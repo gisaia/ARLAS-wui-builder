@@ -1,0 +1,25 @@
+.menu_container {
+  height: 100%; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: space-between;
+
+  .logo {
+    padding: 10px;
+  }
+
+  .toggler {
+    display: flex; 
+    justify-content: flex-end;
+    padding: 15px;
+  }
+
+  mat-icon {
+    padding-right: 5px;
+  }
+  
+  &.hide-label span {
+    display: none;
+  }
+
+}
