@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LeftMenuComponent } from './left-menu.component';
+import { EditLayerComponent } from './edit-layer.component';
 
-describe('LeftMenuComponent', () => {
-  let component: LeftMenuComponent;
-  let fixture: ComponentFixture<LeftMenuComponent>;
+describe('EditLayerComponent', () => {
+  let component: EditLayerComponent;
+  let fixture: ComponentFixture<EditLayerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LeftMenuComponent]
+      declarations: [EditLayerComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LeftMenuComponent);
+    fixture = TestBed.createComponent(EditLayerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

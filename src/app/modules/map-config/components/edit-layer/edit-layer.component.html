@@ -1,0 +1,23 @@
+<button mat-raised-button color="primary" [routerLink]="['', 'map-config', 'layers']">Cancel</button>
+
+<form [formGroup]="getLayerFormGroup()" (submit)="submit()" #f="ngForm">
+    <app-config-element description="Name of the layer. Only used for visualization.">
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="name" formControlName="name">
+        </mat-form-field>
+    </app-config-element>
+
+    <app-config-element description="Name of the layer. Only used for visualization.">
+        <mat-form-field>
+            <mat-label>Mode</mat-label>
+            <mat-select formControlName="mode">
+                <mat-option value="features">Features</mat-option>
+                <mat-option value="cluster">Cluster</mat-option>
+                <mat-option value="feature-metric">Feature Metric</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </app-config-element>
+
+    <button mat-raised-button color="primary" type="submit">Save layer</button>
+</form>

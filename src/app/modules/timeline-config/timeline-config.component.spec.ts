@@ -8,9 +8,9 @@ describe('TimelineConfigComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TimelineConfigComponent ]
+      declarations: [TimelineConfigComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
