@@ -8,20 +8,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon'; 
 import { MatListModule } from '@angular/material/list'; 
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { MapConfigComponent } from './components/map-config/map-config.component';
-import { TimelineConfigComponent } from './components/timeline-config/timeline-config.component';
-import { SearchConfigComponent } from './components/search-config/search-config.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import {MatButtonModule} from '@angular/material/button';
+import { MapConfigModule } from './modules/map-config/map-config.module';
+import { TimelineConfigModule } from './modules/timeline-config/timeline-config.module';
+import { SearchConfigModule } from './modules/search-config/search-config.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     LeftMenuComponent,
-    MapConfigComponent,
-    PageNotFoundComponent,
-    TimelineConfigComponent,
-    SearchConfigComponent
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +28,10 @@ import {MatButtonModule} from '@angular/material/button';
     MatIconModule,
     MatListModule,
     MatTooltipModule,
-    MatButtonModule
+    MatButtonModule,
+    MapConfigModule,
+    TimelineConfigModule,
+    SearchConfigModule
   ],
   providers: [],
   bootstrap: [AppComponent]
