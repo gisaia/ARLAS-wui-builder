@@ -1,15 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { MapConfigComponent } from './components/map-config/map-config.component';
-import { TimelineConfigComponent } from './components/timeline-config/timeline-config.component';
-import { SearchConfigComponent } from './components/search-config/search-config.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 
 const routes: Routes = [
-  { path: 'map-config', component: MapConfigComponent }, 
-  { path: 'timeline-config', component: TimelineConfigComponent },
-  { path: 'search-config', component: SearchConfigComponent },
+  { path: 'map-config', loadChildren: () => import('./modules/map-config/map-config.module').then(m => m.MapConfigModule) }, 
+  { path: 'timeline-config', loadChildren: () => import('./modules/timeline-config/timeline-config.module').then(m => m.TimelineConfigModule) },
+  { path: 'search-config', loadChildren: () => import('./modules/search-config/search-config.module').then(m => m.SearchConfigModule) },
   { path: '',   redirectTo: '/map-config', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
