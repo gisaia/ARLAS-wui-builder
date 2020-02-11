@@ -32,7 +32,7 @@
       </mat-nav-list>
     </div>
     <div class="toggler">
-      <button mat-icon-button (click)="toggle()" [matTooltip]="isLabelDisplayed? 'reduce' : 'expand'">
+      <button mat-icon-button (click)="isLabelDisplayed = !isLabelDisplayed;" [matTooltip]="isLabelDisplayed? 'reduce' : 'expand'">
         <mat-icon>{{ isLabelDisplayed ? 'arrow_left' : 'arrow_right' }}</mat-icon>
       </button>
     </div>

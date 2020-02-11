@@ -5,7 +5,7 @@ interface Page {
   link: string;
   name: string;
   icon: string;
-  tooltip: String;
+  tooltip: string;
   enabled: boolean;
 }
 
@@ -18,21 +18,13 @@ export class LeftMenuComponent {
 
   constructor() { }
 
-  public isLabelDisplayed: boolean = true;
+  public isLabelDisplayed = true;
 
   public pages: Page[] = [
-    {name: 'Map', link:'/map-config', icon: 'map', tooltip: 'Map configuration', 'enabled': true},
-    {name: 'Timeline', link:'/timeline-config', icon: 'timeline', tooltip: 'Timeline configuration', 'enabled': true},
-    {name: 'Search', link:'/search-config', icon: 'search', tooltip: 'Search configuration', 'enabled': true},
-    {name: 'Analytics', link:'some-link', icon: 'bar_chart', tooltip: 'Analytics configuration', 'enabled': false},
-    {name: 'Look \'n feel', link:'some-link', icon: 'send', tooltip: 'Look \'n fell configuration', 'enabled': false},
-  ]
-
-  public toggle() {
-    
-    setTimeout(() => {
-      this.isLabelDisplayed = !this.isLabelDisplayed;
-    }, 200)
-  }
-
+    { name: 'Map', link: '/map-config', icon: 'map', tooltip: 'Map configuration', enabled: true },
+    { name: 'Timeline', link: '/timeline-config', icon: 'timeline', tooltip: 'Timeline configuration', enabled: true },
+    { name: 'Search', link: '/search-config', icon: 'search', tooltip: 'Search configuration', enabled: true },
+    { name: 'Analytics', link: 'some-link', icon: 'bar_chart', tooltip: 'Analytics configuration', enabled: false },
+    { name: 'Look \'n feel', link: 'some-link', icon: 'send', tooltip: 'Look \'n fell configuration', enabled: false },
+  ];
 }
