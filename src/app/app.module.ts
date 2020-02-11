@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { 
+import {
   MatButtonModule, MatDialogModule, MatIconModule,
   MatListModule, MatSidenavModule, MatTooltipModule, MatSnackBarModule
 } from '@angular/material';
