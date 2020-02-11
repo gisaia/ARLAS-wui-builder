@@ -1,0 +1,24 @@
+sudo: required
+
+language: node_js
+
+node_js:
+  - "10"
+
+services:
+  - docker
+
+cache:
+  directories:
+    - node_modules
+
+jobs:
+  include:
+    - env:
+        - job=lint
+      script: npm run lint
+    - env:
+        - job=build
+      script:
+      - npm install
+      - npm run build
