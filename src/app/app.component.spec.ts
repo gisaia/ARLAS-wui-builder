@@ -1,35 +1,32 @@
-import { TestBed, async } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { AppComponent } from './app.component';
+import { LeftMenuComponent } from './components/left-menu/left-menu.component';
+import { MockComponent } from 'ng-mocks';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
-  }));
+  let spectator: Spectator<AppComponent>;
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
+  const createComponent = createComponentFactory({
+    component: AppComponent,
+    declarations: [
+      MockComponent(LeftMenuComponent)
+    ]
+  });
+
+  beforeEach(() => {
+    spectator = createComponent();
+  });
+
+  it('should create', () => {
+    expect(spectator.component).toBeTruthy();
   });
 
   it(`should have as title 'ARLAS-wui-builder'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('ARLAS-wui-builder');
+    expect(spectator.component.title).toEqual('ARLAS-wui-builder');
   });
 
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to ARLAS-wui-builder!');
+  it('should contain the left menu and the page content', () => {
+    expect(spectator.query('app-left-menu')).toBeDefined();
+    expect(spectator.query('outer-outlet')).toBeDefined();
   });
 });

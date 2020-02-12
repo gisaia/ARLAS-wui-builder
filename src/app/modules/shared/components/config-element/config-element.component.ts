@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, ContentChild } from '@angular/core';
 import { FormControlName, FormControl, NgForm, ControlContainer, FormGroup, FormGroupDirective } from '@angular/forms';
-import { Validators } from '@angular/forms';
-import { MatLabel } from '@angular/material';
 
 @Component({
   selector: 'app-config-element',

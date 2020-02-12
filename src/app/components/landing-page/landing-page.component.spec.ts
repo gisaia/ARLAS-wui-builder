@@ -1,25 +1,26 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { LandingPageComponent } from './landing-page.component';
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
+import { LandingPageComponent, LandingPageDialogComponent } from './landing-page.component';
+import { MatDialogRef } from '@angular/material';
 
 describe('LandingPageComponent', () => {
-  let component: LandingPageComponent;
-  let fixture: ComponentFixture<LandingPageComponent>;
+  let spectator: Spectator<LandingPageComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ LandingPageComponent ]
-    })
-    .compileComponents();
-  }));
+  const createComponent = createComponentFactory({
+    component: LandingPageComponent,
+    providers: [
+      { provide: MatDialogRef, useValue: {} },
+    ],
+    entryComponents: [
+      LandingPageDialogComponent
+    ]
+  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LandingPageComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    spectator = createComponent();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(spectator.component).toBeTruthy();
   });
+
 });

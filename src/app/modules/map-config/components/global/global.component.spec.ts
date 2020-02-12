@@ -1,25 +1,22 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { GlobalComponent } from './global.component';
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
+import { ConfigElementComponent } from 'src/app/modules/shared/components/config-element/config-element.component';
+import { MockComponent } from 'ng-mocks';
 
 describe('GlobalComponent', () => {
-  let component: GlobalComponent;
-  let fixture: ComponentFixture<GlobalComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [GlobalComponent]
-    })
-      .compileComponents();
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(GlobalComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  let spectator: Spectator<GlobalComponent>;
+  const createComponent = createComponentFactory({
+    component: GlobalComponent,
+    declarations: [
+      MockComponent(ConfigElementComponent)
+    ]
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  beforeEach(() => spectator = createComponent());
+
+  it('should contain 2 config elements', () => {
+    expect(spectator.queryAll('app-config-element')).toHaveLength(2);
   });
+
 });

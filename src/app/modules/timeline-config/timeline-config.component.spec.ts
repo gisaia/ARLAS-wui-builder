@@ -1,25 +1,18 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { TimelineConfigComponent } from './timeline-config.component';
 
 describe('TimelineConfigComponent', () => {
-  let component: TimelineConfigComponent;
-  let fixture: ComponentFixture<TimelineConfigComponent>;
+  let spectator: Spectator<TimelineConfigComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [TimelineConfigComponent]
-    })
-      .compileComponents();
-  }));
+  const createComponent = createComponentFactory({
+    component: TimelineConfigComponent
+  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TimelineConfigComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    spectator = createComponent();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(spectator.component).toBeTruthy();
   });
 });
