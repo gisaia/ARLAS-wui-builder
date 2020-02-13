@@ -37,7 +37,6 @@ import { TimelineConfigModule } from './modules/timeline-config/timeline-config.
     SearchConfigModule,
     TimelineConfigModule
   ],
-  providers: [],
   bootstrap: [AppComponent],
   entryComponents: [LandingPageDialogComponent]
 })

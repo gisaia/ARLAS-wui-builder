@@ -1,1 +1,10 @@
-<p>map-config works!</p>
+<nav mat-tab-nav-bar mat-align-tabs="center" animationDuration="500ms">
+    <a mat-tab-link routerLink="global" routerLinkActive #rlaGlobal="routerLinkActive" [active]="rlaGlobal.isActive">
+        Global Configuration
+    </a>
+    <a mat-tab-link routerLink="layers" routerLinkActive #rlaLayers="routerLinkActive" [active]="rlaLayers.isActive">
+        Layers
+    </a>
+</nav>
+
+<router-outlet></router-outlet>
