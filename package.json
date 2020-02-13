@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod --aot --base-href=''",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -41,6 +41,8 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
+    "ng-mocks": "~9.0.0",
+    "@ngneat/spectator": "~4.11.1",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.16.0",

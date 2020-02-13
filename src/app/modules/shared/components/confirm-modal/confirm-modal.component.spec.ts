@@ -1,25 +1,30 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { ConfirmModalComponent } from './confirm-modal.component';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 describe('ConfirmModalComponent', () => {
-  let component: ConfirmModalComponent;
-  let fixture: ComponentFixture<ConfirmModalComponent>;
+  let spectator: Spectator<ConfirmModalComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ConfirmModalComponent]
-    })
-      .compileComponents();
-  }));
+  const createComponent = createComponentFactory({
+    component: ConfirmModalComponent,
+    providers: [
+      { provide: MatDialogRef, useValue: {} },
+      { provide: MAT_DIALOG_DATA, useValue: { message: 'test' } }
+    ]
+  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ConfirmModalComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    spectator = createComponent();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(spectator.component).toBeTruthy();
   });
+
+  it('should contain 1 title, 1 content and 2 buttons', () => {
+    expect(spectator.queryAll('[mat-dialog-title]')).toHaveLength(1);
+    expect(spectator.queryAll('[mat-dialog-content]')).toHaveLength(1);
+    expect(spectator.queryAll('button')).toHaveLength(2);
+  });
+
 });

@@ -1,25 +1,19 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { LayersComponent } from './layers.component';
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
 
 describe('LayersComponent', () => {
-  let component: LayersComponent;
-  let fixture: ComponentFixture<LayersComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [LayersComponent]
-    })
-      .compileComponents();
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(LayersComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  let spectator: Spectator<LayersComponent>;
+  const createComponent = createComponentFactory({
+    component: LayersComponent
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  beforeEach(() => spectator = createComponent());
+
+  it('should be loaded successfully', () => {
+    expect(spectator.component).toBeTruthy();
+  });
+
+  it('should contain a table', () => {
+    expect(spectator.queryAll('table')).toBeDefined();
   });
 });

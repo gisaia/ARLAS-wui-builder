@@ -1,25 +1,24 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { LeftMenuComponent } from './left-menu.component';
 
 describe('LeftMenuComponent', () => {
-  let component: LeftMenuComponent;
-  let fixture: ComponentFixture<LeftMenuComponent>;
+  let spectator: Spectator<LeftMenuComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [LeftMenuComponent]
-    })
-      .compileComponents();
-  }));
+  const createComponent = createComponentFactory({
+    component: LeftMenuComponent
+  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LeftMenuComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    spectator = createComponent();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(spectator.component).toBeTruthy();
   });
+
+  it('should contain 1 image, 7 items', () => {
+    expect(spectator.queryAll('img')).toHaveLength(1);
+    expect(spectator.queryAll('mat-list-item')).toHaveLength(7);
+  });
+
 });

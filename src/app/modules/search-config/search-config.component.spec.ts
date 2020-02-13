@@ -1,25 +1,18 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { SearchConfigComponent } from './search-config.component';
 
 describe('SearchConfigComponent', () => {
-  let component: SearchConfigComponent;
-  let fixture: ComponentFixture<SearchConfigComponent>;
+  let spectator: Spectator<SearchConfigComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [SearchConfigComponent]
-    })
-      .compileComponents();
-  }));
+  const createComponent = createComponentFactory({
+    component: SearchConfigComponent
+  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SearchConfigComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    spectator = createComponent();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(spectator.component).toBeTruthy();
   });
 });

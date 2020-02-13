@@ -20,5 +20,8 @@ jobs:
     - env:
         - job=build
       script:
-      - npm install
+      - npm ci
       - npm run build
+    - env:
+        - job=test
+      script: npm run test

@@ -21,18 +21,19 @@
   <div>
     <div>
       <mat-nav-list>
-        <a mat-list-item matTooltip="Reset">
+        <mat-list-item matTooltip="Reset">
           <mat-icon>backspace</mat-icon>
           <span>Reset</span>
-        </a>
-        <a mat-list-item matTooltip="Save">
+        </mat-list-item>
+        <mat-list-item matTooltip="Save">
           <mat-icon>save</mat-icon>
           <span>Save</span>
-        </a>
+        </mat-list-item>
       </mat-nav-list>
     </div>
     <div class="toggler">
-      <button mat-icon-button (click)="isLabelDisplayed = !isLabelDisplayed;" [matTooltip]="isLabelDisplayed? 'reduce' : 'expand'">
+      <button mat-icon-button (click)="isLabelDisplayed = !isLabelDisplayed;"
+        [matTooltip]="isLabelDisplayed? 'reduce' : 'expand'">
         <mat-icon>{{ isLabelDisplayed ? 'arrow_left' : 'arrow_right' }}</mat-icon>
       </button>
     </div>

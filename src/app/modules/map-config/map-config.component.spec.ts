@@ -1,25 +1,22 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { MapConfigComponent } from './map-config.component';
 
 describe('MapConfigComponent', () => {
-  let component: MapConfigComponent;
-  let fixture: ComponentFixture<MapConfigComponent>;
+  let spectator: Spectator<MapConfigComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [MapConfigComponent]
-    })
-      .compileComponents();
-  }));
+  const createComponent = createComponentFactory({
+    component: MapConfigComponent
+  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MapConfigComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    spectator = createComponent();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(spectator.component).toBeTruthy();
+  });
+
+  it('should contain 2 tabs', () => {
+    expect(spectator.queryAll('a[mat-tab-link]')).toHaveLength(2);
   });
 });
