@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ContentChild } from '@angular/core';
-import { FormControlName, FormControl, NgForm, ControlContainer, FormGroup, FormGroupDirective } from '@angular/forms';
+import { FormControlName, FormGroupDirective } from '@angular/forms';
 
 @Component({
   selector: 'app-config-element',

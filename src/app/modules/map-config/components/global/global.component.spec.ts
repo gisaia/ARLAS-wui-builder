@@ -1,6 +1,6 @@
 import { GlobalComponent } from './global.component';
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
-import { ConfigElementComponent } from 'src/app/modules/shared/components/config-element/config-element.component';
+import { ConfigElementComponent } from '@shared/components/config-element/config-element.component';
 import { MockComponent } from 'ng-mocks';
 
 describe('GlobalComponent', () => {

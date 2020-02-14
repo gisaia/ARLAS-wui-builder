@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MainFormService } from 'src/app/modules/shared/services/main-form.service';
-import { ConfirmModalComponent } from 'src/app/modules/shared/components/confirm-modal/confirm-modal.component';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfirmModalComponent } from '@app/shared/components/confirm-modal/confirm-modal.component';
 
 export interface Layer {
   id: string;

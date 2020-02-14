@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MainFormService } from 'src/app/modules/shared/services/main-form.service';
+import { MainFormService } from '@app/services/main-form/main-form.service';
 
 @Component({
   selector: 'app-global',

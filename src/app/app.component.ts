@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { LandingPageComponent } from './components/landing-page/landing-page.component';
+import { LandingPageComponent } from '@components/landing-page/landing-page.component';
 
 @Component({
   selector: 'app-root',
