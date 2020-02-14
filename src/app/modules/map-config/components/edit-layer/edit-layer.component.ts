@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MainFormService } from 'src/app/modules/shared/services/main-form.service';
+import { MainFormService } from 'src/app/services/main-form/main-form.service';
 
 @Component({
   selector: 'app-edit-layer',

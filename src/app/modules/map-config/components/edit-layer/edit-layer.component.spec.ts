@@ -1,7 +1,7 @@
 import { EditLayerComponent } from './edit-layer.component';
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { MockComponent } from 'ng-mocks';
-import { ConfigElementComponent } from 'src/app/modules/shared/components/config-element/config-element.component';
+import { ConfigElementComponent } from 'src/app/shared/components/config-element/config-element.component';
 
 describe('EditLayerComponent', () => {
   let spectator: Spectator<EditLayerComponent>;
