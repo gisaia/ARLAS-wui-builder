@@ -4,7 +4,7 @@
             <ng-content></ng-content>
             <div *ngIf="formControl?.invalid && (formControl?.touched || formGroupDirective.submitted)">
                 <mat-error *ngIf="formControl?.errors.required">
-                    {{ formControl?.name }} is mandatory.
+                    The field is mandatory.
                 </mat-error>
             </div>
         </mat-card-subtitle>

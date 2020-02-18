@@ -1,9 +1,9 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import {
   MatButtonModule, MatDialogModule, MatIconModule,
-  MatListModule, MatSidenavModule, MatTooltipModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS
+  MatListModule, MatSidenavModule, MatTooltipModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS, GestureConfig
 } from '@angular/material';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -55,6 +55,10 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
     {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
       useValue: { duration: 2500 }
+    },
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: GestureConfig
     }
   ],
   bootstrap: [AppComponent],

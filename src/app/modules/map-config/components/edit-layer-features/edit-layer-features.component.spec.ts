@@ -25,7 +25,7 @@ describe('EditLayerFeaturesComponent', () => {
     expect(spectator.component).toBeTruthy();
   });
 
-  it('should contain 2 steps', () => {
-    expect(spectator.queryAll('mat-step-header')).toHaveLength(2);
+  it('should contain 4 steps', () => {
+    expect(spectator.queryAll('mat-step-header')).toHaveLength(4);
   });
 });

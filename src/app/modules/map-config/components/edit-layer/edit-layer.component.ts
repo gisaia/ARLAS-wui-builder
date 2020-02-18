@@ -67,6 +67,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit {
     // force validation check on mode subform
     this.submitSubject.next();
     if (!this.layerFormGroup.valid) {
+      console.log('validation failed', this.layerFormGroup);
       return;
     }
 

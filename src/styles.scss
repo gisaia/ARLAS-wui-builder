@@ -45,3 +45,7 @@
     font-feature-settings: 'liga';
   }
   
+  .horizontal-stepper-no-overflow .mat-horizontal-content-container {
+    //avoid color-picker to be hidden outside of the steper content
+   overflow: visible !important;
+}

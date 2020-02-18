@@ -1,5 +1,5 @@
 <ng-container [formGroup]="modeFormGroup">
-    <mat-horizontal-stepper #stepper>
+    <mat-horizontal-stepper #stepper class="horizontal-stepper-no-overflow">
 
         <mat-step label="Collection" formGroupName="collectionStep" [stepControl]="modeFormGroup.get('collectionStep')">
             <app-config-element>
@@ -29,35 +29,102 @@
                     </mat-select>
                 </mat-form-field>
             </app-config-element>
-            <div>
-                <button mat-button matStepperNext type="button">Next</button>
-            </div>
-        </mat-step>
-
-        <!-- <mat-step label="Visibility">
-            <app-config-element>
-                TODO
-            </app-config-element>
-            <div>
-                <button mat-button matStepperNext type="button">Next</button>
-            </div>
-        </mat-step>
-
-        <mat-step label="Geometry type">
             <app-config-element>
                 <mat-form-field>
                     <mat-label>Geometry type</mat-label>
                     <mat-select formControlName="geometryTypeCtrl">
-                        <mat-option value="line">line</mat-option>
-                        <mat-option value="circle">circle</mat-option>
-                        <mat-option value="fill">fill</mat-option>
+                        <mat-option value="fill">Fill</mat-option>
+                        <mat-option value="line">Line</mat-option>
+                        <mat-option value="circle">Circle</mat-option>
                     </mat-select>
                 </mat-form-field>
             </app-config-element>
             <div>
                 <button mat-button matStepperNext type="button">Next</button>
             </div>
-        </mat-step> -->
+        </mat-step>
+
+        <mat-step label="Visibility" formGroupName="visibilityStep" [stepControl]="modeFormGroup.get('visibilityStep')">
+            <mat-error *ngIf="modeFormGroup.controls.visibilityStep.errors?.lte">
+                Zoom max must be greater than or equal to zoom min
+            </mat-error>
+            <app-config-element description="description">
+                <mat-slide-toggle formControlName="enabledCtrl" labelPosition="before">Enabled</mat-slide-toggle>
+            </app-config-element>
+            <app-config-element description="zoom min etc">
+                <mat-label>Zoom min</mat-label>
+                <mat-slider thumbLabel formControlName="zoomMinCtrl" min="1" max="20" thumbLabel="true"> </mat-slider>
+            </app-config-element>
+            <app-config-element>
+                <span>Zoom max</span>
+                <mat-slider thumbLabel formControlName="zoomMaxCtrl" min="1" max="20"> </mat-slider>
+            </app-config-element>
+            <app-config-element>
+                <mat-label>Features max</mat-label>
+                <mat-slider thumbLabel formControlName="featuresMaxCtrl" min="1" max="10000"> </mat-slider>
+            </app-config-element>
+            <div>
+                <button mat-button matStepperNext type="button">Next</button>
+            </div>
+        </mat-step>
+
+        <mat-step label="Style" formGroupName="styleStep" [stepControl]="modeFormGroup.get('styleStep')">
+            <app-config-element description="opacity...">
+                <mat-label>Opacity</mat-label>
+                <mat-slider thumbLabel formControlName="opacityCtrl" min="1" max="100" thumbLabel="true"> </mat-slider>
+            </app-config-element>
+
+            <app-config-element
+                description="Fix: use a fix color.
+Provided by a field: select a field whose values are the colors to use.
+Generated from a field: select a field of type 'keyword', then a color will be generated for every possible value.
+Choosen from a field: select a field of type 'keyword', then select a color for every possible value.
+Interpolated from a field: select a number or date field, colors will be lineary interpolated between the min and the max.">
+                <mat-form-field>
+                    <mat-label>Color source</mat-label>
+                    <mat-select formControlName="colorSourceCtrl">
+                        <mat-option value="fix">Fix</mat-option>
+                        <mat-option value="provided">Provided by a field</mat-option>
+                        <mat-option value="generated">Generated from a field</mat-option>
+                        <mat-option value="generated">Choosen from a field</mat-option>
+                        <mat-option value="interpolated">Interpolated from a field</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <span class="choosen-color">
+                    <ng-container formGroupName="choosenColorGrp">
+
+                        <span *ngIf="colorSourceCtrl().value == 'fix'">
+                            <input autocomplete="off" cpPosition="top-right" cpOutputFormat="hex" cpOKButton="true"
+                                [placeholder]="colorFixCtrl().value === '' ? 'Select a color' : ''"
+                                cpDisableInput="true" cpCancelButton="true" [style.background]="colorFixCtrl().value"
+                                [colorPicker]="colorFixCtrl().value" (colorPickerSelect)="setColorFix($event)">
+                        </span>
+
+                        <span *ngIf="colorSourceCtrl().value == 'provided'">
+                            <mat-form-field>
+                                <mat-label>Source field</mat-label>
+                                <mat-select formControlName="colorProvidedFieldCtrl">
+                                    <mat-option value="a">field a</mat-option>
+                                    <mat-option value="b">field b</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </span>
+
+                        <div *ngIf="choosenColorGrp()?.invalid && choosenColorGrp()?.touched">
+                            <mat-error *ngIf="colorFixCtrl()?.errors?.required">
+                                A color is required
+                            </mat-error>
+                            <mat-error *ngIf="colorProvidedFieldCtrl()?.errors?.required">
+                                A source field is required
+                            </mat-error>
+                        </div>
+
+                    </ng-container>
+                </span>
+
+            </app-config-element>
+        </mat-step>
 
     </mat-horizontal-stepper>
 </ng-container>

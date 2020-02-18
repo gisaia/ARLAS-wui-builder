@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, forwardRef, Output, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, forwardRef, Output, EventEmitter, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
 import {
   FormBuilder, FormGroup, Validators, AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS,
-  ControlValueAccessor, Validator, ValidationErrors
+  ControlValueAccessor, Validator, ValidationErrors, ValidatorFn
 } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Observable, Subscription } from 'rxjs';
 import { MatStepper } from '@angular/material';
+import { CustomValidators } from '@app/utils/custom-validators';
 
 @Component({
   selector: 'app-edit-layer-features',
@@ -40,19 +41,44 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
       collectionCtrl: ['', Validators.required]
     }),
     geometryStep: this.formBuilder.group({
-      geometryCtrl: ['', Validators.required]
+      geometryCtrl: ['', Validators.required],
+      geometryTypeCtrl: ['', Validators.required]
+    }),
+    visibilityStep: this.formBuilder.group({
+      enabledCtrl: [''],
+      zoomMinCtrl: ['', Validators.required],
+      zoomMaxCtrl: ['', Validators.required],
+      featuresMaxCtrl: ['', Validators.required]
+    }, { validator: [CustomValidators.getLTEValidator('zoomMinCtrl', 'zoomMaxCtrl')] }),
+    styleStep: this.formBuilder.group({
+      opacityCtrl: [''],
+      colorSourceCtrl: ['', Validators.required],
+      choosenColorGrp: this.formBuilder.group({
+        colorFixCtrl: ['', CustomValidators.getConditionalValidator(
+          () => !!this.modeFormGroup ? this.colorSourceCtrl().value === 'fix' : false,
+          Validators.required)],
+        colorProvidedFieldCtrl: ['', CustomValidators.getConditionalValidator(
+          () => !!this.modeFormGroup ? this.colorSourceCtrl().value === 'provided' : false,
+          Validators.required)]
+      })
     })
   });
-
   constructor(
     private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.submitSubscription = this.submit.subscribe(() => {
-      // force the display validation errors
+      console.log('submitting', this.modeFormGroup);
       this.stepper.steps.setDirty();
       this.stepper.steps.forEach(s => s.interacted = true);
       this.modeFormGroup.markAllAsTouched();
+    });
+
+    // force to update the validators of choosenColor controls
+    this.colorSourceCtrl().valueChanges.subscribe(value => {
+      Object.keys(this.choosenColorGrp().controls).forEach(k =>
+        this.choosenColorGrp().get(k).updateValueAndValidity()
+      );
     });
   }
 
@@ -82,5 +108,23 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
 
   ngOnDestroy() {
     this.submitSubscription.unsubscribe();
+  }
+
+  public colorSourceCtrl() {
+    return this.modeFormGroup.get('styleStep').get('colorSourceCtrl');
+  }
+
+  public choosenColorGrp() {
+    return this.modeFormGroup.get('styleStep').get('choosenColorGrp') as FormGroup;
+  }
+
+  public colorFixCtrl() {
+    return this.choosenColorGrp().get('colorFixCtrl');
+  }
+  public setColorFix(color: string) {
+    return this.choosenColorGrp().get('colorFixCtrl').setValue(color);
+  }
+  public colorProvidedFieldCtrl() {
+    return this.choosenColorGrp().get('colorProvidedFieldCtrl');
   }
 }

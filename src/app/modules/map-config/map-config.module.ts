@@ -18,6 +18,9 @@ import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-
 import { EditLayerFeaturesComponent } from './components/edit-layer-features/edit-layer-features.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { ConfirmExitGuard } from '@app/guards/confirm-exit.guard';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSliderModule } from '@angular/material/slider';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
   entryComponents: [
@@ -43,7 +46,10 @@ import { ConfirmExitGuard } from '@app/guards/confirm-exit.guard';
     ReactiveFormsModule,
     SharedModule,
     MatButtonModule,
-    MatStepperModule
+    MatStepperModule,
+    MatSlideToggleModule,
+    MatSliderModule,
+    ColorPickerModule
   ],
   providers: [
     ConfirmExitGuard
