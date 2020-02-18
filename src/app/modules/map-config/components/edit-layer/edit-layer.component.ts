@@ -33,7 +33,7 @@ export class EditLayerComponent implements OnInit {
     this.sharedLayersFormGroup = this.mainFormService.mainForm.get('MapConfigLayers') as FormArray;
 
     if (this.sharedLayersFormGroup == null) {
-      this.snackBar.open('Error initializing the page', null, { duration: 2000 });
+      this.snackBar.open('Error initializing the page');
       this.navigateToParentPage();
     } else {
 
@@ -47,7 +47,7 @@ export class EditLayerComponent implements OnInit {
             this.layerFormGroup.setValue(this.getSharedLayerFormGroup(formGroupIndex).value);
           } else {
             this.navigateToParentPage();
-            this.snackBar.open('Unknown layer ID', null, { duration: 2000 });
+            this.snackBar.open('Unknown layer ID');
           }
         }
       });
@@ -79,7 +79,7 @@ export class EditLayerComponent implements OnInit {
       if (formGroupIndex >= 0) {
         this.getSharedLayerFormGroup(formGroupIndex).setValue(this.layerFormGroup.value);
       } else {
-        this.snackBar.open('There was an error while saving the layer', null, { duration: 2000 });
+        this.snackBar.open('There was an error while saving the layer');
       }
     }
     this.navigateToParentPage();

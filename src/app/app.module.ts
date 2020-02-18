@@ -1,7 +1,7 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import {
   MatButtonModule, MatDialogModule, MatIconModule,
-  MatListModule, MatSidenavModule, MatTooltipModule, MatSnackBarModule
+  MatListModule, MatSidenavModule, MatTooltipModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -51,6 +51,10 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
       useFactory: loadServiceFactory,
       deps: [DefaultValuesService],
       multi: true
+    },
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: { duration: 2500 }
     }
   ],
   bootstrap: [AppComponent],
