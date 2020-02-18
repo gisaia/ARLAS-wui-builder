@@ -2,7 +2,7 @@
 <button mat-raised-button color="primary" (click)="forceCanExit = true"
     [routerLink]="['', 'map-config', 'layers']">Cancel</button>
 
-<form [formGroup]="getLayerFormGroup()" (submit)="submit()" #f="ngForm">
+<form [formGroup]="layerFormGroup" (submit)="submit()" #f="ngForm">
     <app-config-element description="Name of the layer. Only used for visualization.">
         <mat-form-field>
             <mat-label>Name</mat-label>
@@ -13,13 +13,18 @@
     <app-config-element description="Mode of the layer.">
         <mat-form-field>
             <mat-label>Mode</mat-label>
-            <mat-select formControlName="mode">
+            <mat-select formControlName="mode" appAlertOnChange="changing the mode will reset the below form">
                 <mat-option value="features">Features</mat-option>
                 <mat-option value="cluster">Cluster</mat-option>
                 <mat-option value="feature-metric">Feature Metric</mat-option>
             </mat-select>
         </mat-form-field>
     </app-config-element>
+
+    <div *ngIf="layerFormGroup.value.mode == 'features'">
+        <app-edit-layer-features formControlName="modeFormGroup" [submit]="submitSubject.asObservable()">
+        </app-edit-layer-features>
+    </div>
 
     <button mat-raised-button color="primary" type="submit">Save layer</button>
 </form>

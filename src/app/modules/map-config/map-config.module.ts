@@ -15,7 +15,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { SharedModule } from '@shared/shared.module';
 import { MatButtonModule } from '@angular/material/button';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
+import { EditLayerFeaturesComponent } from './components/edit-layer-features/edit-layer-features.component';
+import { MatStepperModule } from '@angular/material/stepper';
 import { ConfirmExitGuard } from '@app/guards/confirm-exit.guard';
+
 @NgModule({
   entryComponents: [
     ConfirmModalComponent
@@ -24,7 +27,8 @@ import { ConfirmExitGuard } from '@app/guards/confirm-exit.guard';
     MapConfigComponent,
     GlobalComponent,
     LayersComponent,
-    EditLayerComponent
+    EditLayerComponent,
+    EditLayerFeaturesComponent
   ],
   imports: [
     CommonModule,
@@ -38,7 +42,8 @@ import { ConfirmExitGuard } from '@app/guards/confirm-exit.guard';
     MatSelectModule,
     ReactiveFormsModule,
     SharedModule,
-    MatButtonModule
+    MatButtonModule,
+    MatStepperModule
   ],
   providers: [
     ConfirmExitGuard
