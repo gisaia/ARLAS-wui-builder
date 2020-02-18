@@ -12,16 +12,14 @@ export class GlobalComponent implements OnInit {
   constructor(private mainFormService: MainFormService) { }
 
   ngOnInit() {
-    if (this.getMapConfigFormGroup() == null) {
-      this.mainFormService.mainForm.addControl('MapConfigGlobal', new FormGroup({
-        targetGeometries: new FormControl(),
-        geographicalOperator: new FormControl()
-      }));
-    }
+    this.mainFormService.addMapConfigGlobalFormIfInexisting(new FormGroup({
+      targetGeometries: new FormControl(),
+      geographicalOperator: new FormControl()
+    }));
   }
 
   public getMapConfigFormGroup() {
-    return this.mainFormService.mainForm.get('MapConfigGlobal');
+    return this.mainFormService.getMapConfigGlobalForm();
   }
 
 }
