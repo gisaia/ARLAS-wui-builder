@@ -22,14 +22,12 @@ export class LayersComponent implements OnInit {
   constructor(private mainFormService: MainFormService, public dialog: MatDialog) { }
 
   ngOnInit() {
-    if (this.getMapLayersFormGroup() == null) {
-      this.mainFormService.mainForm.addControl('MapConfigLayers', new FormArray([]));
-    }
+    this.mainFormService.addMapConfigLayersFormIfInexisting(new FormArray([]));
   }
 
 
   public getLayers() {
-    return this.getMapLayersFormGroup().value;
+    return this.mainFormService.getMapConfigLayersForm().value;
   }
 
   public confirmDelete(layerId: number, layerName: string): void {
@@ -40,14 +38,10 @@ export class LayersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        const formGroupIndex = (this.getMapLayersFormGroup().value as any[]).findIndex(el => el.id === layerId);
-        this.getMapLayersFormGroup().removeAt(formGroupIndex);
+        const formGroupIndex = (this.mainFormService.getMapConfigLayersForm().value as any[]).findIndex(el => el.id === layerId);
+        this.mainFormService.getMapConfigLayersForm().removeAt(formGroupIndex);
       }
     });
-  }
-
-  private getMapLayersFormGroup() {
-    return this.mainFormService.mainForm.get('MapConfigLayers') as FormArray;
   }
 
 }

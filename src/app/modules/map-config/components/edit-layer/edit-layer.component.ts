@@ -30,7 +30,7 @@ export class EditLayerComponent implements OnInit {
       id: [''],
     });
 
-    this.sharedLayersFormGroup = this.mainFormService.mainForm.get('MapConfigLayers') as FormArray;
+    this.sharedLayersFormGroup = this.mainFormService.getMapConfigLayersForm();
 
     if (this.sharedLayersFormGroup == null) {
       this.snackBar.open('Error initializing the page');
