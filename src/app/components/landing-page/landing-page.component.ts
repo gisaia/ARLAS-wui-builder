@@ -50,7 +50,7 @@ export class LandingPageComponent implements AfterViewInit {
         this.dialogRef.close();
         this.router.navigate(['map-config']);
       } else {
-        this.snackbar.open('Not available now', '', { duration: 2000 });
+        this.snackbar.open('Not available now');
       }
     });
   }
