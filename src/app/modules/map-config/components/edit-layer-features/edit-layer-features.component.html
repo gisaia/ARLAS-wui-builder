@@ -1,0 +1,63 @@
+<ng-container [formGroup]="modeFormGroup">
+    <mat-horizontal-stepper #stepper>
+
+        <mat-step label="Collection" formGroupName="collectionStep" [stepControl]="modeFormGroup.get('collectionStep')">
+            <app-config-element>
+                <mat-form-field>
+                    <mat-label>Collection</mat-label>
+                    <mat-select formControlName="collectionCtrl"
+                        appAlertOnChange="changing the collection will reset some other fields"
+                        [dependants]="[modeFormGroup.get('geometryStep').get('geometryCtrl')]">
+                        <mat-option value="col1">col1</mat-option>
+                        <mat-option value="col2">col2</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </app-config-element>
+            <div>
+                <button mat-button matStepperNext type="button">Next</button>
+            </div>
+        </mat-step>
+
+        <mat-step label="Rendered geometry" formGroupName="geometryStep"
+            [stepControl]="modeFormGroup.get('geometryStep')">
+            <app-config-element>
+                <mat-form-field>
+                    <mat-label>Rendered geometry</mat-label>
+                    <mat-select formControlName="geometryCtrl">
+                        <mat-option value="geopoint">a geopoint</mat-option>
+                        <mat-option value="geoshape">a geoshape</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </app-config-element>
+            <div>
+                <button mat-button matStepperNext type="button">Next</button>
+            </div>
+        </mat-step>
+
+        <!-- <mat-step label="Visibility">
+            <app-config-element>
+                TODO
+            </app-config-element>
+            <div>
+                <button mat-button matStepperNext type="button">Next</button>
+            </div>
+        </mat-step>
+
+        <mat-step label="Geometry type">
+            <app-config-element>
+                <mat-form-field>
+                    <mat-label>Geometry type</mat-label>
+                    <mat-select formControlName="geometryTypeCtrl">
+                        <mat-option value="line">line</mat-option>
+                        <mat-option value="circle">circle</mat-option>
+                        <mat-option value="fill">fill</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </app-config-element>
+            <div>
+                <button mat-button matStepperNext type="button">Next</button>
+            </div>
+        </mat-step> -->
+
+    </mat-horizontal-stepper>
+</ng-container>

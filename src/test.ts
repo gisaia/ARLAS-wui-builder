@@ -17,6 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule, MatListModule, MatSidenavModule, MatTooltipModule } from '@angular/material';
+import { MatStepperModule } from '@angular/material/stepper';
 
 // define modules to be injected in every test
 defineGlobalsInjections({
@@ -37,7 +38,8 @@ defineGlobalsInjections({
     MatIconModule,
     MatListModule,
     MatSidenavModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatStepperModule
   ]
 });
 

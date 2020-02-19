@@ -2,13 +2,15 @@ import { EditLayerComponent } from './edit-layer.component';
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { MockComponent } from 'ng-mocks';
 import { ConfigElementComponent } from '@shared/components/config-element/config-element.component';
+import { EditLayerFeaturesComponent } from '../edit-layer-features/edit-layer-features.component';
 
 describe('EditLayerComponent', () => {
   let spectator: Spectator<EditLayerComponent>;
   const createComponent = createComponentFactory({
     component: EditLayerComponent,
     declarations: [
-      MockComponent(ConfigElementComponent)
+      MockComponent(ConfigElementComponent),
+      MockComponent(EditLayerFeaturesComponent)
     ]
   });
 

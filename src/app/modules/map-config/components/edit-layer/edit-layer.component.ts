@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { CanComponentExit } from '@app/guards/confirm-exit.guard';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-edit-layer',
@@ -12,10 +13,11 @@ import { CanComponentExit } from '@app/guards/confirm-exit.guard';
 })
 export class EditLayerComponent implements OnInit, CanComponentExit {
 
-  private layerFormGroup: FormGroup;
+  public layerFormGroup: FormGroup;
   private sharedLayersFormGroup: FormArray;
   private sharedLayersFormGroupValues: any[] = [];
   public forceCanExit: boolean;
+  public submitSubject: Subject<void> = new Subject<void>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -30,6 +32,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit {
       name: ['', Validators.required],
       mode: ['', Validators.required],
       id: [''],
+      modeFormGroup: ['', Validators.required]
     });
 
     this.sharedLayersFormGroup = this.mainFormService.getMapConfigLayersForm();
@@ -42,11 +45,10 @@ export class EditLayerComponent implements OnInit, CanComponentExit {
       this.sharedLayersFormGroupValues = this.sharedLayersFormGroup.value as any[];
       this.route.paramMap.subscribe(params => {
         const layerId = params.get('id');
-
         if (layerId != null) {
-          const formGroupIndex = this.getSharedLayerFormIndex(layerId);
+          const formGroupIndex = this.getSharedLayerFormIndex(Number(layerId));
           if (formGroupIndex >= 0) {
-            this.layerFormGroup.setValue(this.getSharedLayerFormGroup(formGroupIndex).value);
+            this.layerFormGroup.patchValue(this.getSharedLayerFormGroup(formGroupIndex).value);
           } else {
             this.navigateToParentPage();
             this.snackBar.open('Unknown layer ID');
@@ -56,39 +58,37 @@ export class EditLayerComponent implements OnInit, CanComponentExit {
     }
   }
 
-  public getLayerFormGroup() {
-    return this.layerFormGroup;
-  }
-
   private navigateToParentPage() {
     this.router.navigate(['', 'map-config', 'layers']);
   }
 
   public submit() {
 
+    // force validation check on mode subform
+    this.submitSubject.next();
     if (!this.layerFormGroup.valid) {
       return;
     }
 
-    if (this.layerFormGroup.get('id').value === '') {
-      const newId = this.sharedLayersFormGroupValues.reduce((acc, val) => acc.id > val.id ? acc.id : val.id, 0) + 1;
-      this.layerFormGroup.patchValue({ id: newId });
-      (this.sharedLayersFormGroup).insert(newId, this.layerFormGroup);
-
-    } else {
+    if (!this.isNewLayer()) {
+      // delete current layer in order to recreate it with a new id
       const formGroupIndex = this.getSharedLayerFormIndex(this.layerFormGroup.get('id').value);
-
       if (formGroupIndex >= 0) {
-        this.getSharedLayerFormGroup(formGroupIndex).setValue(this.layerFormGroup.value);
+        this.sharedLayersFormGroup.removeAt(formGroupIndex);
       } else {
         this.snackBar.open('There was an error while saving the layer');
       }
     }
+
+    const newId = this.sharedLayersFormGroupValues.reduce((acc, val) => acc.id > val.id ? acc.id : val.id, 0) + 1;
+    this.layerFormGroup.patchValue({ id: newId });
+    this.sharedLayersFormGroup.insert(newId, this.layerFormGroup);
+
     this.layerFormGroup.markAsPristine();
     this.navigateToParentPage();
   }
 
-  private getSharedLayerFormIndex(id: string) {
+  private getSharedLayerFormIndex(id: number) {
     return this.sharedLayersFormGroupValues.findIndex(el => el.id === id);
   }
 
@@ -96,7 +96,12 @@ export class EditLayerComponent implements OnInit, CanComponentExit {
     return (this.sharedLayersFormGroup.at(index) as FormGroup);
   }
 
+  public isNewLayer(): boolean {
+    return this.layerFormGroup.get('id').value === '';
+  }
+
   public canExit() {
     return this.forceCanExit || this.layerFormGroup.pristine;
   }
+
 }

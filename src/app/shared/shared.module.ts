@@ -6,9 +6,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { AlertOnChangeDirective } from './directives/alert-on-change.directive';
 
 @NgModule({
-  declarations: [ConfigElementComponent, ConfirmModalComponent],
+  declarations: [ConfigElementComponent, ConfirmModalComponent, AlertOnChangeDirective],
   imports: [
     CommonModule,
     MatDialogModule,
@@ -18,7 +19,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   ],
   exports: [
     ConfigElementComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    AlertOnChangeDirective
   ]
 })
 export class SharedModule { }
