@@ -1,4 +1,4 @@
-<button mat-raised-button color="primary" class="add-layer" [routerLink]="['', 'map-config', 'add-layer']"> Add layer
+<button mat-raised-button color="primary" class="add-layer" [routerLink]="['add']"> Add layer
 </button>
 
 <table mat-table [dataSource]="getLayers()" class="mat-elevation-z8">
@@ -16,7 +16,7 @@
     <ng-container matColumnDef="edit">
         <th mat-header-cell *matHeaderCellDef> Edit </th>
         <td mat-cell *matCellDef="let element">
-            <button mat-raised-button [routerLink]="['', 'map-config', 'edit-layer', element.id]"> edit </button>
+            <button mat-raised-button [routerLink]="['edit', element.id]"> edit </button>
         </td>
     </ng-container>
 

@@ -11,9 +11,13 @@ const routes: Routes = [
     path: '', component: MapConfigComponent, children: [
       { path: '', redirectTo: 'global', pathMatch: 'full' },
       { path: 'global', component: GlobalComponent },
-      { path: 'layers', component: LayersComponent },
-      { path: 'add-layer', component: EditLayerComponent },
-      { path: 'edit-layer/:id', component: EditLayerComponent }
+      {
+        path: 'layers', children: [
+          { path: '', component: LayersComponent, pathMatch: 'full' },
+          { path: 'add', component: EditLayerComponent },
+          { path: 'edit/:id', component: EditLayerComponent }
+        ]
+      }
     ]
   }];
 
