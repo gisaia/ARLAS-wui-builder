@@ -4,6 +4,7 @@ import { MapConfigComponent } from './map-config.component';
 import { GlobalComponent } from './components/global/global.component';
 import { LayersComponent } from './components/layers/layers.component';
 import { EditLayerComponent } from './components/edit-layer/edit-layer.component';
+import { ConfirmExitGuard } from '@app/guards/confirm-exit.guard';
 
 
 const routes: Routes = [
@@ -14,8 +15,8 @@ const routes: Routes = [
       {
         path: 'layers', children: [
           { path: '', component: LayersComponent, pathMatch: 'full' },
-          { path: 'add', component: EditLayerComponent },
-          { path: 'edit/:id', component: EditLayerComponent }
+          { path: 'add', component: EditLayerComponent, canDeactivate: [ConfirmExitGuard] },
+          { path: 'edit/:id', component: EditLayerComponent, canDeactivate: [ConfirmExitGuard] }
         ]
       }
     ]
@@ -25,4 +26,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class MapConfigRoutingModule { }
+export class MapConfigRoutingModule {
+}

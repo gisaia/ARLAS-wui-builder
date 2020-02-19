@@ -1,4 +1,6 @@
-<button mat-raised-button color="primary" [routerLink]="['', 'map-config', 'layers']">Cancel</button>
+<!-- TODO move this, its place is misleading -->
+<button mat-raised-button color="primary" (click)="forceCanExit = true"
+    [routerLink]="['', 'map-config', 'layers']">Cancel</button>
 
 <form [formGroup]="getLayerFormGroup()" (submit)="submit()" #f="ngForm">
     <app-config-element description="Name of the layer. Only used for visualization.">

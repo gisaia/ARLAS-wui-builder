@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { SharedModule } from '@shared/shared.module';
 import { MatButtonModule } from '@angular/material/button';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
+import { ConfirmExitGuard } from '@app/guards/confirm-exit.guard';
 @NgModule({
   entryComponents: [
     ConfirmModalComponent
@@ -38,6 +39,9 @@ import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-
     ReactiveFormsModule,
     SharedModule,
     MatButtonModule
+  ],
+  providers: [
+    ConfirmExitGuard
   ]
 })
 export class MapConfigModule { }

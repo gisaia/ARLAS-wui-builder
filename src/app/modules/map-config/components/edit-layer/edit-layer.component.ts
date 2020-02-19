@@ -3,17 +3,19 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { CanComponentExit } from '@app/guards/confirm-exit.guard';
 
 @Component({
   selector: 'app-edit-layer',
   templateUrl: './edit-layer.component.html',
   styleUrls: ['./edit-layer.component.scss']
 })
-export class EditLayerComponent implements OnInit {
+export class EditLayerComponent implements OnInit, CanComponentExit {
 
   private layerFormGroup: FormGroup;
   private sharedLayersFormGroup: FormArray;
   private sharedLayersFormGroupValues: any[] = [];
+  public forceCanExit: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -82,6 +84,7 @@ export class EditLayerComponent implements OnInit {
         this.snackBar.open('There was an error while saving the layer');
       }
     }
+    this.layerFormGroup.markAsPristine();
     this.navigateToParentPage();
   }
 
@@ -93,4 +96,7 @@ export class EditLayerComponent implements OnInit {
     return (this.sharedLayersFormGroup.at(index) as FormGroup);
   }
 
+  public canExit() {
+    return this.forceCanExit || this.layerFormGroup.pristine;
+  }
 }
