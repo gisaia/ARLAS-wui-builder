@@ -1,0 +1,32 @@
+<div mat-dialog-content>
+    <form [formGroup]="keywordColorsForm" autocomplete="off">
+        <mat-table [dataSource]="dataSource">
+
+            <ng-container matColumnDef="keyword">
+                <mat-header-cell *matHeaderCellDef> Keyword </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.get('keyword').value}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="color">
+                <mat-header-cell *matHeaderCellDef> Color </mat-header-cell>
+                <mat-cell *matCellDef="let element;" [formGroup]="element" class="column-color">
+                    <app-color-picker [value]="element.get('color').value"
+                        (setValue)="element.get('color').patchValue($event)">
+                    </app-color-picker>
+                    <button type="button" mat-icon-button (click)="reset(element)" matTooltip="Reset color">
+                        <mat-icon>settings_backup_restore</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+        </mat-table>
+    </form>
+</div>
+
+<div mat-dialog-actions>
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-button [mat-dialog-close]="keywordColorsForm.value">Validate</button>
+</div>

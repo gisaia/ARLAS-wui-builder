@@ -125,11 +125,11 @@
                         <mat-label>Color source</mat-label>
                         <mat-select formControlName="colorSourceCtrl"
                             appAlertOnChange="changing the color source will reset the choosen color(s)"
-                            [dependants]="[colorFixCtrl(), colorProvidedFieldCtrl()]">
+                            [dependants]="[colorFixCtrl(), colorProvidedFieldCtrl(), colorGeneratedFieldCtrl(), colorSetFieldCtrl()]">
                             <mat-option value="fix">Fix</mat-option>
                             <mat-option value="provided">Provided by a field</mat-option>
                             <mat-option value="generated">Generated from a field</mat-option>
-                            <mat-option value="generated">Choosen from a field</mat-option>
+                            <mat-option value="manual">Choosen from a field</mat-option>
                             <mat-option value="interpolated">Interpolated from a field</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -138,13 +138,8 @@
                         <ng-container formGroupName="choosenColorGrp">
 
                             <span *ngIf="colorSourceCtrl().value == 'fix'">
-                                <input class="ngx-color-picker" autocomplete="off" cpPosition="top-right"
-                                    cpOutputFormat="hex" cpOKButton="true"
-                                    [cpPresetColors]="['#fff', '#000', '#2889e9', '#e920e9', '#fff500', 'rgb(236,64,64)']"
-                                    cpAlphaChannel="disabled"
-                                    [placeholder]="colorFixCtrl().value === '' ? 'Select a color' : ''"
-                                    cpCancelButton="true" [style.background]="colorFixCtrl().value"
-                                    [colorPicker]="colorFixCtrl().value" (colorPickerSelect)="setColorFix($event)">
+                                <app-color-picker [value]="colorFixCtrl().value" (setValue)="setColorFix($event)">
+                                </app-color-picker>
                             </span>
 
                             <span *ngIf="colorSourceCtrl().value == 'provided'">
@@ -157,11 +152,42 @@
                                 </mat-form-field>
                             </span>
 
+                            <span *ngIf="colorSourceCtrl().value == 'generated'">
+                                <mat-form-field>
+                                    <mat-label>Source field</mat-label>
+                                    <mat-select formControlName="colorGeneratedFieldCtrl">
+                                        <mat-option value="a">field a</mat-option>
+                                        <mat-option value="b">field b</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </span>
+
+                            <span *ngIf="colorSourceCtrl().value == 'manual'">
+                                <mat-form-field>
+                                    <mat-label>Source field</mat-label>
+                                    <!-- No [dependants] because we manually set the new values on source field change -->
+                                    <mat-select formControlName="colorSetFieldCtrl"
+                                        appAlertOnChange="Changing the source field will reset the colors">
+                                        <mat-option value="a">field a</mat-option>
+                                        <mat-option value="b">field b</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <span>
+                                    <button type="button" mat-raised-button color="primary" (click)="openColorTable()"
+                                        *ngIf="colorSetFieldCtrl()?.value">
+                                        View / change colors
+                                    </button>
+                                </span>
+                            </span>
+
                             <div *ngIf="choosenColorGrp()?.invalid && choosenColorGrp()?.touched">
                                 <mat-error *ngIf="colorFixCtrl()?.errors?.required">
                                     A color is required
                                 </mat-error>
-                                <mat-error *ngIf="colorProvidedFieldCtrl()?.errors?.required">
+                                <mat-error
+                                    *ngIf="colorProvidedFieldCtrl()?.errors?.required 
+                                || colorGeneratedFieldCtrl()?.errors?.required || colorSetFieldCtrl()?.errors?.required">
                                     A source field is required
                                 </mat-error>
                             </div>

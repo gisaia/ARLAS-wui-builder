@@ -20,18 +20,23 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { ConfirmExitGuard } from '@app/guards/confirm-exit.guard';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
-import { ColorPickerModule } from 'ngx-color-picker';
+import { DialogColorTableComponent } from './components/dialog-color-table/dialog-color-table.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   entryComponents: [
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    DialogColorTableComponent
   ],
   declarations: [
     MapConfigComponent,
     GlobalComponent,
     LayersComponent,
     EditLayerComponent,
-    EditLayerFeaturesComponent
+    EditLayerFeaturesComponent,
+    DialogColorTableComponent
   ],
   imports: [
     CommonModule,
@@ -49,7 +54,9 @@ import { ColorPickerModule } from 'ngx-color-picker';
     MatStepperModule,
     MatSlideToggleModule,
     MatSliderModule,
-    ColorPickerModule
+    MatDialogModule,
+    MatIconModule,
+    MatTooltipModule
   ],
   providers: [
     ConfirmExitGuard
