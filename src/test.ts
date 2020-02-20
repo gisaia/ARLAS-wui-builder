@@ -16,8 +16,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
-import { MatIconModule, MatListModule, MatSidenavModule, MatTooltipModule } from '@angular/material';
+import { MatIconModule, MatListModule, MatSidenavModule, MatTooltipModule, MatSlideToggleModule, MatSliderModule } from '@angular/material';
 import { MatStepperModule } from '@angular/material/stepper';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 // define modules to be injected in every test
 defineGlobalsInjections({
@@ -39,7 +40,10 @@ defineGlobalsInjections({
     MatListModule,
     MatSidenavModule,
     MatTooltipModule,
-    MatStepperModule
+    MatStepperModule,
+    MatSlideToggleModule,
+    MatSliderModule,
+    ColorPickerModule
   ]
 });
 
