@@ -24,11 +24,13 @@ import { DialogColorTableComponent } from './components/dialog-color-table/dialo
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { DialogPaletteSelectorComponent } from './components/dialog-palette-selector/dialog-palette-selector.component';
 
 @NgModule({
   entryComponents: [
     ConfirmModalComponent,
-    DialogColorTableComponent
+    DialogColorTableComponent,
+    DialogPaletteSelectorComponent
   ],
   declarations: [
     MapConfigComponent,
@@ -36,7 +38,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     LayersComponent,
     EditLayerComponent,
     EditLayerFeaturesComponent,
-    DialogColorTableComponent
+    DialogColorTableComponent,
+    DialogPaletteSelectorComponent
   ],
   imports: [
     CommonModule,
