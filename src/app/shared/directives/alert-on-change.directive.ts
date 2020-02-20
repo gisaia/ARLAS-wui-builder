@@ -20,7 +20,10 @@ export class AlertOnChangeDirective implements OnInit {
     // clean dependants fields on value change
     this.select.valueChange.subscribe(val => {
       if (!!this.select.value && !!this.dependants) {
-        this.dependants.forEach(d => d.setValue(null));
+        this.dependants.forEach(d => {
+          d.setValue('');
+          d.markAsUntouched();
+        });
       }
     });
   }

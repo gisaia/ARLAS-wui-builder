@@ -6,7 +6,7 @@
                 <mat-form-field>
                     <mat-label>Collection</mat-label>
                     <mat-select formControlName="collectionCtrl"
-                        appAlertOnChange="changing the collection will reset some other fields"
+                        appAlertOnChange="changing the collection will reset the rendered geometry"
                         [dependants]="[modeFormGroup.get('geometryStep').get('geometryCtrl')]">
                         <mat-option value="col1">col1</mat-option>
                         <mat-option value="col2">col2</mat-option>
@@ -82,7 +82,9 @@ Choosen from a field: select a field of type 'keyword', then select a color for 
 Interpolated from a field: select a number or date field, colors will be lineary interpolated between the min and the max.">
                 <mat-form-field>
                     <mat-label>Color source</mat-label>
-                    <mat-select formControlName="colorSourceCtrl">
+                    <mat-select formControlName="colorSourceCtrl"
+                        appAlertOnChange="changing the color source will reset the choosen color(s)"
+                        [dependants]="[colorFixCtrl(), colorProvidedFieldCtrl()]">
                         <mat-option value="fix">Fix</mat-option>
                         <mat-option value="provided">Provided by a field</mat-option>
                         <mat-option value="generated">Generated from a field</mat-option>
