@@ -15,6 +15,8 @@ import { SearchConfigModule } from '@search-config/search-config.module';
 import { TimelineConfigModule } from '@timeline-config/timeline-config.module';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { HttpClientModule } from '@angular/common/http';
+import { environment } from 'environments/environment';
+import { LoggerModule } from 'ngx-logger';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -43,7 +45,11 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
     MatSnackBarModule,
     MatTooltipModule,
     SearchConfigModule,
-    TimelineConfigModule
+    TimelineConfigModule,
+    LoggerModule.forRoot({
+      level: environment.logLevel,
+      disableConsoleLogging: false
+    })
   ],
   providers: [
     {
@@ -54,7 +60,7 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
     },
     {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
-      useValue: { duration: 2500 }
+      useValue: { duration: 2500, verticalPosition: 'top' }
     },
     {
       provide: HAMMER_GESTURE_CONFIG,

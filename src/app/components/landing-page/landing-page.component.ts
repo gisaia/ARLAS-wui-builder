@@ -1,8 +1,8 @@
 import { Component, Output, AfterViewInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Subject } from 'rxjs';
-import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   templateUrl: './landing-page-dialog.component.html',
@@ -35,7 +35,7 @@ export class LandingPageComponent implements AfterViewInit {
 
   constructor(
     private dialog: MatDialog,
-    public snackbar: MatSnackBar,
+    private logger: NGXLogger,
     private router: Router) { }
 
   public openChoice() {
@@ -50,7 +50,7 @@ export class LandingPageComponent implements AfterViewInit {
         this.dialogRef.close();
         this.router.navigate(['map-config']);
       } else {
-        this.snackbar.open('Not available now');
+        this.logger.error('Not available now');
       }
     });
   }

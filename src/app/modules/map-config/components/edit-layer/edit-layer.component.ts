@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { CanComponentExit } from '@app/guards/confirm-exit.guard';
 import { Subject } from 'rxjs';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-edit-layer',
@@ -24,7 +24,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit {
     private mainFormService: MainFormService,
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar) { }
+    private logger: NGXLogger) { }
 
   ngOnInit() {
 
@@ -38,7 +38,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit {
     this.sharedLayersFormGroup = this.mainFormService.getMapConfigLayersForm();
 
     if (this.sharedLayersFormGroup == null) {
-      this.snackBar.open('Error initializing the page');
+      this.logger.error('Error initializing the page, layers form group is missing');
       this.navigateToParentPage();
     } else {
 
@@ -51,7 +51,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit {
             this.layerFormGroup.patchValue(this.getSharedLayerFormGroup(formGroupIndex).value);
           } else {
             this.navigateToParentPage();
-            this.snackBar.open('Unknown layer ID');
+            this.logger.error('Unknown layer ID');
           }
         }
       });
@@ -67,7 +67,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit {
     // force validation check on mode subform
     this.submitSubject.next();
     if (!this.layerFormGroup.valid) {
-      console.log('validation failed', this.layerFormGroup);
+      this.logger.warn('validation failed', this.layerFormGroup);
       return;
     }
 
@@ -77,7 +77,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit {
       if (formGroupIndex >= 0) {
         this.sharedLayersFormGroup.removeAt(formGroupIndex);
       } else {
-        this.snackBar.open('There was an error while saving the layer');
+        this.logger.error('There was an error while saving the layer, unknown layer ID');
       }
     }
 
