@@ -145,10 +145,11 @@
 
                             <span *ngIf="colorSourceCtrl().value == 'fix'">
                                 <input autocomplete="off" cpPosition="top-right" cpOutputFormat="hex" cpOKButton="true"
+                                    [cpPresetColors]="['#fff', '#000', '#2889e9', '#e920e9', '#fff500', 'rgb(236,64,64)']"
+                                    cpAlphaChannel="disabled"
                                     [placeholder]="colorFixCtrl().value === '' ? 'Select a color' : ''"
-                                    cpDisableInput="true" cpCancelButton="true"
-                                    [style.background]="colorFixCtrl().value" [colorPicker]="colorFixCtrl().value"
-                                    (colorPickerSelect)="setColorFix($event)">
+                                    cpCancelButton="true" [style.background]="colorFixCtrl().value"
+                                    [colorPicker]="colorFixCtrl().value" (colorPickerSelect)="setColorFix($event)">
                             </span>
 
                             <span *ngIf="colorSourceCtrl().value == 'provided'">
