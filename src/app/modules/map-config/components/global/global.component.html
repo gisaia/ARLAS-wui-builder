@@ -1,23 +1,44 @@
 <div [formGroup]="getMapConfigFormGroup()">
 
-    <app-config-element description="Illud tamen te esse admonitum volo, primum ut qualis es talem te esse omnes existiment ut, quantum a rerum turpitudine abes, tantum te a verborum libertate seiungas; deinde ut ea in alterum ne dicas, quae cum tibi falso responsa sint, erubescas. Quis est enim, cui via ista non pateat, qui isti aetati atque etiam isti dignitati non possit quam velit petulanter, etiamsi sine ulla suspicione, at non sine argumento male dicere? Sed istarum partium culpa est eorum, qui te agere voluerunt; laus pudoris tui, quod ea te invitum dicere videbamus, ingenii, quod ornate politeque dixisti.
-    Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. Ptolomaeo enim rege foederato nobis et socio ob aerarii nostri angustias iusso sine ulla culpa proscribi ideoque hausto veneno voluntaria morte deleto et tributaria facta est et velut hostiles eius exuviae classi inpositae in urbem advectae sunt per Catonem, nunc repetetur ordo gestorum.
-    Ut enim benefici liberalesque sumus, non ut exigamus gratiam (neque enim beneficium faeneramur sed natura propensi ad liberalitatem sumus), sic amicitiam non spe mercedis adducti sed quod omnis eius fructus in ipso amore inest, expetendam putamus.
-    ">
-        <mat-form-field>
-            <mat-label>Target geometries</mat-label>
-            <mat-select formControlName="targetGeometries">
-                <mat-option value="geom">geom</mat-option>
-            </mat-select>
-        </mat-form-field>
+    <app-config-element>
+        <div content>
+            <mat-form-field>
+                <mat-label>Target geometries</mat-label>
+                <mat-select formControlName="targetGeometries">
+                    <mat-option value="geom">geom</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div description>
+            Illud tamen te esse admonitum volo, primum ut qualis es talem te esse omnes existiment ut, quantum a rerum
+            turpitudine abes, tantum te a verborum libertate seiungas; deinde ut ea in alterum ne dicas, quae cum tibi
+            falso responsa sint, erubescas. Quis est enim, cui via ista non pateat, qui isti aetati atque etiam isti
+            dignitati non possit quam velit petulanter, etiamsi sine ulla suspicione, at non sine argumento male dicere?
+            Sed istarum partium culpa est eorum, qui te agere voluerunt; laus pudoris tui, quod ea te invitum dicere
+            videbamus, ingenii, quod ornate politeque dixisti.
+            Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. Ptolomaeo enim rege
+            foederato nobis et socio ob aerarii nostri angustias iusso sine ulla culpa proscribi ideoque hausto veneno
+            voluntaria morte deleto et tributaria facta est et velut hostiles eius exuviae classi inpositae in urbem
+            advectae sunt per Catonem, nunc repetetur ordo gestorum.
+            Ut enim benefici liberalesque sumus, non ut exigamus gratiam (neque enim beneficium faeneramur sed natura
+            propensi ad liberalitatem sumus), sic amicitiam non spe mercedis adducti sed quod omnis eius fructus in ipso
+            amore inest, expetendam putamus.
+
+        </div>
     </app-config-element>
 
-    <app-config-element description="It is used to...">
-        <mat-form-field>
-            <mat-label>Geographical operator</mat-label>
-            <mat-select formControlName="geographicalOperator">
-                <mat-option value="ope">ope</mat-option>
-            </mat-select>
-        </mat-form-field>
+    <app-config-element>
+        <div content>
+            <mat-form-field>
+                <mat-label>Geographical operator</mat-label>
+                <mat-select formControlName="geographicalOperator">
+                    <mat-option value="ope">ope</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div description>
+            It is used to..
+        </div>
+
     </app-config-element>
 </div>
