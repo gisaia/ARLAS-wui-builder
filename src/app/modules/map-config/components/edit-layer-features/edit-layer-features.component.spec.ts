@@ -4,6 +4,8 @@ import { ConfigElementComponent } from '@shared/components/config-element/config
 import { MockComponent, MockDirective } from 'ng-mocks';
 import { AlertOnChangeDirective } from '@app/shared/directives/alert-on-change.directive';
 import { Subject } from 'rxjs';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { HttpClient } from '@angular/common/http';
 
 describe('EditLayerFeaturesComponent', () => {
   let spectator: Spectator<EditLayerFeaturesComponent>;
@@ -12,7 +14,9 @@ describe('EditLayerFeaturesComponent', () => {
     declarations: [
       MockComponent(ConfigElementComponent),
       MockDirective(AlertOnChangeDirective)
-    ]
+    ],
+    providers: [DefaultValuesService],
+    mocks: [HttpClient]
   });
 
   beforeEach(() => spectator = createComponent({

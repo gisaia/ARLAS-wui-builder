@@ -8,9 +8,14 @@
         "global": {
             "description": "Global Default values",
             "type": "object"
+        },
+        "map": {
+            "description": "Map default values",
+            "type": "object"
         }
     },
     "required": [
-        "global"
+        "global",
+        "map"
     ]
 }
