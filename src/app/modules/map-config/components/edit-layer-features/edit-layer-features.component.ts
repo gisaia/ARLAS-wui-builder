@@ -57,7 +57,9 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
         visibleCtrl: [''],
         zoomMinCtrl: [this.defaultValuesService.getValue('map.layer.zoom.min'), Validators.required],
         zoomMaxCtrl: [this.defaultValuesService.getValue('map.layer.zoom.max'), Validators.required],
-        featuresMaxCtrl: [this.defaultValuesService.getValue('map.layer.max_feature'), Validators.required]
+        featuresMaxCtrl:
+          [this.defaultValuesService.getValue('map.layer.max_feature'),
+          [Validators.required, Validators.max(10000), Validators.min(0)]]
       }, { validator: [CustomValidators.getLTEValidator('zoomMinCtrl', 'zoomMaxCtrl')] }),
       styleStep: this.formBuilder.group({
         opacityCtrl: [this.defaultValuesService.getValue('map.layer.opacity')],
