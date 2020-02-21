@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ContentChild } from '@angular/core';
+import { Component, OnInit, ContentChild } from '@angular/core';
 import { FormControlName, FormGroupDirective } from '@angular/forms';
 
 @Component({
@@ -8,7 +8,6 @@ import { FormControlName, FormGroupDirective } from '@angular/forms';
 })
 export class ConfigElementComponent implements OnInit {
 
-  @Input() description: string;
   @ContentChild(FormControlName, { static: true }) formControl: FormControlName;
 
   constructor(public formGroupDirective: FormGroupDirective) { }
