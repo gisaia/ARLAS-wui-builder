@@ -1,4 +1,7 @@
-export function getObject(datalayer, objectKey) {
+/**
+ * Get object or String value of an object from key
+ */
+export function getObject(datalayer: any, objectKey: string) {
     // if datalayer doesn't exists, just return
     if (!datalayer) {
         return null;

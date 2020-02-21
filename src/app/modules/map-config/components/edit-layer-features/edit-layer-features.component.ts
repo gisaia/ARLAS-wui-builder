@@ -8,7 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { MatStepper } from '@angular/material';
 import { CustomValidators } from '@app/utils/custom-validators';
 import { NGXLogger } from 'ngx-logger';
-import { DefaultValuesService } from '../../../../services/default-values/default-values.service';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 @Component({
   selector: 'app-edit-layer-features',
@@ -54,7 +54,7 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
         geometryTypeCtrl: ['', Validators.required]
       }),
       visibilityStep: this.formBuilder.group({
-        enabledCtrl: [''],
+        visibleCtrl: [''],
         zoomMinCtrl: [this.defaultValuesService.getValue('map.layer.zoom.min'), Validators.required],
         zoomMaxCtrl: [this.defaultValuesService.getValue('map.layer.zoom.max'), Validators.required],
         featuresMaxCtrl: [this.defaultValuesService.getValue('map.layer.max_feature'), Validators.required]

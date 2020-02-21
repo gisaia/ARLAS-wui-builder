@@ -4,7 +4,7 @@ import { ConfigElementComponent } from '@shared/components/config-element/config
 import { MockComponent, MockDirective } from 'ng-mocks';
 import { AlertOnChangeDirective } from '@app/shared/directives/alert-on-change.directive';
 import { Subject } from 'rxjs';
-import { DefaultValuesService } from '../../../../services/default-values/default-values.service';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { HttpClient } from '@angular/common/http';
 
 describe('EditLayerFeaturesComponent', () => {
