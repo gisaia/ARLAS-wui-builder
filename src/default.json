@@ -1,7 +1,15 @@
 {
-    "global":{
-        "chart": {
-            "type": "area"
+    "global": {
+
+    },
+    "map": {
+        "layer": {
+            "zoom":{
+                "min": 10,
+                "max": 15
+            },
+            "max_feature": 7500,
+            "opacity": 50
         }
     }
 }

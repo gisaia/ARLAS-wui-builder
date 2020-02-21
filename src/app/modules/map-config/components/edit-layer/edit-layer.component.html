@@ -1,6 +1,5 @@
 <!-- TODO move this, its place is misleading -->
-<button mat-raised-button color="primary" (click)="forceCanExit = true"
-    [routerLink]="['', 'map-config', 'layers']">Cancel</button>
+
 
 <form [formGroup]="layerFormGroup" (submit)="submit()" #f="ngForm">
     <app-config-element>
@@ -37,4 +36,6 @@
     </div>
 
     <button mat-raised-button color="primary" type="submit">Save layer</button>
+    <button class="cancel-button" mat-raised-button (click)="forceCanExit = true"
+    [routerLink]="['', 'map-config', 'layers']">Cancel</button>
 </form>

@@ -5,11 +5,14 @@ import * as ajv from 'ajv';
 import * as ajvKeywords from 'ajv-keywords/keywords/uniqueItemProperties';
 import * as draftSchema from 'ajv/lib/refs/json-schema-draft-06.json';
 import * as defaultValuesSchema from './defaultValues.schema.json';
+import { getObject } from '../../utils/tools';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DefaultValuesService {
+
+  private config: any;
 
   constructor(private http: HttpClient) { }
 
@@ -42,10 +45,19 @@ export class DefaultValuesService {
         return Promise.resolve(null);
       })).toPromise()
       .then(() => this.validateConfiguration(configData))
+      .then((data) => this.setConfig(data))
       .catch((err: any) => {
         console.error(err);
         return Promise.resolve(null);
       });
     return ret.then((x) => { });
+  }
+
+  public setConfig(config) {
+    this.config = config;
+  }
+
+  public getValue(keyPath: string) {
+    return getObject(this.config, 'root.' + keyPath);
   }
 }

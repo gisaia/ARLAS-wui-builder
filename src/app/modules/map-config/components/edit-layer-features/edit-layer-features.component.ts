@@ -8,6 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { MatStepper } from '@angular/material';
 import { CustomValidators } from '@app/utils/custom-validators';
 import { NGXLogger } from 'ngx-logger';
+import { DefaultValuesService } from '../../../../services/default-values/default-values.service';
 
 @Component({
   selector: 'app-edit-layer-features',
@@ -37,38 +38,41 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
   @Input() submit: Observable<void>;
   private submitSubscription: Subscription;
 
-  public modeFormGroup: FormGroup = this.formBuilder.group({
-    collectionStep: this.formBuilder.group({
-      collectionCtrl: ['', Validators.required]
-    }),
-    geometryStep: this.formBuilder.group({
-      geometryCtrl: ['', Validators.required],
-      geometryTypeCtrl: ['', Validators.required]
-    }),
-    visibilityStep: this.formBuilder.group({
-      enabledCtrl: [''],
-      zoomMinCtrl: ['', Validators.required],
-      zoomMaxCtrl: ['', Validators.required],
-      featuresMaxCtrl: ['', Validators.required]
-    }, { validator: [CustomValidators.getLTEValidator('zoomMinCtrl', 'zoomMaxCtrl')] }),
-    styleStep: this.formBuilder.group({
-      opacityCtrl: [''],
-      colorSourceCtrl: ['', Validators.required],
-      choosenColorGrp: this.formBuilder.group({
-        colorFixCtrl: ['', CustomValidators.getConditionalValidator(
-          () => !!this.modeFormGroup ? this.colorSourceCtrl().value === 'fix' : false,
-          Validators.required)],
-        colorProvidedFieldCtrl: ['', CustomValidators.getConditionalValidator(
-          () => !!this.modeFormGroup ? this.colorSourceCtrl().value === 'provided' : false,
-          Validators.required)]
-      })
-    })
-  });
+  public modeFormGroup: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
-    private logger: NGXLogger) { }
+    private logger: NGXLogger, private defaultValuesService: DefaultValuesService) { }
 
   ngOnInit() {
+
+    this.modeFormGroup = this.formBuilder.group({
+      collectionStep: this.formBuilder.group({
+        collectionCtrl: ['', Validators.required]
+      }),
+      geometryStep: this.formBuilder.group({
+        geometryCtrl: ['', Validators.required],
+        geometryTypeCtrl: ['', Validators.required]
+      }),
+      visibilityStep: this.formBuilder.group({
+        enabledCtrl: [''],
+        zoomMinCtrl: [this.defaultValuesService.getValue('map.layer.zoom.min'), Validators.required],
+        zoomMaxCtrl: [this.defaultValuesService.getValue('map.layer.zoom.max'), Validators.required],
+        featuresMaxCtrl: [this.defaultValuesService.getValue('map.layer.max_feature'), Validators.required]
+      }, { validator: [CustomValidators.getLTEValidator('zoomMinCtrl', 'zoomMaxCtrl')] }),
+      styleStep: this.formBuilder.group({
+        opacityCtrl: [this.defaultValuesService.getValue('map.layer.opacity')],
+        colorSourceCtrl: ['', Validators.required],
+        choosenColorGrp: this.formBuilder.group({
+          colorFixCtrl: ['', CustomValidators.getConditionalValidator(
+            () => !!this.modeFormGroup ? this.colorSourceCtrl().value === 'fix' : false,
+            Validators.required)],
+          colorProvidedFieldCtrl: ['', CustomValidators.getConditionalValidator(
+            () => !!this.modeFormGroup ? this.colorSourceCtrl().value === 'provided' : false,
+            Validators.required)]
+        })
+      })
+    });
+
     this.submitSubscription = this.submit.subscribe(() => {
       this.logger.log('submitting', this.modeFormGroup);
       this.stepper.steps.setDirty();
