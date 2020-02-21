@@ -17,6 +17,7 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 import { HttpClientModule } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
+import { ArlasToolKitModule } from 'arlas-wui-toolkit';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -34,6 +35,7 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ArlasToolKitModule,
     BrowserAnimationsModule,
     HttpClientModule,
     MapConfigModule,

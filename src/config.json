@@ -1,0 +1,16 @@
+{
+    "arlas": {
+      "web": {
+        "contributors": []
+      },
+      "server": {
+        "url": "http://demo.arlas.io/arlas",
+        "collection": {
+          "name": "demo_ais-danmark",
+          "id": "id"
+        },
+        "max_age_cache": 120
+      }
+    }
+  }
+  
