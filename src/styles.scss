@@ -45,7 +45,21 @@
     font-feature-settings: 'liga';
   }
   
-  .horizontal-stepper-no-overflow .mat-horizontal-content-container {
+.horizontal-stepper-no-overflow .mat-horizontal-content-container {
     //avoid color-picker to be hidden outside of the steper content
    overflow: visible !important;
+}
+
+// force mat-slider labels to be always displayed
+.mat-slider-thumb-label {
+  transform: rotate(45deg) !important;
+  border-radius: 50% 50% 0 !important;
+}
+
+.mat-slider-thumb {
+  transform: scale(0) !important;
+}
+
+.mat-slider-thumb-label-text {
+  opacity: 1 !important;
 }

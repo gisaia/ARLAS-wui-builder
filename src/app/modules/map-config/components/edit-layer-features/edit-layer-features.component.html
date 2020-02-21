@@ -91,8 +91,17 @@
                 <div content>
                     <span>
                         <mat-label>Features max</mat-label>
-                        <mat-slider #featuresMaxCtrlSlider
-                            formControlName="featuresMaxCtrl" min="1" max="10000"> </mat-slider>
+                        <mat-slider #featuresMaxCtrlSlider formControlName="featuresMaxCtrl"
+                            [value]="modeFormGroup.get('visibilityStep').get('featuresMaxCtrl').value" thumbLabel
+                            min="1" max="10000"> </mat-slider>
+                    </span>
+                    <span>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Enter a value between 1 and 10000</mat-label>
+                            <input #featuresMaxCtrlInput autocomplete="off" formControlName="featuresMaxCtrl"
+                                [value]="modeFormGroup.get('visibilityStep').get('featuresMaxCtrl').value" matInput
+                                type="number" min="1" max="10000">
+                        </mat-form-field>
                     </span>
                 </div>
                 <div description>
