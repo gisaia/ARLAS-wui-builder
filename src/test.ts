@@ -3,9 +3,9 @@
 import 'zone.js/dist/zone-testing';
 import { getTestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { defineGlobalsInjections } from '@ngneat/spectator';
+import { defineGlobalsInjections, mockProvider } from '@ngneat/spectator';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -19,13 +19,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule, MatListModule, MatSidenavModule, MatTooltipModule, MatSlideToggleModule, MatSliderModule } from '@angular/material';
 import { MatStepperModule } from '@angular/material/stepper';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { NGXLogger } from 'ngx-logger';
 
 // define modules to be injected in every test
 defineGlobalsInjections({
   imports: [
+    RouterTestingModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot([]),
     CommonModule,
     MatTabsModule,
     MatSnackBarModule,
@@ -44,6 +45,9 @@ defineGlobalsInjections({
     MatSlideToggleModule,
     MatSliderModule,
     ColorPickerModule
+  ],
+  providers: [
+    mockProvider(NGXLogger)
   ]
 });
 

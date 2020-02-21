@@ -3,12 +3,20 @@ import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { MockComponent } from 'ng-mocks';
 import { ConfigElementComponent } from '@shared/components/config-element/config-element.component';
 import { EditLayerFeaturesComponent } from '../edit-layer-features/edit-layer-features.component';
+import { Component } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
+
+@Component({ template: '' }) class DummyComponent { }
 
 describe('EditLayerComponent', () => {
   let spectator: Spectator<EditLayerComponent>;
   const createComponent = createComponentFactory({
     component: EditLayerComponent,
+    imports: [
+      RouterTestingModule.withRoutes([{ path: 'map-config/layers', component: DummyComponent }])
+    ],
     declarations: [
+      DummyComponent,
       MockComponent(ConfigElementComponent),
       MockComponent(EditLayerFeaturesComponent)
     ]

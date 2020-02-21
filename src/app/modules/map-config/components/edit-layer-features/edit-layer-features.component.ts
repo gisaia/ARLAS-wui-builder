@@ -7,6 +7,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Observable, Subscription } from 'rxjs';
 import { MatStepper } from '@angular/material';
 import { CustomValidators } from '@app/utils/custom-validators';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-edit-layer-features',
@@ -64,11 +65,12 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
     })
   });
   constructor(
-    private formBuilder: FormBuilder) { }
+    private formBuilder: FormBuilder,
+    private logger: NGXLogger) { }
 
   ngOnInit() {
     this.submitSubscription = this.submit.subscribe(() => {
-      console.log('submitting', this.modeFormGroup);
+      this.logger.log('submitting', this.modeFormGroup);
       this.stepper.steps.setDirty();
       this.stepper.steps.forEach(s => s.interacted = true);
       this.modeFormGroup.markAllAsTouched();
