@@ -1,5 +1,5 @@
 <ng-container [formGroup]="modeFormGroup">
-    <mat-horizontal-stepper #stepper class="horizontal-stepper-no-overflow">
+    <mat-horizontal-stepper #stepper class="stepper-no-overflow">
 
         <mat-step label="Collection" formGroupName="collectionStep" [stepControl]="modeFormGroup.get('collectionStep')">
             <app-config-element>
@@ -52,6 +52,7 @@
                 </div>
             </app-config-element>
             <div>
+                <button mat-button matStepperPrevious>Back</button>
                 <button mat-button matStepperNext type="button">Next</button>
             </div>
         </mat-step>
@@ -71,7 +72,7 @@
             <app-config-element>
                 <div content>
                     <mat-label>Zoom min</mat-label>
-                    <mat-slider thumbLabel formControlName="zoomMinCtrl" min="1" max="20" thumbLabel="true">
+                    <mat-slider thumbLabel formControlName="zoomMinCtrl" min="0" max="20" thumbLabel="true">
                     </mat-slider>
                 </div>
                 <div description>
@@ -81,7 +82,7 @@
             <app-config-element>
                 <div content>
                     <span>Zoom max</span>
-                    <mat-slider thumbLabel formControlName="zoomMaxCtrl" min="1" max="20"> </mat-slider>
+                    <mat-slider thumbLabel formControlName="zoomMaxCtrl" min="0" max="20"> </mat-slider>
                 </div>
                 <div description>
 
@@ -93,15 +94,7 @@
                         <mat-label>Features max</mat-label>
                         <mat-slider #featuresMaxCtrlSlider formControlName="featuresMaxCtrl"
                             [value]="modeFormGroup.get('visibilityStep').get('featuresMaxCtrl').value" thumbLabel
-                            min="1" max="10000"> </mat-slider>
-                    </span>
-                    <span>
-                        <mat-form-field appearance="outline">
-                            <mat-label>Enter a value between 1 and 10000</mat-label>
-                            <input #featuresMaxCtrlInput autocomplete="off" formControlName="featuresMaxCtrl"
-                                [value]="modeFormGroup.get('visibilityStep').get('featuresMaxCtrl').value" matInput
-                                type="number" min="1" max="10000">
-                        </mat-form-field>
+                            min="0" max="10000" step="100"> </mat-slider>
                     </span>
                 </div>
                 <div description>
@@ -109,6 +102,7 @@
                 </div>
             </app-config-element>
             <div>
+                <button mat-button matStepperPrevious>Back</button>
                 <button mat-button matStepperNext type="button">Next</button>
             </div>
         </mat-step>
@@ -197,6 +191,7 @@
                     </p>
                 </div>
             </app-config-element>
+                <button mat-button matStepperPrevious>Back</button>
         </mat-step>
 
     </mat-horizontal-stepper>
