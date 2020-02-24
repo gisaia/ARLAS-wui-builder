@@ -45,7 +45,15 @@
     font-feature-settings: 'liga';
   }
   
-.stepper-no-overflow {
+.stepper-for-config-element {
+  &.mat-stepper-horizontal, &.mat-stepper-vertical {
+    background-color: #fafafa;
+
+    div.mat-horizontal-content-container, div.mat-vertical-content-container {
+        padding: 0px 0px 24px 0px;
+    }
+  }
+
   .mat-horizontal-content-container, .mat-vertical-content-container {
     //avoid color-picker to be hidden outside of the steper content
    overflow: visible !important;

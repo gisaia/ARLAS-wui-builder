@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, forwardRef, Output, EventEmitter, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, Input, forwardRef, OnDestroy, ViewChild } from '@angular/core';
 import {
   FormBuilder, FormGroup, Validators, AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS,
-  ControlValueAccessor, Validator, ValidationErrors, ValidatorFn
+  ControlValueAccessor, Validator, ValidationErrors
 } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Observable, Subscription } from 'rxjs';
