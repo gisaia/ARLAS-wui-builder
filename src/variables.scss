@@ -1,0 +1,4 @@
+@import '~@angular/material/theming';
+$config-element-description-background: mat-color($mat-grey, 50);
+$config-element-description-border-color: transparentize(mat-color($mat-indigo, A700), 0.4);
+$config-element-description-text-color: transparentize(mat-color($mat-blue-grey, A700), 0.4);

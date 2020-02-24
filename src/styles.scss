@@ -45,21 +45,36 @@
     font-feature-settings: 'liga';
   }
   
-.horizontal-stepper-no-overflow .mat-horizontal-content-container {
+.stepper-for-config-element {
+  &.mat-stepper-horizontal, &.mat-stepper-vertical {
+    background-color: #fafafa;
+
+    div.mat-horizontal-content-container, div.mat-vertical-content-container {
+        padding: 0px 0px 24px 0px;
+    }
+  }
+
+  .mat-horizontal-content-container, .mat-vertical-content-container {
     //avoid color-picker to be hidden outside of the steper content
    overflow: visible !important;
+  }
 }
 
-// force mat-slider labels to be always displayed
-.mat-slider-thumb-label {
-  transform: rotate(45deg) !important;
-  border-radius: 50% 50% 0 !important;
-}
+.mat-slider-horizontal, .mat-slider-vertical {
+  // force mat-slider labels to be always displayed & to be on the slider itself, not above it
+  .mat-slider-thumb-label {
+    transform: rotate(45deg) !important;
+    top: -16px !important;
+    border-radius: 50% !important;
+    height: 34px;
+    width: 34px;
+  }
 
-.mat-slider-thumb {
-  transform: scale(0) !important;
-}
+  .mat-slider-thumb {
+    transform: scale(0) !important;
+  }
 
-.mat-slider-thumb-label-text {
-  opacity: 1 !important;
+  .mat-slider-thumb-label-text {
+    opacity: 1 !important;
+  }
 }

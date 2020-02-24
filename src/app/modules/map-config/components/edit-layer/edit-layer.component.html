@@ -3,7 +3,7 @@
 
 <form [formGroup]="layerFormGroup" (submit)="submit()" #f="ngForm">
     <app-config-element>
-        <div content>
+        <div form-fields>
             <mat-form-field>
                 <mat-label>Name</mat-label>
                 <input matInput placeholder="name" formControlName="name">
@@ -15,7 +15,7 @@
     </app-config-element>
 
     <app-config-element>
-        <div content>
+        <div form-fields>
             <mat-form-field>
                 <mat-label>Mode</mat-label>
                 <mat-select formControlName="mode" appAlertOnChange="changing the mode will reset the below form">
@@ -35,7 +35,9 @@
         </app-edit-layer-features>
     </div>
 
-    <button mat-raised-button color="primary" type="submit">Save layer</button>
-    <button class="cancel-button" mat-raised-button (click)="forceCanExit = true"
-    [routerLink]="['', 'map-config', 'layers']">Cancel</button>
+    <div class="action-buttons">
+        <button mat-raised-button color="primary" type="submit">Save layer</button>
+        <button class="cancel-button" mat-raised-button (click)="forceCanExit = true"
+            [routerLink]="['', 'map-config', 'layers']">Cancel</button>
+    </div>
 </form>

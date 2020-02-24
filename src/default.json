@@ -9,7 +9,7 @@
                 "max": 15
             },
             "max_feature": 7500,
-            "opacity": 50
+            "opacity": 0.5
         }
     }
 }

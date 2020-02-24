@@ -1,9 +1,9 @@
 <ng-container [formGroup]="modeFormGroup">
-    <mat-horizontal-stepper #stepper class="horizontal-stepper-no-overflow">
+    <mat-horizontal-stepper #stepper class="stepper-for-config-element">
 
         <mat-step label="Collection" formGroupName="collectionStep" [stepControl]="modeFormGroup.get('collectionStep')">
             <app-config-element>
-                <div content>
+                <div form-fields>
                     <mat-form-field>
                         <mat-label>Collection</mat-label>
                         <mat-select formControlName="collectionCtrl"
@@ -24,7 +24,7 @@
 
         <mat-step label="Geometry" formGroupName="geometryStep" [stepControl]="modeFormGroup.get('geometryStep')">
             <app-config-element>
-                <div content>
+                <div form-fields>
                     <mat-form-field>
                         <mat-label>Rendered geometry</mat-label>
                         <mat-select formControlName="geometryCtrl">
@@ -37,7 +37,7 @@
                 </div>
             </app-config-element>
             <app-config-element>
-                <div content>
+                <div form-fields>
                     <mat-form-field>
                         <mat-label>Geometry type</mat-label>
                         <mat-select formControlName="geometryTypeCtrl">
@@ -52,6 +52,7 @@
                 </div>
             </app-config-element>
             <div>
+                <button mat-button matStepperPrevious>Back</button>
                 <button mat-button matStepperNext type="button">Next</button>
             </div>
         </mat-step>
@@ -61,7 +62,7 @@
                 Zoom max must be greater than or equal to zoom min
             </mat-error>
             <app-config-element>
-                <div content>
+                <div form-fields>
                     <mat-slide-toggle formControlName="visibleCtrl" labelPosition="before">Visible</mat-slide-toggle>
                 </div>
                 <div description>
@@ -69,9 +70,9 @@
                 </div>
             </app-config-element>
             <app-config-element>
-                <div content>
+                <div form-fields>
                     <mat-label>Zoom min</mat-label>
-                    <mat-slider thumbLabel formControlName="zoomMinCtrl" min="1" max="20" thumbLabel="true">
+                    <mat-slider thumbLabel formControlName="zoomMinCtrl" min="0" max="20" thumbLabel="true">
                     </mat-slider>
                 </div>
                 <div description>
@@ -79,45 +80,38 @@
                 </div>
             </app-config-element>
             <app-config-element>
-                <div content>
+                <div form-fields>
                     <span>Zoom max</span>
-                    <mat-slider thumbLabel formControlName="zoomMaxCtrl" min="1" max="20"> </mat-slider>
+                    <mat-slider thumbLabel formControlName="zoomMaxCtrl" min="0" max="20"> </mat-slider>
                 </div>
                 <div description>
-
+                    zoom max etc
                 </div>
             </app-config-element>
             <app-config-element>
-                <div content>
+                <div form-fields>
                     <span>
                         <mat-label>Features max</mat-label>
                         <mat-slider #featuresMaxCtrlSlider formControlName="featuresMaxCtrl"
                             [value]="modeFormGroup.get('visibilityStep').get('featuresMaxCtrl').value" thumbLabel
-                            min="1" max="10000"> </mat-slider>
-                    </span>
-                    <span>
-                        <mat-form-field appearance="outline">
-                            <mat-label>Enter a value between 1 and 10000</mat-label>
-                            <input #featuresMaxCtrlInput autocomplete="off" formControlName="featuresMaxCtrl"
-                                [value]="modeFormGroup.get('visibilityStep').get('featuresMaxCtrl').value" matInput
-                                type="number" min="1" max="10000">
-                        </mat-form-field>
+                            min="0" max="10000" step="100"> </mat-slider>
                     </span>
                 </div>
                 <div description>
-
+                    Features max etc
                 </div>
             </app-config-element>
             <div>
+                <button mat-button matStepperPrevious>Back</button>
                 <button mat-button matStepperNext type="button">Next</button>
             </div>
         </mat-step>
 
         <mat-step label="Style" formGroupName="styleStep" [stepControl]="modeFormGroup.get('styleStep')">
             <app-config-element>
-                <div content>
+                <div form-fields>
                     <mat-label>Opacity</mat-label>
-                    <mat-slider thumbLabel formControlName="opacityCtrl" min="1" max="100" thumbLabel="true">
+                    <mat-slider thumbLabel formControlName="opacityCtrl" min="0" max="1" thumbLabel="true" step="0.1">
                     </mat-slider>
                 </div>
                 <div description>
@@ -126,7 +120,7 @@
             </app-config-element>
 
             <app-config-element>
-                <div content>
+                <div form-fields>
                     <mat-form-field>
                         <mat-label>Color source</mat-label>
                         <mat-select formControlName="colorSourceCtrl"
@@ -140,15 +134,17 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <span class="choosen-color">
+                    <div>
                         <ng-container formGroupName="choosenColorGrp">
 
                             <span *ngIf="colorSourceCtrl().value == 'fix'">
-                                <input autocomplete="off" cpPosition="top-right" cpOutputFormat="hex" cpOKButton="true"
+                                <input class="ngx-color-picker" autocomplete="off" cpPosition="top-right"
+                                    cpOutputFormat="hex" cpOKButton="true"
+                                    [cpPresetColors]="['#fff', '#000', '#2889e9', '#e920e9', '#fff500', 'rgb(236,64,64)']"
+                                    cpAlphaChannel="disabled"
                                     [placeholder]="colorFixCtrl().value === '' ? 'Select a color' : ''"
-                                    cpDisableInput="true" cpCancelButton="true"
-                                    [style.background]="colorFixCtrl().value" [colorPicker]="colorFixCtrl().value"
-                                    (colorPickerSelect)="setColorFix($event)">
+                                    cpCancelButton="true" [style.background]="colorFixCtrl().value"
+                                    [colorPicker]="colorFixCtrl().value" (colorPickerSelect)="setColorFix($event)">
                             </span>
 
                             <span *ngIf="colorSourceCtrl().value == 'provided'">
@@ -171,7 +167,7 @@
                             </div>
 
                         </ng-container>
-                    </span>
+                    </div>
 
                 </div>
                 <div description>
@@ -196,6 +192,7 @@
                     </p>
                 </div>
             </app-config-element>
+            <button mat-button matStepperPrevious>Back</button>
         </mat-step>
 
     </mat-horizontal-stepper>

@@ -1,19 +1,26 @@
-<mat-card>
-    <mat-card-header>
-        <mat-card-subtitle>
-            <ng-content select="[content]"></ng-content>
-            <div *ngIf="formControl?.invalid && (formControl?.touched || formGroupDirective.submitted)">
-                <mat-error *ngIf="formControl?.errors.required">
-                    The field is mandatory.
-                </mat-error>
-                <mat-error *ngIf="formControl?.errors.max">
-                    The value {{formControl?.errors.max.actual}} is above allowed value {{formControl?.errors.max.max}}.
-                </mat-error>
-            </div>
-        </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-        <ng-content select="[description]"></ng-content>
+<div class="config-element">
 
-    </mat-card-content>
-</mat-card>
+    <div class="config-element-container">
+        <div class="form-fields">
+            <ng-content select="[form-fields]"></ng-content>
+        </div>
+        <div class="description">
+            <ng-content select="[description]"></ng-content>
+        </div>
+    </div>
+
+    <div class="errors-container">
+        <div *ngIf="formControl?.invalid && (formControl?.touched || formGroupDirective.submitted)">
+            <mat-error *ngIf="formControl?.errors.required">
+                The field is mandatory.
+            </mat-error>
+            <mat-error *ngIf="formControl?.errors.max">
+                The value {{formControl?.errors.max.actual}} is above allowed value {{formControl?.errors.max.max}}.
+            </mat-error>
+            <mat-error *ngIf="formControl?.errors.min">
+                The value {{formControl?.errors.min.actual}} is below allowed value {{formControl?.errors.min.min}}.
+            </mat-error>
+        </div>
+    </div>
+
+</div>
