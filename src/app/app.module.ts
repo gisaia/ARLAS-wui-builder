@@ -1,7 +1,8 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import {
   MatButtonModule, MatDialogModule, MatIconModule,
-  MatListModule, MatSidenavModule, MatTooltipModule, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS, GestureConfig
+  MatListModule, MatSidenavModule, MatTooltipModule, MatSnackBarModule,
+  MAT_SNACK_BAR_DEFAULT_OPTIONS, GestureConfig, MatFormFieldModule
 } from '@angular/material';
 import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,6 +19,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
 import { ArlasToolKitModule } from 'arlas-wui-toolkit';
+import { SharedModule } from '@shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -38,15 +43,21 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
     ArlasToolKitModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    FormsModule,
     MapConfigModule,
     MatButtonModule,
     MatDialogModule,
+    MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     MatListModule,
+    MatSelectModule,
     MatSidenavModule,
     MatSnackBarModule,
     MatTooltipModule,
+    ReactiveFormsModule,
     SearchConfigModule,
+    SharedModule,
     TimelineConfigModule,
     LoggerModule.forRoot({
       level: environment.logLevel,

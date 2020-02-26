@@ -6,7 +6,7 @@
       "server": {
         "url": "http://demo.arlas.io/arlas",
         "collection": {
-          "name": "demo_ais-danmark",
+          "name": "metacollection",
           "id": "id"
         },
         "max_age_cache": 120

@@ -1,5 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 
 interface Page {
   link: string;

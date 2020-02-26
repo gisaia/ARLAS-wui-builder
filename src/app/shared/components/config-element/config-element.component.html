@@ -20,6 +20,9 @@
             <mat-error *ngIf="formControl?.errors.min">
                 The value {{formControl?.errors.min.actual}} is below allowed value {{formControl?.errors.min.min}}.
             </mat-error>
+            <mat-error *ngIf="formControl?.errors.maxlength">
+                The allowed size is {{formControl?.errors.maxlength.requiredLength}}. Currently is {{formControl?.errors.maxlength.actualLength}}
+            </mat-error>
         </div>
     </div>
 

@@ -1,4 +1,4 @@
-<div class="landing-container">
+<div class="landing-container" *ngIf="!configChoice">
     <div class="bloc" (click)="config('new')">
         <mat-icon>add</mat-icon>
         <span>New configuration</span>
@@ -8,3 +8,38 @@
         <span>Import from file</span>
     </div>
 </div>
+<ng-container *ngIf="configChoice">
+    <h2 mat-dialog-title>Set ALRAS Server url</h2>
+    <mat-dialog-content>
+        <div [formGroup]="this.mainFormService.getStartingGlobalForm()">
+            <app-config-element>
+                <div form-fields>
+                    <mat-form-field style="width:100%">
+                        <mat-label>Server URL</mat-label>
+                        <input matInput (change)="this.mainFormService.getStartingGlobalForm().get('serverUrl').valid && checkUrl()" formControlName="serverUrl">
+                    </mat-form-field>
+                </div>
+                <button (click)="checkUrl()" mat-raised-button>Check url</button>
+            </app-config-element>
+            <app-config-element *ngIf="isServerReady">
+                <div form-fields>
+                    <mat-form-field  style="width:100%">
+                        <mat-label>Collections</mat-label>
+                        <mat-select formControlName="collections" multiple>
+                            <mat-option *ngFor="let collection of availablesCollections" value="{{collection}}">
+                                {{ collection}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div description>
+                    Choose collections availables in configuration.<br />
+                    Only one for now.
+                </div>
+            </app-config-element> 
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button (click)="this.startEvent.next('new');" [disabled]="this.mainFormService.getStartingGlobalForm().invalid" mat-raised-button color="primary">Start configuration</button>
+    </mat-dialog-actions>
+</ng-container>
