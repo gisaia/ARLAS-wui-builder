@@ -1,14 +1,15 @@
 import { Component, OnInit, Input, forwardRef, OnDestroy, ViewChild } from '@angular/core';
 import {
   FormBuilder, FormGroup, Validators, AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS,
-  ControlValueAccessor, Validator, ValidationErrors
+  ControlValueAccessor, Validator, ValidationErrors, FormArray
 } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Observable, Subscription } from 'rxjs';
-import { MatStepper } from '@angular/material';
+import { MatStepper, MatDialog } from '@angular/material';
 import { CustomValidators } from '@app/utils/custom-validators';
 import { NGXLogger } from 'ngx-logger';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { DialogColorTableComponent, KeywordColor } from '../dialog-color-table/dialog-color-table.component';
 
 @Component({
   selector: 'app-edit-layer-features',
@@ -41,7 +42,9 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
   public modeFormGroup: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
-    private logger: NGXLogger, private defaultValuesService: DefaultValuesService) { }
+    private logger: NGXLogger,
+    private defaultValuesService: DefaultValuesService,
+    public dialog: MatDialog) { }
 
   ngOnInit() {
 
@@ -80,12 +83,24 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
             Validators.required)],
           colorProvidedFieldCtrl: ['', CustomValidators.getConditionalValidator(
             () => !!this.modeFormGroup ? this.colorSourceCtrl().value === 'provided' : false,
-            Validators.required)]
+            Validators.required)],
+          colorGeneratedFieldCtrl: ['', CustomValidators.getConditionalValidator(
+            () => !!this.modeFormGroup ? this.colorSourceCtrl().value === 'generated' : false,
+            Validators.required)],
+          colorSetFieldCtrl: ['', CustomValidators.getConditionalValidator(
+            () => !!this.modeFormGroup ? this.colorSourceCtrl().value === 'manual' : false,
+            Validators.required)],
+          colorSetValuesCtrl: this.formBuilder.array([], [CustomValidators
+            .getConditionalValidator(
+              () => !!this.modeFormGroup ? this.colorSourceCtrl().value === 'manual' : false,
+              Validators.required)
+          ])
         })
       })
     });
 
     this.submitSubscription = this.submit.subscribe(() => {
+      // activate validation on submit
       this.logger.log('submitting', this.modeFormGroup);
       this.stepper.steps.setDirty();
       this.stepper.steps.forEach(s => s.interacted = true);
@@ -97,6 +112,20 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
       Object.keys(this.choosenColorGrp().controls).forEach(k =>
         this.choosenColorGrp().get(k).updateValueAndValidity()
       );
+    });
+
+    // in manual color mode, update the keywords when source field is changed
+    this.colorSetFieldCtrl().valueChanges.subscribe(v => {
+      this.colorSetValuesCtrl().clear();
+      const keywords = ['toto', 'tata'];
+      keywords.forEach(k => {
+        const keywordColorGrp = this.formBuilder.group({
+          keyword: [''],
+          color: ['']
+        });
+        keywordColorGrp.setValue({ keyword: k, color: '#ffffff' });
+        this.colorSetValuesCtrl().push(keywordColorGrp);
+      });
     });
   }
 
@@ -139,10 +168,39 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
   public colorFixCtrl() {
     return this.choosenColorGrp().get('colorFixCtrl');
   }
+
   public setColorFix(color: string) {
-    return this.choosenColorGrp().get('colorFixCtrl').setValue(color);
+    this.choosenColorGrp().get('colorFixCtrl').setValue(color);
+    this.choosenColorGrp().get('colorFixCtrl').markAsDirty();
+    this.choosenColorGrp().get('colorFixCtrl').markAsTouched();
   }
+
   public colorProvidedFieldCtrl() {
     return this.choosenColorGrp().get('colorProvidedFieldCtrl');
+  }
+
+  public colorGeneratedFieldCtrl() {
+    return this.choosenColorGrp().get('colorGeneratedFieldCtrl');
+  }
+
+  public colorSetFieldCtrl() {
+    return this.choosenColorGrp().get('colorSetFieldCtrl');
+  }
+
+  public colorSetValuesCtrl() {
+    return this.choosenColorGrp().get('colorSetValuesCtrl') as FormArray;
+  }
+
+  public openColorTable() {
+    const dialogRef = this.dialog.open(DialogColorTableComponent, {
+      data: this.colorSetValuesCtrl().value as KeywordColor[],
+      autoFocus: false,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.colorSetValuesCtrl().setValue(result);
+      }
+    });
   }
 }

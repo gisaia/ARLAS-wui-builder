@@ -6,6 +6,7 @@ import { AlertOnChangeDirective } from '@app/shared/directives/alert-on-change.d
 import { Subject } from 'rxjs';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { HttpClient } from '@angular/common/http';
+import { ColorPickerWrapperComponent } from '@app/shared/components/color-picker-wrapper/color-picker-wrapper.component';
 
 describe('EditLayerFeaturesComponent', () => {
   let spectator: Spectator<EditLayerFeaturesComponent>;
@@ -13,7 +14,8 @@ describe('EditLayerFeaturesComponent', () => {
     component: EditLayerFeaturesComponent,
     declarations: [
       MockComponent(ConfigElementComponent),
-      MockDirective(AlertOnChangeDirective)
+      MockDirective(AlertOnChangeDirective),
+      MockComponent(ColorPickerWrapperComponent)
     ],
     providers: [DefaultValuesService],
     mocks: [HttpClient]

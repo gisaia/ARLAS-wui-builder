@@ -7,20 +7,24 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AlertOnChangeDirective } from './directives/alert-on-change.directive';
+import { ColorPickerWrapperComponent } from './components/color-picker-wrapper/color-picker-wrapper.component';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
-  declarations: [ConfigElementComponent, ConfirmModalComponent, AlertOnChangeDirective],
+  declarations: [ConfigElementComponent, ConfirmModalComponent, AlertOnChangeDirective, ColorPickerWrapperComponent],
   imports: [
     CommonModule,
     MatDialogModule,
     MatCardModule,
     MatButtonModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    ColorPickerModule
   ],
   exports: [
     ConfigElementComponent,
     ConfirmModalComponent,
-    AlertOnChangeDirective
+    AlertOnChangeDirective,
+    ColorPickerWrapperComponent
   ]
 })
 export class SharedModule { }
