@@ -124,25 +124,25 @@
                     <mat-form-field>
                         <mat-label>Color source</mat-label>
                         <mat-select formControlName="colorSourceCtrl"
-                            appAlertOnChange="changing the color source will reset the choosen color(s)"
-                            [dependants]="[colorFixCtrl(), colorProvidedFieldCtrl(), colorGeneratedFieldCtrl(), colorSetFieldCtrl()]">
-                            <mat-option value="fix">Fix</mat-option>
-                            <mat-option value="provided">Provided by a field</mat-option>
-                            <mat-option value="generated">Generated from a field</mat-option>
-                            <mat-option value="manual">Choosen from a field</mat-option>
-                            <mat-option value="interpolated">Interpolated from a field</mat-option>
+                            appAlertOnChange="changing the color source will reset the choosen color(s)" [dependants]="[colorFixCtrl(), colorProvidedFieldCtrl(), 
+                            colorGeneratedFieldCtrl(), colorManualGroup(), colorInterpolatedGroup()]">
+                            <mat-option [value]="COLOR_SOURCE.fix">Fix</mat-option>
+                            <mat-option [value]="COLOR_SOURCE.provided">Provided by a field</mat-option>
+                            <mat-option [value]="COLOR_SOURCE.generated">Generated from a field</mat-option>
+                            <mat-option [value]="COLOR_SOURCE.manual">Choosen from a field</mat-option>
+                            <mat-option [value]="COLOR_SOURCE.interpolated">Interpolated from a field</mat-option>
                         </mat-select>
                     </mat-form-field>
 
                     <div>
                         <ng-container formGroupName="choosenColorGrp">
 
-                            <span *ngIf="colorSourceCtrl().value == 'fix'">
+                            <div *ngIf="colorSourceCtrl().value == COLOR_SOURCE.fix">
                                 <app-color-picker [value]="colorFixCtrl().value" (setValue)="setColorFix($event)">
                                 </app-color-picker>
-                            </span>
+                            </div>
 
-                            <span *ngIf="colorSourceCtrl().value == 'provided'">
+                            <div *ngIf="colorSourceCtrl().value == COLOR_SOURCE.provided">
                                 <mat-form-field>
                                     <mat-label>Source field</mat-label>
                                     <mat-select formControlName="colorProvidedFieldCtrl">
@@ -150,9 +150,9 @@
                                         <mat-option value="b">field b</mat-option>
                                     </mat-select>
                                 </mat-form-field>
-                            </span>
+                            </div>
 
-                            <span *ngIf="colorSourceCtrl().value == 'generated'">
+                            <div *ngIf="colorSourceCtrl().value == COLOR_SOURCE.generated">
                                 <mat-form-field>
                                     <mat-label>Source field</mat-label>
                                     <mat-select formControlName="colorGeneratedFieldCtrl">
@@ -160,35 +160,125 @@
                                         <mat-option value="b">field b</mat-option>
                                     </mat-select>
                                 </mat-form-field>
-                            </span>
+                            </div>
 
-                            <span *ngIf="colorSourceCtrl().value == 'manual'">
+                            <div *ngIf="colorSourceCtrl().value == COLOR_SOURCE.manual"
+                                formGroupName="colorManualGroup">
                                 <mat-form-field>
                                     <mat-label>Source field</mat-label>
                                     <!-- No [dependants] because we manually set the new values on source field change -->
-                                    <mat-select formControlName="colorSetFieldCtrl"
+                                    <mat-select formControlName="colorManualFieldCtrl"
                                         appAlertOnChange="Changing the source field will reset the colors">
                                         <mat-option value="a">field a</mat-option>
                                         <mat-option value="b">field b</mat-option>
                                     </mat-select>
                                 </mat-form-field>
 
-                                <span>
+                                <div>
                                     <button type="button" mat-raised-button color="primary" (click)="openColorTable()"
-                                        *ngIf="colorSetFieldCtrl()?.value">
+                                        *ngIf="colorManualFieldCtrl()?.value">
                                         View / change colors
                                     </button>
-                                </span>
-                            </span>
+                                </div>
+                            </div>
 
-                            <div *ngIf="choosenColorGrp()?.invalid && choosenColorGrp()?.touched">
-                                <mat-error *ngIf="colorFixCtrl()?.errors?.required">
+                            <div *ngIf="colorSourceCtrl().value == COLOR_SOURCE.interpolated"
+                                formGroupName="colorInterpolatedGroup">
+                                <mat-form-field>
+                                    <mat-label>Source field</mat-label>
+                                    <mat-select formControlName="colorInterpolatedFieldCtrl">
+                                        <mat-option value="date">field date</mat-option>
+                                        <mat-option value="number">field number</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <div *ngIf="colorInterpolatedFieldCtrl().value">
+                                    <div>
+                                        <mat-label>Normalize</mat-label>
+                                        <mat-slide-toggle formControlName="colorInterpolatedNormalizeCtrl"
+                                            labelPosition="before">
+                                        </mat-slide-toggle>
+                                    </div>
+
+                                    <div *ngIf="colorInterpolatedNormalizeCtrl().value">
+                                        <mat-form-field>
+                                            <mat-label>Scope</mat-label>
+                                            <mat-select formControlName="colorInterpolatedScopeCtrl">
+                                                <mat-option value="local">Local</mat-option>
+                                                <mat-option value="global">Global</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+
+                                        <div *ngIf="colorInterpolatedScopeCtrl().value === 'local'">
+                                            <mat-label>Normalize by key</mat-label>
+                                            <mat-slide-toggle formControlName="colorInterpolatedNormalizeByKeyCtrl"
+                                                labelPosition="before">
+                                            </mat-slide-toggle>
+                                        </div>
+
+                                        <div *ngIf="colorInterpolatedNormalizeByKeyCtrl().value">
+                                            <mat-form-field>
+                                                <mat-select formControlName="colorInterpolatedNormalizeLocalFieldCtrl">
+                                                    <mat-option value="a">field a</mat-option>
+                                                    <mat-option value="b">field b</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="!colorInterpolatedNormalizeCtrl().value">
+                                        <mat-form-field>
+                                            <mat-label>Minimum value</mat-label>
+                                            <input matInput placeholder="Min" type="number"
+                                                formControlName="colorInterpolatedMinValueCtrl">
+                                        </mat-form-field>
+                                        <mat-form-field>
+                                            <mat-label>Maximum value</mat-label>
+                                            <input matInput placeholder="Max" type="number"
+                                                formControlName="colorInterpolatedMaxValueCtrl">
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div>
+                                        <button type="button" mat-raised-button color="primary"
+                                            (click)="openPaletteTable()">
+                                            View / select palette
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div *ngIf="choosenColorGrp()?.invalid && choosenColorGrp().touched">
+                                <mat-error *ngIf=" colorFixCtrl().touched && colorFixCtrl()?.errors?.required">
                                     A color is required
                                 </mat-error>
                                 <mat-error
-                                    *ngIf="colorProvidedFieldCtrl()?.errors?.required 
-                                || colorGeneratedFieldCtrl()?.errors?.required || colorSetFieldCtrl()?.errors?.required">
+                                    *ngIf="colorProvidedFieldCtrl().touched && colorProvidedFieldCtrl()?.errors?.required 
+                                    || colorGeneratedFieldCtrl().touched && colorGeneratedFieldCtrl()?.errors?.required 
+                                    || colorManualFieldCtrl().touched && colorManualFieldCtrl()?.errors?.required 
+                                    || colorInterpolatedFieldCtrl().touched && colorInterpolatedFieldCtrl()?.errors?.required">
                                     A source field is required
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="colorInterpolatedMinValueCtrl().touched && colorInterpolatedMinValueCtrl()?.errors?.required">
+                                    A minimum value is required
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="colorInterpolatedMaxValueCtrl().touched && colorInterpolatedMaxValueCtrl()?.errors?.required">
+                                    A maximum value is required
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="colorInterpolatedScopeCtrl().touched && colorInterpolatedScopeCtrl()?.errors?.required">
+                                    A scope is required
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="colorInterpolatedNormalizeLocalFieldCtrl().touched && colorInterpolatedNormalizeLocalFieldCtrl()?.errors?.required">
+                                    A local-normalization field is required
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="colorInterpolatedPaletteCtrl().touched && colorInterpolatedPaletteCtrl()?.errors?.required">
+                                    A palette is required
                                 </mat-error>
                             </div>
 

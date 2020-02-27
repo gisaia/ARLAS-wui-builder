@@ -1,0 +1,54 @@
+h1 {
+  text-align: center;
+}
+
+%palette {
+  height: 100px;
+  display: flex;
+  align-items: stretch;
+  margin: 20px;
+
+  .color {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.palette-selector {
+  @extend %palette;
+  &:hover {
+    box-shadow: 10px 10px 5px grey;
+    border-radius: 20px 20px 20px 20px;
+    cursor: pointer;
+  }
+
+  .color {
+    &:first-child {
+      border-radius: 20px 0px 0px 20px;
+    }
+
+    &:last-child {
+      border-radius: 0px 20px 20px 0px;
+    }
+  }
+}
+
+.palette-customize {
+  @extend %palette;
+  .color {
+    input.ngx-color-picker {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+  }
+}
+
+.palette-gradient {
+  @extend %palette;
+}
+
+.action-button {
+  display: flex;
+  justify-content: space-between;
+}
