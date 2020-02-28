@@ -3,6 +3,20 @@
     <app-config-element>
         <div form-fields>
             <mat-form-field>
+                <mat-label>Geographical operator</mat-label>
+                <mat-select formControlName="geographicalOperator">
+                    <mat-option *ngFor="let ope of operators | keyvalue" value="{{ope.key}}">{{ope.value}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div description>
+            It is used to..
+        </div>
+    </app-config-element>
+
+    <app-config-element>
+        <div form-fields>
+            <mat-form-field>
                 <mat-label>Target geometries</mat-label>
                 <mat-select formControlName="targetGeometries">
                     <mat-option value="geom">geom</mat-option>
@@ -16,29 +30,6 @@
             dignitati non possit quam velit petulanter, etiamsi sine ulla suspicione, at non sine argumento male dicere?
             Sed istarum partium culpa est eorum, qui te agere voluerunt; laus pudoris tui, quod ea te invitum dicere
             videbamus, ingenii, quod ornate politeque dixisti.
-            Nec piget dicere avide magis hanc insulam populum Romanum invasisse quam iuste. Ptolomaeo enim rege
-            foederato nobis et socio ob aerarii nostri angustias iusso sine ulla culpa proscribi ideoque hausto veneno
-            voluntaria morte deleto et tributaria facta est et velut hostiles eius exuviae classi inpositae in urbem
-            advectae sunt per Catonem, nunc repetetur ordo gestorum.
-            Ut enim benefici liberalesque sumus, non ut exigamus gratiam (neque enim beneficium faeneramur sed natura
-            propensi ad liberalitatem sumus), sic amicitiam non spe mercedis adducti sed quod omnis eius fructus in ipso
-            amore inest, expetendam putamus.
-
         </div>
-    </app-config-element>
-
-    <app-config-element>
-        <div form-fields>
-            <mat-form-field>
-                <mat-label>Geographical operator</mat-label>
-                <mat-select formControlName="geographicalOperator">
-                    <mat-option value="ope">ope</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div description>
-            It is used to..
-        </div>
-
     </app-config-element>
 </div>

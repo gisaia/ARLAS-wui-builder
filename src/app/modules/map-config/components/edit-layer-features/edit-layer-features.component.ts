@@ -11,6 +11,7 @@ import { NGXLogger } from 'ngx-logger';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { DialogColorTableComponent, KeywordColor } from '../dialog-color-table/dialog-color-table.component';
 import { DialogPaletteSelectorComponent, PaletteData } from '../dialog-palette-selector/dialog-palette-selector.component';
+import { MainFormService } from '@services/main-form/main-form.service';
 
 enum COLOR_SOURCE {
   fix = 'fix',
@@ -54,7 +55,9 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
     private formBuilder: FormBuilder,
     private logger: NGXLogger,
     private defaultValuesService: DefaultValuesService,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog,
+    public mainformService: MainFormService
+    ) { }
 
   ngOnInit() {
 

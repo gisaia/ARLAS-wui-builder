@@ -26,7 +26,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/default.json"
+              "src/default.json",
+              "src/config.json"
             ],
             "styles": [
               "src/styles.scss"
@@ -56,7 +57,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumError": "8mb"
                 }
               ]
             }
@@ -89,7 +90,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/default.json"
+              "src/default.json",
+              "src/config.json"
             ],
             "styles": [
               "src/styles.scss"

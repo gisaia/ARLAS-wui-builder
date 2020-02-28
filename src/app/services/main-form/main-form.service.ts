@@ -3,7 +3,8 @@ import { FormGroup, AbstractControl, FormArray } from '@angular/forms';
 
 enum MAIN_FORM_KEYS {
   MAP_CONFIG_LAYERS = 'MapConfigLayers',
-  MAP_CONFIG_GLOBAL = 'MapConfigGlobal'
+  MAP_CONFIG_GLOBAL = 'MapConfigGlobal',
+  STARTING_CONFIG = 'StartingConfig'
 }
 
 @Injectable({
@@ -33,6 +34,17 @@ export class MainFormService {
     if (this.getMapConfigGlobalForm() == null) {
       return this.mainForm.addControl(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL, control);
     }
+  }
+
+  public getStartingGlobalForm(): FormGroup {
+    return this.mainForm.get(MAIN_FORM_KEYS.STARTING_CONFIG) as FormGroup;
+  }
+
+  public getCollections(): string[] {
+    if (this.getStartingGlobalForm() !== null) {
+      return this.getStartingGlobalForm().get('collections').value;
+    }
+    return null;
   }
 
 }

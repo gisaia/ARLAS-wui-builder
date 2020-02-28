@@ -1,0 +1,16 @@
+{
+    "arlas": {
+      "web": {
+        "contributors": []
+      },
+      "server": {
+        "url": "http://demo.arlas.io/arlas",
+        "collection": {
+          "name": "metacollection",
+          "id": "id"
+        },
+        "max_age_cache": 120
+      }
+    }
+  }
+  

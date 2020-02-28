@@ -1,33 +1,36 @@
 @import "variables.scss";
 
 .config-element {
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
-    border-radius: 4px;
-    padding: 16px;
-    margin: 15px 0px;
-    background-color: white;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  padding: 16px;
+  margin: 15px 0px;
+  background-color: white;
 
-    .config-element-container {
-        display: flex;
-        align-items: center;
+  .config-element-container {
+    display: flex;
+    align-items: flex-start;
 
-        .form-fields {
-            min-width: 250px;
-            padding: 10px;
-        }
-
-        .description {
-            width: 100%;
-            margin-left: 36px;
-            font-size: 14px;
-            color: $config-element-description-text-color;
-            line-height: 1.6;
-            border-left: .2rem solid $config-element-description-border-color;
-            background-color: $config-element-description-background;
-            padding: 10px;
-            border-radius: 4px;
-            flex-basis: content;
-        }    
+    .form-fields {
+      min-width: 250px;
+      padding: 10px;
+      flex: 1;
     }
 
+    .description {
+      align-self: center;
+      margin-left: 36px;
+      font-size: 14px;
+      color: $config-element-description-text-color;
+      line-height: 1.6;
+      border-left: 0.2rem solid $config-element-description-border-color;
+      background-color: $config-element-description-background;
+      border-radius: 4px;       
+    }
+
+    .description:not(:empty) {
+      padding: 10px;
+    }
+  }
 }
