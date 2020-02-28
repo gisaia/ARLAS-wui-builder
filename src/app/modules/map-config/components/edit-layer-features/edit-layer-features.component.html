@@ -9,8 +9,7 @@
                         <mat-select formControlName="collectionCtrl"
                             appAlertOnChange="changing the collection will reset the rendered geometry"
                             [dependants]="[modeFormGroup.get('geometryStep').get('geometryCtrl')]">
-                            <mat-option value="col1">col1</mat-option>
-                            <mat-option value="col2">col2</mat-option>
+                            <mat-option *ngFor="let collection of this.mainformService.getStartingGlobalForm()?.get('collections').value" value="{{collection}}">{{collection}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
