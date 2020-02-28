@@ -4,12 +4,22 @@
     },
     "map": {
         "layer": {
-            "zoom":{
-                "min": 10,
-                "max": 15
+            "visibilityStep": {
+                "zoomMinCtrl": 10,
+                "zoomMaxCtrl": 10,
+                "featuresMaxCtrl": 7500
             },
-            "max_feature": 7500,
-            "opacity": 0.5
+            "styleStep": {
+                "opacityCtrl": 0.5,
+                "colorSourceCtrl": "interpolated",
+                "choosenColorGrp": {
+                    "colorFixCtrl": "#abcdef",
+                    "colorInterpolatedGroup": {
+                        "colorInterpolatedNormalizeCtrl": true,
+                        "colorInterpolatedMinValueCtrl": 5
+                    }
+                }
+            }
         }
     }
 }

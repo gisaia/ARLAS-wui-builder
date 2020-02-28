@@ -8,10 +8,10 @@ import { Observable, Subscription } from 'rxjs';
 import { MatStepper, MatDialog } from '@angular/material';
 import { CustomValidators } from '@app/utils/custom-validators';
 import { NGXLogger } from 'ngx-logger';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { DialogColorTableComponent, KeywordColor } from '../dialog-color-table/dialog-color-table.component';
 import { DialogPaletteSelectorComponent, PaletteData } from '../dialog-palette-selector/dialog-palette-selector.component';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { FormBuilderWithDefaultService } from '@app/services/form-builder-with-default/form-builder-with-default.service';
 
 enum COLOR_SOURCE {
   fix = 'fix',
@@ -52,57 +52,57 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
 
   public modeFormGroup: FormGroup;
   constructor(
+    private formBuilderDefault: FormBuilderWithDefaultService,
     private formBuilder: FormBuilder,
     private logger: NGXLogger,
-    private defaultValuesService: DefaultValuesService,
     public dialog: MatDialog,
     public mainformService: MainFormService
-    ) { }
+  ) { }
 
   ngOnInit() {
 
-    this.modeFormGroup = this.formBuilder.group({
+    this.modeFormGroup = this.formBuilderDefault.group('map.layer', {
       collectionStep: this.formBuilder.group({
         collectionCtrl:
           [
-            '',
+            null,
             Validators.required
           ]
       }),
       geometryStep: this.formBuilder.group({
         geometryCtrl:
           [
-            '',
+            null,
             Validators.required
           ],
         geometryTypeCtrl:
           [
-            '',
+            null,
             Validators.required
           ]
       }),
       visibilityStep: this.formBuilder.group({
         visibleCtrl:
           [
-            ''
+            null
           ],
         zoomMinCtrl:
           [
-            this.defaultValuesService.getValue('map.layer.zoom.min'),
+            null,
             [
               Validators.required, Validators.min(1), Validators.max(20)
             ]
           ],
         zoomMaxCtrl:
           [
-            this.defaultValuesService.getValue('map.layer.zoom.max'),
+            null,
             [
               Validators.required, Validators.min(1), Validators.max(20)
             ]
           ],
         featuresMaxCtrl:
           [
-            this.defaultValuesService.getValue('map.layer.max_feature'),
+            null,
             [
               Validators.required,
               Validators.max(10000),
@@ -119,17 +119,17 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
       styleStep: this.formBuilder.group({
         opacityCtrl:
           [
-            this.defaultValuesService.getValue('map.layer.opacity')
+            null
           ],
         colorSourceCtrl:
           [
-            '',
+            null,
             Validators.required
           ],
         choosenColorGrp: this.formBuilder.group({
           colorFixCtrl:
             [
-              '',
+              null,
               CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
                 this.colorSourceCtrl().value === COLOR_SOURCE.fix :
                 false,
@@ -137,7 +137,7 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
             ],
           colorProvidedFieldCtrl:
             [
-              '',
+              null,
               CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
                 this.colorSourceCtrl().value === COLOR_SOURCE.provided :
                 false,
@@ -145,7 +145,7 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
             ],
           colorGeneratedFieldCtrl:
             [
-              '',
+              null,
               CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
                 this.colorSourceCtrl().value === COLOR_SOURCE.generated
                 : false,
@@ -154,7 +154,7 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
           colorManualGroup: this.formBuilder.group({
             colorManualFieldCtrl:
               [
-                '',
+                null,
                 CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
                   this.colorSourceCtrl().value === COLOR_SOURCE.manual :
                   false,
@@ -172,7 +172,7 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
           colorInterpolatedGroup: this.formBuilder.group({
             colorInterpolatedFieldCtrl:
               [
-                '',
+                null,
                 CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
                   this.colorSourceCtrl().value === COLOR_SOURCE.interpolated :
                   false,
@@ -180,7 +180,7 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
               ],
             colorInterpolatedNormalizeCtrl:
               [
-                '',
+                null,
                 CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
                   this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedFieldCtrl().value
                   : false,
@@ -188,7 +188,7 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
               ],
             colorInterpolatedScopeCtrl:
               [
-                '',
+                null,
                 CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
                   this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedNormalizeCtrl().value
                   : false,
@@ -196,11 +196,11 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
               ],
             colorInterpolatedNormalizeByKeyCtrl:
               [
-                ''
+                null
               ],
             colorInterpolatedNormalizeLocalFieldCtrl:
               [
-                '',
+                null,
                 CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
                   this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedNormalizeByKeyCtrl().value :
                   false,
@@ -208,7 +208,7 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
               ],
             colorInterpolatedMinValueCtrl:
               [
-                '',
+                null,
                 CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
                   this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedFieldCtrl().value
                   && !this.colorInterpolatedNormalizeCtrl().value :
@@ -217,7 +217,7 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
               ],
             colorInterpolatedMaxValueCtrl:
               [
-                '',
+                null,
                 CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
                   this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedFieldCtrl().value
                   && !this.colorInterpolatedNormalizeCtrl().value :
@@ -226,7 +226,7 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
               ],
             colorInterpolatedPaletteCtrl:
               [
-                '',
+                null,
                 CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
                   this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedFieldCtrl().value :
                   false,
@@ -269,7 +269,7 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
     });
   }
 
-  // recursively update the value and validity of itself and sub-controls
+  // recursively update the value and validity of itself and sub-controls (but not ancestors)
   private updateValueAndValidity(control: AbstractControl) {
     control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
     if (control instanceof FormGroup || control instanceof FormArray) {
