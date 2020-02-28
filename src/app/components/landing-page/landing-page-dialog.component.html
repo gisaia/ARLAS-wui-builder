@@ -14,16 +14,15 @@
         <div [formGroup]="this.mainFormService.getStartingGlobalForm()">
             <app-config-element>
                 <div form-fields>
-                    <mat-form-field style="width:100%">
+                    <mat-form-field class="server-url-field">
                         <mat-label>Server URL</mat-label>
-                        <input matInput (change)="this.mainFormService.getStartingGlobalForm().get('serverUrl').valid && checkUrl()" formControlName="serverUrl">
+                        <input matInput (change)="this.mainFormService.getStartingGlobalForm().get('serverUrl').valid ? checkUrl() : false" formControlName="serverUrl">
                     </mat-form-field>
                 </div>
-                <button (click)="checkUrl()" mat-raised-button>Check url</button>
             </app-config-element>
             <app-config-element *ngIf="isServerReady">
                 <div form-fields>
-                    <mat-form-field  style="width:100%">
+                    <mat-form-field  class="collection-field">
                         <mat-label>Collections</mat-label>
                         <mat-select formControlName="collections" multiple>
                             <mat-option *ngFor="let collection of availablesCollections" value="{{collection}}">
@@ -33,7 +32,7 @@
                     </mat-form-field>
                 </div>
                 <div description>
-                    Choose collections availables in configuration.<br />
+                    Choose collections available in configuration.<br />
                     Only one for now.
                 </div>
             </app-config-element> 

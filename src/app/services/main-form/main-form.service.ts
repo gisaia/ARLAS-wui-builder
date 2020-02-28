@@ -41,7 +41,10 @@ export class MainFormService {
   }
 
   public getCollections(): string[] {
-    return this.getStartingGlobalForm().get('collections').value;
+    if (this.getStartingGlobalForm() !== null) {
+      return this.getStartingGlobalForm().get('collections').value;
+    }
+    return null;
   }
 
 }
