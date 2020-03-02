@@ -12,7 +12,7 @@
             },
             "styleStep": {
                 "opacityCtrl": 0.5,
-                "colorSourceCtrl": "interpolated",
+                "colorSourceCtrl": "manual",
                 "choosenColorGrp": {
                     "colorFixCtrl": "#abcdef",
                     "colorInterpolatedGroup": {

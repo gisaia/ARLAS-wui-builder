@@ -9,13 +9,15 @@ import { HttpClient } from '@angular/common/http';
 import { ColorPickerWrapperComponent } from '@app/shared/components/color-picker-wrapper/color-picker-wrapper.component';
 import { ResetOnChangeDirective } from '@app/shared/directives/reset-on-change/reset-on-change.directive';
 import { CollectionService } from '@app/services/collection-service/collection.service';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 describe('EditLayerFeaturesComponent', () => {
   let spectator: Spectator<EditLayerFeaturesComponent>;
   const createComponent = createComponentFactory({
     component: EditLayerFeaturesComponent,
     componentProviders: [
-      mockProvider(CollectionService)
+      mockProvider(CollectionService),
+      mockProvider(ArlasColorGeneratorLoader)
     ],
     declarations: [
       MockComponent(ConfigElementComponent),

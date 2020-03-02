@@ -19,10 +19,14 @@ under the License.
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
-import { map } from 'rxjs/operators';
+import { map, finalize } from 'rxjs/operators';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
+import { ComputationRequest, Aggregation, AggregationsRequest, AggregationResponse } from 'arlas-api';
 
 export import FIELD_TYPES = CollectionReferenceDescriptionProperty.TypeEnum;
+export import METRIC_TYPES = ComputationRequest.MetricEnum;
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NGXLogger } from 'ngx-logger';
 
 @Injectable({
   providedIn: 'root'
@@ -30,31 +34,73 @@ export import FIELD_TYPES = CollectionReferenceDescriptionProperty.TypeEnum;
 export class CollectionService {
 
   constructor(
-    private collabSearchService: ArlasCollaborativesearchService
+    private collabSearchService: ArlasCollaborativesearchService,
+    private spinner: NgxSpinnerService,
+    private logger: NGXLogger
   ) { }
 
   public getCollectionFields(collection: string, types?: Array<FIELD_TYPES>)
     : Observable<Array<string>> {
 
-    return this.collabSearchService.describe(collection).pipe(map((c: CollectionReferenceDescriptionProperty) => {
+    this.spinner.show();
 
-      const getSubFields = (properties, parentPath?: string): Array<string> => {
-        return Object.keys(properties).flatMap(key => {
-          const path = parentPath ? parentPath + '.' + key : key;
-          const property = properties[key];
+    const result: Observable<Array<string>> = this.collabSearchService.describe(collection).pipe(map(
+      (c: CollectionReferenceDescriptionProperty) => {
 
-          if (property.type === CollectionReferenceDescriptionProperty.TypeEnum.OBJECT) {
-            return getSubFields(property.properties, path);
+        const getSubFields = (properties, parentPath?: string): Array<string> => {
+          return Object.keys(properties).flatMap(key => {
+            const path = parentPath ? parentPath + '.' + key : key;
+            const property = properties[key];
 
-          } else if (!types || types.includes(property.type)) {
-            return path;
-          } else {
-            return null;
-          }
-        }).filter(p => p !== null);
-      };
+            if (property.type === CollectionReferenceDescriptionProperty.TypeEnum.OBJECT) {
+              return getSubFields(property.properties, path);
 
-      return getSubFields(c.properties).sort();
-    }));
+            } else if (!types || types.includes(property.type)) {
+              return path;
+            } else {
+              return null;
+            }
+          }).filter(p => p !== null);
+        };
+
+        return getSubFields(c.properties).sort();
+      }))
+      .pipe(finalize(() => this.spinner.hide()));
+
+    return result;
   }
+
+  public getComputationMetric(collection: string, field: string, metric: METRIC_TYPES) {
+
+    const computation: ComputationRequest = {
+      field,
+      metric
+    };
+    this.spinner.show();
+
+    return this.collabSearchService.getExploreApi().computePost(collection, computation).then(ag => {
+      this.spinner.hide();
+      return ag.value;
+    })
+      .finally(() => this.spinner.hide());
+  }
+
+  public getAggregation(collection: string, field: string): Promise<Array<string>> {
+
+    this.spinner.show();
+    const aggregation: Aggregation = {
+      type: Aggregation.TypeEnum.Term,
+      field,
+      size: '10'
+    };
+    const aggreationRequest: AggregationsRequest = {
+      aggregations: [aggregation]
+    };
+
+    return this.collabSearchService.getExploreApi().aggregatePost(collection, aggreationRequest).then((a: AggregationResponse) => {
+      return a.elements ? a.elements.map(e => e.key) : [];
+    })
+      .finally(() => this.spinner.hide());
+  }
+
 }

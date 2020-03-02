@@ -30,7 +30,8 @@ import { DialogColorTableComponent, KeywordColor } from '../dialog-color-table/d
 import { DialogPaletteSelectorComponent, PaletteData } from '../dialog-palette-selector/dialog-palette-selector.component';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormBuilderWithDefaultService } from '@app/services/form-builder-with-default/form-builder-with-default.service';
-import { CollectionService, FIELD_TYPES } from '@services/collection-service/collection.service';
+import { CollectionService, FIELD_TYPES, METRIC_TYPES } from '@services/collection-service/collection.service';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 enum COLOR_SOURCE {
   fix = 'fix',
@@ -79,7 +80,8 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
     private logger: NGXLogger,
     public dialog: MatDialog,
     public mainformService: MainFormService,
-    public collectionService: CollectionService
+    public collectionService: CollectionService,
+    private colorService: ArlasColorGeneratorLoader
   ) { }
 
   ngOnInit() {
@@ -277,31 +279,49 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
         })
       );
 
+    // init collection fields, to be used in UI
+    this.collectionCtrl().valueChanges.subscribe(c => {
+      if (!c) {
+        return;
+      }
+      this.collectionService.getCollectionFields(c, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE])
+        .subscribe(
+          f => this.collectionGeoFields = f);
+      this.collectionService.getCollectionFields(c, [FIELD_TYPES.KEYWORD])
+        .subscribe(
+          f => this.collectionKeywordFields = f);
+      this.collectionService.getCollectionFields(c, [FIELD_TYPES.LONG, FIELD_TYPES.INTEGER, FIELD_TYPES.DATE])
+        .subscribe(
+          f => this.collectionIntegerFields = f);
+    });
+
     // in manual color mode, update the keywords when source field is changed
     this.colorManualFieldCtrl().valueChanges.subscribe(v => {
       this.colorManualValuesCtrl().clear();
-      const keywords = ['toto', 'tata'];
-      keywords.forEach(k => {
-        const keywordColorGrp = this.formBuilder.group({
-          keyword: [''],
-          color: ['']
+
+      if (v) {
+        this.collectionService.getAggregation(this.collectionCtrl().value, v).then(keywords => {
+          keywords.forEach(k => {
+            const keywordColorGrp = this.formBuilder.group({
+              keyword: [k],
+              color: [this.colorService.getColor(k)]
+            });
+            this.colorManualValuesCtrl().push(keywordColorGrp);
+          });
         });
-        keywordColorGrp.setValue({ keyword: k, color: '#ffffff' });
-        this.colorManualValuesCtrl().push(keywordColorGrp);
-      });
+      }
     });
 
-    // init collection fields, to be used in UI
-    this.collectionCtrl().valueChanges.subscribe(v => {
-      this.collectionService.getCollectionFields(v, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE])
-        .subscribe(
-          f => this.collectionGeoFields = f);
-      this.collectionService.getCollectionFields(v, [FIELD_TYPES.KEYWORD])
-        .subscribe(
-          f => this.collectionKeywordFields = f);
-      this.collectionService.getCollectionFields(v, [FIELD_TYPES.LONG, FIELD_TYPES.INTEGER, FIELD_TYPES.DATE])
-        .subscribe(
-          f => this.collectionIntegerFields = f);
+    this.colorInterpolatedFieldCtrl().valueChanges.subscribe(f => {
+      if (!f) {
+        return;
+      }
+      this.collectionService.getComputationMetric(this.collectionCtrl().value, f, METRIC_TYPES.MIN).then(min =>
+        this.colorInterpolatedMinValueCtrl().setValue(min)
+      );
+      this.collectionService.getComputationMetric(this.collectionCtrl().value, f, METRIC_TYPES.MAX).then(max =>
+        this.colorInterpolatedMaxValueCtrl().setValue(max)
+      );
     });
   }
 
@@ -321,6 +341,18 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
     if (obj) {
       this.modeFormGroup.patchValue(obj, { emitEvent: false });
       this.onTouched();
+      // launch 'onChange' event on fields that are necesaary to other fields, for edition mode
+      this.collectionCtrl().updateValueAndValidity({ onlySelf: true, emitEvent: true });
+      this.colorInterpolatedFieldCtrl().updateValueAndValidity({ onlySelf: true, emitEvent: true });
+
+      // with FormArray, values cannot be simply set, each inner element is a FormGroup to be created
+      obj.styleStep.choosenColorGrp.colorManualGroup.colorManualValuesCtrl.forEach(k => {
+        const keywordColorGrp = this.formBuilder.group({
+          keyword: [k.keyword],
+          color: [k.color]
+        });
+        this.colorManualValuesCtrl().push(keywordColorGrp);
+      });
     }
   }
   registerOnChange(fn: any): void {
