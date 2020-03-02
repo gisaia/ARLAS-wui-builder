@@ -1,6 +1,6 @@
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { ConfigElementComponent } from './config-element.component';
-import { FormGroupDirective, FormControlDirective, ControlContainer, FormGroup } from '@angular/forms';
+import { FormGroupDirective } from '@angular/forms';
 
 describe('ConfigElementComponent', () => {
   let spectator: Spectator<ConfigElementComponent>;

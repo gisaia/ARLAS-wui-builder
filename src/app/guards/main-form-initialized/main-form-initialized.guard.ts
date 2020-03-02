@@ -19,7 +19,7 @@ under the License.
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { MainFormService } from '@app/services/main-form/main-form.service';
+import { MainFormService } from '@services/main-form/main-form.service';
 
 /**
  * Redirect to root URL if the starting global form is not initialized,

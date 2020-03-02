@@ -24,14 +24,14 @@ import {
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Observable, Subscription } from 'rxjs';
 import { MatStepper, MatDialog, MatSliderChange } from '@angular/material';
-import { CustomValidators } from '@app/utils/custom-validators';
 import { NGXLogger } from 'ngx-logger';
-import { DialogColorTableComponent, KeywordColor } from '../dialog-color-table/dialog-color-table.component';
-import { DialogPaletteSelectorComponent, PaletteData } from '../dialog-palette-selector/dialog-palette-selector.component';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { FormBuilderWithDefaultService } from '@app/services/form-builder-with-default/form-builder-with-default.service';
 import { CollectionService, FIELD_TYPES, METRIC_TYPES } from '@services/collection-service/collection.service';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { CustomValidators } from '@utils/custom-validators';
+import { DialogColorTableComponent, KeywordColor } from '../dialog-color-table/dialog-color-table.component';
+import { DialogPaletteSelectorComponent, PaletteData } from '../dialog-palette-selector/dialog-palette-selector.component';
 
 enum COLOR_SOURCE {
   fix = 'fix',

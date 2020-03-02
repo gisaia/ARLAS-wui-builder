@@ -22,7 +22,7 @@ import { MapConfigComponent } from './map-config.component';
 import { GlobalComponent } from './components/global/global.component';
 import { LayersComponent } from './components/layers/layers.component';
 import { EditLayerComponent } from './components/edit-layer/edit-layer.component';
-import { ConfirmExitGuard } from '@app/guards/confirm-exit/confirm-exit.guard';
+import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
 
 
 const routes: Routes = [

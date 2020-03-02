@@ -22,11 +22,11 @@ import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { map, finalize } from 'rxjs/operators';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { ComputationRequest, Aggregation, AggregationsRequest, AggregationResponse } from 'arlas-api';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NGXLogger } from 'ngx-logger';
 
 export import FIELD_TYPES = CollectionReferenceDescriptionProperty.TypeEnum;
 export import METRIC_TYPES = ComputationRequest.MetricEnum;
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NGXLogger } from 'ngx-logger';
 
 @Injectable({
   providedIn: 'root'

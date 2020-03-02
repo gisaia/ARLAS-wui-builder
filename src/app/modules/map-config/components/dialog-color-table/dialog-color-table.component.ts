@@ -19,7 +19,7 @@ under the License.
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
 import { NGXLogger } from 'ngx-logger';
-import { FormArray, FormBuilder, Validators, AbstractControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, AbstractControl, FormGroup } from '@angular/forms';
 
 export interface KeywordColor {
   keyword: string;

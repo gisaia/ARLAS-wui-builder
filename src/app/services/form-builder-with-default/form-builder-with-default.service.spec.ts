@@ -1,6 +1,6 @@
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { FormBuilderWithDefaultService } from './form-builder-with-default.service';
-import { DefaultValuesService } from '../default-values/default-values.service';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 describe('FormBuilderWithDefaultService', () => {
   let spectator: SpectatorService<FormBuilderWithDefaultService>;

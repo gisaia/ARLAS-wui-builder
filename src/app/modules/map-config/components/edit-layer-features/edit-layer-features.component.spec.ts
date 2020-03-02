@@ -1,14 +1,14 @@
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { EditLayerFeaturesComponent } from './edit-layer-features.component';
-import { ConfigElementComponent } from '@shared/components/config-element/config-element.component';
 import { MockComponent, MockDirective } from 'ng-mocks';
-import { AlertOnChangeDirective } from '@app/shared/directives/alert-on-change/alert-on-change.directive';
 import { Subject } from 'rxjs';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { HttpClient } from '@angular/common/http';
-import { ColorPickerWrapperComponent } from '@app/shared/components/color-picker-wrapper/color-picker-wrapper.component';
-import { ResetOnChangeDirective } from '@app/shared/directives/reset-on-change/reset-on-change.directive';
-import { CollectionService } from '@app/services/collection-service/collection.service';
+import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
+import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
+import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
+import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
+import { CollectionService } from '@services/collection-service/collection.service';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 describe('EditLayerFeaturesComponent', () => {

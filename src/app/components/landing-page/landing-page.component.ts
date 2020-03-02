@@ -26,7 +26,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { ArlasConfigService } from 'arlas-wui-toolkit';
-import { FormBuilderWithDefaultService } from '@app/services/form-builder-with-default/form-builder-with-default.service';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 @Component({
   templateUrl: './landing-page-dialog.component.html',

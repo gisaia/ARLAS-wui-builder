@@ -18,9 +18,9 @@ under the License.
 */
 import { Directive, Input, OnInit, Host, Self, Optional } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
-import { DefaultValuesService } from '@app/services/default-values/default-values.service';
 import { NGXLogger } from 'ngx-logger';
 import { MatSelect, MatSlideToggle, MatSlideToggleChange } from '@angular/material';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 /**
  * Reset the dependants fields when the directive component value changes
