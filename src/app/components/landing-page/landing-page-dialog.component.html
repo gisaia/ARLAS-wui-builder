@@ -12,17 +12,17 @@
     <h2 mat-dialog-title>Set ALRAS Server url</h2>
     <mat-dialog-content>
         <div [formGroup]="this.mainFormService.getStartingGlobalForm()">
-            <app-config-element>
-                <div form-fields>
-                    <mat-form-field class="server-url-field">
+            <app-config-element [fullSize]="true">
+                <div form-fields class="server-url">
+                    <mat-form-field >
                         <mat-label>Server URL</mat-label>
                         <input matInput (change)="this.mainFormService.getStartingGlobalForm().get('serverUrl').valid ? checkUrl() : false" formControlName="serverUrl">
                     </mat-form-field>
                 </div>
             </app-config-element>
             <app-config-element *ngIf="isServerReady">
-                <div form-fields>
-                    <mat-form-field  class="collection-field">
+                <div form-fields class="collection">
+                    <mat-form-field >
                         <mat-label>Collections</mat-label>
                         <mat-select formControlName="collections" multiple>
                             <mat-option *ngFor="let collection of availablesCollections" value="{{collection}}">
