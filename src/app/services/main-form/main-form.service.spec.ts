@@ -1,12 +1,15 @@
-import { TestBed } from '@angular/core/testing';
-
 import { MainFormService } from './main-form.service';
+import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
 
 describe('MainFormService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let spectator: SpectatorService<MainFormService>;
+  const createService = createServiceFactory({
+    service: MainFormService
+  });
 
-  it('should be created', () => {
-    const service: MainFormService = TestBed.get(MainFormService);
-    expect(service).toBeTruthy();
+  beforeEach(() => spectator = createService());
+
+  it('should be defined', () => {
+    expect(spectator.service).toBeDefined();
   });
 });

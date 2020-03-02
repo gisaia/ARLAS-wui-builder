@@ -1,4 +1,4 @@
-import { Spectator, createComponentFactory } from '@ngneat/spectator';
+import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { EditLayerFeaturesComponent } from './edit-layer-features.component';
 import { ConfigElementComponent } from '@shared/components/config-element/config-element.component';
 import { MockComponent, MockDirective } from 'ng-mocks';
@@ -8,11 +8,15 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 import { HttpClient } from '@angular/common/http';
 import { ColorPickerWrapperComponent } from '@app/shared/components/color-picker-wrapper/color-picker-wrapper.component';
 import { ResetOnChangeDirective } from '@app/shared/directives/reset-on-change/reset-on-change.directive';
+import { CollectionService } from '@app/services/collection-service/collection.service';
 
 describe('EditLayerFeaturesComponent', () => {
   let spectator: Spectator<EditLayerFeaturesComponent>;
   const createComponent = createComponentFactory({
     component: EditLayerFeaturesComponent,
+    componentProviders: [
+      mockProvider(CollectionService)
+    ],
     declarations: [
       MockComponent(ConfigElementComponent),
       MockDirective(AlertOnChangeDirective),
