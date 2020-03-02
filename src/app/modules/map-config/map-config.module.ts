@@ -35,7 +35,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { EditLayerFeaturesComponent } from './components/edit-layer-features/edit-layer-features.component';
 import { MatStepperModule } from '@angular/material/stepper';
-import { ConfirmExitGuard } from '@app/guards/confirm-exit.guard';
+import { ConfirmExitGuard } from '@app/guards/confirm-exit/confirm-exit.guard';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { DialogColorTableComponent } from './components/dialog-color-table/dialog-color-table.component';

@@ -26,6 +26,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { ArlasConfigService } from 'arlas-wui-toolkit';
+import { FormBuilderWithDefaultService } from '@app/services/form-builder-with-default/form-builder-with-default.service';
 
 @Component({
   templateUrl: './landing-page-dialog.component.html',
@@ -44,15 +45,15 @@ export class LandingPageDialogComponent implements OnInit {
     private http: HttpClient,
     private logger: NGXLogger,
     private configService: ArlasConfigService,
-    private configDescritor: ArlasConfigurationDescriptor) { }
+    private configDescritor: ArlasConfigurationDescriptor,
+    private formBuilderWithDefault: FormBuilderWithDefaultService) { }
 
   public ngOnInit(): void {
     if (!!this.mainFormService.mainForm) {
-      this.mainFormService.mainForm.reset();
-      this.mainFormService.mainForm.addControl('StartingConfig', new FormGroup({
-        serverUrl: new FormControl('',
+      this.mainFormService.initFormWithStartingConfig(this.formBuilderWithDefault.group('global', {
+        serverUrl: new FormControl(null,
           [Validators.required, Validators.pattern('(https?://)([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')]),
-        collections: new FormControl('', [Validators.required, Validators.maxLength(1)])
+        collections: new FormControl(null, [Validators.required, Validators.maxLength(1)])
       }));
     }
   }

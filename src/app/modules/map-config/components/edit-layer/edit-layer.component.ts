@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { CanComponentExit } from '@app/guards/confirm-exit.guard';
+import { CanComponentExit } from '@app/guards/confirm-exit/confirm-exit.guard';
 import { Subject } from 'rxjs';
 import { NGXLogger } from 'ngx-logger';
 
