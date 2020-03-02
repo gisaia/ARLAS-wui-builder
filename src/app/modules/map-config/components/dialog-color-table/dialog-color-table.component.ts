@@ -16,14 +16,24 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
 import { NGXLogger } from 'ngx-logger';
-import { FormArray, FormBuilder, AbstractControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, AbstractControl, FormGroup, FormControl } from '@angular/forms';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { Observable, from, of } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+import { CollectionService } from '@services/collection-service/collection.service';
 
-export interface KeywordColor {
+interface KeywordColor {
   keyword: string;
   color: string;
+}
+
+export interface DialogColorTableData {
+  collection: string;
+  sourceField: string;
+  keywordColors: Array<KeywordColor>;
 }
 
 @Component({
@@ -36,12 +46,17 @@ export class DialogColorTableComponent implements OnInit {
   public keywordColorsForm: FormArray;
   public dataSource: MatTableDataSource<AbstractControl>;
   public displayedColumns = ['keyword', 'color'];
+  public filter: string;
+  public newKeywordValues: Observable<Array<string>>;
+  public newKeywordCtrl = new FormControl();
 
   constructor(
     public dialogRef: MatDialogRef<DialogColorTableComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: KeywordColor[],
+    @Inject(MAT_DIALOG_DATA) public data: DialogColorTableData,
     private logger: NGXLogger,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private colorService: ArlasColorGeneratorLoader,
+    private collectionService: CollectionService
   ) { }
 
   ngOnInit() {
@@ -50,15 +65,45 @@ export class DialogColorTableComponent implements OnInit {
 
     // build the form with all keywords / colors
     this.keywordColorsForm = this.formBuilder.array([]);
-    this.data.forEach(v => {
-      const keywordColorGrp = this.formBuilder.group({
-        keyword: [''],
-        color: ['']
-      });
-      keywordColorGrp.setValue(v);
-      this.keywordColorsForm.push(keywordColorGrp);
-    });
+    this.data.keywordColors.forEach(kc =>
+      this.keywordColorsForm.push(this.formBuilder.group({
+        keyword: [kc.keyword],
+        color: [kc.color]
+      })));
     this.dataSource = new MatTableDataSource(this.keywordColorsForm.controls);
+    this.dataSource.filterPredicate =
+      (data: FormGroup, filter: string): boolean => data.controls.keyword.value.toLowerCase().includes(filter);
+
+    this.newKeywordValues = this.newKeywordCtrl.valueChanges.pipe(
+      mergeMap((value: string) => {
+        if (value.length > 1) {
+          return from(this.collectionService.getTermAggregationStartWith(
+            this.data.collection,
+            this.data.sourceField,
+            value));
+        } else {
+          // for performance issues, require to type at least 2 letters
+          return of([]);
+        }
+      })
+    );
+  }
+
+  public applyFilter() {
+    this.dataSource.filter = this.filter.trim().toLowerCase();
+  }
+
+  public addKeyword() {
+    this.keywordColorsForm.insert(0, this.formBuilder.group({
+      keyword: [this.newKeywordCtrl.value],
+      color: [this.colorService.getColor(this.newKeywordCtrl.value)]
+    }));
+    // update table rendering
+    this.dataSource._updateChangeSubscription();
+  }
+
+  public alreadyHasNewKeyword() {
+    return this.keywordColorsForm.value.filter(fg => fg.keyword === this.newKeywordCtrl.value).length > 0;
   }
 
   public onCancel(): void {
@@ -66,8 +111,14 @@ export class DialogColorTableComponent implements OnInit {
   }
 
   public reset(fg: FormGroup) {
-    fg.get('color').setValue('#ffffff');
+    fg.get('color').setValue(
+      this.colorService.getColor(fg.get('keyword').value));
   }
 
+  public remove(index: number) {
+    this.keywordColorsForm.removeAt(index);
+    // update table rendering
+    this.dataSource._updateChangeSubscription();
+  }
 
 }

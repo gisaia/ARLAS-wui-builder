@@ -17,14 +17,34 @@ specific language governing permissions and limitations
 under the License.
 */
 mat-cell.column-color {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
+}
+
+mat-cell.column-keyword {
+  display: inline-block;
+  overflow-wrap: break-word;
 }
 
 .mat-dialog-actions {
-    justify-content: space-around;
+  justify-content: space-around;
 }
 
 .mat-header-cell {
-    justify-content: center;
+  justify-content: center;
+}
+
+div.add-header {
+  display: flex;
+  width: 100%;
+
+  mat-form-field.add-input {
+    width: 100%;
+    margin-right: 20px;
   }
+}
+
+button.remove-button {
+  transform: scale(0.7);
+  opacity: 0.7;
+}

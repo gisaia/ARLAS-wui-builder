@@ -30,6 +30,7 @@ export interface DefaultConfig {
   aggregationTermSize: number;
   palettes: Array<Array<string>>;
   colorPickerPresets: Array<string>;
+  otherColor: string;
 }
 @Injectable({
   providedIn: 'root'

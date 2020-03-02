@@ -3,6 +3,9 @@ import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectat
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { MockComponent } from 'ng-mocks';
 import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
+import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { HttpClient } from '@angular/common/http';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 describe('DialogColorTableComponent', () => {
   let spectator: Spectator<DialogColorTableComponent>;
@@ -11,7 +14,16 @@ describe('DialogColorTableComponent', () => {
     component: DialogColorTableComponent,
     providers: [
       mockProvider(MatDialogRef),
-      { provide: MAT_DIALOG_DATA, useValue: [] }
+      mockProvider(ArlasCollaborativesearchService),
+      mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(CollectionService),
+      {
+        provide: MAT_DIALOG_DATA, useValue: {
+          collection: '',
+          sourceField: '',
+          keywordColors: []
+        }
+      }
     ],
     entryComponents: [
       DialogColorTableComponent
