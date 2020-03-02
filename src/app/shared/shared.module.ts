@@ -6,12 +6,19 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { AlertOnChangeDirective } from './directives/alert-on-change.directive';
+import { AlertOnChangeDirective } from './directives/alert-on-change/alert-on-change.directive';
 import { ColorPickerWrapperComponent } from './components/color-picker-wrapper/color-picker-wrapper.component';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { ResetOnChangeDirective } from './directives/reset-on-change/reset-on-change.directive';
 
 @NgModule({
-  declarations: [ConfigElementComponent, ConfirmModalComponent, AlertOnChangeDirective, ColorPickerWrapperComponent],
+  declarations: [
+    ConfigElementComponent,
+    ConfirmModalComponent,
+    AlertOnChangeDirective,
+    ColorPickerWrapperComponent,
+    ResetOnChangeDirective
+  ],
   imports: [
     CommonModule,
     MatDialogModule,
@@ -24,7 +31,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
     ConfigElementComponent,
     ConfirmModalComponent,
     AlertOnChangeDirective,
-    ColorPickerWrapperComponent
+    ColorPickerWrapperComponent,
+    ResetOnChangeDirective
   ]
 })
 export class SharedModule { }

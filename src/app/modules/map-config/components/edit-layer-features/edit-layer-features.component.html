@@ -8,8 +8,11 @@
                         <mat-label>Collection</mat-label>
                         <mat-select formControlName="collectionCtrl"
                             appAlertOnChange="changing the collection will reset the rendered geometry"
+                            appResetOnChange="map.layer"
                             [dependants]="[modeFormGroup.get('geometryStep').get('geometryCtrl')]">
-                            <mat-option *ngFor="let collection of this.mainformService.getStartingGlobalForm()?.get('collections').value" value="{{collection}}">{{collection}}</mat-option>
+                            <mat-option
+                                *ngFor="let collection of this.mainformService.getStartingGlobalForm()?.get('collections').value"
+                                value="{{collection}}">{{collection}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -124,7 +127,8 @@
                         <mat-label>Color source</mat-label>
                         <mat-select formControlName="colorSourceCtrl"
                             appAlertOnChange="changing the color source will reset the choosen color(s)" [dependants]="[colorFixCtrl(), colorProvidedFieldCtrl(), 
-                            colorGeneratedFieldCtrl(), colorManualGroup(), colorInterpolatedGroup()]">
+                            colorGeneratedFieldCtrl(), colorManualGroup(), colorInterpolatedGroup()]"
+                            appResetOnChange="map.layer">
                             <mat-option [value]="COLOR_SOURCE.fix">Fix</mat-option>
                             <mat-option [value]="COLOR_SOURCE.provided">Provided by a field</mat-option>
                             <mat-option [value]="COLOR_SOURCE.generated">Generated from a field</mat-option>
@@ -167,7 +171,8 @@
                                     <mat-label>Source field</mat-label>
                                     <!-- No [dependants] because we manually set the new values on source field change -->
                                     <mat-select formControlName="colorManualFieldCtrl"
-                                        appAlertOnChange="Changing the source field will reset the colors">
+                                        appAlertOnChange="Changing the source field will reset the colors"
+                                        appResetOnChange="map.layer">
                                         <mat-option value="a">field a</mat-option>
                                         <mat-option value="b">field b</mat-option>
                                     </mat-select>
@@ -185,7 +190,9 @@
                                 formGroupName="colorInterpolatedGroup">
                                 <mat-form-field>
                                     <mat-label>Source field</mat-label>
-                                    <mat-select formControlName="colorInterpolatedFieldCtrl">
+                                    <mat-select formControlName="colorInterpolatedFieldCtrl"
+                                        appResetOnChange="map.layer"
+                                        [dependants]="[colorInterpolatedMinValueCtrl(), colorInterpolatedMaxValueCtrl(), colorInterpolatedNormalizeLocalFieldCtrl()]">
                                         <mat-option value="date">field date</mat-option>
                                         <mat-option value="number">field number</mat-option>
                                     </mat-select>
@@ -195,14 +202,18 @@
                                     <div>
                                         <mat-label>Normalize</mat-label>
                                         <mat-slide-toggle formControlName="colorInterpolatedNormalizeCtrl"
-                                            labelPosition="before">
+                                            labelPosition="before" appResetOnChange="map.layer"
+                                            [dependants]="[colorInterpolatedScopeCtrl(), colorInterpolatedNormalizeByKeyCtrl(), 
+                                            colorInterpolatedNormalizeLocalFieldCtrl(), colorInterpolatedMinValueCtrl(), colorInterpolatedMaxValueCtrl()]">
                                         </mat-slide-toggle>
                                     </div>
 
                                     <div *ngIf="colorInterpolatedNormalizeCtrl().value">
                                         <mat-form-field>
                                             <mat-label>Scope</mat-label>
-                                            <mat-select formControlName="colorInterpolatedScopeCtrl">
+                                            <mat-select formControlName="colorInterpolatedScopeCtrl"
+                                                appResetOnChange="map.layer"
+                                                [dependants]="[colorInterpolatedNormalizeByKeyCtrl(), colorInterpolatedNormalizeLocalFieldCtrl()]">
                                                 <mat-option value="local">Local</mat-option>
                                                 <mat-option value="global">Global</mat-option>
                                             </mat-select>
@@ -211,7 +222,8 @@
                                         <div *ngIf="colorInterpolatedScopeCtrl().value === 'local'">
                                             <mat-label>Normalize by key</mat-label>
                                             <mat-slide-toggle formControlName="colorInterpolatedNormalizeByKeyCtrl"
-                                                labelPosition="before">
+                                                labelPosition="before" appResetOnChange="map.layer"
+                                                [dependants]="[colorInterpolatedNormalizeLocalFieldCtrl()]">
                                             </mat-slide-toggle>
                                         </div>
 
