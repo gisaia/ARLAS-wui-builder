@@ -17,6 +17,9 @@ jobs:
         - job=lint
       script: npm run lint
     - env:
+        - job=licence
+      script: npm run licence-check
+    - env:
         - job=build
       script:
         - export NODE_OPTIONS=--max_old_space_size=8192;

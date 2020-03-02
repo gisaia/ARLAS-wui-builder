@@ -7,7 +7,9 @@
     "build": "ng build --prod --aot --base-href=''",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "licence-check": "license-check-and-add check -f license-check-and-add.json",
+    "licence-add": "license-check-and-add add -f license-check-and-add.json"
   },
   "private": true,
   "dependencies": {
@@ -51,6 +53,7 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
+    "license-check-and-add": "^3.0.4",
     "ng-mocks": "~9.0.0",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
