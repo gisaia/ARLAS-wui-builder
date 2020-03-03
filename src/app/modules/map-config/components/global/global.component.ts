@@ -35,7 +35,7 @@ export class GlobalComponent implements OnInit {
     Expression.OpEnum.Within
   ];
 
-  constructor(private mainFormService: MainFormService) { }
+  constructor(public mainFormService: MainFormService) { }
 
   ngOnInit() {
     this.mainFormService.addMapConfigGlobalFormIfInexisting(new FormGroup({

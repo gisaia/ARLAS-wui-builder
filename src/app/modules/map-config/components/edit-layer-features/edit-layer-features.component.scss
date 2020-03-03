@@ -16,6 +16,13 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+
+@import "variables.scss";
+
 mat-slider {
   margin-left: 10px;
+}
+
+.palette-button{
+  color: mat-color($primary-palette);
 }

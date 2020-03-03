@@ -16,20 +16,18 @@
 
     <app-config-element>
         <div form-fields>
-            <mat-form-field>
-                <mat-label>Target geometries</mat-label>
-                <mat-select formControlName="targetGeometries">
-                    <mat-option value="geom">geom</mat-option>
-                </mat-select>
-            </mat-form-field>
+            <div *ngFor="let collection of this.mainFormService.getCollections()" class="map-global-geo-field">
+                <mat-label class="label">{{collection}}</mat-label>
+                <mat-form-field>
+                    <mat-label>Geographical field</mat-label>
+                    <mat-select formControlName="targetGeometries">
+                        <mat-option value="geom">geom</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
         </div>
         <div description>
-            Illud tamen te esse admonitum volo, primum ut qualis es talem te esse omnes existiment ut, quantum a rerum
-            turpitudine abes, tantum te a verborum libertate seiungas; deinde ut ea in alterum ne dicas, quae cum tibi
-            falso responsa sint, erubescas. Quis est enim, cui via ista non pateat, qui isti aetati atque etiam isti
-            dignitati non possit quam velit petulanter, etiamsi sine ulla suspicione, at non sine argumento male dicere?
-            Sed istarum partium culpa est eorum, qui te agere voluerunt; laus pudoris tui, quod ea te invitum dicere
-            videbamus, ingenii, quod ornate politeque dixisti.
+            For each collection choose the geographical field used to filter data on the map
         </div>
     </app-config-element>
 </div>

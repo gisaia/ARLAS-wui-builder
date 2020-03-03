@@ -17,6 +17,11 @@ specific language governing permissions and limitations
 under the License.
 */
 @import '~@angular/material/theming';
+
+$primary-palette: mat-palette($mat-indigo);
+$accent-palette: mat-palette($mat-pink, A200, A100, A400);
+$warn-palette: mat-palette($mat-red);
+
 $config-element-description-background: mat-color($mat-grey, 50);
 $config-element-description-border-color: transparentize(mat-color($mat-indigo, A700), 0.4);
 $config-element-description-text-color: transparentize(mat-color($mat-blue-grey, A700), 0.4);
