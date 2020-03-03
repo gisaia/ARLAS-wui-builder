@@ -11,7 +11,7 @@
                             appResetOnChange="map.layer"
                             [dependants]="[modeFormGroup.get('geometryStep').get('geometryCtrl')]">
                             <mat-option
-                                *ngFor="let collection of this.mainformService.getStartingGlobalForm()?.get('collections').value"
+                                *ngFor="let collection of this.mainformService.getCollections()"
                                 value="{{collection}}">{{collection}}</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -74,8 +74,7 @@
             <app-config-element>
                 <div form-fields>
                     <mat-label>Zoom min</mat-label>
-                    <mat-slider thumbLabel formControlName="zoomMinCtrl" min="0" max="20" thumbLabel="true">
-                    </mat-slider>
+                    <mat-slider thumbLabel formControlName="zoomMinCtrl" min="1" max="20" (input)="checkZoom($event, 'min')" thumbLabel="true"></mat-slider>
                 </div>
                 <div description>
                     zoom min etc
@@ -84,7 +83,7 @@
             <app-config-element>
                 <div form-fields>
                     <span>Zoom max</span>
-                    <mat-slider thumbLabel formControlName="zoomMaxCtrl" min="0" max="20"> </mat-slider>
+                    <mat-slider thumbLabel formControlName="zoomMaxCtrl" min="1" max="20" (input)="checkZoom($event, 'max')"></mat-slider>
                 </div>
                 <div description>
                     zoom max etc
@@ -251,9 +250,8 @@
                                     </div>
 
                                     <div>
-                                        <button type="button" mat-raised-button color="primary"
-                                            (click)="openPaletteTable()">
-                                            View / select palette
+                                        <button type="button" mat-raised-button (click)="openPaletteTable()" class="palette-button">
+                                            Select palette
                                         </button>
                                     </div>
                                 </div>

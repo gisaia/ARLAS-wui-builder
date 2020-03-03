@@ -23,7 +23,7 @@ import {
 } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Observable, Subscription } from 'rxjs';
-import { MatStepper, MatDialog } from '@angular/material';
+import { MatStepper, MatDialog, MatSliderChange } from '@angular/material';
 import { CustomValidators } from '@app/utils/custom-validators';
 import { NGXLogger } from 'ngx-logger';
 import { DialogColorTableComponent, KeywordColor } from '../dialog-color-table/dialog-color-table.component';
@@ -323,6 +323,27 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
 
   ngOnDestroy() {
     this.submitSubscription.unsubscribe();
+  }
+
+  public checkZoom(event: MatSliderChange, source: string) {
+    if (source === 'min') {
+      if (event.value > this.zoomMaxCtrl().value) {
+        this.zoomMaxCtrl().setValue(event.value);
+      }
+    } else if (source === 'max') {
+      if (event.value < this.zoomMinCtrl().value) {
+        this.zoomMinCtrl().setValue(event.value);
+      }
+    }
+
+  }
+
+  public zoomMinCtrl() {
+    return this.modeFormGroup.get('visibilityStep').get('zoomMinCtrl');
+  }
+
+  public zoomMaxCtrl() {
+    return this.modeFormGroup.get('visibilityStep').get('zoomMaxCtrl');
   }
 
   public colorSourceCtrl() {

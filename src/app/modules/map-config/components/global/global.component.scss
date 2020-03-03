@@ -16,3 +16,14 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+
+.map-global-geo-field{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .label{
+        min-width: 250px;
+    }
+}
+
