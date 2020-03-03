@@ -41,6 +41,7 @@ import { SharedModule } from '@shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -80,7 +81,8 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
     LoggerModule.forRoot({
       level: environment.logLevel,
       disableConsoleLogging: false
-    })
+    }),
+    NgxSpinnerModule
   ],
   providers: [
     {

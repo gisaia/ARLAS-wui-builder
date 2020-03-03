@@ -20,6 +20,7 @@ import { MatIconModule, MatListModule, MatSidenavModule, MatTooltipModule, MatSl
 import { MatStepperModule } from '@angular/material/stepper';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { NGXLogger } from 'ngx-logger';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 // define modules to be injected in every test
 defineGlobalsInjections({
@@ -44,7 +45,8 @@ defineGlobalsInjections({
     MatStepperModule,
     MatSlideToggleModule,
     MatSliderModule,
-    ColorPickerModule
+    ColorPickerModule,
+    NgxSpinnerModule
   ],
   providers: [
     mockProvider(NGXLogger)

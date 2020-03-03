@@ -18,7 +18,7 @@ under the License.
 */
 import { Component, ViewChild } from '@angular/core';
 import { LandingPageComponent } from '@components/landing-page/landing-page.component';
-import { NGXLoggerMonitor, NGXLogInterface, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
+import { NGXLogInterface, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
 import { MatSnackBar } from '@angular/material';
 
 @Component({

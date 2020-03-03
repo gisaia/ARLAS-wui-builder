@@ -22,7 +22,7 @@ import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { ArlasConfigService } from 'arlas-wui-toolkit';
