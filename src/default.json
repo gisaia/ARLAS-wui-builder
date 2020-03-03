@@ -1,6 +1,7 @@
 {
     "global": {
-
+        "serverUrl": "http://demo.arlas.io/arlas",
+        "collections": ["demo_ais-danmark"]
     },
     "map": {
         "layer": {

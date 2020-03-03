@@ -38,9 +38,9 @@ export class MainFormService {
     return this.mainForm.get(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS) as FormArray;
   }
 
-  public addMapConfigLayersFormIfInexisting(control: FormArray) {
+  public addMapConfigLayersFormIfInexisting(fg: FormArray) {
     if (this.getMapConfigLayersForm() == null) {
-      return this.mainForm.addControl(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS, control);
+      return this.mainForm.addControl(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS, fg);
     }
   }
 
@@ -48,10 +48,15 @@ export class MainFormService {
     return this.mainForm.get(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL) as FormGroup;
   }
 
-  public addMapConfigGlobalFormIfInexisting(control: FormGroup) {
+  public addMapConfigGlobalFormIfInexisting(fg: FormGroup) {
     if (this.getMapConfigGlobalForm() == null) {
-      return this.mainForm.addControl(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL, control);
+      return this.mainForm.addControl(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL, fg);
     }
+  }
+
+  public initFormWithStartingConfig(fg: FormGroup) {
+    this.mainForm.reset();
+    this.mainForm.addControl(MAIN_FORM_KEYS.STARTING_CONFIG, fg);
   }
 
   public getStartingGlobalForm(): FormGroup {
