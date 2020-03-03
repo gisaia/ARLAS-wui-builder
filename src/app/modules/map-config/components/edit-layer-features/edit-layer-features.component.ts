@@ -30,6 +30,7 @@ import { DialogColorTableComponent, KeywordColor } from '../dialog-color-table/d
 import { DialogPaletteSelectorComponent, PaletteData } from '../dialog-palette-selector/dialog-palette-selector.component';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormBuilderWithDefaultService } from '@app/services/form-builder-with-default/form-builder-with-default.service';
+import { CollectionService, FIELD_TYPES } from '@services/collection-service/collection.service';
 
 enum COLOR_SOURCE {
   fix = 'fix',
@@ -67,6 +68,9 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
   @Input() submit: Observable<void>;
   private submitSubscription: Subscription;
   public COLOR_SOURCE = COLOR_SOURCE;
+  public collectionGeoFields: string[] = [];
+  public collectionKeywordFields: string[] = [];
+  public collectionIntegerFields: string[] = [];
 
   public modeFormGroup: FormGroup;
   constructor(
@@ -74,7 +78,8 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
     private formBuilder: FormBuilder,
     private logger: NGXLogger,
     public dialog: MatDialog,
-    public mainformService: MainFormService
+    public mainformService: MainFormService,
+    public collectionService: CollectionService
   ) { }
 
   ngOnInit() {
@@ -285,6 +290,19 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
         this.colorManualValuesCtrl().push(keywordColorGrp);
       });
     });
+
+    // init collection fields, to be used in UI
+    this.collectionCtrl().valueChanges.subscribe(v => {
+      this.collectionService.getCollectionFields(v, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE])
+        .subscribe(
+          f => this.collectionGeoFields = f);
+      this.collectionService.getCollectionFields(v, [FIELD_TYPES.KEYWORD])
+        .subscribe(
+          f => this.collectionKeywordFields = f);
+      this.collectionService.getCollectionFields(v, [FIELD_TYPES.LONG, FIELD_TYPES.INTEGER, FIELD_TYPES.DATE])
+        .subscribe(
+          f => this.collectionIntegerFields = f);
+    });
   }
 
   // recursively update the value and validity of itself and sub-controls (but not ancestors)
@@ -335,89 +353,34 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
         this.zoomMinCtrl().setValue(event.value);
       }
     }
-
   }
 
-  public zoomMinCtrl() {
-    return this.modeFormGroup.get('visibilityStep').get('zoomMinCtrl');
-  }
-
-  public zoomMaxCtrl() {
-    return this.modeFormGroup.get('visibilityStep').get('zoomMaxCtrl');
-  }
-
-  public colorSourceCtrl() {
-    return this.modeFormGroup.get('styleStep').get('colorSourceCtrl');
-  }
-
-  public choosenColorGrp() {
-    return this.modeFormGroup.get('styleStep').get('choosenColorGrp') as FormGroup;
-  }
-
-  public colorFixCtrl() {
-    return this.choosenColorGrp().get('colorFixCtrl');
-  }
+  public zoomMinCtrl = () => this.modeFormGroup.get('visibilityStep').get('zoomMinCtrl');
+  public zoomMaxCtrl = () => this.modeFormGroup.get('visibilityStep').get('zoomMaxCtrl');
+  public collectionCtrl = () => this.modeFormGroup.get('collectionStep').get('collectionCtrl');
+  public geometryCtrl = () => this.modeFormGroup.get('geometryStep').get('geometryCtrl');
+  public colorSourceCtrl = () => this.modeFormGroup.get('styleStep').get('colorSourceCtrl');
+  public choosenColorGrp = () => this.modeFormGroup.get('styleStep').get('choosenColorGrp') as FormGroup;
+  public colorFixCtrl = () => this.choosenColorGrp().get('colorFixCtrl');
+  public colorProvidedFieldCtrl = () => this.choosenColorGrp().get('colorProvidedFieldCtrl');
+  public colorGeneratedFieldCtrl = () => this.choosenColorGrp().get('colorGeneratedFieldCtrl');
+  public colorManualGroup = () => this.choosenColorGrp().get('colorManualGroup') as FormGroup;
+  public colorManualFieldCtrl = () => this.colorManualGroup().get('colorManualFieldCtrl');
+  public colorManualValuesCtrl = () => this.colorManualGroup().get('colorManualValuesCtrl') as FormArray;
+  public colorInterpolatedGroup = () => this.choosenColorGrp().get('colorInterpolatedGroup') as FormGroup;
+  public colorInterpolatedFieldCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedFieldCtrl');
+  public colorInterpolatedNormalizeCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedNormalizeCtrl');
+  public colorInterpolatedNormalizeByKeyCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedNormalizeByKeyCtrl');
+  public colorInterpolatedNormalizeLocalFieldCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedNormalizeLocalFieldCtrl');
+  public colorInterpolatedScopeCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedScopeCtrl');
+  public colorInterpolatedMinValueCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedMinValueCtrl');
+  public colorInterpolatedMaxValueCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedMaxValueCtrl');
+  public colorInterpolatedPaletteCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedPaletteCtrl');
 
   public setColorFix(color: string) {
     this.choosenColorGrp().get('colorFixCtrl').setValue(color);
     this.choosenColorGrp().get('colorFixCtrl').markAsDirty();
     this.choosenColorGrp().get('colorFixCtrl').markAsTouched();
-  }
-
-  public colorProvidedFieldCtrl() {
-    return this.choosenColorGrp().get('colorProvidedFieldCtrl');
-  }
-
-  public colorGeneratedFieldCtrl() {
-    return this.choosenColorGrp().get('colorGeneratedFieldCtrl');
-  }
-
-  public colorManualGroup() {
-    return this.choosenColorGrp().get('colorManualGroup') as FormGroup;
-  }
-
-  public colorManualFieldCtrl() {
-    return this.colorManualGroup().get('colorManualFieldCtrl');
-  }
-
-  public colorManualValuesCtrl() {
-    return this.colorManualGroup().get('colorManualValuesCtrl') as FormArray;
-  }
-
-  public colorInterpolatedGroup() {
-    return this.choosenColorGrp().get('colorInterpolatedGroup') as FormGroup;
-  }
-
-  public colorInterpolatedFieldCtrl() {
-    return this.colorInterpolatedGroup().get('colorInterpolatedFieldCtrl');
-  }
-
-  public colorInterpolatedNormalizeCtrl() {
-    return this.colorInterpolatedGroup().get('colorInterpolatedNormalizeCtrl');
-  }
-
-  public colorInterpolatedNormalizeByKeyCtrl() {
-    return this.colorInterpolatedGroup().get('colorInterpolatedNormalizeByKeyCtrl');
-  }
-
-  public colorInterpolatedNormalizeLocalFieldCtrl() {
-    return this.colorInterpolatedGroup().get('colorInterpolatedNormalizeLocalFieldCtrl');
-  }
-
-  public colorInterpolatedScopeCtrl() {
-    return this.colorInterpolatedGroup().get('colorInterpolatedScopeCtrl');
-  }
-
-  public colorInterpolatedMinValueCtrl() {
-    return this.colorInterpolatedGroup().get('colorInterpolatedMinValueCtrl');
-  }
-
-  public colorInterpolatedMaxValueCtrl() {
-    return this.colorInterpolatedGroup().get('colorInterpolatedMaxValueCtrl');
-  }
-
-  public colorInterpolatedPaletteCtrl() {
-    return this.colorInterpolatedGroup().get('colorInterpolatedPaletteCtrl');
   }
 
   public openColorTable() {

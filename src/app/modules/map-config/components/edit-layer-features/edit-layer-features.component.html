@@ -7,9 +7,8 @@
                     <mat-form-field>
                         <mat-label>Collection</mat-label>
                         <mat-select formControlName="collectionCtrl"
-                            appAlertOnChange="changing the collection will reset the rendered geometry"
-                            appResetOnChange="map.layer"
-                            [dependants]="[modeFormGroup.get('geometryStep').get('geometryCtrl')]">
+                            appAlertOnChange="changing the collection will reset the rendered geometry" [dependants]="[geometryCtrl(), colorProvidedFieldCtrl(), colorGeneratedFieldCtrl(), colorManualFieldCtrl(), 
+                            colorInterpolatedFieldCtrl(), colorInterpolatedNormalizeLocalFieldCtrl()]">
                             <mat-option
                                 *ngFor="let collection of this.mainformService.getCollections()"
                                 value="{{collection}}">{{collection}}</mat-option>
@@ -30,8 +29,8 @@
                     <mat-form-field>
                         <mat-label>Rendered geometry</mat-label>
                         <mat-select formControlName="geometryCtrl">
-                            <mat-option value="geopoint">a geopoint</mat-option>
-                            <mat-option value="geoshape">a geoshape</mat-option>
+                            <mat-option *ngFor="let field of collectionGeoFields" [value]="field">
+                                {{ field }}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -148,8 +147,8 @@
                                 <mat-form-field>
                                     <mat-label>Source field</mat-label>
                                     <mat-select formControlName="colorProvidedFieldCtrl">
-                                        <mat-option value="a">field a</mat-option>
-                                        <mat-option value="b">field b</mat-option>
+                                        <mat-option *ngFor="let field of collectionKeywordFields" [value]="field">
+                                            {{ field }}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
@@ -158,8 +157,8 @@
                                 <mat-form-field>
                                     <mat-label>Source field</mat-label>
                                     <mat-select formControlName="colorGeneratedFieldCtrl">
-                                        <mat-option value="a">field a</mat-option>
-                                        <mat-option value="b">field b</mat-option>
+                                        <mat-option *ngFor="let field of collectionKeywordFields" [value]="field">
+                                            {{ field }}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
@@ -172,8 +171,8 @@
                                     <mat-select formControlName="colorManualFieldCtrl"
                                         appAlertOnChange="Changing the source field will reset the colors"
                                         appResetOnChange="map.layer">
-                                        <mat-option value="a">field a</mat-option>
-                                        <mat-option value="b">field b</mat-option>
+                                        <mat-option *ngFor="let field of collectionKeywordFields" [value]="field">
+                                            {{ field }}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
 
@@ -192,8 +191,8 @@
                                     <mat-select formControlName="colorInterpolatedFieldCtrl"
                                         appResetOnChange="map.layer"
                                         [dependants]="[colorInterpolatedMinValueCtrl(), colorInterpolatedMaxValueCtrl(), colorInterpolatedNormalizeLocalFieldCtrl()]">
-                                        <mat-option value="date">field date</mat-option>
-                                        <mat-option value="number">field number</mat-option>
+                                        <mat-option *ngFor="let field of collectionIntegerFields" [value]="field">
+                                            {{ field }}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
 
@@ -229,24 +228,28 @@
                                         <div *ngIf="colorInterpolatedNormalizeByKeyCtrl().value">
                                             <mat-form-field>
                                                 <mat-select formControlName="colorInterpolatedNormalizeLocalFieldCtrl">
-                                                    <mat-option value="a">field a</mat-option>
-                                                    <mat-option value="b">field b</mat-option>
+                                                    <mat-option *ngFor="let field of collectionKeywordFields"
+                                                        [value]="field">{{ field }}</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
                                     </div>
 
                                     <div *ngIf="!colorInterpolatedNormalizeCtrl().value">
-                                        <mat-form-field>
-                                            <mat-label>Minimum value</mat-label>
-                                            <input matInput placeholder="Min" type="number"
-                                                formControlName="colorInterpolatedMinValueCtrl">
-                                        </mat-form-field>
-                                        <mat-form-field>
-                                            <mat-label>Maximum value</mat-label>
-                                            <input matInput placeholder="Max" type="number"
-                                                formControlName="colorInterpolatedMaxValueCtrl">
-                                        </mat-form-field>
+                                        <div>
+                                            <mat-form-field>
+                                                <mat-label>Minimum value</mat-label>
+                                                <input matInput placeholder="Min" type="number"
+                                                    formControlName="colorInterpolatedMinValueCtrl">
+                                            </mat-form-field>
+                                        </div>
+                                        <div>
+                                            <mat-form-field>
+                                                <mat-label>Maximum value</mat-label>
+                                                <input matInput placeholder="Max" type="number"
+                                                    formControlName="colorInterpolatedMaxValueCtrl">
+                                            </mat-form-field>
+                                        </div>
                                     </div>
 
                                     <div>
