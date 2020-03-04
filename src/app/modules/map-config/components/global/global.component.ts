@@ -51,6 +51,7 @@ export class GlobalComponent implements OnInit {
       geographicalOperator: new FormControl(null, Validators.required)
     }));
 
+    this.targetGeometries.clear();
     this.collections.forEach((collection) => {
 
       this.collectionService.getCollectionFields(collection, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE]).subscribe(fields => {
@@ -58,6 +59,7 @@ export class GlobalComponent implements OnInit {
       });
       this.collectionService.getCollectionParamFields(collection).subscribe(params => {
         this.targetGeometries.push(new FormControl(params.geometry_path, Validators.required));
+
       });
     });
   }

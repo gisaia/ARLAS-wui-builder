@@ -104,7 +104,7 @@ export class CollectionService {
     })
       .finally(() => this.spinner.hide());
   }
-  
+
   public getCollectionParamFields(collection: string): Observable<CollectionReferenceParameters> {
     return this.collabSearchService.describe(collection).pipe(map((collectionDescription: CollectionReferenceDescription) => {
       return collectionDescription.params;
