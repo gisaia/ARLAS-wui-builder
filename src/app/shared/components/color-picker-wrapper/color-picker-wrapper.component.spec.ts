@@ -1,11 +1,19 @@
 import { ColorPickerWrapperComponent } from './color-picker-wrapper.component';
-import { Spectator, createComponentFactory } from '@ngneat/spectator';
+import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 describe('ColorPickerComponent', () => {
   let spectator: Spectator<ColorPickerWrapperComponent>;
 
   const createComponent = createComponentFactory({
-    component: ColorPickerWrapperComponent
+    component: ColorPickerWrapperComponent,
+    providers: [
+      mockProvider(DefaultValuesService, {
+        getDefaultConfig: () => {
+          return { config: { colorPickerPresets: [] } };
+        }
+      })
+    ]
   });
 
   beforeEach(() => {

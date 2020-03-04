@@ -32,6 +32,7 @@ import { FormBuilderWithDefaultService } from '@services/form-builder-with-defau
 import { CustomValidators } from '@utils/custom-validators';
 import { DialogColorTableComponent, KeywordColor } from '../dialog-color-table/dialog-color-table.component';
 import { DialogPaletteSelectorComponent, PaletteData } from '../dialog-palette-selector/dialog-palette-selector.component';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 enum COLOR_SOURCE {
   fix = 'fix',
@@ -81,7 +82,8 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
     public dialog: MatDialog,
     public mainformService: MainFormService,
     public collectionService: CollectionService,
-    private colorService: ArlasColorGeneratorLoader
+    private colorService: ArlasColorGeneratorLoader,
+    private defaultValueService: DefaultValuesService
   ) { }
 
   ngOnInit() {
@@ -430,7 +432,7 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
 
   public openPaletteTable() {
     const paletteData: PaletteData = {
-      defaultPalettes: [['#065143', '#ce1483'], ['#6d213c', '#946846', '#baab68'], ['#eecf6d', '#d5ac4e', '#8b6220', '#720e07', '#45050c']],
+      defaultPalettes: this.defaultValueService.getDefaultConfig().palettes,
       selectedPalette: this.colorInterpolatedPaletteCtrl().value
     };
     const dialogRef = this.dialog.open(DialogPaletteSelectorComponent, {

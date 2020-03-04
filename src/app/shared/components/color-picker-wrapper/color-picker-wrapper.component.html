@@ -1,4 +1,3 @@
 <input class="ngx-color-picker" autocomplete="off" cpPosition="top-right" cpOutputFormat="hex"
-    [cpPresetColors]="['#fff', '#000', '#2889e9', '#e920e9', '#fff500', 'rgb(236,64,64)']" cpAlphaChannel="disabled"
-    [placeholder]="value === '' ? 'Select a color' : ''" cpCancelButton="true" [style.background]="value"
-    [colorPicker]="value" (colorPickerSelect)="setColor($event)">
+    [cpPresetColors]="getColorPresets()" cpAlphaChannel="disabled" [placeholder]="value === '' ? 'Select a color' : ''"
+    cpCancelButton="true" [style.background]="value" [colorPicker]="value" (colorPickerSelect)="setColor($event)">

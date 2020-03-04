@@ -17,6 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 @Component({
   selector: 'app-color-picker',
@@ -28,13 +29,19 @@ export class ColorPickerWrapperComponent implements OnInit {
   @Input() value: string;
   @Output() setValue = new EventEmitter<string>();
 
-  constructor() { }
+  constructor(
+    private defaultValuService: DefaultValuesService
+  ) { }
 
   ngOnInit() {
   }
 
   public setColor(color: string) {
     this.setValue.emit(color);
+  }
+
+  public getColorPresets() {
+    return this.defaultValuService.getDefaultConfig().colorPickerPresets;
   }
 
 }
