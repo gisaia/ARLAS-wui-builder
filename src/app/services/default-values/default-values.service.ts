@@ -23,7 +23,7 @@ import * as ajv from 'ajv';
 import * as ajvKeywords from 'ajv-keywords/keywords/uniqueItemProperties';
 import * as draftSchema from 'ajv/lib/refs/json-schema-draft-06.json';
 import * as defaultValuesSchema from './defaultValues.schema.json';
-import { getObject } from '@app/utils/tools';
+import { getObject } from '@utils/tools';
 
 
 @Injectable({

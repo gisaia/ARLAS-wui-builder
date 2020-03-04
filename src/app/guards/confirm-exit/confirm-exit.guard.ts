@@ -20,7 +20,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanDeactivate } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material';
-import { ConfirmModalComponent } from '@app/shared/components/confirm-modal/confirm-modal.component';
+import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 
 /**
  * To be implements by components that need a confirmation before changing location

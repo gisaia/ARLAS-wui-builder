@@ -18,9 +18,9 @@ under the License.
 */
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { LandingPageComponent } from './components/landing-page/landing-page.component';
-import { MainFormInitializedGuard } from './guards/main-form-initialized/main-form-initialized.guard';
+import { LandingPageComponent } from '@components/landing-page/landing-page.component';
+import { MainFormInitializedGuard } from '@guards/main-form-initialized/main-form-initialized.guard';
+import { PageNotFoundComponent } from '@components/page-not-found/page-not-found.component';
 
 
 const routes: Routes = [

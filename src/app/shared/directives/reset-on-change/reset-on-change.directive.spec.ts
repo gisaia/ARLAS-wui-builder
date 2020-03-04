@@ -1,7 +1,6 @@
 import { ResetOnChangeDirective } from './reset-on-change.directive';
 import { SpectatorDirective, createDirectiveFactory, mockProvider } from '@ngneat/spectator';
-import { Mock } from 'protractor/built/driverProviders';
-import { DefaultValuesService } from '@app/services/default-values/default-values.service';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 describe('ResetOnChangeDirective', () => {
   let spectator: SpectatorDirective<ResetOnChangeDirective>;

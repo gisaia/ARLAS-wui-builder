@@ -1,4 +1,4 @@
-import { Spectator, createComponentFactory, createServiceFactory, SpectatorService } from '@ngneat/spectator';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { ConfirmExitGuard } from './confirm-exit.guard';
 
 describe('ConfirmExitGuard', () => {
