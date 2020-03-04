@@ -5,7 +5,7 @@
             <mat-form-field>
                 <mat-label>Geographical operator</mat-label>
                 <mat-select formControlName="geographicalOperator">
-                    <mat-option *ngFor="let ope of operators | keyvalue" value="{{ope.key}}">{{ope.value}}</mat-option>
+                    <mat-option *ngFor="let ope of operators | keyvalue" value="{{ope.value}}">{{ope.value}}</mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
@@ -16,15 +16,18 @@
 
     <app-config-element>
         <div form-fields>
-            <div *ngFor="let collection of this.mainFormService.getCollections()" class="map-global-geo-field">
-                <mat-label class="label">{{collection}}</mat-label>
-                <mat-form-field>
-                    <mat-label>Geographical field</mat-label>
-                    <mat-select formControlName="targetGeometries">
-                        <mat-option value="geom">geom</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
+            <ng-container formArrayName="targetGeometries">
+                <div *ngFor="let control of this.targetGeometries.controls; let i = index" class="map-global-geo-field">
+                    <mat-label class="label">{{collections[i]}}</mat-label>
+                    <mat-form-field>
+                        <mat-label>Geographical field</mat-label>
+
+                        <mat-select [formControlName]="i">
+                            <mat-option *ngFor="let geoField of this.getGeoFields(collections[i]);" value="{{geoField}}">{{geoField}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </ng-container>
         </div>
         <div description>
             For each collection choose the geographical field used to filter data on the map

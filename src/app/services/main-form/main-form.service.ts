@@ -67,7 +67,7 @@ export class MainFormService {
     if (this.getStartingGlobalForm() !== null) {
       return this.getStartingGlobalForm().get('collections').value;
     }
-    return null;
+    return [];
   }
 
 }

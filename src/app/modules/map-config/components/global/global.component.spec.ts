@@ -1,7 +1,8 @@
 import { GlobalComponent } from './global.component';
-import { Spectator, createComponentFactory } from '@ngneat/spectator';
+import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
+import { ConfigElementComponent } from '@shared/components/config-element/config-element.component';
 import { MockComponent } from 'ng-mocks';
-import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 describe('GlobalComponent', () => {
 
@@ -10,6 +11,9 @@ describe('GlobalComponent', () => {
     component: GlobalComponent,
     declarations: [
       MockComponent(ConfigElementComponent)
+    ],
+    providers: [
+      mockProvider(CollectionService)
     ]
   });
 

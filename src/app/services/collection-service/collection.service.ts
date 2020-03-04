@@ -20,10 +20,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { map, finalize } from 'rxjs/operators';
-import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { ComputationRequest, Aggregation, AggregationsRequest, AggregationResponse } from 'arlas-api';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NGXLogger } from 'ngx-logger';
+import { CollectionReferenceDescriptionProperty, CollectionReferenceDescription, CollectionReferenceParameters } from 'arlas-api';
 
 export import FIELD_TYPES = CollectionReferenceDescriptionProperty.TypeEnum;
 export import METRIC_TYPES = ComputationRequest.MetricEnum;
@@ -103,6 +103,13 @@ export class CollectionService {
       return a.elements ? a.elements.map(e => e.key) : [];
     })
       .finally(() => this.spinner.hide());
+  }
+  
+  public getCollectionParamFields(collection: string): Observable<CollectionReferenceParameters> {
+    return this.collabSearchService.describe(collection).pipe(map((collectionDescription: CollectionReferenceDescription) => {
+      return collectionDescription.params;
+    }));
+
   }
 
 }
