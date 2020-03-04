@@ -87,7 +87,6 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
   ) { }
 
   ngOnInit() {
-
     this.modeFormGroup = this.formBuilderDefault.group('map.layer', {
       collectionStep: this.formBuilder.group({
         collectionCtrl:
