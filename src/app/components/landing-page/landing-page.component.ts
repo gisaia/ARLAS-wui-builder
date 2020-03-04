@@ -28,6 +28,8 @@ import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configu
 import { ArlasConfigService } from 'arlas-wui-toolkit';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
+
+
 @Component({
   templateUrl: './landing-page-dialog.component.html',
   styleUrls: ['./landing-page-dialog.component.scss']

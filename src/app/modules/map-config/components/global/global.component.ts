@@ -47,25 +47,30 @@ export class GlobalComponent implements OnInit {
     this.collections = this.mainFormService.getCollections();
 
     this.mainFormService.addMapConfigGlobalFormIfInexisting(new FormGroup({
-      targetGeometries: new FormArray([]),
+      requestGeometries: new FormArray([]),
       geographicalOperator: new FormControl(null, Validators.required)
     }));
 
-    this.targetGeometries.clear();
     this.collections.forEach((collection) => {
 
       this.collectionService.getCollectionFields(collection, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE]).subscribe(fields => {
         this.geoFieldsByCollection.set(collection, fields);
       });
-      this.collectionService.getCollectionParamFields(collection).subscribe(params => {
-        this.targetGeometries.push(new FormControl(params.geometry_path, Validators.required));
-
-      });
+      // Push a new FormGroup iff the FormArray (requestGeometries) doesn't contains
+      // as many controls that there is select collection
+      if (this.requestGeometries.length < this.collections.length) {
+        this.collectionService.getCollectionParamFields(collection).subscribe(params => {
+          this.requestGeometries.push(new FormGroup({
+            collection: new FormControl({ value: collection, disabled: true }),
+            requestGeom: new FormControl(params.geometry_path, Validators.required)
+          }));
+        });
+      }
     });
   }
 
-  get targetGeometries() {
-    return this.mainFormService.getMapConfigGlobalForm().get('targetGeometries') as FormArray;
+  get requestGeometries() {
+    return this.mainFormService.getMapConfigGlobalForm().get('requestGeometries') as FormArray;
   }
 
   public getMapConfigFormGroup() {
