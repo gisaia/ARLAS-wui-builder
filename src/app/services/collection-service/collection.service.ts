@@ -27,6 +27,7 @@ import { NGXLogger } from 'ngx-logger';
 
 export import FIELD_TYPES = CollectionReferenceDescriptionProperty.TypeEnum;
 export import METRIC_TYPES = ComputationRequest.MetricEnum;
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,7 @@ export class CollectionService {
   constructor(
     private collabSearchService: ArlasCollaborativesearchService,
     private spinner: NgxSpinnerService,
+    private defaultValueService: DefaultValuesService,
     private logger: NGXLogger
   ) { }
 
@@ -91,7 +93,7 @@ export class CollectionService {
     const aggregation: Aggregation = {
       type: Aggregation.TypeEnum.Term,
       field,
-      size: '10'
+      size: this.defaultValueService.getDefaultConfig().aggregationTermSize.toString()
     };
     const aggreationRequest: AggregationsRequest = {
       aggregations: [aggregation]

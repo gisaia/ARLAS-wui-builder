@@ -24,8 +24,13 @@ import * as ajvKeywords from 'ajv-keywords/keywords/uniqueItemProperties';
 import * as draftSchema from 'ajv/lib/refs/json-schema-draft-06.json';
 import * as defaultValuesSchema from './defaultValues.schema.json';
 import { getObject } from '@utils/tools';
+import { NGXLogger } from 'ngx-logger';
 
-
+export interface DefaultConfig {
+  aggregationTermSize: number;
+  palettes: Array<Array<string>>;
+  colorPickerPresets: Array<string>;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -33,7 +38,10 @@ export class DefaultValuesService {
 
   private config: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private logger: NGXLogger
+  ) { }
 
   public validateConfiguration(data) {
     return new Promise<any>((resolve, reject) => {
@@ -66,7 +74,7 @@ export class DefaultValuesService {
       .then(() => this.validateConfiguration(configData))
       .then((data) => this.setConfig(data))
       .catch((err: any) => {
-        console.error(err);
+        this.logger.error(err);
         return Promise.resolve(null);
       });
     return ret.then((x) => { });
@@ -78,5 +86,9 @@ export class DefaultValuesService {
 
   public getValue(keyPath: string) {
     return getObject(this.config, 'root.' + keyPath);
+  }
+
+  public getDefaultConfig(): DefaultConfig {
+    return this.getValue('config') as DefaultConfig;
   }
 }
