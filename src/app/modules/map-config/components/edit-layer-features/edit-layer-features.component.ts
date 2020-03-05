@@ -28,11 +28,11 @@ import { NGXLogger } from 'ngx-logger';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionService, FIELD_TYPES, METRIC_TYPES } from '@services/collection-service/collection.service';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
-import { CustomValidators } from '@utils/custom-validators';
-import { DialogColorTableComponent, KeywordColor } from '../dialog-color-table/dialog-color-table.component';
+import { DialogColorTableComponent, DialogColorTableData } from '../dialog-color-table/dialog-color-table.component';
 import { DialogPaletteSelectorComponent, PaletteData } from '../dialog-palette-selector/dialog-palette-selector.component';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { CustomValidators } from '@utils/custom-validators';
 
 enum COLOR_SOURCE {
   fix = 'fix',
@@ -40,6 +40,11 @@ enum COLOR_SOURCE {
   generated = 'generated',
   manual = 'manual',
   interpolated = 'interpolated'
+}
+
+interface KeywordColor {
+  keyword: string;
+  color: string;
 }
 
 @Component({
@@ -301,13 +306,16 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
       this.colorManualValuesCtrl().clear();
 
       if (v) {
-        this.collectionService.getAggregation(this.collectionCtrl().value, v).then(keywords => {
-          keywords.forEach(k => {
-            const keywordColorGrp = this.formBuilder.group({
-              keyword: [k],
-              color: [this.colorService.getColor(k)]
+        this.collectionService.getTermAggregation(this.collectionCtrl().value, v).then((keywords: Array<string>) => {
+          keywords.forEach((k: string) => {
+            this.addToColorManualValuesCtrl({
+              keyword: k,
+              color: this.colorService.getColor(k)
             });
-            this.colorManualValuesCtrl().push(keywordColorGrp);
+          });
+          this.addToColorManualValuesCtrl({
+            keyword: 'OTHER',
+            color: this.defaultValueService.getDefaultConfig().otherColor
           });
         });
       }
@@ -347,12 +355,8 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
       this.colorInterpolatedFieldCtrl().updateValueAndValidity({ onlySelf: true, emitEvent: true });
 
       // with FormArray, values cannot be simply set, each inner element is a FormGroup to be created
-      obj.styleStep.choosenColorGrp.colorManualGroup.colorManualValuesCtrl.forEach(k => {
-        const keywordColorGrp = this.formBuilder.group({
-          keyword: [k.keyword],
-          color: [k.color]
-        });
-        this.colorManualValuesCtrl().push(keywordColorGrp);
+      obj.styleStep.choosenColorGrp.colorManualGroup.colorManualValuesCtrl.forEach((k: KeywordColor) => {
+        this.addToColorManualValuesCtrl(k);
       });
     }
   }
@@ -374,6 +378,14 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
 
   ngOnDestroy() {
     this.submitSubscription.unsubscribe();
+  }
+
+  private addToColorManualValuesCtrl(kc: KeywordColor) {
+    const keywordColorGrp = this.formBuilder.group({
+      keyword: [kc.keyword],
+      color: [kc.color]
+    });
+    this.colorManualValuesCtrl().push(keywordColorGrp);
   }
 
   public checkZoom(event: MatSliderChange, source: string) {
@@ -418,13 +430,20 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
 
   public openColorTable() {
     const dialogRef = this.dialog.open(DialogColorTableComponent, {
-      data: this.colorManualValuesCtrl().value as KeywordColor[],
+      data: {
+        collection: this.collectionCtrl().value,
+        sourceField: this.colorManualFieldCtrl().value,
+        keywordColors: this.colorManualValuesCtrl().value
+      } as DialogColorTableData,
       autoFocus: false,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: Array<KeywordColor>) => {
       if (result !== undefined) {
-        this.colorManualValuesCtrl().setValue(result);
+        this.colorManualValuesCtrl().clear();
+        result.forEach((k: KeywordColor) => {
+          this.addToColorManualValuesCtrl(k);
+        });
       }
     });
   }

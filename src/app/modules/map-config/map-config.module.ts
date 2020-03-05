@@ -43,6 +43,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DialogPaletteSelectorComponent } from './components/dialog-palette-selector/dialog-palette-selector.component';
 import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   entryComponents: [
@@ -77,7 +78,8 @@ import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
     MatSliderModule,
     MatDialogModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatAutocompleteModule
   ],
   providers: [
     ConfirmExitGuard

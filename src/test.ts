@@ -21,6 +21,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 // define modules to be injected in every test
 defineGlobalsInjections({
@@ -46,7 +47,8 @@ defineGlobalsInjections({
     MatSlideToggleModule,
     MatSliderModule,
     ColorPickerModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    MatAutocompleteModule
   ],
   providers: [
     mockProvider(NGXLogger)

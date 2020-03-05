@@ -20,14 +20,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { map, finalize } from 'rxjs/operators';
+import { CollectionReferenceDescriptionProperty, Filter, CollectionReferenceDescription, CollectionReferenceParameters } from 'arlas-api';
 import { ComputationRequest, Aggregation, AggregationsRequest, AggregationResponse } from 'arlas-api';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NGXLogger } from 'ngx-logger';
-import { CollectionReferenceDescriptionProperty, CollectionReferenceDescription, CollectionReferenceParameters } from 'arlas-api';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 export import FIELD_TYPES = CollectionReferenceDescriptionProperty.TypeEnum;
 export import METRIC_TYPES = ComputationRequest.MetricEnum;
-import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 @Injectable({
   providedIn: 'root'
@@ -87,22 +87,29 @@ export class CollectionService {
       .finally(() => this.spinner.hide());
   }
 
-  public getAggregation(collection: string, field: string): Promise<Array<string>> {
+  public getTermAggregation(collection: string, field: string, showSpinner: boolean = true, filter?: Filter): Promise<Array<string>> {
 
-    this.spinner.show();
+    if (showSpinner) {
+      this.spinner.show();
+    }
     const aggregation: Aggregation = {
       type: Aggregation.TypeEnum.Term,
       field,
       size: this.defaultValueService.getDefaultConfig().aggregationTermSize.toString()
     };
     const aggreationRequest: AggregationsRequest = {
-      aggregations: [aggregation]
+      aggregations: [aggregation],
+      filter
     };
 
     return this.collabSearchService.getExploreApi().aggregatePost(collection, aggreationRequest).then((a: AggregationResponse) => {
       return a.elements ? a.elements.map(e => e.key) : [];
     })
-      .finally(() => this.spinner.hide());
+      .finally(() => {
+        if (showSpinner) {
+          this.spinner.hide();
+        }
+      });
   }
 
   public getCollectionParamFields(collection: string): Observable<CollectionReferenceParameters> {
@@ -110,6 +117,19 @@ export class CollectionService {
       return collectionDescription.params;
     }));
 
+  }
+
+
+  public getTermAggregationStartWith(collection: string, field: string, startWith: string) {
+    return this.getTermAggregation(
+      collection,
+      field,
+      false,
+      {
+        q: [[
+          field + ':' + startWith + '*'
+        ]]
+      });
   }
 
 }
