@@ -9,8 +9,7 @@
                         <mat-select formControlName="collectionCtrl"
                             appAlertOnChange="changing the collection will reset the rendered geometry" [dependants]="[geometryCtrl(), colorProvidedFieldCtrl(), colorGeneratedFieldCtrl(), colorManualFieldCtrl(), 
                             colorInterpolatedFieldCtrl(), colorInterpolatedNormalizeLocalFieldCtrl()]">
-                            <mat-option
-                                *ngFor="let collection of this.mainformService.getCollections()"
+                            <mat-option *ngFor="let collection of this.mainformService.getCollections()"
                                 value="{{collection}}">{{collection}}</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -73,7 +72,8 @@
             <app-config-element>
                 <div form-fields>
                     <mat-label>Zoom min</mat-label>
-                    <mat-slider thumbLabel formControlName="zoomMinCtrl" min="1" max="20" (input)="checkZoom($event, 'min')" thumbLabel="true"></mat-slider>
+                    <mat-slider thumbLabel formControlName="zoomMinCtrl" min="1" max="20"
+                        (input)="checkZoom($event, 'min')" thumbLabel="true"></mat-slider>
                 </div>
                 <div description>
                     zoom min etc
@@ -82,7 +82,8 @@
             <app-config-element>
                 <div form-fields>
                     <span>Zoom max</span>
-                    <mat-slider thumbLabel formControlName="zoomMaxCtrl" min="1" max="20" (input)="checkZoom($event, 'max')"></mat-slider>
+                    <mat-slider thumbLabel formControlName="zoomMaxCtrl" min="1" max="20"
+                        (input)="checkZoom($event, 'max')"></mat-slider>
                 </div>
                 <div description>
                     zoom max etc
@@ -139,8 +140,9 @@
                         <ng-container formGroupName="choosenColorGrp">
 
                             <div *ngIf="colorSourceCtrl().value == COLOR_SOURCE.fix">
-                                <app-color-picker [value]="colorFixCtrl().value" (setValue)="setColorFix($event)">
-                                </app-color-picker>
+                                <app-color-picker-wrapper [value]="colorFixCtrl().value"
+                                    (setValue)="setColorFix($event)">
+                                </app-color-picker-wrapper>
                             </div>
 
                             <div *ngIf="colorSourceCtrl().value == COLOR_SOURCE.provided">
@@ -179,7 +181,7 @@
                                 <div>
                                     <button type="button" mat-raised-button color="primary" (click)="openColorTable()"
                                         *ngIf="colorManualFieldCtrl()?.value">
-                                        View / change colors
+                                        Manage colors
                                     </button>
                                 </div>
                             </div>
@@ -200,9 +202,9 @@
                                     <div>
                                         <mat-label>Normalize</mat-label>
                                         <mat-slide-toggle formControlName="colorInterpolatedNormalizeCtrl"
-                                            labelPosition="before" appResetOnChange="map.layer"
-                                            [dependants]="[colorInterpolatedScopeCtrl(), colorInterpolatedNormalizeByKeyCtrl(), 
-                                            colorInterpolatedNormalizeLocalFieldCtrl(), colorInterpolatedMinValueCtrl(), colorInterpolatedMaxValueCtrl()]">
+                                            labelPosition="before" appResetOnChange="map.layer" [dependants]="[colorInterpolatedScopeCtrl(), colorInterpolatedNormalizeByKeyCtrl(), 
+                                            colorInterpolatedNormalizeLocalFieldCtrl(), colorInterpolatedMinValueCtrl(), colorInterpolatedMaxValueCtrl(),
+                                            colorInterpolatedPaletteCtrl()]">
                                         </mat-slide-toggle>
                                     </div>
 
@@ -240,21 +242,28 @@
                                             <mat-form-field>
                                                 <mat-label>Minimum value</mat-label>
                                                 <input matInput placeholder="Min" type="number"
-                                                    formControlName="colorInterpolatedMinValueCtrl">
+                                                    formControlName="colorInterpolatedMinValueCtrl"
+                                                    appAlertOnChange="Changing this value will reset the palette"
+                                                    appResetOnChange [dependants]="[colorInterpolatedPaletteCtrl()]">
                                             </mat-form-field>
                                         </div>
                                         <div>
                                             <mat-form-field>
                                                 <mat-label>Maximum value</mat-label>
                                                 <input matInput placeholder="Max" type="number"
-                                                    formControlName="colorInterpolatedMaxValueCtrl">
+                                                    formControlName="colorInterpolatedMaxValueCtrl"
+                                                    appAlertOnChange="Changing this value will reset the palette"
+                                                    appResetOnChange [dependants]="[colorInterpolatedPaletteCtrl()]">
                                             </mat-form-field>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <button type="button" mat-raised-button (click)="openPaletteTable()" class="palette-button">
-                                            Select palette
+                                        <button type=" button" mat-raised-button (click)="openPaletteTable()"
+                                            class="palette-button"
+                                            [disabled]="!colorInterpolatedNormalizeCtrl().value 
+                                            && (!colorInterpolatedMinValueCtrl().valid || !colorInterpolatedMaxValueCtrl().valid || colorInterpolatedGroup()?.errors?.lte)">
+                                            Manage palette
                                         </button>
                                     </div>
                                 </div>
@@ -287,6 +296,10 @@
                                 <mat-error
                                     *ngIf="colorInterpolatedNormalizeLocalFieldCtrl().touched && colorInterpolatedNormalizeLocalFieldCtrl()?.errors?.required">
                                     A local-normalization field is required
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="colorInterpolatedMinValueCtrl().value && colorInterpolatedMaxValueCtrl().valid && colorInterpolatedGroup()?.errors?.lte">
+                                    The minimum value must be less than the maximum value
                                 </mat-error>
                                 <mat-error
                                     *ngIf="colorInterpolatedPaletteCtrl().touched && colorInterpolatedPaletteCtrl()?.errors?.required">

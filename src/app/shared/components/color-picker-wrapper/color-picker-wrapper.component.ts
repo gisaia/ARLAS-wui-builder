@@ -20,7 +20,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 @Component({
-  selector: 'app-color-picker',
+  selector: 'app-color-picker-wrapper',
   templateUrl: './color-picker-wrapper.component.html',
   styleUrls: ['./color-picker-wrapper.component.scss']
 })

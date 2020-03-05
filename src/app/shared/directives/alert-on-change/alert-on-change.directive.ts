@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Directive, HostListener, Input } from '@angular/core';
+import { Directive, HostListener, Input, Optional, ElementRef, OnInit } from '@angular/core';
 import { MatSnackBar, MatSelect } from '@angular/material';
 import { AbstractControl } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
@@ -25,18 +25,36 @@ import { NGXLogger } from 'ngx-logger';
  * Shows a toast of the value of mat-select changes (and was previously set).
  */
 @Directive({
-  selector: 'mat-select[appAlertOnChange]'
+  selector: '[appAlertOnChange]'
 })
-export class AlertOnChangeDirective {
+export class AlertOnChangeDirective implements OnInit {
 
   constructor(
     private logger: NGXLogger,
-    private select: MatSelect,
+    @Optional() private select: MatSelect,
+    private elementRef: ElementRef<HTMLInputElement>,
     private snackBar: MatSnackBar) { }
 
   // tslint:disable-next-line: no-input-rename
   @Input('appAlertOnChange') alertMessage: string;
   @Input() dependants: AbstractControl[];
+
+  // 2 cases are managed in different ways:
+  // - host is a regular html input, then we can simply use the native element
+  // to attach a listener and get the current value
+  // - host is a MatSelect: this is a pure angular component, this is handled through angular
+
+  ngOnInit(): void {
+    const nativeElement = this.elementRef.nativeElement;
+    if (!this.select) {
+      nativeElement.onfocus = (e: Event) => {
+        const anyDependantDirty = this.dependants == null || this.dependants.filter(d => d.dirty).length > 0;
+        if (anyDependantDirty && !!nativeElement.value) {
+          this.snackBar.open('Carreful! ' + this.alertMessage);
+        }
+      };
+    }
+  }
 
   @HostListener('openedChange', ['$event']) openedChange(value: boolean) {
     // display a snack on opening if a dependant has been changed

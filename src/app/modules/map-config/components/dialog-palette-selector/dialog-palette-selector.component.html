@@ -2,7 +2,7 @@
     <h1 mat-dialog-title>Select a template palette</h1>
     <div mat-dialog-content>
         <div *ngFor="let palette of defaultPalettes; let i = index" class="palette-selector" mat-button>
-            <div *ngFor="let color of palette" class="color" [ngStyle]="{'background-color': color}"
+            <div *ngFor="let propColor of palette" class="color" [ngStyle]="{'background-color': propColor.color}"
                 (click)="selectPalette(i)">
             </div>
         </div>
@@ -12,24 +12,62 @@
 <div *ngIf="selectedPalette">
     <h1 mat-dialog-title>Customize the palette</h1>
     <div mat-dialog-content>
-        <div class="palette-customize">
-            <div *ngFor="let color of selectedPalette; let i = index" class="color">
-                <app-color-picker [value]="color" (setValue)="selectedPalette[i] = $event">
-                </app-color-picker>
+        <div class="palette-gradient"
+            [ngStyle]="{'background': selectedPalette.length > 1 ? 'linear-gradient(to right, ' + getSelectedPaletteGradients() + ')' : selectedPalette[0].color}">
+            <div class="parent-gradient-buttons">
+                <button mat-mini-fab mat-icon-button (click)="reverse()" matTooltip="Reverse the colors order">
+                    <mat-icon>swap_horiz</mat-icon>
+                </button>
+                <button mat-mini-fab mat-icon-button (click)="resetProportions()"
+                    matTooltip="Reset the colors midpoints">
+                    <mat-icon>settings_backup_restore</mat-icon>
+                </button>
             </div>
         </div>
-        <div class="palette-gradient"
-            [ngStyle]="{'background': 'linear-gradient(to right, ' + selectedPalette.join(', ') + ')'}">
+        <div cdkDropList cdkDropListOrientation="vertical" (cdkDropListDropped)="drop($event)" class="color-panel-list">
+            <div *ngFor="let propColor of selectedPalette; let i = index" cdkDrag>
+                <div class="color-panel">
+                    <div class="color">
+                        <app-color-picker-wrapper [value]="propColor.color"
+                            (setValue)="selectedPalette[i].color = $event">
+                        </app-color-picker-wrapper>
+                        <app-color-picker-wrapper *cdkDragPreview [value]="propColor.color">
+                        </app-color-picker-wrapper>
+                    </div>
+                    <div class="color-buttons">
+                        <button mat-mini-fab cdkDragHandle matTooltip="Reorder this color">
+                            <mat-icon>open_with</mat-icon>
+                        </button>
+                        <button mat-mini-fab (click)="add(i)" matTooltip="Add new color">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <button mat-mini-fab (click)="remove(i)" *ngIf="selectedPalette.length > 2"
+                            matTooltip="Remove color">
+                            <mat-icon>remove</mat-icon>
+                        </button>
+                        <mat-slider [min]="data.min" [max]="data.max" [step]="(data.max - data.min) / 20" thumbLabel
+                            [(ngModel)]="selectedPalette[i].proportion" matTooltip="Change color midpoint"></mat-slider>
+                    </div>
+                </div>
+                <div *cdkDragPlaceholder class="color-panel">
+                    <div class="color">
+                        <app-color-picker-wrapper [value]="propColor.color"
+                            (setValue)="selectedPalette[i].color = $event">
+                        </app-color-picker-wrapper>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<div mat-dialog-actions class="action-button">
+<div mat-dialog-actions class="action-buttons">
     <div>
-        <button mat-button (click)="onCancel()">Cancel</button>
+        <button mat-button mat-dialog-close>Cancel</button>
         <button mat-button (click)="selectedPalette = null" *ngIf="selectedPalette">Back to templates</button>
     </div>
     <div>
-        <button mat-button *ngIf="selectedPalette" [mat-dialog-close]="selectedPalette">Save</button>
+        <button mat-button color="primary" mat-raise *ngIf="selectedPalette" [mat-dialog-close]="selectedPalette"
+            [disabled]="!isValid()">Save</button>
     </div>
 </div>
