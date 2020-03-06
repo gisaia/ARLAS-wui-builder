@@ -16,6 +16,10 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+mat-row {
+  line-height: 60px;
+}
+
 mat-cell.column-color {
   display: flex;
   justify-content: space-between;
@@ -23,7 +27,9 @@ mat-cell.column-color {
 
 mat-cell.column-keyword {
   display: inline-block;
-  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
 }
 
 .mat-dialog-actions {
