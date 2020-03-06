@@ -16,7 +16,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-$primary-color: #ff4081;
+@import "../../../variables.scss";
+
+$primary-color: mat-color($accent-palette, 300);
 
 .landing-container {
   display: flex;
