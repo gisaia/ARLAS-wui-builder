@@ -1,15 +1,22 @@
-import { Spectator, createComponentFactory } from '@ngneat/spectator';
+import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { AppComponent } from './app.component';
 import { MockComponent } from 'ng-mocks';
 import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
+import { TranslateService, TranslateModule, TranslateFakeLoader, TranslateLoader } from '@ngx-translate/core';
 
 describe('AppComponent', () => {
   let spectator: Spectator<AppComponent>;
 
   const createComponent = createComponentFactory({
     component: AppComponent,
+    imports: [
+      TranslateModule.forRoot({ loader: { provide: TranslateLoader, useClass: TranslateFakeLoader } })
+    ],
     declarations: [
       MockComponent(LeftMenuComponent)
+    ],
+    providers: [
+      TranslateService
     ]
   });
 

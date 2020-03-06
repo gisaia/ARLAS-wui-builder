@@ -9,7 +9,7 @@
     </div>
 </div>
 <ng-container *ngIf="configChoice">
-    <h2 mat-dialog-title>Set ALRAS Server url</h2>
+    <h2 mat-dialog-title>{{'Set ARLAS Server url' | translate}}</h2>
     <mat-dialog-content>
         <div [formGroup]="this.mainFormService.getStartingGlobalForm()">
             <app-config-element [fullSize]="true">
