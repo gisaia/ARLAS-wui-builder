@@ -36,12 +36,15 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 import { HttpClientModule } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
-import { ArlasToolKitModule } from 'arlas-wui-toolkit';
+import { ArlasToolKitModule, ArlasStartupService } from 'arlas-wui-toolkit';
 import { SharedModule } from '@shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { StartupService } from '@services/startup/startup.service';
+import { ArlasWalkthroughService } from 'arlas-wui-toolkit/services/walkthrough/walkthrough.service';
+import { WalkthroughService } from '@services/walkthrough/walkthrough.service';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -90,6 +93,14 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
       useFactory: loadServiceFactory,
       deps: [DefaultValuesService],
       multi: true
+    },
+    {
+      provide: ArlasStartupService,
+      useClass: StartupService
+    },
+    {
+      provide: ArlasWalkthroughService,
+      useClass: WalkthroughService
     },
     {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
