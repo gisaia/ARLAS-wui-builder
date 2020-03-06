@@ -18,6 +18,7 @@
                         <button class="add-button" mat-button mat-raised-button (click)="addKeyword()"
                             [disabled]="!newKeywordCtrl.value || alreadyHasNewKeyword()">Add</button>
                     </div>
+                    <mat-divider></mat-divider>
                 </mat-header-cell>
             </ng-container>
 
@@ -38,9 +39,9 @@
             <ng-container matColumnDef="color">
                 <mat-header-cell *matHeaderCellDef> Color </mat-header-cell>
                 <mat-cell *matCellDef="let element;let i = index;" [formGroup]="element" class="column-color">
-                    <app-color-picker [value]="element.get('color').value"
+                    <app-color-picker-wrapper [value]="element.get('color').value"
                         (setValue)="element.get('color').patchValue($event)">
-                    </app-color-picker>
+                    </app-color-picker-wrapper>
                     <button type="button" mat-icon-button (click)="remove(i)" matTooltip="Remove row"
                         class="remove-button">
                         <mat-icon>delete</mat-icon>

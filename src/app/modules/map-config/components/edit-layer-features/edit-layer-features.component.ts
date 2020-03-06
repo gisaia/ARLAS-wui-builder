@@ -29,7 +29,8 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionService, FIELD_TYPES, METRIC_TYPES } from '@services/collection-service/collection.service';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { DialogColorTableComponent, DialogColorTableData } from '../dialog-color-table/dialog-color-table.component';
-import { DialogPaletteSelectorComponent, PaletteData } from '../dialog-palette-selector/dialog-palette-selector.component';
+import { DialogPaletteSelectorComponent } from '../dialog-palette-selector/dialog-palette-selector.component';
+import { DialogPaletteSelectorData } from '../dialog-palette-selector/model';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { CustomValidators } from '@utils/custom-validators';
@@ -258,11 +259,21 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
             colorInterpolatedPaletteCtrl:
               [
                 null,
-                CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
-                  this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedFieldCtrl().value :
-                  false,
-                  Validators.required)
+                [
+                  CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
+                    this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedFieldCtrl().value :
+                    false,
+                    Validators.required)
+                ]
               ]
+          }, {
+            validators: [
+              CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
+                this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedFieldCtrl().value
+                && this.colorInterpolatedMinValueCtrl().value && this.colorInterpolatedMaxValueCtrl().value :
+                false,
+                CustomValidators.getLTEValidator('colorInterpolatedMinValueCtrl', 'colorInterpolatedMaxValueCtrl'))
+            ]
           })
         })
       })
@@ -449,7 +460,9 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
   }
 
   public openPaletteTable() {
-    const paletteData: PaletteData = {
+    const paletteData: DialogPaletteSelectorData = {
+      min: this.colorInterpolatedNormalizeCtrl().value ? 0 : this.colorInterpolatedMinValueCtrl().value,
+      max: this.colorInterpolatedNormalizeCtrl().value ? 1 : this.colorInterpolatedMaxValueCtrl().value,
       defaultPalettes: this.defaultValueService.getDefaultConfig().palettes,
       selectedPalette: this.colorInterpolatedPaletteCtrl().value
     };
@@ -462,6 +475,7 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
         this.colorInterpolatedGroup().get('colorInterpolatedPaletteCtrl').setValue(result);
+        this.colorInterpolatedGroup().get('colorInterpolatedPaletteCtrl').markAsDirty();
       }
     });
   }

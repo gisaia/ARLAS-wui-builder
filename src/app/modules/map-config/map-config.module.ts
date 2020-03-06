@@ -44,6 +44,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DialogPaletteSelectorComponent } from './components/dialog-palette-selector/dialog-palette-selector.component';
 import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   entryComponents: [
@@ -79,7 +81,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatDialogModule,
     MatIconModule,
     MatTooltipModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    DragDropModule,
+    MatDividerModule
   ],
   providers: [
     ConfirmExitGuard

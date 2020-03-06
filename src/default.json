@@ -12,12 +12,13 @@
             },
             "styleStep": {
                 "opacityCtrl": 0.5,
-                "colorSourceCtrl": "manual",
+                "colorSourceCtrl": "interpolated",
                 "choosenColorGrp": {
                     "colorFixCtrl": "#abcdef",
                     "colorInterpolatedGroup": {
                         "colorInterpolatedNormalizeCtrl": true,
-                        "colorInterpolatedMinValueCtrl": 5
+                        "colorInterpolatedMinValueCtrl": 5,
+                        "colorInterpolatedFieldCtrl": "vessel.length"
                     }
                 }
             }

@@ -16,10 +16,10 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Directive, Input, OnInit, Host, Self, Optional } from '@angular/core';
+import { Directive, Input, OnInit, Host, Self, Optional, ElementRef } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
-import { MatSelect, MatSlideToggle, MatSlideToggleChange } from '@angular/material';
+import { MatSelect, MatSlideToggle, MatSlideToggleChange, MatInput } from '@angular/material';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 /**
@@ -35,30 +35,29 @@ export class ResetOnChangeDirective implements OnInit {
   @Input('appResetOnChange') defaultValuePrefix: string;
 
   constructor(
+    private elementRef: ElementRef<HTMLInputElement>,
     @Optional() private matSelect: MatSelect,
     @Optional() private matSlider: MatSlideToggle,
     private logger: NGXLogger,
     private defaultValueService: DefaultValuesService) { }
 
   ngOnInit(): void {
-    if (!this.defaultValuePrefix) {
-      this.logger.error('Missing default value prefix in reset-on-change');
-    }
-
-    // clean dependants fields on value change
     if (this.matSelect) {
       this.matSelect.valueChange.subscribe((value: any) =>
-        this.resetDependants(value));
+        this.resetDependants());
     } else if (this.matSlider) {
       this.matSlider.change.subscribe(
-        (event: MatSlideToggleChange) => this.resetDependants(event.checked));
+        (event: MatSlideToggleChange) => this.resetDependants());
     } else {
-      this.logger.error('Unsupported input type for reset-on-change');
+      // at least we guess this is a regulr html input
+      this.elementRef.nativeElement.onchange = (e: Event) => {
+        this.resetDependants();
+      };
     }
   }
 
-  private resetDependants(value: any) {
-    if (!!value && !!this.dependants) {
+  private resetDependants() {
+    if (!!this.dependants) {
       this.dependants.forEach(d => {
         this.resetControl(d);
       });
@@ -70,10 +69,10 @@ export class ResetOnChangeDirective implements OnInit {
    */
   private resetControl(control: AbstractControl) {
     if (control instanceof FormControl) {
-      // reset to the default value of the control
+      // reset to the default value of the control, or null if no default value prefix provided
       control.reset(
-        this.defaultValueService.getValue(
-          this.defaultValuePrefix + '.' + this.findParentPath(control)));
+        !!this.defaultValuePrefix ? this.defaultValueService.getValue(
+          this.defaultValuePrefix + '.' + this.findParentPath(control)) : null);
     } else if (control instanceof FormGroup || control instanceof FormArray) {
       // reset inner FormControls
       Object.keys(control.controls).forEach(key => {
