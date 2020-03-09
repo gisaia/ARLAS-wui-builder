@@ -33,7 +33,7 @@ import { MapConfigModule } from '@map-config/map-config.module';
 import { SearchConfigModule } from '@search-config/search-config.module';
 import { TimelineConfigModule } from '@timeline-config/timeline-config.module';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
 import { ArlasToolKitModule, ArlasStartupService } from 'arlas-wui-toolkit';
@@ -45,6 +45,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { StartupService } from '@services/startup/startup.service';
 import { ArlasWalkthroughService } from 'arlas-wui-toolkit/services/walkthrough/walkthrough.service';
 import { WalkthroughService } from '@services/walkthrough/walkthrough.service';
+import { CustomTranslateLoader } from 'arlas-wui-toolkit/app.module';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());

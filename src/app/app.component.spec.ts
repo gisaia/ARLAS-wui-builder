@@ -1,7 +1,7 @@
-import { Spectator, createComponentFactory } from '@ngneat/spectator';
-import { AppComponent } from './app.component';
-import { MockComponent } from 'ng-mocks';
 import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
+import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { MockComponent } from 'ng-mocks';
+import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   let spectator: Spectator<AppComponent>;

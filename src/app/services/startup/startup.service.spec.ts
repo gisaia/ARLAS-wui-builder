@@ -1,7 +1,7 @@
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
-import { StartupService } from './startup.service';
-import { ArlasConfigService, ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { HttpClient } from '@angular/common/http';
+import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/spectator';
+import { ArlasCollaborativesearchService, ArlasConfigService } from 'arlas-wui-toolkit';
+import { StartupService } from './startup.service';
 
 describe('StartupService', () => {
   let spectator: SpectatorService<StartupService>;
