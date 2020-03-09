@@ -61,7 +61,7 @@ export class DialogColorTableComponent implements OnInit {
 
   ngOnInit() {
     this.dialogRef.disableClose = true;
-    this.dialogRef.updateSize('600px');
+    this.dialogRef.updateSize('800px');
 
     // build the form with all keywords / colors
     this.keywordColorsForm = this.formBuilder.array([]);
