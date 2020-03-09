@@ -17,10 +17,11 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit } from '@angular/core';
-import { FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { LayersComponentForm } from './layers.component.form';
+import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
 
 export interface Layer {
   id: string;
@@ -33,19 +34,18 @@ export interface Layer {
   templateUrl: './layers.component.html',
   styleUrls: ['./layers.component.scss']
 })
-export class LayersComponent implements OnInit {
+export class LayersComponent extends LayersComponentForm implements OnInit {
 
   public displayedColumns: string[] = ['name', 'mode', 'edit', 'delete'];
 
-  constructor(private mainFormService: MainFormService, public dialog: MatDialog) { }
-
-  ngOnInit() {
-    this.mainFormService.addMapConfigLayersFormIfInexisting(new FormArray([]));
+  constructor(
+    protected mainFormService: MainFormService,
+    public dialog: MatDialog
+  ) {
+    super(mainFormService);
   }
 
-
-  public getLayers() {
-    return this.mainFormService.getMapConfigLayersForm().value;
+  ngOnInit() {
   }
 
   public confirmDelete(layerId: number, layerName: string): void {
@@ -56,8 +56,8 @@ export class LayersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        const formGroupIndex = (this.mainFormService.getMapConfigLayersForm().value as any[]).findIndex(el => el.id === layerId);
-        this.mainFormService.getMapConfigLayersForm().removeAt(formGroupIndex);
+        const formGroupIndex = (this.layersFa.value as any[]).findIndex(el => el.id === layerId);
+        this.layersFa.removeAt(formGroupIndex);
       }
     });
   }

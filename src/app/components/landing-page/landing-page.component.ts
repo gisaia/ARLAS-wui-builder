@@ -52,11 +52,12 @@ export class LandingPageDialogComponent implements OnInit {
 
   public ngOnInit(): void {
     if (!!this.mainFormService.mainForm) {
-      this.mainFormService.initFormWithStartingConfig(this.formBuilderWithDefault.group('global', {
-        serverUrl: new FormControl(null,
-          [Validators.required, Validators.pattern('(https?://)([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')]),
-        collections: new FormControl(null, [Validators.required, Validators.maxLength(1)])
-      }));
+      this.mainFormService.startingConfig.init(
+        this.formBuilderWithDefault.group('global', {
+          serverUrl: new FormControl(null,
+            [Validators.required, Validators.pattern('(https?://)([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')]),
+          collections: new FormControl(null, [Validators.required, Validators.maxLength(1)])
+        }));
     }
   }
 
@@ -73,7 +74,7 @@ export class LandingPageDialogComponent implements OnInit {
   }
 
   public checkUrl() {
-    const url = this.mainFormService.getStartingGlobalForm().get('serverUrl').value;
+    const url = this.mainFormService.startingConfig.getFg().get('serverUrl').value;
     this.http.get(url + '/swagger.json').subscribe(
       () => {
         // Update config with new server url

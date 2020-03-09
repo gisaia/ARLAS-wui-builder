@@ -16,53 +16,20 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-@import "variables.scss";
+import { MainFormService } from '@services/main-form/main-form.service';
+import { FormArray, Validators } from '@angular/forms';
 
-$primary-color: mat-color($accent-palette, 300);
+export class LayersComponentForm {
 
-.landing-container {
-  display: flex;
-  flex-direction: row;
+    public layersFa: FormArray;
 
-  .bloc {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 30px;
-    padding: 50px;
-    width: 150px;
-    background: $primary-color;
-    color: white;
-    font-weight: 200;
-    cursor: pointer;
-    font-size: 18px;
-    border-radius: 10px;
+    constructor(
+        protected mainFormService: MainFormService) {
 
-    span {
-      text-align: center;
+        this.mainFormService.mapConfig.initLayersFa(
+            new FormArray([], [Validators.required])
+        );
+        this.layersFa = this.mainFormService.mapConfig.getLayersFa();
     }
 
-    mat-icon {
-      font-size: 50px;
-      width: 50px;
-      height: 50px;
-    }
-
-    &:hover {
-      background: rgba($primary-color, 0.5);
-    }
-  }
-}
-
-.collection {
-  .mat-form-field {
-    width: 100%;
-  }
-}
-
-.server-url {
-  .mat-form-field {
-    width: 100%;
-  }
 }

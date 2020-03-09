@@ -11,18 +11,20 @@
 <ng-container *ngIf="configChoice">
     <h2 mat-dialog-title>{{'Set ARLAS Server url' | translate}}</h2>
     <mat-dialog-content>
-        <div [formGroup]="this.mainFormService.getStartingGlobalForm()">
+        <div [formGroup]="this.mainFormService.startingConfig.getFg()">
             <app-config-element [fullSize]="true">
                 <div form-fields class="server-url">
-                    <mat-form-field >
+                    <mat-form-field>
                         <mat-label>Server URL</mat-label>
-                        <input matInput (change)="this.mainFormService.getStartingGlobalForm().get('serverUrl').valid ? checkUrl() : false" formControlName="serverUrl">
+                        <input matInput
+                            (change)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
+                            formControlName="serverUrl">
                     </mat-form-field>
                 </div>
             </app-config-element>
             <app-config-element *ngIf="isServerReady">
                 <div form-fields class="collection">
-                    <mat-form-field >
+                    <mat-form-field>
                         <mat-label>Collections</mat-label>
                         <mat-select formControlName="collections" multiple>
                             <mat-option *ngFor="let collection of availablesCollections" value="{{collection}}">
@@ -35,10 +37,11 @@
                     Choose collections available in configuration.<br />
                     Only one for now.
                 </div>
-            </app-config-element> 
+            </app-config-element>
         </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button (click)="this.startEvent.next('new');" [disabled]="this.mainFormService.getStartingGlobalForm().invalid" mat-raised-button color="primary">Start configuration</button>
+        <button (click)="this.startEvent.next('new');" [disabled]="this.mainFormService.startingConfig.getFg().invalid"
+            mat-raised-button color="primary">Start configuration</button>
     </mat-dialog-actions>
 </ng-container>

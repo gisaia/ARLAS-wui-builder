@@ -1,7 +1,7 @@
 <button mat-raised-button color="primary" class="add-layer" [routerLink]="['add']"> Add layer
 </button>
 
-<table mat-table [dataSource]="getLayers()" class="mat-elevation-z8">
+<table mat-table [dataSource]="layersFa.value" class="mat-elevation-z8">
 
     <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> Name </th>
@@ -30,3 +30,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+
+<mat-error *ngIf="layersFa.touched && layersFa.errors?.required">
+    At least one layer is required
+</mat-error>

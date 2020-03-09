@@ -17,7 +17,7 @@ describe('LandingPageComponent', () => {
       SharedModule
     ],
     providers: [
-      { provide: MatDialogRef, useValue: {} },
+      mockProvider(MatDialogRef),
       mockProvider(NGXLogger),
       mockProvider(MainFormService),
       mockProvider(ArlasConfigService),

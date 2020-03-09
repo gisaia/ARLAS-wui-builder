@@ -18,7 +18,7 @@ under the License.
 */
 import { Component, OnInit, Input, forwardRef, OnDestroy, ViewChild } from '@angular/core';
 import {
-  FormBuilder, FormGroup, Validators, AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS,
+  FormBuilder, FormGroup, AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS,
   ControlValueAccessor, Validator, ValidationErrors, FormArray
 } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
@@ -33,20 +33,9 @@ import { DialogPaletteSelectorComponent } from '../dialog-palette-selector/dialo
 import { DialogPaletteSelectorData } from '../dialog-palette-selector/model';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
-import { CustomValidators } from '@utils/custom-validators';
-
-enum COLOR_SOURCE {
-  fix = 'fix',
-  provided = 'provided',
-  generated = 'generated',
-  manual = 'manual',
-  interpolated = 'interpolated'
-}
-
-interface KeywordColor {
-  keyword: string;
-  color: string;
-}
+import { EditLayerFeaturesComponentForm } from './edit-layer-features.component.form';
+import { KeywordColor, COLOR_SOURCE } from './models';
+import { updateValueAndValidity } from '@utils/tools';
 
 @Component({
   selector: 'app-edit-layer-features',
@@ -70,7 +59,8 @@ interface KeywordColor {
   ]
 })
 // ControlValueAccessor: see https://christianlydemann.com/form-validation-with-controlvalueaccessor/
-export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor, Validator, OnDestroy {
+export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm
+  implements OnInit, ControlValueAccessor, Validator, OnDestroy {
 
   @ViewChild('stepper', { static: false }) stepper: MatStepper;
   @Input() submit: Observable<void>;
@@ -80,224 +70,50 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
   public collectionKeywordFields: string[] = [];
   public collectionIntegerFields: string[] = [];
 
-  public modeFormGroup: FormGroup;
   constructor(
-    private formBuilderDefault: FormBuilderWithDefaultService,
-    private formBuilder: FormBuilder,
+    protected formBuilderDefault: FormBuilderWithDefaultService,
+    protected formBuilder: FormBuilder,
     private logger: NGXLogger,
     public dialog: MatDialog,
     public mainformService: MainFormService,
     public collectionService: CollectionService,
     private colorService: ArlasColorGeneratorLoader,
     private defaultValueService: DefaultValuesService
-  ) { }
+  ) {
+    super(formBuilderDefault, formBuilder);
+  }
 
   ngOnInit() {
-    this.modeFormGroup = this.formBuilderDefault.group('map.layer', {
-      collectionStep: this.formBuilder.group({
-        collectionCtrl:
-          [
-            null,
-            Validators.required
-          ]
-      }),
-      geometryStep: this.formBuilder.group({
-        geometryCtrl:
-          [
-            null,
-            Validators.required
-          ],
-        geometryTypeCtrl:
-          [
-            null,
-            Validators.required
-          ]
-      }),
-      visibilityStep: this.formBuilder.group({
-        visibleCtrl:
-          [
-            null
-          ],
-        zoomMinCtrl:
-          [
-            null,
-            [
-              Validators.required, Validators.min(1), Validators.max(20)
-            ]
-          ],
-        zoomMaxCtrl:
-          [
-            null,
-            [
-              Validators.required, Validators.min(1), Validators.max(20)
-            ]
-          ],
-        featuresMaxCtrl:
-          [
-            null,
-            [
-              Validators.required,
-              Validators.max(10000),
-              Validators.min(0)
-            ]
-          ]
-      },
-        {
-          validator:
-            [
-              CustomValidators.getLTEValidator('zoomMinCtrl', 'zoomMaxCtrl')
-            ]
-        }),
-      styleStep: this.formBuilder.group({
-        opacityCtrl:
-          [
-            null
-          ],
-        colorSourceCtrl:
-          [
-            null,
-            Validators.required
-          ],
-        choosenColorGrp: this.formBuilder.group({
-          colorFixCtrl:
-            [
-              null,
-              CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
-                this.colorSourceCtrl().value === COLOR_SOURCE.fix :
-                false,
-                Validators.required)
-            ],
-          colorProvidedFieldCtrl:
-            [
-              null,
-              CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
-                this.colorSourceCtrl().value === COLOR_SOURCE.provided :
-                false,
-                Validators.required)
-            ],
-          colorGeneratedFieldCtrl:
-            [
-              null,
-              CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
-                this.colorSourceCtrl().value === COLOR_SOURCE.generated
-                : false,
-                Validators.required)
-            ],
-          colorManualGroup: this.formBuilder.group({
-            colorManualFieldCtrl:
-              [
-                null,
-                CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
-                  this.colorSourceCtrl().value === COLOR_SOURCE.manual :
-                  false,
-                  Validators.required)
-              ],
-            colorManualValuesCtrl: this.formBuilder.array(
-              [],
-              [
-                CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
-                  this.colorSourceCtrl().value === COLOR_SOURCE.manual :
-                  false,
-                  Validators.required)
-              ])
-          }),
-          colorInterpolatedGroup: this.formBuilder.group({
-            colorInterpolatedFieldCtrl:
-              [
-                null,
-                CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
-                  this.colorSourceCtrl().value === COLOR_SOURCE.interpolated :
-                  false,
-                  Validators.required)
-              ],
-            colorInterpolatedNormalizeCtrl:
-              [
-                null,
-                CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
-                  this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedFieldCtrl().value
-                  : false,
-                  Validators.required)
-              ],
-            colorInterpolatedScopeCtrl:
-              [
-                null,
-                CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
-                  this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedNormalizeCtrl().value
-                  : false,
-                  Validators.required)
-              ],
-            colorInterpolatedNormalizeByKeyCtrl:
-              [
-                null
-              ],
-            colorInterpolatedNormalizeLocalFieldCtrl:
-              [
-                null,
-                CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
-                  this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedNormalizeByKeyCtrl().value :
-                  false,
-                  Validators.required)
-              ],
-            colorInterpolatedMinValueCtrl:
-              [
-                null,
-                CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
-                  this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedFieldCtrl().value
-                  && !this.colorInterpolatedNormalizeCtrl().value :
-                  false,
-                  Validators.required)
-              ],
-            colorInterpolatedMaxValueCtrl:
-              [
-                null,
-                CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
-                  this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedFieldCtrl().value
-                  && !this.colorInterpolatedNormalizeCtrl().value :
-                  false,
-                  Validators.required)
-              ],
-            colorInterpolatedPaletteCtrl:
-              [
-                null,
-                [
-                  CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
-                    this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedFieldCtrl().value :
-                    false,
-                    Validators.required)
-                ]
-              ]
-          }, {
-            validators: [
-              CustomValidators.getConditionalValidator(() => !!this.modeFormGroup ?
-                this.colorSourceCtrl().value === COLOR_SOURCE.interpolated && this.colorInterpolatedFieldCtrl().value
-                && this.colorInterpolatedMinValueCtrl().value && this.colorInterpolatedMaxValueCtrl().value :
-                false,
-                CustomValidators.getLTEValidator('colorInterpolatedMinValueCtrl', 'colorInterpolatedMaxValueCtrl'))
-            ]
-          })
-        })
-      })
-    });
 
+    this.initActivateValidationOnSubmit();
+    this.initForceUpdateChoosenColorValidityOnChange();
+    this.initCollectionRelatedFields();
+    this.initUpdateManualColorKeywordOnSourceFieldChange();
+    this.initUpdateMinMaxOnInterpolatedFieldChange();
+  }
+
+  private initActivateValidationOnSubmit() {
     this.submitSubscription = this.submit.subscribe(() => {
       // activate validation on submit
-      this.logger.log('submitting', this.modeFormGroup);
+      this.logger.log('submitting', this.featuresFg);
       this.stepper.steps.setDirty();
       this.stepper.steps.forEach(s => s.interacted = true);
-      this.modeFormGroup.markAllAsTouched();
+      this.featuresFg.markAllAsTouched();
     });
+  }
 
-    // force to update the validators of choosenColor controls
-    [this.colorSourceCtrl(), this.colorInterpolatedFieldCtrl(), this.colorInterpolatedNormalizeCtrl(),
-    this.colorInterpolatedScopeCtrl(), this.colorInterpolatedNormalizeCtrl()]
+  private initForceUpdateChoosenColorValidityOnChange() {
+    [this.colorSourceCtrl, this.colorInterpolatedFieldCtrl, this.colorInterpolatedNormalizeCtrl,
+    this.colorInterpolatedScopeCtrl, this.colorInterpolatedNormalizeCtrl]
       .forEach(ctrl =>
         ctrl.valueChanges.subscribe(value => {
-          this.updateValueAndValidity(this.choosenColorGrp());
+          updateValueAndValidity(this.colorFg, true, false);
         })
       );
+  }
 
-    // init collection fields, to be used in UI
-    this.collectionCtrl().valueChanges.subscribe(c => {
+  private initCollectionRelatedFields() {
+    this.collectionCtrl.valueChanges.subscribe(c => {
       if (!c) {
         return;
       }
@@ -311,13 +127,14 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
         .subscribe(
           f => this.collectionIntegerFields = f);
     });
+  }
 
-    // in manual color mode, update the keywords when source field is changed
-    this.colorManualFieldCtrl().valueChanges.subscribe(v => {
-      this.colorManualValuesCtrl().clear();
+  private initUpdateManualColorKeywordOnSourceFieldChange() {
+    this.colorManualFieldCtrl.valueChanges.subscribe(v => {
+      this.colorManualValuesCtrl.clear();
 
       if (v) {
-        this.collectionService.getTermAggregation(this.collectionCtrl().value, v).then((keywords: Array<string>) => {
+        this.collectionService.getTermAggregation(this.collectionCtrl.value, v).then((keywords: Array<string>) => {
           keywords.forEach((k: string) => {
             this.addToColorManualValuesCtrl({
               keyword: k,
@@ -331,127 +148,85 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
         });
       }
     });
+  }
 
-    this.colorInterpolatedFieldCtrl().valueChanges.subscribe(f => {
+  private initUpdateMinMaxOnInterpolatedFieldChange() {
+    this.colorInterpolatedFieldCtrl.valueChanges.subscribe(f => {
       if (!f) {
         return;
       }
-      this.collectionService.getComputationMetric(this.collectionCtrl().value, f, METRIC_TYPES.MIN).then(min =>
-        this.colorInterpolatedMinValueCtrl().setValue(min)
+      this.collectionService.getComputationMetric(this.collectionCtrl.value, f, METRIC_TYPES.MIN).then(min =>
+        this.colorInterpolatedMinValueCtrl.setValue(min)
       );
-      this.collectionService.getComputationMetric(this.collectionCtrl().value, f, METRIC_TYPES.MAX).then(max =>
-        this.colorInterpolatedMaxValueCtrl().setValue(max)
+      this.collectionService.getComputationMetric(this.collectionCtrl.value, f, METRIC_TYPES.MAX).then(max =>
+        this.colorInterpolatedMaxValueCtrl.setValue(max)
       );
     });
   }
 
-  // recursively update the value and validity of itself and sub-controls (but not ancestors)
-  private updateValueAndValidity(control: AbstractControl) {
-    control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
-    if (control instanceof FormGroup || control instanceof FormArray) {
-      Object.keys(control.controls).forEach(key => {
-        this.updateValueAndValidity(control.get(key));
-      });
-    }
-  }
+
 
   public onTouched: () => void = () => { };
 
   writeValue(obj: any): void {
     if (obj) {
-      this.modeFormGroup.patchValue(obj, { emitEvent: false });
+      this.featuresFg.patchValue(obj, { emitEvent: false });
       this.onTouched();
       // launch 'onChange' event on fields that are necesaary to other fields, for edition mode
-      this.collectionCtrl().updateValueAndValidity({ onlySelf: true, emitEvent: true });
-      this.colorInterpolatedFieldCtrl().updateValueAndValidity({ onlySelf: true, emitEvent: true });
+      this.collectionCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+      this.colorInterpolatedFieldCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
 
       // with FormArray, values cannot be simply set, each inner element is a FormGroup to be created
-      obj.styleStep.choosenColorGrp.colorManualGroup.colorManualValuesCtrl.forEach((k: KeywordColor) => {
+      obj.styleStep.colorFg.colorManualFg.colorManualValuesCtrl.forEach((k: KeywordColor) => {
         this.addToColorManualValuesCtrl(k);
       });
     }
   }
   registerOnChange(fn: any): void {
-    this.modeFormGroup.valueChanges.subscribe(fn);
+    this.featuresFg.valueChanges.subscribe(fn);
   }
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.modeFormGroup.disable() : this.modeFormGroup.enable();
+    isDisabled ? this.featuresFg.disable() : this.featuresFg.enable();
   }
   validate(control: AbstractControl): ValidationErrors {
-    return this.modeFormGroup.valid ? null : { invalidForm: { valid: false, message: 'Features fields are invalid' } };
+    return this.featuresFg.valid ? null : { invalidForm: { valid: false, message: 'Features fields are invalid' } };
   }
   registerOnValidatorChange?(fn: () => void): void {
-    this.modeFormGroup.valueChanges.subscribe(fn);
+    this.featuresFg.valueChanges.subscribe(fn);
   }
 
   ngOnDestroy() {
     this.submitSubscription.unsubscribe();
   }
 
-  private addToColorManualValuesCtrl(kc: KeywordColor) {
-    const keywordColorGrp = this.formBuilder.group({
-      keyword: [kc.keyword],
-      color: [kc.color]
-    });
-    this.colorManualValuesCtrl().push(keywordColorGrp);
-  }
-
   public checkZoom(event: MatSliderChange, source: string) {
     if (source === 'min') {
-      if (event.value > this.zoomMaxCtrl().value) {
-        this.zoomMaxCtrl().setValue(event.value);
+      if (event.value > this.zoomMaxCtrl.value) {
+        this.zoomMaxCtrl.setValue(event.value);
       }
     } else if (source === 'max') {
-      if (event.value < this.zoomMinCtrl().value) {
-        this.zoomMinCtrl().setValue(event.value);
+      if (event.value < this.zoomMinCtrl.value) {
+        this.zoomMinCtrl.setValue(event.value);
       }
     }
-  }
-
-  public zoomMinCtrl = () => this.modeFormGroup.get('visibilityStep').get('zoomMinCtrl');
-  public zoomMaxCtrl = () => this.modeFormGroup.get('visibilityStep').get('zoomMaxCtrl');
-  public collectionCtrl = () => this.modeFormGroup.get('collectionStep').get('collectionCtrl');
-  public geometryCtrl = () => this.modeFormGroup.get('geometryStep').get('geometryCtrl');
-  public colorSourceCtrl = () => this.modeFormGroup.get('styleStep').get('colorSourceCtrl');
-  public choosenColorGrp = () => this.modeFormGroup.get('styleStep').get('choosenColorGrp') as FormGroup;
-  public colorFixCtrl = () => this.choosenColorGrp().get('colorFixCtrl');
-  public colorProvidedFieldCtrl = () => this.choosenColorGrp().get('colorProvidedFieldCtrl');
-  public colorGeneratedFieldCtrl = () => this.choosenColorGrp().get('colorGeneratedFieldCtrl');
-  public colorManualGroup = () => this.choosenColorGrp().get('colorManualGroup') as FormGroup;
-  public colorManualFieldCtrl = () => this.colorManualGroup().get('colorManualFieldCtrl');
-  public colorManualValuesCtrl = () => this.colorManualGroup().get('colorManualValuesCtrl') as FormArray;
-  public colorInterpolatedGroup = () => this.choosenColorGrp().get('colorInterpolatedGroup') as FormGroup;
-  public colorInterpolatedFieldCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedFieldCtrl');
-  public colorInterpolatedNormalizeCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedNormalizeCtrl');
-  public colorInterpolatedNormalizeByKeyCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedNormalizeByKeyCtrl');
-  public colorInterpolatedNormalizeLocalFieldCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedNormalizeLocalFieldCtrl');
-  public colorInterpolatedScopeCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedScopeCtrl');
-  public colorInterpolatedMinValueCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedMinValueCtrl');
-  public colorInterpolatedMaxValueCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedMaxValueCtrl');
-  public colorInterpolatedPaletteCtrl = () => this.colorInterpolatedGroup().get('colorInterpolatedPaletteCtrl');
-
-  public setColorFix(color: string) {
-    this.choosenColorGrp().get('colorFixCtrl').setValue(color);
-    this.choosenColorGrp().get('colorFixCtrl').markAsDirty();
-    this.choosenColorGrp().get('colorFixCtrl').markAsTouched();
   }
 
   public openColorTable() {
     const dialogRef = this.dialog.open(DialogColorTableComponent, {
       data: {
-        collection: this.collectionCtrl().value,
-        sourceField: this.colorManualFieldCtrl().value,
-        keywordColors: this.colorManualValuesCtrl().value
+        collection: this.collectionCtrl.value,
+        sourceField: this.colorManualFieldCtrl.value,
+        keywordColors: this.colorManualValuesCtrl.value
       } as DialogColorTableData,
       autoFocus: false,
     });
 
     dialogRef.afterClosed().subscribe((result: Array<KeywordColor>) => {
       if (result !== undefined) {
-        this.colorManualValuesCtrl().clear();
+        this.colorManualValuesCtrl.clear();
         result.forEach((k: KeywordColor) => {
           this.addToColorManualValuesCtrl(k);
         });
@@ -461,10 +236,10 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
 
   public openPaletteTable() {
     const paletteData: DialogPaletteSelectorData = {
-      min: this.colorInterpolatedNormalizeCtrl().value ? 0 : this.colorInterpolatedMinValueCtrl().value,
-      max: this.colorInterpolatedNormalizeCtrl().value ? 1 : this.colorInterpolatedMaxValueCtrl().value,
+      min: this.colorInterpolatedNormalizeCtrl.value ? 0 : this.colorInterpolatedMinValueCtrl.value,
+      max: this.colorInterpolatedNormalizeCtrl.value ? 1 : this.colorInterpolatedMaxValueCtrl.value,
       defaultPalettes: this.defaultValueService.getDefaultConfig().palettes,
-      selectedPalette: this.colorInterpolatedPaletteCtrl().value
+      selectedPalette: this.colorInterpolatedPaletteCtrl.value
     };
     const dialogRef = this.dialog.open(DialogPaletteSelectorComponent, {
       data: paletteData,
@@ -474,8 +249,8 @@ export class EditLayerFeaturesComponent implements OnInit, ControlValueAccessor,
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        this.colorInterpolatedGroup().get('colorInterpolatedPaletteCtrl').setValue(result);
-        this.colorInterpolatedGroup().get('colorInterpolatedPaletteCtrl').markAsDirty();
+        this.colorInterpolatedFg.get('colorInterpolatedPaletteCtrl').setValue(result);
+        this.colorInterpolatedFg.get('colorInterpolatedPaletteCtrl').markAsDirty();
       }
     });
   }

@@ -10,23 +10,25 @@ import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset
 import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { MainFormService } from '@services/main-form/main-form.service';
 
 describe('EditLayerFeaturesComponent', () => {
   let spectator: Spectator<EditLayerFeaturesComponent>;
   const createComponent = createComponentFactory({
     component: EditLayerFeaturesComponent,
-    componentProviders: [
-      mockProvider(CollectionService),
-      mockProvider(ArlasColorGeneratorLoader)
-    ],
     declarations: [
       MockComponent(ConfigElementComponent),
       MockDirective(AlertOnChangeDirective),
       MockDirective(ResetOnChangeDirective),
       MockComponent(ColorPickerWrapperComponent)
     ],
-    providers: [DefaultValuesService],
-    mocks: [HttpClient]
+    mocks: [
+      HttpClient,
+      CollectionService,
+      ArlasColorGeneratorLoader,
+      MainFormService,
+      DefaultValuesService
+    ]
   });
 
   beforeEach(() => spectator = createComponent({

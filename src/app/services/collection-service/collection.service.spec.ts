@@ -7,9 +7,9 @@ describe('CollectionService', () => {
   let spectator: SpectatorService<CollectionService>;
   const createService = createServiceFactory({
     service: CollectionService,
-    providers: [
-      mockProvider(ArlasCollaborativesearchService),
-      mockProvider(DefaultValuesService)
+    mocks: [
+      ArlasCollaborativesearchService,
+      DefaultValuesService
     ]
   });
 

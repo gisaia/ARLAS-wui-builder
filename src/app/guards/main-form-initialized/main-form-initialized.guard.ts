@@ -38,7 +38,7 @@ export class MainFormInitializedGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    if (!!this.mainFormService.getStartingGlobalForm()) {
+    if (Object.keys(this.mainFormService.startingConfig.getFg().controls).length > 0) {
       return true;
 
     } else {

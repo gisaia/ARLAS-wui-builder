@@ -21,7 +21,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import * as d3i from 'd3-interpolate';
 import * as d3c from 'd3-color';
 import { NGXLogger } from 'ngx-logger';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ProportionedColor, DialogPaletteSelectorData } from './model';
 
 @Component({

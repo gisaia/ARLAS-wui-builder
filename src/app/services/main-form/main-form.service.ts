@@ -16,13 +16,16 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Injectable } from '@angular/core';
-import { FormGroup, AbstractControl, FormArray } from '@angular/forms';
+import { Injectable, ComponentFactoryResolver, ViewContainerRef, ReflectiveInjector } from '@angular/core';
+import { FormGroup, FormArray } from '@angular/forms';
+import { updateValueAndValidity } from '@utils/tools';
+// import { LayersComponent } from '@map-config/components/layers/layers.component';
 
 enum MAIN_FORM_KEYS {
+  MAP_CONFIG = 'MapConfig',
+  STARTING_CONFIG = 'StartingConfig',
   MAP_CONFIG_LAYERS = 'MapConfigLayers',
-  MAP_CONFIG_GLOBAL = 'MapConfigGlobal',
-  STARTING_CONFIG = 'StartingConfig'
+  MAP_CONFIG_GLOBAL = 'MapConfigGlobal'
 }
 
 @Injectable({
@@ -30,44 +33,46 @@ enum MAIN_FORM_KEYS {
 })
 export class MainFormService {
 
-  constructor() { }
+  public mainForm = new FormGroup({
+    [MAIN_FORM_KEYS.MAP_CONFIG]: new FormGroup({}),
+    [MAIN_FORM_KEYS.STARTING_CONFIG]: new FormGroup({})
+  });
 
-  public mainForm = new FormGroup({});
+  // In sub configs, init() methods should only use `registerControl()` method.
+  // It doesn't replace the control, so it avoids to overwrite any existing value by reopening a page
 
-  public getMapConfigLayersForm(): FormArray {
-    return this.mainForm.get(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS) as FormArray;
-  }
+  // STARTING FORM
+  public startingConfig = new class {
+    constructor(public mainForm: FormGroup) { }
 
-  public addMapConfigLayersFormIfInexisting(fg: FormArray) {
-    if (this.getMapConfigLayersForm() == null) {
-      return this.mainForm.addControl(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS, fg);
+    public init(control: FormGroup) {
+      this.mainForm.reset();
+      this.mainForm.setControl(MAIN_FORM_KEYS.STARTING_CONFIG, control);
     }
-  }
+    public getFg = () => this.mainForm.get(MAIN_FORM_KEYS.STARTING_CONFIG) as FormGroup;
 
-  public getMapConfigGlobalForm(): FormGroup {
-    return this.mainForm.get(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL) as FormGroup;
-  }
+  }(this.mainForm);
 
-  public addMapConfigGlobalFormIfInexisting(fg: FormGroup) {
-    if (this.getMapConfigGlobalForm() == null) {
-      return this.mainForm.addControl(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL, fg);
-    }
-  }
+  // MAP CONFIG
+  public mapConfig = new class {
+    constructor(public control: FormGroup) { }
 
-  public initFormWithStartingConfig(fg: FormGroup) {
-    this.mainForm.reset();
-    this.mainForm.addControl(MAIN_FORM_KEYS.STARTING_CONFIG, fg);
-  }
+    public initGlobalFg = (fg: FormGroup) => this.control.registerControl(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL, fg);
+    public initLayersFa = (fa: FormArray) => this.control.registerControl(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS, fa);
+    public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL) as FormGroup;
+    public getLayersFa = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS) as FormArray;
 
-  public getStartingGlobalForm(): FormGroup {
-    return this.mainForm.get(MAIN_FORM_KEYS.STARTING_CONFIG) as FormGroup;
-  }
+  }(this.mainForm.get(MAIN_FORM_KEYS.MAP_CONFIG) as FormGroup);
 
+  // OTHER METHODS ...
   public getCollections(): string[] {
-    if (this.getStartingGlobalForm() !== null) {
-      return this.getStartingGlobalForm().get('collections').value;
+    if (!!this.startingConfig.getFg() && !!this.startingConfig.getFg().get('collections')) {
+      return this.startingConfig.getFg().get('collections').value;
     }
     return [];
   }
+
+  constructor(
+  ) { }
 
 }

@@ -1,3 +1,5 @@
+import { AbstractControl, FormGroup, FormArray } from '@angular/forms';
+
 /*
 Licensed to Gisaïa under one or more contributor
 license agreements. See the NOTICE.txt file distributed with
@@ -38,4 +40,25 @@ export function getObject(datalayer: any, objectKey: string) {
         }
     }
     return current;
+}
+
+// recursively update the value and validity of itself and sub-controls (but not ancestors)
+export function updateValueAndValidity(control: AbstractControl, onlySelf: boolean = true, emitEvent: boolean = true) {
+    control.updateValueAndValidity({ onlySelf, emitEvent });
+    if (control instanceof FormGroup || control instanceof FormArray) {
+        Object.keys(control.controls).forEach(key => {
+            updateValueAndValidity(control.get(key), onlySelf, emitEvent);
+        });
+    }
+}
+
+export function getNbErrorsInControl(control: AbstractControl): number {
+    let nbErrors = 0;
+    nbErrors += !!control.errors ? Object.keys(control.errors).length : 0;
+    if (control instanceof FormGroup || control instanceof FormArray) {
+        Object.keys(control.controls).forEach(k => {
+            nbErrors += getNbErrorsInControl(control.controls[k]);
+        });
+    }
+    return nbErrors;
 }

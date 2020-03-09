@@ -16,6 +16,20 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-.tab-error {
-  color: red;
+import { FormGroup, Validators } from '@angular/forms';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+
+export class EditLayerComponentForm {
+    public layerFg: FormGroup;
+
+    constructor(
+        protected formBuilderDefault: FormBuilderWithDefaultService
+    ) {
+        this.layerFg = this.formBuilderDefault.group('map.layer', {
+            name: ['', Validators.required],
+            mode: ['', Validators.required],
+            id: [''],
+            modeFg: ['', Validators.required]
+        });
+    }
 }

@@ -16,6 +16,15 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-.tab-error {
-  color: red;
+export enum COLOR_SOURCE {
+    fix = 'fix',
+    provided = 'provided',
+    generated = 'generated',
+    manual = 'manual',
+    interpolated = 'interpolated'
+}
+
+export interface KeywordColor {
+    keyword: string;
+    color: string;
 }

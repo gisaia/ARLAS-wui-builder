@@ -6,8 +6,8 @@ describe('FormBuilderWithDefaultService', () => {
   let spectator: SpectatorService<FormBuilderWithDefaultService>;
   const createService = createServiceFactory({
     service: FormBuilderWithDefaultService,
-    providers: [
-      mockProvider(DefaultValuesService)
+    mocks: [
+      DefaultValuesService
     ]
   });
 
