@@ -22,6 +22,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { TranslateFakeLoader, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 
 // define modules to be injected in every test
 defineGlobalsInjections({
@@ -48,10 +49,12 @@ defineGlobalsInjections({
     MatSliderModule,
     ColorPickerModule,
     NgxSpinnerModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    TranslateModule.forRoot({ loader: { provide: TranslateLoader, useClass: TranslateFakeLoader } })
   ],
   providers: [
-    mockProvider(NGXLogger)
+    mockProvider(NGXLogger),
+    TranslateService
   ]
 });
 
