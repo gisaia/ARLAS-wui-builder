@@ -101,7 +101,7 @@ export class StartupService {
         }, err => {
           console.error(`Problem with '${langToSet}' language initialization.'`);
         }, () => {
-          resolve([data, langToSet]);
+          resolve(data);
         });
       });
     });
