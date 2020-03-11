@@ -16,7 +16,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component } from '@angular/core';
+import { Component, ViewContainerRef } from '@angular/core';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { AbstractControl } from '@angular/forms';
+import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
+import { getNbErrorsInControl } from '@utils/tools';
 
 interface Page {
   link: string;
@@ -24,6 +28,7 @@ interface Page {
   icon: string;
   tooltip: string;
   enabled: boolean;
+  control?: AbstractControl;
 }
 
 @Component({
@@ -33,15 +38,49 @@ interface Page {
 })
 export class LeftMenuComponent {
 
-  constructor() { }
-
   public isLabelDisplayed = true;
+  public nbErrorsByPage: Map<string, number> = new Map();
+
+  constructor(
+    private mainFormService: MainFormService,
+    private importExportService: MainFormImportExportService,
+    private vcref: ViewContainerRef
+  ) {
+    // recompute nberrors of each page anytime the mainform validity changes
+    this.mainFormService.mainForm.statusChanges.subscribe(st => this.updateNbErrors());
+  }
 
   public pages: Page[] = [
-    { name: 'Map', link: '/map-config', icon: 'map', tooltip: 'Map configuration', enabled: true },
-    { name: 'Timeline', link: '/timeline-config', icon: 'timeline', tooltip: 'Timeline configuration', enabled: true },
-    { name: 'Search', link: '/search-config', icon: 'search', tooltip: 'Search configuration', enabled: true },
-    { name: 'Analytics', link: 'some-link', icon: 'bar_chart', tooltip: 'Analytics configuration', enabled: false },
-    { name: 'Look \'n feel', link: 'some-link', icon: 'send', tooltip: 'Look \'n fell configuration', enabled: false },
+    {
+      name: 'Map', link: '/map-config', icon: 'map', tooltip: 'Map configuration', enabled: true,
+      control: this.mainFormService.mapConfig.control
+    },
+    {
+      name: 'Timeline', link: '/timeline-config', icon: 'timeline', tooltip: 'Timeline configuration', enabled: true
+    },
+    {
+      name: 'Search', link: '/search-config', icon: 'search', tooltip: 'Search configuration', enabled: true
+    },
+    {
+      name: 'Analytics', link: 'some-link', icon: 'bar_chart', tooltip: 'Analytics configuration', enabled: false
+    },
+    {
+      name: 'Look \'n feel', link: 'some-link', icon: 'send', tooltip: 'Look \'n fell configuration', enabled: false
+    },
   ];
+
+  private updateNbErrors() {
+    this.nbErrorsByPage.clear();
+    this.pages
+      .filter(p => this.importExportService.isExportExpected && !!p.control && !p.control.valid)
+      .forEach(p =>
+        this.nbErrorsByPage.set(p.name, getNbErrorsInControl(p.control))
+      );
+  }
+
+  public save() {
+    this.importExportService.setExportExpected(this.vcref);
+    this.updateNbErrors();
+  }
+
 }

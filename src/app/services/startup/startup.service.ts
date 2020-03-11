@@ -52,9 +52,9 @@ export class StartupService {
 
       })).toPromise()
       .then(() => this.validateConfiguration(configData))
-      .then((data) => this.translationLoaded(data))
       .then((data) => this.setConfigService(data))
       .then((data) => this.setCollaborativeService(data))
+      .then((data) => this.translationLoaded(data))
       .catch((err: any) => {
         console.error(err);
         return Promise.resolve(null);

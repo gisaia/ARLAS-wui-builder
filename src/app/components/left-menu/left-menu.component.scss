@@ -17,9 +17,9 @@ specific language governing permissions and limitations
 under the License.
 */
 .menu_container {
-  height: 100%; 
-  display: flex; 
-  flex-direction: column; 
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
 
   .logo {
@@ -27,7 +27,7 @@ under the License.
   }
 
   .toggler {
-    display: flex; 
+    display: flex;
     justify-content: flex-end;
     padding: 15px;
   }
@@ -35,9 +35,8 @@ under the License.
   mat-icon {
     padding-right: 5px;
   }
-  
+
   &.hide-label span {
     display: none;
   }
-
 }

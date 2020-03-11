@@ -1,10 +1,14 @@
 import { MainFormInitializedGuard } from './main-form-initialized.guard';
-import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
+import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
+import { MainFormService } from '@services/main-form/main-form.service';
 
 describe('MainFormInitializedGuard', () => {
   let spectator: SpectatorService<MainFormInitializedGuard>;
   const createComponent = createServiceFactory({
-    service: MainFormInitializedGuard
+    service: MainFormInitializedGuard,
+    providers: [
+      mockProvider(MainFormService)
+    ]
   });
 
   beforeEach(() => spectator = createComponent());

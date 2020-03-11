@@ -47,6 +47,7 @@ import { ArlasWalkthroughService } from 'arlas-wui-toolkit/services/walkthrough/
 import { WalkthroughService } from '@services/walkthrough/walkthrough.service';
 import { CustomTranslateLoader } from 'arlas-wui-toolkit/app.module';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { MatBadgeModule } from '@angular/material/badge';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -87,7 +88,8 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
       level: environment.logLevel,
       disableConsoleLogging: false
     }),
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    MatBadgeModule
   ],
   providers: [
     {

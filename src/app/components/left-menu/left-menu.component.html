@@ -6,12 +6,14 @@
       <img src="assets/img/logo-cropped.png" *ngIf="!isLabelDisplayed" />
     </a>
   </div>
-
+  
   <div>
     <mat-nav-list>
       <mat-list-item *ngFor="let page of pages" [matTooltip]="page?.tooltip" [routerLink]="page?.link">
         <button mat-icon-button [disabled]="!page?.enabled" routerLinkActive="mat-accent">
-          <mat-icon>{{ page?.icon }}</mat-icon>
+          <mat-icon [matBadge]="nbErrorsByPage.get(page.name)" [matBadgeHidden]="!nbErrorsByPage.get(page.name)"
+            matBadgePosition="above before" matBadgeColor="warn">
+            {{ page?.icon }}</mat-icon>
           <span>{{ page?.name }} </span>
         </button>
       </mat-list-item>
@@ -22,12 +24,16 @@
     <div>
       <mat-nav-list>
         <mat-list-item matTooltip="Reset">
-          <mat-icon>backspace</mat-icon>
-          <span>Reset</span>
+          <button mat-icon-button>
+            <mat-icon>backspace</mat-icon>
+            <span>Reset</span>
+          </button>
         </mat-list-item>
         <mat-list-item matTooltip="Save">
-          <mat-icon>save</mat-icon>
-          <span>Save</span>
+          <button mat-icon-button (click)="save()">
+            <mat-icon>save</mat-icon>
+            <span>Save</span>
+          </button>
         </mat-list-item>
       </mat-nav-list>
     </div>

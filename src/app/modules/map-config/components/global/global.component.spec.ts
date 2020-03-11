@@ -3,6 +3,10 @@ import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectat
 import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
 import { MockComponent } from 'ng-mocks';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { FormGroup } from '@angular/forms';
+import { GlobalComponentForm } from './global.component.form';
+import { of } from 'rxjs';
 
 describe('GlobalComponent', () => {
 
@@ -12,8 +16,8 @@ describe('GlobalComponent', () => {
     declarations: [
       MockComponent(ConfigElementComponent)
     ],
-    providers: [
-      mockProvider(CollectionService)
+    mocks: [
+      CollectionService
     ]
   });
 

@@ -1,7 +1,7 @@
 <!-- TODO move this, its place is misleading -->
 
 
-<form [formGroup]="layerFormGroup" (submit)="submit()" #f="ngForm">
+<form [formGroup]="layerFg" (submit)="submit()" #f="ngForm">
     <app-config-element>
         <div form-fields>
             <mat-form-field>
@@ -30,8 +30,8 @@
         </div>
     </app-config-element>
 
-    <div *ngIf="layerFormGroup.value.mode == 'features'">
-        <app-edit-layer-features formControlName="modeFormGroup" [submit]="submitSubject.asObservable()">
+    <div *ngIf="layerFg.value.mode == 'features'">
+        <app-edit-layer-features formControlName="modeFg" [submit]="submitSubject.asObservable()">
         </app-edit-layer-features>
     </div>
 

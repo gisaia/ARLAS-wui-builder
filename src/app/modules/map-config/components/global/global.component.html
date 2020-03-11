@@ -1,4 +1,4 @@
-<div [formGroup]="getMapConfigFormGroup()">
+<div [formGroup]="globalFg">
 
     <app-config-element>
         <div form-fields>
@@ -18,8 +18,7 @@
     <app-config-element>
         <div form-fields>
             <ng-container formArrayName="requestGeometries">
-                <div *ngFor="let control of this.requestGeometries.controls; let i = index"
-                    class="map-global-geo-field">
+                <div *ngFor="let control of requestGeometries.controls; let i = index" class="map-global-geo-field">
                     <ng-container [formGroup]="control">
                         <mat-form-field class="label">
                             <input matInput formControlName="collection">

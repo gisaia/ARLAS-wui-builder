@@ -13,10 +13,6 @@ describe('DialogColorTableComponent', () => {
   const createComponent = createComponentFactory({
     component: DialogColorTableComponent,
     providers: [
-      mockProvider(MatDialogRef),
-      mockProvider(ArlasCollaborativesearchService),
-      mockProvider(ArlasColorGeneratorLoader),
-      mockProvider(CollectionService),
       {
         provide: MAT_DIALOG_DATA, useValue: {
           collection: '',
@@ -30,6 +26,12 @@ describe('DialogColorTableComponent', () => {
     ],
     declarations: [
       MockComponent(ColorPickerWrapperComponent)
+    ],
+    mocks: [
+      MatDialogRef,
+      ArlasCollaborativesearchService,
+      ArlasColorGeneratorLoader,
+      CollectionService,
     ]
   });
 

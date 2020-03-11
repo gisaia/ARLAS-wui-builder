@@ -1,11 +1,10 @@
-import { DefaultValuesService } from './default-values.service';
+import { MainFormImportExportService } from './main-form-import-export.service';
 import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
-import { HttpClient } from '@angular/common/http';
 
-describe('DefaultValuesService', () => {
-  let spectator: SpectatorService<DefaultValuesService>;
+describe('MainFormImportExportService', () => {
+  let spectator: SpectatorService<MainFormImportExportService>;
   const createService = createServiceFactory({
-    service: DefaultValuesService
+    service: MainFormImportExportService
   });
 
   beforeEach(() => spectator = createService());

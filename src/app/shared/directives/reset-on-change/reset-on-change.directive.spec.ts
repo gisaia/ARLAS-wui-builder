@@ -6,8 +6,8 @@ describe('ResetOnChangeDirective', () => {
   let spectator: SpectatorDirective<ResetOnChangeDirective>;
   const createDirective = createDirectiveFactory({
     directive: ResetOnChangeDirective,
-    providers: [
-      mockProvider(DefaultValuesService)
+    mocks: [
+      DefaultValuesService
     ]
   });
 

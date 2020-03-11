@@ -4,6 +4,9 @@
         "collections": ["demo_ais-danmark"]
     },
     "map": {
+        "global": {
+            "geographicalOperator": "intersects"
+        },
         "layer": {
             "visibilityStep": {
                 "zoomMinCtrl": 10,
@@ -13,9 +16,9 @@
             "styleStep": {
                 "opacityCtrl": 0.5,
                 "colorSourceCtrl": "interpolated",
-                "choosenColorGrp": {
+                "colorFg": {
                     "colorFixCtrl": "#abcdef",
-                    "colorInterpolatedGroup": {
+                    "colorInterpolatedFg": {
                         "colorInterpolatedNormalizeCtrl": true,
                         "colorInterpolatedMinValueCtrl": 5,
                         "colorInterpolatedFieldCtrl": "vessel.length"

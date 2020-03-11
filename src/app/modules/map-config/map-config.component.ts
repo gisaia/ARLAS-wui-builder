@@ -17,6 +17,14 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit } from '@angular/core';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
+
+interface Tab {
+  routeurLink: string;
+  label: string;
+  hasError: () => boolean;
+}
 
 @Component({
   selector: 'app-map-config',
@@ -25,7 +33,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MapConfigComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private mainFormService: MainFormService,
+    private importExportService: MainFormImportExportService) { }
+
+  public tabs: Tab[] = [
+    {
+      routeurLink: 'global', label: 'Global configuration',
+      hasError: () => this.importExportService.isExportExpected &&
+        this.mainFormService.mapConfig.getGlobalFg() && !this.mainFormService.mapConfig.getGlobalFg().valid
+    },
+    {
+      routeurLink: 'layers', label: 'Layers',
+      hasError: () => this.importExportService.isExportExpected && this.mainFormService.mapConfig.getLayersFa()
+        && !this.mainFormService.mapConfig.getLayersFa().valid
+    }
+  ];
+
+  public activeTab = this.tabs[0];
 
   ngOnInit() {
   }

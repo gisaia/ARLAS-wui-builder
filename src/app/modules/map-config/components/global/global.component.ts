@@ -21,13 +21,15 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CollectionService, FIELD_TYPES } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { Expression } from 'arlas-api';
+import { GlobalComponentForm } from './global.component.form';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 @Component({
   selector: 'app-global',
   templateUrl: './global.component.html',
   styleUrls: ['./global.component.scss']
 })
-export class GlobalComponent implements OnInit {
+export class GlobalComponent extends GlobalComponentForm implements OnInit {
 
   public operators = [
     Expression.OpEnum.Intersects,
@@ -40,17 +42,15 @@ export class GlobalComponent implements OnInit {
   public formArrayGeom: FormArray = new FormArray([]);
 
   constructor(
-    public mainFormService: MainFormService,
-    private collectionService: CollectionService) { }
+    protected mainFormService: MainFormService,
+    protected formBuilderDefault: FormBuilderWithDefaultService,
+    private collectionService: CollectionService) {
+
+    super(mainFormService, formBuilderDefault);
+  }
 
   ngOnInit() {
     this.collections = this.mainFormService.getCollections();
-
-    this.mainFormService.addMapConfigGlobalFormIfInexisting(new FormGroup({
-      requestGeometries: new FormArray([]),
-      geographicalOperator: new FormControl(null, Validators.required)
-    }));
-
     this.collections.forEach((collection) => {
 
       this.collectionService.getCollectionFields(collection, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE]).subscribe(fields => {
@@ -67,14 +67,6 @@ export class GlobalComponent implements OnInit {
         });
       }
     });
-  }
-
-  get requestGeometries() {
-    return this.mainFormService.getMapConfigGlobalForm().get('requestGeometries') as FormArray;
-  }
-
-  public getMapConfigFormGroup() {
-    return this.mainFormService.getMapConfigGlobalForm();
   }
 
   public getGeoFields(collection: string): string[] {
