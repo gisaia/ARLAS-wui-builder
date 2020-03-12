@@ -106,7 +106,7 @@ export class MainFormImportExportService {
         maxzoom: modeValues.visibilityStep.zoomMaxCtrl,
         maxfeatures: modeValues.visibilityStep.featuresMaxCtrl
       };
-      switch (modeValues.styleStep.colorSourceCtrl) {
+      switch (modeValues.styleStep.colorFg.colorSourceCtrl) {
         case COLOR_SOURCE.fix: {
           break;
         }
@@ -156,7 +156,7 @@ export class MainFormImportExportService {
       const colorOpacity = modeValues.styleStep.opacityCtrl;
 
       const color: Array<string | Array<string> | number> | PaintColor | string = (() => {
-        switch (modeValues.styleStep.colorSourceCtrl) {
+        switch (modeValues.styleStep.colorFg.colorSourceCtrl) {
           case COLOR_SOURCE.fix:
             return colorValues.colorFixCtrl;
           case COLOR_SOURCE.provided:

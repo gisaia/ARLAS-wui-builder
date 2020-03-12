@@ -1,0 +1,173 @@
+<ng-container [formGroup]="formFg">
+    <mat-form-field>
+        <mat-label>{{ 'Source' | translate}}</mat-label>
+        <mat-select formControlName="propertySourceCtrl" appAlertOnChange="changing the source will reset your choices"
+            [dependants]="[propertyFixCtrl, propertyProvidedFieldCtrl, 
+            propertyGeneratedFieldCtrl, propertyManualFg, propertyInterpolatedFg]" [appResetOnChange]="defaultKey">
+            <mat-option *ngFor="let source of selectionSources" [value]="source.key">{{source.value}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <div>
+
+        <div *ngIf="propertySourceCtrl.value == PROPERTY_SELECTOR_SOURCE.fix">
+            <app-color-picker-wrapper [value]="propertyFixCtrl.value" (setValue)="setPropertyFix($event)">
+            </app-color-picker-wrapper>
+        </div>
+
+        <div *ngIf="propertySourceCtrl.value == PROPERTY_SELECTOR_SOURCE.provided">
+            <mat-form-field>
+                <mat-label>{{'Source field' | translate}}</mat-label>
+                <mat-select formControlName="propertyProvidedFieldCtrl">
+                    <mat-option *ngFor="let field of collectionKeywordFields" [value]="field">
+                        {{ field }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div *ngIf="propertySourceCtrl.value == PROPERTY_SELECTOR_SOURCE.generated">
+            <mat-form-field>
+                <mat-label>{{'Source field' | translate}}</mat-label>
+                <mat-select formControlName="propertyGeneratedFieldCtrl">
+                    <mat-option *ngFor="let field of collectionKeywordFields" [value]="field">
+                        {{ field }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div *ngIf="propertySourceCtrl.value == PROPERTY_SELECTOR_SOURCE.manual" formGroupName="propertyManualFg">
+            <mat-form-field>
+                <mat-label>{{'Source field | translate'}}</mat-label>
+                <!-- No [dependants] because we manually set the new values on source field change -->
+                <mat-select formControlName="propertyManualFieldCtrl"
+                    appAlertOnChange="Changing the source field will reset the colors" [appResetOnChange]="defaultKey">
+                    <mat-option *ngFor="let field of collectionKeywordFields" [value]="field">
+                        {{ field }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <div>
+                <button type="button" mat-raised-button color="primary" (click)="openManualColorTable()"
+                    *ngIf="propertyManualFieldCtrl?.value">
+                    {{'Manage colors' | translate}}
+                </button>
+            </div>
+        </div>
+
+        <div *ngIf="propertySourceCtrl.value == PROPERTY_SELECTOR_SOURCE.interpolated"
+            formGroupName="propertyInterpolatedFg">
+            <mat-form-field>
+                <mat-label>{{'Source field' | translate}}</mat-label>
+                <mat-select formControlName="propertyInterpolatedFieldCtrl" [appResetOnChange]="defaultKey"
+                    [dependants]="[propertyInterpolatedMinValueCtrl, propertyInterpolatedMaxValueCtrl, propertyInterpolatedNormalizeLocalFieldCtrl]">
+                    <mat-option *ngFor="let field of collectionIntegerFields" [value]="field">
+                        {{ field }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <div *ngIf="propertyInterpolatedFieldCtrl.value">
+                <div>
+                    <mat-label>{{'Normalize' | translate}}</mat-label>
+                    <mat-slide-toggle formControlName="propertyInterpolatedNormalizeCtrl" labelPosition="before"
+                        appResetOnChange="map.layer" [dependants]="[propertyInterpolatedScopeCtrl, propertyInterpolatedNormalizeByKeyCtrl, 
+                        propertyInterpolatedNormalizeLocalFieldCtrl, propertyInterpolatedMinValueCtrl, propertyInterpolatedMaxValueCtrl,
+                        propertyInterpolatedPaletteCtrl]">
+                    </mat-slide-toggle>
+                </div>
+
+                <div *ngIf="propertyInterpolatedNormalizeCtrl.value">
+                    <mat-form-field>
+                        <mat-label>{{'Scope' | translate}}</mat-label>
+                        <mat-select formControlName="propertyInterpolatedScopeCtrl" [appResetOnChange]="defaultKey"
+                            [dependants]="[propertyInterpolatedNormalizeByKeyCtrl, propertyInterpolatedNormalizeLocalFieldCtrl]">
+                            <mat-option value="local">{{'Local' | translate}}</mat-option>
+                            <mat-option value="global">{{'Global' | translate}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <div *ngIf="propertyInterpolatedScopeCtrl.value === 'local'">
+                        <mat-label>{{'Normalize by key' | translate}}</mat-label>
+                        <mat-slide-toggle formControlName="propertyInterpolatedNormalizeByKeyCtrl"
+                            labelPosition="before" [appResetOnChange]="defaultKey"
+                            [dependants]="[propertyInterpolatedNormalizeLocalFieldCtrl]">
+                        </mat-slide-toggle>
+                    </div>
+
+                    <div *ngIf="propertyInterpolatedNormalizeByKeyCtrl.value">
+                        <mat-form-field>
+                            <mat-select formControlName="propertyInterpolatedNormalizeLocalFieldCtrl">
+                                <mat-option *ngFor="let field of collectionKeywordFields" [value]="field">
+                                    {{ field }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div *ngIf="!propertyInterpolatedNormalizeCtrl.value">
+                    <div>
+                        <mat-form-field>
+                            <mat-label>{{'Minimum value' | translate}}</mat-label>
+                            <input matInput type="number" formControlName="propertyInterpolatedMinValueCtrl"
+                                appAlertOnChange="Changing this value will reset the palette" appResetOnChange
+                                [dependants]="[propertyInterpolatedPaletteCtrl]">
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field>
+                            <mat-label>{{'Maximum value' | translate}}</mat-label>
+                            <input matInput type="number" formControlName="propertyInterpolatedMaxValueCtrl"
+                                appAlertOnChange="Changing this value will reset the palette" appResetOnChange
+                                [dependants]="[propertyInterpolatedPaletteCtrl]">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div>
+                    <button type="button" mat-raised-button (click)="openPaletteTable()" class="palette-button"
+                        [disabled]="!propertyInterpolatedNormalizeCtrl.value 
+                        && (!propertyInterpolatedMinValueCtrl.valid || !propertyInterpolatedMaxValueCtrl.valid || propertyInterpolatedFg?.errors?.lte)">
+                        {{'Manage palette' | translate}}
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div *ngIf="formFg?.invalid && formFg.touched">
+            <mat-error *ngIf=" propertyFixCtrl.touched && propertyFixCtrl?.errors?.required">
+                {{'A color is required' | translate}}
+            </mat-error>
+            <mat-error *ngIf="propertyProvidedFieldCtrl.touched && propertyProvidedFieldCtrl?.errors?.required 
+                || propertyGeneratedFieldCtrl.touched && propertyGeneratedFieldCtrl?.errors?.required 
+                || propertyManualFieldCtrl.touched && propertyManualFieldCtrl?.errors?.required 
+                || propertyInterpolatedFieldCtrl.touched && propertyInterpolatedFieldCtrl?.errors?.required">
+                {{'A source field is required' | translate}}
+            </mat-error>
+            <mat-error
+                *ngIf="propertyInterpolatedMinValueCtrl.touched && propertyInterpolatedMinValueCtrl?.errors?.required">
+                {{'A minimum value is required' | translate}}
+            </mat-error>
+            <mat-error
+                *ngIf="propertyInterpolatedMaxValueCtrl.touched && propertyInterpolatedMaxValueCtrl?.errors?.required">
+                {{'A maximum value is required' | translate}}
+            </mat-error>
+            <mat-error *ngIf="propertyInterpolatedScopeCtrl.touched && propertyInterpolatedScopeCtrl?.errors?.required">
+                {{'A scope is required' | translate}}
+            </mat-error>
+            <mat-error
+                *ngIf="propertyInterpolatedNormalizeLocalFieldCtrl.touched && propertyInterpolatedNormalizeLocalFieldCtrl?.errors?.required">
+                {{'A local-normalization field is required' | translate}}
+            </mat-error>
+            <mat-error
+                *ngIf="propertyInterpolatedMinValueCtrl.value && propertyInterpolatedMaxValueCtrl.valid && propertyInterpolatedFg?.errors?.lte">
+                {{'The minimum value must be less than the maximum value' | translate}}
+            </mat-error>
+            <mat-error
+                *ngIf="propertyInterpolatedPaletteCtrl.touched && propertyInterpolatedPaletteCtrl?.errors?.required">
+                {{'A palette is required' | translate}}
+            </mat-error>
+        </div>
+
+    </div>
+</ng-container>

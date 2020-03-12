@@ -20,7 +20,7 @@ import { FormGroup, FormArray, FormControl, Validators, AbstractControl } from '
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
-export class GlobalComponentForm {
+export abstract class GlobalComponentForm {
 
     public globalFg: FormGroup;
 

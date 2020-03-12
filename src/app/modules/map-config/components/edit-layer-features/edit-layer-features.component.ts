@@ -17,28 +17,19 @@ specific language governing permissions and limitations
 under the License.
 */
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, forwardRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, forwardRef, OnInit, ViewChild } from '@angular/core';
 import {
-  AbstractControl, ControlValueAccessor, FormBuilder,
-  NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator
+  FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR
 } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSliderChange } from '@angular/material/slider';
 import { MatStepper } from '@angular/material/stepper';
-import { TranslateService } from '@ngx-translate/core';
-import { CollectionService, FIELD_TYPES, METRIC_TYPES } from '@services/collection-service/collection.service';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { CollectionService, FIELD_TYPES } from '@services/collection-service/collection.service';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { updateValueAndValidity } from '@utils/tools';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
-import { Observable, Subscription } from 'rxjs';
-import { DialogColorTableComponent, DialogColorTableData } from '../dialog-color-table/dialog-color-table.component';
-import { DialogPaletteSelectorComponent } from '../dialog-palette-selector/dialog-palette-selector.component';
-import { DialogPaletteSelectorData } from '../dialog-palette-selector/model';
 import { EditLayerFeaturesComponentForm } from './edit-layer-features.component.form';
-import { COLOR_SOURCE, GEOMETRY_TYPE, KeywordColor } from './models';
+import { GEOMETRY_TYPE } from './models';
+import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
 
 @Component({
   selector: 'app-edit-layer-features',
@@ -62,14 +53,12 @@ import { COLOR_SOURCE, GEOMETRY_TYPE, KeywordColor } from './models';
   ]
 })
 // ControlValueAccessor: see https://christianlydemann.com/form-validation-with-controlvalueaccessor/
-export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm
-  implements OnInit, ControlValueAccessor, Validator, OnDestroy {
+export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm implements OnInit {
 
   @ViewChild('stepper', { static: false }) stepper: MatStepper;
-  @Input() submit: Observable<void>;
-  private submitSubscription: Subscription;
-  public COLOR_SOURCE = COLOR_SOURCE;
+
   public GEOMETRY_TYPE = GEOMETRY_TYPE;
+  public colorSources = Object.values(PROPERTY_SELECTOR_SOURCE);
   public collectionGeoFields: string[] = [];
   public collectionKeywordFields: string[] = [];
   public collectionIntegerFields: string[] = [];
@@ -77,43 +66,23 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm
   constructor(
     protected formBuilderDefault: FormBuilderWithDefaultService,
     protected formBuilder: FormBuilder,
-    private logger: NGXLogger,
-    public dialog: MatDialog,
+    protected logger: NGXLogger,
     public mainformService: MainFormService,
-    public collectionService: CollectionService,
-    private colorService: ArlasColorGeneratorLoader,
-    private defaultValueService: DefaultValuesService,
-    private translate: TranslateService
+    public collectionService: CollectionService
   ) {
-    super(formBuilderDefault, formBuilder);
+    super(formBuilderDefault, formBuilder, logger);
   }
 
   ngOnInit() {
-    this.initActivateValidationOnSubmit();
-    this.initForceUpdateChoosenColorValidityOnChange();
+    super.ngOnInit();
     this.initCollectionRelatedFields();
-    this.initUpdateManualColorKeywordOnSourceFieldChange();
-    this.initUpdateMinMaxOnInterpolatedFieldChange();
   }
 
-  private initActivateValidationOnSubmit() {
-    this.submitSubscription = this.submit.subscribe(() => {
-      // activate validation on submit
-      this.logger.log('submitting', this.featuresFg);
-      this.stepper.steps.setDirty();
-      this.stepper.steps.forEach(s => s.interacted = true);
-      this.featuresFg.markAllAsTouched();
-    });
-  }
-
-  private initForceUpdateChoosenColorValidityOnChange() {
-    [this.colorSourceCtrl, this.colorInterpolatedFieldCtrl, this.colorInterpolatedNormalizeCtrl,
-    this.colorInterpolatedScopeCtrl, this.colorInterpolatedNormalizeCtrl]
-      .forEach(ctrl =>
-        ctrl.valueChanges.subscribe(value => {
-          updateValueAndValidity(this.colorFg, true, false);
-        })
-      );
+  protected onSubmit() {
+    super.onSubmit();
+    // activate stepper validation on submit
+    this.stepper.steps.setDirty();
+    this.stepper.steps.forEach(s => s.interacted = true);
   }
 
   private initCollectionRelatedFields() {
@@ -133,75 +102,11 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm
     });
   }
 
-  private initUpdateManualColorKeywordOnSourceFieldChange() {
-    this.colorManualFieldCtrl.valueChanges.subscribe(v => {
-      this.colorManualValuesCtrl.clear();
-
-      if (v) {
-        this.collectionService.getTermAggregation(this.collectionCtrl.value, v).then((keywords: Array<string>) => {
-          keywords.forEach((k: string) => {
-            this.addToColorManualValuesCtrl({
-              keyword: k,
-              color: this.colorService.getColor(k)
-            });
-          });
-          this.addToColorManualValuesCtrl({
-            keyword: 'OTHER',
-            color: this.defaultValueService.getDefaultConfig().otherColor
-          });
-        });
-      }
-    });
-  }
-
-  private initUpdateMinMaxOnInterpolatedFieldChange() {
-    this.colorInterpolatedFieldCtrl.valueChanges.subscribe(f => {
-      if (!f) {
-        return;
-      }
-      this.collectionService.getComputationMetric(this.collectionCtrl.value, f, METRIC_TYPES.MIN).then(min =>
-        this.colorInterpolatedMinValueCtrl.setValue(min)
-      );
-      this.collectionService.getComputationMetric(this.collectionCtrl.value, f, METRIC_TYPES.MAX).then(max =>
-        this.colorInterpolatedMaxValueCtrl.setValue(max)
-      );
-    });
-  }
-
-  public onTouched: () => void = () => { };
-
   writeValue(obj: any): void {
+    super.writeValue(obj);
     if (obj) {
-      this.featuresFg.patchValue(obj, { emitEvent: false });
-      this.onTouched();
-      // launch 'onChange' event on fields that are necesaary to other fields, for edition mode
       this.collectionCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
-      this.colorInterpolatedFieldCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
-
-      // with FormArray, values cannot be simply set, each inner element is a FormGroup to be created
-      obj.styleStep.colorFg.colorManualFg.colorManualValuesCtrl.forEach((k: KeywordColor) => {
-        this.addToColorManualValuesCtrl(k);
-      });
     }
-  }
-  registerOnChange(fn: any): void {
-    this.featuresFg.valueChanges.subscribe(fn);
-  }
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-  setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.featuresFg.disable() : this.featuresFg.enable();
-  }
-  validate(control: AbstractControl): ValidationErrors {
-    return this.featuresFg.valid ? null : { invalidForm: { valid: false, message: this.translate.instant('Features fields are invalid') } };
-  }
-  registerOnValidatorChange?(fn: () => void): void {
-    this.featuresFg.valueChanges.subscribe(fn);
-  }
-
-  ngOnDestroy() {
-    this.submitSubscription.unsubscribe();
   }
 
   public checkZoom(event: MatSliderChange, source: string) {
@@ -214,47 +119,6 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm
         this.zoomMinCtrl.setValue(event.value);
       }
     }
-  }
-
-  public openColorTable() {
-    const dialogRef = this.dialog.open(DialogColorTableComponent, {
-      data: {
-        collection: this.collectionCtrl.value,
-        sourceField: this.colorManualFieldCtrl.value,
-        keywordColors: this.colorManualValuesCtrl.value
-      } as DialogColorTableData,
-      autoFocus: false,
-    });
-
-    dialogRef.afterClosed().subscribe((result: Array<KeywordColor>) => {
-      if (result !== undefined) {
-        this.colorManualValuesCtrl.clear();
-        result.forEach((k: KeywordColor) => {
-          this.addToColorManualValuesCtrl(k);
-        });
-      }
-    });
-  }
-
-  public openPaletteTable() {
-    const paletteData: DialogPaletteSelectorData = {
-      min: this.colorInterpolatedNormalizeCtrl.value ? 0 : this.colorInterpolatedMinValueCtrl.value,
-      max: this.colorInterpolatedNormalizeCtrl.value ? 1 : this.colorInterpolatedMaxValueCtrl.value,
-      defaultPalettes: this.defaultValueService.getDefaultConfig().palettes,
-      selectedPalette: this.colorInterpolatedPaletteCtrl.value
-    };
-    const dialogRef = this.dialog.open(DialogPaletteSelectorComponent, {
-      data: paletteData,
-      autoFocus: false,
-      panelClass: 'dialog-with-overflow'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        this.colorInterpolatedFg.get('colorInterpolatedPaletteCtrl').setValue(result);
-        this.colorInterpolatedFg.get('colorInterpolatedPaletteCtrl').markAsDirty();
-      }
-    });
   }
 
 }

@@ -11,6 +11,7 @@ import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wra
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { PropertySelectorComponent } from '@shared-components/property-selector/property-selector.component';
 
 describe('EditLayerFeaturesComponent', () => {
   let spectator: Spectator<EditLayerFeaturesComponent>;
@@ -20,7 +21,8 @@ describe('EditLayerFeaturesComponent', () => {
       MockComponent(ConfigElementComponent),
       MockDirective(AlertOnChangeDirective),
       MockDirective(ResetOnChangeDirective),
-      MockComponent(ColorPickerWrapperComponent)
+      MockComponent(ColorPickerWrapperComponent),
+      MockComponent(PropertySelectorComponent),
     ],
     mocks: [
       HttpClient,
