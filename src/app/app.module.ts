@@ -45,8 +45,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { StartupService } from '@services/startup/startup.service';
 import { ArlasWalkthroughService } from 'arlas-wui-toolkit/services/walkthrough/walkthrough.service';
 import { WalkthroughService } from '@services/walkthrough/walkthrough.service';
-import { CustomTranslateLoader } from 'arlas-wui-toolkit/app.module';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatBadgeModule } from '@angular/material/badge';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {

@@ -20,6 +20,7 @@ import { Directive, HostListener, Input, Optional, ElementRef, OnInit } from '@a
 import { MatSnackBar, MatSelect } from '@angular/material';
 import { AbstractControl } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * Shows a toast of the value of mat-select changes (and was previously set).
@@ -33,7 +34,8 @@ export class AlertOnChangeDirective implements OnInit {
     private logger: NGXLogger,
     @Optional() private select: MatSelect,
     private elementRef: ElementRef<HTMLInputElement>,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private translate: TranslateService) { }
 
   // tslint:disable-next-line: no-input-rename
   @Input('appAlertOnChange') alertMessage: string;
@@ -50,7 +52,7 @@ export class AlertOnChangeDirective implements OnInit {
       nativeElement.onfocus = (e: Event) => {
         const anyDependantDirty = this.dependants == null || this.dependants.filter(d => d.dirty).length > 0;
         if (anyDependantDirty && !!nativeElement.value) {
-          this.snackBar.open('Carreful! ' + this.alertMessage);
+          this.snackBar.open(this.translate.instant('Carreful!') + ' ' + this.translate.instant(this.alertMessage));
         }
       };
     }
@@ -61,7 +63,7 @@ export class AlertOnChangeDirective implements OnInit {
     const anyDependantDirty = this.dependants == null || this.dependants.filter(d => d.dirty).length > 0;
     // display the warning only if a value is already set AND if any dependency has been changed
     if (anyDependantDirty && !!value && !!this.select.value) {
-      this.snackBar.open('Carreful! ' + this.alertMessage);
+      this.snackBar.open(this.translate.instant('Carreful!') + ' ' + this.translate.instant(this.alertMessage));
     }
   }
 

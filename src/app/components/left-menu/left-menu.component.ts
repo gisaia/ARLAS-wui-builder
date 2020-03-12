@@ -21,6 +21,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { AbstractControl } from '@angular/forms';
 import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
 import { getNbErrorsInControl } from '@utils/tools';
+import { TranslateService } from '@ngx-translate/core';
 
 interface Page {
   link: string;
@@ -44,7 +45,8 @@ export class LeftMenuComponent {
   constructor(
     private mainFormService: MainFormService,
     private importExportService: MainFormImportExportService,
-    private vcref: ViewContainerRef
+    private vcref: ViewContainerRef,
+    private translate: TranslateService
   ) {
     // recompute nberrors of each page anytime the mainform validity changes
     this.mainFormService.mainForm.statusChanges.subscribe(st => this.updateNbErrors());
@@ -52,20 +54,20 @@ export class LeftMenuComponent {
 
   public pages: Page[] = [
     {
-      name: 'Map', link: '/map-config', icon: 'map', tooltip: 'Map configuration', enabled: true,
+      name: 'Map', link: '/map-config', icon: 'map', tooltip: this.translate.instant('Map configuration'), enabled: true,
       control: this.mainFormService.mapConfig.control
     },
     {
-      name: 'Timeline', link: '/timeline-config', icon: 'timeline', tooltip: 'Timeline configuration', enabled: true
+      name: 'Timeline', link: '/timeline-config', icon: 'timeline', tooltip: this.translate.instant('Timeline configuration'), enabled: true
     },
     {
-      name: 'Search', link: '/search-config', icon: 'search', tooltip: 'Search configuration', enabled: true
+      name: 'Search', link: '/search-config', icon: 'search', tooltip: this.translate.instant('Search configuration'), enabled: true
     },
     {
-      name: 'Analytics', link: 'some-link', icon: 'bar_chart', tooltip: 'Analytics configuration', enabled: false
+      name: 'Analytics', link: 'some-link', icon: 'bar_chart', tooltip: this.translate.instant('Analytics configuration'), enabled: false
     },
     {
-      name: 'Look \'n feel', link: 'some-link', icon: 'send', tooltip: 'Look \'n fell configuration', enabled: false
+      name: 'Look \'n feel', link: 'some-link', icon: 'send', tooltip: this.translate.instant('Look \'n fell configuration'), enabled: false
     },
   ];
 

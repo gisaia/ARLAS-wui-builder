@@ -22,6 +22,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { LayersComponentForm } from './layers.component.form';
 import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
+import { TranslateService } from '@ngx-translate/core';
 
 export interface Layer {
   id: string;
@@ -40,7 +41,8 @@ export class LayersComponent extends LayersComponentForm implements OnInit {
 
   constructor(
     protected mainFormService: MainFormService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private translate: TranslateService
   ) {
     super(mainFormService);
   }
@@ -51,7 +53,7 @@ export class LayersComponent extends LayersComponentForm implements OnInit {
   public confirmDelete(layerId: number, layerName: string): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
-      data: { message: 'delete the layer ' + layerName + '?' }
+      data: { message: this.translate.instant('delete the layer') +  ' ' + layerName + '?' }
     });
 
     dialogRef.afterClosed().subscribe(result => {

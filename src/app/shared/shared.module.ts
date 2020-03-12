@@ -28,6 +28,7 @@ import { AlertOnChangeDirective } from './directives/alert-on-change/alert-on-ch
 import { ColorPickerWrapperComponent } from './components/color-picker-wrapper/color-picker-wrapper.component';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { ResetOnChangeDirective } from './directives/reset-on-change/reset-on-change.directive';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { ResetOnChangeDirective } from './directives/reset-on-change/reset-on-ch
     MatCardModule,
     MatButtonModule,
     MatFormFieldModule,
-    ColorPickerModule
+    ColorPickerModule,
+    TranslateModule
   ],
   exports: [
     ConfigElementComponent,

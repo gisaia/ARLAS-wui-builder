@@ -21,6 +21,7 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanDeactivate } f
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * To be implements by components that need a confirmation before changing location
@@ -34,7 +35,9 @@ export interface CanComponentExit {
 })
 export class ConfirmExitGuard implements CanDeactivate<CanComponentExit> {
 
-  constructor(public dialog: MatDialog) {
+  constructor(
+    public dialog: MatDialog,
+    private translate: TranslateService) {
   }
 
   canDeactivate(
@@ -51,7 +54,7 @@ export class ConfirmExitGuard implements CanDeactivate<CanComponentExit> {
     if (!component.canExit()) {
       const dialogRef = this.dialog.open(ConfirmModalComponent, {
         width: '400px',
-        data: { message: 'exit without saving?' }
+        data: { message: this.translate.instant('Exit without saving ?') }
       });
       return dialogRef.afterClosed();
     } else {
