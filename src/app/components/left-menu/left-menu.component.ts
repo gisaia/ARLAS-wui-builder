@@ -79,7 +79,7 @@ export class LeftMenuComponent {
   }
 
   public save() {
-    this.importExportService.setExportExpected(this.vcref);
+    this.importExportService.attemptExport(this.vcref);
     this.updateNbErrors();
   }
 
