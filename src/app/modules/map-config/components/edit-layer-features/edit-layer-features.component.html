@@ -41,9 +41,9 @@
                     <mat-form-field>
                         <mat-label>Geometry type</mat-label>
                         <mat-select formControlName="geometryTypeCtrl">
-                            <mat-option value="fill">Fill</mat-option>
-                            <mat-option value="line">Line</mat-option>
-                            <mat-option value="circle">Circle</mat-option>
+                            <mat-option [value]="GEOMETRY_TYPE.fill">Fill</mat-option>
+                            <mat-option [value]="GEOMETRY_TYPE.line">Line</mat-option>
+                            <mat-option [value]="GEOMETRY_TYPE.circle">Circle</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>

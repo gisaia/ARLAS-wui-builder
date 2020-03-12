@@ -18,7 +18,7 @@ under the License.
 */
 import { Component, OnInit, Input, forwardRef, OnDestroy, ViewChild } from '@angular/core';
 import {
-  FormBuilder, FormGroup, AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS,
+  FormBuilder, AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS,
   ControlValueAccessor, Validator, ValidationErrors, FormArray
 } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
@@ -34,7 +34,7 @@ import { DialogPaletteSelectorData } from '../dialog-palette-selector/model';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { EditLayerFeaturesComponentForm } from './edit-layer-features.component.form';
-import { KeywordColor, COLOR_SOURCE } from './models';
+import { KeywordColor, COLOR_SOURCE, GEOMETRY_TYPE } from './models';
 import { updateValueAndValidity } from '@utils/tools';
 
 @Component({
@@ -66,6 +66,7 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm
   @Input() submit: Observable<void>;
   private submitSubscription: Subscription;
   public COLOR_SOURCE = COLOR_SOURCE;
+  public GEOMETRY_TYPE = GEOMETRY_TYPE;
   public collectionGeoFields: string[] = [];
   public collectionKeywordFields: string[] = [];
   public collectionIntegerFields: string[] = [];
