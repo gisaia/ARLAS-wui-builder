@@ -22,7 +22,9 @@ import {
   AbstractControl, ControlValueAccessor, FormBuilder,
   NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator
 } from '@angular/forms';
-import { MatDialog, MatSliderChange, MatStepper } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSliderChange } from '@angular/material/slider';
+import { MatStepper } from '@angular/material/stepper';
 import { TranslateService } from '@ngx-translate/core';
 import { CollectionService, FIELD_TYPES, METRIC_TYPES } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
