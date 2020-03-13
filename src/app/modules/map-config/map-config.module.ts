@@ -46,6 +46,7 @@ import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDividerModule } from '@angular/material/divider';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   entryComponents: [
@@ -83,7 +84,8 @@ import { MatDividerModule } from '@angular/material/divider';
     MatTooltipModule,
     MatAutocompleteModule,
     DragDropModule,
-    MatDividerModule
+    MatDividerModule,
+    TranslateModule
   ],
   providers: [
     ConfirmExitGuard

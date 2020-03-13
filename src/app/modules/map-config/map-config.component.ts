@@ -19,6 +19,7 @@ under the License.
 import { Component, OnInit } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
+import { TranslateService } from '@ngx-translate/core';
 
 interface Tab {
   routeurLink: string;
@@ -35,16 +36,17 @@ export class MapConfigComponent implements OnInit {
 
   constructor(
     private mainFormService: MainFormService,
-    private importExportService: MainFormImportExportService) { }
+    private importExportService: MainFormImportExportService,
+    private translate: TranslateService) { }
 
   public tabs: Tab[] = [
     {
-      routeurLink: 'global', label: 'Global configuration',
+      routeurLink: 'global', label: this.translate.instant('Global configuration'),
       hasError: () => this.importExportService.isExportExpected &&
         this.mainFormService.mapConfig.getGlobalFg() && !this.mainFormService.mapConfig.getGlobalFg().valid
     },
     {
-      routeurLink: 'layers', label: 'Layers',
+      routeurLink: 'layers', label: this.translate.instant('Layers'),
       hasError: () => this.importExportService.isExportExpected && this.mainFormService.mapConfig.getLayersFa()
         && !this.mainFormService.mapConfig.getLayersFa().valid
     }

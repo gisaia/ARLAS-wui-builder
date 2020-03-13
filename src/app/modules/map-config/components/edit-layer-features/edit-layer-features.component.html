@@ -5,7 +5,7 @@
             <app-config-element>
                 <div form-fields>
                     <mat-form-field>
-                        <mat-label>Collection</mat-label>
+                        <mat-label>{{ 'Collection' | translate}}</mat-label>
                         <mat-select formControlName="collectionCtrl"
                             appAlertOnChange="changing the collection will reset the rendered geometry" [dependants]="[geometryCtrl, colorProvidedFieldCtrl, colorGeneratedFieldCtrl, colorManualFieldCtrl, 
                             colorInterpolatedFieldCtrl, colorInterpolatedNormalizeLocalFieldCtrl]">
@@ -18,7 +18,7 @@
                 </div>
             </app-config-element>
             <div>
-                <button mat-button matStepperNext type="button">Next</button>
+                <button mat-button matStepperNext type="button">{{ 'Next' | translate}}</button>
             </div>
         </mat-step>
 
@@ -26,7 +26,7 @@
             <app-config-element>
                 <div form-fields>
                     <mat-form-field>
-                        <mat-label>Rendered geometry</mat-label>
+                        <mat-label>{{ 'Rendered geometry' | translate}} </mat-label>
                         <mat-select formControlName="geometryCtrl">
                             <mat-option *ngFor="let field of collectionGeoFields" [value]="field">
                                 {{ field }}</mat-option>
@@ -39,11 +39,11 @@
             <app-config-element>
                 <div form-fields>
                     <mat-form-field>
-                        <mat-label>Geometry type</mat-label>
+                        <mat-label>{{ 'Geometry type' | translate}} </mat-label>
                         <mat-select formControlName="geometryTypeCtrl">
-                            <mat-option [value]="GEOMETRY_TYPE.fill">Fill</mat-option>
-                            <mat-option [value]="GEOMETRY_TYPE.line">Line</mat-option>
-                            <mat-option [value]="GEOMETRY_TYPE.circle">Circle</mat-option>
+                            <mat-option [value]="GEOMETRY_TYPE.fill">{{ 'Fill' | translate}}</mat-option>
+                            <mat-option [value]="GEOMETRY_TYPE.line">{{ 'Line' | translate}}</mat-option>
+                            <mat-option [value]="GEOMETRY_TYPE.circle">{{ 'Circle' | translate}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -52,86 +52,86 @@
                 </div>
             </app-config-element>
             <div>
-                <button mat-button matStepperPrevious>Back</button>
-                <button mat-button matStepperNext type="button">Next</button>
+                <button mat-button matStepperPrevious>{{ 'Back' | translate}}</button>
+                <button mat-button matStepperNext type="button">{{ 'Next' | translate}}</button>
             </div>
         </mat-step>
 
         <mat-step label="Visibility" formGroupName="visibilityStep" [stepControl]="featuresFg.get('visibilityStep')">
             <mat-error *ngIf="featuresFg.controls.visibilityStep.errors?.lte">
-                Zoom max must be greater than or equal to zoom min
+                {{ 'Zoom max must be greater than or equal to zoom min' | translate}}
             </mat-error>
             <app-config-element>
                 <div form-fields>
-                    <mat-slide-toggle formControlName="visibleCtrl" labelPosition="before">Visible</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="visibleCtrl" labelPosition="before">{{ 'Visible' | translate}}</mat-slide-toggle>
                 </div>
                 <div description>
-                    description
+                    {{ 'description' | translate}} 
                 </div>
             </app-config-element>
             <app-config-element>
                 <div form-fields>
-                    <mat-label>Zoom min</mat-label>
+                    <mat-label>{{ 'Zoom min' | translate}}</mat-label>
                     <mat-slider thumbLabel formControlName="zoomMinCtrl" min="1" max="20"
                         (input)="checkZoom($event, 'min')" thumbLabel="true"></mat-slider>
                 </div>
                 <div description>
-                    zoom min etc
+                   {{ 'zoom min etc' | translate}}
                 </div>
             </app-config-element>
             <app-config-element>
                 <div form-fields>
-                    <span>Zoom max</span>
+                    <span>{{ 'Zoom max' | translate}}</span>
                     <mat-slider thumbLabel formControlName="zoomMaxCtrl" min="1" max="20"
                         (input)="checkZoom($event, 'max')"></mat-slider>
                 </div>
                 <div description>
-                    zoom max etc
+                    {{ 'zoom max etc' | translate}} 
                 </div>
             </app-config-element>
             <app-config-element>
                 <div form-fields>
                     <span>
-                        <mat-label>Features max</mat-label>
+                        <mat-label>{{ 'Features max' | translate}}</mat-label>
                         <mat-slider #featuresMaxCtrlSlider formControlName="featuresMaxCtrl"
                             [value]="featuresFg.get('visibilityStep').get('featuresMaxCtrl').value" thumbLabel min="0"
                             max="10000" step="100"> </mat-slider>
                     </span>
                 </div>
                 <div description>
-                    Features max etc
+                    {{ 'Features max etc' | translate}}
                 </div>
             </app-config-element>
             <div>
-                <button mat-button matStepperPrevious>Back</button>
-                <button mat-button matStepperNext type="button">Next</button>
+                <button mat-button matStepperPrevious>{{ 'Back' | translate}}</button>
+                <button mat-button matStepperNext type="button">{{ 'Next' | translate}}</button>
             </div>
         </mat-step>
 
         <mat-step label="Style" formGroupName="styleStep" [stepControl]="featuresFg.get('styleStep')">
             <app-config-element>
                 <div form-fields>
-                    <mat-label>Opacity</mat-label>
+                    <mat-label>{{ 'Opacity' | translate}}</mat-label>
                     <mat-slider thumbLabel formControlName="opacityCtrl" min="0" max="1" thumbLabel="true" step="0.1">
                     </mat-slider>
                 </div>
                 <div description>
-                    opacity...
+                    {{ 'opacity...' | translate}}
                 </div>
             </app-config-element>
 
             <app-config-element>
                 <div form-fields>
                     <mat-form-field>
-                        <mat-label>Color source</mat-label>
+                        <mat-label>{{ 'Color source' | translate}}</mat-label>
                         <mat-select formControlName="colorSourceCtrl"
                             appAlertOnChange="changing the color source will reset the choosen color(s)" [dependants]="[colorFixCtrl, colorProvidedFieldCtrl, 
                             colorGeneratedFieldCtrl, colorManualFg, colorInterpolatedFg]" appResetOnChange="map.layer">
-                            <mat-option [value]="COLOR_SOURCE.fix">Fix</mat-option>
-                            <mat-option [value]="COLOR_SOURCE.provided">Provided by a field</mat-option>
-                            <mat-option [value]="COLOR_SOURCE.generated">Generated from a field</mat-option>
-                            <mat-option [value]="COLOR_SOURCE.manual">Choosen from a field</mat-option>
-                            <mat-option [value]="COLOR_SOURCE.interpolated">Interpolated from a field</mat-option>
+                            <mat-option [value]="COLOR_SOURCE.fix">{{ 'Fix' | translate}}</mat-option>
+                            <mat-option [value]="COLOR_SOURCE.provided">{{ 'Provided by a field' | translate}}</mat-option>
+                            <mat-option [value]="COLOR_SOURCE.generated">{{ 'Generated from a field' | translate}}</mat-option>
+                            <mat-option [value]="COLOR_SOURCE.manual">{{ 'Choosen from a field' | translate}}</mat-option>
+                            <mat-option [value]="COLOR_SOURCE.interpolated">{{ 'Interpolated from a field' | translate}}</mat-option>
                         </mat-select>
                     </mat-form-field>
 
@@ -145,7 +145,7 @@
 
                             <div *ngIf="colorSourceCtrl.value == COLOR_SOURCE.provided">
                                 <mat-form-field>
-                                    <mat-label>Source field</mat-label>
+                                    <mat-label>{{ 'Source field' | translate}}</mat-label>
                                     <mat-select formControlName="colorProvidedFieldCtrl">
                                         <mat-option *ngFor="let field of collectionKeywordFields" [value]="field">
                                             {{ field }}</mat-option>
@@ -155,7 +155,7 @@
 
                             <div *ngIf="colorSourceCtrl.value == COLOR_SOURCE.generated">
                                 <mat-form-field>
-                                    <mat-label>Source field</mat-label>
+                                    <mat-label>{{ 'Source field' | translate}}</mat-label>
                                     <mat-select formControlName="colorGeneratedFieldCtrl">
                                         <mat-option *ngFor="let field of collectionKeywordFields" [value]="field">
                                             {{ field }}</mat-option>
@@ -165,7 +165,7 @@
 
                             <div *ngIf="colorSourceCtrl.value == COLOR_SOURCE.manual" formGroupName="colorManualFg">
                                 <mat-form-field>
-                                    <mat-label>Source field</mat-label>
+                                    <mat-label>{{ 'Source field' | translate}}</mat-label>
                                     <!-- No [dependants] because we manually set the new values on source field change -->
                                     <mat-select formControlName="colorManualFieldCtrl"
                                         appAlertOnChange="Changing the source field will reset the colors"
@@ -178,7 +178,7 @@
                                 <div>
                                     <button type="button" mat-raised-button color="primary" (click)="openColorTable()"
                                         *ngIf="colorManualFieldCtrl?.value">
-                                        Manage colors
+                                        {{ 'Manage colors' | translate}}
                                     </button>
                                 </div>
                             </div>
@@ -186,7 +186,7 @@
                             <div *ngIf="colorSourceCtrl.value == COLOR_SOURCE.interpolated"
                                 formGroupName="colorInterpolatedFg">
                                 <mat-form-field>
-                                    <mat-label>Source field</mat-label>
+                                    <mat-label>{{ 'Source field' | translate}}</mat-label>
                                     <mat-select formControlName="colorInterpolatedFieldCtrl"
                                         appResetOnChange="map.layer"
                                         [dependants]="[colorInterpolatedMinValueCtrl, colorInterpolatedMaxValueCtrl, colorInterpolatedNormalizeLocalFieldCtrl]">
@@ -197,7 +197,7 @@
 
                                 <div *ngIf="colorInterpolatedFieldCtrl.value">
                                     <div>
-                                        <mat-label>Normalize</mat-label>
+                                        <mat-label>{{ 'Normalize' | translate}}</mat-label>
                                         <mat-slide-toggle formControlName="colorInterpolatedNormalizeCtrl"
                                             labelPosition="before" appResetOnChange="map.layer" [dependants]="[colorInterpolatedScopeCtrl, colorInterpolatedNormalizeByKeyCtrl, 
                                             colorInterpolatedNormalizeLocalFieldCtrl, colorInterpolatedMinValueCtrl, colorInterpolatedMaxValueCtrl,
@@ -207,17 +207,17 @@
 
                                     <div *ngIf="colorInterpolatedNormalizeCtrl.value">
                                         <mat-form-field>
-                                            <mat-label>Scope</mat-label>
+                                            <mat-label>{{ 'Scope' | translate}}</mat-label>
                                             <mat-select formControlName="colorInterpolatedScopeCtrl"
                                                 appResetOnChange="map.layer"
                                                 [dependants]="[colorInterpolatedNormalizeByKeyCtrl, colorInterpolatedNormalizeLocalFieldCtrl]">
-                                                <mat-option value="local">Local</mat-option>
-                                                <mat-option value="global">Global</mat-option>
+                                                <mat-option value="local">{{ 'Local' | translate}}</mat-option>
+                                                <mat-option value="global">{{ 'Global' | translate}}</mat-option>
                                             </mat-select>
                                         </mat-form-field>
 
                                         <div *ngIf="colorInterpolatedScopeCtrl.value === 'local'">
-                                            <mat-label>Normalize by key</mat-label>
+                                            <mat-label>{{ 'Normalize by key' | translate}}</mat-label>
                                             <mat-slide-toggle formControlName="colorInterpolatedNormalizeByKeyCtrl"
                                                 labelPosition="before" appResetOnChange="map.layer"
                                                 [dependants]="[colorInterpolatedNormalizeLocalFieldCtrl]">
@@ -237,7 +237,7 @@
                                     <div *ngIf="!colorInterpolatedNormalizeCtrl.value">
                                         <div>
                                             <mat-form-field>
-                                                <mat-label>Minimum value</mat-label>
+                                                <mat-label>{{ 'Minimum value' | translate}}</mat-label>
                                                 <input matInput placeholder="Min" type="number"
                                                     formControlName="colorInterpolatedMinValueCtrl"
                                                     appAlertOnChange="Changing this value will reset the palette"
@@ -246,7 +246,7 @@
                                         </div>
                                         <div>
                                             <mat-form-field>
-                                                <mat-label>Maximum value</mat-label>
+                                                <mat-label>{{ 'Maximum value' | translate}}</mat-label>
                                                 <input matInput placeholder="Max" type="number"
                                                     formControlName="colorInterpolatedMaxValueCtrl"
                                                     appAlertOnChange="Changing this value will reset the palette"
@@ -260,7 +260,7 @@
                                             class="palette-button"
                                             [disabled]="!colorInterpolatedNormalizeCtrl.value 
                                             && (!colorInterpolatedMinValueCtrl.valid || !colorInterpolatedMaxValueCtrl.valid || colorInterpolatedFg?.errors?.lte)">
-                                            Manage palette
+                                            {{ 'Manage palette' | translate}}
                                         </button>
                                     </div>
                                 </div>
@@ -269,38 +269,38 @@
 
                             <div *ngIf="colorFg?.invalid && colorFg.touched">
                                 <mat-error *ngIf=" colorFixCtrl.touched && colorFixCtrl?.errors?.required">
-                                    A color is required
+                                    {{ 'A color is required' | translate}}
                                 </mat-error>
                                 <mat-error
                                     *ngIf="colorProvidedFieldCtrl.touched && colorProvidedFieldCtrl?.errors?.required 
                                     || colorGeneratedFieldCtrl.touched && colorGeneratedFieldCtrl?.errors?.required 
                                     || colorManualFieldCtrl.touched && colorManualFieldCtrl?.errors?.required 
                                     || colorInterpolatedFieldCtrl.touched && colorInterpolatedFieldCtrl?.errors?.required">
-                                    A source field is required
+                                    {{ 'A source field is required' | translate}} 
                                 </mat-error>
                                 <mat-error
                                     *ngIf="colorInterpolatedMinValueCtrl.touched && colorInterpolatedMinValueCtrl?.errors?.required">
-                                    A minimum value is required
+                                    {{ 'A minimum value is required' | translate}}
                                 </mat-error>
                                 <mat-error
                                     *ngIf="colorInterpolatedMaxValueCtrl.touched && colorInterpolatedMaxValueCtrl?.errors?.required">
-                                    A maximum value is required
+                                    {{ 'A maximum value is required' | translate}}
                                 </mat-error>
                                 <mat-error
                                     *ngIf="colorInterpolatedScopeCtrl.touched && colorInterpolatedScopeCtrl?.errors?.required">
-                                    A scope is required
+                                    {{ 'A scope is required' | translate}}
                                 </mat-error>
                                 <mat-error
                                     *ngIf="colorInterpolatedNormalizeLocalFieldCtrl.touched && colorInterpolatedNormalizeLocalFieldCtrl?.errors?.required">
-                                    A local-normalization field is required
+                                    {{ 'A local-normalization field is required' | translate}}
                                 </mat-error>
                                 <mat-error
                                     *ngIf="colorInterpolatedMinValueCtrl.value && colorInterpolatedMaxValueCtrl.valid && colorInterpolatedFg?.errors?.lte">
-                                    The minimum value must be less than the maximum value
+                                    {{ 'The minimum value must be less than the maximum value' | translate}}
                                 </mat-error>
                                 <mat-error
                                     *ngIf="colorInterpolatedPaletteCtrl.touched && colorInterpolatedPaletteCtrl?.errors?.required">
-                                    A palette is required
+                                    {{ 'A palette is required' | translate}}
                                 </mat-error>
                             </div>
 
@@ -310,27 +310,23 @@
                 </div>
                 <div description>
                     <p>
-                        Fix: use a fix color.
+                        {{ 'Fix: use a fix color.' | translate}}
                     </p>
                     <p>
-                        Provided by a field: select a field whose values are the colors to use.
+                        {{ 'Provided by a field: select a field whose values are the colors to use.' | translate}}
                     </p>
                     <p>
-                        Generated from a field: select a field of type 'keyword', then a color will be generated for
-                        every
-                        possible value.
+                        {{ 'Generated from a field: select a field of type \'keyword\', then a color will be generated for every possible value.' | translate}}
                     </p>
                     <p>
-                        Choosen from a field: select a field of type 'keyword', then select a color for every possible
-                        value.
+                        {{ 'Choosen from a field: select a field of type \'keyword\', then select a color for every possible value.' | translate}}
                     </p>
                     <p>
-                        Interpolated from a field: select a number or date field, colors will be lineary interpolated
-                        between the min and the max.
+                        {{ 'Interpolated from a field: select a number or date field, colors will be lineary interpolated between the min and the max.' | translate}}
                     </p>
                 </div>
             </app-config-element>
-            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperPrevious>{{ 'Back' | translate}}</button>
         </mat-step>
 
     </mat-horizontal-stepper>

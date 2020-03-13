@@ -12,7 +12,7 @@
     <div class="errors-container">
         <div *ngIf="formControl?.invalid && (formControl?.touched || formGroupDirective.submitted)">
             <mat-error *ngIf="formControl?.errors.required">
-                The field is mandatory.
+                {{'The field is mandatory.' | translate}}
             </mat-error>
             <mat-error *ngIf="formControl?.errors.max">
                 The value {{formControl?.errors.max.actual}} is above allowed value {{formControl?.errors.max.max}}.

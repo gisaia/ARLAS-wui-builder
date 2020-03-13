@@ -27,6 +27,7 @@ import { HttpClient } from '@angular/common/http';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { ArlasConfigService } from 'arlas-wui-toolkit';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 
@@ -48,7 +49,8 @@ export class LandingPageDialogComponent implements OnInit {
     private logger: NGXLogger,
     private configService: ArlasConfigService,
     private configDescritor: ArlasConfigurationDescriptor,
-    private formBuilderWithDefault: FormBuilderWithDefaultService) { }
+    private formBuilderWithDefault: FormBuilderWithDefaultService,
+    private translate: TranslateService) { }
 
   public ngOnInit(): void {
     if (!!this.mainFormService.mainForm) {
@@ -86,7 +88,7 @@ export class LandingPageDialogComponent implements OnInit {
         this.isServerReady = true;
       },
       () => {
-        this.logger.error('Unable to access the server. Please, verify the url.');
+        this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
         this.isServerReady = false;
       }
     );
@@ -106,7 +108,8 @@ export class LandingPageComponent implements AfterViewInit {
   constructor(
     private dialog: MatDialog,
     private logger: NGXLogger,
-    private router: Router) { }
+    private router: Router,
+    private translate: TranslateService) { }
 
   public openChoice() {
     this.dialogRef = this.dialog.open(LandingPageDialogComponent, { disableClose: true });
@@ -119,9 +122,9 @@ export class LandingPageComponent implements AfterViewInit {
       if (mode === 'new') {
         this.dialogRef.close();
         this.router.navigate(['map-config']);
-        this.logger.info('Ready to access server');
+        this.logger.info(this.translate.instant('Ready to access server'));
       } else {
-        this.logger.error('Not available now');
+        this.logger.error(this.translate.instant('Not available now'));
       }
     });
   }

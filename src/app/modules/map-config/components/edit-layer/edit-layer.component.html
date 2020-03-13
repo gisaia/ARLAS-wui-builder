@@ -5,28 +5,28 @@
     <app-config-element>
         <div form-fields>
             <mat-form-field>
-                <mat-label>Name</mat-label>
+                <mat-label>{{ 'Name' | translate}}</mat-label>
                 <input matInput placeholder="name" formControlName="name">
             </mat-form-field>
         </div>
         <div description>
-            Name of the layer. Only used for visualization.
+            {{ 'Name of the layer.' | translate}} {{ 'Only used for visualization.' | translate}}
         </div>
     </app-config-element>
 
     <app-config-element>
         <div form-fields>
             <mat-form-field>
-                <mat-label>Mode</mat-label>
+                <mat-label>{{ 'Mode' | translate}} </mat-label>
                 <mat-select formControlName="mode" appAlertOnChange="changing the mode will reset the below form">
-                    <mat-option value="features">Features</mat-option>
-                    <mat-option value="cluster">Cluster</mat-option>
-                    <mat-option value="feature-metric">Feature Metric</mat-option>
+                    <mat-option value="features">{{ 'Features' | translate}} </mat-option>
+                    <mat-option value="cluster">{{ 'Cluster' | translate}} </mat-option>
+                    <mat-option value="feature-metric">{{ 'Feature Metric' | translate}} </mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
         <div description>
-            Mode of the layer.
+           {{ 'Mode of the layer.' | translate}} 
         </div>
     </app-config-element>
 
@@ -36,8 +36,8 @@
     </div>
 
     <div class="action-buttons">
-        <button mat-raised-button color="primary" type="submit">Save layer</button>
+        <button mat-raised-button color="primary" type="submit">{{ 'Save layer' | translate}} </button>
         <button class="cancel-button" mat-raised-button (click)="forceCanExit = true"
-            [routerLink]="['', 'map-config', 'layers']">Cancel</button>
+            [routerLink]="['', 'map-config', 'layers']">{{ 'Cancel' | translate}} </button>
     </div>
 </form>

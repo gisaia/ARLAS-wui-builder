@@ -3,7 +3,7 @@
     <app-config-element>
         <div form-fields>
             <mat-form-field>
-                <mat-label>Geographical operator</mat-label>
+                <mat-label>{{'Geographical operator' | translate}}</mat-label>
                 <mat-select formControlName="geographicalOperator">
                     <mat-option *ngFor="let ope of operators | keyvalue" value="{{ope.value}}">{{ope.value}}
                     </mat-option>
@@ -11,7 +11,7 @@
             </mat-form-field>
         </div>
         <div description>
-            It is used to..
+            {{'It is used to..' | translate}}
         </div>
     </app-config-element>
 
@@ -24,7 +24,7 @@
                             <input matInput formControlName="collection">
                         </mat-form-field>
                         <mat-form-field>
-                            <mat-label>Geographical field</mat-label>
+                            <mat-label>{{'Geographical field' | translate}}</mat-label>
 
                             <mat-select formControlName="requestGeom">
                                 <mat-option *ngFor="let geoField of this.getGeoFields(collections[i]);"
@@ -36,7 +36,7 @@
             </ng-container>
         </div>
         <div description>
-            For each collection choose the geographical field used to filter data on the map
+            {{'For each collection choose the geographical field used to filter data on the map' | translate}}
         </div>
     </app-config-element>
 </div>

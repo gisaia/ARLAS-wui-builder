@@ -36,6 +36,7 @@ import { FormBuilderWithDefaultService } from '@services/form-builder-with-defau
 import { EditLayerFeaturesComponentForm } from './edit-layer-features.component.form';
 import { KeywordColor, COLOR_SOURCE, GEOMETRY_TYPE } from './models';
 import { updateValueAndValidity } from '@utils/tools';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-layer-features',
@@ -79,13 +80,13 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm
     public mainformService: MainFormService,
     public collectionService: CollectionService,
     private colorService: ArlasColorGeneratorLoader,
-    private defaultValueService: DefaultValuesService
+    private defaultValueService: DefaultValuesService,
+    private translate: TranslateService
   ) {
     super(formBuilderDefault, formBuilder);
   }
 
   ngOnInit() {
-
     this.initActivateValidationOnSubmit();
     this.initForceUpdateChoosenColorValidityOnChange();
     this.initCollectionRelatedFields();
@@ -165,8 +166,6 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm
     });
   }
 
-
-
   public onTouched: () => void = () => { };
 
   writeValue(obj: any): void {
@@ -193,7 +192,7 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm
     isDisabled ? this.featuresFg.disable() : this.featuresFg.enable();
   }
   validate(control: AbstractControl): ValidationErrors {
-    return this.featuresFg.valid ? null : { invalidForm: { valid: false, message: 'Features fields are invalid' } };
+    return this.featuresFg.valid ? null : { invalidForm: { valid: false, message: this.translate.instant('Features fields are invalid') } };
   }
   registerOnValidatorChange?(fn: () => void): void {
     this.featuresFg.valueChanges.subscribe(fn);

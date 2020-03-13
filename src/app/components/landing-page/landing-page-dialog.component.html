@@ -1,11 +1,11 @@
 <div class="landing-container" *ngIf="!configChoice">
     <div class="bloc" (click)="config('new')">
         <mat-icon>add</mat-icon>
-        <span>New configuration</span>
+        <span>{{'New configuration' | translate}}</span>
     </div>
     <div class="bloc" (click)="config('load')">
         <mat-icon>get_app</mat-icon>
-        <span>Import from file</span>
+        <span>{{'Import from file' | translate}}</span>
     </div>
 </div>
 <ng-container *ngIf="configChoice">
@@ -15,7 +15,7 @@
             <app-config-element [fullSize]="true">
                 <div form-fields class="server-url">
                     <mat-form-field>
-                        <mat-label>Server URL</mat-label>
+                        <mat-label>{{'Server URL' | translate}}</mat-label>
                         <input matInput
                             (change)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
                             formControlName="serverUrl">
@@ -25,7 +25,7 @@
             <app-config-element *ngIf="isServerReady">
                 <div form-fields class="collection">
                     <mat-form-field>
-                        <mat-label>Collections</mat-label>
+                        <mat-label>{{'Collections' | translate}}</mat-label>
                         <mat-select formControlName="collections" multiple>
                             <mat-option *ngFor="let collection of availablesCollections" value="{{collection}}">
                                 {{ collection}}
@@ -34,7 +34,7 @@
                     </mat-form-field>
                 </div>
                 <div description>
-                    Choose collections available in configuration.<br />
+                    {{'Choose collections available in configuration.' | translate}}<br />
                     Only one for now.
                 </div>
             </app-config-element>
@@ -42,6 +42,6 @@
     </mat-dialog-content>
     <mat-dialog-actions>
         <button (click)="this.startEvent.next('new');" [disabled]="this.mainFormService.startingConfig.getFg().invalid"
-            mat-raised-button color="primary">Start configuration</button>
+            mat-raised-button color="primary">{{'Start configuration' | translate}}</button>
     </mat-dialog-actions>
 </ng-container>
