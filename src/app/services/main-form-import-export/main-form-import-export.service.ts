@@ -16,18 +16,17 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Injectable, ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
+import { ComponentFactoryResolver, Injectable, ViewContainerRef } from '@angular/core';
+import { FormArray, FormGroup } from '@angular/forms';
+import { ProportionedColor } from '@map-config/components/dialog-palette-selector/model';
+import { COLOR_SOURCE, GEOMETRY_TYPE, KeywordColor } from '@map-config/components/edit-layer-features/models';
+import { LayersComponent } from '@map-config/components/layers/layers.component';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { updateValueAndValidity } from '@utils/tools';
-import { LayersComponent } from '@map-config/components/layers/layers.component';
-import { Contributor, Config, LayerSource } from './models-config';
-import { Layer, PaintColor } from './models-map-config';
-import { NGXLogger } from 'ngx-logger';
-import { FormGroup, FormArray } from '@angular/forms';
-import { COLOR_SOURCE, GEOMETRY_TYPE, KeywordColor } from '@map-config/components/edit-layer-features/models';
 import * as FileSaver from 'file-saver';
-import { MapConfig, Paint } from './models-map-config';
-import { ProportionedColor } from '@map-config/components/dialog-palette-selector/model';
+import { NGXLogger } from 'ngx-logger';
+import { Config, Contributor, LayerSource } from './models-config';
+import { Layer, MapConfig, Paint, PaintColor } from './models-map-config';
 
 const MAIN_FORM_VALIDATE_COMPONENTS = [
   LayersComponent

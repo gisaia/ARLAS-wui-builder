@@ -16,18 +16,18 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Injectable, Injector } from '@angular/core';
-import { ArlasConfigService, ArlasCollaborativesearchService, ArlasExploreApi } from 'arlas-wui-toolkit';
-import { Configuration } from 'arlas-api';
-import { flatMap } from 'rxjs/operators';
+import { LOCATION_INITIALIZED } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import * as portableFetch from 'portable-fetch';
-import * as arlasConfSchema from './builderconfig.schema.json';
-import * as draftSchema from 'ajv/lib/refs/json-schema-draft-06.json';
+import { Injectable, Injector } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import ajv from 'ajv';
 import * as ajvKeywords from 'ajv-keywords/keywords/uniqueItemProperties';
-import { TranslateService } from '@ngx-translate/core';
-import { LOCATION_INITIALIZED } from '@angular/common';
+import * as draftSchema from 'ajv/lib/refs/json-schema-draft-06.json';
+import { Configuration } from 'arlas-api';
+import { ArlasCollaborativesearchService, ArlasConfigService, ArlasExploreApi } from 'arlas-wui-toolkit';
+import * as portableFetch from 'portable-fetch';
+import { flatMap } from 'rxjs/operators';
+import * as arlasConfSchema from './builderconfig.schema.json';
 
 @Injectable({
   providedIn: 'root'

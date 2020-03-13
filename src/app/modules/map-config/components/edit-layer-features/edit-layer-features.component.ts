@@ -16,27 +16,27 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Input, forwardRef, OnDestroy, ViewChild } from '@angular/core';
-import {
-  FormBuilder, AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS,
-  ControlValueAccessor, Validator, ValidationErrors, FormArray
-} from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Observable, Subscription } from 'rxjs';
-import { MatStepper, MatDialog, MatSliderChange } from '@angular/material';
-import { NGXLogger } from 'ngx-logger';
-import { MainFormService } from '@services/main-form/main-form.service';
+import { Component, forwardRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AbstractControl, ControlValueAccessor, FormBuilder,
+  NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator
+} from '@angular/forms';
+import { MatDialog, MatSliderChange, MatStepper } from '@angular/material';
+import { TranslateService } from '@ngx-translate/core';
 import { CollectionService, FIELD_TYPES, METRIC_TYPES } from '@services/collection-service/collection.service';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { updateValueAndValidity } from '@utils/tools';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { NGXLogger } from 'ngx-logger';
+import { Observable, Subscription } from 'rxjs';
 import { DialogColorTableComponent, DialogColorTableData } from '../dialog-color-table/dialog-color-table.component';
 import { DialogPaletteSelectorComponent } from '../dialog-palette-selector/dialog-palette-selector.component';
 import { DialogPaletteSelectorData } from '../dialog-palette-selector/model';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { EditLayerFeaturesComponentForm } from './edit-layer-features.component.form';
-import { KeywordColor, COLOR_SOURCE, GEOMETRY_TYPE } from './models';
-import { updateValueAndValidity } from '@utils/tools';
-import { TranslateService } from '@ngx-translate/core';
+import { COLOR_SOURCE, GEOMETRY_TYPE, KeywordColor } from './models';
 
 @Component({
   selector: 'app-edit-layer-features',

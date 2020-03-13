@@ -16,11 +16,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Directive, Input, OnInit, Host, Self, Optional, ElementRef } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, FormArray } from '@angular/forms';
-import { NGXLogger } from 'ngx-logger';
-import { MatSelect, MatSlideToggle, MatSlideToggleChange, MatInput } from '@angular/material';
+import { Directive, ElementRef, Input, OnInit, Optional } from '@angular/core';
+import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { MatSelect, MatSlideToggle, MatSlideToggleChange } from '@angular/material';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { NGXLogger } from 'ngx-logger';
 
 /**
  * Reset the dependants fields when the directive component value changes

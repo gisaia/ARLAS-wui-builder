@@ -19,10 +19,10 @@ under the License.
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CollectionService, FIELD_TYPES } from '@services/collection-service/collection.service';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { Expression } from 'arlas-api';
 import { GlobalComponentForm } from './global.component.form';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 @Component({
   selector: 'app-global',

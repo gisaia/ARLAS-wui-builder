@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { FormBuilder, AbstractControlOptions, AbstractControl, FormGroup, FormArray } from '@angular/forms';
+import { AbstractControl, AbstractControlOptions, FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 @Injectable({

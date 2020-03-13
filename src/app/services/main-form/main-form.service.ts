@@ -16,10 +16,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Injectable, ComponentFactoryResolver, ViewContainerRef, ReflectiveInjector } from '@angular/core';
-import { FormGroup, FormArray } from '@angular/forms';
-import { updateValueAndValidity } from '@utils/tools';
-// import { LayersComponent } from '@map-config/components/layers/layers.component';
+import { Injectable } from '@angular/core';
+import { FormArray, FormGroup } from '@angular/forms';
 
 enum MAIN_FORM_KEYS {
   MAP_CONFIG = 'MapConfig',
@@ -67,7 +65,7 @@ export class MainFormService {
   // OTHER METHODS ...
   public getCollections(): string[] {
     if (!!this.startingConfig.getFg() && !!this.startingConfig.getFg().get('collections')) {
-      return this.startingConfig.getFg().get('collections').value;
+      return   this.startingConfig.getFg().get('collections').value;
     }
     return [];
   }

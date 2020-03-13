@@ -1,8 +1,8 @@
 <h1 mat-dialog-title>{{'Are you sure?' | translate}}</h1>
 <div mat-dialog-content>
-    <p>{{'Do you really want to ' | translate}}{{data.message}}</p>
+    <p>{{'Do you really want to' | translate}} {{data.message}}</p>
 </div>
 <div mat-dialog-actions>
     <button mat-button cdkFocusInitial [mat-dialog-close]="false">{{'No, let\'s forget it' | translate}}</button>
-    <button mat-button [mat-dialog-close]="true">Yes</button>
+    <button mat-button [mat-dialog-close]="true">{{ 'Yes' | translate}}</button>
 </div>

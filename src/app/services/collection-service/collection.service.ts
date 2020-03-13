@@ -20,8 +20,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { map, finalize } from 'rxjs/operators';
-import { CollectionReferenceDescriptionProperty, Filter, CollectionReferenceDescription, CollectionReferenceParameters } from 'arlas-api';
-import { ComputationRequest, Aggregation, AggregationsRequest, AggregationResponse } from 'arlas-api';
+import {
+  CollectionReferenceDescriptionProperty, Filter, CollectionReferenceDescription, CollectionReferenceParameters,
+  ComputationRequest, Aggregation, AggregationsRequest, AggregationResponse
+} from 'arlas-api';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NGXLogger } from 'ngx-logger';
 import { DefaultValuesService } from '@services/default-values/default-values.service';

@@ -1,5 +1,3 @@
-import { AbstractControl, FormGroup, FormArray } from '@angular/forms';
-
 /*
 Licensed to Gisaïa under one or more contributor
 license agreements. See the NOTICE.txt file distributed with
@@ -18,6 +16,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+
 /**
  * Get object or String value of an object from key
  */
