@@ -16,13 +16,13 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import * as d3i from 'd3-interpolate';
-import * as d3c from 'd3-color';
-import { NGXLogger } from 'ngx-logger';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { ProportionedColor, DialogPaletteSelectorData } from './model';
+import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import * as d3c from 'd3-color';
+import * as d3i from 'd3-interpolate';
+import { NGXLogger } from 'ngx-logger';
+import { DialogPaletteSelectorData, ProportionedColor } from './model';
 
 @Component({
   selector: 'app-dialog-palette',

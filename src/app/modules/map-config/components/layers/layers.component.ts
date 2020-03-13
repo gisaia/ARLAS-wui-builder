@@ -18,11 +18,10 @@ under the License.
 */
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { LayersComponentForm } from './layers.component.form';
-import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
-import { TranslateService } from '@ngx-translate/core';
 
 export interface Layer {
   id: string;

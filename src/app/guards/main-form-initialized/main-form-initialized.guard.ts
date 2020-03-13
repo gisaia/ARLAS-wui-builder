@@ -17,9 +17,9 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { Observable } from 'rxjs';
 
 /**
  * Redirect to root URL if the starting global form is not initialized,

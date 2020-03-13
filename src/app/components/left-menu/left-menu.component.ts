@@ -17,11 +17,11 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, ViewContainerRef } from '@angular/core';
-import { MainFormService } from '@services/main-form/main-form.service';
 import { AbstractControl } from '@angular/forms';
-import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
-import { getNbErrorsInControl } from '@utils/tools';
 import { TranslateService } from '@ngx-translate/core';
+import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { getNbErrorsInControl } from '@utils/tools';
 
 interface Page {
   link: string;

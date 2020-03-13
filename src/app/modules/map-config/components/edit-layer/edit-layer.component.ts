@@ -17,14 +17,14 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { NGXLogger } from 'ngx-logger';
 import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { EditLayerComponentForm } from './edit-layer.component.form';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { NGXLogger } from 'ngx-logger';
+import { Subject } from 'rxjs';
+import { EditLayerComponentForm } from './edit-layer.component.form';
 
 @Component({
   selector: 'app-edit-layer',

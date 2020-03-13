@@ -16,14 +16,14 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
-import { NGXLogger } from 'ngx-logger';
-import { FormArray, FormBuilder, AbstractControl, FormGroup, FormControl } from '@angular/forms';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-import { Observable, from, of } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { Component, Inject, OnInit } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatDialogRef, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { NGXLogger } from 'ngx-logger';
+import { from, Observable, of } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 
 interface KeywordColor {
   keyword: string;

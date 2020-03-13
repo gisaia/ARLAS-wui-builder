@@ -16,15 +16,15 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Injectable } from '@angular/core';
-import { flatMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { getObject } from '@utils/tools';
 import * as ajv from 'ajv';
 import * as ajvKeywords from 'ajv-keywords/keywords/uniqueItemProperties';
 import * as draftSchema from 'ajv/lib/refs/json-schema-draft-06.json';
-import * as defaultValuesSchema from './defaultValues.schema.json';
-import { getObject } from '@utils/tools';
 import { NGXLogger } from 'ngx-logger';
+import { flatMap } from 'rxjs/operators';
+import * as defaultValuesSchema from './defaultValues.schema.json';
 
 export interface DefaultConfig {
   aggregationTermSize: number;

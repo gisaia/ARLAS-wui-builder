@@ -16,11 +16,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Directive, HostListener, Input, Optional, ElementRef, OnInit } from '@angular/core';
-import { MatSnackBar, MatSelect } from '@angular/material';
+import { Directive, ElementRef, HostListener, Input, OnInit, Optional } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { NGXLogger } from 'ngx-logger';
+import { MatSelect, MatSnackBar } from '@angular/material';
 import { TranslateService } from '@ngx-translate/core';
+import { NGXLogger } from 'ngx-logger';
 
 /**
  * Shows a toast of the value of mat-select changes (and was previously set).
