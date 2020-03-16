@@ -5,11 +5,13 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --prod --aot --base-href=''",
+    "build:stats": "ng build --stats-json",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "licence-check": "license-check-and-add check -f license-check-and-add.json",
-    "licence-add": "license-check-and-add add -f license-check-and-add.json"
+    "licence-add": "license-check-and-add add -f license-check-and-add.json",
+    "analyze": "webpack-bundle-analyzer dist/ARLAS-wui-builder/stats-es2015.json"
   },
   "private": true,
   "dependencies": {
@@ -40,7 +42,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.803.9",
-    "@angular/cli": "8.3.9",
+    "@angular/cli": "~8.3.9",
     "@angular/compiler-cli": "~8.2.10",
     "@angular/language-service": "~8.2.10",
     "@ngneat/spectator": "~4.11.1",
@@ -61,6 +63,7 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.16.0",
-    "typescript": "3.5.3"
+    "typescript": "3.5.3",
+    "webpack-bundle-analyzer": "^3.6.1"
   }
 }

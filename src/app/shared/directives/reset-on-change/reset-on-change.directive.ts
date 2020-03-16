@@ -18,7 +18,8 @@ under the License.
 */
 import { Directive, ElementRef, Input, OnInit, Optional } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
-import { MatSelect, MatSlideToggle, MatSlideToggleChange } from '@angular/material';
+import { MatSelect } from '@angular/material/select';
+import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { NGXLogger } from 'ngx-logger';
 

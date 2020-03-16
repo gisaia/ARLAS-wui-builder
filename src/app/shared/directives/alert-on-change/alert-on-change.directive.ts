@@ -18,7 +18,8 @@ under the License.
 */
 import { Directive, ElementRef, HostListener, Input, OnInit, Optional } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { MatSelect, MatSnackBar } from '@angular/material';
+import { MatSelect } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { NGXLogger } from 'ngx-logger';
 

@@ -18,7 +18,7 @@ under the License.
 */
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as d3c from 'd3-color';
 import * as d3i from 'd3-interpolate';
 import { NGXLogger } from 'ngx-logger';
