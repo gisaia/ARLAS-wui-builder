@@ -29,6 +29,11 @@ import { ColorPickerWrapperComponent } from './components/color-picker-wrapper/c
 import { ColorPickerModule } from 'ngx-color-picker';
 import { ResetOnChangeDirective } from './directives/reset-on-change/reset-on-change.directive';
 import { TranslateModule } from '@ngx-translate/core';
+import { PropertySelectorComponent } from './components/property-selector/property-selector.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -36,7 +41,8 @@ import { TranslateModule } from '@ngx-translate/core';
     ConfirmModalComponent,
     AlertOnChangeDirective,
     ColorPickerWrapperComponent,
-    ResetOnChangeDirective
+    ResetOnChangeDirective,
+    PropertySelectorComponent
   ],
   imports: [
     CommonModule,
@@ -45,14 +51,19 @@ import { TranslateModule } from '@ngx-translate/core';
     MatButtonModule,
     MatFormFieldModule,
     ColorPickerModule,
-    TranslateModule
+    TranslateModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    ReactiveFormsModule,
+    MatInputModule
   ],
   exports: [
     ConfigElementComponent,
     ConfirmModalComponent,
     AlertOnChangeDirective,
     ColorPickerWrapperComponent,
-    ResetOnChangeDirective
+    ResetOnChangeDirective,
+    PropertySelectorComponent
   ]
 })
 export class SharedModule { }

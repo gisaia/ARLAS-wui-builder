@@ -1,14 +1,14 @@
-<ng-container [formGroup]="featuresFg">
+<ng-container [formGroup]="formFg">
     <mat-horizontal-stepper #stepper class="stepper-for-config-element">
 
-        <mat-step label="Collection" formGroupName="collectionStep" [stepControl]="featuresFg.get('collectionStep')">
+        <mat-step label="Collection" formGroupName="collectionStep" [stepControl]="formFg.get('collectionStep')">
             <app-config-element>
                 <div form-fields>
                     <mat-form-field>
                         <mat-label>{{ 'Collection' | translate}}</mat-label>
                         <mat-select formControlName="collectionCtrl"
-                            appAlertOnChange="changing the collection will reset the rendered geometry" [dependants]="[geometryCtrl, colorProvidedFieldCtrl, colorGeneratedFieldCtrl, colorManualFieldCtrl, 
-                            colorInterpolatedFieldCtrl, colorInterpolatedNormalizeLocalFieldCtrl]">
+                            appAlertOnChange="changing the collection will reset the rendered geometry"
+                            [dependants]="[geometryCtrl, colorFg]">
                             <mat-option *ngFor="let collection of this.mainformService.getCollections()"
                                 value="{{collection}}">{{collection}}</mat-option>
                         </mat-select>
@@ -22,7 +22,7 @@
             </div>
         </mat-step>
 
-        <mat-step label="Geometry" formGroupName="geometryStep" [stepControl]="featuresFg.get('geometryStep')">
+        <mat-step label="Geometry" formGroupName="geometryStep" [stepControl]="formFg.get('geometryStep')">
             <app-config-element>
                 <div form-fields>
                     <mat-form-field>
@@ -57,8 +57,8 @@
             </div>
         </mat-step>
 
-        <mat-step label="Visibility" formGroupName="visibilityStep" [stepControl]="featuresFg.get('visibilityStep')">
-            <mat-error *ngIf="featuresFg.controls.visibilityStep.errors?.lte">
+        <mat-step label="Visibility" formGroupName="visibilityStep" [stepControl]="formFg.get('visibilityStep')">
+            <mat-error *ngIf="formFg.controls.visibilityStep.errors?.lte">
                 {{ 'Zoom max must be greater than or equal to zoom min' | translate}}
             </mat-error>
             <app-config-element>
@@ -94,7 +94,7 @@
                     <span>
                         <mat-label>{{ 'Features max' | translate}}</mat-label>
                         <mat-slider #featuresMaxCtrlSlider formControlName="featuresMaxCtrl"
-                            [value]="featuresFg.get('visibilityStep').get('featuresMaxCtrl').value" thumbLabel min="0"
+                            [value]="formFg.get('visibilityStep').get('featuresMaxCtrl').value" thumbLabel min="0"
                             max="10000" step="100"> </mat-slider>
                     </span>
                 </div>
@@ -108,7 +108,7 @@
             </div>
         </mat-step>
 
-        <mat-step label="Style" formGroupName="styleStep" [stepControl]="featuresFg.get('styleStep')">
+        <mat-step label="Style" formGroupName="styleStep" [stepControl]="formFg.get('styleStep')">
             <app-config-element>
                 <div form-fields>
                     <mat-label>{{ 'Opacity' | translate}}</mat-label>
@@ -122,190 +122,11 @@
 
             <app-config-element>
                 <div form-fields>
-                    <mat-form-field>
-                        <mat-label>{{ 'Color source' | translate}}</mat-label>
-                        <mat-select formControlName="colorSourceCtrl"
-                            appAlertOnChange="changing the color source will reset the choosen color(s)" [dependants]="[colorFixCtrl, colorProvidedFieldCtrl, 
-                            colorGeneratedFieldCtrl, colorManualFg, colorInterpolatedFg]" appResetOnChange="map.layer">
-                            <mat-option [value]="COLOR_SOURCE.fix">{{ 'Fix' | translate}}</mat-option>
-                            <mat-option [value]="COLOR_SOURCE.provided">{{ 'Provided by a field' | translate}}</mat-option>
-                            <mat-option [value]="COLOR_SOURCE.generated">{{ 'Generated from a field' | translate}}</mat-option>
-                            <mat-option [value]="COLOR_SOURCE.manual">{{ 'Choosen from a field' | translate}}</mat-option>
-                            <mat-option [value]="COLOR_SOURCE.interpolated">{{ 'Interpolated from a field' | translate}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-
-                    <div>
-                        <ng-container formGroupName="colorFg">
-
-                            <div *ngIf="colorSourceCtrl.value == COLOR_SOURCE.fix">
-                                <app-color-picker-wrapper [value]="colorFixCtrl.value" (setValue)="setColorFix($event)">
-                                </app-color-picker-wrapper>
-                            </div>
-
-                            <div *ngIf="colorSourceCtrl.value == COLOR_SOURCE.provided">
-                                <mat-form-field>
-                                    <mat-label>{{ 'Source field' | translate}}</mat-label>
-                                    <mat-select formControlName="colorProvidedFieldCtrl">
-                                        <mat-option *ngFor="let field of collectionKeywordFields" [value]="field">
-                                            {{ field }}</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-
-                            <div *ngIf="colorSourceCtrl.value == COLOR_SOURCE.generated">
-                                <mat-form-field>
-                                    <mat-label>{{ 'Source field' | translate}}</mat-label>
-                                    <mat-select formControlName="colorGeneratedFieldCtrl">
-                                        <mat-option *ngFor="let field of collectionKeywordFields" [value]="field">
-                                            {{ field }}</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-
-                            <div *ngIf="colorSourceCtrl.value == COLOR_SOURCE.manual" formGroupName="colorManualFg">
-                                <mat-form-field>
-                                    <mat-label>{{ 'Source field' | translate}}</mat-label>
-                                    <!-- No [dependants] because we manually set the new values on source field change -->
-                                    <mat-select formControlName="colorManualFieldCtrl"
-                                        appAlertOnChange="Changing the source field will reset the colors"
-                                        appResetOnChange="map.layer">
-                                        <mat-option *ngFor="let field of collectionKeywordFields" [value]="field">
-                                            {{ field }}</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-
-                                <div>
-                                    <button type="button" mat-raised-button color="primary" (click)="openColorTable()"
-                                        *ngIf="colorManualFieldCtrl?.value">
-                                        {{ 'Manage colors' | translate}}
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div *ngIf="colorSourceCtrl.value == COLOR_SOURCE.interpolated"
-                                formGroupName="colorInterpolatedFg">
-                                <mat-form-field>
-                                    <mat-label>{{ 'Source field' | translate}}</mat-label>
-                                    <mat-select formControlName="colorInterpolatedFieldCtrl"
-                                        appResetOnChange="map.layer"
-                                        [dependants]="[colorInterpolatedMinValueCtrl, colorInterpolatedMaxValueCtrl, colorInterpolatedNormalizeLocalFieldCtrl]">
-                                        <mat-option *ngFor="let field of collectionIntegerFields" [value]="field">
-                                            {{ field }}</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-
-                                <div *ngIf="colorInterpolatedFieldCtrl.value">
-                                    <div>
-                                        <mat-label>{{ 'Normalize' | translate}}</mat-label>
-                                        <mat-slide-toggle formControlName="colorInterpolatedNormalizeCtrl"
-                                            labelPosition="before" appResetOnChange="map.layer" [dependants]="[colorInterpolatedScopeCtrl, colorInterpolatedNormalizeByKeyCtrl, 
-                                            colorInterpolatedNormalizeLocalFieldCtrl, colorInterpolatedMinValueCtrl, colorInterpolatedMaxValueCtrl,
-                                            colorInterpolatedPaletteCtrl]">
-                                        </mat-slide-toggle>
-                                    </div>
-
-                                    <div *ngIf="colorInterpolatedNormalizeCtrl.value">
-                                        <mat-form-field>
-                                            <mat-label>{{ 'Scope' | translate}}</mat-label>
-                                            <mat-select formControlName="colorInterpolatedScopeCtrl"
-                                                appResetOnChange="map.layer"
-                                                [dependants]="[colorInterpolatedNormalizeByKeyCtrl, colorInterpolatedNormalizeLocalFieldCtrl]">
-                                                <mat-option value="local">{{ 'Local' | translate}}</mat-option>
-                                                <mat-option value="global">{{ 'Global' | translate}}</mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-
-                                        <div *ngIf="colorInterpolatedScopeCtrl.value === 'local'">
-                                            <mat-label>{{ 'Normalize by key' | translate}}</mat-label>
-                                            <mat-slide-toggle formControlName="colorInterpolatedNormalizeByKeyCtrl"
-                                                labelPosition="before" appResetOnChange="map.layer"
-                                                [dependants]="[colorInterpolatedNormalizeLocalFieldCtrl]">
-                                            </mat-slide-toggle>
-                                        </div>
-
-                                        <div *ngIf="colorInterpolatedNormalizeByKeyCtrl.value">
-                                            <mat-form-field>
-                                                <mat-select formControlName="colorInterpolatedNormalizeLocalFieldCtrl">
-                                                    <mat-option *ngFor="let field of collectionKeywordFields"
-                                                        [value]="field">{{ field }}</mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-
-                                    <div *ngIf="!colorInterpolatedNormalizeCtrl.value">
-                                        <div>
-                                            <mat-form-field>
-                                                <mat-label>{{ 'Minimum value' | translate}}</mat-label>
-                                                <input matInput placeholder="Min" type="number"
-                                                    formControlName="colorInterpolatedMinValueCtrl"
-                                                    appAlertOnChange="Changing this value will reset the palette"
-                                                    appResetOnChange [dependants]="[colorInterpolatedPaletteCtrl]">
-                                            </mat-form-field>
-                                        </div>
-                                        <div>
-                                            <mat-form-field>
-                                                <mat-label>{{ 'Maximum value' | translate}}</mat-label>
-                                                <input matInput placeholder="Max" type="number"
-                                                    formControlName="colorInterpolatedMaxValueCtrl"
-                                                    appAlertOnChange="Changing this value will reset the palette"
-                                                    appResetOnChange [dependants]="[colorInterpolatedPaletteCtrl]">
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <button type=" button" mat-raised-button (click)="openPaletteTable()"
-                                            class="palette-button"
-                                            [disabled]="!colorInterpolatedNormalizeCtrl.value 
-                                            && (!colorInterpolatedMinValueCtrl.valid || !colorInterpolatedMaxValueCtrl.valid || colorInterpolatedFg?.errors?.lte)">
-                                            {{ 'Manage palette' | translate}}
-                                        </button>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div *ngIf="colorFg?.invalid && colorFg.touched">
-                                <mat-error *ngIf=" colorFixCtrl.touched && colorFixCtrl?.errors?.required">
-                                    {{ 'A color is required' | translate}}
-                                </mat-error>
-                                <mat-error
-                                    *ngIf="colorProvidedFieldCtrl.touched && colorProvidedFieldCtrl?.errors?.required 
-                                    || colorGeneratedFieldCtrl.touched && colorGeneratedFieldCtrl?.errors?.required 
-                                    || colorManualFieldCtrl.touched && colorManualFieldCtrl?.errors?.required 
-                                    || colorInterpolatedFieldCtrl.touched && colorInterpolatedFieldCtrl?.errors?.required">
-                                    {{ 'A source field is required' | translate}} 
-                                </mat-error>
-                                <mat-error
-                                    *ngIf="colorInterpolatedMinValueCtrl.touched && colorInterpolatedMinValueCtrl?.errors?.required">
-                                    {{ 'A minimum value is required' | translate}}
-                                </mat-error>
-                                <mat-error
-                                    *ngIf="colorInterpolatedMaxValueCtrl.touched && colorInterpolatedMaxValueCtrl?.errors?.required">
-                                    {{ 'A maximum value is required' | translate}}
-                                </mat-error>
-                                <mat-error
-                                    *ngIf="colorInterpolatedScopeCtrl.touched && colorInterpolatedScopeCtrl?.errors?.required">
-                                    {{ 'A scope is required' | translate}}
-                                </mat-error>
-                                <mat-error
-                                    *ngIf="colorInterpolatedNormalizeLocalFieldCtrl.touched && colorInterpolatedNormalizeLocalFieldCtrl?.errors?.required">
-                                    {{ 'A local-normalization field is required' | translate}}
-                                </mat-error>
-                                <mat-error
-                                    *ngIf="colorInterpolatedMinValueCtrl.value && colorInterpolatedMaxValueCtrl.valid && colorInterpolatedFg?.errors?.lte">
-                                    {{ 'The minimum value must be less than the maximum value' | translate}}
-                                </mat-error>
-                                <mat-error
-                                    *ngIf="colorInterpolatedPaletteCtrl.touched && colorInterpolatedPaletteCtrl?.errors?.required">
-                                    {{ 'A palette is required' | translate}}
-                                </mat-error>
-                            </div>
-
-                        </ng-container>
-                    </div>
+                    <app-property-selector formControlName="colorFg" [collection]="collectionCtrl.value"
+                        [collectionKeywordFields]="collectionKeywordFields"
+                        [collectionIntegerFields]="collectionIntegerFields" [submit]="submitSubject.asObservable()"
+                        defaultKey="map.layer.styleStep.colorFg" [sources]="colorSources">
+                    </app-property-selector>
 
                 </div>
                 <div description>

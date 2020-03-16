@@ -16,20 +16,22 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { CustomValidators } from '@utils/custom-validators';
-import { COLOR_SOURCE, KeywordColor } from './models';
+import { ComponentSubForm } from '@shared/ComponentSubForm';
+import { NGXLogger } from 'ngx-logger';
 
-export class EditLayerFeaturesComponentForm {
-
-    public featuresFg: FormGroup;
+export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
 
     constructor(
         protected formBuilderDefault: FormBuilderWithDefaultService,
-        protected formBuilder: FormBuilder
+        protected formBuilder: FormBuilder,
+        protected logger: NGXLogger
     ) {
-        this.featuresFg = this.formBuilderDefault.group('map.layer', {
+        super(logger);
+
+        this.formFg = this.formBuilderDefault.group('map.layer', {
             collectionStep: this.formBuilder.group({
                 collectionCtrl:
                     [
@@ -89,208 +91,29 @@ export class EditLayerFeaturesComponentForm {
                     [
                         null
                     ],
-                colorSourceCtrl:
-                    [
-                        null,
-                        Validators.required
-                    ],
-                colorFg: this.formBuilder.group({
-                    colorFixCtrl:
-                        [
-                            null,
-                            CustomValidators.getConditionalValidator(() => !!this.featuresFg ?
-                                this.colorSourceCtrl.value === COLOR_SOURCE.fix :
-                                false,
-                                Validators.required)
-                        ],
-                    colorProvidedFieldCtrl:
-                        [
-                            null,
-                            CustomValidators.getConditionalValidator(() => !!this.featuresFg ?
-                                this.colorSourceCtrl.value === COLOR_SOURCE.provided :
-                                false,
-                                Validators.required)
-                        ],
-                    colorGeneratedFieldCtrl:
-                        [
-                            null,
-                            CustomValidators.getConditionalValidator(() => !!this.featuresFg ?
-                                this.colorSourceCtrl.value === COLOR_SOURCE.generated
-                                : false,
-                                Validators.required)
-                        ],
-                    colorManualFg: this.formBuilder.group({
-                        colorManualFieldCtrl:
-                            [
-                                null,
-                                CustomValidators.getConditionalValidator(() => !!this.featuresFg ?
-                                    this.colorSourceCtrl.value === COLOR_SOURCE.manual :
-                                    false,
-                                    Validators.required)
-                            ],
-                        colorManualValuesCtrl: this.formBuilder.array(
-                            [],
-                            [
-                                CustomValidators.getConditionalValidator(() => !!this.featuresFg ?
-                                    this.colorSourceCtrl.value === COLOR_SOURCE.manual :
-                                    false,
-                                    Validators.required)
-                            ])
-                    }),
-                    colorInterpolatedFg: this.formBuilder.group({
-                        colorInterpolatedFieldCtrl:
-                            [
-                                null,
-                                CustomValidators.getConditionalValidator(() => !!this.featuresFg ?
-                                    this.colorSourceCtrl.value === COLOR_SOURCE.interpolated :
-                                    false,
-                                    Validators.required)
-                            ],
-                        colorInterpolatedNormalizeCtrl:
-                            [
-                                null
-                            ],
-                        colorInterpolatedScopeCtrl:
-                            [
-                                null,
-                                CustomValidators.getConditionalValidator(() => !!this.featuresFg ?
-                                    this.colorSourceCtrl.value === COLOR_SOURCE.interpolated
-                                    && this.colorInterpolatedNormalizeCtrl.value
-                                    : false,
-                                    Validators.required)
-                            ],
-                        colorInterpolatedNormalizeByKeyCtrl:
-                            [
-                                null
-                            ],
-                        colorInterpolatedNormalizeLocalFieldCtrl:
-                            [
-                                null,
-                                CustomValidators.getConditionalValidator(() => !!this.featuresFg ?
-                                    this.colorSourceCtrl.value === COLOR_SOURCE.interpolated
-                                    && this.colorInterpolatedNormalizeByKeyCtrl.value :
-                                    false,
-                                    Validators.required)
-                            ],
-                        colorInterpolatedMinValueCtrl:
-                            [
-                                null,
-                                CustomValidators.getConditionalValidator(() => !!this.featuresFg ?
-                                    this.colorSourceCtrl.value === COLOR_SOURCE.interpolated && this.colorInterpolatedFieldCtrl.value
-                                    && !this.colorInterpolatedNormalizeCtrl.value :
-                                    false,
-                                    Validators.required)
-                            ],
-                        colorInterpolatedMaxValueCtrl:
-                            [
-                                null,
-                                CustomValidators.getConditionalValidator(() => !!this.featuresFg ?
-                                    this.colorSourceCtrl.value === COLOR_SOURCE.interpolated && this.colorInterpolatedFieldCtrl.value
-                                    && !this.colorInterpolatedNormalizeCtrl.value :
-                                    false,
-                                    Validators.required)
-                            ],
-                        colorInterpolatedPaletteCtrl:
-                            [
-                                null,
-                                [
-                                    CustomValidators.getConditionalValidator(() => !!this.featuresFg ?
-                                        this.colorSourceCtrl.value === COLOR_SOURCE.interpolated
-                                        && this.colorInterpolatedFieldCtrl.value :
-                                        false,
-                                        Validators.required)
-                                ]
-                            ]
-                    }, {
-                        validators: [
-                            CustomValidators.getConditionalValidator(() => !!this.featuresFg ?
-                                this.colorSourceCtrl.value === COLOR_SOURCE.interpolated && this.colorInterpolatedFieldCtrl.value
-                                && this.colorInterpolatedMinValueCtrl.value && this.colorInterpolatedMaxValueCtrl.value :
-                                false,
-                                CustomValidators.getLTEValidator('colorInterpolatedMinValueCtrl', 'colorInterpolatedMaxValueCtrl'))
-                        ]
-                    })
-                })
+                colorFg: [
+                    null,
+                    Validators.required
+                ]
             })
         });
     }
 
     get zoomMinCtrl() {
-        return this.featuresFg.get('visibilityStep').get('zoomMinCtrl');
+        return this.formFg.get('visibilityStep').get('zoomMinCtrl');
     }
     get zoomMaxCtrl() {
-        return this.featuresFg.get('visibilityStep').get('zoomMaxCtrl');
+        return this.formFg.get('visibilityStep').get('zoomMaxCtrl');
     }
     get collectionCtrl() {
-        return this.featuresFg.get('collectionStep').get('collectionCtrl');
+        return this.formFg.get('collectionStep').get('collectionCtrl');
     }
     get geometryCtrl() {
-        return this.featuresFg.get('geometryStep').get('geometryCtrl');
-    }
-    get colorSourceCtrl() {
-        return this.featuresFg.get('styleStep').get('colorSourceCtrl');
+        return this.formFg.get('geometryStep').get('geometryCtrl');
     }
     get colorFg() {
-        return this.featuresFg.get('styleStep').get('colorFg') as FormGroup;
-    }
-    get colorFixCtrl() {
-        return this.colorFg.get('colorFixCtrl');
-    }
-    get colorProvidedFieldCtrl() {
-        return this.colorFg.get('colorProvidedFieldCtrl');
-    }
-    get colorGeneratedFieldCtrl() {
-        return this.colorFg.get('colorGeneratedFieldCtrl');
-    }
-    get colorManualFg() {
-        return this.colorFg.get('colorManualFg') as FormGroup;
-    }
-    get colorManualFieldCtrl() {
-        return this.colorManualFg.get('colorManualFieldCtrl');
-    }
-    get colorManualValuesCtrl() {
-        return this.colorManualFg.get('colorManualValuesCtrl') as FormArray;
-    }
-    get colorInterpolatedFg() {
-        return this.colorFg.get('colorInterpolatedFg') as FormGroup;
-    }
-    get colorInterpolatedFieldCtrl() {
-        return this.colorInterpolatedFg.get('colorInterpolatedFieldCtrl');
-    }
-    get colorInterpolatedNormalizeCtrl() {
-        return this.colorInterpolatedFg.get('colorInterpolatedNormalizeCtrl');
-    }
-    get colorInterpolatedNormalizeByKeyCtrl() {
-        return this.colorInterpolatedFg.get('colorInterpolatedNormalizeByKeyCtrl');
-    }
-    get colorInterpolatedNormalizeLocalFieldCtrl() {
-        return this.colorInterpolatedFg.get('colorInterpolatedNormalizeLocalFieldCtrl');
-    }
-    get colorInterpolatedScopeCtrl() {
-        return this.colorInterpolatedFg.get('colorInterpolatedScopeCtrl');
-    }
-    get colorInterpolatedMinValueCtrl() {
-        return this.colorInterpolatedFg.get('colorInterpolatedMinValueCtrl');
-    }
-    get colorInterpolatedMaxValueCtrl() {
-        return this.colorInterpolatedFg.get('colorInterpolatedMaxValueCtrl');
-    }
-    get colorInterpolatedPaletteCtrl() {
-        return this.colorInterpolatedFg.get('colorInterpolatedPaletteCtrl');
+        return this.formFg.get('styleStep').get('colorFg') as FormGroup;
     }
 
-    public setColorFix(color: string) {
-        this.colorFixCtrl.setValue(color);
-        this.colorFixCtrl.markAsDirty();
-        this.colorFixCtrl.markAsTouched();
-    }
-
-    protected addToColorManualValuesCtrl(kc: KeywordColor) {
-        const keywordColorGrp = this.formBuilder.group({
-            keyword: [kc.keyword],
-            color: [kc.color]
-        });
-        this.colorManualValuesCtrl.push(keywordColorGrp);
-    }
 
 }

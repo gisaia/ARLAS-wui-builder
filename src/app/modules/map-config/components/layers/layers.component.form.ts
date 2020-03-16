@@ -19,7 +19,7 @@ under the License.
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormArray, Validators } from '@angular/forms';
 
-export class LayersComponentForm {
+export abstract class LayersComponentForm {
 
     public layersFa: FormArray;
 

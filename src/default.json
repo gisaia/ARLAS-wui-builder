@@ -15,10 +15,10 @@
             },
             "styleStep": {
                 "opacityCtrl": 0.5,
-                "colorSourceCtrl": "fix",
                 "colorFg": {
-                    "colorFixCtrl": "#abcdef",
-                    "colorInterpolatedFg": {
+                    "propertySourceCtrl": "fix",
+                    "propertyFixCtrl": "#abcdef",
+                    "propertyInterpolatedFg": {
                     }
                 }
             }
