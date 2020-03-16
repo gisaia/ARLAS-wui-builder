@@ -28,3 +28,13 @@ export interface KeywordColor {
     keyword: string;
     color: string;
 }
+
+export enum PROPERTY_TYPE {
+    color,
+    number
+}
+
+export interface ProportionedValues {
+    proportion: number;
+    value: string | number;
+}

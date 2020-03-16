@@ -18,8 +18,7 @@ under the License.
 */
 import { ComponentFactoryResolver, Injectable, ViewContainerRef } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { ProportionedColor } from '@map-config/components/dialog-palette-selector/model';
-import { COLOR_SOURCE, GEOMETRY_TYPE, KeywordColor } from '@map-config/components/edit-layer-features/models';
+import { GEOMETRY_TYPE, KeywordColor } from '@map-config/components/edit-layer-features/models';
 import { LayersComponent } from '@map-config/components/layers/layers.component';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { updateValueAndValidity } from '@utils/tools';
@@ -27,6 +26,7 @@ import * as FileSaver from 'file-saver';
 import { NGXLogger } from 'ngx-logger';
 import { Config, Contributor, LayerSource } from './models-config';
 import { Layer, MapConfig, Paint, PaintColor } from './models-map-config';
+import { ProportionedValues, PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
 
 const MAIN_FORM_VALIDATE_COMPONENTS = [
   LayersComponent
@@ -98,46 +98,26 @@ export class MainFormImportExportService {
 
     const layersSources: Array<LayerSource> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
       const modeValues = layerFg.value.modeFg;
-      const colorValues = modeValues.styleStep.colorFg;
       const layerSource: LayerSource = {
         id: layerFg.value.name,
         source: 'feature',
         minzoom: modeValues.visibilityStep.zoomMinCtrl,
         maxzoom: modeValues.visibilityStep.zoomMaxCtrl,
-        maxfeatures: modeValues.visibilityStep.featuresMaxCtrl
+        maxfeatures: modeValues.visibilityStep.featuresMaxCtrl,
+        include_fields: [],
+        normalization_fields: []
       };
-      switch (modeValues.styleStep.colorFg.colorSourceCtrl) {
-        case COLOR_SOURCE.fix: {
-          break;
-        }
-        case COLOR_SOURCE.provided: {
-          layerSource.include_fields = [colorValues.colorProvidedFieldCtrl];
-          break;
-        }
-        case COLOR_SOURCE.generated: {
-          layerSource.color_from_field = colorValues.colorGeneratedFieldCtrl;
-          break;
-        }
-        case COLOR_SOURCE.manual: {
-          layerSource.include_fields = [colorValues.colorManualFg.colorManualFieldCtrl];
-          break;
-        }
-        case COLOR_SOURCE.interpolated: {
-          const interpolatedValues = colorValues.colorInterpolatedFg;
-          if (interpolatedValues.colorInterpolatedNormalizeCtrl) {
-            layerSource.normalization_fields = [
-              {
-                on: interpolatedValues.colorInterpolatedFieldCtrl,
-                per: interpolatedValues.colorInterpolatedNormalizeLocalFieldCtrl,
-                scope: interpolatedValues.colorInterpolatedScopeCtrl
-              }
-            ];
-          } else {
-            layerSource.include_fields = [interpolatedValues.colorInterpolatedFieldCtrl];
-          }
-          break;
-        }
+
+      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.colorFg);
+
+      if (!!modeValues.styleStep.widthFg) {
+        this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.widthFg);
       }
+
+      if (!!modeValues.styleStep.radiusFg) {
+        this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.radiusFg);
+      }
+
       return layerSource;
     });
 
@@ -147,6 +127,40 @@ export class MainFormImportExportService {
     this.saveJson(config, 'config.json');
   }
 
+  private addLayerSourceInterpolationData(layerSource: LayerSource, layerValues: any) {
+    switch (layerValues.propertySourceCtrl) {
+      case PROPERTY_SELECTOR_SOURCE.fix: {
+        break;
+      }
+      case PROPERTY_SELECTOR_SOURCE.provided: {
+        layerSource.include_fields.push(layerValues.propertyProvidedFieldCtrl);
+        break;
+      }
+      case PROPERTY_SELECTOR_SOURCE.generated: {
+        layerSource.color_from_field = layerValues.propertyGeneratedFieldCtrl;
+        break;
+      }
+      case PROPERTY_SELECTOR_SOURCE.manual: {
+        layerSource.include_fields.push(layerValues.propertyManualFg.propertyManualFieldCtrl);
+        break;
+      }
+      case PROPERTY_SELECTOR_SOURCE.interpolated: {
+        const interpolatedValues = layerValues.propertyInterpolatedFg;
+        if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
+          layerSource.normalization_fields.push(
+            {
+              on: interpolatedValues.propertyInterpolatedFieldCtrl,
+              per: interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl,
+              scope: interpolatedValues.propertyInterpolatedScopeCtrl
+            });
+        } else {
+          layerSource.include_fields.push(interpolatedValues.propertyInterpolatedFieldCtrl);
+        }
+        break;
+      }
+    }
+  }
+
   doExportConfigMap(mapConfigLayers: FormArray) {
     const layers: Array<Layer> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
       const modeValues = layerFg.value.modeFg;
@@ -154,47 +168,7 @@ export class MainFormImportExportService {
 
       const paint: Paint = {};
       const colorOpacity = modeValues.styleStep.opacityCtrl;
-
-      const color: Array<string | Array<string> | number> | PaintColor | string = (() => {
-        switch (modeValues.styleStep.colorFg.colorSourceCtrl) {
-          case COLOR_SOURCE.fix:
-            return colorValues.colorFixCtrl;
-          case COLOR_SOURCE.provided:
-            return this.getArray(colorValues.colorProvidedFieldCtrl);
-          case COLOR_SOURCE.generated:
-            return this.getArray(colorValues.colorGeneratedFieldCtrl + '_color');
-          case COLOR_SOURCE.manual:
-            return [
-              'match',
-              this.getArray(colorValues.colorManualFg.colorManualFieldCtrl + '_color')
-            ].concat(
-              (colorValues.colorManualFg.colorManualValuesCtrl as Array<KeywordColor>)
-                .flatMap(kc => kc.keyword !== 'OTHER' ? [kc.keyword, kc.color] : [kc.color])
-            );
-          case COLOR_SOURCE.interpolated: {
-            const interpolatedValues = colorValues.colorInterpolatedFg;
-            let interpolatedColor: Array<string | Array<string | number>>;
-            if (interpolatedValues.colorInterpolatedNormalizeCtrl) {
-              interpolatedColor = [
-                'interpolate',
-                ['linear'],
-                this.getArray(interpolatedValues.colorInterpolatedFieldCtrl
-                  .concat(':').concat(interpolatedValues.colorInterpolatedScopeCtrl)
-                  .concat(interpolatedValues.colorInterpolatedNormalizeByKeyCtrl ?
-                    ':' + interpolatedValues.colorInterpolatedNormalizeLocalFieldCtrl : ''))
-              ];
-            } else {
-              interpolatedColor = [
-                'interpolate',
-                ['linear'],
-                this.getArray(interpolatedValues.colorInterpolatedFieldCtrl)
-              ];
-            }
-            return interpolatedColor.concat((interpolatedValues.colorInterpolatedPaletteCtrl as Array<ProportionedColor>)
-              .flatMap(pc => [pc.proportion, pc.color]));
-          }
-        }
-      })();
+      const color = this.getMapProperty(modeValues.styleStep.colorFg);
 
       switch (modeValues.geometryStep.geometryTypeCtrl) {
         case GEOMETRY_TYPE.fill: {
@@ -205,11 +179,13 @@ export class MainFormImportExportService {
         case GEOMETRY_TYPE.line: {
           paint.lineOpacity = colorOpacity;
           paint.lineColor = color;
+          paint.lineWidth = this.getMapProperty(modeValues.styleStep.widthFg);
           break;
         }
         case GEOMETRY_TYPE.circle: {
           paint.circleOpacity = colorOpacity;
           paint.circleColor = color;
+          paint.lineRadius = this.getMapProperty(modeValues.styleStep.radiusFg);
           break;
         }
       }
@@ -247,9 +223,53 @@ export class MainFormImportExportService {
     this.saveJson(mapConfig, 'config.map.json', true);
   }
 
+  private getMapProperty(fgValues: any) {
+    switch (fgValues.propertySourceCtrl) {
+      case PROPERTY_SELECTOR_SOURCE.fix:
+        return fgValues.propertyFixCtrl;
+      case PROPERTY_SELECTOR_SOURCE.provided:
+        return this.getArray(fgValues.propertyProvidedFieldCtrl);
+      case PROPERTY_SELECTOR_SOURCE.generated:
+        return this.getArray(fgValues.propertyGeneratedFieldCtrl + '_color');
+      case PROPERTY_SELECTOR_SOURCE.manual:
+        return [
+          'match',
+          this.getArray(fgValues.propertyManualFg.propertyManualFieldCtrl + '_color')
+        ].concat(
+          (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>)
+            .flatMap(kc => kc.keyword !== 'OTHER' ? [kc.keyword, kc.color] : [kc.color])
+        );
+      case PROPERTY_SELECTOR_SOURCE.interpolated: {
+        const interpolatedValues = fgValues.propertyInterpolatedFg;
+        let interpolatedColor: Array<string | Array<string | number>>;
+        if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
+          interpolatedColor = [
+            'interpolate',
+            ['linear'],
+            this.getArray(interpolatedValues.propertyInterpolatedFieldCtrl
+              .concat(':').concat(interpolatedValues.propertyInterpolatedScopeCtrl)
+              .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
+                ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl : ''))
+          ];
+        } else {
+          interpolatedColor = [
+            'interpolate',
+            ['linear'],
+            this.getArray(interpolatedValues.propertyInterpolatedFieldCtrl)
+          ];
+        }
+        return interpolatedColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
+          .flatMap(pc => [pc.proportion, pc.value]));
+      }
+    }
+  }
+
   private saveJson(json: any, filename: string, keysToSnakeCase = false) {
     const blob = new Blob([JSON.stringify(json, (key, value) => {
-      if (keysToSnakeCase && value && typeof value === 'object' && !Array.isArray(value)) {
+      if (Array.isArray(value) && value.length === 0) {
+        // do not export empty array, they are useless
+        return undefined;
+      } else if (keysToSnakeCase && value && typeof value === 'object' && !Array.isArray(value)) {
         // convert keys to snake-keys. In fact we cannot declare a property with a snake-cased name,
         // (so in models interfaces properties are are camel case)
         const replacement = {};

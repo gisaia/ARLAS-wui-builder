@@ -20,6 +20,7 @@ import { ControlValueAccessor, FormGroup, Validator, AbstractControl, Validation
 import { OnDestroy, Input, OnInit } from '@angular/core';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { NGXLogger } from 'ngx-logger';
+import { getAllFormGroupErrors } from '@utils/tools';
 
 /**
  * TO inherit from a component that manages a sub-form.
@@ -46,7 +47,6 @@ export abstract class ComponentSubForm implements ControlValueAccessor, Validato
     }
 
     protected onSubmit() {
-        this.logger.log('submitting', this.formFg);
         this.formFg.markAllAsTouched();
         this.submitSubject.next();
     }
@@ -73,7 +73,14 @@ export abstract class ComponentSubForm implements ControlValueAccessor, Validato
     }
 
     validate(control: AbstractControl): ValidationErrors {
-        return this.formFg.valid ? null : { invalidForm: { valid: false, message: 'InnerForm fields are invalid' } };
+        return this.formFg.valid ? null : {
+            invalidForm:
+            {
+                valid: false,
+                message: 'InnerForm fields are invalid',
+                errors: getAllFormGroupErrors(this.formFg)
+            }
+        };
     }
 
     registerOnValidatorChange?(fn: () => void): void {

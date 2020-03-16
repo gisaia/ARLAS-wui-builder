@@ -33,6 +33,10 @@ under the License.
     .form-fields {
       min-width: 250px;
       padding: 10px;
+
+      ::ng-deep mat-label + mat-slider {
+        margin-left: 20px;
+      }
     }
 
     .description {
@@ -50,8 +54,8 @@ under the License.
       padding: 10px;
     }
 
-    .full-size{
-      flex:1;
+    .full-size {
+      flex: 1;
     }
   }
 }

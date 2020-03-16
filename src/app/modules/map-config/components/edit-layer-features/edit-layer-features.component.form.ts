@@ -21,6 +21,7 @@ import { FormBuilderWithDefaultService } from '@services/form-builder-with-defau
 import { CustomValidators } from '@utils/custom-validators';
 import { ComponentSubForm } from '@shared/ComponentSubForm';
 import { NGXLogger } from 'ngx-logger';
+import { GEOMETRY_TYPE } from './models';
 
 export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
 
@@ -94,6 +95,19 @@ export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
                 colorFg: [
                     null,
                     Validators.required
+                ],
+                widthFg: [
+                    null,
+                    CustomValidators.getConditionalValidator(
+                        () => !!this.formFg ? this.geometryTypeCtrl.value === GEOMETRY_TYPE.line : false,
+                        Validators.required
+                    )
+                ],
+                radiusFg: [
+                    null,
+                    CustomValidators.getConditionalValidator(
+                        () => !!this.formFg ? this.geometryTypeCtrl.value === GEOMETRY_TYPE.circle : false,
+                        Validators.required)
                 ]
             })
         });
@@ -111,8 +125,17 @@ export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
     get geometryCtrl() {
         return this.formFg.get('geometryStep').get('geometryCtrl');
     }
+    get geometryTypeCtrl() {
+        return this.formFg.get('geometryStep').get('geometryTypeCtrl');
+    }
     get colorFg() {
         return this.formFg.get('styleStep').get('colorFg') as FormGroup;
+    }
+    get widthFg() {
+        return this.formFg.get('styleStep').get('widthFg') as FormGroup;
+    }
+    get radiusFg() {
+        return this.formFg.get('styleStep').get('radiusFg') as FormGroup;
     }
 
 

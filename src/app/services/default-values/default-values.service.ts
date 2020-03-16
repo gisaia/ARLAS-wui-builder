@@ -31,6 +31,12 @@ export interface DefaultConfig {
   palettes: Array<Array<string>>;
   colorPickerPresets: Array<string>;
   otherColor: string;
+  widthMin: number;
+  widthMax: number;
+  widthStep: number;
+  radiusMin: number;
+  radiusMax: number;
+  radiusStep: number;
 }
 @Injectable({
   providedIn: 'root'

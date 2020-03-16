@@ -19,7 +19,7 @@ under the License.
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, forwardRef, OnInit, ViewChild } from '@angular/core';
 import {
-  FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR
+  FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, FormControl
 } from '@angular/forms';
 import { MatSliderChange } from '@angular/material/slider';
 import { MatStepper } from '@angular/material/stepper';
@@ -29,7 +29,8 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { NGXLogger } from 'ngx-logger';
 import { EditLayerFeaturesComponentForm } from './edit-layer-features.component.form';
 import { GEOMETRY_TYPE } from './models';
-import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
+import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-components/property-selector/models';
+import { ensureMinLessThanMax } from '@utils/tools';
 
 @Component({
   selector: 'app-edit-layer-features',
@@ -57,8 +58,13 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm i
 
   @ViewChild('stepper', { static: false }) stepper: MatStepper;
 
+  public ensureMinLessThanMax = ensureMinLessThanMax;
+
   public GEOMETRY_TYPE = GEOMETRY_TYPE;
-  public colorSources = Object.values(PROPERTY_SELECTOR_SOURCE);
+  public PROPERTY_TYPE = PROPERTY_TYPE;
+  public colorFgSources = Object.values(PROPERTY_SELECTOR_SOURCE);
+  public widthFgSources = [PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated];
+  public radiusFgSources = [PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated];
   public collectionGeoFields: string[] = [];
   public collectionKeywordFields: string[] = [];
   public collectionIntegerFields: string[] = [];
@@ -76,6 +82,7 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm i
   ngOnInit() {
     super.ngOnInit();
     this.initCollectionRelatedFields();
+    this.initEnableWidthOrRadiusFg();
   }
 
   protected onSubmit() {
@@ -102,6 +109,34 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm i
     });
   }
 
+  /**
+   * widthFg and radiusFg are conditionally displayed, once they have been displayed, their subform has been
+   * registred into the main form and their validation works even if they aren't displayed anymore.
+   * The solution is to enable only the expected form group.
+   */
+  private initEnableWidthOrRadiusFg() {
+    this.geometryTypeCtrl.valueChanges.subscribe(v => {
+      const geoEnableDisable = [{
+        geometry: GEOMETRY_TYPE.line,
+        enabled: [this.widthFg],
+        disabled: [this.radiusFg]
+      },
+      {
+        geometry: GEOMETRY_TYPE.circle,
+        enabled: [this.radiusFg],
+        disabled: [this.widthFg]
+      },
+      {
+        geometry: GEOMETRY_TYPE.fill,
+        enabled: [this.radiusFg, this.widthFg],
+        disabled: []
+      }].find(elmt => elmt.geometry === v);
+
+      geoEnableDisable.enabled.forEach(c => c.enable());
+      geoEnableDisable.disabled.forEach(c => c.disable());
+    });
+  }
+
   writeValue(obj: any): void {
     super.writeValue(obj);
     if (obj) {
@@ -120,5 +155,6 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm i
       }
     }
   }
+
 
 }

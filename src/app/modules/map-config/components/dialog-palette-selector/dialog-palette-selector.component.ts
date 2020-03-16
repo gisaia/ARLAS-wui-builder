@@ -22,7 +22,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as d3c from 'd3-color';
 import * as d3i from 'd3-interpolate';
 import { NGXLogger } from 'ngx-logger';
-import { DialogPaletteSelectorData, ProportionedColor } from './model';
+import { DialogPaletteSelectorData } from './model';
+import { ProportionedValues } from '@shared-components/property-selector/models';
 
 @Component({
   selector: 'app-dialog-palette',
@@ -32,8 +33,8 @@ import { DialogPaletteSelectorData, ProportionedColor } from './model';
 })
 export class DialogPaletteSelectorComponent implements OnInit {
 
-  public defaultPalettes: ProportionedColor[][];
-  public selectedPalette: ProportionedColor[];
+  public defaultPalettes: ProportionedValues[][];
+  public selectedPalette: ProportionedValues[];
 
   constructor(
     public dialogRef: MatDialogRef<DialogPaletteSelectorComponent>,
@@ -52,16 +53,16 @@ export class DialogPaletteSelectorComponent implements OnInit {
       const minMaxDiff = this.data.max - this.data.min;
 
       return p.map((c: string, i: number) => {
-        return { proportion: this.computeProportion(p.length, i), color: c };
+        return { proportion: this.computeProportion(p.length, i), value: c };
       });
     });
   }
 
   public resetProportions() {
-    this.selectedPalette = this.selectedPalette.map((c: ProportionedColor, i: number) => {
+    this.selectedPalette = this.selectedPalette.map((c: ProportionedValues, i: number) => {
       return {
         proportion: this.computeProportion(this.selectedPalette.length, i),
-        color: c.color
+        value: c.value
       };
     });
   }
@@ -72,15 +73,15 @@ export class DialogPaletteSelectorComponent implements OnInit {
 
   public getSelectedPaletteGradients() {
     return this.selectedPalette.map(
-      c => c.color + ' ' + (100 * (c.proportion - this.data.min) / (this.data.max - this.data.min)) + '%').join(',');
+      c => c.value + ' ' + (100 * (c.proportion - this.data.min) / (this.data.max - this.data.min)) + '%').join(',');
   }
 
   drop(event: CdkDragDrop<string[]>) {
     // only reverse the color, proportions should stay consistent
-    const previousColor = this.selectedPalette[event.previousIndex].color;
-    const currentColor = this.selectedPalette[event.currentIndex].color;
-    this.selectedPalette[event.currentIndex].color = previousColor;
-    this.selectedPalette[event.previousIndex].color = currentColor;
+    const previousColor = this.selectedPalette[event.previousIndex].value;
+    const currentColor = this.selectedPalette[event.currentIndex].value;
+    this.selectedPalette[event.currentIndex].value = previousColor;
+    this.selectedPalette[event.previousIndex].value = currentColor;
   }
 
   private interpolateColor(color1: string, color2: string, step: number) {
@@ -92,9 +93,9 @@ export class DialogPaletteSelectorComponent implements OnInit {
   }
 
   public reverse() {
-    this.selectedPalette = this.selectedPalette.map((c: ProportionedColor) => {
+    this.selectedPalette = this.selectedPalette.map((c: ProportionedValues) => {
       return {
-        color: c.color,
+        value: c.value,
         proportion: 1 - c.proportion
       };
     }).reverse();
@@ -102,9 +103,12 @@ export class DialogPaletteSelectorComponent implements OnInit {
 
   public add(index: number) {
     const newColor = (index === this.selectedPalette.length - 1) ?
-      this.selectedPalette[index].color :
-      this.interpolateColor(this.selectedPalette[index].color, this.selectedPalette[index + 1].color, 0.5);
-    this.selectedPalette.splice(index + 1, 0, { proportion: this.selectedPalette[index].proportion, color: newColor });
+      this.selectedPalette[index].value :
+      this.interpolateColor(
+        this.selectedPalette[index].value as string,
+        this.selectedPalette[index + 1].value as string,
+        0.5);
+    this.selectedPalette.splice(index + 1, 0, { proportion: this.selectedPalette[index].proportion, value: newColor });
   }
 
   public remove(index: number) {
@@ -114,7 +118,7 @@ export class DialogPaletteSelectorComponent implements OnInit {
   public isValid() {
     return this.selectedPalette[0].proportion === this.data.min
       && this.selectedPalette.slice(-1)[0].proportion === this.data.max
-      && this.selectedPalette.slice(0, -1).map((c: ProportionedColor, i: number) =>
+      && this.selectedPalette.slice(0, -1).map((c: ProportionedValues, i: number) =>
         c.proportion < this.selectedPalette[i + 1].proportion).reduce((a, b) => a && b);
   }
 

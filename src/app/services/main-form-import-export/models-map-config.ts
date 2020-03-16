@@ -37,14 +37,16 @@ export interface Layout {
     'line-join'?: string;
 }
 
+type PaintValue = Array<string | Array<string> | number> | PaintColor | string;
 export interface Paint {
-    fillColor?: Array<string | Array<string> | number> | PaintColor | string;
+    fillColor?: PaintValue;
     fillOpacity?: number;
-    circleColor?: Array<string | Array<string> | number> | PaintColor | string;
+    circleColor?: PaintValue;
     circleOpacity?: number;
-    lineColor?: Array<string | Array<string> | number> | PaintColor | string;
+    lineColor?: PaintValue;
     lineOpacity?: number;
-    lineWidth?: number;
+    lineWidth?: PaintValue;
+    lineRadius?: PaintValue;
 }
 
 export interface PaintColor {

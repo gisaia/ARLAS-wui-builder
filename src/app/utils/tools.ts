@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/forms';
 
 /**
  * Get object or String value of an object from key
@@ -62,4 +62,34 @@ export function getNbErrorsInControl(control: AbstractControl): number {
         });
     }
     return nbErrors;
+}
+
+export function getAllFormGroupErrors(control: FormGroup | FormArray) {
+    const errors = {};
+    Object.keys(control.controls)
+        .filter(k => !control.get(k).valid)
+        .forEach(k => {
+            const subControl = control.get(k);
+            if (subControl instanceof FormGroup || subControl instanceof FormArray) {
+                errors[k] = getAllFormGroupErrors(subControl);
+            } else {
+                errors[k] = subControl.errors;
+            }
+        });
+    return errors;
+}
+
+export function ensureMinLessThanMax(
+    newValue: number,
+    minControl: AbstractControl,
+    maxControl: AbstractControl,
+    isMinOrMax: 'min' | 'max') {
+
+    if (isMinOrMax === 'min') {
+        if (newValue > maxControl.value) {
+            maxControl.setValue(newValue);
+        }
+    } else if (newValue < minControl.value) {
+        minControl.setValue(newValue);
+    }
 }

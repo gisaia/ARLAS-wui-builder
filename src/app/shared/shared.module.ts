@@ -34,6 +34,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { MatInputModule } from '@angular/material/input';
     MatSelectModule,
     MatSlideToggleModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    MatSliderModule
   ],
   exports: [
     ConfigElementComponent,
