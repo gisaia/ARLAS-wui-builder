@@ -88,7 +88,10 @@ export abstract class ComponentSubForm implements ControlValueAccessor, Validato
     }
 
     ngOnDestroy(): void {
-        this.submitSubscription.unsubscribe();
+        // sometimes null, but no idea why...
+        [this.submitSubscription, this.submitSubject]
+            .filter(s => !!s)
+            .forEach(s => s.unsubscribe());
     }
 
 }

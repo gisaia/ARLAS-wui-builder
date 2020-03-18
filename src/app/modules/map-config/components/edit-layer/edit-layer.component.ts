@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterContentChecked, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
@@ -25,18 +25,20 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs';
 import { EditLayerComponentForm } from './edit-layer.component.form';
+import { LAYER_MODE } from './models';
 
 @Component({
   selector: 'app-edit-layer',
   templateUrl: './edit-layer.component.html',
   styleUrls: ['./edit-layer.component.scss']
 })
-export class EditLayerComponent extends EditLayerComponentForm implements OnInit, CanComponentExit, AfterContentChecked {
+export class EditLayerComponent extends EditLayerComponentForm implements OnInit, CanComponentExit, AfterContentChecked, OnDestroy {
 
   private layersFa: FormArray;
   private layersValues: any[] = [];
   public forceCanExit: boolean;
   public submitSubject: Subject<void> = new Subject<void>();
+  public LAYER_MODE = LAYER_MODE;
 
   constructor(
     protected formBuilderDefault: FormBuilderWithDefaultService,
@@ -121,9 +123,13 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
     return this.forceCanExit || this.layerFg.pristine;
   }
 
-  ngAfterContentChecked() {
+  public ngAfterContentChecked() {
     // fix ExpressionChangedAfterItHasBeenCheckedError
     this.cdref.detectChanges();
+  }
+
+  public ngOnDestroy() {
+    this.submitSubject.unsubscribe();
   }
 
 }

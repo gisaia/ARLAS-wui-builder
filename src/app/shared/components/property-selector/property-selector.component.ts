@@ -55,7 +55,6 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
   public PROPERTY_SELECTOR_SOURCE = PROPERTY_SELECTOR_SOURCE;
   public PROPERTY_TYPE = PROPERTY_TYPE;
   public ensureMinLessThanMax = ensureMinLessThanMax;
-  public selectionSources: Array<{ key: PROPERTY_SELECTOR_SOURCE, value: string }>;
 
   @Input() public propertyName: string;
   @Input() public propertyType: PROPERTY_TYPE;
@@ -73,22 +72,13 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
     private collectionService: CollectionService,
     private colorService: ArlasColorGeneratorLoader,
     private cdref: ChangeDetectorRef,
-    protected logger: NGXLogger,
-    private translate: TranslateService
+    protected logger: NGXLogger
   ) {
     super(formBuilder, logger);
   }
 
   ngOnInit() {
     super.ngOnInit();
-
-    this.selectionSources = [
-      { key: PROPERTY_SELECTOR_SOURCE.fix, value: this.translate.instant('Fix') },
-      { key: PROPERTY_SELECTOR_SOURCE.provided, value: this.translate.instant('Provided by a field') },
-      { key: PROPERTY_SELECTOR_SOURCE.generated, value: this.translate.instant('Generated from a field') },
-      { key: PROPERTY_SELECTOR_SOURCE.manual, value: this.translate.instant('Manual') },
-      { key: PROPERTY_SELECTOR_SOURCE.interpolated, value: this.translate.instant('Interpolated from a field') },
-    ].filter(o => this.sources.indexOf(o.key) >= 0);
 
     // register into the parent form
     this.initForceUpdateValidityOnChange();

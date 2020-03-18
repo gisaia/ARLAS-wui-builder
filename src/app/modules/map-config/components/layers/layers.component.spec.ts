@@ -7,7 +7,6 @@ describe('LayersComponent', () => {
   let spectator: Spectator<LayersComponent>;
   const createComponent = createComponentFactory({
     component: LayersComponent
-
   });
 
   beforeEach(() => spectator = createComponent());

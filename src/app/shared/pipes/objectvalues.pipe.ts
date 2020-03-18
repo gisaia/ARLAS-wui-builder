@@ -16,25 +16,15 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-export enum PROPERTY_SELECTOR_SOURCE {
-    fix = 'Fix',
-    provided = 'Provided',
-    generated = 'Generated',
-    manual = 'Manual',
-    interpolated = 'Interpolated'
-}
+import { Pipe, PipeTransform } from '@angular/core';
 
-export interface KeywordColor {
-    keyword: string;
-    color: string;
-}
+@Pipe({
+  name: 'objectvalues'
+})
+export class ObjectvaluesPipe implements PipeTransform {
 
-export enum PROPERTY_TYPE {
-    color,
-    number
-}
+  transform(input: any): any {
+    return Object.values(input);
+  }
 
-export interface ProportionedValues {
-    proportion: number;
-    value: string | number;
 }

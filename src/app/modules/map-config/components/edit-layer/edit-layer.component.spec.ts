@@ -8,6 +8,8 @@ import { EditLayerFeaturesComponent } from '../edit-layer-features/edit-layer-fe
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { FormArray } from '@angular/forms';
+import { EditLayerFeatureMetricComponent } from '../edit-layer-feature-metric/edit-layer-feature-metric.component';
+import { ObjectvaluesPipe } from '@shared/pipes/objectvalues.pipe';
 
 @Component({ template: '' }) class DummyComponent { }
 
@@ -28,7 +30,9 @@ describe('EditLayerComponent', () => {
     declarations: [
       DummyComponent,
       MockComponent(ConfigElementComponent),
-      MockComponent(EditLayerFeaturesComponent)
+      MockComponent(EditLayerFeaturesComponent),
+      MockComponent(EditLayerFeatureMetricComponent),
+      ObjectvaluesPipe
     ]
   });
 
