@@ -17,9 +17,9 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit, Input, forwardRef, OnDestroy, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
-import { PROPERTY_SELECTOR_SOURCE, KeywordColor } from './models';
+import { PROPERTY_SELECTOR_SOURCE, KeywordColor, PROPERTY_TYPE, ProportionedValues } from './models';
 import { PropertySelectorComponentForm } from './property-selector.component.form';
-import { FormBuilder, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { FormBuilder, NG_VALUE_ACCESSOR, NG_VALIDATORS, AbstractControl, ValidationErrors } from '@angular/forms';
 import { DialogPaletteSelectorData } from '@map-config/components/dialog-palette-selector/model';
 import { DialogPaletteSelectorComponent } from '@map-config/components/dialog-palette-selector/dialog-palette-selector.component';
 import { MatDialog } from '@angular/material';
@@ -31,6 +31,7 @@ import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { NGXLogger } from 'ngx-logger';
 import { TranslateService } from '@ngx-translate/core';
+import { ensureMinLessThanMax } from '@utils/tools';
 
 @Component({
   selector: 'app-property-selector',
@@ -52,8 +53,12 @@ import { TranslateService } from '@ngx-translate/core';
 export class PropertySelectorComponent extends PropertySelectorComponentForm implements OnInit, OnDestroy, AfterContentChecked {
 
   public PROPERTY_SELECTOR_SOURCE = PROPERTY_SELECTOR_SOURCE;
+  public PROPERTY_TYPE = PROPERTY_TYPE;
+  public ensureMinLessThanMax = ensureMinLessThanMax;
   public selectionSources: Array<{ key: PROPERTY_SELECTOR_SOURCE, value: string }>;
 
+  @Input() public propertyName: string;
+  @Input() public propertyType: PROPERTY_TYPE;
   @Input() private collection: string;
   @Input() public collectionKeywordFields: Array<string>;
   @Input() public collectionIntegerFields: Array<string>;
@@ -64,7 +69,7 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
     protected formBuilder: FormBuilder,
     protected formBuilderDefault: FormBuilderWithDefaultService,
     public dialog: MatDialog,
-    private defaultValueService: DefaultValuesService,
+    public defaultValueService: DefaultValuesService,
     private collectionService: CollectionService,
     private colorService: ArlasColorGeneratorLoader,
     private cdref: ChangeDetectorRef,
@@ -89,17 +94,28 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
     this.initForceUpdateValidityOnChange();
     this.initUpdateManualColorKeywordOnSourceFieldChange();
     this.initUpdateMinMaxOnInterpolatedFieldChange();
+    this.initUpdateInterpolatedValuesForNumberProperty();
   }
 
   writeValue(obj: any): void {
     super.writeValue(obj);
     if (obj) {
-      this.propertyInterpolatedFieldCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+      this.propertyInterpolatedFieldCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: false });
       // with FormArray, values cannot be simply set, each inner element is a FormGroup to be created
       if (obj && obj.propertyManualFg && obj.propertyManualFg.propertyManualValuesCtrl) {
         obj.propertyManualFg.propertyManualValuesCtrl.forEach((k: KeywordColor) => {
           this.addToColorManualValuesCtrl(k);
         });
+
+
+        // interpolated min/max values cannot be get when import a config file, so we extract them
+        const interpolatedValues = this.propertyInterpolatedValuesCtrl.value as Array<ProportionedValues>;
+        if (!!interpolatedValues) {
+          this.propertyInterpolatedMinFieldValueCtrl.setValue(interpolatedValues[0].proportion);
+          this.propertyInterpolatedMaxFieldValueCtrl.setValue(interpolatedValues.slice(-1)[0].proportion);
+          this.propertyInterpolatedMinValueCtrl.setValue(interpolatedValues[0].value);
+          this.propertyInterpolatedMaxValueCtrl.setValue(interpolatedValues.slice(-1)[0].value);
+        }
       }
     }
   }
@@ -136,17 +152,42 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
   }
 
   private initUpdateMinMaxOnInterpolatedFieldChange() {
-    this.propertyInterpolatedFieldCtrl.valueChanges.subscribe(f => {
-      if (!f) {
-        return;
+    [this.propertyInterpolatedFieldCtrl, this.propertyInterpolatedNormalizeCtrl].forEach(c => c.valueChanges.subscribe(v => {
+      const interpolatedField = this.propertyInterpolatedFieldCtrl.value;
+      if (!!interpolatedField && !this.propertyInterpolatedNormalizeCtrl.value) {
+        this.collectionService.getComputationMetric(this.collection, interpolatedField, METRIC_TYPES.MIN).then(min =>
+          this.propertyInterpolatedMinFieldValueCtrl.setValue(min)
+        );
+        this.collectionService.getComputationMetric(this.collection, interpolatedField, METRIC_TYPES.MAX).then(max =>
+          this.propertyInterpolatedMaxFieldValueCtrl.setValue(max)
+        );
       }
-      this.collectionService.getComputationMetric(this.collection, f, METRIC_TYPES.MIN).then(min =>
-        this.propertyInterpolatedMinValueCtrl.setValue(min)
-      );
-      this.collectionService.getComputationMetric(this.collection, f, METRIC_TYPES.MAX).then(max =>
-        this.propertyInterpolatedMaxValueCtrl.setValue(max)
-      );
-    });
+    }));
+  }
+
+  private initUpdateInterpolatedValuesForNumberProperty() {
+    if (this.propertyType === PROPERTY_TYPE.number) {
+      [this.propertyInterpolatedNormalizeCtrl, this.propertyInterpolatedNormalizeByKeyCtrl,
+      this.propertyInterpolatedNormalizeLocalFieldCtrl, this.propertyInterpolatedMinFieldValueCtrl,
+      this.propertyInterpolatedMaxFieldValueCtrl, this.propertyInterpolatedMinValueCtrl,
+      this.propertyInterpolatedMaxValueCtrl]
+        .forEach(control => control.valueChanges.subscribe(v => {
+          const minValue = this.propertyInterpolatedNormalizeCtrl.value ? 0.0 : this.propertyInterpolatedMinFieldValueCtrl.value;
+          const maxValue = this.propertyInterpolatedNormalizeCtrl.value ? 1.0 : this.propertyInterpolatedMaxFieldValueCtrl.value;
+          const minInterpolatedValue = this.propertyInterpolatedMinValueCtrl.value;
+          const maxInterpolatedValue = this.propertyInterpolatedMaxValueCtrl.value;
+          this.propertyInterpolatedValuesCtrl.setValue(
+            [...Array(6).keys()].map(k =>
+              ({
+                proportion: minValue + (maxValue - minValue) * k / 5,
+                value: minInterpolatedValue + (maxInterpolatedValue - minInterpolatedValue) * k / 5
+              })
+            )
+          );
+        }
+        )
+        );
+    }
   }
 
   public openManualColorTable() {
@@ -171,10 +212,10 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
 
   public openPaletteTable() {
     const paletteData: DialogPaletteSelectorData = {
-      min: this.propertyInterpolatedNormalizeCtrl.value ? 0 : this.propertyInterpolatedMinValueCtrl.value,
-      max: this.propertyInterpolatedNormalizeCtrl.value ? 1 : this.propertyInterpolatedMaxValueCtrl.value,
+      min: this.propertyInterpolatedNormalizeCtrl.value ? 0 : this.propertyInterpolatedMinFieldValueCtrl.value,
+      max: this.propertyInterpolatedNormalizeCtrl.value ? 1 : this.propertyInterpolatedMaxFieldValueCtrl.value,
       defaultPalettes: this.defaultValueService.getDefaultConfig().palettes,
-      selectedPalette: this.propertyInterpolatedPaletteCtrl.value
+      selectedPalette: this.propertyInterpolatedValuesCtrl.value
     };
     const dialogRef = this.dialog.open(DialogPaletteSelectorComponent, {
       data: paletteData,
@@ -184,8 +225,8 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        this.propertyInterpolatedFg.get('propertyInterpolatedPaletteCtrl').setValue(result);
-        this.propertyInterpolatedFg.get('propertyInterpolatedPaletteCtrl').markAsDirty();
+        this.propertyInterpolatedFg.get('propertyInterpolatedValuesCtrl').setValue(result);
+        this.propertyInterpolatedFg.get('propertyInterpolatedValuesCtrl').markAsDirty();
       }
     });
   }
@@ -193,6 +234,10 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
   ngAfterContentChecked() {
     // fix ExpressionChangedAfterItHasBeenCheckedError
     this.cdref.detectChanges();
+  }
+
+  protected getPropertyType(): PROPERTY_TYPE {
+    return this.propertyType;
   }
 
 }

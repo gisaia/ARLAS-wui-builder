@@ -8,6 +8,9 @@
             "geographicalOperator": "intersects"
         },
         "layer": {
+            "geometryStep": {
+                "geometryTypeCtrl": "circle"
+            },
             "visibilityStep": {
                 "zoomMinCtrl": 10,
                 "zoomMaxCtrl": 10,
@@ -28,6 +31,12 @@
         "aggregationTermSize": 20,
         "palettes": [["#065143", "#ce1483"], ["#6d213c", "#946846", "#baab68"], ["#eecf6d", "#d5ac4e", "#8b6220", "#720e07", "#45050c"]],
         "colorPickerPresets": ["#fff", "#000", "#2889e9", "#e920e9", "#fff500", "rgb(236,64,64)"],
-        "otherColor": "#9d9ca9"
+        "otherColor": "#9d9ca9",
+        "widthMin": 0,
+        "widthMax": 15,
+        "widthStep": 0.5,
+        "radiusMin": 1,
+        "radiusMax": 3,
+        "radiusStep": 0.1
     }
 }

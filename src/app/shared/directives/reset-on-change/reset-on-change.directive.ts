@@ -44,8 +44,7 @@ export class ResetOnChangeDirective implements OnInit {
 
   ngOnInit(): void {
     if (this.matSelect) {
-      this.matSelect.valueChange.subscribe((value: any) =>
-        this.resetDependants());
+      this.matSelect.valueChange.subscribe((value: any) => this.resetDependants());
     } else if (this.matSlider) {
       this.matSlider.change.subscribe(
         (event: MatSlideToggleChange) => this.resetDependants());

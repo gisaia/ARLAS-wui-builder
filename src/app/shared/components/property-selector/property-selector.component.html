@@ -1,6 +1,6 @@
 <ng-container [formGroup]="formFg">
     <mat-form-field>
-        <mat-label>{{ 'Source' | translate}}</mat-label>
+        <mat-label>{{propertyName | translate | titlecase}} {{' source' | translate}}</mat-label>
         <mat-select formControlName="propertySourceCtrl" appAlertOnChange="changing the source will reset your choices"
             [dependants]="[propertyFixCtrl, propertyProvidedFieldCtrl, 
             propertyGeneratedFieldCtrl, propertyManualFg, propertyInterpolatedFg]" [appResetOnChange]="defaultKey">
@@ -11,8 +11,19 @@
     <div>
 
         <div *ngIf="propertySourceCtrl.value == PROPERTY_SELECTOR_SOURCE.fix">
-            <app-color-picker-wrapper [value]="propertyFixCtrl.value" (setValue)="setPropertyFix($event)">
-            </app-color-picker-wrapper>
+            <div *ngIf="propertyType === PROPERTY_TYPE.color">
+                <app-color-picker-wrapper [value]="propertyFixCtrl.value" (setValue)="setPropertyFix($event)">
+                </app-color-picker-wrapper>
+            </div>
+            <div *ngIf="propertyType === PROPERTY_TYPE.number">
+                <mat-label>{{ propertyName | translate | titlecase}}</mat-label>
+                <!-- Dynamically reading default value from the propertyName -->
+                <mat-slider [min]="defaultValueService.getDefaultConfig()[propertyName + 'Min']"
+                    [max]="defaultValueService.getDefaultConfig()[propertyName + 'Max']"
+                    [step]="defaultValueService.getDefaultConfig()[propertyName + 'Step']" thumbLabel
+                    formControlName="propertyFixCtrl">
+                </mat-slider>
+            </div>
         </div>
 
         <div *ngIf="propertySourceCtrl.value == PROPERTY_SELECTOR_SOURCE.provided">
@@ -59,7 +70,7 @@
             <mat-form-field>
                 <mat-label>{{'Source field' | translate}}</mat-label>
                 <mat-select formControlName="propertyInterpolatedFieldCtrl" [appResetOnChange]="defaultKey"
-                    [dependants]="[propertyInterpolatedMinValueCtrl, propertyInterpolatedMaxValueCtrl, propertyInterpolatedNormalizeLocalFieldCtrl]">
+                    [dependants]="[propertyInterpolatedMinFieldValueCtrl, propertyInterpolatedMaxFieldValueCtrl, propertyInterpolatedNormalizeLocalFieldCtrl]">
                     <mat-option *ngFor="let field of collectionIntegerFields" [value]="field">
                         {{ field }}</mat-option>
                 </mat-select>
@@ -70,8 +81,8 @@
                     <mat-label>{{'Normalize' | translate}}</mat-label>
                     <mat-slide-toggle formControlName="propertyInterpolatedNormalizeCtrl" labelPosition="before"
                         appResetOnChange="map.layer" [dependants]="[propertyInterpolatedScopeCtrl, propertyInterpolatedNormalizeByKeyCtrl, 
-                        propertyInterpolatedNormalizeLocalFieldCtrl, propertyInterpolatedMinValueCtrl, propertyInterpolatedMaxValueCtrl,
-                        propertyInterpolatedPaletteCtrl]">
+                        propertyInterpolatedNormalizeLocalFieldCtrl, propertyInterpolatedMinFieldValueCtrl, propertyInterpolatedMaxFieldValueCtrl,
+                        propertyInterpolatedValuesCtrl]">
                     </mat-slide-toggle>
                 </div>
 
@@ -107,28 +118,52 @@
                 <div *ngIf="!propertyInterpolatedNormalizeCtrl.value">
                     <div>
                         <mat-form-field>
-                            <mat-label>{{'Minimum value' | translate}}</mat-label>
-                            <input matInput type="number" formControlName="propertyInterpolatedMinValueCtrl"
+                            <mat-label>{{'Minimum value of' | translate}}
+                                {{propertyInterpolatedFg.value.propertyInterpolatedFieldCtrl}}</mat-label>
+                            <input matInput type="number" formControlName="propertyInterpolatedMinFieldValueCtrl"
                                 appAlertOnChange="Changing this value will reset the palette" appResetOnChange
-                                [dependants]="[propertyInterpolatedPaletteCtrl]">
+                                [dependants]="propertyType === PROPERTY_TYPE.color ? [propertyInterpolatedValuesCtrl] : []">
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field>
-                            <mat-label>{{'Maximum value' | translate}}</mat-label>
-                            <input matInput type="number" formControlName="propertyInterpolatedMaxValueCtrl"
+                            <mat-label>{{'Maximum value of ' | translate}}
+                                {{propertyInterpolatedFg.value.propertyInterpolatedFieldCtrl}}</mat-label>
+                            <input matInput type="number" formControlName="propertyInterpolatedMaxFieldValueCtrl"
                                 appAlertOnChange="Changing this value will reset the palette" appResetOnChange
-                                [dependants]="[propertyInterpolatedPaletteCtrl]">
+                                [dependants]="propertyType === PROPERTY_TYPE.color ? [propertyInterpolatedValuesCtrl] : []">
                         </mat-form-field>
                     </div>
                 </div>
 
                 <div>
-                    <button type="button" mat-raised-button (click)="openPaletteTable()" class="palette-button"
-                        [disabled]="!propertyInterpolatedNormalizeCtrl.value 
-                        && (!propertyInterpolatedMinValueCtrl.valid || !propertyInterpolatedMaxValueCtrl.valid || propertyInterpolatedFg?.errors?.lte)">
-                        {{'Manage palette' | translate}}
-                    </button>
+                    <div *ngIf="propertyType === PROPERTY_TYPE.color">
+                        <button type="button" mat-raised-button (click)="openPaletteTable()" class="palette-button"
+                            [disabled]="!propertyInterpolatedNormalizeCtrl.value 
+                        && (!propertyInterpolatedMinFieldValueCtrl.valid || !propertyInterpolatedMaxFieldValueCtrl.valid || propertyInterpolatedFg?.errors?.lte)">
+                            {{'Manage palette' | translate}}
+                        </button>
+                    </div>
+                    <div *ngIf="propertyType === PROPERTY_TYPE.number">
+                        <div>
+                            <mat-label>{{'Minimum' | translate}} {{propertyName | translate}} </mat-label>
+                            <mat-slider [min]="defaultValueService.getDefaultConfig()[propertyName + 'Min']"
+                                [max]="defaultValueService.getDefaultConfig()[propertyName + 'Max']"
+                                [step]="defaultValueService.getDefaultConfig()[propertyName + 'Step']" thumbLabel
+                                formControlName="propertyInterpolatedMinValueCtrl"
+                                (input)="ensureMinLessThanMax($event.value, propertyInterpolatedMinValueCtrl, propertyInterpolatedMaxValueCtrl, 'min')">
+                            </mat-slider>
+                        </div>
+                        <div>
+                            <mat-label>{{'Maximum' | translate}} {{propertyName | translate}}</mat-label>
+                            <mat-slider [min]="defaultValueService.getDefaultConfig()[propertyName + 'Min']"
+                                [max]="defaultValueService.getDefaultConfig()[propertyName + 'Max']"
+                                [step]="defaultValueService.getDefaultConfig()[propertyName + 'Step']" thumbLabel
+                                formControlName="propertyInterpolatedMaxValueCtrl"
+                                (input)="ensureMinLessThanMax($event.value, propertyInterpolatedMinValueCtrl, propertyInterpolatedMaxValueCtrl, 'max')">
+                            </mat-slider>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -136,13 +171,21 @@
 
         <div *ngIf="formFg?.invalid && formFg.touched">
             <mat-error *ngIf=" propertyFixCtrl.touched && propertyFixCtrl?.errors?.required">
-                {{'A color is required' | translate}}
+                {{'A value is required' | translate}}
             </mat-error>
             <mat-error *ngIf="propertyProvidedFieldCtrl.touched && propertyProvidedFieldCtrl?.errors?.required 
                 || propertyGeneratedFieldCtrl.touched && propertyGeneratedFieldCtrl?.errors?.required 
                 || propertyManualFieldCtrl.touched && propertyManualFieldCtrl?.errors?.required 
                 || propertyInterpolatedFieldCtrl.touched && propertyInterpolatedFieldCtrl?.errors?.required">
                 {{'A source field is required' | translate}}
+            </mat-error>
+            <mat-error
+                *ngIf="propertyInterpolatedMinFieldValueCtrl.touched && propertyInterpolatedMinFieldValueCtrl?.errors?.required">
+                {{'A minimum field value is required' | translate}}
+            </mat-error>
+            <mat-error
+                *ngIf="propertyInterpolatedMaxFieldValueCtrl.touched && propertyInterpolatedMaxFieldValueCtrl?.errors?.required">
+                {{'A maximum field value is required' | translate}}
             </mat-error>
             <mat-error
                 *ngIf="propertyInterpolatedMinValueCtrl.touched && propertyInterpolatedMinValueCtrl?.errors?.required">
@@ -160,12 +203,16 @@
                 {{'A local-normalization field is required' | translate}}
             </mat-error>
             <mat-error
+                *ngIf="propertyInterpolatedMinFieldValueCtrl.value && propertyInterpolatedMaxFieldValueCtrl.valid && propertyInterpolatedFg?.errors?.lte">
+                {{'The minimum field value must be less than the maximum field value' | translate}}
+            </mat-error>
+            <mat-error
                 *ngIf="propertyInterpolatedMinValueCtrl.value && propertyInterpolatedMaxValueCtrl.valid && propertyInterpolatedFg?.errors?.lte">
                 {{'The minimum value must be less than the maximum value' | translate}}
             </mat-error>
             <mat-error
-                *ngIf="propertyInterpolatedPaletteCtrl.touched && propertyInterpolatedPaletteCtrl?.errors?.required">
-                {{'A palette is required' | translate}}
+                *ngIf="propertyInterpolatedValuesCtrl.touched && propertyInterpolatedValuesCtrl?.errors?.required">
+                {{'Interpolated values are required' | translate}}
             </mat-error>
         </div>
 

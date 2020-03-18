@@ -40,7 +40,9 @@
                 <div form-fields>
                     <mat-form-field>
                         <mat-label>{{ 'Geometry type' | translate}} </mat-label>
-                        <mat-select formControlName="geometryTypeCtrl">
+                        <mat-select formControlName="geometryTypeCtrl"
+                            appAlertOnChange="changing the geometry type may reset the radius or the width"
+                            appResetOnChange [dependants]="[widthFg, radiusFg]">
                             <mat-option [value]="GEOMETRY_TYPE.fill">{{ 'Fill' | translate}}</mat-option>
                             <mat-option [value]="GEOMETRY_TYPE.line">{{ 'Line' | translate}}</mat-option>
                             <mat-option [value]="GEOMETRY_TYPE.circle">{{ 'Circle' | translate}}</mat-option>
@@ -63,30 +65,32 @@
             </mat-error>
             <app-config-element>
                 <div form-fields>
-                    <mat-slide-toggle formControlName="visibleCtrl" labelPosition="before">{{ 'Visible' | translate}}</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="visibleCtrl" labelPosition="before">{{ 'Visible' | translate}}
+                    </mat-slide-toggle>
                 </div>
                 <div description>
-                    {{ 'description' | translate}} 
+                    {{ 'description' | translate}}
                 </div>
             </app-config-element>
             <app-config-element>
                 <div form-fields>
                     <mat-label>{{ 'Zoom min' | translate}}</mat-label>
                     <mat-slider thumbLabel formControlName="zoomMinCtrl" min="1" max="20"
-                        (input)="checkZoom($event, 'min')" thumbLabel="true"></mat-slider>
+                        (input)="ensureMinLessThanMax($event.value, zoomMinCtrl, zoomMaxCtrl, 'min')" thumbLabel="true">
+                    </mat-slider>
                 </div>
                 <div description>
-                   {{ 'zoom min etc' | translate}}
+                    {{ 'zoom min etc' | translate}}
                 </div>
             </app-config-element>
             <app-config-element>
                 <div form-fields>
-                    <span>{{ 'Zoom max' | translate}}</span>
+                    <mat-label>{{ 'Zoom max' | translate}}</mat-label>
                     <mat-slider thumbLabel formControlName="zoomMaxCtrl" min="1" max="20"
-                        (input)="checkZoom($event, 'max')"></mat-slider>
+                        (input)="ensureMinLessThanMax($event.value, zoomMinCtrl, zoomMaxCtrl, 'max')"></mat-slider>
                 </div>
                 <div description>
-                    {{ 'zoom max etc' | translate}} 
+                    {{ 'zoom max etc' | translate}}
                 </div>
             </app-config-element>
             <app-config-element>
@@ -122,10 +126,11 @@
 
             <app-config-element>
                 <div form-fields>
-                    <app-property-selector formControlName="colorFg" [collection]="collectionCtrl.value"
+                    <app-property-selector property="color" [propertyType]="PROPERTY_TYPE.color"
+                        formControlName="colorFg" [collection]="collectionCtrl.value"
                         [collectionKeywordFields]="collectionKeywordFields"
                         [collectionIntegerFields]="collectionIntegerFields" [submit]="submitSubject.asObservable()"
-                        defaultKey="map.layer.styleStep.colorFg" [sources]="colorSources">
+                        defaultKey="map.layer.styleStep.colorFg" [sources]="colorFgSources">
                     </app-property-selector>
 
                 </div>
@@ -144,6 +149,48 @@
                     </p>
                     <p>
                         {{ 'Interpolated from a field: select a number or date field, colors will be lineary interpolated between the min and the max.' | translate}}
+                    </p>
+                </div>
+            </app-config-element>
+            <!-- using [hidden] instead of ng-if because otherwise, each time the condition is true,
+            ut creates a new subform instance without cleaning the previous ones -->
+            <app-config-element [hidden]="formFg.value?.geometryStep?.geometryTypeCtrl !== GEOMETRY_TYPE.line">
+                <div form-fields>
+                    <app-property-selector propertyName="width" [propertyType]="PROPERTY_TYPE.number"
+                        formControlName="widthFg" [collection]="collectionCtrl.value"
+                        [collectionKeywordFields]="collectionKeywordFields"
+                        [collectionIntegerFields]="collectionIntegerFields" [submit]="submitSubject.asObservable()"
+                        defaultKey="map.layer.styleStep.widthFg" [sources]="widthFgSources">
+                    </app-property-selector>
+
+                </div>
+                <div description>
+                    <p>
+                        {{'Fix: use a fix width' | translate}}
+                    </p>
+                    <p>
+                        {{'Interpolated from a field: select a number or date field, width will be lineary interpolated between the min and the max.' | translate}}
+                    </p>
+                </div>
+            </app-config-element>
+            <!-- using [hidden] instead of ng-if because otherwise, each time the condition is true,
+            ut creates a new subform instance without cleaning the previous ones -->
+            <app-config-element [hidden]="formFg.value?.geometryStep?.geometryTypeCtrl !== GEOMETRY_TYPE.circle">
+                <div form-fields>
+                    <app-property-selector propertyName="radius" [propertyType]="PROPERTY_TYPE.number"
+                        formControlName="radiusFg" [collection]="collectionCtrl.value"
+                        [collectionKeywordFields]="collectionKeywordFields"
+                        [collectionIntegerFields]="collectionIntegerFields" [submit]="submitSubject.asObservable()"
+                        defaultKey="map.layer.styleStep.radiusFg" [sources]="radiusFgSources">
+                    </app-property-selector>
+
+                </div>
+                <div description>
+                    <p>
+                        {{'Fix: use a fix width' | translate}}
+                    </p>
+                    <p>
+                        {{'Interpolated from a field: select a number or date field, radius will be lineary interpolated between the min and the max.' | translate}}
                     </p>
                 </div>
             </app-config-element>

@@ -21,13 +21,6 @@ export enum GEOMETRY_TYPE {
     line = 'line',
     circle = 'circle'
 }
-export enum COLOR_SOURCE {
-    fix = 'fix',
-    provided = 'provided',
-    generated = 'generated',
-    manual = 'manual',
-    interpolated = 'interpolated'
-}
 
 export interface KeywordColor {
     keyword: string;

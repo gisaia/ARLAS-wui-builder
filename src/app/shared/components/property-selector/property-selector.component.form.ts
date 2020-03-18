@@ -18,11 +18,11 @@ under the License.
 */
 import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 import { CustomValidators } from '@utils/custom-validators';
-import { PROPERTY_SELECTOR_SOURCE, KeywordColor } from './models';
+import { PROPERTY_SELECTOR_SOURCE, KeywordColor, PROPERTY_TYPE } from './models';
 import { ComponentSubForm } from '@shared/ComponentSubForm';
 import { NGXLogger } from 'ngx-logger';
 
-export class PropertySelectorComponentForm extends ComponentSubForm {
+export abstract class PropertySelectorComponentForm extends ComponentSubForm {
 
     constructor(
         protected formBuilder: FormBuilder,
@@ -113,11 +113,30 @@ export class PropertySelectorComponentForm extends ComponentSubForm {
                             : false,
                             Validators.required)
                     ],
+                propertyInterpolatedMinFieldValueCtrl:
+                    [
+                        null,
+                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
+                            this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                            && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value
+                            : false,
+                            Validators.required)
+                    ],
+                propertyInterpolatedMaxFieldValueCtrl:
+                    [
+                        null,
+                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
+                            this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                            && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value
+                            : false,
+                            Validators.required)
+                    ],
                 propertyInterpolatedMinValueCtrl:
                     [
                         null,
                         CustomValidators.getConditionalValidator(() => !!this.formFg ?
                             this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                            && this.getPropertyType() === PROPERTY_TYPE.number
                             && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value
                             : false,
                             Validators.required)
@@ -127,11 +146,12 @@ export class PropertySelectorComponentForm extends ComponentSubForm {
                         null,
                         CustomValidators.getConditionalValidator(() => !!this.formFg ?
                             this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                            && this.getPropertyType() === PROPERTY_TYPE.number
                             && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value
                             : false,
                             Validators.required)
                     ],
-                propertyInterpolatedPaletteCtrl:
+                propertyInterpolatedValuesCtrl:
                     [
                         null,
                         [
@@ -146,9 +166,9 @@ export class PropertySelectorComponentForm extends ComponentSubForm {
                 validators: [
                     CustomValidators.getConditionalValidator(() => !!this.formFg ?
                         this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated && this.propertyInterpolatedFieldCtrl.value
-                        && this.propertyInterpolatedMinValueCtrl.value && this.propertyInterpolatedMaxValueCtrl.value
+                        && this.propertyInterpolatedMinFieldValueCtrl.value && this.propertyInterpolatedMaxFieldValueCtrl.value
                         : false,
-                        CustomValidators.getLTEValidator('propertyInterpolatedMinValueCtrl', 'propertyInterpolatedMaxValueCtrl'))
+                        CustomValidators.getLTEValidator('propertyInterpolatedMinFieldValueCtrl', 'propertyInterpolatedMaxFieldValueCtrl'))
                 ]
             })
         });
@@ -193,14 +213,20 @@ export class PropertySelectorComponentForm extends ComponentSubForm {
     get propertyInterpolatedScopeCtrl() {
         return this.propertyInterpolatedFg.get('propertyInterpolatedScopeCtrl');
     }
+    get propertyInterpolatedMinFieldValueCtrl() {
+        return this.propertyInterpolatedFg.get('propertyInterpolatedMinFieldValueCtrl');
+    }
+    get propertyInterpolatedMaxFieldValueCtrl() {
+        return this.propertyInterpolatedFg.get('propertyInterpolatedMaxFieldValueCtrl');
+    }
     get propertyInterpolatedMinValueCtrl() {
         return this.propertyInterpolatedFg.get('propertyInterpolatedMinValueCtrl');
     }
     get propertyInterpolatedMaxValueCtrl() {
         return this.propertyInterpolatedFg.get('propertyInterpolatedMaxValueCtrl');
     }
-    get propertyInterpolatedPaletteCtrl() {
-        return this.propertyInterpolatedFg.get('propertyInterpolatedPaletteCtrl');
+    get propertyInterpolatedValuesCtrl() {
+        return this.propertyInterpolatedFg.get('propertyInterpolatedValuesCtrl');
     }
 
     public setPropertyFix(value: string) {
@@ -216,4 +242,7 @@ export class PropertySelectorComponentForm extends ComponentSubForm {
         });
         this.propertyManualValuesCtrl.push(keywordColorGrp);
     }
+
+    protected abstract getPropertyType(): PROPERTY_TYPE;
+
 }

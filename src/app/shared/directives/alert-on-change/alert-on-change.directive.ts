@@ -59,11 +59,11 @@ export class AlertOnChangeDirective implements OnInit {
     }
   }
 
-  @HostListener('openedChange', ['$event']) openedChange(value: boolean) {
-    // display a snack on opening if a dependant has been changed
-    const anyDependantDirty = this.dependants == null || this.dependants.filter(d => d.dirty).length > 0;
+  @HostListener('openedChange', ['$event']) openedChange(selectedHasBeenOpen: boolean) {
+    // display a snack on opening if a dependant has a value
+    const anyDependantHasValue = this.dependants == null || this.dependants.filter(d => d.value !== null).length > 0;
     // display the warning only if a value is already set AND if any dependency has been changed
-    if (anyDependantDirty && !!value && !!this.select.value) {
+    if (anyDependantHasValue && selectedHasBeenOpen && !this.select.empty) {
       this.snackBar.open(this.translate.instant('Carreful!') + ' ' + this.translate.instant(this.alertMessage));
     }
   }
