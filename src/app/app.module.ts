@@ -17,11 +17,15 @@ specific language governing permissions and limitations
 under the License.
 */
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import {
-  MatButtonModule, MatDialogModule, MatIconModule,
-  MatListModule, MatSidenavModule, MatTooltipModule, MatSnackBarModule,
-  MAT_SNACK_BAR_DEFAULT_OPTIONS, GestureConfig, MatFormFieldModule
-} from '@angular/material';
+import { GestureConfig } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
@@ -33,7 +37,7 @@ import { MapConfigModule } from '@map-config/map-config.module';
 import { SearchConfigModule } from '@search-config/search-config.module';
 import { TimelineConfigModule } from '@timeline-config/timeline-config.module';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
 import { ArlasToolKitModule, ArlasStartupService } from 'arlas-wui-toolkit';

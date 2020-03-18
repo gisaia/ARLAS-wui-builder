@@ -19,7 +19,7 @@ under the License.
 import { Component, ViewChild } from '@angular/core';
 import { LandingPageComponent } from '@components/landing-page/landing-page.component';
 import { NGXLogInterface, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',

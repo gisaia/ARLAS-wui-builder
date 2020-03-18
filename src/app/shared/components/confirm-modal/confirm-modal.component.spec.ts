@@ -1,6 +1,6 @@
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { ConfirmModalComponent } from './confirm-modal.component';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 describe('ConfirmModalComponent', () => {
   let spectator: Spectator<ConfirmModalComponent>;

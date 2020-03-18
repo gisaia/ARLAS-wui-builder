@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
 import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { SharedModule } from '@shared/shared.module';
