@@ -1,7 +1,7 @@
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { DialogPaletteSelectorComponent } from './dialog-palette-selector.component';
 import { MockComponent } from 'ng-mocks';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
 
 describe('DialogPaletteSelectorComponent', () => {

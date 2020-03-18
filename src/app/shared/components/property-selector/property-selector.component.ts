@@ -22,7 +22,7 @@ import { PropertySelectorComponentForm } from './property-selector.component.for
 import { FormBuilder, NG_VALUE_ACCESSOR, NG_VALIDATORS, AbstractControl, ValidationErrors } from '@angular/forms';
 import { DialogPaletteSelectorData } from '@map-config/components/dialog-palette-selector/model';
 import { DialogPaletteSelectorComponent } from '@map-config/components/dialog-palette-selector/dialog-palette-selector.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogColorTableComponent, DialogColorTableData } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { updateValueAndValidity } from '@utils/tools';
