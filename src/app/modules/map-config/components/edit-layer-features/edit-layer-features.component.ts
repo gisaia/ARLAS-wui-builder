@@ -135,6 +135,7 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm i
       geoEnableDisable.enabled.forEach(c => c.enable());
       geoEnableDisable.disabled.forEach(c => c.disable());
     });
+    this.geometryTypeCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
   }
 
   writeValue(obj: any): void {
