@@ -37,6 +37,11 @@ under the License.
       ::ng-deep mat-label + mat-slider {
         margin-left: 20px;
       }
+
+      ::ng-deep mat-label + mat-slide-toggle,
+      ::ng-deep mat-slide-toggle + mat-label {
+        margin-left: 10px;
+      }
     }
 
     .description {

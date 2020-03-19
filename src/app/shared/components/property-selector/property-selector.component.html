@@ -68,14 +68,42 @@
 
         <div *ngIf="propertySourceCtrl.value == PROPERTY_SELECTOR_SOURCE.interpolated"
             formGroupName="propertyInterpolatedFg">
-            <mat-form-field>
-                <mat-label>{{'Source field' | translate}}</mat-label>
-                <mat-select formControlName="propertyInterpolatedFieldCtrl" [appResetOnChange]="defaultKey"
-                    [dependants]="[propertyInterpolatedMinFieldValueCtrl, propertyInterpolatedMaxFieldValueCtrl, propertyInterpolatedNormalizeLocalFieldCtrl]">
-                    <mat-option *ngFor="let field of collectionIntegerFields" [value]="field">
-                        {{ field }}</mat-option>
-                </mat-select>
-            </mat-form-field>
+
+            <div>
+                <div *ngIf="aggregated">
+                    <div>
+                        <mat-label>{{'Count' | translate}}</mat-label>
+                        <mat-slide-toggle formControlName="propertyInterpolatedCountOrMetricCtrl"
+                            [appResetOnChange]="defaultKey"
+                            [dependants]="[propertyInterpolatedMetricCtrl, propertyInterpolatedFieldCtrl]">
+                        </mat-slide-toggle>
+                        <mat-label>{{'Metric' | translate}}</mat-label>
+                    </div>
+                    <div *ngIf="propertyInterpolatedCountOrMetricCtrl.value">
+                        <mat-form-field>
+                            <mat-label>{{'Metric' | translate}}</mat-label>
+                            <mat-select formControlName="propertyInterpolatedMetricCtrl" [appResetOnChange]="defaultKey"
+                                [dependants]="[propertyInterpolatedFieldCtrl]">
+                                <mat-option *ngFor="let metric of METRICS" [value]="metric">
+                                    {{ metric }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                    </div>
+                </div>
+                <div *ngIf="!aggregated || aggregated && propertyInterpolatedMetricCtrl.value">
+                    <mat-form-field>
+                        <mat-label>{{'Source field' | translate}}</mat-label>
+                        <mat-select formControlName="propertyInterpolatedFieldCtrl" [appResetOnChange]="defaultKey"
+                            [dependants]="[propertyInterpolatedMinFieldValueCtrl, propertyInterpolatedMaxFieldValueCtrl, propertyInterpolatedNormalizeLocalFieldCtrl,
+                            propertyInterpolatedNormalizeCtrl, propertyInterpolatedNormalizeByKeyCtrl]">
+                            <mat-option *ngFor="let field of interpolatedFields" [value]="field">
+                                {{ field }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
 
             <div *ngIf="propertyInterpolatedFieldCtrl.value">
                 <div>
@@ -97,22 +125,25 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <div *ngIf="propertyInterpolatedScopeCtrl.value === 'local'">
-                        <mat-label>{{'Normalize by key' | translate}}</mat-label>
-                        <mat-slide-toggle formControlName="propertyInterpolatedNormalizeByKeyCtrl"
-                            labelPosition="before" [appResetOnChange]="defaultKey"
-                            [dependants]="[propertyInterpolatedNormalizeLocalFieldCtrl]">
-                        </mat-slide-toggle>
-                    </div>
+                    <div *ngIf="!aggregated">
 
-                    <div *ngIf="propertyInterpolatedNormalizeByKeyCtrl.value">
-                        <mat-form-field>
-                            <mat-select formControlName="propertyInterpolatedNormalizeLocalFieldCtrl">
-                                <mat-option *ngFor="let field of collectionKeywordFields" [value]="field">
-                                    {{ field }}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                        <div *ngIf="propertyInterpolatedScopeCtrl.value === 'local'">
+                            <mat-label>{{'Normalize by key' | translate}}</mat-label>
+                            <mat-slide-toggle formControlName="propertyInterpolatedNormalizeByKeyCtrl"
+                                labelPosition="before" [appResetOnChange]="defaultKey"
+                                [dependants]="[propertyInterpolatedNormalizeLocalFieldCtrl]">
+                            </mat-slide-toggle>
+                        </div>
+
+                        <div *ngIf="propertyInterpolatedNormalizeByKeyCtrl.value">
+                            <mat-form-field>
+                                <mat-select formControlName="propertyInterpolatedNormalizeLocalFieldCtrl">
+                                    <mat-option *ngFor="let field of collectionKeywordFields" [value]="field">
+                                        {{ field }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
                     </div>
                 </div>
 
