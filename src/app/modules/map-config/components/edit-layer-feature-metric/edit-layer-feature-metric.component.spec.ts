@@ -3,18 +3,17 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { EditLayerFeatureMetricComponent } from './edit-layer-feature-metric.component';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { Subject } from 'rxjs';
-import { EditLayerFeaturesComponent } from '../edit-layer-features/edit-layer-features.component';
+import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
 import { MockComponent } from 'ng-mocks';
 import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { FormGroup } from '@angular/forms';
 
 describe('EditLayerFeatureMetricComponent', () => {
   let spectator: Spectator<EditLayerFeatureMetricComponent>;
   const createComponent = createComponentFactory({
     component: EditLayerFeatureMetricComponent,
     declarations: [
-      MockComponent(EditLayerFeaturesComponent),
+      MockComponent(EditLayerModeFormComponent),
       MockComponent(ConfigElementComponent)
     ]
   });
@@ -26,14 +25,11 @@ describe('EditLayerFeatureMetricComponent', () => {
         formFg: new FormGroup({
           geometryStep: new FormGroup({})
         })
-      } as EditLayerFeaturesComponent
+      } as EditLayerModeFormComponent
     }
   }));
 
   it('should create', () => {
-    spectator.component.formFg = new FormGroup({
-      geometryStep: new FormGroup({})
-    });
     expect(spectator.component).toBeTruthy();
   });
 

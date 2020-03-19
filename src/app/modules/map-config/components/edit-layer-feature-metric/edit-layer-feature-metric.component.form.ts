@@ -19,13 +19,13 @@ under the License.
 import { ComponentSubForm } from '@shared/ComponentSubForm';
 import { NGXLogger } from 'ngx-logger';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { EditLayerFeaturesComponent } from '../edit-layer-features/edit-layer-features.component';
+import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
 import { ViewChild } from '@angular/core';
 
-export class EditLayerFeatureMetricComponentForm extends ComponentSubForm {
+export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubForm {
 
-    @ViewChild(EditLayerFeaturesComponent, { static: true })
-    public embeddedFeaturesComponent: EditLayerFeaturesComponent;
+    @ViewChild(EditLayerModeFormComponent, { static: true })
+    public embeddedFeaturesComponent: EditLayerModeFormComponent;
 
     constructor(
         protected logger: NGXLogger,

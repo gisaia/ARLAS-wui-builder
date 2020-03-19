@@ -16,127 +16,19 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
-import { CustomValidators } from '@utils/custom-validators';
 import { ComponentSubForm } from '@shared/ComponentSubForm';
+import { ViewChild } from '@angular/core';
+import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
 import { NGXLogger } from 'ngx-logger';
-import { GEOMETRY_TYPE } from './models';
 
 export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
 
+    @ViewChild(EditLayerModeFormComponent, { static: true })
+    public embeddedFeaturesComponent: EditLayerModeFormComponent;
+
     constructor(
-        protected formBuilderDefault: FormBuilderWithDefaultService,
-        protected formBuilder: FormBuilder,
         protected logger: NGXLogger
     ) {
         super(logger);
-
-        this.formFg = this.formBuilderDefault.group('map.layer', {
-            collectionStep: this.formBuilder.group({
-                collectionCtrl:
-                    [
-                        null,
-                        Validators.required
-                    ]
-            }),
-            geometryStep: this.formBuilder.group({
-                geometryCtrl:
-                    [
-                        null,
-                        Validators.required
-                    ],
-                geometryTypeCtrl:
-                    [
-                        null,
-                        Validators.required
-                    ]
-            }),
-            visibilityStep: this.formBuilder.group({
-                visibleCtrl:
-                    [
-                        null
-                    ],
-                zoomMinCtrl:
-                    [
-                        null,
-                        [
-                            Validators.required, Validators.min(1), Validators.max(20)
-                        ]
-                    ],
-                zoomMaxCtrl:
-                    [
-                        null,
-                        [
-                            Validators.required, Validators.min(1), Validators.max(20)
-                        ]
-                    ],
-                featuresMaxCtrl:
-                    [
-                        null,
-                        [
-                            Validators.required,
-                            Validators.max(10000),
-                            Validators.min(0)
-                        ]
-                    ]
-            },
-                {
-                    validator:
-                        [
-                            CustomValidators.getLTEValidator('zoomMinCtrl', 'zoomMaxCtrl')
-                        ]
-                }),
-            styleStep: this.formBuilder.group({
-                opacityCtrl:
-                    [
-                        null
-                    ],
-                colorFg: [
-                    null,
-                    Validators.required
-                ],
-                widthFg: [
-                    null,
-                    CustomValidators.getConditionalValidator(
-                        () => !!this.formFg ? this.geometryTypeCtrl.value === GEOMETRY_TYPE.line : false,
-                        Validators.required
-                    )
-                ],
-                radiusFg: [
-                    null,
-                    CustomValidators.getConditionalValidator(
-                        () => !!this.formFg ? this.geometryTypeCtrl.value === GEOMETRY_TYPE.circle : false,
-                        Validators.required)
-                ]
-            })
-        });
     }
-
-    get zoomMinCtrl() {
-        return this.formFg.get('visibilityStep').get('zoomMinCtrl');
-    }
-    get zoomMaxCtrl() {
-        return this.formFg.get('visibilityStep').get('zoomMaxCtrl');
-    }
-    get collectionCtrl() {
-        return this.formFg.get('collectionStep').get('collectionCtrl');
-    }
-    get geometryCtrl() {
-        return this.formFg.get('geometryStep').get('geometryCtrl');
-    }
-    get geometryTypeCtrl() {
-        return this.formFg.get('geometryStep').get('geometryTypeCtrl');
-    }
-    get colorFg() {
-        return this.formFg.get('styleStep').get('colorFg') as FormGroup;
-    }
-    get widthFg() {
-        return this.formFg.get('styleStep').get('widthFg') as FormGroup;
-    }
-    get radiusFg() {
-        return this.formFg.get('styleStep').get('radiusFg') as FormGroup;
-    }
-
-
 }

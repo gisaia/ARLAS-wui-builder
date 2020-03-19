@@ -18,7 +18,7 @@ under the License.
 */
 import { ComponentFactoryResolver, Injectable, ViewContainerRef } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { GEOMETRY_TYPE, KeywordColor } from '@map-config/components/edit-layer-features/models';
+import { GEOMETRY_TYPE, KeywordColor } from '@map-config/components/edit-layer-mode-form/models';
 import { LayersComponent } from '@map-config/components/layers/layers.component';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { updateValueAndValidity } from '@utils/tools';

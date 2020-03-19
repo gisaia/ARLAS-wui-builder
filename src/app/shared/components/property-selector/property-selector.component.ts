@@ -74,7 +74,7 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
     private cdref: ChangeDetectorRef,
     protected logger: NGXLogger
   ) {
-    super(formBuilder, logger);
+    super(formBuilder, formBuilderDefault, logger);
   }
 
   ngOnInit() {
