@@ -35,6 +35,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
+import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { MatSliderModule } from '@angular/material/slider';
     AlertOnChangeDirective,
     ColorPickerWrapperComponent,
     ResetOnChangeDirective,
-    PropertySelectorComponent
+    PropertySelectorComponent,
+    ObjectvaluesPipe
   ],
   imports: [
     CommonModule,
@@ -65,7 +67,8 @@ import { MatSliderModule } from '@angular/material/slider';
     AlertOnChangeDirective,
     ColorPickerWrapperComponent,
     ResetOnChangeDirective,
-    PropertySelectorComponent
+    PropertySelectorComponent,
+    ObjectvaluesPipe
   ]
 })
 export class SharedModule { }

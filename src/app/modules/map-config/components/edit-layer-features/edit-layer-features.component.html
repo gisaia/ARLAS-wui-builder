@@ -53,6 +53,8 @@
 
                 </div>
             </app-config-element>
+            <ng-content select="[additional-geometry]">
+            </ng-content>
             <div>
                 <button mat-button matStepperPrevious>{{ 'Back' | translate}}</button>
                 <button mat-button matStepperNext type="button">{{ 'Next' | translate}}</button>
@@ -126,7 +128,7 @@
 
             <app-config-element>
                 <div form-fields>
-                    <app-property-selector property="color" [propertyType]="PROPERTY_TYPE.color"
+                    <app-property-selector propertyName="color" [propertyType]="PROPERTY_TYPE.color"
                         formControlName="colorFg" [collection]="collectionCtrl.value"
                         [collectionKeywordFields]="collectionKeywordFields"
                         [collectionIntegerFields]="collectionIntegerFields" [submit]="submitSubject.asObservable()"

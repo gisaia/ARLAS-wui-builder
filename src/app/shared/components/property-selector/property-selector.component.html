@@ -4,7 +4,8 @@
         <mat-select formControlName="propertySourceCtrl" appAlertOnChange="changing the source will reset your choices"
             [dependants]="[propertyFixCtrl, propertyProvidedFieldCtrl, 
             propertyGeneratedFieldCtrl, propertyManualFg, propertyInterpolatedFg]" [appResetOnChange]="defaultKey">
-            <mat-option *ngFor="let source of selectionSources" [value]="source.key">{{source.value}}</mat-option>
+            <mat-option *ngFor="let source of sources" [value]="source">
+                {{source | translate}}</mat-option>
         </mat-select>
     </mat-form-field>
 
