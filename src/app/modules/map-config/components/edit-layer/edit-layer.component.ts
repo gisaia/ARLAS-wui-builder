@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
@@ -31,7 +31,7 @@ import { EditLayerComponentForm } from './edit-layer.component.form';
   templateUrl: './edit-layer.component.html',
   styleUrls: ['./edit-layer.component.scss']
 })
-export class EditLayerComponent extends EditLayerComponentForm implements OnInit, CanComponentExit {
+export class EditLayerComponent extends EditLayerComponentForm implements OnInit, CanComponentExit, AfterContentChecked {
 
   private layersFa: FormArray;
   private layersValues: any[] = [];
@@ -42,6 +42,7 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
     protected formBuilderDefault: FormBuilderWithDefaultService,
     private mainFormService: MainFormService,
     private route: ActivatedRoute,
+    private cdref: ChangeDetectorRef,
     private router: Router,
     private logger: NGXLogger) {
 
@@ -118,6 +119,11 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
 
   public canExit() {
     return this.forceCanExit || this.layerFg.pristine;
+  }
+
+  ngAfterContentChecked() {
+    // fix ExpressionChangedAfterItHasBeenCheckedError
+    this.cdref.detectChanges();
   }
 
 }
