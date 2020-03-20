@@ -18,11 +18,12 @@ under the License.
 */
 import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 import { CustomValidators } from '@utils/custom-validators';
-import { PROPERTY_SELECTOR_SOURCE, KeywordColor, PROPERTY_TYPE } from './models';
+import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from './models';
 import { ComponentSubForm } from '@shared/ComponentSubForm';
 import { NGXLogger } from 'ngx-logger';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { Input } from '@angular/core';
+import { KeywordColor } from '@map-config/components/dialog-color-table/models';
 
 export abstract class PropertySelectorComponentForm extends ComponentSubForm {
 

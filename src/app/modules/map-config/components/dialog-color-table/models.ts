@@ -16,9 +16,13 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-export enum GEOMETRY_TYPE {
-    fill = 'fill',
-    line = 'line',
-    circle = 'circle'
+export interface KeywordColor {
+    keyword: string;
+    color: string;
 }
 
+export interface DialogColorTableData {
+    collection: string;
+    sourceField: string;
+    keywordColors: Array<KeywordColor>;
+}

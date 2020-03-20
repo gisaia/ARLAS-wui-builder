@@ -17,13 +17,13 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit, Input, forwardRef, OnDestroy, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
-import { PROPERTY_SELECTOR_SOURCE, KeywordColor, PROPERTY_TYPE, ProportionedValues } from './models';
+import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE, ProportionedValues } from './models';
 import { PropertySelectorComponentForm } from './property-selector.component.form';
 import { FormBuilder, NG_VALUE_ACCESSOR, NG_VALIDATORS, AbstractControl, ValidationErrors } from '@angular/forms';
 import { DialogPaletteSelectorData } from '@map-config/components/dialog-palette-selector/model';
 import { DialogPaletteSelectorComponent } from '@map-config/components/dialog-palette-selector/dialog-palette-selector.component';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogColorTableComponent, DialogColorTableData } from '@map-config/components/dialog-color-table/dialog-color-table.component';
+import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { updateValueAndValidity } from '@utils/tools';
 import { METRIC_TYPES, CollectionService } from '@services/collection-service/collection.service';
@@ -32,6 +32,7 @@ import { FormBuilderWithDefaultService } from '@services/form-builder-with-defau
 import { NGXLogger } from 'ngx-logger';
 import { TranslateService } from '@ngx-translate/core';
 import { ensureMinLessThanMax } from '@utils/tools';
+import { KeywordColor, DialogColorTableData } from '@map-config/components/dialog-color-table/models';
 
 @Component({
   selector: 'app-property-selector',

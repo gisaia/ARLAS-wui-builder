@@ -25,17 +25,7 @@ import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { from, Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-
-interface KeywordColor {
-  keyword: string;
-  color: string;
-}
-
-export interface DialogColorTableData {
-  collection: string;
-  sourceField: string;
-  keywordColors: Array<KeywordColor>;
-}
+import { DialogColorTableData } from './models';
 
 @Component({
   selector: 'app-dialog-color-table',

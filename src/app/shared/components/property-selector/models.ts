@@ -24,11 +24,6 @@ export enum PROPERTY_SELECTOR_SOURCE {
     interpolated = 'Interpolated'
 }
 
-export interface KeywordColor {
-    keyword: string;
-    color: string;
-}
-
 export enum PROPERTY_TYPE {
     color,
     number
