@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, forwardRef, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, forwardRef, OnInit, ViewChild, Input, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import {
   FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, FormControl
 } from '@angular/forms';
@@ -31,6 +31,7 @@ import { EditLayerModeFormComponentForm } from './edit-layer-mode-form.component
 import { GEOMETRY_TYPE } from './models';
 import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-components/property-selector/models';
 import { ensureMinLessThanMax } from '@utils/tools';
+import { PropertySelectorComponent } from '@shared-components/property-selector/property-selector.component';
 
 @Component({
   selector: 'app-edit-layer-mode-form',
@@ -54,11 +55,12 @@ import { ensureMinLessThanMax } from '@utils/tools';
   ]
 })
 // ControlValueAccessor: see https://christianlydemann.com/form-validation-with-controlvalueaccessor/
-export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm implements OnInit {
+export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm implements OnInit, AfterViewInit {
 
   @ViewChild('stepper', { static: false }) stepper: MatStepper;
   @Input() aggregatedMode = false;
   @Input() colorFgSources: Array<string>;
+  @ViewChildren(PropertySelectorComponent) propertySelectorComponents: QueryList<PropertySelectorComponent>;
 
   public ensureMinLessThanMax = ensureMinLessThanMax;
 
@@ -82,8 +84,11 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
 
   ngOnInit() {
     super.ngOnInit();
-    this.initCollectionRelatedFields();
     this.initEnableWidthOrRadiusFg();
+  }
+
+  ngAfterViewInit() {
+    this.initCollectionRelatedFields();
   }
 
   protected onSubmit() {
@@ -102,14 +107,26 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
       }
       this.collectionService.getCollectionFields(c, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE])
         .subscribe(
-          f => this.collectionGeoFields = f);
+          f => {
+            this.collectionGeoFields = f;
+          });
       this.collectionService.getCollectionFields(c, [FIELD_TYPES.KEYWORD])
         .subscribe(
-          f => this.collectionKeywordFields = f);
+          f => {
+            this.collectionKeywordFields = f;
+            this.propertySelectorComponents.forEach(psc => psc.collectionKeywordFieldsEmitter.emit(f));
+          });
       this.collectionService.getCollectionFields(c, [FIELD_TYPES.LONG, FIELD_TYPES.INTEGER, FIELD_TYPES.DATE])
         .subscribe(
-          f => this.collectionIntegerFields = f);
+          f => {
+            this.collectionIntegerFields = f;
+            this.propertySelectorComponents.forEach(psc => psc.collectionIntegerFieldsEmitter.emit(f));
+          });
     });
+    if (!!this.collectionCtrl.value) {
+      // init values in edition mode
+      this.collectionCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+    }
   }
 
   /**

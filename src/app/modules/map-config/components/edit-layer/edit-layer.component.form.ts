@@ -16,8 +16,10 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { CustomValidators } from '@utils/custom-validators';
+import { LAYER_MODE } from './models';
 
 export abstract class EditLayerComponentForm {
     public layerFg: FormGroup;
@@ -29,11 +31,30 @@ export abstract class EditLayerComponentForm {
             name: ['', Validators.required],
             mode: ['', Validators.required],
             id: [''],
-            modeFg: ['', Validators.required]
+            featuresFg: [
+                { value: null, disabled: true },
+                CustomValidators.getConditionalValidator(() => !!this.layerFg ?
+                    this.mode.value === LAYER_MODE.features : false,
+                    Validators.required)
+            ],
+            featureMetricFg: [
+                { value: null, disabled: true },
+                CustomValidators.getConditionalValidator(() => !!this.layerFg ?
+                    this.mode.value === LAYER_MODE.featureMetric : false,
+                    Validators.required)
+            ]
         });
     }
 
-    get modeFg() {
-        return this.layerFg.get('modeFg');
+    get mode() {
+        return this.layerFg.get('mode');
     }
+
+    get featuresFg() {
+        return this.layerFg.get('featuresFg');
+    }
+    get featureMetricFg() {
+        return this.layerFg.get('featureMetricFg');
+    }
+
 }
