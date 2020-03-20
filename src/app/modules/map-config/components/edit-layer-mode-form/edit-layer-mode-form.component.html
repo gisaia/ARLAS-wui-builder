@@ -42,7 +42,7 @@
                         <mat-label>{{ 'Geometry type' | translate}} </mat-label>
                         <mat-select formControlName="geometryTypeCtrl"
                             appAlertOnChange="changing the geometry type may reset the radius or the width"
-                            appResetOnChange [dependants]="[widthFg, radiusFg]">
+                            appResetOnChange="map.layer" [dependants]="[widthFg, radiusFg]">
                             <mat-option [value]="GEOMETRY_TYPE.fill">{{ 'Fill' | translate}}</mat-option>
                             <mat-option [value]="GEOMETRY_TYPE.line">{{ 'Line' | translate}}</mat-option>
                             <mat-option [value]="GEOMETRY_TYPE.circle">{{ 'Circle' | translate}}</mat-option>
@@ -132,7 +132,8 @@
                         formControlName="colorFg" [collection]="collectionCtrl.value"
                         [collectionKeywordFields]="collectionKeywordFields"
                         [collectionIntegerFields]="collectionIntegerFields" [submit]="submitSubject.asObservable()"
-                        defaultKey="map.layer.styleStep.colorFg" [sources]="colorFgSources">
+                        defaultKey="map.layer.styleStep.colorFg" [sources]="colorFgSources"
+                        [aggregated]="aggregatedMode">
                     </app-property-selector>
 
                 </div>
@@ -162,7 +163,8 @@
                         formControlName="widthFg" [collection]="collectionCtrl.value"
                         [collectionKeywordFields]="collectionKeywordFields"
                         [collectionIntegerFields]="collectionIntegerFields" [submit]="submitSubject.asObservable()"
-                        defaultKey="map.layer.styleStep.widthFg" [sources]="widthFgSources">
+                        defaultKey="map.layer.styleStep.widthFg" [sources]="widthFgSources"
+                        [aggregated]="aggregatedMode">
                     </app-property-selector>
 
                 </div>
@@ -183,7 +185,8 @@
                         formControlName="radiusFg" [collection]="collectionCtrl.value"
                         [collectionKeywordFields]="collectionKeywordFields"
                         [collectionIntegerFields]="collectionIntegerFields" [submit]="submitSubject.asObservable()"
-                        defaultKey="map.layer.styleStep.radiusFg" [sources]="radiusFgSources">
+                        defaultKey="map.layer.styleStep.radiusFg" [sources]="radiusFgSources"
+                        [aggregated]="aggregatedMode">
                     </app-property-selector>
 
                 </div>

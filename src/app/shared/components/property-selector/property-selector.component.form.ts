@@ -22,8 +22,11 @@ import { PROPERTY_SELECTOR_SOURCE, KeywordColor, PROPERTY_TYPE } from './models'
 import { ComponentSubForm } from '@shared/ComponentSubForm';
 import { NGXLogger } from 'ngx-logger';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { Input } from '@angular/core';
 
 export abstract class PropertySelectorComponentForm extends ComponentSubForm {
+
+    @Input() public aggregated: boolean;
 
     constructor(
         protected formBuilder: FormBuilder,
@@ -81,11 +84,28 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                     ])
             }),
             propertyInterpolatedFg: this.formBuilder.group({
+                propertyInterpolatedCountOrMetricCtrl:
+                    [
+                        null,
+                        CustomValidators.getConditionalValidator(() => !!this.formFg && this.aggregated ?
+                            this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                            : false,
+                            Validators.required)
+                    ],
+                propertyInterpolatedMetricCtrl: [
+                    null,
+                    CustomValidators.getConditionalValidator(() => !!this.formFg && this.aggregated ?
+                        this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                        && this.propertyInterpolatedCountOrMetricCtrl.value
+                        : false,
+                        Validators.required)
+                ],
                 propertyInterpolatedFieldCtrl:
                     [
                         null,
                         CustomValidators.getConditionalValidator(() => !!this.formFg ?
                             this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                            && (!this.aggregated || this.aggregated && this.propertyInterpolatedMetricCtrl.value)
                             : false,
                             Validators.required)
                     ],
@@ -96,7 +116,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                 propertyInterpolatedScopeCtrl:
                     [
                         null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
+                        CustomValidators.getConditionalValidator(() => !!this.formFg && !this.aggregated ?
                             this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
                             && this.propertyInterpolatedNormalizeCtrl.value
                             : false,
@@ -109,7 +129,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                 propertyInterpolatedNormalizeLocalFieldCtrl:
                     [
                         null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
+                        CustomValidators.getConditionalValidator(() => !!this.formFg && !this.aggregated ?
                             this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
                             && this.propertyInterpolatedNormalizeByKeyCtrl.value
                             : false,
@@ -199,6 +219,12 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
     }
     get propertyInterpolatedFg() {
         return this.formFg.get('propertyInterpolatedFg') as FormGroup;
+    }
+    get propertyInterpolatedCountOrMetricCtrl() {
+        return this.propertyInterpolatedFg.get('propertyInterpolatedCountOrMetricCtrl');
+    }
+    get propertyInterpolatedMetricCtrl() {
+        return this.propertyInterpolatedFg.get('propertyInterpolatedMetricCtrl');
     }
     get propertyInterpolatedFieldCtrl() {
         return this.propertyInterpolatedFg.get('propertyInterpolatedFieldCtrl');

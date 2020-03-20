@@ -1,4 +1,5 @@
-<app-edit-layer-mode-form [submit]="submitSubject.asObservable()">
+<app-edit-layer-mode-form [submit]="submitSubject.asObservable()" aggregatedMode="true"
+    [colorFgSources]="[PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated]">
     <div additional-geometry>
         <app-config-element>
             <div form-fields>

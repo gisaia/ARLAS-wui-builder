@@ -20,6 +20,7 @@ import { Component, OnInit, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, FormBuilder } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { EditLayerFeatureMetricComponentForm } from './edit-layer-feature-metric.component.form';
+import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
 
 @Component({
   selector: 'app-edit-layer-feature-metric',
@@ -39,6 +40,8 @@ import { EditLayerFeatureMetricComponentForm } from './edit-layer-feature-metric
   ]
 })
 export class EditLayerFeatureMetricComponent extends EditLayerFeatureMetricComponentForm implements OnInit {
+
+  public PROPERTY_SELECTOR_SOURCE = PROPERTY_SELECTOR_SOURCE;
 
   constructor(
     protected logger: NGXLogger,

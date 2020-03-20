@@ -57,11 +57,13 @@ import { ensureMinLessThanMax } from '@utils/tools';
 export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm implements OnInit {
 
   @ViewChild('stepper', { static: false }) stepper: MatStepper;
+  @Input() aggregatedMode = false;
+  @Input() colorFgSources: Array<string>;
+
   public ensureMinLessThanMax = ensureMinLessThanMax;
 
   public GEOMETRY_TYPE = GEOMETRY_TYPE;
   public PROPERTY_TYPE = PROPERTY_TYPE;
-  public colorFgSources = Object.values(PROPERTY_SELECTOR_SOURCE);
   public widthFgSources = [PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated];
   public radiusFgSources = [PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated];
   public collectionGeoFields: string[] = [];
