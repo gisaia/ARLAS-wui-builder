@@ -18,7 +18,8 @@
         <div form-fields>
             <mat-form-field>
                 <mat-label>{{ 'Mode' | translate}} </mat-label>
-                <mat-select formControlName="mode" appAlertOnChange="changing the mode will reset the below form">
+                <mat-select formControlName="mode" appAlertOnChange="changing the mode will reset the below form"
+                    [dependants]="[modeFg]" appResetOnChange>
                     <mat-option *ngFor="let mode of LAYER_MODE | objectvalues" [value]="mode">
                         {{mode | translate}}
                     </mat-option>

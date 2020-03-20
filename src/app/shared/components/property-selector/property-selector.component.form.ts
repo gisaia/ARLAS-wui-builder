@@ -21,11 +21,13 @@ import { CustomValidators } from '@utils/custom-validators';
 import { PROPERTY_SELECTOR_SOURCE, KeywordColor, PROPERTY_TYPE } from './models';
 import { ComponentSubForm } from '@shared/ComponentSubForm';
 import { NGXLogger } from 'ngx-logger';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 export abstract class PropertySelectorComponentForm extends ComponentSubForm {
 
     constructor(
         protected formBuilder: FormBuilder,
+        protected formBuilderDefault: FormBuilderWithDefaultService,
         protected logger: NGXLogger
     ) {
         super(logger);

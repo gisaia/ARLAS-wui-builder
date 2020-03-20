@@ -41,13 +41,14 @@ import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-
 import { SharedModule } from '@shared/shared.module';
 import { DialogColorTableComponent } from './components/dialog-color-table/dialog-color-table.component';
 import { DialogPaletteSelectorComponent } from './components/dialog-palette-selector/dialog-palette-selector.component';
-import { EditLayerFeaturesComponent } from './components/edit-layer-features/edit-layer-features.component';
+import { EditLayerModeFormComponent } from './components/edit-layer-mode-form/edit-layer-mode-form.component';
 import { EditLayerComponent } from './components/edit-layer/edit-layer.component';
 import { GlobalComponent } from './components/global/global.component';
 import { LayersComponent } from './components/layers/layers.component';
 import { MapConfigRoutingModule } from './map-config-routing.module';
 import { MapConfigComponent } from './map-config.component';
 import { EditLayerFeatureMetricComponent } from './components/edit-layer-feature-metric/edit-layer-feature-metric.component';
+import { EditLayerFeaturesComponent } from './components/edit-layer-features/edit-layer-features.component';
 
 @NgModule({
   entryComponents: [
@@ -60,10 +61,11 @@ import { EditLayerFeatureMetricComponent } from './components/edit-layer-feature
     GlobalComponent,
     LayersComponent,
     EditLayerComponent,
-    EditLayerFeaturesComponent,
+    EditLayerModeFormComponent,
     DialogColorTableComponent,
     DialogPaletteSelectorComponent,
-    EditLayerFeatureMetricComponent
+    EditLayerFeatureMetricComponent,
+    EditLayerFeaturesComponent
   ],
   imports: [
     CommonModule,
