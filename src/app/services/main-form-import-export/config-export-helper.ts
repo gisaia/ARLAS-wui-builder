@@ -17,17 +17,36 @@ specific language governing permissions and limitations
 under the License.
 */
 import { FormGroup, FormArray } from '@angular/forms';
-import { Config, Contributor, LayerSource } from './models-config';
+import { Config, Contributor, LayerSource, ChipSearch } from './models-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
 
 export class ConfigExportHelper {
 
-    public static process(mapConfigGlobal: FormGroup, mapConfigLayers: FormArray, sourceByMode: Map<string, string>): any {
+    public static process(
+        mapConfigGlobal: FormGroup,
+        mapConfigLayers: FormArray,
+        searchConfigGlobal: FormGroup,
+        sourceByMode: Map<string, string>): any {
+
+        const chipssearch: ChipSearch = {
+            name: searchConfigGlobal.value.name,
+            icon: searchConfigGlobal.value.icon
+        };
+
         const config: Config = {
             arlas: {
                 web: {
                     contributors: []
+                }
+            },
+            arlasWui: {
+                web: {
+                    app: {
+                        components: {
+                            chipssearch
+                        }
+                    }
                 }
             }
         };
@@ -42,7 +61,8 @@ export class ConfigExportHelper {
 
         const layersSources: Array<LayerSource> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
             const layerValues = layerFg.value;
-            const modeValues = layerValues.modeFg;
+            const modeValues = layerFg.value.mode === LAYER_MODE.features ?
+                layerValues.featuresFg : layerValues.featureMetricFg;
             const layerSource: LayerSource = {
                 id: layerValues.name,
                 source: sourceByMode.get(layerFg.value.mode),
@@ -80,6 +100,15 @@ export class ConfigExportHelper {
 
         mapContributor.layers_sources = layersSources;
         config.arlas.web.contributors.push(mapContributor);
+        config.arlas.web.contributors.push({
+            type: 'chipssearch',
+            identifier: 'chipssearch',
+            search_field: searchConfigGlobal.value.searchField,
+            name: searchConfigGlobal.value.name,
+            icon: searchConfigGlobal.value.icon,
+            autocomplete_field: searchConfigGlobal.value.autocompleteField,
+            autocomplete_size: searchConfigGlobal.value.autocompleteSize,
+        });
 
         return config;
     }

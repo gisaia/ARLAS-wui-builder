@@ -14,6 +14,9 @@ describe('LeftMenuComponent', () => {
           mapConfig: {
             control: new FormGroup({})
           },
+          searchConfig: {
+            control: new FormGroup({})
+          },
           mainForm: new FormGroup({})
         })
     ]

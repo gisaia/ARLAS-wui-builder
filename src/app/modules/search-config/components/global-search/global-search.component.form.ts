@@ -16,11 +16,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormGroup, FormArray, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
-export abstract class GlobalComponentForm {
+export abstract class GlobalSearchComponentForm {
 
     public globalFg: FormGroup;
 
@@ -28,16 +28,16 @@ export abstract class GlobalComponentForm {
         protected mainFormService: MainFormService,
         protected formBuilderDefault: FormBuilderWithDefaultService
     ) {
-        this.mainFormService.mapConfig.initGlobalFg(
-            this.formBuilderDefault.group('map.global', {
-                requestGeometries: new FormArray([]),
-                geographicalOperator: new FormControl(null, Validators.required)
+
+        this.mainFormService.searchConfig.initGlobalFg(
+            formBuilderDefault.group('search.global', {
+                name: [null, Validators.required],
+                searchField: [null, Validators.required],
+                autocompleteField: [null, Validators.required],
+                autocompleteSize: [null, Validators.required],
+                icon: [null, Validators.required]
             }));
-        this.globalFg = this.mainFormService.mapConfig.getGlobalFg();
-    }
 
-    get requestGeometries() {
-        return this.globalFg.get('requestGeometries') as FormArray;
+        this.globalFg = this.mainFormService.searchConfig.getGlobalFg();
     }
-
 }

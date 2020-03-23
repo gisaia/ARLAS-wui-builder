@@ -22,14 +22,14 @@ import { CollectionService, FIELD_TYPES } from '@services/collection-service/col
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { Expression } from 'arlas-api';
-import { GlobalComponentForm } from './global.component.form';
+import { GlobalMapComponentForm as GlobalMapComponentForm } from './global-map.component.form';
 
 @Component({
   selector: 'app-global',
-  templateUrl: './global.component.html',
-  styleUrls: ['./global.component.scss']
+  templateUrl: './global-map.component.html',
+  styleUrls: ['./global-map.component.scss']
 })
-export class GlobalComponent extends GlobalComponentForm implements OnInit {
+export class GlobalMapComponent extends GlobalMapComponentForm implements OnInit {
 
   public operators = [
     Expression.OpEnum.Intersects,

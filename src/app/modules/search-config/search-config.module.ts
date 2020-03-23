@@ -18,16 +18,30 @@ under the License.
 */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { SearchConfigRoutingModule } from './search-config-routing.module';
 import { SearchConfigComponent } from './search-config.component';
-
+import { GlobalSearchComponent } from './components/global-search/global-search.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '@shared/shared.module';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatInputModule } from '@angular/material/input';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
-  declarations: [SearchConfigComponent],
+  declarations: [SearchConfigComponent, GlobalSearchComponent],
   imports: [
     CommonModule,
-    SearchConfigRoutingModule
+    SearchConfigRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SharedModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    TranslateModule,
+    MatInputModule,
+    MatSliderModule
   ]
 })
 export class SearchConfigModule { }

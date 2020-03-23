@@ -20,10 +20,12 @@ import { Injectable } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 
 enum MAIN_FORM_KEYS {
-  MAP_CONFIG = 'MapConfig',
   STARTING_CONFIG = 'StartingConfig',
+  MAP_CONFIG = 'MapConfig',
   MAP_CONFIG_LAYERS = 'MapConfigLayers',
-  MAP_CONFIG_GLOBAL = 'MapConfigGlobal'
+  MAP_CONFIG_GLOBAL = 'MapConfigGlobal',
+  SEARCH_CONFIG = 'SearchConfig',
+  SEARCH_CONFIG_GLOBAL = 'SearchConfigGlobal'
 }
 
 @Injectable({
@@ -32,8 +34,9 @@ enum MAIN_FORM_KEYS {
 export class MainFormService {
 
   public mainForm = new FormGroup({
+    [MAIN_FORM_KEYS.STARTING_CONFIG]: new FormGroup({}),
     [MAIN_FORM_KEYS.MAP_CONFIG]: new FormGroup({}),
-    [MAIN_FORM_KEYS.STARTING_CONFIG]: new FormGroup({})
+    [MAIN_FORM_KEYS.SEARCH_CONFIG]: new FormGroup({})
   });
 
   // In sub configs, init() methods should only use `registerControl()` method.
@@ -62,10 +65,19 @@ export class MainFormService {
 
   }(this.mainForm.get(MAIN_FORM_KEYS.MAP_CONFIG) as FormGroup);
 
+  // SEARCH CONFIG
+  public searchConfig = new class {
+    constructor(public control: FormGroup) { }
+
+    public initGlobalFg = (fg: FormGroup) => this.control.registerControl(MAIN_FORM_KEYS.SEARCH_CONFIG_GLOBAL, fg);
+    public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.SEARCH_CONFIG_GLOBAL) as FormGroup;
+
+  }(this.mainForm.get(MAIN_FORM_KEYS.SEARCH_CONFIG) as FormGroup);
+
   // OTHER METHODS ...
   public getCollections(): string[] {
     if (!!this.startingConfig.getFg() && !!this.startingConfig.getFg().get('collections')) {
-      return   this.startingConfig.getFg().get('collections').value;
+      return this.startingConfig.getFg().get('collections').value;
     }
     return [];
   }

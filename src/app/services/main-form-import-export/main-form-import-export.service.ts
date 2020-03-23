@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { ComponentFactoryResolver, Injectable, ViewContainerRef } from '@angular/core';
+import { ComponentFactoryResolver, Injectable, ViewContainerRef, Type, OnInit } from '@angular/core';
 import { LayersComponent } from '@map-config/components/layers/layers.component';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { updateValueAndValidity } from '@utils/tools';
@@ -25,10 +25,14 @@ import { NGXLogger } from 'ngx-logger';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { ConfigExportHelper } from './config-export-helper';
 import { ConfigMapExportHelper } from './config-map-export-helper';
+import { GlobalMapComponent } from '@map-config/components/global-map/global-map.component';
+import { GlobalSearchComponent } from '@search-config/components/global-search/global-search.component';
 
 const MAIN_FORM_VALIDATE_COMPONENTS = [
-  LayersComponent
-];
+  GlobalMapComponent,
+  LayersComponent,
+  GlobalSearchComponent
+] as Array<Type<GlobalMapComponent | LayersComponent | GlobalSearchComponent>>;
 
 @Injectable({
   providedIn: 'root'
@@ -70,28 +74,30 @@ export class MainFormImportExportService {
   private doExport() {
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
     const mapConfigLayers = this.mainFormService.mapConfig.getLayersFa();
+    const searchConfigGlobal = this.mainFormService.searchConfig.getGlobalFg();
 
     const sourceByMode = new Map<string, string>();
     sourceByMode.set(LAYER_MODE.features, 'feature');
     sourceByMode.set(LAYER_MODE.featureMetric, 'feature-metric');
 
     this.saveJson(
-      ConfigExportHelper.process(mapConfigGlobal, mapConfigLayers, sourceByMode),
-      'config.json');
+      ConfigExportHelper.process(mapConfigGlobal, mapConfigLayers, searchConfigGlobal, sourceByMode),
+      'config.json', '_');
 
     this.saveJson(
       ConfigMapExportHelper.process(mapConfigLayers, sourceByMode),
       'config.map.json',
-      true);
+      '-');
   }
 
-  private saveJson(json: any, filename: string, keysToSnakeCase = false) {
+  private saveJson(json: any, filename: string, separator: string) {
     const blob = new Blob([JSON.stringify(json, (key, value) => {
       if (Array.isArray(value) && value.length === 0) {
         // do not export empty array, they are useless
         return undefined;
-      } else if (keysToSnakeCase && value && typeof value === 'object' && !Array.isArray(value)) {
-        // convert keys to snake-keys. In fact we cannot declare a property with a snake-cased name,
+      } else if (value && typeof value === 'object' && !Array.isArray(value)) {
+        // convert keys to snake- or kebab-case (eventually other) according to the separator.
+        // In fact we cannot declare a property with a snake-cased name,
         // (so in models interfaces properties are are camel case)
         const replacement = {};
         for (const k in value) {
@@ -99,7 +105,7 @@ export class MainFormImportExportService {
             replacement[
               k.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
                 .map(x => x.toLowerCase())
-                .join('-')
+                .join(separator)
             ] = value[k];
           }
         }

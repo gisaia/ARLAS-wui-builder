@@ -18,10 +18,24 @@ under the License.
 */
 export interface Config {
     arlas: Arlas;
+    arlasWui: {
+        web: {
+            app: {
+                components: {
+                    chipssearch: ChipSearch;
+                }
+            }
+        }
+    };
 }
 
 export interface Arlas {
     web: Web;
+}
+
+export interface ChipSearch {
+    name: string;
+    icon: string;
 }
 
 export interface Web {
@@ -31,9 +45,14 @@ export interface Web {
 export interface Contributor {
     type: string;
     identifier: string;
-    geoQueryOp: string;
-    geoQueryField: string;
-    layers_sources: Array<LayerSource>;
+    geoQueryOp?: string;
+    geoQueryField?: string;
+    layers_sources?: Array<LayerSource>;
+    name?: string;
+    search_field?: string;
+    icon?: string;
+    autocomplete_field?: string;
+    autocomplete_size?: number;
 }
 
 export interface LayerSource {
