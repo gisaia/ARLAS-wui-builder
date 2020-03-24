@@ -8,7 +8,11 @@
             "geographicalOperator": "intersects"
         },
         "layer": {
+            "collectionStep": {
+                "collectionCtrl": "demo_ais-danmark"
+            },
             "geometryStep": {
+                "geometryCtrl": "position.location",
                 "geometryTypeCtrl": "circle"
             },
             "visibilityStep": {
@@ -19,10 +23,12 @@
             "styleStep": {
                 "opacityCtrl": 0.5,
                 "colorFg": {
-                    "propertySourceCtrl": "fix",
-                    "propertyFixCtrl": "#abcdef",
-                    "propertyInterpolatedFg": {
-                    }
+                    "propertySourceCtrl": "Fix",
+                    "propertyFixCtrl": "#abcdef"
+                },
+                "radiusFg": {
+                    "propertySourceCtrl": "Fix",
+                    "propertyFixCtrl": "1.5"
                 }
             }
         }
@@ -30,7 +36,30 @@
     "search": {
         "global": {
             "autocompleteSize": 10,
-            "name": "Search a ..."
+            "name": "Search a ...",
+            "searchField": "id",
+            "autocompleteField": "id",
+            "icon": "search"
+        }
+    },
+    "timeline": {
+        "global": {
+            "useDetailedTimeline": true,
+            "timeline": {
+                "field": "position.timestamp",
+                "bucketsNumber": 22,
+                "intervalSize": 10,
+                "chartTitle": "title",
+                "chartType": "area"
+            },
+            "detailedTimeline": {
+                "field": "position.timestamp",
+                "bucketsNumber": 44,
+                "intervalSize": 10,
+                "chartTitle": "title",
+                "chartType": "area",
+                "selectionExtentPercent": 2
+            }
         }
     },
     "timeline": {

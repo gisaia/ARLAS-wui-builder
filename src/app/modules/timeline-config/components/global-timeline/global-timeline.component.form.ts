@@ -17,9 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { MainFormService } from '@services/main-form/main-form.service';
-import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { TimelineFormComponent } from '../timeline-form/timeline-form.component';
-import { ViewChildren, QueryList, ViewChild } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 export class GlobalTimelineComponentForm {
@@ -37,6 +35,8 @@ export class GlobalTimelineComponentForm {
         }));
 
         this.globalFg = this.mainFormService.timelineConfig.getGlobalFg();
+        // make the fg independant form the mainForm, this will make default values resolution easier
+        this.globalFg.setParent(null);
     }
 
     get timeline() {

@@ -40,6 +40,10 @@ export interface ChipSearch {
 
 export interface Web {
     contributors: Array<Contributor>;
+    components: {
+        timeline: TimelineComponent,
+        detailedTimeline: TimelineComponent
+    };
 }
 
 export interface Contributor {
@@ -53,6 +57,11 @@ export interface Contributor {
     icon?: string;
     autocomplete_field?: string;
     autocomplete_size?: number;
+    numberOfBuckets?: number;
+    isOneDimension?: boolean;
+    aggregationmodels?: Array<AggregationModel>;
+    annexedContributorId?: string;
+    selectionExtentPercentage?: number;
 }
 
 export interface LayerSource {
@@ -73,6 +82,15 @@ export interface LayerSource {
     metrics?: Array<Metric>;
 }
 
+export interface AggregationModel {
+    type: string;
+    field: string;
+    interval?: {
+        value: number;
+        unit: string;
+    };
+}
+
 export interface NormalizationField {
     on: string;
     per: string;
@@ -88,4 +106,39 @@ export interface Metric {
     field: string;
     metrics: string;
     normalize: string;
+}
+
+export interface TimelineComponent {
+    contributorId: string;
+    componentType: string;
+    input: TimelineComponentInput;
+}
+
+export interface TimelineComponentInput {
+    id: string;
+    xTicks: number;
+    yTicks: number;
+    xLabels: number;
+    yLabels: number;
+    chartTitle: string;
+    customizedCssClass: string;
+    chartHeight: number;
+    multiselectable: boolean;
+    brushHandlesHeightWeight: number;
+    dataType: string;
+    isHistogramSelectable: boolean;
+    ticksDateFormat?: string;
+    chartType: string;
+    chartWidth: number;
+    xAxisPosition: string;
+    yAxisStartsFromZero: boolean;
+    descriptionPosition: string;
+    showXTicks: boolean;
+    showYTicks: boolean;
+    showXLabels: boolean;
+    showYLabels: boolean;
+    showHorizontalLines: boolean;
+    isSmoothedCurve: boolean;
+    barWeight: number;
+    topOffsetRemoveInterval?: number;
 }
