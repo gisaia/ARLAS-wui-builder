@@ -33,6 +33,19 @@
             "name": "Search a ..."
         }
     },
+    "timeline": {
+        "global": {
+            "useDetailedTimeline": true,
+            "timeline": {
+                "bucketsNumber": 22,
+                "intervalSize": 10
+            },
+            "detailedTimeline": {
+                "bucketsNumber": 44,
+                "selectionExtentPercent": 2
+            }
+        }
+    },
     "config": {
         "aggregationTermSize": 20,
         "palettes": [["#065143", "#ce1483"], ["#6d213c", "#946846", "#baab68"], ["#eecf6d", "#d5ac4e", "#8b6220", "#720e07", "#45050c"]],

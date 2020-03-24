@@ -1,19 +1,18 @@
-import { EditLayerFeaturesComponent } from './edit-layer-features.component';
+import { TimelineFormComponent } from './timeline-form.component';
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
-import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
+import { MockComponent, MockDirective } from 'ng-mocks';
 import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
+import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
+import { FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { MockComponent } from 'ng-mocks';
-import { ObjectvaluesPipe } from '@shared/pipes/objectvalues.pipe';
 
-describe('EditLayerFeaturesComponent', () => {
-  let spectator: Spectator<EditLayerFeaturesComponent>;
+describe('TimelineFormComponent', () => {
+  let spectator: Spectator<TimelineFormComponent>;
   const createComponent = createComponentFactory({
-    component: EditLayerFeaturesComponent,
+    component: TimelineFormComponent,
     declarations: [
-      MockComponent(EditLayerModeFormComponent),
       MockComponent(ConfigElementComponent),
-      ObjectvaluesPipe
+      ResetOnChangeDirective
     ]
   });
 
@@ -26,5 +25,4 @@ describe('EditLayerFeaturesComponent', () => {
   it('should create', () => {
     expect(spectator.component).toBeTruthy();
   });
-
 });

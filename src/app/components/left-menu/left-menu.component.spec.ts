@@ -17,6 +17,9 @@ describe('LeftMenuComponent', () => {
           searchConfig: {
             control: new FormGroup({})
           },
+          timelineConfig: {
+            control: new FormGroup({})
+          },
           mainForm: new FormGroup({})
         })
     ]

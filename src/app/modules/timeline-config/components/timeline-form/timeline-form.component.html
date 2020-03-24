@@ -1,0 +1,134 @@
+<div [formGroup]="formFg">
+    <app-config-element>
+        <div form-fields>
+            <mat-form-field>
+                <mat-label>{{'Field' | translate}}</mat-label>
+                <mat-select formControlName="field">
+                    <mat-option *ngFor="let field of dateFields" [value]="field">
+                        {{field}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div description>
+            {{'It is used to..' | translate}}
+        </div>
+    </app-config-element>
+    <app-config-element>
+        <div form-fields>
+
+            <div>
+                <mat-label>{{'By bucket' | translate}}</mat-label>
+                <mat-slide-toggle formControlName="bucketOrInterval" [appResetOnChange]="defaultKey"
+                    [dependants]="[bucketsNumber, intervalUnit, intervalSize]">
+                    {{'or interval' | translate}}
+                </mat-slide-toggle>
+            </div>
+            <div *ngIf="!bucketOrInterval.value">
+                <mat-label>{{'Number of buckets' | translate}}</mat-label>
+                <mat-slider thumbLabel formControlName="bucketsNumber" min="10" max="200" step="5"></mat-slider>
+            </div>
+            <div *ngIf="bucketOrInterval.value">
+                <div>
+                    <mat-form-field>
+                        <mat-label>{{'Interval unit' | translate}}</mat-label>
+                        <mat-select formControlName="intervalUnit">
+                            <mat-option *ngFor="let unit of intervalUnits" [value]="unit">
+                                {{unit}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>{{'Interval size' | translate}}</mat-label>
+                        <input matInput formControlName="intervalSize" type="number">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div>
+                <mat-error *ngIf="bucketsNumber.touched && bucketsNumber?.errors?.required">
+                    {{'The number of buckets is required' | translate}}
+                </mat-error>
+                <mat-error *ngIf="intervalUnit.touched && intervalUnit?.errors?.required">
+                    {{'The interval unit is required' | translate}}
+                </mat-error>
+                <mat-error *ngIf="intervalSize.touched && intervalSize?.errors?.required">
+                    {{'The interval size is required' | translate}}
+                </mat-error>
+                <mat-error *ngIf="intervalSize.touched && intervalSize?.errors?.pattern">
+                    {{'The interval size must be an integer number' | translate}}
+                </mat-error>
+            </div>
+        </div>
+        <div description>
+            {{'It is used to..' | translate}}
+        </div>
+    </app-config-element>
+    <app-config-element>
+        <div form-fields>
+            <mat-form-field>
+                <mat-label>{{'Chart title' | translate}}</mat-label>
+                <input matInput formControlName="chartTitle">
+            </mat-form-field>
+        </div>
+        <div description>
+            {{'It is used to..' | translate}}
+        </div>
+    </app-config-element>
+    <app-config-element>
+        <div form-fields>
+            <mat-form-field>
+                <mat-label>{{'Chart type' | translate}}</mat-label>
+                <mat-select formControlName="chartType">
+                    <mat-option *ngFor="let type of chartTypes" [value]="type">
+                        {{type | translate | titlecase}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div description>
+            {{'It is used to..' | translate}}
+        </div>
+    </app-config-element>
+    <app-config-element>
+        <div form-fields>
+            <mat-form-field>
+                <mat-label>{{'Date format' | translate}}</mat-label>
+                <mat-select formControlName="dateFormat">
+                    <mat-option *ngFor="let format of dateFormats" [value]="format">
+                        {{format | translate | titlecase}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div description>
+            {{'It is used to..' | translate}}
+        </div>
+    </app-config-element>
+    <div *ngIf="!isDetailedTimeline">
+        <app-config-element>
+            <div form-fields>
+                <mat-label>{{'Is multi-selectable' | translate}}</mat-label>
+                <mat-slide-toggle [formControl]="isMultiselectable">
+                </mat-slide-toggle>
+            </div>
+            <div description>
+                {{'It is used to..' | translate}}
+            </div>
+        </app-config-element>
+    </div>
+    <div *ngIf="isDetailedTimeline">
+        <app-config-element>
+            <div form-fields>
+                <mat-label>{{'Percent of selection extent' | translate}}</mat-label>
+                <mat-slider thumbLabel [formControl]="selectionExtentPercent" min="0" max="100" step="5">
+                </mat-slider>
+            </div>
+            <div description>
+                {{'It is used to..' | translate}}
+            </div>
+        </app-config-element>
+    </div>
+    <ng-content select="[additional-config-elements]"></ng-content>
+</div>

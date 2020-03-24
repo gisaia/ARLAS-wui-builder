@@ -1,0 +1,39 @@
+<form [formGroup]="globalFg">
+
+    <mat-tab-group mat-align-tabs="center" animationDuration="500ms" mat-stretch-tabs>
+        <mat-tab>
+
+            <ng-template mat-tab-label>
+                <span [class.tab-error]="timeline.touched && timeline.invalid">
+                    {{'Timeline' | translate}}
+                </span>
+            </ng-template>
+
+            <app-timeline-form [dateFields]="dateFields" formControlName="timeline"
+                [submit]="submitSubject.asObservable()" [isDetailedTimeline]="false"
+                defaultKey="timeline.global.timeline">
+            </app-timeline-form>
+
+        </mat-tab>
+        <mat-tab>
+
+            <ng-template mat-tab-label>
+                <span [class.tab-error]="detailedTimeline.touched && detailedTimeline.invalid">
+                    {{'Detailed timeline' | translate}}
+                </span>
+            </ng-template>
+
+            <div class="toggle-detailed-timeline">
+                <mat-slide-toggle formControlName="useDetailedTimeline">Use
+                    detailed timeline</mat-slide-toggle>
+            </div>
+            <app-timeline-form [dateFields]="dateFields" formControlName="detailedTimeline"
+                [submit]="submitSubject.asObservable()" [hidden]="!useDetailedTimeline.value"
+                [isDetailedTimeline]="true" defaultKey="timeline.global.detailedTimeline">
+            </app-timeline-form>
+
+        </mat-tab>
+
+    </mat-tab-group>
+
+</form>

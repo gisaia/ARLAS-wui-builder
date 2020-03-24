@@ -25,7 +25,9 @@ enum MAIN_FORM_KEYS {
   MAP_CONFIG_LAYERS = 'MapConfigLayers',
   MAP_CONFIG_GLOBAL = 'MapConfigGlobal',
   SEARCH_CONFIG = 'SearchConfig',
-  SEARCH_CONFIG_GLOBAL = 'SearchConfigGlobal'
+  SEARCH_CONFIG_GLOBAL = 'SearchConfigGlobal',
+  TIMELINE_CONFIG = 'TimelineConfig',
+  TIMELINE_CONFIG_GLOBAL = 'TimelineConfigGlobal'
 }
 
 @Injectable({
@@ -36,7 +38,8 @@ export class MainFormService {
   public mainForm = new FormGroup({
     [MAIN_FORM_KEYS.STARTING_CONFIG]: new FormGroup({}),
     [MAIN_FORM_KEYS.MAP_CONFIG]: new FormGroup({}),
-    [MAIN_FORM_KEYS.SEARCH_CONFIG]: new FormGroup({})
+    [MAIN_FORM_KEYS.SEARCH_CONFIG]: new FormGroup({}),
+    [MAIN_FORM_KEYS.TIMELINE_CONFIG]: new FormGroup({})
   });
 
   // In sub configs, init() methods should only use `registerControl()` method.
@@ -73,6 +76,15 @@ export class MainFormService {
     public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.SEARCH_CONFIG_GLOBAL) as FormGroup;
 
   }(this.mainForm.get(MAIN_FORM_KEYS.SEARCH_CONFIG) as FormGroup);
+
+  // TIMELINE CONFIG
+  public timelineConfig = new class {
+    constructor(public control: FormGroup) { }
+
+    public initGlobalFg = (fg: FormGroup) => this.control.registerControl(MAIN_FORM_KEYS.TIMELINE_CONFIG_GLOBAL, fg);
+    public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.TIMELINE_CONFIG_GLOBAL) as FormGroup;
+
+  }(this.mainForm.get(MAIN_FORM_KEYS.TIMELINE_CONFIG) as FormGroup);
 
   // OTHER METHODS ...
   public getCollections(): string[] {

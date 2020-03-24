@@ -24,7 +24,7 @@ describe('PropertySelectorComponent', () => {
   beforeEach(() => {
     spectator = createComponent({
       props: {
-        submit: new Subject<void>().asObservable(),
+        submit: new Subject<boolean>().asObservable(),
         sources: Object.values(PROPERTY_SELECTOR_SOURCE)
       }
 

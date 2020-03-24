@@ -18,11 +18,14 @@ under the License.
 */
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { TimelineConfigComponent } from './timeline-config.component';
+import { GlobalTimelineComponent } from './components/global-timeline/global-timeline.component';
 
 
 const routes: Routes = [{
-  path: '', component: TimelineConfigComponent, pathMatch: 'full'
+  path: '', children: [
+    { path: '', redirectTo: 'global', pathMatch: 'full' },
+    { path: 'global', component: GlobalTimelineComponent }
+  ]
 }];
 
 @NgModule({

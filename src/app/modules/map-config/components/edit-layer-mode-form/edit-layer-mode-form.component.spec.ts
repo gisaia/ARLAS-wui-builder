@@ -35,7 +35,7 @@ describe('EditLayerModeFormComponent', () => {
 
   beforeEach(() => spectator = createComponent({
     props: {
-      submit: new Subject<void>().asObservable()
+      submit: new Subject<boolean>().asObservable()
     }
   }));
 
