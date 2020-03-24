@@ -43,7 +43,7 @@ import { DialogColorTableComponent } from './components/dialog-color-table/dialo
 import { DialogPaletteSelectorComponent } from './components/dialog-palette-selector/dialog-palette-selector.component';
 import { EditLayerModeFormComponent } from './components/edit-layer-mode-form/edit-layer-mode-form.component';
 import { EditLayerComponent } from './components/edit-layer/edit-layer.component';
-import { GlobalComponent } from './components/global/global.component';
+import { GlobalMapComponent } from './components/global-map/global-map.component';
 import { LayersComponent } from './components/layers/layers.component';
 import { MapConfigRoutingModule } from './map-config-routing.module';
 import { MapConfigComponent } from './map-config.component';
@@ -58,7 +58,7 @@ import { EditLayerFeaturesComponent } from './components/edit-layer-features/edi
   ],
   declarations: [
     MapConfigComponent,
-    GlobalComponent,
+    GlobalMapComponent,
     LayersComponent,
     EditLayerComponent,
     EditLayerModeFormComponent,

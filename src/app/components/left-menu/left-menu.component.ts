@@ -61,7 +61,8 @@ export class LeftMenuComponent {
       name: 'Timeline', link: '/timeline-config', icon: 'timeline', tooltip: this.translate.instant('Timeline configuration'), enabled: true
     },
     {
-      name: 'Search', link: '/search-config', icon: 'search', tooltip: this.translate.instant('Search configuration'), enabled: true
+      name: 'Search', link: '/search-config', icon: 'search', tooltip: this.translate.instant('Search configuration'), enabled: true,
+      control: this.mainFormService.searchConfig.control
     },
     {
       name: 'Analytics', link: 'some-link', icon: 'bar_chart', tooltip: this.translate.instant('Analytics configuration'), enabled: false

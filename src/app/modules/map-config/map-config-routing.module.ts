@@ -19,7 +19,7 @@ under the License.
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MapConfigComponent } from './map-config.component';
-import { GlobalComponent } from './components/global/global.component';
+import { GlobalMapComponent } from './components/global-map/global-map.component';
 import { LayersComponent } from './components/layers/layers.component';
 import { EditLayerComponent } from './components/edit-layer/edit-layer.component';
 import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
@@ -29,7 +29,7 @@ const routes: Routes = [
   {
     path: '', component: MapConfigComponent, children: [
       { path: '', redirectTo: 'global', pathMatch: 'full' },
-      { path: 'global', component: GlobalComponent },
+      { path: 'global', component: GlobalMapComponent },
       {
         path: 'layers', children: [
           { path: '', component: LayersComponent, pathMatch: 'full' },

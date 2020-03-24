@@ -29,7 +29,8 @@ export class ConfigMapExportHelper {
 
         const layers: Array<Layer> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
             const mode = layerFg.value.mode as LAYER_MODE;
-            const modeValues = layerFg.value.modeFg;
+            const modeValues = layerFg.value.mode === LAYER_MODE.features ?
+                layerFg.value.featuresFg : layerFg.value.featureMetricFg;
 
             const paint: Paint = {};
             const colorOpacity = modeValues.styleStep.opacityCtrl;
