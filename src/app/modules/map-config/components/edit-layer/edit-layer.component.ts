@@ -132,4 +132,15 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
     this.submitSubject.unsubscribe();
   }
 
+  public changeMode(mode: string) {
+
+    const formByMode = new Map<string, string>();
+    formByMode.set(LAYER_MODE.features, 'featuresFg');
+    formByMode.set(LAYER_MODE.featureMetric, 'featureMetricFg');
+
+    formByMode.forEach(
+      (form, m) =>
+        m === mode ? this.layerFg.get(form).enable() : this.layerFg.get(form).disable());
+  }
+
 }

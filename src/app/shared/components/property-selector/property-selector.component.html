@@ -49,7 +49,7 @@
 
         <div *ngIf="propertySourceCtrl.value == PROPERTY_SELECTOR_SOURCE.manual" formGroupName="propertyManualFg">
             <mat-form-field>
-                <mat-label>{{'Source field | translate'}}</mat-label>
+                <mat-label>{{'Source field' | translate}}</mat-label>
                 <!-- No [dependants] because we manually set the new values on source field change -->
                 <mat-select formControlName="propertyManualFieldCtrl"
                     appAlertOnChange="Changing the source field will reset the colors" [appResetOnChange]="defaultKey">
