@@ -27,12 +27,14 @@ import { ConfigExportHelper } from './config-export-helper';
 import { ConfigMapExportHelper } from './config-map-export-helper';
 import { GlobalMapComponent } from '@map-config/components/global-map/global-map.component';
 import { GlobalSearchComponent } from '@search-config/components/global-search/global-search.component';
+import { GlobalTimelineComponent } from '@timeline-config/components/global-timeline/global-timeline.component';
 
 const MAIN_FORM_VALIDATE_COMPONENTS = [
   GlobalMapComponent,
   LayersComponent,
-  GlobalSearchComponent
-] as Array<Type<GlobalMapComponent | LayersComponent | GlobalSearchComponent>>;
+  GlobalSearchComponent,
+  GlobalTimelineComponent
+] as Array<Type<GlobalMapComponent | LayersComponent | GlobalSearchComponent | GlobalTimelineComponent>>;
 
 @Injectable({
   providedIn: 'root'
@@ -64,7 +66,7 @@ export class MainFormImportExportService {
 
     // update the validity of the whole form
     this.mainFormService.mainForm.markAllAsTouched();
-    updateValueAndValidity(this.mainFormService.mainForm, false, false);
+    updateValueAndValidity(this.mainFormService.mainForm, false, true);
 
     if (this.mainFormService.mainForm.valid) {
       this.doExport();

@@ -20,7 +20,7 @@ describe('EditLayerFeatureMetricComponent', () => {
 
   beforeEach(() => spectator = createComponent({
     props: {
-      submit: new Subject<void>().asObservable(),
+      submit: new Subject<boolean>().asObservable(),
       embeddedFeaturesComponent: {
         formFg: new FormGroup({
           geometryStep: new FormGroup({})

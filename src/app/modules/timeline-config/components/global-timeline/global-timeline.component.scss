@@ -16,20 +16,13 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { GlobalSearchComponent } from './components/global-search/global-search.component';
 
+@import "variables.scss";
 
-const routes: Routes = [{
-  path: '', children: [
-    { path: '', redirectTo: 'global', pathMatch: 'full' },
-    { path: 'global', component: GlobalSearchComponent }
-  ]
-}];
+.tab-error {
+  color: $error-color;
+}
 
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class SearchConfigRoutingModule { }
+.toggle-detailed-timeline {
+  margin: 15px;
+}

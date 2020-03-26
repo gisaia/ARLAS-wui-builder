@@ -18,21 +18,21 @@ under the License.
 */
 import { ControlValueAccessor, FormGroup, Validator, AbstractControl, ValidationErrors } from '@angular/forms';
 import { OnDestroy, Input, OnInit } from '@angular/core';
-import { Observable, Subscription, Subject } from 'rxjs';
+import { Observable, Subscription, Subject, BehaviorSubject } from 'rxjs';
 import { NGXLogger } from 'ngx-logger';
 import { getAllFormGroupErrors } from '@utils/tools';
 
 /**
- * TO inherit from a component that manages a sub-form.
+ * To inherit from a component that manages a sub-form.
  * Implementing 'ControlValueAccessor', values are automatically set from the parent form.
  */
 export abstract class ComponentSubForm implements ControlValueAccessor, Validator, OnInit, OnDestroy {
 
     public formFg: FormGroup;
     // be informed if the parent form is submitted
-    @Input() public submit: Observable<void>;
+    @Input() public submit: Observable<boolean>;
     // notify the submission to an optional child component
-    public submitSubject: Subject<void> = new Subject<void>();
+    public submitSubject = new BehaviorSubject<boolean>(false);
     private submitSubscription: Subscription;
 
     constructor(
@@ -41,14 +41,16 @@ export abstract class ComponentSubForm implements ControlValueAccessor, Validato
     }
 
     public ngOnInit() {
-        this.submitSubscription = this.submit.subscribe(() => {
-            this.onSubmit();
+        this.submitSubscription = this.submit.subscribe((b) => {
+            if (b) {
+                this.onSubmit();
+            }
         });
     }
 
     protected onSubmit() {
         this.formFg.markAllAsTouched();
-        this.submitSubject.next();
+        this.submitSubject.next(true);
     }
 
     public onTouched: () => void = () => { };
@@ -73,14 +75,7 @@ export abstract class ComponentSubForm implements ControlValueAccessor, Validato
     }
 
     validate(control: AbstractControl): ValidationErrors {
-        return this.formFg.valid ? null : {
-            invalidForm:
-            {
-                valid: false,
-                message: 'InnerForm fields are invalid',
-                errors: getAllFormGroupErrors(this.formFg)
-            }
-        };
+        return this.formFg.valid ? null : getAllFormGroupErrors(this.formFg);
     }
 
     registerOnValidatorChange?(fn: () => void): void {

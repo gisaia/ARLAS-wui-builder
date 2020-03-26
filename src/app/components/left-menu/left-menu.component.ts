@@ -54,21 +54,42 @@ export class LeftMenuComponent {
 
   public pages: Page[] = [
     {
-      name: 'Map', link: '/map-config', icon: 'map', tooltip: this.translate.instant('Map configuration'), enabled: true,
+      name: 'Map',
+      link: '/map-config',
+      icon: 'map',
+      tooltip: this.translate.instant('Map configuration'),
+      enabled: true,
       control: this.mainFormService.mapConfig.control
     },
     {
-      name: 'Timeline', link: '/timeline-config', icon: 'timeline', tooltip: this.translate.instant('Timeline configuration'), enabled: true
+      name: 'Timeline',
+      link: '/timeline-config',
+      icon: 'timeline',
+      tooltip: this.translate.instant('Timeline configuration'),
+      enabled: true,
+      control: this.mainFormService.timelineConfig.control
     },
     {
-      name: 'Search', link: '/search-config', icon: 'search', tooltip: this.translate.instant('Search configuration'), enabled: true,
+      name: 'Search',
+      link: '/search-config',
+      icon: 'search',
+      tooltip: this.translate.instant('Search configuration'),
+      enabled: true,
       control: this.mainFormService.searchConfig.control
     },
     {
-      name: 'Analytics', link: 'some-link', icon: 'bar_chart', tooltip: this.translate.instant('Analytics configuration'), enabled: false
+      name: 'Analytics',
+      link: 'some-link',
+      icon: 'bar_chart',
+      tooltip: this.translate.instant('Analytics configuration'),
+      enabled: false
     },
     {
-      name: 'Look \'n feel', link: 'some-link', icon: 'send', tooltip: this.translate.instant('Look \'n fell configuration'), enabled: false
+      name: 'Look \'n feel',
+      link: 'some-link',
+      icon: 'send',
+      tooltip: this.translate.instant('Look \'n fell configuration'),
+      enabled: false
     },
   ];
 
