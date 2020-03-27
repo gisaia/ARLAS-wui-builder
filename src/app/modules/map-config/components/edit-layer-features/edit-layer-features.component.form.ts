@@ -20,6 +20,7 @@ import { ComponentSubForm } from '@shared/ComponentSubForm';
 import { ViewChild } from '@angular/core';
 import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
 import { NGXLogger } from 'ngx-logger';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 
 export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
 
@@ -27,8 +28,46 @@ export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
     public embeddedFeaturesComponent: EditLayerModeFormComponent;
 
     constructor(
-        protected logger: NGXLogger
+        protected logger: NGXLogger,
+        protected formBuilder: FormBuilder
     ) {
         super(logger);
+    }
+
+    protected registerRendererGeometry() {
+        (this.formFg.get('geometryStep') as FormGroup)
+            .addControl(
+                'geometryCtrl',
+                this.formBuilder.control(
+                    '',
+                    [
+                        Validators.required
+                    ]
+                ));
+    }
+
+    protected registerGeometryType() {
+        (this.formFg.get('geometryStep') as FormGroup)
+            .addControl(
+                'geometryTypeCtrl',
+                this.formBuilder.control(
+                    '',
+                    [
+                        Validators.required
+                    ]
+                ));
+    }
+
+    get geometryCtrl() {
+        return this.formFg.get('geometryStep').get('geometryCtrl') as FormControl;
+    }
+    get geometryTypeCtrl() {
+        return this.formFg.get('geometryStep').get('geometryTypeCtrl') as FormControl;
+    }
+    get widthFg() {
+        return this.formFg.get('styleStep').get('widthFg') as FormGroup;
+    }
+    get radiusFg() {
+        return this.formFg.get('styleStep').get('radiusFg') as FormGroup;
     }
 }

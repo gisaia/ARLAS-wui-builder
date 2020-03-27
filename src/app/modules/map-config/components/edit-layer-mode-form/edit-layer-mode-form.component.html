@@ -8,7 +8,7 @@
                         <mat-label>{{ 'Collection' | translate}}</mat-label>
                         <mat-select formControlName="collectionCtrl"
                             appAlertOnChange="changing the collection will reset the rendered geometry"
-                            [dependants]="[geometryCtrl, colorFg]">
+                            [dependants]="[colorFg]">
                             <mat-option *ngFor="let collection of this.mainformService.getCollections()"
                                 value="{{collection}}">{{collection}}</mat-option>
                         </mat-select>
@@ -23,38 +23,10 @@
         </mat-step>
 
         <mat-step label="Geometry" formGroupName="geometryStep" [stepControl]="formFg.get('geometryStep')">
-            <app-config-element>
-                <div form-fields>
-                    <mat-form-field>
-                        <mat-label>{{ 'Rendered geometry' | translate}} </mat-label>
-                        <mat-select formControlName="geometryCtrl">
-                            <mat-option *ngFor="let field of collectionGeoFields" [value]="field">
-                                {{ field }}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div description>
-                </div>
-            </app-config-element>
-            <app-config-element>
-                <div form-fields>
-                    <mat-form-field>
-                        <mat-label>{{ 'Geometry type' | translate}} </mat-label>
-                        <mat-select formControlName="geometryTypeCtrl"
-                            appAlertOnChange="changing the geometry type may reset the radius or the width"
-                            appResetOnChange="map.layer" [dependants]="[widthFg, radiusFg]">
-                            <mat-option [value]="GEOMETRY_TYPE.fill">{{ 'Fill' | translate}}</mat-option>
-                            <mat-option [value]="GEOMETRY_TYPE.line">{{ 'Line' | translate}}</mat-option>
-                            <mat-option [value]="GEOMETRY_TYPE.circle">{{ 'Circle' | translate}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div description>
-
-                </div>
-            </app-config-element>
-            <ng-content select="[additional-geometry]">
-            </ng-content>
+            <ng-content select="[rendered-geometry]"></ng-content>
+            <ng-content select="[geometry-type]"></ng-content>
+            <ng-content select="[additional-geometry]"></ng-content>
+            <ng-content select="[aggregation-geometry]"></ng-content>
             <div>
                 <button mat-button matStepperPrevious>{{ 'Back' | translate}}</button>
                 <button mat-button matStepperNext type="button">{{ 'Next' | translate}}</button>

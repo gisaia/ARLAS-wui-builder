@@ -21,7 +21,6 @@ import { FormBuilderWithDefaultService } from '@services/form-builder-with-defau
 import { CustomValidators } from '@utils/custom-validators';
 import { ComponentSubForm } from '@shared/ComponentSubForm';
 import { NGXLogger } from 'ngx-logger';
-import { GEOMETRY_TYPE } from './models';
 
 export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
 
@@ -41,16 +40,7 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
                     ]
             }),
             geometryStep: this.formBuilder.group({
-                geometryCtrl:
-                    [
-                        null,
-                        Validators.required
-                    ],
-                geometryTypeCtrl:
-                    [
-                        null,
-                        Validators.required
-                    ]
+
             }),
             visibilityStep: this.formBuilder.group({
                 visibleCtrl:
@@ -99,14 +89,14 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
                 widthFg: [
                     null,
                     CustomValidators.getConditionalValidator(
-                        () => !!this.formFg ? this.geometryTypeCtrl.value === GEOMETRY_TYPE.line : false,
+                        () => !!this.formFg ? this.geometryTypeCtrl.value : false,
                         Validators.required
                     )
                 ],
                 radiusFg: [
                     null,
                     CustomValidators.getConditionalValidator(
-                        () => !!this.formFg ? this.geometryTypeCtrl.value === GEOMETRY_TYPE.circle : false,
+                        () => !!this.formFg ? this.geometryTypeCtrl.value : false,
                         Validators.required)
                 ]
             })
@@ -122,9 +112,6 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
     get collectionCtrl() {
         return this.formFg.get('collectionStep').get('collectionCtrl');
     }
-    get geometryCtrl() {
-        return this.formFg.get('geometryStep').get('geometryCtrl');
-    }
     get geometryTypeCtrl() {
         return this.formFg.get('geometryStep').get('geometryTypeCtrl');
     }
@@ -137,6 +124,4 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
     get radiusFg() {
         return this.formFg.get('styleStep').get('radiusFg') as FormGroup;
     }
-
-
 }

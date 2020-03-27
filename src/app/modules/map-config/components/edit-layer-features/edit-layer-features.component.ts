@@ -18,9 +18,10 @@ under the License.
 */
 import { Component, OnInit, forwardRef } from '@angular/core';
 import { EditLayerFeaturesComponentForm } from './edit-layer-features.component.form';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, FormBuilder } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
+import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
 
 @Component({
   selector: 'app-edit-layer-features',
@@ -42,10 +43,12 @@ import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/m
 export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm implements OnInit {
 
   public PROPERTY_SELECTOR_SOURCE = PROPERTY_SELECTOR_SOURCE;
+  public GEOMETRY_TYPE = GEOMETRY_TYPE;
 
   constructor(
-    protected logger: NGXLogger) {
-    super(logger);
+    protected logger: NGXLogger,
+    protected formBuilder: FormBuilder) {
+    super(logger, formBuilder);
   }
 
   ngOnInit() {
@@ -53,6 +56,44 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm i
     // by getting a reference to the embedded form in this variable,
     // it will used by the parent ControlValueAccessor implementation to write values on-the-fly
     this.formFg = this.embeddedFeaturesComponent.formFg;
+    this.registerRendererGeometry();
+    this.registerGeometryType();
+    this.initEnableWidthOrRadiusFg();
+  }
+
+  /**
+   * widthFg and radiusFg are conditionally displayed, once they have been displayed, their subform has been
+   * registred into the main form and their validation works even if they aren't displayed anymore.
+   * The solution is to enable only the expected form group.
+   */
+  private initEnableWidthOrRadiusFg() {
+    this.geometryTypeCtrl.valueChanges.subscribe(v => {
+      const geoEnableDisable = [{
+        geometry: GEOMETRY_TYPE.line,
+        enabled: [this.widthFg],
+        disabled: [this.radiusFg]
+      },
+      {
+        geometry: GEOMETRY_TYPE.circle,
+        enabled: [this.radiusFg],
+        disabled: [this.widthFg]
+      },
+      {
+        geometry: GEOMETRY_TYPE.fill,
+        enabled: [],
+        disabled: [this.radiusFg, this.widthFg]
+      }].find(elmt => elmt.geometry === v);
+
+      if (!!geoEnableDisable) {
+        geoEnableDisable.enabled.forEach(c => c.enable());
+        geoEnableDisable.disabled.forEach(c => c.disable());
+      }
+    });
+    this.geometryTypeCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+  }
+
+  public getCollectionGeoFields() {
+    return this.embeddedFeaturesComponent.collectionGeoFields;
   }
 
 }

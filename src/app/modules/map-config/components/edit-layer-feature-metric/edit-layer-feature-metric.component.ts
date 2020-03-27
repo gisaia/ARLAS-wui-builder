@@ -21,6 +21,7 @@ import { NG_VALUE_ACCESSOR, NG_VALIDATORS, FormBuilder } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { EditLayerFeatureMetricComponentForm } from './edit-layer-feature-metric.component.form';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
+import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
 
 @Component({
   selector: 'app-edit-layer-feature-metric',
@@ -42,6 +43,7 @@ import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/m
 export class EditLayerFeatureMetricComponent extends EditLayerFeatureMetricComponentForm implements OnInit {
 
   public PROPERTY_SELECTOR_SOURCE = PROPERTY_SELECTOR_SOURCE;
+  public GEOMETRY_TYPE = GEOMETRY_TYPE;
 
   constructor(
     protected logger: NGXLogger,
@@ -57,11 +59,17 @@ export class EditLayerFeatureMetricComponent extends EditLayerFeatureMetricCompo
     // by getting a reference to the embedded form in this variable,
     // it will used by the parent ControlValueAccessor implementation to write values on-the-fly
     this.formFg = this.embeddedFeaturesComponent.formFg;
+    this.registerRendererGeometry();
+    this.registerGeometryType();
     this.registerGeometryId();
   }
 
   public getKeywordFields() {
     return this.embeddedFeaturesComponent.collectionKeywordFields;
+  }
+
+  public getCollectionGeoFields() {
+    return this.embeddedFeaturesComponent.collectionGeoFields;
   }
 
 }

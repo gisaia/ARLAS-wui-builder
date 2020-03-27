@@ -68,6 +68,7 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
   public PROPERTY_TYPE = PROPERTY_TYPE;
   public widthFgSources = [PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated];
   public radiusFgSources = [PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated];
+  public collectionGeoPointFields: string[] = [];
   public collectionGeoFields: string[] = [];
   public collectionKeywordFields: string[] = [];
   public collectionIntegerFields: string[] = [];
@@ -84,7 +85,6 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
 
   ngOnInit() {
     super.ngOnInit();
-    this.initEnableWidthOrRadiusFg();
   }
 
   ngAfterViewInit() {
@@ -105,6 +105,11 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
       if (!c) {
         return;
       }
+      this.collectionService.getCollectionFields(c, [FIELD_TYPES.GEOPOINT])
+      .subscribe(
+        f => {
+          this.collectionGeoPointFields = f;
+        });
       this.collectionService.getCollectionFields(c, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE])
         .subscribe(
           f => {
@@ -127,37 +132,6 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
       // init values in edition mode
       this.collectionCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
     }
-  }
-
-  /**
-   * widthFg and radiusFg are conditionally displayed, once they have been displayed, their subform has been
-   * registred into the main form and their validation works even if they aren't displayed anymore.
-   * The solution is to enable only the expected form group.
-   */
-  private initEnableWidthOrRadiusFg() {
-    this.geometryTypeCtrl.valueChanges.subscribe(v => {
-      const geoEnableDisable = [{
-        geometry: GEOMETRY_TYPE.line,
-        enabled: [this.widthFg],
-        disabled: [this.radiusFg]
-      },
-      {
-        geometry: GEOMETRY_TYPE.circle,
-        enabled: [this.radiusFg],
-        disabled: [this.widthFg]
-      },
-      {
-        geometry: GEOMETRY_TYPE.fill,
-        enabled: [],
-        disabled: [this.radiusFg, this.widthFg]
-      }].find(elmt => elmt.geometry === v);
-
-      if (!!geoEnableDisable) {
-        geoEnableDisable.enabled.forEach(c => c.enable());
-        geoEnableDisable.disabled.forEach(c => c.disable());
-      }
-    });
-    this.geometryTypeCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
   }
 
   writeValue(obj: any): void {

@@ -1,3 +1,37 @@
 <app-edit-layer-mode-form [submit]="submitSubject.asObservable()"
     [colorFgSources]="PROPERTY_SELECTOR_SOURCE | objectvalues">
+    <div rendered-geometry>
+        <app-config-element>
+            <div form-fields>
+                <mat-form-field>
+                    <mat-label>{{ 'Rendered geometry' | translate}} </mat-label>
+                    <mat-select [formControl]="geometryCtrl">
+                        <mat-option *ngFor="let field of getCollectionGeoFields()" [value]="field">
+                            {{ field }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div description>
+            </div>
+        </app-config-element>
+    </div>
+    <div geometry-type>
+        <app-config-element>
+            <div form-fields>
+                <mat-form-field>
+                    <mat-label>{{ 'Geometry type' | translate}} </mat-label>
+                    <mat-select [formControl]="geometryTypeCtrl"
+                        appAlertOnChange="changing the geometry type may reset the radius or the width"
+                        appResetOnChange="map.layer" [dependants]="[widthFg, radiusFg]">
+                        <mat-option [value]="GEOMETRY_TYPE.fill">{{ 'Fill' | translate}}</mat-option>
+                        <mat-option [value]="GEOMETRY_TYPE.line">{{ 'Line' | translate}}</mat-option>
+                        <mat-option [value]="GEOMETRY_TYPE.circle">{{ 'Circle' | translate}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div description>
+
+            </div>
+        </app-config-element>
+    </div>
 </app-edit-layer-mode-form>

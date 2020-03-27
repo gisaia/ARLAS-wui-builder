@@ -49,6 +49,7 @@ import { MapConfigRoutingModule } from './map-config-routing.module';
 import { MapConfigComponent } from './map-config.component';
 import { EditLayerFeatureMetricComponent } from './components/edit-layer-feature-metric/edit-layer-feature-metric.component';
 import { EditLayerFeaturesComponent } from './components/edit-layer-features/edit-layer-features.component';
+import { EditLayerClusterComponent } from './components/edit-layer-cluster/edit-layer-cluster.component';
 
 @NgModule({
   entryComponents: [
@@ -65,7 +66,8 @@ import { EditLayerFeaturesComponent } from './components/edit-layer-features/edi
     DialogColorTableComponent,
     DialogPaletteSelectorComponent,
     EditLayerFeatureMetricComponent,
-    EditLayerFeaturesComponent
+    EditLayerFeaturesComponent,
+    EditLayerClusterComponent
   ],
   imports: [
     CommonModule,

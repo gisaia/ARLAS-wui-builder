@@ -42,6 +42,12 @@ export abstract class EditLayerComponentForm {
                 CustomValidators.getConditionalValidator(() => !!this.layerFg ?
                     this.mode.value === LAYER_MODE.featureMetric : false,
                     Validators.required)
+            ],
+            clusterFg: [
+                { value: null, disabled: true },
+                CustomValidators.getConditionalValidator(() => !!this.layerFg ?
+                    this.mode.value === LAYER_MODE.cluster : false,
+                    Validators.required)
             ]
         });
     }
@@ -55,6 +61,9 @@ export abstract class EditLayerComponentForm {
     }
     get featureMetricFg() {
         return this.layerFg.get('featureMetricFg');
+    }
+    get clusterFg() {
+        return this.layerFg.get('clusterFg');
     }
 
 }

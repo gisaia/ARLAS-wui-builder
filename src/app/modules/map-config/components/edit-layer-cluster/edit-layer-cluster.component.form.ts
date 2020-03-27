@@ -18,11 +18,11 @@ under the License.
 */
 import { ComponentSubForm } from '@shared/ComponentSubForm';
 import { NGXLogger } from 'ngx-logger';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
 import { ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
-export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubForm {
+export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
 
     @ViewChild(EditLayerModeFormComponent, { static: true })
     public embeddedFeaturesComponent: EditLayerModeFormComponent;
@@ -34,34 +34,10 @@ export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubFo
         super(logger);
     }
 
-    protected registerRendererGeometry() {
+    protected registerAggGeometry() {
         (this.formFg.get('geometryStep') as FormGroup)
             .addControl(
-                'geometryCtrl',
-                this.formBuilder.control(
-                    null,
-                    [
-                        Validators.required
-                    ]
-                ));
-    }
-
-    protected registerGeometryType() {
-        (this.formFg.get('geometryStep') as FormGroup)
-            .addControl(
-                'geometryTypeCtrl',
-                this.formBuilder.control(
-                    null,
-                    [
-                        Validators.required
-                    ]
-                ));
-    }
-
-    protected registerGeometryId() {
-        (this.formFg.get('geometryStep') as FormGroup)
-            .addControl(
-                'geometryIdCtrl',
+                'aggGeometryCtrl',
                 this.formBuilder.control(
                     '',
                     [
@@ -70,20 +46,8 @@ export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubFo
                 ));
     }
 
-    get widthFg() {
-        return this.formFg.get('styleStep').get('widthFg') as FormGroup;
+    get aggGeometryCtrl() {
+        return this.formFg.get('geometryStep').get('aggGeometryCtrl') as FormControl;
     }
-    get radiusFg() {
-        return this.formFg.get('styleStep').get('radiusFg') as FormGroup;
-    }
-    get geometryCtrl() {
-        return this.formFg.get('geometryStep').get('geometryCtrl') as FormControl;
-    }
-    get geometryTypeCtrl() {
-        return this.formFg.get('geometryStep').get('geometryTypeCtrl') as FormControl;
-    }
-    get geometryIdCtrl() {
-        return this.formFg.get('geometryStep').get('geometryIdCtrl') as FormControl;
-    }
-
 }
+
