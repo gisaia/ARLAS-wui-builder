@@ -62,17 +62,10 @@
             }
         }
     },
-    "timeline": {
-        "global": {
-            "useDetailedTimeline": true,
-            "timeline": {
-                "bucketsNumber": 22,
-                "intervalSize": 10
-            },
-            "detailedTimeline": {
-                "bucketsNumber": 44,
-                "selectionExtentPercent": 2
-            }
+    "analytics": {
+        "tabs": {
+            "default": "Default",
+            "new": "New"
         }
     },
     "config": {

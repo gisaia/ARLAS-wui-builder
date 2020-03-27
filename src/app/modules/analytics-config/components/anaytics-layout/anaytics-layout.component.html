@@ -1,0 +1,36 @@
+<div class="tab-wrapper">
+    <mat-tab-group disableRipple mat-align-tabs="start">
+        <mat-tab *ngFor="let tab of tabs; let index = index">
+            <ng-template mat-tab-label>
+                <div [id]="'tab-' + index" cdkDropList cdkDropListOrientation="horizontal"
+                    (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="getOtherTabsIds(index)">
+                    <div cdkDrag>
+                        <span *ngIf="editingTabIndex !== index" class="tab-name">
+                            {{tab}}
+                        </span>
+                        <span *ngIf="editingTabIndex === index" class="edit-tab-name">
+                            <!-- keydown stopPropagation needed to allow spaces -->
+                            <input matInput [(ngModel)]="editingTabName" appAutoFocus autocomplete="off"
+                                (focusout)="finishEditTabName(index)" (keydown)="$event.stopPropagation();"
+                                (keydown.enter)="finishEditTabName(index);">
+
+                        </span>
+                        <button mat-icon-button (click)="startEditTabName(index)">
+                            <mat-icon>create</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="$event.stopPropagation(); removeTab(index)"
+                            [disabled]="tabs.length === 1">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+            Contents for {{tab}} tab
+        </mat-tab>
+    </mat-tab-group>
+
+    <button mat-icon-button (click)="addTab()">
+        <mat-icon>add</mat-icon>
+    </button>
+
+</div>
