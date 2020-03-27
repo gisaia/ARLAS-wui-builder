@@ -24,6 +24,12 @@ import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { Interval } from 'arlas-api';
 import { updateValueAndValidity } from '@utils/tools';
 import { ChartType } from 'arlas-web-components';
+
+enum DateFormats {
+  English = '%b %d %Y  %H:%M',
+  French = '%d %b %Y  %H:%M'
+}
+
 @Component({
   selector: 'app-timeline-form',
   templateUrl: './timeline-form.component.html',
@@ -52,7 +58,7 @@ export class TimelineFormComponent extends TimelineFormComponentForm implements 
     .sort();
 
   public chartTypes = [ChartType[0], ChartType[1]];
-  public dateFormats = ['english', 'french'];
+  public dateFormats = DateFormats;
 
   constructor(
     protected formBuilderDefault: FormBuilderWithDefaultService,
@@ -63,6 +69,9 @@ export class TimelineFormComponent extends TimelineFormComponentForm implements 
 
   ngOnInit() {
     super.ngOnInit();
+
+    this.formFg.controls.isDetailedTimeline.setValue(this.isDetailedTimeline);
+
     // force update of custom validators & mainForm, otherwise it is not consistent
     this.formFg.valueChanges.subscribe(
       () => updateValueAndValidity(this.formFg, false, false));

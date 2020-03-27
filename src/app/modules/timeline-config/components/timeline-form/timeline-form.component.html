@@ -1,4 +1,5 @@
 <div [formGroup]="formFg">
+    <input type="hidden" formControlName="isDetailedTimeline">
     <app-config-element>
         <div form-fields>
             <mat-form-field>
@@ -17,18 +18,18 @@
     <app-config-element>
         <div form-fields>
 
-            <div>
+            <div *ngIf="!isDetailedTimeline">
                 <mat-label>{{'By bucket' | translate}}</mat-label>
                 <mat-slide-toggle formControlName="bucketOrInterval" [appResetOnChange]="defaultKey"
                     [dependants]="[bucketsNumber, intervalUnit, intervalSize]">
                     {{'or interval' | translate}}
                 </mat-slide-toggle>
             </div>
-            <div *ngIf="!bucketOrInterval.value">
+            <div *ngIf="!bucketOrInterval.value || isDetailedTimeline">
                 <mat-label>{{'Number of buckets' | translate}}</mat-label>
                 <mat-slider thumbLabel formControlName="bucketsNumber" min="10" max="200" step="5"></mat-slider>
             </div>
-            <div *ngIf="bucketOrInterval.value">
+            <div *ngIf="bucketOrInterval.value && !isDetailedTimeline">
                 <div>
                     <mat-form-field>
                         <mat-label>{{'Interval unit' | translate}}</mat-label>
@@ -96,8 +97,8 @@
             <mat-form-field>
                 <mat-label>{{'Date format' | translate}}</mat-label>
                 <mat-select formControlName="dateFormat">
-                    <mat-option *ngFor="let format of dateFormats" [value]="format">
-                        {{format | translate | titlecase}}
+                    <mat-option *ngFor="let format of dateFormats | keyvalue" [value]="format.value">
+                        {{format.key | translate }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>

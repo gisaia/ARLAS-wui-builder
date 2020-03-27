@@ -24,8 +24,10 @@
             </ng-template>
 
             <div class="toggle-detailed-timeline">
-                <mat-slide-toggle formControlName="useDetailedTimeline">Use
-                    detailed timeline</mat-slide-toggle>
+                <mat-slide-toggle formControlName="useDetailedTimeline" appResetOnChange="timeline.global"
+                    [dependants]="[detailedTimeline]">
+                    {{'Use detailed timeline' | translate}}
+                </mat-slide-toggle>
             </div>
             <app-timeline-form [dateFields]="dateFields" formControlName="detailedTimeline"
                 [submit]="submitSubject.asObservable()" [hidden]="!useDetailedTimeline.value"

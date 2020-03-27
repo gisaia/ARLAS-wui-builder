@@ -4,13 +4,15 @@ import { MockComponent } from 'ng-mocks';
 import { TimelineFormComponent } from '../timeline-form/timeline-form.component';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { of } from 'rxjs';
+import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
 
 describe('GlobalTimelineComponent', () => {
   let spectator: Spectator<GlobalTimelineComponent>;
   const createComponent = createComponentFactory({
     component: GlobalTimelineComponent,
     declarations: [
-      MockComponent(TimelineFormComponent)
+      MockComponent(TimelineFormComponent),
+      ResetOnChangeDirective
     ],
     providers: [
       mockProvider(CollectionService, {

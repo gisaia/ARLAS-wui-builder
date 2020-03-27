@@ -77,13 +77,19 @@ export class MainFormImportExportService {
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
     const mapConfigLayers = this.mainFormService.mapConfig.getLayersFa();
     const searchConfigGlobal = this.mainFormService.searchConfig.getGlobalFg();
+    const timelineConfigGlobal = this.mainFormService.timelineConfig.getGlobalFg();
 
     const sourceByMode = new Map<string, string>();
     sourceByMode.set(LAYER_MODE.features, 'feature');
     sourceByMode.set(LAYER_MODE.featureMetric, 'feature-metric');
 
     this.saveJson(
-      ConfigExportHelper.process(mapConfigGlobal, mapConfigLayers, searchConfigGlobal, sourceByMode),
+      ConfigExportHelper.process(
+        mapConfigGlobal,
+        mapConfigLayers,
+        searchConfigGlobal,
+        timelineConfigGlobal,
+        sourceByMode),
       'config.json', '_');
 
     this.saveJson(

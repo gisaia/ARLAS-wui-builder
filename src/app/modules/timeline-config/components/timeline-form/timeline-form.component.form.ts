@@ -35,25 +35,26 @@ export class TimelineFormComponentForm extends ComponentSubForm {
         super(logger);
 
         this.formFg = formBuilderDefault.group('timeline.global', {
+            isDetailedTimeline: [null],
             field: [null, Validators.required],
             bucketOrInterval: [null],
             bucketsNumber: [
                 null,
                 CustomValidators.getConditionalValidator(() =>
-                    !!this.formFg ? !this.bucketOrInterval.value : false,
+                    !!this.formFg ? !this.bucketOrInterval.value || this.isDetailedTimeline : false,
                     Validators.required
                 )],
             intervalUnit: [
                 null,
                 CustomValidators.getConditionalValidator(() =>
-                    !!this.formFg ? this.bucketOrInterval.value : false,
+                    !!this.formFg ? this.bucketOrInterval.value && !this.isDetailedTimeline : false,
                     Validators.required
                 )],
             intervalSize: [
                 null,
                 [
                     CustomValidators.getConditionalValidator(() =>
-                        !!this.formFg ? this.bucketOrInterval.value : false,
+                        !!this.formFg ? this.bucketOrInterval.value && !this.isDetailedTimeline : false,
                         Validators.required
                     ),
                     Validators.pattern('^[0-9]*$')
