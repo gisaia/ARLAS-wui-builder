@@ -39,6 +39,10 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
   public forceCanExit: boolean;
   public submitSubject: Subject<void> = new Subject<void>();
   public LAYER_MODE = LAYER_MODE;
+  private readonly formByMode = new Map<string, string>([
+    [LAYER_MODE.features, 'featuresFg'],
+    [LAYER_MODE.featureMetric, 'featureMetricFg']
+  ]);
 
   constructor(
     protected formBuilderDefault: FormBuilderWithDefaultService,
@@ -64,9 +68,16 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
       this.route.paramMap.subscribe(params => {
         const layerId = params.get('id');
         if (layerId != null) {
+          // there we are editing an existing layer
           const layerIndex = this.getLayerIndex(Number(layerId));
           if (layerIndex >= 0) {
-            this.layerFg.patchValue(this.getLayerAt(layerIndex).value);
+            // cannot simply the existing form instance because we want to allow cancellation
+            // si we rather the the existing form properties
+            const existingLayerFg = this.getLayerAt(layerIndex);
+            this.layerFg.patchValue(existingLayerFg.value);
+            this.formByMode.forEach(
+              (modeForm, m) =>
+                existingLayerFg.get(modeForm).enabled ? this.layerFg.get(modeForm).enable() : this.layerFg.get(modeForm).disable());
           } else {
             this.navigateToParentPage();
             this.logger.error('Unknown layer ID');
@@ -102,7 +113,6 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
     const newId = this.layersValues.reduce((acc, val) => acc.id > val.id ? acc.id : val.id, 0) + 1;
     this.layerFg.patchValue({ id: newId });
     this.layersFa.insert(newId, this.layerFg);
-
     this.layerFg.markAsPristine();
     this.navigateToParentPage();
   }
@@ -134,13 +144,9 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
 
   public changeMode(mode: string) {
 
-    const formByMode = new Map<string, string>();
-    formByMode.set(LAYER_MODE.features, 'featuresFg');
-    formByMode.set(LAYER_MODE.featureMetric, 'featureMetricFg');
-
-    formByMode.forEach(
-      (form, m) =>
-        m === mode ? this.layerFg.get(form).enable() : this.layerFg.get(form).disable());
+    this.formByMode.forEach(
+      (modeForm, m) =>
+        m === mode ? this.layerFg.get(modeForm).enable() : this.layerFg.get(modeForm).disable());
   }
 
 }
