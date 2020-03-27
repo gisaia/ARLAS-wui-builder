@@ -50,6 +50,7 @@ import { MapConfigComponent } from './map-config.component';
 import { EditLayerFeatureMetricComponent } from './components/edit-layer-feature-metric/edit-layer-feature-metric.component';
 import { EditLayerFeaturesComponent } from './components/edit-layer-features/edit-layer-features.component';
 import { EditLayerClusterComponent } from './components/edit-layer-cluster/edit-layer-cluster.component';
+import { MatExpansionModule } from '@angular/material';
 
 @NgModule({
   entryComponents: [
@@ -89,6 +90,7 @@ import { EditLayerClusterComponent } from './components/edit-layer-cluster/edit-
     MatIconModule,
     MatTooltipModule,
     MatAutocompleteModule,
+    MatExpansionModule,
     DragDropModule,
     MatDividerModule,
     TranslateModule

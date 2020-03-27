@@ -22,3 +22,20 @@ export enum GEOMETRY_TYPE {
     circle = 'circle'
 }
 
+export enum AGGREGATE_GEOMETRY_TYPE {
+    geohash_center = 'geohash_center',
+    geohash = 'geohash',
+    bbox = 'bbox',
+    centroid = 'centroid'
+}
+
+export enum GRANULARITY {
+    coarse = 'coarse',
+    fine = 'fine',
+    finest = 'finest'
+}
+
+export enum CLUSTER_GEOMETRY_TYPE {
+    aggregated_geometry = 'aggregated_geometry',
+    raw_geometry = 'raw_geometry'
+}

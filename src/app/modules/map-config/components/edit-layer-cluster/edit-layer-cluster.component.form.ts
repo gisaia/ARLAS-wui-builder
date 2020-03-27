@@ -38,16 +38,51 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
         (this.formFg.get('geometryStep') as FormGroup)
             .addControl(
                 'aggGeometryCtrl',
-                this.formBuilder.control(
-                    '',
-                    [
-                        Validators.required
-                    ]
-                ));
+                this.formBuilder.control('', [Validators.required]));
     }
+
+    protected registerGranlularity() {
+        (this.formFg.get('geometryStep') as FormGroup)
+            .addControl(
+                'granularityCtrl',
+                this.formBuilder.control('', [Validators.required]));
+    }
+
+    protected registerClusterGeometryType() {
+        (this.formFg.get('geometryStep') as FormGroup)
+            .addControl(
+                'clusterGeometryTypeCtrl',
+                this.formBuilder.control('', [Validators.required]));
+    }
+
+    protected registerAggregatedGeometry() {
+        (this.formFg.get('geometryStep') as FormGroup)
+            .addControl(
+                'aggregatedGeometryCtrl',
+                this.formBuilder.control('', [Validators.required]));
+    }
+    protected registerRawGeometry() {
+        (this.formFg.get('geometryStep') as FormGroup)
+            .addControl(
+                'rawGeometryCtrl',
+                this.formBuilder.control('', [Validators.required]));
+    }
+
 
     get aggGeometryCtrl() {
         return this.formFg.get('geometryStep').get('aggGeometryCtrl') as FormControl;
+    }
+    get granularityCtrl() {
+        return this.formFg.get('geometryStep').get('granularityCtrl') as FormControl;
+    }
+    get clusterGeometryTypeCtrl() {
+        return this.formFg.get('geometryStep').get('clusterGeometryTypeCtrl') as FormControl;
+    }
+    get aggregatedGeometryCtrl() {
+        return this.formFg.get('geometryStep').get('aggregatedGeometryCtrl') as FormControl;
+    }
+    get rawGeometryCtrl() {
+        return this.formFg.get('geometryStep').get('rawGeometryCtrl') as FormControl;
     }
 }
 

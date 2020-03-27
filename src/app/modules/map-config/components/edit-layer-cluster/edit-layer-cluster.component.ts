@@ -3,6 +3,9 @@ import { EditLayerClusterComponentForm } from './edit-layer-cluster.component.fo
 import { NGXLogger } from 'ngx-logger';
 import { FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
+import { GRANULARITY, AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '../edit-layer-mode-form/models';
+
+
 
 @Component({
   selector: 'app-edit-layer-cluster',
@@ -24,6 +27,9 @@ import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/m
 export class EditLayerClusterComponent extends EditLayerClusterComponentForm implements OnInit {
 
   public PROPERTY_SELECTOR_SOURCE = PROPERTY_SELECTOR_SOURCE;
+  public GRANULARITY = GRANULARITY;
+  public CLUSTER_GEOMETRY_TYPE = CLUSTER_GEOMETRY_TYPE;
+  public AGGREGATE_GEOMETRY_TYPE = AGGREGATE_GEOMETRY_TYPE;
 
   constructor(
     protected logger: NGXLogger,
@@ -39,9 +45,17 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
     // it will used by the parent ControlValueAccessor implementation to write values on-the-fly
     this.formFg = this.embeddedFeaturesComponent.formFg;
     this.registerAggGeometry();
+    this.registerGranlularity();
+    this.registerClusterGeometryType();
+    this.registerAggregatedGeometry();
+    this.registerRawGeometry();
   }
 
   public getPointFields() {
+    return this.embeddedFeaturesComponent.collectionGeoPointFields;
+  }
+
+  public getGeoPointFields() {
     return this.embeddedFeaturesComponent.collectionGeoPointFields;
   }
 

@@ -89,14 +89,14 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
                 widthFg: [
                     null,
                     CustomValidators.getConditionalValidator(
-                        () => !!this.formFg ? this.geometryTypeCtrl.value : false,
+                        () => !!this.formFg && !!this.geometryTypeCtrl ? this.geometryTypeCtrl.value : false,
                         Validators.required
                     )
                 ],
                 radiusFg: [
                     null,
                     CustomValidators.getConditionalValidator(
-                        () => !!this.formFg ? this.geometryTypeCtrl.value : false,
+                        () => !!this.formFg && !!this.geometryTypeCtrl ? this.geometryTypeCtrl.value : false,
                         Validators.required)
                 ]
             })

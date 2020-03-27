@@ -144,20 +144,9 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
 
   public changeMode(mode: string) {
 
-<<<<<<< bb443d41297295350528cd238c71c552ff510e9a
     this.formByMode.forEach(
       (modeForm, m) =>
         m === mode ? this.layerFg.get(modeForm).enable() : this.layerFg.get(modeForm).disable());
-=======
-    const formByMode = new Map<string, string>();
-    formByMode.set(LAYER_MODE.features, 'featuresFg');
-    formByMode.set(LAYER_MODE.featureMetric, 'featureMetricFg');
-    formByMode.set(LAYER_MODE.cluster, 'clusterFg');
-
-    formByMode.forEach(
-      (form, m) =>
-        m === mode ? this.layerFg.get(form).enable() : this.layerFg.get(form).disable());
->>>>>>> Reorganize geometry step in layer creation
   }
 
 }
