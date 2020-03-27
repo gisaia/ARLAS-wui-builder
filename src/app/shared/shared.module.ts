@@ -36,6 +36,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
+import { AutoFocusDirective } from './directives/auto-focus/auto-focus.directive';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
     ColorPickerWrapperComponent,
     ResetOnChangeDirective,
     PropertySelectorComponent,
-    ObjectvaluesPipe
+    ObjectvaluesPipe,
+    AutoFocusDirective
   ],
   imports: [
     CommonModule,
@@ -68,7 +70,8 @@ import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
     ColorPickerWrapperComponent,
     ResetOnChangeDirective,
     PropertySelectorComponent,
-    ObjectvaluesPipe
+    ObjectvaluesPipe,
+    AutoFocusDirective
   ]
 })
 export class SharedModule { }

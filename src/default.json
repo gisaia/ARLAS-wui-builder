@@ -65,6 +65,12 @@
             }
         }
     },
+    "analytics": {
+        "tabs": {
+            "default": "Default",
+            "new": "New"
+        }
+    },
     "config": {
         "aggregationTermSize": 20,
         "palettes": [["#065143", "#ce1483"], ["#6d213c", "#946846", "#baab68"], ["#eecf6d", "#d5ac4e", "#8b6220", "#720e07", "#45050c"]],
