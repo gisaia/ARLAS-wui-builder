@@ -51,12 +51,12 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
     this.registerRawGeometry();
   }
 
-  public getPointFields() {
+  public getGeoPointFields() {
     return this.embeddedFeaturesComponent.collectionGeoPointFields;
   }
 
-  public getGeoPointFields() {
-    return this.embeddedFeaturesComponent.collectionGeoPointFields;
+  public getGeoFields() {
+    return this.embeddedFeaturesComponent.collectionGeoFields;
   }
 
 }

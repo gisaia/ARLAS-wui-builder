@@ -7,7 +7,7 @@
                 <mat-form-field>
                     <mat-label>{{ 'Aggregation field' | translate}} </mat-label>
                     <mat-select [formControl]="aggGeometryCtrl">
-                        <mat-option *ngFor="let field of getPointFields()" [value]="field">{{field}}</mat-option>
+                        <mat-option *ngFor="let field of getGeoPointFields()" [value]="field">{{field}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -68,7 +68,7 @@
                 <mat-form-field>
                     <mat-label>{{ 'Type' | translate}} </mat-label>
                     <mat-select [formControl]="rawGeometryCtrl">
-                        <mat-option *ngFor="let field of getGeoPointFields()" [value]="field">{{field}}</mat-option>
+                        <mat-option *ngFor="let field of getGeoFields()" [value]="field">{{field}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
