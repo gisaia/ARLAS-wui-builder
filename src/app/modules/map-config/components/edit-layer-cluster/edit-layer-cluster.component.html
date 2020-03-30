@@ -1,4 +1,5 @@
-<app-edit-layer-mode-form [submit]="submitSubject.asObservable()">
+<app-edit-layer-mode-form [submit]="submitSubject.asObservable()"
+    [colorFgSources]="[PROPERTY_SELECTOR_SOURCE.fix]">
     <div requested-geometry>
         <h3 class="layer-section-title">Requested geometry</h3>
         <app-config-element>

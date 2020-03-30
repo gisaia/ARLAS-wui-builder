@@ -21,6 +21,7 @@ import { FormBuilderWithDefaultService } from '@services/form-builder-with-defau
 import { CustomValidators } from '@utils/custom-validators';
 import { ComponentSubForm } from '@shared/ComponentSubForm';
 import { NGXLogger } from 'ngx-logger';
+import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
 
 export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
 
@@ -89,15 +90,16 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
                 widthFg: [
                     null,
                     CustomValidators.getConditionalValidator(
-                        () => !!this.formFg && !!this.geometryTypeCtrl ? this.geometryTypeCtrl.value : false,
+                        () => (!!this.formFg && !!this.geometryTypeCtrl) ? this.geometryTypeCtrl.value === GEOMETRY_TYPE.line : false,
                         Validators.required
                     )
                 ],
                 radiusFg: [
                     null,
                     CustomValidators.getConditionalValidator(
-                        () => !!this.formFg && !!this.geometryTypeCtrl ? this.geometryTypeCtrl.value : false,
-                        Validators.required)
+                        () => (!!this.formFg && !!this.geometryTypeCtrl) ? this.geometryTypeCtrl.value === GEOMETRY_TYPE.circle : false,
+                        Validators.required
+                    )
                 ]
             })
         });
@@ -113,7 +115,11 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
         return this.formFg.get('collectionStep').get('collectionCtrl');
     }
     get geometryTypeCtrl() {
-        return this.formFg.get('geometryStep').get('geometryTypeCtrl');
+        if (!!this.formFg) {
+            return this.formFg.get('geometryStep').get('geometryTypeCtrl');
+        } else {
+            return null;
+        }
     }
     get colorFg() {
         return this.formFg.get('styleStep').get('colorFg') as FormGroup;

@@ -21,6 +21,8 @@ import { NGXLogger } from 'ngx-logger';
 import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
 import { ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { CLUSTER_GEOMETRY_TYPE } from '../edit-layer-mode-form/models';
+import { CustomValidators } from '@utils/custom-validators';
 
 export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
 
@@ -59,13 +61,25 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
         (this.formFg.get('geometryStep') as FormGroup)
             .addControl(
                 'aggregatedGeometryCtrl',
-                this.formBuilder.control('', [Validators.required]));
+                this.formBuilder.control('', [
+                    CustomValidators.getConditionalValidator(
+                        () => !!this.clusterGeometryTypeCtrl
+                            && this.clusterGeometryTypeCtrl.value === CLUSTER_GEOMETRY_TYPE.aggregated_geometry ? true : false,
+                        Validators.required
+                    )
+                ]));
     }
     protected registerRawGeometry() {
         (this.formFg.get('geometryStep') as FormGroup)
             .addControl(
                 'rawGeometryCtrl',
-                this.formBuilder.control('', [Validators.required]));
+                this.formBuilder.control('', [
+                    CustomValidators.getConditionalValidator(
+                        () => !!this.clusterGeometryTypeCtrl
+                            && this.clusterGeometryTypeCtrl.value === CLUSTER_GEOMETRY_TYPE.raw_geometry ? true : false,
+                        Validators.required
+                    )
+                ]));
     }
 
 
