@@ -39,15 +39,15 @@ export class AlertOnChangeDirective implements OnInit {
     private translate: TranslateService) { }
 
   // tslint:disable-next-line: no-input-rename
-  @Input('appAlertOnChange') alertMessage: string;
-  @Input() dependants: AbstractControl[];
+  @Input('appAlertOnChange') private alertMessage: string;
+  @Input() private dependants: AbstractControl[];
 
   // 2 cases are managed in different ways:
   // - host is a regular html input, then we can simply use the native element
   // to attach a listener and get the current value
   // - host is a MatSelect: this is a pure angular component, this is handled through angular
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     const nativeElement = this.elementRef.nativeElement;
     if (!this.select) {
       nativeElement.onfocus = (e: Event) => {
@@ -59,7 +59,7 @@ export class AlertOnChangeDirective implements OnInit {
     }
   }
 
-  @HostListener('openedChange', ['$event']) openedChange(selectedHasBeenOpen: boolean) {
+  @HostListener('openedChange', ['$event']) public openedChange(selectedHasBeenOpen: boolean) {
     // display a snack on opening if a dependant has a value
     const anyDependantHasValue = this.dependants == null || this.dependants.filter(d => d.value !== null).length > 0;
     // display the warning only if a value is already set AND if any dependency has been changed

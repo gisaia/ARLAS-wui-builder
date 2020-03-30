@@ -56,10 +56,10 @@ import { PropertySelectorComponent } from '@shared-components/property-selector/
 // ControlValueAccessor: see https://christianlydemann.com/form-validation-with-controlvalueaccessor/
 export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm implements OnInit, AfterViewInit {
 
-  @ViewChild('stepper', { static: false }) stepper: MatStepper;
-  @Input() aggregatedMode = false;
-  @Input() colorFgSources: Array<string>;
-  @ViewChildren(PropertySelectorComponent) propertySelectorComponents: QueryList<PropertySelectorComponent>;
+  @ViewChild('stepper', { static: false }) private stepper: MatStepper;
+  @Input() public aggregatedMode = false;
+  @Input() public colorFgSources: Array<string>;
+  @ViewChildren(PropertySelectorComponent) private propertySelectorComponents: QueryList<PropertySelectorComponent>;
 
   public ensureMinLessThanMax = ensureMinLessThanMax;
 
@@ -85,12 +85,12 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
     super(formBuilderDefault, formBuilder, logger);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     super.ngOnInit();
     this.initEnableWidthOrRadiusFg();
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     this.initCollectionRelatedFields();
   }
 

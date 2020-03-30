@@ -27,7 +27,7 @@ export class SearchConfigComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 }

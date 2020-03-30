@@ -34,7 +34,7 @@ export class ConfirmModalComponent implements OnInit {
     public dialogRef: MatDialogRef<ConfirmModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ModalData) { }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 }

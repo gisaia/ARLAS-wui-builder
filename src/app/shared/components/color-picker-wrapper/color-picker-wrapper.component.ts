@@ -26,14 +26,14 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 })
 export class ColorPickerWrapperComponent implements OnInit {
 
-  @Input() value: string;
-  @Output() setValue = new EventEmitter<string>();
+  @Input() public value: string;
+  @Output() private setValue = new EventEmitter<string>();
 
   constructor(
     private defaultValuService: DefaultValuesService
   ) { }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
   public setColor(color: string) {

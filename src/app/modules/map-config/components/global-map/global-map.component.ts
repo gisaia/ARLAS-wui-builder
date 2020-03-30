@@ -49,7 +49,7 @@ export class GlobalMapComponent extends GlobalMapComponentForm implements OnInit
     super(mainFormService, formBuilderDefault);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.collections = this.mainFormService.getCollections();
     this.collections.forEach((collection) => {
 

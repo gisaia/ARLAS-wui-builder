@@ -26,11 +26,11 @@ import { FormControlName, FormGroupDirective } from '@angular/forms';
 })
 export class ConfigElementComponent implements OnInit {
 
-  @ContentChild(FormControlName, { static: true }) formControl: FormControlName;
-  @Input() fullSize = false;
+  @ContentChild(FormControlName, { static: true }) public formControl: FormControlName;
+  @Input() public fullSize = false;
 
   constructor(public formGroupDirective: FormGroupDirective) { }
 
-  ngOnInit() { }
+  public ngOnInit() { }
 
 }

@@ -28,7 +28,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class AppComponent {
 
-  title = 'ARLAS-wui-builder';
+  public title = 'ARLAS-wui-builder';
 
   @ViewChild('landing', { static: false }) public landing: LandingPageComponent;
 

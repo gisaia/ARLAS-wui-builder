@@ -23,7 +23,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ObjectvaluesPipe implements PipeTransform {
 
-  transform(input: any): any {
+  public transform(input: any): any {
     return Object.values(input);
   }
 
