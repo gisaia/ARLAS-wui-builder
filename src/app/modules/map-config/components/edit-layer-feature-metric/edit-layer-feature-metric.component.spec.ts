@@ -1,12 +1,13 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EditLayerFeatureMetricComponent } from './edit-layer-feature-metric.component';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { Subject } from 'rxjs';
 import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
-import { MockComponent } from 'ng-mocks';
+import { MockComponent, MockDirective } from 'ng-mocks';
 import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
 import { FormGroup } from '@angular/forms';
+import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
+import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
 
 describe('EditLayerFeatureMetricComponent', () => {
   let spectator: Spectator<EditLayerFeatureMetricComponent>;
@@ -14,7 +15,9 @@ describe('EditLayerFeatureMetricComponent', () => {
     component: EditLayerFeatureMetricComponent,
     declarations: [
       MockComponent(EditLayerModeFormComponent),
-      MockComponent(ConfigElementComponent)
+      MockComponent(ConfigElementComponent),
+      MockDirective(AlertOnChangeDirective),
+      MockDirective(ResetOnChangeDirective)
     ]
   });
 
@@ -23,6 +26,7 @@ describe('EditLayerFeatureMetricComponent', () => {
       submit: new Subject<boolean>().asObservable(),
       embeddedFeaturesComponent: {
         formFg: new FormGroup({
+          styleStep: new FormGroup({}),
           geometryStep: new FormGroup({})
         })
       } as EditLayerModeFormComponent
