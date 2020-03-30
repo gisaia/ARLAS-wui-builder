@@ -27,7 +27,7 @@ export class PageNotFoundComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 }

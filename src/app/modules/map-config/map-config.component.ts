@@ -54,7 +54,7 @@ export class MapConfigComponent implements OnInit {
 
   public activeTab = this.tabs[0];
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 }

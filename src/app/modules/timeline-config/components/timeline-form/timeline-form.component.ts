@@ -67,7 +67,7 @@ export class TimelineFormComponent extends TimelineFormComponentForm implements 
     super(formBuilderDefault, logger);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     super.ngOnInit();
 
     this.formFg.controls.isDetailedTimeline.setValue(this.isDetailedTimeline);

@@ -46,13 +46,13 @@ export class LayersComponent extends LayersComponentForm implements OnInit {
     super(mainFormService);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
   public confirmDelete(layerId: number, layerName: string): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
-      data: { message: this.translate.instant('delete the layer') +  ' ' + layerName + '?' }
+      data: { message: this.translate.instant('delete the layer') + ' ' + layerName + '?' }
     });
 
     dialogRef.afterClosed().subscribe(result => {

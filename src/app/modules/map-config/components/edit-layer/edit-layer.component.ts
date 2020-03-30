@@ -55,7 +55,7 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
     super(formBuilderDefault);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
 
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
 
