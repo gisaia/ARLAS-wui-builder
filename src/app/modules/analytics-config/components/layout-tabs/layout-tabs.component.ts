@@ -17,17 +17,20 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit, ViewChildren, QueryList, ViewContainerRef, ElementRef } from '@angular/core';
-import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { TranslateService } from '@ngx-translate/core';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
+import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
 
 @Component({
   selector: 'app-anaytics-layout',
-  templateUrl: './anaytics-layout.component.html',
-  styleUrls: ['./anaytics-layout.component.scss']
+  templateUrl: './layout-tabs.component.html',
+  styleUrls: ['./layout-tabs.component.scss']
 })
-export class AnayticsLayoutComponent implements OnInit {
+export class LayoutTabsComponent implements OnInit {
 
   public tabsFa: FormArray;
   public editingTabIndex = -1;
@@ -36,14 +39,20 @@ export class AnayticsLayoutComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private defaultValuesService: DefaultValuesService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private mainFormService: MainFormService,
+    private importExportService: MainFormImportExportService
   ) {
 
-    this.tabsFa = formBuilder.array([
-      this.createNewTab(
-        translateService.instant(
-          defaultValuesService.getValue('analytics.tabs.default')))
-    ]);
+    this.mainFormService.analyticsConfig.initListFa(
+      formBuilder.array([
+        this.createNewTab(
+          translateService.instant(
+            defaultValuesService.getValue('analytics.tabs.default')))
+      ],
+        Validators.required));
+
+    this.tabsFa = this.mainFormService.analyticsConfig.getListFa();
   }
 
   public ngOnInit() {
@@ -52,6 +61,8 @@ export class AnayticsLayoutComponent implements OnInit {
   get tabs() {
     return this.tabsFa.controls.map(fg => fg.value.tabName);
   }
+
+  public getTab = (index: number) => this.tabsFa.at(index) as FormGroup;
 
   public addTab() {
     this.tabsFa.controls.push(this.createNewTab(
@@ -64,13 +75,13 @@ export class AnayticsLayoutComponent implements OnInit {
     this.tabsFa.removeAt(tabIndex);
   }
 
-  public startEditTabName(tabIndex: number) {
-    this.editingTabIndex = tabIndex;
-    this.editingTabName = this.tabsFa.at(tabIndex).get('tabName').value;
+  public startEditTabName(index: number) {
+    this.editingTabIndex = index;
+    this.editingTabName = this.getTab(index).get('tabName').value;
   }
 
   public finishEditTabName(tabIndex: number) {
-    this.tabsFa.at(tabIndex).get('tabName').setValue(this.editingTabName);
+    this.getTab(tabIndex).get('tabName').setValue(this.editingTabName);
     this.editingTabIndex = -1;
   }
 
@@ -79,7 +90,8 @@ export class AnayticsLayoutComponent implements OnInit {
       tabName: [
         name,
         Validators.required
-      ]
+      ],
+      contentFg: this.formBuilder.group({})
     });
   }
 
@@ -92,20 +104,12 @@ export class AnayticsLayoutComponent implements OnInit {
 
   public drop(event: CdkDragDrop<string[]>) {
     const previousIndex = parseInt(event.previousContainer.id.replace('tab-', ''), 10);
-    const currentIndex = parseInt(event.container.id.replace('tab-', ''), 10);
-    const previousTab = this.tabsFa.at(previousIndex);
+    const newIndex = parseInt(event.container.id.replace('tab-', ''), 10);
+    moveItemInFormArray(previousIndex, newIndex, this.tabsFa);
+  }
 
-    if (previousIndex === currentIndex) {
-      return;
-    }
-
-    if (previousIndex < currentIndex) {
-      this.tabsFa.insert(currentIndex + 1, previousTab);
-      this.tabsFa.removeAt(previousIndex);
-    } else {
-      this.tabsFa.insert(currentIndex, previousTab);
-      this.tabsFa.removeAt(previousIndex + 1);
-    }
+  public tabHasError(index: number) {
+    return this.importExportService.isExportExpected && this.tabsFa.at(index).invalid;
   }
 
 }

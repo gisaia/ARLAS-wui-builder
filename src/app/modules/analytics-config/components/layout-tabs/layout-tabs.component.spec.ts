@@ -1,16 +1,21 @@
-import { AnayticsLayoutComponent } from './anaytics-layout.component';
+import { LayoutTabsComponent } from './layout-tabs.component';
 import { createComponentFactory, Spectator, mockProvider } from '@ngneat/spectator';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { LayoutGroupsComponent } from '../layout-groups/layout-groups.component';
+import { MockComponent } from 'ng-mocks';
 
-describe('AnayticsLayoutComponent', () => {
-  let spectator: Spectator<AnayticsLayoutComponent>;
+describe('LayoutTabsComponent', () => {
+  let spectator: Spectator<LayoutTabsComponent>;
 
   const createComponent = createComponentFactory({
-    component: AnayticsLayoutComponent,
+    component: LayoutTabsComponent,
     providers: [
       mockProvider(DefaultValuesService, {
         getValue: () => 'aValue'
       })
+    ],
+    declarations: [
+      MockComponent(LayoutGroupsComponent)
     ]
   });
 

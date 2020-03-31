@@ -20,6 +20,9 @@ describe('LeftMenuComponent', () => {
           timelineConfig: {
             control: new FormGroup({})
           },
+          analyticsConfig: {
+            control: new FormGroup({})
+          },
           mainForm: new FormGroup({})
         })
     ]
