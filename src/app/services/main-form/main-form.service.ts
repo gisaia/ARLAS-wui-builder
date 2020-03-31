@@ -27,7 +27,9 @@ enum MAIN_FORM_KEYS {
   SEARCH_CONFIG = 'SearchConfig',
   SEARCH_CONFIG_GLOBAL = 'SearchConfigGlobal',
   TIMELINE_CONFIG = 'TimelineConfig',
-  TIMELINE_CONFIG_GLOBAL = 'TimelineConfigGlobal'
+  TIMELINE_CONFIG_GLOBAL = 'TimelineConfigGlobal',
+  ANALYTICS_CONFIG = 'AnalyticsConfig',
+  ANALYTICS_CONFIG_LIST = 'AnalyticsConfigList'
 }
 
 @Injectable({
@@ -39,7 +41,8 @@ export class MainFormService {
     [MAIN_FORM_KEYS.STARTING_CONFIG]: new FormGroup({}),
     [MAIN_FORM_KEYS.MAP_CONFIG]: new FormGroup({}),
     [MAIN_FORM_KEYS.SEARCH_CONFIG]: new FormGroup({}),
-    [MAIN_FORM_KEYS.TIMELINE_CONFIG]: new FormGroup({})
+    [MAIN_FORM_KEYS.TIMELINE_CONFIG]: new FormGroup({}),
+    [MAIN_FORM_KEYS.ANALYTICS_CONFIG]: new FormGroup({})
   });
 
   // In sub configs, init() methods should only use `registerControl()` method.
@@ -85,6 +88,15 @@ export class MainFormService {
     public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.TIMELINE_CONFIG_GLOBAL) as FormGroup;
 
   }(this.mainForm.get(MAIN_FORM_KEYS.TIMELINE_CONFIG) as FormGroup);
+
+  // ANALYTICS CONFIG
+  public analyticsConfig = new class {
+    constructor(public control: FormGroup) { }
+
+    public initListFa = (fa: FormArray) => this.control.registerControl(MAIN_FORM_KEYS.ANALYTICS_CONFIG_LIST, fa);
+    public getListFa = () => this.control.get(MAIN_FORM_KEYS.ANALYTICS_CONFIG_LIST) as FormArray;
+
+  }(this.mainForm.get(MAIN_FORM_KEYS.ANALYTICS_CONFIG) as FormGroup);
 
   // OTHER METHODS ...
   public getCollections(): string[] {

@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { ComponentFactoryResolver, Injectable, ViewContainerRef, Type, OnInit } from '@angular/core';
+import { ComponentFactoryResolver, Injectable, ViewContainerRef, Type } from '@angular/core';
 import { LayersComponent } from '@map-config/components/layers/layers.component';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { updateValueAndValidity } from '@utils/tools';
@@ -70,6 +70,8 @@ export class MainFormImportExportService {
 
     if (this.mainFormService.mainForm.valid) {
       this.doExport();
+    } else {
+      this.logger.info('Main form is not valid', this.mainFormService.mainForm);
     }
   }
 

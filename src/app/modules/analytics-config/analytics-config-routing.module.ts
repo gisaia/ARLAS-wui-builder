@@ -18,14 +18,14 @@ under the License.
 */
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AnayticsLayoutComponent } from './components/anaytics-layout/anaytics-layout.component';
+import { LayoutTabsComponent } from './components/layout-tabs/layout-tabs.component';
 
 
 const routes: Routes = [
   {
     path: '', children: [
       { path: '', redirectTo: 'layout', pathMatch: 'full' },
-      { path: 'layout', component: AnayticsLayoutComponent }
+      { path: 'layout', component: LayoutTabsComponent }
     ]
   }];
 @NgModule({
