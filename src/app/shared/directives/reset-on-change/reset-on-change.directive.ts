@@ -32,8 +32,8 @@ import { NGXLogger } from 'ngx-logger';
 })
 export class ResetOnChangeDirective implements OnInit {
 
-  @Input() dependants: AbstractControl[];
-  @Input('appResetOnChange') defaultValuePrefix: string;
+  @Input() private dependants: AbstractControl[];
+  @Input('appResetOnChange') private defaultValuePrefix: string;
 
   constructor(
     private elementRef: ElementRef<HTMLInputElement>,
@@ -42,7 +42,7 @@ export class ResetOnChangeDirective implements OnInit {
     private logger: NGXLogger,
     private defaultValueService: DefaultValuesService) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     if (this.matSelect) {
       this.matSelect.valueChange.subscribe((value: any) => this.resetDependants());
     } else if (this.matSlider) {

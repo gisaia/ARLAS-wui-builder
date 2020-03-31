@@ -34,7 +34,7 @@ export class MainFormInitializedGuard implements CanActivate {
     private mainFormService: MainFormService,
     private router: Router) { }
 
-  canActivate(
+  public canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 

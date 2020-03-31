@@ -83,7 +83,7 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
     super(formBuilder, formBuilderDefault, logger);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     super.ngOnInit();
 
     this.subscribeToCollectionFields();
@@ -95,7 +95,7 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
     this.initUpdateInterpolatedValuesForNumberProperty();
   }
 
-  writeValue(obj: any): void {
+  public writeValue(obj: any): void {
     super.writeValue(obj);
     if (obj) {
       this.propertyInterpolatedFieldCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: false });
@@ -268,7 +268,7 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
     });
   }
 
-  ngAfterContentChecked() {
+  public ngAfterContentChecked() {
     // fix ExpressionChangedAfterItHasBeenCheckedError
     this.cdref.detectChanges();
   }
@@ -277,7 +277,7 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
     return this.propertyType;
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     super.ngOnDestroy();
     this.collectionFieldsSubscription.unsubscribe();
   }

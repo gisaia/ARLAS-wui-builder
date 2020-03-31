@@ -27,7 +27,7 @@ export class TimelineConfigComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 }

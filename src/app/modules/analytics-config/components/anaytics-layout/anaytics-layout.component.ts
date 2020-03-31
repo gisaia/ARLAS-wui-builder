@@ -46,7 +46,7 @@ export class AnayticsLayoutComponent implements OnInit {
     ]);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
   get tabs() {
