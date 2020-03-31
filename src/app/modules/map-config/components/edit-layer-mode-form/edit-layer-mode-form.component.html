@@ -68,19 +68,7 @@
                     {{ 'zoom max etc' | translate}}
                 </div>
             </app-config-element>
-            <app-config-element>
-                <div form-fields>
-                    <span>
-                        <mat-label>{{ 'Features max' | translate}}</mat-label>
-                        <mat-slider #featuresMaxCtrlSlider formControlName="featuresMaxCtrl"
-                            [value]="formFg.get('visibilityStep').get('featuresMaxCtrl').value" thumbLabel min="0"
-                            max="10000" step="100"> </mat-slider>
-                    </span>
-                </div>
-                <div description>
-                    {{ 'Features max etc' | translate}}
-                </div>
-            </app-config-element>
+            <ng-content select="[features-min-max]"></ng-content>
             <div>
                 <button mat-button matStepperPrevious>{{ 'Back' | translate}}</button>
                 <button mat-button matStepperNext type="button">{{ 'Next' | translate}}</button>

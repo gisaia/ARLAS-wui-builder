@@ -34,55 +34,41 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
 
         this.formFg = this.formBuilderDefault.group('map.layer', {
             collectionStep: this.formBuilder.group({
-                collectionCtrl:
-                    [
-                        null,
-                        Validators.required
-                    ]
+                collectionCtrl: [
+                    null,
+                    Validators.required
+                ]
             }),
             geometryStep: this.formBuilder.group({
 
             }),
-            visibilityStep: this.formBuilder.group({
-                visibleCtrl:
-                    [
+            visibilityStep: this.formBuilder.group(
+                {
+                    visibleCtrl: [
                         null
                     ],
-                zoomMinCtrl:
-                    [
+                    zoomMinCtrl: [
                         null,
                         [
                             Validators.required, Validators.min(1), Validators.max(20)
                         ]
                     ],
-                zoomMaxCtrl:
-                    [
+                    zoomMaxCtrl: [
                         null,
                         [
                             Validators.required, Validators.min(1), Validators.max(20)
-                        ]
-                    ],
-                featuresMaxCtrl:
-                    [
-                        null,
-                        [
-                            Validators.required,
-                            Validators.max(10000),
-                            Validators.min(0)
                         ]
                     ]
-            },
+                },
                 {
-                    validator:
-                        [
-                            CustomValidators.getLTEValidator('zoomMinCtrl', 'zoomMaxCtrl')
-                        ]
+                    validator: [
+                        CustomValidators.getLTEValidator('zoomMinCtrl', 'zoomMaxCtrl')
+                    ]
                 }),
             styleStep: this.formBuilder.group({
-                opacityCtrl:
-                    [
-                        null
-                    ],
+                opacityCtrl: [
+                    null
+                ],
                 colorFg: [
                     null,
                     Validators.required

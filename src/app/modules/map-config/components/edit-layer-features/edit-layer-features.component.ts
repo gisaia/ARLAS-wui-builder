@@ -22,6 +22,7 @@ import { NG_VALUE_ACCESSOR, NG_VALIDATORS, FormBuilder } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
 import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 @Component({
   selector: 'app-edit-layer-features',
@@ -47,8 +48,10 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm i
 
   constructor(
     protected logger: NGXLogger,
-    protected formBuilder: FormBuilder) {
-    super(logger, formBuilder);
+    protected formBuilder: FormBuilder,
+    protected formBuilderDefault: FormBuilderWithDefaultService
+    ) {
+    super(logger, formBuilder, formBuilderDefault);
   }
 
   ngOnInit() {
@@ -58,6 +61,7 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm i
     this.formFg = this.embeddedFeaturesComponent.formFg;
     this.registerRendererGeometry();
     this.registerGeometryType();
+    this.registerFeaturesMax();
     this.initEnableWidthOrRadiusFg();
   }
 

@@ -22,6 +22,7 @@ import { NGXLogger } from 'ngx-logger';
 import { EditLayerFeatureMetricComponentForm } from './edit-layer-feature-metric.component.form';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
 import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 @Component({
   selector: 'app-edit-layer-feature-metric',
@@ -47,9 +48,10 @@ export class EditLayerFeatureMetricComponent extends EditLayerFeatureMetricCompo
 
   constructor(
     protected logger: NGXLogger,
-    protected formBuilder: FormBuilder
+    protected formBuilder: FormBuilder,
+    protected formBuilderDefault: FormBuilderWithDefaultService
   ) {
-    super(logger, formBuilder);
+    super(logger, formBuilder, formBuilderDefault);
   }
 
   public ngOnInit() {
@@ -62,6 +64,7 @@ export class EditLayerFeatureMetricComponent extends EditLayerFeatureMetricCompo
     this.registerRendererGeometry();
     this.registerGeometryType();
     this.registerGeometryId();
+    this.registerFeaturesMax();
   }
 
   public getKeywordFields() {

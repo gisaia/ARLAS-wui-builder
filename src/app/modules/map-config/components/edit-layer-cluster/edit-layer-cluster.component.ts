@@ -67,6 +67,9 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
     this.registerClusterGeometryType();
     this.registerAggregatedGeometry();
     this.registerRawGeometry();
+    this.registerFeaturesMin();
+    this.widthFg.disable();
+    this.radiusFg.disable();
   }
 
   public getGeoPointFields() {

@@ -50,4 +50,17 @@
             </div>
         </app-config-element>
     </div>
+    <div features-min-max>
+        <app-config-element>
+            <div form-fields>
+                <span>
+                    <mat-label>{{ 'Features max' | translate}}</mat-label>
+                    <mat-slider [formControl]="featuresMaxCtrl" thumbLabel min="0" max="10000" step="100"> </mat-slider>
+                </span>
+            </div>
+            <div description>
+                {{ 'Features max etc' | translate}}
+            </div>
+        </app-config-element>
+    </div>
 </app-edit-layer-mode-form>

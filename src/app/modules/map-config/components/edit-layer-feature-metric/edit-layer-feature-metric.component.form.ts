@@ -21,6 +21,7 @@ import { NGXLogger } from 'ngx-logger';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
 import { ViewChild } from '@angular/core';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubForm {
 
@@ -29,7 +30,8 @@ export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubFo
 
     constructor(
         protected logger: NGXLogger,
-        protected formBuilder: FormBuilder
+        protected formBuilder: FormBuilder,
+        protected formBuilderDefault: FormBuilderWithDefaultService
     ) {
         super(logger);
     }
@@ -70,6 +72,21 @@ export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubFo
                 ));
     }
 
+    protected registerFeaturesMax() {
+        this.formBuilderDefault.addControl(
+            'map.layer.visibilityStep',
+            this.formFg.get('visibilityStep') as FormGroup,
+            'featuresMaxCtrl',
+            this.formBuilder.control(
+                '',
+                [
+                    Validators.required,
+                    Validators.max(10000),
+                    Validators.min(0)
+                ]
+            ));
+    }
+
     get widthFg() {
         return this.formFg.get('styleStep').get('widthFg') as FormGroup;
     }
@@ -81,6 +98,9 @@ export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubFo
     }
     get geometryTypeCtrl() {
         return this.formFg.get('geometryStep').get('geometryTypeCtrl') as FormControl;
+    }
+    get featuresMaxCtrl() {
+        return this.formFg.get('visibilityStep').get('featuresMaxCtrl') as FormControl;
     }
     get geometryIdCtrl() {
         return this.formFg.get('geometryStep').get('geometryIdCtrl') as FormControl;

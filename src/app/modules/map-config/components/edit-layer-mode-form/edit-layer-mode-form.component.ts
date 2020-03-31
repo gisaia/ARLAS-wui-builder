@@ -141,17 +141,5 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
     }
   }
 
-  public checkZoom(event: MatSliderChange, source: string) {
-    if (source === 'min') {
-      if (event.value > this.zoomMaxCtrl.value) {
-        this.zoomMaxCtrl.setValue(event.value);
-      }
-    } else if (source === 'max') {
-      if (event.value < this.zoomMinCtrl.value) {
-        this.zoomMinCtrl.setValue(event.value);
-      }
-    }
-  }
-
 
 }

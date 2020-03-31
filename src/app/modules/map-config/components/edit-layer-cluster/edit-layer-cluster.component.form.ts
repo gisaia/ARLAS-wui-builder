@@ -82,6 +82,19 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
                 ]));
     }
 
+    protected registerFeaturesMin() {
+        (this.formFg.get('visibilityStep') as FormGroup)
+            .addControl('featuresMinCtrl',
+                this.formBuilder.control(
+                    '',
+                    [
+                        Validators.required,
+                        Validators.max(10000),
+                        Validators.min(0)
+                    ]
+                ));
+    }
+
 
     get aggGeometryCtrl() {
         return this.formFg.get('geometryStep').get('aggGeometryCtrl') as FormControl;
@@ -97,6 +110,15 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
     }
     get rawGeometryCtrl() {
         return this.formFg.get('geometryStep').get('rawGeometryCtrl') as FormControl;
+    }
+    get featuresMinCtrl(){
+        return this.formFg.get('visibilityStep').get('featuresMinCtrl') as FormControl;
+    }
+    get widthFg() {
+        return this.formFg.get('styleStep').get('widthFg') as FormGroup;
+    }
+    get radiusFg() {
+        return this.formFg.get('styleStep').get('radiusFg') as FormGroup;
     }
 }
 

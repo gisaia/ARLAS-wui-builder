@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { AbstractControl, AbstractControlOptions, FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, AbstractControlOptions, FormArray, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 @Injectable({
@@ -37,6 +37,16 @@ export class FormBuilderWithDefaultService {
     const builtGroup = this.formBuilder.group(controlsConfig, options);
     this.setDefaultValueRecursively(defaultValueKey, builtGroup);
     return builtGroup;
+  }
+
+  public addControl(
+    defaultValueGroupKey: string,
+    formGroup: FormGroup,
+    controlName: string,
+    control: FormControl,
+  ) {
+    formGroup.addControl(controlName, control);
+    control.setValue(this.defaultValuesService.getValue(defaultValueGroupKey + '.' + controlName));
   }
 
   private setDefaultValueRecursively(path: string, control: AbstractControl) {
