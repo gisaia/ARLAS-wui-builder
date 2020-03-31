@@ -22,6 +22,7 @@ import { NGXLogger } from 'ngx-logger';
 import { FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
 import { GRANULARITY, AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '../edit-layer-mode-form/models';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 
 
@@ -51,9 +52,10 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
 
   constructor(
     protected logger: NGXLogger,
-    protected formBuilder: FormBuilder
+    protected formBuilder: FormBuilder,
+    protected formBuilderDefault: FormBuilderWithDefaultService
   ) {
-    super(logger, formBuilder);
+    super(logger, formBuilder, formBuilderDefault);
   }
 
   ngOnInit() {

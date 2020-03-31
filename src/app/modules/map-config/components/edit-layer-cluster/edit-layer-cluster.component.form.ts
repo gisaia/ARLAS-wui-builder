@@ -23,6 +23,7 @@ import { ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { CLUSTER_GEOMETRY_TYPE } from '../edit-layer-mode-form/models';
 import { CustomValidators } from '@utils/custom-validators';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
 
@@ -31,7 +32,8 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
 
     constructor(
         protected logger: NGXLogger,
-        protected formBuilder: FormBuilder
+        protected formBuilder: FormBuilder,
+        protected formBuilderDefault: FormBuilderWithDefaultService
     ) {
         super(logger);
     }
@@ -40,28 +42,28 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
         (this.formFg.get('geometryStep') as FormGroup)
             .addControl(
                 'aggGeometryCtrl',
-                this.formBuilder.control('', [Validators.required]));
+                this.formBuilderDefault.control('map.layer.geometryStep.aggGeometryCtrl', [Validators.required]));
     }
 
     protected registerGranlularity() {
         (this.formFg.get('geometryStep') as FormGroup)
             .addControl(
                 'granularityCtrl',
-                this.formBuilder.control('', [Validators.required]));
+                this.formBuilderDefault.control('map.layer.geometryStep.granularityCtrl', [Validators.required]));
     }
 
     protected registerClusterGeometryType() {
         (this.formFg.get('geometryStep') as FormGroup)
             .addControl(
                 'clusterGeometryTypeCtrl',
-                this.formBuilder.control('', [Validators.required]));
+                this.formBuilderDefault.control('map.layer.geometryStep.clusterGeometryTypeCtrl', [Validators.required]));
     }
 
     protected registerAggregatedGeometry() {
         (this.formFg.get('geometryStep') as FormGroup)
             .addControl(
                 'aggregatedGeometryCtrl',
-                this.formBuilder.control('', [
+                this.formBuilderDefault.control('map.layer.geometryStep.aggregatedGeometryCtrl', [
                     CustomValidators.getConditionalValidator(
                         () => !!this.clusterGeometryTypeCtrl
                             && this.clusterGeometryTypeCtrl.value === CLUSTER_GEOMETRY_TYPE.aggregated_geometry ? true : false,
@@ -73,7 +75,7 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
         (this.formFg.get('geometryStep') as FormGroup)
             .addControl(
                 'rawGeometryCtrl',
-                this.formBuilder.control('', [
+                this.formBuilderDefault.control('map.layer.geometryStep.rawGeometryCtrl', [
                     CustomValidators.getConditionalValidator(
                         () => !!this.clusterGeometryTypeCtrl
                             && this.clusterGeometryTypeCtrl.value === CLUSTER_GEOMETRY_TYPE.raw_geometry ? true : false,
@@ -84,13 +86,12 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
 
     protected registerFeaturesMin() {
         (this.formFg.get('visibilityStep') as FormGroup)
-            .addControl('featuresMinCtrl',
-                this.formBuilder.control(
-                    '',
+            .addControl(
+                'featuresMinCtrl',
+                this.formBuilderDefault.control(
+                    'map.layer.visibilityStep.featuresMinCtrl',
                     [
-                        Validators.required,
-                        Validators.max(10000),
-                        Validators.min(0)
+                        Validators.required
                     ]
                 ));
     }
@@ -111,7 +112,7 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
     get rawGeometryCtrl() {
         return this.formFg.get('geometryStep').get('rawGeometryCtrl') as FormControl;
     }
-    get featuresMinCtrl(){
+    get featuresMinCtrl() {
         return this.formFg.get('visibilityStep').get('featuresMinCtrl') as FormControl;
     }
     get widthFg() {
