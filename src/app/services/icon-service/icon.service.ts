@@ -16,30 +16,33 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-.tab-wrapper {
-  display: flex;
+import { Injectable } from '@angular/core';
+import { MatIconRegistry } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
 
-  mat-tab-group {
-    flex: 1;
-    overflow-y: hidden;
+enum CustomIcons {
+  move = 'move'
+}
 
-    ::ng-deep mat-tab-header {
-      .mat-tab-label {
-        .mat-tab-label-content {
-          div {
-            display: inline-flex;
-          }
+@Injectable({
+  providedIn: 'root'
+})
+export class IconService {
 
-          .edit-tab-name {
-            display: flex;
-          }
+  constructor(
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer
+  ) { }
 
-          .tab-name {
-            min-width: 165px;
-            align-self: center;
-          }
-        }
-      }
-    }
+  public registerIcons(): void {
+    this.loadIcons(Object.values(CustomIcons), '../assets/svg');
+  }
+
+  private loadIcons(iconKeys: string[], iconUrl: string): void {
+    iconKeys.forEach(key => {
+      this.matIconRegistry.addSvgIcon(
+        key,
+        this.domSanitizer.bypassSecurityTrustResourceUrl(`${iconUrl}/${key}.svg`));
+    });
   }
 }

@@ -33,7 +33,11 @@ import { TimelineFormComponent } from './components/timeline-form/timeline-form.
 import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
-  declarations: [TimelineConfigComponent, GlobalTimelineComponent, TimelineFormComponent],
+  declarations: [
+    TimelineConfigComponent,
+    GlobalTimelineComponent,
+    TimelineFormComponent
+  ],
   imports: [
     CommonModule,
     TimelineConfigRoutingModule,

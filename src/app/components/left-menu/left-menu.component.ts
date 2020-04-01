@@ -82,7 +82,8 @@ export class LeftMenuComponent {
       link: '/analytics-config',
       icon: 'bar_chart',
       tooltip: this.translate.instant('Analytics configuration'),
-      enabled: true
+      enabled: true,
+      control: this.mainFormService.analyticsConfig.control
     },
     {
       name: 'Look \'n feel',

@@ -16,11 +16,10 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GlobalTimelineComponentForm } from './global-timeline.component.form';
 import { CollectionService, FIELD_TYPES } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { FormBuilder } from '@angular/forms';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
