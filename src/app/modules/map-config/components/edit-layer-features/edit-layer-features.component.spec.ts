@@ -26,8 +26,10 @@ describe('EditLayerFeaturesComponent', () => {
     props: {
       submit: new Subject<boolean>().asObservable(),
       embeddedFeaturesComponent: {
+        initEnableWidthOrRadiusFg: () => { },
         formFg: new FormGroup({
           styleStep: new FormGroup({}),
+          visibilityStep: new FormGroup({}),
           geometryStep: new FormGroup({})
         })
       } as EditLayerModeFormComponent

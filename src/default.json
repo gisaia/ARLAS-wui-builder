@@ -17,6 +17,7 @@
                 "granularityCtrl": "coarse"
             },
             "visibilityStep": {
+                "visibleCtrl": true,
                 "zoomMinCtrl": 10,
                 "zoomMaxCtrl": 10,
                 "featuresMaxCtrl": 7500,

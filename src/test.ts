@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -30,6 +31,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import 'zone.js/dist/zone-testing';
+import { MatChipsModule } from '@angular/material/chips';
 
 // define modules to be injected in every test
 defineGlobalsInjections({
@@ -38,6 +40,7 @@ defineGlobalsInjections({
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
+    MatChipsModule,
     MatTabsModule,
     MatSnackBarModule,
     MatTableModule,
@@ -49,6 +52,7 @@ defineGlobalsInjections({
     MatCardModule,
     MatIconModule,
     MatListModule,
+    MatRadioModule,
     MatSidenavModule,
     MatTooltipModule,
     MatSelectModule,

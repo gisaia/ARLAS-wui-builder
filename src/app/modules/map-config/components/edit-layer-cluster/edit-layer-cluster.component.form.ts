@@ -16,19 +16,15 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { ComponentSubForm } from '@shared/ComponentSubForm';
-import { NGXLogger } from 'ngx-logger';
-import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
-import { ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { CLUSTER_GEOMETRY_TYPE } from '../edit-layer-mode-form/models';
-import { CustomValidators } from '@utils/custom-validators';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { ComponentSubForm } from '@shared/ComponentSubForm';
+import { CustomValidators } from '@utils/custom-validators';
+import { NGXLogger } from 'ngx-logger';
+import { CLUSTER_GEOMETRY_TYPE } from '../edit-layer-mode-form/models';
 
 export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
-
-    @ViewChild(EditLayerModeFormComponent, { static: true })
-    public embeddedFeaturesComponent: EditLayerModeFormComponent;
+    public sortDirection: string;
 
     constructor(
         protected logger: NGXLogger,
@@ -83,6 +79,12 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
                     )
                 ]));
     }
+    protected registerClusterSort() {
+        (this.formFg.get('geometryStep') as FormGroup)
+            .addControl(
+                'clusterSort',
+                this.formBuilderDefault.control('map.layer.geometryStep.clusterSort'));
+    }
 
     protected registerFeaturesMin() {
         (this.formFg.get('visibilityStep') as FormGroup)
@@ -111,6 +113,9 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
     }
     get rawGeometryCtrl() {
         return this.formFg.get('geometryStep').get('rawGeometryCtrl') as FormControl;
+    }
+    get clusterSort() {
+        return this.formFg.get('geometryStep').get('clusterSort') as FormControl;
     }
     get featuresMinCtrl() {
         return this.formFg.get('visibilityStep').get('featuresMinCtrl') as FormControl;

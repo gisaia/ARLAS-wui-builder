@@ -22,8 +22,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -41,16 +43,16 @@ import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-
 import { SharedModule } from '@shared/shared.module';
 import { DialogColorTableComponent } from './components/dialog-color-table/dialog-color-table.component';
 import { DialogPaletteSelectorComponent } from './components/dialog-palette-selector/dialog-palette-selector.component';
+import { EditLayerClusterComponent } from './components/edit-layer-cluster/edit-layer-cluster.component';
+import { EditLayerFeatureMetricComponent } from './components/edit-layer-feature-metric/edit-layer-feature-metric.component';
+import { EditLayerFeaturesComponent } from './components/edit-layer-features/edit-layer-features.component';
 import { EditLayerModeFormComponent } from './components/edit-layer-mode-form/edit-layer-mode-form.component';
 import { EditLayerComponent } from './components/edit-layer/edit-layer.component';
 import { GlobalMapComponent } from './components/global-map/global-map.component';
 import { LayersComponent } from './components/layers/layers.component';
 import { MapConfigRoutingModule } from './map-config-routing.module';
 import { MapConfigComponent } from './map-config.component';
-import { EditLayerFeatureMetricComponent } from './components/edit-layer-feature-metric/edit-layer-feature-metric.component';
-import { EditLayerFeaturesComponent } from './components/edit-layer-features/edit-layer-features.component';
-import { EditLayerClusterComponent } from './components/edit-layer-cluster/edit-layer-cluster.component';
-import { MatExpansionModule } from '@angular/material';
+import { MatRadioModule } from '@angular/material';
 
 @NgModule({
   entryComponents: [
@@ -73,6 +75,7 @@ import { MatExpansionModule } from '@angular/material';
   imports: [
     CommonModule,
     MapConfigRoutingModule,
+    MatChipsModule,
     MatTabsModule,
     MatSnackBarModule,
     MatTableModule,
@@ -86,6 +89,7 @@ import { MatExpansionModule } from '@angular/material';
     MatStepperModule,
     MatSlideToggleModule,
     MatSliderModule,
+    MatRadioModule,
     MatDialogModule,
     MatIconModule,
     MatTooltipModule,

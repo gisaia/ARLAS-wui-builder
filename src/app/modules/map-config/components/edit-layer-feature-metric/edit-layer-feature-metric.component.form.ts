@@ -16,17 +16,12 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { ComponentSubForm } from '@shared/ComponentSubForm';
 import { NGXLogger } from 'ngx-logger';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
-import { ViewChild } from '@angular/core';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubForm {
-
-    @ViewChild(EditLayerModeFormComponent, { static: true })
-    public embeddedFeaturesComponent: EditLayerModeFormComponent;
 
     constructor(
         protected logger: NGXLogger,

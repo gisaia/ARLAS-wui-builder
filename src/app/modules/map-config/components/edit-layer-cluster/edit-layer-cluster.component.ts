@@ -16,13 +16,14 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, forwardRef } from '@angular/core';
+import { Component, OnInit, forwardRef, AfterViewInit, ViewChild } from '@angular/core';
 import { EditLayerClusterComponentForm } from './edit-layer-cluster.component.form';
 import { NGXLogger } from 'ngx-logger';
 import { FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
 import { GRANULARITY, AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '../edit-layer-mode-form/models';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
 
 
 
@@ -43,12 +44,15 @@ import { FormBuilderWithDefaultService } from '@services/form-builder-with-defau
     }
   ]
 })
-export class EditLayerClusterComponent extends EditLayerClusterComponentForm implements OnInit {
+export class EditLayerClusterComponent extends EditLayerClusterComponentForm implements OnInit, AfterViewInit {
 
   public PROPERTY_SELECTOR_SOURCE = PROPERTY_SELECTOR_SOURCE;
   public GRANULARITY = GRANULARITY;
   public CLUSTER_GEOMETRY_TYPE = CLUSTER_GEOMETRY_TYPE;
   public AGGREGATE_GEOMETRY_TYPE = AGGREGATE_GEOMETRY_TYPE;
+  @ViewChild(EditLayerModeFormComponent, { static: true }) public embeddedFeaturesComponent: EditLayerModeFormComponent;
+
+  public sorts: Set<string> = new Set();
 
   constructor(
     protected logger: NGXLogger,
@@ -69,10 +73,28 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
     this.registerClusterGeometryType();
     this.registerAggregatedGeometry();
     this.registerRawGeometry();
+    this.registerClusterSort();
     this.registerFeaturesMin();
-    this.widthFg.disable();
-    this.radiusFg.disable();
+    if (!!this.widthFg) { this.widthFg.disable(); }
+    if (!!this.radiusFg) { this.radiusFg.disable(); }
   }
+
+  ngAfterViewInit() {
+    this.initSortChips();
+  }
+
+  public addSort(sort: string, event) {
+    event.stopPropagation();
+    this.sorts.add(sort);
+    this.setSortValue();
+    console.log(this.clusterSort.value);
+  }
+
+  public removeSort(sort: string) {
+    this.sorts.delete(sort);
+    this.setSortValue();
+  }
+
 
   public getGeoPointFields() {
     return this.embeddedFeaturesComponent.collectionGeoPointFields;
@@ -82,4 +104,27 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
     return this.embeddedFeaturesComponent.collectionGeoFields;
   }
 
+  public getAllButGeoFields() {
+    return this.embeddedFeaturesComponent.collectionAllButGeoFields;
+  }
+
+  private setSortValue() {
+    let sortValue = '';
+    Array.from(this.sorts).forEach((sort, index) => {
+      if (index !== 0) {
+        sortValue += ',' + sort;
+      } else {
+        sortValue += sort;
+      }
+    });
+    this.clusterSort.setValue(sortValue);
+  }
+
+  private initSortChips() {
+    if (!!this.clusterSort.value) {
+      this.clusterSort.value.split(',').forEach(sortTerm => {
+        this.sorts.add(sortTerm);
+      });
+    }
+  }
 }

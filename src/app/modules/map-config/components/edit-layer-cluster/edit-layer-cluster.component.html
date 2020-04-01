@@ -1,5 +1,4 @@
-<app-edit-layer-mode-form [submit]="submitSubject.asObservable()"
-    [colorFgSources]="[PROPERTY_SELECTOR_SOURCE.fix]">
+<app-edit-layer-mode-form [submit]="submitSubject.asObservable()" [colorFgSources]="[PROPERTY_SELECTOR_SOURCE.fix]">
     <div requested-geometry>
         <h3 class="layer-section-title">Requested geometry</h3>
         <app-config-element>
@@ -38,13 +37,15 @@
                 <mat-form-field>
                     <mat-label>{{ 'Type' | translate}} </mat-label>
                     <mat-select [formControl]="clusterGeometryTypeCtrl">
-                        <mat-option [value]="CLUSTER_GEOMETRY_TYPE.aggregated_geometry">{{ 'Aggregated geometry' | translate}}</mat-option>
-                        <mat-option [value]="CLUSTER_GEOMETRY_TYPE.raw_geometry">{{ 'Raw Geometry' | translate}}</mat-option>
+                        <mat-option [value]="CLUSTER_GEOMETRY_TYPE.aggregated_geometry">
+                            {{ 'Aggregated geometry' | translate}}</mat-option>
+                        <mat-option [value]="CLUSTER_GEOMETRY_TYPE.raw_geometry">{{ 'Raw Geometry' | translate}}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div description>
-               
+
             </div>
         </app-config-element>
         <app-config-element *ngIf="clusterGeometryTypeCtrl.value === CLUSTER_GEOMETRY_TYPE.aggregated_geometry">
@@ -52,15 +53,18 @@
                 <mat-form-field>
                     <mat-label>{{ 'Type' | translate}} </mat-label>
                     <mat-select [formControl]="aggregatedGeometryCtrl">
-                        <mat-option [value]="AGGREGATE_GEOMETRY_TYPE.geohash_center">{{ 'Cell center' | translate}}</mat-option>
+                        <mat-option [value]="AGGREGATE_GEOMETRY_TYPE.geohash_center">{{ 'Cell center' | translate}}
+                        </mat-option>
                         <mat-option [value]="AGGREGATE_GEOMETRY_TYPE.geohash">{{ 'Cell' | translate}}</mat-option>
-                        <mat-option [value]="AGGREGATE_GEOMETRY_TYPE.bbox">{{ 'Data cell bbox' | translate}}</mat-option>
-                        <mat-option [value]="AGGREGATE_GEOMETRY_TYPE.centroid">{{ 'Data cell centroid' | translate}}</mat-option>
+                        <mat-option [value]="AGGREGATE_GEOMETRY_TYPE.bbox">{{ 'Data cell bbox' | translate}}
+                        </mat-option>
+                        <mat-option [value]="AGGREGATE_GEOMETRY_TYPE.centroid">{{ 'Data cell centroid' | translate}}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div description>
-               
+
             </div>
         </app-config-element>
         <app-config-element *ngIf="clusterGeometryTypeCtrl.value === CLUSTER_GEOMETRY_TYPE.raw_geometry">
@@ -73,18 +77,46 @@
                 </mat-form-field>
             </div>
             <div description>
-               
+
             </div>
         </app-config-element>
+        <ng-container
+            *ngIf="clusterGeometryTypeCtrl.value === CLUSTER_GEOMETRY_TYPE.raw_geometry && !!rawGeometryCtrl.value">
+            <input matInput [formControl]="clusterSort" [hidden]="true">
+            <app-config-element [fullSize]="true">
+                <div form-fields class="order-section">
+                    <mat-form-field>
+                        <mat-label>{{ 'Order Field' | translate}}</mat-label>
+                        <mat-select #selectSort>
+                            <mat-option *ngFor="let field of getAllButGeoFields()" [value]="field">{{field}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-radio-group [(ngModel)]="sortDirection" aria-label="Select a direction">
+                        <mat-radio-button value="+">ASC</mat-radio-button>
+                        <mat-radio-button value="-">DESC</mat-radio-button>
+                    </mat-radio-group>
+                    <button type="button" mat-stroked-button
+                        (click)="addSort(sortDirection + selectSort.value, $event)">{{ 'Add' | translate}}</button>
+                    <mat-chip-list #chipSortList aria-label="Sort selection" class="order-chip-list">
+                        <mat-chip *ngFor="let sort of sorts" [selectable]="false" [removable]="true"
+                            (removed)="removeSort(sort)">
+                            {{sort}}
+                            <mat-icon matChipRemove>cancel</mat-icon>
+                        </mat-chip>
+                    </mat-chip-list>
+
+                </div>
+            </app-config-element>
+
+        </ng-container>
     </div>
     <div features-min-max>
         <app-config-element>
             <div form-fields>
                 <span>
                     <mat-label>{{ 'Minimum features' | translate}}</mat-label>
-                    <mat-slider [formControl]="featuresMinCtrl"
-                        [value]="formFg.get('visibilityStep').get('featuresMinCtrl').value" thumbLabel min="0"
-                        max="10000" step="100"> </mat-slider>
+                    <mat-slider [formControl]="featuresMinCtrl" thumbLabel min="0" max="10000" step="100"> </mat-slider>
                 </span>
             </div>
             <div description>
@@ -92,5 +124,5 @@
             </div>
         </app-config-element>
     </div>
-    
+
 </app-edit-layer-mode-form>
