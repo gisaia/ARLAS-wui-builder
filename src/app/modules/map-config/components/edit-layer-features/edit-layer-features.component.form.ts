@@ -37,27 +37,25 @@ export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
     }
 
     protected registerRendererGeometry() {
-        (this.formFg.get('geometryStep') as FormGroup)
-            .addControl(
-                'geometryCtrl',
-                this.formBuilderDefault.control(
-                    'map.layer.geometryStep.geometryCtrl',
-                    [
-                        Validators.required
-                    ]
-                ));
+        this.geometryStep.addControl(
+            'geometryCtrl',
+            this.formBuilderDefault.control(
+                'map.layer.geometryStep.geometryCtrl',
+                [
+                    Validators.required
+                ]
+            ));
     }
 
     protected registerGeometryType() {
-        (this.formFg.get('geometryStep') as FormGroup)
-            .addControl(
-                'geometryTypeCtrl',
-                this.formBuilderDefault.control(
-                    'map.layer.geometryStep.geometryTypeCtrl',
-                    [
-                        Validators.required
-                    ]
-                ));
+        this.geometryStep.addControl(
+            'geometryTypeCtrl',
+            this.formBuilderDefault.control(
+                'map.layer.geometryStep.geometryTypeCtrl',
+                [
+                    Validators.required
+                ]
+            ));
     }
 
     protected registerFeaturesMax() {
@@ -74,6 +72,9 @@ export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
                 ));
     }
 
+    get geometryStep() {
+        return this.formFg.get('geometryStep') as FormGroup;
+    }
     get geometryCtrl() {
         return this.formFg.get('geometryStep').get('geometryCtrl') as FormControl;
     }

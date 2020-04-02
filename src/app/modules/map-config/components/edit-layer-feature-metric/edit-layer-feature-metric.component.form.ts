@@ -20,9 +20,11 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { ComponentSubForm } from '@shared/ComponentSubForm';
 import { NGXLogger } from 'ngx-logger';
+import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
+import { ViewChild } from '@angular/core';
 
 export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubForm {
-
+    @ViewChild(EditLayerModeFormComponent, { static: true }) public embeddedFeaturesComponent: EditLayerModeFormComponent;
     constructor(
         protected logger: NGXLogger,
         protected formBuilder: FormBuilder,
@@ -32,39 +34,36 @@ export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubFo
     }
 
     protected registerRendererGeometry() {
-        (this.formFg.get('geometryStep') as FormGroup)
-            .addControl(
-                'geometryCtrl',
-                this.formBuilderDefault.control(
-                    'map.layer.geometryStep.geometryCtrl',
-                    [
-                        Validators.required
-                    ]
-                ));
+        this.geometryStep.addControl(
+            'geometryCtrl',
+            this.formBuilderDefault.control(
+                'map.layer.geometryStep.geometryCtrl',
+                [
+                    Validators.required
+                ]
+            ));
     }
 
     protected registerGeometryType() {
-        (this.formFg.get('geometryStep') as FormGroup)
-            .addControl(
-                'geometryTypeCtrl',
-                this.formBuilderDefault.control(
-                    'map.layer.geometryStep.geometryTypeCtrl',
-                    [
-                        Validators.required
-                    ]
-                ));
+        this.geometryStep.addControl(
+            'geometryTypeCtrl',
+            this.formBuilderDefault.control(
+                'map.layer.geometryStep.geometryTypeCtrl',
+                [
+                    Validators.required
+                ]
+            ));
     }
 
     protected registerGeometryId() {
-        (this.formFg.get('geometryStep') as FormGroup)
-            .addControl(
-                'geometryIdCtrl',
-                this.formBuilderDefault.control(
-                    'map.layer.geometryStep.geometryIdCtrl',
-                    [
-                        Validators.required
-                    ]
-                ));
+        this.geometryStep.addControl(
+            'geometryIdCtrl',
+            this.formBuilderDefault.control(
+                'map.layer.geometryStep.geometryIdCtrl',
+                [
+                    Validators.required
+                ]
+            ));
     }
 
     protected registerFeaturesMax() {
@@ -81,6 +80,9 @@ export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubFo
                 ));
     }
 
+    get geometryStep() {
+        return this.formFg.get('geometryStep') as FormGroup;
+    }
     get widthFg() {
         return this.formFg.get('styleStep').get('widthFg') as FormGroup;
     }

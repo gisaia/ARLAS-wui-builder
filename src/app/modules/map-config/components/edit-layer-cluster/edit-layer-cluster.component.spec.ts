@@ -1,4 +1,4 @@
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
 import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
 import { MockComponent } from 'ng-mocks';
@@ -24,7 +24,10 @@ describe('EditLayerClusterComponent', () => {
         formFg: new FormGroup({
           geometryStep: new FormGroup({}),
           visibilityStep: new FormGroup({}),
-          styleStep: new FormGroup({})
+          styleStep: new FormGroup({
+            widthFg: new FormControl(),
+            radiusFg: new FormControl(),
+          })
         })
       } as EditLayerModeFormComponent
     }

@@ -100,6 +100,13 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
     get collectionCtrl() {
         return this.formFg.get('collectionStep').get('collectionCtrl');
     }
+    get geometryCtrl() {
+        if (!!this.formFg) {
+            return this.formFg.get('geometryStep').get('geometryCtrl');
+        } else {
+            return null;
+        }
+    }
     get geometryTypeCtrl() {
         if (!!this.formFg) {
             return this.formFg.get('geometryStep').get('geometryTypeCtrl');

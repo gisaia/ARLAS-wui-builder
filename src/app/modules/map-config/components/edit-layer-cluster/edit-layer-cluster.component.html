@@ -92,13 +92,13 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-radio-group [(ngModel)]="sortDirection" aria-label="Select a direction">
-                        <mat-radio-button value="+">ASC</mat-radio-button>
-                        <mat-radio-button value="-">DESC</mat-radio-button>
+                    <mat-radio-group [(ngModel)]="sortDirection">
+                        <mat-radio-button value="+">{{ 'ASC' | translate}}</mat-radio-button>
+                        <mat-radio-button value="-">{{ 'DESC' | translate}}</mat-radio-button>
                     </mat-radio-group>
                     <button type="button" mat-stroked-button
                         (click)="addSort(sortDirection + selectSort.value, $event)">{{ 'Add' | translate}}</button>
-                    <mat-chip-list #chipSortList aria-label="Sort selection" class="order-chip-list">
+                    <mat-chip-list #chipSortList class="order-chip-list">
                         <mat-chip *ngFor="let sort of sorts" [selectable]="false" [removable]="true"
                             (removed)="removeSort(sort)">
                             {{sort}}

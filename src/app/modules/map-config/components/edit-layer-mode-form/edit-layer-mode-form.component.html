@@ -8,7 +8,7 @@
                         <mat-label>{{ 'Collection' | translate}}</mat-label>
                         <mat-select formControlName="collectionCtrl"
                             appAlertOnChange="changing the collection will reset the rendered geometry"
-                            [dependants]="[colorFg]">
+                            [dependants]="[geometryCtrl, colorFg]">
                             <mat-option *ngFor="let collection of this.mainformService.getCollections()"
                                 value="{{collection}}">{{collection}}</mat-option>
                         </mat-select>

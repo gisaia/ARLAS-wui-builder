@@ -86,6 +86,7 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
 
   ngOnInit() {
     super.ngOnInit();
+    this.initEnableWidthOrRadiusFg();
   }
 
   ngAfterViewInit() {
@@ -153,29 +154,31 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
    * The solution is to enable only the expected form group.
    */
   public initEnableWidthOrRadiusFg() {
-    this.geometryTypeCtrl.valueChanges.subscribe(v => {
-      const geoEnableDisable = [{
-        geometry: GEOMETRY_TYPE.line,
-        enabled: [this.widthFg],
-        disabled: [this.radiusFg]
-      },
-      {
-        geometry: GEOMETRY_TYPE.circle,
-        enabled: [this.radiusFg],
-        disabled: [this.widthFg]
-      },
-      {
-        geometry: GEOMETRY_TYPE.fill,
-        enabled: [],
-        disabled: [this.radiusFg, this.widthFg]
-      }].find(elmt => elmt.geometry === v);
+    if (!!this.geometryTypeCtrl) {
+      this.geometryTypeCtrl.valueChanges.subscribe(v => {
+        const geoEnableDisable = [{
+          geometry: GEOMETRY_TYPE.line,
+          enabled: [this.widthFg],
+          disabled: [this.radiusFg]
+        },
+        {
+          geometry: GEOMETRY_TYPE.circle,
+          enabled: [this.radiusFg],
+          disabled: [this.widthFg]
+        },
+        {
+          geometry: GEOMETRY_TYPE.fill,
+          enabled: [],
+          disabled: [this.radiusFg, this.widthFg]
+        }].find(elmt => elmt.geometry === v);
 
-      if (!!geoEnableDisable) {
-        geoEnableDisable.enabled.forEach(c => c.enable());
-        geoEnableDisable.disabled.forEach(c => c.disable());
-      }
-    });
-    this.geometryTypeCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+        if (!!geoEnableDisable) {
+          geoEnableDisable.enabled.forEach(c => c.enable());
+          geoEnableDisable.disabled.forEach(c => c.disable());
+        }
+      });
+      this.geometryTypeCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+    }
   }
 
 }

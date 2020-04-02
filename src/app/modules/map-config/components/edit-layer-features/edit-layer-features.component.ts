@@ -62,7 +62,6 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm i
     this.registerRendererGeometry();
     this.registerGeometryType();
     this.registerFeaturesMax();
-    this.embeddedFeaturesComponent.initEnableWidthOrRadiusFg();
   }
 
   public getCollectionGeoFields() {
