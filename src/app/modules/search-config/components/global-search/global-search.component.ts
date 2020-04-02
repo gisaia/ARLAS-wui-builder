@@ -41,7 +41,7 @@ export class GlobalSearchComponent extends GlobalSearchComponentForm implements 
 
   public ngOnInit() {
     // TODO use multi collection instead of the first one
-    this.collectionService.getCollectionFields(this.mainFormService.getCollections()[0], [FIELD_TYPES.KEYWORD])
+    this.collectionService.getCollectionFieldsNames(this.mainFormService.getCollections()[0], [FIELD_TYPES.KEYWORD])
       .subscribe(fields => this.keywordFields = fields);
   }
 

@@ -69,6 +69,21 @@
         "tabs": {
             "default": "Default",
             "new": "New"
+        },
+        "widgets": {
+            "histogram": {
+                "dataStep": {
+                    "bucketOrInterval": true,
+                    "bucketsNumber": 5,
+                    "aggregationValue": "COUNT"
+                },
+                "renderStep": {
+                    "multiselectable": true,
+                    "chartType": "bars",
+                    "showHorizontalLines": true,
+                    "ticksDateFormat": "%b %d %Y  %H:%M"
+                }
+            }
         }
     },
     "config": {

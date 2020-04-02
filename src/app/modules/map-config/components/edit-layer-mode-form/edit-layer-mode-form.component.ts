@@ -108,28 +108,28 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
       if (!c) {
         return;
       }
-      this.collectionService.getCollectionFields(c, [FIELD_TYPES.GEOPOINT])
+      this.collectionService.getCollectionFieldsNames(c, [FIELD_TYPES.GEOPOINT])
         .subscribe(
           f => {
             this.collectionGeoPointFields = f;
           });
-      this.collectionService.getCollectionFields(c, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE])
+      this.collectionService.getCollectionFieldsNames(c, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE])
         .subscribe(
           f => {
             this.collectionGeoFields = f;
           });
-      this.collectionService.getCollectionFields(c, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE], true)
+      this.collectionService.getCollectionFieldsNames(c, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE], true)
         .subscribe(
           f => {
             this.collectionAllButGeoFields = f;
           });
-      this.collectionService.getCollectionFields(c, [FIELD_TYPES.KEYWORD])
+      this.collectionService.getCollectionFieldsNames(c, [FIELD_TYPES.KEYWORD])
         .subscribe(
           f => {
             this.collectionKeywordFields = f;
             this.propertySelectorComponents.forEach(psc => psc.collectionKeywordFieldsEmitter.emit(f));
           });
-      this.collectionService.getCollectionFields(c, [FIELD_TYPES.LONG, FIELD_TYPES.INTEGER, FIELD_TYPES.DATE])
+      this.collectionService.getCollectionFieldsNames(c, [FIELD_TYPES.LONG, FIELD_TYPES.INTEGER, FIELD_TYPES.DATE])
         .subscribe(
           f => {
             this.collectionIntegerFields = f;

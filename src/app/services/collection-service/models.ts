@@ -16,11 +16,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-export enum WIDGET_TYPE {
-    histogram = 'histogram',
-    donut = 'donut',
-    powerbar = 'powerbar',
-    resultlist = 'resultlist',
-    metric = 'metric',
-    swimlane = 'swimlane'
+import { CollectionReferenceDescriptionProperty } from 'arlas-api';
+
+export interface CollectionField {
+    name: string;
+    type: CollectionReferenceDescriptionProperty.TypeEnum;
 }

@@ -1,6 +1,16 @@
 <div class="group-wrapper" [formGroup]="formGroup">
     <div class="edit-group">
         <div class="edit-group-form">
+            <div class="action-buttons">
+                <div cdkDragHandle>
+                    <mat-icon svgIcon="move" [matTooltip]="'Reorder group' | translate"></mat-icon>
+                </div>
+                <div>
+                    <button mat-icon-button (click)="remove.emit()" [matTooltip]="'Delete group' | translate">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
             <div>
                 <div>
                     <mat-form-field>
@@ -19,42 +29,34 @@
                 <div>
                     <mat-form-field>
                         <mat-label>Type</mat-label>
-                        <mat-select formControlName="contentType">
-                            <mat-optgroup *ngFor="let nbComponents of [1, 2, 3]"
-                                [label]="('With ' + nbComponents + ' component(s)') | translate ">
-                                <mat-option *ngFor="let types of getContentTypes(nbComponents)" [value]="types">
+                        <mat-select formControlName="contentType"
+                            appAlertOnChange="changing the type will reset the set-up widgets" appResetOnChange
+                            [dependants]="[content]">
+                            <mat-optgroup *ngFor="let nbWidgets of [1, 2, 3]"
+                                [label]="('With ' + nbWidgets + ' widget(s)') | translate ">
+                                <mat-option *ngFor="let types of getContentTypes(nbWidgets)" [value]="types">
                                     {{types.join(' / ') | translate}}
                                 </mat-option>
                             </mat-optgroup>
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div *ngIf="contentType" class="edit-components">
-                    <div *ngFor="let comp of contentType; index as ci;">
-                        <button mat-raised-button (click)="editComponent(ci)">
-                            <div>
-                                {{('Edit component' | translate) + ' ' +  ci}}
-                            </div>
-                            <div>{{'(' + (contentType[ci] | translate) + ')'}}</div>
-                        </button>
-                    </div>
-                </div>
                 <div>
                     <mat-error *ngIf="formGroup.controls.content.touched && formGroup.controls.content.invalid">
-                        {{ contentType.length | i18nPlural:{
-                            '=1': 'The component within isn\'t valid' | translate, 
-                            'other': 'The components within aren\'t valid' | translate
+                        {{ contentTypeValue.length | i18nPlural:{
+                            '=1': 'The widget within isn\'t valid' | translate, 
+                            'other': 'The widgets within aren\'t valid' | translate
                         } }}
                     </mat-error>
                 </div>
             </div>
-            <div class="action-buttons">
-                <div cdkDragHandle>
-                    <mat-icon svgIcon="move" [matTooltip]="'Reorder group' | translate"></mat-icon>
-                </div>
-                <div>
-                    <button mat-icon-button (click)="remove.emit()" [matTooltip]="'Delete group' | translate">
-                        <mat-icon>delete</mat-icon>
+            <div *ngIf="contentTypeValue" class="edit-widgets">
+                <div *ngFor="let comp of contentTypeValue; index as ci;">
+                    <button mat-raised-button (click)="editWidget(ci)">
+                        <div>
+                            {{('Edit widget' | translate) + ' ' +  ci}}
+                        </div>
+                        <div>{{'(' + (contentTypeValue[ci] | translate) + ')'}}</div>
                     </button>
                 </div>
             </div>

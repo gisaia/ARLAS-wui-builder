@@ -14,7 +14,7 @@ describe('GlobalSearchComponent', () => {
     ],
     providers: [
       mockProvider(CollectionService, {
-        getCollectionFields: () => of([])
+        getCollectionFieldsNames: () => of([])
       })
     ]
   });
