@@ -43,7 +43,7 @@ export class CollectionService {
     private logger: NGXLogger
   ) { }
 
-  public getCollectionFields(collection: string, types?: Array<FIELD_TYPES>)
+  public getCollectionFields(collection: string, types?: Array<FIELD_TYPES>, exclude: boolean = false)
     : Observable<Array<string>> {
 
     this.spinner.show();
@@ -55,11 +55,12 @@ export class CollectionService {
           return Object.keys(properties).flatMap(key => {
             const path = parentPath ? parentPath + '.' + key : key;
             const property = properties[key];
-
             if (property.type === CollectionReferenceDescriptionProperty.TypeEnum.OBJECT) {
               return getSubFields(property.properties, path);
 
-            } else if (!types || types.includes(property.type)) {
+            } else if (!exclude && (!types || types.includes(property.type))) {
+              return path;
+            } else if (exclude && (!types || !types.includes(property.type))) {
               return path;
             } else {
               return null;

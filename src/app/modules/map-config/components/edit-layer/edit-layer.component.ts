@@ -41,7 +41,8 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
   public LAYER_MODE = LAYER_MODE;
   private readonly formByMode = new Map<string, string>([
     [LAYER_MODE.features, 'featuresFg'],
-    [LAYER_MODE.featureMetric, 'featureMetricFg']
+    [LAYER_MODE.featureMetric, 'featureMetricFg'],
+    [LAYER_MODE.cluster, 'clusterFg']
   ]);
 
   constructor(

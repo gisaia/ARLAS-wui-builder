@@ -20,6 +20,8 @@ import { ComponentSubForm } from '@shared/ComponentSubForm';
 import { ViewChild } from '@angular/core';
 import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
 import { NGXLogger } from 'ngx-logger';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
 
@@ -27,8 +29,65 @@ export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
     public embeddedFeaturesComponent: EditLayerModeFormComponent;
 
     constructor(
-        protected logger: NGXLogger
+        protected logger: NGXLogger,
+        protected formBuilder: FormBuilder,
+        protected formBuilderDefault: FormBuilderWithDefaultService
     ) {
         super(logger);
+    }
+
+    protected registerRendererGeometry() {
+        this.geometryStep.addControl(
+            'geometryCtrl',
+            this.formBuilderDefault.control(
+                'map.layer.geometryStep.geometryCtrl',
+                [
+                    Validators.required
+                ]
+            ));
+    }
+
+    protected registerGeometryType() {
+        this.geometryStep.addControl(
+            'geometryTypeCtrl',
+            this.formBuilderDefault.control(
+                'map.layer.geometryStep.geometryTypeCtrl',
+                [
+                    Validators.required
+                ]
+            ));
+    }
+
+    protected registerFeaturesMax() {
+        (this.formFg.get('visibilityStep') as FormGroup)
+            .addControl(
+                'featuresMaxCtrl',
+                this.formBuilderDefault.control(
+                    'map.layer.visibilityStep.featuresMaxCtrl',
+                    [
+                        Validators.required,
+                        Validators.max(10000),
+                        Validators.min(0)
+                    ]
+                ));
+    }
+
+    get geometryStep() {
+        return this.formFg.get('geometryStep') as FormGroup;
+    }
+    get geometryCtrl() {
+        return this.formFg.get('geometryStep').get('geometryCtrl') as FormControl;
+    }
+    get geometryTypeCtrl() {
+        return this.formFg.get('geometryStep').get('geometryTypeCtrl') as FormControl;
+    }
+    get featuresMaxCtrl() {
+        return this.formFg.get('visibilityStep').get('featuresMaxCtrl') as FormControl;
+    }
+    get widthFg() {
+        return this.formFg.get('styleStep').get('widthFg') as FormGroup;
+    }
+    get radiusFg() {
+        return this.formFg.get('styleStep').get('radiusFg') as FormGroup;
     }
 }

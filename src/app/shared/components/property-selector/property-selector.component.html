@@ -1,6 +1,6 @@
 <ng-container [formGroup]="formFg">
     <mat-form-field>
-        <mat-label>{{propertyName | translate | titlecase}} {{' source' | translate}}</mat-label>
+        <mat-label>{{propertyName | translate | titlecase}} {{'source' | translate}}</mat-label>
         <mat-select formControlName="propertySourceCtrl" appAlertOnChange="changing the source will reset your choices"
             [dependants]="[propertyFixCtrl, propertyProvidedFieldCtrl, 
             propertyGeneratedFieldCtrl, propertyManualFg, propertyInterpolatedFg]" [appResetOnChange]="defaultKey">

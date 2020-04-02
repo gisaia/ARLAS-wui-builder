@@ -33,15 +33,24 @@ export abstract class EditLayerComponentForm {
             id: [''],
             featuresFg: [
                 { value: null, disabled: true },
-                CustomValidators.getConditionalValidator(() => !!this.layerFg ?
-                    this.mode.value === LAYER_MODE.features : false,
-                    Validators.required)
+                CustomValidators.getConditionalValidator(
+                    () => !!this.layerFg && this.mode.value === LAYER_MODE.features,
+                    Validators.required
+                )
             ],
             featureMetricFg: [
                 { value: null, disabled: true },
-                CustomValidators.getConditionalValidator(() => !!this.layerFg ?
-                    this.mode.value === LAYER_MODE.featureMetric : false,
-                    Validators.required)
+                CustomValidators.getConditionalValidator(
+                    () => !!this.layerFg && this.mode.value === LAYER_MODE.featureMetric,
+                    Validators.required
+                )
+            ],
+            clusterFg: [
+                { value: null, disabled: true },
+                CustomValidators.getConditionalValidator(
+                    () => !!this.layerFg && this.mode.value === LAYER_MODE.cluster,
+                    Validators.required
+                )
             ]
         });
     }
@@ -49,12 +58,14 @@ export abstract class EditLayerComponentForm {
     get mode() {
         return this.layerFg.get('mode');
     }
-
     get featuresFg() {
         return this.layerFg.get('featuresFg');
     }
     get featureMetricFg() {
         return this.layerFg.get('featureMetricFg');
+    }
+    get clusterFg() {
+        return this.layerFg.get('clusterFg');
     }
 
 }

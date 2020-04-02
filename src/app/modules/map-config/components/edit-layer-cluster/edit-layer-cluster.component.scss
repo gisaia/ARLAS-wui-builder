@@ -16,26 +16,28 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-export enum GEOMETRY_TYPE {
-    fill = 'fill',
-    line = 'line',
-    circle = 'circle'
+.layer-section-title {
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 32px;
+  margin: 40px 0 20px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-export enum AGGREGATE_GEOMETRY_TYPE {
-    geohash_center = 'geohash_center',
-    geohash = 'geohash',
-    bbox = 'bbox',
-    centroid = 'centroid'
-}
+.order-section {
+  mat-form-field {
+    width: 20%;
+    &.sort-list {
+      width: 50%;
+    }
+  }
 
-export enum GRANULARITY {
-    coarse = 'coarse',
-    fine = 'fine',
-    finest = 'finest'
-}
-
-export enum CLUSTER_GEOMETRY_TYPE {
-    aggregated_geometry = 'aggregated_geometry',
-    raw_geometry = 'raw_geometry'
+  mat-radio-group {
+    padding: 0 5px;
+    mat-radio-button {
+      width: 80px;
+      font-size: 0.9rem;
+    }
+  }
 }

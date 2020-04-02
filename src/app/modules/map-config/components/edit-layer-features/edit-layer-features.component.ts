@@ -18,9 +18,11 @@ under the License.
 */
 import { Component, OnInit, forwardRef } from '@angular/core';
 import { EditLayerFeaturesComponentForm } from './edit-layer-features.component.form';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, FormBuilder } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
+import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 @Component({
   selector: 'app-edit-layer-features',
@@ -42,10 +44,14 @@ import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/m
 export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm implements OnInit {
 
   public PROPERTY_SELECTOR_SOURCE = PROPERTY_SELECTOR_SOURCE;
+  public GEOMETRY_TYPE = GEOMETRY_TYPE;
 
   constructor(
-    protected logger: NGXLogger) {
-    super(logger);
+    protected logger: NGXLogger,
+    protected formBuilder: FormBuilder,
+    protected formBuilderDefault: FormBuilderWithDefaultService
+  ) {
+    super(logger, formBuilder, formBuilderDefault);
   }
 
   ngOnInit() {
@@ -53,6 +59,13 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm i
     // by getting a reference to the embedded form in this variable,
     // it will used by the parent ControlValueAccessor implementation to write values on-the-fly
     this.formFg = this.embeddedFeaturesComponent.formFg;
+    this.registerRendererGeometry();
+    this.registerGeometryType();
+    this.registerFeaturesMax();
+  }
+
+  public getCollectionGeoFields() {
+    return this.embeddedFeaturesComponent.collectionGeoFields;
   }
 
 }

@@ -16,11 +16,13 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, forwardRef } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS, FormBuilder } from '@angular/forms';
+import { Component, forwardRef, OnInit } from '@angular/core';
+import { FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
 import { NGXLogger } from 'ngx-logger';
 import { EditLayerFeatureMetricComponentForm } from './edit-layer-feature-metric.component.form';
-import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
 
 @Component({
   selector: 'app-edit-layer-feature-metric',
@@ -42,12 +44,14 @@ import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/m
 export class EditLayerFeatureMetricComponent extends EditLayerFeatureMetricComponentForm implements OnInit {
 
   public PROPERTY_SELECTOR_SOURCE = PROPERTY_SELECTOR_SOURCE;
+  public GEOMETRY_TYPE = GEOMETRY_TYPE;
 
   constructor(
     protected logger: NGXLogger,
-    protected formBuilder: FormBuilder
+    protected formBuilder: FormBuilder,
+    protected formBuilderDefault: FormBuilderWithDefaultService
   ) {
-    super(logger, formBuilder);
+    super(logger, formBuilder, formBuilderDefault);
   }
 
   public ngOnInit() {
@@ -57,11 +61,18 @@ export class EditLayerFeatureMetricComponent extends EditLayerFeatureMetricCompo
     // by getting a reference to the embedded form in this variable,
     // it will used by the parent ControlValueAccessor implementation to write values on-the-fly
     this.formFg = this.embeddedFeaturesComponent.formFg;
+    this.registerRendererGeometry();
+    this.registerGeometryType();
     this.registerGeometryId();
+    this.registerFeaturesMax();
   }
 
   public getKeywordFields() {
     return this.embeddedFeaturesComponent.collectionKeywordFields;
+  }
+
+  public getCollectionGeoFields() {
+    return this.embeddedFeaturesComponent.collectionGeoFields;
   }
 
 }

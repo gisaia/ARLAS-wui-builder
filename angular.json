@@ -70,6 +70,7 @@
           },
           "configurations": {
             "production": {
+              "optimization": false,
               "browserTarget": "ARLAS-wui-builder:build:production"
             }
           }

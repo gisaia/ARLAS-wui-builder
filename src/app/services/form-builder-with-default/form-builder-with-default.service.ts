@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { AbstractControl, AbstractControlOptions, FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, AbstractControlOptions, FormArray, FormBuilder, FormGroup, FormControl, ValidatorFn } from '@angular/forms';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 @Injectable({
@@ -37,6 +37,15 @@ export class FormBuilderWithDefaultService {
     const builtGroup = this.formBuilder.group(controlsConfig, options);
     this.setDefaultValueRecursively(defaultValueKey, builtGroup);
     return builtGroup;
+  }
+
+  public control(
+    defaultValueKey: string,
+    validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null
+  ) {
+    const buildControl = this.formBuilder.control('', validatorOrOpts);
+    buildControl.setValue(this.defaultValuesService.getValue(defaultValueKey));
+    return buildControl;
   }
 
   private setDefaultValueRecursively(path: string, control: AbstractControl) {

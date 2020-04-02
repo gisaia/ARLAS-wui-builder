@@ -13,12 +13,15 @@
             },
             "geometryStep": {
                 "geometryCtrl": "position.location",
-                "geometryTypeCtrl": "circle"
+                "geometryTypeCtrl": "circle",
+                "granularityCtrl": "coarse"
             },
             "visibilityStep": {
+                "visibleCtrl": true,
                 "zoomMinCtrl": 10,
                 "zoomMaxCtrl": 10,
-                "featuresMaxCtrl": 7500
+                "featuresMaxCtrl": 7500,
+                "featuresMinCtrl": 7500
             },
             "styleStep": {
                 "opacityCtrl": 0.5,
@@ -58,19 +61,6 @@
                 "intervalSize": 10,
                 "chartTitle": "title",
                 "chartType": "area",
-                "selectionExtentPercent": 2
-            }
-        }
-    },
-    "timeline": {
-        "global": {
-            "useDetailedTimeline": true,
-            "timeline": {
-                "bucketsNumber": 22,
-                "intervalSize": 10
-            },
-            "detailedTimeline": {
-                "bucketsNumber": 44,
                 "selectionExtentPercent": 2
             }
         }

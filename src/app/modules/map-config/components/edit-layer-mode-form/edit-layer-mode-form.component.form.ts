@@ -21,7 +21,7 @@ import { FormBuilderWithDefaultService } from '@services/form-builder-with-defau
 import { CustomValidators } from '@utils/custom-validators';
 import { ComponentSubForm } from '@shared/ComponentSubForm';
 import { NGXLogger } from 'ngx-logger';
-import { GEOMETRY_TYPE } from './models';
+import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
 
 export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
 
@@ -34,64 +34,41 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
 
         this.formFg = this.formBuilderDefault.group('map.layer', {
             collectionStep: this.formBuilder.group({
-                collectionCtrl:
-                    [
-                        null,
-                        Validators.required
-                    ]
+                collectionCtrl: [
+                    null,
+                    Validators.required
+                ]
             }),
             geometryStep: this.formBuilder.group({
-                geometryCtrl:
-                    [
-                        null,
-                        Validators.required
-                    ],
-                geometryTypeCtrl:
-                    [
-                        null,
-                        Validators.required
-                    ]
+
             }),
-            visibilityStep: this.formBuilder.group({
-                visibleCtrl:
-                    [
+            visibilityStep: this.formBuilder.group(
+                {
+                    visibleCtrl: [
                         null
                     ],
-                zoomMinCtrl:
-                    [
+                    zoomMinCtrl: [
                         null,
                         [
                             Validators.required, Validators.min(1), Validators.max(20)
                         ]
                     ],
-                zoomMaxCtrl:
-                    [
+                    zoomMaxCtrl: [
                         null,
                         [
                             Validators.required, Validators.min(1), Validators.max(20)
-                        ]
-                    ],
-                featuresMaxCtrl:
-                    [
-                        null,
-                        [
-                            Validators.required,
-                            Validators.max(10000),
-                            Validators.min(0)
                         ]
                     ]
-            },
+                },
                 {
-                    validator:
-                        [
-                            CustomValidators.getLTEValidator('zoomMinCtrl', 'zoomMaxCtrl')
-                        ]
+                    validator: [
+                        CustomValidators.getLTEValidator('zoomMinCtrl', 'zoomMaxCtrl')
+                    ]
                 }),
             styleStep: this.formBuilder.group({
-                opacityCtrl:
-                    [
-                        null
-                    ],
+                opacityCtrl: [
+                    null
+                ],
                 colorFg: [
                     null,
                     Validators.required
@@ -99,15 +76,16 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
                 widthFg: [
                     null,
                     CustomValidators.getConditionalValidator(
-                        () => !!this.formFg ? this.geometryTypeCtrl.value === GEOMETRY_TYPE.line : false,
+                        () => !!this.formFg && !!this.geometryTypeCtrl && this.geometryTypeCtrl.value === GEOMETRY_TYPE.line,
                         Validators.required
                     )
                 ],
                 radiusFg: [
                     null,
                     CustomValidators.getConditionalValidator(
-                        () => !!this.formFg ? this.geometryTypeCtrl.value === GEOMETRY_TYPE.circle : false,
-                        Validators.required)
+                        () => !!this.formFg && !!this.geometryTypeCtrl && this.geometryTypeCtrl.value === GEOMETRY_TYPE.circle,
+                        Validators.required
+                    )
                 ]
             })
         });
@@ -137,6 +115,4 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
     get radiusFg() {
         return this.formFg.get('styleStep').get('radiusFg') as FormGroup;
     }
-
-
 }

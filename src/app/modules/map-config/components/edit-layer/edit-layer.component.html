@@ -19,7 +19,7 @@
             <mat-form-field>
                 <mat-label>{{ 'Mode' | translate}} </mat-label>
                 <mat-select formControlName="mode" appAlertOnChange="changing the mode will reset the below form"
-                    [dependants]="[featuresFg, featureMetricFg]" appResetOnChange
+                    [dependants]="[featuresFg, featureMetricFg, clusterFg]" appResetOnChange
                     (selectionChange)="changeMode($event.value)">
                     <mat-option *ngFor="let mode of LAYER_MODE | objectvalues" [value]="mode">
                         {{mode | translate}}
@@ -38,6 +38,10 @@
     <div *ngIf="layerFg.get('featureMetricFg').enabled">
         <app-edit-layer-feature-metric formControlName="featureMetricFg" [submit]="submitSubject.asObservable()">
         </app-edit-layer-feature-metric>
+    </div>
+    <div *ngIf="layerFg.get('clusterFg').enabled">
+        <app-edit-layer-cluster formControlName="clusterFg" [submit]="submitSubject.asObservable()">
+        </app-edit-layer-cluster>
     </div>
 
     <div class="action-buttons">
