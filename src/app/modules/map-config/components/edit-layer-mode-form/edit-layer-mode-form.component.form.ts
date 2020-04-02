@@ -34,7 +34,7 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
 
         this.formFg = this.formBuilderDefault.group('map.layer', {
             collectionStep: this.formBuilder.group({
-                collectionCtrl: [
+                collection: [
                     null,
                     Validators.required
                 ]
@@ -44,16 +44,16 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
             }),
             visibilityStep: this.formBuilder.group(
                 {
-                    visibleCtrl: [
+                    visible: [
                         null
                     ],
-                    zoomMinCtrl: [
+                    zoomMin: [
                         null,
                         [
                             Validators.required, Validators.min(1), Validators.max(20)
                         ]
                     ],
-                    zoomMaxCtrl: [
+                    zoomMax: [
                         null,
                         [
                             Validators.required, Validators.min(1), Validators.max(20)
@@ -62,11 +62,11 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
                 },
                 {
                     validator: [
-                        CustomValidators.getLTEValidator('zoomMinCtrl', 'zoomMaxCtrl')
+                        CustomValidators.getLTEValidator('zoomMin', 'zoomMax')
                     ]
                 }),
             styleStep: this.formBuilder.group({
-                opacityCtrl: [
+                opacity: [
                     null
                 ],
                 colorFg: [
@@ -76,14 +76,14 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
                 widthFg: [
                     null,
                     CustomValidators.getConditionalValidator(
-                        () => !!this.formFg && !!this.geometryTypeCtrl && this.geometryTypeCtrl.value === GEOMETRY_TYPE.line,
+                        () => !!this.formFg && !!this.geometryType && this.geometryType.value === GEOMETRY_TYPE.line,
                         Validators.required
                     )
                 ],
                 radiusFg: [
                     null,
                     CustomValidators.getConditionalValidator(
-                        () => !!this.formFg && !!this.geometryTypeCtrl && this.geometryTypeCtrl.value === GEOMETRY_TYPE.circle,
+                        () => !!this.formFg && !!this.geometryType && this.geometryType.value === GEOMETRY_TYPE.circle,
                         Validators.required
                     )
                 ]
@@ -91,20 +91,20 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
         });
     }
 
-    get zoomMinCtrl() {
-        return this.formFg.get('visibilityStep').get('zoomMinCtrl');
+    get zoomMin() {
+        return this.formFg.get('visibilityStep').get('zoomMin');
     }
-    get zoomMaxCtrl() {
-        return this.formFg.get('visibilityStep').get('zoomMaxCtrl');
+    get zoomMax() {
+        return this.formFg.get('visibilityStep').get('zoomMax');
     }
-    get collectionCtrl() {
-        return this.formFg.get('collectionStep').get('collectionCtrl');
+    get collection() {
+        return this.formFg.get('collectionStep').get('collection');
     }
-    get geometryCtrl() {
-        return this.formFg.get('geometryStep').get('geometryCtrl');
+    get geometry() {
+        return this.formFg.get('geometryStep').get('geometry');
     }
-    get geometryTypeCtrl() {
-        return this.formFg.get('geometryStep').get('geometryTypeCtrl');
+    get geometryType() {
+        return this.formFg.get('geometryStep').get('geometryType');
     }
     get colorFg() {
         return this.formFg.get('styleStep').get('colorFg') as FormGroup;

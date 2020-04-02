@@ -1,8 +1,8 @@
 <ng-container [formGroup]="formFg">
     <mat-form-field>
         <mat-label>{{propertyName | translate | titlecase}} {{'source' | translate}}</mat-label>
-        <mat-select formControlName="propertySourceCtrl" appAlertOnChange="changing the source will reset your choices"
-            [dependants]="[propertyFixCtrl, propertyProvidedFieldCtrl, 
+        <mat-select formControlName="propertySource" appAlertOnChange="changing the source will reset your choices"
+            [dependants]="[propertyFix, propertyProvidedFieldCtrl, 
             propertyGeneratedFieldCtrl, propertyManualFg, propertyInterpolatedFg]" [appResetOnChange]="defaultKey">
             <mat-option *ngFor="let source of sources" [value]="source">
                 {{source | translate}}</mat-option>
@@ -11,9 +11,9 @@
 
     <div>
 
-        <div *ngIf="propertySourceCtrl.value == PROPERTY_SELECTOR_SOURCE.fix">
+        <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.fix">
             <div *ngIf="propertyType === PROPERTY_TYPE.color">
-                <app-color-picker-wrapper [value]="propertyFixCtrl.value" (setValue)="setPropertyFix($event)">
+                <app-color-picker-wrapper [value]="propertyFix.value" (setValue)="setPropertyFix($event)">
                 </app-color-picker-wrapper>
             </div>
             <div *ngIf="propertyType === PROPERTY_TYPE.number">
@@ -22,12 +22,12 @@
                 <mat-slider [min]="defaultValueService.getDefaultConfig()[propertyName + 'Min']"
                     [max]="defaultValueService.getDefaultConfig()[propertyName + 'Max']"
                     [step]="defaultValueService.getDefaultConfig()[propertyName + 'Step']" thumbLabel
-                    formControlName="propertyFixCtrl">
+                    formControlName="propertyFix">
                 </mat-slider>
             </div>
         </div>
 
-        <div *ngIf="propertySourceCtrl.value == PROPERTY_SELECTOR_SOURCE.provided">
+        <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.provided">
             <mat-form-field>
                 <mat-label>{{'Source field' | translate}}</mat-label>
                 <mat-select formControlName="propertyProvidedFieldCtrl">
@@ -37,7 +37,7 @@
             </mat-form-field>
         </div>
 
-        <div *ngIf="propertySourceCtrl.value == PROPERTY_SELECTOR_SOURCE.generated">
+        <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.generated">
             <mat-form-field>
                 <mat-label>{{'Source field' | translate}}</mat-label>
                 <mat-select formControlName="propertyGeneratedFieldCtrl">
@@ -47,7 +47,7 @@
             </mat-form-field>
         </div>
 
-        <div *ngIf="propertySourceCtrl.value == PROPERTY_SELECTOR_SOURCE.manual" formGroupName="propertyManualFg">
+        <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.manual" formGroupName="propertyManualFg">
             <mat-form-field>
                 <mat-label>{{'Source field' | translate}}</mat-label>
                 <!-- No [dependants] because we manually set the new values on source field change -->
@@ -66,7 +66,7 @@
             </div>
         </div>
 
-        <div *ngIf="propertySourceCtrl.value == PROPERTY_SELECTOR_SOURCE.interpolated"
+        <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.interpolated"
             formGroupName="propertyInterpolatedFg">
 
             <div>
@@ -202,7 +202,7 @@
         </div>
 
         <div *ngIf="formFg?.invalid && formFg.touched">
-            <mat-error *ngIf=" propertyFixCtrl.touched && propertyFixCtrl?.errors?.required">
+            <mat-error *ngIf=" propertyFix.touched && propertyFix?.errors?.required">
                 {{'A value is required' | translate}}
             </mat-error>
             <mat-error *ngIf="propertyProvidedFieldCtrl.touched && propertyProvidedFieldCtrl?.errors?.required 

@@ -19,9 +19,8 @@ under the License.
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, forwardRef, OnInit, ViewChild, Input, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import {
-  FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, FormControl
+  FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR
 } from '@angular/forms';
-import { MatSliderChange } from '@angular/material/slider';
 import { MatStepper } from '@angular/material/stepper';
 import { CollectionService, FIELD_TYPES } from '@services/collection-service/collection.service';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
@@ -103,7 +102,7 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
   }
 
   private initCollectionRelatedFields() {
-    this.collectionCtrl.valueChanges.subscribe(c => {
+    this.collection.valueChanges.subscribe(c => {
       if (!c) {
         return;
       }
@@ -135,16 +134,16 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
             this.propertySelectorComponents.forEach(psc => psc.collectionIntegerFieldsEmitter.emit(f));
           });
     });
-    if (!!this.collectionCtrl.value) {
+    if (!!this.collection.value) {
       // init values in edition mode
-      this.collectionCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+      this.collection.updateValueAndValidity({ onlySelf: true, emitEvent: true });
     }
   }
 
   public writeValue(obj: any): void {
     super.writeValue(obj);
     if (obj) {
-      this.collectionCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+      this.collection.updateValueAndValidity({ onlySelf: true, emitEvent: true });
     }
   }
 
@@ -154,8 +153,8 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
    * The solution is to enable only the expected form group.
    */
   public initEnableWidthOrRadiusFg() {
-    if (!!this.geometryTypeCtrl) {
-      this.geometryTypeCtrl.valueChanges.subscribe(v => {
+    if (!!this.geometryType) {
+      this.geometryType.valueChanges.subscribe(v => {
         const geoEnableDisable = [{
           geometry: GEOMETRY_TYPE.line,
           enabled: [this.widthFg],
@@ -177,7 +176,7 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
           geoEnableDisable.disabled.forEach(c => c.disable());
         }
       });
-      this.geometryTypeCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+      this.geometryType.updateValueAndValidity({ onlySelf: true, emitEvent: true });
     }
   }
 

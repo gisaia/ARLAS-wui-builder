@@ -87,9 +87,9 @@ export class ConfigExportHelper {
             const layerSource: LayerSource = {
                 id: layerValues.name,
                 source: sourceByMode.get(layerFg.value.mode),
-                minzoom: modeValues.visibilityStep.zoomMinCtrl,
-                maxzoom: modeValues.visibilityStep.zoomMaxCtrl,
-                maxfeatures: modeValues.visibilityStep.featuresMaxCtrl,
+                minzoom: modeValues.visibilityStep.zoomMin,
+                maxzoom: modeValues.visibilityStep.zoomMax,
+                maxfeatures: modeValues.visibilityStep.featuresMax,
                 include_fields: [],
                 normalization_fields: [],
                 metrics: []
@@ -100,8 +100,8 @@ export class ConfigExportHelper {
                     break;
                 }
                 case LAYER_MODE.featureMetric: {
-                    layerSource.geometry_support = modeValues.geometryStep.geometryCtrl;
-                    layerSource.geometry_id = modeValues.geometryStep.geometryIdCtrl;
+                    layerSource.geometry_support = modeValues.geometryStep.geometry;
+                    layerSource.geometry_id = modeValues.geometryStep.geometryId;
                     break;
                 }
             }
@@ -124,7 +124,7 @@ export class ConfigExportHelper {
     }
 
     private static addLayerSourceInterpolationData(layerSource: LayerSource, layerValues: any, mode: LAYER_MODE) {
-        switch (layerValues.propertySourceCtrl) {
+        switch (layerValues.propertySource) {
             case PROPERTY_SELECTOR_SOURCE.fix: {
                 break;
             }

@@ -5,7 +5,7 @@
             <div form-fields>
                 <mat-form-field>
                     <mat-label>{{ 'Aggregation field' | translate}} </mat-label>
-                    <mat-select [formControl]="aggGeometryCtrl">
+                    <mat-select [formControl]="aggGeometry">
                         <mat-option *ngFor="let field of getGeoPointFields()" [value]="field">{{field}}</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -18,7 +18,7 @@
             <div form-fields>
                 <mat-form-field>
                     <mat-label>{{ 'Granularity' | translate}} </mat-label>
-                    <mat-select [formControl]="granularityCtrl">
+                    <mat-select [formControl]="granularity">
                         <mat-option [value]="GRANULARITY.coarse">{{ 'Coarse' | translate}}</mat-option>
                         <mat-option [value]="GRANULARITY.fine">{{ 'Fine' | translate}}</mat-option>
                         <mat-option [value]="GRANULARITY.finest">{{ 'Finest' | translate}}</mat-option>
@@ -36,7 +36,9 @@
             <div form-fields>
                 <mat-form-field>
                     <mat-label>{{ 'Type' | translate}} </mat-label>
-                    <mat-select [formControl]="clusterGeometryTypeCtrl">
+                    <mat-select [formControl]="clusterGeometryType"
+                        appAlertOnChange="changing the displayed geometry will reset the geometry type"
+                        [dependants]="[aggregatedGeometry, rawGeometry]">
                         <mat-option [value]="CLUSTER_GEOMETRY_TYPE.aggregated_geometry">
                             {{ 'Aggregated geometry' | translate}}</mat-option>
                         <mat-option [value]="CLUSTER_GEOMETRY_TYPE.raw_geometry">{{ 'Raw Geometry' | translate}}
@@ -48,11 +50,11 @@
 
             </div>
         </app-config-element>
-        <app-config-element *ngIf="clusterGeometryTypeCtrl.value === CLUSTER_GEOMETRY_TYPE.aggregated_geometry">
+        <app-config-element *ngIf="clusterGeometryType.value === CLUSTER_GEOMETRY_TYPE.aggregated_geometry">
             <div form-fields>
                 <mat-form-field>
                     <mat-label>{{ 'Type' | translate}} </mat-label>
-                    <mat-select [formControl]="aggregatedGeometryCtrl">
+                    <mat-select [formControl]="aggregatedGeometry">
                         <mat-option [value]="AGGREGATE_GEOMETRY_TYPE.geohash_center">{{ 'Cell center' | translate}}
                         </mat-option>
                         <mat-option [value]="AGGREGATE_GEOMETRY_TYPE.geohash">{{ 'Cell' | translate}}</mat-option>
@@ -67,11 +69,11 @@
 
             </div>
         </app-config-element>
-        <app-config-element *ngIf="clusterGeometryTypeCtrl.value === CLUSTER_GEOMETRY_TYPE.raw_geometry">
+        <app-config-element *ngIf="clusterGeometryType.value === CLUSTER_GEOMETRY_TYPE.raw_geometry">
             <div form-fields>
                 <mat-form-field>
                     <mat-label>{{ 'Field' | translate}} </mat-label>
-                    <mat-select [formControl]="rawGeometryCtrl">
+                    <mat-select [formControl]="rawGeometry">
                         <mat-option *ngFor="let field of getGeoFields()" [value]="field">{{field}}</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -81,7 +83,7 @@
             </div>
         </app-config-element>
         <ng-container
-            *ngIf="clusterGeometryTypeCtrl.value === CLUSTER_GEOMETRY_TYPE.raw_geometry && !!rawGeometryCtrl.value">
+            *ngIf="clusterGeometryType.value === CLUSTER_GEOMETRY_TYPE.raw_geometry && !!rawGeometry.value">
             <input matInput [formControl]="clusterSort" [hidden]="true">
             <app-config-element [fullSize]="true">
                 <div form-fields class="order-section">
@@ -116,7 +118,7 @@
             <div form-fields>
                 <span>
                     <mat-label>{{ 'Minimum features' | translate}}</mat-label>
-                    <mat-slider [formControl]="featuresMinCtrl" thumbLabel min="0" max="10000" step="100"> </mat-slider>
+                    <mat-slider [formControl]="featuresMin" thumbLabel min="0" max="10000" step="100"> </mat-slider>
                 </span>
             </div>
             <div description>

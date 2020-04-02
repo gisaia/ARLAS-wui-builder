@@ -37,16 +37,16 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
         super(logger);
 
         this.formFg = this.formBuilder.group({
-            propertySourceCtrl:
+            propertySource:
                 [
                     null,
                     Validators.required
                 ],
-            propertyFixCtrl:
+            propertyFix:
                 [
                     null,
                     CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                        this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.fix
+                        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix
                         : false,
                         Validators.required)
                 ],
@@ -54,7 +54,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                 [
                     null,
                     CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                        this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.provided
+                        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided
                         : false,
                         Validators.required)
                 ],
@@ -62,7 +62,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                 [
                     null,
                     CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                        this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.generated
+                        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.generated
                         : false,
                         Validators.required)
                 ],
@@ -71,7 +71,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                     [
                         null,
                         CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.manual
+                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.manual
                             : false,
                             Validators.required)
                     ],
@@ -79,7 +79,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                     [],
                     [
                         CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.manual
+                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.manual
                             : false,
                             Validators.required)
                     ])
@@ -89,14 +89,14 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                     [
                         null,
                         CustomValidators.getConditionalValidator(() => !!this.formFg && this.aggregated ?
-                            this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
                             : false,
                             Validators.required)
                     ],
                 propertyInterpolatedMetricCtrl: [
                     null,
                     CustomValidators.getConditionalValidator(() => !!this.formFg && this.aggregated ?
-                        this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
                         && this.propertyInterpolatedCountOrMetricCtrl.value
                         : false,
                         Validators.required)
@@ -105,7 +105,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                     [
                         null,
                         CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
                             && (!this.aggregated || this.aggregated && this.propertyInterpolatedMetricCtrl.value)
                             : false,
                             Validators.required)
@@ -118,7 +118,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                     [
                         null,
                         CustomValidators.getConditionalValidator(() => !!this.formFg && !this.aggregated ?
-                            this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
                             && this.propertyInterpolatedNormalizeCtrl.value
                             : false,
                             Validators.required)
@@ -131,7 +131,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                     [
                         null,
                         CustomValidators.getConditionalValidator(() => !!this.formFg && !this.aggregated ?
-                            this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
                             && this.propertyInterpolatedNormalizeByKeyCtrl.value
                             : false,
                             Validators.required)
@@ -140,7 +140,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                     [
                         null,
                         CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
                             && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value
                             : false,
                             Validators.required)
@@ -149,7 +149,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                     [
                         null,
                         CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
                             && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value
                             : false,
                             Validators.required)
@@ -158,7 +158,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                     [
                         null,
                         CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
                             && this.getPropertyType() === PROPERTY_TYPE.number
                             && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value
                             : false,
@@ -168,7 +168,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                     [
                         null,
                         CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
                             && this.getPropertyType() === PROPERTY_TYPE.number
                             && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value
                             : false,
@@ -179,7 +179,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                         null,
                         [
                             CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                                this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated
+                                this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
                                 && this.propertyInterpolatedFieldCtrl.value
                                 : false,
                                 Validators.required)
@@ -188,7 +188,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
             }, {
                 validators: [
                     CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                        this.propertySourceCtrl.value === PROPERTY_SELECTOR_SOURCE.interpolated && this.propertyInterpolatedFieldCtrl.value
+                        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated && this.propertyInterpolatedFieldCtrl.value
                         && this.propertyInterpolatedMinFieldValueCtrl.value && this.propertyInterpolatedMaxFieldValueCtrl.value
                         : false,
                         CustomValidators.getLTEValidator('propertyInterpolatedMinFieldValueCtrl', 'propertyInterpolatedMaxFieldValueCtrl'))
@@ -197,11 +197,11 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
         });
     }
 
-    get propertySourceCtrl() {
-        return this.formFg.get('propertySourceCtrl');
+    get propertySource() {
+        return this.formFg.get('propertySource');
     }
-    get propertyFixCtrl() {
-        return this.formFg.get('propertyFixCtrl');
+    get propertyFix() {
+        return this.formFg.get('propertyFix');
     }
     get propertyProvidedFieldCtrl() {
         return this.formFg.get('propertyProvidedFieldCtrl');
@@ -259,9 +259,9 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
     }
 
     public setPropertyFix(value: string) {
-        this.propertyFixCtrl.setValue(value);
-        this.propertyFixCtrl.markAsDirty();
-        this.propertyFixCtrl.markAsTouched();
+        this.propertyFix.setValue(value);
+        this.propertyFix.markAsDirty();
+        this.propertyFix.markAsTouched();
     }
 
     protected addToColorManualValuesCtrl(kc: KeywordColor) {

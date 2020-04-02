@@ -6,9 +6,9 @@
                 <div form-fields>
                     <mat-form-field>
                         <mat-label>{{ 'Collection' | translate}}</mat-label>
-                        <mat-select formControlName="collectionCtrl"
+                        <mat-select formControlName="collection"
                             appAlertOnChange="changing the collection will reset the rendered geometry"
-                            [dependants]="[geometryCtrl, colorFg]">
+                            [dependants]="[geometry, colorFg]">
                             <mat-option *ngFor="let collection of this.mainformService.getCollections()"
                                 value="{{collection}}">{{collection}}</mat-option>
                         </mat-select>
@@ -40,7 +40,7 @@
             </mat-error>
             <app-config-element>
                 <div form-fields>
-                    <mat-slide-toggle formControlName="visibleCtrl" labelPosition="before">{{ 'Visible' | translate}}
+                    <mat-slide-toggle formControlName="visible" labelPosition="before">{{ 'Visible' | translate}}
                     </mat-slide-toggle>
                 </div>
                 <div description>
@@ -50,8 +50,8 @@
             <app-config-element>
                 <div form-fields>
                     <mat-label>{{ 'Zoom min' | translate}}</mat-label>
-                    <mat-slider thumbLabel formControlName="zoomMinCtrl" min="1" max="20"
-                        (input)="ensureMinLessThanMax($event.value, zoomMinCtrl, zoomMaxCtrl, 'min')" thumbLabel="true">
+                    <mat-slider thumbLabel formControlName="zoomMin" min="1" max="20"
+                        (input)="ensureMinLessThanMax($event.value, zoomMin, zoomMax, 'min')" thumbLabel="true">
                     </mat-slider>
                 </div>
                 <div description>
@@ -61,8 +61,8 @@
             <app-config-element>
                 <div form-fields>
                     <mat-label>{{ 'Zoom max' | translate}}</mat-label>
-                    <mat-slider thumbLabel formControlName="zoomMaxCtrl" min="1" max="20"
-                        (input)="ensureMinLessThanMax($event.value, zoomMinCtrl, zoomMaxCtrl, 'max')"></mat-slider>
+                    <mat-slider thumbLabel formControlName="zoomMax" min="1" max="20"
+                        (input)="ensureMinLessThanMax($event.value, zoomMin, zoomMax, 'max')"></mat-slider>
                 </div>
                 <div description>
                     {{ 'zoom max etc' | translate}}
@@ -79,7 +79,7 @@
             <app-config-element>
                 <div form-fields>
                     <mat-label>{{ 'Opacity' | translate}}</mat-label>
-                    <mat-slider thumbLabel formControlName="opacityCtrl" min="0" max="1" thumbLabel="true" step="0.1">
+                    <mat-slider thumbLabel formControlName="opacity" min="0" max="1" thumbLabel="true" step="0.1">
                     </mat-slider>
                 </div>
                 <div description>
@@ -90,7 +90,7 @@
             <app-config-element>
                 <div form-fields>
                     <app-property-selector propertyName="color" [propertyType]="PROPERTY_TYPE.color"
-                        formControlName="colorFg" [collection]="collectionCtrl.value"
+                        formControlName="colorFg" [collection]="collection.value"
                         [submit]="submitSubject.asObservable()" defaultKey="map.layer.styleStep.colorFg"
                         [sources]="colorFgSources" [aggregated]="aggregatedMode">
                     </app-property-selector>
@@ -116,10 +116,10 @@
             </app-config-element>
             <!-- using [hidden] instead of ng-if because otherwise, each time the condition is true,
             ut creates a new subform instance without cleaning the previous ones -->
-            <app-config-element [hidden]="formFg.value?.geometryStep?.geometryTypeCtrl !== GEOMETRY_TYPE.line">
+            <app-config-element [hidden]="formFg.value?.geometryStep?.geometryType !== GEOMETRY_TYPE.line">
                 <div form-fields>
                     <app-property-selector propertyName="width" [propertyType]="PROPERTY_TYPE.number"
-                        formControlName="widthFg" [collection]="collectionCtrl.value"
+                        formControlName="widthFg" [collection]="collection.value"
                         [submit]="submitSubject.asObservable()" defaultKey="map.layer.styleStep.widthFg"
                         [sources]="widthFgSources" [aggregated]="aggregatedMode">
                     </app-property-selector>
@@ -136,10 +136,10 @@
             </app-config-element>
             <!-- using [hidden] instead of ng-if because otherwise, each time the condition is true,
             ut creates a new subform instance without cleaning the previous ones -->
-            <app-config-element [hidden]="formFg.value?.geometryStep?.geometryTypeCtrl !== GEOMETRY_TYPE.circle">
+            <app-config-element [hidden]="formFg.value?.geometryStep?.geometryType !== GEOMETRY_TYPE.circle">
                 <div form-fields>
                     <app-property-selector propertyName="radius" [propertyType]="PROPERTY_TYPE.number"
-                        formControlName="radiusFg" [collection]="collectionCtrl.value"
+                        formControlName="radiusFg" [collection]="collection.value"
                         [submit]="submitSubject.asObservable()" defaultKey="map.layer.styleStep.radiusFg"
                         [sources]="radiusFgSources" [aggregated]="aggregatedMode">
                     </app-property-selector>
