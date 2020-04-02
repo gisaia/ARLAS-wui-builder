@@ -76,14 +76,14 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
                 widthFg: [
                     null,
                     CustomValidators.getConditionalValidator(
-                        () => (!!this.formFg && !!this.geometryTypeCtrl) ? this.geometryTypeCtrl.value === GEOMETRY_TYPE.line : false,
+                        () => !!this.formFg && !!this.geometryTypeCtrl && this.geometryTypeCtrl.value === GEOMETRY_TYPE.line,
                         Validators.required
                     )
                 ],
                 radiusFg: [
                     null,
                     CustomValidators.getConditionalValidator(
-                        () => (!!this.formFg && !!this.geometryTypeCtrl) ? this.geometryTypeCtrl.value === GEOMETRY_TYPE.circle : false,
+                        () => !!this.formFg && !!this.geometryTypeCtrl && this.geometryTypeCtrl.value === GEOMETRY_TYPE.circle,
                         Validators.required
                     )
                 ]
@@ -101,18 +101,10 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
         return this.formFg.get('collectionStep').get('collectionCtrl');
     }
     get geometryCtrl() {
-        if (!!this.formFg) {
-            return this.formFg.get('geometryStep').get('geometryCtrl');
-        } else {
-            return null;
-        }
+        return this.formFg.get('geometryStep').get('geometryCtrl');
     }
     get geometryTypeCtrl() {
-        if (!!this.formFg) {
-            return this.formFg.get('geometryStep').get('geometryTypeCtrl');
-        } else {
-            return null;
-        }
+        return this.formFg.get('geometryStep').get('geometryTypeCtrl');
     }
     get colorFg() {
         return this.formFg.get('styleStep').get('colorFg') as FormGroup;
