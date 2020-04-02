@@ -1,0 +1,66 @@
+<div class="group-wrapper" [formGroup]="formGroup">
+    <div class="edit-group">
+        <div class="edit-group-form">
+            <div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Icon</mat-label>
+                        <input matInput formControlName="icon">
+                        <mat-hint>Available icons <a href="https://material.io/resources/icons/?style=baseline"
+                                target="_blank">here</a></mat-hint>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Title</mat-label>
+                        <input matInput formControlName="title">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Type</mat-label>
+                        <mat-select formControlName="contentType">
+                            <mat-optgroup *ngFor="let nbComponents of [1, 2, 3]"
+                                [label]="('With ' + nbComponents + ' component(s)') | translate ">
+                                <mat-option *ngFor="let types of getContentTypes(nbComponents)" [value]="types">
+                                    {{types.join(' / ') | translate}}
+                                </mat-option>
+                            </mat-optgroup>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div *ngIf="contentType" class="edit-components">
+                    <div *ngFor="let comp of contentType; index as ci;">
+                        <button mat-raised-button (click)="editComponent(ci)">
+                            <div>
+                                {{('Edit component' | translate) + ' ' +  ci}}
+                            </div>
+                            <div>{{'(' + (contentType[ci] | translate) + ')'}}</div>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <mat-error *ngIf="formGroup.controls.content.touched && formGroup.controls.content.invalid">
+                        {{ contentType.length | i18nPlural:{
+                            '=1': 'The component within isn\'t valid' | translate, 
+                            'other': 'The components within aren\'t valid' | translate
+                        } }}
+                    </mat-error>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <div cdkDragHandle>
+                    <mat-icon svgIcon="move" [matTooltip]="'Reorder group' | translate"></mat-icon>
+                </div>
+                <div>
+                    <button mat-icon-button (click)="remove.emit()" [matTooltip]="'Delete group' | translate">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="preview-group">
+        Preview
+    </div>
+</div>

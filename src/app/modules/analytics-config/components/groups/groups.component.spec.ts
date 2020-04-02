@@ -1,12 +1,17 @@
-import { LayoutGroupsComponent } from './layout-groups.component';
+import { GroupsComponent } from './groups.component';
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { FormGroup } from '@angular/forms';
+import { MockComponent } from 'ng-mocks';
+import { EditGroupComponent } from '../edit-group/edit-group.component';
 
-describe('LayoutGroupsComponent', () => {
-  let spectator: Spectator<LayoutGroupsComponent>;
+describe('GroupsComponent', () => {
+  let spectator: Spectator<GroupsComponent>;
 
   const createComponent = createComponentFactory({
-    component: LayoutGroupsComponent
+    component: GroupsComponent,
+    declarations: [
+      MockComponent(EditGroupComponent)
+    ]
   });
 
   beforeEach(() => {

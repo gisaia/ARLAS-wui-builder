@@ -20,34 +20,21 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormArray, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
+import { TranslateService } from '@ngx-translate/core';
+import { MatDialog } from '@angular/material';
 
 @Component({
-  selector: 'app-layout-groups',
-  templateUrl: './layout-groups.component.html',
-  styleUrls: ['./layout-groups.component.scss']
+  selector: 'app-groups',
+  templateUrl: './groups.component.html',
+  styleUrls: ['./groups.component.scss']
 })
-export class LayoutGroupsComponent implements OnInit {
+export class GroupsComponent implements OnInit {
 
   @Input() public contentFg: FormGroup;
-  public contentTypes = new Map([
-    [
-      'With single component',
-      ['histogram', 'donut', 'powerbar', 'resultlist', 'metric', 'swimlane']
-    ],
-    [
-      'With paired components',
-      ['metric / metric', 'donut / powerbar', 'donut / swimlane', 'histogram / histogram', 'powerbar / powerbar']
-    ],
-    [
-      'With more components',
-      ['metric / metric / metric', 'powerbar / powerbar / powerbar']
-    ]
-  ]);
-  // to be used by the view to keep original contentTypes order
-  public unsorted = () => 0;
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public dialog: MatDialog
   ) {
   }
 
@@ -72,10 +59,7 @@ export class LayoutGroupsComponent implements OnInit {
         null,
         Validators.required
       ],
-      content: [
-        null,
-        Validators.required
-      ]
+      content: this.formBuilder.array([])
     });
     this.groupsFa.push(newGroupFg);
   }
