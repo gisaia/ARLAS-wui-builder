@@ -1,21 +1,21 @@
-import { LayoutTabsComponent } from './layout-tabs.component';
+import { TabsComponent as TabsComponent } from './tabs.component';
 import { createComponentFactory, Spectator, mockProvider } from '@ngneat/spectator';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { LayoutGroupsComponent } from '../layout-groups/layout-groups.component';
+import { GroupsComponent } from '../groups/groups.component';
 import { MockComponent } from 'ng-mocks';
 
-describe('LayoutTabsComponent', () => {
-  let spectator: Spectator<LayoutTabsComponent>;
+describe('TabsComponent', () => {
+  let spectator: Spectator<TabsComponent>;
 
   const createComponent = createComponentFactory({
-    component: LayoutTabsComponent,
+    component: TabsComponent,
     providers: [
       mockProvider(DefaultValuesService, {
         getValue: () => 'aValue'
       })
     ],
     declarations: [
-      MockComponent(LayoutGroupsComponent)
+      MockComponent(GroupsComponent)
     ]
   });
 
