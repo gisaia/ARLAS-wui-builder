@@ -1,0 +1,25 @@
+<div [formGroup]="configFormGroup">
+    <div *ngFor="let control of configFormGroup.controls | objectvalues">
+        <div *ngIf="control.enabled && !control.isChild">
+            <app-config-element>
+                <div form-fields>
+                    <app-config-form-control [control]="control" [defaultKey]="defaultKey"></app-config-form-control>
+                    <div *ngFor="let child of control.childs()">
+                        <div *ngIf="child.enabled">
+                            <app-config-form-control [control]="child" [defaultKey]="defaultKey">
+                            </app-config-form-control>
+                        </div>
+                    </div>
+                </div>
+                <div description>
+                    {{ control.description | translate}}
+                    <div *ngFor="let child of control.childs()">
+                        <div *ngIf="child.enabled">
+                            {{ child.description | translate}}
+                        </div>
+                    </div>
+                </div>
+            </app-config-element>
+        </div>
+    </div>
+</div>

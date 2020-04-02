@@ -17,8 +17,11 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
-import { COMPONENT_TYPE } from './models';
+import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { WIDGET_TYPE as WIDGET_TYPE } from './models';
+import { MatDialog } from '@angular/material';
+import { WidgetHistogramComponent } from '../widget-histogram/widget-histogram.component';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-edit-group',
@@ -31,41 +34,77 @@ export class EditGroupComponent implements OnInit {
   @Output() public remove = new EventEmitter();
 
   public contentTypes = [
-    [COMPONENT_TYPE.histogram],
-    [COMPONENT_TYPE.donut],
-    [COMPONENT_TYPE.powerbar],
-    [COMPONENT_TYPE.resultlist],
-    [COMPONENT_TYPE.metric],
-    [COMPONENT_TYPE.swimlane],
-    [COMPONENT_TYPE.metric, COMPONENT_TYPE.metric],
-    [COMPONENT_TYPE.donut, COMPONENT_TYPE.powerbar],
-    [COMPONENT_TYPE.donut, COMPONENT_TYPE.swimlane],
-    [COMPONENT_TYPE.histogram, COMPONENT_TYPE.histogram],
-    [COMPONENT_TYPE.powerbar, COMPONENT_TYPE.powerbar],
-    [COMPONENT_TYPE.metric, COMPONENT_TYPE.metric, COMPONENT_TYPE.metric],
-    [COMPONENT_TYPE.powerbar, COMPONENT_TYPE.powerbar, COMPONENT_TYPE.powerbar]
+    [WIDGET_TYPE.histogram],
+    [WIDGET_TYPE.donut],
+    [WIDGET_TYPE.powerbar],
+    [WIDGET_TYPE.resultlist],
+    [WIDGET_TYPE.metric],
+    [WIDGET_TYPE.swimlane],
+    [WIDGET_TYPE.metric, WIDGET_TYPE.metric],
+    [WIDGET_TYPE.donut, WIDGET_TYPE.powerbar],
+    [WIDGET_TYPE.donut, WIDGET_TYPE.swimlane],
+    [WIDGET_TYPE.histogram, WIDGET_TYPE.histogram],
+    [WIDGET_TYPE.powerbar, WIDGET_TYPE.powerbar],
+    [WIDGET_TYPE.metric, WIDGET_TYPE.metric, WIDGET_TYPE.metric],
+    [WIDGET_TYPE.powerbar, WIDGET_TYPE.powerbar, WIDGET_TYPE.powerbar]
   ];
-  public getContentTypes = (nbComponents: number) => this.contentTypes.filter(elmt => elmt.length === nbComponents);
+  public getContentTypes = (nbWidgets: number) => this.contentTypes.filter(elmt => elmt.length === nbWidgets);
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog,
+    private logger: NGXLogger
   ) { }
 
   public ngOnInit() {
+
+    this.resetWidgetsOnTypeChange();
   }
 
-  public editComponent(componentIndex: number) {
-    this.contentType.forEach(t => {
-      // create the FG related to each component
-      (this.formGroup.controls.content as FormArray).push(this.formBuilder.group({
-        componentType: [t],
-        component: this.formBuilder.group({})
-      }));
+  /**
+   * on content type change, re-create the formgroup for each widget to define
+   */
+  private resetWidgetsOnTypeChange() {
+    this.contentType.valueChanges.subscribe(values => {
+      this.content.clear();
+      values.forEach(v => this.content.push(this.formBuilder.group({
+        widgetType: [v],
+        widgetData: new FormGroup({}, (fg: FormGroup) => ({ validateWidget: { valid: !!fg.controls.length } }))
+      })));
     });
   }
 
+  public editWidget(widgetIndex: number) {
+
+    const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup;
+    let widgetComponent: any;
+
+    switch (widgetFg.value.widgetType) {
+      case WIDGET_TYPE.histogram:
+        widgetComponent = WidgetHistogramComponent;
+        break;
+    }
+
+    this.dialog.open(widgetComponent, {
+      data: widgetFg.value.widgetData
+    })
+      .afterClosed().subscribe(result => {
+        if (result) {
+          widgetFg.setControl('widgetData', result);
+        }
+      });
+  }
+
   get contentType() {
+    return this.formGroup.controls.contentType;
+  }
+
+  get contentTypeValue() {
     return this.formGroup.controls.contentType.value as Array<string>;
+  }
+
+  get content() {
+    return this.formGroup.controls.content as FormArray;
   }
 
 }

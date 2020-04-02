@@ -44,7 +44,7 @@ export class GlobalTimelineComponent extends GlobalTimelineComponentForm impleme
 
   public ngOnInit() {
     // TODO use multi collection instead of the first one
-    this.collectionService.getCollectionFields(this.mainFormService.getCollections()[0], [FIELD_TYPES.DATE])
+    this.collectionService.getCollectionFieldsNames(this.mainFormService.getCollections()[0], [FIELD_TYPES.DATE])
       .subscribe(fields => this.dateFields = fields);
 
     this.markSubFormsTouched();

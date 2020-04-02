@@ -57,7 +57,7 @@ export class TimelineFormComponent extends TimelineFormComponentForm implements 
       Object.values(Interval.UnitEnum).map(v => typeof v === 'string' ? v.toLowerCase() : v)))
     .sort();
 
-  public chartTypes = [ChartType[0], ChartType[1]];
+  public chartTypes = [ChartType[ChartType.area], ChartType[ChartType.bars]];
   public dateFormats = DateFormats;
 
   constructor(

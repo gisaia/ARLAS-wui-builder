@@ -1,7 +1,8 @@
 <ng-container [formGroup]="formFg">
     <mat-horizontal-stepper #stepper class="stepper-for-config-element">
 
-        <mat-step label="Collection" formGroupName="collectionStep" [stepControl]="formFg.get('collectionStep')">
+        <mat-step label="'Collection' | translate" formGroupName="collectionStep"
+            [stepControl]="formFg.get('collectionStep')">
             <app-config-element>
                 <div form-fields>
                     <mat-form-field>
@@ -22,7 +23,8 @@
             </div>
         </mat-step>
 
-        <mat-step label="Geometry" formGroupName="geometryStep" [stepControl]="formFg.get('geometryStep')">
+        <mat-step label="'Geometry' | translate" formGroupName="geometryStep"
+            [stepControl]="formFg.get('geometryStep')">
             <app-config-element>
                 <div form-fields>
                     <mat-form-field>
@@ -61,7 +63,8 @@
             </div>
         </mat-step>
 
-        <mat-step label="Visibility" formGroupName="visibilityStep" [stepControl]="formFg.get('visibilityStep')">
+        <mat-step label="'Visibility' | translate" formGroupName="visibilityStep"
+            [stepControl]="formFg.get('visibilityStep')">
             <mat-error *ngIf="formFg.controls.visibilityStep.errors?.lte">
                 {{ 'Zoom max must be greater than or equal to zoom min' | translate}}
             </mat-error>
@@ -114,7 +117,7 @@
             </div>
         </mat-step>
 
-        <mat-step label="Style" formGroupName="styleStep" [stepControl]="formFg.get('styleStep')">
+        <mat-step label="'Style' | translate" formGroupName="styleStep" [stepControl]="formFg.get('styleStep')">
             <app-config-element>
                 <div form-fields>
                     <mat-label>{{ 'Opacity' | translate}}</mat-label>

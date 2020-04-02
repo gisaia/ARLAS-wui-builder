@@ -53,7 +53,7 @@ export class GlobalMapComponent extends GlobalMapComponentForm implements OnInit
     this.collections = this.mainFormService.getCollections();
     this.collections.forEach((collection) => {
 
-      this.collectionService.getCollectionFields(collection, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE]).subscribe(fields => {
+      this.collectionService.getCollectionFieldsNames(collection, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE]).subscribe(fields => {
         this.geoFieldsByCollection.set(collection, fields);
       });
       // Push a new FormGroup iff the FormArray (requestGeometries) doesn't contains

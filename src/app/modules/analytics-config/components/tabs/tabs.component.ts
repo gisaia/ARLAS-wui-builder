@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, ViewChildren, QueryList, ViewContainerRef, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, ViewContainerRef, ElementRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
@@ -24,6 +24,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
+import { MatTabGroup } from '@angular/material';
 
 @Component({
   selector: 'app-tabs',
@@ -35,6 +36,7 @@ export class TabsComponent implements OnInit {
   public tabsFa: FormArray;
   public editingTabIndex = -1;
   public editingTabName = '';
+  @ViewChild('matTabGroup', { static: false }) private matTabGroup: MatTabGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -65,10 +67,14 @@ export class TabsComponent implements OnInit {
   public getTab = (index: number) => this.tabsFa.at(index) as FormGroup;
 
   public addTab() {
+    // add new formgroup
     this.tabsFa.controls.push(this.createNewTab(
       this.translateService.instant(
         this.defaultValuesService.getValue('analytics.tabs.new'))
     ));
+
+    // select the newly created tab
+    this.matTabGroup.selectedIndex = this.matTabGroup._tabs.length;
   }
 
   public removeTab(tabIndex: number) {
@@ -106,6 +112,7 @@ export class TabsComponent implements OnInit {
     const previousIndex = parseInt(event.previousContainer.id.replace('tab-', ''), 10);
     const newIndex = parseInt(event.container.id.replace('tab-', ''), 10);
     moveItemInFormArray(previousIndex, newIndex, this.tabsFa);
+    this.matTabGroup.selectedIndex = newIndex;
   }
 
   public tabHasError(index: number) {
