@@ -185,7 +185,8 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                                 Validators.required)
                         ]
                     ]
-            }, {
+            }
+            , {
                 validators: [
                     CustomValidators.getConditionalValidator(() => !!this.formFg ?
                         this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated && this.propertyInterpolatedFieldCtrl.value
@@ -193,7 +194,8 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                         : false,
                         CustomValidators.getLTEValidator('propertyInterpolatedMinFieldValueCtrl', 'propertyInterpolatedMaxFieldValueCtrl'))
                 ]
-            })
+            }),
+            propertyPointCountNormalized: this.formBuilder.group({})
         });
     }
 
@@ -256,6 +258,9 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
     }
     get propertyInterpolatedValuesCtrl() {
         return this.propertyInterpolatedFg.get('propertyInterpolatedValuesCtrl');
+    }
+    get propertyPointCountNormalized() {
+        return this.formFg.get('propertyPointCountNormalized');
     }
 
     public setPropertyFix(value: string) {

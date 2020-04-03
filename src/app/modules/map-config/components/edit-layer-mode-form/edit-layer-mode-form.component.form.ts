@@ -83,7 +83,22 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
                 radiusFg: [
                     null,
                     CustomValidators.getConditionalValidator(
-                        () => !!this.formFg && !!this.geometryType && this.geometryType.value === GEOMETRY_TYPE.circle,
+                        () => !!this.formFg && !!this.geometryType
+                            && (this.geometryType.value === GEOMETRY_TYPE.circle || this.geometryType.value === GEOMETRY_TYPE.heatmap),
+                        Validators.required
+                    )
+                ],
+                weightFg: [
+                    null,
+                    CustomValidators.getConditionalValidator(
+                        () => !!this.formFg && !!this.geometryType && this.geometryType.value === GEOMETRY_TYPE.heatmap,
+                        Validators.required
+                    )
+                ],
+                intensityFg: [
+                    null,
+                    CustomValidators.getConditionalValidator(
+                        () => !!this.formFg && !!this.geometryType && this.geometryType.value === GEOMETRY_TYPE.heatmap,
                         Validators.required
                     )
                 ]
@@ -104,7 +119,7 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
         return this.formFg.get('geometryStep').get('geometry');
     }
     get geometryType() {
-        return this.formFg.get('geometryStep').get('geometryType');
+        return this.formFg.get('styleStep').get('geometryType');
     }
     get colorFg() {
         return this.formFg.get('styleStep').get('colorFg') as FormGroup;
@@ -114,5 +129,11 @@ export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
     }
     get radiusFg() {
         return this.formFg.get('styleStep').get('radiusFg') as FormGroup;
+    }
+    get weightFg() {
+        return this.formFg.get('styleStep').get('weightFg') as FormGroup;
+    }
+    get intensityFg() {
+        return this.formFg.get('styleStep').get('intensityFg') as FormGroup;
     }
 }

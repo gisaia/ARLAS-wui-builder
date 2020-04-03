@@ -1,5 +1,6 @@
-<app-edit-layer-mode-form [submit]="submitSubject.asObservable()"
-    [colorFgSources]="PROPERTY_SELECTOR_SOURCE | objectvalues">
+<app-edit-layer-mode-form [submit]="submitSubject.asObservable()" 
+    [colorFgSources]="[PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.generated,
+    PROPERTY_SELECTOR_SOURCE.manual, PROPERTY_SELECTOR_SOURCE.provided]">
     <div rendered-geometry>
         <app-config-element>
             <div form-fields>

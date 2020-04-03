@@ -19,7 +19,8 @@ under the License.
 export enum GEOMETRY_TYPE {
     fill = 'fill',
     line = 'line',
-    circle = 'circle'
+    circle = 'circle',
+    heatmap = 'heatmap'
 }
 
 export enum AGGREGATE_GEOMETRY_TYPE {

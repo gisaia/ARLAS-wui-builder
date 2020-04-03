@@ -157,7 +157,7 @@ export class ConfigExportHelper {
                 } else {
                     layerSource.metrics.push({
                         field: interpolatedValues.propertyInterpolatedFieldCtrl,
-                        metrics: interpolatedValues.propertyInterpolatedMetricCtrl,
+                        metric: interpolatedValues.propertyInterpolatedMetricCtrl,
                         normalize: interpolatedValues.propertyInterpolatedScopeCtrl
                     });
                 }

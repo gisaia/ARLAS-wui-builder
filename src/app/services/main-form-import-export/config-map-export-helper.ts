@@ -36,7 +36,7 @@ export class ConfigMapExportHelper {
             const colorOpacity = modeValues.styleStep.opacity;
             const color = this.getMapProperty(modeValues.styleStep.colorFg, mode);
 
-            switch (modeValues.geometryStep.geometryType) {
+            switch (modeValues.styleStep.geometryType) {
                 case GEOMETRY_TYPE.fill: {
                     paint.fillOpacity = colorOpacity;
                     paint.fillColor = color;
@@ -58,7 +58,7 @@ export class ConfigMapExportHelper {
 
             const layer: Layer = {
                 id: layerFg.value.name,
-                type: modeValues.geometryStep.geometryType,
+                type: modeValues.styleStep.geometryType,
                 source: sourceByMode.get(layerFg.value.mode),
                 minzoom: modeValues.visibilityStep.zoomMin,
                 maxzoom: modeValues.visibilityStep.zoomMax,

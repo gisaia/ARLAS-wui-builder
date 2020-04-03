@@ -24,11 +24,13 @@ import { NGXLogger } from 'ngx-logger';
 import { CLUSTER_GEOMETRY_TYPE } from '../edit-layer-mode-form/models';
 import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
 import { ViewChild } from '@angular/core';
+import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
 
 export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
 
     @ViewChild(EditLayerModeFormComponent, { static: true }) public embeddedFeaturesComponent: EditLayerModeFormComponent;
     public sortDirection: string;
+    public colorFgSources: Array<PROPERTY_SELECTOR_SOURCE> = [PROPERTY_SELECTOR_SOURCE.fix];
 
     constructor(
         protected logger: NGXLogger,
@@ -96,6 +98,18 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
                 ));
     }
 
+    protected registerGeometryType() {
+        (this.formFg.get('styleStep') as FormGroup)
+            .addControl(
+                'geometryType',
+                this.formBuilderDefault.control(
+                    'map.layer.styleStep.geometryType',
+                    [
+                        Validators.required
+                    ]
+                ));
+    }
+
 
     get geometryStep() {
         return this.formFg.get('geometryStep') as FormGroup;
@@ -121,11 +135,20 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
     get featuresMin() {
         return this.formFg.get('visibilityStep').get('featuresMin') as FormControl;
     }
+    get geometryType() {
+        return this.formFg.get('styleStep').get('geometryType') as FormControl;
+    }
     get widthFg() {
         return this.formFg.get('styleStep').get('widthFg') as FormGroup;
     }
     get radiusFg() {
         return this.formFg.get('styleStep').get('radiusFg') as FormGroup;
+    }
+    get weightFg() {
+        return this.formFg.get('styleStep').get('weightFg') as FormGroup;
+    }
+    get intensityFg() {
+        return this.formFg.get('styleStep').get('intensityFg') as FormGroup;
     }
 }
 

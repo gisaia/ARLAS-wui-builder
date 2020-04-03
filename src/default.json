@@ -13,7 +13,6 @@
             },
             "geometryStep": {
                 "geometry": "position.location",
-                "geometryType": "circle",
                 "granularity": "coarse"
             },
             "visibilityStep": {
@@ -24,6 +23,7 @@
                 "featuresMin": 7500
             },
             "styleStep": {
+                "geometryType": "fill",
                 "opacity": 0.5,
                 "colorFg": {
                     "propertySource": "Fix",

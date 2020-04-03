@@ -104,7 +104,7 @@ export interface RawGeometry {
 
 export interface Metric {
     field: string;
-    metrics: string;
+    metric: string;
     normalize: string;
 }
 

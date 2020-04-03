@@ -3,7 +3,7 @@
         <mat-label>{{propertyName | translate | titlecase}} {{'source' | translate}}</mat-label>
         <mat-select formControlName="propertySource" appAlertOnChange="changing the source will reset your choices"
             [dependants]="[propertyFix, propertyProvidedFieldCtrl, 
-            propertyGeneratedFieldCtrl, propertyManualFg, propertyInterpolatedFg]" [appResetOnChange]="defaultKey">
+            propertyGeneratedFieldCtrl, propertyManualFg, propertyInterpolatedFg, propertyPointCountNormalized]" [appResetOnChange]="defaultKey">
             <mat-option *ngFor="let source of sources" [value]="source">
                 {{source | translate}}</mat-option>
         </mat-select>
@@ -26,6 +26,8 @@
                 </mat-slider>
             </div>
         </div>
+
+        
 
         <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.provided">
             <mat-form-field>
