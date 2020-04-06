@@ -111,7 +111,7 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
 
   public geometryTypeChange(geometryType: string) {
     if (geometryType === GEOMETRY_TYPE.heatmap) {
-      this.colorFgSources = [PROPERTY_SELECTOR_SOURCE.fix];
+      this.colorFgSources = [PROPERTY_SELECTOR_SOURCE.heatmap_density];
     } else {
       this.colorFgSources = [
         PROPERTY_SELECTOR_SOURCE.fix,

@@ -160,17 +160,22 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
         const geoEnableDisable = [{
           geometry: GEOMETRY_TYPE.line,
           enabled: [this.widthFg],
-          disabled: [this.radiusFg]
+          disabled: [this.radiusFg, this.weightFg, this.intensityFg]
         },
         {
           geometry: GEOMETRY_TYPE.circle,
           enabled: [this.radiusFg],
-          disabled: [this.widthFg]
+          disabled: [this.widthFg, this.weightFg, this.intensityFg]
         },
         {
           geometry: GEOMETRY_TYPE.fill,
           enabled: [],
-          disabled: [this.radiusFg, this.widthFg]
+          disabled: [this.radiusFg, this.widthFg, this.weightFg, this.intensityFg]
+        },
+        {
+          geometry: GEOMETRY_TYPE.heatmap,
+          enabled: [this.radiusFg, this.weightFg, this.intensityFg],
+          disabled: [this.widthFg]
         }].find(elmt => elmt.geometry === v);
 
         if (!!geoEnableDisable) {

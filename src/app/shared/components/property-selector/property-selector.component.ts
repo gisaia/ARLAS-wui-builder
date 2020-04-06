@@ -69,6 +69,7 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
   public ensureMinLessThanMax = ensureMinLessThanMax;
   public METRICS = [METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX, METRIC_TYPES.CARDINALITY];
   public interpolatedFields: Array<string>;
+  public metricFields: Array<string>;
 
   constructor(
     protected formBuilder: FormBuilder,
@@ -104,7 +105,6 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
         obj.propertyManualFg.propertyManualValuesCtrl.forEach((k: KeywordColor) => {
           this.addToColorManualValuesCtrl(k);
         });
-
 
         // interpolated min/max values cannot be get when import a config file, so we extract them
         const interpolatedValues = this.propertyInterpolatedValuesCtrl.value as Array<ProportionedValues>;
@@ -206,11 +206,11 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
   private subscribeToCollectionFields() {
     this.collectionFieldsSubscription =
       combineLatest([this.collectionKeywordFieldsEmitter.asObservable(), this.collectionIntegerFieldsEmitter.asObservable()])
-        // .forEach(t => console.log('truc'));
         .subscribe(([kFields, iFields]) => {
           this.collectionKeywordFields = kFields;
           this.collectionIntegerFields = iFields;
           this.initInterpolatedFields();
+          this.initMetricFields();
         });
   }
 
@@ -224,6 +224,15 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
         // in edition mode, thus start the listener once with existing values
         this.propertyInterpolatedMetricCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
       }
+    }
+  }
+
+  private initMetricFields() {
+    this.propertyMetricCtrl.valueChanges.subscribe(v =>
+      this.metricFields = (v === METRIC_TYPES.CARDINALITY ? this.collectionKeywordFields : this.collectionIntegerFields));
+    if (!!this.propertyMetricCtrl.value) {
+      // in edition mode, thus start the listener once with existing values
+      this.propertyMetricCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
     }
   }
 
@@ -247,13 +256,14 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
     });
   }
 
-  public openPaletteTable() {
+  public openPaletteTable(mode: string = 'Interpolated') {
     const paletteData: DialogPaletteSelectorData = {
-      min: this.propertyInterpolatedNormalizeCtrl.value ? 0 : this.propertyInterpolatedMinFieldValueCtrl.value,
-      max: this.propertyInterpolatedNormalizeCtrl.value ? 1 : this.propertyInterpolatedMaxFieldValueCtrl.value,
+      min: this['property' + mode + 'NormalizeCtrl'].value ? 0 : this['property' + mode + 'MinFieldValueCtrl'].value,
+      max: this['property' + mode + 'NormalizeCtrl'].value ? 1 : this['property' + mode + 'MaxFieldValueCtrl'].value,
       defaultPalettes: this.defaultValueService.getDefaultConfig().palettes,
-      selectedPalette: this.propertyInterpolatedValuesCtrl.value
+      selectedPalette: this['property' + mode + 'ValuesCtrl'].value
     };
+    console.log(paletteData);
     const dialogRef = this.dialog.open(DialogPaletteSelectorComponent, {
       data: paletteData,
       autoFocus: false,
@@ -262,8 +272,8 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        this.propertyInterpolatedFg.get('propertyInterpolatedValuesCtrl').setValue(result);
-        this.propertyInterpolatedFg.get('propertyInterpolatedValuesCtrl').markAsDirty();
+        this['property' + mode + 'Fg'].get('property' + mode + 'ValuesCtrl').setValue(result);
+        this['property' + mode + 'Fg'].get('property' + mode + 'ValuesCtrl').markAsDirty();
       }
     });
   }

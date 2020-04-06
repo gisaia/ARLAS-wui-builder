@@ -25,6 +25,7 @@ describe('EditLayerClusterComponent', () => {
     props: {
       submit: new Subject<boolean>().asObservable(),
       embeddedFeaturesComponent: {
+        initEnableWidthOrRadiusFg: () => { },
         formFg: new FormGroup({
           geometryStep: new FormGroup({}),
           visibilityStep: new FormGroup({}),
