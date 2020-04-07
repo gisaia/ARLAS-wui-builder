@@ -92,6 +92,12 @@ export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubFo
     get radiusFg() {
         return this.formFg.get('styleStep').get('radiusFg') as FormGroup;
     }
+    get intensityFg() {
+        return this.formFg.get('styleStep').get('intensityFg') as FormGroup;
+    }
+    get weightFg() {
+        return this.formFg.get('styleStep').get('weightFg') as FormGroup;
+    }
     get geometry() {
         return this.formFg.get('geometryStep').get('geometry') as FormControl;
     }
