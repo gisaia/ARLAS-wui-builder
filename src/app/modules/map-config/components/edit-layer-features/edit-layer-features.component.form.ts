@@ -38,9 +38,9 @@ export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
 
     protected registerRendererGeometry() {
         this.geometryStep.addControl(
-            'geometryCtrl',
+            'geometry',
             this.formBuilderDefault.control(
-                'map.layer.geometryStep.geometryCtrl',
+                'map.layer.geometryStep.geometry',
                 [
                     Validators.required
                 ]
@@ -48,22 +48,23 @@ export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
     }
 
     protected registerGeometryType() {
-        this.geometryStep.addControl(
-            'geometryTypeCtrl',
-            this.formBuilderDefault.control(
-                'map.layer.geometryStep.geometryTypeCtrl',
-                [
-                    Validators.required
-                ]
-            ));
+        (this.formFg.get('styleStep') as FormGroup)
+            .addControl(
+                'geometryType',
+                this.formBuilderDefault.control(
+                    'map.layer.styleStep.geometryType',
+                    [
+                        Validators.required
+                    ]
+                ));
     }
 
     protected registerFeaturesMax() {
         (this.formFg.get('visibilityStep') as FormGroup)
             .addControl(
-                'featuresMaxCtrl',
+                'featuresMax',
                 this.formBuilderDefault.control(
-                    'map.layer.visibilityStep.featuresMaxCtrl',
+                    'map.layer.visibilityStep.featuresMax',
                     [
                         Validators.required,
                         Validators.max(10000),
@@ -75,19 +76,25 @@ export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
     get geometryStep() {
         return this.formFg.get('geometryStep') as FormGroup;
     }
-    get geometryCtrl() {
-        return this.formFg.get('geometryStep').get('geometryCtrl') as FormControl;
+    get geometry() {
+        return this.formFg.get('geometryStep').get('geometry') as FormControl;
     }
-    get geometryTypeCtrl() {
-        return this.formFg.get('geometryStep').get('geometryTypeCtrl') as FormControl;
+    get geometryType() {
+        return this.formFg.get('styleStep').get('geometryType') as FormControl;
     }
-    get featuresMaxCtrl() {
-        return this.formFg.get('visibilityStep').get('featuresMaxCtrl') as FormControl;
+    get featuresMax() {
+        return this.formFg.get('visibilityStep').get('featuresMax') as FormControl;
     }
     get widthFg() {
         return this.formFg.get('styleStep').get('widthFg') as FormGroup;
     }
     get radiusFg() {
         return this.formFg.get('styleStep').get('radiusFg') as FormGroup;
+    }
+    get intensityFg() {
+        return this.formFg.get('styleStep').get('intensityFg') as FormGroup;
+    }
+    get weightFg() {
+        return this.formFg.get('styleStep').get('weightFg') as FormGroup;
     }
 }

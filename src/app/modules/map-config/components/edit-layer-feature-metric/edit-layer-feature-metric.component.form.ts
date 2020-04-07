@@ -35,31 +35,22 @@ export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubFo
 
     protected registerRendererGeometry() {
         this.geometryStep.addControl(
-            'geometryCtrl',
+            'geometry',
             this.formBuilderDefault.control(
-                'map.layer.geometryStep.geometryCtrl',
+                'map.layer.geometryStep.geometry',
                 [
                     Validators.required
                 ]
             ));
     }
 
-    protected registerGeometryType() {
-        this.geometryStep.addControl(
-            'geometryTypeCtrl',
-            this.formBuilderDefault.control(
-                'map.layer.geometryStep.geometryTypeCtrl',
-                [
-                    Validators.required
-                ]
-            ));
-    }
+
 
     protected registerGeometryId() {
         this.geometryStep.addControl(
-            'geometryIdCtrl',
+            'geometryId',
             this.formBuilderDefault.control(
-                'map.layer.geometryStep.geometryIdCtrl',
+                'map.layer.geometryStep.geometryId',
                 [
                     Validators.required
                 ]
@@ -69,13 +60,25 @@ export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubFo
     protected registerFeaturesMax() {
         (this.formFg.get('visibilityStep') as FormGroup)
             .addControl(
-                'featuresMaxCtrl',
+                'featuresMax',
                 this.formBuilderDefault.control(
-                    'map.layer.visibilityStep.featuresMaxCtrl',
+                    'map.layer.visibilityStep.featuresMax',
                     [
                         Validators.required,
                         Validators.max(10000),
                         Validators.min(0)
+                    ]
+                ));
+    }
+
+    protected registerGeometryType() {
+        (this.formFg.get('styleStep') as FormGroup)
+            .addControl(
+                'geometryType',
+                this.formBuilderDefault.control(
+                    'map.layer.styleStep.geometryType',
+                    [
+                        Validators.required
                     ]
                 ));
     }
@@ -89,17 +92,23 @@ export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubFo
     get radiusFg() {
         return this.formFg.get('styleStep').get('radiusFg') as FormGroup;
     }
-    get geometryCtrl() {
-        return this.formFg.get('geometryStep').get('geometryCtrl') as FormControl;
+    get intensityFg() {
+        return this.formFg.get('styleStep').get('intensityFg') as FormGroup;
     }
-    get geometryTypeCtrl() {
-        return this.formFg.get('geometryStep').get('geometryTypeCtrl') as FormControl;
+    get weightFg() {
+        return this.formFg.get('styleStep').get('weightFg') as FormGroup;
     }
-    get featuresMaxCtrl() {
-        return this.formFg.get('visibilityStep').get('featuresMaxCtrl') as FormControl;
+    get geometry() {
+        return this.formFg.get('geometryStep').get('geometry') as FormControl;
     }
-    get geometryIdCtrl() {
-        return this.formFg.get('geometryStep').get('geometryIdCtrl') as FormControl;
+    get geometryType() {
+        return this.formFg.get('styleStep').get('geometryType') as FormControl;
+    }
+    get featuresMax() {
+        return this.formFg.get('visibilityStep').get('featuresMax') as FormControl;
+    }
+    get geometryId() {
+        return this.formFg.get('geometryStep').get('geometryId') as FormControl;
     }
 
 }

@@ -1,11 +1,12 @@
-<app-edit-layer-mode-form [submit]="submitSubject.asObservable()"
-    [colorFgSources]="PROPERTY_SELECTOR_SOURCE | objectvalues">
+<app-edit-layer-mode-form [submit]="submitSubject.asObservable()" 
+    [colorFgSources]="[PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.generated,
+    PROPERTY_SELECTOR_SOURCE.manual, PROPERTY_SELECTOR_SOURCE.provided]">
     <div rendered-geometry>
         <app-config-element>
             <div form-fields>
                 <mat-form-field>
                     <mat-label>{{ 'Rendered geometry' | translate}} </mat-label>
-                    <mat-select [formControl]="geometryCtrl">
+                    <mat-select [formControl]="geometry">
                         <mat-option *ngFor="let field of getCollectionGeoFields()" [value]="field">
                             {{ field }}</mat-option>
                     </mat-select>
@@ -20,9 +21,9 @@
             <div form-fields>
                 <mat-form-field>
                     <mat-label>{{ 'Geometry type' | translate}} </mat-label>
-                    <mat-select [formControl]="geometryTypeCtrl"
+                    <mat-select [formControl]="geometryType"
                         appAlertOnChange="changing the geometry type may reset the radius or the width"
-                        appResetOnChange="map.layer" [dependants]="[widthFg, radiusFg]">
+                        appResetOnChange="map.layer" [dependants]="[widthFg, radiusFg, weightFg, intensityFg]">
                         <mat-option [value]="GEOMETRY_TYPE.fill">{{ 'Fill' | translate}}</mat-option>
                         <mat-option [value]="GEOMETRY_TYPE.line">{{ 'Line' | translate}}</mat-option>
                         <mat-option [value]="GEOMETRY_TYPE.circle">{{ 'Circle' | translate}}</mat-option>
@@ -39,7 +40,7 @@
             <div form-fields>
                 <span>
                     <mat-label>{{ 'Features max' | translate}}</mat-label>
-                    <mat-slider [formControl]="featuresMaxCtrl" thumbLabel min="0" max="10000" step="100"> </mat-slider>
+                    <mat-slider [formControl]="featuresMax" thumbLabel min="0" max="10000" step="100"> </mat-slider>
                 </span>
             </div>
             <div description>

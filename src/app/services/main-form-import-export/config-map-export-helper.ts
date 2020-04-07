@@ -33,10 +33,10 @@ export class ConfigMapExportHelper {
                 layerFg.value.featuresFg : layerFg.value.featureMetricFg;
 
             const paint: Paint = {};
-            const colorOpacity = modeValues.styleStep.opacityCtrl;
+            const colorOpacity = modeValues.styleStep.opacity;
             const color = this.getMapProperty(modeValues.styleStep.colorFg, mode);
 
-            switch (modeValues.geometryStep.geometryTypeCtrl) {
+            switch (modeValues.styleStep.geometryType) {
                 case GEOMETRY_TYPE.fill: {
                     paint.fillOpacity = colorOpacity;
                     paint.fillColor = color;
@@ -58,12 +58,12 @@ export class ConfigMapExportHelper {
 
             const layer: Layer = {
                 id: layerFg.value.name,
-                type: modeValues.geometryStep.geometryTypeCtrl,
+                type: modeValues.styleStep.geometryType,
                 source: sourceByMode.get(layerFg.value.mode),
-                minzoom: modeValues.visibilityStep.zoomMinCtrl,
-                maxzoom: modeValues.visibilityStep.zoomMaxCtrl,
+                minzoom: modeValues.visibilityStep.zoomMin,
+                maxzoom: modeValues.visibilityStep.zoomMax,
                 layout: {
-                    visibility: modeValues.visibilityStep.visibleCtrl ? 'visible' : 'none'
+                    visibility: modeValues.visibilityStep.visible ? 'visible' : 'none'
                 },
                 paint,
                 filter: null
@@ -75,7 +75,7 @@ export class ConfigMapExportHelper {
                         [
                             '==',
                             'geometry_path',
-                            modeValues.geometryStep.geometryCtrl,
+                            modeValues.geometryStep.geometry,
                         ],
                         [
                             '==',
@@ -90,7 +90,7 @@ export class ConfigMapExportHelper {
                         [
                             '==',
                             'geometry_ref',
-                            modeValues.geometryStep.geometryCtrl,
+                            modeValues.geometryStep.geometry,
                         ],
                         [
                             '==',
@@ -118,9 +118,9 @@ export class ConfigMapExportHelper {
     }
 
     private static getMapProperty(fgValues: any, mode: LAYER_MODE) {
-        switch (fgValues.propertySourceCtrl) {
+        switch (fgValues.propertySource) {
             case PROPERTY_SELECTOR_SOURCE.fix:
-                return fgValues.propertyFixCtrl;
+                return fgValues.propertyFix;
             case PROPERTY_SELECTOR_SOURCE.provided:
                 return this.getArray(fgValues.propertyProvidedFieldCtrl);
             case PROPERTY_SELECTOR_SOURCE.generated:

@@ -9,29 +9,29 @@
         },
         "layer": {
             "collectionStep": {
-                "collectionCtrl": "demo_ais-danmark"
+                "collection": "demo_ais-danmark"
             },
             "geometryStep": {
-                "geometryCtrl": "position.location",
-                "geometryTypeCtrl": "circle",
-                "granularityCtrl": "coarse"
+                "geometry": "position.location",
+                "granularity": "coarse"
             },
             "visibilityStep": {
-                "visibleCtrl": true,
-                "zoomMinCtrl": 10,
-                "zoomMaxCtrl": 10,
-                "featuresMaxCtrl": 7500,
-                "featuresMinCtrl": 7500
+                "visible": true,
+                "zoomMin": 10,
+                "zoomMax": 10,
+                "featuresMax": 7500,
+                "featuresMin": 7500
             },
             "styleStep": {
-                "opacityCtrl": 0.5,
+                "geometryType": "fill",
+                "opacity": 0.5,
                 "colorFg": {
-                    "propertySourceCtrl": "Fix",
-                    "propertyFixCtrl": "#abcdef"
+                    "propertySource": "Fix",
+                    "propertyFix": "#abcdef"
                 },
                 "radiusFg": {
-                    "propertySourceCtrl": "Fix",
-                    "propertyFixCtrl": "1.5"
+                    "propertySource": "Fix",
+                    "propertyFix": "1.5"
                 }
             }
         }
@@ -73,8 +73,11 @@
         "widthMin": 0,
         "widthMax": 15,
         "widthStep": 0.5,
-        "radiusMin": 1,
-        "radiusMax": 3,
-        "radiusStep": 0.1
+        "radiusMin": 5,
+        "radiusMax": 20,
+        "radiusStep": 0.5,
+        "intensityMin": 0,
+        "intensityMax": 10,
+        "intensityStep": 0.5
     }
 }

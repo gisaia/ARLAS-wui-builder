@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
 import { MockComponent, MockDirective } from 'ng-mocks';
 import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
 import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
 
@@ -27,7 +27,10 @@ describe('EditLayerFeatureMetricComponent', () => {
       embeddedFeaturesComponent: {
         initEnableWidthOrRadiusFg: () => { },
         formFg: new FormGroup({
-          styleStep: new FormGroup({}),
+          styleStep: new FormGroup({
+            intensityFg: new FormControl(),
+            weightFg: new FormControl()
+          }),
           visibilityStep: new FormGroup({}),
           geometryStep: new FormGroup({})
         })

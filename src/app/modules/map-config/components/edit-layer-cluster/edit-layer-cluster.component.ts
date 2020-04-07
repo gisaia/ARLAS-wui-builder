@@ -16,13 +16,14 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { AfterViewInit, Component, forwardRef, OnInit } from '@angular/core';
+import { AfterViewInit, Component, forwardRef, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
 import { NGXLogger } from 'ngx-logger';
 import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GRANULARITY } from '../edit-layer-mode-form/models';
 import { EditLayerClusterComponentForm } from './edit-layer-cluster.component.form';
+import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
 
 
 
@@ -49,13 +50,15 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
   public GRANULARITY = GRANULARITY;
   public CLUSTER_GEOMETRY_TYPE = CLUSTER_GEOMETRY_TYPE;
   public AGGREGATE_GEOMETRY_TYPE = AGGREGATE_GEOMETRY_TYPE;
+  public GEOMETRY_TYPE = GEOMETRY_TYPE;
 
   public sorts: Set<string> = new Set();
 
   constructor(
     protected logger: NGXLogger,
     protected formBuilder: FormBuilder,
-    protected formBuilderDefault: FormBuilderWithDefaultService
+    protected formBuilderDefault: FormBuilderWithDefaultService,
+    protected changeDetectorRef: ChangeDetectorRef
   ) {
     super(logger, formBuilder, formBuilderDefault);
   }
@@ -73,12 +76,25 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
     this.registerRawGeometry();
     this.registerClusterSort();
     this.registerFeaturesMin();
-    this.widthFg.disable();
-    this.radiusFg.disable();
+    this.registerGeometryType();
   }
 
   ngAfterViewInit() {
     this.initSortChips();
+    // Fired geometryChange event to update colorFgSource according to the geometryType value at init
+    this.geometryTypeChange(this.geometryType.value);
+  }
+
+  public getGeoPointFields() {
+    return this.embeddedFeaturesComponent.collectionGeoPointFields;
+  }
+
+  public getGeoFields() {
+    return this.embeddedFeaturesComponent.collectionGeoFields;
+  }
+
+  public getAllButGeoFields() {
+    return this.embeddedFeaturesComponent.collectionAllButGeoFields;
   }
 
   public addSort(sort: string, event) {
@@ -92,17 +108,17 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
     this.setSortValue();
   }
 
-
-  public getGeoPointFields() {
-    return this.embeddedFeaturesComponent.collectionGeoPointFields;
-  }
-
-  public getGeoFields() {
-    return this.embeddedFeaturesComponent.collectionGeoFields;
-  }
-
-  public getAllButGeoFields() {
-    return this.embeddedFeaturesComponent.collectionAllButGeoFields;
+  public geometryTypeChange(geometryType: string) {
+    if (geometryType === GEOMETRY_TYPE.heatmap) {
+      this.colorFgSources = [PROPERTY_SELECTOR_SOURCE.heatmap_density];
+    } else {
+      this.colorFgSources = [
+        PROPERTY_SELECTOR_SOURCE.fix,
+        PROPERTY_SELECTOR_SOURCE.point_count_normalized,
+        PROPERTY_SELECTOR_SOURCE.metric_on_field
+      ];
+    }
+    this.changeDetectorRef.detectChanges();
   }
 
   private setSortValue() {
@@ -117,4 +133,5 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
       });
     }
   }
+
 }
