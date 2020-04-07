@@ -22,7 +22,7 @@
                     <mat-label>{{ 'Geometry type' | translate}} </mat-label>
                     <mat-select [formControl]="geometryType"
                         appAlertOnChange="changing the geometry type may reset the radius or the width"
-                        appResetOnChange="map.layer" [dependants]="[widthFg, radiusFg]">
+                        appResetOnChange="map.layer" [dependants]="[widthFg, radiusFg, weightFg, intensityFg]">
                         <mat-option [value]="GEOMETRY_TYPE.fill">{{ 'Fill' | translate}}</mat-option>
                         <mat-option [value]="GEOMETRY_TYPE.line">{{ 'Line' | translate}}</mat-option>
                         <mat-option [value]="GEOMETRY_TYPE.circle">{{ 'Circle' | translate}}</mat-option>

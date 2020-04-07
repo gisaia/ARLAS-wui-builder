@@ -263,7 +263,6 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
       defaultPalettes: this.defaultValueService.getDefaultConfig().palettes,
       selectedPalette: this['property' + mode + 'ValuesCtrl'].value
     };
-    console.log(paletteData);
     const dialogRef = this.dialog.open(DialogPaletteSelectorComponent, {
       data: paletteData,
       autoFocus: false,

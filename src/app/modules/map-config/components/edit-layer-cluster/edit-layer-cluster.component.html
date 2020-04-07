@@ -133,7 +133,7 @@
                     <mat-label>{{ 'Geometry type' | translate}} </mat-label>
                     <mat-select [formControl]="geometryType" (selectionChange)="geometryTypeChange($event.value)"
                         appAlertOnChange="changing the geometry type may reset the radius or the width"
-                        appResetOnChange="map.layer" [dependants]="[widthFg, radiusFg, weightFg, intensityFg]">
+                        appResetOnChange="map.layer" [dependants]="[widthFg, radiusFg, weightFg, intensityFg, colorFg]">
                         <mat-option [value]="GEOMETRY_TYPE.fill">{{ 'Fill' | translate}}</mat-option>
                         <mat-option [value]="GEOMETRY_TYPE.circle">{{ 'Circle' | translate}}</mat-option>
                         <mat-option [value]="GEOMETRY_TYPE.heatmap">{{ 'Heatmap' | translate}}</mat-option>

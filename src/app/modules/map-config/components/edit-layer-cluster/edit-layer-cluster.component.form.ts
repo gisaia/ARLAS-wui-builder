@@ -150,5 +150,8 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
     get intensityFg() {
         return this.formFg.get('styleStep').get('intensityFg') as FormGroup;
     }
+    get colorFg() {
+        return this.formFg.get('styleStep').get('colorFg') as FormGroup;
+    }
 }
 

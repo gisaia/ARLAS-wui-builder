@@ -69,7 +69,6 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
     // by getting a reference to the embedded form in this variable,
     // it will used by the parent ControlValueAccessor implementation to write values on-the-fly
     this.formFg = this.embeddedFeaturesComponent.formFg;
-    this.embeddedFeaturesComponent.radiusFgSources = [PROPERTY_SELECTOR_SOURCE.fix];
     this.registerAggGeometry();
     this.registerGranlularity();
     this.registerClusterGeometryType();
@@ -82,7 +81,7 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
 
   ngAfterViewInit() {
     this.initSortChips();
-    // Fired geometryChange event to update colorFgSource according to geometryType value at init
+    // Fired geometryChange event to update colorFgSource according to the geometryType value at init
     this.geometryTypeChange(this.geometryType.value);
   }
 
@@ -119,6 +118,7 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
         PROPERTY_SELECTOR_SOURCE.metric_on_field
       ];
     }
+    this.changeDetectorRef.detectChanges();
   }
 
   private setSortValue() {

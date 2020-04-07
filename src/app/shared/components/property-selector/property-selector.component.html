@@ -11,7 +11,7 @@
 
     <div>
 
-        <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.fix">
+        <div *ngIf="propertySource.value === PROPERTY_SELECTOR_SOURCE.fix">
             <div *ngIf="propertyType === PROPERTY_TYPE.color">
                 <app-color-picker-wrapper [value]="propertyFix.value" (setValue)="setPropertyFix($event)">
                 </app-color-picker-wrapper>
@@ -24,6 +24,7 @@
                     [step]="defaultValueService.getDefaultConfig()[propertyName + 'Step']" thumbLabel
                     formControlName="propertyFix">
                 </mat-slider>
+                {{ defaultValueService.getDefaultConfig()[propertyName + 'Max']}}
             </div>
         </div>
 
@@ -205,7 +206,7 @@
 
         <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.heatmap_density">
             <div *ngIf="propertyType === PROPERTY_TYPE.color">
-                <button type="button" mat-raised-button (click)="this.propertyMetricNormalizeCtrl.value = 1;openPaletteTable('Metric')" class="palette-button">
+                <button type="button" mat-raised-button (click)="this.propertyMetricNormalizeCtrl.setValue(1);openPaletteTable('Metric')" class="palette-button">
                     {{'Manage palette' | translate}}
                 </button>
             </div>

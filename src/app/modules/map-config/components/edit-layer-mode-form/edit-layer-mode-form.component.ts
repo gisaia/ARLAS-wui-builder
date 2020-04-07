@@ -67,7 +67,7 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
   public PROPERTY_TYPE = PROPERTY_TYPE;
   public widthFgSources = [PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated];
   public radiusFgSources = [PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated];
-  public weightFgSources = [PROPERTY_SELECTOR_SOURCE.fix];
+  public weightFgSources = [PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated];
   public intensityFgSources = [PROPERTY_SELECTOR_SOURCE.fix];
   public collectionGeoPointFields: string[] = [];
   public collectionGeoFields: string[] = [];

@@ -73,8 +73,11 @@
         "widthMin": 0,
         "widthMax": 15,
         "widthStep": 0.5,
-        "radiusMin": 1,
-        "radiusMax": 3,
-        "radiusStep": 0.1
+        "radiusMin": 5,
+        "radiusMax": 20,
+        "radiusStep": 0.5,
+        "intensityMin": 0,
+        "intensityMax": 10,
+        "intensityStep": 0.5
     }
 }
