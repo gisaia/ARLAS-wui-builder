@@ -19,7 +19,7 @@ under the License.
 import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 import { CustomValidators } from '@utils/custom-validators';
 import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from './models';
-import { ComponentSubForm } from '@shared/ComponentSubForm';
+import { ComponentSubForm } from '@shared-models/component-sub-form';
 import { NGXLogger } from 'ngx-logger';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { Input } from '@angular/core';
