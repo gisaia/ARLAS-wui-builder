@@ -16,20 +16,13 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { TabsComponent } from './components/tabs/tabs.component';
 
+.groups-wrapper {
+  overflow-y: hidden;
 
-const routes: Routes = [
-  {
-    path: '', children: [
-      { path: '', redirectTo: 'layout', pathMatch: 'full' },
-      { path: 'layout', component: TabsComponent }
-    ]
-  }];
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class AnalyticsConfigRoutingModule { }
+  .add-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+}

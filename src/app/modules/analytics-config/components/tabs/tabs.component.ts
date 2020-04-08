@@ -26,11 +26,11 @@ import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
 
 @Component({
-  selector: 'app-anaytics-layout',
-  templateUrl: './layout-tabs.component.html',
-  styleUrls: ['./layout-tabs.component.scss']
+  selector: 'app-tabs',
+  templateUrl: './tabs.component.html',
+  styleUrls: ['./tabs.component.scss']
 })
-export class LayoutTabsComponent implements OnInit {
+export class TabsComponent implements OnInit {
 
   public tabsFa: FormArray;
   public editingTabIndex = -1;

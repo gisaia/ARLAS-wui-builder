@@ -16,42 +16,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-@import "variables.scss";
-$primary-color: mat-color($primary-palette);
-
-.groups-wrapper {
-  overflow-y: hidden;
-
-  .group-wrapper {
-    display: flex;
-    margin: 20px 10px;
-
-    .edit-group,
-    .preview-group {
-      flex-grow: 1;
-    }
-
-    .edit-group-form {
-      padding: 20px 60px;
-      border: 5px solid $primary-color;
-      border-radius: 25px;
-      width: fit-content;
-      display: flex;
-
-      .action-buttons {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        margin-left: 10px;
-        padding: 15px 0px;
-      }
-    }
-  }
-
-  .add-button {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-  }
+export enum COMPONENT_TYPE {
+    histogram = 'histogram',
+    donut = 'donut',
+    powerbar = 'powerbar',
+    resultlist = 'resultlist',
+    metric = 'metric',
+    swimlane = 'swimlane'
 }
