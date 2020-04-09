@@ -82,6 +82,7 @@ export class MainFormImportExportService {
     const sourceByMode = new Map<string, string>();
     sourceByMode.set(LAYER_MODE.features, 'feature');
     sourceByMode.set(LAYER_MODE.featureMetric, 'feature-metric');
+    sourceByMode.set(LAYER_MODE.cluster, 'cluster');
 
     this.saveJson(
       ConfigExportHelper.process(
