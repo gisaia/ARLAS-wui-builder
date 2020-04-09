@@ -16,27 +16,35 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ConfigFormGroup, ConfigFormControl } from '@shared-models/config-form';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-config-form-group',
   templateUrl: './config-form-group.component.html',
   styleUrls: ['./config-form-group.component.scss']
 })
-export class ConfigFormGroupComponent implements OnInit {
+export class ConfigFormGroupComponent implements OnInit, OnDestroy {
 
   @Input() public configFormGroup: ConfigFormGroup;
   @Input() public defaultKey: string;
+  public toUnsubscribe: Array<Subscription> = [];
+
   constructor() { }
 
   public ngOnInit() {
+    Object.values(this.configFormGroup.controls)
+      .filter(c => c instanceof ConfigFormControl)
+      .forEach((c: ConfigFormControl) => {
+        this.watchDependenciesChange(c);
+        this.initDependantControls(c);
+        this.markChildControls(c);
+      });
+  }
 
-    Object.values(this.configFormGroup.controls).forEach((c: ConfigFormControl) => {
-      this.watchDependenciesChange(c);
-      this.initDependantControls(c);
-      this.markChildControls(c);
-    });
+  public ngOnDestroy(): void {
+    this.toUnsubscribe.forEach(u => u.unsubscribe());
   }
 
   /**
@@ -45,9 +53,9 @@ export class ConfigFormGroupComponent implements OnInit {
   private watchDependenciesChange(control: ConfigFormControl) {
     if (!!control.dependsOn) {
       control.dependsOn().forEach(dep => {
-        dep.valueChanges.subscribe(v => {
+        this.toUnsubscribe.push(dep.valueChanges.subscribe(v => {
           control.onDependencyChange(control);
-        });
+        }));
       });
       // trigger on initial load
       control.onDependencyChange(control);
@@ -70,6 +78,14 @@ export class ConfigFormGroupComponent implements OnInit {
   private markChildControls(control: ConfigFormControl) {
     control.childs().forEach((child: ConfigFormControl) =>
       child.isChild = true);
+  }
+
+  public isFormControl(control: ConfigFormGroup | ConfigFormControl): ConfigFormControl | null {
+    return control instanceof ConfigFormControl ? control : null;
+  }
+
+  public isFormGroup(control: ConfigFormGroup | ConfigFormControl): ConfigFormGroup | null {
+    return control instanceof ConfigFormGroup ? control : null;
   }
 
 }

@@ -18,6 +18,13 @@ under the License.
 */
 
 import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/forms';
+import { CollectionReferenceDescriptionProperty } from 'arlas-api';
+
+export const NUMERIC_OR_DATE_TYPES = [
+    CollectionReferenceDescriptionProperty.TypeEnum.DATE, CollectionReferenceDescriptionProperty.TypeEnum.INTEGER,
+    CollectionReferenceDescriptionProperty.TypeEnum.LONG, CollectionReferenceDescriptionProperty.TypeEnum.DOUBLE,
+    CollectionReferenceDescriptionProperty.TypeEnum.FLOAT
+];
 
 /**
  * Get object or String value of an object from key

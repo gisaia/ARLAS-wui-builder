@@ -1,22 +1,30 @@
-import { WidgetHistogramComponent } from './widget-histogram.component';
+import { EditWidgetDialogComponent } from './edit-widget-dialog.component';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { MockComponent } from 'ng-mocks';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { of } from 'rxjs';
+import { HistogramFormBuilderService } from '../../services/histogram-form-builder/histogram-form-builder.service';
+import { FormGroup } from '@angular/forms';
 
-describe('WidgetHistogramComponent', () => {
-  let spectator: Spectator<WidgetHistogramComponent>;
+describe('EditWidgetDialogComponent', () => {
+  let spectator: Spectator<EditWidgetDialogComponent>;
 
   const createComponent = createComponentFactory({
-    component: WidgetHistogramComponent,
+    component: EditWidgetDialogComponent,
     providers: [
       {
-        provide: MAT_DIALOG_DATA, useValue: null
+        provide: MAT_DIALOG_DATA, useValue: {
+          widgetType: 'histogram',
+          formData: {}
+        }
       },
       mockProvider(CollectionService, {
         getCollectionFields: () => of([])
+      }),
+      mockProvider(HistogramFormBuilderService, {
+        widgetFormGroup: new FormGroup({})
       })
     ],
     declarations: [
