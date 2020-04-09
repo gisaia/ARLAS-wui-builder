@@ -37,6 +37,7 @@ export interface DefaultConfig {
   radiusMin: number;
   radiusMax: number;
   radiusStep: number;
+  huePalettes: Array<[number, number] | string>;
 }
 @Injectable({
   providedIn: 'root'

@@ -16,18 +16,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+import { WIDGET_TYPE } from '../edit-group/models';
 
-@import "variables.scss";
-
-.control-error {
-    color: $error-color;
-}
-
-mat-option {
-    margin: 2px 0px;
-
-    &:hover,
-    &.mat-active {
-        margin: 2px 0px 2px 5px;
-    }
+export interface EditWidgetDialogData {
+    widgetType: WIDGET_TYPE;
+    formData: any;
 }

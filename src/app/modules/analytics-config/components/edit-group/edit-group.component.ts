@@ -20,8 +20,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { WIDGET_TYPE as WIDGET_TYPE } from './models';
 import { MatDialog } from '@angular/material';
-import { WidgetHistogramComponent } from '../widget-histogram/widget-histogram.component';
+import { EditWidgetDialogComponent } from '../edit-widget-dialog/edit-widget-dialog.component';
 import { NGXLogger } from 'ngx-logger';
+import { EditWidgetDialogData } from '../edit-widget-dialog/models';
 
 @Component({
   selector: 'app-edit-group',
@@ -77,16 +78,12 @@ export class EditGroupComponent implements OnInit {
   public editWidget(widgetIndex: number) {
 
     const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup;
-    let widgetComponent: any;
 
-    switch (widgetFg.value.widgetType) {
-      case WIDGET_TYPE.histogram:
-        widgetComponent = WidgetHistogramComponent;
-        break;
-    }
-
-    this.dialog.open(widgetComponent, {
-      data: widgetFg.value.widgetData
+    this.dialog.open(EditWidgetDialogComponent, {
+      data: {
+        widgetType: widgetFg.value.widgetType,
+        formData: widgetFg.value.widgetData
+      } as EditWidgetDialogData
     })
       .afterClosed().subscribe(result => {
         if (result) {

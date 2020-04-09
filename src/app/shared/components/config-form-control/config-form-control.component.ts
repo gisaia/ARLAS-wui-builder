@@ -19,7 +19,7 @@ under the License.
 import { Component, OnInit, Input } from '@angular/core';
 import {
   ConfigFormControl, SlideToggleFormControl, SliderFormControl,
-  SelectFormControl, InputFormControl
+  SelectFormControl, InputFormControl, ColorFormControl, HuePaletteFormControl
 } from '@shared-models/config-form';
 
 @Component({
@@ -38,25 +38,35 @@ export class ConfigFormControlComponent implements OnInit {
   }
 
   public isSlideToggle(): SlideToggleFormControl | null {
-    return this.control instanceof SlideToggleFormControl ? this.control as SlideToggleFormControl : null;
+    return Object.getPrototypeOf(this.control) === SlideToggleFormControl.prototype ? this.control as SlideToggleFormControl : null;
   }
 
   public isSlider(): SliderFormControl | null {
-    return this.control instanceof SliderFormControl ? this.control as SliderFormControl : null;
+    return Object.getPrototypeOf(this.control) === SliderFormControl.prototype ? this.control as SliderFormControl : null;
   }
 
   public isSelect(): SelectFormControl | null {
-    return this.control instanceof SelectFormControl && !this.control.isAutocomplete ?
+    return Object.getPrototypeOf(this.control) === SelectFormControl.prototype &&
+      !(this.control as SelectFormControl).isAutocomplete ?
       this.control as SelectFormControl : null;
   }
 
   public isAutocomplete(): SelectFormControl | null {
-    return this.control instanceof SelectFormControl && this.control.isAutocomplete ?
+    return Object.getPrototypeOf(this.control) === SelectFormControl.prototype &&
+      (this.control as SelectFormControl).isAutocomplete ?
       this.control as SelectFormControl : null;
   }
 
   public isInput(): InputFormControl | null {
-    return this.control instanceof InputFormControl ? this.control as InputFormControl : null;
+    return Object.getPrototypeOf(this.control) === InputFormControl.prototype ? this.control as InputFormControl : null;
+  }
+
+  public isColor(): ColorFormControl | null {
+    return Object.getPrototypeOf(this.control) === ColorFormControl.prototype ? this.control as ColorFormControl : null;
+  }
+
+  public isHuePalette(): HuePaletteFormControl | null {
+    return Object.getPrototypeOf(this.control) === HuePaletteFormControl.prototype ? this.control as HuePaletteFormControl : null;
   }
 
 }

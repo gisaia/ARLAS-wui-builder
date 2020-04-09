@@ -8,7 +8,7 @@
 </div>
 
 <div *ngIf="isSlider(); let typedControl">
-    <mat-label [class.slider-error]="typedControl.touched && typedControl.invalid">{{ typedControl.label | translate}}
+    <mat-label [class.control-error]="typedControl.touched && typedControl.invalid">{{ typedControl.label | translate}}
         {{typedControl.optional ? '' : '*'}}</mat-label>
     <mat-slider thumbLabel [formControl]="typedControl" [min]="typedControl.min" [max]="typedControl.max"
         [step]="typedControl.step">
@@ -20,8 +20,21 @@
         <mat-label>{{ typedControl.label | translate}}</mat-label>
         <mat-select [formControl]="typedControl" [required]="!typedControl.optional">
             <mat-option *ngIf="typedControl.optional"></mat-option>
-            <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.key">
-                {{opt.value}}
+            <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value">
+                {{opt.label | translate}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+
+<div *ngIf="isHuePalette(); let typedControl" class="control-hue-palette">
+    <mat-form-field>
+        <mat-label>{{ typedControl.label | translate}}</mat-label>
+        <mat-select [formControl]="typedControl" [required]="!typedControl.optional"
+            [ngStyle]="{'backgroundImage': typedControl.value ? 'linear-gradient(to left, ' + typedControl.getCurrentOption().label + ')' : null}">
+            <mat-option *ngIf="typedControl.optional"></mat-option>
+            <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value"
+                [ngStyle]="{'backgroundImage': 'linear-gradient(to left, ' + opt.label + ')'}">
             </mat-option>
         </mat-select>
     </mat-form-field>
@@ -37,8 +50,8 @@
         </button>
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
             <mat-option *ngIf="typedControl.optional"></mat-option>
-            <mat-option *ngFor="let opt of typedControl.filteredOptions" [value]="opt.key">
-                {{opt.value}}
+            <mat-option *ngFor="let opt of typedControl.filteredOptions" [value]="opt.value">
+                {{opt.label}}
             </mat-option>
         </mat-autocomplete>
     </mat-form-field>
@@ -50,4 +63,11 @@
         <input matInput [formControl]="typedControl" [type]="typedControl.inputType"
             [required]="!typedControl.optional">
     </mat-form-field>
+</div>
+
+<div *ngIf="isColor(); let typedControl">
+    <div [class.control-error]="typedControl.touched && typedControl.invalid">
+        {{ typedControl.label | translate}} {{typedControl.optional ? '' : '*'}}</div>
+    <app-color-picker-wrapper [value]="typedControl.value" (setValue)="typedControl.setValue($event)">
+    </app-color-picker-wrapper>
 </div>

@@ -1,7 +1,7 @@
 <ng-container [formGroup]="formFg">
     <mat-horizontal-stepper #stepper class="stepper-for-config-element">
 
-        <mat-step label="'Collection' | translate" formGroupName="collectionStep"
+        <mat-step label="{{'Collection' | translate}}" formGroupName="collectionStep"
             [stepControl]="formFg.get('collectionStep')">
             <app-config-element>
                 <div form-fields>
@@ -23,7 +23,7 @@
             </div>
         </mat-step>
 
-        <mat-step label="'Geometry' | translate" formGroupName="geometryStep"
+        <mat-step label="{{'Geometry' | translate}}" formGroupName="geometryStep"
             [stepControl]="formFg.get('geometryStep')">
             <ng-content select="[rendered-geometry]"></ng-content>
             
@@ -36,7 +36,7 @@
             </div>
         </mat-step>
 
-        <mat-step label="'Visibility' | translate" formGroupName="visibilityStep"
+        <mat-step label="{{'Visibility' | translate}}" formGroupName="visibilityStep"
             [stepControl]="formFg.get('visibilityStep')">
             <mat-error *ngIf="formFg.controls.visibilityStep.errors?.lte">
                 {{ 'Zoom max must be greater than or equal to zoom min' | translate}}
@@ -78,7 +78,7 @@
             </div>
         </mat-step>
 
-        <mat-step label="'Style' | translate" formGroupName="styleStep" [stepControl]="formFg.get('styleStep')">
+        <mat-step label="{{'Style' | translate}}" formGroupName="styleStep" [stepControl]="formFg.get('styleStep')">
             <ng-content select="[geometry-type]"></ng-content>
             <app-config-element [hidden]="formFg.value?.styleStep?.geometryType === GEOMETRY_TYPE.heatmap">
                 <div form-fields>

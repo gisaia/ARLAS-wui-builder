@@ -35,7 +35,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { EditGroupComponent } from './components/edit-group/edit-group.component';
-import { WidgetHistogramComponent } from './components/widget-histogram/widget-histogram.component';
+import { EditWidgetDialogComponent } from './components/edit-widget-dialog/edit-widget-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
@@ -43,14 +43,14 @@ import { MatStepperModule } from '@angular/material/stepper';
 
 @NgModule({
   entryComponents: [
-    WidgetHistogramComponent
+    EditWidgetDialogComponent
   ],
   declarations: [
     AnalyticsConfigComponent,
     TabsComponent,
     GroupsComponent,
     EditGroupComponent,
-    WidgetHistogramComponent
+    EditWidgetDialogComponent
   ],
   imports: [
     CommonModule,

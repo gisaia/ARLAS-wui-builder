@@ -18,6 +18,7 @@ under the License.
 */
 import { FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { HistogramUtils } from 'arlas-d3';
 
 /**
  * These are wrappers above existing FormGroup and FormControl in order to add a custom behavior.
@@ -26,12 +27,12 @@ import { Observable } from 'rxjs';
  * Looking for one control, everything should be described into its declaration.
  */
 
-interface SelectOption {
-    key: string;
-    value: string;
+export interface SelectOption {
+    value: any;
+    label: any;
 }
 
-interface OptionalParams {
+interface ControlOptionalParams {
 
     // if false, it is a required control
     optional?: boolean;
@@ -49,20 +50,31 @@ interface OptionalParams {
     childs?: () => Array<ConfigFormControl>;
 }
 
+interface GroupOptionalParams {
+    validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null;
+    asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null;
+}
+
 export class ConfigFormGroup extends FormGroup {
+
+    public title: string;
 
     constructor(
         controls: {
-            [key: string]: ConfigFormControl;
+            [key: string]: ConfigFormControl | ConfigFormGroup;
         },
-        validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null,
-        asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null) {
+        private optionalParams: GroupOptionalParams = {}) {
 
-        super(controls, validatorOrOpts, asyncValidator);
+        super(controls, optionalParams.validatorOrOpts, optionalParams.asyncValidator);
     }
 
     get controlsValues() {
         return Object.values(this.controls) as Array<ConfigFormControl>;
+    }
+
+    public withTitle(title: string) {
+        this.title = title;
+        return this;
     }
 }
 
@@ -78,7 +90,7 @@ export abstract class ConfigFormControl extends FormControl {
         formState: any,
         public label: string,
         public description: string,
-        private optionalParams: OptionalParams) {
+        private optionalParams: ControlOptionalParams) {
 
         super(formState);
         // add default values to missing attributes
@@ -112,7 +124,7 @@ export class SlideToggleFormControl extends ConfigFormControl {
         label: string,
         description: string,
         public labelAfter?: string,
-        optionalParams?: OptionalParams
+        optionalParams?: ControlOptionalParams
     ) {
 
         super(formState, label, description, { ...optionalParams, ... { optional: true } });
@@ -123,7 +135,7 @@ export class SelectFormControl extends ConfigFormControl {
 
     // used only for autocomplete: list of filtered options
     public filteredOptions: Array<SelectOption>;
-    public syncOptions: Array<SelectOption>;
+    public syncOptions: Array<SelectOption> = [];
 
     constructor(
         formState: any,
@@ -131,7 +143,7 @@ export class SelectFormControl extends ConfigFormControl {
         description: string,
         public isAutocomplete: boolean,
         private options: Array<SelectOption> | Observable<Array<SelectOption>>,
-        optionalParams?: OptionalParams) {
+        optionalParams?: ControlOptionalParams) {
 
         super(
             formState,
@@ -145,12 +157,50 @@ export class SelectFormControl extends ConfigFormControl {
             this.setSyncOptions(options);
         }
 
+        if (isAutocomplete) {
+            // TODO should we unsubscribe later?
+            this.valueChanges.subscribe(v =>
+                this.filteredOptions = this.syncOptions.filter(o => o.label.indexOf(v) >= 0)
+            );
+        }
+
     }
 
     public setSyncOptions(newOptions: Array<SelectOption>) {
         this.syncOptions = newOptions;
         this.filteredOptions = newOptions;
     }
+}
+
+export class HuePaletteFormControl extends SelectFormControl {
+    constructor(
+        formState: any,
+        label: string,
+        description: string,
+        private hueOptions: Array<[number, number] | string>,
+        optionalParams?: ControlOptionalParams) {
+        super(
+            formState,
+            label,
+            description,
+            false,
+            HuePaletteFormControl.toHslOptions(hueOptions),
+            optionalParams);
+    }
+
+    public static toHslOptions(hues: Array<[number, number] | string>): Array<SelectOption> {
+        return hues.map(h => {
+            return {
+                value: h,
+                label: HistogramUtils.getColor(0, h).toHslString() + ', ' + HistogramUtils.getColor(1, h).toHslString()
+            };
+        });
+    }
+
+    public getCurrentOption() {
+        return this.syncOptions.find(o => o.value === this.value);
+    }
+
 }
 
 export class SliderFormControl extends ConfigFormControl {
@@ -161,7 +211,7 @@ export class SliderFormControl extends ConfigFormControl {
         public min: number,
         public max: number,
         public step: number,
-        optionalParams?: OptionalParams) {
+        optionalParams?: ControlOptionalParams) {
 
         super(formState, label, description, optionalParams);
     }
@@ -173,7 +223,18 @@ export class InputFormControl extends ConfigFormControl {
         label: string,
         description: string,
         public inputType: string = 'text',
-        optionalParams?: OptionalParams) {
+        optionalParams?: ControlOptionalParams) {
+
+        super(formState, label, description, optionalParams);
+    }
+}
+
+export class ColorFormControl extends ConfigFormControl {
+    constructor(
+        formState: any,
+        label: string,
+        description: string,
+        optionalParams?: ControlOptionalParams) {
 
         super(formState, label, description, optionalParams);
     }

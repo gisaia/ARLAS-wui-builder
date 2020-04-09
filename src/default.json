@@ -90,6 +90,16 @@
         "aggregationTermSize": 20,
         "palettes": [["#065143", "#ce1483"], ["#6d213c", "#946846", "#baab68"], ["#eecf6d", "#d5ac4e", "#8b6220", "#720e07", "#45050c"]],
         "colorPickerPresets": ["#fff", "#000", "#2889e9", "#e920e9", "#fff500", "rgb(236,64,64)"],
+        "huePalettes": [
+            [0, 10],
+            [10, 20],
+            [40, 60],
+            [80, 100],
+            [100, 200],
+            [330, 170],
+            "green",
+            "black"
+        ],
         "otherColor": "#9d9ca9",
         "widthMin": 0,
         "widthMax": 15,
