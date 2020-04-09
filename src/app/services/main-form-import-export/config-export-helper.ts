@@ -117,7 +117,7 @@ export class ConfigExportHelper {
                         layerSource.raw_geometry = {
                             geometry: modeValues.geometryStep.rawGeometry,
                             sort: !!modeValues.geometryStep.clusterSort ? modeValues.geometryStep.clusterSort : ''
-                        }
+                        };
                     }
                 }
             }
@@ -162,7 +162,6 @@ export class ConfigExportHelper {
             }
             case PROPERTY_SELECTOR_SOURCE.interpolated: {
                 const interpolatedValues = layerValues.propertyInterpolatedFg;
-
                 if (mode === LAYER_MODE.features) {
                     if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
                         layerSource.normalization_fields.push(
@@ -206,8 +205,7 @@ export class ConfigExportHelper {
             identifier: isDetailed ? 'detailedTimeline' : 'timeline',
             name: 'Timeline',
             icon: 'watch_later',
-            isOneDimension: false,
-
+            isOneDimension: false
         };
 
         const aggregationModel: AggregationModel = {

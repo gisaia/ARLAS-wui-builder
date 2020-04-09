@@ -56,7 +56,7 @@ export class ConfigMapExportHelper {
                 }
                 case GEOMETRY_TYPE.heatmap: {
                     paint.heatmapColor = color;
-                    paint.heatmapIntensity = modeValues.styleStep.intensity;
+                    paint.heatmapIntensity = this.getMapProperty(modeValues.styleStep.intensityFg, mode);
                     paint.heatmapWeight = this.getMapProperty(modeValues.styleStep.weightFg, mode);
                     paint.heatmapRadius = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
                 }
@@ -196,6 +196,20 @@ export class ConfigMapExportHelper {
                     ['get', 'point_count_normalized']
                 ];
                 return pointCountNormalzedColor;
+            }
+            case PROPERTY_SELECTOR_SOURCE.heatmap_density: {
+                const interpolatedValues = fgValues.propertyInterpolatedFg;
+                let densityColor: Array<string | Array<string | number>>;
+                densityColor = [
+                    'interpolate',
+                    ['linear'],
+                    ['heatmap-density'],
+                    '0',
+                    'rgba(0, 0, 0, 0)',
+
+                ];
+                return densityColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
+                    .flatMap(pc => [(pc.proportion === 0 ? '0.000000000001' : pc.proportion), pc.value]));
             }
         }
     }

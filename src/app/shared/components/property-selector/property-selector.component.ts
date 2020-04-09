@@ -210,7 +210,6 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
           this.collectionKeywordFields = kFields;
           this.collectionIntegerFields = iFields;
           this.initInterpolatedFields();
-          this.initMetricFields();
         });
   }
 
@@ -224,15 +223,6 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
         // in edition mode, thus start the listener once with existing values
         this.propertyInterpolatedMetricCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
       }
-    }
-  }
-
-  private initMetricFields() {
-    this.propertyMetricCtrl.valueChanges.subscribe(v =>
-      this.metricFields = (v === METRIC_TYPES.CARDINALITY ? this.collectionKeywordFields : this.collectionIntegerFields));
-    if (!!this.propertyMetricCtrl.value) {
-      // in edition mode, thus start the listener once with existing values
-      this.propertyMetricCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
     }
   }
 
@@ -256,12 +246,12 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
     });
   }
 
-  public openPaletteTable(mode: string = 'Interpolated') {
+  public openPaletteTable() {
     const paletteData: DialogPaletteSelectorData = {
-      min: this['property' + mode + 'NormalizeCtrl'].value ? 0 : this['property' + mode + 'MinFieldValueCtrl'].value,
-      max: this['property' + mode + 'NormalizeCtrl'].value ? 1 : this['property' + mode + 'MaxFieldValueCtrl'].value,
+      min: this.propertyInterpolatedNormalizeCtrl.value ? 0 : this.propertyInterpolatedMinFieldValueCtrl.value,
+      max: this.propertyInterpolatedNormalizeCtrl.value ? 1 : this.propertyInterpolatedMaxFieldValueCtrl.value,
       defaultPalettes: this.defaultValueService.getDefaultConfig().palettes,
-      selectedPalette: this['property' + mode + 'ValuesCtrl'].value
+      selectedPalette: this.propertyInterpolatedValuesCtrl.value
     };
     const dialogRef = this.dialog.open(DialogPaletteSelectorComponent, {
       data: paletteData,
@@ -271,8 +261,8 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        this['property' + mode + 'Fg'].get('property' + mode + 'ValuesCtrl').setValue(result);
-        this['property' + mode + 'Fg'].get('property' + mode + 'ValuesCtrl').markAsDirty();
+        this.propertyInterpolatedFg.get('propertyInterpolatedValuesCtrl').setValue(result);
+        this.propertyInterpolatedFg.get('propertyInterpolatedValuesCtrl').markAsDirty();
       }
     });
   }

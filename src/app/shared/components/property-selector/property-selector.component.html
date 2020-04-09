@@ -3,7 +3,7 @@
         <mat-label>{{propertyName | translate | titlecase}} {{'source' | translate}}</mat-label>
         <mat-select formControlName="propertySource" appAlertOnChange="changing the source will reset your choices"
             [dependants]="[propertyFix, propertyProvidedFieldCtrl, 
-            propertyGeneratedFieldCtrl, propertyManualFg, propertyInterpolatedFg, propertyPointCountNormalized, propertyMetricFg]" [appResetOnChange]="defaultKey">
+            propertyGeneratedFieldCtrl, propertyManualFg, propertyInterpolatedFg, propertyPointCountNormalized]" [appResetOnChange]="defaultKey">
             <mat-option *ngFor="let source of sources" [value]="source">
                 {{source | translate}}</mat-option>
         </mat-select>
@@ -173,7 +173,7 @@
 
                 <div>
                     <div *ngIf="propertyType === PROPERTY_TYPE.color">
-                        <button type="button" mat-raised-button (click)="openPaletteTable('Interpolated')" class="palette-button"
+                        <button type="button" mat-raised-button (click)="openPaletteTable()" class="palette-button"
                             [disabled]="!propertyInterpolatedNormalizeCtrl.value 
                         && (!propertyInterpolatedMinFieldValueCtrl.valid || !propertyInterpolatedMaxFieldValueCtrl.valid || propertyInterpolatedFg?.errors?.lte)">
                             {{'Manage palette' | translate}}
@@ -206,104 +206,9 @@
 
         <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.heatmap_density">
             <div *ngIf="propertyType === PROPERTY_TYPE.color">
-                <button type="button" mat-raised-button (click)="this.propertyMetricNormalizeCtrl.setValue(1);openPaletteTable('Metric')" class="palette-button">
+                <button type="button" mat-raised-button (click)="this.propertyInterpolatedNormalizeCtrl.setValue(1);openPaletteTable()" class="palette-button">
                     {{'Manage palette' | translate}}
                 </button>
-            </div>
-        </div>
-
-        <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.metric_on_field" formGroupName="propertyMetricFg">
-            <mat-form-field>
-                <mat-label>{{'Metric' | translate}}</mat-label>
-                <mat-select formControlName="propertyMetricCtrl" [appResetOnChange]="defaultKey"
-                    [dependants]="[propertyMetricFieldCtrl]">
-                    <mat-option *ngFor="let metric of METRICS" [value]="metric">
-                        {{ metric }}</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div *ngIf="propertyMetricCtrl.value">
-                <mat-form-field>
-                    <mat-label>{{'Source field' | translate}}</mat-label>
-                    <mat-select formControlName="propertyMetricFieldCtrl" [appResetOnChange]="defaultKey"
-                        [dependants]="[propertyMetricNormalizeCtrl]">
-                        <mat-option *ngFor="let field of metricFields" [value]="field">
-                            {{ field }}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-
-            <div *ngIf="propertyMetricFieldCtrl.value">
-                <div>
-                    <mat-label>{{'Normalize' | translate}}</mat-label>
-                    <mat-slide-toggle formControlName="propertyMetricNormalizeCtrl" labelPosition="before"
-                        appResetOnChange="map.layer" [dependants]="[propertyMetricScopeCtrl, propertyMetricNormalizeByKeyCtrl, 
-                        propertyMetricNormalizeLocalFieldCtrl, propertyMetricMinFieldValueCtrl, propertyMetricMaxFieldValueCtrl,
-                        propertyMetricValuesCtrl]">
-                    </mat-slide-toggle>
-                </div>
-
-                <div *ngIf="propertyMetricNormalizeCtrl.value">
-                    <mat-form-field>
-                        <mat-label>{{'Scope' | translate}}</mat-label>
-                        <mat-select formControlName="propertyMetricScopeCtrl" [appResetOnChange]="defaultKey"
-                            [dependants]="[propertyMetricNormalizeByKeyCtrl, propertyMetricNormalizeLocalFieldCtrl]">
-                            <mat-option value="local">{{'Local' | translate}}</mat-option>
-                            <mat-option value="global">{{'Global' | translate}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-
-                    <div *ngIf="!aggregated">
-
-                        <div *ngIf="propertyMetricScopeCtrl.value === 'local'">
-                            <mat-label>{{'Normalize by key' | translate}}</mat-label>
-                            <mat-slide-toggle formControlName="propertyMetricNormalizeByKeyCtrl"
-                                labelPosition="before" [appResetOnChange]="defaultKey"
-                                [dependants]="[propertyMetricNormalizeLocalFieldCtrl]">
-                            </mat-slide-toggle>
-                        </div>
-
-                        <div *ngIf="propertyMetricNormalizeByKeyCtrl.value">
-                            <mat-form-field>
-                                <mat-select formControlName="propertyMetricNormalizeLocalFieldCtrl">
-                                    <mat-option *ngFor="let field of collectionKeywordFields" [value]="field">
-                                        {{ field }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-
-                <div *ngIf="!propertyMetricNormalizeCtrl.value">
-                    <div>
-                        <mat-form-field>
-                            <mat-label>{{'Minimum value of' | translate}}
-                                {{propertyMetricFg.value.propertyMetricFieldCtrl}}</mat-label>
-                            <input matInput type="number" formControlName="propertyMetricMinFieldValueCtrl"
-                                appAlertOnChange="Changing this value will reset the palette" appResetOnChange
-                                [dependants]="propertyType === PROPERTY_TYPE.color ? [propertyMetricValuesCtrl] : []">
-                        </mat-form-field>
-                    </div>
-                    <div>
-                        <mat-form-field>
-                            <mat-label>{{'Maximum value of ' | translate}}
-                                {{propertyMetricFg.value.propertyMetricFieldCtrl}}</mat-label>
-                            <input matInput type="number" formControlName="propertyMetricMaxFieldValueCtrl"
-                                appAlertOnChange="Changing this value will reset the palette" appResetOnChange
-                                [dependants]="propertyType === PROPERTY_TYPE.color ? [propertyMetricValuesCtrl] : []">
-                        </mat-form-field>
-                    </div>
-                </div>
-
-                <div>
-                    <div *ngIf="propertyType === PROPERTY_TYPE.color">
-                        <button type="button" mat-raised-button (click)="openPaletteTable('Metric')" class="palette-button"
-                            [disabled]="!propertyMetricNormalizeCtrl.value 
-                        && (!propertyMetricMinFieldValueCtrl.valid || !propertyMetricMaxFieldValueCtrl.valid || propertyMetricFg?.errors?.lte)">
-                            {{'Manage palette' | translate}}
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
 
