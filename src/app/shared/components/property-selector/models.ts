@@ -22,7 +22,6 @@ export enum PROPERTY_SELECTOR_SOURCE {
     generated = 'Generated',
     manual = 'Manual',
     interpolated = 'Interpolated',
-    point_count_normalized = 'Aggregated number of elements',
     metric_on_field = 'Metric on field',
     heatmap_density = 'Density'
 }
