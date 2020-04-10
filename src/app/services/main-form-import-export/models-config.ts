@@ -77,6 +77,7 @@ export interface LayerSource {
     color_from_field?: string | Array<string>;
     include_fields?: Array<string>;
     normalization_fields?: Array<NormalizationField>;
+    aggregated_geometry?: string;
     raw_geometry?: RawGeometry;
     granularity?: string;
     metrics?: Array<Metric>;

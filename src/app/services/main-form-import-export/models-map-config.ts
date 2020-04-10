@@ -47,6 +47,10 @@ export interface Paint {
     lineOpacity?: number;
     lineWidth?: PaintValue;
     lineRadius?: PaintValue;
+    heatmapColor?: PaintValue;
+    heatmapRadius?: PaintValue;
+    heatmapWeight?: PaintValue;
+    heatmapIntensity?: number;
 }
 
 export interface PaintColor {

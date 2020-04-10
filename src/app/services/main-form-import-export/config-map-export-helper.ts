@@ -19,7 +19,7 @@ under the License.
 import { FormArray, FormGroup } from '@angular/forms';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { Paint, Layer, MapConfig } from './models-map-config';
-import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
+import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-components/property-selector/models';
 import { KeywordColor } from '@map-config/components/dialog-color-table/models';
 
@@ -29,8 +29,8 @@ export class ConfigMapExportHelper {
 
         const layers: Array<Layer> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
             const mode = layerFg.value.mode as LAYER_MODE;
-            const modeValues = layerFg.value.mode === LAYER_MODE.features ?
-                layerFg.value.featuresFg : layerFg.value.featureMetricFg;
+            const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
+                (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
 
             const paint: Paint = {};
             const colorOpacity = modeValues.styleStep.opacity;
@@ -53,6 +53,12 @@ export class ConfigMapExportHelper {
                     paint.circleColor = color;
                     paint.lineRadius = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
                     break;
+                }
+                case GEOMETRY_TYPE.heatmap: {
+                    paint.heatmapColor = color;
+                    paint.heatmapIntensity = this.getMapProperty(modeValues.styleStep.intensityFg, mode);
+                    paint.heatmapWeight = this.getMapProperty(modeValues.styleStep.weightFg, mode);
+                    paint.heatmapRadius = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
                 }
             }
 
@@ -96,6 +102,28 @@ export class ConfigMapExportHelper {
                             '==',
                             'geometry_type',
                             'raw'
+                        ],
+                        [
+                            '==',
+                            'feature_type',
+                            'aggregation'
+                        ]
+                    ];
+                    break;
+                }
+                case LAYER_MODE.cluster: {
+                    const clusterType = modeValues.geometryStep.clusterGeometryType;
+                    layer.filter = [
+                        [
+                            '==',
+                            'geometry_ref',
+                            clusterType === CLUSTER_GEOMETRY_TYPE.raw_geometry ?
+                                modeValues.geometryStep.rawGeometry : modeValues.geometryStep.aggregatedGeometry
+                        ],
+                        [
+                            '==',
+                            'geometry_type',
+                            clusterType === CLUSTER_GEOMETRY_TYPE.raw_geometry ? 'raw' : 'aggregated'
                         ],
                         [
                             '==',
@@ -160,6 +188,31 @@ export class ConfigMapExportHelper {
                 }
                 return interpolatedColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
                     .flatMap(pc => [pc.proportion, pc.value]));
+            }
+            case PROPERTY_SELECTOR_SOURCE.point_count_normalized: {
+                const interpolatedValues = fgValues.propertyInterpolatedFg;
+                let pointCountNormalzedColor: Array<string | Array<string | number>>;
+                pointCountNormalzedColor = [
+                    'interpolate',
+                    ['linear'],
+                    ['get', 'point_count_normalized']
+                ];
+                return pointCountNormalzedColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
+                    .flatMap(pc => [pc.proportion, pc.value]));
+            }
+            case PROPERTY_SELECTOR_SOURCE.heatmap_density: {
+                const interpolatedValues = fgValues.propertyInterpolatedFg;
+                let densityColor: Array<string | Array<string | number>>;
+                densityColor = [
+                    'interpolate',
+                    ['linear'],
+                    ['heatmap-density'],
+                    '0',
+                    'rgba(0, 0, 0, 0)',
+
+                ];
+                return densityColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
+                    .flatMap(pc => [(pc.proportion === 0 ? '0.000000000001' : pc.proportion), pc.value]));
             }
         }
     }

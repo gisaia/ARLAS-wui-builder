@@ -20,6 +20,7 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { Config, Contributor, LayerSource, ChipSearch, AggregationModel, TimelineComponent } from './models-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
+import { CLUSTER_GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
 
 export class ConfigExportHelper {
 
@@ -82,14 +83,13 @@ export class ConfigExportHelper {
 
         const layersSources: Array<LayerSource> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
             const layerValues = layerFg.value;
-            const modeValues = layerFg.value.mode === LAYER_MODE.features ?
-                layerValues.featuresFg : layerValues.featureMetricFg;
+            const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
+                (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
             const layerSource: LayerSource = {
                 id: layerValues.name,
                 source: sourceByMode.get(layerFg.value.mode),
                 minzoom: modeValues.visibilityStep.zoomMin,
                 maxzoom: modeValues.visibilityStep.zoomMax,
-                maxfeatures: modeValues.visibilityStep.featuresMax,
                 include_fields: [],
                 normalization_fields: [],
                 metrics: []
@@ -97,12 +97,28 @@ export class ConfigExportHelper {
 
             switch (layerValues.mode) {
                 case LAYER_MODE.features: {
+                    layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
                     break;
                 }
                 case LAYER_MODE.featureMetric: {
+                    layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
                     layerSource.geometry_support = modeValues.geometryStep.geometry;
                     layerSource.geometry_id = modeValues.geometryStep.geometryId;
                     break;
+                }
+                case LAYER_MODE.cluster: {
+
+                    layerSource.agg_geo_field = modeValues.geometryStep.aggGeometry;
+                    layerSource.granularity = modeValues.geometryStep.granularity;
+                    layerSource.minfeatures = modeValues.visibilityStep.featuresMin;
+                    if (modeValues.geometryStep.clusterGeometryType === CLUSTER_GEOMETRY_TYPE.aggregated_geometry) {
+                        layerSource.aggregated_geometry = modeValues.geometryStep.aggregatedGeometry;
+                    } else {
+                        layerSource.raw_geometry = {
+                            geometry: modeValues.geometryStep.rawGeometry,
+                            sort: !!modeValues.geometryStep.clusterSort ? modeValues.geometryStep.clusterSort : ''
+                        };
+                    }
                 }
             }
 
@@ -114,6 +130,10 @@ export class ConfigExportHelper {
 
             if (!!modeValues.styleStep.radiusFg) {
                 this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.radiusFg, layerValues.mode);
+            }
+
+            if (!!modeValues.styleStep.weightFg) {
+                this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.weightFg, layerValues.mode);
             }
 
             return layerSource;
@@ -142,7 +162,6 @@ export class ConfigExportHelper {
             }
             case PROPERTY_SELECTOR_SOURCE.interpolated: {
                 const interpolatedValues = layerValues.propertyInterpolatedFg;
-
                 if (mode === LAYER_MODE.features) {
                     if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
                         layerSource.normalization_fields.push(
@@ -186,8 +205,7 @@ export class ConfigExportHelper {
             identifier: isDetailed ? 'detailedTimeline' : 'timeline',
             name: 'Timeline',
             icon: 'watch_later',
-            isOneDimension: false,
-
+            isOneDimension: false
         };
 
         const aggregationModel: AggregationModel = {

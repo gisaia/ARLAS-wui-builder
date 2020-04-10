@@ -85,19 +85,10 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                     ])
             }),
             propertyInterpolatedFg: this.formBuilder.group({
-                propertyInterpolatedCountOrMetricCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg && this.aggregated ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                            : false,
-                            Validators.required)
-                    ],
                 propertyInterpolatedMetricCtrl: [
                     null,
                     CustomValidators.getConditionalValidator(() => !!this.formFg && this.aggregated ?
                         this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                        && this.propertyInterpolatedCountOrMetricCtrl.value
                         : false,
                         Validators.required)
                 ],
@@ -198,110 +189,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                             ))
                     ]
                 }),
-            propertyPointCountNormalized: this.formBuilder.group({}),
-            propertyMetricFg: this.formBuilder.group({
-                propertyMetricCtrl: [
-                    null,
-                    CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field
-                        : false,
-                        Validators.required)
-                ],
-                propertyMetricFieldCtrl: [
-                    null,
-                    CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field
-                        : false,
-                        Validators.required)
-                ],
-                propertyMetricNormalizeCtrl:
-                    [
-                        null
-                    ],
-                propertyMetricScopeCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg && !this.aggregated ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field
-                            && this.propertyMetricNormalizeCtrl.value
-                            : false,
-                            Validators.required)
-                    ],
-                propertyMetricNormalizeByKeyCtrl:
-                    [
-                        null
-                    ],
-                propertyMetricNormalizeLocalFieldCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg && !this.aggregated ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field
-                            && this.propertyMetricNormalizeByKeyCtrl.value
-                            : false,
-                            Validators.required)
-                    ],
-                propertyMetricMinFieldValueCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field
-                            && this.propertyMetricFieldCtrl.value && !this.propertyMetricNormalizeCtrl.value
-                            : false,
-                            Validators.required)
-                    ],
-                propertyMetricMaxFieldValueCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field
-                            && this.propertyMetricFieldCtrl.value && !this.propertyMetricNormalizeCtrl.value
-                            : false,
-                            Validators.required)
-                    ],
-                propertyMetricMinValueCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field
-                            && this.getPropertyType() === PROPERTY_TYPE.number
-                            && this.propertyMetricFieldCtrl.value && !this.propertyMetricNormalizeCtrl.value
-                            : false,
-                            Validators.required)
-                    ],
-                propertyMetricMaxValueCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field
-                            && this.getPropertyType() === PROPERTY_TYPE.number
-                            && this.propertyMetricFieldCtrl.value && !this.propertyMetricNormalizeCtrl.value
-                            : false,
-                            Validators.required)
-                    ],
-                propertyMetricValuesCtrl:
-                    [
-                        null,
-                        [
-                            CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                                this.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field
-                                && this.propertyMetricFieldCtrl.value
-                                : false,
-                                Validators.required)
-                        ]
-                    ]
-            },
-                {
-                    validators: [
-                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field && this.propertyMetricFieldCtrl.value
-                            && this.propertyMetricMinFieldValueCtrl.value && this.propertyMetricMaxFieldValueCtrl.value
-                            : false,
-                            CustomValidators.getLTEValidator(
-                                'propertyMetricMinFieldValueCtrl',
-                                'propertyMetricMaxFieldValueCtrl'
-                            ))
-                    ]
-                })
+            propertyPointCountNormalized: this.formBuilder.group({})
         });
     }
 
@@ -328,9 +216,6 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
     }
     get propertyInterpolatedFg() {
         return this.formFg.get('propertyInterpolatedFg') as FormGroup;
-    }
-    get propertyInterpolatedCountOrMetricCtrl() {
-        return this.propertyInterpolatedFg.get('propertyInterpolatedCountOrMetricCtrl');
     }
     get propertyInterpolatedMetricCtrl() {
         return this.propertyInterpolatedFg.get('propertyInterpolatedMetricCtrl');
@@ -367,42 +252,6 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
     }
     get propertyPointCountNormalized() {
         return this.formFg.get('propertyPointCountNormalized');
-    }
-    get propertyMetricFg() {
-        return this.formFg.get('propertyMetricFg') as FormGroup;
-    }
-    get propertyMetricCtrl() {
-        return this.propertyMetricFg.get('propertyMetricCtrl');
-    }
-    get propertyMetricFieldCtrl() {
-        return this.propertyMetricFg.get('propertyMetricFieldCtrl');
-    }
-    get propertyMetricNormalizeCtrl() {
-        return this.propertyMetricFg.get('propertyMetricNormalizeCtrl');
-    }
-    get propertyMetricNormalizeByKeyCtrl() {
-        return this.propertyMetricFg.get('propertyMetricNormalizeByKeyCtrl');
-    }
-    get propertyMetricNormalizeLocalFieldCtrl() {
-        return this.propertyMetricFg.get('propertyMetricNormalizeLocalFieldCtrl');
-    }
-    get propertyMetricScopeCtrl() {
-        return this.propertyMetricFg.get('propertyMetricScopeCtrl');
-    }
-    get propertyMetricMinFieldValueCtrl() {
-        return this.propertyMetricFg.get('propertyMetricMinFieldValueCtrl');
-    }
-    get propertyMetricMaxFieldValueCtrl() {
-        return this.propertyMetricFg.get('propertyMetricMaxFieldValueCtrl');
-    }
-    get propertyMetricMinValueCtrl() {
-        return this.propertyMetricFg.get('propertyMetricMinValueCtrl');
-    }
-    get propertyMetricMaxValueCtrl() {
-        return this.propertyMetricFg.get('propertyMetricMaxValueCtrl');
-    }
-    get propertyMetricValuesCtrl() {
-        return this.propertyMetricFg.get('propertyMetricValuesCtrl');
     }
 
     public setPropertyFix(value: string) {

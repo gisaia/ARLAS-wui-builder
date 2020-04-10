@@ -114,8 +114,8 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
     } else {
       this.colorFgSources = [
         PROPERTY_SELECTOR_SOURCE.fix,
+        PROPERTY_SELECTOR_SOURCE.interpolated,
         PROPERTY_SELECTOR_SOURCE.point_count_normalized,
-        PROPERTY_SELECTOR_SOURCE.metric_on_field
       ];
     }
     this.changeDetectorRef.detectChanges();
