@@ -85,19 +85,10 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                     ])
             }),
             propertyInterpolatedFg: this.formBuilder.group({
-                propertyInterpolatedCountOrMetricCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg && this.aggregated ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                            : false,
-                            Validators.required)
-                    ],
                 propertyInterpolatedMetricCtrl: [
                     null,
                     CustomValidators.getConditionalValidator(() => !!this.formFg && this.aggregated ?
                         this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                        && this.propertyInterpolatedCountOrMetricCtrl.value
                         : false,
                         Validators.required)
                 ],
@@ -225,9 +216,6 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
     }
     get propertyInterpolatedFg() {
         return this.formFg.get('propertyInterpolatedFg') as FormGroup;
-    }
-    get propertyInterpolatedCountOrMetricCtrl() {
-        return this.propertyInterpolatedFg.get('propertyInterpolatedCountOrMetricCtrl');
     }
     get propertyInterpolatedMetricCtrl() {
         return this.propertyInterpolatedFg.get('propertyInterpolatedMetricCtrl');

@@ -75,14 +75,6 @@
             <div>
                 <div *ngIf="aggregated">
                     <div>
-                        <mat-label>{{'Count' | translate}}</mat-label>
-                        <mat-slide-toggle formControlName="propertyInterpolatedCountOrMetricCtrl"
-                            [appResetOnChange]="defaultKey"
-                            [dependants]="[propertyInterpolatedMetricCtrl, propertyInterpolatedFieldCtrl]">
-                        </mat-slide-toggle>
-                        <mat-label>{{'Metric' | translate}}</mat-label>
-                    </div>
-                    <div *ngIf="propertyInterpolatedCountOrMetricCtrl.value">
                         <mat-form-field>
                             <mat-label>{{'Metric' | translate}}</mat-label>
                             <mat-select formControlName="propertyInterpolatedMetricCtrl" [appResetOnChange]="defaultKey"
@@ -91,8 +83,6 @@
                                     {{ metric }}</mat-option>
                             </mat-select>
                         </mat-form-field>
-                    </div>
-                    <div>
                     </div>
                 </div>
                 <div *ngIf="!aggregated || aggregated && propertyInterpolatedMetricCtrl.value">
@@ -202,6 +192,14 @@
                 </div>
             </div>
 
+        </div>
+
+        <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.point_count_normalized">
+            <div *ngIf="propertyType === PROPERTY_TYPE.color">
+                <button type="button" mat-raised-button (click)="this.propertyInterpolatedNormalizeCtrl.setValue(1);openPaletteTable()" class="palette-button">
+                    {{'Manage palette' | translate}}
+                </button>
+            </div>
         </div>
 
         <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.heatmap_density">

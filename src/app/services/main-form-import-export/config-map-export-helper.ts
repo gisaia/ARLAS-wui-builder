@@ -190,12 +190,15 @@ export class ConfigMapExportHelper {
                     .flatMap(pc => [pc.proportion, pc.value]));
             }
             case PROPERTY_SELECTOR_SOURCE.point_count_normalized: {
-                const pointCountNormalzedColor = [
+                const interpolatedValues = fgValues.propertyInterpolatedFg;
+                let pointCountNormalzedColor: Array<string | Array<string | number>>;
+                pointCountNormalzedColor = [
                     'interpolate',
                     ['linear'],
                     ['get', 'point_count_normalized']
                 ];
-                return pointCountNormalzedColor;
+                return pointCountNormalzedColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
+                    .flatMap(pc => [pc.proportion, pc.value]));
             }
             case PROPERTY_SELECTOR_SOURCE.heatmap_density: {
                 const interpolatedValues = fgValues.propertyInterpolatedFg;
