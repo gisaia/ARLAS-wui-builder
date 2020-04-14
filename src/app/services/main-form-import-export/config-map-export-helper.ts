@@ -169,17 +169,30 @@ export class ConfigMapExportHelper {
                     interpolatedValues.propertyInterpolatedFieldCtrl + '_' + interpolatedValues.propertyInterpolatedMetricCtrl + '_';
 
                 if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
-                    interpolatedColor = [
-                        'interpolate',
-                        ['linear'],
-                        this.getArray(
-                            getField
-                                .concat(':')
-                                .concat(interpolatedValues.propertyInterpolatedScopeCtrl)
-                                .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
-                                    ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl : ''))
-                    ];
+                    if (interpolatedValues.propertyInterpolatedCountOrMetricCtrl) {
+                        interpolatedColor = [
+                            'interpolate',
+                            ['linear'],
+                            this.getArray(
+                                getField
+                                    .concat(':')
+                                    .concat(interpolatedValues.propertyInterpolatedScopeCtrl)
+                                    .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
+                                        ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl : ''))
+                        ];
+                    } else {
+                        let pointCountNormalzedColor: Array<string | Array<string | number>>;
+                        pointCountNormalzedColor = [
+                            'interpolate',
+                            ['linear'],
+                            ['get', 'point_count_normalized']
+                        ];
+                        return pointCountNormalzedColor
+                            .concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
+                                .flatMap(pc => [pc.proportion, pc.value]));
+                    }
                 } else {
+
                     interpolatedColor = [
                         'interpolate',
                         ['linear'],
@@ -187,17 +200,6 @@ export class ConfigMapExportHelper {
                     ];
                 }
                 return interpolatedColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
-                    .flatMap(pc => [pc.proportion, pc.value]));
-            }
-            case PROPERTY_SELECTOR_SOURCE.point_count_normalized: {
-                const interpolatedValues = fgValues.propertyInterpolatedFg;
-                let pointCountNormalzedColor: Array<string | Array<string | number>>;
-                pointCountNormalzedColor = [
-                    'interpolate',
-                    ['linear'],
-                    ['get', 'point_count_normalized']
-                ];
-                return pointCountNormalzedColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
                     .flatMap(pc => [pc.proportion, pc.value]));
             }
             case PROPERTY_SELECTOR_SOURCE.heatmap_density: {
