@@ -206,7 +206,6 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
   private subscribeToCollectionFields() {
     this.collectionFieldsSubscription =
       combineLatest([this.collectionKeywordFieldsEmitter.asObservable(), this.collectionIntegerFieldsEmitter.asObservable()])
-        // .forEach(t => console.log('truc'));
         .subscribe(([kFields, iFields]) => {
           this.collectionKeywordFields = kFields;
           this.collectionIntegerFields = iFields;

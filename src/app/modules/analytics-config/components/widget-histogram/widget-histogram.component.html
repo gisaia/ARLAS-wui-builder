@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Histogram</h1>
+
+<div mat-dialog-content>
+
+    <!-- <ng-container [formGroup]="componentFormGroup"> -->
+    <mat-horizontal-stepper #stepper class="stepper-for-config-element">
+
+        <mat-step [label]="'Data' | translate " [stepControl]="dataStep">
+            <app-config-form-group [configFormGroup]="dataStep" [defaultKey]="defaultKey"></app-config-form-group>
+            <div>
+                <button mat-button matStepperNext type="button">{{ 'Next' | translate}}</button>
+            </div>
+        </mat-step>
+
+        <mat-step [label]="'Render' | translate " [stepControl]="renderStep">
+            <app-config-form-group [configFormGroup]="renderStep" [defaultKey]="defaultKey"></app-config-form-group>
+            <div>
+                <button mat-button matStepperPrevious>{{ 'Back' | translate}}</button>
+            </div>
+        </mat-step>
+
+    </mat-horizontal-stepper>
+    <!-- </ng-container> -->
+
+</div>
+
+<div mat-dialog-actions>
+
+    <button mat-button [mat-dialog-close]>Cancel</button>
+    <button cdkFocusInitial (click)="save()" mat-raised-button>Save</button>
+
+</div>
