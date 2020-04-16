@@ -29,6 +29,8 @@ import { Config } from './models-config';
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { SearchInitService } from '@search-config/services/search-init/search-init.service';
 import { SearchImportService } from '@search-config/services/search-import/search-import.service';
+import { TimelineInitService } from '@timeline-config/services/timeline-init/timeline-init.service';
+import { TimelineImportService } from '@timeline-config/services/timeline-import/timeline-import.service';
 
 
 @Injectable({
@@ -44,8 +46,20 @@ export class MainFormManagerService {
     private analyticsImportService: AnalyticsImportService,
     private analyticsInitService: AnalyticsInitService,
     private searchInitService: SearchInitService,
-    private searchImportService: SearchImportService
+    private searchImportService: SearchImportService,
+    private timelineInitService: TimelineInitService,
+    private timelineImportService: TimelineImportService,
   ) { }
+
+  /**
+   * Init main modules' forms that are required to a global validation
+   */
+  public initMainModulesForms() {
+    // load the modules required forms
+    this.analyticsInitService.initModule();
+    this.searchInitService.initModule();
+    this.timelineInitService.initModule();
+  }
 
   public attemptExport() {
 
@@ -103,15 +117,7 @@ export class MainFormManagerService {
 
     this.analyticsImportService.doImport(config);
     this.searchImportService.doImport(config);
-  }
-
-  /**
-   * Init main modules' forms that are required to global validation
-   */
-  public initMainModulesForms() {
-    // load the modules required forms
-    this.analyticsInitService.initModule();
-    this.searchInitService.initModule();
+    this.timelineImportService.doImport(config);
   }
 
   private saveJson(json: any, filename: string, separator?: string) {

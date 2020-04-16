@@ -59,7 +59,6 @@ export class ConfigExportHelper {
                     contributors: [],
                     components: {
                         timeline: this.getTimelineComponent(timelineConfigGlobal.controls.timeline.value),
-                        detailedTimeline: this.getTimelineComponent(timelineConfigGlobal.controls.detailedTimeline.value),
                         mapgl: this.getMapComponent(mapConfigGlobal, mapConfigLayers)
                     },
                     analytics: []
@@ -88,7 +87,9 @@ export class ConfigExportHelper {
         config.arlas.web.contributors.push(this.getChipsearchContributor(searchConfigGlobal));
 
         config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal.controls.timeline.value));
+
         if (timelineConfigGlobal.value.useDetailedTimeline) {
+            config.arlas.web.components.detailedTimeline = this.getTimelineComponent(timelineConfigGlobal.controls.detailedTimeline.value);
             config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal.controls.detailedTimeline.value));
         }
 

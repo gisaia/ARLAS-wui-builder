@@ -16,100 +16,50 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Validators } from '@angular/forms';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
-import { CustomValidators } from '@utils/custom-validators';
-import { ComponentSubForm } from '@shared-models/component-sub-form';
 import { NGXLogger } from 'ngx-logger';
-import { Input } from '@angular/core';
+import { ComponentSubForm } from '@shared-models/component-sub-form';
+import { TimelineFormGroup } from '@timeline-config/services/timeline-form-builder/timeline-form-builder.service';
 
+/**
+ * TODO delete this class and use Config Forms instead
+ */
 export class TimelineFormComponentForm extends ComponentSubForm {
-
-    @Input() public isDetailedTimeline: boolean;
-
     constructor(
-        protected formBuilderDefault: FormBuilderWithDefaultService,
         protected logger: NGXLogger
     ) {
-
         super(logger);
-
-        this.formFg = formBuilderDefault.group('timeline.global', {
-            isDetailedTimeline: [null],
-            field: [null, Validators.required],
-            bucketOrInterval: [null],
-            bucketsNumber: [
-                null,
-                CustomValidators.getConditionalValidator(() =>
-                    !!this.formFg ? !this.bucketOrInterval.value || this.isDetailedTimeline : false,
-                    Validators.required
-                )],
-            intervalUnit: [
-                null,
-                CustomValidators.getConditionalValidator(() =>
-                    !!this.formFg ? this.bucketOrInterval.value && !this.isDetailedTimeline : false,
-                    Validators.required
-                )],
-            intervalSize: [
-                null,
-                [
-                    CustomValidators.getConditionalValidator(() =>
-                        !!this.formFg ? this.bucketOrInterval.value && !this.isDetailedTimeline : false,
-                        Validators.required
-                    ),
-                    Validators.pattern('^[0-9]*$')
-                ]
-            ],
-            chartTitle: [
-                null,
-                Validators.required
-            ],
-            chartType: [
-                null,
-                Validators.required
-            ],
-            dateFormat: [
-                null,
-                Validators.required
-            ],
-            isMultiselectable: [
-                false
-            ],
-            selectionExtentPercent: [
-                0
-            ]
-        });
     }
 
     get bucketOrInterval() {
-        return this.formFg.get('bucketOrInterval');
+        return (this.formFg as TimelineFormGroup).customControls.bucketOrInterval;
     }
 
     get bucketsNumber() {
-        return this.formFg.get('bucketsNumber');
+        return (this.formFg as TimelineFormGroup).customControls.bucketsNumber;
     }
 
     get intervalUnit() {
-        return this.formFg.get('intervalUnit');
+        return (this.formFg as TimelineFormGroup).customControls.intervalUnit;
     }
 
     get intervalSize() {
-        return this.formFg.get('intervalSize');
+        return (this.formFg as TimelineFormGroup).customControls.intervalSize;
     }
 
     get chartTitle() {
-        return this.formFg.get('chartTitle');
+        return (this.formFg as TimelineFormGroup).customControls.chartTitle;
     }
 
     get chartType() {
-        return this.formFg.get('chartType');
+        return (this.formFg as TimelineFormGroup).customControls.chartType;
     }
 
     get isMultiselectable() {
-        return this.formFg.get('isMultiselectable');
+        return (this.formFg as TimelineFormGroup).customControls.isMultiselectable;
     }
 
     get selectionExtentPercent() {
-        return this.formFg.get('selectionExtentPercent');
+        return (this.formFg as TimelineFormGroup).customControls.selectionExtentPercent;
     }
+
 }

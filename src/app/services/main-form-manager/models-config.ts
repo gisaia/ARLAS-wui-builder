@@ -52,7 +52,7 @@ export interface WebConfig {
     contributors: Array<ContributorConfig>;
     components: {
         timeline: AnalyticComponentConfig,
-        detailedTimeline: AnalyticComponentConfig,
+        detailedTimeline?: AnalyticComponentConfig,
         mapgl: MapglComponentConfig
     };
     analytics: Array<AnalyticConfig>;
