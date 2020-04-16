@@ -27,31 +27,16 @@ import { Observable } from 'rxjs';
 import { CollectionField } from '@services/collection-service/models';
 import { toNumericOrDateFieldsObs } from '@services/collection-service/tools';
 
+export interface BucketsIntervalControls {
+  aggregationField: SelectFormControl;
+  aggregationFieldType: SelectFormControl;
+  aggregationBucketOrInterval: SlideToggleFormControl;
+  aggregationBucketsNumber: SliderFormControl;
+  aggregationIntervalUnit: SelectFormControl;
+  aggregationIntervalSize: InputFormControl;
+}
+
 export class BucketsIntervalFormGroup extends ConfigFormGroup {
-
-  private get aggregationField() {
-    return this.get('aggregationField') as SelectFormControl;
-  }
-
-  private get aggregationFieldType() {
-    return this.get('aggregationFieldType') as SelectFormControl;
-  }
-
-  private get aggregationBucketOrInterval() {
-    return this.get('aggregationBucketOrInterval') as SlideToggleFormControl;
-  }
-
-  private get aggregationBucketsNumber() {
-    return this.get('aggregationBucketsNumber') as SliderFormControl;
-  }
-
-  private get aggregationIntervalUnit() {
-    return this.get('aggregationIntervalUnit') as SelectFormControl;
-  }
-
-  private get aggregationIntervalSize() {
-    return this.get('aggregationIntervalSize') as InputFormControl;
-  }
 
   constructor(
     collectionFieldsObs: Observable<Array<CollectionField>>) {
@@ -65,16 +50,18 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           true,
           toNumericOrDateFieldsObs(collectionFieldsObs),
           {
-            childs: () => [this.aggregationFieldType]
+            childs: () => [this.customControls.aggregationFieldType]
           }),
         aggregationFieldType: new HiddenFormControl(
           '',
           {
-            dependsOn: () => [this.aggregationField],
+            dependsOn: () => [this.customControls.aggregationField],
             onDependencyChange: (control) => {
               collectionFieldsObs.subscribe(fields => {
-                const aggregationFieldType = fields.find(f => f.name === this.aggregationField.value);
-                control.setValue(!!aggregationFieldType ? aggregationFieldType.type : null);
+                const aggregationField = fields.find(f => f.name === this.customControls.aggregationField.value);
+                if (!!aggregationField) {
+                  control.setValue(aggregationField.type === CollectionReferenceDescriptionProperty.TypeEnum.DATE ? 'time' : 'numeric');
+                }
               });
             }
           }
@@ -86,7 +73,11 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           'or interval',
           {
             resetDependantsOnChange: true,
-            childs: () => [this.aggregationBucketsNumber, this.aggregationIntervalUnit, this.aggregationIntervalSize]
+            childs: () => [
+              this.customControls.aggregationBucketsNumber,
+              this.customControls.aggregationIntervalUnit,
+              this.customControls.aggregationIntervalSize
+            ]
           }
         ),
         aggregationBucketsNumber: new SliderFormControl(
@@ -97,9 +88,9 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           200,
           5,
           {
-            dependsOn: () => [this.aggregationBucketOrInterval],
+            dependsOn: () => [this.customControls.aggregationBucketOrInterval],
             onDependencyChange: (control) =>
-              !!this.aggregationBucketOrInterval.value ? control.disable() : control.enable()
+              !!this.customControls.aggregationBucketOrInterval.value ? control.disable() : control.enable()
           }
         ),
         aggregationIntervalUnit: new SelectFormControl(
@@ -115,12 +106,12 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
               })))
             .sort(),
           {
-            dependsOn: () => [this.aggregationBucketOrInterval, this.aggregationField],
+            dependsOn: () => [this.customControls.aggregationBucketOrInterval, this.customControls.aggregationField],
             onDependencyChange: (control) => {
               collectionFieldsObs.subscribe(fields => {
-                if (this.aggregationBucketOrInterval.value &&
-                  !!fields.find(f => f.name === this.aggregationField.value) &&
-                  fields.find(f => f.name === this.aggregationField.value).type
+                if (this.customControls.aggregationBucketOrInterval.value &&
+                  !!fields.find(f => f.name === this.customControls.aggregationField.value) &&
+                  fields.find(f => f.name === this.customControls.aggregationField.value).type
                   === CollectionReferenceDescriptionProperty.TypeEnum.DATE) {
                   control.enable();
                 } else {
@@ -137,14 +128,23 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           'description',
           'number',
           {
-            dependsOn: () => [this.aggregationBucketOrInterval],
+            dependsOn: () => [this.customControls.aggregationBucketOrInterval],
             onDependencyChange: (control) =>
-              !!this.aggregationBucketOrInterval.value ? control.enable() : control.disable()
+              !!this.customControls.aggregationBucketOrInterval.value ? control.enable() : control.disable()
           }
         )
       }
     );
   }
+
+  public customControls = {
+    aggregationField: this.get('aggregationField') as SelectFormControl,
+    aggregationFieldType: this.get('aggregationFieldType') as SelectFormControl,
+    aggregationBucketOrInterval: this.get('aggregationBucketOrInterval') as SlideToggleFormControl,
+    aggregationBucketsNumber: this.get('aggregationBucketsNumber') as SliderFormControl,
+    aggregationIntervalUnit: this.get('aggregationIntervalUnit') as SelectFormControl,
+    aggregationIntervalSize: this.get('aggregationIntervalSize') as InputFormControl
+  } as BucketsIntervalControls;
 
 }
 

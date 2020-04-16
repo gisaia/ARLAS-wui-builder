@@ -202,7 +202,8 @@ export class HuePaletteFormControl extends SelectFormControl {
     }
 
     public getCurrentOption() {
-        return this.syncOptions.find(o => o.value === this.value);
+        // JSON.stringifY to compare also array (as `[] === []` => false)
+        return this.syncOptions.find(o => JSON.stringify(o.value) === JSON.stringify(this.value));
     }
 
 }

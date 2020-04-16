@@ -33,9 +33,13 @@ import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { MapComponentInputConfig, MapComponentInputMapLayersConfig, MapComponentInputLayersSetsConfig } from './models-config';
 import { Layer } from './models-map-config';
 
+export const JSONPATH_COUNT = '$.count';
+export const JSONPATH_METRIC = '$.metrics[0].value';
+
 export class ConfigExportHelper {
 
     public static process(
+        startingConfig: FormGroup,
         mapConfigGlobal: FormGroup,
         mapConfigLayers: FormArray,
         searchConfigGlobal: FormGroup,
@@ -58,6 +62,14 @@ export class ConfigExportHelper {
                         mapgl: this.getMapComponent(mapConfigGlobal, mapConfigLayers)
                     },
                     analytics: []
+                },
+                server: {
+                    url: startingConfig.value.serverUrl,
+                    maxAgeCache: 120,
+                    collection: {
+                        name: startingConfig.value.collections[0],
+                        id: 'id'
+                    }
                 }
             },
             arlasWui: {
@@ -375,7 +387,7 @@ export class ConfigExportHelper {
                 this.addMetricToAggregationModel(aggregationModel, widgetData.dataStep.metric);
 
                 contrib.jsonpath = widgetData.dataStep.metric.metricValue === DEFAULT_METRIC_VALUE ?
-                    '$.count' : '$.metrics[0].value';
+                    JSONPATH_COUNT : JSONPATH_METRIC;
 
                 contrib.aggregationmodels = [aggregationModel];
 
@@ -486,23 +498,22 @@ export class ConfigExportHelper {
                 showXLabels: true,
                 showYLabels: true,
                 showHorizontalLines: widgetData.renderStep.showHorizontalLines,
-                barWeight: 0.8
+                barWeight: 0.8,
+                dataType: widgetData.dataStep.aggregation.aggregationFieldType === CollectionReferenceDescriptionProperty.TypeEnum.DATE ?
+                    'time' : 'numeric'
             } as AnalyticComponentInputConfig
         } as AnalyticComponentConfig;
 
         switch (widgetType) {
             case WIDGET_TYPE.histogram: {
                 component.componentType = 'histogram';
+                component.input.ticksDateFormat = widgetData.renderStep.ticksDateFormat;
                 (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve = false;
-                (component.input as AnalyticComponentHistogramInputConfig).dataType =
-                    widgetData.dataStep.aggregation.aggregationFieldType === CollectionReferenceDescriptionProperty.TypeEnum.DATE ?
-                        'time' : 'numeric';
                 break;
             }
             case WIDGET_TYPE.swimlane: {
                 component.componentType = 'swimlane';
                 const swimlaneInput = (component.input as AnalyticComponentSwimlaneInputConfig);
-                swimlaneInput.dataType = 'time';
                 swimlaneInput.swimLaneLabelsWidth = 100;
                 swimlaneInput.swimlaneHeight = 20;
                 swimlaneInput.swimlaneMode = widgetData.renderStep.swimlaneMode;

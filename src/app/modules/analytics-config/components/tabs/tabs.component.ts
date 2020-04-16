@@ -23,8 +23,9 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
-import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
 import { MatTabGroup } from '@angular/material';
+import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
+import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 
 @Component({
   selector: 'app-tabs',
@@ -39,20 +40,13 @@ export class TabsComponent implements OnInit {
   @ViewChild('matTabGroup', { static: false }) private matTabGroup: MatTabGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
     private defaultValuesService: DefaultValuesService,
     private translateService: TranslateService,
     private mainFormService: MainFormService,
-    private importExportService: MainFormImportExportService
+    private mainFormManager: MainFormManagerService,
+    private analyticsInitService: AnalyticsInitService
   ) {
 
-    this.mainFormService.analyticsConfig.initListFa(
-      formBuilder.array([
-        this.createNewTab(
-          translateService.instant(
-            defaultValuesService.getValue('analytics.tabs.default')))
-      ],
-        Validators.required));
     this.tabsFa = this.mainFormService.analyticsConfig.getListFa();
   }
 
@@ -67,7 +61,7 @@ export class TabsComponent implements OnInit {
 
   public addTab() {
     // add new formgroup
-    this.tabsFa.controls.push(this.createNewTab(
+    this.tabsFa.controls.push(this.analyticsInitService.initNewTab(
       this.translateService.instant(
         this.defaultValuesService.getValue('analytics.tabs.new'))
     ));
@@ -90,16 +84,6 @@ export class TabsComponent implements OnInit {
     this.editingTabIndex = -1;
   }
 
-  private createNewTab(name: string) {
-    return this.formBuilder.group({
-      tabName: [
-        name,
-        Validators.required
-      ],
-      contentFg: this.formBuilder.group({})
-    });
-  }
-
   public getOtherTabsIds(tabIndex: number) {
     return this.tabs
       .map((tab, i) => i)
@@ -115,7 +99,7 @@ export class TabsComponent implements OnInit {
   }
 
   public tabHasError(index: number) {
-    return this.importExportService.isExportExpected && this.tabsFa.at(index).invalid;
+    return this.mainFormManager.isExportExpected && this.tabsFa.at(index).invalid;
   }
 
 }

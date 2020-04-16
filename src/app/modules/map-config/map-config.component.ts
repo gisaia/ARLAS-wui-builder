@@ -18,11 +18,11 @@ under the License.
 */
 import { Component, OnInit } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/internal/operators/filter';
 import { map } from 'rxjs/operators';
+import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 
 interface Tab {
   routeurLink: string;
@@ -39,7 +39,7 @@ export class MapConfigComponent implements OnInit {
 
   constructor(
     private mainFormService: MainFormService,
-    private importExportService: MainFormImportExportService,
+    private mainFormManager: MainFormManagerService,
     private translate: TranslateService,
     private router: Router) {
 
@@ -53,12 +53,12 @@ export class MapConfigComponent implements OnInit {
   public tabs: Tab[] = [
     {
       routeurLink: 'global', label: this.translate.instant('Global configuration'),
-      hasError: () => this.importExportService.isExportExpected &&
+      hasError: () => this.mainFormManager.isExportExpected &&
         this.mainFormService.mapConfig.getGlobalFg() && !this.mainFormService.mapConfig.getGlobalFg().valid
     },
     {
       routeurLink: 'layers', label: this.translate.instant('Layers'),
-      hasError: () => this.importExportService.isExportExpected && this.mainFormService.mapConfig.getLayersFa()
+      hasError: () => this.mainFormManager.isExportExpected && this.mainFormService.mapConfig.getLayersFa()
         && !this.mainFormService.mapConfig.getLayersFa().valid
     }
   ];

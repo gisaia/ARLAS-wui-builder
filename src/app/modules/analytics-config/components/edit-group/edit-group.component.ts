@@ -20,19 +20,14 @@ import {
   Component, OnInit, Input, Output, EventEmitter,
   ChangeDetectorRef
 } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
 import { WIDGET_TYPE } from './models';
 import { MatDialog } from '@angular/material';
 import { EditWidgetDialogComponent } from '../edit-widget-dialog/edit-widget-dialog.component';
 import { NGXLogger } from 'ngx-logger';
 import { EditWidgetDialogData } from '../edit-widget-dialog/models';
-import { AnalyticGroupConfiguration } from 'arlas-wui-toolkit/components/analytics-board/analytics.utils';
 import { ArlasCollaborativesearchService, ArlasStartupService, ArlasConfigService } from 'arlas-wui-toolkit';
-import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
-import { HistogramComponent } from 'arlas-web-components';
-import { HistogramContributor } from 'arlas-web-contributors';
-import { OperationEnum } from 'arlas-web-core';
-import { ConfigExportHelper } from '@services/main-form-import-export/config-export-helper';
+import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 
 @Component({
   selector: 'app-edit-group',
@@ -42,9 +37,7 @@ import { ConfigExportHelper } from '@services/main-form-import-export/config-exp
 export class EditGroupComponent implements OnInit {
 
   @Input() public formGroup: FormGroup;
-  @Input() public preview = [];
   @Output() public remove = new EventEmitter();
-
 
   public contentTypes = [
     [WIDGET_TYPE.histogram],
@@ -63,7 +56,6 @@ export class EditGroupComponent implements OnInit {
   ];
   public getContentTypes = (nbWidgets: number) => this.contentTypes.filter(elmt => elmt.length === nbWidgets);
   constructor(
-    private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private logger: NGXLogger,
     private cdr: ChangeDetectorRef,
@@ -71,6 +63,7 @@ export class EditGroupComponent implements OnInit {
     private collaborativesearchService: ArlasCollaborativesearchService,
     private configService: ArlasConfigService,
 
+    private analyticsInitService: AnalyticsInitService
   ) { }
 
   public ngOnInit() {
@@ -82,10 +75,7 @@ export class EditGroupComponent implements OnInit {
   private resetWidgetsOnTypeChange() {
     this.contentType.valueChanges.subscribe(values => {
       this.content.clear();
-      values.forEach(v => this.content.push(this.formBuilder.group({
-        widgetType: [v],
-        widgetData: new FormGroup({}, (fg: FormGroup) => ({ validateWidget: { valid: !!fg.controls.length } }))
-      })));
+      values.forEach(v => this.content.push(this.analyticsInitService.initNewWidget(v)));
     });
   }
 
@@ -100,41 +90,10 @@ export class EditGroupComponent implements OnInit {
       .afterClosed().subscribe(result => {
         if (result) {
           widgetFg.setControl('widgetData', result);
-          const contrib = this.createContributor(widgetFg.value.widgetType,
-            widgetFg.value.widgetData, this.formGroup.controls.icon.value);
-          this.formGroup.controls.preview.setValue([ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1)]);
-          contrib.updateFromCollaboration({
-            id: '',
-            operation: OperationEnum.add,
-            all: false
-          });
+          this.analyticsInitService.createPreviewContributor(this.formGroup, widgetFg);
           this.cdr.detectChanges();
         }
       });
-  }
-
-
-  public createContributor = (widgetType, widgetData, icon) => {
-    const contribConfig = ConfigExportHelper.getAnalyticsContributor(widgetType, widgetData, icon) as any;
-    const currentConfig = this.configService.getConfig() as any;
-    // add web contributors in config if not exist
-    if (currentConfig.arlas.web === undefined) {
-      currentConfig.arlas.web = {};
-      currentConfig.arlas.web.contributors = [];
-    } else if (currentConfig.arlas.web.contributors === undefined) {
-      currentConfig.arlas.web.contributors = [];
-    }
-    if (this.arlasStartupService.contributorRegistry.get(contribConfig.identifier) === undefined) {
-      currentConfig.arlas.web.contributors.push(contribConfig);
-      this.configService.setConfig(currentConfig);
-      const contributor = ContributorBuilder.buildContributor(WIDGET_TYPE[widgetType],
-        contribConfig.identifier,
-        this.configService,
-        this.collaborativesearchService);
-      this.arlasStartupService.contributorRegistry
-        .set(contribConfig.identifier, contributor);
-    }
-    return this.arlasStartupService.contributorRegistry.get(contribConfig.identifier);
   }
 
   get contentType() {

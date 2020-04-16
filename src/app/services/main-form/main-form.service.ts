@@ -37,10 +37,17 @@ enum MAIN_FORM_KEYS {
 })
 export class MainFormService {
 
-  public mainForm = this.getMainEmptyFormGroup();
+  public mainForm = new FormGroup({
+    [MAIN_FORM_KEYS.STARTING_CONFIG]: new FormGroup({}),
+    [MAIN_FORM_KEYS.MAP_CONFIG]: new FormGroup({}),
+    [MAIN_FORM_KEYS.SEARCH_CONFIG]: new FormGroup({}),
+    [MAIN_FORM_KEYS.TIMELINE_CONFIG]: new FormGroup({}),
+    [MAIN_FORM_KEYS.ANALYTICS_CONFIG]: new FormGroup({})
+  });
 
-  // In sub configs, init() methods should only use `registerControl()` method.
-  // It doesn't replace the control, so it avoids to overwrite any existing value by reopening a page
+
+  constructor() {
+  }
 
   // STARTING FORM
   public startingConfig = new class {
@@ -58,8 +65,8 @@ export class MainFormService {
   public mapConfig = new class {
     constructor(public control: FormGroup) { }
 
-    public initGlobalFg = (fg: FormGroup) => this.control.registerControl(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL, fg);
-    public initLayersFa = (fa: FormArray) => this.control.registerControl(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS, fa);
+    public initGlobalFg = (fg: FormGroup) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL, fg);
+    public initLayersFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS, fa);
     public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL) as FormGroup;
     public getLayersFa = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS) as FormArray;
 
@@ -69,7 +76,7 @@ export class MainFormService {
   public searchConfig = new class {
     constructor(public control: FormGroup) { }
 
-    public initGlobalFg = (fg: FormGroup) => this.control.registerControl(MAIN_FORM_KEYS.SEARCH_CONFIG_GLOBAL, fg);
+    public initGlobalFg = (fg: FormGroup) => this.control.setControl(MAIN_FORM_KEYS.SEARCH_CONFIG_GLOBAL, fg);
     public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.SEARCH_CONFIG_GLOBAL) as FormGroup;
 
   }(this.mainForm.get(MAIN_FORM_KEYS.SEARCH_CONFIG) as FormGroup);
@@ -78,7 +85,7 @@ export class MainFormService {
   public timelineConfig = new class {
     constructor(public control: FormGroup) { }
 
-    public initGlobalFg = (fg: FormGroup) => this.control.registerControl(MAIN_FORM_KEYS.TIMELINE_CONFIG_GLOBAL, fg);
+    public initGlobalFg = (fg: FormGroup) => this.control.setControl(MAIN_FORM_KEYS.TIMELINE_CONFIG_GLOBAL, fg);
     public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.TIMELINE_CONFIG_GLOBAL) as FormGroup;
 
   }(this.mainForm.get(MAIN_FORM_KEYS.TIMELINE_CONFIG) as FormGroup);
@@ -87,7 +94,7 @@ export class MainFormService {
   public analyticsConfig = new class {
     constructor(public control: FormGroup) { }
 
-    public initListFa = (fa: FormArray) => this.control.registerControl(MAIN_FORM_KEYS.ANALYTICS_CONFIG_LIST, fa);
+    public initListFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.ANALYTICS_CONFIG_LIST, fa);
     public getListFa = () => this.control.get(MAIN_FORM_KEYS.ANALYTICS_CONFIG_LIST) as FormArray;
 
   }(this.mainForm.get(MAIN_FORM_KEYS.ANALYTICS_CONFIG) as FormGroup);
@@ -95,8 +102,17 @@ export class MainFormService {
   // OTHER METHODS ...
 
   public resetMainForm() {
-    Object.keys(this.mainForm.controls).forEach(c => this.mainForm.removeControl(c));
-    this.mainForm = this.getMainEmptyFormGroup();
+    // keep the existing instances of the main config FormGroup as all *config
+    // (mapConfig, analyticsConfig...) keep the initial related instance
+    [
+      this.mainForm.get(MAIN_FORM_KEYS.STARTING_CONFIG),
+      this.mainForm.get(MAIN_FORM_KEYS.MAP_CONFIG),
+      this.mainForm.get(MAIN_FORM_KEYS.SEARCH_CONFIG),
+      this.mainForm.get(MAIN_FORM_KEYS.TIMELINE_CONFIG),
+      this.mainForm.get(MAIN_FORM_KEYS.ANALYTICS_CONFIG)
+    ].forEach((sf: FormGroup) => {
+      Object.keys(sf.controls).forEach(c => sf.removeControl(c));
+    });
   }
 
   public getCollections(): string[] {
@@ -105,18 +121,5 @@ export class MainFormService {
     }
     return [];
   }
-
-  private getMainEmptyFormGroup() {
-    return new FormGroup({
-      [MAIN_FORM_KEYS.STARTING_CONFIG]: new FormGroup({}),
-      [MAIN_FORM_KEYS.MAP_CONFIG]: new FormGroup({}),
-      [MAIN_FORM_KEYS.SEARCH_CONFIG]: new FormGroup({}),
-      [MAIN_FORM_KEYS.TIMELINE_CONFIG]: new FormGroup({}),
-      [MAIN_FORM_KEYS.ANALYTICS_CONFIG]: new FormGroup({})
-    });
-  }
-
-  constructor(
-  ) { }
 
 }

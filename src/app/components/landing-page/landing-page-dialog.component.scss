@@ -66,3 +66,10 @@ $accent-color: mat-color($accent-palette, 300);
     width: 100%;
   }
 }
+
+.import-content {
+  .import-valid {
+    padding: 20px 0px;
+    color: green;
+  }
+}
