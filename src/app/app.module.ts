@@ -17,15 +17,6 @@ specific language governing permissions and limitations
 under the License.
 */
 import { NgModule, APP_INITIALIZER, forwardRef } from '@angular/core';
-import { GestureConfig } from '@angular/material/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
 import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
@@ -37,23 +28,20 @@ import { MapConfigModule } from '@map-config/map-config.module';
 import { SearchConfigModule } from '@search-config/search-config.module';
 import { TimelineConfigModule } from '@timeline-config/timeline-config.module';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
-import {  ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
+import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { SharedModule } from '@shared/shared.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { StartupService } from '@services/startup/startup.service';
 import { ArlasWalkthroughService } from 'arlas-wui-toolkit/services/walkthrough/walkthrough.service';
 import { WalkthroughService } from '@services/walkthrough/walkthrough.service';
-import { MatBadgeModule } from '@angular/material/badge';
 import { AnalyticsConfigModule } from './modules/analytics-config/analytics-config.module';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { CustomTranslateLoader } from 'arlas-wui-toolkit/shared.module';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS, GestureConfig } from '@angular/material';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -76,20 +64,7 @@ export function startupServiceFactory(startupService: StartupService) {
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HttpClientModule,
-    FormsModule,
     MapConfigModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSnackBarModule,
-    MatTooltipModule,
-    ReactiveFormsModule,
     SearchConfigModule,
     SharedModule,
     TimelineConfigModule,
@@ -105,7 +80,6 @@ export function startupServiceFactory(startupService: StartupService) {
       disableConsoleLogging: false
     }),
     NgxSpinnerModule,
-    MatBadgeModule,
     AnalyticsConfigModule
   ],
   providers: [

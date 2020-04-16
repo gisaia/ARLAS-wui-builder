@@ -16,29 +16,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatStepperModule } from '@angular/material/stepper';
-import { MatTableModule } from '@angular/material/table';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
-import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { SharedModule } from '@shared/shared.module';
 import { DialogColorTableComponent } from './components/dialog-color-table/dialog-color-table.component';
@@ -52,7 +31,6 @@ import { GlobalMapComponent } from './components/global-map/global-map.component
 import { LayersComponent } from './components/layers/layers.component';
 import { MapConfigRoutingModule } from './map-config-routing.module';
 import { MapConfigComponent } from './map-config.component';
-import { MatRadioModule } from '@angular/material';
 
 @NgModule({
   entryComponents: [
@@ -73,31 +51,8 @@ import { MatRadioModule } from '@angular/material';
     EditLayerClusterComponent
   ],
   imports: [
-    CommonModule,
     MapConfigRoutingModule,
-    MatChipsModule,
-    MatTabsModule,
-    MatSnackBarModule,
-    MatTableModule,
-    FormsModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    ReactiveFormsModule,
-    SharedModule,
-    MatButtonModule,
-    MatStepperModule,
-    MatSlideToggleModule,
-    MatSliderModule,
-    MatRadioModule,
-    MatDialogModule,
-    MatIconModule,
-    MatTooltipModule,
-    MatAutocompleteModule,
-    MatExpansionModule,
-    DragDropModule,
-    MatDividerModule,
-    TranslateModule
+    SharedModule
   ],
   providers: [
     ConfirmExitGuard

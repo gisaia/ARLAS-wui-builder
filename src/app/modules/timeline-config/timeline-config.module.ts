@@ -17,20 +17,11 @@ specific language governing permissions and limitations
 under the License.
 */
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { TimelineConfigRoutingModule } from './timeline-config-routing.module';
 import { TimelineConfigComponent } from './timeline-config.component';
 import { GlobalTimelineComponent } from './components/global-timeline/global-timeline.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@shared/shared.module';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { TranslateModule } from '@ngx-translate/core';
-import { MatInputModule } from '@angular/material/input';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TimelineFormComponent } from './components/timeline-form/timeline-form.component';
-import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -39,18 +30,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     TimelineFormComponent
   ],
   imports: [
-    CommonModule,
     TimelineConfigRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SharedModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    TranslateModule,
-    MatInputModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatTabsModule
+    SharedModule
   ]
 })
 export class TimelineConfigModule { }
