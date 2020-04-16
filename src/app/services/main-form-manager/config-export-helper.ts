@@ -22,7 +22,11 @@ import {
     AnalyticComponentConfig, AnalyticComponentHistogramInputConfig, SwimlaneConfig,
     AnalyticConfig, AnalyticComponentInputConfig, AnalyticComponentSwimlaneInputConfig,
     AnalyticComponentSwimlaneInputOptionsConfig,
-    MapglComponentConfig
+    MapglComponentConfig,
+    JSONPATH_METRIC,
+    JSONPATH_COUNT,
+    CHIPSEARCH_TYPE,
+    CHIPSEARCH_IDENTIFIER
 } from './models-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
@@ -32,9 +36,6 @@ import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-form-bui
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { MapComponentInputConfig, MapComponentInputMapLayersConfig, MapComponentInputLayersSetsConfig } from './models-config';
 import { Layer } from './models-map-config';
-
-export const JSONPATH_COUNT = '$.count';
-export const JSONPATH_METRIC = '$.metrics[0].value';
 
 export class ConfigExportHelper {
 
@@ -231,8 +232,8 @@ export class ConfigExportHelper {
     private static getChipsearchContributor(searchConfigGlobal: FormGroup): ContributorConfig {
         const searchValues = searchConfigGlobal.value;
         return {
-            type: 'chipssearch',
-            identifier: 'chipssearch',
+            type: CHIPSEARCH_TYPE,
+            identifier: CHIPSEARCH_IDENTIFIER,
             search_field: searchValues.searchField,
             name: searchValues.name,
             icon: searchValues.icon,

@@ -19,6 +19,12 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+
+export const JSONPATH_COUNT = '$.count';
+export const JSONPATH_METRIC = '$.metrics[0].value';
+export const CHIPSEARCH_TYPE = 'chipssearch';
+export const CHIPSEARCH_IDENTIFIER = 'chipssearch';
+
 export interface Config {
     arlas: ArlasConfig;
     arlasWui: {

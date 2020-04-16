@@ -18,8 +18,9 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import {
-  Config, AnalyticComponentConfig, ContributorConfig, AggregationModelConfig, AggregationModelMetricConfig,
-  AnalyticComponentSwimlaneInputConfig
+  Config, AnalyticComponentConfig, ContributorConfig, AggregationModelConfig,
+  AnalyticComponentSwimlaneInputConfig,
+  JSONPATH_COUNT
 } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormArray, FormGroup, FormControl } from '@angular/forms';
@@ -27,7 +28,6 @@ import { AnalyticsInitService } from '../analytics-init/analytics-init.service';
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { HistogramFormBuilderService } from '../histogram-form-builder/histogram-form-builder.service';
 import { SwimlaneFormBuilderService } from '../swimlane-form-builder/swimlane-form-builder.service';
-import { JSONPATH_COUNT } from '@services/main-form-manager/config-export-helper';
 import { DEFAULT_METRIC_VALUE, MetricControls } from '../metric-form-builder/metric-form-builder.service';
 import { BucketsIntervalControls } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
@@ -51,10 +51,6 @@ export class AnalyticsImportService {
   ) { }
 
   public doImport(config: Config) {
-
-    this.mainFormService.analyticsConfig.initListFa(
-      this.analyticsInitService.initTabsList([])
-    );
 
     const tabs: Map<string, FormGroup> = new Map();
 

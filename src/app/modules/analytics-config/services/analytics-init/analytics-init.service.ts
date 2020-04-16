@@ -19,8 +19,6 @@ under the License.
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, AbstractControl, FormGroup } from '@angular/forms';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { TranslateService } from '@ngx-translate/core';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { ArlasStartupService, ArlasCollaborativesearchService, ArlasConfigService } from 'arlas-wui-toolkit';
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
@@ -35,8 +33,6 @@ export class AnalyticsInitService {
   constructor(
     private formBuilder: FormBuilder,
     private mainFormService: MainFormService,
-    private defaultValuesService: DefaultValuesService,
-    private translateService: TranslateService,
     private arlasStartupService: ArlasStartupService,
     private collaborativesearchService: ArlasCollaborativesearchService,
     private configService: ArlasConfigService

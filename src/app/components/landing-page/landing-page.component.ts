@@ -65,6 +65,7 @@ export class LandingPageDialogComponent implements OnInit {
   public ngOnInit(): void {
     // Reset and clean the content of all forms
     this.mainFormService.resetMainForm();
+    this.mainFormManager.initMainModulesForms();
 
     this.mainFormService.startingConfig.init(
       this.formBuilderWithDefault.group('global', {
@@ -103,7 +104,6 @@ export class LandingPageDialogComponent implements OnInit {
   public saveConfig() {
     const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('collections').value;
     this.startupService.setCollection(collection);
-    this.mainFormManager.doInit();
     this.startEvent.next();
   }
 
@@ -122,20 +122,20 @@ export class LandingPageDialogComponent implements OnInit {
       // const newUrl = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('serverUrl').value;
       // this.startupService.validLoadedConfig(newUrl)
 
-      const json: Config = JSON.parse(fileReader.result.toString());
-      this.getServerCollections(json.arlas.server.url).then(() => {
+      const jsonConfig: Config = JSON.parse(fileReader.result.toString());
+      this.getServerCollections(jsonConfig.arlas.server.url).then(() => {
 
         this.configDescritor.getAllCollections().subscribe(collections => {
-          const collection = (collections.find(c => c === json.arlas.server.collection.name));
+          const collection = (collections.find(c => c === jsonConfig.arlas.server.collection.name));
 
           if (!collection) {
             this.logger.error(
-              this.translate.instant('Collection ' + json.arlas.server.collection.name + ' unknown. Available collections: ')
+              this.translate.instant('Collection ' + jsonConfig.arlas.server.collection.name + ' unknown. Available collections: ')
               + collections);
 
           } else {
             this.startupService.setCollection(collection);
-            this.mainFormManager.doImport(json);
+            this.mainFormManager.doImport(jsonConfig);
           }
         });
       });
