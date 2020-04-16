@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { ComponentFactoryResolver, Injectable, ViewContainerRef, Type } from '@angular/core';
+import { Injectable, ViewContainerRef } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { updateValueAndValidity } from '@utils/tools';
 import * as FileSaver from 'file-saver';
@@ -35,11 +35,10 @@ export class MainFormImportExportService {
 
   constructor(
     private logger: NGXLogger,
-    private mainFormService: MainFormService,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private mainFormService: MainFormService
   ) { }
 
-  public attemptExport(vCref: ViewContainerRef) {
+  public attemptExport() {
 
     if (!this.isExportExpected) {
       this.isExportExpected = true;
@@ -47,7 +46,7 @@ export class MainFormImportExportService {
 
     // update the validity of the whole form
     this.mainFormService.mainForm.markAllAsTouched();
-    updateValueAndValidity(this.mainFormService.mainForm, false, true);
+    updateValueAndValidity(this.mainFormService.mainForm, false, false);
 
     if (this.mainFormService.mainForm.valid) {
       this.doExport();
@@ -61,6 +60,7 @@ export class MainFormImportExportService {
     const mapConfigLayers = this.mainFormService.mapConfig.getLayersFa();
     const searchConfigGlobal = this.mainFormService.searchConfig.getGlobalFg();
     const timelineConfigGlobal = this.mainFormService.timelineConfig.getGlobalFg();
+    const analyticsConfigList = this.mainFormService.analyticsConfig.getListFa();
 
     const sourceByMode = new Map<string, string>();
     sourceByMode.set(LAYER_MODE.features, 'feature');
@@ -73,6 +73,7 @@ export class MainFormImportExportService {
         mapConfigLayers,
         searchConfigGlobal,
         timelineConfigGlobal,
+        analyticsConfigList,
         sourceByMode),
       'config.json', '_');
 

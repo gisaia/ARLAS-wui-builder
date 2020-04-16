@@ -26,6 +26,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class MetricFormBuilderService {
 
+  public static defaultMetricValue = 'COUNT';
   public formGroup: ConfigFormGroup;
 
   constructor() { }
@@ -69,6 +70,21 @@ export class MetricFormBuilderService {
             } else {
               control.disable();
             }
+          }
+        }
+      ),
+      metricValue: new SelectFormControl(
+        '',
+        'Value used in aggregation',
+        'description',
+        false,
+        [],
+        {
+          dependsOn: () => [this.metricCollectFunction],
+          onDependencyChange: (control: SelectFormControl) => {
+            // exclude metricCollectFunction.value if falsy
+            control.setSyncOptions([this.metricCollectFunction.value, MetricFormBuilderService.defaultMetricValue]
+              .filter(Boolean).map(value => ({ value, label: value })));
           }
         }
       )

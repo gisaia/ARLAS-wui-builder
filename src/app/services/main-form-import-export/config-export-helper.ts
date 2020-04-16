@@ -17,10 +17,18 @@ specific language governing permissions and limitations
 under the License.
 */
 import { FormGroup, FormArray } from '@angular/forms';
-import { Config, Contributor, LayerSource, ChipSearch, AggregationModel, TimelineComponent } from './models-config';
+import {
+    Config, ChipSearchConfig, ContributorConfig, LayerSourceConfig, AggregationModelConfig,
+    AnalyticComponentConfig, AnalyticComponentHistogramInputConfig, SwimlaneConfig,
+    AnalyticConfig, AnalyticComponentInputConfig, AnalyticComponentSwimlaneInputConfig,
+    AnalyticComponentSwimlaneInputOptionsConfig
+} from './models-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
 import { CLUSTER_GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
+import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
+import { CollectionReferenceDescriptionProperty } from 'arlas-api';
+import { MetricFormBuilderService } from '@analytics-config/services/metric-form-builder/metric-form-builder.service';
 
 export class ConfigExportHelper {
 
@@ -29,9 +37,10 @@ export class ConfigExportHelper {
         mapConfigLayers: FormArray,
         searchConfigGlobal: FormGroup,
         timelineConfigGlobal: FormGroup,
+        analyticsConfigList: FormArray,
         sourceByMode: Map<string, string>, ): any {
 
-        const chipssearch: ChipSearch = {
+        const chipssearch: ChipSearchConfig = {
             name: searchConfigGlobal.value.name,
             icon: searchConfigGlobal.value.icon
         };
@@ -43,7 +52,8 @@ export class ConfigExportHelper {
                     components: {
                         timeline: this.getTimelineComponent(timelineConfigGlobal.controls.timeline.value),
                         detailedTimeline: this.getTimelineComponent(timelineConfigGlobal.controls.detailedTimeline.value)
-                    }
+                    },
+                    analytics: []
                 }
             },
             arlasWui: {
@@ -65,15 +75,29 @@ export class ConfigExportHelper {
             config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal.controls.detailedTimeline.value));
         }
 
+        (analyticsConfigList.value as Array<any>).forEach(tab => {
+            tab.contentFg.groupsFa.forEach(group => {
+                group.content.forEach(widget => {
+                    config.arlas.web.contributors.push(this.getAnalyticsContributor(widget.widgetType, widget.widgetData, group.icon));
+                });
+            });
+        });
+
+        (analyticsConfigList.value as Array<any>).forEach(tab => {
+            tab.contentFg.groupsFa.forEach((group: any, groupIndex: number) => {
+                config.arlas.web.analytics.push(this.getAnalyticsGroup(tab.tabName, group, groupIndex));
+            });
+        });
+
         return config;
     }
 
     private static getMapContributor(
         mapConfigGlobal: FormGroup,
         mapConfigLayers: FormArray,
-        sourceByMode: Map<string, string>): Contributor {
+        sourceByMode: Map<string, string>): ContributorConfig {
 
-        const mapContributor: Contributor = {
+        const mapContributor: ContributorConfig = {
             type: 'map',
             identifier: 'mapbox',
             geoQueryOp: mapConfigGlobal.value.geographicalOperator,
@@ -81,11 +105,11 @@ export class ConfigExportHelper {
             layers_sources: []
         };
 
-        const layersSources: Array<LayerSource> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
+        const layersSources: Array<LayerSourceConfig> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
             const layerValues = layerFg.value;
             const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
                 (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
-            const layerSource: LayerSource = {
+            const layerSource: LayerSourceConfig = {
                 id: layerValues.name,
                 source: sourceByMode.get(layerFg.value.mode),
                 minzoom: modeValues.visibilityStep.zoomMin,
@@ -143,7 +167,7 @@ export class ConfigExportHelper {
         return mapContributor;
     }
 
-    private static addLayerSourceInterpolationData(layerSource: LayerSource, layerValues: any, mode: LAYER_MODE) {
+    private static addLayerSourceInterpolationData(layerSource: LayerSourceConfig, layerValues: any, mode: LAYER_MODE) {
         switch (layerValues.propertySource) {
             case PROPERTY_SELECTOR_SOURCE.fix: {
                 break;
@@ -185,7 +209,7 @@ export class ConfigExportHelper {
         }
     }
 
-    private static getChipsearchContributor(searchConfigGlobal: FormGroup): Contributor {
+    private static getChipsearchContributor(searchConfigGlobal: FormGroup): ContributorConfig {
         const searchValues = searchConfigGlobal.value;
         return {
             type: 'chipssearch',
@@ -198,9 +222,10 @@ export class ConfigExportHelper {
         };
     }
 
-    private static getTimelineContributor(timelineValues: any): Contributor {
+    // TODO put in common with getAnalyticsContributor ?
+    private static getTimelineContributor(timelineValues: any): ContributorConfig {
         const isDetailed = timelineValues.isDetailedTimeline;
-        const contributor: Contributor = {
+        const contributor: ContributorConfig = {
             type: isDetailed ? 'detailedhistogram' : 'histogram',
             identifier: isDetailed ? 'detailedTimeline' : 'timeline',
             name: 'Timeline',
@@ -208,7 +233,7 @@ export class ConfigExportHelper {
             isOneDimension: false
         };
 
-        const aggregationModel: AggregationModel = {
+        const aggregationModel: AggregationModelConfig = {
             type: 'datehistogram',
             field: timelineValues.field
         };
@@ -232,9 +257,9 @@ export class ConfigExportHelper {
         return contributor;
     }
 
-    private static getTimelineComponent(timelineValues: any): TimelineComponent {
+    private static getTimelineComponent(timelineValues: any): AnalyticComponentConfig {
         const isDetailed = timelineValues.isDetailedTimeline;
-        const timelineComponent: TimelineComponent = {
+        const timelineComponent: AnalyticComponentConfig = {
             contributorId: isDetailed ? 'detailedTimeline' : 'timeline',
             componentType: 'histogram',
             input: {
@@ -263,7 +288,7 @@ export class ConfigExportHelper {
                 showHorizontalLines: false,
                 isSmoothedCurve: true,
                 barWeight: 0.8
-            }
+            } as AnalyticComponentHistogramInputConfig
         };
 
         if (!isDetailed) {
@@ -271,6 +296,199 @@ export class ConfigExportHelper {
         }
 
         return timelineComponent;
+    }
+
+    private static getAnalyticsContributor(widgetType: any, widgetData: any, icon: string): ContributorConfig {
+        // TODO at the end, find same contributors and keep only one instance
+        switch (widgetType) {
+            case WIDGET_TYPE.histogram: {
+                const contrib = this.getWidgetContributor(widgetData, icon);
+                contrib.type = 'histogram';
+
+                const aggregationModel = {
+                    type: 'histogram',
+                    field: widgetData.dataStep.aggregation.aggregationField
+                } as AggregationModelConfig;
+
+                this.addNumberOfBucketsOrInterval(contrib, aggregationModel, widgetData.dataStep.aggregation);
+
+                this.addMetricToAggregationModel(aggregationModel, widgetData.dataStep.metric);
+
+                contrib.jsonpath = widgetData.dataStep.metric.metricValue === MetricFormBuilderService.defaultMetricValue ?
+                    '$.count' : '$.metrics[0].value';
+
+                contrib.aggregationmodels = [aggregationModel];
+
+                return contrib;
+            }
+            case WIDGET_TYPE.swimlane: {
+                const contrib = this.getWidgetContributor(widgetData, icon);
+                contrib.type = 'swimlane';
+                const swimlane = {
+                    id: 1,
+                    name: widgetData.dataStep.name,
+                    xAxisField: widgetData.dataStep.dateAggregation.aggregationField,
+                    termField: widgetData.dataStep.termAggregation.termAggregationField
+                } as SwimlaneConfig;
+
+                swimlane.aggregationmodels = [];
+
+                swimlane.aggregationmodels.push({
+                    type: 'term',
+                    field: widgetData.dataStep.termAggregation.termAggregationField,
+                    size: widgetData.dataStep.termAggregation.termAggregationSize
+                });
+
+                const dateAggregationModel = {
+                    type: 'datehistogram',
+                    field: widgetData.dataStep.dateAggregation.aggregationField
+                } as AggregationModelConfig;
+                this.addNumberOfBucketsOrInterval(contrib, dateAggregationModel, widgetData.dataStep.dateAggregation);
+
+                this.addMetricToAggregationModel(dateAggregationModel, widgetData.dataStep.metric);
+
+                swimlane.aggregationmodels.push(dateAggregationModel);
+                contrib.swimlane = [swimlane];
+
+                contrib.jsonpath = widgetData.dataStep.metric.metricValue === MetricFormBuilderService.defaultMetricValue ?
+                    '$.count' : '$.metrics[0].value';
+
+                return contrib;
+            }
+        }
+    }
+
+    private static getWidgetContributor(widgetData: any, icon: string) {
+        return {
+            identifier: this.toSnakeCase(widgetData.dataStep.name),
+            charttype: widgetData.renderStep.chartType,
+            name: widgetData.dataStep.name,
+            title: widgetData.dataStep.name,
+            icon,
+            isOneDimension: false
+        } as ContributorConfig;
+    }
+
+    private static getAnalyticsGroup(tabName: string, group: any, groupIndex: number) {
+
+        const groupAnalytic = {
+            groupId: groupIndex.toString(),
+            title: group.title,
+            tab: tabName,
+            icon: group.icon,
+            components: []
+        } as AnalyticConfig;
+
+        group.content.forEach(widget => {
+            groupAnalytic.components.push(this.getAnalyticsComponent(widget.widgetType, widget.widgetData));
+        });
+
+        return groupAnalytic;
+    }
+
+    private static addMetricToAggregationModel(aggregationModel: AggregationModelConfig, metricData: any) {
+        if (!!metricData.metricCollectFunction) {
+            aggregationModel.metrics = [
+                {
+                    collect_fct: metricData.metricCollectFunction,
+                    collect_field: metricData.metricCollectField
+                }
+            ];
+        }
+    }
+
+    private static getAnalyticsComponent(widgetType: any, widgetData: any): AnalyticComponentConfig {
+
+        const component = {
+            contributorId: this.toSnakeCase(widgetData.dataStep.name),
+            showExportCsv: true,
+            input: {
+                id: this.toSnakeCase(widgetData.dataStep.name),
+                isHistogramSelectable: true,
+                multiselectable: !!widgetData.renderStep.multiselectable,
+                topOffsetRemoveInterval: 40,
+                leftOffsetRemoveInterval: 18,
+                brushHandlesHeightWeight: 0.8,
+                yAxisStartsFromZero: true,
+                chartType: widgetData.renderStep.chartType,
+                chartTitle: widgetData.dataStep.name,
+                chartWidth: 222, // TODO generated from colspan
+                chartHeight: 100, // TODO generated from colspan
+                customizedCssClass: 'arlas-histogram-analytics', // TODO generated from colspan
+                xAxisPosition: 'bottom',
+                descriptionPosition: 'bottom',
+                xTicks: 4,
+                yTicks: 1,
+                xLabels: 4,
+                yLabels: 4,
+                showXTicks: true,
+                showYTicks: true,
+                showXLabels: true,
+                showYLabels: true,
+                showHorizontalLines: widgetData.renderStep.showHorizontalLines,
+                barWeight: 0.8
+            } as AnalyticComponentInputConfig
+        } as AnalyticComponentConfig;
+
+        switch (widgetType) {
+            case WIDGET_TYPE.histogram: {
+                component.componentType = 'histogram';
+                (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve = false;
+                (component.input as AnalyticComponentHistogramInputConfig).dataType =
+                    widgetData.dataStep.aggregation.aggregationFieldType === CollectionReferenceDescriptionProperty.TypeEnum.DATE ?
+                        'time' : 'numeric';
+                break;
+            }
+            case WIDGET_TYPE.swimlane: {
+                component.componentType = 'swimlane';
+                const swimlaneInput = (component.input as AnalyticComponentSwimlaneInputConfig);
+                swimlaneInput.dataType = 'time';
+                swimlaneInput.swimLaneLabelsWidth = 100;
+                swimlaneInput.swimlaneHeight = 20;
+                swimlaneInput.swimlaneMode = widgetData.renderStep.swimlaneMode;
+                swimlaneInput.swimlaneBorderRadius = 3;
+                swimlaneInput.paletteColors = widgetData.renderStep.paletteColors;
+                swimlaneInput.swimlaneRepresentation = !!widgetData.renderStep.swimlaneRepresentation ? 'column' : 'global';
+
+                const swimlaneOptions = {} as AnalyticComponentSwimlaneInputOptionsConfig;
+                swimlaneOptions.nanColors = widgetData.renderStep.NaNColors;
+
+                if (!!widgetData.renderStep.zerosColors) {
+                    swimlaneOptions.zerosColor = widgetData.renderStep.zerosColors;
+                }
+
+                swimlaneInput.swimlaneOptions = swimlaneOptions;
+
+                break;
+            }
+
+        }
+        return component;
+    }
+
+    private static addNumberOfBucketsOrInterval(
+        contrib: ContributorConfig,
+        aggregationModel: AggregationModelConfig,
+        aggregationData: any) {
+
+        if (!aggregationData.aggregationBucketOrInterval) {
+            contrib.numberOfBuckets = aggregationData.aggregationBucketsNumber;
+        } else {
+            aggregationModel.interval = {
+                value: aggregationData.aggregationIntervalSize
+            };
+            if (!!aggregationData.aggregationIntervalUnit) {
+                aggregationModel.interval.unit = aggregationData.aggregationIntervalUnit;
+            }
+        }
+    }
+
+    private static toSnakeCase(str) {
+        return str &&
+            str
+                .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
+                .map(x => x.toLowerCase())
+                .join('_');
     }
 
 }

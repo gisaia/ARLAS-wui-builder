@@ -38,6 +38,8 @@ export interface DefaultConfig {
   radiusMax: number;
   radiusStep: number;
   huePalettes: Array<[number, number] | string>;
+  swimlaneZeroColor: string;
+  swimlaneNanColor: string;
 }
 @Injectable({
   providedIn: 'root'

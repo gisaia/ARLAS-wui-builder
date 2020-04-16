@@ -108,6 +108,8 @@
         "radiusStep": 0.5,
         "intensityMin": 0,
         "intensityMax": 10,
-        "intensityStep": 0.5
+        "intensityStep": 0.5,
+        "swimlaneZeroColor": "#D6D6D6",
+        "swimlaneNanColor": "#D6D6D6"
     }
 }

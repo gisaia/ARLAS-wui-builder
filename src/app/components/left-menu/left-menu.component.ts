@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, ViewContainerRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
@@ -45,7 +45,6 @@ export class LeftMenuComponent {
   constructor(
     private mainFormService: MainFormService,
     private importExportService: MainFormImportExportService,
-    private vcref: ViewContainerRef,
     private translate: TranslateService
   ) {
     // recompute nberrors of each page anytime the mainform validity changes
@@ -104,7 +103,7 @@ export class LeftMenuComponent {
   }
 
   public save() {
-    this.importExportService.attemptExport(this.vcref);
+    this.importExportService.attemptExport();
     this.updateNbErrors();
   }
 

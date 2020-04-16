@@ -18,7 +18,7 @@ under the License.
 */
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
-import { WIDGET_TYPE as WIDGET_TYPE } from './models';
+import { WIDGET_TYPE } from './models';
 import { MatDialog } from '@angular/material';
 import { EditWidgetDialogComponent } from '../edit-widget-dialog/edit-widget-dialog.component';
 import { NGXLogger } from 'ngx-logger';
