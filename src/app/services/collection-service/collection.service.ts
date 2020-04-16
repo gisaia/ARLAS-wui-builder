@@ -61,7 +61,7 @@ export class CollectionService {
               return getSubFields(property.properties, path);
 
             } else if (!exclude && (!types || types.includes(property.type))) {
-              return path;
+              return { name: path, type: property.type };
             } else if (exclude && (!types || !types.includes(property.type))) {
               return { name: path, type: property.type };
             } else {
