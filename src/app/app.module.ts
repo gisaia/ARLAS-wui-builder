@@ -48,8 +48,8 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   return load;
 }
 export function startupServiceFactory(startupService: StartupService) {
-  const load = () => startupService.load('config.json?' + Date.now());
-  return load;
+  const init = () => startupService.init();
+  return init;
 }
 
 @NgModule({

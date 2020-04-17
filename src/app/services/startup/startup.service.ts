@@ -42,24 +42,30 @@ export class StartupService {
     private injector: Injector
   ) { }
 
-  public load(configFilePath: string): Promise<any> {
+  public init(): Promise<string> {
+    // Init app with an empty configuration
+    return this.setConfigService({})
+      // Init app with the language read from url
+      .then(() => this.translationLoaded());
+  }
+
+  // This funcion could be used to valid an existing loaded conf
+  public validLoadedConfig(configFilePath: string): Promise<boolean> {
     let configData;
     const ret = this.http
       .get(configFilePath)
       .pipe(flatMap((response) => {
         configData = response;
         return Promise.resolve(null);
-
       })).toPromise()
       .then(() => this.validateConfiguration(configData))
       .then((data) => this.setConfigService(data))
       .then((data) => this.setCollaborativeService(data))
-      .then((data) => this.translationLoaded(data))
       .catch((err: any) => {
         console.error(err);
         return Promise.resolve(null);
       });
-    return ret.then((x) => { });
+    return ret.then((x) => true);
   }
 
   public validateConfiguration(data) {
@@ -82,7 +88,7 @@ export class StartupService {
     });
   }
 
-  public translationLoaded(data) {
+  public translationLoaded() {
     return new Promise<any>((resolve: any) => {
       const url = window.location.href;
       const paramLangage = 'lg';
@@ -101,7 +107,7 @@ export class StartupService {
         }, err => {
           console.error(`Problem with '${langToSet}' language initialization.'`);
         }, () => {
-          resolve(data);
+          resolve(`Successfully initialized '${langToSet}' language.`);
         });
       });
     });
@@ -125,9 +131,6 @@ export class StartupService {
       );
       this.arlasCss.setExploreApi(arlasExploreApi);
       resolve(data);
-
     });
   }
-
-
 }

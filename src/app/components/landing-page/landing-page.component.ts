@@ -28,6 +28,7 @@ import { ArlasConfigService } from 'arlas-wui-toolkit';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs';
+import { StartupService } from '../../services/startup/startup.service';
 
 @Component({
   templateUrl: './landing-page-dialog.component.html',
@@ -46,6 +47,7 @@ export class LandingPageDialogComponent implements OnInit {
     private http: HttpClient,
     private logger: NGXLogger,
     private configService: ArlasConfigService,
+    private startupService: StartupService,
     private configDescritor: ArlasConfigurationDescriptor,
     private formBuilderWithDefault: FormBuilderWithDefaultService,
     private translate: TranslateService) { }
@@ -82,8 +84,11 @@ export class LandingPageDialogComponent implements OnInit {
         const currentConf = this.configService.getConfig();
         const newConf = Object.assign(currentConf, { arlas: { server: { url } } });
         this.configService.setConfig(newConf);
-        this.configDescritor.getAllCollections().subscribe(collections => this.availablesCollections = collections);
-        this.isServerReady = true;
+        // Update collaborative search Service with the new url
+        this.startupService.setCollaborativeService(newConf).then(() => {
+          this.configDescritor.getAllCollections().subscribe(collections => this.availablesCollections = collections);
+          this.isServerReady = true;
+        });
       },
       () => {
         this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
@@ -107,6 +112,7 @@ export class LandingPageComponent implements AfterViewInit {
     private dialog: MatDialog,
     private logger: NGXLogger,
     private router: Router,
+    // private startupService: StartupService,
     private translate: TranslateService) { }
 
   public openChoice() {
@@ -122,11 +128,16 @@ export class LandingPageComponent implements AfterViewInit {
         this.router.navigate(['map-config']);
         this.logger.info(this.translate.instant('Ready to access server'));
       } else {
+        // I think we need to think about two options for this part
+        // A config file store in a database with arlas-persistence
+        // A config file store on the file system of the user computer
+        // In all cases we need to validate the folder with this code
+        // const newUrl = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('serverUrl').value;
+        // this.startupService.validLoadedConfig(newUrl)
         this.logger.error(this.translate.instant('Not available now'));
       }
     });
   }
-
 }
 
 

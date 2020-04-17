@@ -3,10 +3,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { SharedModule } from '@shared/shared.module';
-import { ArlasConfigService } from 'arlas-wui-toolkit';
+import { ArlasConfigService, ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { NGXLogger } from 'ngx-logger';
 import { LandingPageComponent, LandingPageDialogComponent } from './landing-page.component';
+import { StartupService } from '@services/startup/startup.service';
 
 describe('LandingPageComponent', () => {
   let spectator: Spectator<LandingPageComponent>;
@@ -21,6 +22,8 @@ describe('LandingPageComponent', () => {
       mockProvider(NGXLogger),
       mockProvider(MainFormService),
       mockProvider(ArlasConfigService),
+      mockProvider(ArlasCollaborativesearchService),
+      mockProvider(StartupService),
       mockProvider(ArlasConfigurationDescriptor),
       mockProvider(HttpClient)
     ],
