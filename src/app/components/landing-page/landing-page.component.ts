@@ -85,10 +85,10 @@ export class LandingPageDialogComponent implements OnInit {
         const newConf = Object.assign(currentConf, { arlas: { server: { url } } });
         this.configService.setConfig(newConf);
         // Update collaborative search Service with the new url
-        this.startupService.setCollaborativeService(newConf).then(()=>{
+        this.startupService.setCollaborativeService(newConf).then(() => {
           this.configDescritor.getAllCollections().subscribe(collections => this.availablesCollections = collections);
           this.isServerReady = true;
-        })
+        });
       },
       () => {
         this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
@@ -131,10 +131,10 @@ export class LandingPageComponent implements AfterViewInit {
         // I think we need to think about two options for this part
         // A config file store in a database with arlas-persistence
         // A config file store on the file system of the user computer
-        // In all cases we need to validate the folder with this code 
+        // In all cases we need to validate the folder with this code
         // const newUrl = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('serverUrl').value;
         // this.startupService.validLoadedConfig(newUrl)
-         this.logger.error(this.translate.instant('Not available now'));
+        this.logger.error(this.translate.instant('Not available now'));
       }
     });
   }

@@ -43,14 +43,14 @@ export class StartupService {
   ) { }
 
   public init(): Promise<string> {
-    // Init app with an empty configuration 
+    // Init app with an empty configuration
     return this.setConfigService({})
-    // Init app with the language read from url 
-    .then(()=>this.translationLoaded())    
+      // Init app with the language read from url
+      .then(() => this.translationLoaded());
   }
 
   // This funcion could be used to valid an existing loaded conf
-  public validLoadedConfig(configFilePath: string) : Promise<boolean> {
+  public validLoadedConfig(configFilePath: string): Promise<boolean> {
     let configData;
     const ret = this.http
       .get(configFilePath)
