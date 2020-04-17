@@ -41,6 +41,7 @@ import { ConfigFormGroupComponent as ConfigFormGroupComponent } from './componen
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfigFormControlComponent } from './components/config-form-control/config-form-control.component';
+import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { ConfigFormControlComponent } from './components/config-form-control/con
     ConfigFormControlComponent
   ],
   imports: [
+    ArlasToolkitSharedModule,
     CommonModule,
     MatDialogModule,
     MatCardModule,

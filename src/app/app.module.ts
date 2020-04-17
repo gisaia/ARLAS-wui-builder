@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule, APP_INITIALIZER, forwardRef } from '@angular/core';
 import { GestureConfig } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
@@ -37,10 +37,10 @@ import { MapConfigModule } from '@map-config/map-config.module';
 import { SearchConfigModule } from '@search-config/search-config.module';
 import { TimelineConfigModule } from '@timeline-config/timeline-config.module';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
-import { ArlasToolKitModule, ArlasStartupService } from 'arlas-wui-toolkit';
+import {  ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { SharedModule } from '@shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -51,9 +51,16 @@ import { ArlasWalkthroughService } from 'arlas-wui-toolkit/services/walkthrough/
 import { WalkthroughService } from '@services/walkthrough/walkthrough.service';
 import { MatBadgeModule } from '@angular/material/badge';
 import { AnalyticsConfigModule } from './modules/analytics-config/analytics-config.module';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { CustomTranslateLoader } from 'arlas-wui-toolkit/shared.module';
+import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
+  return load;
+}
+export function startupServiceFactory(startupService: StartupService) {
+  const load = () => startupService.load('config.json?' + Date.now());
   return load;
 }
 
@@ -68,7 +75,6 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ArlasToolKitModule,
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
@@ -87,6 +93,13 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
     SearchConfigModule,
     SharedModule,
     TimelineConfigModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useClass: CustomTranslateLoader,
+        deps: [HttpClient]
+      }
+    }),
     LoggerModule.forRoot({
       level: environment.logLevel,
       disableConsoleLogging: false
@@ -96,6 +109,8 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
     AnalyticsConfigModule
   ],
   providers: [
+    forwardRef(() => ArlasConfigurationDescriptor),
+    forwardRef(() => ArlasCollaborativesearchService),
     {
       provide: APP_INITIALIZER,
       useFactory: loadServiceFactory,
@@ -103,8 +118,10 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
       multi: true
     },
     {
-      provide: ArlasStartupService,
-      useClass: StartupService
+      provide: APP_INITIALIZER,
+      useFactory: startupServiceFactory,
+      deps: [StartupService],
+      multi: true
     },
     {
       provide: ArlasWalkthroughService,
