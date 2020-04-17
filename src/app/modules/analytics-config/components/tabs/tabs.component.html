@@ -1,0 +1,41 @@
+<div class="tab-wrapper">
+    <mat-tab-group disableRipple mat-align-tabs="start" #matTabGroup>
+        <mat-tab *ngFor="let tab of tabs; let index = index">
+            <ng-template mat-tab-label>
+                <div [id]="'tab-' + index" cdkDropList cdkDropListOrientation="horizontal"
+                    (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="getOtherTabsIds(index)">
+                    <div cdkDrag>
+                        <span *ngIf="editingTabIndex !== index" class="tab-name" [class.tab-error]="tabHasError(index)">
+                            {{tab}}
+                        </span>
+                        <span *ngIf="editingTabIndex === index" class="edit-tab-name">
+                            <!-- keydown stopPropagation needed to allow spaces -->
+                            <input matInput [(ngModel)]="editingTabName" appAutoFocus autocomplete="off"
+                                (focusout)="finishEditTabName(index)" (keydown)="$event.stopPropagation();"
+                                (keydown.enter)="finishEditTabName(index);">
+
+                        </span>
+                        <button mat-icon-button (click)="startEditTabName(index)"
+                            [matTooltip]="'Edit tab name' | translate">
+                            <mat-icon>create</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="$event.stopPropagation(); removeTab(index)"
+                            [disabled]="tabs.length === 1" [matTooltip]="'Delete tab' | translate">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+            <app-groups [contentFg]="getTab(index).controls.contentFg">
+            </app-groups>
+        </mat-tab>
+    </mat-tab-group>
+
+    <button mat-icon-button (click)="addTab()" [matTooltip]="'Add tab' | translate">
+        <mat-icon>add</mat-icon>
+    </button>
+
+</div>
+<mat-error *ngIf="tabsFa.touched && tabsFa.errors?.required">
+    {{'At least one tab is required' | translate}}
+</mat-error>

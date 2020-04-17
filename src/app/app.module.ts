@@ -50,6 +50,7 @@ import { StartupService } from '@services/startup/startup.service';
 import { ArlasWalkthroughService } from 'arlas-wui-toolkit/services/walkthrough/walkthrough.service';
 import { WalkthroughService } from '@services/walkthrough/walkthrough.service';
 import { MatBadgeModule } from '@angular/material/badge';
+import { AnalyticsConfigModule } from './modules/analytics-config/analytics-config.module';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -91,7 +92,8 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
       disableConsoleLogging: false
     }),
     NgxSpinnerModule,
-    MatBadgeModule
+    MatBadgeModule,
+    AnalyticsConfigModule
   ],
   providers: [
     {

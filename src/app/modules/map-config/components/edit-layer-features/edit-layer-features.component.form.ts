@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { ComponentSubForm } from '@shared/ComponentSubForm';
+import { ComponentSubForm } from '@shared-models/component-sub-form';
 import { ViewChild } from '@angular/core';
 import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
 import { NGXLogger } from 'ngx-logger';

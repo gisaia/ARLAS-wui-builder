@@ -40,6 +40,11 @@ const routes: Routes = [
     loadChildren: () => import('./modules/search-config/search-config.module').then(m => m.SearchConfigModule),
     canActivate: [MainFormInitializedGuard]
   },
+  {
+    path: 'analytics-config',
+    loadChildren: () => import('./modules/analytics-config/analytics-config.module').then(m => m.AnalyticsConfigModule),
+    canActivate: [MainFormInitializedGuard]
+  },
   { path: '**', component: PageNotFoundComponent }
 ];
 

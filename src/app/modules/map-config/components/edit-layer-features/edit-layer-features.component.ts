@@ -54,7 +54,7 @@ export class EditLayerFeaturesComponent extends EditLayerFeaturesComponentForm i
     super(logger, formBuilder, formBuilderDefault);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     super.ngOnInit();
     // by getting a reference to the embedded form in this variable,
     // it will used by the parent ControlValueAccessor implementation to write values on-the-fly

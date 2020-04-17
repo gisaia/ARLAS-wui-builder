@@ -36,6 +36,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
+import { AutoFocusDirective } from './directives/auto-focus/auto-focus.directive';
+import { ConfigFormGroupComponent as ConfigFormGroupComponent } from './components/config-form-group/config-form-group.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatIconModule } from '@angular/material/icon';
+import { ConfigFormControlComponent } from './components/config-form-control/config-form-control.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +50,10 @@ import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
     ColorPickerWrapperComponent,
     ResetOnChangeDirective,
     PropertySelectorComponent,
-    ObjectvaluesPipe
+    ObjectvaluesPipe,
+    AutoFocusDirective,
+    ConfigFormGroupComponent,
+    ConfigFormControlComponent
   ],
   imports: [
     CommonModule,
@@ -59,7 +67,9 @@ import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
     MatSlideToggleModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatSliderModule
+    MatSliderModule,
+    MatAutocompleteModule,
+    MatIconModule
   ],
   exports: [
     ConfigElementComponent,
@@ -68,7 +78,9 @@ import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
     ColorPickerWrapperComponent,
     ResetOnChangeDirective,
     PropertySelectorComponent,
-    ObjectvaluesPipe
+    ObjectvaluesPipe,
+    AutoFocusDirective,
+    ConfigFormGroupComponent
   ]
 })
 export class SharedModule { }

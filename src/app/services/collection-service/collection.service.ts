@@ -27,9 +27,9 @@ import {
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NGXLogger } from 'ngx-logger';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-
 export import FIELD_TYPES = CollectionReferenceDescriptionProperty.TypeEnum;
 export import METRIC_TYPES = ComputationRequest.MetricEnum;
+import { CollectionField } from './models';
 
 @Injectable({
   providedIn: 'root'
@@ -44,14 +44,16 @@ export class CollectionService {
   ) { }
 
   public getCollectionFields(collection: string, types?: Array<FIELD_TYPES>, exclude: boolean = false)
-    : Observable<Array<string>> {
+    : Observable<Array<CollectionField>> {
 
     this.spinner.show();
 
-    const result: Observable<Array<string>> = this.collabSearchService.describe(collection).pipe(map(
+    const result: Observable<Array<CollectionField>> = this.collabSearchService.describe(collection).pipe(map(
       (c: CollectionReferenceDescriptionProperty) => {
 
-        const getSubFields = (properties, parentPath?: string): Array<string> => {
+        const getSubFields = (properties: CollectionReferenceDescriptionProperty, parentPath?: string):
+          Array<CollectionField> => {
+
           return Object.keys(properties).flatMap(key => {
             const path = parentPath ? parentPath + '.' + key : key;
             const property = properties[key];
@@ -59,9 +61,9 @@ export class CollectionService {
               return getSubFields(property.properties, path);
 
             } else if (!exclude && (!types || types.includes(property.type))) {
-              return path;
+              return { name: path, type: property.type };
             } else if (exclude && (!types || !types.includes(property.type))) {
-              return path;
+              return { name: path, type: property.type };
             } else {
               return null;
             }
@@ -73,6 +75,12 @@ export class CollectionService {
       .pipe(finalize(() => this.spinner.hide()));
 
     return result;
+  }
+
+  public getCollectionFieldsNames(collection: string, types?: Array<FIELD_TYPES>, exclude: boolean = false) {
+    return this.getCollectionFields(collection, types, exclude).pipe(map(
+      fields => fields.map(f => f.name)
+    ));
   }
 
   public getComputationMetric(collection: string, field: string, metric: METRIC_TYPES) {

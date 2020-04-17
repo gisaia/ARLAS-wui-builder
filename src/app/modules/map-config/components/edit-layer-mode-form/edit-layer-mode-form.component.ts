@@ -56,10 +56,10 @@ import { PropertySelectorComponent } from '@shared-components/property-selector/
 // ControlValueAccessor: see https://christianlydemann.com/form-validation-with-controlvalueaccessor/
 export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm implements OnInit, AfterViewInit {
 
-  @ViewChild('stepper', { static: false }) stepper: MatStepper;
-  @Input() aggregatedMode = false;
-  @Input() colorFgSources: Array<string>;
-  @ViewChildren(PropertySelectorComponent) propertySelectorComponents: QueryList<PropertySelectorComponent>;
+  @ViewChild('stepper', { static: false }) private stepper: MatStepper;
+  @Input() public aggregatedMode = false;
+  @Input() public colorFgSources: Array<string>;
+  @ViewChildren(PropertySelectorComponent) private propertySelectorComponents: QueryList<PropertySelectorComponent>;
 
   public ensureMinLessThanMax = ensureMinLessThanMax;
 
@@ -85,12 +85,12 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
     super(formBuilderDefault, formBuilder, logger);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     super.ngOnInit();
     this.initEnableWidthOrRadiusFg();
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     this.initCollectionRelatedFields();
   }
 
@@ -108,28 +108,28 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
       if (!c) {
         return;
       }
-      this.collectionService.getCollectionFields(c, [FIELD_TYPES.GEOPOINT])
+      this.collectionService.getCollectionFieldsNames(c, [FIELD_TYPES.GEOPOINT])
         .subscribe(
           f => {
             this.collectionGeoPointFields = f;
           });
-      this.collectionService.getCollectionFields(c, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE])
+      this.collectionService.getCollectionFieldsNames(c, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE])
         .subscribe(
           f => {
             this.collectionGeoFields = f;
           });
-      this.collectionService.getCollectionFields(c, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE], true)
+      this.collectionService.getCollectionFieldsNames(c, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE], true)
         .subscribe(
           f => {
             this.collectionAllButGeoFields = f;
           });
-      this.collectionService.getCollectionFields(c, [FIELD_TYPES.KEYWORD])
+      this.collectionService.getCollectionFieldsNames(c, [FIELD_TYPES.KEYWORD])
         .subscribe(
           f => {
             this.collectionKeywordFields = f;
             this.propertySelectorComponents.forEach(psc => psc.collectionKeywordFieldsEmitter.emit(f));
           });
-      this.collectionService.getCollectionFields(c, [FIELD_TYPES.LONG, FIELD_TYPES.INTEGER, FIELD_TYPES.DATE])
+      this.collectionService.getCollectionFieldsNames(c, [FIELD_TYPES.LONG, FIELD_TYPES.INTEGER, FIELD_TYPES.DATE])
         .subscribe(
           f => {
             this.collectionIntegerFields = f;

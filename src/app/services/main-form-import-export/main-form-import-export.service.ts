@@ -16,8 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { ComponentFactoryResolver, Injectable, ViewContainerRef, Type, OnInit } from '@angular/core';
-import { LayersComponent } from '@map-config/components/layers/layers.component';
+import { ComponentFactoryResolver, Injectable, ViewContainerRef, Type } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { updateValueAndValidity } from '@utils/tools';
 import * as FileSaver from 'file-saver';
@@ -25,23 +24,14 @@ import { NGXLogger } from 'ngx-logger';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { ConfigExportHelper } from './config-export-helper';
 import { ConfigMapExportHelper } from './config-map-export-helper';
-import { GlobalMapComponent } from '@map-config/components/global-map/global-map.component';
-import { GlobalSearchComponent } from '@search-config/components/global-search/global-search.component';
-import { GlobalTimelineComponent } from '@timeline-config/components/global-timeline/global-timeline.component';
 
-const MAIN_FORM_VALIDATE_COMPONENTS = [
-  GlobalMapComponent,
-  LayersComponent,
-  GlobalSearchComponent,
-  GlobalTimelineComponent
-] as Array<Type<GlobalMapComponent | LayersComponent | GlobalSearchComponent | GlobalTimelineComponent>>;
 
 @Injectable({
   providedIn: 'root'
 })
 export class MainFormImportExportService {
 
-  private exportExpected = false;
+  public isExportExpected = false;
 
   constructor(
     private logger: NGXLogger,
@@ -49,19 +39,10 @@ export class MainFormImportExportService {
     private componentFactoryResolver: ComponentFactoryResolver
   ) { }
 
-  get isExportExpected() {
-    return this.exportExpected;
-  }
-
   public attemptExport(vCref: ViewContainerRef) {
 
-    if (!this.exportExpected) {
-      // On first save, instanciate all related views, for them to inject their form in the mainForm.
-      // This allows a global validation.
-      MAIN_FORM_VALIDATE_COMPONENTS.forEach(
-        c => this.componentFactoryResolver.resolveComponentFactory(c).create(vCref.injector));
-
-      this.exportExpected = true;
+    if (!this.isExportExpected) {
+      this.isExportExpected = true;
     }
 
     // update the validity of the whole form
@@ -70,6 +51,8 @@ export class MainFormImportExportService {
 
     if (this.mainFormService.mainForm.valid) {
       this.doExport();
+    } else {
+      this.logger.info('Main form is not valid', this.mainFormService.mainForm);
     }
   }
 

@@ -16,25 +16,27 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { LandingPageComponent } from '@components/landing-page/landing-page.component';
 import { NGXLogInterface, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { IconService } from '@services/icon-service/icon.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-  title = 'ARLAS-wui-builder';
+  public title = 'ARLAS-wui-builder';
 
   @ViewChild('landing', { static: false }) public landing: LandingPageComponent;
 
   constructor(
     private logger: NGXLogger,
-    private snackbar: MatSnackBar) {
+    private snackbar: MatSnackBar,
+    private iconService: IconService) {
 
     this.logger.registerMonitor({
       onLog(logObject: NGXLogInterface): void {
@@ -43,5 +45,9 @@ export class AppComponent {
         }
       }
     });
+  }
+
+  public ngOnInit(): void {
+    this.iconService.registerIcons();
   }
 }

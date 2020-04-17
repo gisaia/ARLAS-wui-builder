@@ -18,7 +18,7 @@ under the License.
 */
 @import "variables.scss";
 
-$primary-color: mat-color($accent-palette, 300);
+$accent-color: mat-color($accent-palette, 300);
 
 .landing-container {
   display: flex;
@@ -32,7 +32,7 @@ $primary-color: mat-color($accent-palette, 300);
     margin: 30px;
     padding: 50px;
     width: 150px;
-    background: $primary-color;
+    background: $accent-color;
     color: white;
     font-weight: 200;
     cursor: pointer;
@@ -50,7 +50,7 @@ $primary-color: mat-color($accent-palette, 300);
     }
 
     &:hover {
-      background: rgba($primary-color, 0.5);
+      background: rgba($accent-color, 0.5);
     }
   }
 }

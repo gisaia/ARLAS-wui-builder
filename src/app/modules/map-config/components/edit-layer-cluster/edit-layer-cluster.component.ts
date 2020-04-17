@@ -63,7 +63,7 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
     super(logger, formBuilder, formBuilderDefault);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     super.ngOnInit();
 
     // by getting a reference to the embedded form in this variable,
@@ -79,7 +79,7 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
     this.registerGeometryType();
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     this.initSortChips();
     // Fired geometryChange event to update colorFgSource according to the geometryType value at init
     this.geometryTypeChange(this.geometryType.value);

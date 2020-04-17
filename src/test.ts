@@ -30,6 +30,7 @@ import { TranslateFakeLoader, TranslateLoader, TranslateModule, TranslateService
 import { ColorPickerModule } from 'ngx-color-picker';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import 'zone.js/dist/zone-testing';
 import { MatChipsModule } from '@angular/material/chips';
 
@@ -64,7 +65,8 @@ defineGlobalsInjections({
     MatAutocompleteModule,
     TranslateModule.forRoot({ loader: { provide: TranslateLoader, useClass: TranslateFakeLoader } }),
     MatBadgeModule,
-    HttpClientModule
+    HttpClientModule,
+    DragDropModule
   ],
   providers: [
     mockProvider(NGXLogger),

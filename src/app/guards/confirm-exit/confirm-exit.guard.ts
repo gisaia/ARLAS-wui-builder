@@ -40,7 +40,7 @@ export class ConfirmExitGuard implements CanDeactivate<CanComponentExit> {
     private translate: TranslateService) {
   }
 
-  canDeactivate(
+  public canDeactivate(
     component: CanComponentExit,
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot,

@@ -18,13 +18,13 @@ under the License.
 */
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
-import { ComponentSubForm } from '@shared/ComponentSubForm';
 import { CustomValidators } from '@utils/custom-validators';
 import { NGXLogger } from 'ngx-logger';
 import { CLUSTER_GEOMETRY_TYPE } from '../edit-layer-mode-form/models';
 import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
 import { ViewChild } from '@angular/core';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
+import { ComponentSubForm } from '@shared-models/component-sub-form';
 
 export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
 

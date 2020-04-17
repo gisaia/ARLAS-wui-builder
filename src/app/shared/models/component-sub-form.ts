@@ -55,34 +55,34 @@ export abstract class ComponentSubForm implements ControlValueAccessor, Validato
 
     public onTouched: () => void = () => { };
 
-    writeValue(obj: any): void {
+    public writeValue(obj: any): void {
         if (obj) {
             this.formFg.patchValue(obj, { emitEvent: false });
             this.onTouched();
         }
     }
 
-    registerOnChange(fn: any): void {
+    public registerOnChange(fn: any): void {
         this.formFg.valueChanges.subscribe(fn);
     }
 
-    registerOnTouched(fn: any): void {
+    public registerOnTouched(fn: any): void {
         this.onTouched = fn;
     }
 
-    setDisabledState?(isDisabled: boolean): void {
+    public setDisabledState?(isDisabled: boolean): void {
         isDisabled ? this.formFg.disable() : this.formFg.enable();
     }
 
-    validate(control: AbstractControl): ValidationErrors {
+    public validate(control: AbstractControl): ValidationErrors {
         return this.formFg.valid ? null : getAllFormGroupErrors(this.formFg);
     }
 
-    registerOnValidatorChange?(fn: () => void): void {
+    public registerOnValidatorChange?(fn: () => void): void {
         this.formFg.valueChanges.subscribe(fn);
     }
 
-    ngOnDestroy(): void {
+    public ngOnDestroy(): void {
         // sometimes null, but no idea why...
         [this.submitSubscription, this.submitSubject]
             .filter(s => !!s)

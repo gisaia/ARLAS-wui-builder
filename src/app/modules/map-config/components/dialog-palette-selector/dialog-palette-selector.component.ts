@@ -41,7 +41,7 @@ export class DialogPaletteSelectorComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogPaletteSelectorData,
     private logger: NGXLogger) { }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.dialogRef.disableClose = true;
     this.dialogRef.updateSize('800px');
     this.prepareDefaultPalettes();
@@ -76,7 +76,7 @@ export class DialogPaletteSelectorComponent implements OnInit {
       c => c.value + ' ' + (100 * (c.proportion - this.data.min) / (this.data.max - this.data.min)) + '%').join(',');
   }
 
-  drop(event: CdkDragDrop<string[]>) {
+  public drop(event: CdkDragDrop<string[]>) {
     // only reverse the color, proportions should stay consistent
     const previousColor = this.selectedPalette[event.previousIndex].value;
     const currentColor = this.selectedPalette[event.currentIndex].value;

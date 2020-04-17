@@ -50,7 +50,7 @@ export class DialogColorTableComponent implements OnInit {
     private collectionService: CollectionService
   ) { }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.dialogRef.disableClose = true;
     this.dialogRef.updateSize('800px');
 
