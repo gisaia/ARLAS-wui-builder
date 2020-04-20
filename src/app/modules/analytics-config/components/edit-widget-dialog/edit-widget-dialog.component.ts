@@ -24,8 +24,7 @@ import { WidgetFormBuilder } from '../../services/widget-form-builder';
 import { SwimlaneFormBuilderService } from '../../services/swimlane-form-builder/swimlane-form-builder.service';
 import { EditWidgetDialogData } from './models';
 import { WIDGET_TYPE } from '../edit-group/models';
-import { BucketsIntervalFormBuilderService } from '../../services/buckets-interval-form-builder/buckets-interval-form-builder.service';
-import { MetricFormBuilderService } from '../../services/metric-form-builder/metric-form-builder.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-widget-dialog',
@@ -35,57 +34,53 @@ import { MetricFormBuilderService } from '../../services/metric-form-builder/met
     {
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { showError: true }
-    },
-    // FormBuilderServices should be created at each new call as they have a state
-    HistogramFormBuilderService,
-    SwimlaneFormBuilderService,
-    BucketsIntervalFormBuilderService,
-    MetricFormBuilderService
+    }
   ]
 })
 export class EditWidgetDialogComponent implements OnInit {
 
   @ViewChild('stepper', { static: false }) private stepper: MatStepper;
-  public formBuilder: WidgetFormBuilder;
+  public formGroup: FormGroup;
+  public defaultKey: string;
 
   constructor(
     public dialogRef: MatDialogRef<EditWidgetDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: EditWidgetDialogData,
-    private injector: Injector
+    private histogramBuilder: HistogramFormBuilderService,
+    private swimlaneBuilder: SwimlaneFormBuilderService
   ) {
 
-    this.getWidgetFormBuilderInstance();
+    this.initFormGroup();
   }
 
-  private getWidgetFormBuilderInstance() {
+  private initFormGroup() {
+    let formBuilder: WidgetFormBuilder;
     switch (this.dialogData.widgetType) {
       case WIDGET_TYPE.histogram:
-        this.formBuilder = this.injector.get(HistogramFormBuilderService);
+        formBuilder = this.histogramBuilder;
         break;
       case WIDGET_TYPE.swimlane:
-        this.formBuilder = this.injector.get(SwimlaneFormBuilderService);
+        formBuilder = this.swimlaneBuilder;
         break;
     }
 
-    this.formBuilder.widgetFormGroup.patchValue(this.dialogData.formData);
+    this.formGroup = formBuilder.build();
+    this.formGroup.patchValue(this.dialogData.formData);
+    this.defaultKey = formBuilder.defaultKey;
   }
 
   public ngOnInit() {
 
     this.dialogRef.disableClose = true;
     this.dialogRef.updateSize('1200px');
-
-    if (!!this.dialogData.formData) {
-      this.formBuilder.widgetFormGroup.patchValue(this.dialogData);
-    }
   }
 
   public save() {
-    this.formBuilder.widgetFormGroup.markAllAsTouched();
+    this.formGroup.markAllAsTouched();
     this.stepper.steps.setDirty();
     this.stepper.steps.forEach(s => s.interacted = true);
-    if (this.formBuilder.widgetFormGroup.valid) {
-      this.dialogRef.close(this.formBuilder.widgetFormGroup);
+    if (this.formGroup.valid) {
+      this.dialogRef.close(this.formGroup);
     }
   }
 

@@ -4,16 +4,16 @@
 
     <mat-horizontal-stepper #stepper class="stepper-for-config-element">
 
-        <mat-step [label]="'Data' | translate " [stepControl]="formBuilder.dataStep">
-            <app-config-form-group [configFormGroup]="formBuilder.dataStep" [defaultKey]="formBuilder.defaultKey">
+        <mat-step [label]="'Data' | translate " [stepControl]="formGroup.controls.dataStep">
+            <app-config-form-group [configFormGroup]="formGroup.controls.dataStep" [defaultKey]="defaultKey">
             </app-config-form-group>
             <div>
                 <button mat-button matStepperNext type="button">{{ 'Next' | translate}}</button>
             </div>
         </mat-step>
 
-        <mat-step [label]="'Render' | translate " [stepControl]="formBuilder.renderStep">
-            <app-config-form-group [configFormGroup]="formBuilder.renderStep" [defaultKey]="formBuilder.defaultKey">
+        <mat-step [label]="'Render' | translate " [stepControl]="formGroup.controls.renderStep">
+            <app-config-form-group [configFormGroup]="formGroup.controls.renderStep" [defaultKey]="defaultKey">
             </app-config-form-group>
             <div>
                 <button mat-button matStepperPrevious>{{ 'Back' | translate}}</button>

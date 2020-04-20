@@ -27,8 +27,8 @@ import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
 import { CLUSTER_GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
+import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-form-builder/metric-form-builder.service';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
-import { MetricFormBuilderService } from '@analytics-config/services/metric-form-builder/metric-form-builder.service';
 
 export class ConfigExportHelper {
 
@@ -314,7 +314,7 @@ export class ConfigExportHelper {
 
                 this.addMetricToAggregationModel(aggregationModel, widgetData.dataStep.metric);
 
-                contrib.jsonpath = widgetData.dataStep.metric.metricValue === MetricFormBuilderService.defaultMetricValue ?
+                contrib.jsonpath = widgetData.dataStep.metric.metricValue === DEFAULT_METRIC_VALUE ?
                     '$.count' : '$.metrics[0].value';
 
                 contrib.aggregationmodels = [aggregationModel];
@@ -350,7 +350,7 @@ export class ConfigExportHelper {
                 swimlane.aggregationmodels.push(dateAggregationModel);
                 contrib.swimlane = [swimlane];
 
-                contrib.jsonpath = widgetData.dataStep.metric.metricValue === MetricFormBuilderService.defaultMetricValue ?
+                contrib.jsonpath = widgetData.dataStep.metric.metricValue === DEFAULT_METRIC_VALUE ?
                     '$.count' : '$.metrics[0].value';
 
                 return contrib;

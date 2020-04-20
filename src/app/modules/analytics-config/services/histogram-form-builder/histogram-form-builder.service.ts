@@ -28,6 +28,8 @@ import { FormGroup } from '@angular/forms';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { BucketsIntervalFormBuilderService } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
 import { MetricFormBuilderService } from '../metric-form-builder/metric-form-builder.service';
+import { CollectionField } from '@services/collection-service/models';
+import { Observable } from 'rxjs';
 
 // TODO put in common with timeline
 enum DateFormats {
@@ -35,7 +37,59 @@ enum DateFormats {
   French = '%d %b %Y  %H:%M'
 }
 
-@Injectable()
+export class HistogramFormGroup extends ConfigFormGroup {
+
+  constructor(
+    private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
+    private metricBuilderService: MetricFormBuilderService,
+    collectionFieldsObs: Observable<CollectionField[]>
+  ) {
+    super(
+      {
+        dataStep: new ConfigFormGroup({
+          name: new InputFormControl(
+            '',
+            'Name',
+            'description'),
+          aggregation:
+            bucketsIntervalBuilderService.build(collectionFieldsObs),
+          metric:
+            metricBuilderService.build(collectionFieldsObs)
+        }),
+        renderStep: new ConfigFormGroup({
+          multiselectable: new SlideToggleFormControl(
+            '',
+            'Is multiselectable?',
+            'description'
+          ),
+          chartType: new SelectFormControl(
+            '',
+            'Chart type',
+            'description',
+            false,
+            [ChartType[ChartType.area], ChartType[ChartType.bars]].map(value => ({ value, label: value }))
+          ),
+          showHorizontalLines: new SlideToggleFormControl(
+            '',
+            'Show horizontal lines?',
+            'description'
+          ),
+          ticksDateFormat: new SelectFormControl(
+            '',
+            'Date format',
+            'description',
+            false,
+            Object.keys(DateFormats).map(df => ({ value: DateFormats[df], label: df }))
+          )
+        })
+      }
+    );
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class HistogramFormBuilderService extends WidgetFormBuilder {
 
   public defaultKey = 'analytics.widgets.histogram';
@@ -49,45 +103,22 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
     private metricBuilderService: MetricFormBuilderService
   ) {
     super(collectionService, mainFormService);
+  }
 
-    this.widgetFormGroup = this.formBuilderDefault.group(this.defaultKey, {
-      dataStep: new ConfigFormGroup({
-        name: new InputFormControl(
-          '',
-          'Name',
-          'description'),
-        aggregation:
-          bucketsIntervalBuilderService.build(this.getNumericOrDateFieldsObs(), this.collectionFieldsObs),
-        metric:
-          metricBuilderService.build(this.collectionFieldsObs)
-      }),
-      renderStep: new ConfigFormGroup({
-        multiselectable: new SlideToggleFormControl(
-          '',
-          'Is multiselectable?',
-          'description'
-        ),
-        chartType: new SelectFormControl(
-          '',
-          'Chart type',
-          'description',
-          false,
-          [ChartType[ChartType.area], ChartType[ChartType.bars]].map(value => ({ value, label: value }))
-        ),
-        showHorizontalLines: new SlideToggleFormControl(
-          '',
-          'Show horizontal lines?',
-          'description'
-        ),
-        ticksDateFormat: new SelectFormControl(
-          '',
-          'Date format',
-          'description',
-          false,
-          Object.keys(DateFormats).map(df => ({ value: DateFormats[df], label: df }))
-        )
-      })
-    });
+  public build() {
+
+    const collectionFieldsObs = this.collectionService.getCollectionFields(
+      this.mainFormService.getCollections()[0]);
+
+    const formGroup = new HistogramFormGroup(
+      this.bucketsIntervalBuilderService,
+      this.metricBuilderService,
+      collectionFieldsObs
+    );
+
+    this.formBuilderDefault.setDefaultValueRecursively(this.defaultKey, formGroup);
+
+    return formGroup;
   }
 
 }

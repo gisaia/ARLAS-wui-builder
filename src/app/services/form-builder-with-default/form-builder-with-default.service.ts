@@ -48,7 +48,7 @@ export class FormBuilderWithDefaultService {
     return buildControl;
   }
 
-  private setDefaultValueRecursively(path: string, control: AbstractControl) {
+  public setDefaultValueRecursively(path: string, control: AbstractControl) {
 
     if (control instanceof FormGroup || control instanceof FormArray) {
       Object.keys(control.controls).forEach(c => {
