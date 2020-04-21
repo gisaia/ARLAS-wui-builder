@@ -16,12 +16,20 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Input } from '@angular/core';
-import { FormArray, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Component, OnInit, Input, ChangeDetectionStrategy, OnChanges, ChangeDetectorRef, EventEmitter, Output } from '@angular/core';
+import { FormArray, FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material';
+import {
+  ArlasCollaborativesearchService, ArlasStartupService,
+  ArlasConfigService
+} from 'arlas-wui-toolkit/services/startup/startup.service';
+import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
+import { AnalyticGroupConfiguration } from 'arlas-wui-toolkit/components/analytics-board/analytics.utils';
+import { Subject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-groups',
@@ -59,7 +67,8 @@ export class GroupsComponent implements OnInit {
         null,
         Validators.required
       ],
-      content: this.formBuilder.array([])
+      content: this.formBuilder.array([]),
+      preview: [new Array()]
     });
     this.groupsFa.push(newGroupFg);
   }
@@ -68,10 +77,7 @@ export class GroupsComponent implements OnInit {
     return this.contentFg.get('groupsFa') as FormArray;
   }
 
-  public getGroup = (index: number) => this.groupsFa.at(index) as FormGroup;
-
   public drop(event: CdkDragDrop<string[]>) {
     moveItemInFormArray(event.previousIndex, event.currentIndex, this.groupsFa);
   }
-
 }
