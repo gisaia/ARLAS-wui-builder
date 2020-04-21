@@ -32,7 +32,8 @@ import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contribut
 import { HistogramComponent } from 'arlas-web-components';
 import { HistogramContributor } from 'arlas-web-contributors';
 import { OperationEnum } from 'arlas-web-core';
-import { Subject } from 'rxjs';
+import { ConfigExportHelper } from '@services/main-form-import-export/config-export-helper';
+
 @Component({
   selector: 'app-edit-group',
   templateUrl: './edit-group.component.html',
@@ -68,7 +69,6 @@ export class EditGroupComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private arlasStartupService: ArlasStartupService,
     private collaborativesearchService: ArlasCollaborativesearchService,
-
     private configService: ArlasConfigService,
 
   ) { }
@@ -90,9 +90,7 @@ export class EditGroupComponent implements OnInit {
   }
 
   public editWidget(widgetIndex: number) {
-
     const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup;
-
     this.dialog.open(EditWidgetDialogComponent, {
       data: {
         widgetType: widgetFg.value.widgetType,
@@ -101,104 +99,42 @@ export class EditGroupComponent implements OnInit {
     })
       .afterClosed().subscribe(result => {
         if (result) {
-          this.createContributor('1');
-          this.formGroup.controls
-            .preview.setValue([this.analyticsBoardConfig('1')]);
-          this.arlasStartupService.contributorRegistry.get('1').updateFromCollaboration({
+          widgetFg.setControl('widgetData', result);
+          const contrib = this.createContributor(widgetFg.value.widgetType,
+            widgetFg.value.widgetData, this.formGroup.controls.icon.value);
+          this.formGroup.controls.preview.setValue([ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1)]);
+          contrib.updateFromCollaboration({
             id: '',
             operation: OperationEnum.add,
             all: false
           });
-          widgetFg.
-            setControl('widgetData', result);
           this.cdr.detectChanges();
         }
       });
   }
 
-  // Use to test hardcoding preview
-  public analyticsBoardConfig(identifier) {
-    return {
-      groupId: identifier,
-      title: 'Course over ground (degree)',
-      icon: 'explore',
-      tab: 'Preview',
-      components: [
-        {
-          contributorId: identifier,
-          componentType: 'histogram',
-          input: {
-            dataType: 'numeric',
-            id: identifier,
-            isHistogramSelectable: true,
-            multiselectable: true,
-            topOffsetRemoveInterval: 40,
-            leftOffsetRemoveInterval: 18,
-            brushHandlesHeightWeight: 0.8,
-            yAxisStartsFromZero: true,
-            chartType: 'area',
-            chartTitle: 'Course over ground',
-            chartWidth: 445,
-            chartHeight: 100,
-            customizedCssClass: 'arlas-histogram-analytics',
-            xAxisPosition: 'bottom',
-            descriptionPosition: 'bottom',
-            xTicks: 4,
-            yTicks: 1,
-            xLabels: 4,
-            yLabels: 4,
-            showXTicks: true,
-            showYTicks: true,
-            showXLabels: true,
-            showYLabels: true,
-            showHorizontalLines: false,
-            isSmoothedCurve: true,
-            barWeight: 0.8
-          }
-        }
-      ]
-    };
-  }
 
-  // Use to test hardcoding contributor
-  public getContribConfiguration(id) {
-    return {
-      type: 'histogram',
-      identifier: id,
-      aggregationmodels: [
-
-        {
-          type: 'histogram',
-          field: 'course.cog'
-        }
-      ],
-      name: 'Course over ground',
-      charttype: 'area',
-      numberOfBuckets: 50,
-      title: 'Course over ground',
-      icon: 'explore',
-      isOneDimension: false
-    };
-  }
-
-  public createContributor = (id) => {
-    if (this.arlasStartupService.contributorRegistry.get(id) === undefined) {
-      const config = {
-        arlas: {
-          web: {
-            contributors: []
-          }
-        }
-      };
-      config.arlas.web.contributors.push(this.getContribConfiguration(id));
-      this.configService.setConfig(config);
-      const contributor = ContributorBuilder.buildContributor('histogram',
-        id,
+  public createContributor = (widgetType, widgetData, icon) => {
+    const contribConfig = ConfigExportHelper.getAnalyticsContributor(widgetType, widgetData, icon) as any;
+    const currentConfig = this.configService.getConfig() as any;
+    // add web contributors in config if not exist
+    if (currentConfig.arlas.web === undefined) {
+      currentConfig.arlas.web = {};
+      currentConfig.arlas.web.contributors = [];
+    } else if (currentConfig.arlas.web.contributors === undefined) {
+      currentConfig.arlas.web.contributors = [];
+    }
+    if (this.arlasStartupService.contributorRegistry.get(contribConfig.identifier) === undefined) {
+      currentConfig.arlas.web.contributors.push(contribConfig);
+      this.configService.setConfig(currentConfig);
+      const contributor = ContributorBuilder.buildContributor(WIDGET_TYPE[widgetType],
+        contribConfig.identifier,
         this.configService,
         this.collaborativesearchService);
       this.arlasStartupService.contributorRegistry
-        .set(id, contributor);
+        .set(contribConfig.identifier, contributor);
     }
+    return this.arlasStartupService.contributorRegistry.get(contribConfig.identifier);
   }
 
   get contentType() {

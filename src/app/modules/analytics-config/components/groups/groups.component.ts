@@ -16,20 +16,20 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Input, ChangeDetectionStrategy, OnChanges, ChangeDetectorRef, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormArray, FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material';
+import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
+import { ConfigExportHelper } from '@services/main-form-import-export/config-export-helper';
+import { ContributorConfig } from '@services/main-form-import-export/models-config';
 import {
-  ArlasCollaborativesearchService, ArlasStartupService,
+  ArlasStartupService,
   ArlasConfigService
 } from 'arlas-wui-toolkit/services/startup/startup.service';
-import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
-import { AnalyticGroupConfiguration } from 'arlas-wui-toolkit/components/analytics-board/analytics.utils';
-import { Subject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-groups',
@@ -42,7 +42,9 @@ export class GroupsComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private arlasStartupService: ArlasStartupService,
+    private configService: ArlasConfigService
   ) {
   }
 
@@ -71,6 +73,25 @@ export class GroupsComponent implements OnInit {
       preview: [new Array()]
     });
     this.groupsFa.push(newGroupFg);
+  }
+
+  public remove(gi) {
+    let currentContributors = this.configService.getValue('arlas.web.contributors') as Array<ContributorConfig>;
+    if (currentContributors !== undefined) {
+      this.groupsFa.at(gi).value.content.forEach(c => {
+        if (c.widgetData) {
+          const contributorId = ConfigExportHelper.toSnakeCase(c.widgetData.dataStep.name);
+          // remove contributors from registry
+          this.arlasStartupService.contributorRegistry.delete(contributorId);
+          // remove contributors from config
+          currentContributors = currentContributors.filter(config => config.identifier !== contributorId);
+        }
+      });
+      // set new config
+      const currentConfig = this.configService.getConfig() as any;
+      currentConfig.arlas.web.contributors = currentContributors;
+    }
+    this.groupsFa.removeAt(gi);
   }
 
   get groupsFa() {
