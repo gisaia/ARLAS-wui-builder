@@ -19,7 +19,8 @@ under the License.
 import { Injectable } from '@angular/core';
 import {
   ConfigFormGroup, SelectFormControl, SlideToggleFormControl, SliderFormControl,
-  InputFormControl
+  InputFormControl,
+  HiddenFormControl
 } from '@shared-models/config-form';
 import { Interval, Metric, CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { Observable } from 'rxjs';
@@ -41,16 +42,32 @@ export class BucketsIntervalFormBuilderService {
     this.formGroup = new ConfigFormGroup({
       aggregationField: new SelectFormControl(
         '',
-        'Date aggregation field',
+        'Aggregation field',
         'description',
         true,
-        numericOrDateFieldsObs),
+        numericOrDateFieldsObs,
+        {
+          childs: () => [this.aggregationFieldType]
+        }),
+      aggregationFieldType: new HiddenFormControl(
+        '',
+        {
+          dependsOn: () => [this.aggregationField],
+          onDependencyChange: (control) => {
+            collectionFieldsObs.subscribe(fields => {
+              const aggregationFieldType = fields.find(f => f.name === this.aggregationField.value);
+              control.setValue(!!aggregationFieldType ? aggregationFieldType.type : null);
+            });
+          }
+        }
+      ),
       aggregationBucketOrInterval: new SlideToggleFormControl(
         '',
         'By bucket',
         'description',
         'or interval',
         {
+          resetDependantsOnChange: true,
           childs: () => [this.aggregationBucketsNumber, this.aggregationIntervalUnit, this.aggregationIntervalSize]
         }
       ),
@@ -114,6 +131,10 @@ export class BucketsIntervalFormBuilderService {
 
   private get aggregationField() {
     return this.formGroup.get('aggregationField') as SelectFormControl;
+  }
+
+  private get aggregationFieldType() {
+    return this.formGroup.get('aggregationFieldType') as SelectFormControl;
   }
 
   private get aggregationBucketOrInterval() {

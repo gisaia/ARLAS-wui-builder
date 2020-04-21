@@ -17,54 +17,131 @@ specific language governing permissions and limitations
 under the License.
 */
 export interface Config {
-    arlas: Arlas;
+    arlas: ArlasConfig;
     arlasWui: {
         web: {
             app: {
                 components: {
-                    chipssearch: ChipSearch;
+                    chipssearch: ChipSearchConfig;
                 }
             }
         }
     };
 }
 
-export interface Arlas {
-    web: Web;
+export interface ArlasConfig {
+    web: WebConfig;
 }
 
-export interface ChipSearch {
+export interface ChipSearchConfig {
     name: string;
     icon: string;
 }
 
-export interface Web {
-    contributors: Array<Contributor>;
+export interface WebConfig {
+    contributors: Array<ContributorConfig>;
     components: {
-        timeline: TimelineComponent,
-        detailedTimeline: TimelineComponent
+        timeline: AnalyticComponentConfig,
+        detailedTimeline: AnalyticComponentConfig
     };
+    analytics: Array<AnalyticConfig>;
 }
 
-export interface Contributor {
+export interface ContributorConfig {
     type: string;
     identifier: string;
     geoQueryOp?: string;
     geoQueryField?: string;
-    layers_sources?: Array<LayerSource>;
+    layers_sources?: Array<LayerSourceConfig>;
     name?: string;
+    title?: string;
+    charttype?: string;
     search_field?: string;
     icon?: string;
     autocomplete_field?: string;
     autocomplete_size?: number;
     numberOfBuckets?: number;
     isOneDimension?: boolean;
-    aggregationmodels?: Array<AggregationModel>;
+    aggregationmodels?: Array<AggregationModelConfig>;
     annexedContributorId?: string;
     selectionExtentPercentage?: number;
+    datatype?: string;
+    jsonpath?: string;
+    swimlane?: Array<SwimlaneConfig>;
 }
 
-export interface LayerSource {
+export interface SwimlaneConfig {
+    id: number;
+    name: string;
+    xAxisField: string;
+    termField: string;
+    aggregationmodels?: Array<AggregationModelConfig>;
+}
+
+export interface AnalyticConfig {
+    groupId: string;
+    title: string;
+    tab: string;
+    icon: string;
+    components: Array<AnalyticComponentConfig>;
+}
+
+export interface AnalyticComponentConfig {
+    contributorId: string;
+    componentType: string;
+    showExportCsv?: boolean;
+    input: AnalyticComponentInputConfig;
+}
+
+export interface AnalyticComponentInputConfig {
+    id: string;
+    dataType: string;
+    isHistogramSelectable: boolean;
+    ticksDateFormat?: string;
+    multiselectable: boolean;
+    topOffsetRemoveInterval?: number;
+    leftOffsetRemoveInterval?: number;
+    brushHandlesHeightWeight: number;
+    yAxisStartsFromZero: boolean;
+    chartType: string;
+    chartTitle: string;
+    chartWidth: number;
+    chartHeight: number;
+    customizedCssClass: string;
+    xAxisPosition: string;
+    descriptionPosition: string;
+    xTicks: number;
+    yTicks: number;
+    xLabels: number;
+    yLabels: number;
+    showXTicks: boolean;
+    showYTicks: boolean;
+    showXLabels: boolean;
+    showYLabels: boolean;
+    showHorizontalLines: boolean;
+    barWeight: number;
+}
+
+export interface AnalyticComponentHistogramInputConfig extends AnalyticComponentInputConfig {
+    isSmoothedCurve: boolean;
+}
+
+export interface AnalyticComponentSwimlaneInputConfig extends AnalyticComponentInputConfig {
+    swimLaneLabelsWidth: number;
+    swimlaneHeight: number;
+    swimlaneMode: string;
+    swimlaneBorderRadius: number;
+    paletteColors: [number, number];
+    swimlaneRepresentation: string;
+    swimlaneOptions: AnalyticComponentSwimlaneInputOptionsConfig;
+}
+
+export interface AnalyticComponentSwimlaneInputOptionsConfig {
+    zerosColor?: string;
+    nanColors?: string;
+}
+
+export interface LayerSourceConfig {
     id: string;
     source: string;
     minzoom: number;
@@ -76,70 +153,37 @@ export interface LayerSource {
     agg_geo_field?: string;
     color_from_field?: string | Array<string>;
     include_fields?: Array<string>;
-    normalization_fields?: Array<NormalizationField>;
+    normalization_fields?: Array<NormalizationFieldConfig>;
     aggregated_geometry?: string;
-    raw_geometry?: RawGeometry;
+    raw_geometry?: RawGeometryConfig;
     granularity?: string;
-    metrics?: Array<Metric>;
+    metrics?: Array<MetricConfig>;
 }
 
-export interface AggregationModel {
+export interface AggregationModelConfig {
     type: string;
     field: string;
+    size?: number;
     interval?: {
         value: number;
-        unit: string;
+        unit?: string;
     };
+    metrics?: Array<{ collect_field: string, collect_fct: string }>;
 }
 
-export interface NormalizationField {
+export interface NormalizationFieldConfig {
     on: string;
     per: string;
     scope: string;
 }
 
-export interface RawGeometry {
+export interface RawGeometryConfig {
     geometry: string;
     sort: string;
 }
 
-export interface Metric {
+export interface MetricConfig {
     field: string;
     metric: string;
     normalize: string;
-}
-
-export interface TimelineComponent {
-    contributorId: string;
-    componentType: string;
-    input: TimelineComponentInput;
-}
-
-export interface TimelineComponentInput {
-    id: string;
-    xTicks: number;
-    yTicks: number;
-    xLabels: number;
-    yLabels: number;
-    chartTitle: string;
-    customizedCssClass: string;
-    chartHeight: number;
-    multiselectable: boolean;
-    brushHandlesHeightWeight: number;
-    dataType: string;
-    isHistogramSelectable: boolean;
-    ticksDateFormat?: string;
-    chartType: string;
-    chartWidth: number;
-    xAxisPosition: string;
-    yAxisStartsFromZero: boolean;
-    descriptionPosition: string;
-    showXTicks: boolean;
-    showYTicks: boolean;
-    showXLabels: boolean;
-    showYLabels: boolean;
-    showHorizontalLines: boolean;
-    isSmoothedCurve: boolean;
-    barWeight: number;
-    topOffsetRemoveInterval?: number;
 }

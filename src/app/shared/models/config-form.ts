@@ -43,6 +43,9 @@ interface ControlOptionalParams {
     // callback to be executed when a dependency changes
     onDependencyChange?: (c: ConfigFormControl) => void;
 
+    // indicates if other fields that depends on this one, should be reset when this one changes
+    resetDependantsOnChange?: boolean;
+
     // usual validators
     validators?: ValidatorFn[];
 
@@ -111,6 +114,7 @@ export abstract class ConfigFormControl extends FormControl {
     get dependsOn() { return this.optionalParams.dependsOn; }
     get onDependencyChange() { return this.optionalParams.onDependencyChange; }
     get childs() { return this.optionalParams.childs; }
+    get resetDependantsOnChange() { return this.optionalParams.resetDependantsOnChange || false; }
 
     public initValidators() {
         const optionalValidator = this.optionalParams.optional ? [] : [Validators.required];
@@ -201,6 +205,15 @@ export class HuePaletteFormControl extends SelectFormControl {
         return this.syncOptions.find(o => o.value === this.value);
     }
 
+}
+
+export class HiddenFormControl extends ConfigFormControl {
+    constructor(
+        formState: any,
+        optionalParams?: ControlOptionalParams
+    ) {
+        super(formState, null, null, optionalParams);
+    }
 }
 
 export class SliderFormControl extends ConfigFormControl {

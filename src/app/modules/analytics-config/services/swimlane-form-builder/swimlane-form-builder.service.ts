@@ -21,7 +21,7 @@ import { WidgetFormBuilder } from '../widget-form-builder';
 import { FormGroup } from '@angular/forms';
 import {
   ConfigFormGroup, InputFormControl, SelectFormControl, SliderFormControl,
-  SlideToggleFormControl, ColorFormControl, HuePaletteFormControl
+  SlideToggleFormControl, ColorFormControl, HuePaletteFormControl, HiddenFormControl
 } from '@shared-models/config-form';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -43,7 +43,8 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
     protected mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
-    private metricBuilderService: MetricFormBuilderService
+    private metricBuilderService: MetricFormBuilderService,
+    private defaultValueService: DefaultValuesService
   ) {
     super(collectionService, mainFormService);
 
@@ -70,26 +71,9 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
             'description',
             0,
             10,
-            1),
-          termAggregationMetric: metricBuilderService.build(this.collectionFieldsObs).withTitle('Metric')
+            1)
         }).withTitle('Term aggregation'),
-        aggregationValue: new SelectFormControl(
-          '',
-          'Value used in aggregation',
-          'description',
-          false,
-          [],
-          {
-            dependsOn: () => [metricBuilderService.metricCollectFunction],
-            onDependencyChange: (control: SelectFormControl) => {
-              // exclude metricCollectFunction.value if falsy
-              control.setSyncOptions(
-                [metricBuilderService.metricCollectFunction.value, 'COUNT']
-                  .filter(Boolean)
-                  .map(value => ({ value, label: value })));
-            }
-          }
-        )
+        metric: metricBuilderService.build(this.collectionFieldsObs).withTitle('Metric')
       }),
       renderStep: new ConfigFormGroup({
         swimlaneMode: new SelectFormControl(
@@ -115,23 +99,40 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
           'description',
           this.defaultValuesService.getDefaultConfig().huePalettes
         ),
-        displayOptionNoColor: new ColorFormControl(
+        isZeroRepresentative: new SlideToggleFormControl(
           '',
-          '0 color',
-          'description'),
-        NaNColor: new ColorFormControl(
+          'Is zero representative?',
+          'Description',
+          undefined,
+          {
+            childs: () => [this.zerosColors, this.NaNColors]
+          }
+        ),
+        zerosColors: new HiddenFormControl(
           '',
-          'Nan color',
-          'description'),
-        levelTicks: new SliderFormControl(
-          '',
-          'Tickness',
-          'description',
-          0,
-          2,
-          0.1)
+          {
+            optional: true,
+            dependsOn: () => [this.isZeroRepresentative],
+            onDependencyChange: (control: HiddenFormControl) =>
+              control.setValue(!!this.isZeroRepresentative.value ? this.defaultValueService.getDefaultConfig().swimlaneZeroColor : null)
+          }),
+        NaNColors: new HiddenFormControl(
+          this.defaultValueService.getDefaultConfig().swimlaneNanColor
+        )
       }),
     });
+  }
+
+  public get isZeroRepresentative() {
+    return this.widgetFormGroup.get('renderStep').get('isZeroRepresentative') as SlideToggleFormControl;
+  }
+
+  public get zerosColors() {
+    return this.widgetFormGroup.get('renderStep').get('zerosColors') as HiddenFormControl;
+  }
+
+  public get NaNColors() {
+    return this.widgetFormGroup.get('renderStep').get('NaNColors') as HiddenFormControl;
   }
 
 }

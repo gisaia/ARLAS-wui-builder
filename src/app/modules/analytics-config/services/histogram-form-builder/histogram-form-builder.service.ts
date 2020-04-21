@@ -21,16 +21,11 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import {
-  ConfigFormGroup, SlideToggleFormControl, SelectFormControl, InputFormControl,
-  SliderFormControl
+  ConfigFormGroup, SlideToggleFormControl, SelectFormControl, InputFormControl
 } from '@shared-models/config-form';
 import { ChartType } from 'arlas-web-components';
-import { Interval, Metric } from 'arlas-api';
-import { CollectionField } from '@services/collection-service/models';
 import { FormGroup } from '@angular/forms';
 import { WidgetFormBuilder } from '../widget-form-builder';
-import { CollectionReferenceDescriptionProperty } from 'arlas-api';
-import { NUMERIC_OR_DATE_TYPES } from '@utils/tools';
 import { BucketsIntervalFormBuilderService } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
 import { MetricFormBuilderService } from '../metric-form-builder/metric-form-builder.service';
 
@@ -64,22 +59,7 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
         aggregation:
           bucketsIntervalBuilderService.build(this.getNumericOrDateFieldsObs(), this.collectionFieldsObs),
         metric:
-          metricBuilderService.build(this.collectionFieldsObs),
-        aggregationValue: new SelectFormControl(
-          '',
-          'Value used in aggregation',
-          'description',
-          false,
-          [],
-          {
-            dependsOn: () => [metricBuilderService.metricCollectFunction],
-            onDependencyChange: (control: SelectFormControl) => {
-              // exclude metricCollectFunction.value if falsy
-              control.setSyncOptions([metricBuilderService.metricCollectFunction.value, 'COUNT']
-                .filter(Boolean).map(value => ({ value, label: value })));
-            }
-          }
-        )
+          metricBuilderService.build(this.collectionFieldsObs)
       }),
       renderStep: new ConfigFormGroup({
         multiselectable: new SlideToggleFormControl(

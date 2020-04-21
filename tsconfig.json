@@ -33,6 +33,7 @@
       "@map-config/*": ["app/modules/map-config/*"],
       "@search-config/*": ["app/modules/search-config/*"],
       "@timeline-config/*": ["app/modules/timeline-config/*"],
+      "@analytics-config/*": ["app/modules/analytics-config/*"],
       "@assets/*": ["assets/*"],
       "@environments/*": ["environments/*"],
       "@app/*": ["app/*"]      

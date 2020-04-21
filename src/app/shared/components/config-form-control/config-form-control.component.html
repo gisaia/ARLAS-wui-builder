@@ -1,7 +1,7 @@
 <div *ngIf="isSlideToggle(); let typedControl">
     <mat-slide-toggle [formControl]="typedControl" labelPosition="before"
-        [appResetOnChange]="typedControl.dependantControls ? defaultKey : null"
-        [dependants]="typedControl.dependantControls ? typedControl.dependantControls : null">
+        [appResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
+        [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
         {{ typedControl.label | translate}}
     </mat-slide-toggle>
     {{ typedControl.labelAfter | translate}}
@@ -70,4 +70,8 @@
         {{ typedControl.label | translate}} {{typedControl.optional ? '' : '*'}}</div>
     <app-color-picker-wrapper [value]="typedControl.value" (setValue)="typedControl.setValue($event)">
     </app-color-picker-wrapper>
+</div>
+
+<div *ngIf="isHidden(); let typedControl">
+    <input [formControl]="typedControl" type="hidden" [required]="!typedControl.optional">
 </div>
