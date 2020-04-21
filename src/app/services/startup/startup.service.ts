@@ -34,6 +34,9 @@ import * as arlasConfSchema from './builderconfig.schema.json';
 })
 export class StartupService {
 
+  public contributorRegistry: Map<string, any> = new Map<string, any>();
+
+
   constructor(
     private http: HttpClient,
     private configService: ArlasConfigService,
@@ -132,5 +135,9 @@ export class StartupService {
       this.arlasCss.setExploreApi(arlasExploreApi);
       resolve(data);
     });
+  }
+
+  public setCollection(collection: string) {
+    this.arlasCss.collection = collection;
   }
 }

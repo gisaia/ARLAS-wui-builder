@@ -31,7 +31,10 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
-import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import {
+  ArlasCollaborativesearchService, ArlasStartupService,
+  ArlasColorGeneratorLoader
+} from 'arlas-wui-toolkit';
 import { SharedModule } from '@shared/shared.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { StartupService } from '@services/startup/startup.service';
@@ -101,6 +104,10 @@ export function startupServiceFactory(startupService: StartupService) {
     {
       provide: ArlasWalkthroughService,
       useClass: WalkthroughService
+    },
+    {
+      provide: ArlasStartupService,
+      useClass: StartupService
     },
     {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,

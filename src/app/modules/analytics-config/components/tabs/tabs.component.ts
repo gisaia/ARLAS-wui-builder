@@ -53,7 +53,6 @@ export class TabsComponent implements OnInit {
             defaultValuesService.getValue('analytics.tabs.default')))
       ],
         Validators.required));
-
     this.tabsFa = this.mainFormService.analyticsConfig.getListFa();
   }
 
