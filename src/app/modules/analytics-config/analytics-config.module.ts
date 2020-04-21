@@ -24,6 +24,11 @@ import { SharedModule } from '@shared/shared.module';
 import { GroupsComponent } from './components/groups/groups.component';
 import { EditGroupComponent } from './components/edit-group/edit-group.component';
 import { EditWidgetDialogComponent } from './components/edit-widget-dialog/edit-widget-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatStepperModule } from '@angular/material/stepper';
+import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
 
 @NgModule({
   entryComponents: [
@@ -37,6 +42,7 @@ import { EditWidgetDialogComponent } from './components/edit-widget-dialog/edit-
     EditWidgetDialogComponent
   ],
   imports: [
+    ArlasToolkitSharedModule,
     SharedModule,
     AnalyticsConfigRoutingModule
   ]
