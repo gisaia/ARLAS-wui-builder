@@ -112,7 +112,7 @@ export class LandingPageComponent implements AfterViewInit {
     private dialog: MatDialog,
     private logger: NGXLogger,
     private router: Router,
-    // private startupService: StartupService,
+    private startupService: StartupService,
     private translate: TranslateService) { }
 
   public openChoice() {
@@ -124,6 +124,8 @@ export class LandingPageComponent implements AfterViewInit {
     this.openChoice();
     this.startEvent.subscribe(mode => {
       if (mode === 'new') {
+        const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('collections').value;
+        this.startupService.setCollection(collection);
         this.dialogRef.close();
         this.router.navigate(['map-config']);
         this.logger.info(this.translate.instant('Ready to access server'));
