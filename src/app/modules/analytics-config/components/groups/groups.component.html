@@ -4,7 +4,7 @@
     </mat-error>
     <div formArrayName="groupsFa" cdkDropList (cdkDropListDropped)="drop($event)">
         <div *ngFor="let group of groupsFa.controls; index as gi;" [formGroupName]="gi" cdkDrag>
-            <app-edit-group   [preview]="group.value['preview']" [formGroup]="group" (remove)="groupsFa.removeAt(gi)"></app-edit-group>
+            <app-edit-group   [preview]="group.value['preview']" [formGroup]="group" (remove)="remove(gi)"></app-edit-group>
         </div>
     </div>
 

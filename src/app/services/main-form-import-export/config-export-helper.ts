@@ -298,7 +298,7 @@ export class ConfigExportHelper {
         return timelineComponent;
     }
 
-    private static getAnalyticsContributor(widgetType: any, widgetData: any, icon: string): ContributorConfig {
+    public static getAnalyticsContributor(widgetType: any, widgetData: any, icon: string): ContributorConfig {
         // TODO at the end, find same contributors and keep only one instance
         switch (widgetType) {
             case WIDGET_TYPE.histogram: {
@@ -369,10 +369,10 @@ export class ConfigExportHelper {
         } as ContributorConfig;
     }
 
-    private static getAnalyticsGroup(tabName: string, group: any, groupIndex: number) {
+    public static getAnalyticsGroup(tabName: string, group: any, groupIndex: number) {
 
         const groupAnalytic = {
-            groupId: groupIndex.toString(),
+            groupId: tabName + '-' + groupIndex.toString(),
             title: group.title,
             tab: tabName,
             icon: group.icon,
@@ -483,7 +483,7 @@ export class ConfigExportHelper {
         }
     }
 
-    private static toSnakeCase(str) {
+    public static toSnakeCase(str) {
         return str &&
             str
                 .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
