@@ -20,80 +20,91 @@ import { Injectable } from '@angular/core';
 import { ConfigFormGroup, SelectFormControl, InputFormControl } from '@shared-models/config-form';
 import { Metric } from 'arlas-api';
 import { CollectionField } from '@services/collection-service/models';
-import { NUMERIC_OR_DATE_TYPES } from '@utils/tools';
 import { Observable } from 'rxjs';
+import { NUMERIC_OR_DATE_TYPES } from '@services/collection-service/tools';
 
-@Injectable()
+export const DEFAULT_METRIC_VALUE = 'COUNT';
+
+export class MetricFormGroup extends ConfigFormGroup {
+
+  public get metricCollectFunction() {
+    return this.get('metricCollectFunction') as InputFormControl;
+  }
+
+  constructor(collectionFieldsObs: Observable<Array<CollectionField>>) {
+    super(
+      {
+        metricCollectFunction: new SelectFormControl(
+          '',
+          'Metric collect function',
+          'Description',
+          false,
+          [Metric.CollectFctEnum.AVG.toString(), Metric.CollectFctEnum.CARDINALITY.toString(),
+          Metric.CollectFctEnum.MAX.toString(), Metric.CollectFctEnum.MIN.toString(),
+          Metric.CollectFctEnum.SUM.toString()].map(value => ({ value, label: value })),
+          {
+            optional: true
+          }
+        ),
+        metricCollectField: new SelectFormControl(
+          '',
+          'Metric collect field',
+          'Description',
+          true,
+          [],
+          {
+            dependsOn: () => [this.metricCollectFunction],
+            onDependencyChange: (control: SelectFormControl) => {
+              if (this.metricCollectFunction.value) {
+
+                control.enable();
+
+                const filterCallback = (field: CollectionField) =>
+                  this.metricCollectFunction.value === Metric.CollectFctEnum.CARDINALITY ?
+                    field : NUMERIC_OR_DATE_TYPES.indexOf(field.type) >= 0;
+
+                collectionFieldsObs.subscribe(
+                  fields => control.setSyncOptions(
+                    fields
+                      .filter(filterCallback)
+                      .map(f => ({ value: f.name, label: f.name }))));
+              } else {
+                control.disable();
+              }
+            }
+          }
+        ),
+        metricValue: new SelectFormControl(
+          '',
+          'Value used in aggregation',
+          'description',
+          false,
+          [],
+          {
+            dependsOn: () => [this.metricCollectFunction],
+            onDependencyChange: (control: SelectFormControl) => {
+              // exclude metricCollectFunction.value if falsy
+              control.setSyncOptions([this.metricCollectFunction.value, DEFAULT_METRIC_VALUE]
+                .filter(Boolean).map(value => ({ value, label: value })));
+            }
+          }
+        )
+      }
+    );
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class MetricFormBuilderService {
 
-  public static defaultMetricValue = 'COUNT';
   public formGroup: ConfigFormGroup;
 
   constructor() { }
 
   public build(collectionFieldsObs: Observable<Array<CollectionField>>) {
-    this.formGroup = new ConfigFormGroup({
-      metricCollectFunction: new SelectFormControl(
-        '',
-        'Metric collect function',
-        'Description',
-        false,
-        [Metric.CollectFctEnum.AVG.toString(), Metric.CollectFctEnum.CARDINALITY.toString(),
-        Metric.CollectFctEnum.MAX.toString(), Metric.CollectFctEnum.MIN.toString(),
-        Metric.CollectFctEnum.SUM.toString()].map(value => ({ value, label: value })),
-        {
-          optional: true
-        }
-      ),
-      metricCollectField: new SelectFormControl(
-        '',
-        'Metric collect field',
-        'Description',
-        true,
-        [],
-        {
-          dependsOn: () => [this.metricCollectFunction],
-          onDependencyChange: (control: SelectFormControl) => {
-            if (this.metricCollectFunction.value) {
-
-              control.enable();
-
-              const filterCallback = (field: CollectionField) =>
-                this.metricCollectFunction.value === Metric.CollectFctEnum.CARDINALITY ?
-                  field : NUMERIC_OR_DATE_TYPES.indexOf(field.type) >= 0;
-
-              collectionFieldsObs.subscribe(
-                fields => control.setSyncOptions(
-                  fields
-                    .filter(filterCallback)
-                    .map(f => ({ value: f.name, label: f.name }))));
-            } else {
-              control.disable();
-            }
-          }
-        }
-      ),
-      metricValue: new SelectFormControl(
-        '',
-        'Value used in aggregation',
-        'description',
-        false,
-        [],
-        {
-          dependsOn: () => [this.metricCollectFunction],
-          onDependencyChange: (control: SelectFormControl) => {
-            // exclude metricCollectFunction.value if falsy
-            control.setSyncOptions([this.metricCollectFunction.value, MetricFormBuilderService.defaultMetricValue]
-              .filter(Boolean).map(value => ({ value, label: value })));
-          }
-        }
-      )
-    });
-
-    return this.formGroup;
+    return new MetricFormGroup(collectionFieldsObs);
   }
 
-  public get metricCollectFunction() {
-    return this.formGroup.get('metricCollectFunction') as InputFormControl;
-  }
 }

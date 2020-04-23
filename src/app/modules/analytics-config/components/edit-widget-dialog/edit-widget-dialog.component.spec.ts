@@ -24,7 +24,7 @@ describe('EditWidgetDialogComponent', () => {
         getCollectionFields: () => of([])
       }),
       mockProvider(HistogramFormBuilderService, {
-        widgetFormGroup: new FormGroup({})
+        build: () => new FormGroup({})
       })
     ],
     declarations: [

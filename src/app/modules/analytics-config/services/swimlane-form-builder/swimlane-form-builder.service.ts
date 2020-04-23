@@ -21,7 +21,7 @@ import { WidgetFormBuilder } from '../widget-form-builder';
 import { FormGroup } from '@angular/forms';
 import {
   ConfigFormGroup, InputFormControl, SelectFormControl, SliderFormControl,
-  SlideToggleFormControl, ColorFormControl, HuePaletteFormControl, HiddenFormControl
+  SlideToggleFormControl, HuePaletteFormControl, HiddenFormControl
 } from '@shared-models/config-form';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -30,8 +30,111 @@ import { SwimlaneMode } from 'arlas-web-components';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { BucketsIntervalFormBuilderService } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
 import { MetricFormBuilderService } from '../metric-form-builder/metric-form-builder.service';
+import { Observable } from 'rxjs';
+import { CollectionField } from '@services/collection-service/models';
+import { toKeywordFieldsObs } from '@services/collection-service/tools';
 
-@Injectable()
+export class SwimlaneFormGroup extends ConfigFormGroup {
+
+  public get isZeroRepresentative() {
+    return this.get('renderStep').get('isZeroRepresentative') as SlideToggleFormControl;
+  }
+
+  public get zerosColors() {
+    return this.get('renderStep').get('zerosColors') as HiddenFormControl;
+  }
+
+  public get NaNColors() {
+    return this.get('renderStep').get('NaNColors') as HiddenFormControl;
+  }
+
+  constructor(
+    private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
+    private defaultValuesService: DefaultValuesService,
+    private metricBuilderService: MetricFormBuilderService,
+    collectionFieldsObs: Observable<CollectionField[]>
+  ) {
+    super(
+      {
+        dataStep: new ConfigFormGroup({
+          name: new InputFormControl(
+            '',
+            'Name',
+            'description'),
+          dateAggregation:
+            bucketsIntervalBuilderService
+              .build(collectionFieldsObs)
+              .withTitle('Date aggregation'),
+          termAggregation: new ConfigFormGroup({
+            termAggregationField: new SelectFormControl(
+              '',
+              'Term field',
+              'description',
+              true,
+              toKeywordFieldsObs(collectionFieldsObs)),
+            termAggregationSize: new SliderFormControl(
+              '',
+              'Term size',
+              'description',
+              0,
+              10,
+              1)
+          }).withTitle('Term aggregation'),
+          metric: metricBuilderService.build(collectionFieldsObs).withTitle('Metric')
+        }),
+        renderStep: new ConfigFormGroup({
+          swimlaneMode: new SelectFormControl(
+            '',
+            'Swimlane mode',
+            'description',
+            false,
+            [
+              { value: SwimlaneMode[SwimlaneMode.fixedHeight].toString(), label: 'Fixed' },
+              { value: SwimlaneMode[SwimlaneMode.variableHeight].toString(), label: 'Variable' },
+              { value: SwimlaneMode[SwimlaneMode.circles].toString(), label: 'Circles' }
+            ]
+          ),
+          swimlaneRepresentation: new SlideToggleFormControl(
+            '',
+            'Represent globally',
+            'description',
+            'or by column'
+          ),
+          paletteColors: new HuePaletteFormControl(
+            '',
+            'Palette colors',
+            'description',
+            defaultValuesService.getDefaultConfig().huePalettes
+          ),
+          isZeroRepresentative: new SlideToggleFormControl(
+            '',
+            'Is zero representative?',
+            'Description',
+            undefined,
+            {
+              childs: () => [this.zerosColors, this.NaNColors]
+            }
+          ),
+          zerosColors: new HiddenFormControl(
+            '',
+            {
+              optional: true,
+              dependsOn: () => [this.isZeroRepresentative],
+              onDependencyChange: (control: HiddenFormControl) =>
+                control.setValue(!!this.isZeroRepresentative.value ? defaultValuesService.getDefaultConfig().swimlaneZeroColor : null)
+            }),
+          NaNColors: new HiddenFormControl(
+            defaultValuesService.getDefaultConfig().swimlaneNanColor
+          )
+        }),
+      }
+    );
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class SwimlaneFormBuilderService extends WidgetFormBuilder {
 
   public defaultKey = 'analytics.widgets.swimlane';
@@ -44,95 +147,21 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
     private defaultValuesService: DefaultValuesService,
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
     private metricBuilderService: MetricFormBuilderService,
-    private defaultValueService: DefaultValuesService
   ) {
     super(collectionService, mainFormService);
-
-    this.widgetFormGroup = this.formBuilderDefault.group(this.defaultKey, {
-      dataStep: new ConfigFormGroup({
-        name: new InputFormControl(
-          '',
-          'Name',
-          'description'),
-        dateAggregation:
-          bucketsIntervalBuilderService
-            .build(this.getNumericOrDateFieldsObs(), this.collectionFieldsObs)
-            .withTitle('Date aggregation'),
-        termAggregation: new ConfigFormGroup({
-          termAggregationField: new SelectFormControl(
-            '',
-            'Term field',
-            'description',
-            true,
-            this.getKeywordFieldsObs()),
-          termAggregationSize: new SliderFormControl(
-            '',
-            'Term size',
-            'description',
-            0,
-            10,
-            1)
-        }).withTitle('Term aggregation'),
-        metric: metricBuilderService.build(this.collectionFieldsObs).withTitle('Metric')
-      }),
-      renderStep: new ConfigFormGroup({
-        swimlaneMode: new SelectFormControl(
-          '',
-          'Swimlane mode',
-          'description',
-          false,
-          [
-            { value: SwimlaneMode[SwimlaneMode.fixedHeight].toString(), label: 'Fixed' },
-            { value: SwimlaneMode[SwimlaneMode.variableHeight].toString(), label: 'Variable' },
-            { value: SwimlaneMode[SwimlaneMode.circles].toString(), label: 'Circles' }
-          ]
-        ),
-        swimlaneRepresentation: new SlideToggleFormControl(
-          '',
-          'Represent globally',
-          'description',
-          'or by column'
-        ),
-        paletteColors: new HuePaletteFormControl(
-          '',
-          'Palette colors',
-          'description',
-          this.defaultValuesService.getDefaultConfig().huePalettes
-        ),
-        isZeroRepresentative: new SlideToggleFormControl(
-          '',
-          'Is zero representative?',
-          'Description',
-          undefined,
-          {
-            childs: () => [this.zerosColors, this.NaNColors]
-          }
-        ),
-        zerosColors: new HiddenFormControl(
-          '',
-          {
-            optional: true,
-            dependsOn: () => [this.isZeroRepresentative],
-            onDependencyChange: (control: HiddenFormControl) =>
-              control.setValue(!!this.isZeroRepresentative.value ? this.defaultValueService.getDefaultConfig().swimlaneZeroColor : null)
-          }),
-        NaNColors: new HiddenFormControl(
-          this.defaultValueService.getDefaultConfig().swimlaneNanColor
-        )
-      }),
-    });
   }
 
-  public get isZeroRepresentative() {
-    return this.widgetFormGroup.get('renderStep').get('isZeroRepresentative') as SlideToggleFormControl;
-  }
+  public build() {
 
-  public get zerosColors() {
-    return this.widgetFormGroup.get('renderStep').get('zerosColors') as HiddenFormControl;
-  }
+    const collectionFieldsObs = this.collectionService.getCollectionFields(
+      this.mainFormService.getCollections()[0]);
 
-  public get NaNColors() {
-    return this.widgetFormGroup.get('renderStep').get('NaNColors') as HiddenFormControl;
+    const formGroup = new SwimlaneFormGroup(
+      this.bucketsIntervalBuilderService, this.defaultValuesService, this.metricBuilderService, collectionFieldsObs);
+
+    this.formBuilderDefault.setDefaultValueRecursively(this.defaultKey, formGroup);
+
+    return formGroup;
   }
 
 }

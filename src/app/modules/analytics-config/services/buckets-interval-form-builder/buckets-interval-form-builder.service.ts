@@ -22,135 +22,143 @@ import {
   InputFormControl,
   HiddenFormControl
 } from '@shared-models/config-form';
-import { Interval, Metric, CollectionReferenceDescriptionProperty } from 'arlas-api';
+import { Interval, CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { Observable } from 'rxjs';
-import { SelectOption } from '@shared-models/config-form';
 import { CollectionField } from '@services/collection-service/models';
+import { toNumericOrDateFieldsObs } from '@services/collection-service/tools';
 
-@Injectable()
-export class BucketsIntervalFormBuilderService {
-
-  public formGroup: ConfigFormGroup;
-  constructor() {
-  }
-
-  public build(
-    numericOrDateFieldsObs: Observable<Array<SelectOption>>,
-    collectionFieldsObs: Observable<Array<CollectionField>>,
-  ) {
-
-    this.formGroup = new ConfigFormGroup({
-      aggregationField: new SelectFormControl(
-        '',
-        'Aggregation field',
-        'description',
-        true,
-        numericOrDateFieldsObs,
-        {
-          childs: () => [this.aggregationFieldType]
-        }),
-      aggregationFieldType: new HiddenFormControl(
-        '',
-        {
-          dependsOn: () => [this.aggregationField],
-          onDependencyChange: (control) => {
-            collectionFieldsObs.subscribe(fields => {
-              const aggregationFieldType = fields.find(f => f.name === this.aggregationField.value);
-              control.setValue(!!aggregationFieldType ? aggregationFieldType.type : null);
-            });
-          }
-        }
-      ),
-      aggregationBucketOrInterval: new SlideToggleFormControl(
-        '',
-        'By bucket',
-        'description',
-        'or interval',
-        {
-          resetDependantsOnChange: true,
-          childs: () => [this.aggregationBucketsNumber, this.aggregationIntervalUnit, this.aggregationIntervalSize]
-        }
-      ),
-      aggregationBucketsNumber: new SliderFormControl(
-        '',
-        'Number of buckets',
-        'description',
-        10,
-        200,
-        5,
-        {
-          dependsOn: () => [this.aggregationBucketOrInterval],
-          onDependencyChange: (control) =>
-            !!this.aggregationBucketOrInterval.value ? control.disable() : control.enable()
-        }
-      ),
-      aggregationIntervalUnit: new SelectFormControl(
-        '',
-        'Interval unit',
-        'description',
-        false,
-        Array.from(
-          new Set(
-            Object.values(Interval.UnitEnum).map(v => {
-              const value = typeof v === 'string' ? v.toLowerCase() : v.toString();
-              return { value, label: value };
-            })))
-          .sort(),
-        {
-          dependsOn: () => [this.aggregationBucketOrInterval, this.aggregationField],
-          onDependencyChange: (control) => {
-            collectionFieldsObs.subscribe(fields => {
-              if (this.aggregationBucketOrInterval.value &&
-                !!fields.find(f => f.name === this.aggregationField.value) &&
-                fields.find(f => f.name === this.aggregationField.value).type
-                === CollectionReferenceDescriptionProperty.TypeEnum.DATE) {
-                control.enable();
-              } else {
-                control.disable();
-              }
-            });
-
-          }
-        }
-      ),
-      aggregationIntervalSize: new InputFormControl(
-        '',
-        'Interval size',
-        'description',
-        'number',
-        {
-          dependsOn: () => [this.aggregationBucketOrInterval],
-          onDependencyChange: (control) =>
-            !!this.aggregationBucketOrInterval.value ? control.enable() : control.disable()
-        }
-      )
-    });
-
-    return this.formGroup;
-  }
+export class BucketsIntervalFormGroup extends ConfigFormGroup {
 
   private get aggregationField() {
-    return this.formGroup.get('aggregationField') as SelectFormControl;
+    return this.get('aggregationField') as SelectFormControl;
   }
 
   private get aggregationFieldType() {
-    return this.formGroup.get('aggregationFieldType') as SelectFormControl;
+    return this.get('aggregationFieldType') as SelectFormControl;
   }
 
   private get aggregationBucketOrInterval() {
-    return this.formGroup.get('aggregationBucketOrInterval') as SlideToggleFormControl;
+    return this.get('aggregationBucketOrInterval') as SlideToggleFormControl;
   }
 
   private get aggregationBucketsNumber() {
-    return this.formGroup.get('aggregationBucketsNumber') as SliderFormControl;
+    return this.get('aggregationBucketsNumber') as SliderFormControl;
   }
 
   private get aggregationIntervalUnit() {
-    return this.formGroup.get('aggregationIntervalUnit') as SelectFormControl;
+    return this.get('aggregationIntervalUnit') as SelectFormControl;
   }
 
   private get aggregationIntervalSize() {
-    return this.formGroup.get('aggregationIntervalSize') as InputFormControl;
+    return this.get('aggregationIntervalSize') as InputFormControl;
+  }
+
+  constructor(
+    collectionFieldsObs: Observable<Array<CollectionField>>) {
+
+    super(
+      {
+        aggregationField: new SelectFormControl(
+          '',
+          'Aggregation field',
+          'description',
+          true,
+          toNumericOrDateFieldsObs(collectionFieldsObs),
+          {
+            childs: () => [this.aggregationFieldType]
+          }),
+        aggregationFieldType: new HiddenFormControl(
+          '',
+          {
+            dependsOn: () => [this.aggregationField],
+            onDependencyChange: (control) => {
+              collectionFieldsObs.subscribe(fields => {
+                const aggregationFieldType = fields.find(f => f.name === this.aggregationField.value);
+                control.setValue(!!aggregationFieldType ? aggregationFieldType.type : null);
+              });
+            }
+          }
+        ),
+        aggregationBucketOrInterval: new SlideToggleFormControl(
+          '',
+          'By bucket',
+          'description',
+          'or interval',
+          {
+            resetDependantsOnChange: true,
+            childs: () => [this.aggregationBucketsNumber, this.aggregationIntervalUnit, this.aggregationIntervalSize]
+          }
+        ),
+        aggregationBucketsNumber: new SliderFormControl(
+          '',
+          'Number of buckets',
+          'description',
+          10,
+          200,
+          5,
+          {
+            dependsOn: () => [this.aggregationBucketOrInterval],
+            onDependencyChange: (control) =>
+              !!this.aggregationBucketOrInterval.value ? control.disable() : control.enable()
+          }
+        ),
+        aggregationIntervalUnit: new SelectFormControl(
+          '',
+          'Interval unit',
+          'description',
+          false,
+          Array.from(
+            new Set(
+              Object.values(Interval.UnitEnum).map(v => {
+                const value = typeof v === 'string' ? v.toLowerCase() : v.toString();
+                return { value, label: value };
+              })))
+            .sort(),
+          {
+            dependsOn: () => [this.aggregationBucketOrInterval, this.aggregationField],
+            onDependencyChange: (control) => {
+              collectionFieldsObs.subscribe(fields => {
+                if (this.aggregationBucketOrInterval.value &&
+                  !!fields.find(f => f.name === this.aggregationField.value) &&
+                  fields.find(f => f.name === this.aggregationField.value).type
+                  === CollectionReferenceDescriptionProperty.TypeEnum.DATE) {
+                  control.enable();
+                } else {
+                  control.disable();
+                }
+              });
+
+            }
+          }
+        ),
+        aggregationIntervalSize: new InputFormControl(
+          '',
+          'Interval size',
+          'description',
+          'number',
+          {
+            dependsOn: () => [this.aggregationBucketOrInterval],
+            onDependencyChange: (control) =>
+              !!this.aggregationBucketOrInterval.value ? control.enable() : control.disable()
+          }
+        )
+      }
+    );
+  }
+
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class BucketsIntervalFormBuilderService {
+
+  constructor() {
+  }
+
+  public build(collectionFieldsObs: Observable<Array<CollectionField>>) {
+
+    return new BucketsIntervalFormGroup(collectionFieldsObs);
   }
 
 }
