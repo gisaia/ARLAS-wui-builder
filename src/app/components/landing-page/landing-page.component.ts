@@ -103,7 +103,7 @@ export class LandingPageDialogComponent implements OnInit {
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.scss']
 })
-export class LandingPageComponent implements AfterViewInit {
+export class LandingPageComponent implements OnInit, AfterViewInit {
 
   @Output() public startEvent: Subject<string> = new Subject<string>();
   public dialogRef: MatDialogRef<LandingPageDialogComponent>;
@@ -113,7 +113,13 @@ export class LandingPageComponent implements AfterViewInit {
     private logger: NGXLogger,
     private router: Router,
     private startupService: StartupService,
-    private translate: TranslateService) { }
+    private translate: TranslateService,
+    private mainFormService: MainFormService) { }
+
+  public ngOnInit(): void {
+    // Reset and clean all contents of all forms
+    this.mainFormService.resetMainForm();
+  }
 
   public openChoice() {
     this.dialogRef = this.dialog.open(LandingPageDialogComponent, { disableClose: true });

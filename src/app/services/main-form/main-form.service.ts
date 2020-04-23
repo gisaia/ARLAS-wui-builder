@@ -37,13 +37,7 @@ enum MAIN_FORM_KEYS {
 })
 export class MainFormService {
 
-  public mainForm = new FormGroup({
-    [MAIN_FORM_KEYS.STARTING_CONFIG]: new FormGroup({}),
-    [MAIN_FORM_KEYS.MAP_CONFIG]: new FormGroup({}),
-    [MAIN_FORM_KEYS.SEARCH_CONFIG]: new FormGroup({}),
-    [MAIN_FORM_KEYS.TIMELINE_CONFIG]: new FormGroup({}),
-    [MAIN_FORM_KEYS.ANALYTICS_CONFIG]: new FormGroup({})
-  });
+  public mainForm = this.getMainEmptyFormGroup();
 
   // In sub configs, init() methods should only use `registerControl()` method.
   // It doesn't replace the control, so it avoids to overwrite any existing value by reopening a page
@@ -99,11 +93,27 @@ export class MainFormService {
   }(this.mainForm.get(MAIN_FORM_KEYS.ANALYTICS_CONFIG) as FormGroup);
 
   // OTHER METHODS ...
+
+  public resetMainForm() {
+    Object.keys(this.mainForm.controls).forEach(c => this.mainForm.removeControl(c));
+    this.mainForm = this.getMainEmptyFormGroup();
+  }
+
   public getCollections(): string[] {
     if (!!this.startingConfig.getFg() && !!this.startingConfig.getFg().get('collections')) {
       return this.startingConfig.getFg().get('collections').value;
     }
     return [];
+  }
+
+  private getMainEmptyFormGroup() {
+    return new FormGroup({
+      [MAIN_FORM_KEYS.STARTING_CONFIG]: new FormGroup({}),
+      [MAIN_FORM_KEYS.MAP_CONFIG]: new FormGroup({}),
+      [MAIN_FORM_KEYS.SEARCH_CONFIG]: new FormGroup({}),
+      [MAIN_FORM_KEYS.TIMELINE_CONFIG]: new FormGroup({}),
+      [MAIN_FORM_KEYS.ANALYTICS_CONFIG]: new FormGroup({})
+    });
   }
 
   constructor(
