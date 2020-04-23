@@ -20,6 +20,9 @@ import { Component, OnInit } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/internal/operators/filter';
+import { map } from 'rxjs/operators';
 
 interface Tab {
   routeurLink: string;
@@ -37,7 +40,15 @@ export class MapConfigComponent implements OnInit {
   constructor(
     private mainFormService: MainFormService,
     private importExportService: MainFormImportExportService,
-    private translate: TranslateService) { }
+    private translate: TranslateService,
+    private router: Router) {
+
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd),
+        map(navEnd => (navEnd as NavigationEnd).urlAfterRedirects))
+      .subscribe(url => this.activeTab = this.tabs.find(tabs => url.indexOf(tabs.routeurLink) > 0));
+  }
+
 
   public tabs: Tab[] = [
     {
