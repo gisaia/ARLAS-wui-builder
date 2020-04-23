@@ -48,6 +48,7 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS, GestureConfig } from '@angular/material'
 import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
 import { GET_OPTIONS } from '@services/persistence/persistence.service';
 import { OAuthModuleConfig, OAuthModule } from 'angular-oauth2-oidc';
+import { EnvServiceProvider } from '@services/env/env.service.provider';
 
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
@@ -111,6 +112,7 @@ export function getOptionsFactory(arlasAuthService: AuthentificationService): an
     OAuthModule.forRoot()
   ],
   providers: [
+    EnvServiceProvider,
     forwardRef(() => ArlasConfigurationDescriptor),
     forwardRef(() => ArlasCollaborativesearchService),
     forwardRef(() => ArlasColorGeneratorLoader),

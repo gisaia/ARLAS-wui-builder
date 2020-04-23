@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { from } from 'rxjs/internal/observable/from';
 import { Configuration, PersistenceApi, Data, DataResource } from 'arlas-persistence-api';
 import { ArlasConfigService } from 'arlas-wui-toolkit';
+import { EnvService } from '@services/env/env.service';
 
 export const GET_OPTIONS = new InjectionToken<(Function)>('get_options');
 
@@ -15,12 +16,12 @@ export class PersistenceService {
 
   private persistenceApi: PersistenceApi;
   constructor(
-    private configService: ArlasConfigService,
+    private envService: EnvService,
     @Inject(GET_OPTIONS) private getOptions
   ) {
     const configuraiton = new Configuration();
-    const baseUrl = this.configService.getValue('arlas.persistence-server.url');
-    this.persistenceApi = new PersistenceApi(configuraiton, 'http://localhost:19997/arlas_persistence_server/', portableFetch);
+    const baseUrl = this.envService.persistenceUrl;
+    this.persistenceApi = new PersistenceApi(configuraiton, baseUrl, portableFetch);
   }
 
 

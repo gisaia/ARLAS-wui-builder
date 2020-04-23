@@ -27,7 +27,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/default.json",
-              "src/config.json"
+              "src/env.js"
             ],
             "styles": [
               "src/styles.scss",
@@ -93,7 +93,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/default.json",
-              "src/config.json"
+              "src/env.js"
             ],
             "styles": [
               "src/styles.scss"
