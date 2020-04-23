@@ -17,9 +17,13 @@
                     <mat-form-field>
                         <mat-label>{{'Server URL' | translate}}</mat-label>
                         <input matInput
+                            (keyup)="onKeyUp($event)"
                             (change)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
                             formControlName="serverUrl">
                     </mat-form-field>
+                    <button (click)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false" 
+                    [disabled]="this.mainFormService.startingConfig.getFg().get('serverUrl').invalid"
+                    mat-raised-button color="primary">{{'Show collections' | translate}}</button>
                 </div>
             </app-config-element>
             <app-config-element *ngIf="isServerReady">

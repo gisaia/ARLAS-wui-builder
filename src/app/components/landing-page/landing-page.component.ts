@@ -74,6 +74,12 @@ export class LandingPageDialogComponent implements OnInit {
   public cancel(): void {
     this.dialogRef.close();
   }
+  public onKeyUp(event: KeyboardEvent) {
+    // On press enter
+    if (event.key === 'Enter') {
+      this.checkUrl();
+    }
+  }
 
   public checkUrl() {
     const url = this.mainFormService.startingConfig.getFg().get('serverUrl').value;

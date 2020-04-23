@@ -1,6 +1,6 @@
 {
     "global": {
-
+        "serverUrl": "http://demo.arlas.io/arlas"
     },
     "map": {
         "global": {
