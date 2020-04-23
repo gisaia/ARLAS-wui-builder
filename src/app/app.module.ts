@@ -45,6 +45,10 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { CustomTranslateLoader } from 'arlas-wui-toolkit/shared.module';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS, GestureConfig } from '@angular/material';
+import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
+import { GET_OPTIONS } from '@services/persistence/persistence.service';
+import { OAuthModuleConfig, OAuthModule } from 'angular-oauth2-oidc';
+
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -53,6 +57,26 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
 export function startupServiceFactory(startupService: StartupService) {
   const init = () => startupService.init();
   return init;
+}
+
+export function getAuthModuleConfig(): OAuthModuleConfig {
+  return {} as OAuthModuleConfig;
+}
+
+export function getOptionsFactory(arlasAuthService: AuthentificationService): any {
+  const getOptions = () => {
+    const token = !!arlasAuthService.accessToken ? arlasAuthService.accessToken : null;
+    if (token !== null) {
+      return {
+        headers: {
+          'X-Forwarded-User': token
+        }
+      };
+    } else {
+      return environment.noToken;
+    }
+  };
+  return getOptions;
 }
 
 @NgModule({
@@ -83,7 +107,8 @@ export function startupServiceFactory(startupService: StartupService) {
       disableConsoleLogging: false
     }),
     NgxSpinnerModule,
-    AnalyticsConfigModule
+    AnalyticsConfigModule,
+    OAuthModule.forRoot()
   ],
   providers: [
     forwardRef(() => ArlasConfigurationDescriptor),
@@ -116,6 +141,11 @@ export function startupServiceFactory(startupService: StartupService) {
     {
       provide: HAMMER_GESTURE_CONFIG,
       useClass: GestureConfig
+    },
+    {
+      provide: GET_OPTIONS,
+      useFactory: getOptionsFactory,
+      deps: [AuthentificationService]
     }
   ],
   bootstrap: [AppComponent],

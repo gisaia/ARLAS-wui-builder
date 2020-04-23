@@ -31,6 +31,7 @@ import { SearchInitService } from '@search-config/services/search-init/search-in
 import { SearchImportService } from '@search-config/services/search-import/search-import.service';
 import { TimelineInitService } from '@timeline-config/services/timeline-init/timeline-init.service';
 import { TimelineImportService } from '@timeline-config/services/timeline-import/timeline-import.service';
+import { PersistenceService } from '@services/persistence/persistence.service';
 
 
 @Injectable({
@@ -49,6 +50,7 @@ export class MainFormManagerService {
     private searchImportService: SearchImportService,
     private timelineInitService: TimelineInitService,
     private timelineImportService: TimelineImportService,
+    private persistenceService: PersistenceService
   ) { }
 
   /**
@@ -90,6 +92,27 @@ export class MainFormManagerService {
     sourceByMode.set(LAYER_MODE.features, 'feature');
     sourceByMode.set(LAYER_MODE.featureMetric, 'feature-metric');
     sourceByMode.set(LAYER_MODE.cluster, 'cluster');
+
+    this.persistenceService.create(
+      'config.json',
+      JSON.stringify(
+        ConfigExportHelper.process(
+          startingConfig,
+          mapConfigGlobal,
+          mapConfigLayers,
+          searchConfigGlobal,
+          timelineConfigGlobal,
+          analyticsConfigList,
+          sourceByMode)
+      )
+    );
+
+    this.persistenceService.create(
+      'config.map.json',
+      JSON.stringify(
+        ConfigMapExportHelper.process(mapConfigLayers, sourceByMode)
+      )
+    );
 
     this.saveJson(
       ConfigExportHelper.process(

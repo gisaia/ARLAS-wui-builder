@@ -28,7 +28,12 @@
     "@types/file-saver": "^2.0.1",
     "ajv": "^6.4.0",
     "ajv-keywords": "^3.4.0",
+<<<<<<< e6651832f3bc4adefd8e899ee6a124ad72ec9539
     "arlas-wui-toolkit": "13.0.0-beta.6",
+=======
+    "angular-oauth2-oidc": "^8.0.4",
+    "arlas-wui-toolkit": "13.0.0-beta.5",
+>>>>>>> Save into persistence service
     "core-js": "^2.4.1",
     "d3-interpolate": "^1.4.0",
     "file-saver": "^2.0.2",

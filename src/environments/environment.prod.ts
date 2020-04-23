@@ -20,5 +20,6 @@ import { NgxLoggerLevel } from 'ngx-logger';
 
 export const environment = {
   production: true,
-  logLevel: NgxLoggerLevel.ERROR
+  logLevel: NgxLoggerLevel.ERROR,
+  noToken: {}
 };
