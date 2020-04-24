@@ -32,6 +32,9 @@ import { SearchImportService } from '@search-config/services/search-import/searc
 import { TimelineInitService } from '@timeline-config/services/timeline-init/timeline-init.service';
 import { TimelineImportService } from '@timeline-config/services/timeline-import/timeline-import.service';
 import { PersistenceService } from '@services/persistence/persistence.service';
+import { EnvService } from '../env/env.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Injectable({
@@ -50,7 +53,10 @@ export class MainFormManagerService {
     private searchImportService: SearchImportService,
     private timelineInitService: TimelineInitService,
     private timelineImportService: TimelineImportService,
-    private persistenceService: PersistenceService
+    private persistenceService: PersistenceService,
+    private envService: EnvService,
+    private snackbar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   /**
@@ -93,9 +99,38 @@ export class MainFormManagerService {
     sourceByMode.set(LAYER_MODE.featureMetric, 'feature-metric');
     sourceByMode.set(LAYER_MODE.cluster, 'cluster');
 
-    this.persistenceService.create(
-      'config.json',
-      JSON.stringify(
+    if (this.envService.persistenceUrl !== '') {
+      this.persistenceService.create(
+        'config.json',
+        JSON.stringify(
+          ConfigExportHelper.process(
+            startingConfig,
+            mapConfigGlobal,
+            mapConfigLayers,
+            searchConfigGlobal,
+            timelineConfigGlobal,
+            analyticsConfigList,
+            sourceByMode)
+        )
+      ).subscribe(
+        () => {
+          this.snackbar.open(this.translate.instant('Configuration saved !'));
+        },
+        () => {
+          this.snackbar.open(this.translate.instant('Error : Configuration not saved'));
+        }
+      );
+
+      this.persistenceService.create(
+        'config.map.json',
+        JSON.stringify(
+          ConfigMapExportHelper.process(mapConfigLayers, sourceByMode)
+        )
+      );
+
+    } else {
+
+      this.saveJson(
         ConfigExportHelper.process(
           startingConfig,
           mapConfigGlobal,
@@ -103,32 +138,14 @@ export class MainFormManagerService {
           searchConfigGlobal,
           timelineConfigGlobal,
           analyticsConfigList,
-          sourceByMode)
-      )
-    );
+          sourceByMode),
+        'config.json', '_');
 
-    this.persistenceService.create(
-      'config.map.json',
-      JSON.stringify(
-        ConfigMapExportHelper.process(mapConfigLayers, sourceByMode)
-      )
-    );
-
-    this.saveJson(
-      ConfigExportHelper.process(
-        startingConfig,
-        mapConfigGlobal,
-        mapConfigLayers,
-        searchConfigGlobal,
-        timelineConfigGlobal,
-        analyticsConfigList,
-        sourceByMode),
-      'config.json');
-
-    this.saveJson(
-      ConfigMapExportHelper.process(mapConfigLayers, sourceByMode),
-      'config.map.json',
-      '-');
+      this.saveJson(
+        ConfigMapExportHelper.process(mapConfigLayers, sourceByMode),
+        'config.map.json',
+        '-');
+    }
   }
 
   public doImport(config: Config) {
