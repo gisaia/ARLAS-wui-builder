@@ -1,3 +1,5 @@
+import { Layer } from './models-map-config';
+
 /*
 Licensed to Gisaïa under one or more contributor
 license agreements. See the NOTICE.txt file distributed with
@@ -42,7 +44,8 @@ export interface WebConfig {
     contributors: Array<ContributorConfig>;
     components: {
         timeline: AnalyticComponentConfig,
-        detailedTimeline: AnalyticComponentConfig
+        detailedTimeline: AnalyticComponentConfig,
+        mapgl: MapglComponentConfig
     };
     analytics: Array<AnalyticConfig>;
 }
@@ -140,6 +143,49 @@ export interface AnalyticComponentSwimlaneInputOptionsConfig {
     zerosColor?: string;
     nanColors?: string;
 }
+
+export interface MapglComponentConfig {
+    allowMapExtend: boolean;
+    nbVerticesLimit?: number;
+    input: MapComponentInputConfig;
+}
+
+export interface BaseMapStyle {
+    name: string;
+    styleFile: string;
+}
+
+export interface MapComponentInputConfig {
+    defaultBasemapStyle: BaseMapStyle;
+    basemapStyles: Array<BaseMapStyle>;
+    margePanForLoad: number;
+    margePanForTest: number;
+    initZoom: number;
+    initCenter: [number, number];
+    displayScale: boolean;
+    idFeatureField: string;
+    mapLayers: MapComponentInputMapLayersConfig;
+}
+
+export interface MapComponentInputMapLayersConfig {
+    layers: Array<Layer>;
+    events: MapComponentInputMapLayersEventsConfig;
+    externalEventLayers: Array<{ id: string, on: string }>;
+    visualisations_sets: MapComponentInputLayersSetsConfig;
+}
+
+export interface MapComponentInputMapLayersEventsConfig {
+    zoomOnClick: Array<string>;
+    emitOnClick: Array<string>;
+    onHover: Array<string>;
+}
+
+export interface MapComponentInputLayersSetsConfig {
+    visualisations: any;
+    default: Array<string>;
+}
+
+
 
 export interface LayerSourceConfig {
     id: string;

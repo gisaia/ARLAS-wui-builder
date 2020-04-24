@@ -85,10 +85,7 @@ export class MainFormImportExportService {
 
   private saveJson(json: any, filename: string, separator: string) {
     const blob = new Blob([JSON.stringify(json, (key, value) => {
-      if (Array.isArray(value) && value.length === 0) {
-        // do not export empty array, they are useless
-        return undefined;
-      } else if (value && typeof value === 'object' && !Array.isArray(value)) {
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
         // convert keys to snake- or kebab-case (eventually other) according to the separator.
         // In fact we cannot declare a property with a snake-cased name,
         // (so in models interfaces properties are are camel case)

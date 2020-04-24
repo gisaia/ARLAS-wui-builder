@@ -31,7 +31,14 @@ export abstract class GlobalMapComponentForm {
         this.mainFormService.mapConfig.initGlobalFg(
             this.formBuilderDefault.group('map.global', {
                 requestGeometries: new FormArray([]),
-                geographicalOperator: new FormControl(null, Validators.required)
+                geographicalOperator: new FormControl(null, Validators.required),
+                allowMapExtend: new FormControl(),
+                margePanForLoad: new FormControl(null, Validators.min(0)),
+                margePanForTest: new FormControl(null, Validators.min(0)),
+                initZoom: new FormControl(null, [Validators.required, Validators.min(1), Validators.max(18)]),
+                initCenterLat: new FormControl(null, Validators.required),
+                initCenterLon: new FormControl(null, Validators.required),
+                displayScale: new FormControl()
             }));
         this.globalFg = this.mainFormService.mapConfig.getGlobalFg();
     }
