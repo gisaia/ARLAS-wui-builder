@@ -348,7 +348,7 @@ export class ConfigExportHelper {
                 this.addMetricToAggregationModel(dateAggregationModel, widgetData.dataStep.metric);
 
                 swimlane.aggregationmodels.push(dateAggregationModel);
-                contrib.swimlane = [swimlane];
+                contrib.swimlanes = [swimlane];
 
                 contrib.jsonpath = widgetData.dataStep.metric.metricValue === DEFAULT_METRIC_VALUE ?
                     '$.count' : '$.metrics[0].value';

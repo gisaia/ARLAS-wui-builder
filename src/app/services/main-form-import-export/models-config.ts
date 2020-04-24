@@ -67,7 +67,7 @@ export interface ContributorConfig {
     selectionExtentPercentage?: number;
     datatype?: string;
     jsonpath?: string;
-    swimlane?: Array<SwimlaneConfig>;
+    swimlanes?: Array<SwimlaneConfig>;
 }
 
 export interface SwimlaneConfig {
