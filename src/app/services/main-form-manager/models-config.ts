@@ -207,6 +207,7 @@ export interface LayerSourceConfig {
     include_fields?: Array<string>;
     normalization_fields?: Array<NormalizationFieldConfig>;
     aggregated_geometry?: string;
+    returned_geometry?: string;
     raw_geometry?: RawGeometryConfig;
     granularity?: string;
     metrics?: Array<MetricConfig>;
