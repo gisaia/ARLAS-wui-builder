@@ -1,4 +1,5 @@
 import { Layer } from './models-map-config';
+import { BasemapStyle } from 'arlas-web-components/components/mapgl/model/mapLayers';
 
 /*
 Licensed to Gisaïa under one or more contributor
@@ -150,14 +151,9 @@ export interface MapglComponentConfig {
     input: MapComponentInputConfig;
 }
 
-export interface BaseMapStyle {
-    name: string;
-    styleFile: string;
-}
-
 export interface MapComponentInputConfig {
-    defaultBasemapStyle: BaseMapStyle;
-    basemapStyles: Array<BaseMapStyle>;
+    defaultBasemapStyle: BasemapStyle;
+    basemapStyles: Array<BasemapStyle>;
     margePanForLoad: number;
     margePanForTest: number;
     initZoom: number;
