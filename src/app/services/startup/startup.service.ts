@@ -140,4 +140,17 @@ export class StartupService {
   public setCollection(collection: string) {
     this.arlasCss.collection = collection;
   }
+
+  public getConfigWithInitContrib(): any {
+    // Add contributor part in arlasConfigService
+    const currentConfig = this.configService.getConfig() as any;
+    // Add web contributors in config if not exist
+    if (currentConfig.arlas.web === undefined) {
+      currentConfig.arlas.web = {};
+      currentConfig.arlas.web.contributors = [];
+    } else if (currentConfig.arlas.web.contributors === undefined) {
+      currentConfig.arlas.web.contributors = [];
+    }
+    return currentConfig;
+  }
 }

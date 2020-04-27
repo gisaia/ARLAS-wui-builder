@@ -110,7 +110,7 @@ export class ConfigExportHelper {
         return config;
     }
 
-    private static getMapContributor(
+    public static getMapContributor(
         mapConfigGlobal: FormGroup,
         mapConfigLayers: FormArray,
         sourceByMode: Map<string, string>): ContributorConfig {
@@ -140,6 +140,7 @@ export class ConfigExportHelper {
             switch (layerValues.mode) {
                 case LAYER_MODE.features: {
                     layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
+                    layerSource.returned_geometry = modeValues.geometryStep.geometry;
                     break;
                 }
                 case LAYER_MODE.featureMetric: {

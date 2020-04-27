@@ -28,6 +28,12 @@ import { NGXLogger } from 'ngx-logger';
 import { EditWidgetDialogData } from '../edit-widget-dialog/models';
 import { ArlasCollaborativesearchService, ArlasStartupService, ArlasConfigService } from 'arlas-wui-toolkit';
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
+import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
+import { HistogramComponent } from 'arlas-web-components';
+import { HistogramContributor } from 'arlas-web-contributors';
+import { OperationEnum } from 'arlas-web-core';
+import { StartupService } from '@services/startup/startup.service';
+import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 
 @Component({
   selector: 'app-edit-group',
@@ -62,7 +68,7 @@ export class EditGroupComponent implements OnInit {
     private arlasStartupService: ArlasStartupService,
     private collaborativesearchService: ArlasCollaborativesearchService,
     private configService: ArlasConfigService,
-
+    private startupService: StartupService,
     private analyticsInitService: AnalyticsInitService
   ) { }
 
@@ -94,6 +100,23 @@ export class EditGroupComponent implements OnInit {
           this.cdr.detectChanges();
         }
       });
+  }
+
+
+  public createContributor = (widgetType, widgetData, icon) => {
+    const contribConfig = ConfigExportHelper.getAnalyticsContributor(widgetType, widgetData, icon) as any;
+    const currentConfig = this.startupService.getConfigWithInitContrib();
+    if (this.arlasStartupService.contributorRegistry.get(contribConfig.identifier) === undefined) {
+      currentConfig.arlas.web.contributors.push(contribConfig);
+      this.configService.setConfig(currentConfig);
+      const contributor = ContributorBuilder.buildContributor(WIDGET_TYPE[widgetType],
+        contribConfig.identifier,
+        this.configService,
+        this.collaborativesearchService);
+      this.arlasStartupService.contributorRegistry
+        .set(contribConfig.identifier, contributor);
+    }
+    return this.arlasStartupService.contributorRegistry.get(contribConfig.identifier);
   }
 
   get contentType() {

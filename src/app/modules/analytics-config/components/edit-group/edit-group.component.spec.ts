@@ -5,8 +5,10 @@ import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert
 import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
 import { MockComponent } from 'ng-mocks';
 import { AnalyticsBoardComponent } from 'arlas-wui-toolkit/components/analytics-board/analytics-board.component';
-import { ArlasStartupService, ArlasConfigService } from 'arlas-wui-toolkit';
-import { ArlasCollaborativesearchService, CONFIG_UPDATER } from 'arlas-wui-toolkit/services/startup/startup.service';
+import {
+  ArlasCollaborativesearchService, ArlasStartupService,
+  ArlasConfigService, CONFIG_UPDATER
+} from 'arlas-wui-toolkit/services/startup/startup.service';
 
 describe('EditGroupComponent', () => {
   let spectator: Spectator<EditGroupComponent>;

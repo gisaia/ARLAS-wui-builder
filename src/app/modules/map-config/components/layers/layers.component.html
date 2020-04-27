@@ -28,6 +28,13 @@
         </td>
     </ng-container>
 
+    <ng-container matColumnDef="preview">
+        <th mat-header-cell *matHeaderCellDef>{{'Preview' | translate}}</th>
+        <td mat-cell *matCellDef="let element">
+            <button mat-raised-button (click)="preview(element.id, element.name)">{{'preview' | translate}}</button>
+        </td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
