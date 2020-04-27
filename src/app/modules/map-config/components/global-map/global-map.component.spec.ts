@@ -20,7 +20,7 @@ describe('GlobalMapComponent', () => {
   beforeEach(() => spectator = createComponent());
 
   it('should contain 2 config elements', () => {
-    expect(spectator.queryAll('app-config-element')).toHaveLength(2);
+    expect(spectator.queryAll('app-config-element')).toHaveLength(8);
   });
 
 });

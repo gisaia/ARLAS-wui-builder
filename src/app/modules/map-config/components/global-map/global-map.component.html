@@ -31,12 +31,87 @@
                                     value="{{geoField}}">{{geoField}}</mat-option>
                             </mat-select>
                         </mat-form-field>
+                        <mat-form-field class="second-field">
+                            <mat-label>{{'Id feature field' | translate}}</mat-label>
+
+                            <mat-select formControlName="idFeatureField">
+                                <mat-option *ngFor="let keywordField of this.getKeywordFields(collections[i]);"
+                                    value="{{keywordField}}">{{keywordField}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </ng-container>
                 </div>
             </ng-container>
         </div>
         <div description>
             {{'For each collection choose the geographical field used to filter data on the map' | translate}}
+        </div>
+    </app-config-element>
+    <app-config-element>
+        <div form-fields>
+            <mat-form-field>
+                <mat-label>{{ 'Initial zoom' | translate}}</mat-label>
+                <input matInput min="1" max="18" type="number" formControlName="initZoom">
+            </mat-form-field>
+        </div>
+        <div description>
+            {{ '...' | translate}}
+        </div>
+    </app-config-element>
+    <app-config-element>
+        <div form-fields>
+            <mat-form-field>
+                <mat-label>{{ 'Init center' | translate}}</mat-label>
+                <input matInput formControlName="initCenterLat">
+            </mat-form-field>
+            <mat-form-field class="second-field">
+                <input matInput formControlName="initCenterLon">
+            </mat-form-field>
+        </div>
+        <div description>
+            {{ '...' | translate}}
+        </div>
+    </app-config-element>
+    <app-config-element>
+        <div form-fields>
+            <mat-slide-toggle formControlName="allowMapExtend">
+                {{'Allow map extend' | translate}}
+            </mat-slide-toggle>
+        </div>
+        <div discription>
+
+        </div>
+    </app-config-element>
+    <app-config-element>
+        <div form-fields>
+            <mat-slide-toggle formControlName="displayScale">
+                {{'Display scale' | translate}}
+            </mat-slide-toggle>
+        </div>
+        <div discription>
+
+        </div>
+    </app-config-element>
+    <app-config-element>
+        <div form-fields>
+            <mat-form-field>
+                <mat-label>{{ 'MargePanForLoad' | translate}}</mat-label>
+                <input matInput min="0" type="number" formControlName="margePanForLoad">
+            </mat-form-field>
+        </div>
+        <div description>
+            {{ '...' | translate}}
+        </div>
+    </app-config-element>
+    <app-config-element>
+        <div form-fields>
+            <mat-form-field>
+                <mat-label>{{ 'MargePanForTest' | translate}}</mat-label>
+                <input matInput min="0" type="number" formControlName="margePanForTest">
+            </mat-form-field>
+        </div>
+        <div description>
+            {{ '...' | translate}}
         </div>
     </app-config-element>
 </div>

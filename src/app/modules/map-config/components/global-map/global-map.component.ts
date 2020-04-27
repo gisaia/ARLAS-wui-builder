@@ -39,10 +39,11 @@ export class GlobalMapComponent extends GlobalMapComponentForm implements OnInit
   ];
   public collections: string[];
   public geoFieldsByCollection: Map<string, string[]> = new Map<string, string[]>();
+  public keywordFieldsByCollection: Map<string, string[]> = new Map<string, string[]>();
   public formArrayGeom: FormArray = new FormArray([]);
 
   constructor(
-    protected mainFormService: MainFormService,
+    public mainFormService: MainFormService,
     protected formBuilderDefault: FormBuilderWithDefaultService,
     private collectionService: CollectionService) {
 
@@ -56,13 +57,18 @@ export class GlobalMapComponent extends GlobalMapComponentForm implements OnInit
       this.collectionService.getCollectionFieldsNames(collection, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE]).subscribe(fields => {
         this.geoFieldsByCollection.set(collection, fields);
       });
+      this.collectionService.getCollectionFieldsNames(collection, [FIELD_TYPES.KEYWORD]).subscribe(fields => {
+        this.keywordFieldsByCollection.set(collection, fields);
+      });
+
       // Push a new FormGroup iff the FormArray (requestGeometries) doesn't contains
       // as many controls that there is select collection
       if (this.requestGeometries.length < this.collections.length) {
         this.collectionService.getCollectionParamFields(collection).subscribe(params => {
           this.requestGeometries.push(new FormGroup({
             collection: new FormControl({ value: collection, disabled: true }),
-            requestGeom: new FormControl(params.geometry_path, Validators.required)
+            requestGeom: new FormControl(params.geometry_path, Validators.required),
+            idFeatureField : new FormControl(params.id_path, Validators.required),
           }));
         });
       }
@@ -71,5 +77,9 @@ export class GlobalMapComponent extends GlobalMapComponentForm implements OnInit
 
   public getGeoFields(collection: string): string[] {
     return this.geoFieldsByCollection.get(collection);
+  }
+
+  public getKeywordFields(collection: string): string[] {
+    return this.keywordFieldsByCollection.get(collection);
   }
 }

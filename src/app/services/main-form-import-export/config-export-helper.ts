@@ -21,7 +21,8 @@ import {
     Config, ChipSearchConfig, ContributorConfig, LayerSourceConfig, AggregationModelConfig,
     AnalyticComponentConfig, AnalyticComponentHistogramInputConfig, SwimlaneConfig,
     AnalyticConfig, AnalyticComponentInputConfig, AnalyticComponentSwimlaneInputConfig,
-    AnalyticComponentSwimlaneInputOptionsConfig
+    AnalyticComponentSwimlaneInputOptionsConfig,
+    MapglComponentConfig
 } from './models-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
@@ -29,6 +30,8 @@ import { CLUSTER_GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-fo
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-form-builder/metric-form-builder.service';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
+import { MapComponentInputConfig, MapComponentInputMapLayersConfig, MapComponentInputLayersSetsConfig } from './models-config';
+import { Layer } from './models-map-config';
 
 export class ConfigExportHelper {
 
@@ -51,7 +54,8 @@ export class ConfigExportHelper {
                     contributors: [],
                     components: {
                         timeline: this.getTimelineComponent(timelineConfigGlobal.controls.timeline.value),
-                        detailedTimeline: this.getTimelineComponent(timelineConfigGlobal.controls.detailedTimeline.value)
+                        detailedTimeline: this.getTimelineComponent(timelineConfigGlobal.controls.detailedTimeline.value),
+                        mapgl: this.getMapComponent(mapConfigGlobal, mapConfigLayers)
                     },
                     analytics: []
                 }
@@ -75,19 +79,21 @@ export class ConfigExportHelper {
             config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal.controls.detailedTimeline.value));
         }
 
-        (analyticsConfigList.value as Array<any>).forEach(tab => {
-            tab.contentFg.groupsFa.forEach(group => {
-                group.content.forEach(widget => {
-                    config.arlas.web.contributors.push(this.getAnalyticsContributor(widget.widgetType, widget.widgetData, group.icon));
+        if (!!analyticsConfigList) {
+            (analyticsConfigList.value as Array<any>).forEach(tab => {
+                tab.contentFg.groupsFa.forEach(group => {
+                    group.content.forEach(widget => {
+                        config.arlas.web.contributors.push(this.getAnalyticsContributor(widget.widgetType, widget.widgetData, group.icon));
+                    });
                 });
             });
-        });
 
-        (analyticsConfigList.value as Array<any>).forEach(tab => {
-            tab.contentFg.groupsFa.forEach((group: any, groupIndex: number) => {
-                config.arlas.web.analytics.push(this.getAnalyticsGroup(tab.tabName, group, groupIndex));
+            (analyticsConfigList.value as Array<any>).forEach(tab => {
+                tab.contentFg.groupsFa.forEach((group: any, groupIndex: number) => {
+                    config.arlas.web.analytics.push(this.getAnalyticsGroup(tab.tabName, group, groupIndex));
+                });
             });
-        });
+        }
 
         return config;
     }
@@ -255,6 +261,60 @@ export class ConfigExportHelper {
         }
 
         return contributor;
+    }
+
+    private static getMapComponent(mapConfigGlobal: any, mapConfigLayers: FormArray): MapglComponentConfig {
+
+        const visualisations = {};
+        const layers: string[] = new Array<string>();
+        mapConfigLayers.controls.map(layer => {
+            layers.push(layer.value.name);
+        });
+        // tslint:disable-next-line: no-string-literal
+        visualisations['set1'] = layers;
+
+        const visualisationsSets: MapComponentInputLayersSetsConfig = {
+            visualisations,
+            default: ['set1']
+        };
+
+        const mapComponent: MapglComponentConfig = {
+            allowMapExtend: mapConfigGlobal.value.allowMapExtend,
+            nbVerticesLimit: 100,
+            input: {
+                defaultBasemapStyle: {
+                    name: 'Positron',
+                    styleFile: 'https://api.maptiler.com/maps/positron/style.json?key=xIhbu1RwgdbxfZNmoXn4'
+                },
+                basemapStyles: [
+                    {
+                        name: 'Positron',
+                        styleFile: 'https://api.maptiler.com/maps/positron/style.json?key=xIhbu1RwgdbxfZNmoXn4'
+                    }
+                ],
+                margePanForLoad: mapConfigGlobal.value.margePanForLoad,
+                margePanForTest: mapConfigGlobal.value.margePanForTest,
+                initZoom: mapConfigGlobal.value.initZoom,
+                initCenter: [
+                    mapConfigGlobal.value.initCenterLat,
+                    mapConfigGlobal.value.initCenterLon
+                ],
+                displayScale: mapConfigGlobal.value.displayScale,
+                idFeatureField: mapConfigGlobal.value.requestGeometries[0].idFeatureField,
+                mapLayers: {
+                    layers: [],
+                    events: {
+                        zoomOnClick: [],
+                        emitOnClick: [],
+                        onHover: [],
+                    },
+                    externalEventLayers: new Array<{ id: string, on: string }>(),
+                    visualisations_sets: visualisationsSets
+                } as MapComponentInputMapLayersConfig
+            } as MapComponentInputConfig
+        };
+
+        return mapComponent;
     }
 
     private static getTimelineComponent(timelineValues: any): AnalyticComponentConfig {
