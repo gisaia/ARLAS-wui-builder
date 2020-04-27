@@ -25,10 +25,11 @@ import { LayersComponentForm } from './layers.component.form';
 import { PreviewModalComponent } from '../preview-modal/preview-modal.component';
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
 import { ArlasCollaborativesearchService, ArlasConfigService } from 'arlas-wui-toolkit';
-import { ConfigExportHelper } from '../../../../services/main-form-import-export/config-export-helper';
 import { LAYER_MODE } from '../edit-layer/models';
 import { FormArray } from '@angular/forms';
-import { ConfigMapExportHelper } from '@services/main-form-import-export/config-map-export-helper';
+import { StartupService } from '@services/startup/startup.service';
+import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
+import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
 
 export interface Layer {
   id: string;
@@ -51,6 +52,8 @@ export class LayersComponent extends LayersComponentForm implements OnInit {
     private translate: TranslateService,
     private collaborativesearchService: ArlasCollaborativesearchService,
     private configService: ArlasConfigService,
+    private startupService: StartupService,
+
   ) {
     super(mainFormService);
   }
@@ -82,21 +85,13 @@ export class LayersComponent extends LayersComponentForm implements OnInit {
     sourceByMode.set(LAYER_MODE.featureMetric, 'feature-metric');
     sourceByMode.set(LAYER_MODE.cluster, 'cluster');
     const mapConfigLayers = new FormArray([this.layersFa.at(formGroupIndex)]);
-
+    // Get contributor config for this layer
     const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers, sourceByMode);
-
     // Get config.map part for this layer
     const configMap = ConfigMapExportHelper.process(mapConfigLayers, sourceByMode);
-
     // Add contributor part in arlasConfigService
-    const currentConfig = this.configService.getConfig() as any;
     // Add web contributors in config if not exist
-    if (currentConfig.arlas.web === undefined) {
-      currentConfig.arlas.web = {};
-      currentConfig.arlas.web.contributors = [];
-    } else if (currentConfig.arlas.web.contributors === undefined) {
-      currentConfig.arlas.web.contributors = [];
-    }
+    const currentConfig = this.startupService.getConfigWithInitContrib();
     // update arlasConfigService with layer info
     // Create mapcontributor
     currentConfig.arlas.web.contributors.push(contribConfig);
