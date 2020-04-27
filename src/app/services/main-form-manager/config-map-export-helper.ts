@@ -43,9 +43,9 @@ export class ConfigMapExportHelper {
                     break;
                 }
                 case GEOMETRY_TYPE.line: {
-                    paint.lineOpacity = colorOpacity;
+                    paint['line-opacity'] = colorOpacity;
                     paint['line-color'] = color;
-                    paint.lineWidth = this.getMapProperty(modeValues.styleStep.widthFg, mode);
+                    paint['line-width'] = this.getMapProperty(modeValues.styleStep.widthFg, mode);
                     break;
                 }
                 case GEOMETRY_TYPE.circle: {
@@ -55,10 +55,10 @@ export class ConfigMapExportHelper {
                     break;
                 }
                 case GEOMETRY_TYPE.heatmap: {
-                    paint.heatmapColor = color;
-                    paint.heatmapIntensity = this.getMapProperty(modeValues.styleStep.intensityFg, mode);
-                    paint.heatmapWeight = this.getMapProperty(modeValues.styleStep.weightFg, mode);
-                    paint.heatmapRadius = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
+                    paint['heatmap-color'] = color;
+                    paint['heatmap-instensity'] = this.getMapProperty(modeValues.styleStep.intensityFg, mode);
+                    paint['heatmap-weight']  = this.getMapProperty(modeValues.styleStep.weightFg, mode);
+                    paint['heatmap-radius']  = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
                 }
             }
 

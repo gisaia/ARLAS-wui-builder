@@ -40,18 +40,18 @@ export interface Layout {
 
 type PaintValue = Array<string | Array<string> | number> | PaintColor | string | number;
 export interface Paint {
-    fillColor?: PaintValue;
-    fillOpacity?: number;
+    'fill-color'?: PaintValue;
+    'fill-opacity'?: number;
     'circle-color'?: PaintValue;
     'circle-opacity'?: number;
     'line-color'?: PaintValue;
-    lineOpacity?: number;
-    lineWidth?: PaintValue;
+    'line-opacity'?: number;
+    'line-width'?: PaintValue;
     'circle-radius'?: PaintValue;
-    heatmapColor?: PaintValue;
-    heatmapRadius?: PaintValue;
-    heatmapWeight?: PaintValue;
-    heatmapIntensity?: number;
+    'heatmap-color'?: PaintValue;
+    'heatmap-radius'?: PaintValue;
+    'heatmap-weight'?: PaintValue;
+    'heatmap-intensity'?: number;
 }
 
 export interface PaintColor {
