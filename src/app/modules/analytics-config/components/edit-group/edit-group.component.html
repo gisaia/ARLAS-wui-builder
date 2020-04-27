@@ -62,7 +62,7 @@
             </div>
         </div>
     </div>
-    <div class="preview-group" *ngIf="preview.length>0">
-    <arlas-analytics-board  [groups]="this.preview"></arlas-analytics-board>
+    <div class="preview-group" *ngIf="formGroup.value.preview.length>0">
+        <arlas-analytics-board [groups]="formGroup.value.preview"></arlas-analytics-board>
     </div>
 </div>

@@ -2,6 +2,7 @@ import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectat
 import { LeftMenuComponent } from './left-menu.component';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormGroup } from '@angular/forms';
+import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 
 describe('LeftMenuComponent', () => {
   let spectator: Spectator<LeftMenuComponent>;
@@ -24,7 +25,8 @@ describe('LeftMenuComponent', () => {
             control: new FormGroup({})
           },
           mainForm: new FormGroup({})
-        })
+        }),
+      mockProvider(MainFormManagerService)
     ]
   });
 

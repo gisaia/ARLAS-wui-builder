@@ -1,29 +1,29 @@
 <div class="landing-container" *ngIf="!configChoice">
-    <div class="bloc" (click)="config('new')">
+    <div class="bloc" (click)="configChoice = InitialChoice.setup">
         <mat-icon>add</mat-icon>
         <span>{{'New configuration' | translate}}</span>
     </div>
-    <div class="bloc" (click)="config('load')">
+    <div class="bloc" (click)="configChoice = InitialChoice.load">
         <mat-icon>get_app</mat-icon>
         <span>{{'Import from file' | translate}}</span>
     </div>
 </div>
-<ng-container *ngIf="configChoice">
-    <h2 mat-dialog-title>{{'Set ARLAS Server url' | translate}}</h2>
+<ng-container *ngIf="configChoice === InitialChoice.setup">
+    <h2 mat-dialog-title>{{'New configuration' | translate}}</h2>
     <mat-dialog-content>
         <div [formGroup]="this.mainFormService.startingConfig.getFg()">
             <app-config-element [fullSize]="true">
                 <div form-fields class="server-url">
                     <mat-form-field>
                         <mat-label>{{'Server URL' | translate}}</mat-label>
-                        <input matInput
-                            (keyup)="onKeyUp($event)"
+                        <input matInput (keyup)="onKeyUp($event)"
                             (change)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
                             formControlName="serverUrl">
                     </mat-form-field>
-                    <button (click)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false" 
-                    [disabled]="this.mainFormService.startingConfig.getFg().get('serverUrl').invalid"
-                    mat-raised-button color="primary">{{'Show collections' | translate}}</button>
+                    <button
+                        (click)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
+                        [disabled]="this.mainFormService.startingConfig.getFg().get('serverUrl').invalid"
+                        mat-raised-button color="primary">{{'Show collections' | translate}}</button>
                 </div>
             </app-config-element>
             <app-config-element *ngIf="isServerReady">
@@ -45,7 +45,25 @@
         </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button (click)="this.startEvent.next('new');" [disabled]="this.mainFormService.startingConfig.getFg().invalid"
+        <button (click)="saveConfig()" [disabled]="this.mainFormService.startingConfig.getFg().invalid"
+            mat-raised-button color="primary">{{'Start configuration' | translate}}</button>
+    </mat-dialog-actions>
+</ng-container>
+
+<ng-container *ngIf="configChoice === InitialChoice.load">
+    <h2 mat-dialog-title>{{'Import a file' | translate}}</h2>
+    <mat-dialog-content class="import-content">
+        <div>
+            <!-- No material file input exists, so we hide the basic input behind a material button -->
+            <button type="button" mat-raised-button (click)="fileInput.click()">Select a File</button>
+            <input hidden (change)="upload($event.target.files)" #fileInput type="file">
+        </div>
+        <div *ngIf="this.mainFormService.startingConfig.getFg().valid" class="import-valid">
+            {{'File imported successfully' | translate}}
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button (click)="this.startEvent.next();" [disabled]="this.mainFormService.startingConfig.getFg().invalid"
             mat-raised-button color="primary">{{'Start configuration' | translate}}</button>
     </mat-dialog-actions>
 </ng-container>

@@ -29,17 +29,26 @@ import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configu
 import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs';
 import { StartupService } from '../../services/startup/startup.service';
+import { Config } from '@services/main-form-manager/models-config';
+import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+
+enum InitialChoice {
+  none = 0,
+  setup = 1,
+  load = 2
+}
 
 @Component({
   templateUrl: './landing-page-dialog.component.html',
   styleUrls: ['./landing-page-dialog.component.scss']
 })
 export class LandingPageDialogComponent implements OnInit {
-  @Output() public startEvent: Subject<string> = new Subject<string>();
+  @Output() public startEvent: Subject<boolean> = new Subject<boolean>();
 
-  public configChoice = false;
+  public configChoice = InitialChoice.none;
   public isServerReady = false;
   public availablesCollections: string[];
+  public InitialChoice = InitialChoice;
 
   constructor(
     public dialogRef: MatDialogRef<LandingPageDialogComponent>,
@@ -50,25 +59,19 @@ export class LandingPageDialogComponent implements OnInit {
     private startupService: StartupService,
     private configDescritor: ArlasConfigurationDescriptor,
     private formBuilderWithDefault: FormBuilderWithDefaultService,
-    private translate: TranslateService) { }
+    private translate: TranslateService,
+    private mainFormManager: MainFormManagerService) { }
 
   public ngOnInit(): void {
-    if (!!this.mainFormService.mainForm) {
-      this.mainFormService.startingConfig.init(
-        this.formBuilderWithDefault.group('global', {
-          serverUrl: new FormControl(null,
-            [Validators.required, Validators.pattern('(https?://)([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')]),
-          collections: new FormControl(null, [Validators.required, Validators.maxLength(1)])
-        }));
-    }
-  }
+    // Reset and clean the content of all forms
+    this.mainFormService.resetMainForm();
 
-  public config(mode: string) {
-    if (mode === 'new') {
-      this.configChoice = true;
-    } else {
-      this.startEvent.next(mode);
-    }
+    this.mainFormService.startingConfig.init(
+      this.formBuilderWithDefault.group('global', {
+        serverUrl: new FormControl(null,
+          [Validators.required, Validators.pattern('(https?://)([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')]),
+        collections: new FormControl(null, [Validators.required, Validators.maxLength(1)])
+      }));
   }
 
   public cancel(): void {
@@ -85,13 +88,7 @@ export class LandingPageDialogComponent implements OnInit {
     const url = this.mainFormService.startingConfig.getFg().get('serverUrl').value;
     this.http.get(url + '/swagger.json').subscribe(
       () => {
-        // Update config with new server url
-        // Usefull to use toolkit method
-        const currentConf = this.configService.getConfig();
-        const newConf = Object.assign(currentConf, { arlas: { server: { url } } });
-        this.configService.setConfig(newConf);
-        // Update collaborative search Service with the new url
-        this.startupService.setCollaborativeService(newConf).then(() => {
+        this.getServerCollections(url).then(() => {
           this.configDescritor.getAllCollections().subscribe(collections => this.availablesCollections = collections);
           this.isServerReady = true;
         });
@@ -102,6 +99,60 @@ export class LandingPageDialogComponent implements OnInit {
       }
     );
   }
+
+  public saveConfig() {
+    const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('collections').value;
+    this.startupService.setCollection(collection);
+    this.mainFormManager.doInit();
+    this.startEvent.next();
+  }
+
+  public upload(files: File[]) {
+
+    if (!files.length) {
+      // user cancelled with no file
+      return;
+    }
+    const fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      // I think we need to think about two options for this part
+      // A config file store in a database with arlas-persistence
+      // A config file store on the file system of the user computer
+      // TODO In all cases we need to validate the folder with this code
+      // const newUrl = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('serverUrl').value;
+      // this.startupService.validLoadedConfig(newUrl)
+
+      const json: Config = JSON.parse(fileReader.result.toString());
+      this.getServerCollections(json.arlas.server.url).then(() => {
+
+        this.configDescritor.getAllCollections().subscribe(collections => {
+          const collection = (collections.find(c => c === json.arlas.server.collection.name));
+
+          if (!collection) {
+            this.logger.error(
+              this.translate.instant('Collection ' + json.arlas.server.collection.name + ' unknown. Available collections: ')
+              + collections);
+
+          } else {
+            this.startupService.setCollection(collection);
+            this.mainFormManager.doImport(json);
+          }
+        });
+      });
+    };
+    fileReader.readAsText(files[0]);
+  }
+
+  private getServerCollections(serverUrl: string) {
+    // Update config with new server url
+    // Usefull to use toolkit method
+    const currentConf = this.configService.getConfig();
+    const newConf = Object.assign(currentConf, { arlas: { server: { url: serverUrl } } });
+    this.configService.setConfig(newConf);
+    // Update collaborative search Service with the new url
+    return this.startupService.setCollaborativeService(newConf);
+  }
+
 }
 
 @Component({
@@ -111,20 +162,16 @@ export class LandingPageDialogComponent implements OnInit {
 })
 export class LandingPageComponent implements OnInit, AfterViewInit {
 
-  @Output() public startEvent: Subject<string> = new Subject<string>();
+  @Output() public startEvent: Subject<boolean> = new Subject<boolean>();
   public dialogRef: MatDialogRef<LandingPageDialogComponent>;
 
   constructor(
     private dialog: MatDialog,
     private logger: NGXLogger,
     private router: Router,
-    private startupService: StartupService,
-    private translate: TranslateService,
-    private mainFormService: MainFormService) { }
+    private translate: TranslateService) { }
 
   public ngOnInit(): void {
-    // Reset and clean all contents of all forms
-    this.mainFormService.resetMainForm();
   }
 
   public openChoice() {
@@ -134,22 +181,10 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
 
   public ngAfterViewInit() {
     this.openChoice();
-    this.startEvent.subscribe(mode => {
-      if (mode === 'new') {
-        const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('collections').value;
-        this.startupService.setCollection(collection);
-        this.dialogRef.close();
-        this.router.navigate(['map-config']);
-        this.logger.info(this.translate.instant('Ready to access server'));
-      } else {
-        // I think we need to think about two options for this part
-        // A config file store in a database with arlas-persistence
-        // A config file store on the file system of the user computer
-        // In all cases we need to validate the folder with this code
-        // const newUrl = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('serverUrl').value;
-        // this.startupService.validLoadedConfig(newUrl)
-        this.logger.error(this.translate.instant('Not available now'));
-      }
+    this.startEvent.subscribe(state => {
+      this.dialogRef.close();
+      this.router.navigate(['map-config']);
+      this.logger.info(this.translate.instant('Ready to access server'));
     });
   }
 }

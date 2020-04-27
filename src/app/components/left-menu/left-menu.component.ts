@@ -19,9 +19,9 @@ under the License.
 import { Component } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { MainFormImportExportService } from '@services/main-form-import-export/main-form-import-export.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { getNbErrorsInControl } from '@utils/tools';
+import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 
 interface Page {
   link: string;
@@ -44,7 +44,7 @@ export class LeftMenuComponent {
 
   constructor(
     private mainFormService: MainFormService,
-    private importExportService: MainFormImportExportService,
+    private mainFormManager: MainFormManagerService,
     private translate: TranslateService
   ) {
     // recompute nberrors of each page anytime the mainform validity changes
@@ -96,14 +96,14 @@ export class LeftMenuComponent {
   private updateNbErrors() {
     this.nbErrorsByPage.clear();
     this.pages
-      .filter(p => this.importExportService.isExportExpected && !!p.control && !p.control.valid)
+      .filter(p => this.mainFormManager.isExportExpected && !!p.control && !p.control.valid)
       .forEach(p =>
         this.nbErrorsByPage.set(p.name, getNbErrorsInControl(p.control))
       );
   }
 
   public save() {
-    this.importExportService.attemptExport();
+    this.mainFormManager.attemptExport();
     this.updateNbErrors();
   }
 

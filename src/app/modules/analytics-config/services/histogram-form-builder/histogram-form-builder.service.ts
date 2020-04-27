@@ -26,8 +26,10 @@ import {
 import { ChartType } from 'arlas-web-components';
 import { FormGroup } from '@angular/forms';
 import { WidgetFormBuilder } from '../widget-form-builder';
-import { BucketsIntervalFormBuilderService } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
-import { MetricFormBuilderService } from '../metric-form-builder/metric-form-builder.service';
+import {
+  BucketsIntervalFormBuilderService, BucketsIntervalFormGroup
+} from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
+import { MetricFormBuilderService, MetricFormGroup } from '../metric-form-builder/metric-form-builder.service';
 import { CollectionField } from '@services/collection-service/models';
 import { Observable } from 'rxjs';
 
@@ -40,9 +42,8 @@ enum DateFormats {
 export class HistogramFormGroup extends ConfigFormGroup {
 
   constructor(
-    private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
-    private metricBuilderService: MetricFormBuilderService,
-    collectionFieldsObs: Observable<CollectionField[]>
+    bucketsIntervalFg: BucketsIntervalFormGroup,
+    metricFg: MetricFormGroup
   ) {
     super(
       {
@@ -51,10 +52,8 @@ export class HistogramFormGroup extends ConfigFormGroup {
             '',
             'Name',
             'description'),
-          aggregation:
-            bucketsIntervalBuilderService.build(collectionFieldsObs),
-          metric:
-            metricBuilderService.build(collectionFieldsObs)
+          aggregation: bucketsIntervalFg,
+          metric: metricFg
         }),
         renderStep: new ConfigFormGroup({
           multiselectable: new SlideToggleFormControl(
@@ -85,6 +84,21 @@ export class HistogramFormGroup extends ConfigFormGroup {
       }
     );
   }
+
+  public customControls = {
+    dataStep: {
+      name: this.get('dataStep').get('name') as InputFormControl,
+      aggregation: this.get('dataStep').get('aggregation') as BucketsIntervalFormGroup,
+      metric: this.get('dataStep').get('metric') as MetricFormGroup
+    },
+    renderStep: {
+      multiselectable: this.get('renderStep').get('multiselectable') as SlideToggleFormControl,
+      chartType: this.get('renderStep').get('chartType') as SelectFormControl,
+      showHorizontalLines: this.get('renderStep').get('showHorizontalLines') as SlideToggleFormControl,
+      ticksDateFormat: this.get('renderStep').get('ticksDateFormat') as SelectFormControl
+    }
+  };
+
 }
 
 @Injectable({
@@ -105,15 +119,14 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
     super(collectionService, mainFormService);
   }
 
-  public build() {
+  public build(): HistogramFormGroup {
 
     const collectionFieldsObs = this.collectionService.getCollectionFields(
       this.mainFormService.getCollections()[0]);
 
     const formGroup = new HistogramFormGroup(
-      this.bucketsIntervalBuilderService,
-      this.metricBuilderService,
-      collectionFieldsObs
+      this.bucketsIntervalBuilderService.build(collectionFieldsObs),
+      this.metricBuilderService.build(collectionFieldsObs)
     );
 
     this.formBuilderDefault.setDefaultValueRecursively(this.defaultKey, formGroup);

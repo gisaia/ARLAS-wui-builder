@@ -25,6 +25,12 @@ import { NUMERIC_OR_DATE_TYPES } from '@services/collection-service/tools';
 
 export const DEFAULT_METRIC_VALUE = 'COUNT';
 
+export interface MetricControls {
+  metricCollectFunction: SelectFormControl;
+  metricCollectField: SelectFormControl;
+  metricValue: SelectFormControl;
+}
+
 export class MetricFormGroup extends ConfigFormGroup {
 
   public get metricCollectFunction() {
@@ -85,13 +91,21 @@ export class MetricFormGroup extends ConfigFormGroup {
             onDependencyChange: (control: SelectFormControl) => {
               // exclude metricCollectFunction.value if falsy
               control.setSyncOptions([this.metricCollectFunction.value, DEFAULT_METRIC_VALUE]
-                .filter(Boolean).map(value => ({ value, label: value })));
+                .filter(Boolean)
+                .map(value => ({ value, label: value })));
             }
           }
         )
       }
     );
   }
+
+  public customControls = {
+    metricCollectFunction: this.get('metricCollectFunction') as SelectFormControl,
+    metricCollectField: this.get('metricCollectField') as SelectFormControl,
+    metricValue: this.get('metricValue') as SelectFormControl,
+  } as MetricControls;
+
 }
 
 @Injectable({

@@ -34,6 +34,7 @@ export interface Config {
 
 export interface ArlasConfig {
     web: WebConfig;
+    server: ServerConfig;
 }
 
 export interface ChipSearchConfig {
@@ -49,6 +50,15 @@ export interface WebConfig {
         mapgl: MapglComponentConfig
     };
     analytics: Array<AnalyticConfig>;
+}
+
+export interface ServerConfig {
+    url: string;
+    collection: {
+        name: string;
+        id: string;
+    };
+    maxAgeCache: number;
 }
 
 export interface ContributorConfig {
@@ -210,7 +220,12 @@ export interface AggregationModelConfig {
         value: number;
         unit?: string;
     };
-    metrics?: Array<{ collect_field: string, collect_fct: string }>;
+    metrics?: Array<AggregationModelMetricConfig>;
+}
+
+export interface AggregationModelMetricConfig {
+    collect_field: string;
+    collect_fct: string;
 }
 
 export interface NormalizationFieldConfig {

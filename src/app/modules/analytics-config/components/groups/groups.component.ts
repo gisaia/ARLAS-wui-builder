@@ -23,13 +23,14 @@ import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material';
 import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
-import { ConfigExportHelper } from '@services/main-form-import-export/config-export-helper';
-import { ContributorConfig } from '@services/main-form-import-export/models-config';
+import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
+import { ContributorConfig } from '@services/main-form-manager/models-config';
 import {
   ArlasStartupService,
   ArlasConfigService
 } from 'arlas-wui-toolkit/services/startup/startup.service';
 
+import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 
 @Component({
   selector: 'app-groups',
@@ -44,35 +45,17 @@ export class GroupsComponent implements OnInit {
     private formBuilder: FormBuilder,
     public dialog: MatDialog,
     private arlasStartupService: ArlasStartupService,
-    private configService: ArlasConfigService
+    private configService: ArlasConfigService,
+    private analyticsInitService: AnalyticsInitService
   ) {
   }
 
   public ngOnInit() {
-    this.contentFg.addControl('groupsFa', this.formBuilder.array(
-      [],
-      Validators.required
-    ));
+    this.analyticsInitService.initTabContent(this.contentFg);
   }
 
   public addGroup() {
-    const newGroupFg = this.formBuilder.group({
-      icon: [
-        null,
-        Validators.required
-      ],
-      title: [
-        null,
-        Validators.required
-      ],
-      contentType: [
-        null,
-        Validators.required
-      ],
-      content: this.formBuilder.array([]),
-      preview: [new Array()]
-    });
-    this.groupsFa.push(newGroupFg);
+    this.groupsFa.push(this.analyticsInitService.initNewGroup());
   }
 
   public remove(gi) {

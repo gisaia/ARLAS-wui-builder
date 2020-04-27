@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Injectable, ViewContainerRef } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { updateValueAndValidity } from '@utils/tools';
 import * as FileSaver from 'file-saver';
@@ -24,18 +24,23 @@ import { NGXLogger } from 'ngx-logger';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { ConfigExportHelper } from './config-export-helper';
 import { ConfigMapExportHelper } from './config-map-export-helper';
+import { AnalyticsImportService } from '@analytics-config/services/analytics-import/analytics-import.service';
+import { Config } from './models-config';
+import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class MainFormImportExportService {
+export class MainFormManagerService {
 
   public isExportExpected = false;
 
   constructor(
     private logger: NGXLogger,
-    private mainFormService: MainFormService
+    private mainFormService: MainFormService,
+    private analyticsImportService: AnalyticsImportService,
+    private analyticsInitService: AnalyticsInitService
   ) { }
 
   public attemptExport() {
@@ -56,6 +61,7 @@ export class MainFormImportExportService {
   }
 
   private doExport() {
+    const startingConfig = this.mainFormService.startingConfig.getFg();
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
     const mapConfigLayers = this.mainFormService.mapConfig.getLayersFa();
     const searchConfigGlobal = this.mainFormService.searchConfig.getGlobalFg();
@@ -69,13 +75,14 @@ export class MainFormImportExportService {
 
     this.saveJson(
       ConfigExportHelper.process(
+        startingConfig,
         mapConfigGlobal,
         mapConfigLayers,
         searchConfigGlobal,
         timelineConfigGlobal,
         analyticsConfigList,
         sourceByMode),
-      'config.json', '_');
+      'config.json');
 
     this.saveJson(
       ConfigMapExportHelper.process(mapConfigLayers, sourceByMode),
@@ -83,7 +90,25 @@ export class MainFormImportExportService {
       '-');
   }
 
-  private saveJson(json: any, filename: string, separator: string) {
+  public doImport(config: Config) {
+
+    this.mainFormService.startingConfig.getFg().setValue({
+      collections: [config.arlas.server.collection.name],
+      serverUrl: config.arlas.server.url
+    });
+
+    this.analyticsImportService.doImport(config);
+  }
+
+  /**
+   * Init the sub-forms that are required to a global validation
+   */
+  public doInit() {
+    // load the modules required forms
+    this.analyticsInitService.initModule();
+  }
+
+  private saveJson(json: any, filename: string, separator?: string) {
     const blob = new Blob([JSON.stringify(json, (key, value) => {
       if (value && typeof value === 'object' && !Array.isArray(value)) {
         // convert keys to snake- or kebab-case (eventually other) according to the separator.

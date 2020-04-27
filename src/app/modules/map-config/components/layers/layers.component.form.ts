@@ -26,9 +26,11 @@ export abstract class LayersComponentForm {
     constructor(
         protected mainFormService: MainFormService) {
 
-        this.mainFormService.mapConfig.initLayersFa(
-            new FormArray([], [Validators.required])
-        );
+        if (!this.mainFormService.mapConfig.getLayersFa()) {
+            this.mainFormService.mapConfig.initLayersFa(
+                new FormArray([], [Validators.required])
+            );
+        }
         this.layersFa = this.mainFormService.mapConfig.getLayersFa();
     }
 
