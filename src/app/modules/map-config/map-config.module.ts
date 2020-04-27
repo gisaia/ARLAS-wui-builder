@@ -31,12 +31,16 @@ import { GlobalMapComponent } from './components/global-map/global-map.component
 import { LayersComponent } from './components/layers/layers.component';
 import { MapConfigRoutingModule } from './map-config-routing.module';
 import { MapConfigComponent } from './map-config.component';
+import { PreviewModalComponent } from './components/preview-modal/preview-modal.component';
+import { MapglComponent, MapglModule } from 'arlas-web-components';
 
 @NgModule({
   entryComponents: [
     ConfirmModalComponent,
     DialogColorTableComponent,
-    DialogPaletteSelectorComponent
+    DialogPaletteSelectorComponent,
+    MapglComponent,
+    PreviewModalComponent
   ],
   declarations: [
     MapConfigComponent,
@@ -48,10 +52,12 @@ import { MapConfigComponent } from './map-config.component';
     DialogPaletteSelectorComponent,
     EditLayerFeatureMetricComponent,
     EditLayerFeaturesComponent,
-    EditLayerClusterComponent
+    EditLayerClusterComponent,
+    PreviewModalComponent
   ],
   imports: [
     MapConfigRoutingModule,
+    MapglModule,
     SharedModule
   ],
   providers: [

@@ -101,3 +101,10 @@ body {
 .dialog-with-overflow mat-dialog-container {
   overflow: visible;
 }
+
+#mapgl {
+  width: 80% !important;
+  height: 80%!important;
+  margin: -24px!important;
+  position: absolute;
+}

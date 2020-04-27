@@ -22,6 +22,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { LayersComponentForm } from './layers.component.form';
+import { PreviewModalComponent } from '../preview-modal/preview-modal.component';
+import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
+import { ArlasCollaborativesearchService, ArlasConfigService } from 'arlas-wui-toolkit';
+import { ConfigExportHelper } from '../../../../services/main-form-import-export/config-export-helper';
+import { LAYER_MODE } from '../edit-layer/models';
+import { FormArray } from '@angular/forms';
+import { ConfigMapExportHelper } from '@services/main-form-import-export/config-map-export-helper';
 
 export interface Layer {
   id: string;
@@ -36,12 +43,14 @@ export interface Layer {
 })
 export class LayersComponent extends LayersComponentForm implements OnInit {
 
-  public displayedColumns: string[] = ['name', 'mode', 'edit', 'delete'];
+  public displayedColumns: string[] = ['name', 'mode', 'edit', 'delete', 'preview'];
 
   constructor(
     protected mainFormService: MainFormService,
     public dialog: MatDialog,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private collaborativesearchService: ArlasCollaborativesearchService,
+    private configService: ArlasConfigService,
   ) {
     super(mainFormService);
   }
@@ -63,4 +72,56 @@ export class LayersComponent extends LayersComponentForm implements OnInit {
     });
   }
 
+  public preview(layerId: number, layerName: string): void {
+
+    // Get contributor conf part for this layer
+    const formGroupIndex = (this.layersFa.value as any[]).findIndex(el => el.id === layerId);
+    const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
+    const sourceByMode = new Map<string, string>();
+    sourceByMode.set(LAYER_MODE.features, 'feature');
+    sourceByMode.set(LAYER_MODE.featureMetric, 'feature-metric');
+    sourceByMode.set(LAYER_MODE.cluster, 'cluster');
+    const mapConfigLayers = new FormArray([this.layersFa.at(formGroupIndex)]);
+
+    const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers, sourceByMode);
+
+    // Get config.map part for this layer
+    const configMap = ConfigMapExportHelper.process(mapConfigLayers, sourceByMode);
+
+    // Add contributor part in arlasConfigService
+    const currentConfig = this.configService.getConfig() as any;
+    // Add web contributors in config if not exist
+    if (currentConfig.arlas.web === undefined) {
+      currentConfig.arlas.web = {};
+      currentConfig.arlas.web.contributors = [];
+    } else if (currentConfig.arlas.web.contributors === undefined) {
+      currentConfig.arlas.web.contributors = [];
+    }
+    // update arlasConfigService with layer info
+    // Create mapcontributor
+    currentConfig.arlas.web.contributors.push(contribConfig);
+    this.configService.setConfig(currentConfig);
+    const contributor = ContributorBuilder.buildContributor('map',
+      'mapbox',
+      this.configService,
+      this.collaborativesearchService);
+    const dialogRef = this.dialog.open(PreviewModalComponent, {
+      width: '80%',
+      height: '80%',
+      data: {
+        mapglContributor: contributor,
+        idField: 'id',
+        initZoom: 15,
+        initCenter: [
+          -5.49213,
+          36.18482
+        ],
+        layers: configMap.layers
+      }
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      // TODO Clean ArlasConfigService
+      this.collaborativesearchService.registry.clear();
+    });
+  }
 }
