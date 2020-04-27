@@ -30,7 +30,8 @@
               "src/config.json"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/mapbox-gl/dist/mapbox-gl.css"
             ],
             "scripts": [
               "node_modules/hammerjs/hammer.min.js"
