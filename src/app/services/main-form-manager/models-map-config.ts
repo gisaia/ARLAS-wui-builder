@@ -1,3 +1,4 @@
+import { AnalyticComponentInputConfig } from './models-config';
 /*
 Licensed to Gisaïa under one or more contributor
 license agreements. See the NOTICE.txt file distributed with
@@ -37,16 +38,16 @@ export interface Layout {
     'line-join'?: string;
 }
 
-type PaintValue = Array<string | Array<string> | number> | PaintColor | string;
+type PaintValue = Array<string | Array<string> | number> | PaintColor | string | number;
 export interface Paint {
     fillColor?: PaintValue;
     fillOpacity?: number;
-    circleColor?: PaintValue;
-    circleOpacity?: number;
-    lineColor?: PaintValue;
+    'circle-color'?: PaintValue;
+    'circle-opacity'?: number;
+    'line-color'?: PaintValue;
     lineOpacity?: number;
     lineWidth?: PaintValue;
-    lineRadius?: PaintValue;
+    'circle-radius'?: PaintValue;
     heatmapColor?: PaintValue;
     heatmapRadius?: PaintValue;
     heatmapWeight?: PaintValue;

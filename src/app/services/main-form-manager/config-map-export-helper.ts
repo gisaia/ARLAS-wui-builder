@@ -38,20 +38,20 @@ export class ConfigMapExportHelper {
 
             switch (modeValues.styleStep.geometryType) {
                 case GEOMETRY_TYPE.fill: {
-                    paint.fillOpacity = colorOpacity;
-                    paint.fillColor = color;
+                    paint['fill-opacity'] = colorOpacity;
+                    paint['fill-color'] = color;
                     break;
                 }
                 case GEOMETRY_TYPE.line: {
                     paint.lineOpacity = colorOpacity;
-                    paint.lineColor = color;
+                    paint['line-color'] = color;
                     paint.lineWidth = this.getMapProperty(modeValues.styleStep.widthFg, mode);
                     break;
                 }
                 case GEOMETRY_TYPE.circle: {
-                    paint.circleOpacity = colorOpacity;
-                    paint.circleColor = color;
-                    paint.lineRadius = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
+                    paint['circle-opacity'] = colorOpacity;
+                    paint['circle-color'] = color;
+                    paint['circle-radius'] = +this.getMapProperty(modeValues.styleStep.radiusFg, mode);
                     break;
                 }
                 case GEOMETRY_TYPE.heatmap: {
@@ -78,6 +78,7 @@ export class ConfigMapExportHelper {
             switch (mode) {
                 case LAYER_MODE.features: {
                     layer.filter = [
+                        'all',
                         [
                             '==',
                             'geometry_path',
@@ -93,6 +94,7 @@ export class ConfigMapExportHelper {
                 }
                 case LAYER_MODE.featureMetric: {
                     layer.filter = [
+                        'all',
                         [
                             '==',
                             'geometry_ref',
@@ -114,6 +116,7 @@ export class ConfigMapExportHelper {
                 case LAYER_MODE.cluster: {
                     const clusterType = modeValues.geometryStep.clusterGeometryType;
                     layer.filter = [
+                        'all',
                         [
                             '==',
                             'geometry_ref',
