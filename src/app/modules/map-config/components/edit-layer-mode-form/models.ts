@@ -31,9 +31,9 @@ export enum AGGREGATE_GEOMETRY_TYPE {
 }
 
 export enum GRANULARITY {
-    coarse = 'coarse',
-    fine = 'fine',
-    finest = 'finest'
+    coarse = 'Coarse',
+    fine = 'Fine',
+    finest = 'Finest'
 }
 
 export enum CLUSTER_GEOMETRY_TYPE {
