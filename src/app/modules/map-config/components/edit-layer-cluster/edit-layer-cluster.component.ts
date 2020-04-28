@@ -70,7 +70,7 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
     // it will used by the parent ControlValueAccessor implementation to write values on-the-fly
     this.formFg = this.embeddedFeaturesComponent.formFg;
     this.registerAggGeometry();
-    this.registerGranlularity();
+    this.registerGranularity();
     this.registerClusterGeometryType();
     this.registerAggregatedGeometry();
     this.registerRawGeometry();

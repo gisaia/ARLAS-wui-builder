@@ -46,7 +46,7 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
             this.formBuilderDefault.control('map.layer.geometryStep.aggGeometry', [Validators.required]));
     }
 
-    protected registerGranlularity() {
+    protected registerGranularity() {
         this.geometryStep.addControl(
             'granularity',
             this.formBuilderDefault.control('map.layer.geometryStep.granularity', [Validators.required]));

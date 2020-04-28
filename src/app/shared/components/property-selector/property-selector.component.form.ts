@@ -171,7 +171,8 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                         [
                             CustomValidators.getConditionalValidator(() => !!this.formFg ?
                                 this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                                && this.propertyInterpolatedFieldCtrl.value
+                                && (this.propertyInterpolatedFieldCtrl.value ||
+                                    this.aggregated && !this.propertyInterpolatedCountOrMetricCtrl.value)
                                 : false,
                                 Validators.required)
                         ]

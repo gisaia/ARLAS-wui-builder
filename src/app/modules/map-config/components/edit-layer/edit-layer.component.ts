@@ -37,7 +37,7 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
   private layersFa: FormArray;
   private layersValues: any[] = [];
   public forceCanExit: boolean;
-  public submitSubject: Subject<void> = new Subject<void>();
+  public submitSubject = new Subject<boolean>();
   public LAYER_MODE = LAYER_MODE;
   private readonly formByMode = new Map<string, string>([
     [LAYER_MODE.features, 'featuresFg'],
@@ -95,7 +95,7 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
   public submit() {
 
     // force validation check on mode subform
-    this.submitSubject.next();
+    this.submitSubject.next(true);
     if (!this.layerFg.valid) {
       this.logger.warn('validation failed', this.layerFg);
       return;
