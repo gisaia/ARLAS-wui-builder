@@ -17,26 +17,26 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit } from '@angular/core';
-import { GlobalSearchComponentForm } from './global-search.component.form';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { CollectionService, FIELD_TYPES } from '@services/collection-service/collection.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-global-search',
   templateUrl: './global-search.component.html',
   styleUrls: ['./global-search.component.scss']
 })
-export class GlobalSearchComponent extends GlobalSearchComponentForm implements OnInit {
+export class GlobalSearchComponent implements OnInit {
 
   public keywordFields: Array<string>;
+  public globalFg: FormGroup;
 
   constructor(
-    protected mainFormService: MainFormService,
-    protected formBuilderDefault: FormBuilderWithDefaultService,
-    private collectionService: CollectionService
+    private collectionService: CollectionService,
+    private mainFormService: MainFormService
   ) {
-    super(mainFormService, formBuilderDefault);
+
+    this.globalFg = this.mainFormService.searchConfig.getGlobalFg();
   }
 
   public ngOnInit() {

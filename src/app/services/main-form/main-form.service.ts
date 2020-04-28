@@ -54,7 +54,6 @@ export class MainFormService {
     constructor(public mainForm: FormGroup) { }
 
     public init(control: FormGroup) {
-      this.mainForm.reset();
       this.mainForm.setControl(MAIN_FORM_KEYS.STARTING_CONFIG, control);
     }
     public getFg = () => this.mainForm.get(MAIN_FORM_KEYS.STARTING_CONFIG) as FormGroup;

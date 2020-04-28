@@ -27,6 +27,8 @@ import { ConfigMapExportHelper } from './config-map-export-helper';
 import { AnalyticsImportService } from '@analytics-config/services/analytics-import/analytics-import.service';
 import { Config } from './models-config';
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
+import { SearchInitService } from '@search-config/services/search-init/search-init.service';
+import { SearchImportService } from '@search-config/services/search-import/search-import.service';
 
 
 @Injectable({
@@ -40,7 +42,9 @@ export class MainFormManagerService {
     private logger: NGXLogger,
     private mainFormService: MainFormService,
     private analyticsImportService: AnalyticsImportService,
-    private analyticsInitService: AnalyticsInitService
+    private analyticsInitService: AnalyticsInitService,
+    private searchInitService: SearchInitService,
+    private searchImportService: SearchImportService
   ) { }
 
   public attemptExport() {
@@ -98,19 +102,21 @@ export class MainFormManagerService {
     });
 
     this.analyticsImportService.doImport(config);
+    this.searchImportService.doImport(config);
   }
 
   /**
-   * Init the sub-forms that are required to a global validation
+   * Init main modules' forms that are required to global validation
    */
-  public doInit() {
+  public initMainModulesForms() {
     // load the modules required forms
     this.analyticsInitService.initModule();
+    this.searchInitService.initModule();
   }
 
   private saveJson(json: any, filename: string, separator?: string) {
     const blob = new Blob([JSON.stringify(json, (key, value) => {
-      if (value && typeof value === 'object' && !Array.isArray(value)) {
+      if (!!separator && value && typeof value === 'object' && !Array.isArray(value)) {
         // convert keys to snake- or kebab-case (eventually other) according to the separator.
         // In fact we cannot declare a property with a snake-cased name,
         // (so in models interfaces properties are are camel case)

@@ -1,6 +1,6 @@
 {
     "global": {
-        "serverUrl": "http://demo.arlas.io/arlas"
+        "serverUrl": "http://demo.arlas.io/arlas",
     },
     "map": {
         "global": {
@@ -44,7 +44,6 @@
     },
     "search": {
         "global": {
-            "autocompleteSize": 10,
             "name": "Search a ...",
             "searchField": "id",
             "autocompleteField": "id",
