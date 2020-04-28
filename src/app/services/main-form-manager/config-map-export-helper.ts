@@ -58,8 +58,8 @@ export class ConfigMapExportHelper {
                 case GEOMETRY_TYPE.heatmap: {
                     paint['heatmap-color'] = color;
                     paint['heatmap-intensity'] = this.getMapProperty(modeValues.styleStep.intensityFg, mode);
-                    paint['heatmap-weight']  = this.getMapProperty(modeValues.styleStep.weightFg, mode);
-                    paint['heatmap-radius']  = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
+                    paint['heatmap-weight'] = this.getMapProperty(modeValues.styleStep.weightFg, mode);
+                    paint['heatmap-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
                 }
             }
             const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
@@ -170,17 +170,17 @@ export class ConfigMapExportHelper {
                 const interpolatedValues = fgValues.propertyInterpolatedFg;
                 let interpolatedColor: Array<string | Array<string | number>>;
                 const getField = (mode === LAYER_MODE.features) ? interpolatedValues.propertyInterpolatedFieldCtrl :
-                    interpolatedValues.propertyInterpolatedFieldCtrl + '_' + interpolatedValues.propertyInterpolatedMetricCtrl + '_';
+                    interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
+                    (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_';
 
                 if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
-                    if (interpolatedValues.propertyInterpolatedCountOrMetricCtrl) {
+                    if (mode === LAYER_MODE.features || interpolatedValues.propertyInterpolatedCountOrMetricCtrl) {
                         interpolatedColor = [
                             'interpolate',
                             ['linear'],
                             this.getArray(
                                 getField
-                                    .concat(':')
-                                    .concat(interpolatedValues.propertyInterpolatedScopeCtrl)
+                                    .concat(':normalized')
                                     .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
                                         ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl : ''))
                         ];

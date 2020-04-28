@@ -222,8 +222,7 @@ export class ConfigExportHelper {
                     layerSource.metrics.push({
                         field: interpolatedValues.propertyInterpolatedFieldCtrl,
                         metric: interpolatedValues.propertyInterpolatedMetricCtrl,
-                        // todo : `normalize` is now a boolean
-                        normalize: interpolatedValues.propertyInterpolatedScopeCtrl
+                        normalize: !!interpolatedValues.propertyInterpolatedNormalizeCtrl
                     });
                 }
                 break;

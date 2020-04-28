@@ -119,7 +119,7 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
 
   private initForceUpdateValidityOnChange() {
     [this.propertySource, this.propertyInterpolatedFieldCtrl, this.propertyInterpolatedNormalizeCtrl,
-    this.propertyInterpolatedScopeCtrl, this.propertyInterpolatedNormalizeCtrl]
+    this.propertyInterpolatedNormalizeCtrl]
       .forEach(ctrl =>
         ctrl.valueChanges.subscribe(value => {
           updateValueAndValidity(this.formFg, true, false);

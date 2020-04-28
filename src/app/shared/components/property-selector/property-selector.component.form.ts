@@ -114,15 +114,6 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                     [
                         null
                     ],
-                propertyInterpolatedScopeCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg && !this.aggregated ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                            && this.propertyInterpolatedNormalizeCtrl.value
-                            : false,
-                            Validators.required)
-                    ],
                 propertyInterpolatedNormalizeByKeyCtrl:
                     [
                         null
@@ -243,9 +234,6 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
     }
     get propertyInterpolatedNormalizeLocalFieldCtrl() {
         return this.propertyInterpolatedFg.get('propertyInterpolatedNormalizeLocalFieldCtrl');
-    }
-    get propertyInterpolatedScopeCtrl() {
-        return this.propertyInterpolatedFg.get('propertyInterpolatedScopeCtrl');
     }
     get propertyInterpolatedMinFieldValueCtrl() {
         return this.propertyInterpolatedFg.get('propertyInterpolatedMinFieldValueCtrl');

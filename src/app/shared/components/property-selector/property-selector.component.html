@@ -120,25 +120,25 @@
                 <div>
                     <mat-label>{{'Normalize' | translate}}</mat-label>
                     <mat-slide-toggle formControlName="propertyInterpolatedNormalizeCtrl" labelPosition="before"
-                        appResetOnChange="map.layer" [dependants]="[propertyInterpolatedScopeCtrl, propertyInterpolatedNormalizeByKeyCtrl, 
+                        appResetOnChange="map.layer" [dependants]="[propertyInterpolatedNormalizeByKeyCtrl, 
                         propertyInterpolatedNormalizeLocalFieldCtrl, propertyInterpolatedMinFieldValueCtrl, propertyInterpolatedMaxFieldValueCtrl,
                         propertyInterpolatedValuesCtrl]">
                     </mat-slide-toggle>
                 </div>
 
                 <div *ngIf="propertyInterpolatedNormalizeCtrl.value">
-                    <mat-form-field>
+                    <!-- <mat-form-field>
                         <mat-label>{{'Scope' | translate}}</mat-label>
                         <mat-select formControlName="propertyInterpolatedScopeCtrl" [appResetOnChange]="defaultKey"
                             [dependants]="[propertyInterpolatedNormalizeByKeyCtrl, propertyInterpolatedNormalizeLocalFieldCtrl]">
                             <mat-option value="local">{{'Local' | translate}}</mat-option>
                             <mat-option value="global">{{'Global' | translate}}</mat-option>
                         </mat-select>
-                    </mat-form-field>
+                    </mat-form-field> -->
 
                     <div *ngIf="!aggregated">
 
-                        <div *ngIf="propertyInterpolatedScopeCtrl.value === 'local'">
+                        <div *ngIf="propertyInterpolatedNormalizeCtrl.value">
                             <mat-label>{{'Normalize by key' | translate}}</mat-label>
                             <mat-slide-toggle formControlName="propertyInterpolatedNormalizeByKeyCtrl"
                                 labelPosition="before" [appResetOnChange]="defaultKey"
@@ -247,9 +247,6 @@
             <mat-error
                 *ngIf="propertyInterpolatedMaxValueCtrl.touched && propertyInterpolatedMaxValueCtrl?.errors?.required">
                 {{'A maximum value is required' | translate}}
-            </mat-error>
-            <mat-error *ngIf="propertyInterpolatedScopeCtrl.touched && propertyInterpolatedScopeCtrl?.errors?.required">
-                {{'A scope is required' | translate}}
             </mat-error>
             <mat-error
                 *ngIf="propertyInterpolatedNormalizeLocalFieldCtrl.touched && propertyInterpolatedNormalizeLocalFieldCtrl?.errors?.required">
