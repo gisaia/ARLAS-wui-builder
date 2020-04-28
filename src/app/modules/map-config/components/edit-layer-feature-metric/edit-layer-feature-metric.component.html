@@ -1,6 +1,25 @@
 <app-edit-layer-mode-form [submit]="submitSubject.asObservable()" aggregatedMode="true"
     [colorFgSources]="[PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated]">
+    <div requested-geometry>
+        <h3 class="layer-section-title">Granularity</h3>
+        <app-config-element>
+            <div form-fields>
+                <mat-form-field>
+                    <mat-label>{{ 'Granularity' | translate}} </mat-label>
+                    <mat-select [formControl]="granularity">
+                        <mat-option [value]="GRANULARITY.coarse">{{ 'Coarse' | translate}}</mat-option>
+                        <mat-option [value]="GRANULARITY.fine">{{ 'Fine' | translate}}</mat-option>
+                        <mat-option [value]="GRANULARITY.finest">{{ 'Finest' | translate}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div description>
+
+            </div>
+        </app-config-element>
+    </div>
     <div rendered-geometry>
+        <h3 class="layer-section-title">Rendered geometry</h3>
         <app-config-element>
             <div form-fields>
                 <mat-form-field>
@@ -45,7 +64,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div description> 
+            <div description>
 
             </div>
         </app-config-element>
