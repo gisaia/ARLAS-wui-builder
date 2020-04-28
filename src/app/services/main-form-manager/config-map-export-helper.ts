@@ -169,7 +169,7 @@ export class ConfigMapExportHelper {
 
                 const interpolatedValues = fgValues.propertyInterpolatedFg;
                 let interpolatedColor: Array<string | Array<string | number>>;
-                const getField = (mode === LAYER_MODE.features) ? interpolatedValues.propertyInterpolatedFieldCtrl :
+                const getField = () => (mode === LAYER_MODE.features) ? interpolatedValues.propertyInterpolatedFieldCtrl :
                     interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
                     (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_';
 
@@ -179,7 +179,7 @@ export class ConfigMapExportHelper {
                             'interpolate',
                             ['linear'],
                             this.getArray(
-                                getField
+                                getField()
                                     .concat(':normalized')
                                     .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
                                         ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl : ''))
@@ -189,7 +189,7 @@ export class ConfigMapExportHelper {
                         pointCountNormalzedColor = [
                             'interpolate',
                             ['linear'],
-                            ['get', 'point_count_normalized']
+                            ['get', 'count_:normalized']
                         ];
                         return pointCountNormalzedColor
                             .concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
@@ -200,7 +200,7 @@ export class ConfigMapExportHelper {
                     interpolatedColor = [
                         'interpolate',
                         ['linear'],
-                        this.getArray(getField)
+                        this.getArray(getField())
                     ];
                 }
                 return interpolatedColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)

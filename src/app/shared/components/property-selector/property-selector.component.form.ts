@@ -87,11 +87,7 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
             propertyInterpolatedFg: this.formBuilder.group({
                 propertyInterpolatedCountOrMetricCtrl:
                     [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg && this.aggregated ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                            : false,
-                            Validators.required)
+                        null
                     ],
                 propertyInterpolatedMetricCtrl: [
                     null,
