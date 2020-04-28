@@ -73,71 +73,7 @@ export class ConfigMapExportHelper {
                     visibility: modeValues.visibilityStep.visible ? 'visible' : 'none'
                 },
                 paint,
-                filter: null
             };
-
-            switch (mode) {
-                case LAYER_MODE.features: {
-                    layer.filter = [
-                        'all',
-                        [
-                            '==',
-                            'geometry_path',
-                            modeValues.geometryStep.geometry,
-                        ],
-                        [
-                            '==',
-                            'feature_type',
-                            'hit'
-                        ]
-                    ];
-                    break;
-                }
-                case LAYER_MODE.featureMetric: {
-                    layer.filter = [
-                        'all',
-                        [
-                            '==',
-                            'geometry_ref',
-                            modeValues.geometryStep.geometry,
-                        ],
-                        [
-                            '==',
-                            'geometry_type',
-                            'raw'
-                        ],
-                        [
-                            '==',
-                            'feature_type',
-                            'aggregation'
-                        ]
-                    ];
-                    break;
-                }
-                case LAYER_MODE.cluster: {
-                    const clusterType = modeValues.geometryStep.clusterGeometryType;
-                    layer.filter = [
-                        'all',
-                        [
-                            '==',
-                            'geometry_ref',
-                            clusterType === CLUSTER_GEOMETRY_TYPE.raw_geometry ?
-                                modeValues.geometryStep.rawGeometry : modeValues.geometryStep.aggregatedGeometry
-                        ],
-                        [
-                            '==',
-                            'geometry_type',
-                            clusterType === CLUSTER_GEOMETRY_TYPE.raw_geometry ? 'raw' : 'aggregated'
-                        ],
-                        [
-                            '==',
-                            'feature_type',
-                            'aggregation'
-                        ]
-                    ];
-                    break;
-                }
-            }
 
             return layer;
         });

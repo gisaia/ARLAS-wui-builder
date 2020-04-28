@@ -29,7 +29,6 @@ export interface Layer {
     minzoom: number;
     maxzoom: number;
     paint: Paint;
-    filter: Array<string | Array<string>>;
 }
 
 export interface Layout {
