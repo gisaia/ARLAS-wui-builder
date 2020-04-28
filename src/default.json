@@ -1,6 +1,6 @@
 {
     "global": {
-        "serverUrl": "http://demo.arlas.io/arlas",
+        "serverUrl": "http://demo.arlas.io/arlas"
     },
     "map": {
         "global": {
@@ -19,7 +19,7 @@
             },
             "geometryStep": {
                 "geometry": "position.location",
-                "granularity": "coarse"
+                "granularity": "Coarse"
             },
             "visibilityStep": {
                 "visible": true,
@@ -37,7 +37,7 @@
                 },
                 "radiusFg": {
                     "propertySource": "Fix",
-                    "propertyFix": "1.5"
+                    "propertyFix": 1.5
                 }
             }
         }
