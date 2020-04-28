@@ -18,7 +18,7 @@ under the License.
 */
 import { FormGroup, FormArray } from '@angular/forms';
 import {
-    Config, ChipSearchConfig, ContributorConfig, LayerSourceConfig, AggregationModelConfig,
+    Config, ChipSearchConfig, ContributorConfig, AggregationModelConfig,
     AnalyticComponentConfig, AnalyticComponentHistogramInputConfig, SwimlaneConfig,
     AnalyticConfig, AnalyticComponentInputConfig, AnalyticComponentSwimlaneInputConfig,
     AnalyticComponentSwimlaneInputOptionsConfig,
@@ -37,6 +37,7 @@ import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { MapComponentInputConfig, MapComponentInputMapLayersConfig, MapComponentInputLayersSetsConfig } from './models-config';
 import { Layer } from './models-map-config';
 
+import { LayerSourceConfig, getSourceName } from 'arlas-web-contributors';
 export class ConfigExportHelper {
 
     public static process(
@@ -45,8 +46,7 @@ export class ConfigExportHelper {
         mapConfigLayers: FormArray,
         searchConfigGlobal: FormGroup,
         timelineConfigGlobal: FormGroup,
-        analyticsConfigList: FormArray,
-        sourceByMode: Map<string, string>, ): any {
+        analyticsConfigList: FormArray ): any {
 
         const chipssearch: ChipSearchConfig = {
             name: searchConfigGlobal.value.name,
@@ -83,7 +83,7 @@ export class ConfigExportHelper {
             }
         };
 
-        config.arlas.web.contributors.push(this.getMapContributor(mapConfigGlobal, mapConfigLayers, sourceByMode));
+        config.arlas.web.contributors.push(this.getMapContributor(mapConfigGlobal, mapConfigLayers));
         config.arlas.web.contributors.push(this.getChipsearchContributor(searchConfigGlobal));
 
         config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal.controls.timeline.value));
@@ -114,8 +114,7 @@ export class ConfigExportHelper {
 
     public static getMapContributor(
         mapConfigGlobal: FormGroup,
-        mapConfigLayers: FormArray,
-        sourceByMode: Map<string, string>): ContributorConfig {
+        mapConfigLayers: FormArray): ContributorConfig {
 
         const mapContributor: ContributorConfig = {
             type: 'map',
@@ -131,7 +130,7 @@ export class ConfigExportHelper {
                 (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
             const layerSource: LayerSourceConfig = {
                 id: layerValues.name,
-                source: sourceByMode.get(layerFg.value.mode),
+                source: '',
                 minzoom: modeValues.visibilityStep.zoomMin,
                 maxzoom: modeValues.visibilityStep.zoomMax,
                 include_fields: [],
@@ -180,7 +179,7 @@ export class ConfigExportHelper {
             if (!!modeValues.styleStep.weightFg) {
                 this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.weightFg, layerValues.mode);
             }
-
+            layerSource.source = getSourceName(layerSource);
             return layerSource;
         });
 
@@ -212,8 +211,7 @@ export class ConfigExportHelper {
                         layerSource.normalization_fields.push(
                             {
                                 on: interpolatedValues.propertyInterpolatedFieldCtrl,
-                                per: interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl,
-                                scope: interpolatedValues.propertyInterpolatedScopeCtrl
+                                per: interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl
                             });
                     } else {
                         layerSource.include_fields.push(interpolatedValues.propertyInterpolatedFieldCtrl);
@@ -222,6 +220,7 @@ export class ConfigExportHelper {
                     layerSource.metrics.push({
                         field: interpolatedValues.propertyInterpolatedFieldCtrl,
                         metric: interpolatedValues.propertyInterpolatedMetricCtrl,
+                        // todo : `normalize` is now a boolean
                         normalize: interpolatedValues.propertyInterpolatedScopeCtrl
                     });
                 }
