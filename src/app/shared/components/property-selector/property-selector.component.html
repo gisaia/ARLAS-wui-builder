@@ -3,7 +3,8 @@
         <mat-label>{{propertyName | translate | titlecase}} {{'source' | translate}}</mat-label>
         <mat-select formControlName="propertySource" appAlertOnChange="changing the source will reset your choices"
             [dependants]="[propertyFix, propertyProvidedFieldCtrl, 
-            propertyGeneratedFieldCtrl, propertyManualFg, propertyInterpolatedFg, propertyPointCountNormalized]" [appResetOnChange]="defaultKey">
+            propertyGeneratedFieldCtrl, propertyManualFg, propertyInterpolatedFg, propertyPointCountNormalized]"
+            [appResetOnChange]="defaultKey">
             <mat-option *ngFor="let source of sources" [value]="source">
                 {{source | translate}}</mat-option>
         </mat-select>
@@ -28,7 +29,7 @@
             </div>
         </div>
 
-        
+
 
         <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.provided">
             <mat-form-field>
@@ -94,7 +95,9 @@
                     </div>
                     <div *ngIf="!propertyInterpolatedCountOrMetricCtrl.value">
                         <div *ngIf="propertyType === PROPERTY_TYPE.color">
-                            <button type="button" mat-raised-button (click)="this.propertyInterpolatedNormalizeCtrl.setValue(1);openPaletteTable()" class="palette-button">
+                            <button type="button" mat-raised-button
+                                (click)="this.propertyInterpolatedNormalizeCtrl.setValue(1);openPaletteTable()"
+                                class="palette-button">
                                 {{'Manage palette' | translate}}
                             </button>
                         </div>
@@ -106,7 +109,7 @@
                         <mat-select formControlName="propertyInterpolatedFieldCtrl" [appResetOnChange]="defaultKey"
                             [dependants]="[propertyInterpolatedMinFieldValueCtrl, propertyInterpolatedMaxFieldValueCtrl, propertyInterpolatedNormalizeLocalFieldCtrl,
                             propertyInterpolatedNormalizeCtrl, propertyInterpolatedNormalizeByKeyCtrl]">
-                            <mat-option *ngFor="let field of interpolatedFields" [value]="field">
+                            <mat-option *ngFor="let field of collectionIntegerFields" [value]="field">
                                 {{ field }}</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -211,7 +214,9 @@
 
         <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.heatmap_density">
             <div *ngIf="propertyType === PROPERTY_TYPE.color">
-                <button type="button" mat-raised-button (click)="this.propertyInterpolatedNormalizeCtrl.setValue(1);openPaletteTable()" class="palette-button">
+                <button type="button" mat-raised-button
+                    (click)="this.propertyInterpolatedNormalizeCtrl.setValue(1);openPaletteTable()"
+                    class="palette-button">
                     {{'Manage palette' | translate}}
                 </button>
             </div>
