@@ -28,14 +28,17 @@ export const EnvServiceFactory = () => {
     // tslint:disable-next-line: no-string-literal
     const browserWindowEnv = browserWindow['__env'] || {};
 
-    // Assign environment variables from browser window to env
-    // In the current implementation, properties from env.js overwrite defaults from the EnvService.
-    for (const key in browserWindowEnv) {
-        if (browserWindowEnv.hasOwnProperty(key)) {
-            // tslint:disable-next-line: no-string-literal
-            env[key] = window['__env'][key];
-        }
-    }
+    // // Assign environment variables from browser window to env
+    // // In the current implementation, properties from env.js overwrite defaults from the EnvService.
+    // for (const key in browserWindowEnv) {
+    //     if (browserWindowEnv.hasOwnProperty(key)) {
+    //         // tslint:disable-next-line: no-string-literal
+    //         env[key] = window['__env'][key];
+    //     }
+    // }
+
+    // tslint:disable-next-line: no-string-literal
+    Object.assign(env, browserWindowEnv);
 
     return env;
 };

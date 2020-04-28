@@ -22,7 +22,6 @@ import * as portableFetch from 'portable-fetch';
 import { Observable } from 'rxjs/internal/Observable';
 import { from } from 'rxjs/internal/observable/from';
 import { Configuration, PersistenceApi, Data, DataResource } from 'arlas-persistence-api';
-import { ArlasConfigService } from 'arlas-wui-toolkit';
 import { EnvService } from '@services/env/env.service';
 
 // tslint:disable-next-line: ban-types
@@ -38,9 +37,11 @@ export class PersistenceService {
     private envService: EnvService,
     @Inject(GET_OPTIONS) private getOptions
   ) {
-    const configuraiton = new Configuration();
-    const baseUrl = this.envService.persistenceUrl;
-    this.persistenceApi = new PersistenceApi(configuraiton, baseUrl, portableFetch);
+    const configuration = new Configuration();
+    if (this.envService.persistenceUrl !== '') {
+      const baseUrl = this.envService.persistenceUrl;
+      this.persistenceApi = new PersistenceApi(configuration, baseUrl, portableFetch);
+    }
   }
 
 

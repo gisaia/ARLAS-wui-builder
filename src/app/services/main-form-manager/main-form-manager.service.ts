@@ -99,20 +99,22 @@ export class MainFormManagerService {
     sourceByMode.set(LAYER_MODE.featureMetric, 'feature-metric');
     sourceByMode.set(LAYER_MODE.cluster, 'cluster');
 
+    const generatedConfig = ConfigExportHelper.process(
+      startingConfig,
+      mapConfigGlobal,
+      mapConfigLayers,
+      searchConfigGlobal,
+      timelineConfigGlobal,
+      analyticsConfigList,
+      sourceByMode);
+
+    const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers, sourceByMode);
+
     if (this.envService.persistenceUrl !== '') {
       this.persistenceService.create(
         'config.json',
-        JSON.stringify(
-          ConfigExportHelper.process(
-            startingConfig,
-            mapConfigGlobal,
-            mapConfigLayers,
-            searchConfigGlobal,
-            timelineConfigGlobal,
-            analyticsConfigList,
-            sourceByMode)
-        ).replace('"layers":[]', '"layers":' + JSON.stringify(
-          ConfigMapExportHelper.process(mapConfigLayers, sourceByMode).layers
+        JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
+          generatedMapConfig.layers
         ))
       ).subscribe(
         () => {
@@ -125,21 +127,9 @@ export class MainFormManagerService {
 
     } else {
 
-      this.saveJson(
-        ConfigExportHelper.process(
-          startingConfig,
-          mapConfigGlobal,
-          mapConfigLayers,
-          searchConfigGlobal,
-          timelineConfigGlobal,
-          analyticsConfigList,
-          sourceByMode),
-        'config.json', '_');
+      this.saveJson(generatedConfig, 'config.json', '_');
 
-      this.saveJson(
-        ConfigMapExportHelper.process(mapConfigLayers, sourceByMode),
-        'config.map.json',
-        '-');
+      this.saveJson(generatedMapConfig, 'config.map.json', '-');
     }
   }
 
