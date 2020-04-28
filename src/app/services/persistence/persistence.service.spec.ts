@@ -1,12 +1,19 @@
-import { TestBed } from '@angular/core/testing';
-
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
+import { GET_OPTIONS } from '@services/persistence/persistence.service';
 import { PersistenceService } from './persistence.service';
 
 describe('PersistenceService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let spectator: SpectatorService<PersistenceService>;
+  const createService = createServiceFactory({
+    service: PersistenceService,
+    providers: [
+      {provide: GET_OPTIONS, useValue: {}}
+    ]
+  });
 
-  it('should be created', () => {
-    const service: PersistenceService = TestBed.get(PersistenceService);
-    expect(service).toBeTruthy();
+  beforeEach(() => spectator = createService());
+
+  it('should be defined', () => {
+    expect(spectator.service).toBeDefined();
   });
 });

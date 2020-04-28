@@ -111,7 +111,9 @@ export class MainFormManagerService {
             timelineConfigGlobal,
             analyticsConfigList,
             sourceByMode)
-        )
+        ).replace('"layers":[]', '"layers":' + JSON.stringify(
+          ConfigMapExportHelper.process(mapConfigLayers, sourceByMode).layers
+        ))
       ).subscribe(
         () => {
           this.snackbar.open(this.translate.instant('Configuration saved !'));
@@ -119,13 +121,6 @@ export class MainFormManagerService {
         () => {
           this.snackbar.open(this.translate.instant('Error : Configuration not saved'));
         }
-      );
-
-      this.persistenceService.create(
-        'config.map.json',
-        JSON.stringify(
-          ConfigMapExportHelper.process(mapConfigLayers, sourceByMode)
-        )
       );
 
     } else {
