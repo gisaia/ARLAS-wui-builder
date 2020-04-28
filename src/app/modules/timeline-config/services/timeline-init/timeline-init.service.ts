@@ -16,34 +16,27 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+import { Injectable } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { FormGroup, Validators } from '@angular/forms';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { Validators } from '@angular/forms';
 
-export class GlobalTimelineComponentForm {
+@Injectable({
+  providedIn: 'root'
+})
+export class TimelineInitService {
 
-    public globalFg: FormGroup;
+  constructor(
+    private mainFormService: MainFormService,
+    private formBuilderDefault: FormBuilderWithDefaultService
+  ) { }
 
-    constructor(
-        protected mainFormService: MainFormService,
-        protected formBuilderDefault: FormBuilderWithDefaultService
-    ) {
-
-        this.globalFg = this.mainFormService.timelineConfig.getGlobalFg();
-        // make the fg independant form the mainForm, this will make default values resolution easier
-        this.globalFg.setParent(null);
-    }
-
-    get timeline() {
-        return this.globalFg.get('timeline');
-    }
-
-    get useDetailedTimeline() {
-        return this.globalFg.get('useDetailedTimeline');
-    }
-
-    get detailedTimeline() {
-        return this.globalFg.get('detailedTimeline');
-    }
+  public initModule() {
+    this.mainFormService.timelineConfig.initGlobalFg(this.formBuilderDefault.group('timeline.global', {
+      timeline: [null, Validators.required],
+      useDetailedTimeline: [false],
+      detailedTimeline: [null, Validators.required]
+    }));
+  }
 
 }

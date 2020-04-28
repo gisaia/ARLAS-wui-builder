@@ -16,14 +16,18 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Input, forwardRef, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, forwardRef } from '@angular/core';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
-import { TimelineFormComponentForm } from './timeline-form.component.form';
 import { NGXLogger } from 'ngx-logger';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { Interval } from 'arlas-api';
 import { updateValueAndValidity } from '@utils/tools';
 import { ChartType } from 'arlas-web-components';
+import {
+  TimelineFormBuilderService,
+  TimelineFormGroup
+} from '@timeline-config/services/timeline-form-builder/timeline-form-builder.service';
+import { TimelineFormComponentForm } from './timeline-form.component.form';
 
 enum DateFormats {
   English = '%b %d %Y  %H:%M',
@@ -51,6 +55,7 @@ export class TimelineFormComponent extends TimelineFormComponentForm implements 
 
   @Input() public dateFields: Array<string> = [];
   @Input() public defaultKey: string;
+  @Input() public isDetailedTimeline: boolean;
 
   public intervalUnits = Array.from(
     new Set(
@@ -62,15 +67,17 @@ export class TimelineFormComponent extends TimelineFormComponentForm implements 
 
   constructor(
     protected formBuilderDefault: FormBuilderWithDefaultService,
+    protected timelineFormBuilder: TimelineFormBuilderService,
     protected logger: NGXLogger
   ) {
-    super(formBuilderDefault, logger);
+    super(logger);
+    this.formFg = timelineFormBuilder.build(this.isDetailedTimeline);
   }
 
   public ngOnInit() {
     super.ngOnInit();
 
-    this.formFg.controls.isDetailedTimeline.setValue(this.isDetailedTimeline);
+    (this.formFg as TimelineFormGroup).customControls.isDetailedTimeline.setValue(this.isDetailedTimeline);
 
     // force update of custom validators & mainForm, otherwise it is not consistent
     this.formFg.valueChanges.subscribe(
