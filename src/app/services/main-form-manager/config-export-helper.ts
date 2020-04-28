@@ -112,6 +112,63 @@ export class ConfigExportHelper {
         return config;
     }
 
+    public static getLayerSourceConfig(layerFg: FormGroup): LayerSourceConfig {
+        const layerValues = layerFg.value;
+        const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
+            (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
+        const layerSource: LayerSourceConfig = {
+            id: layerValues.name,
+            source: '',
+            minzoom: modeValues.visibilityStep.zoomMin,
+            maxzoom: modeValues.visibilityStep.zoomMax,
+            include_fields: [],
+            normalization_fields: [],
+            metrics: []
+        };
+
+        switch (layerValues.mode) {
+            case LAYER_MODE.features: {
+                layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
+                break;
+            }
+            case LAYER_MODE.featureMetric: {
+                layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
+                layerSource.geometry_support = modeValues.geometryStep.geometry;
+                layerSource.geometry_id = modeValues.geometryStep.geometryId;
+                break;
+            }
+            case LAYER_MODE.cluster: {
+
+                layerSource.agg_geo_field = modeValues.geometryStep.aggGeometry;
+                layerSource.granularity = modeValues.geometryStep.granularity;
+                layerSource.minfeatures = modeValues.visibilityStep.featuresMin;
+                if (modeValues.geometryStep.clusterGeometryType === CLUSTER_GEOMETRY_TYPE.aggregated_geometry) {
+                    layerSource.aggregated_geometry = modeValues.geometryStep.aggregatedGeometry;
+                } else {
+                    layerSource.raw_geometry = {
+                        geometry: modeValues.geometryStep.rawGeometry,
+                        sort: !!modeValues.geometryStep.clusterSort ? modeValues.geometryStep.clusterSort : ''
+                    };
+                }
+            }
+        }
+
+        this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.colorFg, layerValues.mode);
+
+        if (!!modeValues.styleStep.widthFg) {
+            this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.widthFg, layerValues.mode);
+        }
+
+        if (!!modeValues.styleStep.radiusFg) {
+            this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.radiusFg, layerValues.mode);
+        }
+
+        if (!!modeValues.styleStep.weightFg) {
+            this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.weightFg, layerValues.mode);
+        }
+        layerSource.source = getSourceName(layerSource);
+        return layerSource;
+    }
     public static getMapContributor(
         mapConfigGlobal: FormGroup,
         mapConfigLayers: FormArray): ContributorConfig {
@@ -125,62 +182,7 @@ export class ConfigExportHelper {
         };
 
         const layersSources: Array<LayerSourceConfig> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
-            const layerValues = layerFg.value;
-            const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
-                (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
-            const layerSource: LayerSourceConfig = {
-                id: layerValues.name,
-                source: '',
-                minzoom: modeValues.visibilityStep.zoomMin,
-                maxzoom: modeValues.visibilityStep.zoomMax,
-                include_fields: [],
-                normalization_fields: [],
-                metrics: []
-            };
-
-            switch (layerValues.mode) {
-                case LAYER_MODE.features: {
-                    layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
-                    layerSource.returned_geometry = modeValues.geometryStep.geometry;
-                    break;
-                }
-                case LAYER_MODE.featureMetric: {
-                    layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
-                    layerSource.geometry_support = modeValues.geometryStep.geometry;
-                    layerSource.geometry_id = modeValues.geometryStep.geometryId;
-                    break;
-                }
-                case LAYER_MODE.cluster: {
-
-                    layerSource.agg_geo_field = modeValues.geometryStep.aggGeometry;
-                    layerSource.granularity = modeValues.geometryStep.granularity;
-                    layerSource.minfeatures = modeValues.visibilityStep.featuresMin;
-                    if (modeValues.geometryStep.clusterGeometryType === CLUSTER_GEOMETRY_TYPE.aggregated_geometry) {
-                        layerSource.aggregated_geometry = modeValues.geometryStep.aggregatedGeometry;
-                    } else {
-                        layerSource.raw_geometry = {
-                            geometry: modeValues.geometryStep.rawGeometry,
-                            sort: !!modeValues.geometryStep.clusterSort ? modeValues.geometryStep.clusterSort : ''
-                        };
-                    }
-                }
-            }
-
-            this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.colorFg, layerValues.mode);
-
-            if (!!modeValues.styleStep.widthFg) {
-                this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.widthFg, layerValues.mode);
-            }
-
-            if (!!modeValues.styleStep.radiusFg) {
-                this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.radiusFg, layerValues.mode);
-            }
-
-            if (!!modeValues.styleStep.weightFg) {
-                this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.weightFg, layerValues.mode);
-            }
-            layerSource.source = getSourceName(layerSource);
-            return layerSource;
+            return this.getLayerSourceConfig(layerFg);
         });
 
         mapContributor.layers_sources = layersSources;
