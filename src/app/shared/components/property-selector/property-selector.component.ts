@@ -161,8 +161,10 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
         this.collectionService.getComputationMetric(this.collection, interpolatedField, METRIC_TYPES.MIN).then(min =>
           this.propertyInterpolatedMinFieldValueCtrl.setValue(min)
         );
-        this.collectionService.getComputationMetric(this.collection, interpolatedField, METRIC_TYPES.MAX).then(max =>
-          this.propertyInterpolatedMaxFieldValueCtrl.setValue(max)
+
+        const metric = this.propertyInterpolatedMetricCtrl.value === METRIC_TYPES.SUM ? METRIC_TYPES.SUM : METRIC_TYPES.MAX;
+        this.collectionService.getComputationMetric(this.collection, interpolatedField, metric).then(sum =>
+          this.propertyInterpolatedMaxFieldValueCtrl.setValue(sum)
         );
       }
     }));
