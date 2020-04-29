@@ -72,4 +72,23 @@ $accent-color: mat-color($accent-palette, 300);
     padding: 20px 0px;
     color: green;
   }
+  .upload-files {
+    display: flex;
+  }
+  .upload-single-files {
+    margin: 15px;
+    ::ng-deep .mat-button-wrapper {
+      display: flex;
+      .upload-check {
+        display: flex;
+        align-items: center;
+        margin-left: 7px;
+      }
+    }
+  }
+}
+
+mat-dialog-actions {
+  display: flex;
+  flex-direction: column;
 }

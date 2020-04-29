@@ -1,11 +1,11 @@
+import { MapImportService } from './map-import.service';
 import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
-import { TimelineFormBuilderService } from './timeline-form-builder.service';
 
-describe('TimelineFormBuilderService', () => {
-  let spectator: SpectatorService<TimelineFormBuilderService>;
+describe('MapImportService', () => {
+  let spectator: SpectatorService<MapImportService>;
 
   const createService = createServiceFactory({
-    service: TimelineFormBuilderService
+    service: MapImportService
   });
 
   beforeEach(() => {

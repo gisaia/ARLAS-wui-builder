@@ -31,6 +31,7 @@ import { Subject } from 'rxjs';
 import { StartupService } from '../../services/startup/startup.service';
 import { Config } from '@services/main-form-manager/models-config';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+import { MapConfig } from '@services/main-form-manager/models-map-config';
 
 enum InitialChoice {
   none = 0,
@@ -113,14 +114,27 @@ export class LandingPageDialogComponent implements OnInit {
     this.startEvent.next();
   }
 
-  public upload(files: File[]) {
+  public upload(configFile: File, mapConfigFile: File) {
 
-    if (!files.length) {
-      // user cancelled with no file
-      return;
-    }
-    const fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    const readAndParsePromise = (file: File) => new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.onload = (e) => {
+        try {
+          resolve(JSON.parse(fileReader.result.toString()));
+        } catch (excp) {
+          reject(excp);
+        }
+      };
+      fileReader.onerror = (err) => reject(err);
+      fileReader.readAsText(file);
+    });
+
+    Promise.all([
+      readAndParsePromise(configFile), readAndParsePromise(mapConfigFile)
+    ]).then(values => {
+      const configJson = values[0] as Config;
+      const configMapJson = values[1] as MapConfig;
+
       // I think we need to think about two options for this part
       // A config file store in a database with arlas-persistence
       // A config file store on the file system of the user computer
@@ -128,25 +142,25 @@ export class LandingPageDialogComponent implements OnInit {
       // const newUrl = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('serverUrl').value;
       // this.startupService.validLoadedConfig(newUrl)
 
-      const jsonConfig: Config = JSON.parse(fileReader.result.toString());
-      this.getServerCollections(jsonConfig.arlas.server.url).then(() => {
+      this.getServerCollections(configJson.arlas.server.url).then(() => {
 
         this.configDescritor.getAllCollections().subscribe(collections => {
-          const collection = (collections.find(c => c === jsonConfig.arlas.server.collection.name));
+          const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
 
           if (!collection) {
             this.logger.error(
-              this.translate.instant('Collection ' + jsonConfig.arlas.server.collection.name + ' unknown. Available collections: ')
+              this.translate.instant('Collection ' + configJson.arlas.server.collection.name + ' unknown. Available collections: ')
               + collections);
 
           } else {
             this.startupService.setCollection(collection);
-            this.mainFormManager.doImport(jsonConfig);
+            this.mainFormManager.doImport(configJson, configMapJson);
+            this.startEvent.next();
           }
         });
       });
-    };
-    fileReader.readAsText(files[0]);
+
+    }).catch(err => this.logger.error(this.translate.instant('Could not load config files ' + err)));
   }
 
   private getServerCollections(serverUrl: string) {
@@ -158,7 +172,6 @@ export class LandingPageDialogComponent implements OnInit {
     // Update collaborative search Service with the new url
     return this.startupService.setCollaborativeService(newConf);
   }
-
 }
 
 @Component({
