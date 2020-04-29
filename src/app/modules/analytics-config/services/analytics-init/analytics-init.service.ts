@@ -107,7 +107,7 @@ export class AnalyticsInitService {
     });
   }
 
-  private createContributor(widgetType: string, widgetData: any, icon: string) {
+  public createContributor(widgetType: string, widgetData: any, icon: string) {
     const contribConfig = ConfigExportHelper.getAnalyticsContributor(widgetType, widgetData, icon) as any;
     const currentConfig = this.configService.getConfig() as any;
 
@@ -117,15 +117,19 @@ export class AnalyticsInitService {
 
     if (!this.arlasStartupService.contributorRegistry.has(contribConfig.identifier)) {
       currentConfig.arlas.web.contributors.push(contribConfig);
-      this.configService.setConfig(currentConfig);
-      const contributor = ContributorBuilder.buildContributor(
-        WIDGET_TYPE[widgetType],
-        contribConfig.identifier,
-        this.configService,
-        this.collaborativesearchService);
-      this.arlasStartupService.contributorRegistry.set(
-        contribConfig.identifier, contributor);
+    } else {
+      const contributorsWithMe = currentConfig.arlas.web.contributors.filter(config => config.identifier !== contribConfig.identifier);
+      contributorsWithMe.push(contribConfig);
+      currentConfig.arlas.web.contributors = contributorsWithMe;
     }
+    this.configService.setConfig(currentConfig);
+    const contributor = ContributorBuilder.buildContributor(
+      WIDGET_TYPE[widgetType],
+      contribConfig.identifier,
+      this.configService,
+      this.collaborativesearchService);
+    this.arlasStartupService.contributorRegistry.set(
+      contribConfig.identifier, contributor);
     return this.arlasStartupService.contributorRegistry.get(contribConfig.identifier);
   }
 

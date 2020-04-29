@@ -96,27 +96,20 @@ export class EditGroupComponent implements OnInit {
       .afterClosed().subscribe(result => {
         if (result) {
           widgetFg.setControl('widgetData', result);
-          this.analyticsInitService.createPreviewContributor(this.formGroup, widgetFg);
+          const contrib = this.analyticsInitService.createContributor(
+            widgetFg.value.widgetType,
+            widgetFg.value.widgetData,
+            this.formGroup.controls.icon.value);
+          this.formGroup.controls.preview.setValue([]);
+          setTimeout(() => this.formGroup.controls.preview.setValue([ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1)]), 1);
+          contrib.updateFromCollaboration({
+            id: '',
+            operation: OperationEnum.add,
+            all: false
+          });
           this.cdr.detectChanges();
         }
       });
-  }
-
-
-  public createContributor = (widgetType, widgetData, icon) => {
-    const contribConfig = ConfigExportHelper.getAnalyticsContributor(widgetType, widgetData, icon) as any;
-    const currentConfig = this.startupService.getConfigWithInitContrib();
-    if (this.arlasStartupService.contributorRegistry.get(contribConfig.identifier) === undefined) {
-      currentConfig.arlas.web.contributors.push(contribConfig);
-      this.configService.setConfig(currentConfig);
-      const contributor = ContributorBuilder.buildContributor(WIDGET_TYPE[widgetType],
-        contribConfig.identifier,
-        this.configService,
-        this.collaborativesearchService);
-      this.arlasStartupService.contributorRegistry
-        .set(contribConfig.identifier, contributor);
-    }
-    return this.arlasStartupService.contributorRegistry.get(contribConfig.identifier);
   }
 
   get contentType() {
