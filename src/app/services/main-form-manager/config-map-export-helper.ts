@@ -125,7 +125,7 @@ export class ConfigMapExportHelper {
                         pointCountNormalzedColor = [
                             'interpolate',
                             ['linear'],
-                            ['get', 'count_:normalized']
+                            ['get', 'count' + (!!interpolatedValues.propertyInterpolatedCountNormalizeCtrl ? '_:normalized' : '')]
                         ];
                         return pointCountNormalzedColor
                             .concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)

@@ -79,9 +79,14 @@
                         <mat-label>{{'Count' | translate}}</mat-label>
                         <mat-slide-toggle formControlName="propertyInterpolatedCountOrMetricCtrl"
                             [appResetOnChange]="defaultKey"
-                            [dependants]="[propertyInterpolatedMetricCtrl, propertyInterpolatedFieldCtrl]">
+                            [dependants]="[propertyInterpolatedCountNormalizeCtrl, propertyInterpolatedMetricCtrl, propertyInterpolatedFieldCtrl]">
                         </mat-slide-toggle>
                         <mat-label>{{'Metric' | translate}}</mat-label>
+                    </div>
+                    <div *ngIf="!propertyInterpolatedCountOrMetricCtrl.value">
+                        <mat-label>{{'Normalize' | translate}}</mat-label>
+                        <mat-slide-toggle formControlName="propertyInterpolatedCountNormalizeCtrl">
+                        </mat-slide-toggle>
                     </div>
                     <div *ngIf="propertyInterpolatedCountOrMetricCtrl.value">
                         <mat-form-field>

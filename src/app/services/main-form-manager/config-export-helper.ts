@@ -46,7 +46,7 @@ export class ConfigExportHelper {
         mapConfigLayers: FormArray,
         searchConfigGlobal: FormGroup,
         timelineConfigGlobal: FormGroup,
-        analyticsConfigList: FormArray ): any {
+        analyticsConfigList: FormArray): any {
 
         const chipssearch: ChipSearchConfig = {
             name: searchConfigGlobal.value.name,
@@ -219,11 +219,19 @@ export class ConfigExportHelper {
                         layerSource.include_fields.push(interpolatedValues.propertyInterpolatedFieldCtrl);
                     }
                 } else {
-                    layerSource.metrics.push({
-                        field: interpolatedValues.propertyInterpolatedFieldCtrl,
-                        metric: interpolatedValues.propertyInterpolatedMetricCtrl,
-                        normalize: !!interpolatedValues.propertyInterpolatedNormalizeCtrl
-                    });
+                    if (!interpolatedValues.propertyInterpolatedCountOrMetricCtrl) {
+                        layerSource.metrics.push({
+                            field: 'count',
+                            metric: 'count',
+                            normalize: !!interpolatedValues.propertyInterpolatedCountNormalizeCtrl
+                        });
+                    } else {
+                        layerSource.metrics.push({
+                            field: interpolatedValues.propertyInterpolatedFieldCtrl,
+                            metric: interpolatedValues.propertyInterpolatedMetricCtrl,
+                            normalize: !!interpolatedValues.propertyInterpolatedNormalizeCtrl
+                        });
+                    }
                 }
                 break;
             }
