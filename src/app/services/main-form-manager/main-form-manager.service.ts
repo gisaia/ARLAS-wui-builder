@@ -94,22 +94,15 @@ export class MainFormManagerService {
     const timelineConfigGlobal = this.mainFormService.timelineConfig.getGlobalFg();
     const analyticsConfigList = this.mainFormService.analyticsConfig.getListFa();
 
-<<<<<<< HEAD
-    const sourceByMode = new Map<string, string>();
-    sourceByMode.set(LAYER_MODE.features, 'feature');
-    sourceByMode.set(LAYER_MODE.featureMetric, 'feature-metric');
-    sourceByMode.set(LAYER_MODE.cluster, 'cluster');
-
     const generatedConfig = ConfigExportHelper.process(
       startingConfig,
       mapConfigGlobal,
       mapConfigLayers,
       searchConfigGlobal,
       timelineConfigGlobal,
-      analyticsConfigList,
-      sourceByMode);
+      analyticsConfigList);
 
-    const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers, sourceByMode);
+    const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers);
 
     if (this.envService.persistenceUrl !== '') {
       this.persistenceService.create(
@@ -128,26 +121,10 @@ export class MainFormManagerService {
 
     } else {
 
-      this.saveJson(generatedConfig, 'config.json', '_');
+      this.saveJson(generatedConfig, 'config.json');
 
       this.saveJson(generatedMapConfig, 'config.map.json', '-');
     }
-=======
-    this.saveJson(
-      ConfigExportHelper.process(
-        startingConfig,
-        mapConfigGlobal,
-        mapConfigLayers,
-        searchConfigGlobal,
-        timelineConfigGlobal,
-        analyticsConfigList),
-      'config.json');
-
-    this.saveJson(
-      ConfigMapExportHelper.process(mapConfigLayers),
-      'config.map.json',
-      '-');
->>>>>>> Rename source in a layer definition
   }
 
   public doImport(config: Config) {
