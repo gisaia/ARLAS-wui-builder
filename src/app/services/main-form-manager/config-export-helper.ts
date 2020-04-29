@@ -18,7 +18,7 @@ under the License.
 */
 import { FormGroup, FormArray } from '@angular/forms';
 import {
-    Config, ChipSearchConfig, ContributorConfig, LayerSourceConfig, AggregationModelConfig,
+    Config, ChipSearchConfig, ContributorConfig, AggregationModelConfig,
     AnalyticComponentConfig, AnalyticComponentHistogramInputConfig, SwimlaneConfig,
     AnalyticConfig, AnalyticComponentInputConfig, AnalyticComponentSwimlaneInputConfig,
     AnalyticComponentSwimlaneInputOptionsConfig,
@@ -37,6 +37,7 @@ import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { MapComponentInputConfig, MapComponentInputMapLayersConfig, MapComponentInputLayersSetsConfig } from './models-config';
 import { Layer } from './models-map-config';
 
+import { LayerSourceConfig, getSourceName } from 'arlas-web-contributors';
 export class ConfigExportHelper {
 
     public static process(
@@ -45,8 +46,7 @@ export class ConfigExportHelper {
         mapConfigLayers: FormArray,
         searchConfigGlobal: FormGroup,
         timelineConfigGlobal: FormGroup,
-        analyticsConfigList: FormArray,
-        sourceByMode: Map<string, string>, ): any {
+        analyticsConfigList: FormArray ): any {
 
         const chipssearch: ChipSearchConfig = {
             name: searchConfigGlobal.value.name,
@@ -83,7 +83,7 @@ export class ConfigExportHelper {
             }
         };
 
-        config.arlas.web.contributors.push(this.getMapContributor(mapConfigGlobal, mapConfigLayers, sourceByMode));
+        config.arlas.web.contributors.push(this.getMapContributor(mapConfigGlobal, mapConfigLayers));
         config.arlas.web.contributors.push(this.getChipsearchContributor(searchConfigGlobal));
 
         config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal.controls.timeline.value));
@@ -112,10 +112,66 @@ export class ConfigExportHelper {
         return config;
     }
 
+    public static getLayerSourceConfig(layerFg: FormGroup): LayerSourceConfig {
+        const layerValues = layerFg.value;
+        const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
+            (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
+        const layerSource: LayerSourceConfig = {
+            id: layerValues.name,
+            source: '',
+            minzoom: modeValues.visibilityStep.zoomMin,
+            maxzoom: modeValues.visibilityStep.zoomMax,
+            include_fields: [],
+            normalization_fields: [],
+            metrics: []
+        };
+
+        switch (layerValues.mode) {
+            case LAYER_MODE.features: {
+                layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
+                break;
+            }
+            case LAYER_MODE.featureMetric: {
+                layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
+                layerSource.geometry_support = modeValues.geometryStep.geometry;
+                layerSource.geometry_id = modeValues.geometryStep.geometryId;
+                break;
+            }
+            case LAYER_MODE.cluster: {
+
+                layerSource.agg_geo_field = modeValues.geometryStep.aggGeometry;
+                layerSource.granularity = modeValues.geometryStep.granularity;
+                layerSource.minfeatures = modeValues.visibilityStep.featuresMin;
+                if (modeValues.geometryStep.clusterGeometryType === CLUSTER_GEOMETRY_TYPE.aggregated_geometry) {
+                    layerSource.aggregated_geometry = modeValues.geometryStep.aggregatedGeometry;
+                } else {
+                    layerSource.raw_geometry = {
+                        geometry: modeValues.geometryStep.rawGeometry,
+                        sort: !!modeValues.geometryStep.clusterSort ? modeValues.geometryStep.clusterSort : ''
+                    };
+                }
+            }
+        }
+
+        this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.colorFg, layerValues.mode);
+
+        if (!!modeValues.styleStep.widthFg) {
+            this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.widthFg, layerValues.mode);
+        }
+
+        if (!!modeValues.styleStep.radiusFg) {
+            this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.radiusFg, layerValues.mode);
+        }
+
+        if (!!modeValues.styleStep.weightFg) {
+            this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.weightFg, layerValues.mode);
+        }
+        layerSource.source = getSourceName(layerSource);
+        return layerSource;
+    }
     public static getMapContributor(
         mapConfigGlobal: FormGroup,
-        mapConfigLayers: FormArray,
-        sourceByMode: Map<string, string>): ContributorConfig {
+        mapConfigLayers: FormArray): ContributorConfig {
 
         const mapContributor: ContributorConfig = {
             type: 'map',
@@ -126,62 +182,7 @@ export class ConfigExportHelper {
         };
 
         const layersSources: Array<LayerSourceConfig> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
-            const layerValues = layerFg.value;
-            const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
-                (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
-            const layerSource: LayerSourceConfig = {
-                id: layerValues.name,
-                source: sourceByMode.get(layerFg.value.mode),
-                minzoom: modeValues.visibilityStep.zoomMin,
-                maxzoom: modeValues.visibilityStep.zoomMax,
-                include_fields: [],
-                normalization_fields: [],
-                metrics: []
-            };
-
-            switch (layerValues.mode) {
-                case LAYER_MODE.features: {
-                    layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
-                    layerSource.returned_geometry = modeValues.geometryStep.geometry;
-                    break;
-                }
-                case LAYER_MODE.featureMetric: {
-                    layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
-                    layerSource.geometry_support = modeValues.geometryStep.geometry;
-                    layerSource.geometry_id = modeValues.geometryStep.geometryId;
-                    break;
-                }
-                case LAYER_MODE.cluster: {
-
-                    layerSource.agg_geo_field = modeValues.geometryStep.aggGeometry;
-                    layerSource.granularity = modeValues.geometryStep.granularity;
-                    layerSource.minfeatures = modeValues.visibilityStep.featuresMin;
-                    if (modeValues.geometryStep.clusterGeometryType === CLUSTER_GEOMETRY_TYPE.aggregated_geometry) {
-                        layerSource.aggregated_geometry = modeValues.geometryStep.aggregatedGeometry;
-                    } else {
-                        layerSource.raw_geometry = {
-                            geometry: modeValues.geometryStep.rawGeometry,
-                            sort: !!modeValues.geometryStep.clusterSort ? modeValues.geometryStep.clusterSort : ''
-                        };
-                    }
-                }
-            }
-
-            this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.colorFg, layerValues.mode);
-
-            if (!!modeValues.styleStep.widthFg) {
-                this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.widthFg, layerValues.mode);
-            }
-
-            if (!!modeValues.styleStep.radiusFg) {
-                this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.radiusFg, layerValues.mode);
-            }
-
-            if (!!modeValues.styleStep.weightFg) {
-                this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.weightFg, layerValues.mode);
-            }
-
-            return layerSource;
+            return this.getLayerSourceConfig(layerFg);
         });
 
         mapContributor.layers_sources = layersSources;
@@ -212,8 +213,7 @@ export class ConfigExportHelper {
                         layerSource.normalization_fields.push(
                             {
                                 on: interpolatedValues.propertyInterpolatedFieldCtrl,
-                                per: interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl,
-                                scope: interpolatedValues.propertyInterpolatedScopeCtrl
+                                per: interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl
                             });
                     } else {
                         layerSource.include_fields.push(interpolatedValues.propertyInterpolatedFieldCtrl);
@@ -222,6 +222,7 @@ export class ConfigExportHelper {
                     layerSource.metrics.push({
                         field: interpolatedValues.propertyInterpolatedFieldCtrl,
                         metric: interpolatedValues.propertyInterpolatedMetricCtrl,
+                        // todo : `normalize` is now a boolean
                         normalize: interpolatedValues.propertyInterpolatedScopeCtrl
                     });
                 }

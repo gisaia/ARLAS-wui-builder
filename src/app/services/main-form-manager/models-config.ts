@@ -24,6 +24,7 @@ export const JSONPATH_COUNT = '$.count';
 export const JSONPATH_METRIC = '$.metrics[0].value';
 export const CHIPSEARCH_TYPE = 'chipssearch';
 export const CHIPSEARCH_IDENTIFIER = 'chipssearch';
+import { LayerSourceConfig } from 'arlas-web-contributors';
 
 export interface Config {
     arlas: ArlasConfig;
@@ -197,28 +198,6 @@ export interface MapComponentInputLayersSetsConfig {
     default: Array<string>;
 }
 
-
-
-export interface LayerSourceConfig {
-    id: string;
-    source: string;
-    minzoom: number;
-    maxzoom: number;
-    minfeatures?: number;
-    maxfeatures?: number;
-    geometry_id?: string;
-    geometry_support?: string;
-    agg_geo_field?: string;
-    color_from_field?: string | Array<string>;
-    include_fields?: Array<string>;
-    normalization_fields?: Array<NormalizationFieldConfig>;
-    aggregated_geometry?: string;
-    returned_geometry?: string;
-    raw_geometry?: RawGeometryConfig;
-    granularity?: string;
-    metrics?: Array<MetricConfig>;
-}
-
 export interface AggregationModelConfig {
     type: string;
     field: string;
@@ -239,15 +218,4 @@ export interface NormalizationFieldConfig {
     on: string;
     per: string;
     scope: string;
-}
-
-export interface RawGeometryConfig {
-    geometry: string;
-    sort: string;
-}
-
-export interface MetricConfig {
-    field: string;
-    metric: string;
-    normalize: string;
 }

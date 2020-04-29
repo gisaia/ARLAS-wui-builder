@@ -22,10 +22,11 @@ import { Paint, Layer, MapConfig } from './models-map-config';
 import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-components/property-selector/models';
 import { KeywordColor } from '@map-config/components/dialog-color-table/models';
-
+import { ConfigExportHelper } from './config-export-helper';
+import { LayerSourceConfig } from 'arlas-web-contributors';
 export class ConfigMapExportHelper {
 
-    public static process(mapConfigLayers: FormArray, sourceByMode: Map<string, string>) {
+    public static process(mapConfigLayers: FormArray) {
 
         const layers: Array<Layer> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
             const mode = layerFg.value.mode as LAYER_MODE;
@@ -61,11 +62,11 @@ export class ConfigMapExportHelper {
                     paint['heatmap-radius']  = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
                 }
             }
-
+            const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
             const layer: Layer = {
                 id: layerFg.value.name,
                 type: modeValues.styleStep.geometryType,
-                source: sourceByMode.get(layerFg.value.mode),
+                source: layerSource.source,
                 minzoom: modeValues.visibilityStep.zoomMin,
                 maxzoom: modeValues.visibilityStep.zoomMax,
                 layout: {

@@ -80,15 +80,11 @@ export class LayersComponent extends LayersComponentForm implements OnInit {
     // Get contributor conf part for this layer
     const formGroupIndex = (this.layersFa.value as any[]).findIndex(el => el.id === layerId);
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
-    const sourceByMode = new Map<string, string>();
-    sourceByMode.set(LAYER_MODE.features, 'feature');
-    sourceByMode.set(LAYER_MODE.featureMetric, 'feature-metric');
-    sourceByMode.set(LAYER_MODE.cluster, 'cluster');
     const mapConfigLayers = new FormArray([this.layersFa.at(formGroupIndex)]);
     // Get contributor config for this layer
-    const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers, sourceByMode);
+    const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers);
     // Get config.map part for this layer
-    const configMap = ConfigMapExportHelper.process(mapConfigLayers, sourceByMode);
+    const configMap = ConfigMapExportHelper.process(mapConfigLayers);
     // Add contributor part in arlasConfigService
     // Add web contributors in config if not exist
     const currentConfig = this.startupService.getConfigWithInitContrib();
