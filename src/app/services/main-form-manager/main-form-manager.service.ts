@@ -141,7 +141,7 @@ export class MainFormManagerService {
         searchConfigGlobal,
         timelineConfigGlobal,
         analyticsConfigList),
-      'config.json', '_');
+      'config.json');
 
     this.saveJson(
       ConfigMapExportHelper.process(mapConfigLayers),
