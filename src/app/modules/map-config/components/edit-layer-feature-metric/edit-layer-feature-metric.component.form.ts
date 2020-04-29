@@ -31,6 +31,12 @@ export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubFo
         super(logger);
     }
 
+    get geometryStep() {
+        return this.formFg.get('geometryStep') as FormGroup;
+    }
+    get granularity() {
+        return this.formFg.get('geometryStep').get('granularity') as FormControl;
+    }
     get widthFg() {
         return this.formFg.get('styleStep').get('widthFg') as FormGroup;
     }
@@ -42,9 +48,6 @@ export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubFo
     }
     get weightFg() {
         return this.formFg.get('styleStep').get('weightFg') as FormGroup;
-    }
-    get granularity() {
-        return this.formFg.get('geometryStep').get('granularity') as FormControl;
     }
     get geometry() {
         return this.formFg.get('geometryStep').get('geometry') as FormControl;

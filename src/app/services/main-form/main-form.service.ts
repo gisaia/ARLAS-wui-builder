@@ -18,6 +18,7 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
+import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 
 enum MAIN_FORM_KEYS {
   STARTING_CONFIG = 'StartingConfig',
@@ -64,9 +65,9 @@ export class MainFormService {
   public mapConfig = new class {
     constructor(public control: FormGroup) { }
 
-    public initGlobalFg = (fg: FormGroup) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL, fg);
+    public initGlobalFg = (fg: MapGlobalFormGroup) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL, fg);
     public initLayersFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS, fa);
-    public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL) as FormGroup;
+    public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL) as MapGlobalFormGroup;
     public getLayersFa = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS) as FormArray;
 
   }(this.mainForm.get(MAIN_FORM_KEYS.MAP_CONFIG) as FormGroup);

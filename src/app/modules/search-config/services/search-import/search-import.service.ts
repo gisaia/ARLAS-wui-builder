@@ -19,13 +19,8 @@ under the License.
 import { Injectable } from '@angular/core';
 import { Config, CHIPSEARCH_IDENTIFIER } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { FormControl } from '@angular/forms';
 import { SearchGlobalFormGroup } from '../search-global-form-builder/search-global-form-builder.service';
-
-export interface ImportElement {
-  value: any;
-  control: FormControl;
-}
+import { importElements } from '@services/main-form-manager/tools';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +38,7 @@ export class SearchImportService {
 
     const globalSearchFg = this.mainFormService.searchConfig.getGlobalFg() as SearchGlobalFormGroup;
 
-    const importElements = [
+    importElements([
       {
         value: chipsearchComponent.icon,
         control: globalSearchFg.customControls.icon
@@ -64,11 +59,7 @@ export class SearchImportService {
         value: chipsearchContributor.autocomplete_size,
         control: globalSearchFg.customControls.autocompleteSize
       }
-    ] as Array<ImportElement>;
-
-    importElements
-      .filter(e => e.value !== null)
-      .forEach(element => element.control.setValue(element.value));
+    ]);
   }
 
 }

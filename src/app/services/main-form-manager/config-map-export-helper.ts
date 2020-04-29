@@ -19,7 +19,7 @@ under the License.
 import { FormArray, FormGroup } from '@angular/forms';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { Paint, Layer, MapConfig } from './models-map-config';
-import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
+import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-components/property-selector/models';
 import { KeywordColor } from '@map-config/components/dialog-color-table/models';
 import { ConfigExportHelper } from './config-export-helper';

@@ -19,14 +19,72 @@ under the License.
 import { Injectable } from '@angular/core';
 import { MapConfig } from '@services/main-form-manager/models-map-config';
 import { Config } from '@services/main-form-manager/models-config';
+import { MapInitService } from '../map-init/map-init.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { importElements } from '@services/main-form-manager/tools';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapImportService {
 
-  constructor() { }
+  constructor(
+    private mapInitService: MapInitService,
+    private mainFormService: MainFormService
+  ) { }
   public doImport(config: Config, mapConfig: MapConfig) {
+    this.mapInitService.initModule();
+    this.importMapGlobal(config);
+  }
+
+  private importMapGlobal(config: Config) {
+    const mapgl = config.arlas.web.components.mapgl;
+    const mapContrib = config.arlas.web.contributors.find(c => c.identifier === 'mapbox');
+    const mapGlobalForm = this.mainFormService.mapConfig.getGlobalFg();
+
+    mapGlobalForm.customControls.requestGeometries.push(
+      this.mapInitService.createRequestGeometry(
+        config.arlas.server.collection.name,
+        mapContrib.geoQueryField,
+        mapgl.input.idFeatureField
+      )
+    );
+
+    importElements([
+      {
+        value: mapContrib.geoQueryOp,
+        control: mapGlobalForm.customControls.geographicalOperator
+      },
+      {
+        value: mapgl.allowMapExtend,
+        control: mapGlobalForm.customControls.allowMapExtend
+      },
+      {
+        value: mapgl.input.margePanForLoad,
+        control: mapGlobalForm.customControls.margePanForLoad
+      },
+      {
+        value: mapgl.input.margePanForTest,
+        control: mapGlobalForm.customControls.margePanForTest
+      },
+      {
+        value: mapgl.input.initZoom,
+        control: mapGlobalForm.customControls.initZoom
+      },
+      {
+        value: mapgl.input.initCenter[0],
+        control: mapGlobalForm.customControls.initCenterLat
+      },
+      {
+        value: mapgl.input.initCenter[1],
+        control: mapGlobalForm.customControls.initCenterLon
+      },
+      {
+        value: mapgl.input.displayScale,
+        control: mapGlobalForm.customControls.displayScale
+      }
+    ]);
+
   }
 
 }

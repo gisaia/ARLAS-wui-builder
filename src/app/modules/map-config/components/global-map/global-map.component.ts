@@ -22,6 +22,7 @@ import { CollectionService, FIELD_TYPES } from '@services/collection-service/col
 import { MainFormService } from '@services/main-form/main-form.service';
 import { Expression } from 'arlas-api';
 import { GlobalMapComponentForm as GlobalMapComponentForm } from './global-map.component.form';
+import { MapInitService } from '@map-config/services/map-init/map-init.service';
 
 @Component({
   selector: 'app-global',
@@ -43,6 +44,7 @@ export class GlobalMapComponent extends GlobalMapComponentForm implements OnInit
 
   constructor(
     public mainFormService: MainFormService,
+    private mapInitService: MapInitService,
     private collectionService: CollectionService) {
 
     super(mainFormService);
@@ -63,11 +65,13 @@ export class GlobalMapComponent extends GlobalMapComponentForm implements OnInit
       // as many controls that there is select collection
       if (this.requestGeometries.length < this.collections.length) {
         this.collectionService.getCollectionParamFields(collection).subscribe(params => {
-          this.requestGeometries.push(new FormGroup({
-            collection: new FormControl({ value: collection, disabled: true }),
-            requestGeom: new FormControl(params.geometry_path, Validators.required),
-            idFeatureField: new FormControl(params.id_path, Validators.required),
-          }));
+          this.requestGeometries.push(
+            this.mapInitService.createRequestGeometry(
+              collection,
+              params.geometry_path,
+              params.id_path
+            )
+          );
         });
       }
     });
