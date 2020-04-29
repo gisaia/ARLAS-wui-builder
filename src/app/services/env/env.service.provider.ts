@@ -16,10 +16,26 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { NgxLoggerLevel } from 'ngx-logger';
+import { EnvService } from './env.service';
 
-export const environment = {
-  production: true,
-  logLevel: NgxLoggerLevel.ERROR,
-  noToken: {}
+export const EnvServiceFactory = () => {
+
+    const env = new EnvService();
+
+    // Read environment variables from browser window
+    const browserWindow = window || {};
+
+    // tslint:disable-next-line: no-string-literal
+    const browserWindowEnv = browserWindow['__env'] || {};
+
+    // tslint:disable-next-line: no-string-literal
+    Object.assign(env, browserWindowEnv);
+
+    return env;
+};
+
+export const EnvServiceProvider = {
+    provide: EnvService,
+    useFactory: EnvServiceFactory,
+    deps: [],
 };

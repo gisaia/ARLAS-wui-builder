@@ -1,7 +1,8 @@
-import { MainFormManagerService } from './main-form-manager.service';
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
+import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasStartupService, ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
+import { GET_OPTIONS } from '@services/persistence/persistence.service';
+import { ArlasCollaborativesearchService, ArlasStartupService } from 'arlas-wui-toolkit';
+import { MainFormManagerService } from './main-form-manager.service';
 
 describe('MainFormManagerService', () => {
   let spectator: SpectatorService<MainFormManagerService>;
@@ -11,6 +12,7 @@ describe('MainFormManagerService', () => {
       mockProvider(CollectionService),
       mockProvider(ArlasStartupService),
       mockProvider(ArlasCollaborativesearchService),
+      {provide: GET_OPTIONS, useValue: {}}
     ]
   });
 

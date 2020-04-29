@@ -31,6 +31,10 @@ import { SearchInitService } from '@search-config/services/search-init/search-in
 import { SearchImportService } from '@search-config/services/search-import/search-import.service';
 import { TimelineInitService } from '@timeline-config/services/timeline-init/timeline-init.service';
 import { TimelineImportService } from '@timeline-config/services/timeline-import/timeline-import.service';
+import { PersistenceService } from '@services/persistence/persistence.service';
+import { EnvService } from '../env/env.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Injectable({
@@ -49,6 +53,10 @@ export class MainFormManagerService {
     private searchImportService: SearchImportService,
     private timelineInitService: TimelineInitService,
     private timelineImportService: TimelineImportService,
+    private persistenceService: PersistenceService,
+    private envService: EnvService,
+    private snackbar: MatSnackBar,
+    private translate: TranslateService
   ) { }
 
   /**
@@ -91,21 +99,38 @@ export class MainFormManagerService {
     sourceByMode.set(LAYER_MODE.featureMetric, 'feature-metric');
     sourceByMode.set(LAYER_MODE.cluster, 'cluster');
 
-    this.saveJson(
-      ConfigExportHelper.process(
-        startingConfig,
-        mapConfigGlobal,
-        mapConfigLayers,
-        searchConfigGlobal,
-        timelineConfigGlobal,
-        analyticsConfigList,
-        sourceByMode),
-      'config.json');
+    const generatedConfig = ConfigExportHelper.process(
+      startingConfig,
+      mapConfigGlobal,
+      mapConfigLayers,
+      searchConfigGlobal,
+      timelineConfigGlobal,
+      analyticsConfigList,
+      sourceByMode);
 
-    this.saveJson(
-      ConfigMapExportHelper.process(mapConfigLayers, sourceByMode),
-      'config.map.json',
-      '-');
+    const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers, sourceByMode);
+
+    if (this.envService.persistenceUrl !== '') {
+      this.persistenceService.create(
+        'config.json',
+        JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
+          generatedMapConfig.layers
+        ))
+      ).subscribe(
+        () => {
+          this.snackbar.open(this.translate.instant('Configuration saved !'));
+        },
+        () => {
+          this.snackbar.open(this.translate.instant('Error : Configuration not saved'));
+        }
+      );
+
+    } else {
+
+      this.saveJson(generatedConfig, 'config.json', '_');
+
+      this.saveJson(generatedMapConfig, 'config.map.json', '-');
+    }
   }
 
   public doImport(config: Config) {

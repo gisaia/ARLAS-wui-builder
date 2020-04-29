@@ -16,10 +16,20 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { NgxLoggerLevel } from 'ngx-logger';
+import { Injectable } from '@angular/core';
 
-export const environment = {
-  production: true,
-  logLevel: NgxLoggerLevel.ERROR,
-  noToken: {}
-};
+@Injectable({
+  providedIn: 'root'
+})
+export class EnvService {
+
+  // The values that are defined here are the default values that can
+  // be overridden by env.js
+
+  // Persistence server url
+  public persistenceUrl = '';
+
+  constructor() {
+  }
+
+}
