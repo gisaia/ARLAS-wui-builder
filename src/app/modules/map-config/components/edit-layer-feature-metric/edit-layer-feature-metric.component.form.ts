@@ -24,75 +24,13 @@ import { ViewChild } from '@angular/core';
 import { ComponentSubForm } from '@shared-models/component-sub-form';
 
 export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubForm {
-    @ViewChild(EditLayerModeFormComponent, { static: true }) public embeddedFeaturesComponent: EditLayerModeFormComponent;
+
     constructor(
         protected logger: NGXLogger,
-        protected formBuilder: FormBuilder,
-        protected formBuilderDefault: FormBuilderWithDefaultService
     ) {
         super(logger);
     }
 
-    protected registerRendererGeometry() {
-        this.geometryStep.addControl(
-            'geometry',
-            this.formBuilderDefault.control(
-                'map.layer.geometryStep.geometry',
-                [
-                    Validators.required
-                ]
-            ));
-    }
-
-    protected registerGranularity() {
-        this.geometryStep.addControl(
-            'granularity',
-            this.formBuilderDefault.control('map.layer.geometryStep.granularity', [Validators.required]));
-    }
-
-    protected registerGeometryId() {
-        this.geometryStep.addControl(
-            'geometryId',
-            this.formBuilderDefault.control(
-                'map.layer.geometryStep.geometryId',
-                [
-                    Validators.required
-                ]
-            ));
-    }
-
-    protected registerFeaturesMax() {
-        (this.formFg.get('visibilityStep') as FormGroup)
-            .addControl(
-                'featuresMax',
-                this.formBuilderDefault.control(
-                    'map.layer.visibilityStep.featuresMax',
-                    [
-                        Validators.required,
-                        Validators.max(10000),
-                        Validators.min(0)
-                    ]
-                ));
-    }
-
-    protected registerGeometryType() {
-        (this.formFg.get('styleStep') as FormGroup)
-            .addControl(
-                'geometryType',
-                this.formBuilderDefault.control(
-                    'map.layer.styleStep.geometryType',
-                    [
-                        Validators.required
-                    ]
-                ));
-    }
-
-    get geometryStep() {
-        return this.formFg.get('geometryStep') as FormGroup;
-    }
-    get granularity() {
-        return this.formFg.get('geometryStep').get('granularity') as FormControl;
-    }
     get widthFg() {
         return this.formFg.get('styleStep').get('widthFg') as FormGroup;
     }
@@ -104,6 +42,9 @@ export abstract class EditLayerFeatureMetricComponentForm extends ComponentSubFo
     }
     get weightFg() {
         return this.formFg.get('styleStep').get('weightFg') as FormGroup;
+    }
+    get granularity() {
+        return this.formFg.get('geometryStep').get('granularity') as FormControl;
     }
     get geometry() {
         return this.formFg.get('geometryStep').get('geometry') as FormControl;

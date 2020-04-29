@@ -59,7 +59,7 @@ export class MainFormManagerService {
     private persistenceService: PersistenceService,
     private envService: EnvService,
     private snackbar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
     private mapInitService: MapInitService,
     private mapImportService: MapImportService,
   ) { }

@@ -16,94 +16,17 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
-import { CustomValidators } from '@utils/custom-validators';
 import { ComponentSubForm } from '@shared-models/component-sub-form';
 import { NGXLogger } from 'ngx-logger';
-import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
 
 export abstract class EditLayerModeFormComponentForm extends ComponentSubForm {
 
     constructor(
-        protected formBuilderDefault: FormBuilderWithDefaultService,
-        protected formBuilder: FormBuilder,
         protected logger: NGXLogger
     ) {
         super(logger);
-
-        this.formFg = this.formBuilderDefault.group('map.layer', {
-            collectionStep: this.formBuilder.group({
-                collection: [
-                    null,
-                    Validators.required
-                ]
-            }),
-            geometryStep: this.formBuilder.group({
-
-            }),
-            visibilityStep: this.formBuilder.group(
-                {
-                    visible: [
-                        null
-                    ],
-                    zoomMin: [
-                        null,
-                        [
-                            Validators.required, Validators.min(1), Validators.max(20)
-                        ]
-                    ],
-                    zoomMax: [
-                        null,
-                        [
-                            Validators.required, Validators.min(1), Validators.max(20)
-                        ]
-                    ]
-                },
-                {
-                    validator: [
-                        CustomValidators.getLTEValidator('zoomMin', 'zoomMax')
-                    ]
-                }),
-            styleStep: this.formBuilder.group({
-                opacity: [
-                    null
-                ],
-                colorFg: [
-                    null,
-                    Validators.required
-                ],
-                widthFg: [
-                    null,
-                    CustomValidators.getConditionalValidator(
-                        () => !!this.formFg && !!this.geometryType && this.geometryType.value === GEOMETRY_TYPE.line,
-                        Validators.required
-                    )
-                ],
-                radiusFg: [
-                    null,
-                    CustomValidators.getConditionalValidator(
-                        () => !!this.formFg && !!this.geometryType
-                            && (this.geometryType.value === GEOMETRY_TYPE.circle || this.geometryType.value === GEOMETRY_TYPE.heatmap),
-                        Validators.required
-                    )
-                ],
-                weightFg: [
-                    null,
-                    CustomValidators.getConditionalValidator(
-                        () => !!this.formFg && !!this.geometryType && this.geometryType.value === GEOMETRY_TYPE.heatmap,
-                        Validators.required
-                    )
-                ],
-                intensityFg: [
-                    null,
-                    CustomValidators.getConditionalValidator(
-                        () => !!this.formFg && !!this.geometryType && this.geometryType.value === GEOMETRY_TYPE.heatmap,
-                        Validators.required
-                    )
-                ]
-            })
-        });
     }
 
     get zoomMin() {

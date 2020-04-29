@@ -22,60 +22,17 @@ import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-m
 import { NGXLogger } from 'ngx-logger';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { MapLayerFormBuilderService } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 
 export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
 
-    @ViewChild(EditLayerModeFormComponent, { static: true })
-    public embeddedFeaturesComponent: EditLayerModeFormComponent;
-
     constructor(
         protected logger: NGXLogger,
-        protected formBuilder: FormBuilder,
-        protected formBuilderDefault: FormBuilderWithDefaultService
     ) {
         super(logger);
+
     }
 
-    protected registerRendererGeometry() {
-        this.geometryStep.addControl(
-            'geometry',
-            this.formBuilderDefault.control(
-                'map.layer.geometryStep.geometry',
-                [
-                    Validators.required
-                ]
-            ));
-    }
-
-    protected registerGeometryType() {
-        (this.formFg.get('styleStep') as FormGroup)
-            .addControl(
-                'geometryType',
-                this.formBuilderDefault.control(
-                    'map.layer.styleStep.geometryType',
-                    [
-                        Validators.required
-                    ]
-                ));
-    }
-
-    protected registerFeaturesMax() {
-        (this.formFg.get('visibilityStep') as FormGroup)
-            .addControl(
-                'featuresMax',
-                this.formBuilderDefault.control(
-                    'map.layer.visibilityStep.featuresMax',
-                    [
-                        Validators.required,
-                        Validators.max(10000),
-                        Validators.min(0)
-                    ]
-                ));
-    }
-
-    get geometryStep() {
-        return this.formFg.get('geometryStep') as FormGroup;
-    }
     get geometry() {
         return this.formFg.get('geometryStep').get('geometry') as FormControl;
     }
@@ -85,6 +42,7 @@ export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
     get featuresMax() {
         return this.formFg.get('visibilityStep').get('featuresMax') as FormControl;
     }
+
     get widthFg() {
         return this.formFg.get('styleStep').get('widthFg') as FormGroup;
     }
@@ -97,4 +55,5 @@ export abstract class EditLayerFeaturesComponentForm extends ComponentSubForm {
     get weightFg() {
         return this.formFg.get('styleStep').get('weightFg') as FormGroup;
     }
+
 }

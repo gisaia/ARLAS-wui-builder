@@ -16,182 +16,30 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
-import { CustomValidators } from '@utils/custom-validators';
-import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from './models';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { ComponentSubForm } from '@shared-models/component-sub-form';
 import { NGXLogger } from 'ngx-logger';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
-import { Input } from '@angular/core';
+import { Input, OnInit } from '@angular/core';
 import { KeywordColor } from '@map-config/components/dialog-color-table/models';
+import { PropertySelectorFormBuilderService } from '@shared/services/property-selector-form-builder/property-selector-form-builder.service';
+import { PROPERTY_TYPE } from './models';
 
-export abstract class PropertySelectorComponentForm extends ComponentSubForm {
+export abstract class PropertySelectorComponentForm extends ComponentSubForm implements OnInit {
 
     @Input() public aggregated: boolean;
 
     constructor(
+        protected logger: NGXLogger,
         protected formBuilder: FormBuilder,
-        protected formBuilderDefault: FormBuilderWithDefaultService,
-        protected logger: NGXLogger
+        protected propertySelectorFormBuilder: PropertySelectorFormBuilderService
     ) {
         super(logger);
+    }
 
-        this.formFg = this.formBuilder.group({
-            propertySource:
-                [
-                    null,
-                    Validators.required
-                ],
-            propertyFix:
-                [
-                    null,
-                    CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix
-                        : false,
-                        Validators.required)
-                ],
-            propertyProvidedFieldCtrl:
-                [
-                    null,
-                    CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided
-                        : false,
-                        Validators.required)
-                ],
-            propertyGeneratedFieldCtrl:
-                [
-                    null,
-                    CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.generated
-                        : false,
-                        Validators.required)
-                ],
-            propertyManualFg: this.formBuilder.group({
-                propertyManualFieldCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.manual
-                            : false,
-                            Validators.required)
-                    ],
-                propertyManualValuesCtrl: this.formBuilder.array(
-                    [],
-                    [
-                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.manual
-                            : false,
-                            Validators.required)
-                    ])
-            }),
-            propertyInterpolatedFg: this.formBuilder.group({
-                propertyInterpolatedCountOrMetricCtrl:
-                    [
-                        null
-                    ],
-                propertyInterpolatedCountNormalizeCtrl:
-                    [
-                        null
-                    ],
-                propertyInterpolatedMetricCtrl: [
-                    null,
-                    CustomValidators.getConditionalValidator(() => !!this.formFg && this.aggregated ?
-                        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                        && this.propertyInterpolatedCountOrMetricCtrl.value
-                        : false,
-                        Validators.required)
-                ],
-                propertyInterpolatedFieldCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                            && (!this.aggregated || this.aggregated && this.propertyInterpolatedMetricCtrl.value)
-                            : false,
-                            Validators.required)
-                    ],
-                propertyInterpolatedNormalizeCtrl:
-                    [
-                        null
-                    ],
-                propertyInterpolatedNormalizeByKeyCtrl:
-                    [
-                        null
-                    ],
-                propertyInterpolatedNormalizeLocalFieldCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg && !this.aggregated ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                            && this.propertyInterpolatedNormalizeByKeyCtrl.value
-                            : false,
-                            Validators.required)
-                    ],
-                propertyInterpolatedMinFieldValueCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                            && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value
-                            : false,
-                            Validators.required)
-                    ],
-                propertyInterpolatedMaxFieldValueCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                            && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value
-                            : false,
-                            Validators.required)
-                    ],
-                propertyInterpolatedMinValueCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                            && this.getPropertyType() === PROPERTY_TYPE.number
-                            && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value
-                            : false,
-                            Validators.required)
-                    ],
-                propertyInterpolatedMaxValueCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                            && this.getPropertyType() === PROPERTY_TYPE.number
-                            && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value
-                            : false,
-                            Validators.required)
-                    ],
-                propertyInterpolatedValuesCtrl:
-                    [
-                        null,
-                        [
-                            CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                                this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                                && (this.propertyInterpolatedFieldCtrl.value ||
-                                    this.aggregated && !this.propertyInterpolatedCountOrMetricCtrl.value)
-                                : false,
-                                Validators.required)
-                        ]
-                    ]
-            },
-                {
-                    validators: [
-                        CustomValidators.getConditionalValidator(() => !!this.formFg ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated && this.propertyInterpolatedFieldCtrl.value
-                            && this.propertyInterpolatedMinFieldValueCtrl.value && this.propertyInterpolatedMaxFieldValueCtrl.value
-                            : false,
-                            CustomValidators.getLTEValidator(
-                                'propertyInterpolatedMinFieldValueCtrl',
-                                'propertyInterpolatedMaxFieldValueCtrl'
-                            ))
-                    ]
-                }),
-            propertyPointCountNormalized: this.formBuilder.group({})
-        });
+    public ngOnInit() {
+        super.ngOnInit();
+        this.formFg = this.propertySelectorFormBuilder.build(this.aggregated, this.getPropertyType());
     }
 
     get propertySource() {

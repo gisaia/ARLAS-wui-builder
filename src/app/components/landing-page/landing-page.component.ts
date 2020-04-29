@@ -150,7 +150,7 @@ export class LandingPageDialogComponent implements OnInit {
           if (!collection) {
             this.logger.error(
               this.translate.instant('Collection ' + configJson.arlas.server.collection.name + ' unknown. Available collections: ')
-              + collections);
+              + collections.join(', '));
 
           } else {
             this.startupService.setCollection(collection);

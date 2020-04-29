@@ -16,56 +16,28 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormGroup, Validators, FormControl } from '@angular/forms';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
-import { CustomValidators } from '@utils/custom-validators';
-import { LAYER_MODE } from './models';
+import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 
 export abstract class EditLayerComponentForm {
-    public layerFg: FormGroup;
+    public layerFg: MapLayerFormGroup;
 
     constructor(
-        protected formBuilderDefault: FormBuilderWithDefaultService
+        protected mapLayerFormBuilder: MapLayerFormBuilderService
     ) {
-        this.layerFg = this.formBuilderDefault.group('map.layer', {
-            name: ['', Validators.required],
-            mode: ['', Validators.required],
-            id: [''],
-            featuresFg: [
-                { value: null, disabled: true },
-                CustomValidators.getConditionalValidator(
-                    () => !!this.layerFg && this.mode.value === LAYER_MODE.features,
-                    Validators.required
-                )
-            ],
-            featureMetricFg: [
-                { value: null, disabled: true },
-                CustomValidators.getConditionalValidator(
-                    () => !!this.layerFg && this.mode.value === LAYER_MODE.featureMetric,
-                    Validators.required
-                )
-            ],
-            clusterFg: [
-                { value: null, disabled: true },
-                CustomValidators.getConditionalValidator(
-                    () => !!this.layerFg && this.mode.value === LAYER_MODE.cluster,
-                    Validators.required
-                )
-            ]
-        });
+        this.layerFg = mapLayerFormBuilder.buildLayer();
     }
 
     get mode() {
-        return this.layerFg.get('mode');
+        return this.layerFg.customControls.mode;
     }
     get featuresFg() {
-        return this.layerFg.get('featuresFg');
+        return this.layerFg.customControls.featuresFg;
     }
     get featureMetricFg() {
-        return this.layerFg.get('featureMetricFg');
+        return this.layerFg.customControls.featureMetricFg;
     }
     get clusterFg() {
-        return this.layerFg.get('clusterFg');
+        return this.layerFg.customControls.clusterFg;
     }
 
 }

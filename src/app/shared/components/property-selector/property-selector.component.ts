@@ -33,6 +33,7 @@ import { NGXLogger } from 'ngx-logger';
 import { ensureMinLessThanMax } from '@utils/tools';
 import { KeywordColor, DialogColorTableData } from '@map-config/components/dialog-color-table/models';
 import { combineLatest, Subscription } from 'rxjs';
+import { PropertySelectorFormBuilderService } from '@shared/services/property-selector-form-builder/property-selector-form-builder.service';
 
 @Component({
   selector: 'app-property-selector',
@@ -71,16 +72,16 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
   public metricFields: Array<string>;
 
   constructor(
-    protected formBuilder: FormBuilder,
-    protected formBuilderDefault: FormBuilderWithDefaultService,
     public dialog: MatDialog,
     public defaultValueService: DefaultValuesService,
     private collectionService: CollectionService,
     private colorService: ArlasColorGeneratorLoader,
+    protected formBuilder: FormBuilder,
     private cdref: ChangeDetectorRef,
-    protected logger: NGXLogger
+    protected logger: NGXLogger,
+    propertySelectorFormBuilder: PropertySelectorFormBuilderService
   ) {
-    super(formBuilder, formBuilderDefault, logger);
+    super(logger, formBuilder, propertySelectorFormBuilder);
   }
 
   public ngOnInit() {
