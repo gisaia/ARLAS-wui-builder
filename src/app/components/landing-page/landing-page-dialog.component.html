@@ -18,7 +18,7 @@
                         <mat-label>{{'Server URL' | translate}}</mat-label>
                         <input matInput (keyup)="onKeyUp($event)"
                             (change)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
-                            formControlName="serverUrl">
+                            formControlName="serverUrl" type="url">
                     </mat-form-field>
                     <button
                         (click)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"

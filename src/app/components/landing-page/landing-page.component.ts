@@ -70,7 +70,11 @@ export class LandingPageDialogComponent implements OnInit {
     this.mainFormService.startingConfig.init(
       this.formBuilderWithDefault.group('global', {
         serverUrl: new FormControl(null,
-          [Validators.required, Validators.pattern('(https?://)([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')]),
+          [
+            Validators.required,
+            Validators.pattern('(https?://)?(([0-9.]{1,4}){4}(:[0-9]{2,5})|([a-z0-9-.]+)(\\.[a-z-.]+)|localhost(:[0-9]{2,5}))+([/?].*)?')
+          ]),
+
         collections: new FormControl(null, [Validators.required, Validators.maxLength(1)])
       }));
   }
