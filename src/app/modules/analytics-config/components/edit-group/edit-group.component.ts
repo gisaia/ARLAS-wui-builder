@@ -96,10 +96,7 @@ export class EditGroupComponent implements OnInit {
       .afterClosed().subscribe(result => {
         if (result) {
           widgetFg.setControl('widgetData', result);
-          this.formGroup.controls.preview.setValue([]);
-          setTimeout(() => this.formGroup.controls.preview
-            .setValue([ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1)]), 1000);
-          // this.analyticsInitService.createPreviewContributor(this.formGroup, widgetFg);
+          this.analyticsInitService.createPreviewContributor(this.formGroup, widgetFg);
           this.cdr.detectChanges();
         }
       });
