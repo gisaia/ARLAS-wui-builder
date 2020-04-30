@@ -17,9 +17,11 @@ specific language governing permissions and limitations
 under the License.
 */
 
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MapContributor } from 'arlas-web-contributors';
+import { MapglComponent } from 'arlas-web-components';
+import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 
 export interface MapglComponentInput {
   mapglContributor: MapContributor;
@@ -34,14 +36,16 @@ export interface MapglComponentInput {
   templateUrl: './preview-modal.component.html',
   styleUrls: ['./preview-modal.component.scss']
 })
-export class PreviewModalComponent implements OnInit {
+export class PreviewModalComponent implements OnInit, AfterViewInit {
 
   public mapComponentConfig;
   public mapglContributor: MapContributor;
+  @ViewChild('map', { static: false }) public mapglComponent: MapglComponent;
 
   constructor(
     public dialogRef: MatDialogRef<PreviewModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public dataMap: MapglComponentInput) {
+    @Inject(MAT_DIALOG_DATA) public dataMap: MapglComponentInput,
+    private collaborativeService: ArlasCollaborativesearchService ) {
     const layerID = dataMap.layers.length > 0 ? dataMap.layers[0].id : undefined;
     this.mapglContributor = dataMap.mapglContributor;
     this.mapComponentConfig = {
@@ -94,11 +98,27 @@ export class PreviewModalComponent implements OnInit {
             layerID
           ]
         }
+      },
+      visualisations_sets: {
+        visualisations: {
+          set1: [layerID],
+        },
+        default: ['set1']
       }
     };
   }
 
   public ngOnInit() {
+
   }
 
+  public ngAfterViewInit() {
+    this.mapglComponent.onMapLoaded.subscribe(isLoaded => {
+      if (isLoaded && !!this.mapglContributor ) {
+        this.mapglContributor.updateData = true;
+        this.mapglContributor.fetchData(null);
+        this.mapglContributor.setSelection(null, this.collaborativeService.getCollaboration(this.mapglContributor.identifier));
+      }
+    });
+  }
 }
