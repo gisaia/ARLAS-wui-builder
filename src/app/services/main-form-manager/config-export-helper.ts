@@ -129,6 +129,7 @@ export class ConfigExportHelper {
         switch (layerValues.mode) {
             case LAYER_MODE.features: {
                 layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
+                layerSource.returned_geometry = modeValues.geometryStep.geometry;
                 break;
             }
             case LAYER_MODE.featureMetric: {
@@ -180,7 +181,6 @@ export class ConfigExportHelper {
             geoQueryField: mapConfigGlobal.value.requestGeometries[0].requestGeom,
             layers_sources: []
         };
-
         const layersSources: Array<LayerSourceConfig> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
             return this.getLayerSourceConfig(layerFg);
         });

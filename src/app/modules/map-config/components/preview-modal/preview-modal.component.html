@@ -17,5 +17,7 @@
       [mapSources]="mapComponentConfig?.mapSources" 
       [displayLayerSwitcher]="false"
       [drawButtonEnabled]="false"
+      [visualisationSetsConfig]="mapComponentConfig?.visualisations_sets"
+      (visualisations)="mapglContributor.changeVisualisation($event)"
       (onAoiChanged)="mapglContributor?.onChangeAoi($event)" (onMove)="mapglContributor?.onMove($event)">
     </arlas-mapgl>
