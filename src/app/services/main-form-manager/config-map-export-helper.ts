@@ -109,36 +109,33 @@ export class ConfigMapExportHelper {
                     interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
                     (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_';
 
-                if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
-                    if (mode === LAYER_MODE.features || interpolatedValues.propertyInterpolatedCountOrMetricCtrl) {
-                        interpolatedColor = [
-                            'interpolate',
-                            ['linear'],
-                            this.getArray(
-                                getField()
-                                    .concat(':normalized')
-                                    .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
-                                        ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl : ''))
-                        ];
-                    } else {
-                        let pointCountNormalzedColor: Array<string | Array<string | number>>;
-                        pointCountNormalzedColor = [
-                            'interpolate',
-                            ['linear'],
-                            ['get', 'count' + (!!interpolatedValues.propertyInterpolatedCountNormalizeCtrl ? '_:normalized' : '')]
-                        ];
-                        return pointCountNormalzedColor
-                            .concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
-                                .flatMap(pc => [pc.proportion, pc.value]));
-                    }
+                if (mode !== LAYER_MODE.features && !interpolatedValues.propertyInterpolatedCountOrMetricCtrl) {
+                    // for types FEATURE-METRIC and CLUSTER, if we interpolate by count
+                    interpolatedColor = [
+                        'interpolate',
+                        ['linear'],
+                        ['get', 'count' + (!!interpolatedValues.propertyInterpolatedCountNormalizeCtrl ? '_:normalized' : '')]
+                    ];
+                } else if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
+                    // otherwise if we normalized
+                    interpolatedColor = [
+                        'interpolate',
+                        ['linear'],
+                        this.getArray(
+                            getField()
+                                .concat(':normalized')
+                                .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
+                                    ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl : ''))
+                    ];
                 } else {
-
+                    // if we don't normalize
                     interpolatedColor = [
                         'interpolate',
                         ['linear'],
                         this.getArray(getField())
                     ];
                 }
+
                 return interpolatedColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
                     .flatMap(pc => [pc.proportion, pc.value]));
             }
