@@ -6,6 +6,7 @@ import { HttpClient, HttpHandler } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { CustomTranslateLoader } from 'arlas-wui-toolkit/shared.module';
 import { MockComponent } from 'ng-mocks';
+import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 
 describe('PreviewModalComponent', () => {
   let component: PreviewModalComponent;
@@ -27,7 +28,8 @@ describe('PreviewModalComponent', () => {
             initCenter: [0, 0],
             layers: [],
           }
-        }
+        },
+        ArlasCollaborativesearchService
       ]
     })
       .compileComponents();
