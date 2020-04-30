@@ -129,6 +129,7 @@ export class ConfigExportHelper {
         switch (layerValues.mode) {
             case LAYER_MODE.features: {
                 layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
+                layerSource.returned_geometry = modeValues.geometryStep.geometry;
                 break;
             }
             case LAYER_MODE.featureMetric: {
