@@ -1,23 +1,43 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": "src",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "module": "esnext",
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "importHelpers": true,
     "target": "es2015",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "es2018",
+      "es2019",
       "dom"
-    ]
+    ],
+    // the most specific path should be the first, to be used with auto import
+    "paths": {
+      "@components/*": ["app/components/*"],
+      "@guards/*": ["app/guards/*"],
+      "@services/*": ["app/services/*"],
+      "@shared-components/*": ["app/shared/components/*"],
+      "@shared-directives/*": ["app/shared/directives/*"],
+      "@shared-models/*": ["app/shared/models/*"],
+      "@utils/*": ["app/utils/*"],
+      "@shared/*": ["app/shared/*"],
+      "@map-config/*": ["app/modules/map-config/*"],
+      "@search-config/*": ["app/modules/search-config/*"],
+      "@timeline-config/*": ["app/modules/timeline-config/*"],
+      "@analytics-config/*": ["app/modules/analytics-config/*"],
+      "@assets/*": ["assets/*"],
+      "@environments/*": ["environments/*"],
+      "@app/*": ["app/*"]      
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

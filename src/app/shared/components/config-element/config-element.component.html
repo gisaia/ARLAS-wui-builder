@@ -1,0 +1,30 @@
+<div class="config-element">
+
+    <div class="config-element-container">
+        <div class="form-fields" [class.full-size]="fullSize">
+            <ng-content select="[form-fields]"></ng-content>
+        </div>
+        <div class="description">
+            <ng-content select="[description]"></ng-content>
+        </div>
+    </div>
+
+    <div class="errors-container">
+        <div *ngIf="formControl?.invalid && (formControl?.touched || formGroupDirective.submitted)">
+            <mat-error *ngIf="formControl?.errors.required">
+                {{'The field is mandatory.' | translate}}
+            </mat-error>
+            <mat-error *ngIf="formControl?.errors.max">
+                The value {{formControl?.errors.max.actual}} is above allowed value {{formControl?.errors.max.max}}.
+            </mat-error>
+            <mat-error *ngIf="formControl?.errors.min">
+                The value {{formControl?.errors.min.actual}} is below allowed value {{formControl?.errors.min.min}}.
+            </mat-error>
+            <mat-error *ngIf="formControl?.errors.maxlength">
+                The allowed size is {{formControl?.errors.maxlength.requiredLength}}. Currently is
+                {{formControl?.errors.maxlength.actualLength}}
+            </mat-error>
+        </div>
+    </div>
+
+</div>

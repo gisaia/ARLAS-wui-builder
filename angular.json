@@ -25,12 +25,17 @@
             "aot": false,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/default.json",
+              "src/env.js"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/mapbox-gl/dist/mapbox-gl.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/hammerjs/hammer.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -53,7 +58,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumError": "8mb"
                 }
               ]
             }
@@ -66,6 +71,7 @@
           },
           "configurations": {
             "production": {
+              "optimization": false,
               "browserTarget": "ARLAS-wui-builder:build:production"
             }
           }
@@ -85,7 +91,9 @@
             "karmaConfig": "karma.conf.js",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/default.json",
+              "src/env.js"
             ],
             "styles": [
               "src/styles.scss"

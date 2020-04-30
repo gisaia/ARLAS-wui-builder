@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>{{dialogData.widgetType | translate | titlecase }}</h1>
+
+<div mat-dialog-content>
+
+    <mat-horizontal-stepper #stepper class="stepper-for-config-element">
+
+        <mat-step [label]="'Data' | translate " [stepControl]="formGroup.controls.dataStep">
+            <app-config-form-group [configFormGroup]="formGroup.controls.dataStep" [defaultKey]="defaultKey">
+            </app-config-form-group>
+            <div>
+                <button mat-button matStepperNext type="button">{{ 'Next' | translate}}</button>
+            </div>
+        </mat-step>
+
+        <mat-step [label]="'Render' | translate " [stepControl]="formGroup.controls.renderStep">
+            <app-config-form-group [configFormGroup]="formGroup.controls.renderStep" [defaultKey]="defaultKey">
+            </app-config-form-group>
+            <div>
+                <button mat-button matStepperPrevious>{{ 'Back' | translate}}</button>
+            </div>
+        </mat-step>
+
+    </mat-horizontal-stepper>
+
+</div>
+
+<div mat-dialog-actions>
+
+    <button mat-button [mat-dialog-close]>Cancel</button>
+    <button cdkFocusInitial (click)="save()" mat-raised-button>Save</button>
+
+</div>

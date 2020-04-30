@@ -1,0 +1,52 @@
+<!-- TODO move this, its place is misleading -->
+
+
+<form [formGroup]="layerFg" (submit)="submit()" #f="ngForm">
+    <app-config-element>
+        <div form-fields>
+            <mat-form-field>
+                <mat-label>{{ 'Name' | translate}}</mat-label>
+                <input matInput formControlName="name">
+            </mat-form-field>
+        </div>
+        <div description>
+            {{ 'Name of the layer.' | translate}} {{ 'Only used for visualization.' | translate}}
+        </div>
+    </app-config-element>
+
+    <app-config-element>
+        <div form-fields>
+            <mat-form-field>
+                <mat-label>{{ 'Mode' | translate}} </mat-label>
+                <mat-select formControlName="mode" appAlertOnChange="changing the mode will reset the below form"
+                    [dependants]="[featuresFg, featureMetricFg, clusterFg]" appResetOnChange
+                    (selectionChange)="changeMode($event.value)">
+                    <mat-option *ngFor="let mode of LAYER_MODE | objectvalues" [value]="mode">
+                        {{mode | translate}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div description>
+            {{ 'Mode of the layer.' | translate}}
+        </div>
+    </app-config-element>
+    <div *ngIf="layerFg.get('featuresFg').enabled">
+        <app-edit-layer-features formControlName="featuresFg" [submit]="submitSubject.asObservable()">
+        </app-edit-layer-features>
+    </div>
+    <div *ngIf="layerFg.get('featureMetricFg').enabled">
+        <app-edit-layer-feature-metric formControlName="featureMetricFg" [submit]="submitSubject.asObservable()">
+        </app-edit-layer-feature-metric>
+    </div>
+    <div *ngIf="layerFg.get('clusterFg').enabled">
+        <app-edit-layer-cluster formControlName="clusterFg" [submit]="submitSubject.asObservable()">
+        </app-edit-layer-cluster>
+    </div>
+
+    <div class="action-buttons">
+        <button mat-raised-button color="primary" type="submit">{{ 'Save layer' | translate}} </button>
+        <button class="cancel-button" mat-raised-button (click)="forceCanExit = true"
+            [routerLink]="['', 'map-config', 'layers']">{{ 'Cancel' | translate}} </button>
+    </div>
+</form>

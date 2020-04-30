@@ -1,0 +1,5 @@
+{
+    "ignore": [".git/**", "e2e/**", "*", "*.yml", "*.md", "**/*.svg", "**/*.spec.ts", "**/*.html", "src/assets/fonts/material-icons*", "src/test.ts", "**/.DS_Store", "**/.gitkeep"],
+    "license": "LICENSE",
+    "trailingWhitespace": "TRIM"
+}

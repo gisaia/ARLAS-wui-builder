@@ -1,0 +1,163 @@
+{
+    "global": {
+        "serverUrl": "http://demo.arlas.io/arlas"
+    },
+    "map": {
+        "global": {
+            "geographicalOperator": "intersects",
+            "margePanForLoad": 40,
+            "margePanForTest": 2,
+            "initZoom": 2,
+            "allowMapExtend": true,
+            "initCenterLat": 9.667969,
+            "initCenterLon": 55.627996,
+            "displayScale": true
+        },
+        "layer": {
+            "collectionStep": {
+                "collection": "demo_ais-danmark"
+            },
+            "geometryStep": {
+                "geometry": "position.location",
+                "granularity": "Coarse"
+            },
+            "visibilityStep": {
+                "visible": true,
+                "zoomMin": 10,
+                "zoomMax": 10,
+                "featuresMax": 7500,
+                "featuresMin": 7500
+            },
+            "styleStep": {
+                "geometryType": "fill",
+                "opacity": 0.5,
+                "colorFg": {
+                    "propertySource": "Fix",
+                    "propertyFix": "#abcdef"
+                },
+                "radiusFg": {
+                    "propertySource": "Fix",
+                    "propertyFix": 1.5
+                }
+            }
+        }
+    },
+    "search": {
+        "global": {
+            "name": "Search a ...",
+            "searchField": "id",
+            "autocompleteField": "id",
+            "icon": "search"
+        }
+    },
+    "timeline": {
+        "global": {
+            "useDetailedTimeline": true,
+            "timeline": {
+                "field": "position.timestamp",
+                "bucketsNumber": 22,
+                "intervalSize": 10,
+                "chartTitle": "title",
+                "chartType": "area"
+            },
+            "detailedTimeline": {
+                "field": "position.timestamp",
+                "bucketsNumber": 44,
+                "intervalSize": 10,
+                "chartTitle": "title",
+                "chartType": "area",
+                "selectionExtentPercent": 2
+            }
+        }
+    },
+    "analytics": {
+        "tabs": {
+            "default": "Default",
+            "new": "New"
+        },
+        "widgets": {
+            "histogram": {
+                "dataStep": {
+                    "bucketOrInterval": true,
+                    "bucketsNumber": 5,
+                    "aggregationValue": "COUNT"
+                },
+                "renderStep": {
+                    "multiselectable": true,
+                    "chartType": "bars",
+                    "showHorizontalLines": true,
+                    "ticksDateFormat": "%b %d %Y  %H:%M"
+                }
+            }
+        }
+    },
+    "config": {
+        "aggregationTermSize": 20,
+        "palettes": [
+            [
+                "#065143",
+                "#ce1483"
+            ],
+            [
+                "#6d213c",
+                "#946846",
+                "#baab68"
+            ],
+            [
+                "#eecf6d",
+                "#d5ac4e",
+                "#8b6220",
+                "#720e07",
+                "#45050c"
+            ]
+        ],
+        "colorPickerPresets": [
+            "#fff",
+            "#000",
+            "#2889e9",
+            "#e920e9",
+            "#fff500",
+            "rgb(236,64,64)"
+        ],
+        "huePalettes": [
+            [
+                0,
+                10
+            ],
+            [
+                10,
+                20
+            ],
+            [
+                40,
+                60
+            ],
+            [
+                80,
+                100
+            ],
+            [
+                100,
+                200
+            ],
+            [
+                330,
+                170
+            ],
+            "green",
+            "black"
+        ],
+        "otherColor": "#9d9ca9",
+        "widthMin": 0,
+        "widthMax": 15,
+        "widthStep": 0.5,
+        "radiusMin": 5,
+        "radiusMax": 20,
+        "radiusStep": 0.5,
+        "intensityMin": 0,
+        "intensityMax": 10,
+        "intensityStep": 0.5,
+        "swimlaneZeroColor": "#D6D6D6",
+        "swimlaneNanColor": "#D6D6D6"
+    }
+}

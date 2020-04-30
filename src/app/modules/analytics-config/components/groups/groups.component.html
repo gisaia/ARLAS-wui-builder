@@ -1,0 +1,16 @@
+<div class="groups-wrapper" [formGroup]="contentFg">
+    <mat-error *ngIf="groupsFa.touched && groupsFa?.errors?.required">
+        {{'At least one group is required within a tab' | translate}}
+    </mat-error>
+    <div formArrayName="groupsFa" cdkDropList (cdkDropListDropped)="drop($event)">
+        <div *ngFor="let group of groupsFa.controls; index as gi;" [formGroupName]="gi" cdkDrag>
+            <app-edit-group [formGroup]="group" (remove)="remove(gi)"></app-edit-group>
+        </div>
+    </div>
+
+    <div class="add-button">
+        <button mat-fab (click)="addGroup()" [matTooltip]="'Add group' | translate">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</div>

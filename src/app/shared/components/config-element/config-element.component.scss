@@ -1,0 +1,66 @@
+/*
+Licensed to Gisaïa under one or more contributor
+license agreements. See the NOTICE.txt file distributed with
+this work for additional information regarding copyright
+ownership. Gisaïa licenses this file to you under
+the Apache License, Version 2.0 (the "License"); you may
+not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+@import "variables.scss";
+
+.config-element {
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  padding: 16px;
+  margin: 15px 0px;
+  background-color: white;
+
+  .config-element-container {
+    display: flex;
+    align-items: flex-start;
+
+    .form-fields {
+      min-width: 250px;
+      padding: 10px;
+
+      ::ng-deep mat-label + mat-slider {
+        margin-left: 20px;
+      }
+
+      ::ng-deep mat-label + mat-slide-toggle,
+      ::ng-deep mat-slide-toggle + mat-label {
+        margin-left: 10px;
+      }
+    }
+
+    .description {
+      align-self: center;
+      margin-left: 36px;
+      font-size: 14px;
+      color: $config-element-description-text-color;
+      line-height: 1.6;
+      border-left: 0.2rem solid $config-element-description-border-color;
+      background-color: $config-element-description-background;
+      border-radius: 4px;
+    }
+
+    .description:not(:empty) {
+      padding: 10px;
+    }
+
+    .full-size {
+      flex: 1;
+    }
+  }
+}

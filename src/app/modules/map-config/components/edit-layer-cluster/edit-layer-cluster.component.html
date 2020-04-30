@@ -1,0 +1,149 @@
+<app-edit-layer-mode-form aggregatedMode="true" [submit]="submitSubject.asObservable()" [colorFgSources]="colorFgSources">
+    <div requested-geometry>
+        <h3 class="layer-section-title">Requested geometry</h3>
+        <app-config-element>
+            <div form-fields>
+                <mat-form-field>
+                    <mat-label>{{ 'Aggregation field' | translate}} </mat-label>
+                    <mat-select [formControl]="aggGeometry">
+                        <mat-option *ngFor="let field of getGeoPointFields()" [value]="field">{{field}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div description>
+                {{ 'Choose the geometry field ...' | translate}}
+            </div>
+        </app-config-element>
+        <app-config-element>
+            <div form-fields>
+                <mat-form-field>
+                    <mat-label>{{ 'Granularity' | translate}} </mat-label>
+                    <mat-select [formControl]="granularity">
+                        <mat-option [value]="GRANULARITY.coarse">{{ 'Coarse' | translate}}</mat-option>
+                        <mat-option [value]="GRANULARITY.fine">{{ 'Fine' | translate}}</mat-option>
+                        <mat-option [value]="GRANULARITY.finest">{{ 'Finest' | translate}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div description>
+
+            </div>
+        </app-config-element>
+    </div>
+    <div displayed-geometry>
+        <h3 class="layer-section-title">Displayed geometry</h3>
+        <app-config-element>
+            <div form-fields>
+                <mat-form-field>
+                    <mat-label>{{ 'Type' | translate}} </mat-label>
+                    <mat-select [formControl]="clusterGeometryType"
+                        appAlertOnChange="changing the displayed geometry will reset the geometry type"
+                        [dependants]="[aggregatedGeometry, rawGeometry]">
+                        <mat-option [value]="CLUSTER_GEOMETRY_TYPE.aggregated_geometry">
+                            {{ 'Aggregated geometry' | translate}}</mat-option>
+                        <mat-option [value]="CLUSTER_GEOMETRY_TYPE.raw_geometry">{{ 'Raw Geometry' | translate}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div description>
+
+            </div>
+        </app-config-element>
+        <app-config-element *ngIf="clusterGeometryType.value === CLUSTER_GEOMETRY_TYPE.aggregated_geometry">
+            <div form-fields>
+                <mat-form-field>
+                    <mat-label>{{ 'Type' | translate}} </mat-label>
+                    <mat-select [formControl]="aggregatedGeometry">
+                        <mat-option [value]="AGGREGATE_GEOMETRY_TYPE.geohash_center">{{ 'Cell center' | translate}}
+                        </mat-option>
+                        <mat-option [value]="AGGREGATE_GEOMETRY_TYPE.geohash">{{ 'Cell' | translate}}</mat-option>
+                        <mat-option [value]="AGGREGATE_GEOMETRY_TYPE.bbox">{{ 'Data cell bbox' | translate}}
+                        </mat-option>
+                        <mat-option [value]="AGGREGATE_GEOMETRY_TYPE.centroid">{{ 'Data cell centroid' | translate}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div description>
+
+            </div>
+        </app-config-element>
+        <app-config-element *ngIf="clusterGeometryType.value === CLUSTER_GEOMETRY_TYPE.raw_geometry">
+            <div form-fields>
+                <mat-form-field>
+                    <mat-label>{{ 'Field' | translate}} </mat-label>
+                    <mat-select [formControl]="rawGeometry">
+                        <mat-option *ngFor="let field of getGeoFields()" [value]="field">{{field}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div description>
+
+            </div>
+        </app-config-element>
+        <ng-container
+            *ngIf="clusterGeometryType.value === CLUSTER_GEOMETRY_TYPE.raw_geometry && !!rawGeometry.value">
+            <input matInput [formControl]="clusterSort" [hidden]="true">
+            <app-config-element [fullSize]="true">
+                <div form-fields class="order-section">
+                    <mat-form-field>
+                        <mat-label>{{ 'Order Field' | translate}}</mat-label>
+                        <mat-select #selectSort>
+                            <mat-option *ngFor="let field of getAllButGeoFields()" [value]="field">{{field}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-radio-group [(ngModel)]="sortDirection">
+                        <mat-radio-button value="+">{{ 'ASC' | translate}}</mat-radio-button>
+                        <mat-radio-button value="-">{{ 'DESC' | translate}}</mat-radio-button>
+                    </mat-radio-group>
+                    <button type="button" mat-stroked-button [disabled]="!sortDirection || !selectSort.value"
+                        (click)="addSort(sortDirection + selectSort.value, $event)">{{ 'Add' | translate}}</button>
+                    <mat-chip-list #chipSortList class="order-chip-list">
+                        <mat-chip *ngFor="let sort of sorts" [selectable]="false" [removable]="true"
+                            (removed)="removeSort(sort)">
+                            {{sort}}
+                            <mat-icon matChipRemove>cancel</mat-icon>
+                        </mat-chip>
+                    </mat-chip-list>
+
+                </div>
+            </app-config-element>
+
+        </ng-container>
+    </div>
+    <div features-min-max>
+        <app-config-element>
+            <div form-fields>
+                <span>
+                    <mat-label>{{ 'Minimum features' | translate}}</mat-label>
+                    <mat-slider [formControl]="featuresMin" thumbLabel min="0" max="10000" step="100"> </mat-slider>
+                </span>
+            </div>
+            <div description>
+                {{ 'Minimum number of features to display this layer' | translate}}
+            </div>
+        </app-config-element>
+    </div>
+    <div geometry-type>
+        <app-config-element>
+            <div form-fields>
+                <mat-form-field>
+                    <mat-label>{{ 'Geometry type' | translate}} </mat-label>
+                    <mat-select [formControl]="geometryType" (selectionChange)="geometryTypeChange($event.value)"
+                        appAlertOnChange="changing the geometry type may reset the radius or the width"
+                        appResetOnChange="map.layer" [dependants]="[widthFg, radiusFg, weightFg, intensityFg, colorFg]">
+                        <mat-option [value]="GEOMETRY_TYPE.fill">{{ 'Fill' | translate}}</mat-option>
+                        <mat-option [value]="GEOMETRY_TYPE.circle">{{ 'Circle' | translate}}</mat-option>
+                        <mat-option [value]="GEOMETRY_TYPE.heatmap">{{ 'Heatmap' | translate}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div description>
+
+            </div>
+        </app-config-element>
+    </div>
+
+</app-edit-layer-mode-form>
