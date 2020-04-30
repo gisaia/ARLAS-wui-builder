@@ -25,7 +25,6 @@ import { LayersComponentForm } from './layers.component.form';
 import { PreviewModalComponent } from '../preview-modal/preview-modal.component';
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
 import { ArlasCollaborativesearchService, ArlasConfigService } from 'arlas-wui-toolkit';
-import { LAYER_MODE } from '../edit-layer/models';
 import { FormArray } from '@angular/forms';
 import { StartupService } from '@services/startup/startup.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
@@ -82,14 +81,18 @@ export class LayersComponent extends LayersComponentForm implements OnInit {
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
     const mapConfigLayers = new FormArray([this.layersFa.at(formGroupIndex)]);
     // Get contributor config for this layer
-    const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers);
     // Get config.map part for this layer
     const configMap = ConfigMapExportHelper.process(mapConfigLayers);
+    const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers);
     // Add contributor part in arlasConfigService
     // Add web contributors in config if not exist
     const currentConfig = this.startupService.getConfigWithInitContrib();
     // update arlasConfigService with layer info
     // Create mapcontributor
+    const mapContributor = currentConfig.arlas.web.contributors.find(c => c.type = 'map');
+    if (mapContributor) {
+      currentConfig.arlas.web.contributors.splice(currentConfig.arlas.web.contributors.indexOf(mapContributor), 1 );
+    }
     currentConfig.arlas.web.contributors.push(contribConfig);
     this.configService.setConfig(currentConfig);
     const contributor = ContributorBuilder.buildContributor('map',

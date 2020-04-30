@@ -180,7 +180,6 @@ export class ConfigExportHelper {
             geoQueryField: mapConfigGlobal.value.requestGeometries[0].requestGeom,
             layers_sources: []
         };
-
         const layersSources: Array<LayerSourceConfig> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
             return this.getLayerSourceConfig(layerFg);
         });
