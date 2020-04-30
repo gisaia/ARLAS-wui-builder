@@ -67,8 +67,7 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
   public PROPERTY_SELECTOR_SOURCE = PROPERTY_SELECTOR_SOURCE;
   public PROPERTY_TYPE = PROPERTY_TYPE;
   public ensureMinLessThanMax = ensureMinLessThanMax;
-  public METRICS = [METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX, METRIC_TYPES.CARDINALITY];
-  public interpolatedFields: Array<string>;
+  public METRICS = [METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX];
   public metricFields: Array<string>;
 
   constructor(
@@ -120,7 +119,7 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
 
   private initForceUpdateValidityOnChange() {
     [this.propertySource, this.propertyInterpolatedFieldCtrl, this.propertyInterpolatedNormalizeCtrl,
-    this.propertyInterpolatedScopeCtrl, this.propertyInterpolatedNormalizeCtrl]
+    this.propertyInterpolatedNormalizeCtrl]
       .forEach(ctrl =>
         ctrl.valueChanges.subscribe(value => {
           updateValueAndValidity(this.formFg, true, false);
@@ -159,21 +158,14 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
       const interpolatedField = this.propertyInterpolatedFieldCtrl.value;
       if (!!interpolatedField && !this.propertyInterpolatedNormalizeCtrl.value) {
 
-        // in aggregated mode with a metric, if the metric is CARDINALITY then it is used as max
-        if (!!this.propertyInterpolatedMetricCtrl.value && this.propertyInterpolatedMetricCtrl.value === METRIC_TYPES.CARDINALITY) {
-          this.propertyInterpolatedMinFieldValueCtrl.setValue(0);
-          this.collectionService.getComputationMetric(this.collection, interpolatedField, METRIC_TYPES.CARDINALITY).then(max =>
-            this.propertyInterpolatedMaxFieldValueCtrl.setValue(max)
-          );
+        this.collectionService.getComputationMetric(this.collection, interpolatedField, METRIC_TYPES.MIN).then(min =>
+          this.propertyInterpolatedMinFieldValueCtrl.setValue(min)
+        );
 
-        } else {
-          this.collectionService.getComputationMetric(this.collection, interpolatedField, METRIC_TYPES.MIN).then(min =>
-            this.propertyInterpolatedMinFieldValueCtrl.setValue(min)
-          );
-          this.collectionService.getComputationMetric(this.collection, interpolatedField, METRIC_TYPES.MAX).then(max =>
-            this.propertyInterpolatedMaxFieldValueCtrl.setValue(max)
-          );
-        }
+        const metric = this.propertyInterpolatedMetricCtrl.value === METRIC_TYPES.SUM ? METRIC_TYPES.SUM : METRIC_TYPES.MAX;
+        this.collectionService.getComputationMetric(this.collection, interpolatedField, metric).then(sum =>
+          this.propertyInterpolatedMaxFieldValueCtrl.setValue(sum)
+        );
       }
     }));
   }
@@ -209,21 +201,7 @@ export class PropertySelectorComponent extends PropertySelectorComponentForm imp
         .subscribe(([kFields, iFields]) => {
           this.collectionKeywordFields = kFields;
           this.collectionIntegerFields = iFields;
-          this.initInterpolatedFields();
         });
-  }
-
-  private initInterpolatedFields() {
-    if (!this.aggregated) {
-      this.interpolatedFields = this.collectionIntegerFields;
-    } else {
-      this.propertyInterpolatedMetricCtrl.valueChanges.subscribe(v =>
-        this.interpolatedFields = (v === METRIC_TYPES.CARDINALITY ? this.collectionKeywordFields : this.collectionIntegerFields));
-      if (!!this.propertyInterpolatedMetricCtrl.value) {
-        // in edition mode, thus start the listener once with existing values
-        this.propertyInterpolatedMetricCtrl.updateValueAndValidity({ onlySelf: true, emitEvent: true });
-      }
-    }
   }
 
   public openManualColorTable() {

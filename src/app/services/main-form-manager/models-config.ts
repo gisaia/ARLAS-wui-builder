@@ -217,5 +217,4 @@ export interface AggregationModelMetricConfig {
 export interface NormalizationFieldConfig {
     on: string;
     per: string;
-    scope: string;
 }

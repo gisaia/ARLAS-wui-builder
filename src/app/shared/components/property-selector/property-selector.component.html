@@ -3,7 +3,8 @@
         <mat-label>{{propertyName | translate | titlecase}} {{'source' | translate}}</mat-label>
         <mat-select formControlName="propertySource" appAlertOnChange="changing the source will reset your choices"
             [dependants]="[propertyFix, propertyProvidedFieldCtrl, 
-            propertyGeneratedFieldCtrl, propertyManualFg, propertyInterpolatedFg, propertyPointCountNormalized]" [appResetOnChange]="defaultKey">
+            propertyGeneratedFieldCtrl, propertyManualFg, propertyInterpolatedFg, propertyPointCountNormalized]"
+            [appResetOnChange]="defaultKey">
             <mat-option *ngFor="let source of sources" [value]="source">
                 {{source | translate}}</mat-option>
         </mat-select>
@@ -28,7 +29,7 @@
             </div>
         </div>
 
-        
+
 
         <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.provided">
             <mat-form-field>
@@ -78,9 +79,14 @@
                         <mat-label>{{'Count' | translate}}</mat-label>
                         <mat-slide-toggle formControlName="propertyInterpolatedCountOrMetricCtrl"
                             [appResetOnChange]="defaultKey"
-                            [dependants]="[propertyInterpolatedMetricCtrl, propertyInterpolatedFieldCtrl]">
+                            [dependants]="[propertyInterpolatedCountNormalizeCtrl, propertyInterpolatedMetricCtrl, propertyInterpolatedFieldCtrl]">
                         </mat-slide-toggle>
                         <mat-label>{{'Metric' | translate}}</mat-label>
+                    </div>
+                    <div *ngIf="!propertyInterpolatedCountOrMetricCtrl.value">
+                        <mat-label>{{'Normalize' | translate}}</mat-label>
+                        <mat-slide-toggle formControlName="propertyInterpolatedCountNormalizeCtrl">
+                        </mat-slide-toggle>
                     </div>
                     <div *ngIf="propertyInterpolatedCountOrMetricCtrl.value">
                         <mat-form-field>
@@ -94,7 +100,9 @@
                     </div>
                     <div *ngIf="!propertyInterpolatedCountOrMetricCtrl.value">
                         <div *ngIf="propertyType === PROPERTY_TYPE.color">
-                            <button type="button" mat-raised-button (click)="this.propertyInterpolatedNormalizeCtrl.setValue(1);openPaletteTable()" class="palette-button">
+                            <button type="button" mat-raised-button
+                                (click)="this.propertyInterpolatedNormalizeCtrl.setValue(1);openPaletteTable()"
+                                class="palette-button">
                                 {{'Manage palette' | translate}}
                             </button>
                         </div>
@@ -106,7 +114,7 @@
                         <mat-select formControlName="propertyInterpolatedFieldCtrl" [appResetOnChange]="defaultKey"
                             [dependants]="[propertyInterpolatedMinFieldValueCtrl, propertyInterpolatedMaxFieldValueCtrl, propertyInterpolatedNormalizeLocalFieldCtrl,
                             propertyInterpolatedNormalizeCtrl, propertyInterpolatedNormalizeByKeyCtrl]">
-                            <mat-option *ngFor="let field of interpolatedFields" [value]="field">
+                            <mat-option *ngFor="let field of collectionIntegerFields" [value]="field">
                                 {{ field }}</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -117,25 +125,25 @@
                 <div>
                     <mat-label>{{'Normalize' | translate}}</mat-label>
                     <mat-slide-toggle formControlName="propertyInterpolatedNormalizeCtrl" labelPosition="before"
-                        appResetOnChange="map.layer" [dependants]="[propertyInterpolatedScopeCtrl, propertyInterpolatedNormalizeByKeyCtrl, 
+                        appResetOnChange="map.layer" [dependants]="[propertyInterpolatedNormalizeByKeyCtrl, 
                         propertyInterpolatedNormalizeLocalFieldCtrl, propertyInterpolatedMinFieldValueCtrl, propertyInterpolatedMaxFieldValueCtrl,
                         propertyInterpolatedValuesCtrl]">
                     </mat-slide-toggle>
                 </div>
 
                 <div *ngIf="propertyInterpolatedNormalizeCtrl.value">
-                    <mat-form-field>
+                    <!-- <mat-form-field>
                         <mat-label>{{'Scope' | translate}}</mat-label>
                         <mat-select formControlName="propertyInterpolatedScopeCtrl" [appResetOnChange]="defaultKey"
                             [dependants]="[propertyInterpolatedNormalizeByKeyCtrl, propertyInterpolatedNormalizeLocalFieldCtrl]">
                             <mat-option value="local">{{'Local' | translate}}</mat-option>
                             <mat-option value="global">{{'Global' | translate}}</mat-option>
                         </mat-select>
-                    </mat-form-field>
+                    </mat-form-field> -->
 
                     <div *ngIf="!aggregated">
 
-                        <div *ngIf="propertyInterpolatedScopeCtrl.value === 'local'">
+                        <div *ngIf="propertyInterpolatedNormalizeCtrl.value">
                             <mat-label>{{'Normalize by key' | translate}}</mat-label>
                             <mat-slide-toggle formControlName="propertyInterpolatedNormalizeByKeyCtrl"
                                 labelPosition="before" [appResetOnChange]="defaultKey"
@@ -211,7 +219,9 @@
 
         <div *ngIf="propertySource.value == PROPERTY_SELECTOR_SOURCE.heatmap_density">
             <div *ngIf="propertyType === PROPERTY_TYPE.color">
-                <button type="button" mat-raised-button (click)="this.propertyInterpolatedNormalizeCtrl.setValue(1);openPaletteTable()" class="palette-button">
+                <button type="button" mat-raised-button
+                    (click)="this.propertyInterpolatedNormalizeCtrl.setValue(1);openPaletteTable()"
+                    class="palette-button">
                     {{'Manage palette' | translate}}
                 </button>
             </div>
@@ -242,9 +252,6 @@
             <mat-error
                 *ngIf="propertyInterpolatedMaxValueCtrl.touched && propertyInterpolatedMaxValueCtrl?.errors?.required">
                 {{'A maximum value is required' | translate}}
-            </mat-error>
-            <mat-error *ngIf="propertyInterpolatedScopeCtrl.touched && propertyInterpolatedScopeCtrl?.errors?.required">
-                {{'A scope is required' | translate}}
             </mat-error>
             <mat-error
                 *ngIf="propertyInterpolatedNormalizeLocalFieldCtrl.touched && propertyInterpolatedNormalizeLocalFieldCtrl?.errors?.required">

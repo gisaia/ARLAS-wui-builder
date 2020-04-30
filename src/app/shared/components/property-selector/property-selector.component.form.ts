@@ -87,11 +87,11 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
             propertyInterpolatedFg: this.formBuilder.group({
                 propertyInterpolatedCountOrMetricCtrl:
                     [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg && this.aggregated ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                            : false,
-                            Validators.required)
+                        null
+                    ],
+                propertyInterpolatedCountNormalizeCtrl:
+                    [
+                        null
                     ],
                 propertyInterpolatedMetricCtrl: [
                     null,
@@ -113,15 +113,6 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
                 propertyInterpolatedNormalizeCtrl:
                     [
                         null
-                    ],
-                propertyInterpolatedScopeCtrl:
-                    [
-                        null,
-                        CustomValidators.getConditionalValidator(() => !!this.formFg && !this.aggregated ?
-                            this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-                            && this.propertyInterpolatedNormalizeCtrl.value
-                            : false,
-                            Validators.required)
                     ],
                 propertyInterpolatedNormalizeByKeyCtrl:
                     [
@@ -226,6 +217,9 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
     get propertyInterpolatedCountOrMetricCtrl() {
         return this.propertyInterpolatedFg.get('propertyInterpolatedCountOrMetricCtrl');
     }
+    get propertyInterpolatedCountNormalizeCtrl() {
+        return this.propertyInterpolatedFg.get('propertyInterpolatedCountNormalizeCtrl');
+    }
     get propertyInterpolatedFg() {
         return this.formFg.get('propertyInterpolatedFg') as FormGroup;
     }
@@ -243,9 +237,6 @@ export abstract class PropertySelectorComponentForm extends ComponentSubForm {
     }
     get propertyInterpolatedNormalizeLocalFieldCtrl() {
         return this.propertyInterpolatedFg.get('propertyInterpolatedNormalizeLocalFieldCtrl');
-    }
-    get propertyInterpolatedScopeCtrl() {
-        return this.propertyInterpolatedFg.get('propertyInterpolatedScopeCtrl');
     }
     get propertyInterpolatedMinFieldValueCtrl() {
         return this.propertyInterpolatedFg.get('propertyInterpolatedMinFieldValueCtrl');

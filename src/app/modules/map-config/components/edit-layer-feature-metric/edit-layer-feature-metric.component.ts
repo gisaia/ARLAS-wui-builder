@@ -18,7 +18,7 @@ under the License.
 */
 import { Component, forwardRef, OnInit } from '@angular/core';
 import { FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
+import { GEOMETRY_TYPE, GRANULARITY } from '@map-config/components/edit-layer-mode-form/models';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
 import { NGXLogger } from 'ngx-logger';
@@ -45,6 +45,7 @@ export class EditLayerFeatureMetricComponent extends EditLayerFeatureMetricCompo
 
   public PROPERTY_SELECTOR_SOURCE = PROPERTY_SELECTOR_SOURCE;
   public GEOMETRY_TYPE = GEOMETRY_TYPE;
+  public GRANULARITY = GRANULARITY;
 
   constructor(
     protected logger: NGXLogger,
@@ -62,6 +63,7 @@ export class EditLayerFeatureMetricComponent extends EditLayerFeatureMetricCompo
     // it will used by the parent ControlValueAccessor implementation to write values on-the-fly
     this.formFg = this.embeddedFeaturesComponent.formFg;
     this.registerRendererGeometry();
+    this.registerGranularity();
     this.registerGeometryType();
     this.registerGeometryId();
     this.registerFeaturesMax();

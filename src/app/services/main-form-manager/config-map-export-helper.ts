@@ -58,8 +58,8 @@ export class ConfigMapExportHelper {
                 case GEOMETRY_TYPE.heatmap: {
                     paint['heatmap-color'] = color;
                     paint['heatmap-intensity'] = this.getMapProperty(modeValues.styleStep.intensityFg, mode);
-                    paint['heatmap-weight']  = this.getMapProperty(modeValues.styleStep.weightFg, mode);
-                    paint['heatmap-radius']  = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
+                    paint['heatmap-weight'] = this.getMapProperty(modeValues.styleStep.weightFg, mode);
+                    paint['heatmap-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
                 }
             }
             const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
@@ -73,71 +73,7 @@ export class ConfigMapExportHelper {
                     visibility: modeValues.visibilityStep.visible ? 'visible' : 'none'
                 },
                 paint,
-                filter: null
             };
-
-            switch (mode) {
-                case LAYER_MODE.features: {
-                    layer.filter = [
-                        'all',
-                        [
-                            '==',
-                            'geometry_path',
-                            modeValues.geometryStep.geometry,
-                        ],
-                        [
-                            '==',
-                            'feature_type',
-                            'hit'
-                        ]
-                    ];
-                    break;
-                }
-                case LAYER_MODE.featureMetric: {
-                    layer.filter = [
-                        'all',
-                        [
-                            '==',
-                            'geometry_ref',
-                            modeValues.geometryStep.geometry,
-                        ],
-                        [
-                            '==',
-                            'geometry_type',
-                            'raw'
-                        ],
-                        [
-                            '==',
-                            'feature_type',
-                            'aggregation'
-                        ]
-                    ];
-                    break;
-                }
-                case LAYER_MODE.cluster: {
-                    const clusterType = modeValues.geometryStep.clusterGeometryType;
-                    layer.filter = [
-                        'all',
-                        [
-                            '==',
-                            'geometry_ref',
-                            clusterType === CLUSTER_GEOMETRY_TYPE.raw_geometry ?
-                                modeValues.geometryStep.rawGeometry : modeValues.geometryStep.aggregatedGeometry
-                        ],
-                        [
-                            '==',
-                            'geometry_type',
-                            clusterType === CLUSTER_GEOMETRY_TYPE.raw_geometry ? 'raw' : 'aggregated'
-                        ],
-                        [
-                            '==',
-                            'feature_type',
-                            'aggregation'
-                        ]
-                    ];
-                    break;
-                }
-            }
 
             return layer;
         });
@@ -169,18 +105,18 @@ export class ConfigMapExportHelper {
 
                 const interpolatedValues = fgValues.propertyInterpolatedFg;
                 let interpolatedColor: Array<string | Array<string | number>>;
-                const getField = (mode === LAYER_MODE.features) ? interpolatedValues.propertyInterpolatedFieldCtrl :
-                    interpolatedValues.propertyInterpolatedFieldCtrl + '_' + interpolatedValues.propertyInterpolatedMetricCtrl + '_';
+                const getField = () => (mode === LAYER_MODE.features) ? interpolatedValues.propertyInterpolatedFieldCtrl :
+                    interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
+                    (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_';
 
                 if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
-                    if (interpolatedValues.propertyInterpolatedCountOrMetricCtrl) {
+                    if (mode === LAYER_MODE.features || interpolatedValues.propertyInterpolatedCountOrMetricCtrl) {
                         interpolatedColor = [
                             'interpolate',
                             ['linear'],
                             this.getArray(
-                                getField
-                                    .concat(':')
-                                    .concat(interpolatedValues.propertyInterpolatedScopeCtrl)
+                                getField()
+                                    .concat(':normalized')
                                     .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
                                         ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl : ''))
                         ];
@@ -189,7 +125,7 @@ export class ConfigMapExportHelper {
                         pointCountNormalzedColor = [
                             'interpolate',
                             ['linear'],
-                            ['get', 'point_count_normalized']
+                            ['get', 'count' + (!!interpolatedValues.propertyInterpolatedCountNormalizeCtrl ? '_:normalized' : '')]
                         ];
                         return pointCountNormalzedColor
                             .concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
@@ -200,7 +136,7 @@ export class ConfigMapExportHelper {
                     interpolatedColor = [
                         'interpolate',
                         ['linear'],
-                        this.getArray(getField)
+                        this.getArray(getField())
                     ];
                 }
                 return interpolatedColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
