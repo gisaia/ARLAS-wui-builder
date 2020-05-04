@@ -126,9 +126,7 @@ export class MainFormManagerService {
       );
 
     } else {
-
       this.saveJson(generatedConfig, 'config.json');
-
       this.saveJson(generatedMapConfig, 'config.map.json', '-');
     }
   }

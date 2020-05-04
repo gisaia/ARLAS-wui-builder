@@ -16,6 +16,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+
+export const OTHER_KEYWORD = 'OTHER';
+
 export interface KeywordColor {
     keyword: string;
     color: string;

@@ -41,12 +41,12 @@ export class MapInitService {
     );
   }
 
-  public createRequestGeometry(collection: string, geometry_path: string, id_path: string) {
+  public createRequestGeometry(collection: string, geometryPath: string, idPath: string) {
     return new FormGroup({
       collection: new FormControl({ value: collection, disabled: true }),
-      requestGeom: new FormControl(geometry_path, Validators.required),
-      idFeatureField: new FormControl(id_path, Validators.required),
-    })
+      requestGeom: new FormControl(geometryPath, Validators.required),
+      idFeatureField: new FormControl(idPath, Validators.required),
+    });
   }
 
 }
