@@ -19,7 +19,7 @@ under the License.
 import { Injectable } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
-import { FormArray, Validators } from '@angular/forms';
+import { FormArray, Validators, FormControl, FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +39,14 @@ export class MapInitService {
     this.mainFormService.mapConfig.initLayersFa(
       new FormArray([], [Validators.required])
     );
+  }
+
+  public createRequestGeometry(collection: string, geometryPath: string, idPath: string) {
+    return new FormGroup({
+      collection: new FormControl({ value: collection, disabled: true }),
+      requestGeom: new FormControl(geometryPath, Validators.required),
+      idFeatureField: new FormControl(idPath, Validators.required),
+    });
   }
 
 }

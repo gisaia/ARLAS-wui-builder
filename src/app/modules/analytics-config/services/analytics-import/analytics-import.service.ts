@@ -31,11 +31,7 @@ import { SwimlaneFormBuilderService } from '../swimlane-form-builder/swimlane-fo
 import { DEFAULT_METRIC_VALUE, MetricControls } from '../metric-form-builder/metric-form-builder.service';
 import { BucketsIntervalControls } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-
-export interface ImportElement {
-  value: any;
-  control: FormControl;
-}
+import { ImportElement, importElements } from '@services/main-form-manager/tools';
 
 @Injectable({
   providedIn: 'root'
@@ -101,7 +97,7 @@ export class AnalyticsImportService {
 
     const contribAggregationModel = contributor.aggregationmodels[0];
 
-    const importElements = ([
+    importElements([
       {
         value: component.input.chartTitle,
         control: dataStepFg.name
@@ -133,11 +129,7 @@ export class AnalyticsImportService {
         value: component.input.ticksDateFormat,
         control: renderStepFg.ticksDateFormat
       }
-    ] as Array<ImportElement>);
-
-    importElements
-      .filter(e => e.value !== null)
-      .forEach(element => element.control.setValue(element.value));
+    ]);
 
     return widgetData;
   }
@@ -151,7 +143,7 @@ export class AnalyticsImportService {
     const termAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'term');
     const swimlaneInput = component.input as AnalyticComponentSwimlaneInputConfig;
 
-    ([
+    importElements([
       {
         value: component.input.chartTitle,
         control: dataStepFg.name
@@ -197,9 +189,7 @@ export class AnalyticsImportService {
         value: swimlaneInput.swimlaneOptions.nanColors,
         control: renderStep.NaNColors
       }
-    ] as Array<ImportElement>)
-      .filter(e => e.value !== null)
-      .forEach(element => element.control.setValue(element.value));
+    ]);
 
     return widgetData;
   }

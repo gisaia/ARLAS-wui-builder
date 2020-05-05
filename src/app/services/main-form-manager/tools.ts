@@ -16,16 +16,15 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+import { AbstractControl } from '@angular/forms';
 
-export const OTHER_KEYWORD = 'OTHER';
-
-export interface KeywordColor {
-    keyword: string;
-    color: string;
+export interface ImportElement {
+    value: any;
+    control: AbstractControl;
 }
 
-export interface DialogColorTableData {
-    collection: string;
-    sourceField: string;
-    keywordColors: Array<KeywordColor>;
+export function importElements(elements: Array<ImportElement>) {
+    elements
+        .filter(e => e.value !== null)
+        .forEach(element => element.control.setValue(element.value));
 }

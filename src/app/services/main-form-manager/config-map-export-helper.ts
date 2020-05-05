@@ -19,11 +19,17 @@ under the License.
 import { FormArray, FormGroup } from '@angular/forms';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { Paint, Layer, MapConfig } from './models-map-config';
-import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
+import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-components/property-selector/models';
-import { KeywordColor } from '@map-config/components/dialog-color-table/models';
+import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 import { ConfigExportHelper } from './config-export-helper';
 import { LayerSourceConfig } from 'arlas-web-contributors';
+
+export enum VISIBILITY {
+    visible = 'visible',
+    none = 'none'
+}
+export const NORMALIZED = 'normalized';
 export class ConfigMapExportHelper {
 
     public static process(mapConfigLayers: FormArray) {
@@ -70,7 +76,7 @@ export class ConfigMapExportHelper {
                 minzoom: modeValues.visibilityStep.zoomMin,
                 maxzoom: modeValues.visibilityStep.zoomMax,
                 layout: {
-                    visibility: modeValues.visibilityStep.visible ? 'visible' : 'none'
+                    visibility: modeValues.visibilityStep.visible ? VISIBILITY.visible : VISIBILITY.none
                 },
                 paint,
             };
@@ -99,7 +105,7 @@ export class ConfigMapExportHelper {
                     this.getArray(fgValues.propertyManualFg.propertyManualFieldCtrl + '_color')
                 ].concat(
                     (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>)
-                        .flatMap(kc => kc.keyword !== 'OTHER' ? [kc.keyword, kc.color] : [kc.color])
+                        .flatMap(kc => kc.keyword !== OTHER_KEYWORD ? [kc.keyword, kc.color] : [kc.color])
                 );
             case PROPERTY_SELECTOR_SOURCE.interpolated: {
 
@@ -117,13 +123,13 @@ export class ConfigMapExportHelper {
                         ['get', 'count' + (!!interpolatedValues.propertyInterpolatedCountNormalizeCtrl ? '_:normalized' : '')]
                     ];
                 } else if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
-                    // otherwise if we normalized
+                    // otherwise if we normalize
                     interpolatedColor = [
                         'interpolate',
                         ['linear'],
                         this.getArray(
                             getField()
-                                .concat(':normalized')
+                                .concat(':' + NORMALIZED)
                                 .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
                                     ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl : ''))
                     ];
