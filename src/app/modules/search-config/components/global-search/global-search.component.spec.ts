@@ -6,13 +6,15 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { of } from 'rxjs';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormGroup, FormControl } from '@angular/forms';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 
 describe('GlobalSearchComponent', () => {
   let spectator: Spectator<GlobalSearchComponent>;
   const createComponent = createComponentFactory({
     component: GlobalSearchComponent,
     declarations: [
-      MockComponent(ConfigElementComponent)
+      MockComponent(ConfigElementComponent),
+      MockComponent(ConfigFormGroupComponent)
     ],
     providers: [
       mockProvider(CollectionService, {

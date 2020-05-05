@@ -33,7 +33,7 @@ import {
 } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
 import { MetricFormBuilderService, MetricFormGroup } from '../metric-form-builder/metric-form-builder.service';
 import { Observable } from 'rxjs';
-import { toKeywordFieldsObs } from '@services/collection-service/tools';
+import { toKeywordOptionsObs } from '@services/collection-service/tools';
 
 export class SwimlaneFormGroup extends ConfigFormGroup {
 
@@ -171,7 +171,7 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
         .build(collectionFieldsObs)
         .withTitle('Metric'),
       this.defaultValuesService.getDefaultConfig(),
-      toKeywordFieldsObs(collectionFieldsObs));
+      toKeywordOptionsObs(collectionFieldsObs));
 
     this.formBuilderDefault.setDefaultValueRecursively(this.defaultKey, formGroup);
 

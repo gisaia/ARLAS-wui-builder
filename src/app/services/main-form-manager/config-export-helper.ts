@@ -38,19 +38,20 @@ import { MapComponentInputConfig, MapComponentInputMapLayersConfig, MapComponent
 import { Layer } from './models-map-config';
 
 import { LayerSourceConfig, getSourceName } from 'arlas-web-contributors';
+import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 export class ConfigExportHelper {
 
     public static process(
         startingConfig: FormGroup,
         mapConfigGlobal: FormGroup,
         mapConfigLayers: FormArray,
-        searchConfigGlobal: FormGroup,
+        searchConfigGlobal: SearchGlobalFormGroup,
         timelineConfigGlobal: FormGroup,
         analyticsConfigList: FormArray): any {
 
         const chipssearch: ChipSearchConfig = {
-            name: searchConfigGlobal.value.name,
-            icon: searchConfigGlobal.value.icon
+            name: searchConfigGlobal.customControls.name.value,
+            icon: searchConfigGlobal.customControls.icon.value
         };
 
         const config: Config = {
@@ -239,16 +240,15 @@ export class ConfigExportHelper {
         }
     }
 
-    private static getChipsearchContributor(searchConfigGlobal: FormGroup): ContributorConfig {
-        const searchValues = searchConfigGlobal.value;
+    private static getChipsearchContributor(searchConfigGlobal: SearchGlobalFormGroup): ContributorConfig {
         return {
             type: CHIPSEARCH_TYPE,
             identifier: CHIPSEARCH_IDENTIFIER,
-            search_field: searchValues.searchField,
-            name: searchValues.name,
-            icon: searchValues.icon,
-            autocomplete_field: searchValues.autocompleteField,
-            autocomplete_size: searchValues.autocompleteSize,
+            search_field: searchConfigGlobal.customControls.searchField.value,
+            name: searchConfigGlobal.customControls.name.value,
+            icon: searchConfigGlobal.customControls.icon.value,
+            autocomplete_field: searchConfigGlobal.customControls.autocompleteField.value,
+            autocomplete_size: searchConfigGlobal.customControls.autocompleteSize.value,
         };
     }
 
@@ -384,6 +384,7 @@ export class ConfigExportHelper {
 
     public static getAnalyticsContributor(widgetType: any, widgetData: any, icon: string): ContributorConfig {
         // TODO at the end, find same contributors and keep only one instance
+        // TODO use customControls from widgets config form groups, like the Search export
         switch (widgetType) {
             case WIDGET_TYPE.histogram: {
                 const contrib = this.getWidgetContributor(widgetData, icon);

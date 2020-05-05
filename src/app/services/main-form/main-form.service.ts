@@ -19,6 +19,7 @@ under the License.
 import { Injectable } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
+import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 
 enum MAIN_FORM_KEYS {
   STARTING_CONFIG = 'StartingConfig',
@@ -76,8 +77,8 @@ export class MainFormService {
   public searchConfig = new class {
     constructor(public control: FormGroup) { }
 
-    public initGlobalFg = (fg: FormGroup) => this.control.setControl(MAIN_FORM_KEYS.SEARCH_CONFIG_GLOBAL, fg);
-    public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.SEARCH_CONFIG_GLOBAL) as FormGroup;
+    public initGlobalFg = (fg: SearchGlobalFormGroup) => this.control.setControl(MAIN_FORM_KEYS.SEARCH_CONFIG_GLOBAL, fg);
+    public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.SEARCH_CONFIG_GLOBAL) as SearchGlobalFormGroup;
 
   }(this.mainForm.get(MAIN_FORM_KEYS.SEARCH_CONFIG) as FormGroup);
 

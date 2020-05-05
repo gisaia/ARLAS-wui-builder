@@ -65,6 +65,14 @@
     </mat-form-field>
 </div>
 
+<div *ngIf="isIcon(); let typedControl" class="icon-form-control">
+    <mat-form-field>
+        <mat-label>{{ typedControl.label | translate}}</mat-label>
+        <input matInput [formControl]="typedControl" type="text" [required]="!typedControl.optional">
+    </mat-form-field>
+    <mat-icon>{{ typedControl.value }}</mat-icon>
+</div>
+
 <div *ngIf="isColor(); let typedControl">
     <div [class.control-error]="typedControl.touched && typedControl.invalid">
         {{ typedControl.label | translate}} {{typedControl.optional ? '' : '*'}}</div>
