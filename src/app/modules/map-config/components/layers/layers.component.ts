@@ -21,7 +21,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
-import { LayersComponentForm } from './layers.component.form';
 import { PreviewModalComponent } from '../preview-modal/preview-modal.component';
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
 import { ArlasCollaborativesearchService, ArlasConfigService } from 'arlas-wui-toolkit';
@@ -41,9 +40,10 @@ export interface Layer {
   templateUrl: './layers.component.html',
   styleUrls: ['./layers.component.scss']
 })
-export class LayersComponent extends LayersComponentForm implements OnInit {
+export class LayersComponent implements OnInit {
 
   public displayedColumns: string[] = ['name', 'mode', 'edit', 'delete', 'preview'];
+  public layersFa: FormArray;
 
   constructor(
     protected mainFormService: MainFormService,
@@ -54,7 +54,7 @@ export class LayersComponent extends LayersComponentForm implements OnInit {
     private startupService: StartupService,
 
   ) {
-    super(mainFormService);
+    this.layersFa = this.mainFormService.mapConfig.getLayersFa();
   }
 
   public ngOnInit() {

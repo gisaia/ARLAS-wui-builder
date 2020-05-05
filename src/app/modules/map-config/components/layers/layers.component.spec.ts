@@ -14,9 +14,14 @@ describe('LayersComponent', () => {
       ArlasStartupService,
       ArlasCollaborativesearchService,
       ArlasConfigService,
-      { provide: CONFIG_UPDATER, useValue: {} }
+      { provide: CONFIG_UPDATER, useValue: {} },
+      mockProvider(MainFormService, {
+        mapConfig: {
+          getLayersFa: () => new FormArray([])
+        }
+      })
     ],
-    component: LayersComponent
+    component: LayersComponent,
   });
 
   beforeEach(() => spectator = createComponent());

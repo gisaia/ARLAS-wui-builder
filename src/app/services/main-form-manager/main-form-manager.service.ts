@@ -35,6 +35,9 @@ import { PersistenceService } from '@services/persistence/persistence.service';
 import { EnvService } from '../env/env.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
+import { MapConfig } from './models-map-config';
+import { MapInitService } from '@map-config/services/map-init/map-init.service';
+import { MapImportService } from '@map-config/services/map-import/map-import.service';
 
 
 @Injectable({
@@ -56,7 +59,9 @@ export class MainFormManagerService {
     private persistenceService: PersistenceService,
     private envService: EnvService,
     private snackbar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private mapInitService: MapInitService,
+    private mapImportService: MapImportService,
   ) { }
 
   /**
@@ -67,6 +72,7 @@ export class MainFormManagerService {
     this.analyticsInitService.initModule();
     this.searchInitService.initModule();
     this.timelineInitService.initModule();
+    this.mapInitService.initModule();
   }
 
   public attemptExport() {
@@ -127,7 +133,7 @@ export class MainFormManagerService {
     }
   }
 
-  public doImport(config: Config) {
+  public doImport(config: Config, mapConfig: MapConfig) {
 
     this.mainFormService.startingConfig.getFg().setValue({
       collections: [config.arlas.server.collection.name],
@@ -137,6 +143,7 @@ export class MainFormManagerService {
     this.analyticsImportService.doImport(config);
     this.searchImportService.doImport(config);
     this.timelineImportService.doImport(config);
+    this.mapImportService.doImport(config, mapConfig);
   }
 
   private saveJson(json: any, filename: string, separator?: string) {

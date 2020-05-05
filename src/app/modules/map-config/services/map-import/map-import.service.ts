@@ -16,22 +16,17 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { MainFormService } from '@services/main-form/main-form.service';
-import { FormArray, Validators } from '@angular/forms';
+import { Injectable } from '@angular/core';
+import { MapConfig } from '@services/main-form-manager/models-map-config';
+import { Config } from '@services/main-form-manager/models-config';
 
-export abstract class LayersComponentForm {
+@Injectable({
+  providedIn: 'root'
+})
+export class MapImportService {
 
-    public layersFa: FormArray;
-
-    constructor(
-        protected mainFormService: MainFormService) {
-
-        if (!this.mainFormService.mapConfig.getLayersFa()) {
-            this.mainFormService.mapConfig.initLayersFa(
-                new FormArray([], [Validators.required])
-            );
-        }
-        this.layersFa = this.mainFormService.mapConfig.getLayersFa();
-    }
+  constructor() { }
+  public doImport(config: Config, mapConfig: MapConfig) {
+  }
 
 }

@@ -16,28 +16,29 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { Injectable } from '@angular/core';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
+import { FormArray, Validators } from '@angular/forms';
 
-export abstract class EditLayerComponentForm {
-    public layerFg: MapLayerFormGroup;
+@Injectable({
+  providedIn: 'root'
+})
+export class MapInitService {
 
-    constructor(
-        protected mapLayerFormBuilder: MapLayerFormBuilderService
-    ) {
-        this.layerFg = mapLayerFormBuilder.buildLayer();
-    }
+  constructor(
+    private mainFormService: MainFormService,
+    private mapGlobalFormBuilder: MapGlobalFormBuilderService
+  ) { }
 
-    get mode() {
-        return this.layerFg.customControls.mode;
-    }
-    get featuresFg() {
-        return this.layerFg.customControls.featuresFg;
-    }
-    get featureMetricFg() {
-        return this.layerFg.customControls.featureMetricFg;
-    }
-    get clusterFg() {
-        return this.layerFg.customControls.clusterFg;
-    }
+  public initModule() {
+    this.mainFormService.mapConfig.initGlobalFg(
+      this.mapGlobalFormBuilder.build()
+    );
+
+    this.mainFormService.mapConfig.initLayersFa(
+      new FormArray([], [Validators.required])
+    );
+  }
 
 }

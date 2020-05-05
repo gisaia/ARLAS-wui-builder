@@ -23,7 +23,7 @@
                     <button
                         (click)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
                         [disabled]="this.mainFormService.startingConfig.getFg().get('serverUrl').invalid"
-                        mat-raised-button color="primary">{{'Show collections' | translate}}</button>
+                        mat-raised-button color="accent">{{'Show collections' | translate}}</button>
                 </div>
             </app-config-element>
             <app-config-element *ngIf="isServerReady">
@@ -53,17 +53,34 @@
 <ng-container *ngIf="configChoice === InitialChoice.load">
     <h2 mat-dialog-title>{{'Import a file' | translate}}</h2>
     <mat-dialog-content class="import-content">
-        <div>
-            <!-- No material file input exists, so we hide the basic input behind a material button -->
-            <button type="button" mat-raised-button (click)="fileInput.click()">Select a File</button>
-            <input hidden (change)="upload($event.target.files)" #fileInput type="file">
-        </div>
-        <div *ngIf="this.mainFormService.startingConfig.getFg().valid" class="import-valid">
-            {{'File imported successfully' | translate}}
+        <div class="upload-files">
+            <div class="upload-single-files">
+                <!-- No material file input exists, so we hide the basic input behind a material button -->
+                <button type="button" mat-raised-button color="accent" (click)="confFileInput.click()">
+                    Select a config.json file
+                    <span *ngIf="confFileInput.files.length" class="upload-check">
+                        <mat-icon>check</mat-icon>
+                    </span>
+                </button>
+                <!-- (change), even empty, needed to refresh the UI -->
+                <input hidden (change)="null" #confFileInput type="file">
+            </div>
+            <div class="upload-single-files">
+                <!-- No material file input exists, so we hide the basic input behind a material button -->
+                <button type="button" mat-raised-button color="accent" (click)="mapFileInput.click()">
+                    Select a config.map.json file
+                    <span *ngIf="mapFileInput.files.length" class="upload-check">
+                        <mat-icon>check</mat-icon>
+                    </span>
+                </button>
+                <!-- (change), even empty, needed to refresh the UI -->
+                <input hidden (change)="null" #mapFileInput type="file">
+            </div>
         </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button (click)="this.startEvent.next();" [disabled]="this.mainFormService.startingConfig.getFg().invalid"
-            mat-raised-button color="primary">{{'Start configuration' | translate}}</button>
+        <button (click)="upload(confFileInput.files[0], mapFileInput.files[0]);"
+            [disabled]="!confFileInput.files.length || !mapFileInput.files.length" mat-raised-button
+            color="primary">{{'Start configuration' | translate}}</button>
     </mat-dialog-actions>
 </ng-container>

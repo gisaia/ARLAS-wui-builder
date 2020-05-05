@@ -22,7 +22,7 @@ import { CustomValidators } from '@utils/custom-validators';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 
-export class TimelineFormGroup extends FormGroup {
+export class TimelineGlobalFormGroup extends FormGroup {
 
   constructor(isDetailedTimeline: boolean) {
     super(
@@ -107,14 +107,14 @@ export class TimelineFormGroup extends FormGroup {
 @Injectable({
   providedIn: 'root'
 })
-export class TimelineFormBuilderService {
+export class TimelineGlobalFormBuilderService {
 
   constructor(
     private formBuilderDefault: FormBuilderWithDefaultService
   ) { }
 
   public build(isDetailedTimeline: boolean) {
-    const timelineFormGroup = new TimelineFormGroup(isDetailedTimeline);
+    const timelineFormGroup = new TimelineGlobalFormGroup(isDetailedTimeline);
     this.formBuilderDefault.setDefaultValueRecursively(
       'timeline.global',
       timelineFormGroup);

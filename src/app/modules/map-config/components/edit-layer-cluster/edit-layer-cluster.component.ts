@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { AfterViewInit, Component, forwardRef, OnInit, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, Component, forwardRef, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
@@ -24,6 +24,8 @@ import { NGXLogger } from 'ngx-logger';
 import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GRANULARITY } from '../edit-layer-mode-form/models';
 import { EditLayerClusterComponentForm } from './edit-layer-cluster.component.form';
 import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
+import { EditLayerModeFormComponent } from '../edit-layer-mode-form/edit-layer-mode-form.component';
+import { MapLayerFormBuilderService } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 
 
 
@@ -46,6 +48,9 @@ import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/model
 })
 export class EditLayerClusterComponent extends EditLayerClusterComponentForm implements OnInit, AfterViewInit {
 
+  @ViewChild(EditLayerModeFormComponent, { static: true })
+  public embeddedFeaturesComponent: EditLayerModeFormComponent;
+
   public PROPERTY_SELECTOR_SOURCE = PROPERTY_SELECTOR_SOURCE;
   public GRANULARITY = GRANULARITY;
   public CLUSTER_GEOMETRY_TYPE = CLUSTER_GEOMETRY_TYPE;
@@ -56,11 +61,11 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
 
   constructor(
     protected logger: NGXLogger,
-    protected formBuilder: FormBuilder,
-    protected formBuilderDefault: FormBuilderWithDefaultService,
+    protected mapLayerFormBuilder: MapLayerFormBuilderService,
     protected changeDetectorRef: ChangeDetectorRef
   ) {
-    super(logger, formBuilder, formBuilderDefault);
+    super(logger);
+    this.formFg = mapLayerFormBuilder.buildCluster();
   }
 
   public ngOnInit() {
@@ -68,15 +73,7 @@ export class EditLayerClusterComponent extends EditLayerClusterComponentForm imp
 
     // by getting a reference to the embedded form in this variable,
     // it will used by the parent ControlValueAccessor implementation to write values on-the-fly
-    this.formFg = this.embeddedFeaturesComponent.formFg;
-    this.registerAggGeometry();
-    this.registerGranularity();
-    this.registerClusterGeometryType();
-    this.registerAggregatedGeometry();
-    this.registerRawGeometry();
-    this.registerClusterSort();
-    this.registerFeaturesMin();
-    this.registerGeometryType();
+    this.embeddedFeaturesComponent.formFg = this.formFg;
   }
 
   public ngAfterViewInit() {

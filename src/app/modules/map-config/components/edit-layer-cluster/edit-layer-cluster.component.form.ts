@@ -33,83 +33,10 @@ export abstract class EditLayerClusterComponentForm extends ComponentSubForm {
     public colorFgSources: Array<PROPERTY_SELECTOR_SOURCE> = [PROPERTY_SELECTOR_SOURCE.fix];
 
     constructor(
-        protected logger: NGXLogger,
-        protected formBuilder: FormBuilder,
-        protected formBuilderDefault: FormBuilderWithDefaultService
+        protected logger: NGXLogger
     ) {
         super(logger);
     }
-
-    protected registerAggGeometry() {
-        this.geometryStep.addControl(
-            'aggGeometry',
-            this.formBuilderDefault.control('map.layer.geometryStep.aggGeometry', [Validators.required]));
-    }
-
-    protected registerGranularity() {
-        this.geometryStep.addControl(
-            'granularity',
-            this.formBuilderDefault.control('map.layer.geometryStep.granularity', [Validators.required]));
-    }
-
-    protected registerClusterGeometryType() {
-        this.geometryStep.addControl(
-            'clusterGeometryType',
-            this.formBuilderDefault.control('map.layer.geometryStep.clusterGeometryType', [Validators.required]));
-    }
-
-    protected registerAggregatedGeometry() {
-        this.geometryStep.addControl(
-            'aggregatedGeometry',
-            this.formBuilderDefault.control('map.layer.geometryStep.aggregatedGeometry', [
-                CustomValidators.getConditionalValidator(
-                    () => !!this.clusterGeometryType
-                        && this.clusterGeometryType.value === CLUSTER_GEOMETRY_TYPE.aggregated_geometry,
-                    Validators.required
-                )
-            ]));
-    }
-    protected registerRawGeometry() {
-        this.geometryStep.addControl(
-            'rawGeometry',
-            this.formBuilderDefault.control('map.layer.geometryStep.rawGeometry', [
-                CustomValidators.getConditionalValidator(
-                    () => !!this.clusterGeometryType
-                        && this.clusterGeometryType.value === CLUSTER_GEOMETRY_TYPE.raw_geometry,
-                    Validators.required
-                )
-            ]));
-    }
-    protected registerClusterSort() {
-        this.geometryStep.addControl(
-            'clusterSort',
-            this.formBuilderDefault.control('map.layer.geometryStep.clusterSort'));
-    }
-
-    protected registerFeaturesMin() {
-        (this.formFg.get('visibilityStep') as FormGroup)
-            .addControl(
-                'featuresMin',
-                this.formBuilderDefault.control(
-                    'map.layer.visibilityStep.featuresMin',
-                    [
-                        Validators.required
-                    ]
-                ));
-    }
-
-    protected registerGeometryType() {
-        (this.formFg.get('styleStep') as FormGroup)
-            .addControl(
-                'geometryType',
-                this.formBuilderDefault.control(
-                    'map.layer.styleStep.geometryType',
-                    [
-                        Validators.required
-                    ]
-                ));
-    }
-
 
     get geometryStep() {
         return this.formFg.get('geometryStep') as FormGroup;

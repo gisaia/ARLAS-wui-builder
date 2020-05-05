@@ -1,11 +1,11 @@
+import { PropertySelectorFormBuilderService } from './property-selector-form-builder.service';
 import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
-import { TimelineFormBuilderService } from './timeline-form-builder.service';
 
-describe('TimelineFormBuilderService', () => {
-  let spectator: SpectatorService<TimelineFormBuilderService>;
+describe('PropertySelectorFormBuilderService', () => {
+  let spectator: SpectatorService<PropertySelectorFormBuilderService>;
 
   const createService = createServiceFactory({
-    service: TimelineFormBuilderService
+    service: PropertySelectorFormBuilderService
   });
 
   beforeEach(() => {

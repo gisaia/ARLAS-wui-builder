@@ -26,6 +26,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs';
 import { EditLayerComponentForm } from './edit-layer.component.form';
 import { LAYER_MODE } from './models';
+import { MapLayerFormBuilderService } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 
 @Component({
   selector: 'app-edit-layer',
@@ -46,14 +47,14 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
   ]);
 
   constructor(
-    protected formBuilderDefault: FormBuilderWithDefaultService,
+    protected mapLayerFormBuilderService: MapLayerFormBuilderService,
     private mainFormService: MainFormService,
     private route: ActivatedRoute,
     private cdref: ChangeDetectorRef,
     private router: Router,
     private logger: NGXLogger) {
 
-    super(formBuilderDefault);
+    super(mapLayerFormBuilderService);
   }
 
   public ngOnInit() {

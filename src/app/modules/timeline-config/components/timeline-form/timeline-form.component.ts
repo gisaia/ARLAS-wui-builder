@@ -24,9 +24,9 @@ import { Interval } from 'arlas-api';
 import { updateValueAndValidity } from '@utils/tools';
 import { ChartType } from 'arlas-web-components';
 import {
-  TimelineFormBuilderService,
-  TimelineFormGroup
-} from '@timeline-config/services/timeline-form-builder/timeline-form-builder.service';
+  TimelineGlobalFormBuilderService,
+  TimelineGlobalFormGroup
+} from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 import { TimelineFormComponentForm } from './timeline-form.component.form';
 
 enum DateFormats {
@@ -67,7 +67,7 @@ export class TimelineFormComponent extends TimelineFormComponentForm implements 
 
   constructor(
     protected formBuilderDefault: FormBuilderWithDefaultService,
-    protected timelineFormBuilder: TimelineFormBuilderService,
+    protected timelineFormBuilder: TimelineGlobalFormBuilderService,
     protected logger: NGXLogger
   ) {
     super(logger);
@@ -77,7 +77,7 @@ export class TimelineFormComponent extends TimelineFormComponentForm implements 
   public ngOnInit() {
     super.ngOnInit();
 
-    (this.formFg as TimelineFormGroup).customControls.isDetailedTimeline.setValue(this.isDetailedTimeline);
+    (this.formFg as TimelineGlobalFormGroup).customControls.isDetailedTimeline.setValue(this.isDetailedTimeline);
 
     // force update of custom validators & mainForm, otherwise it is not consistent
     this.formFg.valueChanges.subscribe(

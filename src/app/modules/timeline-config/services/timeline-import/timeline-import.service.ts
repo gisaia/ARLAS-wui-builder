@@ -19,7 +19,7 @@ under the License.
 import { Injectable } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { Config, AnalyticComponentConfig, ContributorConfig } from '@services/main-form-manager/models-config';
-import { TimelineFormGroup } from '../timeline-form-builder/timeline-form-builder.service';
+import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timeline-global-form-builder.service';
 
 @Injectable({
   providedIn: 'root'

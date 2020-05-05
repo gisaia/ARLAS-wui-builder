@@ -3,6 +3,9 @@ import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectat
 import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
 import { MockComponent } from 'ng-mocks';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
+import { of, Observable } from 'rxjs';
 
 describe('GlobalMapComponent', () => {
 
@@ -12,8 +15,17 @@ describe('GlobalMapComponent', () => {
     declarations: [
       MockComponent(ConfigElementComponent)
     ],
-    mocks: [
-      CollectionService
+    providers: [
+      mockProvider(MainFormService, {
+        mapConfig: {
+          getGlobalFg: () => new MapGlobalFormGroup()
+        },
+        getCollections: () => ['collection']
+      }),
+      mockProvider(CollectionService, {
+        getCollectionFieldsNames: () => of([]),
+        getCollectionParamFields: () => of([])
+      })
     ]
   });
 

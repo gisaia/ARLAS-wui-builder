@@ -16,35 +16,21 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormGroup, FormArray, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 
 export abstract class GlobalMapComponentForm {
 
-    public globalFg: FormGroup;
+    public globalFg: MapGlobalFormGroup;
 
     constructor(
         protected mainFormService: MainFormService,
-        protected formBuilderDefault: FormBuilderWithDefaultService
     ) {
-        this.mainFormService.mapConfig.initGlobalFg(
-            this.formBuilderDefault.group('map.global', {
-                requestGeometries: new FormArray([]),
-                geographicalOperator: new FormControl(null, Validators.required),
-                allowMapExtend: new FormControl(),
-                margePanForLoad: new FormControl(null, Validators.min(0)),
-                margePanForTest: new FormControl(null, Validators.min(0)),
-                initZoom: new FormControl(null, [Validators.required, Validators.min(1), Validators.max(18)]),
-                initCenterLat: new FormControl(null, Validators.required),
-                initCenterLon: new FormControl(null, Validators.required),
-                displayScale: new FormControl()
-            }));
-        this.globalFg = this.mainFormService.mapConfig.getGlobalFg();
+        this.globalFg = this.mainFormService.mapConfig.getGlobalFg() as MapGlobalFormGroup;
     }
 
     get requestGeometries() {
-        return this.globalFg.get('requestGeometries') as FormArray;
+        return this.globalFg.customControls.requestGeometries;
     }
 
 }

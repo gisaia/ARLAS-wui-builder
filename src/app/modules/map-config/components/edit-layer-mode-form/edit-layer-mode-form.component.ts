@@ -76,13 +76,11 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
   public collectionAllButGeoFields: string[] = [];
 
   constructor(
-    protected formBuilderDefault: FormBuilderWithDefaultService,
-    protected formBuilder: FormBuilder,
     protected logger: NGXLogger,
     public mainformService: MainFormService,
     public collectionService: CollectionService
   ) {
-    super(formBuilderDefault, formBuilder, logger);
+    super(logger);
   }
 
   public ngOnInit() {

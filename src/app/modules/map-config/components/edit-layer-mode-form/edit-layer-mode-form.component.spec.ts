@@ -12,6 +12,8 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { PropertySelectorComponent } from '@shared-components/property-selector/property-selector.component';
+import { FormGroup, FormControl } from '@angular/forms';
+import { MapLayerTypeFeaturesFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 
 describe('EditLayerModeFormComponent', () => {
   let spectator: Spectator<EditLayerModeFormComponent>;
@@ -35,7 +37,8 @@ describe('EditLayerModeFormComponent', () => {
 
   beforeEach(() => spectator = createComponent({
     props: {
-      submit: new Subject<boolean>().asObservable()
+      submit: new Subject<boolean>().asObservable(),
+      formFg: new MapLayerTypeFeaturesFormGroup({})
     }
   }));
 
