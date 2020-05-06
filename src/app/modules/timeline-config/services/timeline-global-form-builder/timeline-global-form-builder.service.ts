@@ -17,91 +17,142 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CustomValidators } from '@utils/custom-validators';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import {
+  ConfigFormGroup, SlideToggleFormControl, InputFormControl, SelectFormControl, SliderFormControl, ConfigFormControl, HiddenFormControl
+} from '@shared-models/config-form';
+import {
+  BucketsIntervalFormGroup, BucketsIntervalFormBuilderService
+} from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
+import { CollectionService, FIELD_TYPES } from '@services/collection-service/collection.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { ChartType } from 'arlas-web-components';
+import { map } from 'rxjs/operators';
 
+enum DateFormats {
+  English = '%b %d %Y  %H:%M',
+  French = '%d %b %Y  %H:%M'
+}
 
-export class TimelineGlobalFormGroup extends FormGroup {
+export class TimelineGlobalFormGroup extends ConfigFormGroup {
 
-  constructor(isDetailedTimeline: boolean) {
+  constructor(
+    timelineBucketsIntervalFg: BucketsIntervalFormGroup
+  ) {
     super(
       {
-        isDetailedTimeline: new FormControl(),
-        field: new FormControl(
-          null,
-          Validators.required
+        useDetailedTimeline: new SlideToggleFormControl(
+          '',
+          'Use detailed timeline?',
+          'Description'
         ),
-        bucketOrInterval: new FormControl(
-        ),
-        bucketsNumber: new FormControl(
-          null
-        ),
-        intervalUnit: new FormControl(
-          null
-        ),
-        intervalSize: new FormControl(
-          null
-        ),
-        chartTitle: new FormControl(
-          null,
-          Validators.required
-        ),
-        chartType: new FormControl(
-          null,
-          Validators.required
-        ),
-        dateFormat: new FormControl(
-          null,
-          Validators.required
-        ),
-        isMultiselectable: new FormControl(
-          false
-        ),
-        selectionExtentPercent: new FormControl(
-          0
-        )
-      }
-    );
+        dataStep: new ConfigFormGroup({
+          timeline: new ConfigFormGroup({
+            aggregation: timelineBucketsIntervalFg,
+          }
+          ).withTitle('Timeline'),
+          detailedTimeline: new ConfigFormGroup({
+            bucketsNumber: new SliderFormControl(
+              '',
+              'Number of buckets',
+              'description',
+              10,
+              200,
+              5
+            )
+          },
+            {
+              dependsOn: () => [this.customControls.useDetailedTimeline],
+              onDependencyChange: (control) =>
+                this.customControls.useDetailedTimeline.value ? control.enable() : control.disable()
+            }
+          ).withTitle('Detailed timeline')
+        }),
+        renderStep: new ConfigFormGroup({
+          timeline: new ConfigFormGroup({
+            ...TimelineGlobalFormGroup.getCommonsControls(),
+            isMultiselectable: new SlideToggleFormControl(
+              false,
+              'Is multi-selectable',
+              'Description'
+            )
+          }).withTitle('Timeline'),
+          detailedTimeline: new ConfigFormGroup({
+            ...TimelineGlobalFormGroup.getCommonsControls(),
+            selectionExtentPercent: new SliderFormControl(
+              '',
+              'Percent of selection extent',
+              'Description',
+              0,
+              100,
+              5
+            )
+          },
+            {
+              dependsOn: () => [this.customControls.useDetailedTimeline],
+              onDependencyChange: (control) =>
+                this.customControls.useDetailedTimeline.value ? control.enable() : control.disable()
+            }).withTitle('Detailed timeline'),
 
-    // add validators, could not be done before because we need to reference to this from the custom validators
-    // (and this is not possible) from `super(...)`
-    if (!!isDetailedTimeline) {
-      this.customControls.bucketsNumber.setValidators(
-        CustomValidators.getConditionalValidator(() =>
-          !this.customControls.bucketOrInterval.value,
-          Validators.required
-        )
-      );
-    } else {
-      this.customControls.intervalUnit.setValidators(
-        CustomValidators.getConditionalValidator(() =>
-          !!this.customControls.bucketOrInterval.value,
-          Validators.required
-        )
-      );
-      this.customControls.intervalSize.setValidators(
-        CustomValidators.getConditionalValidator(() =>
-          !!this.customControls.bucketOrInterval.value,
-          Validators.required
-        )
-      );
-    }
+        })
+      });
   }
 
   public customControls = {
-    isDetailedTimeline: this.get('isDetailedTimeline') as FormControl,
-    field: this.get('field') as FormControl,
-    bucketOrInterval: this.get('bucketOrInterval') as FormControl,
-    bucketsNumber: this.get('bucketsNumber') as FormControl,
-    intervalUnit: this.get('intervalUnit') as FormControl,
-    intervalSize: this.get('intervalSize') as FormControl,
-    chartTitle: this.get('chartTitle') as FormControl,
-    chartType: this.get('chartType') as FormControl,
-    dateFormat: this.get('dateFormat') as FormControl,
-    isMultiselectable: this.get('isMultiselectable') as FormControl,
-    selectionExtentPercent: this.get('selectionExtentPercent') as FormControl,
+    useDetailedTimeline: this.get('useDetailedTimeline') as SlideToggleFormControl,
+    dataStepGrp: this.get('dataStep') as ConfigFormControl,
+    dataStep: {
+      timeline: {
+        aggregation: this.get('dataStep').get('timeline').get('aggregation') as BucketsIntervalFormGroup
+      },
+      detailedTimeline: {
+        bucketsNumber: this.get('dataStep').get('detailedTimeline').get('bucketsNumber') as SliderFormControl
+      }
+    },
+    renderStepGrp: this.get('renderStep') as ConfigFormControl,
+    renderStep: {
+      timeline: {
+        chartTitle: this.get('renderStep').get('timeline').get('chartTitle') as InputFormControl,
+        chartType: this.get('renderStep').get('timeline').get('chartType') as SelectFormControl,
+        dateFormat: this.get('renderStep').get('timeline').get('dateFormat') as SelectFormControl,
+        isMultiselectable: this.get('renderStep').get('timeline').get('isMultiselectable') as SlideToggleFormControl
+      },
+      detailedTimeline: {
+        chartTitle: this.get('renderStep').get('detailedTimeline').get('chartTitle') as InputFormControl,
+        chartType: this.get('renderStep').get('detailedTimeline').get('chartType') as SelectFormControl,
+        dateFormat: this.get('renderStep').get('detailedTimeline').get('dateFormat') as SelectFormControl,
+        selectionExtentPercent: this.get('renderStep').get('detailedTimeline').get('selectionExtentPercent') as SliderFormControl
+      }
+    }
   };
+
+  private static getCommonsControls() {
+    return {
+      chartTitle: new InputFormControl(
+        '',
+        'Chart title',
+        'Description'
+      ),
+      chartType: new SelectFormControl(
+        '',
+        'Chart type',
+        'Description',
+        false,
+        [ChartType[ChartType.area], ChartType[ChartType.bars]].map(s =>
+          ({ label: s, value: s }))
+      ),
+      dateFormat: new SelectFormControl(
+        '',
+        'Date format',
+        'Description',
+        false,
+        Object.keys(DateFormats).map(df => ({
+          label: df + ' (' + DateFormats[df] + ')', value: DateFormats[df]
+        }))
+      )
+    };
+  }
+
 }
 
 @Injectable({
@@ -110,11 +161,29 @@ export class TimelineGlobalFormGroup extends FormGroup {
 export class TimelineGlobalFormBuilderService {
 
   constructor(
-    private formBuilderDefault: FormBuilderWithDefaultService
+    private collectionService: CollectionService,
+    private mainFormService: MainFormService,
+    private formBuilderDefault: FormBuilderWithDefaultService,
+    private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
   ) { }
 
-  public build(isDetailedTimeline: boolean) {
-    const timelineFormGroup = new TimelineGlobalFormGroup(isDetailedTimeline);
+  public build() {
+
+    const longDateFields = this.collectionService.getCollectionFields(
+      this.mainFormService.getCollections()[0], [FIELD_TYPES.DATE, FIELD_TYPES.LONG])
+      .pipe(map(fields => fields.sort((a, b) => {
+        // sort by DATE first, then by name
+        if (a.type !== b.type) {
+          return a.type === FIELD_TYPES.DATE ? -1 : 1;
+        }
+        return a.name.localeCompare(b.name);
+      })));
+
+    const timelineBucketIntervalFg = this.bucketsIntervalBuilderService.build(longDateFields);
+
+    const timelineFormGroup = new TimelineGlobalFormGroup(
+      timelineBucketIntervalFg);
+
     this.formBuilderDefault.setDefaultValueRecursively(
       'timeline.global',
       timelineFormGroup);

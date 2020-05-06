@@ -26,7 +26,6 @@ import { MapLayerFormBuilderService } from '../map-layer-form-builder/map-layer-
 import { LayerSourceConfig } from 'arlas-web-contributors';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { VISIBILITY, NORMALIZED } from '@services/main-form-manager/config-map-export-helper';
-import { FormControl, FormGroup } from '@angular/forms';
 import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-components/property-selector/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';

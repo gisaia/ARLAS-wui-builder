@@ -19,6 +19,7 @@ under the License.
 import { FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { HistogramUtils } from 'arlas-d3';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 
 /**
  * These are wrappers above existing FormGroup and FormControl in order to add a custom behavior.
@@ -38,10 +39,10 @@ interface ControlOptionalParams {
     optional?: boolean;
 
     // getter the other controls that it depends on
-    dependsOn?: () => Array<ConfigFormControl>;
+    dependsOn?: () => Array<ConfigFormControl | ConfigFormGroup>;
 
     // callback to be executed when a dependency changes
-    onDependencyChange?: (c: ConfigFormControl) => void;
+    onDependencyChange?: (c: ConfigFormControl | ConfigFormGroup) => void;
 
     // indicates if other fields that depends on this one, should be reset when this one changes
     resetDependantsOnChange?: boolean;
@@ -58,11 +59,20 @@ interface ControlOptionalParams {
 }
 
 interface GroupOptionalParams {
+    // getter the other controls that it depends on
+    dependsOn?: () => Array<ConfigFormControl>;
+
+    // callback to be executed when a dependency changes
+    onDependencyChange?: (c: ConfigFormControl | ConfigFormGroup) => void;
+
     validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null;
     asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null;
 }
 
 export class ConfigFormGroup extends FormGroup {
+
+    // reference to other controls that depends on this one
+    public dependantControls: Array<AbstractControl>;
 
     public title: string;
 
@@ -74,6 +84,9 @@ export class ConfigFormGroup extends FormGroup {
 
         super(controls, optionalParams.validatorOrOpts, optionalParams.asyncValidator);
     }
+
+    get dependsOn() { return this.optionalParams.dependsOn; }
+    get onDependencyChange() { return this.optionalParams.onDependencyChange; }
 
     get controlsValues() {
         return Object.values(this.controls) as Array<ConfigFormControl>;
@@ -180,6 +193,7 @@ export class SelectFormControl extends ConfigFormControl {
         this.syncOptions = newOptions;
         this.filteredOptions = newOptions;
     }
+
 }
 
 export class HuePaletteFormControl extends SelectFormControl {
@@ -254,3 +268,4 @@ export class IconFormControl extends ConfigFormControl {
 
 export class ColorFormControl extends ConfigFormControl {
 }
+

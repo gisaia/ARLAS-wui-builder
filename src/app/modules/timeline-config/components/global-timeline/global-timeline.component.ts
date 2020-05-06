@@ -16,61 +16,26 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { GlobalTimelineComponentForm } from './global-timeline.component.form';
-import { CollectionService, FIELD_TYPES } from '@services/collection-service/collection.service';
+import { Component, OnInit } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 
 @Component({
   selector: 'app-global-timeline',
   templateUrl: './global-timeline.component.html',
   styleUrls: ['./global-timeline.component.scss'],
 })
-export class GlobalTimelineComponent extends GlobalTimelineComponentForm implements OnInit, OnDestroy {
+export class GlobalTimelineComponent implements OnInit {
 
-  public dateFields: Array<string>;
-  public submitSubject = new BehaviorSubject<boolean>(false);
-  private touchedSubscription: Subscription;
+  public globalFg: TimelineGlobalFormGroup;
 
   constructor(
     protected mainFormService: MainFormService,
-    protected formBuilderDefault: FormBuilderWithDefaultService,
-    private collectionService: CollectionService
   ) {
-    super(mainFormService, formBuilderDefault);
+    this.globalFg = mainFormService.timelineConfig.getGlobalFg();
   }
 
   public ngOnInit() {
-    // TODO use multi collection instead of the first one
-    this.collectionService.getCollectionFieldsNames(this.mainFormService.getCollections()[0], [FIELD_TYPES.DATE])
-      .subscribe(fields => this.dateFields = fields);
-
-    this.markSubFormsTouched();
-    this.enableDisableDetailedTimeline();
-  }
-
-  // on submission of the parent form, propagate to the sub forms
-  private markSubFormsTouched() {
-    this.touchedSubscription = this.globalFg.statusChanges.subscribe(st => {
-      if (this.globalFg.touched) {
-        this.submitSubject.next(true);
-        this.touchedSubscription.unsubscribe();
-      }
-    });
-    // trigger event on edition
-    this.globalFg.updateValueAndValidity();
-  }
-
-  public ngOnDestroy() {
-    this.touchedSubscription.unsubscribe();
-  }
-
-  private enableDisableDetailedTimeline() {
-    this.useDetailedTimeline.valueChanges.subscribe(
-      v => v ? this.detailedTimeline.enable() : this.detailedTimeline.disable());
-    this.useDetailedTimeline.updateValueAndValidity({ onlySelf: true, emitEvent: true });
   }
 
 }

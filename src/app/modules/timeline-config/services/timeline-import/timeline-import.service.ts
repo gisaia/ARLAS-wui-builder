@@ -20,6 +20,7 @@ import { Injectable } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { Config, AnalyticComponentConfig, ContributorConfig } from '@services/main-form-manager/models-config';
 import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timeline-global-form-builder.service';
+import { importElements } from '@services/main-form-manager/tools';
 
 @Injectable({
   providedIn: 'root'
@@ -41,39 +42,78 @@ export class TimelineImportService {
     const timelineFg = this.mainFormService.timelineConfig.getGlobalFg();
     const hasDetailedTimeline = !!detailedTimelineContributor && !!detailedTimelineComponent;
 
-    // as timeline form is still using sub-forms, due to their nature we cannot get an instance to their form controls.
-    // We can only set the value of the parent Form Control, angular will then propagate to every sub-control.
-    // TODO after turning timeline forms to config forms, use a direct reference to the field, like in Search module
+    const timelineDataStep = timelineFg.customControls.dataStep.timeline;
+    const detailedTimelineDataStep = timelineFg.customControls.dataStep.detailedTimeline;
 
-    timelineFg.patchValue({
-      useDetailedTimeline: hasDetailedTimeline,
-      timeline: this.getTimelineFormGroupValue(false, timelineContributor, timelineComponent)
-    });
+    importElements([
+      {
+        value: hasDetailedTimeline,
+        control: timelineFg.customControls.useDetailedTimeline
+      },
+      {
+        value: timelineComponent.input.multiselectable,
+        control: timelineFg.customControls.renderStep.timeline.isMultiselectable
+      },
+      {
+        value: timelineContributor.aggregationmodels[0].field,
+        control: timelineDataStep.aggregation.customControls.aggregationField
+      },
+      {
+        value: !!timelineContributor.aggregationmodels[0].interval,
+        control: timelineDataStep.aggregation.customControls.aggregationBucketOrInterval
+      },
+      {
+        value: timelineContributor.numberOfBuckets,
+        control: timelineDataStep.aggregation.customControls.aggregationBucketsNumber
+      },
+      {
+        value: !!timelineContributor.aggregationmodels[0].interval ? timelineContributor.aggregationmodels[0].interval.unit : null,
+        control: timelineDataStep.aggregation.customControls.aggregationIntervalUnit
+      },
+      {
+        value: !!timelineContributor.aggregationmodels[0].interval ? timelineContributor.aggregationmodels[0].interval.value : null,
+        control: timelineDataStep.aggregation.customControls.aggregationIntervalSize
+      }
+    ]);
+    this.importCommonElements(timelineComponent, timelineFg, false);
 
     if (hasDetailedTimeline) {
-      timelineFg.patchValue({
-        detailedTimeline: this.getTimelineFormGroupValue(true, detailedTimelineContributor, detailedTimelineComponent)
-      });
-    }
 
+      this.importCommonElements(detailedTimelineComponent, timelineFg, true);
+      importElements([
+        {
+          value: detailedTimelineContributor.selectionExtentPercentage * 100,
+          control: timelineFg.customControls.renderStep.detailedTimeline.selectionExtentPercent
+        },
+        {
+          value: detailedTimelineContributor.numberOfBuckets,
+          control: detailedTimelineDataStep.bucketsNumber
+        }
+      ]);
+    }
   }
 
-  public getTimelineFormGroupValue(isDetailedTimeline: boolean, contributor: ContributorConfig, component: AnalyticComponentConfig) {
-    return {
-      isDetailedTimeline,
-      field: contributor.aggregationmodels[0].field,
-      bucketOrInterval: !!contributor.aggregationmodels[0].interval,
-      bucketsNumber: contributor.numberOfBuckets,
-      intervalUnit: !!contributor.aggregationmodels[0].interval ?
-        !!contributor.aggregationmodels[0].interval.unit : null,
-      intervalSize: !!contributor.aggregationmodels[0].interval ?
-        !!contributor.aggregationmodels[0].interval.value : null,
-      chartTitle: component.input.chartTitle,
-      chartType: component.input.chartType,
-      dateFormat: component.input.ticksDateFormat,
-      isMultiselectable: component.input.multiselectable,
-      selectionExtentPercent: contributor.selectionExtentPercentage * 100,
-    };
+  private importCommonElements(
+    timelineComponent: AnalyticComponentConfig,
+    timelineFg: TimelineGlobalFormGroup,
+    isDetailed: boolean) {
+
+    const renderStep = isDetailed ? timelineFg.customControls.renderStep.detailedTimeline : timelineFg.customControls.renderStep.timeline;
+
+    importElements([
+      {
+        value: timelineComponent.input.chartTitle,
+        control: renderStep.chartTitle
+      },
+      {
+        value: timelineComponent.input.chartType,
+        control: renderStep.chartType
+      },
+      {
+        value: timelineComponent.input.ticksDateFormat,
+        control: timelineFg.customControls.renderStep.timeline.dateFormat
+      }
+    ]);
   }
 
 }

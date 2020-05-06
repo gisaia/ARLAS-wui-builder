@@ -39,7 +39,7 @@ export interface BucketsIntervalControls {
 export class BucketsIntervalFormGroup extends ConfigFormGroup {
 
   constructor(
-    collectionFieldsObs: Observable<Array<CollectionField>>) {
+    fieldsObs: Observable<Array<CollectionField>>) {
 
     super(
       {
@@ -48,16 +48,18 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           'Aggregation field',
           'description',
           true,
-          toNumericOrDateOptionsObs(collectionFieldsObs),
+          toNumericOrDateOptionsObs(fieldsObs),
           {
-            childs: () => [this.customControls.aggregationFieldType]
+            childs: () => [
+              this.customControls.aggregationFieldType
+            ]
           }),
         aggregationFieldType: new HiddenFormControl(
           '',
           {
             dependsOn: () => [this.customControls.aggregationField],
             onDependencyChange: (control) => {
-              collectionFieldsObs.subscribe(fields => {
+              fieldsObs.subscribe(fields => {
                 const aggregationField = fields.find(f => f.name === this.customControls.aggregationField.value);
                 if (!!aggregationField) {
                   control.setValue(aggregationField.type === CollectionReferenceDescriptionProperty.TypeEnum.DATE ? 'time' : 'numeric');
@@ -98,17 +100,16 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           'Interval unit',
           'description',
           false,
-          Array.from(
-            new Set(
-              Object.values(Interval.UnitEnum).map(v => {
-                const value = typeof v === 'string' ? v.toLowerCase() : v.toString();
-                return { value, label: value };
-              })))
-            .sort(),
+          Array.from(new Set(
+            Object.keys(Interval.UnitEnum).map(u => u.charAt(0).toUpperCase() + u.slice(1))))
+            .sort()
+            .map(u => ({
+              value: u, label: u
+            })),
           {
             dependsOn: () => [this.customControls.aggregationBucketOrInterval, this.customControls.aggregationField],
             onDependencyChange: (control) => {
-              collectionFieldsObs.subscribe(fields => {
+              fieldsObs.subscribe(fields => {
                 if (this.customControls.aggregationBucketOrInterval.value &&
                   !!fields.find(f => f.name === this.customControls.aggregationField.value) &&
                   fields.find(f => f.name === this.customControls.aggregationField.value).type
@@ -140,7 +141,7 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
   public customControls = {
     aggregationField: this.get('aggregationField') as SelectFormControl,
     aggregationFieldType: this.get('aggregationFieldType') as SelectFormControl,
-    aggregationBucketOrInterval: this.get('aggregationBucketOrInterval') as SlideToggleFormControl,
+    aggregationBucketOrInterval: this.get('aggregationBucketOrInterval') as SlideToggleFormControl | HiddenFormControl,
     aggregationBucketsNumber: this.get('aggregationBucketsNumber') as SliderFormControl,
     aggregationIntervalUnit: this.get('aggregationIntervalUnit') as SelectFormControl,
     aggregationIntervalSize: this.get('aggregationIntervalSize') as InputFormControl
@@ -156,9 +157,9 @@ export class BucketsIntervalFormBuilderService {
   constructor() {
   }
 
-  public build(collectionFieldsObs: Observable<Array<CollectionField>>) {
+  public build(fieldsObs: Observable<Array<CollectionField>>) {
 
-    return new BucketsIntervalFormGroup(collectionFieldsObs);
+    return new BucketsIntervalFormGroup(fieldsObs);
   }
 
 }

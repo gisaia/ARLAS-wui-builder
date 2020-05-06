@@ -35,10 +35,10 @@ import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-form-builder/metric-form-builder.service';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { MapComponentInputConfig, MapComponentInputMapLayersConfig, MapComponentInputLayersSetsConfig } from './models-config';
-import { Layer } from './models-map-config';
-
 import { LayerSourceConfig, getSourceName } from 'arlas-web-contributors';
 import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
+import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
+
 export class ConfigExportHelper {
 
     public static process(
@@ -46,7 +46,7 @@ export class ConfigExportHelper {
         mapConfigGlobal: FormGroup,
         mapConfigLayers: FormArray,
         searchConfigGlobal: SearchGlobalFormGroup,
-        timelineConfigGlobal: FormGroup,
+        timelineConfigGlobal: TimelineGlobalFormGroup,
         analyticsConfigList: FormArray): any {
 
         const chipssearch: ChipSearchConfig = {
@@ -59,7 +59,7 @@ export class ConfigExportHelper {
                 web: {
                     contributors: [],
                     components: {
-                        timeline: this.getTimelineComponent(timelineConfigGlobal.controls.timeline.value),
+                        timeline: this.getTimelineComponent(timelineConfigGlobal, false),
                         mapgl: this.getMapComponent(mapConfigGlobal, mapConfigLayers)
                     },
                     analytics: []
@@ -87,11 +87,11 @@ export class ConfigExportHelper {
         config.arlas.web.contributors.push(this.getMapContributor(mapConfigGlobal, mapConfigLayers));
         config.arlas.web.contributors.push(this.getChipsearchContributor(searchConfigGlobal));
 
-        config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal.controls.timeline.value));
+        config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal, false));
 
         if (timelineConfigGlobal.value.useDetailedTimeline) {
-            config.arlas.web.components.detailedTimeline = this.getTimelineComponent(timelineConfigGlobal.controls.detailedTimeline.value);
-            config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal.controls.detailedTimeline.value));
+            config.arlas.web.components.detailedTimeline = this.getTimelineComponent(timelineConfigGlobal, true);
+            config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal, true));
         }
 
         if (!!analyticsConfigList) {
@@ -253,8 +253,11 @@ export class ConfigExportHelper {
     }
 
     // TODO put in common with getAnalyticsContributor ?
-    private static getTimelineContributor(timelineValues: any): ContributorConfig {
-        const isDetailed = timelineValues.isDetailedTimeline;
+    private static getTimelineContributor(timelineConfigGlobal: TimelineGlobalFormGroup, isDetailed: boolean): ContributorConfig {
+
+        const timelineAggregation = timelineConfigGlobal.customControls.dataStep.timeline.aggregation.customControls;
+        const detailedTimelineDataStep = timelineConfigGlobal.customControls.dataStep.detailedTimeline;
+
         const contributor: ContributorConfig = {
             type: isDetailed ? 'detailedhistogram' : 'histogram',
             identifier: isDetailed ? 'detailedTimeline' : 'timeline',
@@ -265,23 +268,26 @@ export class ConfigExportHelper {
 
         const aggregationModel: AggregationModelConfig = {
             type: 'datehistogram',
-            field: timelineValues.field
+            field: timelineAggregation.aggregationField.value
         };
 
-        if (timelineValues.bucketOrInterval) {
+        if (!isDetailed && timelineAggregation.aggregationBucketOrInterval.value) {
             aggregationModel.interval = {
-                value: timelineValues.intervalSize,
-                unit: timelineValues.intervalUnit
+                value: timelineAggregation.aggregationIntervalSize.value,
+                unit: timelineAggregation.aggregationIntervalUnit.value
             };
+        } else if (!isDetailed) {
+            contributor.numberOfBuckets = timelineAggregation.aggregationBucketsNumber.value;
         } else {
-            contributor.numberOfBuckets = timelineValues.bucketsNumber;
+            contributor.numberOfBuckets = detailedTimelineDataStep.bucketsNumber.value;
         }
 
         contributor.aggregationmodels = [aggregationModel];
 
         if (isDetailed) {
             contributor.annexedContributorId = 'timeline';
-            contributor.selectionExtentPercentage = timelineValues.selectionExtentPercent / 100;
+            contributor.selectionExtentPercentage =
+                timelineConfigGlobal.customControls.renderStep.detailedTimeline.selectionExtentPercent.value / 100;
         }
 
         return contributor;
@@ -341,8 +347,11 @@ export class ConfigExportHelper {
         return mapComponent;
     }
 
-    private static getTimelineComponent(timelineValues: any): AnalyticComponentConfig {
-        const isDetailed = timelineValues.isDetailedTimeline;
+    private static getTimelineComponent(timelineConfigGlobal: TimelineGlobalFormGroup, isDetailed: boolean): AnalyticComponentConfig {
+
+        const renderStep = isDetailed ? timelineConfigGlobal.customControls.renderStep.detailedTimeline :
+            timelineConfigGlobal.customControls.renderStep.timeline;
+
         const timelineComponent: AnalyticComponentConfig = {
             contributorId: isDetailed ? 'detailedTimeline' : 'timeline',
             componentType: 'histogram',
@@ -352,15 +361,15 @@ export class ConfigExportHelper {
                 yTicks: 2,
                 xLabels: isDetailed ? 5 : 9,
                 yLabels: 2,
-                chartTitle: timelineValues.chartTitle,
+                chartTitle: renderStep.chartTitle.value,
                 customizedCssClass: isDetailed ? 'arlas-detailed-timeline' : 'arlas-timeline',
                 chartHeight: isDetailed ? 60 : 128,
-                multiselectable: isDetailed ? false : timelineValues.isMultiselectable,
+                multiselectable: isDetailed ? false : timelineConfigGlobal.customControls.renderStep.timeline.isMultiselectable.value,
                 brushHandlesHeightWeight: 0.8,
                 dataType: 'time',
                 isHistogramSelectable: true,
-                ticksDateFormat: timelineValues.dateFormat,
-                chartType: timelineValues.chartType,
+                ticksDateFormat: renderStep.dateFormat.value,
+                chartType: renderStep.chartType.value,
                 chartWidth: null,
                 xAxisPosition: isDetailed ? 'top' : 'bottom',
                 yAxisStartsFromZero: true,
