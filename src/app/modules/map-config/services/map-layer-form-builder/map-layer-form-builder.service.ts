@@ -21,6 +21,14 @@ import { FormGroup, Validators, FormControl, AbstractControl } from '@angular/fo
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { CustomValidators } from '@utils/custom-validators';
 import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
+import { PropertySelectorFormGroup, NewPropertySelectorFormGroup, PropertySelectorFormBuilderService } from '@shared/services/property-selector-form-builder/property-selector-form-builder.service';
+import { PROPERTY_TYPE, PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
+import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
+import { Observable } from 'rxjs';
+import { CollectionField } from '@services/collection-service/models';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { MatDialog } from '@angular/material';
 
 export class MapLayerFormGroup extends FormGroup {
 
@@ -48,6 +56,7 @@ export class MapLayerFormGroup extends FormGroup {
 export class MapLayerAllTypesFormGroup extends FormGroup {
 
   constructor(
+    propertySelectorFormBuilder: PropertySelectorFormBuilderService,
     geometryFormControls: { [key: string]: AbstractControl },
     visibilityFormControls: { [key: string]: AbstractControl },
     styleFormControls: { [key: string]: AbstractControl }
@@ -72,9 +81,25 @@ export class MapLayerAllTypesFormGroup extends FormGroup {
       ),
       styleStep: new FormGroup({
         opacity: new FormControl(),
-        colorFg: new FormControl(null, Validators.required),
-        widthFg: new FormControl(),
-        radiusFg: new FormControl(),
+        colorFg: propertySelectorFormBuilder.buildNew(
+          PROPERTY_TYPE.color,
+          'color',
+          [
+            PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.generated,
+            PROPERTY_SELECTOR_SOURCE.manual, PROPERTY_SELECTOR_SOURCE.provided
+          ]),
+        widthFg: propertySelectorFormBuilder.buildNew(
+          PROPERTY_TYPE.number,
+          'width',
+          [
+            PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
+          ]),
+        radiusFg: propertySelectorFormBuilder.buildNew(
+          PROPERTY_TYPE.number,
+          'radius',
+          [
+            PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
+          ]),
         weightFg: new FormControl(),
         intensityFg: new FormControl(),
         ...styleFormControls
@@ -129,13 +154,16 @@ export class MapLayerAllTypesFormGroup extends FormGroup {
 export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
 
   constructor(
+    propertySelectorFormBuilder: PropertySelectorFormBuilderService,
     geometryFormControls: { [key: string]: AbstractControl } = {},
   ) {
 
-    super({
-      geometry: new FormControl(null, Validators.required),
-      ...geometryFormControls
-    }, {
+    super(
+      propertySelectorFormBuilder,
+      {
+        geometry: new FormControl(null, Validators.required),
+        ...geometryFormControls
+      }, {
       featuresMax: new FormControl(
         null,
         [
@@ -156,25 +184,33 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
 
 export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesFormGroup {
 
-  constructor() {
-    super({
-      geometryId: new FormControl(null, Validators.required),
-      granularity: new FormControl(null, Validators.required)
-    });
+  constructor(
+    propertySelectorFormBuilder: PropertySelectorFormBuilderService
+  ) {
+    super(
+      propertySelectorFormBuilder,
+      {
+        geometryId: new FormControl(null, Validators.required),
+        granularity: new FormControl(null, Validators.required)
+      });
   }
 }
 
 export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
 
-  constructor() {
-    super({
-      aggGeometry: new FormControl(null, Validators.required),
-      granularity: new FormControl(null, Validators.required),
-      clusterGeometryType: new FormControl(null, Validators.required),
-      aggregatedGeometry: new FormControl(null, Validators.required),
-      rawGeometry: new FormControl(null, Validators.required),
-      clusterSort: new FormControl(null),
-    },
+  constructor(
+    propertySelectorFormBuilder: PropertySelectorFormBuilderService
+  ) {
+    super(
+      propertySelectorFormBuilder,
+      {
+        aggGeometry: new FormControl(null, Validators.required),
+        granularity: new FormControl(null, Validators.required),
+        clusterGeometryType: new FormControl(null, Validators.required),
+        aggregatedGeometry: new FormControl(null, Validators.required),
+        rawGeometry: new FormControl(null, Validators.required),
+        clusterSort: new FormControl(null),
+      },
       {
         featuresMin: new FormControl(null, Validators.required)
       }, {
@@ -210,7 +246,8 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
 export class MapLayerFormBuilderService {
 
   constructor(
-    private formBuilderDefault: FormBuilderWithDefaultService
+    private formBuilderDefault: FormBuilderWithDefaultService,
+    private propertySelectorFormBuilder: PropertySelectorFormBuilderService
   ) { }
 
   public buildLayer() {
@@ -220,19 +257,25 @@ export class MapLayerFormBuilderService {
   }
 
   public buildFeatures() {
-    const featureFormGroup = new MapLayerTypeFeaturesFormGroup();
+    const featureFormGroup = new MapLayerTypeFeaturesFormGroup(
+      this.propertySelectorFormBuilder);
+
     this.formBuilderDefault.setDefaultValueRecursively('map.layer', featureFormGroup);
     return featureFormGroup;
   }
 
   public buildFeatureMetric() {
-    const featureMetricFormGroup = new MapLayerTypeFeatureMetricFormGroup();
+    const featureMetricFormGroup = new MapLayerTypeFeatureMetricFormGroup(
+      this.propertySelectorFormBuilder);
+
     this.formBuilderDefault.setDefaultValueRecursively('map.layer', featureMetricFormGroup);
     return featureMetricFormGroup;
   }
 
   public buildCluster() {
-    const clusterFormGroup = new MapLayerTypeClusterFormGroup();
+    const clusterFormGroup = new MapLayerTypeClusterFormGroup(
+      this.propertySelectorFormBuilder);
+
     this.formBuilderDefault.setDefaultValueRecursively('map.layer', clusterFormGroup);
     return clusterFormGroup;
   }

@@ -19,7 +19,7 @@ under the License.
 import { Component, OnInit, Input } from '@angular/core';
 import {
   ConfigFormControl, SlideToggleFormControl, SliderFormControl,
-  SelectFormControl, InputFormControl, ColorFormControl, HuePaletteFormControl, HiddenFormControl, IconFormControl
+  SelectFormControl, InputFormControl, ColorFormControl, HuePaletteFormControl, HiddenFormControl, IconFormControl, ButtonFormControl
 } from '@shared-models/config-form';
 
 @Component({
@@ -75,6 +75,10 @@ export class ConfigFormControlComponent implements OnInit {
 
   public isHidden(): HiddenFormControl | null {
     return Object.getPrototypeOf(this.control) === HiddenFormControl.prototype ? this.control as HiddenFormControl : null;
+  }
+
+  public isButton(): ButtonFormControl | null {
+    return Object.getPrototypeOf(this.control) === ButtonFormControl.prototype ? this.control as ButtonFormControl : null;
   }
 
 }

@@ -89,6 +89,8 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           10,
           200,
           5,
+          undefined,
+          undefined,
           {
             dependsOn: () => [this.customControls.aggregationBucketOrInterval],
             onDependencyChange: (control) =>
@@ -141,7 +143,7 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
   public customControls = {
     aggregationField: this.get('aggregationField') as SelectFormControl,
     aggregationFieldType: this.get('aggregationFieldType') as SelectFormControl,
-    aggregationBucketOrInterval: this.get('aggregationBucketOrInterval') as SlideToggleFormControl | HiddenFormControl,
+    aggregationBucketOrInterval: this.get('aggregationBucketOrInterval') as SlideToggleFormControl,
     aggregationBucketsNumber: this.get('aggregationBucketsNumber') as SliderFormControl,
     aggregationIntervalUnit: this.get('aggregationIntervalUnit') as SelectFormControl,
     aggregationIntervalSize: this.get('aggregationIntervalSize') as InputFormControl

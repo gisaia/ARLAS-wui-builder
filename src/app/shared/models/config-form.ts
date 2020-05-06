@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators } from '@angular/forms';
+import { FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators, FormArray } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { HistogramUtils } from 'arlas-d3';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
@@ -78,7 +78,7 @@ export class ConfigFormGroup extends FormGroup {
 
     constructor(
         controls: {
-            [key: string]: ConfigFormControl | ConfigFormGroup;
+            [key: string]: AbstractControl;
         },
         private optionalParams: GroupOptionalParams = {}) {
 
@@ -165,7 +165,7 @@ export class SelectFormControl extends ConfigFormControl {
         label: string,
         description: string,
         public isAutocomplete: boolean,
-        private options: Array<SelectOption> | Observable<Array<SelectOption>>,
+        options: Array<SelectOption> | Observable<Array<SelectOption>>,
         optionalParams?: ControlOptionalParams) {
 
         super(
@@ -182,8 +182,14 @@ export class SelectFormControl extends ConfigFormControl {
 
         if (isAutocomplete) {
             // TODO should we unsubscribe later?
-            this.valueChanges.subscribe(v =>
-                this.filteredOptions = this.syncOptions.filter(o => o.label.indexOf(v) >= 0)
+            this.valueChanges.subscribe(v => {
+                if (!!v) {
+                    this.filteredOptions = this.syncOptions.filter(o => o.label.indexOf(v) >= 0);
+                } else {
+                    this.filteredOptions = this.syncOptions;
+                }
+
+            }
             );
         }
 
@@ -245,9 +251,25 @@ export class SliderFormControl extends ConfigFormControl {
         public min: number,
         public max: number,
         public step: number,
+        public ensureLessThan?: () => ConfigFormControl,
+        public ensureGeaterThan?: () => ConfigFormControl,
         optionalParams?: ControlOptionalParams) {
 
         super(formState, label, description, optionalParams);
+    }
+
+    public checkLessThan(newValue: number) {
+        const other = this.ensureLessThan();
+        if (newValue > other.value) {
+            other.setValue(newValue);
+        }
+    }
+
+    public checkGreaterThan(newValue: number) {
+        const other = this.ensureGeaterThan();
+        if (newValue < other.value) {
+            other.setValue(newValue);
+        }
     }
 }
 
@@ -269,3 +291,16 @@ export class IconFormControl extends ConfigFormControl {
 export class ColorFormControl extends ConfigFormControl {
 }
 
+export class ButtonFormControl extends ConfigFormControl {
+
+    //TODO remove formstate
+    constructor(
+        formState: any,
+        label: string,
+        description: string,
+        public callback: () => void,
+        optionalParams?: ControlOptionalParams) {
+        super(formState, label, description, optionalParams || { optional: true });
+    }
+
+}

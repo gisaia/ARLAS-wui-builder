@@ -50,8 +50,6 @@ export class DialogPaletteSelectorComponent implements OnInit {
   private prepareDefaultPalettes() {
     this.selectedPalette = this.data.selectedPalette;
     this.defaultPalettes = this.data.defaultPalettes.map((p: Array<string>) => {
-      const minMaxDiff = this.data.max - this.data.min;
-
       return p.map((c: string, i: number) => {
         return { proportion: this.computeProportion(p.length, i), value: c };
       });

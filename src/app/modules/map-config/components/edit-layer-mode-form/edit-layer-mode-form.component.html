@@ -26,7 +26,7 @@
         <mat-step label="{{'Geometry' | translate}}" formGroupName="geometryStep"
             [stepControl]="formFg.get('geometryStep')">
             <ng-content select="[rendered-geometry]"></ng-content>
-            
+
             <ng-content select="[additional-geometry]"></ng-content>
             <ng-content select="[requested-geometry]"></ng-content>
             <ng-content select="[displayed-geometry]"></ng-content>
@@ -91,7 +91,8 @@
                 </div>
             </app-config-element>
 
-            <app-config-element>
+            <app-config-form-group [configFormGroup]="formFg.get('styleStep').get('colorFg')"></app-config-form-group>
+            <!-- <app-config-element>
                 <div form-fields>
                     <app-property-selector propertyName="color" [propertyType]="PROPERTY_TYPE.color"
                         formControlName="colorFg" [collection]="collection.value"
@@ -117,10 +118,10 @@
                         {{ 'Interpolated from a field: select a number or date field, colors will be lineary interpolated between the min and the max.' | translate}}
                     </p>
                 </div>
-            </app-config-element>
+            </app-config-element> -->
             <!-- using [hidden] instead of ng-if because otherwise, each time the condition is true,
             ut creates a new subform instance without cleaning the previous ones -->
-            <app-config-element [hidden]="formFg.value?.styleStep?.geometryType !== GEOMETRY_TYPE.line">
+            <!-- <app-config-element [hidden]="formFg.value?.styleStep?.geometryType !== GEOMETRY_TYPE.line">
                 <div form-fields>
                     <app-property-selector propertyName="width" [propertyType]="PROPERTY_TYPE.number"
                         formControlName="widthFg" [collection]="collection.value"
@@ -137,10 +138,13 @@
                         {{'Interpolated from a field: select a number or date field, width will be lineary interpolated between the min and the max.' | translate}}
                     </p>
                 </div>
-            </app-config-element>
+            </app-config-element> -->
+            <app-config-form-group [configFormGroup]="formFg.get('styleStep').get('widthFg')"></app-config-form-group>
             <!-- using [hidden] instead of ng-if because otherwise, each time the condition is true,
             ut creates a new subform instance without cleaning the previous ones -->
-            <app-config-element [hidden]="formFg.value?.styleStep?.geometryType !== GEOMETRY_TYPE.circle && formFg.value?.styleStep?.geometryType !== GEOMETRY_TYPE.heatmap">
+            <app-config-form-group [configFormGroup]="formFg.get('styleStep').get('radiusFg')"></app-config-form-group>
+            <!-- <app-config-element
+                [hidden]="formFg.value?.styleStep?.geometryType !== GEOMETRY_TYPE.circle && formFg.value?.styleStep?.geometryType !== GEOMETRY_TYPE.heatmap">
                 <div form-fields>
                     <app-property-selector propertyName="radius" [propertyType]="PROPERTY_TYPE.number"
                         formControlName="radiusFg" [collection]="collection.value"
@@ -157,8 +161,8 @@
                         {{'Interpolated from a field: select a number or date field, radius will be lineary interpolated between the min and the max.' | translate}}
                     </p>
                 </div>
-            </app-config-element>
-             <!-- using [hidden] instead of ng-if because otherwise, each time the condition is true,
+            </app-config-element> -->
+            <!-- using [hidden] instead of ng-if because otherwise, each time the condition is true,
             ut creates a new subform instance without cleaning the previous ones -->
             <app-config-element [hidden]="formFg.value?.styleStep?.geometryType !== GEOMETRY_TYPE.heatmap">
                 <div form-fields>
@@ -178,7 +182,7 @@
                     </p>
                 </div>
             </app-config-element>
-             <!-- using [hidden] instead of ng-if because otherwise, each time the condition is true,
+            <!-- using [hidden] instead of ng-if because otherwise, each time the condition is true,
             ut creates a new subform instance without cleaning the previous ones -->
             <app-config-element [hidden]="formFg.value?.styleStep?.geometryType !== GEOMETRY_TYPE.heatmap">
                 <div form-fields>
@@ -193,8 +197,8 @@
                     <p>
                         {{'Fix: use a fix width' | translate}}
                     </p>
-                    
-                
+
+
                 </div>
             </app-config-element>
             <button mat-button matStepperPrevious>{{ 'Back' | translate}}</button>
