@@ -66,7 +66,6 @@ export class LandingPageDialogComponent implements OnInit {
   public ngOnInit(): void {
     // Reset and clean the content of all forms
     this.mainFormService.resetMainForm();
-    this.mainFormManager.initMainModulesForms();
 
     this.mainFormService.startingConfig.init(
       this.formBuilderWithDefault.group('global', {
@@ -111,6 +110,7 @@ export class LandingPageDialogComponent implements OnInit {
   public saveConfig() {
     const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('collections').value;
     this.startupService.setCollection(collection);
+    this.mainFormManager.initMainModulesForms();
     this.startEvent.next();
   }
 
@@ -149,10 +149,19 @@ export class LandingPageDialogComponent implements OnInit {
 
           if (!collection) {
             this.logger.error(
-              this.translate.instant('Collection ' + configJson.arlas.server.collection.name + ' unknown. Available collections: ')
+              this.translate.instant('Collection ')
+              + configJson.arlas.server.collection.name
+              + this.translate.instant(' unknown. Available collections: ')
               + collections.join(', '));
 
           } else {
+            this.mainFormService.startingConfig.getFg().setValue({
+              collections: [configJson.arlas.server.collection.name],
+              serverUrl: configJson.arlas.server.url
+            });
+
+            this.mainFormManager.initMainModulesForms();
+
             this.startupService.setCollection(collection);
             this.mainFormManager.doImport(configJson, configMapJson);
             this.startEvent.next();

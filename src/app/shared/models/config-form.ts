@@ -51,6 +51,10 @@ interface ControlOptionalParams {
 
     // getter of child components
     childs?: () => Array<ConfigFormControl>;
+
+    // is the description in regular HTML. In this case, the caller
+    // is responsable of translating its content
+    isDescriptionHtml?: boolean;
 }
 
 interface GroupOptionalParams {
@@ -93,7 +97,7 @@ export abstract class ConfigFormControl extends FormControl {
         formState: any,
         public label: string,
         public description: string,
-        private optionalParams: ControlOptionalParams) {
+        private optionalParams: ControlOptionalParams = {}) {
 
         super(formState);
         // add default values to missing attributes
@@ -103,7 +107,8 @@ export abstract class ConfigFormControl extends FormControl {
                 validators: [],
                 dependsOn: () => [],
                 onDependencyChange: () => null,
-                childs: () => []
+                childs: () => [],
+                isDescriptionHtml: false
             },
             ...this.optionalParams
         };
@@ -114,6 +119,7 @@ export abstract class ConfigFormControl extends FormControl {
     get dependsOn() { return this.optionalParams.dependsOn; }
     get onDependencyChange() { return this.optionalParams.onDependencyChange; }
     get childs() { return this.optionalParams.childs; }
+    get isDescriptionHtml() { return this.optionalParams.isDescriptionHtml; }
     get resetDependantsOnChange() { return this.optionalParams.resetDependantsOnChange || false; }
 
     public initValidators() {
@@ -243,13 +249,8 @@ export class InputFormControl extends ConfigFormControl {
     }
 }
 
-export class ColorFormControl extends ConfigFormControl {
-    constructor(
-        formState: any,
-        label: string,
-        description: string,
-        optionalParams?: ControlOptionalParams) {
+export class IconFormControl extends ConfigFormControl {
+}
 
-        super(formState, label, description, optionalParams);
-    }
+export class ColorFormControl extends ConfigFormControl {
 }

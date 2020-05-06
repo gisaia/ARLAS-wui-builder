@@ -46,7 +46,7 @@
         "global": {
             "name": "Search a ...",
             "searchField": "id",
-            "autocompleteField": "id",
+            "autocompleteField": "internal.fulltext",
             "icon": "search"
         }
     },

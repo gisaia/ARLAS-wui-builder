@@ -19,6 +19,7 @@ under the License.
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ConfigFormGroup, ConfigFormControl } from '@shared-models/config-form';
 import { Observable, Subscription } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-config-form-group',
@@ -31,7 +32,9 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
   @Input() public defaultKey: string;
   public toUnsubscribe: Array<Subscription> = [];
 
-  constructor() { }
+  constructor(
+    private sanitizer: DomSanitizer
+  ) { }
 
   public ngOnInit() {
     Object.values(this.configFormGroup.controls)
@@ -87,5 +90,7 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
   public isFormGroup(control: ConfigFormGroup | ConfigFormControl): ConfigFormGroup | null {
     return control instanceof ConfigFormGroup ? control : null;
   }
+
+  public trustHtml = (html) => this.sanitizer.bypassSecurityTrustHtml(html);
 
 }

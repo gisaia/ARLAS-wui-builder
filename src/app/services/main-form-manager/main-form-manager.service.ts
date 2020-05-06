@@ -133,11 +133,6 @@ export class MainFormManagerService {
 
   public doImport(config: Config, mapConfig: MapConfig) {
 
-    this.mainFormService.startingConfig.getFg().setValue({
-      collections: [config.arlas.server.collection.name],
-      serverUrl: config.arlas.server.url
-    });
-
     this.analyticsImportService.doImport(config);
     this.searchImportService.doImport(config);
     this.timelineImportService.doImport(config);

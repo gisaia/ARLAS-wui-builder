@@ -16,7 +16,12 @@
                             </div>
                         </div>
                         <div description>
-                            {{ control.description | translate}}
+                            <div *ngIf="control.isDescriptionHtml" [innerHtml]="trustHtml(control.description)">
+                            </div>
+                            <div *ngIf="!control.isDescriptionHtml">
+                                {{ control.description | translate}}
+                            </div>
+
                             <div *ngFor="let child of formControl.childs()">
                                 <div *ngIf="child.enabled">
                                     {{ child.description | translate}}

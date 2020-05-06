@@ -27,16 +27,23 @@ export const NUMERIC_OR_DATE_TYPES = [
     CollectionReferenceDescriptionProperty.TypeEnum.FLOAT
 ];
 
-export function toNumericOrDateFieldsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+export function toNumericOrDateOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
     return collectionFieldsObs.pipe(map(
         fields => fields
             .filter(f => NUMERIC_OR_DATE_TYPES.indexOf(f.type) >= 0)
             .map(f => ({ value: f.name, label: f.name }))));
 }
 
-export function toKeywordFieldsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+export function toKeywordOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
     return collectionFieldsObs.pipe(map(
         fields => fields
             .filter(f => f.type === CollectionReferenceDescriptionProperty.TypeEnum.KEYWORD)
+            .map(f => ({ value: f.name, label: f.name }))));
+}
+
+export function toTextOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+    return collectionFieldsObs.pipe(map(
+        fields => fields
+            .filter(f => f.type === CollectionReferenceDescriptionProperty.TypeEnum.TEXT)
             .map(f => ({ value: f.name, label: f.name }))));
 }
