@@ -74,7 +74,6 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
   public collectionKeywordFields: string[] = [];
   public collectionIntegerFields: string[] = [];
   public collectionAllButGeoFields: string[] = [];
-
   constructor(
     protected logger: NGXLogger,
     public mainformService: MainFormService,
@@ -86,6 +85,8 @@ export class EditLayerModeFormComponent extends EditLayerModeFormComponentForm i
   public ngOnInit() {
     super.ngOnInit();
     this.initEnableWidthOrRadiusFg();
+    /** set the default selected collection to the first one in the list */
+    this.collection.setValue(this.mainformService.getCollections()[0]);
   }
 
   public ngAfterViewInit() {
