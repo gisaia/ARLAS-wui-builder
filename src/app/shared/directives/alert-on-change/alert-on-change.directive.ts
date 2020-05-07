@@ -61,7 +61,7 @@ export class AlertOnChangeDirective implements OnInit {
 
   @HostListener('openedChange', ['$event']) public openedChange(selectedHasBeenOpen: boolean) {
     // display a snack on opening if a dependant has a value
-    const anyDependantHasValue = this.dependants == null || this.dependants.filter(d => d.value !== null).length > 0;
+    const anyDependantHasValue = this.dependants == null || this.dependants.filter(d => d && d.value !== null).length > 0;
     // display the warning only if a value is already set AND if any dependency has been changed
     if (anyDependantHasValue && selectedHasBeenOpen && !this.select.empty) {
       this.snackBar.open(this.translate.instant('Carreful!') + ' ' + this.translate.instant(this.alertMessage));
