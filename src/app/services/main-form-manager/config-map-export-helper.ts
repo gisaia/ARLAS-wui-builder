@@ -102,7 +102,7 @@ export class ConfigMapExportHelper {
             case PROPERTY_SELECTOR_SOURCE.manual:
                 return [
                     'match',
-                    this.getArray(fgValues.propertyManualFg.propertyManualFieldCtrl + '_color')
+                    this.getArray(fgValues.propertyManualFg.propertyManualFieldCtrl)
                 ].concat(
                     (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>)
                         .flatMap(kc => kc.keyword !== OTHER_KEYWORD ? [kc.keyword, kc.color] : [kc.color])
