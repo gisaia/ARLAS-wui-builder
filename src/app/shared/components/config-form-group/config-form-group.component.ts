@@ -16,20 +16,32 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild, ViewChildren, ViewEncapsulation, QueryList } from '@angular/core';
 import { ConfigFormGroup, ConfigFormControl } from '@shared-models/config-form';
 import { Observable, Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatStepper } from '@angular/material';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-config-form-group',
   templateUrl: './config-form-group.component.html',
-  styleUrls: ['./config-form-group.component.scss']
+  styleUrls: ['./config-form-group.component.scss'],
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { showError: true }
+    }
+  ],
+  encapsulation: ViewEncapsulation.None
 })
 export class ConfigFormGroupComponent implements OnInit, OnDestroy {
 
   @Input() public configFormGroup: ConfigFormGroup;
   @Input() public defaultKey: string;
+  @ViewChild(MatStepper, { static: false }) private stepper: MatStepper;
+  @ViewChildren(ConfigFormGroupComponent) private subConfigFormGroups: QueryList<ConfigFormGroupComponent>;
+
   public toUnsubscribe: Array<Subscription> = [];
 
   constructor(
@@ -96,5 +108,23 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
   }
 
   public trustHtml = (html) => this.sanitizer.bypassSecurityTrustHtml(html);
+
+  public hasChildTabs = () =>
+    Object.values(this.configFormGroup.controls)
+      .filter(c => (c instanceof ConfigFormGroup && !!c.tabName))
+      .length > 0
+
+  /**
+   * Propagate the submission to sub config form groups
+   * Usefull to update the stepper's state (if there is any)
+   */
+  public submit() {
+    this.subConfigFormGroups.forEach(s => s.submit());
+
+    if (!!this.stepper) {
+      this.stepper.steps.setDirty();
+      this.stepper.steps.forEach(s => s.interacted = true);
+    }
+  }
 
 }

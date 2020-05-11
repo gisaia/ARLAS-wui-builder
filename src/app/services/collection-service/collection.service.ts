@@ -30,6 +30,8 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 export import FIELD_TYPES = CollectionReferenceDescriptionProperty.TypeEnum;
 export import METRIC_TYPES = ComputationRequest.MetricEnum;
 import { CollectionField } from './models';
+import { projType } from 'arlas-web-core';
+import { Hits } from 'arlas-api';
 
 @Injectable({
   providedIn: 'root'
@@ -96,6 +98,11 @@ export class CollectionService {
       return ag.value;
     })
       .finally(() => this.spinner.hide());
+  }
+
+  public countNbDocuments(): Observable<Hits> {
+    return this.collabSearchService.resolveButNotHits([projType.count, {}],
+      this.collabSearchService.collaborations, null, null, false, 120);
   }
 
   public getTermAggregation(collection: string, field: string, showSpinner: boolean = true, filter?: Filter): Promise<Array<string>> {

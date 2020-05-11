@@ -59,3 +59,27 @@ export function toTextOptionsObs(collectionFieldsObs: Observable<Array<Collectio
             .filter(f => f.type === CollectionReferenceDescriptionProperty.TypeEnum.TEXT)
             .map(f => ({ value: f.name, label: f.name }))));
 }
+
+export function toGeoOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+    return collectionFieldsObs.pipe(map(
+        fields => fields
+            .filter(f => f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT
+                || f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOSHAPE)
+            .map(f => ({ value: f.name, label: f.name }))));
+}
+
+export function toGeoPointOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+    return collectionFieldsObs.pipe(map(
+        fields => fields
+            .filter(f => f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT)
+            .map(f => ({ value: f.name, label: f.name }))));
+}
+
+
+export function toAllButGeoOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+    return collectionFieldsObs.pipe(map(
+        fields => fields
+            .filter(f => f.type !== CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT
+                && f.type !== CollectionReferenceDescriptionProperty.TypeEnum.GEOSHAPE)
+            .map(f => ({ value: f.name, label: f.name }))));
+}

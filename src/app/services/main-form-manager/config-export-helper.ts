@@ -29,8 +29,8 @@ import {
     CHIPSEARCH_IDENTIFIER
 } from './models-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
-import { PROPERTY_SELECTOR_SOURCE } from '@shared-components/property-selector/models';
-import { CLUSTER_GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
+import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
+import { CLUSTER_GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-form-builder/metric-form-builder.service';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';

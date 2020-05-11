@@ -14,30 +14,76 @@
             "displayScale": true
         },
         "layer": {
-            "collectionStep": {
-                "collection": "demo_ais-danmark"
-            },
-            "geometryStep": {
-                "geometry": "position.location",
-                "granularity": "Coarse"
-            },
-            "visibilityStep": {
-                "visible": true,
-                "zoomMin": 10,
-                "zoomMax": 10,
-                "featuresMax": 7500,
-                "featuresMin": 7500
-            },
-            "styleStep": {
-                "geometryType": "fill",
-                "opacity": 0.5,
-                "colorFg": {
-                    "propertySource": "Fix",
-                    "propertyFix": "#abcdef"
+            "featuresFg": {
+                "geometryStep": {
+                    "geometry": "position.location",
+                    "granularity": "Coarse"
                 },
-                "radiusFg": {
-                    "propertySource": "Fix",
-                    "propertyFix": 1.5
+                "visibilityStep": {
+                    "visible": true,
+                    "zoomMin": 10,
+                    "zoomMax": 10,
+                    "featuresMax": 7500
+                },
+                "styleStep": {
+                    "geometryType": "fill",
+                    "opacity": 0.5,
+                    "colorFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": "#abcdef"
+                    },
+                    "radiusFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1.5
+                    }
+                }
+            },
+            "featureMetricFg": {
+                "geometryStep": {
+                    "geometry": "position.location",
+                    "granularity": "Coarse"
+                },
+                "visibilityStep": {
+                    "visible": true,
+                    "zoomMin": 10,
+                    "zoomMax": 10,
+                    "featuresMax": 7500
+                },
+                "styleStep": {
+                    "geometryType": "fill",
+                    "opacity": 0.5,
+                    "colorFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": "#abcdef"
+                    },
+                    "radiusFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1.5
+                    }
+                }
+            },
+            "clusterFg": {
+                "geometryStep": {
+                    "geometry": "position.location",
+                    "granularity": "Coarse"
+                },
+                "visibilityStep": {
+                    "visible": true,
+                    "zoomMin": 10,
+                    "zoomMax": 10,
+                    "featuresMax": 7500
+                },
+                "styleStep": {
+                    "geometryType": "fill",
+                    "opacity": 0.5,
+                    "colorFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": "#abcdef"
+                    },
+                    "radiusFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1.5
+                    }
                 }
             }
         }
@@ -56,7 +102,6 @@
             "dataStep": {
                 "timeline": {
                     "aggregation": {
-                        "aggregationField": "track.timestamps.start",
                         "aggregationBucketsNumber": 22
                     }
                 },

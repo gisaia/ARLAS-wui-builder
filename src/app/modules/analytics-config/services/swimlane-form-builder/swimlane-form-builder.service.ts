@@ -103,6 +103,7 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
           ),
           zerosColors: new HiddenFormControl(
             '',
+            null,
             {
               optional: true,
               dependsOn: () => [this.customControls.renderStep.isZeroRepresentative],

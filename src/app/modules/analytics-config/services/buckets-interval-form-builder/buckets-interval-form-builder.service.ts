@@ -56,6 +56,7 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           }),
         aggregationFieldType: new HiddenFormControl(
           '',
+          null,
           {
             dependsOn: () => [this.customControls.aggregationField],
             onDependencyChange: (control) => {

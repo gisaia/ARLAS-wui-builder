@@ -21,7 +21,6 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { updateValueAndValidity } from '@utils/tools';
 import * as FileSaver from 'file-saver';
 import { NGXLogger } from 'ngx-logger';
-import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { ConfigExportHelper } from './config-export-helper';
 import { ConfigMapExportHelper } from './config-map-export-helper';
 import { AnalyticsImportService } from '@analytics-config/services/analytics-import/analytics-import.service';

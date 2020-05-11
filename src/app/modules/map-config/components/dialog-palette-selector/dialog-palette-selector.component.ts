@@ -23,7 +23,7 @@ import * as d3c from 'd3-color';
 import * as d3i from 'd3-interpolate';
 import { NGXLogger } from 'ngx-logger';
 import { DialogPaletteSelectorData } from './model';
-import { ProportionedValues } from '@shared-components/property-selector/models';
+import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 
 @Component({
   selector: 'app-dialog-palette',

@@ -16,10 +16,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators, FormArray } from '@angular/forms';
+import {
+    FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators
+} from '@angular/forms';
 import { Observable } from 'rxjs';
 import { HistogramUtils } from 'arlas-d3';
-import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 
 /**
  * These are wrappers above existing FormGroup and FormControl in order to add a custom behavior.
@@ -56,6 +57,10 @@ interface ControlOptionalParams {
     // is the description in regular HTML. In this case, the caller
     // is responsable of translating its content
     isDescriptionHtml?: boolean;
+
+    // a title that is displayed before the field.
+    // TODO remove the title from ConfigFormGroup and move it to fields
+    title?: string;
 }
 
 interface GroupOptionalParams {
@@ -75,6 +80,7 @@ export class ConfigFormGroup extends FormGroup {
     public dependantControls: Array<AbstractControl>;
 
     public title: string;
+    public tabName: string;
 
     constructor(
         controls: {
@@ -96,6 +102,32 @@ export class ConfigFormGroup extends FormGroup {
         this.title = title;
         return this;
     }
+
+    public withTabName(tabName: string) {
+        this.tabName = tabName;
+        return this;
+    }
+
+    public withDependsOn(dependsOn: () => Array<ConfigFormControl>) {
+        this.optionalParams.dependsOn = dependsOn;
+        return this;
+    }
+    public withOnDependencyChange(onDependencyChange: (c: ConfigFormControl | ConfigFormGroup) => void) {
+        this.optionalParams.onDependencyChange = onDependencyChange;
+        return this;
+    }
+
+    public enableIf(condition: boolean) {
+        if (condition) {
+            this.enable();
+        } else {
+            // emitEvent: false avoid the cascading effect. When enabling, it is expected to propagate
+            // the status update so that dependan fields can update themselves. Whereas when disabling
+            // we just want to disable everything. moreover, without it, some sub-fields may still be
+            // enabled, probably because of the cascading update
+            this.disable({ emitEvent: false });
+        }
+    }
 }
 
 export abstract class ConfigFormControl extends FormControl {
@@ -105,6 +137,8 @@ export abstract class ConfigFormControl extends FormControl {
 
     // if it is a child control, it is to be displayed below another controls into a single config element
     public isChild = false;
+    // an initial value is used by app-reset-on-change, when resetting a form control (instead of a "default.json" value)
+    public initialValue: any;
 
     constructor(
         formState: any,
@@ -113,6 +147,7 @@ export abstract class ConfigFormControl extends FormControl {
         private optionalParams: ControlOptionalParams = {}) {
 
         super(formState);
+        this.initialValue = formState;
         // add default values to missing attributes
         this.optionalParams = {
             ...{
@@ -134,11 +169,22 @@ export abstract class ConfigFormControl extends FormControl {
     get childs() { return this.optionalParams.childs; }
     get isDescriptionHtml() { return this.optionalParams.isDescriptionHtml; }
     get resetDependantsOnChange() { return this.optionalParams.resetDependantsOnChange || false; }
+    get title() { return this.optionalParams.title; }
 
     public initValidators() {
         const optionalValidator = this.optionalParams.optional ? [] : [Validators.required];
         this.setValidators(optionalValidator.concat(this.optionalParams.validators));
     }
+
+    // short to make enable/disable more readable
+    public enableIf(condition: boolean) {
+        if (condition) {
+            this.enable();
+        } else {
+            this.disable({ emitEvent: false });
+        }
+    }
+
 }
 
 export class SlideToggleFormControl extends ConfigFormControl {
@@ -199,6 +245,27 @@ export class SelectFormControl extends ConfigFormControl {
         this.syncOptions = newOptions;
         this.filteredOptions = newOptions;
     }
+}
+
+export class OrderedSelectFormControl extends SelectFormControl {
+    public sortDirection: string;
+    public sorts: Set<string> = new Set();
+
+    public addSort(sort: string, event) {
+        event.stopPropagation();
+        this.sorts.add(sort);
+        this.setSortValue();
+    }
+
+    public removeSort(sort: string) {
+        this.sorts.delete(sort);
+        this.setSortValue();
+    }
+
+    private setSortValue() {
+        const sortValue = Array.from(this.sorts).reduce((a, b) => a + ',' + b);
+        this.setValue(sortValue);
+    }
 
 }
 
@@ -237,9 +304,11 @@ export class HuePaletteFormControl extends SelectFormControl {
 export class HiddenFormControl extends ConfigFormControl {
     constructor(
         formState: any,
+        // label can be used to display an error with this label, if it is not valid
+        label?: string,
         optionalParams?: ControlOptionalParams
     ) {
-        super(formState, null, null, optionalParams);
+        super(formState, label, null, optionalParams);
     }
 }
 
@@ -293,7 +362,7 @@ export class ColorFormControl extends ConfigFormControl {
 
 export class ButtonFormControl extends ConfigFormControl {
 
-    //TODO remove formstate
+    // TODO remove formstate
     constructor(
         formState: any,
         label: string,

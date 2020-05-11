@@ -28,6 +28,7 @@
       "@shared-components/*": ["app/shared/components/*"],
       "@shared-directives/*": ["app/shared/directives/*"],
       "@shared-models/*": ["app/shared/models/*"],
+      "@shared-services/*": ["app/shared/services/*"],
       "@utils/*": ["app/utils/*"],
       "@shared/*": ["app/shared/*"],
       "@map-config/*": ["app/modules/map-config/*"],

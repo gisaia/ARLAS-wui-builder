@@ -56,7 +56,6 @@ import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.
 import { AlertOnChangeDirective } from './directives/alert-on-change/alert-on-change.directive';
 import { ColorPickerWrapperComponent } from './components/color-picker-wrapper/color-picker-wrapper.component';
 import { ResetOnChangeDirective } from './directives/reset-on-change/reset-on-change.directive';
-import { PropertySelectorComponent } from './components/property-selector/property-selector.component';
 import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
 import { AutoFocusDirective } from './directives/auto-focus/auto-focus.directive';
 import { ConfigFormGroupComponent } from './components/config-form-group/config-form-group.component';
@@ -70,7 +69,6 @@ import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
     AlertOnChangeDirective,
     ColorPickerWrapperComponent,
     ResetOnChangeDirective,
-    PropertySelectorComponent,
     ObjectvaluesPipe,
     AutoFocusDirective,
     ConfigFormGroupComponent,
@@ -113,7 +111,6 @@ import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
     AlertOnChangeDirective,
     ColorPickerWrapperComponent,
     ResetOnChangeDirective,
-    PropertySelectorComponent,
     ObjectvaluesPipe,
     AutoFocusDirective,
     ConfigFormGroupComponent,
