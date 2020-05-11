@@ -44,8 +44,8 @@
     <mat-form-field>
         <mat-label>{{ typedControl.label | translate}}</mat-label>
         <input type="text" matInput [formControl]="typedControl" [matAutocomplete]="auto"
-            [required]="!typedControl.optional">
-        <button mat-button *ngIf="typedControl.value" matSuffix mat-icon-button (click)="typedControl.setValue('')">
+            [required]="!typedControl.optional" #autocompleteInput>
+        <button mat-button *ngIf="typedControl.value" matSuffix mat-icon-button (click)="autocompleteInput.value = ''">
             <mat-icon>close</mat-icon>
         </button>
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">

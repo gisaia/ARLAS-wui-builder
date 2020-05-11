@@ -59,7 +59,7 @@ import { ResetOnChangeDirective } from './directives/reset-on-change/reset-on-ch
 import { PropertySelectorComponent } from './components/property-selector/property-selector.component';
 import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
 import { AutoFocusDirective } from './directives/auto-focus/auto-focus.directive';
-import { ConfigFormGroupComponent as ConfigFormGroupComponent } from './components/config-form-group/config-form-group.component';
+import { ConfigFormGroupComponent } from './components/config-form-group/config-form-group.component';
 import { ConfigFormControlComponent } from './components/config-form-control/config-form-control.component';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
 
@@ -117,6 +117,7 @@ import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
     ObjectvaluesPipe,
     AutoFocusDirective,
     ConfigFormGroupComponent,
+    ConfigFormControlComponent,
     CommonModule,
     ReactiveFormsModule,
     FormsModule,

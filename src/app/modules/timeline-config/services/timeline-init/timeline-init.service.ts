@@ -20,6 +20,7 @@ import { Injectable } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { Validators } from '@angular/forms';
+import { TimelineGlobalFormBuilderService } from '../timeline-global-form-builder/timeline-global-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,15 +29,12 @@ export class TimelineInitService {
 
   constructor(
     private mainFormService: MainFormService,
-    private formBuilderDefault: FormBuilderWithDefaultService
+    private timelineGlobalFormBuilder: TimelineGlobalFormBuilderService
   ) { }
 
   public initModule() {
-    this.mainFormService.timelineConfig.initGlobalFg(this.formBuilderDefault.group('timeline.global', {
-      timeline: [null, Validators.required],
-      useDetailedTimeline: [false],
-      detailedTimeline: [null, Validators.required]
-    }));
+    this.mainFormService.timelineConfig.initGlobalFg(
+      this.timelineGlobalFormBuilder.build());
   }
 
 }

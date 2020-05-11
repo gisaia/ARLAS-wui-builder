@@ -37,12 +37,16 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit() {
+
     Object.values(this.configFormGroup.controls)
-      .filter(c => c instanceof ConfigFormControl)
-      .forEach((c: ConfigFormControl) => {
+      .filter(c => c instanceof ConfigFormGroup || c instanceof ConfigFormControl)
+      .forEach((c: ConfigFormGroup | ConfigFormControl) => {
         this.watchDependenciesChange(c);
         this.initDependantControls(c);
-        this.markChildControls(c);
+
+        if (c instanceof ConfigFormControl) {
+          this.markChildControls(c);
+        }
       });
   }
 
@@ -53,7 +57,7 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
   /**
    * Watch all other controls that input control depends on to update itself
    */
-  private watchDependenciesChange(control: ConfigFormControl) {
+  private watchDependenciesChange(control: ConfigFormControl | ConfigFormGroup) {
     if (!!control.dependsOn) {
       control.dependsOn().forEach(dep => {
         this.toUnsubscribe.push(dep.valueChanges.subscribe(v => {
@@ -68,7 +72,7 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
   /**
    * Set the list of other controls that depends on input control
    */
-  private initDependantControls(control: ConfigFormControl) {
+  private initDependantControls(control: ConfigFormControl | ConfigFormGroup) {
     control.dependantControls = this.configFormGroup.controlsValues
       .filter(
         (filterControl: ConfigFormControl) => !!filterControl.dependsOn &&

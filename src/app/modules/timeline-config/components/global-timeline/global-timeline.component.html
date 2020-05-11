@@ -1,38 +1,32 @@
 <form [formGroup]="globalFg">
 
+    <app-config-form-control [control]="globalFg.customControls.useDetailedTimeline"></app-config-form-control>
+
     <mat-tab-group mat-align-tabs="center" animationDuration="500ms" mat-stretch-tabs>
         <mat-tab>
 
             <ng-template mat-tab-label>
-                <span [class.tab-error]="timeline.touched && timeline.invalid">
-                    {{'Timeline' | translate}}
+                <span
+                    [class.tab-error]="globalFg.customControls.dataStepGrp.touched && globalFg.customControls.dataStepGrp.invalid">
+                    {{'Data' | translate}}
                 </span>
             </ng-template>
 
-            <app-timeline-form [dateFields]="dateFields" formControlName="timeline"
-                [submit]="submitSubject.asObservable()" [isDetailedTimeline]="false"
-                defaultKey="timeline.global.timeline">
-            </app-timeline-form>
+            <app-config-form-group [configFormGroup]="globalFg.customControls.dataStepGrp"
+                defaultKey="timeline.global.dataStep"></app-config-form-group>
 
         </mat-tab>
         <mat-tab>
 
             <ng-template mat-tab-label>
-                <span [class.tab-error]="detailedTimeline.touched && detailedTimeline.invalid">
-                    {{'Detailed timeline' | translate}}
+                <span
+                    [class.tab-error]="globalFg.customControls.renderStepGrp.touched && globalFg.customControls.renderStepGrp.invalid">
+                    {{'Render' | translate}}
                 </span>
             </ng-template>
 
-            <div class="toggle-detailed-timeline">
-                <mat-slide-toggle formControlName="useDetailedTimeline" appResetOnChange="timeline.global"
-                    [dependants]="[detailedTimeline]">
-                    {{'Use detailed timeline' | translate}}
-                </mat-slide-toggle>
-            </div>
-            <app-timeline-form [dateFields]="dateFields" formControlName="detailedTimeline"
-                [submit]="submitSubject.asObservable()" [hidden]="!useDetailedTimeline.value"
-                [isDetailedTimeline]="true" defaultKey="timeline.global.detailedTimeline">
-            </app-timeline-form>
+            <app-config-form-group [configFormGroup]="globalFg.customControls.renderStepGrp"
+                defaultKey="timeline.global.renderStep"></app-config-form-group>
 
         </mat-tab>
 
