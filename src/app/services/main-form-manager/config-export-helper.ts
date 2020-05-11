@@ -506,7 +506,7 @@ export class ConfigExportHelper {
                 yAxisStartsFromZero: true,
                 chartType: widgetData.renderStep.chartType,
                 chartTitle: widgetData.dataStep.name,
-                chartWidth: 222, // TODO generated from colspan
+                chartWidth: 445, // TODO generated from colspan
                 chartHeight: 100, // TODO generated from colspan
                 customizedCssClass: 'arlas-histogram-analytics', // TODO generated from colspan
                 xAxisPosition: 'bottom',

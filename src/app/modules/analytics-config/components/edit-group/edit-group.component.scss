@@ -28,6 +28,10 @@ $primary-color: mat-color($primary-palette);
         flex-grow: 1;
     }
 
+    .preview-group {
+        max-width: 500px;
+    }
+
     .edit-group-form {
         padding: 20px 60px;
         border: 5px solid $primary-color;

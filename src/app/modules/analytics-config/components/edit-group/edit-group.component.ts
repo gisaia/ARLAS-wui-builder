@@ -99,9 +99,12 @@ export class EditGroupComponent implements OnInit {
           const contrib = this.analyticsInitService.createContributor(
             widgetFg.value.widgetType,
             widgetFg.value.widgetData,
-            this.formGroup.controls.icon.value);
+            this.formGroup.controls.icon.value
+          );
           this.formGroup.controls.preview.setValue([]);
-          setTimeout(() => this.formGroup.controls.preview.setValue([ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1)]), 1);
+          setTimeout(
+            () => this.formGroup.controls.preview.setValue([ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1)]), 1
+          );
           contrib.updateFromCollaboration({
             id: '',
             operation: OperationEnum.add,
