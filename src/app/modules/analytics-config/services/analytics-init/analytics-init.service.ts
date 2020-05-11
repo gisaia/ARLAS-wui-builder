@@ -118,9 +118,9 @@ export class AnalyticsInitService {
     if (!this.arlasStartupService.contributorRegistry.has(contribConfig.identifier)) {
       currentConfig.arlas.web.contributors.push(contribConfig);
     } else {
-      const contributorsWithMe = currentConfig.arlas.web.contributors.filter(config => config.identifier !== contribConfig.identifier);
-      contributorsWithMe.push(contribConfig);
-      currentConfig.arlas.web.contributors = contributorsWithMe;
+      const contributorsWithMetric = currentConfig.arlas.web.contributors.filter(config => config.identifier !== contribConfig.identifier);
+      contributorsWithMetric.push(contribConfig);
+      currentConfig.arlas.web.contributors = contributorsWithMetric;
     }
     this.configService.setConfig(currentConfig);
     const contributor = ContributorBuilder.buildContributor(
