@@ -40,6 +40,7 @@ import {
 } from '@shared-models/config-form';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { Observable } from 'rxjs';
+import { valuesToOptions } from '@utils/tools';
 
 export class MapLayerFormGroup extends ConfigFormGroup {
 
@@ -106,9 +107,10 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
   constructor(
     collections: Array<string>,
-    geometryTypes: Array<SelectOption>,
+    geometryTypes: Array<GEOMETRY_TYPE>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService,
     isAggregated: boolean,
+    colorSources: Array<PROPERTY_SELECTOR_SOURCE>,
     geometryFormControls: { [key: string]: AbstractControl },
     visibilityFormControls: { [key: string]: AbstractControl },
     styleFormControls: { [key: string]: AbstractControl }
@@ -160,7 +162,10 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           'Geometry type',
           '',
           false,
-          geometryTypes
+          valuesToOptions(geometryTypes),
+          {
+            resetDependantsOnChange: true
+          }
         ),
         opacity: new SliderFormControl(
           '',
@@ -174,11 +179,9 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         colorFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.color,
           'color',
-          [
-            PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.generated,
-            PROPERTY_SELECTOR_SOURCE.manual, PROPERTY_SELECTOR_SOURCE.provided
-          ],
-          isAggregated),
+          colorSources,
+          isAggregated,
+          geometryTypes.indexOf(GEOMETRY_TYPE.heatmap) >= 0 ? () => this.geometryType : undefined),
 
         widthFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
@@ -258,12 +261,16 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
     super(
       collections,
       [
-        { label: 'Fill', value: GEOMETRY_TYPE.fill },
-        { label: 'Line', value: GEOMETRY_TYPE.line },
-        { label: 'Circle', value: GEOMETRY_TYPE.circle }
+        GEOMETRY_TYPE.fill,
+        GEOMETRY_TYPE.line,
+        GEOMETRY_TYPE.circle
       ],
       propertySelectorFormBuilder,
       isAggregated,
+      [
+        PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.generated,
+        PROPERTY_SELECTOR_SOURCE.manual, PROPERTY_SELECTOR_SOURCE.provided
+      ],
       {
         geometry: new SelectFormControl(
           '',
@@ -342,12 +349,15 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
     super(
       collections,
       [
-        { label: 'Fill', value: GEOMETRY_TYPE.fill },
-        { label: 'Circle', value: GEOMETRY_TYPE.circle },
-        { label: 'Heatmap', value: GEOMETRY_TYPE.heatmap }
+        GEOMETRY_TYPE.fill,
+        GEOMETRY_TYPE.circle,
+        GEOMETRY_TYPE.heatmap
       ],
       propertySelectorFormBuilder,
       true,
+      [
+        PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
+      ],
       {
         aggGeometry: new SelectFormControl(
           '',

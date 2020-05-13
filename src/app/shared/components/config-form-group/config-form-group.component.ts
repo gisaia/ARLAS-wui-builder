@@ -22,6 +22,7 @@ import { Observable, Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatStepper } from '@angular/material';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-config-form-group',
@@ -113,6 +114,12 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
     Object.values(this.configFormGroup.controls)
       .filter(c => (c instanceof ConfigFormGroup && !!c.tabName))
       .length > 0
+
+  public isFirstControl = (control: AbstractControl) =>
+    Object.values(this.configFormGroup.controls)[0] === control
+
+  public isLastControl = (control: AbstractControl) =>
+    Object.values(this.configFormGroup.controls).pop() === control
 
   /**
    * Propagate the submission to sub config form groups

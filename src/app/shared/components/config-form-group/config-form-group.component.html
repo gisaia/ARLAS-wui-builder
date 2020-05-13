@@ -10,6 +10,12 @@
                         <mat-step label="{{formGroup.tabName | translate}}" [stepControl]="formGroup">
                             <app-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey">
                             </app-config-form-group>
+                            <div>
+                                <button mat-button matStepperPrevious
+                                    *ngIf="!isFirstControl(formGroup)">{{ 'Back' | translate}}</button>
+                                <button mat-button matStepperNext type="button"
+                                    *ngIf="!isLastControl(formGroup)">{{ 'Next' | translate}}</button>
+                            </div>
                         </mat-step>
                     </div>
                 </div>

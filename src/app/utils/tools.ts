@@ -110,3 +110,10 @@ export function moveInFormArray(previousIndex: number, newIndex: number, fa: For
     }
 }
 
+export function valuesToOptions(values: Array<string>) {
+    return values.map(v => ({
+        label: v.charAt(0).toUpperCase() + v.slice(1),
+        value: v
+    }));
+}
+

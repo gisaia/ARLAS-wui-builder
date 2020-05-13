@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import {
-    FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators
+    FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators, FormArray
 } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { HistogramUtils } from 'arlas-d3';
@@ -95,7 +95,22 @@ export class ConfigFormGroup extends FormGroup {
     get onDependencyChange() { return this.optionalParams.onDependencyChange; }
 
     get controlsValues() {
-        return Object.values(this.controls) as Array<ConfigFormControl>;
+        return this.getControls(this);
+    }
+
+    private getControls(control: FormGroup | FormArray): Array<AbstractControl> {
+        return Object.values(control.controls).flatMap(c => {
+            if (c instanceof FormControl) {
+                return [c];
+            } else if (c instanceof FormGroup || c instanceof FormArray) {
+                return [
+                    c,
+                    ...this.getControls(c)
+                ];
+            } else {
+                return [];
+            }
+        });
     }
 
     public withTitle(title: string) {
@@ -176,9 +191,10 @@ export abstract class ConfigFormControl extends FormControl {
         this.setValidators(optionalValidator.concat(this.optionalParams.validators));
     }
 
-    // short to make enable/disable more readable
     public enableIf(condition: boolean) {
-        if (condition) {
+        // prevent a single control to get enabled whereas the parent is disabled
+        // => this would enable the parent again
+        if (condition && this.parent.status !== 'DISABLED') {
             this.enable();
         } else {
             this.disable({ emitEvent: false });

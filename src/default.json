@@ -77,7 +77,6 @@
                     "geometryType": "fill",
                     "opacity": 0.5,
                     "colorFg": {
-                        "propertySource": "Fix",
                         "propertyFix": "#abcdef"
                     },
                     "radiusFg": {
