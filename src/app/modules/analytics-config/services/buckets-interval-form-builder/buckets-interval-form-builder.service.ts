@@ -66,7 +66,8 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
                   control.setValue(aggregationField.type === CollectionReferenceDescriptionProperty.TypeEnum.DATE ? 'time' : 'numeric');
                 }
               });
-            }
+            },
+            optional: true
           }
         ),
         aggregationBucketOrInterval: new SlideToggleFormControl(
