@@ -29,9 +29,9 @@ import { WidgetFormBuilder } from '../widget-form-builder';
 import {
   BucketsIntervalFormBuilderService, BucketsIntervalFormGroup
 } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
-import { MetricFormBuilderService, MetricFormGroup } from '../metric-form-builder/metric-form-builder.service';
-import { CollectionField } from '@services/collection-service/models';
-import { Observable } from 'rxjs';
+import {
+  MetricCollectFormBuilderService, MetricCollectFormGroup
+} from '../metric-collect-form-builder/metric-collect-form-builder.service';
 
 // TODO put in common with timeline
 enum DateFormats {
@@ -43,7 +43,7 @@ export class HistogramFormGroup extends ConfigFormGroup {
 
   constructor(
     bucketsIntervalFg: BucketsIntervalFormGroup,
-    metricFg: MetricFormGroup
+    metricFg: MetricCollectFormGroup
   ) {
     super(
       {
@@ -89,7 +89,7 @@ export class HistogramFormGroup extends ConfigFormGroup {
     dataStep: {
       name: this.get('dataStep').get('name') as InputFormControl,
       aggregation: this.get('dataStep').get('aggregation') as BucketsIntervalFormGroup,
-      metric: this.get('dataStep').get('metric') as MetricFormGroup
+      metric: this.get('dataStep').get('metric') as MetricCollectFormGroup
     },
     renderStep: {
       multiselectable: this.get('renderStep').get('multiselectable') as SlideToggleFormControl,
@@ -114,7 +114,7 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
     protected mainFormService: MainFormService,
     private formBuilderDefault: FormBuilderWithDefaultService,
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
-    private metricBuilderService: MetricFormBuilderService
+    private metricBuilderService: MetricCollectFormBuilderService
   ) {
     super(collectionService, mainFormService);
   }

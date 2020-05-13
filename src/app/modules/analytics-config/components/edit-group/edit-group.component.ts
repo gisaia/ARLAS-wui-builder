@@ -102,7 +102,9 @@ export class EditGroupComponent implements OnInit {
             this.formGroup.controls.icon.value
           );
           this.formGroup.controls.preview.setValue([]);
-          this.formGroup.controls.preview.setValue([ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1)]);
+          // TODO do not use the setTimeout
+          setTimeout(() =>
+            this.formGroup.controls.preview.setValue([ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1)]), 0);
           contrib.updateFromCollaboration({
             id: '',
             operation: OperationEnum.add,

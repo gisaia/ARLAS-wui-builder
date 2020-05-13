@@ -32,7 +32,7 @@ import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
 import { CLUSTER_GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
-import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-form-builder/metric-form-builder.service';
+import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { MapComponentInputConfig, MapComponentInputMapLayersConfig, MapComponentInputLayersSetsConfig } from './models-config';
 import { LayerSourceConfig, getSourceName } from 'arlas-web-contributors';
@@ -449,17 +449,28 @@ export class ConfigExportHelper {
 
                 return contrib;
             }
+            case WIDGET_TYPE.metric: {
+                const contrib = this.getWidgetContributor(widgetData, icon);
+                contrib.type = 'metric';
+                contrib.function = !!widgetData.dataStep.function ? widgetData.dataStep.function : 'm[0]';
+                contrib.metrics = Array.from(widgetData.dataStep.metrics);
+
+                return contrib;
+            }
         }
     }
 
     private static getWidgetContributor(widgetData: any, icon: string) {
         return {
             identifier: this.toSnakeCase(widgetData.dataStep.name),
-            charttype: widgetData.renderStep.chartType,
             name: widgetData.dataStep.name,
             title: widgetData.dataStep.name,
             icon,
-            isOneDimension: false
+            ... !!widgetData.renderStep.chartType ?
+                {
+                    charttype: widgetData.renderStep.chartType,
+                    isOneDimension: false
+                } : {}
         } as ContributorConfig;
     }
 
@@ -493,70 +504,92 @@ export class ConfigExportHelper {
 
     private static getAnalyticsComponent(widgetType: any, widgetData: any): AnalyticComponentConfig {
 
-        const component = {
-            contributorId: this.toSnakeCase(widgetData.dataStep.name),
-            showExportCsv: true,
-            input: {
-                id: this.toSnakeCase(widgetData.dataStep.name),
-                isHistogramSelectable: true,
-                multiselectable: !!widgetData.renderStep.multiselectable,
-                topOffsetRemoveInterval: 40,
-                leftOffsetRemoveInterval: 18,
-                brushHandlesHeightWeight: 0.8,
-                yAxisStartsFromZero: true,
-                chartType: widgetData.renderStep.chartType,
-                chartTitle: widgetData.dataStep.name,
-                chartWidth: 445, // TODO generated from colspan
-                chartHeight: 100, // TODO generated from colspan
-                customizedCssClass: 'arlas-histogram-analytics', // TODO generated from colspan
-                xAxisPosition: 'bottom',
-                descriptionPosition: 'bottom',
-                xTicks: 4,
-                yTicks: 1,
-                xLabels: 4,
-                yLabels: 4,
-                showXTicks: true,
-                showYTicks: true,
-                showXLabels: true,
-                showYLabels: true,
-                showHorizontalLines: widgetData.renderStep.showHorizontalLines,
-                barWeight: 0.8,
-                dataType: widgetData.dataStep.aggregation.aggregationFieldType === CollectionReferenceDescriptionProperty.TypeEnum.DATE ?
-                    'time' : 'numeric'
-            } as AnalyticComponentInputConfig
-        } as AnalyticComponentConfig;
+        if ([WIDGET_TYPE.histogram, WIDGET_TYPE.swimlane].indexOf(widgetType) >= 0) {
+            const component = {
+                contributorId: this.toSnakeCase(widgetData.dataStep.name),
+                showExportCsv: true,
+                input: {
+                    id: this.toSnakeCase(widgetData.dataStep.name),
+                    isHistogramSelectable: true,
+                    multiselectable: !!widgetData.renderStep.multiselectable,
+                    topOffsetRemoveInterval: 40,
+                    leftOffsetRemoveInterval: 18,
+                    brushHandlesHeightWeight: 0.8,
+                    yAxisStartsFromZero: true,
+                    chartType: widgetData.renderStep.chartType,
+                    chartTitle: widgetData.dataStep.name,
+                    chartWidth: 445, // TODO generated from colspan
+                    chartHeight: 100, // TODO generated from colspan
+                    customizedCssClass: 'arlas-histogram-analytics', // TODO generated from colspan
+                    xAxisPosition: 'bottom',
+                    descriptionPosition: 'bottom',
+                    xTicks: 4,
+                    yTicks: 1,
+                    xLabels: 4,
+                    yLabels: 4,
+                    showXTicks: true,
+                    showYTicks: true,
+                    showXLabels: true,
+                    showYLabels: true,
+                    showHorizontalLines: widgetData.renderStep.showHorizontalLines,
+                    barWeight: 0.8,
+                    dataType:
+                        widgetData.dataStep.aggregation.aggregationFieldType === CollectionReferenceDescriptionProperty.TypeEnum.DATE ?
+                            'time' : 'numeric'
+                } as AnalyticComponentInputConfig
+            } as AnalyticComponentConfig;
 
-        switch (widgetType) {
-            case WIDGET_TYPE.histogram: {
-                component.componentType = 'histogram';
-                component.input.ticksDateFormat = widgetData.renderStep.ticksDateFormat;
-                (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve = false;
-                break;
-            }
-            case WIDGET_TYPE.swimlane: {
-                component.componentType = 'swimlane';
-                const swimlaneInput = (component.input as AnalyticComponentSwimlaneInputConfig);
-                swimlaneInput.swimLaneLabelsWidth = 100;
-                swimlaneInput.swimlaneHeight = 20;
-                swimlaneInput.swimlaneMode = widgetData.renderStep.swimlaneMode;
-                swimlaneInput.swimlaneBorderRadius = 3;
-                swimlaneInput.paletteColors = widgetData.renderStep.paletteColors;
-                swimlaneInput.swimlaneRepresentation = !!widgetData.renderStep.swimlaneRepresentation ? 'column' : 'global';
+            switch (widgetType) {
+                case WIDGET_TYPE.histogram: {
+                    component.componentType = 'histogram';
+                    component.input.ticksDateFormat = widgetData.renderStep.ticksDateFormat;
+                    (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve = false;
+                    break;
+                }
+                case WIDGET_TYPE.swimlane: {
+                    component.componentType = 'swimlane';
+                    const swimlaneInput = (component.input as AnalyticComponentSwimlaneInputConfig);
+                    swimlaneInput.swimLaneLabelsWidth = 100;
+                    swimlaneInput.swimlaneHeight = 20;
+                    swimlaneInput.swimlaneMode = widgetData.renderStep.swimlaneMode;
+                    swimlaneInput.swimlaneBorderRadius = 3;
+                    swimlaneInput.paletteColors = widgetData.renderStep.paletteColors;
+                    swimlaneInput.swimlaneRepresentation = !!widgetData.renderStep.swimlaneRepresentation ? 'column' : 'global';
 
-                const swimlaneOptions = {} as AnalyticComponentSwimlaneInputOptionsConfig;
-                swimlaneOptions.nanColors = widgetData.renderStep.NaNColors;
+                    const swimlaneOptions = {} as AnalyticComponentSwimlaneInputOptionsConfig;
+                    swimlaneOptions.nanColors = widgetData.renderStep.NaNColors;
 
-                if (!!widgetData.renderStep.zerosColors) {
-                    swimlaneOptions.zerosColor = widgetData.renderStep.zerosColors;
+                    if (!!widgetData.renderStep.zerosColors) {
+                        swimlaneOptions.zerosColor = widgetData.renderStep.zerosColors;
+                    }
+
+                    swimlaneInput.swimlaneOptions = swimlaneOptions;
+
+                    break;
                 }
 
-                swimlaneInput.swimlaneOptions = swimlaneOptions;
+            }
+            return component;
 
-                break;
+        } else if (widgetType === WIDGET_TYPE.metric) {
+            const component = {
+                contributorId: this.toSnakeCase(widgetData.dataStep.name),
+                componentType: 'metric',
+                input: {
+                    customizedCssClass: 'power',
+                    shortValue: !!widgetData.renderStep.shortValue
+                }
+            } as AnalyticComponentConfig;
+            if (widgetData.renderStep.beforeValue) {
+                component.input.beforeValue = widgetData.renderStep.beforeValue;
+            }
+            if (widgetData.renderStep.afterValue) {
+                component.input.afterValue = widgetData.renderStep.afterValue;
             }
 
+            return component;
         }
-        return component;
+
     }
 
     private static addNumberOfBucketsOrInterval(

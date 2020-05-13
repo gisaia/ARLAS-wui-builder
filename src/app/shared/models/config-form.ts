@@ -21,6 +21,9 @@ import {
 } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { HistogramUtils } from 'arlas-d3';
+import { CollectionField } from '@services/collection-service/models';
+import { METRIC_TYPES } from '@services/collection-service/collection.service';
+import { toKeywordOptionsObs, toNumericOrDateOptionsObs } from '@services/collection-service/tools';
 
 /**
  * These are wrappers above existing FormGroup and FormControl in order to add a custom behavior.
@@ -285,6 +288,75 @@ export class OrderedSelectFormControl extends SelectFormControl {
 
 }
 
+export class MetricFieldSelectFormControl extends ConfigFormControl {
+
+    public METRICS = [
+        METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX, METRIC_TYPES.CARDINALITY
+    ];
+    public metricCtrl = new FormControl('', Validators.required);
+    public fieldCtrl = new FormControl('', [
+        Validators.required,
+        (c) => !!this.autocompleteFilteredFields && this.autocompleteFilteredFields.map(f => f.value).indexOf(c.value) >= 0 ?
+            null : { validateField: { valid: false } }
+    ]);
+    public metricFields: Array<SelectOption>;
+    public autocompleteFilteredFields: Array<SelectOption>;
+
+    constructor(
+        formState: any,
+        label: string,
+        description: string,
+        private collectionFields: Observable<Array<CollectionField>>,
+        optionalParams?: ControlOptionalParams
+    ) {
+        super(formState, label, description, optionalParams);
+        if (!this.optional) {
+            // as the value is a set, if the control is required, an empty set should also be an error
+            this.setValidators([
+                (control) => !!control.value && Array.from(control.value).length > 0 ? null : { required: { valid: false } }
+            ]);
+        }
+        this.metricCtrl.valueChanges.subscribe(v => {
+            this.updateFieldsByMetric();
+            this.fieldCtrl.reset();
+        });
+        this.fieldCtrl.valueChanges.subscribe(v => this.filterAutocomplete(v));
+        this.filterAutocomplete();
+        this.updateFieldsByMetric();
+        this.setValue(new Set());
+    }
+
+    public updateFieldsByMetric() {
+        const fieldObs = this.metricCtrl.value === METRIC_TYPES.CARDINALITY ?
+            toKeywordOptionsObs(this.collectionFields) : toNumericOrDateOptionsObs(this.collectionFields);
+        fieldObs.subscribe(f => {
+            this.metricFields = f;
+            this.filterAutocomplete();
+        });
+    }
+
+    public filterAutocomplete(value?: string) {
+        if (!!value) {
+            this.autocompleteFilteredFields = this.metricFields.filter(o => o.label.indexOf(value) >= 0);
+        } else {
+            this.autocompleteFilteredFields = this.metricFields;
+        }
+    }
+
+    public addMetric() {
+        this.getValueAsSet().add({ field: this.fieldCtrl.value, metric: String(this.metricCtrl.value).toLowerCase() });
+        this.updateValueAndValidity();
+        this.fieldCtrl.reset();
+    }
+
+    public removeMetric(metric: { metric: string, field: string }) {
+        this.getValueAsSet().delete(metric);
+        this.updateValueAndValidity();
+    }
+
+    public getValueAsSet = () => (this.value as Set<{ metric: string, field: string }>);
+}
+
 export class HuePaletteFormControl extends SelectFormControl {
     constructor(
         formState: any,
@@ -378,7 +450,7 @@ export class ColorFormControl extends ConfigFormControl {
 
 export class ButtonFormControl extends ConfigFormControl {
 
-    // TODO remove formstate
+    // TODO remove formstate?
     constructor(
         formState: any,
         label: string,
@@ -388,4 +460,7 @@ export class ButtonFormControl extends ConfigFormControl {
         super(formState, label, description, optionalParams || { optional: true });
     }
 
+}
+
+export class TextareaFormControl extends ConfigFormControl {
 }

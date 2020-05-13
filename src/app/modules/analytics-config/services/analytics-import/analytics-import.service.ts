@@ -23,15 +23,16 @@ import {
   JSONPATH_COUNT
 } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { FormArray, FormGroup, FormControl } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { AnalyticsInitService } from '../analytics-init/analytics-init.service';
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { HistogramFormBuilderService } from '../histogram-form-builder/histogram-form-builder.service';
 import { SwimlaneFormBuilderService } from '../swimlane-form-builder/swimlane-form-builder.service';
-import { DEFAULT_METRIC_VALUE, MetricControls } from '../metric-form-builder/metric-form-builder.service';
+import { DEFAULT_METRIC_VALUE, MetricCollectControls } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { BucketsIntervalControls } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { ImportElement, importElements } from '@services/main-form-manager/tools';
+import { MetricFormBuilderService } from '../metric-form-builder/metric-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +44,8 @@ export class AnalyticsImportService {
     private defaultValuesService: DefaultValuesService,
     private analyticsInitService: AnalyticsInitService,
     private histogramFormBuilder: HistogramFormBuilderService,
-    private swimlaneFormBuilder: SwimlaneFormBuilderService
+    private swimlaneFormBuilder: SwimlaneFormBuilderService,
+    private metricFormBuilder: MetricFormBuilderService
   ) { }
 
   public doImport(config: Config) {
@@ -62,12 +64,13 @@ export class AnalyticsImportService {
 
         const isHistogram = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.histogram;
         const isSwimlane = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.swimlane;
+        const isMetric = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.metric;
 
         newGroup.patchValue({
           icon: analyticGroup.icon,
           title: analyticGroup.title,
           contentType:
-            isHistogram ? [WIDGET_TYPE.histogram] : isSwimlane ? [WIDGET_TYPE.swimlane] : ''
+            isHistogram ? [WIDGET_TYPE.histogram] : isSwimlane ? [WIDGET_TYPE.swimlane] : isMetric ? [WIDGET_TYPE.metric] : ''
         });
 
         // TODO manage a list of widgets
@@ -76,7 +79,8 @@ export class AnalyticsImportService {
         const contributor = config.arlas.web.contributors.find(contrib => contrib.identifier === contributorId);
 
         const widgetData = isHistogram ? this.getHistogramWidgetData(analyticGroup.components[0], contributor) :
-          isSwimlane ? this.getSwimlaneWidgetData(analyticGroup.components[0], contributor) : new FormGroup({});
+          isSwimlane ? this.getSwimlaneWidgetData(analyticGroup.components[0], contributor) :
+            isMetric ? this.getMetricWidgetData(analyticGroup.components[0], contributor) : new FormGroup({});
         widget.setControl('widgetData', widgetData);
 
         (newGroup.controls.content as FormArray).push(widget);
@@ -194,6 +198,41 @@ export class AnalyticsImportService {
     return widgetData;
   }
 
+  private getMetricWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
+    const widgetData = this.metricFormBuilder.build();
+    const dataStepFg = widgetData.customControls.dataStep;
+    const renderStep = widgetData.customControls.renderStep;
+
+    importElements([
+      {
+        value: contributor.title,
+        control: dataStepFg.name
+      },
+      {
+        value: !!contributor.function && contributor.function === 'm[0]' ? '' : contributor.function,
+        control: dataStepFg.function
+      },
+      {
+        value: contributor.metrics,
+        control: dataStepFg.metrics
+      },
+      {
+        value: component.input.shortValue,
+        control: renderStep.shortValue
+      },
+      {
+        value: component.input.beforeValue,
+        control: renderStep.beforeValue
+      },
+      {
+        value: component.input.afterValue,
+        control: renderStep.afterValue
+      },
+
+    ]);
+    return widgetData;
+  }
+
   private getAggregationImportElements(
     contributor: ContributorConfig,
     aggregationControls: BucketsIntervalControls,
@@ -228,7 +267,7 @@ export class AnalyticsImportService {
 
   private getMetricImportElements(
     contribAggregationModel: AggregationModelConfig,
-    metricControls: MetricControls,
+    metricControls: MetricCollectControls,
     jsonpath: string) {
 
     return [

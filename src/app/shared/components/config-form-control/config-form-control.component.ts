@@ -19,7 +19,8 @@ under the License.
 import { Component, OnInit, Input } from '@angular/core';
 import {
   ConfigFormControl, SlideToggleFormControl, SliderFormControl, SelectFormControl, InputFormControl,
-  ColorFormControl, HuePaletteFormControl, HiddenFormControl, IconFormControl, ButtonFormControl, OrderedSelectFormControl
+  ColorFormControl, HuePaletteFormControl, HiddenFormControl, IconFormControl, ButtonFormControl,
+  OrderedSelectFormControl, MetricFieldSelectFormControl as MetricFieldListFormControl, TextareaFormControl
 } from '@shared-models/config-form';
 
 @Component({
@@ -83,6 +84,15 @@ export class ConfigFormControlComponent implements OnInit {
 
   public isButton(): ButtonFormControl | null {
     return Object.getPrototypeOf(this.control) === ButtonFormControl.prototype ? this.control as ButtonFormControl : null;
+  }
+
+  public isMetricFieldList(): MetricFieldListFormControl | null {
+    return Object.getPrototypeOf(this.control) === MetricFieldListFormControl.prototype ?
+      this.control as MetricFieldListFormControl : null;
+  }
+
+  public isTextarea(): TextareaFormControl | null {
+    return Object.getPrototypeOf(this.control) === TextareaFormControl.prototype ? this.control as TextareaFormControl : null;
   }
 
 }
