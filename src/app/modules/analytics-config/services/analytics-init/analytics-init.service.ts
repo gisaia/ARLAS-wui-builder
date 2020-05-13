@@ -123,8 +123,11 @@ export class AnalyticsInitService {
       currentConfig.arlas.web.contributors = contributorsWithMetric;
     }
     this.configService.setConfig(currentConfig);
+
+    // TODO do something more robust
+    const contribType = [WIDGET_TYPE.powerbars.toString(), WIDGET_TYPE.donut.toString()].indexOf(widgetType) >= 0 ? 'tree' : widgetType;
     const contributor = ContributorBuilder.buildContributor(
-      WIDGET_TYPE[widgetType],
+      contribType,
       contribConfig.identifier,
       this.configService,
       this.collaborativesearchService);

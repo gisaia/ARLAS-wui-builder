@@ -33,6 +33,8 @@ import { BucketsIntervalControls } from '../buckets-interval-form-builder/bucket
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { ImportElement, importElements } from '@services/main-form-manager/tools';
 import { MetricFormBuilderService } from '../metric-form-builder/metric-form-builder.service';
+import { PowerbarFormBuilderService } from '../powerbar-form-builder/powerbar-form-builder.service';
+import { DonutFormBuilderService } from '../donut-form-builder/donut-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +47,9 @@ export class AnalyticsImportService {
     private analyticsInitService: AnalyticsInitService,
     private histogramFormBuilder: HistogramFormBuilderService,
     private swimlaneFormBuilder: SwimlaneFormBuilderService,
-    private metricFormBuilder: MetricFormBuilderService
+    private metricFormBuilder: MetricFormBuilderService,
+    private powerbarFormBuilder: PowerbarFormBuilderService,
+    private donutFormBuilder: DonutFormBuilderService,
   ) { }
 
   public doImport(config: Config) {
@@ -65,12 +69,16 @@ export class AnalyticsImportService {
         const isHistogram = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.histogram;
         const isSwimlane = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.swimlane;
         const isMetric = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.metric;
+        const isPowerbar = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.powerbars;
+        const isDonut = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.donut;
 
         newGroup.patchValue({
           icon: analyticGroup.icon,
           title: analyticGroup.title,
           contentType:
-            isHistogram ? [WIDGET_TYPE.histogram] : isSwimlane ? [WIDGET_TYPE.swimlane] : isMetric ? [WIDGET_TYPE.metric] : ''
+            isHistogram ? [WIDGET_TYPE.histogram] : isSwimlane ? [WIDGET_TYPE.swimlane] : isMetric ? [WIDGET_TYPE.metric] :
+              isPowerbar ? [WIDGET_TYPE.powerbars] : isDonut ? [WIDGET_TYPE.donut]
+                : ''
         });
 
         // TODO manage a list of widgets
@@ -80,7 +88,10 @@ export class AnalyticsImportService {
 
         const widgetData = isHistogram ? this.getHistogramWidgetData(analyticGroup.components[0], contributor) :
           isSwimlane ? this.getSwimlaneWidgetData(analyticGroup.components[0], contributor) :
-            isMetric ? this.getMetricWidgetData(analyticGroup.components[0], contributor) : new FormGroup({});
+            isMetric ? this.getMetricWidgetData(analyticGroup.components[0], contributor) :
+              isPowerbar ? this.getPowerbarWidgetData(analyticGroup.components[0], contributor) :
+                isDonut ? this.getDonutWidgetData(analyticGroup.components[0], contributor) :
+                  new FormGroup({});
         widget.setControl('widgetData', widgetData);
 
         (newGroup.controls.content as FormArray).push(widget);
@@ -96,42 +107,42 @@ export class AnalyticsImportService {
 
   private getHistogramWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
     const widgetData = this.histogramFormBuilder.build();
-    const dataStepFg = widgetData.customControls.dataStep;
-    const renderStepFg = widgetData.customControls.renderStep;
+    const dataStep = widgetData.customControls.dataStep;
+    const renderStep = widgetData.customControls.renderStep;
 
     const contribAggregationModel = contributor.aggregationmodels[0];
 
     importElements([
       {
         value: component.input.chartTitle,
-        control: dataStepFg.name
+        control: dataStep.name
       },
       ...this.getAggregationImportElements(
         contributor,
-        dataStepFg.aggregation.customControls,
+        dataStep.aggregation.customControls,
         contribAggregationModel,
         component.input.dataType),
       ,
       ...this.getMetricImportElements(
         contribAggregationModel,
-        dataStepFg.metric.customControls,
+        dataStep.metric.customControls,
         contributor.jsonpath),
       ,
       {
         value: component.input.multiselectable,
-        control: renderStepFg.multiselectable
+        control: renderStep.multiselectable
       },
       {
         value: component.input.chartType,
-        control: renderStepFg.chartType
+        control: renderStep.chartType
       },
       {
         value: component.input.showHorizontalLines,
-        control: renderStepFg.showHorizontalLines
+        control: renderStep.showHorizontalLines
       },
       {
         value: component.input.ticksDateFormat,
-        control: renderStepFg.ticksDateFormat
+        control: renderStep.ticksDateFormat
       }
     ]);
 
@@ -140,9 +151,9 @@ export class AnalyticsImportService {
 
   private getSwimlaneWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
     const widgetData = this.swimlaneFormBuilder.build();
-    const dataStepFg = widgetData.customControls.dataStep;
+    const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
-    const termeAggregationFg = dataStepFg.termAggregation;
+    const termeAggregationFg = dataStep.termAggregation;
     const dateAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'datehistogram');
     const termAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'term');
     const swimlaneInput = component.input as AnalyticComponentSwimlaneInputConfig;
@@ -150,16 +161,16 @@ export class AnalyticsImportService {
     importElements([
       {
         value: component.input.chartTitle,
-        control: dataStepFg.name
+        control: dataStep.name
       },
       ...this.getAggregationImportElements(
         contributor,
-        dataStepFg.dateAggregation.customControls,
+        dataStep.dateAggregation.customControls,
         dateAggregationModel,
         component.input.dataType),
       ...this.getMetricImportElements(
         dateAggregationModel,
-        dataStepFg.metric.customControls,
+        dataStep.metric.customControls,
         contributor.jsonpath),
       {
         value: termAggregationModel.field,
@@ -200,21 +211,21 @@ export class AnalyticsImportService {
 
   private getMetricWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
     const widgetData = this.metricFormBuilder.build();
-    const dataStepFg = widgetData.customControls.dataStep;
+    const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
 
     importElements([
       {
         value: contributor.title,
-        control: dataStepFg.name
+        control: dataStep.name
       },
       {
         value: !!contributor.function && contributor.function === 'm[0]' ? '' : contributor.function,
-        control: dataStepFg.function
+        control: dataStep.function
       },
       {
         value: contributor.metrics,
-        control: dataStepFg.metrics
+        control: dataStep.metrics
       },
       {
         value: component.input.shortValue,
@@ -229,6 +240,66 @@ export class AnalyticsImportService {
         control: renderStep.afterValue
       },
 
+    ]);
+    return widgetData;
+  }
+
+  private getPowerbarWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
+    const widgetData = this.powerbarFormBuilder.build();
+    const dataStep = widgetData.customControls.dataStep;
+    const renderStep = widgetData.customControls.renderStep;
+
+    importElements([
+      {
+        value: contributor.title,
+        control: dataStep.name
+      },
+      {
+        value: contributor.aggregationmodels[0].field,
+        control: dataStep.aggregationField
+      },
+      {
+        value: contributor.aggregationmodels[0].size,
+        control: dataStep.aggregationSize
+      },
+      {
+        value: component.input.chartTitle,
+        control: renderStep.powerbarTitle
+      },
+      {
+        value: component.input.displayFilter,
+        control: renderStep.displayFilter
+      },
+      {
+        value: component.input.useColorService,
+        control: renderStep.useColorService
+      }
+    ]);
+    return widgetData;
+  }
+
+  private getDonutWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
+    const widgetData = this.donutFormBuilder.build();
+    const dataStep = widgetData.customControls.dataStep;
+    const renderStep = widgetData.customControls.renderStep;
+
+    importElements([
+      {
+        value: contributor.title,
+        control: dataStep.name
+      },
+      {
+        value: contributor.aggregationmodels,
+        control: dataStep.aggregationmodels
+      },
+      {
+        value: component.input.opacity,
+        control: renderStep.opacity
+      },
+      {
+        value: component.input.multiselectable,
+        control: renderStep.multiselectable
+      }
     ]);
     return widgetData;
   }

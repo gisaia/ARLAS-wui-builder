@@ -19,7 +19,7 @@ under the License.
 export enum WIDGET_TYPE {
     histogram = 'histogram',
     donut = 'donut',
-    powerbar = 'powerbar',
+    powerbars = 'powerbars',
     resultlist = 'resultlist',
     metric = 'metric',
     swimlane = 'swimlane'

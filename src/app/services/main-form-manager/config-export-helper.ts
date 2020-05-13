@@ -44,6 +44,7 @@ export enum EXPORT_TYPE {
     persistence = 'persistence'
 }
 
+// TODO use customControls in the class instead of untyped values
 export class ConfigExportHelper {
 
     public static process(
@@ -52,7 +53,9 @@ export class ConfigExportHelper {
         mapConfigLayers: FormArray,
         searchConfigGlobal: SearchGlobalFormGroup,
         timelineConfigGlobal: TimelineGlobalFormGroup,
-        analyticsConfigList: FormArray): any {
+        analyticsConfigList: FormArray,
+        keysToColorList: FormArray,
+    ): any {
 
         const chipssearch: ChipSearchConfig = {
             name: searchConfigGlobal.customControls.name.value,
@@ -67,7 +70,10 @@ export class ConfigExportHelper {
                         timeline: this.getTimelineComponent(timelineConfigGlobal, false),
                         mapgl: this.getMapComponent(mapConfigGlobal, mapConfigLayers)
                     },
-                    analytics: []
+                    analytics: [],
+                    colorGenerator: {
+                        keysToColors: (keysToColorList.value as Array<{ color: string, keyword: string }>).map(ck => [ck.keyword, ck.color])
+                    }
                 },
                 server: {
                     url: startingConfig.value.serverUrl,
@@ -462,6 +468,27 @@ export class ConfigExportHelper {
 
                 return contrib;
             }
+            case WIDGET_TYPE.powerbars: {
+                const contrib = this.getWidgetContributor(widgetData, icon);
+                contrib.type = 'tree';
+                contrib.aggregationmodels = [
+                    {
+                        type: 'term',
+                        field: widgetData.dataStep.aggregationField,
+                        size: widgetData.dataStep.aggregationSize
+                    }
+                ];
+                return contrib;
+            }
+            case WIDGET_TYPE.donut: {
+                const contrib = this.getWidgetContributor(widgetData, icon);
+                contrib.type = 'tree';
+                contrib.aggregationmodels = Array.from(widgetData.dataStep.aggregationmodels).map((agg: any) => {
+                    agg.type = 'term';
+                    return agg;
+                });
+                return contrib;
+            }
         }
     }
 
@@ -546,13 +573,13 @@ export class ConfigExportHelper {
 
             switch (widgetType) {
                 case WIDGET_TYPE.histogram: {
-                    component.componentType = 'histogram';
+                    component.componentType = WIDGET_TYPE.histogram;
                     component.input.ticksDateFormat = widgetData.renderStep.ticksDateFormat;
                     (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve = false;
                     break;
                 }
                 case WIDGET_TYPE.swimlane: {
-                    component.componentType = 'swimlane';
+                    component.componentType = WIDGET_TYPE.swimlane;
                     const swimlaneInput = (component.input as AnalyticComponentSwimlaneInputConfig);
                     swimlaneInput.swimLaneLabelsWidth = 100;
                     swimlaneInput.swimlaneHeight = 20;
@@ -579,7 +606,7 @@ export class ConfigExportHelper {
         } else if (widgetType === WIDGET_TYPE.metric) {
             const component = {
                 contributorId: this.toSnakeCase(widgetData.dataStep.name),
-                componentType: 'metric',
+                componentType: WIDGET_TYPE.metric,
                 input: {
                     customizedCssClass: 'power',
                     shortValue: !!widgetData.renderStep.shortValue
@@ -591,6 +618,33 @@ export class ConfigExportHelper {
             if (widgetData.renderStep.afterValue) {
                 component.input.afterValue = widgetData.renderStep.afterValue;
             }
+
+            return component;
+
+        } else if (widgetType === WIDGET_TYPE.powerbars) {
+            const component = {
+                contributorId: this.toSnakeCase(widgetData.dataStep.name),
+                componentType: WIDGET_TYPE.powerbars,
+                input: {
+                    chartTitle: widgetData.renderStep.powerbarTitle,
+                    displayFilter: !!widgetData.renderStep.displayFilter,
+                    useColorService: !!widgetData.renderStep.useColorService
+                }
+            } as AnalyticComponentConfig;
+
+            return component;
+
+        } else if (widgetType === WIDGET_TYPE.donut) {
+            const component = {
+                contributorId: this.toSnakeCase(widgetData.dataStep.name),
+                componentType: WIDGET_TYPE.donut,
+                input: {
+                    id: this.toSnakeCase(widgetData.dataStep.name),
+                    customizedCssClass: 'arlas-donuts-analytics',
+                    multiselectable: !!widgetData.renderStep.multiselectable,
+                    opacity: widgetData.renderStep.opacity
+                }
+            } as AnalyticComponentConfig;
 
             return component;
         }

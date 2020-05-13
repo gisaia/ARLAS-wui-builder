@@ -32,7 +32,9 @@ enum MAIN_FORM_KEYS {
   TIMELINE_CONFIG = 'TimelineConfig',
   TIMELINE_CONFIG_GLOBAL = 'TimelineConfigGlobal',
   ANALYTICS_CONFIG = 'AnalyticsConfig',
-  ANALYTICS_CONFIG_LIST = 'AnalyticsConfigList'
+  ANALYTICS_CONFIG_LIST = 'AnalyticsConfigList',
+  COMMON_CONFIG = 'CommonConfig',
+  COMMON_CONFIG_KEYS_TO_COLOR = 'CommonConfigKeysToColor',
 }
 
 @Injectable({
@@ -45,9 +47,9 @@ export class MainFormService {
     [MAIN_FORM_KEYS.MAP_CONFIG]: new FormGroup({}),
     [MAIN_FORM_KEYS.SEARCH_CONFIG]: new FormGroup({}),
     [MAIN_FORM_KEYS.TIMELINE_CONFIG]: new FormGroup({}),
-    [MAIN_FORM_KEYS.ANALYTICS_CONFIG]: new FormGroup({})
+    [MAIN_FORM_KEYS.ANALYTICS_CONFIG]: new FormGroup({}),
+    [MAIN_FORM_KEYS.COMMON_CONFIG]: new FormGroup({}),
   });
-
 
   constructor() {
   }
@@ -101,8 +103,16 @@ export class MainFormService {
 
   }(this.mainForm.get(MAIN_FORM_KEYS.ANALYTICS_CONFIG) as FormGroup);
 
-  // OTHER METHODS ...
+  // COMMON CONFIG
+  public commonConfig = new class {
+    constructor(public control: FormGroup) { }
 
+    public initKeysToColorFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.COMMON_CONFIG_KEYS_TO_COLOR, fa);
+    public getKeysToColorFa = () => this.control.get(MAIN_FORM_KEYS.COMMON_CONFIG_KEYS_TO_COLOR) as FormArray;
+
+  }(this.mainForm.get(MAIN_FORM_KEYS.COMMON_CONFIG) as FormGroup);
+
+  // OTHER METHODS ...
   public resetMainForm() {
     // keep the existing instances of the main config FormGroup as all *config
     // (mapConfig, analyticsConfig...) keep the initial related instance
@@ -111,7 +121,8 @@ export class MainFormService {
       this.mainForm.get(MAIN_FORM_KEYS.MAP_CONFIG),
       this.mainForm.get(MAIN_FORM_KEYS.SEARCH_CONFIG),
       this.mainForm.get(MAIN_FORM_KEYS.TIMELINE_CONFIG),
-      this.mainForm.get(MAIN_FORM_KEYS.ANALYTICS_CONFIG)
+      this.mainForm.get(MAIN_FORM_KEYS.ANALYTICS_CONFIG),
+      this.mainForm.get(MAIN_FORM_KEYS.COMMON_CONFIG),
     ].forEach((sf: FormGroup) => {
       Object.keys(sf.controls).forEach(c => sf.removeControl(c));
     });

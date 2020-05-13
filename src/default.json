@@ -145,7 +145,7 @@
         }
     },
     "config": {
-        "aggregationTermSize": 20,
+        "aggregationTermSize": 10,
         "palettes": [
             [
                 "#065143",

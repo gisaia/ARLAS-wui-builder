@@ -52,7 +52,8 @@
             [appAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? 'Warning, changing this field\'s value will reset some other fields' : null"
             [appResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
-        <button mat-button *ngIf="typedControl.value" matSuffix mat-icon-button (click)="autocompleteInput.value = ''">
+        <button mat-button *ngIf="typedControl.value" matSuffix mat-icon-button
+            (click)="typedControl.filteredOptions=typedControl.syncOptions;autocompleteInput.value = '';typedControl.setValue('')">
             <mat-icon>close</mat-icon>
         </button>
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
@@ -95,7 +96,7 @@
     </mat-error>
 </div>
 
-<div *ngIf="isMetricFieldList(); let typedControl" class="metric-field-form-control">
+<div *ngIf="isMetricWithFieldList(); let typedControl" class="metric-field-form-control">
     <div>
         <div class="action-container">
             <div>
@@ -141,6 +142,50 @@
     </mat-error>
 </div>
 
+<div *ngIf="isFieldWithSizeList(); let typedControl" class="metric-field-form-control">
+    <div>
+        <div class="action-container">
+            <div>
+                <mat-label>{{ 'Size' | translate}}</mat-label>
+                <mat-slider thumbLabel [formControl]="typedControl.sizeCtrl" [min]="0" [max]="100" [step]="1">
+                </mat-slider>
+            </div>
+            <div class="field-add-container">
+                <div class="field-container">
+                    <mat-form-field>
+                        <mat-label>{{'Field' | translate}}</mat-label>
+                        <input type="text" matInput [matAutocomplete]="auto" #autocompleteInput
+                            [formControl]="typedControl.fieldCtrl">
+
+                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                            <mat-option *ngFor="let opt of typedControl.autocompleteFilteredFields" [value]="opt.value">
+                                {{opt.label | translate}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="add-container">
+                    <button type="button" mat-stroked-button
+                        [disabled]="typedControl.sizeCtrl.invalid || typedControl.fieldCtrl.invalid"
+                        (click)="typedControl.add()">{{ 'Add' | translate}}</button>
+                </div>
+            </div>
+        </div>
+        <div class="chips-container">
+            <mat-chip-list #chipSortList>
+                <mat-chip *ngFor="let opt of typedControl.value" [selectable]="false" [removable]="true"
+                    (removed)="typedControl.remove(opt)">
+                    {{opt.field}} ({{opt.size}})
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+            </mat-chip-list>
+        </div>
+    </div>
+    <mat-error *ngIf="typedControl.touched && typedControl.invalid && typedControl?.errors?.required">
+        {{ 'At least one ' | translate}} {{typedControl.label | lowercase | translate}} {{ 'is required' | translate}}
+    </mat-error>
+</div>
+
 <div *ngIf="isInput(); let typedControl">
     <mat-form-field>
         <mat-label>{{ typedControl.label | translate}}</mat-label>
@@ -172,10 +217,13 @@
     </span>
 </div>
 
-<div *ngIf="isButton(); let typedControl">
-    <button type="button" mat-raised-button color="primary" (click)="typedControl.callback(typedControl)">
+<div *ngIf="isButton(); let typedControl" class="button-form-control">
+    <button type="button" mat-raised-button color="primary" (click)="typedControl.callback(typedControl)"
+        [disabled]="typedControl.disabledButton">
         {{typedControl.label | translate}}
     </button>
+    <div *ngIf="typedControl.disabledButton" class="disabled-button-message">
+        {{typedControl.disabledButtonMessage | translate}}</div>
 </div>
 
 <div *ngIf="isTextarea(); let typedControl" class="textarea-form-control">

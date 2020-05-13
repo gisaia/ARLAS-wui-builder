@@ -1,23 +1,21 @@
-import { AnalyticsImportService } from './analytics-import.service';
+import { DonutFormBuilderService } from './donut-form-builder.service';
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasStartupService, ArlasCollaborativesearchService, ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
-describe('AnalyticsImportService', () => {
-  let spectator: SpectatorService<AnalyticsImportService>;
+describe('DonutFormBuilderService', () => {
+  let spectator: SpectatorService<DonutFormBuilderService>;
 
   const createService = createServiceFactory({
-    service: AnalyticsImportService,
+    service: DonutFormBuilderService,
     providers: [
       mockProvider(CollectionService),
-      mockProvider(ArlasStartupService),
-      mockProvider(ArlasCollaborativesearchService),
       mockProvider(ArlasColorGeneratorLoader),
     ]
   });
 
   beforeEach(() => {
-    spectator = createService();
+    spectator = createService({});
   });
 
   it('should create', () => {
