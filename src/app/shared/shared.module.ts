@@ -61,6 +61,7 @@ import { AutoFocusDirective } from './directives/auto-focus/auto-focus.directive
 import { ConfigFormGroupComponent } from './components/config-form-group/config-form-group.component';
 import { ConfigFormControlComponent } from './components/config-form-control/config-form-control.component';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
+import { MatPaginatorModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -103,7 +104,8 @@ import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
     MatSidenavModule,
     MatBadgeModule,
     MatListModule,
-    HttpClientModule
+    HttpClientModule,
+    MatPaginatorModule
   ],
   exports: [
     ConfigElementComponent,
@@ -141,7 +143,8 @@ import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
     MatSidenavModule,
     MatBadgeModule,
     MatListModule,
-    HttpClientModule
+    HttpClientModule,
+    MatPaginatorModule
   ]
 })
 export class SharedModule { }

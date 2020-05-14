@@ -19,6 +19,7 @@ under the License.
 @import "variables.scss";
 
 $accent-color: mat-color($accent-palette, 300);
+$primary-color: mat-color($primary-palette, 400);
 
 .landing-container {
   display: flex;
@@ -51,6 +52,50 @@ $accent-color: mat-color($accent-palette, 300);
 
     &:hover {
       background: rgba($accent-color, 0.5);
+    }
+  }
+}
+
+.small-blocs {
+  margin: 20px;
+
+  .bloc {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    margin: 10px;
+    padding: 22px 45px;
+    width: 160px;
+    background: $accent-color;
+    color: white;
+    font-weight: 200;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 10px;
+
+    span {
+      text-align: center;
+    }
+
+    mat-icon {
+      font-size: 40px;
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    &:hover {
+      background: rgba($accent-color, 0.5);
+    }
+  }
+
+  .bloc-disabled{
+    cursor: not-allowed;
+    background: lightgray;
+
+    &:hover{
+      background: lightgray;
     }
   }
 }
@@ -88,7 +133,23 @@ $accent-color: mat-color($accent-palette, 300);
   }
 }
 
+.load-content{
+  width: 40vw;
+  table{
+    width: 100% !important;
+  }
+}
+
 mat-dialog-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.config-icons-action{
+  cursor: pointer;
+}
+
+.config-icons-action:hover{
+  color: $primary-color;
 }

@@ -23,9 +23,11 @@ import { Observable } from 'rxjs/internal/Observable';
 import { from } from 'rxjs/internal/observable/from';
 import { Configuration, PersistenceApi, Data, DataResource } from 'arlas-persistence-api';
 import { EnvService } from '@services/env/env.service';
+import { map, mergeMap, flatMap } from 'rxjs/operators';
 
 // tslint:disable-next-line: ban-types
 export const GET_OPTIONS = new InjectionToken<(Function)>('get_options');
+export const OBJECT_TYPE = 'config.json';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +35,10 @@ export const GET_OPTIONS = new InjectionToken<(Function)>('get_options');
 export class PersistenceService {
 
   private persistenceApi: PersistenceApi;
+  public isAvailable = false;
+
+
+
   constructor(
     private envService: EnvService,
     @Inject(GET_OPTIONS) private getOptions
@@ -41,6 +47,7 @@ export class PersistenceService {
     if (this.envService.persistenceUrl !== '') {
       const baseUrl = this.envService.persistenceUrl;
       this.persistenceApi = new PersistenceApi(configuration, baseUrl, portableFetch);
+      this.isAvailable = true;
     }
   }
 
@@ -49,20 +56,28 @@ export class PersistenceService {
     return from(this.persistenceApi._delete(id, false, this.getOptions()));
   }
 
-  public create(type: string, value: string): Observable<Data> {
-    return from(this.persistenceApi.create(type, value, false, this.getOptions()));
+  public create(value: string): Observable<Data> {
+    return from(this.persistenceApi.create(OBJECT_TYPE, value, false, this.getOptions()));
 
   }
   public get(id: string): Observable<Data> {
     return from(this.persistenceApi.get(id, false, this.getOptions()));
 
   }
-  public list(type: string, size: number, page: number, order: string): Observable<DataResource> {
-    return from(this.persistenceApi.list(type, size, page, order, false, this.getOptions()));
+  public list(size: number, page: number, order: string): Observable<DataResource> {
+    return from(this.persistenceApi.list(OBJECT_TYPE, size, page, order, false, this.getOptions()));
 
   }
   public update(id: string, value: string): Observable<Data> {
     return from(this.persistenceApi.update(id, value, false, this.getOptions()));
+  }
+
+  public duplicate(id: string): Observable<Data> {
+    return this.get(id).pipe(
+      map(data => data.doc_value),
+      map(docValue => this.create(docValue)),
+      flatMap(a => a)
+    );
   }
 
 }

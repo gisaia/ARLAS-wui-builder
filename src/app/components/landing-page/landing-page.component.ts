@@ -32,11 +32,21 @@ import { StartupService } from '../../services/startup/startup.service';
 import { Config } from '@services/main-form-manager/models-config';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MapConfig } from '@services/main-form-manager/models-map-config';
+import { PersistenceService } from '@services/persistence/persistence.service';
+import { DataResource } from 'arlas-persistence-api';
+import { PageEvent } from '@angular/material/paginator';
+import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 
 enum InitialChoice {
   none = 0,
   setup = 1,
   load = 2
+}
+
+enum ImportType {
+  none = 0,
+  file = 1,
+  persistence = 2
 }
 
 @Component({
@@ -47,9 +57,17 @@ export class LandingPageDialogComponent implements OnInit {
   @Output() public startEvent: Subject<boolean> = new Subject<boolean>();
 
   public configChoice = InitialChoice.none;
+  public importType = ImportType.none;
   public isServerReady = false;
   public availablesCollections: string[];
   public InitialChoice = InitialChoice;
+  public ImportType = ImportType;
+
+  public configurations = [];
+  public displayedColumns: string[] = ['id', 'creation', 'detail'];
+  public configurationsLength = 0;
+  public configPageNumber = 0;
+  public configPageSize = 5;
 
   constructor(
     public dialogRef: MatDialogRef<LandingPageDialogComponent>,
@@ -61,7 +79,9 @@ export class LandingPageDialogComponent implements OnInit {
     private configDescritor: ArlasConfigurationDescriptor,
     private formBuilderWithDefault: FormBuilderWithDefaultService,
     private translate: TranslateService,
-    private mainFormManager: MainFormManagerService) { }
+    private mainFormManager: MainFormManagerService,
+    public persistenceService: PersistenceService,
+    private dialog: MatDialog) { }
 
   public ngOnInit(): void {
     // Reset and clean the content of all forms
@@ -79,6 +99,12 @@ export class LandingPageDialogComponent implements OnInit {
 
         collections: new FormControl(null, [Validators.required, Validators.maxLength(1)])
       }));
+
+    if (this.persistenceService.isAvailable) {
+      // Load all config available in persistence
+      this.getConfigList();
+    }
+
   }
 
   public cancel(): void {
@@ -114,6 +140,35 @@ export class LandingPageDialogComponent implements OnInit {
     this.startEvent.next();
   }
 
+  public initWithConfig(configJson: Config, configMapJson: MapConfig) {
+    this.getServerCollections(configJson.arlas.server.url).then(() => {
+
+      this.configDescritor.getAllCollections().subscribe(collections => {
+        const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
+
+        if (!collection) {
+          this.logger.error(
+            this.translate.instant('Collection ')
+            + configJson.arlas.server.collection.name
+            + this.translate.instant(' unknown. Available collections: ')
+            + collections.join(', '));
+
+        } else {
+          this.mainFormService.startingConfig.getFg().setValue({
+            collections: [configJson.arlas.server.collection.name],
+            serverUrl: configJson.arlas.server.url
+          });
+
+          this.mainFormManager.initMainModulesForms();
+
+          this.startupService.setCollection(collection);
+          this.mainFormManager.doImport(configJson, configMapJson);
+          this.startEvent.next();
+        }
+      });
+    });
+  }
+
   public upload(configFile: File, mapConfigFile: File) {
 
     const readAndParsePromise = (file: File) => new Promise((resolve, reject) => {
@@ -142,34 +197,61 @@ export class LandingPageDialogComponent implements OnInit {
       // const newUrl = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('serverUrl').value;
       // this.startupService.validLoadedConfig(newUrl)
 
-      this.getServerCollections(configJson.arlas.server.url).then(() => {
+      this.initWithConfig(configJson, configMapJson);
 
-        this.configDescritor.getAllCollections().subscribe(collections => {
-          const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
+    }).catch(err => this.logger.error(this.translate.instant('Could not load config files ') + err));
+  }
 
-          if (!collection) {
-            this.logger.error(
-              this.translate.instant('Collection ')
-              + configJson.arlas.server.collection.name
-              + this.translate.instant(' unknown. Available collections: ')
-              + collections.join(', '));
+  public loadConfig(id: string) {
+    this.persistenceService.get(id).subscribe(data => {
+      const configJson = JSON.parse(data.doc_value) as Config;
+      const configMapJson = configJson.arlas.web.components.mapgl.input.mapLayers as MapConfig;
+      this.initWithConfig(configJson, configMapJson);
+    });
+  }
 
-          } else {
-            this.mainFormService.startingConfig.getFg().setValue({
-              collections: [configJson.arlas.server.collection.name],
-              serverUrl: configJson.arlas.server.url
-            });
+  public duplicateConfig(id: string) {
+    this.persistenceService.duplicate(id).subscribe(() => {
+      this.getConfigList();
+    });
+  }
 
-            this.mainFormManager.initMainModulesForms();
+  public removeConfig(id: string) {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '400px',
+      data: { message: this.translate.instant('delete this configuration') }
+    });
 
-            this.startupService.setCollection(collection);
-            this.mainFormManager.doImport(configJson, configMapJson);
-            this.startEvent.next();
-          }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.persistenceService.delete(id).subscribe(() => {
+          this.getConfigList();
         });
-      });
+      }
+    });
+  }
 
-    }).catch(err => this.logger.error(this.translate.instant('Could not load config files ' + err)));
+  public getConfigList() {
+    this.persistenceService.list(this.configPageSize, this.configPageNumber + 1, 'desc')
+      .subscribe((dataResource: DataResource) => {
+        this.configurationsLength = dataResource.total;
+        this.configurations = dataResource.data;
+      });
+  }
+
+  public pageChange(pageEvent: PageEvent) {
+    this.configPageNumber = pageEvent.pageIndex;
+    this.configPageSize = pageEvent.pageSize;
+    this.getConfigList();
+  }
+
+  public openPersistenceManagement(event) {
+    if (this.persistenceService.isAvailable) {
+      this.configChoice = InitialChoice.load;
+      this.importType = ImportType.persistence;
+    } else {
+      event.stopPropagation();
+    }
   }
 
   private getServerCollections(serverUrl: string) {

@@ -111,7 +111,6 @@ export class MainFormManagerService {
 
     if (this.envService.persistenceUrl !== '') {
       this.persistenceService.create(
-        'config.json',
         JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
           generatedMapConfig.layers
         ))
