@@ -37,8 +37,6 @@ export class PersistenceService {
   private persistenceApi: PersistenceApi;
   public isAvailable = false;
 
-
-
   constructor(
     private envService: EnvService,
     @Inject(GET_OPTIONS) private getOptions
