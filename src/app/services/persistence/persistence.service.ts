@@ -24,6 +24,7 @@ import { from } from 'rxjs/internal/observable/from';
 import { Configuration, PersistenceApi, Data, DataResource } from 'arlas-persistence-api';
 import { EnvService } from '@services/env/env.service';
 import { map, mergeMap, flatMap } from 'rxjs/operators';
+import { ConfigPersistence } from '@services/main-form-manager/models-config';
 
 // tslint:disable-next-line: ban-types
 export const GET_OPTIONS = new InjectionToken<(Function)>('get_options');
@@ -70,10 +71,18 @@ export class PersistenceService {
     return from(this.persistenceApi.update(id, value, false, this.getOptions()));
   }
 
-  public duplicate(id: string): Observable<Data> {
+  public duplicate(id: string, newName?: string): Observable<Data> {
     return this.get(id).pipe(
       map(data => data.doc_value),
-      map(docValue => this.create(docValue)),
+      map(docValue => {
+        const duplicateConfig = JSON.parse(docValue) as ConfigPersistence;
+        if (newName !== '') {
+          duplicateConfig.name = newName;
+        } else {
+          duplicateConfig.name = 'Copy of ' + duplicateConfig.name;
+        }
+        return this.create(JSON.stringify(duplicateConfig));
+      }),
       flatMap(a => a)
     );
   }

@@ -49,6 +49,7 @@ import { AuthentificationService } from 'arlas-wui-toolkit/services/authentifica
 import { GET_OPTIONS } from '@services/persistence/persistence.service';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { EnvServiceProvider } from '@services/env/env.service.provider';
+import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
@@ -147,6 +148,6 @@ export function getOptionsFactory(arlasAuthService: AuthentificationService): an
     }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [LandingPageDialogComponent]
+  entryComponents: [LandingPageDialogComponent, InputModalComponent]
 })
 export class AppModule { }

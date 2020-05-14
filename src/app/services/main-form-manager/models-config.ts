@@ -218,3 +218,8 @@ export interface NormalizationFieldConfig {
     on: string;
     per: string;
 }
+
+export interface ConfigPersistence {
+    name: string;
+    config: string;
+}

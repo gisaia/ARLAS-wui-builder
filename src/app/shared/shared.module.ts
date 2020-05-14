@@ -62,6 +62,7 @@ import { ConfigFormGroupComponent } from './components/config-form-group/config-
 import { ConfigFormControlComponent } from './components/config-form-control/config-form-control.component';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
 import { MatPaginatorModule } from '@angular/material';
+import { InputModalComponent } from './components/input-modal/input-modal.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { MatPaginatorModule } from '@angular/material';
     ObjectvaluesPipe,
     AutoFocusDirective,
     ConfigFormGroupComponent,
-    ConfigFormControlComponent
+    ConfigFormControlComponent,
+    InputModalComponent
   ],
   imports: [
     ArlasToolkitSharedModule,
@@ -110,6 +112,7 @@ import { MatPaginatorModule } from '@angular/material';
   exports: [
     ConfigElementComponent,
     ConfirmModalComponent,
+    InputModalComponent,
     AlertOnChangeDirective,
     ColorPickerWrapperComponent,
     ResetOnChangeDirective,
