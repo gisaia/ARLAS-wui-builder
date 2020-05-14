@@ -236,7 +236,6 @@ export class LandingPageDialogComponent implements OnInit {
       .subscribe((dataResource: DataResource) => {
         this.configurationsLength = dataResource.total;
         this.configurations = dataResource.data;
-        console.log(this.configurations);
       });
   }
 
