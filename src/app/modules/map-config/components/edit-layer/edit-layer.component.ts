@@ -16,45 +16,40 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, AfterContentChecked, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterContentChecked, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { NGXLogger } from 'ngx-logger';
-import { Subject } from 'rxjs';
-import { EditLayerComponentForm } from './edit-layer.component.form';
 import { LAYER_MODE } from './models';
-import { MapLayerFormBuilderService } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 
 @Component({
   selector: 'app-edit-layer',
   templateUrl: './edit-layer.component.html',
   styleUrls: ['./edit-layer.component.scss']
 })
-export class EditLayerComponent extends EditLayerComponentForm implements OnInit, CanComponentExit, AfterContentChecked, OnDestroy {
+export class EditLayerComponent implements OnInit, CanComponentExit, AfterContentChecked {
 
   private layersFa: FormArray;
   private layersValues: any[] = [];
   public forceCanExit: boolean;
-  public submitSubject = new Subject<boolean>();
   public LAYER_MODE = LAYER_MODE;
-  private readonly formByMode = new Map<string, string>([
-    [LAYER_MODE.features, 'featuresFg'],
-    [LAYER_MODE.featureMetric, 'featureMetricFg'],
-    [LAYER_MODE.cluster, 'clusterFg']
-  ]);
+  public layerFg: MapLayerFormGroup;
+
+  @ViewChild(ConfigFormGroupComponent, { static: false }) private configFormGroupComponent: ConfigFormGroupComponent;
 
   constructor(
-    protected mapLayerFormBuilderService: MapLayerFormBuilderService,
+    protected mapLayerFormBuilder: MapLayerFormBuilderService,
     private mainFormService: MainFormService,
     private route: ActivatedRoute,
     private cdref: ChangeDetectorRef,
     private router: Router,
     private logger: NGXLogger) {
 
-    super(mapLayerFormBuilderService);
+    this.layerFg = mapLayerFormBuilder.buildLayer();
   }
 
   public ngOnInit() {
@@ -73,13 +68,10 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
           // there we are editing an existing layer
           const layerIndex = this.getLayerIndex(Number(layerId));
           if (layerIndex >= 0) {
-            // cannot simply the existing form instance because we want to allow cancellation
-            // si we rather the the existing form properties
+            // cannot simply update the existing form instance because we want to allow cancellation
+            // so we rather propagate the existing form properties
             const existingLayerFg = this.getLayerAt(layerIndex);
             this.layerFg.patchValue(existingLayerFg.value);
-            this.formByMode.forEach(
-              (modeForm, m) =>
-                existingLayerFg.get(modeForm).enabled ? this.layerFg.get(modeForm).enable() : this.layerFg.get(modeForm).disable());
           } else {
             this.navigateToParentPage();
             this.logger.error('Unknown layer ID');
@@ -95,8 +87,10 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
 
   public submit() {
 
+    this.configFormGroupComponent.submit();
+    this.layerFg.markAllAsTouched();
+
     // force validation check on mode subform
-    this.submitSubject.next(true);
     if (!this.layerFg.valid) {
       this.logger.warn('validation failed', this.layerFg);
       return;
@@ -104,7 +98,7 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
 
     if (!this.isNewLayer()) {
       // delete current layer in order to recreate it with a new id
-      const layerIndex = this.getLayerIndex(this.layerFg.get('id').value);
+      const layerIndex = this.getLayerIndex(this.layerFg.customControls.id.value);
       if (layerIndex >= 0) {
         this.layersFa.removeAt(layerIndex);
       } else {
@@ -113,7 +107,7 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
     }
 
     const newId = this.layersValues.reduce((acc, val) => acc.id > val.id ? acc.id : val.id, 0) + 1;
-    this.layerFg.patchValue({ id: newId });
+    this.layerFg.customControls.id.setValue(newId);
     this.layersFa.insert(newId, this.layerFg);
     this.layerFg.markAsPristine();
     this.navigateToParentPage();
@@ -138,17 +132,6 @@ export class EditLayerComponent extends EditLayerComponentForm implements OnInit
   public ngAfterContentChecked() {
     // fix ExpressionChangedAfterItHasBeenCheckedError
     this.cdref.detectChanges();
-  }
-
-  public ngOnDestroy() {
-    this.submitSubject.unsubscribe();
-  }
-
-  public changeMode(mode: string) {
-
-    this.formByMode.forEach(
-      (modeForm, m) =>
-        m === mode ? this.layerFg.get(modeForm).enable() : this.layerFg.get(modeForm).disable());
   }
 
 }

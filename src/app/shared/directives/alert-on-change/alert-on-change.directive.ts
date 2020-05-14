@@ -48,6 +48,9 @@ export class AlertOnChangeDirective implements OnInit {
   // - host is a MatSelect: this is a pure angular component, this is handled through angular
 
   public ngOnInit(): void {
+    if (!this.alertMessage) {
+      return;
+    }
     const nativeElement = this.elementRef.nativeElement;
     if (!this.select) {
       nativeElement.onfocus = (e: Event) => {
@@ -60,6 +63,9 @@ export class AlertOnChangeDirective implements OnInit {
   }
 
   @HostListener('openedChange', ['$event']) public openedChange(selectedHasBeenOpen: boolean) {
+    if (!this.alertMessage) {
+      return;
+    }
     // display a snack on opening if a dependant has a value
     const anyDependantHasValue = this.dependants == null || this.dependants.filter(d => d.value !== null).length > 0;
     // display the warning only if a value is already set AND if any dependency has been changed

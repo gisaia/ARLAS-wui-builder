@@ -36,3 +36,20 @@ mat-option {
     display: flex;
     align-items: center;
 }
+
+.order-select-form-control {
+    mat-form-field {
+        width: 180px;
+        &.sort-list {
+            width: 50%;
+        }
+    }
+
+    mat-radio-group {
+        padding: 0 5px;
+        mat-radio-button {
+            width: 80px;
+            font-size: 0.9rem;
+        }
+    }
+}

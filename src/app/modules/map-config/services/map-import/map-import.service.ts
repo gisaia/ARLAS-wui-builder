@@ -26,8 +26,8 @@ import { MapLayerFormBuilderService } from '../map-layer-form-builder/map-layer-
 import { LayerSourceConfig } from 'arlas-web-contributors';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { VISIBILITY, NORMALIZED } from '@services/main-form-manager/config-map-export-helper';
-import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
-import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-components/property-selector/models';
+import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '../map-layer-form-builder/models';
+import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 
 @Injectable({
@@ -274,7 +274,7 @@ export class MapImportService {
     const keywordsAndColors = (inputValues.slice(2) as Array<string>);
 
     propertySelectorValues.propertyManualFg = {
-      propertyManualFieldCtrl: this.replaceUnderscore(this.removeLastcolor(inputValues[1][1])),
+      propertyManualFieldCtrl: this.replaceUnderscore(inputValues[1][1]),
       propertyManualValuesCtrl: new Array<KeywordColor>()
     };
 
@@ -326,7 +326,7 @@ export class MapImportService {
         } else {
           propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = this.replaceUnderscore(getValue.split(':')[0]);
 
-          if (isNormalize) {
+          if (isNormalize && getValue.split(':').length > 2) {
             propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl =
               this.replaceUnderscore(getValue.split(':')[2]);
           }

@@ -7,10 +7,10 @@ import { ConfigElementComponent } from '@shared-components/config-element/config
 import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
 import { ObjectvaluesPipe } from '@shared/pipes/objectvalues.pipe';
 import { MockComponent, MockDirective } from 'ng-mocks';
-import { EditLayerClusterComponent } from '../edit-layer-cluster/edit-layer-cluster.component';
-import { EditLayerFeatureMetricComponent } from '../edit-layer-feature-metric/edit-layer-feature-metric.component';
-import { EditLayerFeaturesComponent } from '../edit-layer-features/edit-layer-features.component';
 import { EditLayerComponent } from './edit-layer.component';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { MapLayerFormBuilderService } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { ConfigFormGroup } from '@shared-models/config-form';
 
 @Component({ template: '' }) class DummyComponent { }
 
@@ -26,16 +26,14 @@ describe('EditLayerComponent', () => {
         mapConfig: {
           getLayersFa: () => new FormArray([])
         }
+      }),
+      mockProvider(MapLayerFormBuilderService, {
+        buildLayer: () => new ConfigFormGroup({})
       })
     ],
     declarations: [
       DummyComponent,
-      MockComponent(ConfigElementComponent),
-      MockComponent(EditLayerFeaturesComponent),
-      MockComponent(EditLayerFeatureMetricComponent),
-      MockComponent(EditLayerClusterComponent),
-      MockDirective(ResetOnChangeDirective),
-      ObjectvaluesPipe
+      MockComponent(ConfigFormGroupComponent)
     ]
   });
 
@@ -45,10 +43,6 @@ describe('EditLayerComponent', () => {
 
   it('should create', () => {
     expect(spectator.component).toBeTruthy();
-  });
-
-  it('should contain 2 config elements', () => {
-    expect(spectator.queryAll('app-config-element')).toHaveLength(2);
   });
 
 });

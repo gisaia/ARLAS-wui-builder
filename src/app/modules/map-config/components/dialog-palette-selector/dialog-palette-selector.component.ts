@@ -23,7 +23,7 @@ import * as d3c from 'd3-color';
 import * as d3i from 'd3-interpolate';
 import { NGXLogger } from 'ngx-logger';
 import { DialogPaletteSelectorData } from './model';
-import { ProportionedValues } from '@shared-components/property-selector/models';
+import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 
 @Component({
   selector: 'app-dialog-palette',
@@ -50,8 +50,6 @@ export class DialogPaletteSelectorComponent implements OnInit {
   private prepareDefaultPalettes() {
     this.selectedPalette = this.data.selectedPalette;
     this.defaultPalettes = this.data.defaultPalettes.map((p: Array<string>) => {
-      const minMaxDiff = this.data.max - this.data.min;
-
       return p.map((c: string, i: number) => {
         return { proportion: this.computeProportion(p.length, i), value: c };
       });

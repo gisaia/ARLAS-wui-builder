@@ -18,8 +18,8 @@ under the License.
 */
 import { Component, OnInit, Input } from '@angular/core';
 import {
-  ConfigFormControl, SlideToggleFormControl, SliderFormControl,
-  SelectFormControl, InputFormControl, ColorFormControl, HuePaletteFormControl, HiddenFormControl, IconFormControl
+  ConfigFormControl, SlideToggleFormControl, SliderFormControl, SelectFormControl, InputFormControl,
+  ColorFormControl, HuePaletteFormControl, HiddenFormControl, IconFormControl, ButtonFormControl, OrderedSelectFormControl
 } from '@shared-models/config-form';
 
 @Component({
@@ -57,6 +57,10 @@ export class ConfigFormControlComponent implements OnInit {
       this.control as SelectFormControl : null;
   }
 
+  public isOrderedSelect(): OrderedSelectFormControl | null {
+    return Object.getPrototypeOf(this.control) === OrderedSelectFormControl.prototype ? this.control as OrderedSelectFormControl : null;
+  }
+
   public isInput(): InputFormControl | null {
     return Object.getPrototypeOf(this.control) === InputFormControl.prototype ? this.control as InputFormControl : null;
   }
@@ -75,6 +79,10 @@ export class ConfigFormControlComponent implements OnInit {
 
   public isHidden(): HiddenFormControl | null {
     return Object.getPrototypeOf(this.control) === HiddenFormControl.prototype ? this.control as HiddenFormControl : null;
+  }
+
+  public isButton(): ButtonFormControl | null {
+    return Object.getPrototypeOf(this.control) === ButtonFormControl.prototype ? this.control as ButtonFormControl : null;
   }
 
 }

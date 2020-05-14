@@ -18,196 +18,614 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import { CustomValidators } from '@utils/custom-validators';
-import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-components/property-selector/models';
+import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
+import {
+  ConfigFormGroup, SelectFormControl, ColorFormControl, SliderFormControl, ButtonFormControl,
+  SlideToggleFormControl,
+  InputFormControl,
+  HiddenFormControl,
+  ConfigFormControl
+} from '@shared-models/config-form';
+import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
+import { toKeywordOptionsObs, toNumericOrDateOptionsObs } from '@services/collection-service/tools';
+import { Observable } from 'rxjs';
+import { CollectionField } from '@services/collection-service/models';
+import { MatDialog } from '@angular/material';
+import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
+import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
+import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { DialogPaletteSelectorData } from '@map-config/components/dialog-palette-selector/model';
+import { DialogPaletteSelectorComponent } from '@map-config/components/dialog-palette-selector/dialog-palette-selector.component';
+import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
+import { valuesToOptions } from '@utils/tools';
 
-export class PropertySelectorFormGroup extends FormGroup {
+export class PropertySelectorFormGroup extends ConfigFormGroup {
 
   constructor(
-    aggregated: boolean,
-    propertyType: PROPERTY_TYPE
+    defaultConfig: DefaultConfig,
+    dialog: MatDialog,
+    collectionService: CollectionService,
+    colorService: ArlasColorGeneratorLoader,
+    collection: string,
+    collectionFieldsObs: Observable<Array<CollectionField>>,
+    private propertyType: PROPERTY_TYPE,
+    propertyName: string,
+    sources: Array<PROPERTY_SELECTOR_SOURCE>,
+    isAggregated: boolean,
+    geometryTypeControl?: () => SelectFormControl
   ) {
-
     super({
-      propertySource: new FormControl(
-        null,
-        Validators.required
-      ),
-      propertyFix: new FormControl(
-        null
-      ),
-      propertyProvidedFieldCtrl: new FormControl(
-        null
-      ),
-      propertyGeneratedFieldCtrl: new FormControl(
-        null
-      ),
-      propertyManualFg: new FormGroup({
-        propertyManualFieldCtrl: new FormControl(
-          null
-        ),
-        propertyManualValuesCtrl: new FormArray(
-          []
-        )
-      }),
-      propertyInterpolatedFg: new FormGroup({
-        propertyInterpolatedCountOrMetricCtrl: new FormControl(
-          null
-        ),
-        propertyInterpolatedCountNormalizeCtrl: new FormControl(
+      propertySource: new SelectFormControl(
+        '',
+        propertyName.charAt(0).toUpperCase() + propertyName.slice(1),
+        'description',
+        false,
+        valuesToOptions(sources),
+        {
+          childs: () => [
+            this.customControls.propertyFix,
+            this.customControls.propertyProvidedFieldCtrl,
+            this.customControls.propertyGeneratedFieldCtrl,
+            this.customControls.propertyManualFg.propertyManualFieldCtrl,
+            this.customControls.propertyManualFg.propertyManualButton,
+            this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl,
+            this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl,
+            this.customControls.propertyInterpolatedFg.propertyInterpolatedCountValueCtrl,
+            this.customControls.propertyInterpolatedFg.propertyInterpolatedMetricCtrl,
+            this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
+            this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl,
+            this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeByKeyCtrl,
+            this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl,
+            this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl,
+            this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl,
+            this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesCtrl,
+            this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesButton,
+            this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl,
+            this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl,
+          ],
+          resetDependantsOnChange: true,
+          dependsOn: () => !!geometryTypeControl ? [geometryTypeControl()] : [],
+          onDependencyChange: (control) => {
+            if (!!geometryTypeControl) {
+              if (geometryTypeControl().value === GEOMETRY_TYPE.heatmap) {
+                (control as SelectFormControl).setSyncOptions(
 
+                  valuesToOptions([PROPERTY_SELECTOR_SOURCE.heatmap_density]));
+
+              } else {
+                (control as SelectFormControl).setSyncOptions(valuesToOptions(sources));
+              }
+            }
+          }
+        }
+      ),
+      propertyFix: propertyType === PROPERTY_TYPE.color ?
+        new ColorFormControl(
+          '',
+          'Fixed ' + propertyName,
+          'description',
+          {
+            dependsOn: () => [this.customControls.propertySource],
+            onDependencyChange: (control) => control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix)
+          }
+        ) :
+        new SliderFormControl(
+          '',
+          'Fixed ' + propertyName,
+          'Description',
+          defaultConfig[propertyName + 'Min'],
+          defaultConfig[propertyName + 'Max'],
+          defaultConfig[propertyName + 'Step'],
+          undefined,
+          undefined,
+          {
+            dependsOn: () => [this.customControls.propertySource],
+            onDependencyChange: (control) => control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix)
+          }
         ),
-        propertyInterpolatedMetricCtrl: new FormControl(
-          null
+      propertyProvidedFieldCtrl: new SelectFormControl(
+        '',
+        'Source field',
+        'Description',
+        true,
+        toKeywordOptionsObs(collectionFieldsObs),
+        {
+          dependsOn: () => [this.customControls.propertySource],
+          onDependencyChange: (control) =>
+            control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided)
+        }
+      ),
+      propertyGeneratedFieldCtrl: new SelectFormControl(
+        '',
+        'Source field',
+        'Description',
+        true,
+        toKeywordOptionsObs(collectionFieldsObs),
+        {
+          dependsOn: () => [this.customControls.propertySource],
+          onDependencyChange: (control) =>
+            control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.generated)
+        }
+      ),
+      propertyManualFg: new ConfigFormGroup({
+        propertyManualFieldCtrl: new SelectFormControl(
+          '',
+          'Source field',
+          'Description',
+          true,
+          toKeywordOptionsObs(collectionFieldsObs),
+          {
+            resetDependantsOnChange: true
+          }
         ),
-        propertyInterpolatedFieldCtrl: new FormControl(
-          null
+        propertyManualButton: new ButtonFormControl(
+          '',
+          'Manage colors',
+          'Description',
+          () => dialog.open(DialogColorTableComponent, {
+            data: {
+              collection,
+              sourceField: this.customControls.propertyManualFg.propertyManualFieldCtrl.value,
+              keywordColors: this.customControls.propertyManualFg.propertyManualValuesCtrl.value
+            } as DialogColorTableData,
+            autoFocus: false,
+          })
+            .afterClosed().subscribe((result: Array<KeywordColor>) => {
+              if (result !== undefined) {
+                this.customControls.propertyManualFg.propertyManualValuesCtrl.clear();
+                result.forEach((k: KeywordColor) => {
+                  this.addToColorManualValuesCtrl(k);
+                });
+              }
+            }),
+          {
+            optional: true,
+            dependsOn: () => [this.customControls.propertyManualFg.propertyManualFieldCtrl],
+            onDependencyChange: (control) => {
+              const field = this.customControls.propertyManualFg.propertyManualFieldCtrl.value;
+              this.customControls.propertyManualFg.propertyManualValuesCtrl.clear();
+
+              control.enableIf(!!field);
+              if (field) {
+                control.enable();
+                collectionService.getTermAggregation(collection, field).then((keywords: Array<string>) => {
+                  keywords.forEach((k: string) => {
+                    this.addToColorManualValuesCtrl({
+                      keyword: k,
+                      color: colorService.getColor(k)
+                    });
+                  });
+                  this.addToColorManualValuesCtrl({
+                    keyword: 'OTHER',
+                    color: defaultConfig.otherColor
+                  });
+                });
+              }
+            }
+          }
         ),
-        propertyInterpolatedNormalizeCtrl: new FormControl(
-          null
+        propertyManualValuesCtrl: new FormArray([], Validators.required)
+      },
+        {
+          dependsOn: () => [this.customControls.propertySource],
+          onDependencyChange: (control) =>
+            control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.manual)
+        }),
+      propertyInterpolatedFg: new ConfigFormGroup({
+        propertyInterpolatedCountOrMetricCtrl: new SlideToggleFormControl(
+          '',
+          'Count',
+          '',
+          'Metric',
+          {
+            resetDependantsOnChange: true,
+            dependsOn: () => [this.customControls.propertySource],
+            onDependencyChange: (control) => control.enableIf(
+              this.customControls.propertySource.value !== PROPERTY_SELECTOR_SOURCE.heatmap_density && isAggregated)
+          }
         ),
-        propertyInterpolatedNormalizeByKeyCtrl: new FormControl(
-          null
+        propertyInterpolatedCountNormalizeCtrl: new SlideToggleFormControl(
+          '',
+          'Normalize',
+          '',
+          undefined,
+          {
+            dependsOn: () => [
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl,
+              this.customControls.propertySource
+            ],
+            onDependencyChange: (control) => control.enableIf(
+              this.customControls.propertySource.value !== PROPERTY_SELECTOR_SOURCE.heatmap_density
+              && isAggregated
+              && !this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value)
+          }
         ),
-        propertyInterpolatedNormalizeLocalFieldCtrl: new FormControl(
-          null
+        propertyInterpolatedCountValueCtrl: new HiddenFormControl(
+          '',
+          'undefined',
+          {
+            dependsOn: () => [this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl],
+            onDependencyChange: (control) =>
+              collectionService.countNbDocuments().subscribe(
+                count => control.setValue(count.totalnb))
+          }
         ),
-        propertyInterpolatedMinFieldValueCtrl: new FormControl(
-          null
+        propertyInterpolatedMetricCtrl: new SelectFormControl(
+          '',
+          'Metric',
+          '',
+          false,
+          [METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX]
+            .map(m => ({ label: m, value: m })),
+          {
+            dependsOn: () => [this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl],
+            onDependencyChange: (control) => control.enableIf(
+              isAggregated && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value)
+          }
         ),
-        propertyInterpolatedMaxFieldValueCtrl: new FormControl(
-          null
+        propertyInterpolatedFieldCtrl: new SelectFormControl(
+          '',
+          'Source field',
+          'Description',
+          true,
+          toNumericOrDateOptionsObs(collectionFieldsObs),
+          {
+            resetDependantsOnChange: true,
+            dependsOn: () => [
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedMetricCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
+            ],
+            onDependencyChange: (control) => control.enableIf(
+              (!!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value) &&
+              (!isAggregated || this.customControls.propertyInterpolatedFg.propertyInterpolatedMetricCtrl.value))
+          }
         ),
-        propertyInterpolatedMinValueCtrl: new FormControl(
-          null
+        propertyInterpolatedNormalizeCtrl: new SlideToggleFormControl(
+          '',
+          'Normalize',
+          'Description',
+          undefined,
+          {
+            dependsOn: () => [
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
+            ],
+            onDependencyChange: (control) => control.enableIf(
+              !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value &&
+              !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value),
+            resetDependantsOnChange: true
+          }
         ),
-        propertyInterpolatedMaxValueCtrl: new FormControl(
-          null
+        propertyInterpolatedNormalizeByKeyCtrl: new SlideToggleFormControl(
+          '',
+          'Normalize by key?',
+          'Description',
+          undefined,
+          {
+            resetDependantsOnChange: true,
+            dependsOn: () =>
+              [
+                this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl,
+                this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
+              ],
+            onDependencyChange: (control) => control.enableIf(
+              !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value
+              && !isAggregated
+              && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value)
+          }
         ),
-        propertyInterpolatedValuesCtrl: new FormControl(
-          null
-        )
-      }),
-      propertyPointCountNormalized: new FormGroup({})
+        propertyInterpolatedNormalizeLocalFieldCtrl: new SelectFormControl(
+          '',
+          'Key',
+          'Description',
+          true,
+          toKeywordOptionsObs(collectionFieldsObs),
+          {
+            dependsOn: () => [
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeByKeyCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
+            ],
+            onDependencyChange: (control) => control.enableIf(
+              !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value
+              && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeByKeyCtrl.value),
+            resetDependantsOnChange: true
+          }
+        ),
+        propertyInterpolatedMinFieldValueCtrl: new InputFormControl(
+          '',
+          'Minimum value',
+          'Description',
+          'number',
+          {
+            resetDependantsOnChange: true,
+            dependsOn: () => [
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
+            ],
+            onDependencyChange: (control) => {
+              const doEnable =
+                !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value
+                && !this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
+                && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value;
+              control.enableIf(doEnable);
+
+              if (doEnable) {
+                collectionService.getComputationMetric(
+                  collection,
+                  this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value,
+                  METRIC_TYPES.MIN)
+                  .then(min =>
+                    control.setValue(min));
+              }
+            }
+          }
+        ),
+        propertyInterpolatedMaxFieldValueCtrl: new InputFormControl(
+          '',
+          'Maximum value',
+          'Description',
+          'number',
+          {
+            resetDependantsOnChange: true,
+            dependsOn: () => [
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
+            ],
+            onDependencyChange: (control) => {
+              const doEnable =
+                !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value
+                && !this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
+                && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value;
+              control.enableIf(doEnable);
+
+              if (doEnable) {
+                const metric = this.customControls.propertyInterpolatedFg.propertyInterpolatedMetricCtrl.value === METRIC_TYPES.SUM ?
+                  METRIC_TYPES.SUM : METRIC_TYPES.MAX;
+                collectionService.getComputationMetric(
+                  collection,
+                  this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value,
+                  metric)
+                  .then(sum =>
+                    control.setValue(sum));
+              }
+            }
+          }
+        ),
+        propertyInterpolatedValuesCtrl: new HiddenFormControl(
+          '',
+          // define label, used for error message, only for colors => otherwise interpolation is done automatically
+          propertyType === PROPERTY_TYPE.color ? 'A Palette' : undefined,
+          {
+            dependsOn: () => [
+              this.customControls.propertySource,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeByKeyCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl,
+            ],
+            onDependencyChange: (control) => {
+              // enable if a color or a number can be interpolated
+              this.enableControlIfColorInterpolable(control as ConfigFormControl, isAggregated, false);
+
+              // if propertyType is not color => create interpolation values from the min and max
+              // (other the palette dialog will update the interpolation values)
+              if (propertyType === PROPERTY_TYPE.number &&
+                this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl.valid &&
+                this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl.valid) {
+
+                const isAggregatedCount =
+                  isAggregated && !this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value;
+                const doNormalize =
+                  this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
+                  || isAggregatedCount && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl.value;
+
+                const minValue = doNormalize || isAggregatedCount ?
+                  0.0 : parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl.value, 10);
+                const maxValue = doNormalize ? 1.0 : isAggregatedCount ?
+                  parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedCountValueCtrl.value, 10) :
+                  parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value, 10);
+                const minInterpolatedValue = this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl.value;
+                const maxInterpolatedValue = this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl.value;
+
+                control.setValue(
+                  [...Array(6).keys()].map(k =>
+                    ({
+                      proportion: minValue + (maxValue - minValue) * k / 5,
+                      value: minInterpolatedValue + (maxInterpolatedValue - minInterpolatedValue) * k / 5
+                    })
+                  )
+                );
+              }
+            }
+          }
+        ),
+        propertyInterpolatedValuesButton: new ButtonFormControl(
+          '',
+          'Manage palette',
+          'Description',
+          () => {
+            const isAggregatedCount =
+              isAggregated && !this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value;
+            const doNormalize =
+              !isAggregated && this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
+              || isAggregatedCount && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl.value;
+            const isDensity = this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.heatmap_density;
+
+            const min = doNormalize || isAggregatedCount || isDensity ?
+              0 : parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl.value, 10);
+            const max = doNormalize || isDensity ? 1 : isAggregatedCount ?
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedCountValueCtrl.value :
+              parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value, 10);
+
+            const paletteData: DialogPaletteSelectorData = {
+              min,
+              max,
+              defaultPalettes: defaultConfig.palettes,
+              selectedPalette: this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesCtrl.value
+            };
+            dialog.open(DialogPaletteSelectorComponent, {
+              data: paletteData,
+              autoFocus: false,
+              panelClass: 'dialog-with-overflow'
+            })
+              .afterClosed().subscribe(result => {
+                if (result !== undefined) {
+                  this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesCtrl.setValue(result);
+                  this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesCtrl.markAsDirty();
+                }
+              });
+          },
+          {
+            optional: true,
+            dependsOn: () => [
+              this.customControls.propertySource,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeByKeyCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl,
+            ],
+            onDependencyChange: (control) => this.enableControlIfColorInterpolable(control as ConfigFormControl, isAggregated, true)
+          }
+        ),
+        propertyInterpolatedMinValueCtrl: new SliderFormControl(
+          '',
+          'Minimum ' + propertyName,
+          'description',
+          defaultConfig[propertyName + 'Min'],
+          defaultConfig[propertyName + 'Max'],
+          defaultConfig[propertyName + 'Step'],
+          () => this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl,
+          undefined,
+          {
+            dependsOn: () => [
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
+            ],
+            onDependencyChange: (control) => control.enableIf(
+              propertyType === PROPERTY_TYPE.number && (
+                !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value ||
+                !this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value))
+          }
+        ),
+        propertyInterpolatedMaxValueCtrl: new SliderFormControl(
+          '',
+          'Maximum ' + propertyName,
+          'description',
+          defaultConfig[propertyName + 'Min'],
+          defaultConfig[propertyName + 'Max'],
+          defaultConfig[propertyName + 'Step'],
+          undefined,
+          () => this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl,
+          {
+            dependsOn: () => [
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
+            ],
+            onDependencyChange: (control) => control.enableIf(
+              propertyType === PROPERTY_TYPE.number && (
+                !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value ||
+                !this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value))
+          }
+        ),
+      },
+        {
+          dependsOn: () => [this.customControls.propertySource],
+          onDependencyChange: (control) =>
+            control.enableIf(
+              this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
+              || this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.heatmap_density)
+        })
     });
-
-    this.propertyFix.setValidators(
-      CustomValidators.getConditionalValidator(() =>
-        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix,
-        Validators.required)
-    );
-
-    this.propertyProvidedFieldCtrl.setValidators(
-      CustomValidators.getConditionalValidator(() =>
-        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided,
-        Validators.required)
-    );
-
-    this.propertyGeneratedFieldCtrl.setValidators(
-      CustomValidators.getConditionalValidator(() =>
-        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.generated,
-        Validators.required)
-    );
-
-    this.propertyManualFieldCtrl.setValidators(
-      CustomValidators.getConditionalValidator(() =>
-        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.manual,
-        Validators.required)
-    );
-
-    this.propertyInterpolatedFg.setValidators(
-      CustomValidators.getConditionalValidator(() =>
-        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated && this.propertyInterpolatedFieldCtrl.value
-        && this.propertyInterpolatedMinFieldValueCtrl.value && this.propertyInterpolatedMaxFieldValueCtrl.value,
-        CustomValidators.getLTEValidator(
-          'propertyInterpolatedMinFieldValueCtrl',
-          'propertyInterpolatedMaxFieldValueCtrl'
-        ))
-    );
-
-    this.propertyInterpolatedMetricCtrl.setValidators(
-      CustomValidators.getConditionalValidator(() => aggregated &&
-        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-        && this.propertyInterpolatedCountOrMetricCtrl.value,
-        Validators.required)
-    );
-
-    this.propertyInterpolatedFieldCtrl.setValidators(
-      CustomValidators.getConditionalValidator(() =>
-        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-        && (!aggregated || aggregated && this.propertyInterpolatedMetricCtrl.value),
-        Validators.required)
-    );
-
-    this.propertyInterpolatedNormalizeLocalFieldCtrl.setValidators(
-      CustomValidators.getConditionalValidator(() => !aggregated &&
-        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-        && this.propertyInterpolatedNormalizeByKeyCtrl.value,
-        Validators.required)
-    );
-
-    this.propertyInterpolatedMinFieldValueCtrl.setValidators(
-      CustomValidators.getConditionalValidator(() =>
-        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-        && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value,
-        Validators.required)
-    );
-
-    this.propertyInterpolatedMaxFieldValueCtrl.setValidators(
-      CustomValidators.getConditionalValidator(() =>
-        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-        && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value,
-        Validators.required)
-    );
-
-    this.propertyInterpolatedMinValueCtrl.setValidators(
-      CustomValidators.getConditionalValidator(() =>
-        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-        && propertyType === PROPERTY_TYPE.number
-        && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value,
-        Validators.required)
-    );
-
-    this.propertyInterpolatedMaxValueCtrl.setValidators(
-      CustomValidators.getConditionalValidator(() =>
-        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-        && propertyType === PROPERTY_TYPE.number
-        && this.propertyInterpolatedFieldCtrl.value && !this.propertyInterpolatedNormalizeCtrl.value,
-        Validators.required)
-    );
-
-    this.propertyInterpolatedValuesCtrl.setValidators(
-      CustomValidators.getConditionalValidator(() =>
-        this.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated
-        && (this.propertyInterpolatedFieldCtrl.value ||
-          aggregated && !this.propertyInterpolatedCountOrMetricCtrl.value),
-        Validators.required)
-    );
   }
 
-  public get propertySource() { return this.get('propertySource'); }
-  public get propertyFix() { return this.get('propertyFix'); }
-  public get propertyProvidedFieldCtrl() { return this.get('propertyProvidedFieldCtrl'); }
-  public get propertyGeneratedFieldCtrl() { return this.get('propertyGeneratedFieldCtrl'); }
-  public get propertyManualFg() { return this.get('propertyManualFg'); }
-  public get propertyManualFieldCtrl() { return this.propertyManualFg.get('propertyManualFieldCtrl'); }
-  public get propertyManualValuesCtrl() { return this.propertyManualFg.get('propertyManualValuesCtrl'); }
-  public get propertyInterpolatedFg() { return this.get('propertyInterpolatedFg'); }
-  public get propertyInterpolatedCountOrMetricCtrl() { return this.propertyInterpolatedFg.get('propertyInterpolatedCountOrMetricCtrl'); }
-  public get propertyInterpolatedCountNormalizeCtrl() { return this.propertyInterpolatedFg.get('propertyInterpolatedCountNormalizeCtrl'); }
-  public get propertyInterpolatedMetricCtrl() { return this.propertyInterpolatedFg.get('propertyInterpolatedMetricCtrl'); }
-  public get propertyInterpolatedFieldCtrl() { return this.propertyInterpolatedFg.get('propertyInterpolatedFieldCtrl'); }
-  public get propertyInterpolatedNormalizeCtrl() { return this.propertyInterpolatedFg.get('propertyInterpolatedNormalizeCtrl'); }
-  public get propertyInterpolatedNormalizeByKeyCtrl() { return this.propertyInterpolatedFg.get('propertyInterpolatedNormalizeByKeyCtrl'); }
-  public get propertyInterpolatedNormalizeLocalFieldCtrl() {
-    return this.propertyInterpolatedFg.get('propertyInterpolatedNormalizeLocalFieldCtrl');
+  public customControls = {
+    propertySource: this.get('propertySource') as SelectFormControl,
+    propertyFix: this.get('propertyFix') as ColorFormControl | SliderFormControl,
+    propertyProvidedFieldCtrl: this.get('propertyProvidedFieldCtrl') as SelectFormControl,
+    propertyGeneratedFieldCtrl: this.get('propertyGeneratedFieldCtrl') as SelectFormControl,
+    propertyManualFg: {
+      propertyManualFieldCtrl: this.get('propertyManualFg').get('propertyManualFieldCtrl') as SelectFormControl,
+      propertyManualButton: this.get('propertyManualFg').get('propertyManualButton') as ButtonFormControl,
+      propertyManualValuesCtrl: this.get('propertyManualFg').get('propertyManualValuesCtrl') as FormArray,
+    },
+    propertyInterpolatedFg: {
+      propertyInterpolatedCountOrMetricCtrl:
+        this.get('propertyInterpolatedFg').get('propertyInterpolatedCountOrMetricCtrl') as SlideToggleFormControl,
+      propertyInterpolatedCountNormalizeCtrl:
+        this.get('propertyInterpolatedFg').get('propertyInterpolatedCountNormalizeCtrl') as SlideToggleFormControl,
+      propertyInterpolatedCountValueCtrl:
+        this.get('propertyInterpolatedFg').get('propertyInterpolatedCountValueCtrl') as HiddenFormControl,
+      propertyInterpolatedMetricCtrl:
+        this.get('propertyInterpolatedFg').get('propertyInterpolatedMetricCtrl') as SelectFormControl,
+      propertyInterpolatedFieldCtrl:
+        this.get('propertyInterpolatedFg').get('propertyInterpolatedFieldCtrl') as SelectFormControl,
+      propertyInterpolatedNormalizeCtrl:
+        this.get('propertyInterpolatedFg').get('propertyInterpolatedNormalizeCtrl') as SlideToggleFormControl,
+      propertyInterpolatedNormalizeByKeyCtrl:
+        this.get('propertyInterpolatedFg').get('propertyInterpolatedNormalizeByKeyCtrl') as SlideToggleFormControl,
+      propertyInterpolatedNormalizeLocalFieldCtrl:
+        this.get('propertyInterpolatedFg').get('propertyInterpolatedNormalizeLocalFieldCtrl') as SelectFormControl,
+      propertyInterpolatedMinFieldValueCtrl:
+        this.get('propertyInterpolatedFg').get('propertyInterpolatedMinFieldValueCtrl') as InputFormControl,
+      propertyInterpolatedMaxFieldValueCtrl:
+        this.get('propertyInterpolatedFg').get('propertyInterpolatedMaxFieldValueCtrl') as InputFormControl,
+      propertyInterpolatedValuesCtrl:
+        this.get('propertyInterpolatedFg').get('propertyInterpolatedValuesCtrl') as HiddenFormControl,
+      propertyInterpolatedValuesButton:
+        this.get('propertyInterpolatedFg').get('propertyInterpolatedValuesButton') as SliderFormControl,
+      propertyInterpolatedMinValueCtrl:
+        this.get('propertyInterpolatedFg').get('propertyInterpolatedMinValueCtrl') as SliderFormControl,
+      propertyInterpolatedMaxValueCtrl:
+        this.get('propertyInterpolatedFg').get('propertyInterpolatedMaxValueCtrl') as ButtonFormControl
+    }
+  };
+
+  /**
+   * Enable the "Manage palette" button and its related hidden field
+   * => this method helps only to avoid code duplication
+   */
+  private enableControlIfColorInterpolable(control: ConfigFormControl, isAggregated: boolean, onlyColor: boolean) {
+
+    let doEnable = false;
+    if (onlyColor && this.propertyType !== PROPERTY_TYPE.color) {
+      // NOP
+    } else if (this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.heatmap_density) {
+      doEnable = true;
+    } else if (isAggregated && !this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value) {
+      doEnable = true;
+      // NOP, do not enable
+    } else if (!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
+      && !Number.isNaN(parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl.value, 10))
+      && !Number.isNaN(parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value, 10))) {
+      doEnable = true;
+    } else if (!!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
+      && !this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeByKeyCtrl.value) {
+      doEnable = true;
+    } else if (!!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
+      && this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeByKeyCtrl.value
+      && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl.value) {
+      doEnable = true;
+    }
+    control.enableIf(doEnable);
   }
-  public get propertyInterpolatedMinFieldValueCtrl() { return this.propertyInterpolatedFg.get('propertyInterpolatedMinFieldValueCtrl'); }
-  public get propertyInterpolatedMaxFieldValueCtrl() { return this.propertyInterpolatedFg.get('propertyInterpolatedMaxFieldValueCtrl'); }
-  public get propertyInterpolatedMinValueCtrl() { return this.propertyInterpolatedFg.get('propertyInterpolatedMinValueCtrl'); }
-  public get propertyInterpolatedMaxValueCtrl() { return this.propertyInterpolatedFg.get('propertyInterpolatedMaxValueCtrl'); }
-  public get propertyInterpolatedValuesCtrl() { return this.propertyInterpolatedFg.get('propertyInterpolatedValuesCtrl'); }
-  public get propertyPointCountNormalized() { return this.get('propertyPointCountNormalized'); }
+
+  private addToColorManualValuesCtrl(kc: KeywordColor) {
+    const keywordColorGrp = new FormGroup({
+      keyword: new FormControl(kc.keyword),
+      color: new FormControl(kc.color)
+    });
+    this.customControls.propertyManualFg.propertyManualValuesCtrl.push(keywordColorGrp);
+  }
 
 }
 
@@ -216,12 +634,33 @@ export class PropertySelectorFormGroup extends FormGroup {
 })
 export class PropertySelectorFormBuilderService {
 
-  constructor() { }
+  constructor(
+    private defaultValuesService: DefaultValuesService,
+    private dialog: MatDialog,
+    private collectionService: CollectionService,
+    private colorService: ArlasColorGeneratorLoader,
+    private mainFormService: MainFormService
+  ) { }
 
   public build(
-    aggregated: boolean,
-    propertyType: PROPERTY_TYPE
-  ) {
-    return new PropertySelectorFormGroup(aggregated, propertyType);
+    propertyType: PROPERTY_TYPE,
+    propertyName: string,
+    sources: Array<PROPERTY_SELECTOR_SOURCE>,
+    isAggregated: boolean,
+    geometryTypeControl?: () => SelectFormControl) {
+
+    return new PropertySelectorFormGroup(
+      this.defaultValuesService.getDefaultConfig(),
+      this.dialog,
+      this.collectionService,
+      this.colorService,
+      this.mainFormService.getCollections()[0],
+      this.collectionService.getCollectionFields(this.mainFormService.getCollections()[0]),
+      propertyType,
+      propertyName,
+      sources,
+      isAggregated,
+      geometryTypeControl
+    );
   }
 }

@@ -19,8 +19,8 @@ under the License.
 import { FormArray, FormGroup } from '@angular/forms';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { Paint, Layer, MapConfig } from './models-map-config';
-import { GEOMETRY_TYPE } from '@map-config/components/edit-layer-mode-form/models';
-import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-components/property-selector/models';
+import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
+import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 import { ConfigExportHelper } from './config-export-helper';
 import { LayerSourceConfig } from 'arlas-web-contributors';
@@ -102,7 +102,7 @@ export class ConfigMapExportHelper {
             case PROPERTY_SELECTOR_SOURCE.manual:
                 return [
                     'match',
-                    this.getArray(fgValues.propertyManualFg.propertyManualFieldCtrl + '_color')
+                    this.getArray(fgValues.propertyManualFg.propertyManualFieldCtrl)
                 ].concat(
                     (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>)
                         .flatMap(kc => kc.keyword !== OTHER_KEYWORD ? [kc.keyword, kc.color] : [kc.color])

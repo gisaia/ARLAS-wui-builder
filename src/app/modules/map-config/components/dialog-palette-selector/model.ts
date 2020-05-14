@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 
-import { ProportionedValues } from '@shared-components/property-selector/models';
+import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 
 export interface DialogPaletteSelectorData {
     min: number;

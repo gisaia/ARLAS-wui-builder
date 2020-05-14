@@ -22,6 +22,7 @@ import { MatSelect } from '@angular/material/select';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { NGXLogger } from 'ngx-logger';
+import { ConfigFormControl } from '@shared-models/config-form';
 
 /**
  * Reset the dependants fields when the directive component value changes
@@ -43,7 +44,9 @@ export class ResetOnChangeDirective implements OnInit {
     private defaultValueService: DefaultValuesService) { }
 
   public ngOnInit(): void {
-    if (this.matSelect) {
+    if (!this.defaultValuePrefix) {
+      return;
+    } else if (this.matSelect) {
       this.matSelect.valueChange.subscribe((value: any) => this.resetDependants());
     } else if (this.matSlider) {
       this.matSlider.change.subscribe(
@@ -69,10 +72,14 @@ export class ResetOnChangeDirective implements OnInit {
    */
   private resetControl(control: AbstractControl) {
     if (control instanceof FormControl) {
-      // reset to the default value of the control, or null if no default value prefix provided
-      control.reset(
-        !!this.defaultValuePrefix ? this.defaultValueService.getValue(
-          this.defaultValuePrefix + '.' + this.findParentPath(control)) : null);
+      if (control instanceof ConfigFormControl && !!control.initialValue) {
+        control.reset(control.initialValue);
+      } else {
+        // reset to the default value of the control, or null if no default value prefix provided
+        control.reset(
+          !!this.defaultValuePrefix ? this.defaultValueService.getValue(
+            this.defaultValuePrefix + '.' + this.findParentPath(control)) : null);
+      }
     } else if (control instanceof FormGroup || control instanceof FormArray) {
       // reset inner FormControls
       Object.keys(control.controls).forEach(key => {
