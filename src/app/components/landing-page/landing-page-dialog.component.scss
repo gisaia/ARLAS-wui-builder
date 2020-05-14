@@ -89,6 +89,15 @@ $primary-color: mat-color($primary-palette, 400);
       background: rgba($accent-color, 0.5);
     }
   }
+
+  .bloc-disabled{
+    cursor: not-allowed;
+    background: lightgray;
+
+    &:hover{
+      background: lightgray;
+    }
+  }
 }
 
 .collection {

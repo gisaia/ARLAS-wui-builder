@@ -80,7 +80,7 @@ export class LandingPageDialogComponent implements OnInit {
     private formBuilderWithDefault: FormBuilderWithDefaultService,
     private translate: TranslateService,
     private mainFormManager: MainFormManagerService,
-    private persistenceService: PersistenceService,
+    public persistenceService: PersistenceService,
     private dialog: MatDialog) { }
 
   public ngOnInit(): void {
@@ -199,7 +199,7 @@ export class LandingPageDialogComponent implements OnInit {
 
       this.initWithConfig(configJson, configMapJson);
 
-    }).catch(err => this.logger.error(this.translate.instant('Could not load config files ' + err)));
+    }).catch(err => this.logger.error(this.translate.instant('Could not load config files ') + err));
   }
 
   public loadConfig(id: string) {
@@ -219,7 +219,7 @@ export class LandingPageDialogComponent implements OnInit {
   public removeConfig(id: string) {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
-      data: { message: this.translate.instant('delete this configuration')}
+      data: { message: this.translate.instant('delete this configuration') }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -243,6 +243,15 @@ export class LandingPageDialogComponent implements OnInit {
     this.configPageNumber = pageEvent.pageIndex;
     this.configPageSize = pageEvent.pageSize;
     this.getConfigList();
+  }
+
+  public openPersistenceManagement(event) {
+    if (this.persistenceService.isAvailable) {
+      this.configChoice = InitialChoice.load;
+      this.importType = ImportType.persistence;
+    } else {
+      event.stopPropagation();
+    }
   }
 
   private getServerCollections(serverUrl: string) {
