@@ -37,6 +37,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { MapConfig } from './models-map-config';
 import { MapInitService } from '@map-config/services/map-init/map-init.service';
 import { MapImportService } from '@map-config/services/map-import/map-import.service';
+import { AbstractControl, FormGroup, FormArray } from '@angular/forms';
+import { ConfigFormControl, ConfigFormGroup } from '@shared-models/config-form';
 
 
 @Injectable({
@@ -72,6 +74,8 @@ export class MainFormManagerService {
     this.searchInitService.initModule();
     this.timelineInitService.initModule();
     this.mapInitService.initModule();
+
+    this.updateControlsFromOtherControls(this.mainFormService.mainForm);
   }
 
   public attemptExport() {
@@ -135,6 +139,8 @@ export class MainFormManagerService {
     this.searchImportService.doImport(config);
     this.timelineImportService.doImport(config);
     this.mapImportService.doImport(config, mapConfig);
+
+    this.updateControlsFromOtherControls(this.mainFormService.mainForm);
   }
 
   private saveJson(json: any, filename: string, separator?: string) {
@@ -158,6 +164,28 @@ export class MainFormManagerService {
       return value;
     }, 2)], { type: 'application/json;charset=utf-8' });
     FileSaver.saveAs(blob, filename);
+  }
+
+  /**
+   * For each ConfigFormControl/Group that depends on other fields (its value or its status),
+   * update the field. It is also done by displaying a ConfigFormGroup
+   */
+  private updateControlsFromOtherControls(control: AbstractControl) {
+    if (control instanceof ConfigFormControl) {
+      if (!!control.dependsOn) {
+        control.onDependencyChange(control);
+      }
+    } else if (control instanceof ConfigFormGroup) {
+      if (!!control.dependsOn) {
+        control.onDependencyChange(control);
+      }
+      if (control.status !== 'DISABLED') {
+        // if form group is disabled, k
+        Object.values(control.controls).forEach(c => this.updateControlsFromOtherControls(c));
+      }
+    } else if (control instanceof FormGroup || control instanceof FormArray) {
+      Object.values(control.controls).forEach(c => this.updateControlsFromOtherControls(c));
+    }
   }
 
 }

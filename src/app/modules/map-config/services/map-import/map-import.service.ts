@@ -57,7 +57,6 @@ export class MapImportService {
       const layerFg = this.importLayer(layer, layerSource, collectionName, layerId++);
       this.mainFormService.mapConfig.getLayersFa().push(layerFg);
     });
-
   }
 
   private importMapGlobal(
