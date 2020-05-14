@@ -18,7 +18,7 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { updateValueAndValidity } from '@utils/tools';
+import { updateValueAndValidity, LOCALSTORAGE_CONFIG_ID_KEY } from '@utils/tools';
 import * as FileSaver from 'file-saver';
 import { NGXLogger } from 'ngx-logger';
 import { ConfigExportHelper } from './config-export-helper';
@@ -113,19 +113,40 @@ export class MainFormManagerService {
 
     const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers);
 
-    if (this.envService.persistenceUrl !== '') {
-      this.persistenceService.create(
-        JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
-          generatedMapConfig.layers
-        ))
-      ).subscribe(
-        () => {
-          this.snackbar.open(this.translate.instant('Configuration saved !'));
-        },
-        () => {
-          this.snackbar.open(this.translate.instant('Error : Configuration not saved'));
-        }
-      );
+    if (this.persistenceService.isAvailable) {
+      if (localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY)) {
+        // Update existing
+        this.persistenceService.update(
+          localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY),
+          JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
+            generatedMapConfig.layers
+          ))
+        ).subscribe(
+          () => {
+            this.snackbar.open(
+              this.translate.instant('Configuration updated !') + ' (' + localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY) + ')'
+            );
+          },
+          () => {
+            this.snackbar.open(this.translate.instant('Error : Configuration not updated'));
+          }
+        );
+      } else {
+        // Create new config
+        this.persistenceService.create(
+          JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
+            generatedMapConfig.layers
+          ))
+        ).subscribe(
+          () => {
+            this.snackbar.open(this.translate.instant('Configuration saved !'));
+          },
+          () => {
+            this.snackbar.open(this.translate.instant('Error : Configuration not saved'));
+          }
+        );
+      }
+
 
     } else {
       this.saveJson(generatedConfig, 'config.json');

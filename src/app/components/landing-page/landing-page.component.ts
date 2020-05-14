@@ -36,6 +36,7 @@ import { PersistenceService } from '@services/persistence/persistence.service';
 import { DataResource } from 'arlas-persistence-api';
 import { PageEvent } from '@angular/material/paginator';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { LOCALSTORAGE_CONFIG_ID_KEY } from '@utils/tools';
 
 enum InitialChoice {
   none = 0,
@@ -48,6 +49,8 @@ enum ImportType {
   file = 1,
   persistence = 2
 }
+
+
 
 @Component({
   templateUrl: './landing-page-dialog.component.html',
@@ -86,6 +89,9 @@ export class LandingPageDialogComponent implements OnInit {
   public ngOnInit(): void {
     // Reset and clean the content of all forms
     this.mainFormService.resetMainForm();
+
+    // Reset current config id
+    localStorage.removeItem(LOCALSTORAGE_CONFIG_ID_KEY);
 
     this.mainFormService.startingConfig.init(
       this.formBuilderWithDefault.group('global', {
@@ -207,6 +213,7 @@ export class LandingPageDialogComponent implements OnInit {
       const configJson = JSON.parse(data.doc_value) as Config;
       const configMapJson = configJson.arlas.web.components.mapgl.input.mapLayers as MapConfig;
       this.initWithConfig(configJson, configMapJson);
+      localStorage.setItem(LOCALSTORAGE_CONFIG_ID_KEY, id);
     });
   }
 

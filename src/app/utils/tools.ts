@@ -19,6 +19,8 @@ under the License.
 
 import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/forms';
 
+export const LOCALSTORAGE_CONFIG_ID_KEY = 'current_config_id';
+
 /**
  * Get object or String value of an object from key
  */
