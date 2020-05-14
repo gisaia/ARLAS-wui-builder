@@ -29,7 +29,7 @@ import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configu
 import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs';
 import { StartupService } from '../../services/startup/startup.service';
-import { Config } from '@services/main-form-manager/models-config';
+import { Config, ConfigPersistence } from '@services/main-form-manager/models-config';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MapConfig } from '@services/main-form-manager/models-map-config';
 import { PersistenceService } from '@services/persistence/persistence.service';
@@ -37,6 +37,7 @@ import { DataResource } from 'arlas-persistence-api';
 import { PageEvent } from '@angular/material/paginator';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { LOCALSTORAGE_CONFIG_ID_KEY } from '@utils/tools';
+import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 
 enum InitialChoice {
   none = 0,
@@ -210,7 +211,8 @@ export class LandingPageDialogComponent implements OnInit {
 
   public loadConfig(id: string) {
     this.persistenceService.get(id).subscribe(data => {
-      const configJson = JSON.parse(data.doc_value) as Config;
+      const config = JSON.parse(data.doc_value) as ConfigPersistence;
+      const configJson = JSON.parse(config.config) as Config;
       const configMapJson = configJson.arlas.web.components.mapgl.input.mapLayers as MapConfig;
       this.initWithConfig(configJson, configMapJson);
       localStorage.setItem(LOCALSTORAGE_CONFIG_ID_KEY, id);
@@ -218,8 +220,15 @@ export class LandingPageDialogComponent implements OnInit {
   }
 
   public duplicateConfig(id: string) {
-    this.persistenceService.duplicate(id).subscribe(() => {
-      this.getConfigList();
+    const dialogRef = this.dialog.open(InputModalComponent);
+    dialogRef.afterClosed().subscribe(configName => {
+      let newName = '';
+      if (configName) {
+        newName = configName;
+      }
+      this.persistenceService.duplicate(id, newName).subscribe(() => {
+        this.getConfigList();
+      });
     });
   }
 
@@ -242,7 +251,11 @@ export class LandingPageDialogComponent implements OnInit {
     this.persistenceService.list(this.configPageSize, this.configPageNumber + 1, 'desc')
       .subscribe((dataResource: DataResource) => {
         this.configurationsLength = dataResource.total;
-        this.configurations = dataResource.data;
+        this.configurations = dataResource.data.map( data => {
+          const currentConfig = JSON.parse(data.doc_value) as ConfigPersistence;
+          const newData = Object.assign({}, data, {name: currentConfig.name});
+          return newData;
+        });
       });
   }
 

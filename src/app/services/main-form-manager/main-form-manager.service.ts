@@ -24,7 +24,7 @@ import { NGXLogger } from 'ngx-logger';
 import { ConfigExportHelper } from './config-export-helper';
 import { ConfigMapExportHelper } from './config-map-export-helper';
 import { AnalyticsImportService } from '@analytics-config/services/analytics-import/analytics-import.service';
-import { Config } from './models-config';
+import { Config, ConfigPersistence } from './models-config';
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { SearchInitService } from '@search-config/services/search-init/search-init.service';
 import { SearchImportService } from '@search-config/services/search-import/search-import.service';
@@ -39,6 +39,8 @@ import { MapInitService } from '@map-config/services/map-init/map-init.service';
 import { MapImportService } from '@map-config/services/map-import/map-import.service';
 import { AbstractControl, FormGroup, FormArray } from '@angular/forms';
 import { ConfigFormControl, ConfigFormGroup } from '@shared-models/config-form';
+import { MatDialog } from '@angular/material/dialog';
+import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 
 
 @Injectable({
@@ -63,6 +65,7 @@ export class MainFormManagerService {
     private translate: TranslateService,
     private mapInitService: MapInitService,
     private mapImportService: MapImportService,
+    private dialog: MatDialog
   ) { }
 
   /**
@@ -114,37 +117,51 @@ export class MainFormManagerService {
     const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers);
 
     if (this.persistenceService.isAvailable) {
+
+      const configObject: ConfigPersistence = {
+        name: 'New config',
+        config: JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
+          generatedMapConfig.layers
+        ))
+      };
+
       if (localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY)) {
         // Update existing
-        this.persistenceService.update(
-          localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY),
-          JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
-            generatedMapConfig.layers
-          ))
-        ).subscribe(
-          () => {
-            this.snackbar.open(
-              this.translate.instant('Configuration updated !') + ' (' + localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY) + ')'
-            );
-          },
-          () => {
-            this.snackbar.open(this.translate.instant('Error : Configuration not updated'));
-          }
-        );
+        this.persistenceService.get(localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY)).subscribe(data => {
+          configObject.name = (JSON.parse(data.doc_value) as ConfigPersistence).name;
+          this.persistenceService.update(
+            localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY),
+            JSON.stringify(configObject)
+          ).subscribe(
+            () => {
+              this.snackbar.open(
+                this.translate.instant('Configuration updated !') + ' (' + configObject.name + ')'
+              );
+            },
+            () => {
+              this.snackbar.open(this.translate.instant('Error : Configuration not updated'));
+            }
+          );
+        });
       } else {
         // Create new config
-        this.persistenceService.create(
-          JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
-            generatedMapConfig.layers
-          ))
-        ).subscribe(
-          () => {
-            this.snackbar.open(this.translate.instant('Configuration saved !'));
-          },
-          () => {
-            this.snackbar.open(this.translate.instant('Error : Configuration not saved'));
+        const dialogRef = this.dialog.open(InputModalComponent);
+        dialogRef.afterClosed().subscribe(configName => {
+          if (configName) {
+            configObject.name = configName;
           }
-        );
+          this.persistenceService.create(
+            JSON.stringify(configObject)
+          ).subscribe(
+            () => {
+              this.snackbar.open(this.translate.instant('Configuration saved !'));
+            },
+            () => {
+              this.snackbar.open(this.translate.instant('Error : Configuration not saved'));
+            }
+          );
+        });
+
       }
 
 
