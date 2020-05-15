@@ -45,6 +45,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatListModule } from '@angular/material/list';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 // other libs imports
 import { ColorPickerModule } from 'ngx-color-picker';
@@ -106,6 +107,7 @@ import { InputModalComponent } from './components/input-modal/input-modal.compon
     MatSidenavModule,
     MatBadgeModule,
     MatListModule,
+    MatButtonToggleModule,
     HttpClientModule,
     MatPaginatorModule
   ],

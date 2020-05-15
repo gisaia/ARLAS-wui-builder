@@ -17,12 +17,10 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit, Input } from '@angular/core';
-import { FormArray, FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
-import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material';
-import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { ContributorConfig } from '@services/main-form-manager/models-config';
 import {
@@ -42,7 +40,6 @@ export class GroupsComponent implements OnInit {
   @Input() public contentFg: FormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
     public dialog: MatDialog,
     private arlasStartupService: ArlasStartupService,
     private configService: ArlasConfigService,

@@ -25,6 +25,7 @@ import { SwimlaneFormBuilderService } from '../../services/swimlane-form-builder
 import { EditWidgetDialogData } from './models';
 import { WIDGET_TYPE } from '../edit-group/models';
 import { FormGroup } from '@angular/forms';
+import { MetricFormBuilderService } from '@analytics-config/services/metric-form-builder/metric-form-builder.service';
 
 @Component({
   selector: 'app-edit-widget-dialog',
@@ -47,7 +48,8 @@ export class EditWidgetDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<EditWidgetDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: EditWidgetDialogData,
     private histogramBuilder: HistogramFormBuilderService,
-    private swimlaneBuilder: SwimlaneFormBuilderService
+    private swimlaneBuilder: SwimlaneFormBuilderService,
+    private metricBuilder: MetricFormBuilderService,
   ) {
 
     this.initFormGroup();
@@ -61,6 +63,9 @@ export class EditWidgetDialogComponent implements OnInit {
         break;
       case WIDGET_TYPE.swimlane:
         formBuilder = this.swimlaneBuilder;
+        break;
+      case WIDGET_TYPE.metric:
+        formBuilder = this.metricBuilder;
         break;
     }
 

@@ -53,3 +53,36 @@ mat-option {
         }
     }
 }
+
+.metric-field-form-control {
+    .action-container {
+        // prevent to expend width with the parent
+        width: fit-content;
+        .field-add-container {
+            display: flex;
+
+            .field-container {
+                flex-grow: 5;
+
+                mat-form-field {
+                    width: 90%;
+                }
+            }
+
+            .add-container {
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+
+    .chips-container {
+        margin-top: 15px;
+    }
+}
+
+.textarea-form-control {
+    mat-form-field {
+        width: 100%;
+    }
+}

@@ -31,7 +31,9 @@ import { DefaultValuesService, DefaultConfig } from '@services/default-values/de
 import {
   BucketsIntervalFormBuilderService, BucketsIntervalFormGroup
 } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
-import { MetricFormBuilderService, MetricFormGroup } from '../metric-form-builder/metric-form-builder.service';
+import {
+  MetricCollectFormBuilderService, MetricCollectFormGroup
+} from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { Observable } from 'rxjs';
 import { toKeywordOptionsObs } from '@services/collection-service/tools';
 
@@ -39,7 +41,7 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
 
   constructor(
     dateAggregationFg: BucketsIntervalFormGroup,
-    metricFg: MetricFormGroup,
+    metricFg: MetricCollectFormGroup,
     defaultConfig: DefaultConfig,
     keywordsFieldsObs: Observable<SelectOption[]>
   ) {
@@ -126,7 +128,7 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
         termAggregationField: this.get('dataStep').get('termAggregation').get('termAggregationField') as SelectFormControl,
         termAggregationSize: this.get('dataStep').get('termAggregation').get('termAggregationSize') as SliderFormControl
       },
-      metric: this.get('dataStep').get('metric') as MetricFormGroup
+      metric: this.get('dataStep').get('metric') as MetricCollectFormGroup
     },
     renderStep: {
       swimlaneMode: this.get('renderStep').get('swimlaneMode') as SelectFormControl,
@@ -154,7 +156,7 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
     protected mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
-    private metricBuilderService: MetricFormBuilderService,
+    private metricBuilderService: MetricCollectFormBuilderService,
   ) {
     super(collectionService, mainFormService);
   }

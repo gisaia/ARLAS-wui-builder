@@ -89,6 +89,8 @@ export interface ContributorConfig {
     datatype?: string;
     jsonpath?: string;
     swimlanes?: Array<SwimlaneConfig>;
+    function?: string;
+    metrics?: Array<{ field: string, metric: string }>;
 }
 
 export interface SwimlaneConfig {
@@ -141,6 +143,9 @@ export interface AnalyticComponentInputConfig {
     showYLabels: boolean;
     showHorizontalLines: boolean;
     barWeight: number;
+    beforeValue?: string;
+    afterValue?: string;
+    shortValue?: boolean;
 }
 
 export interface AnalyticComponentHistogramInputConfig extends AnalyticComponentInputConfig {

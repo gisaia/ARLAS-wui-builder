@@ -29,6 +29,8 @@ import { VISIBILITY, NORMALIZED } from '@services/main-form-manager/config-map-e
 import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '../map-layer-form-builder/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
+import { AbstractControl, FormGroup } from '@angular/forms';
+import { ConfigFormControl, ConfigFormGroup } from '@shared-models/config-form';
 
 @Injectable({
   providedIn: 'root'
@@ -200,6 +202,8 @@ export class MapImportService {
 
     return layerFg;
   }
+
+
 
   private importLayerFeatures(
     values: any,
