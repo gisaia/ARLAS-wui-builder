@@ -116,7 +116,7 @@ export class MainFormManagerService {
 
     const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers);
 
-    if (this.persistenceService.isAvailable && type !== EXPORT_TYPE.json) {
+    if (this.persistenceService.isAvailable && type === EXPORT_TYPE.persistence) {
 
       const configObject: ConfigPersistence = {
         name: 'New config',
