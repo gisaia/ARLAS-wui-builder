@@ -22,6 +22,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { getNbErrorsInControl } from '@utils/tools';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+import { EXPORT_TYPE } from '@services/main-form-manager/config-export-helper';
+import { PersistenceService } from '@services/persistence/persistence.service';
 
 interface Page {
   link: string;
@@ -45,7 +47,8 @@ export class LeftMenuComponent {
   constructor(
     private mainFormService: MainFormService,
     private mainFormManager: MainFormManagerService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    public persistenceService: PersistenceService
   ) {
     // recompute nberrors of each page anytime the mainform validity changes
     this.mainFormService.mainForm.statusChanges.subscribe(st => this.updateNbErrors());
@@ -102,8 +105,17 @@ export class LeftMenuComponent {
       );
   }
 
-  public save() {
-    this.mainFormManager.attemptExport();
+  public save(event) {
+    if (this.persistenceService.isAvailable) {
+      this.mainFormManager.attemptExport(EXPORT_TYPE.persistence);
+      this.updateNbErrors();
+    } else {
+      event.stopPropagation();
+    }
+  }
+
+  public export() {
+    this.mainFormManager.attemptExport(EXPORT_TYPE.json);
     this.updateNbErrors();
   }
 

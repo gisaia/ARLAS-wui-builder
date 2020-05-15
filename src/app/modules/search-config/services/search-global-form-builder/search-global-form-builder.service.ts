@@ -59,7 +59,7 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
           'It is used to...',
           1,
           10,
-          0.1
+          1
         ),
         icon: new IconFormControl(
           null,

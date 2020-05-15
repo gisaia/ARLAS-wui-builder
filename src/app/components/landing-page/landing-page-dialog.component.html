@@ -6,7 +6,7 @@
     <div class="small-blocs">
         <div class="bloc" (click)="openPersistenceManagement($event)" [class.bloc-disabled]="!this.persistenceService.isAvailable">
             <mat-icon>cloud_download</mat-icon>
-            <span>{{'Import' | translate}}</span>
+            <span>{{'Load' | translate}}</span>
         </div>
         <div class="bloc" (click)="configChoice = InitialChoice.load; importType = ImportType.file">
             <mat-icon>get_app</mat-icon>

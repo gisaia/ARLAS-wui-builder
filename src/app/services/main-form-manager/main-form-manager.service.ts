@@ -21,7 +21,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { updateValueAndValidity, LOCALSTORAGE_CONFIG_ID_KEY } from '@utils/tools';
 import * as FileSaver from 'file-saver';
 import { NGXLogger } from 'ngx-logger';
-import { ConfigExportHelper } from './config-export-helper';
+import { ConfigExportHelper, EXPORT_TYPE } from './config-export-helper';
 import { ConfigMapExportHelper } from './config-map-export-helper';
 import { AnalyticsImportService } from '@analytics-config/services/analytics-import/analytics-import.service';
 import { Config, ConfigPersistence } from './models-config';
@@ -81,7 +81,7 @@ export class MainFormManagerService {
     this.updateControlsFromOtherControls(this.mainFormService.mainForm);
   }
 
-  public attemptExport() {
+  public attemptExport(type: EXPORT_TYPE) {
 
     if (!this.isExportExpected) {
       this.isExportExpected = true;
@@ -92,13 +92,13 @@ export class MainFormManagerService {
     updateValueAndValidity(this.mainFormService.mainForm, false, false);
 
     if (this.mainFormService.mainForm.valid) {
-      this.doExport();
+      this.doExport(type);
     } else {
       this.logger.info('Main form is not valid', this.mainFormService.mainForm);
     }
   }
 
-  private doExport() {
+  private doExport(type: EXPORT_TYPE) {
     const startingConfig = this.mainFormService.startingConfig.getFg();
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
     const mapConfigLayers = this.mainFormService.mapConfig.getLayersFa();
@@ -116,7 +116,7 @@ export class MainFormManagerService {
 
     const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers);
 
-    if (this.persistenceService.isAvailable) {
+    if (this.persistenceService.isAvailable && type === EXPORT_TYPE.persistence) {
 
       const configObject: ConfigPersistence = {
         name: 'New config',
@@ -154,7 +154,9 @@ export class MainFormManagerService {
             JSON.stringify(configObject)
           ).subscribe(
             () => {
-              this.snackbar.open(this.translate.instant('Configuration saved !'));
+              this.snackbar.open(
+                this.translate.instant('Configuration saved !') + ' (' + configObject.name + ')'
+              );
             },
             () => {
               this.snackbar.open(this.translate.instant('Error : Configuration not saved'));

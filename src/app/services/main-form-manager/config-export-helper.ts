@@ -39,6 +39,11 @@ import { LayerSourceConfig, getSourceName } from 'arlas-web-contributors';
 import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 
+export enum EXPORT_TYPE {
+    json = 'json',
+    persistence = 'persistence'
+}
+
 export class ConfigExportHelper {
 
     public static process(
