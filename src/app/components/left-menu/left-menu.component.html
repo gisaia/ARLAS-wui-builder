@@ -21,18 +21,18 @@
   </div>
 
   <div>
-    <div>
+    <div class="action-list">
       <mat-nav-list>
-        <mat-list-item matTooltip="Reset">
-          <button mat-icon-button>
-            <mat-icon>backspace</mat-icon>
-            <span>{{'Reset' | translate}}</span>
+        <mat-list-item matTooltip="Save" (click)="save($event)" [class.disabled-item]="!this.persistenceService.isAvailable">
+          <button mat-icon-button >
+            <mat-icon>cloud_upload</mat-icon>
+            <span>{{'Save' | translate}}</span>
           </button>
         </mat-list-item>
-        <mat-list-item matTooltip="Save">
-          <button mat-icon-button (click)="save()">
-            <mat-icon>save</mat-icon>
-            <span>{{'Save' | translate}}</span>
+        <mat-list-item matTooltip="Export to json file" (click)="export()">
+          <button mat-icon-button>
+            <mat-icon>insert_drive_file</mat-icon>
+            <span>{{'Export' | translate}}</span>
           </button>
         </mat-list-item>
       </mat-nav-list>
