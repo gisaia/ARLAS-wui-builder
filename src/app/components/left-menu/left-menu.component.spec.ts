@@ -3,6 +3,7 @@ import { LeftMenuComponent } from './left-menu.component';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormGroup } from '@angular/forms';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+import { GET_OPTIONS } from '@services/persistence/persistence.service';
 
 describe('LeftMenuComponent', () => {
   let spectator: Spectator<LeftMenuComponent>;
@@ -26,7 +27,8 @@ describe('LeftMenuComponent', () => {
           },
           mainForm: new FormGroup({})
         }),
-      mockProvider(MainFormManagerService)
+      mockProvider(MainFormManagerService),
+      { provide: GET_OPTIONS, useValue: {} }
     ]
   });
 
