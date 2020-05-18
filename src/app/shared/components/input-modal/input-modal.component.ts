@@ -16,8 +16,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-input-modal',
@@ -37,7 +37,7 @@ export class InputModalComponent {
   }
 
   public pressEvent(event: KeyboardEvent) {
-    if (event.keyCode === 13 && this.textName) {
+    if (event.code === 'Enter' && this.textName) {
       this.dialogRef.close(this.textName);
     }
   }

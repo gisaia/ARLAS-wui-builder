@@ -150,6 +150,7 @@ export interface AnalyticComponentInputConfig {
     displayFilter?: boolean;
     useColorService?: boolean;
     opacity?: number;
+    powerbarTitle?: string;
 }
 
 export interface AnalyticComponentHistogramInputConfig extends AnalyticComponentInputConfig {

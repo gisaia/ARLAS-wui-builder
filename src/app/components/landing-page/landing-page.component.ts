@@ -45,12 +45,6 @@ enum InitialChoice {
   load = 2
 }
 
-enum ImportType {
-  none = 0,
-  file = 1,
-  persistence = 2
-}
-
 
 
 @Component({
@@ -61,11 +55,9 @@ export class LandingPageDialogComponent implements OnInit {
   @Output() public startEvent: Subject<boolean> = new Subject<boolean>();
 
   public configChoice = InitialChoice.none;
-  public importType = ImportType.none;
   public isServerReady = false;
   public availablesCollections: string[];
   public InitialChoice = InitialChoice;
-  public ImportType = ImportType;
 
   public configurations = [];
   public displayedColumns: string[] = ['id', 'creation', 'detail'];
@@ -222,13 +214,11 @@ export class LandingPageDialogComponent implements OnInit {
   public duplicateConfig(id: string) {
     const dialogRef = this.dialog.open(InputModalComponent);
     dialogRef.afterClosed().subscribe(configName => {
-      let newName = '';
       if (configName) {
-        newName = configName;
+        this.persistenceService.duplicate(id, configName).subscribe(() => {
+          this.getConfigList();
+        });
       }
-      this.persistenceService.duplicate(id, newName).subscribe(() => {
-        this.getConfigList();
-      });
     });
   }
 
@@ -268,7 +258,6 @@ export class LandingPageDialogComponent implements OnInit {
   public openPersistenceManagement(event) {
     if (this.persistenceService.isAvailable) {
       this.configChoice = InitialChoice.load;
-      this.importType = ImportType.persistence;
     } else {
       event.stopPropagation();
     }
