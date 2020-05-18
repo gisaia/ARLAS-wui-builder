@@ -7,6 +7,7 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { of } from 'rxjs';
 import { HistogramFormBuilderService } from '../../services/histogram-form-builder/histogram-form-builder.service';
 import { FormGroup } from '@angular/forms';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 describe('EditWidgetDialogComponent', () => {
   let spectator: Spectator<EditWidgetDialogComponent>;
@@ -25,7 +26,8 @@ describe('EditWidgetDialogComponent', () => {
       }),
       mockProvider(HistogramFormBuilderService, {
         build: () => new FormGroup({})
-      })
+      }),
+      mockProvider(ArlasColorGeneratorLoader)
     ],
     declarations: [
       MockComponent(ConfigFormGroupComponent)

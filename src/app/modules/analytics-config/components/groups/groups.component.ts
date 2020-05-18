@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit, Input } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 import { MatDialog } from '@angular/material';

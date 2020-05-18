@@ -26,6 +26,8 @@ import { EditWidgetDialogData } from './models';
 import { WIDGET_TYPE } from '../edit-group/models';
 import { FormGroup } from '@angular/forms';
 import { MetricFormBuilderService } from '@analytics-config/services/metric-form-builder/metric-form-builder.service';
+import { PowerbarFormBuilderService } from '@analytics-config/services/powerbar-form-builder/powerbar-form-builder.service';
+import { DonutFormBuilderService } from '@analytics-config/services/donut-form-builder/donut-form-builder.service';
 
 @Component({
   selector: 'app-edit-widget-dialog',
@@ -50,6 +52,8 @@ export class EditWidgetDialogComponent implements OnInit {
     private histogramBuilder: HistogramFormBuilderService,
     private swimlaneBuilder: SwimlaneFormBuilderService,
     private metricBuilder: MetricFormBuilderService,
+    private powerFormBuilder: PowerbarFormBuilderService,
+    private donutFormBuilder: DonutFormBuilderService,
   ) {
 
     this.initFormGroup();
@@ -66,6 +70,12 @@ export class EditWidgetDialogComponent implements OnInit {
         break;
       case WIDGET_TYPE.metric:
         formBuilder = this.metricBuilder;
+        break;
+      case WIDGET_TYPE.powerbars:
+        formBuilder = this.powerFormBuilder;
+        break;
+      case WIDGET_TYPE.donut:
+        formBuilder = this.donutFormBuilder;
         break;
     }
 

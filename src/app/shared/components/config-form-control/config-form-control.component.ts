@@ -20,7 +20,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import {
   ConfigFormControl, SlideToggleFormControl, SliderFormControl, SelectFormControl, InputFormControl,
   ColorFormControl, HuePaletteFormControl, HiddenFormControl, IconFormControl, ButtonFormControl,
-  OrderedSelectFormControl, MetricFieldSelectFormControl as MetricFieldListFormControl, TextareaFormControl
+  OrderedSelectFormControl, MetricWithFieldListFormControl as MetricFieldListFormControl, TextareaFormControl,
+  MetricWithFieldListFormControl, FieldWithSizeListFormControl
 } from '@shared-models/config-form';
 
 @Component({
@@ -86,9 +87,14 @@ export class ConfigFormControlComponent implements OnInit {
     return Object.getPrototypeOf(this.control) === ButtonFormControl.prototype ? this.control as ButtonFormControl : null;
   }
 
-  public isMetricFieldList(): MetricFieldListFormControl | null {
-    return Object.getPrototypeOf(this.control) === MetricFieldListFormControl.prototype ?
-      this.control as MetricFieldListFormControl : null;
+  public isMetricWithFieldList(): MetricWithFieldListFormControl | null {
+    return Object.getPrototypeOf(this.control) === MetricWithFieldListFormControl.prototype ?
+      this.control as MetricWithFieldListFormControl : null;
+  }
+
+  public isFieldWithSizeList(): FieldWithSizeListFormControl | null {
+    return Object.getPrototypeOf(this.control) === FieldWithSizeListFormControl.prototype ?
+      this.control as FieldWithSizeListFormControl : null;
   }
 
   public isTextarea(): TextareaFormControl | null {

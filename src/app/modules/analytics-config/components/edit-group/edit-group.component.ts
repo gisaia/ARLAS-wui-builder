@@ -24,15 +24,9 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { WIDGET_TYPE } from './models';
 import { MatDialog } from '@angular/material';
 import { EditWidgetDialogComponent } from '../edit-widget-dialog/edit-widget-dialog.component';
-import { NGXLogger } from 'ngx-logger';
 import { EditWidgetDialogData } from '../edit-widget-dialog/models';
-import { ArlasCollaborativesearchService, ArlasStartupService, ArlasConfigService } from 'arlas-wui-toolkit';
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
-import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
-import { HistogramComponent } from 'arlas-web-components';
-import { HistogramContributor } from 'arlas-web-contributors';
 import { OperationEnum } from 'arlas-web-core';
-import { StartupService } from '@services/startup/startup.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 
 @Component({
@@ -48,27 +42,22 @@ export class EditGroupComponent implements OnInit {
   public contentTypes = [
     [WIDGET_TYPE.histogram],
     [WIDGET_TYPE.donut],
-    [WIDGET_TYPE.powerbar],
+    [WIDGET_TYPE.powerbars],
     [WIDGET_TYPE.resultlist],
     [WIDGET_TYPE.metric],
     [WIDGET_TYPE.swimlane],
     [WIDGET_TYPE.metric, WIDGET_TYPE.metric],
-    [WIDGET_TYPE.donut, WIDGET_TYPE.powerbar],
+    [WIDGET_TYPE.donut, WIDGET_TYPE.powerbars],
     [WIDGET_TYPE.donut, WIDGET_TYPE.swimlane],
     [WIDGET_TYPE.histogram, WIDGET_TYPE.histogram],
-    [WIDGET_TYPE.powerbar, WIDGET_TYPE.powerbar],
+    [WIDGET_TYPE.powerbars, WIDGET_TYPE.powerbars],
     [WIDGET_TYPE.metric, WIDGET_TYPE.metric, WIDGET_TYPE.metric],
-    [WIDGET_TYPE.powerbar, WIDGET_TYPE.powerbar, WIDGET_TYPE.powerbar]
+    [WIDGET_TYPE.powerbars, WIDGET_TYPE.powerbars, WIDGET_TYPE.powerbars]
   ];
   public getContentTypes = (nbWidgets: number) => this.contentTypes.filter(elmt => elmt.length === nbWidgets);
   constructor(
     private dialog: MatDialog,
-    private logger: NGXLogger,
     private cdr: ChangeDetectorRef,
-    private arlasStartupService: ArlasStartupService,
-    private collaborativesearchService: ArlasCollaborativesearchService,
-    private configService: ArlasConfigService,
-    private startupService: StartupService,
     private analyticsInitService: AnalyticsInitService
   ) { }
 

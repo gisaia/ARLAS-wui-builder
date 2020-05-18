@@ -57,6 +57,7 @@ export interface WebConfig {
         mapgl: MapglComponentConfig
     };
     analytics: Array<AnalyticConfig>;
+    colorGenerator: { keysToColors: Array<Array<string>> };
 }
 
 export interface ServerConfig {
@@ -130,7 +131,7 @@ export interface AnalyticComponentInputConfig {
     chartTitle: string;
     chartWidth: number;
     chartHeight: number;
-    customizedCssClass: string;
+    customizedCssClass?: string;
     xAxisPosition: string;
     descriptionPosition: string;
     xTicks: number;
@@ -146,6 +147,9 @@ export interface AnalyticComponentInputConfig {
     beforeValue?: string;
     afterValue?: string;
     shortValue?: boolean;
+    displayFilter?: boolean;
+    useColorService?: boolean;
+    opacity?: number;
 }
 
 export interface AnalyticComponentHistogramInputConfig extends AnalyticComponentInputConfig {

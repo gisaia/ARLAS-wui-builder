@@ -288,11 +288,12 @@ export class OrderedSelectFormControl extends SelectFormControl {
 
 }
 
-export class MetricFieldSelectFormControl extends ConfigFormControl {
+export class MetricWithFieldListFormControl extends ConfigFormControl {
 
     public METRICS = [
         METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX, METRIC_TYPES.CARDINALITY
     ];
+    // TODO do not use validators, the fields look like in error
     public metricCtrl = new FormControl('', Validators.required);
     public fieldCtrl = new FormControl('', [
         Validators.required,
@@ -355,6 +356,63 @@ export class MetricFieldSelectFormControl extends ConfigFormControl {
     }
 
     public getValueAsSet = () => (this.value as Set<{ metric: string, field: string }>);
+}
+
+// try to put in common with MetricWithFieldListFormControl
+export class FieldWithSizeListFormControl extends ConfigFormControl {
+
+    // TODO do not use validators, the fields look like in error
+    public sizeCtrl = new FormControl('', Validators.required);
+    public fieldCtrl = new FormControl('', [
+        Validators.required,
+        (c) => !!this.autocompleteFilteredFields && this.autocompleteFilteredFields.map(f => f.value).indexOf(c.value) >= 0 ?
+            null : { validateField: { valid: false } }
+    ]);
+    public fields: Array<SelectOption>;
+    public autocompleteFilteredFields: Array<SelectOption>;
+
+    constructor(
+        formState: any,
+        label: string,
+        description: string,
+        collectionFields: Observable<Array<CollectionField>>,
+        optionalParams?: ControlOptionalParams
+    ) {
+        super(formState, label, description, optionalParams);
+        toKeywordOptionsObs(collectionFields).subscribe(fields => {
+            this.fields = fields;
+            this.filterAutocomplete();
+        });
+        this.fieldCtrl.valueChanges.subscribe(v => this.filterAutocomplete(v));
+        this.setValue(new Set());
+        if (!this.optional) {
+            // as the value is a set, if the control is required, an empty set should also be an error
+            this.setValidators([
+                (control) => !!control.value && Array.from(control.value).length > 0 ? null : { required: { valid: false } }
+            ]);
+        }
+    }
+
+    public filterAutocomplete(value?: string) {
+        if (!!value) {
+            this.autocompleteFilteredFields = this.fields.filter(o => o.label.indexOf(value) >= 0);
+        } else {
+            this.autocompleteFilteredFields = this.fields;
+        }
+    }
+
+    public add() {
+        this.getValueAsSet().add({ field: this.fieldCtrl.value, size: parseInt(this.sizeCtrl.value, 10) });
+        this.updateValueAndValidity();
+        this.fieldCtrl.reset();
+    }
+
+    public remove(opt: { field: string, size: number }) {
+        this.getValueAsSet().delete(opt);
+        this.updateValueAndValidity();
+    }
+
+    public getValueAsSet = () => (this.value as Set<{ field: string, size: number }>);
 }
 
 export class HuePaletteFormControl extends SelectFormControl {
@@ -450,16 +508,20 @@ export class ColorFormControl extends ConfigFormControl {
 
 export class ButtonFormControl extends ConfigFormControl {
 
+    // disabled state of the button itself, not of the form control
+    // ButtonFormControl disabled <=> not displayed, button disabled <=> displayed but disabled
+    public disabledButton = false;
+
     // TODO remove formstate?
     constructor(
         formState: any,
         label: string,
         description: string,
         public callback: () => void,
+        public disabledButtonMessage?: string,
         optionalParams?: ControlOptionalParams) {
         super(formState, label, description, optionalParams || { optional: true });
     }
-
 }
 
 export class TextareaFormControl extends ConfigFormControl {

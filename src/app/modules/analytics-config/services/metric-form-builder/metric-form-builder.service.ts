@@ -18,13 +18,14 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import {
-  ConfigFormGroup, InputFormControl, MetricFieldSelectFormControl, TextareaFormControl, SlideToggleFormControl
+  ConfigFormGroup, InputFormControl, MetricWithFieldListFormControl, TextareaFormControl, SlideToggleFormControl
 } from '@shared-models/config-form';
 import { Observable } from 'rxjs';
 import { CollectionField } from '@services/collection-service/models';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { WidgetFormBuilder } from '../widget-form-builder';
+import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 export class MetricFormGroup extends ConfigFormGroup {
 
@@ -38,7 +39,7 @@ export class MetricFormGroup extends ConfigFormGroup {
           'Title',
           'Description'
         ),
-        metrics: new MetricFieldSelectFormControl(
+        metrics: new MetricWithFieldListFormControl(
           '',
           'metric/field',
           '',
@@ -88,7 +89,7 @@ export class MetricFormGroup extends ConfigFormGroup {
   public customControls = {
     dataStep: {
       name: this.get('dataStep').get('name') as InputFormControl,
-      metrics: this.get('dataStep').get('metrics') as MetricFieldSelectFormControl,
+      metrics: this.get('dataStep').get('metrics') as MetricWithFieldListFormControl,
       function: this.get('dataStep').get('function') as TextareaFormControl,
     },
     renderStep: {
@@ -109,14 +110,19 @@ export class MetricFormBuilderService extends WidgetFormBuilder {
 
   constructor(
     protected mainFormService: MainFormService,
-    protected collectionService: CollectionService
+    protected collectionService: CollectionService,
+    private formBuilderDefault: FormBuilderWithDefaultService,
   ) {
     super(collectionService, mainFormService);
   }
 
   public build() {
-    return new MetricFormGroup(
+
+    const formGroup = new MetricFormGroup(
       this.collectionService.getCollectionFields(this.mainFormService.getCollections()[0])
     );
+    this.formBuilderDefault.setDefaultValueRecursively(this.defaultKey, formGroup);
+
+    return formGroup;
   }
 }

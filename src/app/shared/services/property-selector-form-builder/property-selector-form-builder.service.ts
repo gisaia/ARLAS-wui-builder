@@ -180,6 +180,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                 });
               }
             }),
+          undefined,
           {
             optional: true,
             dependsOn: () => [this.customControls.propertyManualFg.propertyManualFieldCtrl],
@@ -484,6 +485,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                 }
               });
           },
+          undefined,
           {
             optional: true,
             dependsOn: () => [

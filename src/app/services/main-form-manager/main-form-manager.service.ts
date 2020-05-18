@@ -37,7 +37,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MapConfig } from './models-map-config';
 import { MapInitService } from '@map-config/services/map-init/map-init.service';
 import { MapImportService } from '@map-config/services/map-import/map-import.service';
-import { AbstractControl, FormGroup, FormArray } from '@angular/forms';
+import { AbstractControl, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { ConfigFormControl, ConfigFormGroup } from '@shared-models/config-form';
 import { MatDialog } from '@angular/material/dialog';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
@@ -78,6 +78,8 @@ export class MainFormManagerService {
     this.timelineInitService.initModule();
     this.mapInitService.initModule();
 
+    this.mainFormService.commonConfig.initKeysToColorFa(new FormArray([]));
+
     this.updateControlsFromOtherControls(this.mainFormService.mainForm);
   }
 
@@ -105,6 +107,7 @@ export class MainFormManagerService {
     const searchConfigGlobal = this.mainFormService.searchConfig.getGlobalFg();
     const timelineConfigGlobal = this.mainFormService.timelineConfig.getGlobalFg();
     const analyticsConfigList = this.mainFormService.analyticsConfig.getListFa();
+    const keysToColorList = this.mainFormService.commonConfig.getKeysToColorFa();
 
     const generatedConfig = ConfigExportHelper.process(
       startingConfig,
@@ -112,7 +115,9 @@ export class MainFormManagerService {
       mapConfigLayers,
       searchConfigGlobal,
       timelineConfigGlobal,
-      analyticsConfigList);
+      analyticsConfigList,
+      keysToColorList,
+    );
 
     const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers);
 
@@ -179,6 +184,19 @@ export class MainFormManagerService {
     this.searchImportService.doImport(config);
     this.timelineImportService.doImport(config);
     this.mapImportService.doImport(config, mapConfig);
+
+    // load keys to colors
+    if (!!config.arlas.web.colorGenerator && !!config.arlas.web.colorGenerator.keysToColors) {
+
+      const keysToColor = new FormArray([]);
+      config.arlas.web.colorGenerator.keysToColors.forEach(kc =>
+        keysToColor.push(new FormGroup({
+          keyword: new FormControl(kc[0]),
+          color: new FormControl(kc[1])
+        }))
+      );
+      this.mainFormService.commonConfig.initKeysToColorFa(keysToColor);
+    }
 
     this.updateControlsFromOtherControls(this.mainFormService.mainForm);
   }
