@@ -5,6 +5,6 @@
     </mat-form-field>
   </div>
   <div mat-dialog-actions>
-    <button mat-raised-button class="modal_button" color="accent" [mat-dialog-close]="textName" tabindex="2">{{ 'OK' | translate }}</button>
+    <button mat-raised-button class="modal_button" color="primary" [mat-dialog-close]="textName" [disabled]="!textName" tabindex="2">{{ 'OK' | translate }}</button>
     <button mat-raised-button class="modal_button" (click)="cancel()" tabindex="-1">{{ 'Cancel' | translate }}</button>
   </div>
