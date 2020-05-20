@@ -95,6 +95,11 @@
             "icon": "search"
         }
     },
+    "lookAndFeel": {
+        "global": {
+            "dragAndDrop": true
+        }
+    },
     "timeline": {
         "global": {
             "useDetailedTimeline": false,
@@ -119,7 +124,7 @@
                     "chartType": "area",
                     "dateFormat": "%b %d %Y  %H:%M",
                     "selectionExtentPercent": 2
-                }                
+                }
             }
         }
     },

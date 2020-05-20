@@ -41,6 +41,8 @@ import { AbstractControl, FormGroup, FormArray, FormControl } from '@angular/for
 import { ConfigFormControl, ConfigFormGroup } from '@shared-models/config-form';
 import { MatDialog } from '@angular/material/dialog';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
+import { LookAndFeelInitService } from '@app/modules/look-and-feel-config/services/look-and-feel-init/look-and-feel-init.service';
+import { LookAndFeelImportService } from '@look-and-feel-config/services/look-and-feel-import/look-and-feel-import.service';
 
 
 @Injectable({
@@ -57,6 +59,8 @@ export class MainFormManagerService {
     private analyticsInitService: AnalyticsInitService,
     private searchInitService: SearchInitService,
     private searchImportService: SearchImportService,
+    private lookAndFeelInitService: LookAndFeelInitService,
+    private lookAndFeelImportService: LookAndFeelImportService,
     private timelineInitService: TimelineInitService,
     private timelineImportService: TimelineImportService,
     private persistenceService: PersistenceService,
@@ -75,6 +79,7 @@ export class MainFormManagerService {
     // load the modules required forms
     this.analyticsInitService.initModule();
     this.searchInitService.initModule();
+    this.lookAndFeelInitService.initModule();
     this.timelineInitService.initModule();
     this.mapInitService.initModule();
 
@@ -105,6 +110,7 @@ export class MainFormManagerService {
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
     const mapConfigLayers = this.mainFormService.mapConfig.getLayersFa();
     const searchConfigGlobal = this.mainFormService.searchConfig.getGlobalFg();
+    const lookAndFeelConfigGlobal = this.mainFormService.lookAndFeelConfig.getGlobalFg();
     const timelineConfigGlobal = this.mainFormService.timelineConfig.getGlobalFg();
     const analyticsConfigList = this.mainFormService.analyticsConfig.getListFa();
     const keysToColorList = this.mainFormService.commonConfig.getKeysToColorFa();
@@ -115,6 +121,7 @@ export class MainFormManagerService {
       mapConfigLayers,
       searchConfigGlobal,
       timelineConfigGlobal,
+      lookAndFeelConfigGlobal,
       analyticsConfigList,
       keysToColorList,
     );
@@ -183,6 +190,7 @@ export class MainFormManagerService {
     this.analyticsImportService.doImport(config);
     this.searchImportService.doImport(config);
     this.timelineImportService.doImport(config);
+    this.lookAndFeelImportService.doImport(config);
     this.mapImportService.doImport(config, mapConfig);
 
     // load keys to colors

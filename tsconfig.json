@@ -31,6 +31,7 @@
       "@shared-services/*": ["app/shared/services/*"],
       "@utils/*": ["app/utils/*"],
       "@shared/*": ["app/shared/*"],
+      "@look-and-feel-config/*": ["app/modules/look-and-feel-config/*"],
       "@map-config/*": ["app/modules/map-config/*"],
       "@search-config/*": ["app/modules/search-config/*"],
       "@timeline-config/*": ["app/modules/timeline-config/*"],

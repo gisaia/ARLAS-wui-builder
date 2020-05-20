@@ -89,10 +89,11 @@ export class LeftMenuComponent {
     },
     {
       name: 'Look \'n feel',
-      link: 'some-link',
-      icon: 'send',
+      link: '/look-and-feel',
+      icon: 'opacity',
       tooltip: this.translate.instant('Look \'n fell configuration'),
-      enabled: false
+      enabled: true,
+      control: this.mainFormService.lookAndFeelConfig.control
     },
   ];
 

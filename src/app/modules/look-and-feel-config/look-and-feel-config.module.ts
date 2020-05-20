@@ -16,13 +16,19 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-@import "~@angular/material/theming";
+import { NgModule } from '@angular/core';
+import { SharedModule } from '@shared/shared.module';
+import { LookAndFeelConfigRoutingModule } from './look-and-feel-config-routing.module';
+import { LookAndFeelConfigComponent } from './look-and-feel-config.component';
+import { GlobalLookAndFeelComponent } from './components/global-look-and-feel/global-look-and-feel.component';
 
-$primary-palette: mat-palette($mat-indigo);
-$accent-palette: mat-palette($mat-orange, 500);
-$warn-palette: mat-palette($mat-red);
 
-$config-element-description-background: mat-color($mat-grey, 50);
-$config-element-description-border-color: transparentize(mat-color($mat-indigo, A700), 0.4);
-$config-element-description-text-color: transparentize(mat-color($mat-blue-grey, A700), 0.4);
-$error-color: mat-color($warn-palette);
+
+@NgModule({
+  declarations: [LookAndFeelConfigComponent, GlobalLookAndFeelComponent],
+  imports: [
+    LookAndFeelConfigRoutingModule,
+    SharedModule
+  ]
+})
+export class LookAndFeelConfigModule { }

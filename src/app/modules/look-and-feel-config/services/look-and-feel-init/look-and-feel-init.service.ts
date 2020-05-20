@@ -16,13 +16,25 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-@import "~@angular/material/theming";
+import { Injectable } from '@angular/core';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { LookAndFeelGlobalFormBuilderService } from '../look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
 
-$primary-palette: mat-palette($mat-indigo);
-$accent-palette: mat-palette($mat-orange, 500);
-$warn-palette: mat-palette($mat-red);
 
-$config-element-description-background: mat-color($mat-grey, 50);
-$config-element-description-border-color: transparentize(mat-color($mat-indigo, A700), 0.4);
-$config-element-description-text-color: transparentize(mat-color($mat-blue-grey, A700), 0.4);
-$error-color: mat-color($warn-palette);
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LookAndFeelInitService {
+
+  constructor(
+    private mainFormService: MainFormService,
+    private lookAndFeelGlobalFormBuilder: LookAndFeelGlobalFormBuilderService
+  ) { }
+
+  public initModule() {
+    this.mainFormService.lookAndFeelConfig.initGlobalFg(
+      this.lookAndFeelGlobalFormBuilder.build()
+    );
+  }
+}

@@ -18,8 +18,8 @@ under the License.
 */
 @import "variables.scss";
 
-$accent-color: mat-color($accent-palette, 300);
-$primary-color: mat-color($primary-palette, 400);
+$accent-color: mat-color($accent-palette);
+$primary-color: mat-color($primary-palette);
 
 .collection {
   .mat-form-field {
