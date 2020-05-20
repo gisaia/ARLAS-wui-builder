@@ -38,7 +38,9 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
         name: new InputFormControl(
           null,
           'Name',
-          'It is used to...'),
+          'It is used to...',
+          null,
+          { title: 'Search'}),
         searchField: new SelectFormControl(
           null,
           'Search field',

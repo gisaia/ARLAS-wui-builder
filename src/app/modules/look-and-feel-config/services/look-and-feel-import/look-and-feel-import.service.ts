@@ -1,0 +1,73 @@
+/*
+Licensed to Gisaïa under one or more contributor
+license agreements. See the NOTICE.txt file distributed with
+this work for additional information regarding copyright
+ownership. Gisaïa licenses this file to you under
+the Apache License, Version 2.0 (the "License"); you may
+not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+import { Injectable } from '@angular/core';
+import { MainFormService } from '@services/main-form/main-form.service';
+import {
+  LookAndFeelGlobalFormGroup
+} from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
+import { importElements } from '@services/main-form-manager/tools';
+import { Config } from '@services/main-form-manager/models-config';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LookAndFeelImportService {
+
+  constructor(
+    private mainFormService: MainFormService
+  ) { }
+
+  public doImport(config: Config) {
+
+    const configOptionns = config.arlas.web.options ? config.arlas.web.options : null;
+
+    const globalSearchFg = this.mainFormService.lookAndFeelConfig.getGlobalFg() as LookAndFeelGlobalFormGroup;
+
+    if (configOptionns) {
+
+      importElements([
+        {
+          value: configOptionns.dragItems,
+          control: globalSearchFg.customControls.dragAndDrop
+        },
+        {
+          value: configOptionns.zoomToData,
+          control: globalSearchFg.customControls.zoomToData
+        },
+        {
+          value: configOptionns.indicators,
+          control: globalSearchFg.customControls.indicators
+        },
+        {
+          value: configOptionns.spinner,
+          control: globalSearchFg.customControls.spinner
+        },
+        {
+          value: configOptionns.spinner.color,
+          control: globalSearchFg.customControls.spinnerColor
+        },
+        {
+          value: configOptionns.spinner.diameter,
+          control: globalSearchFg.customControls.spinnerDiameter
+        }
+      ]);
+
+    }
+  }
+}

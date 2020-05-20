@@ -45,6 +45,11 @@ const routes: Routes = [
     loadChildren: () => import('./modules/analytics-config/analytics-config.module').then(m => m.AnalyticsConfigModule),
     canActivate: [MainFormInitializedGuard]
   },
+  {
+    path: 'look-and-feel',
+    loadChildren: () => import('./modules/look-and-feel-config/look-and-feel-config.module').then(m => m.LookAndFeelConfigModule),
+    canActivate: [MainFormInitializedGuard]
+  },
   { path: '**', component: PageNotFoundComponent }
 ];
 

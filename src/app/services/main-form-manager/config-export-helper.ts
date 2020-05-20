@@ -26,7 +26,8 @@ import {
     JSONPATH_METRIC,
     JSONPATH_COUNT,
     CHIPSEARCH_TYPE,
-    CHIPSEARCH_IDENTIFIER
+    CHIPSEARCH_IDENTIFIER,
+    WebConfigOptions
 } from './models-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
@@ -38,6 +39,11 @@ import { MapComponentInputConfig, MapComponentInputMapLayersConfig, MapComponent
 import { LayerSourceConfig, getSourceName } from 'arlas-web-contributors';
 import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
+import {
+    LookAndFeelGlobalFormGroup
+} from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
+
+
 
 export enum EXPORT_TYPE {
     json = 'json',
@@ -53,6 +59,7 @@ export class ConfigExportHelper {
         mapConfigLayers: FormArray,
         searchConfigGlobal: SearchGlobalFormGroup,
         timelineConfigGlobal: TimelineGlobalFormGroup,
+        lookAndFeelConfigGlobal: LookAndFeelGlobalFormGroup,
         analyticsConfigList: FormArray,
         keysToColorList: FormArray,
     ): any {
@@ -73,7 +80,8 @@ export class ConfigExportHelper {
                     analytics: [],
                     colorGenerator: {
                         keysToColors: (keysToColorList.value as Array<{ color: string, keyword: string }>).map(ck => [ck.keyword, ck.color])
-                    }
+                    },
+                    options: this.getOptions(lookAndFeelConfigGlobal)
                 },
                 server: {
                     url: startingConfig.value.serverUrl,
@@ -649,6 +657,23 @@ export class ConfigExportHelper {
             return component;
         }
 
+    }
+
+    public static getOptions(lookAndFeelConfigGlobal: LookAndFeelGlobalFormGroup): WebConfigOptions {
+        const showSpinner: boolean = !!lookAndFeelConfigGlobal.customControls.spinner.value;
+        const spinnerColor: string = lookAndFeelConfigGlobal.customControls.spinnerColor.value;
+        const spinnerDiameter: string = lookAndFeelConfigGlobal.customControls.spinnerDiameter.value;
+        const options = {
+            dragItems: !!lookAndFeelConfigGlobal.customControls.dragAndDrop.value,
+            zoomToData: !!lookAndFeelConfigGlobal.customControls.zoomToData.value,
+            indicators: !!lookAndFeelConfigGlobal.customControls.indicators.value,
+            spinner: {
+                show: showSpinner,
+                color: (showSpinner && !!spinnerColor) ? spinnerColor : '',
+                diameter: (showSpinner && !!spinnerDiameter) ? spinnerDiameter : ''
+            }
+        } as WebConfigOptions;
+        return options;
     }
 
     private static addNumberOfBucketsOrInterval(

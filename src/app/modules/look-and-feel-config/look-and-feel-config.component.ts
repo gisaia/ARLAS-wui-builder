@@ -16,13 +16,19 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-@import "~@angular/material/theming";
+import { Component, OnInit } from '@angular/core';
 
-$primary-palette: mat-palette($mat-indigo);
-$accent-palette: mat-palette($mat-orange, 500);
-$warn-palette: mat-palette($mat-red);
 
-$config-element-description-background: mat-color($mat-grey, 50);
-$config-element-description-border-color: transparentize(mat-color($mat-indigo, A700), 0.4);
-$config-element-description-text-color: transparentize(mat-color($mat-blue-grey, A700), 0.4);
-$error-color: mat-color($warn-palette);
+@Component({
+  selector: 'app-look-and-feel-config',
+  templateUrl: './look-and-feel-config.component.html',
+  styleUrls: ['./look-and-feel-config.component.scss']
+})
+export class LookAndFeelConfigComponent implements OnInit {
+
+  constructor() { }
+
+  public ngOnInit() {
+  }
+
+}

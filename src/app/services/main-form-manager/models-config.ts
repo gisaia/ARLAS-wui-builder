@@ -58,6 +58,21 @@ export interface WebConfig {
     };
     analytics: Array<AnalyticConfig>;
     colorGenerator: { keysToColors: Array<Array<string>> };
+    options?: WebConfigOptions;
+}
+
+export interface WebConfigOptions {
+    dragItems?: boolean;
+    zoomToData?: boolean;
+    indicators?: boolean;
+    spinner?: SpinnerOptions;
+}
+
+export interface SpinnerOptions {
+    show: boolean;
+    diameter?: string;
+    color?: string;
+    strokeWidth?: number;
 }
 
 export interface ServerConfig {

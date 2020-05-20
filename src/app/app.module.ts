@@ -50,6 +50,7 @@ import { GET_OPTIONS } from '@services/persistence/persistence.service';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { EnvServiceProvider } from '@services/env/env.service.provider';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
+import { LookAndFeelConfigModule } from '@look-and-feel-config/look-and-feel-config.module';
 
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
@@ -91,6 +92,7 @@ export function getOptionsFactory(arlasAuthService: AuthentificationService): an
     BrowserAnimationsModule,
     MapConfigModule,
     SearchConfigModule,
+    LookAndFeelConfigModule,
     SharedModule,
     TimelineConfigModule,
     TranslateModule.forRoot({
