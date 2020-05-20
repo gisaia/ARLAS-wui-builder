@@ -54,23 +54,13 @@ $primary-color: mat-color($primary-palette);
   }
 }
 
-.load-content{
+.load-content {
   width: 40vw;
-  table{
+  table {
     width: 100% !important;
   }
 }
 
-mat-dialog-actions {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.config-icons-action{
-  cursor: pointer;
-}
-
-.config-icons-action:hover{
-  color: $primary-color;
+.mat-column-detail {
+  width: 50px;
 }

@@ -28,6 +28,7 @@ import { FormArray } from '@angular/forms';
 import { StartupService } from '@services/startup/startup.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
+import { camelize } from '@utils/tools';
 
 export interface Layer {
   id: string;
@@ -42,7 +43,7 @@ export interface Layer {
 })
 export class LayersComponent implements OnInit {
 
-  public displayedColumns: string[] = ['name', 'mode', 'edit', 'delete', 'preview'];
+  public displayedColumns: string[] = ['name', 'mode', 'collection', 'zoomMin', 'zoomMax', 'action'];
   public layersFa: FormArray;
 
   constructor(
@@ -91,7 +92,7 @@ export class LayersComponent implements OnInit {
     // Create mapcontributor
     const mapContributor = currentConfig.arlas.web.contributors.find(c => c.type = 'map');
     if (mapContributor) {
-      currentConfig.arlas.web.contributors.splice(currentConfig.arlas.web.contributors.indexOf(mapContributor), 1 );
+      currentConfig.arlas.web.contributors.splice(currentConfig.arlas.web.contributors.indexOf(mapContributor), 1);
     }
     currentConfig.arlas.web.contributors.push(contribConfig);
     this.configService.setConfig(currentConfig);
@@ -117,5 +118,9 @@ export class LayersComponent implements OnInit {
       // TODO Clean ArlasConfigService
       this.collaborativesearchService.registry.clear();
     });
+  }
+
+  public camelize(text: string): string {
+    return camelize(text);
   }
 }

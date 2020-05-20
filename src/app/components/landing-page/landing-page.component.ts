@@ -237,6 +237,10 @@ export class LandingPageDialogComponent implements OnInit {
     });
   }
 
+  public viewConfig(id: string) {
+    // TODO
+  }
+
   public getConfigList() {
     this.persistenceService.list(this.configPageSize, this.configPageNumber + 1, 'desc')
       .subscribe((dataResource: DataResource) => {
