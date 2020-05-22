@@ -46,6 +46,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatMenuModule } from '@angular/material/menu';
 
 // other libs imports
 import { ColorPickerModule } from 'ngx-color-picker';
@@ -62,7 +64,6 @@ import { AutoFocusDirective } from './directives/auto-focus/auto-focus.directive
 import { ConfigFormGroupComponent } from './components/config-form-group/config-form-group.component';
 import { ConfigFormControlComponent } from './components/config-form-control/config-form-control.component';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
-import { MatPaginatorModule } from '@angular/material';
 import { InputModalComponent } from './components/input-modal/input-modal.component';
 
 @NgModule({
@@ -109,7 +110,8 @@ import { InputModalComponent } from './components/input-modal/input-modal.compon
     MatListModule,
     MatButtonToggleModule,
     HttpClientModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatMenuModule
   ],
   exports: [
     ConfigElementComponent,
@@ -149,7 +151,8 @@ import { InputModalComponent } from './components/input-modal/input-modal.compon
     MatBadgeModule,
     MatListModule,
     HttpClientModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatMenuModule
   ]
 })
 export class SharedModule { }

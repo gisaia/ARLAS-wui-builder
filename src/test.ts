@@ -34,6 +34,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import 'zone.js/dist/zone-testing';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatMenuModule } from '@angular/material/menu';
 
 // define modules to be injected in every test
 defineGlobalsInjections({
@@ -68,7 +69,8 @@ defineGlobalsInjections({
     MatBadgeModule,
     HttpClientModule,
     DragDropModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatMenuModule
   ],
   providers: [
     mockProvider(NGXLogger),
