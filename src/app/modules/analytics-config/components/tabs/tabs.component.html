@@ -39,3 +39,7 @@
 <mat-error *ngIf="tabsFa.touched && tabsFa.errors?.required">
     {{'At least one tab is required' | translate}}
 </mat-error>
+<div *ngIf="this.tabs.length === 0">
+    {{ 'Analytics board is empty.' | translate}}
+    <button mat-raised-button (click)="newTab()">Create a tab</button>
+</div>
