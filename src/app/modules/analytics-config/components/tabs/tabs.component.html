@@ -41,5 +41,5 @@
 </mat-error>
 <div *ngIf="this.tabs.length === 0">
     {{ 'Analytics board is empty.' | translate}}
-    <button mat-raised-button (click)="newTab()">Create a tab</button>
+    <button mat-raised-button (click)="newTab()"> {{ 'Create a new tab.' | translate}}</button>
 </div>

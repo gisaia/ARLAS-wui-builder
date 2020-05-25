@@ -29,6 +29,8 @@ import {
 } from 'arlas-wui-toolkit/services/startup/startup.service';
 
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
+import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-groups',
@@ -43,7 +45,8 @@ export class GroupsComponent implements OnInit {
     public dialog: MatDialog,
     private arlasStartupService: ArlasStartupService,
     private configService: ArlasConfigService,
-    private analyticsInitService: AnalyticsInitService
+    private analyticsInitService: AnalyticsInitService,
+    private translate: TranslateService
   ) {
   }
 
@@ -56,22 +59,31 @@ export class GroupsComponent implements OnInit {
   }
 
   public remove(gi) {
-    let currentContributors = this.configService.getValue('arlas.web.contributors') as Array<ContributorConfig>;
-    if (currentContributors !== undefined) {
-      this.groupsFa.at(gi).value.content.forEach(c => {
-        if (c.widgetData) {
-          const contributorId = ConfigExportHelper.toSnakeCase(c.widgetData.dataStep.name);
-          // remove contributors from registry
-          this.arlasStartupService.contributorRegistry.delete(contributorId);
-          // remove contributors from config
-          currentContributors = currentContributors.filter(config => config.identifier !== contributorId);
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '400px',
+      data: { message: this.translate.instant('delete this group') }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let currentContributors = this.configService.getValue('arlas.web.contributors') as Array<ContributorConfig>;
+        if (currentContributors !== undefined) {
+          this.groupsFa.at(gi).value.content.forEach(c => {
+            if (c.widgetData) {
+              const contributorId = ConfigExportHelper.toSnakeCase(c.widgetData.dataStep.name);
+              // remove contributors from registry
+              this.arlasStartupService.contributorRegistry.delete(contributorId);
+              // remove contributors from config
+              currentContributors = currentContributors.filter(config => config.identifier !== contributorId);
+            }
+          });
+          // set new config
+          const currentConfig = this.configService.getConfig() as any;
+          currentConfig.arlas.web.contributors = currentContributors;
         }
-      });
-      // set new config
-      const currentConfig = this.configService.getConfig() as any;
-      currentConfig.arlas.web.contributors = currentContributors;
-    }
-    this.groupsFa.removeAt(gi);
+        this.groupsFa.removeAt(gi);
+      }
+    });
   }
 
   get groupsFa() {
