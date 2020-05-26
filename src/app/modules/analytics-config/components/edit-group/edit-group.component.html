@@ -1,7 +1,7 @@
 <div class="group-wrapper" [formGroup]="formGroup">
     <div class="edit-group">
         <div class="edit-group-form">
-            <div>
+            <div class="fields">
                 <div>
                     <mat-form-field>
                         <mat-label>Icon</mat-label>
@@ -16,7 +16,7 @@
                         <input matInput formControlName="title">
                     </mat-form-field>
                 </div>
-                <div>
+                <!-- <div>
                     <mat-form-field>
                         <mat-label>Type</mat-label>
                         <mat-select formControlName="contentType"
@@ -30,7 +30,7 @@
                             </mat-optgroup>
                         </mat-select>
                     </mat-form-field>
-                </div>
+                </div> -->
                 <div>
                     <mat-error *ngIf="formGroup.controls.content.touched && formGroup.controls.content.invalid">
                         {{ contentTypeValue.length | i18nPlural:{
@@ -39,6 +39,12 @@
                         } }}
                     </mat-error>
                 </div>
+            </div>
+            <div *ngIf="!contentTypeValue" class="edit-widgets">
+                <button mat-raised-button (click)="addWidget()">
+                    <mat-icon>add</mat-icon>
+                    {{('Add a widget' | translate)}}
+                </button>
             </div>
             <div *ngIf="contentTypeValue" class="edit-widgets">
 

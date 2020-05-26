@@ -69,7 +69,7 @@ export class GroupsComponent implements OnInit {
         let currentContributors = this.configService.getValue('arlas.web.contributors') as Array<ContributorConfig>;
         if (currentContributors !== undefined) {
           this.groupsFa.at(gi).value.content.forEach(c => {
-            if (c.widgetData) {
+            if (c.widgetData && c.widgetData.dataStep) {
               const contributorId = ConfigExportHelper.toSnakeCase(c.widgetData.dataStep.name);
               // remove contributors from registry
               this.arlasStartupService.contributorRegistry.delete(contributorId);

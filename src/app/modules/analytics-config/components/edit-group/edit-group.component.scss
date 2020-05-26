@@ -21,7 +21,8 @@ $primary-color: mat-color($primary-palette);
 
 .group-wrapper {
     display: flex;
-    margin: 20px 10px;
+    padding: 10px;
+    margin: 20px 0;
     justify-content: space-evenly;
 
     .edit-group,
@@ -41,18 +42,15 @@ $primary-color: mat-color($primary-palette);
         padding: 20px 20px;
         margin: 2px;
         border-radius: 4px;
-        width: fit-content;
         display: flex;
         background-color: white;
         flex-direction: column;
 
-        .action-buttons {
+        .fields{
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            margin-left: 10px;
-            padding: 15px 0px;
+            flex-direction: row;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
         }
 
         .edit-widgets {
