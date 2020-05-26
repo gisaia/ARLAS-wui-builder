@@ -18,21 +18,6 @@
                         <input matInput formControlName="title" (change)="updatePreview()">
                     </mat-form-field>
                 </div>
-                <!-- <div>
-                    <mat-form-field>
-                        <mat-label>Type</mat-label>
-                        <mat-select formControlName="contentType"
-                            appAlertOnChange="changing the type will reset the set-up widgets" appResetOnChange
-                            [dependants]="[content]">
-                            <mat-optgroup *ngFor="let nbWidgets of [1, 2, 3]"
-                                [label]="('With ' + nbWidgets + ' widget(s)') | translate ">
-                                <mat-option *ngFor="let types of getContentTypes(nbWidgets)" [value]="types">
-                                    {{types.join(' / ') | translate}}
-                                </mat-option>
-                            </mat-optgroup>
-                        </mat-select>
-                    </mat-form-field>
-                </div> -->
                 <div>
                     <mat-error *ngIf="formGroup.controls.content.touched && formGroup.controls.content.invalid">
                         {{ contentTypeValue.length | i18nPlural:{

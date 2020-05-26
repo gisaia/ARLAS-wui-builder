@@ -142,7 +142,6 @@ export class EditGroupComponent implements OnInit {
 
   public onIconPickerSelect(icon: string): void {
     this.formGroup.controls.icon.setValue(icon);
-    console.log(ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1));
     this.updatePreview();
   }
 

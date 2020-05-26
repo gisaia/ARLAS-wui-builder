@@ -9,6 +9,7 @@ import {
   ArlasCollaborativesearchService, ArlasStartupService,
   ArlasConfigService, CONFIG_UPDATER
 } from 'arlas-wui-toolkit/services/startup/startup.service';
+import { IconPickerComponent } from 'ngx-icon-picker';
 
 describe('EditGroupComponent', () => {
   let spectator: Spectator<EditGroupComponent>;
@@ -18,7 +19,8 @@ describe('EditGroupComponent', () => {
     declarations: [
       AlertOnChangeDirective,
       ResetOnChangeDirective,
-      MockComponent(AnalyticsBoardComponent)
+      MockComponent(AnalyticsBoardComponent),
+      MockComponent(IconPickerComponent)
     ],
     providers: [
       ArlasStartupService,

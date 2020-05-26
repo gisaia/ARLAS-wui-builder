@@ -35,6 +35,7 @@ import 'zone.js/dist/zone-testing';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatMenuModule } from '@angular/material/menu';
+import { IconPickerModule } from 'ngx-icon-picker';
 
 // define modules to be injected in every test
 defineGlobalsInjections({
@@ -70,7 +71,8 @@ defineGlobalsInjections({
     HttpClientModule,
     DragDropModule,
     MatButtonToggleModule,
-    MatMenuModule
+    MatMenuModule,
+    IconPickerModule
   ],
   providers: [
     mockProvider(NGXLogger),
