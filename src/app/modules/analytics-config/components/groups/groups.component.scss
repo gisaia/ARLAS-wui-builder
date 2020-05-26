@@ -19,6 +19,7 @@ under the License.
 
 .groups-wrapper {
   overflow-y: hidden;
+  height: 100%;
 
   .add-button {
     display: flex;
@@ -39,7 +40,7 @@ under the License.
   .placeholder{
     background: #ccc;
     border: dotted 2px #999;
-    min-height: 350px;
+    min-height: 290px;
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }
 }

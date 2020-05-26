@@ -1,4 +1,4 @@
-import { EditGroupComponent } from './edit-group.component';
+import { EditGroupComponent, AddWidgetDialogComponent } from './edit-group.component';
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { FormGroup, FormControl } from '@angular/forms';
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
@@ -25,6 +25,9 @@ describe('EditGroupComponent', () => {
       ArlasCollaborativesearchService,
       ArlasConfigService,
       { provide: CONFIG_UPDATER, useValue: {} }
+    ],
+    entryComponents: [
+      AddWidgetDialogComponent
     ]
   });
 

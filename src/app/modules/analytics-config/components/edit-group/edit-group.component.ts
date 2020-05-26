@@ -80,7 +80,7 @@ export class EditGroupComponent implements OnInit {
   @Input() public formGroup: FormGroup;
   @Output() public remove = new EventEmitter();
 
-  
+
   constructor(
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
@@ -138,6 +138,19 @@ export class EditGroupComponent implements OnInit {
           this.cdr.detectChanges();
         }
       });
+  }
+
+  public onIconPickerSelect(icon: string): void {
+    this.formGroup.controls.icon.setValue(icon);
+    console.log(ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1));
+    this.updatePreview();
+  }
+
+  public updatePreview() {
+    this.formGroup.controls.preview.setValue([]);
+    setTimeout(() =>
+      this.formGroup.controls.preview.setValue([ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1)]), 0);
+    this.cdr.detectChanges();
   }
 
   get contentType() {

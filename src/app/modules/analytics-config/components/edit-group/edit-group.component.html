@@ -3,17 +3,19 @@
         <div class="edit-group-form">
             <div class="fields">
                 <div>
-                    <mat-form-field>
-                        <mat-label>Icon</mat-label>
-                        <input matInput formControlName="icon">
-                        <mat-hint>Available icons <a href="https://material.io/resources/icons/?style=baseline"
-                                target="_blank">here</a></mat-hint>
+                    <mat-form-field class="icon">
+                        <mat-label>{{'Icon' | translate}}</mat-label>
+                        <mat-icon matPrefix>{{this.formGroup.controls.icon.value}}</mat-icon>
+                        <input matInput formControlName="icon" [iconPicker]="this.formGroup.controls.icon.value"
+                            [ipIconPack]="['mat']" [ipFallbackIcon]="'poll'" [ipPosition]="'left'" 
+                            [ipButtonStyleClass]="'mat-raised-button'"
+                            (iconPickerSelect)="onIconPickerSelect($event)" />
                     </mat-form-field>
                 </div>
                 <div>
                     <mat-form-field>
-                        <mat-label>Title</mat-label>
-                        <input matInput formControlName="title">
+                        <mat-label>{{'Title' | translate}}</mat-label>
+                        <input matInput formControlName="title" (change)="updatePreview()">
                     </mat-form-field>
                 </div>
                 <!-- <div>
@@ -43,7 +45,7 @@
             <div *ngIf="!contentTypeValue" class="edit-widgets">
                 <button mat-raised-button (click)="addWidget()">
                     <mat-icon>add</mat-icon>
-                    {{('Add a widget' | translate)}}
+                    {{'Add a widget' | translate}}
                 </button>
             </div>
             <div *ngIf="contentTypeValue" class="edit-widgets">
@@ -60,4 +62,5 @@
     <div class="preview-group" *ngIf="formGroup.value.preview.length > 0">
         <arlas-analytics-board [groups]="formGroup.value.preview" [showSpinner]="true"></arlas-analytics-board>
     </div>
+    <div class="preview-placeholder" *ngIf="formGroup.value.preview.length == 0"></div>
 </div>

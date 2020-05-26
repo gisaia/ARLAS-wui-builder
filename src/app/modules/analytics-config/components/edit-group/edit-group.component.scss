@@ -24,6 +24,7 @@ $primary-color: mat-color($primary-palette);
     padding: 10px;
     margin: 20px 0;
     justify-content: space-evenly;
+    height: 100%;
 
     .edit-group,
     .preview-group {
@@ -38,6 +39,10 @@ $primary-color: mat-color($primary-palette);
         max-width: 500px;
     }
 
+    .preview-placeholder {
+        width: 500px;
+    }
+
     .edit-group-form {
         padding: 20px 20px;
         margin: 2px;
@@ -46,11 +51,21 @@ $primary-color: mat-color($primary-palette);
         background-color: white;
         flex-direction: column;
 
-        .fields{
+        .fields {
             display: flex;
             flex-direction: row;
             justify-content: space-evenly;
             flex-wrap: wrap;
+
+            .icon {
+                ::ng-deep .mat-form-field-flex {
+                    align-items: flex-end;
+
+                    .mat-form-field-prefix{
+                        margin-right: 5px;
+                    }
+                }
+            }
         }
 
         .edit-widgets {
@@ -59,4 +74,23 @@ $primary-color: mat-color($primary-palette);
             }
         }
     }
-}   
+}
+
+::ng-deep .icon-picker {
+    .icon-search {
+        display: none !important;
+    }
+}
+
+::ng-deep .ip-button-icon {
+    min-width: -webkit-fill-available;
+    padding: 0 !important;
+}
+
+::ng-deep .ip-button-icon:hover {
+    background-color: lightgray;
+}
+
+::ng-deep .analytics-board-card{
+    box-shadow: unset !important;
+}
