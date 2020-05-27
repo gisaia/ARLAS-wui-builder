@@ -101,8 +101,8 @@ export class SearchGlobalFormBuilderService {
       .getCollectionFields(this.mainFormService.getCollections()[0]);
 
     const globalFg = new SearchGlobalFormGroup(
-      toKeywordOptionsObs(collectionFields),
       toTextOptionsObs(collectionFields),
+      toKeywordOptionsObs(collectionFields),
       this.translate.instant('Please look for an icon')
       + ' <a href="https://material.io/resources/icons/?style=baseline" target="_blank">'
       + this.translate.instant('here')

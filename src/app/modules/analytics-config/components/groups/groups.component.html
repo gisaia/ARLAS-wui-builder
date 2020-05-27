@@ -16,8 +16,9 @@
     </div>
 
     <div class="add-button">
-        <button mat-fab (click)="addGroup()" [matTooltip]="'Add group' | translate">
+        <button mat-raised-button color="primary" (click)="addGroup()" [matTooltip]="'Add a group' | translate">
             <mat-icon>add</mat-icon>
+            {{'Add a group' | translate}}
         </button>
     </div>
 </div>

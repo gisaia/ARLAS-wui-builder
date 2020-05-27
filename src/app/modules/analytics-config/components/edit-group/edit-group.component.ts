@@ -126,16 +126,12 @@ export class EditGroupComponent implements OnInit {
             widgetFg.value.widgetData,
             this.formGroup.controls.icon.value
           );
-          this.formGroup.controls.preview.setValue([]);
-          // TODO do not use the setTimeout
-          setTimeout(() =>
-            this.formGroup.controls.preview.setValue([ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1)]), 0);
           contrib.updateFromCollaboration({
             id: '',
             operation: OperationEnum.add,
             all: false
           });
-          this.cdr.detectChanges();
+          this.updatePreview();
         }
       });
   }

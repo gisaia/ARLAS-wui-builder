@@ -28,6 +28,7 @@ import { AnalyticsInitService } from '@analytics-config/services/analytics-init/
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MatDialog } from '@angular/material/dialog';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
+import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-tabs',
@@ -47,7 +48,8 @@ export class TabsComponent implements OnInit {
     private mainFormService: MainFormService,
     private mainFormManager: MainFormManagerService,
     private analyticsInitService: AnalyticsInitService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private translate: TranslateService
   ) {
 
     this.tabsFa = this.mainFormService.analyticsConfig.getListFa();
@@ -84,7 +86,16 @@ export class TabsComponent implements OnInit {
   }
 
   public removeTab(tabIndex: number) {
-    this.tabsFa.removeAt(tabIndex);
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '400px',
+      data: { message: this.translate.instant('delete this tab') }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.tabsFa.removeAt(tabIndex);
+      }
+    });
   }
 
   public startEditTabName(index: number) {
