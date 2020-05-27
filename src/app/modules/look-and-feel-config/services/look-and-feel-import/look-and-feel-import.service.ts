@@ -53,21 +53,25 @@ export class LookAndFeelImportService {
         {
           value: configOptionns.indicators,
           control: globalSearchFg.customControls.indicators
-        },
-        {
-          value: configOptionns.spinner,
-          control: globalSearchFg.customControls.spinner
-        },
-        {
-          value: configOptionns.spinner.color,
-          control: globalSearchFg.customControls.spinnerColor
-        },
-        {
-          value: configOptionns.spinner.diameter,
-          control: globalSearchFg.customControls.spinnerDiameter
         }
       ]);
 
+      if ( configOptionns.spinner) {
+        importElements([
+          {
+            value: configOptionns.spinner.show,
+            control: globalSearchFg.customControls.spinner
+          },
+          {
+            value: configOptionns.spinner.color,
+            control: globalSearchFg.customControls.spinnerColor
+          },
+          {
+            value: configOptionns.spinner.diameter,
+            control: globalSearchFg.customControls.spinnerDiameter
+          }
+        ]);
+      }
     }
   }
 }
