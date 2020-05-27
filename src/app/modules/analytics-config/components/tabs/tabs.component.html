@@ -1,3 +1,7 @@
+<div *ngIf="this.tabs.length === 0">
+    {{ 'Analytics board is empty.' | translate}}
+    <button mat-raised-button (click)="newTab()"> {{ 'Create a new tab.' | translate}}</button>
+</div>
 <div class="tab-wrapper">
     <mat-tab-group disableRipple mat-align-tabs="start" #matTabGroup>
         <mat-tab *ngFor="let tab of tabs; let index = index">

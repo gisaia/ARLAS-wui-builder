@@ -31,6 +31,7 @@ import {
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { TranslateService } from '@ngx-translate/core';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 @Component({
   selector: 'app-groups',
@@ -42,6 +43,7 @@ export class GroupsComponent implements OnInit {
   @Input() public contentFg: FormGroup;
 
   constructor(
+    private defaultValuesService: DefaultValuesService,
     public dialog: MatDialog,
     private arlasStartupService: ArlasStartupService,
     private configService: ArlasConfigService,
@@ -55,7 +57,11 @@ export class GroupsComponent implements OnInit {
   }
 
   public addGroup() {
-    this.groupsFa.push(this.analyticsInitService.initNewGroup());
+    this.groupsFa.push(this.analyticsInitService.initNewGroup(
+      this.translate.instant(
+        this.defaultValuesService.getValue('analytics.groups.new'))
+      )
+    );
   }
 
   public remove(gi) {

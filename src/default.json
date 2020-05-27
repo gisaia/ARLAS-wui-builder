@@ -133,6 +133,9 @@
             "default": "Default",
             "new": "New"
         },
+        "groups": {
+            "new": "New group"
+        },
         "widgets": {
             "histogram": {
                 "dataStep": {
