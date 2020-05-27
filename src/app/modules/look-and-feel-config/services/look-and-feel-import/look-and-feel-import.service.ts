@@ -35,39 +35,39 @@ export class LookAndFeelImportService {
 
   public doImport(config: Config) {
 
-    const configOptionns = config.arlas.web.options ? config.arlas.web.options : null;
+    const configOptions = config.arlas.web.options ? config.arlas.web.options : null;
 
     const globalSearchFg = this.mainFormService.lookAndFeelConfig.getGlobalFg() as LookAndFeelGlobalFormGroup;
 
-    if (configOptionns) {
+    if (configOptions) {
 
       importElements([
         {
-          value: configOptionns.dragItems,
+          value: configOptions.dragItems,
           control: globalSearchFg.customControls.dragAndDrop
         },
         {
-          value: configOptionns.zoomToData,
+          value: configOptions.zoomToData,
           control: globalSearchFg.customControls.zoomToData
         },
         {
-          value: configOptionns.indicators,
+          value: configOptions.indicators,
           control: globalSearchFg.customControls.indicators
         }
       ]);
 
-      if ( configOptionns.spinner) {
+      if ( configOptions.spinner) {
         importElements([
           {
-            value: configOptionns.spinner.show,
+            value: configOptions.spinner.show,
             control: globalSearchFg.customControls.spinner
           },
           {
-            value: configOptionns.spinner.color,
+            value: configOptions.spinner.color,
             control: globalSearchFg.customControls.spinnerColor
           },
           {
-            value: configOptionns.spinner.diameter,
+            value: configOptions.spinner.diameter,
             control: globalSearchFg.customControls.spinnerDiameter
           }
         ]);
