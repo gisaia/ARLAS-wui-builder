@@ -64,7 +64,7 @@ export class AnalyticsImportService {
         tabs.set(tabName, tab);
 
         this.analyticsInitService.initTabContent(tab.controls.contentFg as FormGroup);
-        const newGroup = this.analyticsInitService.initNewGroup();
+        const newGroup = this.analyticsInitService.initNewGroup('');
 
         const isHistogram = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.histogram;
         const isSwimlane = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.swimlane;

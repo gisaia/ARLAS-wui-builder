@@ -70,14 +70,14 @@ export class AnalyticsInitService {
     ));
   }
 
-  public initNewGroup() {
+  public initNewGroup(name: string) {
     return this.formBuilder.group({
       icon: [
         null,
         Validators.required
       ],
       title: [
-        this.translate.instant('New group'),
+        name,
         Validators.required
       ],
       contentType: [
