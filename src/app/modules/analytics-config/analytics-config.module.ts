@@ -22,25 +22,29 @@ import { AnalyticsConfigComponent } from './analytics-config.component';
 import { TabsComponent } from './components/tabs/tabs.component';
 import { SharedModule } from '@shared/shared.module';
 import { GroupsComponent } from './components/groups/groups.component';
-import { EditGroupComponent } from './components/edit-group/edit-group.component';
+import { EditGroupComponent, AddWidgetDialogComponent } from './components/edit-group/edit-group.component';
 import { EditWidgetDialogComponent } from './components/edit-widget-dialog/edit-widget-dialog.component';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
+import { IconPickerModule } from 'ngx-icon-picker';
 
 @NgModule({
   entryComponents: [
-    EditWidgetDialogComponent
+    EditWidgetDialogComponent,
+    AddWidgetDialogComponent
   ],
   declarations: [
     AnalyticsConfigComponent,
     TabsComponent,
     GroupsComponent,
     EditGroupComponent,
-    EditWidgetDialogComponent
+    EditWidgetDialogComponent,
+    AddWidgetDialogComponent
   ],
   imports: [
     ArlasToolkitSharedModule,
     SharedModule,
-    AnalyticsConfigRoutingModule
+    AnalyticsConfigRoutingModule,
+    IconPickerModule
   ]
 })
 export class AnalyticsConfigModule { }

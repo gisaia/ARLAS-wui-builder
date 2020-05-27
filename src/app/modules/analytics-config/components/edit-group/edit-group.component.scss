@@ -21,31 +21,51 @@ $primary-color: mat-color($primary-palette);
 
 .group-wrapper {
     display: flex;
-    margin: 20px 10px;
+    padding: 10px;
+    margin: 20px 0;
+    justify-content: space-evenly;
+    height: 100%;
 
     .edit-group,
     .preview-group {
         flex-grow: 1;
     }
 
+    .edit-group {
+        max-width: 480px;
+    }
+
     .preview-group {
         max-width: 500px;
     }
 
-    .edit-group-form {
-        padding: 20px 60px;
-        border: 5px solid $primary-color;
-        border-radius: 25px;
-        width: fit-content;
-        display: flex;
+    .preview-placeholder {
+        width: 500px;
+    }
 
-        .action-buttons {
+    .edit-group-form {
+        padding: 20px 20px;
+        margin: 2px;
+        border-radius: 4px;
+        display: flex;
+        background-color: white;
+        flex-direction: column;
+
+        .fields {
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            margin-left: 10px;
-            padding: 15px 0px;
+            flex-direction: row;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+
+            .icon {
+                ::ng-deep .mat-form-field-flex {
+                    align-items: flex-end;
+
+                    .mat-form-field-prefix{
+                        margin-right: 5px;
+                    }
+                }
+            }
         }
 
         .edit-widgets {
@@ -54,4 +74,23 @@ $primary-color: mat-color($primary-palette);
             }
         }
     }
+}
+
+::ng-deep .icon-picker {
+    .icon-search {
+        display: none !important;
+    }
+}
+
+::ng-deep .ip-button-icon {
+    min-width: -webkit-fill-available;
+    padding: 0 !important;
+}
+
+::ng-deep .ip-button-icon:hover {
+    background-color: lightgray;
+}
+
+::ng-deep .analytics-board-card{
+    box-shadow: unset !important;
 }

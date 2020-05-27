@@ -1,4 +1,4 @@
-import { EditGroupComponent } from './edit-group.component';
+import { EditGroupComponent, AddWidgetDialogComponent } from './edit-group.component';
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { FormGroup, FormControl } from '@angular/forms';
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
@@ -9,6 +9,7 @@ import {
   ArlasCollaborativesearchService, ArlasStartupService,
   ArlasConfigService, CONFIG_UPDATER
 } from 'arlas-wui-toolkit/services/startup/startup.service';
+import { IconPickerComponent } from 'ngx-icon-picker';
 
 describe('EditGroupComponent', () => {
   let spectator: Spectator<EditGroupComponent>;
@@ -18,13 +19,17 @@ describe('EditGroupComponent', () => {
     declarations: [
       AlertOnChangeDirective,
       ResetOnChangeDirective,
-      MockComponent(AnalyticsBoardComponent)
+      MockComponent(AnalyticsBoardComponent),
+      MockComponent(IconPickerComponent)
     ],
     providers: [
       ArlasStartupService,
       ArlasCollaborativesearchService,
       ArlasConfigService,
       { provide: CONFIG_UPDATER, useValue: {} }
+    ],
+    entryComponents: [
+      AddWidgetDialogComponent
     ]
   });
 

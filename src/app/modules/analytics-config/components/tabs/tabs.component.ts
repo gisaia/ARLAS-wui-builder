@@ -26,6 +26,8 @@ import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 import { MatTabGroup } from '@angular/material';
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+import { MatDialog } from '@angular/material/dialog';
+import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 
 @Component({
   selector: 'app-tabs',
@@ -44,13 +46,15 @@ export class TabsComponent implements OnInit {
     private translateService: TranslateService,
     private mainFormService: MainFormService,
     private mainFormManager: MainFormManagerService,
-    private analyticsInitService: AnalyticsInitService
+    private analyticsInitService: AnalyticsInitService,
+    private dialog: MatDialog
   ) {
 
     this.tabsFa = this.mainFormService.analyticsConfig.getListFa();
   }
 
   public ngOnInit() {
+
   }
 
   get tabs() {
@@ -58,6 +62,15 @@ export class TabsComponent implements OnInit {
   }
 
   public getTab = (index: number) => this.tabsFa.at(index) as FormGroup;
+
+  public newTab() {
+    const dialogRef = this.dialog.open(InputModalComponent);
+    dialogRef.afterClosed().subscribe(tabName => {
+      if (tabName) {
+        this.tabsFa.controls.push(this.analyticsInitService.initNewTab(tabName));
+      }
+    });
+  }
 
   public addTab() {
     // add new formgroup

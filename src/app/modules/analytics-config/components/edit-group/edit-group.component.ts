@@ -28,16 +28,15 @@ import { EditWidgetDialogData } from '../edit-widget-dialog/models';
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { OperationEnum } from 'arlas-web-core';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-edit-group',
-  templateUrl: './edit-group.component.html',
-  styleUrls: ['./edit-group.component.scss']
+  selector: 'app-add-widget-dialog',
+  templateUrl: './edit-group-add-widget.component.html',
+  styleUrls: ['./edit-group-add-widget.component.scss']
 })
-export class EditGroupComponent implements OnInit {
-
-  @Input() public formGroup: FormGroup;
-  @Output() public remove = new EventEmitter();
+export class AddWidgetDialogComponent {
+  public widgetType: Array<string> = [];
 
   public contentTypes = [
     [WIDGET_TYPE.histogram],
@@ -55,6 +54,33 @@ export class EditGroupComponent implements OnInit {
     [WIDGET_TYPE.powerbars, WIDGET_TYPE.powerbars, WIDGET_TYPE.powerbars]
   ];
   public getContentTypes = (nbWidgets: number) => this.contentTypes.filter(elmt => elmt.length === nbWidgets);
+
+  constructor(
+    public dialogRef: MatDialogRef<AddWidgetDialogComponent>
+  ) { }
+
+  public cancel(): void {
+    this.dialogRef.close();
+  }
+
+  public pressEvent(event: KeyboardEvent) {
+    if (event.code === 'Enter' && this.widgetType) {
+      this.dialogRef.close(this.widgetType);
+    }
+  }
+}
+
+@Component({
+  selector: 'app-edit-group',
+  templateUrl: './edit-group.component.html',
+  styleUrls: ['./edit-group.component.scss']
+})
+export class EditGroupComponent implements OnInit {
+
+  @Input() public formGroup: FormGroup;
+  @Output() public remove = new EventEmitter();
+
+
   constructor(
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
@@ -72,6 +98,16 @@ export class EditGroupComponent implements OnInit {
       this.content.clear();
       values.forEach(v => this.content.push(this.analyticsInitService.initNewWidget(v)));
     });
+  }
+
+  public addWidget() {
+    this.dialog.open(AddWidgetDialogComponent, {})
+      .afterClosed().subscribe(result => {
+        if (result) {
+          this.formGroup.controls.contentType.setValue(result);
+          this.editWidget(this.contentTypeValue.length - 1);
+        }
+      });
   }
 
   public editWidget(widgetIndex: number) {
@@ -104,6 +140,18 @@ export class EditGroupComponent implements OnInit {
       });
   }
 
+  public onIconPickerSelect(icon: string): void {
+    this.formGroup.controls.icon.setValue(icon);
+    this.updatePreview();
+  }
+
+  public updatePreview() {
+    this.formGroup.controls.preview.setValue([]);
+    setTimeout(() =>
+      this.formGroup.controls.preview.setValue([ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1)]), 0);
+    this.cdr.detectChanges();
+  }
+
   get contentType() {
     return this.formGroup.controls.contentType;
   }
@@ -116,3 +164,5 @@ export class EditGroupComponent implements OnInit {
     return this.formGroup.controls.content as FormArray;
   }
 }
+
+
