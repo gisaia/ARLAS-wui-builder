@@ -650,6 +650,7 @@ export class ConfigExportHelper {
                 input: {
                     id: this.toSnakeCase(widgetData.dataStep.name),
                     customizedCssClass: 'arlas-donuts-analytics',
+                    diameter: 160,
                     multiselectable: !!widgetData.renderStep.multiselectable,
                     opacity: widgetData.renderStep.opacity
                 }

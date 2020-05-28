@@ -166,6 +166,7 @@ export interface AnalyticComponentInputConfig {
     useColorService?: boolean;
     opacity?: number;
     powerbarTitle?: string;
+    diameter?: number;
 }
 
 export interface AnalyticComponentHistogramInputConfig extends AnalyticComponentInputConfig {
