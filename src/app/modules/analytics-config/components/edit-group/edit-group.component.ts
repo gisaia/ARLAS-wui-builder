@@ -126,12 +126,13 @@ export class EditGroupComponent implements OnInit {
             widgetFg.value.widgetData,
             this.formGroup.controls.icon.value
           );
+          this.updatePreview();
           contrib.updateFromCollaboration({
             id: '',
             operation: OperationEnum.add,
             all: false
           });
-          this.updatePreview();
+          this.cdr.detectChanges();
         }
       });
   }
@@ -145,7 +146,6 @@ export class EditGroupComponent implements OnInit {
     this.formGroup.controls.preview.setValue([]);
     setTimeout(() =>
       this.formGroup.controls.preview.setValue([ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1)]), 0);
-    this.cdr.detectChanges();
   }
 
   get contentType() {

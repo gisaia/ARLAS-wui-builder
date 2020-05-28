@@ -7,8 +7,8 @@
                         <mat-label>{{'Icon' | translate}}</mat-label>
                         <mat-icon matPrefix>{{this.formGroup.controls.icon.value}}</mat-icon>
                         <input matInput formControlName="icon" [iconPicker]="this.formGroup.controls.icon.value"
-                            [ipIconPack]="['mat']" [ipFallbackIcon]="'poll'" [ipPosition]="'left'" 
-                            [ipButtonStyleClass]="'mat-raised-button'"
+                            [ipIconPack]="['mat']" [ipFallbackIcon]="'poll'" [ipPosition]="'right'" 
+                            [ipButtonStyleClass]="'mat-raised-button'" [ipMaxHeight]="'160px'"
                             (iconPickerSelect)="onIconPickerSelect($event)" />
                     </mat-form-field>
                 </div>

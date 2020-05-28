@@ -40,10 +40,6 @@ export class SearchImportService {
 
     importElements([
       {
-        value: chipsearchComponent.icon,
-        control: globalSearchFg.customControls.icon
-      },
-      {
         value: chipsearchComponent.name,
         control: globalSearchFg.customControls.name
       },

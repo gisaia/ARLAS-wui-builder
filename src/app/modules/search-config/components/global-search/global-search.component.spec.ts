@@ -26,8 +26,7 @@ describe('GlobalSearchComponent', () => {
             name: new FormControl(null),
             searchField: new FormControl(null),
             autocompleteField: new FormControl(null),
-            autocompleteSize: new FormControl(null),
-            icon: new FormControl(null)
+            autocompleteSize: new FormControl(null)
           })
         },
         getCollections: () => ['collection']
