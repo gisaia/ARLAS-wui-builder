@@ -8,6 +8,7 @@ import { of } from 'rxjs';
 import { HistogramFormBuilderService } from '../../services/histogram-form-builder/histogram-form-builder.service';
 import { FormGroup } from '@angular/forms';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { EditResultlistColumnsComponent } from '../edit-resultlist-columns/edit-resultlist-columns.component';
 
 describe('EditWidgetDialogComponent', () => {
   let spectator: Spectator<EditWidgetDialogComponent>;
@@ -25,12 +26,13 @@ describe('EditWidgetDialogComponent', () => {
         getCollectionFields: () => of([])
       }),
       mockProvider(HistogramFormBuilderService, {
-        build: () => new FormGroup({})
+        buildWithValues: () => new FormGroup({})
       }),
       mockProvider(ArlasColorGeneratorLoader)
     ],
     declarations: [
-      MockComponent(ConfigFormGroupComponent)
+      MockComponent(ConfigFormGroupComponent),
+      MockComponent(EditResultlistColumnsComponent),
     ],
     mocks: [
       MatDialogRef

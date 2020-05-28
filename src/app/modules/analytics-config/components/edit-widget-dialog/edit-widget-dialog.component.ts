@@ -28,6 +28,7 @@ import { FormGroup } from '@angular/forms';
 import { MetricFormBuilderService } from '@analytics-config/services/metric-form-builder/metric-form-builder.service';
 import { PowerbarFormBuilderService } from '@analytics-config/services/powerbar-form-builder/powerbar-form-builder.service';
 import { DonutFormBuilderService } from '@analytics-config/services/donut-form-builder/donut-form-builder.service';
+import { ResultlistFormBuilderService } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 
 @Component({
   selector: 'app-edit-widget-dialog',
@@ -45,6 +46,7 @@ export class EditWidgetDialogComponent implements OnInit {
   @ViewChild('stepper', { static: false }) private stepper: MatStepper;
   public formGroup: FormGroup;
   public defaultKey: string;
+  public WIDGET_TYPE = WIDGET_TYPE;
 
   constructor(
     public dialogRef: MatDialogRef<EditWidgetDialogComponent>,
@@ -54,6 +56,7 @@ export class EditWidgetDialogComponent implements OnInit {
     private metricBuilder: MetricFormBuilderService,
     private powerFormBuilder: PowerbarFormBuilderService,
     private donutFormBuilder: DonutFormBuilderService,
+    private resultlistFormBuilder: ResultlistFormBuilderService,
   ) {
 
     this.initFormGroup();
@@ -77,10 +80,12 @@ export class EditWidgetDialogComponent implements OnInit {
       case WIDGET_TYPE.donut:
         formBuilder = this.donutFormBuilder;
         break;
+      case WIDGET_TYPE.resultlist:
+        formBuilder = this.resultlistFormBuilder;
+        break;
     }
 
-    this.formGroup = formBuilder.build();
-    this.formGroup.patchValue(this.dialogData.formData);
+    this.formGroup = formBuilder.buildWithValues(this.dialogData.formData);
     this.defaultKey = formBuilder.defaultKey;
   }
 

@@ -21,65 +21,64 @@ import { CollectionField } from './models';
 import { map } from 'rxjs/operators';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 
-export const NUMERIC_OR_DATE_TYPES = [
-    CollectionReferenceDescriptionProperty.TypeEnum.DATE, CollectionReferenceDescriptionProperty.TypeEnum.INTEGER,
-    CollectionReferenceDescriptionProperty.TypeEnum.LONG, CollectionReferenceDescriptionProperty.TypeEnum.DOUBLE,
-    CollectionReferenceDescriptionProperty.TypeEnum.FLOAT
+const TypeEnum = CollectionReferenceDescriptionProperty.TypeEnum;
+export const INTEGER_TYPES = [
+    TypeEnum.DATE, TypeEnum.INTEGER, TypeEnum.LONG,
 ];
 
-export const INTEGER_TYPES = [
-    CollectionReferenceDescriptionProperty.TypeEnum.DATE, CollectionReferenceDescriptionProperty.TypeEnum.INTEGER,
-    CollectionReferenceDescriptionProperty.TypeEnum.LONG,
+export const NUMERIC_OR_DATE_TYPES = [
+    ...INTEGER_TYPES, TypeEnum.DOUBLE, TypeEnum.FLOAT
 ];
+
+export const NUMERIC_OR_DATE_OR_TEXT_TYPES = [
+    ...NUMERIC_OR_DATE_TYPES, TypeEnum.TEXT, TypeEnum.KEYWORD
+];
+
+export function toOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+    return collectionFieldsObs.pipe(map(
+        fields => fields.map(f => ({ value: f.name, label: f.name }))
+    ));
+}
 
 export function toNumericOrDateOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
-    return collectionFieldsObs.pipe(map(
+    return toOptionsObs(collectionFieldsObs.pipe(map(
         fields => fields
-            .filter(f => NUMERIC_OR_DATE_TYPES.indexOf(f.type) >= 0)
-            .map(f => ({ value: f.name, label: f.name }))));
+            .filter(f => NUMERIC_OR_DATE_TYPES.indexOf(f.type) >= 0))));
 }
 
 export function toIntegerOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
-    return collectionFieldsObs.pipe(map(
+    return toOptionsObs(collectionFieldsObs.pipe(map(
         fields => fields
-            .filter(f => INTEGER_TYPES.indexOf(f.type) >= 0)
-            .map(f => ({ value: f.name, label: f.name }))));
+            .filter(f => INTEGER_TYPES.indexOf(f.type) >= 0))));
 }
 
 export function toKeywordOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
-    return collectionFieldsObs.pipe(map(
+    return toOptionsObs(collectionFieldsObs.pipe(map(
         fields => fields
-            .filter(f => f.type === CollectionReferenceDescriptionProperty.TypeEnum.KEYWORD)
-            .map(f => ({ value: f.name, label: f.name }))));
+            .filter(f => f.type === TypeEnum.KEYWORD))));
 }
 
 export function toTextOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
-    return collectionFieldsObs.pipe(map(
+    return toOptionsObs(collectionFieldsObs.pipe(map(
         fields => fields
-            .filter(f => f.type === CollectionReferenceDescriptionProperty.TypeEnum.TEXT)
-            .map(f => ({ value: f.name, label: f.name }))));
+            .filter(f => f.type === TypeEnum.TEXT))));
 }
 
 export function toGeoOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
-    return collectionFieldsObs.pipe(map(
+    return toOptionsObs(collectionFieldsObs.pipe(map(
         fields => fields
-            .filter(f => f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT
-                || f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOSHAPE)
-            .map(f => ({ value: f.name, label: f.name }))));
+            .filter(f => f.type === TypeEnum.GEOPOINT || f.type === TypeEnum.GEOSHAPE))));
 }
 
 export function toGeoPointOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
-    return collectionFieldsObs.pipe(map(
+    return toOptionsObs(collectionFieldsObs.pipe(map(
         fields => fields
-            .filter(f => f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT)
-            .map(f => ({ value: f.name, label: f.name }))));
+            .filter(f => f.type === TypeEnum.GEOPOINT))));
 }
 
 
 export function toAllButGeoOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
-    return collectionFieldsObs.pipe(map(
+    return toOptionsObs(collectionFieldsObs.pipe(map(
         fields => fields
-            .filter(f => f.type !== CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT
-                && f.type !== CollectionReferenceDescriptionProperty.TypeEnum.GEOSHAPE)
-            .map(f => ({ value: f.name, label: f.name }))));
+            .filter(f => f.type !== TypeEnum.GEOPOINT && f.type !== TypeEnum.GEOSHAPE))));
 }

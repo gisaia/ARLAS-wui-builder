@@ -45,14 +45,17 @@ export class CollectionService {
     private logger: NGXLogger
   ) { }
 
+  public getDescribe(collection: string): Observable<CollectionReferenceDescription> {
+    return this.collabSearchService.describe(collection);
+  }
+
   public getCollectionFields(collection: string, types?: Array<FIELD_TYPES>, exclude: boolean = false)
     : Observable<Array<CollectionField>> {
 
     this.spinner.show();
 
-    const result: Observable<Array<CollectionField>> = this.collabSearchService.describe(collection).pipe(map(
-      (c: CollectionReferenceDescriptionProperty) => {
-
+    const result: Observable<Array<CollectionField>> = this.getDescribe(collection).pipe(map(
+      (c: CollectionReferenceDescription) => {
         const getSubFields = (properties: CollectionReferenceDescriptionProperty, parentPath?: string):
           Array<CollectionField> => {
 
