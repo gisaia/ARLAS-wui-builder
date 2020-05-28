@@ -360,8 +360,42 @@ export class AnalyticsImportService {
           control: column.customControls.process
         },
       ]);
-      widgetData.customControls.dataStep.columnsWrapper.columns.push(column);
+      widgetData.customControls.dataStep.columns.push(column);
     });
+
+    (contributor.details || [])
+      .sort((d1, d2) => d1.order - d2.order)
+      .forEach(d => {
+
+        const detail = this.resultlistFormBuilder.buildDetail();
+        importElements([
+          {
+            value: d.name,
+            control: detail.customControls.name
+          }
+        ]);
+
+        d.fields.forEach(f => {
+          const field = this.resultlistFormBuilder.buildDetailField();
+          importElements([
+            {
+              value: f.label,
+              control: field.customControls.label
+            },
+            {
+              value: f.path,
+              control: field.customControls.path
+            },
+            {
+              value: f.process,
+              control: field.customControls.process
+            },
+          ]);
+          detail.customControls.fields.push(field);
+        });
+
+        widgetData.customControls.dataStep.details.push(detail);
+      });
     return widgetData;
   }
 

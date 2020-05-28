@@ -245,9 +245,9 @@ export class LandingPageDialogComponent implements OnInit {
     this.persistenceService.list(this.configPageSize, this.configPageNumber + 1, 'desc')
       .subscribe((dataResource: DataResource) => {
         this.configurationsLength = dataResource.total;
-        this.configurations = dataResource.data.map( data => {
+        this.configurations = (dataResource.data || []).map(data => {
           const currentConfig = JSON.parse(data.doc_value) as ConfigPersistence;
-          const newData = Object.assign({}, data, {name: currentConfig.name});
+          const newData = Object.assign({}, data, { name: currentConfig.name });
           return newData;
         });
       });

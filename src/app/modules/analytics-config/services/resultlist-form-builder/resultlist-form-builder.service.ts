@@ -54,10 +54,8 @@ export class ResultlistConfigForm extends ConfigFormGroup {
           500,
           10
         ),
-        columnsWrapper: new ConfigFormGroup({
-          columns: new FormArray([], Validators.required)
-        })
-          .withTitle('Columns'),
+        columns: new FormArray([], Validators.required),
+        details: new FormArray([]),
         idFieldName: new HiddenFormControl(
           '',
           undefined,
@@ -99,9 +97,8 @@ export class ResultlistConfigForm extends ConfigFormGroup {
     dataStep: {
       name: this.get('dataStep.name') as InputFormControl,
       searchSize: this.get('dataStep.searchSize') as SliderFormControl,
-      columnsWrapper: {
-        columns: this.get('dataStep.columnsWrapper.columns') as FormArray
-      },
+      columns: this.get('dataStep.columns') as FormArray,
+      details: this.get('dataStep.details') as FormArray,
       idFieldName: this.get('dataStep.idFieldName') as HiddenFormControl,
     },
     renderStep: {
@@ -157,6 +154,60 @@ export class ResultlistColumnFormGroup extends FormGroup {
   };
 }
 
+export class ResultlistDetailFormGroup extends FormGroup {
+
+  constructor() {
+    super({
+      name: new InputFormControl(
+        '',
+        'Detail name',
+        ''
+      ),
+      fields: new FormArray([], Validators.required)
+    });
+  }
+
+  public customControls = {
+    name: this.get('name') as InputFormControl,
+    fields: this.get('fields') as FormArray,
+  };
+}
+
+export class ResultlistDetailFieldFormGroup extends FormGroup {
+
+  constructor(fieldsObs: Observable<Array<SelectOption>>) {
+    super({
+      label: new InputFormControl(
+        '',
+        'Field name',
+        ''
+      ),
+      path: new SelectFormControl(
+        '',
+        'Field',
+        '',
+        true,
+        fieldsObs
+      ),
+      process: new TextareaFormControl(
+        '',
+        'Transformation',
+        '',
+        1,
+        {
+          optional: true
+        }
+      )
+    });
+  }
+
+  public customControls = {
+    label: this.get('label') as InputFormControl,
+    path: this.get('path') as SelectFormControl,
+    process: this.get('process') as TextareaFormControl,
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -184,17 +235,37 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
   public buildWithValues(value: any) {
     const formGroup = this.build();
     // for each column, the related FormGroup must be created before setting its values
-    const columns = ((value.dataStep || {}).columnsWrapper || {}).columns;
-    if (!!columns) {
-      columns.forEach(c => formGroup.customControls.dataStep.columnsWrapper.columns
-        .push(this.buildColumn()));
-    }
+    const columns = (value.dataStep || {}).columns || [];
+    columns.forEach(c => formGroup.customControls.dataStep.columns
+      .push(this.buildColumn()));
+
+    // same for the details, and the fields within
+    const details = (value.dataStep || {}).details || [];
+    details.forEach(d => {
+      const detail = this.buildDetail();
+      d.fields.forEach(f => detail.customControls.fields.push(this.buildDetailField()));
+      formGroup.customControls.dataStep.details.push(detail);
+    });
+
     formGroup.patchValue(value);
     return formGroup;
   }
 
   public buildColumn() {
     return new ResultlistColumnFormGroup(
+      toOptionsObs(
+        this.collectionService.getCollectionFields(
+          this.mainFormService.getCollections()[0],
+          NUMERIC_OR_DATE_OR_TEXT_TYPES))
+    );
+  }
+
+  public buildDetail() {
+    return new ResultlistDetailFormGroup();
+  }
+
+  public buildDetailField() {
+    return new ResultlistDetailFieldFormGroup(
       toOptionsObs(
         this.collectionService.getCollectionFields(
           this.mainFormService.getCollections()[0],

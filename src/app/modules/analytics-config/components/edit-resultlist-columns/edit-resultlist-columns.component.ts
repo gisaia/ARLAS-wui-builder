@@ -17,8 +17,10 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit, Input, } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
-import { ResultlistFormBuilderService } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
+import { FormArray } from '@angular/forms';
+import {
+  ResultlistFormBuilderService, ResultlistColumnFormGroup
+} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 
 @Component({
   selector: 'app-edit-resultlist-columns',
@@ -45,8 +47,8 @@ export class EditResultlistColumnsComponent implements OnInit {
     this.control.removeAt(colIndex);
   }
 
-  public get rows() {
-    return this.control.controls as Array<FormGroup>;
+  public get columns() {
+    return this.control.controls as Array<ResultlistColumnFormGroup>;
   }
 
 }

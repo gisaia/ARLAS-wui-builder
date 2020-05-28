@@ -27,6 +27,8 @@ import { EditWidgetDialogComponent } from './components/edit-widget-dialog/edit-
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
 import { IconPickerModule } from 'ngx-icon-picker';
 import { EditResultlistColumnsComponent } from './components/edit-resultlist-columns/edit-resultlist-columns.component';
+import { EditResultlistDetailsComponent } from './components/edit-resultlist-details/edit-resultlist-details.component';
+import { ResultlistDataComponent } from './components/resultlist-data/resultlist-data.component';
 
 @NgModule({
   entryComponents: [
@@ -40,7 +42,9 @@ import { EditResultlistColumnsComponent } from './components/edit-resultlist-col
     EditGroupComponent,
     EditWidgetDialogComponent,
     AddWidgetDialogComponent,
-    EditResultlistColumnsComponent
+    EditResultlistColumnsComponent,
+    EditResultlistDetailsComponent,
+    ResultlistDataComponent
   ],
   imports: [
     ArlasToolkitSharedModule,

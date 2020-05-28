@@ -1,0 +1,50 @@
+<div class="details-wrapper" cdkDropList (cdkDropListDropped)="drop($event)">
+    <mat-card *ngFor="let detail of details; let di = index" cdkDrag>
+        <div *cdkDragPreview>
+            <mat-card>
+                {{detail.controls.name.value}}
+            </mat-card>
+        </div>
+        <div class="detail-controls">
+            <app-config-form-control [control]="detail.controls.name"></app-config-form-control>
+            <div class="detail-buttons">
+                <button mat-icon-button cdkDragHandle>
+                    <mat-icon>drag_indicator</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteDetail(di)" type="button">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
+        <div class="fields-wrapper">
+            <mat-error
+                *ngIf="getDetail(di)?.get('fields').touched && getDetail(di)?.get('fields')?.hasError('required')">
+                {{'At least one field is required within a detail' | translate}}
+            </mat-error>
+            <div *ngFor="let field of getFields(di), let fi = index" class="field-controls">
+                <div class="field-name-delete">
+                    <button mat-icon-button (click)="deleteField(di, fi)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                    <app-config-form-control [control]="field.controls.label"></app-config-form-control>
+                </div>
+                <app-config-form-control [control]="field.controls.path"></app-config-form-control>
+                <app-config-form-control [control]="field.controls.process"></app-config-form-control>
+            </div>
+            <div class="add-field">
+                <button mat-raised-button color="primary" (click)="addField(di)" type="button"
+                    [matTooltip]="'Add a field' | translate">
+                    <mat-icon>add</mat-icon>
+                    {{'Add a field' | translate}}
+                </button>
+            </div>
+        </div>
+    </mat-card>
+</div>
+
+<div class="add-detail">
+    <button mat-raised-button color="primary" (click)="addDetail()" [matTooltip]="'Add a detail' | translate">
+        <mat-icon>add</mat-icon>
+        {{'Add a detail' | translate}}
+    </button>
+</div>
