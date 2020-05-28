@@ -19,7 +19,7 @@ under the License.
 import { Injectable } from '@angular/core';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import {
-  ConfigFormGroup, InputFormControl, SelectFormControl, SliderFormControl, SelectOption, IconFormControl
+  ConfigFormGroup, InputFormControl, SelectFormControl, SliderFormControl, SelectOption
 } from '@shared-models/config-form';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { Observable } from 'rxjs';
@@ -31,8 +31,8 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
 
   constructor(
     textFieldsObs: Observable<Array<SelectOption>>,
-    keywordFieldsObs: Observable<Array<SelectOption>>,
-    iconHtmlDescription: string) {
+    keywordFieldsObs: Observable<Array<SelectOption>>
+  ) {
     super(
       {
         name: new InputFormControl(
@@ -40,7 +40,7 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
           'Name',
           'It is used to...',
           null,
-          { title: 'Search'}),
+          { title: 'Search' }),
         searchField: new SelectFormControl(
           null,
           'Search field',
@@ -62,14 +62,6 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
           1,
           10,
           1
-        ),
-        icon: new IconFormControl(
-          null,
-          'Icon',
-          iconHtmlDescription,
-          {
-            isDescriptionHtml: true
-          }
         )
       }
     );
@@ -79,8 +71,7 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
     name: this.get('name') as InputFormControl,
     searchField: this.get('searchField') as SelectFormControl,
     autocompleteField: this.get('autocompleteField') as SelectFormControl,
-    autocompleteSize: this.get('autocompleteSize') as SliderFormControl,
-    icon: this.get('icon') as InputFormControl
+    autocompleteSize: this.get('autocompleteSize') as SliderFormControl
   };
 }
 
@@ -102,12 +93,8 @@ export class SearchGlobalFormBuilderService {
 
     const globalFg = new SearchGlobalFormGroup(
       toTextOptionsObs(collectionFields),
-      toKeywordOptionsObs(collectionFields),
-      this.translate.instant('Please look for an icon')
-      + ' <a href="https://material.io/resources/icons/?style=baseline" target="_blank">'
-      + this.translate.instant('here')
-      + '</a> '
-      + this.translate.instant('and copy-paste its reference'));
+      toKeywordOptionsObs(collectionFields)
+    );
 
     this.formBuilderDefault.setDefaultValueRecursively('search.global', globalFg);
     return globalFg;

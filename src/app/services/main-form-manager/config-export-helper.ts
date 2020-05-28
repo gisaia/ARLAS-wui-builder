@@ -66,7 +66,7 @@ export class ConfigExportHelper {
 
         const chipssearch: ChipSearchConfig = {
             name: searchConfigGlobal.customControls.name.value,
-            icon: searchConfigGlobal.customControls.icon.value
+            icon: 'search'
         };
 
         const config: Config = {
@@ -200,6 +200,7 @@ export class ConfigExportHelper {
             identifier: 'mapbox',
             geoQueryOp: mapConfigGlobal.value.geographicalOperator,
             geoQueryField: mapConfigGlobal.value.requestGeometries[0].requestGeom,
+            icon: 'check_box_outline_blank',
             layers_sources: []
         };
         const layersSources: Array<LayerSourceConfig> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
@@ -265,7 +266,7 @@ export class ConfigExportHelper {
             identifier: CHIPSEARCH_IDENTIFIER,
             search_field: searchConfigGlobal.customControls.searchField.value,
             name: searchConfigGlobal.customControls.name.value,
-            icon: searchConfigGlobal.customControls.icon.value,
+            icon: 'search',
             autocomplete_field: searchConfigGlobal.customControls.autocompleteField.value,
             autocomplete_size: searchConfigGlobal.customControls.autocompleteSize.value,
         };

@@ -61,7 +61,7 @@ $primary-color: mat-color($primary-palette);
                 ::ng-deep .mat-form-field-flex {
                     align-items: flex-end;
 
-                    .mat-form-field-prefix{
+                    .mat-form-field-prefix {
                         margin-right: 5px;
                     }
                 }
@@ -77,6 +77,7 @@ $primary-color: mat-color($primary-palette);
 }
 
 ::ng-deep .icon-picker {
+    top: 0 !important;
     .icon-search {
         display: none !important;
     }
@@ -91,6 +92,6 @@ $primary-color: mat-color($primary-palette);
     background-color: lightgray;
 }
 
-::ng-deep .analytics-board-card{
+::ng-deep .analytics-board-card {
     box-shadow: unset !important;
 }

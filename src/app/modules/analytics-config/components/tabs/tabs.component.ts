@@ -40,6 +40,7 @@ export class TabsComponent implements OnInit {
   public tabsFa: FormArray;
   public editingTabIndex = -1;
   public editingTabName = '';
+  public selectedIndex = 0;
   @ViewChild('matTabGroup', { static: false }) private matTabGroup: MatTabGroup;
 
   constructor(
@@ -80,9 +81,8 @@ export class TabsComponent implements OnInit {
       this.translateService.instant(
         this.defaultValuesService.getValue('analytics.tabs.new'))
     ));
-
     // select the newly created tab
-    this.matTabGroup.selectedIndex = this.matTabGroup._tabs.length;
+    this.selectedIndex = this.matTabGroup._tabs.length - 1;
   }
 
   public removeTab(tabIndex: number) {
@@ -94,6 +94,7 @@ export class TabsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.tabsFa.removeAt(tabIndex);
+        this.selectedIndex = 0;
       }
     });
   }
@@ -119,7 +120,7 @@ export class TabsComponent implements OnInit {
     const previousIndex = parseInt(event.previousContainer.id.replace('tab-', ''), 10);
     const newIndex = parseInt(event.container.id.replace('tab-', ''), 10);
     moveItemInFormArray(previousIndex, newIndex, this.tabsFa);
-    this.matTabGroup.selectedIndex = newIndex;
+    this.selectedIndex = newIndex;
   }
 
   public tabHasError(index: number) {

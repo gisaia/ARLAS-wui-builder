@@ -131,7 +131,7 @@
     "analytics": {
         "tabs": {
             "default": "Default",
-            "new": "New"
+            "new": "New tab"
         },
         "groups": {
             "new": "New group"
