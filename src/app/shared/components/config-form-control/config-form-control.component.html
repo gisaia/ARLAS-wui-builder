@@ -24,7 +24,8 @@
             [appResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
             <mat-option *ngIf="typedControl.optional"></mat-option>
-            <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value" [ngClass]="'option-color-' + opt.value">
+            <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value"
+                [ngClass]="'option-color-' + opt.value">
                 {{opt.label | translate}}
             </mat-option>
         </mat-select>
@@ -229,6 +230,7 @@
 <div *ngIf="isTextarea(); let typedControl" class="textarea-form-control">
     <mat-form-field>
         <mat-label>{{ typedControl.label | translate}}</mat-label>
-        <textarea matInput [formControl]="typedControl" [required]="!typedControl.optional"></textarea>
+        <textarea matInput [formControl]="typedControl" [required]="!typedControl.optional"
+            [rows]="typedControl.nbRows"></textarea>
     </mat-form-field>
 </div>

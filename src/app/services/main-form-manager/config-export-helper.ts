@@ -498,6 +498,18 @@ export class ConfigExportHelper {
                 });
                 return contrib;
             }
+            case WIDGET_TYPE.resultlist: {
+                const contrib = this.getWidgetContributor(widgetData, icon);
+                contrib.type = 'resultlist';
+                contrib.search_size = widgetData.dataStep.searchSize;
+                contrib.fieldsConfiguration = { idFieldName: widgetData.dataStep.idFieldName };
+                contrib.columns = [];
+                (widgetData.dataStep.columnsWrapper.columns as Array<any>).forEach(c =>
+                    contrib.columns.push({
+                        columnName: c.columnName, fieldName: c.fieldName, dataType: c.dataType, process: c.process
+                    }));
+                return contrib;
+            }
         }
     }
 
@@ -524,6 +536,7 @@ export class ConfigExportHelper {
             icon: group.icon,
             components: []
         } as AnalyticConfig;
+
 
         group.content.forEach(widget => {
             groupAnalytic.components.push(this.getAnalyticsComponent(widget.widgetType, widget.widgetData));
@@ -653,6 +666,33 @@ export class ConfigExportHelper {
                     diameter: 160,
                     multiselectable: !!widgetData.renderStep.multiselectable,
                     opacity: widgetData.renderStep.opacity
+                }
+            } as AnalyticComponentConfig;
+
+            return component;
+        } else if (widgetType === WIDGET_TYPE.resultlist) {
+            const component = {
+                contributorId: this.toSnakeCase(widgetData.dataStep.name),
+                componentType: WIDGET_TYPE.resultlist,
+                input: {
+                    id: this.toSnakeCase(widgetData.dataStep.name),
+                    tableWidth: 455,
+                    globalActionsList: [],
+                    searchSize: widgetData.dataStep.searchSize,
+                    nLastLines: 3,
+                    detailedGridHeight: 25,
+                    nbGridColumns: 3,
+                    defautMode: 'list',
+                    displayFilters: widgetData.renderStep.displayFilters,
+                    isBodyHidden: false,
+                    isGeoSortActived: false,
+                    isAutoGeoSortActived: true,
+                    selectedItemsEvent: null,
+                    consultedItemEvent: null,
+                    actionOnItemEvent: null,
+                    globalActionEvent: null,
+                    useColorService: widgetData.renderStep.useColorService,
+                    cellBackgroundStyle: widgetData.renderStep.cellBackgroundStyle
                 }
             } as AnalyticComponentConfig;
 

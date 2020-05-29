@@ -7,6 +7,12 @@
         <mat-step [label]="'Data' | translate " [stepControl]="formGroup.controls.dataStep">
             <app-config-form-group [configFormGroup]="formGroup.controls.dataStep" [defaultKey]="defaultKey">
             </app-config-form-group>
+
+            <div *ngIf="dialogData.widgetType === WIDGET_TYPE.resultlist">
+                <app-edit-resultlist-columns [control]="formGroup.get('dataStep.columnsWrapper.columns')">
+                </app-edit-resultlist-columns>
+            </div>
+
             <div>
                 <button mat-button matStepperNext type="button">{{ 'Next' | translate}}</button>
             </div>

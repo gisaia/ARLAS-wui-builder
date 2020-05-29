@@ -46,6 +46,7 @@ interface ControlOptionalParams {
     dependsOn?: () => Array<ConfigFormControl | ConfigFormGroup>;
 
     // callback to be executed when a dependency changes
+    // it is also executed at loading, so it may be used without any 'dependsOn' to be executed only once
     onDependencyChange?: (c: ConfigFormControl | ConfigFormGroup) => void;
 
     // indicates if other fields that depends on this one, should be reset when this one changes
@@ -525,4 +526,14 @@ export class ButtonFormControl extends ConfigFormControl {
 }
 
 export class TextareaFormControl extends ConfigFormControl {
+
+    constructor(
+        formState: any,
+        label: string,
+        description: string,
+        public nbRows?: number,
+        optionalParams?: ControlOptionalParams
+    ) {
+        super(formState, label, description, optionalParams);
+    }
 }

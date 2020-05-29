@@ -35,6 +35,7 @@ import { ImportElement, importElements } from '@services/main-form-manager/tools
 import { MetricFormBuilderService } from '../metric-form-builder/metric-form-builder.service';
 import { PowerbarFormBuilderService } from '../powerbar-form-builder/powerbar-form-builder.service';
 import { DonutFormBuilderService } from '../donut-form-builder/donut-form-builder.service';
+import { ResultlistFormBuilderService } from '../resultlist-form-builder/resultlist-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,7 @@ export class AnalyticsImportService {
     private metricFormBuilder: MetricFormBuilderService,
     private powerbarFormBuilder: PowerbarFormBuilderService,
     private donutFormBuilder: DonutFormBuilderService,
+    private resultlistFormBuilder: ResultlistFormBuilderService,
   ) { }
 
   public doImport(config: Config) {
@@ -71,13 +73,14 @@ export class AnalyticsImportService {
         const isMetric = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.metric;
         const isPowerbar = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.powerbars;
         const isDonut = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.donut;
+        const isResultlist = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.resultlist;
 
         newGroup.patchValue({
           icon: analyticGroup.icon,
           title: analyticGroup.title,
           contentType:
             isHistogram ? [WIDGET_TYPE.histogram] : isSwimlane ? [WIDGET_TYPE.swimlane] : isMetric ? [WIDGET_TYPE.metric] :
-              isPowerbar ? [WIDGET_TYPE.powerbars] : isDonut ? [WIDGET_TYPE.donut]
+              isPowerbar ? [WIDGET_TYPE.powerbars] : isDonut ? [WIDGET_TYPE.donut] : isResultlist ? [WIDGET_TYPE.resultlist]
                 : ''
         });
 
@@ -91,7 +94,8 @@ export class AnalyticsImportService {
             isMetric ? this.getMetricWidgetData(analyticGroup.components[0], contributor) :
               isPowerbar ? this.getPowerbarWidgetData(analyticGroup.components[0], contributor) :
                 isDonut ? this.getDonutWidgetData(analyticGroup.components[0], contributor) :
-                  new FormGroup({});
+                  isResultlist ? this.getResultlistWidgetData(analyticGroup.components[0], contributor) :
+                    new FormGroup({});
         widget.setControl('widgetData', widgetData);
 
         (newGroup.controls.content as FormArray).push(widget);
@@ -301,6 +305,63 @@ export class AnalyticsImportService {
         control: renderStep.multiselectable
       }
     ]);
+    return widgetData;
+  }
+
+  private getResultlistWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
+    const widgetData = this.resultlistFormBuilder.build();
+    const dataStep = widgetData.customControls.dataStep;
+    const renderStep = widgetData.customControls.renderStep;
+
+    importElements([
+      {
+        value: contributor.name,
+        control: dataStep.name
+      },
+      {
+        value: contributor.search_size,
+        control: dataStep.searchSize
+      },
+      {
+        value: contributor.fieldsConfiguration.idFieldName,
+        control: dataStep.idFieldName
+      },
+      {
+        value: component.input.displayFilters,
+        control: renderStep.displayFilters
+      },
+      {
+        value: component.input.useColorService,
+        control: renderStep.useColorService
+      },
+      {
+        value: component.input.cellBackgroundStyle,
+        control: renderStep.cellBackgroundStyle
+      },
+    ]);
+
+    contributor.columns.forEach(c => {
+      const column = this.resultlistFormBuilder.buildColumn();
+      importElements([
+        {
+          value: c.columnName,
+          control: column.customControls.columnName
+        },
+        {
+          value: c.fieldName,
+          control: column.customControls.fieldName
+        },
+        {
+          value: c.dataType,
+          control: column.customControls.dataType
+        },
+        {
+          value: c.process,
+          control: column.customControls.process
+        },
+      ]);
+      widgetData.customControls.dataStep.columnsWrapper.columns.push(column);
+    });
     return widgetData;
   }
 

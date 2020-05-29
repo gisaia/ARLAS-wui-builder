@@ -107,6 +107,9 @@ export interface ContributorConfig {
     swimlanes?: Array<SwimlaneConfig>;
     function?: string;
     metrics?: Array<{ field: string, metric: string }>;
+    search_size?: number;
+    fieldsConfiguration?: { idFieldName: string };
+    columns?: Array<{ columnName: string, fieldName: string, dataType: string, process: string }>;
 }
 
 export interface SwimlaneConfig {
@@ -167,6 +170,22 @@ export interface AnalyticComponentInputConfig {
     opacity?: number;
     powerbarTitle?: string;
     diameter?: number;
+    tableWidth?: number;
+    globalActionsList?: Array<any>;
+    searchSize?: number;
+    nLastLines?: number;
+    detailedGridHeight?: number;
+    nbGridColumns?: number;
+    defautMode?: string;
+    displayFilters?: boolean;
+    isBodyHidden?: boolean;
+    isGeoSortActived?: boolean;
+    isAutoGeoSortActived?: boolean;
+    selectedItemsEvent?: any;
+    consultedItemEvent?: any;
+    actionOnItemEvent?: any;
+    globalActionEvent?: any;
+    cellBackgroundStyle?: string;
 }
 
 export interface AnalyticComponentHistogramInputConfig extends AnalyticComponentInputConfig {
