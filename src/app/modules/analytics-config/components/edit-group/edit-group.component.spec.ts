@@ -40,7 +40,7 @@ describe('EditGroupComponent', () => {
           icon: new FormControl(''),
           title: new FormControl(''),
           contentType: new FormControl(''),
-          content: new FormControl(''),
+          content: new FormControl([]),
           preview: new FormControl([])
         })
       }
