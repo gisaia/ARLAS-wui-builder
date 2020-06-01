@@ -40,7 +40,6 @@ export class TabsComponent {
   public tabsFa: FormArray;
   public editingTabIndex = -1;
   public editingTabName = '';
-  public selectedTabIndex = 0;
   @ViewChild('matTabGroup', { static: false }) private matTabGroup: MatTabGroup;
 
   constructor(
@@ -66,21 +65,28 @@ export class TabsComponent {
     const dialogRef = this.dialog.open(InputModalComponent);
     dialogRef.afterClosed().subscribe(tabName => {
       if (tabName) {
-        this.tabsFa.controls.push(this.analyticsInitService.initNewTab(tabName));
-        this.selectedTabIndex = this.matTabGroup._tabs.length - 1;
+        this._addTab(tabName);
       }
     });
   }
 
   public addTab() {
+    this._addTab(this.translateService.instant(
+      this.defaultValuesService.getValue('analytics.tabs.new')));
+  }
+
+  private _addTab(tabName: string) {
     // add new formgroup
-    this.tabsFa.controls.push(this.analyticsInitService.initNewTab(
-      this.translateService.instant(
-        this.defaultValuesService.getValue('analytics.tabs.new'))
-    ));
+    this.tabsFa.controls.push(this.analyticsInitService.initNewTab(tabName));
 
     // select the newly created tab
-    this.selectedTabIndex = this.matTabGroup._tabs.length - 1;
+    // because of the "+" tab which is at last index in the MatTabGroup (but not in the this.tabsFa.controls),
+    // angular fails to resolve indexes properly. Timeout was the easier way to make it work as expected,
+    // there might be better ways...
+    // Moreover, matTabGroup.selectedIndex works whereas passing a "selectedIndex" to the mat-tab-group fails
+    setTimeout(() => {
+      this.matTabGroup.selectedIndex = this.tabsFa.controls.length - 1;
+    }, 0);
   }
 
   public removeTab(tabIndex: number) {
@@ -92,7 +98,7 @@ export class TabsComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.tabsFa.removeAt(tabIndex);
-        this.selectedTabIndex = 0;
+        this.matTabGroup.selectedIndex = Math.min(tabIndex, this.tabsFa.controls.length - 1);
       }
     });
   }
@@ -118,7 +124,7 @@ export class TabsComponent {
     const previousIndex = parseInt(event.previousContainer.id.replace('tab-', ''), 10);
     const newIndex = parseInt(event.container.id.replace('tab-', ''), 10);
     moveItemInFormArray(previousIndex, newIndex, this.tabsFa);
-    this.selectedTabIndex = newIndex;
+    this.matTabGroup.selectedIndex = newIndex;
   }
 
   public tabHasError(index: number) {
