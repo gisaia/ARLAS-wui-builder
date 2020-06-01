@@ -16,31 +16,32 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, ViewChildren, QueryList, ViewContainerRef, ElementRef, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormArray, FormGroup } from '@angular/forms';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
-import { MatTabGroup } from '@angular/material';
+
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MatDialog } from '@angular/material/dialog';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.scss']
 })
-export class TabsComponent implements OnInit {
+export class TabsComponent {
 
   public tabsFa: FormArray;
   public editingTabIndex = -1;
   public editingTabName = '';
-  public selectedIndex = 0;
+  public selectedTabIndex = 0;
   @ViewChild('matTabGroup', { static: false }) private matTabGroup: MatTabGroup;
 
   constructor(
@@ -56,10 +57,6 @@ export class TabsComponent implements OnInit {
     this.tabsFa = this.mainFormService.analyticsConfig.getListFa();
   }
 
-  public ngOnInit() {
-
-  }
-
   get tabs() {
     return this.tabsFa.controls.map(fg => fg.value.tabName);
   }
@@ -71,6 +68,7 @@ export class TabsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(tabName => {
       if (tabName) {
         this.tabsFa.controls.push(this.analyticsInitService.initNewTab(tabName));
+        this.selectedTabIndex = this.matTabGroup._tabs.length - 1;
       }
     });
   }
@@ -81,8 +79,9 @@ export class TabsComponent implements OnInit {
       this.translateService.instant(
         this.defaultValuesService.getValue('analytics.tabs.new'))
     ));
+
     // select the newly created tab
-    this.selectedIndex = this.matTabGroup._tabs.length - 1;
+    this.selectedTabIndex = this.matTabGroup._tabs.length - 1;
   }
 
   public removeTab(tabIndex: number) {
@@ -94,7 +93,7 @@ export class TabsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.tabsFa.removeAt(tabIndex);
-        this.selectedIndex = 0;
+        this.selectedTabIndex = 0;
       }
     });
   }
@@ -120,7 +119,7 @@ export class TabsComponent implements OnInit {
     const previousIndex = parseInt(event.previousContainer.id.replace('tab-', ''), 10);
     const newIndex = parseInt(event.container.id.replace('tab-', ''), 10);
     moveItemInFormArray(previousIndex, newIndex, this.tabsFa);
-    this.selectedIndex = newIndex;
+    this.selectedTabIndex = newIndex;
   }
 
   public tabHasError(index: number) {

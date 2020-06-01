@@ -1,5 +1,5 @@
 <div class="tab-wrapper">
-    <mat-tab-group [selectedIndex]="selectedIndex" disableRipple mat-align-tabs="start" #matTabGroup>
+    <mat-tab-group [selectedIndex]="selectedTabIndex" disableRipple mat-align-tabs="start" #matTabGroup>
         <mat-tab *ngFor="let tab of tabs; let index = index">
             <ng-template mat-tab-label>
                 <div [id]="'tab-' + index" cdkDropList cdkDropListOrientation="horizontal"

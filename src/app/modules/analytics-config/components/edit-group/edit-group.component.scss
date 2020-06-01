@@ -69,6 +69,7 @@ $primary-color: mat-color($primary-palette);
         }
 
         .edit-widgets {
+            display: flex;
             button {
                 margin: 5px 0px 0px 10px;
             }
