@@ -55,6 +55,27 @@ export function updateValueAndValidity(control: AbstractControl, onlySelf: boole
     }
 }
 
+/**
+ * Check that all sub-controls of a control have been touched.
+ * This is the case when we try to export => material touches all controls,
+ * so it can be detected to detect an export and display remaining errors.
+ */
+export function isFullyTouched(control: AbstractControl): boolean {
+
+    if (control instanceof FormControl) {
+        return control.touched;
+    } else if (control.touched && (control instanceof FormGroup || control instanceof FormArray)) {
+        if (control.controls.length === 0) {
+            return control.touched;
+        } else if (control.controls.length === 1) {
+            return Object.values(control.controls)[0].touched;
+        } else {
+            return Object.values(control.controls).map(c => isFullyTouched(c)).reduce((b1, b2) => b1 && b2);
+        }
+    }
+    return false;
+}
+
 export function getNbErrorsInControl(control: AbstractControl): number {
     let nbErrors = 0;
     nbErrors += !!control.errors ? Object.keys(control.errors).length : 0;

@@ -16,8 +16,15 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+export interface DialogData {
+  title?: string;
+  message?: string;
+  initialValue?: string;
+  noCancel?: boolean;
+}
 
 @Component({
   selector: 'app-input-modal',
@@ -29,8 +36,15 @@ export class InputModalComponent {
   public textName: string;
 
   constructor(
-    public dialogRef: MatDialogRef<InputModalComponent>
-  ) { }
+    public dialogRef: MatDialogRef<InputModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {
+    this.textName = data.initialValue || '';
+
+    if (data && !!data.noCancel) {
+      dialogRef.disableClose = true;
+    }
+  }
 
   public cancel(): void {
     this.dialogRef.close();
