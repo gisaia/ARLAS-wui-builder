@@ -504,10 +504,24 @@ export class ConfigExportHelper {
                 contrib.search_size = widgetData.dataStep.searchSize;
                 contrib.fieldsConfiguration = { idFieldName: widgetData.dataStep.idFieldName };
                 contrib.columns = [];
-                (widgetData.dataStep.columnsWrapper.columns as Array<any>).forEach(c =>
+                (widgetData.dataStep.columns as Array<any>).forEach(c =>
                     contrib.columns.push({
                         columnName: c.columnName, fieldName: c.fieldName, dataType: c.dataType, process: c.process
                     }));
+
+                contrib.details = [];
+                (widgetData.dataStep.details || [] as Array<any>).forEach((d, index) => {
+                    const fields = d.fields.map(f => ({
+                        path: f.path,
+                        label: f.label,
+                        process: f.process
+                    }));
+                    contrib.details.push({
+                        name: d.name,
+                        order: index + 1,
+                        fields
+                    });
+                });
                 return contrib;
             }
         }

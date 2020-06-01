@@ -110,6 +110,11 @@ export interface ContributorConfig {
     search_size?: number;
     fieldsConfiguration?: { idFieldName: string };
     columns?: Array<{ columnName: string, fieldName: string, dataType: string, process: string }>;
+    details?: Array<{
+        name: string,
+        order: number,
+        fields: Array<{ path: string, label: string, process: string }>
+    }>;
 }
 
 export interface SwimlaneConfig {

@@ -23,7 +23,6 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
-
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MatDialog } from '@angular/material/dialog';

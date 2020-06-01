@@ -9,8 +9,7 @@
             </app-config-form-group>
 
             <div *ngIf="dialogData.widgetType === WIDGET_TYPE.resultlist">
-                <app-edit-resultlist-columns [control]="formGroup.get('dataStep.columnsWrapper.columns')">
-                </app-edit-resultlist-columns>
+                <app-resultlist-data [control]="formGroup.get('dataStep')"></app-resultlist-data>
             </div>
 
             <div>

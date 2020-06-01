@@ -9,6 +9,7 @@ import { HistogramFormBuilderService } from '../../services/histogram-form-build
 import { FormGroup } from '@angular/forms';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { EditResultlistColumnsComponent } from '../edit-resultlist-columns/edit-resultlist-columns.component';
+import { ResultlistDataComponent } from '../resultlist-data/resultlist-data.component';
 
 describe('EditWidgetDialogComponent', () => {
   let spectator: Spectator<EditWidgetDialogComponent>;
@@ -32,7 +33,7 @@ describe('EditWidgetDialogComponent', () => {
     ],
     declarations: [
       MockComponent(ConfigFormGroupComponent),
-      MockComponent(EditResultlistColumnsComponent),
+      MockComponent(ResultlistDataComponent),
     ],
     mocks: [
       MatDialogRef

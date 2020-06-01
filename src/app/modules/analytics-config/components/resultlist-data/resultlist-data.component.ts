@@ -16,24 +16,21 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-.columns-wrapper {
-    background-color: white;
-    padding: 10px;
+import { Component, OnInit, Input } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
-    .column {
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
+@Component({
+  selector: 'app-resultlist-data',
+  templateUrl: './resultlist-data.component.html',
+  styleUrls: ['./resultlist-data.component.scss']
+})
+export class ResultlistDataComponent implements OnInit {
 
-        ::ng-deep mat-form-field {
-            //hard-coded, otherwise with no value the width is 180px, with a value it is 204px
-            width: 204px;
-        }
-    }
-}
+  @Input() public control: FormGroup;
 
-.button-wrapper {
-    display: flex;
-    justify-content: center;
-    margin: 20px;
+  constructor() { }
+
+  public ngOnInit() {
+  }
+
 }

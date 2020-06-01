@@ -16,24 +16,3 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-.columns-wrapper {
-    background-color: white;
-    padding: 10px;
-
-    .column {
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
-
-        ::ng-deep mat-form-field {
-            //hard-coded, otherwise with no value the width is 180px, with a value it is 204px
-            width: 204px;
-        }
-    }
-}
-
-.button-wrapper {
-    display: flex;
-    justify-content: center;
-    margin: 20px;
-}
