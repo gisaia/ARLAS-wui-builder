@@ -31,8 +31,7 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
           '',
           'Drag and drop',
           'description',
-          null,
-          { title: 'Look and feel'}
+          { title: 'Look and feel' }
         ),
         zoomToData: new SlideToggleFormControl(
           '',

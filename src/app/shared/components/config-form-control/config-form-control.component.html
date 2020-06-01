@@ -4,7 +4,15 @@
         [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
         {{ typedControl.label | translate}}
     </mat-slide-toggle>
-    {{ typedControl.labelAfter | translate}}
+</div>
+
+<div *ngIf="isButtonToggle(); let typedControl">
+    <mat-button-toggle-group [formControl]="typedControl"
+        [appResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
+        [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
+        <mat-button-toggle *ngFor="let opt of typedControl.options" [value]="opt.value">{{ opt.label | translate}}
+        </mat-button-toggle>
+    </mat-button-toggle-group>
 </div>
 
 <div *ngIf="isSlider(); let typedControl">

@@ -78,7 +78,6 @@ export class PowerbarConfigForm extends ConfigFormGroup {
           '',
           'Manually associate colors',
           'description',
-          undefined,
           {
             childs: () => [
               this.customControls.renderStep.keysToColorsButton

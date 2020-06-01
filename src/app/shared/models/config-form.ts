@@ -212,11 +212,23 @@ export class SlideToggleFormControl extends ConfigFormControl {
         formState: any,
         label: string,
         description: string,
-        public labelAfter?: string,
         optionalParams?: ControlOptionalParams
     ) {
 
         super(formState, label, description, { ...optionalParams, ... { optional: true } });
+    }
+}
+
+
+export class ButtonToggleFormControl extends ConfigFormControl {
+    constructor(
+        formState: any,
+        public options: Array<{ label: string, value: any }>,
+        description: string,
+        optionalParams?: ControlOptionalParams
+    ) {
+
+        super(formState, null, description, optionalParams);
     }
 }
 

@@ -21,7 +21,7 @@ import { WidgetFormBuilder } from '../widget-form-builder';
 import { FormGroup } from '@angular/forms';
 import {
   ConfigFormGroup, InputFormControl, SelectFormControl, SliderFormControl,
-  SlideToggleFormControl, HuePaletteFormControl, HiddenFormControl, SelectOption
+  SlideToggleFormControl, HuePaletteFormControl, HiddenFormControl, SelectOption, ButtonToggleFormControl
 } from '@shared-models/config-form';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -37,6 +37,10 @@ import {
 import { Observable } from 'rxjs';
 import { toKeywordOptionsObs } from '@services/collection-service/tools';
 
+enum SWIMLANE_REPRESENTATION {
+  GLOBALLY = 'global',
+  BY_COLUMN = 'column'
+}
 export class SwimlaneFormGroup extends ConfigFormGroup {
 
   constructor(
@@ -82,11 +86,14 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
               { value: SwimlaneMode[SwimlaneMode.circles].toString(), label: 'Circles' }
             ]
           ),
-          swimlaneRepresentation: new SlideToggleFormControl(
+          swimlaneRepresentation: new ButtonToggleFormControl(
             '',
-            'Represent globally',
-            'description',
-            'or by column'
+            [
+              { label: 'Represent globally', value: SWIMLANE_REPRESENTATION.GLOBALLY },
+              { label: 'or by column', value: SWIMLANE_REPRESENTATION.BY_COLUMN },
+            ]
+            ,
+            'description'
           ),
           paletteColors: new HuePaletteFormControl(
             '',
@@ -98,7 +105,6 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
             '',
             'Is zero representative?',
             'Description',
-            undefined,
             {
               childs: () => [this.customControls.renderStep.zerosColors, this.customControls.renderStep.NaNColors]
             }
