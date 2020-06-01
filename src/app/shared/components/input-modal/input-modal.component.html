@@ -1,10 +1,13 @@
 <div mat-dialog-content>
-    <h1 class="modal_title" mat-dialog-title>{{ 'Name' | translate }} </h1>
-    <mat-form-field>
-      <input matInput tabindex="1" [(ngModel)]="textName" (keypress)="pressEvent($event)">
-    </mat-form-field>
-  </div>
-  <div mat-dialog-actions>
-    <button mat-raised-button class="modal_button" color="primary" [mat-dialog-close]="textName" [disabled]="!textName" tabindex="2">{{ 'OK' | translate }}</button>
-    <button mat-raised-button class="modal_button" (click)="cancel()" tabindex="-1">{{ 'Cancel' | translate }}</button>
-  </div>
+  <h1 class="modal_title" mat-dialog-title>{{ data?.title || 'Name' | translate }} </h1>
+  <div>{{data?.message | translate}}</div>
+  <mat-form-field>
+    <input matInput tabindex="1" [(ngModel)]="textName" (keypress)="pressEvent($event)">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button class="modal_button" color="primary" [mat-dialog-close]="textName" [disabled]="!textName"
+    tabindex="2">{{ 'OK' | translate }}</button>
+  <button *ngIf="!data?.noCancel" mat-raised-button class="modal_button" (click)="cancel()"
+    tabindex="-1">{{ 'Cancel' | translate }}</button>
+</div>

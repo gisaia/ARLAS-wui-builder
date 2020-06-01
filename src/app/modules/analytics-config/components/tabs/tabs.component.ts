@@ -22,7 +22,7 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
+import { moveInFormArray, isFullyTouched } from '@utils/tools';
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -77,7 +77,7 @@ export class TabsComponent {
 
   private _addTab(tabName: string) {
     // add new formgroup
-    this.tabsFa.controls.push(this.analyticsInitService.initNewTab(tabName));
+    this.tabsFa.push(this.analyticsInitService.initNewTab(tabName));
 
     // select the newly created tab
     // because of the "+" tab which is at last index in the MatTabGroup (but not in the this.tabsFa.controls),
@@ -109,8 +109,32 @@ export class TabsComponent {
   }
 
   public finishEditTabName(tabIndex: number) {
-    this.getTab(tabIndex).get('tabName').setValue(this.editingTabName);
+    const otherTabNames = Object.values(this.tabsFa.controls).filter((c, index) => index !== tabIndex).map(c => c.get('tabName').value);
+
+    // update the tabName, if it is a duplicate then ask recursively for a unique name
+    const updateByCheckingDuplicates = (newTabName: string) => {
+      if (otherTabNames.indexOf(newTabName) >= 0) {
+        const dialogRef = this.dialog.open(InputModalComponent, {
+          data: {
+            title: 'Tab name',
+            message: 'Another tab already exists with the same name, please choose another one',
+            initialValue: newTabName,
+            noCancel: true
+          }
+        });
+        dialogRef.afterClosed().subscribe(tabName => {
+          updateByCheckingDuplicates(tabName);
+        });
+      } else {
+        this.getTab(tabIndex).get('tabName').setValue(newTabName);
+      }
+    };
+
     this.editingTabIndex = -1;
+    // wait until editingTabIndex update removes the related input
+    // otherwise, opening the dialog throws an additional focusout event
+    // and opens another dialog
+    setTimeout(() => updateByCheckingDuplicates(this.editingTabName), 0);
   }
 
   public getOtherTabsIds(tabIndex: number) {
@@ -123,12 +147,12 @@ export class TabsComponent {
   public drop(event: CdkDragDrop<string[]>) {
     const previousIndex = parseInt(event.previousContainer.id.replace('tab-', ''), 10);
     const newIndex = parseInt(event.container.id.replace('tab-', ''), 10);
-    moveItemInFormArray(previousIndex, newIndex, this.tabsFa);
+    moveInFormArray(previousIndex, newIndex, this.tabsFa);
     this.matTabGroup.selectedIndex = newIndex;
   }
 
   public tabHasError(index: number) {
-    return this.mainFormManager.isExportExpected && this.tabsFa.at(index).invalid;
+    return this.tabsFa.at(index).invalid && isFullyTouched(this.tabsFa.at(index));
   }
 
 }
