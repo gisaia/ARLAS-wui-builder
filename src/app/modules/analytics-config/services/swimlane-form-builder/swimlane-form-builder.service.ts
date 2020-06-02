@@ -73,7 +73,7 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
               1)
           }).withTitle('Term aggregation'),
           metric: metricFg
-        }),
+        }).withTabName('Data'),
         renderStep: new ConfigFormGroup({
           swimlaneMode: new SelectFormControl(
             '',
@@ -121,7 +121,7 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
           NaNColor: new HiddenFormControl(
             defaultConfig.swimlaneNanColor
           )
-        }),
+        }).withTabName('Render'),
       }
     );
   }

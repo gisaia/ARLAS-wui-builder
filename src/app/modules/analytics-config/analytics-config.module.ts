@@ -33,7 +33,8 @@ import { ResultlistDataComponent } from './components/resultlist-data/resultlist
 @NgModule({
   entryComponents: [
     EditWidgetDialogComponent,
-    AddWidgetDialogComponent
+    AddWidgetDialogComponent,
+    ResultlistDataComponent
   ],
   declarations: [
     AnalyticsConfigComponent,

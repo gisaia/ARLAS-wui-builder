@@ -85,6 +85,7 @@ export class ConfigFormGroup extends FormGroup {
     public dependantControls: Array<AbstractControl>;
 
     public title: string;
+    public stepName: string;
     public tabName: string;
 
     constructor(
@@ -120,6 +121,11 @@ export class ConfigFormGroup extends FormGroup {
 
     public withTitle(title: string) {
         this.title = title;
+        return this;
+    }
+
+    public withStepName(stepName: string) {
+        this.stepName = stepName;
         return this;
     }
 
@@ -230,6 +236,18 @@ export class ButtonToggleFormControl extends ConfigFormControl {
     ) {
 
         super(formState, null, description, optionalParams);
+    }
+}
+
+export class ComponentFormControl extends ConfigFormControl {
+    constructor(
+        public component: any,
+        // inputs of the component, to be returned from the callback
+        public inputs: {
+            [key: string]: () => any;
+        }
+    ) {
+        super(null, null, null, { optional: true });
     }
 }
 

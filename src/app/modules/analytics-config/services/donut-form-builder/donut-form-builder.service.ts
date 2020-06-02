@@ -57,7 +57,7 @@ export class DonutConfigForm extends ConfigFormGroup {
           'description',
           collectionFields
         )
-      }),
+      }).withTabName('Data'),
       renderStep: new ConfigFormGroup({
         opacity: new SliderFormControl(
           '',
@@ -120,7 +120,7 @@ export class DonutConfigForm extends ConfigFormGroup {
                 || Array.from(this.customControls.dataStep.aggregationmodels.value).length === 0;
             }
           })
-      })
+      }).withTabName('Render')
     });
   }
 

@@ -1,10 +1,22 @@
 <mat-divider></mat-divider>
 <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4">
-    <mat-tab label="{{'Columns' | translate}}">
+    <mat-tab #columns>
+        <ng-template mat-tab-label>
+            <span
+                [class.tab-error]="control.get('columns').touched && control.get('columns').invalid && !columns.isActive">
+                {{'Columns' | translate}}
+            </span>
+        </ng-template>
         <app-edit-resultlist-columns [control]="control.get('columns')">
         </app-edit-resultlist-columns>
     </mat-tab>
-    <mat-tab label="{{'Details' | translate}}">
+    <mat-tab #details>
+        <ng-template mat-tab-label>
+            <span
+                [class.tab-error]="control.get('details').touched && control.get('details').invalid && !details.isActive">
+                {{'Details' | translate}}
+            </span>
+        </ng-template>
         <app-edit-resultlist-details [control]="control.get('details')">
         </app-edit-resultlist-details>
     </mat-tab>

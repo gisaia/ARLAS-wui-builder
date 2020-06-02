@@ -22,13 +22,15 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import {
   ConfigFormGroup, InputFormControl, SliderFormControl, SlideToggleFormControl, SelectFormControl, TextareaFormControl, SelectOption,
-  HiddenFormControl
+  HiddenFormControl,
+  ComponentFormControl
 } from '@shared-models/config-form';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { FormArray, Validators, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { toOptionsObs, NUMERIC_OR_DATE_OR_TEXT_TYPES } from '@services/collection-service/tools';
 import { CollectionReferenceDescription } from 'arlas-api';
+import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
 
 export class ResultlistConfigForm extends ConfigFormGroup {
 
@@ -62,8 +64,14 @@ export class ResultlistConfigForm extends ConfigFormGroup {
           {
             onDependencyChange: (control) => describe.subscribe(d => control.setValue(d.params.id_path))
           }
+        ),
+        customComponent: new ComponentFormControl(
+          ResultlistDataComponent,
+          {
+            control: () => this.customGroups.dataStep
+          }
         )
-      }),
+      }).withTabName('Data'),
       renderStep: new ConfigFormGroup({
         displayFilters: new SlideToggleFormControl(
           '',
@@ -89,9 +97,14 @@ export class ResultlistConfigForm extends ConfigFormGroup {
             onDependencyChange: (control) => control.enableIf(this.customControls.renderStep.useColorService.value)
           }
         )
-      })
+      }).withTabName('Render')
     });
   }
+
+  public customGroups = {
+    dataStep: this.get('dataStep') as ConfigFormGroup,
+    renderStep: this.get('renderStep') as ConfigFormGroup,
+  };
 
   public customControls = {
     dataStep: {
@@ -251,6 +264,7 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
     return formGroup;
   }
 
+  // TODO Optimize by not requesting the collection fields (also for other build methods)
   public buildColumn() {
     return new ResultlistColumnFormGroup(
       toOptionsObs(

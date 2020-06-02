@@ -55,7 +55,7 @@ export class HistogramFormGroup extends ConfigFormGroup {
             'description'),
           aggregation: bucketsIntervalFg,
           metric: metricFg
-        }),
+        }).withTabName('Data'),
         renderStep: new ConfigFormGroup({
           multiselectable: new SlideToggleFormControl(
             '',
@@ -81,7 +81,7 @@ export class HistogramFormGroup extends ConfigFormGroup {
             false,
             Object.keys(DateFormats).map(df => ({ value: DateFormats[df], label: df }))
           )
-        })
+        }).withTabName('Render')
       }
     );
   }

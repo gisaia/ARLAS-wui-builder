@@ -16,9 +16,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Inject, ViewChild, Injector, OnDestroy } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatStepper } from '@angular/material';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { HistogramFormBuilderService } from '../../services/histogram-form-builder/histogram-form-builder.service';
 import { WidgetFormBuilder } from '../../services/widget-form-builder';
 import { SwimlaneFormBuilderService } from '../../services/swimlane-form-builder/swimlane-form-builder.service';
@@ -34,16 +33,9 @@ import { ResultlistFormBuilderService } from '@analytics-config/services/resultl
   selector: 'app-edit-widget-dialog',
   templateUrl: './edit-widget-dialog.component.html',
   styleUrls: ['./edit-widget-dialog.component.scss'],
-  providers: [
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { showError: true }
-    }
-  ]
 })
 export class EditWidgetDialogComponent implements OnInit {
 
-  @ViewChild('stepper', { static: false }) private stepper: MatStepper;
   public formGroup: FormGroup;
   public defaultKey: string;
   public WIDGET_TYPE = WIDGET_TYPE;
@@ -97,8 +89,6 @@ export class EditWidgetDialogComponent implements OnInit {
 
   public save() {
     this.formGroup.markAllAsTouched();
-    this.stepper.steps.setDirty();
-    this.stepper.steps.forEach(s => s.interacted = true);
     if (this.formGroup.valid) {
       this.dialogRef.close(this.formGroup);
     }

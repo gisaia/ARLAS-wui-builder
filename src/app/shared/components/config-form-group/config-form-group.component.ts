@@ -110,6 +110,11 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
 
   public trustHtml = (html) => this.sanitizer.bypassSecurityTrustHtml(html);
 
+  public hasChildSteps = () =>
+    Object.values(this.configFormGroup.controls)
+      .filter(c => (c instanceof ConfigFormGroup && !!c.stepName))
+      .length > 0
+
   public hasChildTabs = () =>
     Object.values(this.configFormGroup.controls)
       .filter(c => (c instanceof ConfigFormGroup && !!c.tabName))

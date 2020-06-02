@@ -249,3 +249,7 @@
             [rows]="typedControl.nbRows"></textarea>
     </mat-form-field>
 </div>
+
+<div *ngIf="isComponent(); let typedControl">
+    <template #component>I am span</template>
+</div>
