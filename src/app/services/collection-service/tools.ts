@@ -22,8 +22,13 @@ import { map } from 'rxjs/operators';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 
 const TypeEnum = CollectionReferenceDescriptionProperty.TypeEnum;
+
+export const DATE_TYPES = [
+    TypeEnum.DATE, TypeEnum.LONG
+];
+
 export const INTEGER_TYPES = [
-    TypeEnum.DATE, TypeEnum.INTEGER, TypeEnum.LONG,
+    ...DATE_TYPES, TypeEnum.INTEGER
 ];
 
 export const NUMERIC_OR_DATE_TYPES = [
@@ -40,10 +45,19 @@ export function toOptionsObs(collectionFieldsObs: Observable<Array<CollectionFie
     ));
 }
 
-export function toNumericOrDateOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
-    return toOptionsObs(collectionFieldsObs.pipe(map(
+export function toNumericOrDateFieldsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+    return collectionFieldsObs.pipe(map(
         fields => fields
-            .filter(f => NUMERIC_OR_DATE_TYPES.indexOf(f.type) >= 0))));
+            .filter(f => NUMERIC_OR_DATE_TYPES.indexOf(f.type) >= 0)));
+}
+
+export function toDateFieldsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+    return collectionFieldsObs.pipe(map(
+        fields => fields.filter(f => DATE_TYPES.indexOf(f.type) >= 0)));
+}
+
+export function toNumericOrDateOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+    return toOptionsObs(toNumericOrDateFieldsObs(collectionFieldsObs));
 }
 
 export function toIntegerOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {

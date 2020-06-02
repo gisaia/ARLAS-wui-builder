@@ -28,6 +28,7 @@ import { CollectionService, FIELD_TYPES } from '@services/collection-service/col
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ChartType } from 'arlas-web-components';
 import { map } from 'rxjs/operators';
+import { toDateFieldsObs } from '@services/collection-service/tools';
 
 enum DateFormats {
   English = '%b %d %Y  %H:%M',
@@ -169,8 +170,8 @@ export class TimelineGlobalFormBuilderService {
 
   public build() {
 
-    const longDateFields = this.collectionService.getCollectionFields(
-      this.mainFormService.getCollections()[0], [FIELD_TYPES.DATE, FIELD_TYPES.LONG])
+    const longDateFields = toDateFieldsObs(this.collectionService.getCollectionFields(
+      this.mainFormService.getCollections()[0]))
       .pipe(map(fields => fields.sort((a, b) => {
         // sort by DATE first, then by name
         if (a.type !== b.type) {

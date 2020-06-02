@@ -32,6 +32,7 @@ import {
 import {
   MetricCollectFormBuilderService, MetricCollectFormGroup
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
+import { toNumericOrDateFieldsObs } from '@services/collection-service/tools';
 
 // TODO put in common with timeline
 enum DateFormats {
@@ -125,7 +126,7 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
       this.mainFormService.getCollections()[0]);
 
     const formGroup = new HistogramFormGroup(
-      this.bucketsIntervalBuilderService.build(collectionFieldsObs),
+      this.bucketsIntervalBuilderService.build(toNumericOrDateFieldsObs(collectionFieldsObs)),
       this.metricBuilderService.build(collectionFieldsObs)
     );
 

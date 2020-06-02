@@ -35,7 +35,7 @@ import {
   MetricCollectFormBuilderService, MetricCollectFormGroup
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { Observable } from 'rxjs';
-import { toKeywordOptionsObs } from '@services/collection-service/tools';
+import { toKeywordOptionsObs, toDateFieldsObs } from '@services/collection-service/tools';
 
 enum SWIMLANE_REPRESENTATION {
   GLOBALLY = 'global',
@@ -81,8 +81,8 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
             'description',
             false,
             [
-              { value: SwimlaneMode[SwimlaneMode.fixedHeight].toString(), label: 'Fixed' },
-              { value: SwimlaneMode[SwimlaneMode.variableHeight].toString(), label: 'Variable' },
+              { value: SwimlaneMode[SwimlaneMode.fixedHeight].toString(), label: 'Fixed height' },
+              { value: SwimlaneMode[SwimlaneMode.variableHeight].toString(), label: 'Variable height' },
               { value: SwimlaneMode[SwimlaneMode.circles].toString(), label: 'Circles' }
             ]
           ),
@@ -106,7 +106,7 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
             'Is zero representative?',
             'Description',
             {
-              childs: () => [this.customControls.renderStep.zerosColors, this.customControls.renderStep.NaNColors]
+              childs: () => [this.customControls.renderStep.zerosColors, this.customControls.renderStep.NaNColor]
             }
           ),
           zerosColors: new HiddenFormControl(
@@ -118,7 +118,7 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
               onDependencyChange: (control: HiddenFormControl) =>
                 control.setValue(!!this.customControls.renderStep.isZeroRepresentative.value ? defaultConfig.swimlaneZeroColor : null)
             }),
-          NaNColors: new HiddenFormControl(
+          NaNColor: new HiddenFormControl(
             defaultConfig.swimlaneNanColor
           )
         }),
@@ -142,7 +142,7 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
       paletteColors: this.get('renderStep').get('paletteColors') as HuePaletteFormControl,
       isZeroRepresentative: this.get('renderStep').get('isZeroRepresentative') as SlideToggleFormControl,
       zerosColors: this.get('renderStep').get('zerosColors') as HiddenFormControl,
-      NaNColors: this.get('renderStep').get('NaNColors') as HiddenFormControl
+      NaNColor: this.get('renderStep').get('NaNColor') as HiddenFormControl
     }
   };
 
@@ -174,7 +174,7 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
 
     const formGroup = new SwimlaneFormGroup(
       this.bucketsIntervalBuilderService
-        .build(collectionFieldsObs)
+        .build(toDateFieldsObs(collectionFieldsObs))
         .withTitle('Date aggregation'),
       this.metricBuilderService
         .build(collectionFieldsObs)
