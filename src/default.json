@@ -106,6 +106,7 @@
             "dataStep": {
                 "timeline": {
                     "aggregation": {
+                        "aggregationBucketOrInterval": "bucket",
                         "aggregationBucketsNumber": 22
                     }
                 },

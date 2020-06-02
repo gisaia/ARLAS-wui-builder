@@ -24,7 +24,8 @@ import {
   SlideToggleFormControl,
   InputFormControl,
   HiddenFormControl,
-  ConfigFormControl
+  ConfigFormControl,
+  ButtonToggleFormControl
 } from '@shared-models/config-form';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { toKeywordOptionsObs, toNumericOrDateOptionsObs } from '@services/collection-service/tools';
@@ -41,6 +42,10 @@ import { DialogPaletteSelectorComponent } from '@map-config/components/dialog-pa
 import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { valuesToOptions } from '@utils/tools';
 
+enum COUNT_OR_METRIC {
+  COUNT = 'count',
+  METRIC = 'metric'
+}
 export class PropertySelectorFormGroup extends ConfigFormGroup {
 
   constructor(
@@ -215,11 +220,13 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
             control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.manual)
         }),
       propertyInterpolatedFg: new ConfigFormGroup({
-        propertyInterpolatedCountOrMetricCtrl: new SlideToggleFormControl(
+        propertyInterpolatedCountOrMetricCtrl: new ButtonToggleFormControl(
           '',
-          'Count',
+          [
+            { label: 'Count', value: COUNT_OR_METRIC.COUNT },
+            { label: 'Metric', value: COUNT_OR_METRIC.METRIC },
+          ],
           '',
-          'Metric',
           {
             resetDependantsOnChange: true,
             dependsOn: () => [this.customControls.propertySource],
@@ -231,7 +238,6 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
           '',
           'Normalize',
           '',
-          undefined,
           {
             dependsOn: () => [
               this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl,
@@ -240,7 +246,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
             onDependencyChange: (control) => control.enableIf(
               this.customControls.propertySource.value !== PROPERTY_SELECTOR_SOURCE.heatmap_density
               && isAggregated
-              && !this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value)
+              && this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT)
           }
         ),
         propertyInterpolatedCountValueCtrl: new HiddenFormControl(
@@ -263,7 +269,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
           {
             dependsOn: () => [this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl],
             onDependencyChange: (control) => control.enableIf(
-              isAggregated && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value)
+              isAggregated &&
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.METRIC)
           }
         ),
         propertyInterpolatedFieldCtrl: new SelectFormControl(
@@ -278,23 +285,26 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
               this.customControls.propertyInterpolatedFg.propertyInterpolatedMetricCtrl,
               this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
             ],
-            onDependencyChange: (control) => control.enableIf(
-              (!!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value) &&
-              (!isAggregated || this.customControls.propertyInterpolatedFg.propertyInterpolatedMetricCtrl.value))
+            onDependencyChange: (control) => {
+              control.enableIf(
+                !isAggregated
+                || this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.METRIC &&
+                !!this.customControls.propertyInterpolatedFg.propertyInterpolatedMetricCtrl.value);
+            }
           }
         ),
         propertyInterpolatedNormalizeCtrl: new SlideToggleFormControl(
           '',
           'Normalize',
           'Description',
-          undefined,
           {
             dependsOn: () => [
               this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
               this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
             ],
             onDependencyChange: (control) => control.enableIf(
-              !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value &&
+              !isAggregated && this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value ||
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.METRIC &&
               !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value),
             resetDependantsOnChange: true
           }
@@ -303,7 +313,6 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
           '',
           'Normalize by key?',
           'Description',
-          undefined,
           {
             resetDependantsOnChange: true,
             dependsOn: () =>
@@ -312,8 +321,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
               ],
             onDependencyChange: (control) => control.enableIf(
-              !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value
-              && !isAggregated
+              (!isAggregated ||
+                this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.METRIC)
               && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value)
           }
         ),
@@ -329,7 +338,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
               this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
             ],
             onDependencyChange: (control) => control.enableIf(
-              !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value
+              (!isAggregated ||
+                this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.METRIC)
               && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeByKeyCtrl.value),
             resetDependantsOnChange: true
           }
@@ -348,7 +358,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
             ],
             onDependencyChange: (control) => {
               const doEnable =
-                !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value
+                (!isAggregated ||
+                  this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.METRIC)
                 && !this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
                 && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value;
               control.enableIf(doEnable);
@@ -378,7 +389,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
             ],
             onDependencyChange: (control) => {
               const doEnable =
-                !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value
+                (!isAggregated ||
+                  this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.METRIC)
                 && !this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
                 && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value;
               control.enableIf(doEnable);
@@ -424,7 +436,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl.valid) {
 
                 const isAggregatedCount =
-                  isAggregated && !this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value;
+                  isAggregated &&
+                  this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT;
                 const doNormalize =
                   this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
                   || isAggregatedCount && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl.value;
@@ -455,7 +468,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
           'Description',
           () => {
             const isAggregatedCount =
-              isAggregated && !this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value;
+              isAggregated &&
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT;
             const doNormalize =
               !isAggregated && this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
               || isAggregatedCount && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl.value;
@@ -516,7 +530,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
             onDependencyChange: (control) => control.enableIf(
               propertyType === PROPERTY_TYPE.number && (
                 !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value ||
-                !this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value))
+                this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT))
           }
         ),
         propertyInterpolatedMaxValueCtrl: new SliderFormControl(
@@ -536,7 +550,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
             onDependencyChange: (control) => control.enableIf(
               propertyType === PROPERTY_TYPE.number && (
                 !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value ||
-                !this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value))
+                this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT))
           }
         ),
       },
@@ -603,9 +617,9 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
       // NOP
     } else if (this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.heatmap_density) {
       doEnable = true;
-    } else if (isAggregated && !this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value) {
+    } else if (isAggregated &&
+      this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT) {
       doEnable = true;
-      // NOP, do not enable
     } else if (!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
       && !Number.isNaN(parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl.value, 10))
       && !Number.isNaN(parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value, 10))) {

@@ -23,6 +23,7 @@ import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-to
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { NGXLogger } from 'ngx-logger';
 import { ConfigFormControl } from '@shared-models/config-form';
+import { MatButtonToggleGroup } from '@angular/material';
 
 /**
  * Reset the dependants fields when the directive component value changes
@@ -40,6 +41,7 @@ export class ResetOnChangeDirective implements OnInit {
     private elementRef: ElementRef<HTMLInputElement>,
     @Optional() private matSelect: MatSelect,
     @Optional() private matSlider: MatSlideToggle,
+    @Optional() private matButtonToggle: MatButtonToggleGroup,
     private logger: NGXLogger,
     private defaultValueService: DefaultValuesService) { }
 
@@ -51,6 +53,9 @@ export class ResetOnChangeDirective implements OnInit {
     } else if (this.matSlider) {
       this.matSlider.change.subscribe(
         (event: MatSlideToggleChange) => this.resetDependants());
+    } else if (this.matButtonToggle) {
+      this.matButtonToggle.change.subscribe(
+        event => this.resetDependants());
     } else {
       // at least we guess this is a regulr html input
       this.elementRef.nativeElement.onchange = (e: Event) => {

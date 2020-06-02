@@ -622,7 +622,7 @@ export class ConfigExportHelper {
                     swimlaneInput.swimlaneMode = widgetData.renderStep.swimlaneMode;
                     swimlaneInput.swimlaneBorderRadius = 3;
                     swimlaneInput.paletteColors = widgetData.renderStep.paletteColors;
-                    swimlaneInput.swimlaneRepresentation = !!widgetData.renderStep.swimlaneRepresentation ? 'column' : 'global';
+                    swimlaneInput.swimlaneRepresentation = widgetData.renderStep.swimlaneRepresentation;
 
                     const swimlaneOptions = {} as AnalyticComponentSwimlaneInputOptionsConfig;
                     swimlaneOptions.nanColors = widgetData.renderStep.NaNColors;

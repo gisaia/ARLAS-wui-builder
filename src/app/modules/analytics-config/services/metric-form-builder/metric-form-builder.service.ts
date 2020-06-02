@@ -60,7 +60,6 @@ export class MetricFormGroup extends ConfigFormGroup {
           '',
           'Short value',
           'Description',
-          undefined,
           {
             optional: true
           }

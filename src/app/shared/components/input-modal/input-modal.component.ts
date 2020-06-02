@@ -39,7 +39,7 @@ export class InputModalComponent {
     public dialogRef: MatDialogRef<InputModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
-    this.textName = data.initialValue || '';
+    this.textName = (data || {}).initialValue || '';
 
     if (data && !!data.noCancel) {
       dialogRef.disableClose = true;

@@ -20,7 +20,8 @@ import { Injectable } from '@angular/core';
 import {
   ConfigFormGroup, SelectFormControl, SlideToggleFormControl, SliderFormControl,
   InputFormControl,
-  HiddenFormControl
+  HiddenFormControl,
+  ButtonToggleFormControl
 } from '@shared-models/config-form';
 import { Interval, CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { Observable } from 'rxjs';
@@ -36,6 +37,10 @@ export interface BucketsIntervalControls {
   aggregationIntervalSize: InputFormControl;
 }
 
+enum BY_BUCKET_OR_INTERVAL {
+  BUCKET = 'bucket',
+  INTERVAL = 'interval'
+}
 export class BucketsIntervalFormGroup extends ConfigFormGroup {
 
   constructor(
@@ -70,11 +75,13 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
             optional: true
           }
         ),
-        aggregationBucketOrInterval: new SlideToggleFormControl(
+        aggregationBucketOrInterval: new ButtonToggleFormControl(
           '',
-          'By bucket',
+          [
+            { label: 'By bucket', value: BY_BUCKET_OR_INTERVAL.BUCKET },
+            { label: 'By interval', value: BY_BUCKET_OR_INTERVAL.INTERVAL },
+          ],
           'description',
-          'or interval',
           {
             resetDependantsOnChange: true,
             childs: () => [
@@ -96,7 +103,7 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           {
             dependsOn: () => [this.customControls.aggregationBucketOrInterval],
             onDependencyChange: (control) =>
-              !!this.customControls.aggregationBucketOrInterval.value ? control.disable() : control.enable()
+              control.enableIf(this.customControls.aggregationBucketOrInterval.value === BY_BUCKET_OR_INTERVAL.BUCKET)
           }
         ),
         aggregationIntervalUnit: new SelectFormControl(
@@ -114,7 +121,7 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
             dependsOn: () => [this.customControls.aggregationBucketOrInterval, this.customControls.aggregationField],
             onDependencyChange: (control) => {
               fieldsObs.subscribe(fields => {
-                if (this.customControls.aggregationBucketOrInterval.value &&
+                if (this.customControls.aggregationBucketOrInterval.value === BY_BUCKET_OR_INTERVAL.INTERVAL &&
                   !!fields.find(f => f.name === this.customControls.aggregationField.value) &&
                   fields.find(f => f.name === this.customControls.aggregationField.value).type
                   === CollectionReferenceDescriptionProperty.TypeEnum.DATE) {
@@ -135,7 +142,7 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           {
             dependsOn: () => [this.customControls.aggregationBucketOrInterval],
             onDependencyChange: (control) =>
-              !!this.customControls.aggregationBucketOrInterval.value ? control.enable() : control.disable()
+              control.enableIf(this.customControls.aggregationBucketOrInterval.value === BY_BUCKET_OR_INTERVAL.INTERVAL)
           }
         )
       }
