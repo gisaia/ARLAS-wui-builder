@@ -24,6 +24,7 @@ import { HistogramUtils } from 'arlas-d3';
 import { CollectionField } from '@services/collection-service/models';
 import { METRIC_TYPES } from '@services/collection-service/collection.service';
 import { toKeywordOptionsObs, toNumericOrDateOptionsObs } from '@services/collection-service/tools';
+import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 
 /**
  * These are wrappers above existing FormGroup and FormControl in order to add a custom behavior.
@@ -517,6 +518,30 @@ export class IconFormControl extends ConfigFormControl {
 }
 
 export class ColorFormControl extends ConfigFormControl {
+}
+
+/**
+ * Display a preview of color(s).
+ * Expects as value:
+ * - an Array<ProportionedValues>
+ * - or a single color
+ */
+export class ColorPreviewFormControl extends ConfigFormControl {
+
+    constructor(label: string, optionalParams?: ControlOptionalParams) {
+        super(null, label, null, optionalParams || { optional: true });
+    }
+
+    public isMultiColors = () => Array.isArray(this.value);
+
+    public getPaletteGradients() {
+        const palette = this.value as Array<ProportionedValues>;
+        const min = Math.min(...palette.map(pv => pv.proportion));
+        const max = Math.max(...palette.map(pv => pv.proportion));
+
+        return palette.map(
+            c => c.value + ' ' + (100 * (c.proportion - min) / (max - min)) + '%').join(',');
+    }
 }
 
 export class ButtonFormControl extends ConfigFormControl {
