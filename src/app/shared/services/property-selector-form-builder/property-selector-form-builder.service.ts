@@ -25,7 +25,8 @@ import {
   InputFormControl,
   HiddenFormControl,
   ConfigFormControl,
-  ButtonToggleFormControl
+  ButtonToggleFormControl,
+  ColorPreviewFormControl
 } from '@shared-models/config-form';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { toKeywordOptionsObs, toNumericOrDateOptionsObs } from '@services/collection-service/tools';
@@ -87,6 +88,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
             this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl,
             this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesCtrl,
             this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesButton,
+            this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesPreview,
             this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl,
             this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl,
           ],
@@ -513,6 +515,20 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
             onDependencyChange: (control) => this.enableControlIfColorInterpolable(control as ConfigFormControl, isAggregated, true)
           }
         ),
+        propertyInterpolatedValuesPreview: new ColorPreviewFormControl(
+          null,
+          {
+            dependsOn: () => [
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesCtrl
+            ],
+            onDependencyChange: (control) => {
+              const interpolatedValuesCtrl = this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesCtrl;
+              const hasInterpolatedValues = interpolatedValuesCtrl.enabled && !!interpolatedValuesCtrl.value;
+              control.enableIf(hasInterpolatedValues);
+              control.setValue(interpolatedValuesCtrl.value);
+            }
+          }
+        ),
         propertyInterpolatedMinValueCtrl: new SliderFormControl(
           '',
           'Minimum ' + propertyName,
@@ -599,6 +615,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         this.get('propertyInterpolatedFg').get('propertyInterpolatedValuesCtrl') as HiddenFormControl,
       propertyInterpolatedValuesButton:
         this.get('propertyInterpolatedFg').get('propertyInterpolatedValuesButton') as SliderFormControl,
+      propertyInterpolatedValuesPreview:
+        this.get('propertyInterpolatedFg').get('propertyInterpolatedValuesPreview') as ColorPreviewFormControl,
       propertyInterpolatedMinValueCtrl:
         this.get('propertyInterpolatedFg').get('propertyInterpolatedMinValueCtrl') as SliderFormControl,
       propertyInterpolatedMaxValueCtrl:

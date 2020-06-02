@@ -114,9 +114,21 @@ mat-option {
 }
 
 .button-form-control {
+    button {
+        margin-left: 24px;
+    }
+
     .disabled-button-message {
         color: #666699;
         font-size: 12px;
         margin-left: 2px;
+    }
+}
+
+.color-preview-form-control {
+    margin: 10px 0px;
+    .color-preview {
+        width: 180px;
+        height: 35px;
     }
 }

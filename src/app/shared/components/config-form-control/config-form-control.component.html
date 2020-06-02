@@ -219,6 +219,13 @@
     </app-color-picker-wrapper>
 </div>
 
+<div *ngIf="isColorPreview(); let typedControl" class="color-preview-form-control">
+    <mat-label *ngIf="typedControl.label">{{ typedControl.label | translate}}</mat-label>
+    <div class="color-preview"
+        [ngStyle]="{'background': typedControl.isMultiColors() ? 'linear-gradient(to right, ' + typedControl.getPaletteGradients() + ')' : typedControl.value}">
+    </div>
+</div>
+
 <div *ngIf="isHidden(); let typedControl">
     <input [formControl]="typedControl" type="hidden" [required]="!typedControl.optional">
     <span *ngIf="typedControl.touched && typedControl?.errors?.required && typedControl.label">

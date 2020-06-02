@@ -21,7 +21,7 @@ import {
   ConfigFormControl, SlideToggleFormControl, SliderFormControl, SelectFormControl, InputFormControl,
   ColorFormControl, HuePaletteFormControl, HiddenFormControl, IconFormControl, ButtonFormControl,
   OrderedSelectFormControl, MetricWithFieldListFormControl as MetricFieldListFormControl, TextareaFormControl,
-  MetricWithFieldListFormControl, FieldWithSizeListFormControl, ButtonToggleFormControl
+  MetricWithFieldListFormControl, FieldWithSizeListFormControl, ButtonToggleFormControl, ColorPreviewFormControl
 } from '@shared-models/config-form';
 
 @Component({
@@ -77,6 +77,10 @@ export class ConfigFormControlComponent implements OnInit {
 
   public isColor(): ColorFormControl | null {
     return Object.getPrototypeOf(this.control) === ColorFormControl.prototype ? this.control as ColorFormControl : null;
+  }
+
+  public isColorPreview(): ColorPreviewFormControl | null {
+    return Object.getPrototypeOf(this.control) === ColorPreviewFormControl.prototype ? this.control as ColorPreviewFormControl : null;
   }
 
   public isHuePalette(): HuePaletteFormControl | null {
