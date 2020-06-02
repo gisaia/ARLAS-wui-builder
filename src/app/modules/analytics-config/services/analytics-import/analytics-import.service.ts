@@ -205,8 +205,8 @@ export class AnalyticsImportService {
         control: renderStep.zerosColors
       },
       {
-        value: swimlaneInput.swimlaneOptions.nanColors,
-        control: renderStep.NaNColors
+        value: swimlaneInput.swimlaneOptions.nanColor,
+        control: renderStep.NaNColor
       }
     ]);
 

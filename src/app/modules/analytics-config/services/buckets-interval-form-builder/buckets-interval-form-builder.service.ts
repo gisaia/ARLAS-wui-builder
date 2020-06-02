@@ -26,7 +26,7 @@ import {
 import { Interval, CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { Observable } from 'rxjs';
 import { CollectionField } from '@services/collection-service/models';
-import { toNumericOrDateOptionsObs } from '@services/collection-service/tools';
+import { toOptionsObs } from '@services/collection-service/tools';
 
 export interface BucketsIntervalControls {
   aggregationField: SelectFormControl;
@@ -53,7 +53,7 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           'Aggregation field',
           'description',
           true,
-          toNumericOrDateOptionsObs(fieldsObs),
+          toOptionsObs(fieldsObs),
           {
             childs: () => [
               this.customControls.aggregationFieldType

@@ -625,7 +625,7 @@ export class ConfigExportHelper {
                     swimlaneInput.swimlaneRepresentation = widgetData.renderStep.swimlaneRepresentation;
 
                     const swimlaneOptions = {} as AnalyticComponentSwimlaneInputOptionsConfig;
-                    swimlaneOptions.nanColors = widgetData.renderStep.NaNColors;
+                    swimlaneOptions.nanColor = widgetData.renderStep.NaNColor;
 
                     if (!!widgetData.renderStep.zerosColors) {
                         swimlaneOptions.zerosColor = widgetData.renderStep.zerosColors;

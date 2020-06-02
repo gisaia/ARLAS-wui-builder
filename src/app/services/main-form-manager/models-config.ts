@@ -209,7 +209,7 @@ export interface AnalyticComponentSwimlaneInputConfig extends AnalyticComponentI
 
 export interface AnalyticComponentSwimlaneInputOptionsConfig {
     zerosColor?: string;
-    nanColors?: string;
+    nanColor?: string;
 }
 
 export interface MapglComponentConfig {

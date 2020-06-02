@@ -150,6 +150,13 @@
                     "showHorizontalLines": true,
                     "ticksDateFormat": "%b %d %Y  %H:%M"
                 }
+            },
+            "swimlane": {
+                "dataStep": {
+                    "termAggregation": {
+                        "termAggregationSize": 5
+                    }
+                }
             }
         }
     },
