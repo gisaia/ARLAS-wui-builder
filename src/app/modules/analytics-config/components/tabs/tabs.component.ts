@@ -71,8 +71,17 @@ export class TabsComponent {
   }
 
   public addTab() {
-    this._addTab(this.translateService.instant(
-      this.defaultValuesService.getValue('analytics.tabs.new')));
+    const existingTabNames = this.tabsFa.controls.map((fg: FormGroup) => fg.value.tabName);
+    const defaultTabName = this.translateService.instant(
+      this.defaultValuesService.getValue('analytics.tabs.new'));
+    let newTabName = defaultTabName;
+    let i = 1;
+
+    while (existingTabNames.indexOf(newTabName) >= 0) {
+      newTabName = `${defaultTabName} (${i++})`;
+    }
+
+    this._addTab(newTabName);
   }
 
   private _addTab(tabName: string) {
