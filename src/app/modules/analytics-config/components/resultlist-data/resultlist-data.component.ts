@@ -28,7 +28,8 @@ export class ResultlistDataComponent implements OnInit {
 
   @Input() public control: FormGroup;
 
-  constructor() { }
+  constructor(
+  ) { }
 
   public ngOnInit() {
   }

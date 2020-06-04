@@ -2,30 +2,8 @@
 
 <div mat-dialog-content>
 
-    <mat-horizontal-stepper #stepper class="stepper-for-config-element">
-
-        <mat-step [label]="'Data' | translate " [stepControl]="formGroup.controls.dataStep">
-            <app-config-form-group [configFormGroup]="formGroup.controls.dataStep" [defaultKey]="defaultKey">
-            </app-config-form-group>
-
-            <div *ngIf="dialogData.widgetType === WIDGET_TYPE.resultlist">
-                <app-resultlist-data [control]="formGroup.get('dataStep')"></app-resultlist-data>
-            </div>
-
-            <div>
-                <button mat-button matStepperNext type="button">{{ 'Next' | translate}}</button>
-            </div>
-        </mat-step>
-
-        <mat-step [label]="'Render' | translate " [stepControl]="formGroup.controls.renderStep">
-            <app-config-form-group [configFormGroup]="formGroup.controls.renderStep" [defaultKey]="defaultKey">
-            </app-config-form-group>
-            <div>
-                <button mat-button matStepperPrevious>{{ 'Back' | translate}}</button>
-            </div>
-        </mat-step>
-
-    </mat-horizontal-stepper>
+    <app-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey">
+    </app-config-form-group>
 
 </div>
 

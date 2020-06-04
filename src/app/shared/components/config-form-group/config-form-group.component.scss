@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+@import "variables.scss";
 
 .form-control-title {
    font-weight: 300;
@@ -24,4 +25,8 @@ under the License.
    margin: 40px 0 20px;
    padding-bottom: 3px;
    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.tab-error {
+   color: $error-color;
 }

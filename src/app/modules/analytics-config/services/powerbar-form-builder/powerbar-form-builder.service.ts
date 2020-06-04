@@ -67,7 +67,7 @@ export class PowerbarConfigForm extends ConfigFormGroup {
           100,
           1
         )
-      }),
+      }).withTabName('Data'),
       renderStep: new ConfigFormGroup({
         powerbarTitle: new InputFormControl(
           '',
@@ -135,7 +135,7 @@ export class PowerbarConfigForm extends ConfigFormGroup {
           'Display the filter',
           'description'
         )
-      })
+      }).withTabName('Data')
     });
   }
 

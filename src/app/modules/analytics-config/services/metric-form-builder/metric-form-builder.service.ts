@@ -54,7 +54,7 @@ export class MetricFormGroup extends ConfigFormGroup {
             optional: true
           }
         )
-      }),
+      }).withTabName('Data'),
       renderStep: new ConfigFormGroup({
         shortValue: new SlideToggleFormControl(
           '',
@@ -82,7 +82,7 @@ export class MetricFormGroup extends ConfigFormGroup {
             optional: true
           }
         )
-      }),
+      }).withTabName('Render'),
     });
   }
 

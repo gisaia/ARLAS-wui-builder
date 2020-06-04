@@ -124,10 +124,10 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           false,
           collections.map(c => ({ label: c, value: c }))
         )
-      }).withTabName('Collection'),
+      }).withStepName('Collection'),
       geometryStep: new ConfigFormGroup({
         ...geometryFormControls
-      }).withTabName('Geometry'),
+      }).withStepName('Geometry'),
       visibilityStep: new ConfigFormGroup({
         visible: new SlideToggleFormControl(
           '',
@@ -154,7 +154,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           () => this.zoomMin
         ),
         ...visibilityFormControls
-      }).withTabName('Visibility'),
+      }).withStepName('Visibility'),
       styleStep: new ConfigFormGroup({
         ...styleFormControls,
         geometryType: new SelectFormControl(
@@ -224,7 +224,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.heatmap))
 
-      }).withTabName('Style')
+      }).withStepName('Style')
     });
 
   }
