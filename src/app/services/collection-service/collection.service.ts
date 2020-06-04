@@ -133,14 +133,6 @@ export class CollectionService {
       });
   }
 
-  public getCollectionParamFields(collection: string): Observable<CollectionReferenceParameters> {
-    return this.collabSearchService.describe(collection).pipe(map((collectionDescription: CollectionReferenceDescription) => {
-      return collectionDescription.params;
-    }));
-
-  }
-
-
   public getTermAggregationStartWith(collection: string, field: string, startWith: string) {
     return this.getTermAggregation(
       collection,

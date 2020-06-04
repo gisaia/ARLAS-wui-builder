@@ -135,7 +135,7 @@ export class LandingPageDialogComponent implements OnInit {
   public saveConfig() {
     const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('collections').value;
     this.startupService.setCollection(collection);
-    this.mainFormManager.initMainModulesForms();
+    this.mainFormManager.initMainModulesForms(true);
     this.startEvent.next();
   }
 
@@ -158,7 +158,7 @@ export class LandingPageDialogComponent implements OnInit {
             serverUrl: configJson.arlas.server.url
           });
 
-          this.mainFormManager.initMainModulesForms();
+          this.mainFormManager.initMainModulesForms(false);
 
           this.startupService.setCollection(collection);
           this.mainFormManager.doImport(configJson, configMapJson);

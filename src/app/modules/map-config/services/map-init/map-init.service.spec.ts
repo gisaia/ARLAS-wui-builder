@@ -1,11 +1,15 @@
-import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
+import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { MapInitService } from './map-init.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 describe('MapInitService', () => {
   let spectator: SpectatorService<MapInitService>;
 
   const createService = createServiceFactory({
-    service: MapInitService
+    service: MapInitService,
+    providers: [
+      mockProvider(CollectionService)
+    ]
   });
 
   beforeEach(() => {

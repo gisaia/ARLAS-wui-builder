@@ -29,8 +29,7 @@ import { VISIBILITY, NORMALIZED } from '@services/main-form-manager/config-map-e
 import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '../map-layer-form-builder/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
-import { AbstractControl, FormGroup } from '@angular/forms';
-import { ConfigFormControl, ConfigFormGroup } from '@shared-models/config-form';
+import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +37,8 @@ import { ConfigFormControl, ConfigFormGroup } from '@shared-models/config-form';
 export class MapImportService {
 
   constructor(
-    private mapInitService: MapInitService,
     private mainFormService: MainFormService,
+    private mapGlobalFormBuilder: MapGlobalFormBuilderService,
     private mapLayerFormBuilder: MapLayerFormBuilderService
   ) { }
   public doImport(config: Config, mapConfig: MapConfig) {
@@ -51,7 +50,6 @@ export class MapImportService {
     const collectionName = config.arlas.server.collection.name;
     let layerId = 0;
 
-    this.mapInitService.initModule();
     this.importMapGlobal(mapgl, mapContrib, collectionName);
 
     layers.forEach(layer => {
@@ -64,12 +62,12 @@ export class MapImportService {
   private importMapGlobal(
     mapgl: MapglComponentConfig,
     mapContrib: ContributorConfig,
-    collection) {
+    collection: string) {
 
     const mapGlobalForm = this.mainFormService.mapConfig.getGlobalFg();
 
     mapGlobalForm.customControls.requestGeometries.push(
-      this.mapInitService.createRequestGeometry(
+      this.mapGlobalFormBuilder.buildRequestGeometry(
         collection,
         mapContrib.geoQueryField,
         mapgl.input.idFeatureField

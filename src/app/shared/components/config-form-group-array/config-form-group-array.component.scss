@@ -16,21 +16,12 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { MainFormService } from '@services/main-form/main-form.service';
-import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
+div .form-group-form-fields {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 
-export abstract class GlobalMapComponentForm {
-
-    public globalFg: MapGlobalFormGroup;
-
-    constructor(
-        protected mainFormService: MainFormService,
-    ) {
-        this.globalFg = this.mainFormService.mapConfig.getGlobalFg() as MapGlobalFormGroup;
+    .single-form-field {
+        margin-right: 20px;
     }
-
-    get requestGeometries() {
-        return this.globalFg.customControls.requestGeometries;
-    }
-
 }

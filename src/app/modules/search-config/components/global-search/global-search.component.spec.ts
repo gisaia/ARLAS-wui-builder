@@ -13,7 +13,6 @@ describe('GlobalSearchComponent', () => {
   const createComponent = createComponentFactory({
     component: GlobalSearchComponent,
     declarations: [
-      MockComponent(ConfigElementComponent),
       MockComponent(ConfigFormGroupComponent)
     ],
     providers: [

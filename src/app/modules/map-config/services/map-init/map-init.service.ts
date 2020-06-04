@@ -19,7 +19,9 @@ under the License.
 import { Injectable } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
-import { FormArray, Validators, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, Validators } from '@angular/forms';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { ConfigFormGroup, SelectFormControl, InputFormControl } from '@shared-models/config-form';
 
 @Injectable({
   providedIn: 'root'
@@ -28,10 +30,11 @@ export class MapInitService {
 
   constructor(
     private mainFormService: MainFormService,
-    private mapGlobalFormBuilder: MapGlobalFormBuilderService
+    private mapGlobalFormBuilder: MapGlobalFormBuilderService,
+    private collectionService: CollectionService
   ) { }
 
-  public initModule() {
+  public initModule(initCollectionFields: boolean) {
     this.mainFormService.mapConfig.initGlobalFg(
       this.mapGlobalFormBuilder.build()
     );
@@ -39,13 +42,25 @@ export class MapInitService {
     this.mainFormService.mapConfig.initLayersFa(
       new FormArray([], [Validators.required])
     );
+
+    if (initCollectionFields) {
+      this.initCollectionFields();
+    }
   }
 
-  public createRequestGeometry(collection: string, geometryPath: string, idPath: string) {
-    return new FormGroup({
-      collection: new FormControl({ value: collection, disabled: true }),
-      requestGeom: new FormControl(geometryPath, Validators.required),
-      idFeatureField: new FormControl(idPath, Validators.required),
+  // init the collection fields, to be done by creating a new configuration only
+  private initCollectionFields() {
+    // init global -> request geometries, by collection
+    this.mainFormService.getCollections().forEach(collection => {
+      this.collectionService.getDescribe(collection).subscribe(params => {
+        this.mainFormService.mapConfig.getGlobalFg().customControls.requestGeometries.push(
+          this.mapGlobalFormBuilder.buildRequestGeometry(
+            collection,
+            params.params.geometry_path,
+            params.params.id_path
+          )
+        );
+      });
     });
   }
 

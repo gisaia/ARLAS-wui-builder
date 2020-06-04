@@ -64,7 +64,6 @@ export class MainFormManagerService {
     private timelineInitService: TimelineInitService,
     private timelineImportService: TimelineImportService,
     private persistenceService: PersistenceService,
-    private envService: EnvService,
     private snackbar: MatSnackBar,
     private translate: TranslateService,
     private mapInitService: MapInitService,
@@ -75,13 +74,13 @@ export class MainFormManagerService {
   /**
    * Init main modules' forms that are required to a global validation
    */
-  public initMainModulesForms() {
+  public initMainModulesForms(initCollectionFields: boolean) {
     // load the modules required forms
     this.analyticsInitService.initModule();
     this.searchInitService.initModule();
     this.lookAndFeelInitService.initModule();
     this.timelineInitService.initModule();
-    this.mapInitService.initModule();
+    this.mapInitService.initModule(initCollectionFields);
 
     this.mainFormService.commonConfig.initKeysToColorFa(new FormArray([]));
 

@@ -16,27 +16,27 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit } from '@angular/core';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
+import { Component, OnInit, Input } from '@angular/core';
+import { ConfigFormGroupArray, ConfigFormGroup } from '@shared-models/config-form';
+import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-global',
-  templateUrl: './global-map.component.html',
-  styleUrls: ['./global-map.component.scss']
+  selector: 'app-config-form-group-array',
+  templateUrl: './config-form-group-array.component.html',
+  styleUrls: ['./config-form-group-array.component.scss']
 })
-export class GlobalMapComponent implements OnInit {
+export class ConfigFormGroupArrayComponent implements OnInit {
 
+  @Input() public configFormGroupArray: ConfigFormGroupArray;
+  @Input() public defaultKey: string;
 
-  public globalFg: MapGlobalFormGroup;
-
-  constructor(
-    public mainFormService: MainFormService,
-  ) {
-    this.globalFg = this.mainFormService.mapConfig.getGlobalFg();
-  }
+  constructor() { }
 
   public ngOnInit() {
+  }
+
+  public get formGroups() {
+    return this.configFormGroupArray.controls as Array<ConfigFormGroup>;
   }
 
 }
