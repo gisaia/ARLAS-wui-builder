@@ -27,6 +27,7 @@ import { Interval, CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { Observable } from 'rxjs';
 import { CollectionField } from '@services/collection-service/models';
 import { toOptionsObs } from '@services/collection-service/tools';
+import { validateInteger } from '@utils/validators';
 
 export interface BucketsIntervalControls {
   aggregationField: SelectFormControl;
@@ -142,7 +143,8 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           {
             dependsOn: () => [this.customControls.aggregationBucketOrInterval],
             onDependencyChange: (control) =>
-              control.enableIf(this.customControls.aggregationBucketOrInterval.value === BY_BUCKET_OR_INTERVAL.INTERVAL)
+              control.enableIf(this.customControls.aggregationBucketOrInterval.value === BY_BUCKET_OR_INTERVAL.INTERVAL),
+            validators: [validateInteger]
           }
         )
       }
