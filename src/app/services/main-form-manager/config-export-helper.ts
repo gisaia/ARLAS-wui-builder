@@ -275,8 +275,8 @@ export class ConfigExportHelper {
     // TODO put in common with getAnalyticsContributor ?
     private static getTimelineContributor(timelineConfigGlobal: TimelineGlobalFormGroup, isDetailed: boolean): ContributorConfig {
 
-        const timelineAggregation = timelineConfigGlobal.customControls.dataStep.timeline.aggregation.customControls;
-        const detailedTimelineDataStep = timelineConfigGlobal.customControls.dataStep.detailedTimeline;
+        const timelineAggregation = timelineConfigGlobal.customControls.tabsContainer.dataStep.timeline.aggregation.customControls;
+        const detailedTimelineDataStep = timelineConfigGlobal.customControls.tabsContainer.dataStep.detailedTimeline;
 
         const contributor: ContributorConfig = {
             type: isDetailed ? 'detailedhistogram' : 'histogram',
@@ -307,7 +307,7 @@ export class ConfigExportHelper {
         if (isDetailed) {
             contributor.annexedContributorId = 'timeline';
             contributor.selectionExtentPercentage =
-                timelineConfigGlobal.customControls.renderStep.detailedTimeline.selectionExtentPercent.value / 100;
+                timelineConfigGlobal.customControls.tabsContainer.renderStep.detailedTimeline.selectionExtentPercent.value / 100;
         }
 
         return contributor;
@@ -369,8 +369,8 @@ export class ConfigExportHelper {
 
     private static getTimelineComponent(timelineConfigGlobal: TimelineGlobalFormGroup, isDetailed: boolean): AnalyticComponentConfig {
 
-        const renderStep = isDetailed ? timelineConfigGlobal.customControls.renderStep.detailedTimeline :
-            timelineConfigGlobal.customControls.renderStep.timeline;
+        const renderStep = isDetailed ? timelineConfigGlobal.customControls.tabsContainer.renderStep.detailedTimeline :
+            timelineConfigGlobal.customControls.tabsContainer.renderStep.timeline;
 
         const timelineComponent: AnalyticComponentConfig = {
             contributorId: isDetailed ? 'detailedTimeline' : 'timeline',
@@ -384,7 +384,8 @@ export class ConfigExportHelper {
                 chartTitle: renderStep.chartTitle.value,
                 customizedCssClass: isDetailed ? 'arlas-detailed-timeline' : 'arlas-timeline',
                 chartHeight: isDetailed ? 60 : 128,
-                multiselectable: isDetailed ? false : timelineConfigGlobal.customControls.renderStep.timeline.isMultiselectable.value,
+                multiselectable:
+                    isDetailed ? false : timelineConfigGlobal.customControls.tabsContainer.renderStep.timeline.isMultiselectable.value,
                 brushHandlesHeightWeight: 0.8,
                 dataType: 'time',
                 isHistogramSelectable: true,
