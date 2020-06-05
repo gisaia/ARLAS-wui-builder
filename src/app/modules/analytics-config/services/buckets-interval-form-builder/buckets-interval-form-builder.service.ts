@@ -38,7 +38,7 @@ export interface BucketsIntervalControls {
   aggregationIntervalSize: InputFormControl;
 }
 
-enum BY_BUCKET_OR_INTERVAL {
+export enum BY_BUCKET_OR_INTERVAL {
   BUCKET = 'bucket',
   INTERVAL = 'interval'
 }

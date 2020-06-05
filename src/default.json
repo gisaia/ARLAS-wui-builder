@@ -103,30 +103,32 @@
     "timeline": {
         "global": {
             "useDetailedTimeline": false,
-            "dataStep": {
-                "timeline": {
-                    "aggregation": {
-                        "aggregationBucketOrInterval": "bucket",
-                        "aggregationBucketsNumber": 22
+            "tabsContainer": {
+                "dataStep": {
+                    "timeline": {
+                        "aggregation": {
+                            "aggregationBucketOrInterval": "bucket",
+                            "aggregationBucketsNumber": 22
+                        }
+                    },
+                    "detailedTimeline": {
+                        "bucketsNumber": 44
                     }
                 },
-                "detailedTimeline": {
-                    "bucketsNumber": 44
+                "renderStep": {
+                    "timeline": {
+                        "chartTitle": "title",
+                        "chartType": "area",
+                        "dateFormat": "%b %d %Y  %H:%M"
+                    },
+                    "detailedTimeline": {
+                        "chartTitle": "detailed title",
+                        "chartType": "area",
+                        "dateFormat": "%b %d %Y  %H:%M",
+                        "selectionExtentPercent": 2
+                    }
                 }
-            },
-            "renderStep": {
-                "timeline": {
-                    "chartTitle": "title",
-                    "chartType": "area",
-                    "dateFormat": "%b %d %Y  %H:%M"
-                },
-                "detailedTimeline": {
-                    "chartTitle": "detailed title",
-                    "chartType": "area",
-                    "dateFormat": "%b %d %Y  %H:%M",
-                    "selectionExtentPercent": 2
-                }
-            }
+            }            
         }
     },
     "analytics": {

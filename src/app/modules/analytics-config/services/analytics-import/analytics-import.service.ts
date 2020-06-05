@@ -29,7 +29,7 @@ import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { HistogramFormBuilderService } from '../histogram-form-builder/histogram-form-builder.service';
 import { SwimlaneFormBuilderService } from '../swimlane-form-builder/swimlane-form-builder.service';
 import { DEFAULT_METRIC_VALUE, MetricCollectControls } from '../metric-collect-form-builder/metric-collect-form-builder.service';
-import { BucketsIntervalControls } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
+import { BucketsIntervalControls, BY_BUCKET_OR_INTERVAL } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { ImportElement, importElements } from '@services/main-form-manager/tools';
 import { MetricFormBuilderService } from '../metric-form-builder/metric-form-builder.service';
@@ -406,7 +406,7 @@ export class AnalyticsImportService {
     dataType: string): Array<ImportElement> {
 
     return [{
-      value: !contributor.numberOfBuckets,
+      value: !contributor.numberOfBuckets ? BY_BUCKET_OR_INTERVAL.INTERVAL : BY_BUCKET_OR_INTERVAL.BUCKET,
       control: aggregationControls.aggregationBucketOrInterval
     },
     {
