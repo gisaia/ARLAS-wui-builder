@@ -65,6 +65,7 @@ import { ConfigFormGroupComponent } from './components/config-form-group/config-
 import { ConfigFormControlComponent } from './components/config-form-control/config-form-control.component';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
 import { InputModalComponent } from './components/input-modal/input-modal.component';
+import { ConfigFormGroupArrayComponent } from './components/config-form-group-array/config-form-group-array.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { InputModalComponent } from './components/input-modal/input-modal.compon
     AutoFocusDirective,
     ConfigFormGroupComponent,
     ConfigFormControlComponent,
-    InputModalComponent
+    InputModalComponent,
+    ConfigFormGroupArrayComponent
   ],
   imports: [
     ArlasToolkitSharedModule,

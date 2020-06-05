@@ -81,6 +81,10 @@
                     <app-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey">
                     </app-config-form-group>
                 </div>
+                <div *ngIf="isFormGroupArray(control); let formGroupArray">
+                    <app-config-form-group-array [configFormGroupArray]="formGroupArray" [defaultKey]="defaultKey">
+                    </app-config-form-group-array>
+                </div>
             </div>
         </div>
     </div>

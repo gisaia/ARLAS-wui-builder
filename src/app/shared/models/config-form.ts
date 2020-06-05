@@ -38,6 +38,64 @@ export interface SelectOption {
     label: any;
 }
 
+export abstract class ConfigFormControl extends FormControl {
+
+    // reference to other controls that depends on this one
+    public dependantControls: Array<AbstractControl>;
+
+    // if it is a child control, it is to be displayed below another controls into a single config element
+    public isChild = false;
+    // an initial value is used by app-reset-on-change, when resetting a form control (instead of a "default.json" value)
+    public initialValue: any;
+
+    constructor(
+        formState: any,
+        public label: string,
+        public description: string,
+        private optionalParams: ControlOptionalParams = {}) {
+
+        super(formState);
+        this.initialValue = formState;
+        // add default values to missing attributes
+        this.optionalParams = {
+            ...{
+                optional: false,
+                validators: [],
+                dependsOn: () => [],
+                onDependencyChange: () => null,
+                childs: () => [],
+                isDescriptionHtml: false
+            },
+            ...this.optionalParams
+        };
+        this.initValidators();
+    }
+
+    get optional() { return this.optionalParams.optional; }
+    get dependsOn() { return this.optionalParams.dependsOn; }
+    get onDependencyChange() { return this.optionalParams.onDependencyChange; }
+    get childs() { return this.optionalParams.childs; }
+    get isDescriptionHtml() { return this.optionalParams.isDescriptionHtml; }
+    get resetDependantsOnChange() { return this.optionalParams.resetDependantsOnChange || false; }
+    get title() { return this.optionalParams.title; }
+
+    public initValidators() {
+        const optionalValidator = this.optionalParams.optional ? [] : [Validators.required];
+        this.setValidators(optionalValidator.concat(this.optionalParams.validators));
+    }
+
+    public enableIf(condition: boolean) {
+        // prevent a single control to get enabled whereas the parent is disabled
+        // => this would enable the parent again
+        if (condition && this.parent.status !== 'DISABLED') {
+            this.enable();
+        } else {
+            this.disable({ emitEvent: false });
+        }
+    }
+
+}
+
 interface ControlOptionalParams {
 
     // if false, it is a required control
@@ -100,7 +158,7 @@ export class ConfigFormGroup extends FormGroup {
     get dependsOn() { return this.optionalParams.dependsOn; }
     get onDependencyChange() { return this.optionalParams.onDependencyChange; }
 
-    get controlsValues() {
+    get controlsRecursively() {
         return this.getControls(this);
     }
 
@@ -117,6 +175,10 @@ export class ConfigFormGroup extends FormGroup {
                 return [];
             }
         });
+    }
+
+    public get configFormControls(): Array<ConfigFormControl> {
+        return Object.values(this.controls).filter(c => c instanceof ConfigFormControl) as Array<ConfigFormControl>;
     }
 
     public withTitle(title: string) {
@@ -156,62 +218,13 @@ export class ConfigFormGroup extends FormGroup {
     }
 }
 
-export abstract class ConfigFormControl extends FormControl {
+// Represent an FormArray of FormGroup, i.a. a repeated FormGroup.
+// Can be used to handle some fields by collection for example.
+export class ConfigFormGroupArray extends FormArray {
 
-    // reference to other controls that depends on this one
-    public dependantControls: Array<AbstractControl>;
-
-    // if it is a child control, it is to be displayed below another controls into a single config element
-    public isChild = false;
-    // an initial value is used by app-reset-on-change, when resetting a form control (instead of a "default.json" value)
-    public initialValue: any;
-
-    constructor(
-        formState: any,
-        public label: string,
-        public description: string,
-        private optionalParams: ControlOptionalParams = {}) {
-
-        super(formState);
-        this.initialValue = formState;
-        // add default values to missing attributes
-        this.optionalParams = {
-            ...{
-                optional: false,
-                validators: [],
-                dependsOn: () => [],
-                onDependencyChange: () => null,
-                childs: () => [],
-                isDescriptionHtml: false
-            },
-            ...this.optionalParams
-        };
-        this.initValidators();
+    constructor(controls: ConfigFormGroup[]) {
+        super(controls);
     }
-
-    get optional() { return this.optionalParams.optional; }
-    get dependsOn() { return this.optionalParams.dependsOn; }
-    get onDependencyChange() { return this.optionalParams.onDependencyChange; }
-    get childs() { return this.optionalParams.childs; }
-    get isDescriptionHtml() { return this.optionalParams.isDescriptionHtml; }
-    get resetDependantsOnChange() { return this.optionalParams.resetDependantsOnChange || false; }
-    get title() { return this.optionalParams.title; }
-
-    public initValidators() {
-        const optionalValidator = this.optionalParams.optional ? [] : [Validators.required];
-        this.setValidators(optionalValidator.concat(this.optionalParams.validators));
-    }
-
-    public enableIf(condition: boolean) {
-        // prevent a single control to get enabled whereas the parent is disabled
-        // => this would enable the parent again
-        if (condition && this.parent.status !== 'DISABLED') {
-            this.enable();
-        } else {
-            this.disable({ emitEvent: false });
-        }
-    }
-
 }
 
 export class SlideToggleFormControl extends ConfigFormControl {

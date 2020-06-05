@@ -17,8 +17,8 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit, Input, OnDestroy, ViewChild, ViewChildren, ViewEncapsulation, QueryList } from '@angular/core';
-import { ConfigFormGroup, ConfigFormControl } from '@shared-models/config-form';
-import { Observable, Subscription } from 'rxjs';
+import { ConfigFormGroup, ConfigFormControl, ConfigFormGroupArray } from '@shared-models/config-form';
+import { Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatStepper } from '@angular/material';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
@@ -86,7 +86,7 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
    * Set the list of other controls that depends on input control
    */
   private initDependantControls(control: ConfigFormControl | ConfigFormGroup) {
-    control.dependantControls = this.configFormGroup.controlsValues
+    control.dependantControls = this.configFormGroup.controlsRecursively
       .filter(
         (filterControl: ConfigFormControl) => !!filterControl.dependsOn &&
           filterControl.dependsOn().indexOf(control) >= 0);
@@ -100,12 +100,16 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
       child.isChild = true);
   }
 
-  public isFormControl(control: ConfigFormGroup | ConfigFormControl): ConfigFormControl | null {
+  public isFormControl(control: AbstractControl): ConfigFormControl | null {
     return control instanceof ConfigFormControl ? control : null;
   }
 
-  public isFormGroup(control: ConfigFormGroup | ConfigFormControl): ConfigFormGroup | null {
+  public isFormGroup(control: AbstractControl): ConfigFormGroup | null {
     return control instanceof ConfigFormGroup ? control : null;
+  }
+
+  public isFormGroupArray(control: AbstractControl): ConfigFormGroupArray | null {
+    return control instanceof ConfigFormGroupArray ? control : null;
   }
 
   public trustHtml = (html) => this.sanitizer.bypassSecurityTrustHtml(html);
