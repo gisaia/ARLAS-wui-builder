@@ -173,7 +173,7 @@ export class ResultlistDetailFormGroup extends FormGroup {
     super({
       name: new InputFormControl(
         '',
-        'Detail name',
+        'Section',
         ''
       ),
       fields: new FormArray([], Validators.required)

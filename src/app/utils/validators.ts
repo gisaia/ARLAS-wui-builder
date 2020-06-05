@@ -16,12 +16,14 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, Validators, ValidatorFn } from '@angular/forms';
+
+export const urlRegexp = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
 /**
  * Check that a control's value is an integer
  */
-export function validateInteger(control: AbstractControl) {
+export function integerValidator(control: AbstractControl) {
     const value = control.value;
     if ((parseFloat(value) === parseInt(value, 10)) && !isNaN(value)) {
         return null;
@@ -31,3 +33,5 @@ export function validateInteger(control: AbstractControl) {
         };
     }
 }
+
+export const urlValidator = Validators.pattern(urlRegexp);

@@ -43,6 +43,9 @@ import {
     LookAndFeelGlobalFormGroup
 } from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
 import { BY_BUCKET_OR_INTERVAL } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
+import {
+    SideModulesGlobalFormGroup
+} from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 
 
 
@@ -60,6 +63,7 @@ export class ConfigExportHelper {
         mapConfigLayers: FormArray,
         searchConfigGlobal: SearchGlobalFormGroup,
         timelineConfigGlobal: TimelineGlobalFormGroup,
+        sideModulesGlobal: SideModulesGlobalFormGroup,
         lookAndFeelConfigGlobal: LookAndFeelGlobalFormGroup,
         analyticsConfigList: FormArray,
         keysToColorList: FormArray,
@@ -129,6 +133,8 @@ export class ConfigExportHelper {
                 });
             });
         }
+
+        this.exportSideModulesConfig(config, sideModulesGlobal);
 
         return config;
     }
@@ -717,6 +723,34 @@ export class ConfigExportHelper {
             return component;
         }
 
+    }
+
+    private static exportSideModulesConfig(config: Config, sideModulesGlobal: SideModulesGlobalFormGroup) {
+        const sideModulesControls = sideModulesGlobal.customControls;
+
+        if (sideModulesControls.useShare.value) {
+            config.arlas.web.components.share = {
+                geojson: {
+                    max_for_feature: sideModulesControls.share.maxForFeature.value,
+                    max_for_topology: sideModulesControls.share.maxForTopology.value,
+                    sort_excluded_type: sideModulesControls.unmanagedFields.sortExcludedTypes.value,
+                }
+            };
+        }
+
+        if (sideModulesControls.useDownload.value) {
+            config.arlas.web.components.download = {};
+            if (sideModulesControls.download.basicAuthent.value) {
+                config.arlas.web.components.download.auth_type = 'basic';
+            }
+        }
+
+        if (sideModulesControls.useTagger.value) {
+            config.arlas.tagger = {
+                url: sideModulesControls.tagger.serverUrl.value,
+                collection: sideModulesControls.tagger.collection.value,
+            };
+        }
     }
 
     public static getOptions(lookAndFeelConfigGlobal: LookAndFeelGlobalFormGroup): WebConfigOptions {

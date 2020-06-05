@@ -16,22 +16,26 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-@import "~@angular/material/theming";
+import { Component, OnInit } from '@angular/core';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { SideModulesGlobalFormGroup } from '../../services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 
-$primary-palette: mat-palette($mat-indigo);
-$accent-palette: mat-palette($mat-orange, 500);
-$warn-palette: mat-palette($mat-red);
+@Component({
+  selector: 'app-global-side-modules',
+  templateUrl: './global-side-modules.component.html',
+  styleUrls: ['./global-side-modules.component.scss']
+})
+export class GlobalSideModulesComponent implements OnInit {
 
-$config-element-description-background: mat-color($mat-grey, 50);
-$config-element-description-border-color: transparentize(mat-color($mat-indigo, A700), 0.4);
-$config-element-description-text-color: transparentize(mat-color($mat-blue-grey, A700), 0.4);
-$error-color: mat-color($warn-palette);
+  public globalFg: SideModulesGlobalFormGroup;
 
-@mixin group-title() {
-   font-weight: 300;
-   font-size: 24px;
-   line-height: 32px;
-   margin: 40px 0 20px;
-   padding-bottom: 3px;
-   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  constructor(
+    private mainFormService: MainFormService
+  ) {
+    this.globalFg = this.mainFormService.sideModulesConfig.getGlobalFg();
+  }
+
+  public ngOnInit() {
+  }
+
 }

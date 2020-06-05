@@ -46,6 +46,11 @@ const routes: Routes = [
     canActivate: [MainFormInitializedGuard]
   },
   {
+    path: 'side-modules',
+    loadChildren: () => import('./modules/side-modules-config/side-modules-config.module').then(m => m.SideModulesConfigModule),
+    canActivate: [MainFormInitializedGuard]
+  },
+  {
     path: 'look-and-feel',
     loadChildren: () => import('./modules/look-and-feel-config/look-and-feel-config.module').then(m => m.LookAndFeelConfigModule),
     canActivate: [MainFormInitializedGuard]

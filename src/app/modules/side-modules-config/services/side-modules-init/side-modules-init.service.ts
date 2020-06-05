@@ -16,22 +16,23 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-@import "~@angular/material/theming";
+import { Injectable } from '@angular/core';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { SideModulesGlobalFormBuilderService } from '../side-modules-global-form-builder/side-modules-global-form-builder.service';
 
-$primary-palette: mat-palette($mat-indigo);
-$accent-palette: mat-palette($mat-orange, 500);
-$warn-palette: mat-palette($mat-red);
+@Injectable({
+  providedIn: 'root'
+})
+export class SideModulesInitService {
 
-$config-element-description-background: mat-color($mat-grey, 50);
-$config-element-description-border-color: transparentize(mat-color($mat-indigo, A700), 0.4);
-$config-element-description-text-color: transparentize(mat-color($mat-blue-grey, A700), 0.4);
-$error-color: mat-color($warn-palette);
+  constructor(
+    private mainFormService: MainFormService,
+    private sideModulesGlobalFormBuilder: SideModulesGlobalFormBuilderService
+  ) {
+  }
 
-@mixin group-title() {
-   font-weight: 300;
-   font-size: 24px;
-   line-height: 32px;
-   margin: 40px 0 20px;
-   padding-bottom: 3px;
-   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  public initModule() {
+    this.mainFormService.sideModulesConfig.initGlobalFg(
+      this.sideModulesGlobalFormBuilder.build());
+  }
 }

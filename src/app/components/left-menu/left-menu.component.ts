@@ -88,6 +88,14 @@ export class LeftMenuComponent {
       control: this.mainFormService.analyticsConfig.control
     },
     {
+      name: 'Side Modules',
+      link: '/side-modules',
+      icon: 'view_column',
+      tooltip: this.translate.instant('Side modules configuration'),
+      enabled: true,
+      control: this.mainFormService.sideModulesConfig.control
+    },
+    {
       name: 'Look \'n feel',
       link: '/look-and-feel',
       icon: 'opacity',

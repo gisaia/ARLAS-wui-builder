@@ -16,22 +16,17 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-@import "~@angular/material/theming";
+import { NgModule } from '@angular/core';
+import { SideModulesConfigRoutingModule } from './side-modules-config-routing.module';
+import { GlobalSideModulesComponent } from './components/global-side-modules/global-side-modules.component';
+import { SharedModule } from '@shared/shared.module';
 
-$primary-palette: mat-palette($mat-indigo);
-$accent-palette: mat-palette($mat-orange, 500);
-$warn-palette: mat-palette($mat-red);
 
-$config-element-description-background: mat-color($mat-grey, 50);
-$config-element-description-border-color: transparentize(mat-color($mat-indigo, A700), 0.4);
-$config-element-description-text-color: transparentize(mat-color($mat-blue-grey, A700), 0.4);
-$error-color: mat-color($warn-palette);
-
-@mixin group-title() {
-   font-weight: 300;
-   font-size: 24px;
-   line-height: 32px;
-   margin: 40px 0 20px;
-   padding-bottom: 3px;
-   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-}
+@NgModule({
+  declarations: [GlobalSideModulesComponent],
+  imports: [
+    SharedModule,
+    SideModulesConfigRoutingModule
+  ]
+})
+export class SideModulesConfigModule { }

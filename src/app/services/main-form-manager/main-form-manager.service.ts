@@ -43,6 +43,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { LookAndFeelInitService } from '@app/modules/look-and-feel-config/services/look-and-feel-init/look-and-feel-init.service';
 import { LookAndFeelImportService } from '@look-and-feel-config/services/look-and-feel-import/look-and-feel-import.service';
+import { SideModulesInitService } from '@app/modules/side-modules-config/services/side-modules-init/side-modules-init.service';
+import { SideModulesImportService } from '@app/modules/side-modules-config/services/side-modules-import/side-modules-import.service';
 
 
 @Injectable({
@@ -59,6 +61,8 @@ export class MainFormManagerService {
     private analyticsInitService: AnalyticsInitService,
     private searchInitService: SearchInitService,
     private searchImportService: SearchImportService,
+    private sideModulesInitService: SideModulesInitService,
+    private sideModulesImportService: SideModulesImportService,
     private lookAndFeelInitService: LookAndFeelInitService,
     private lookAndFeelImportService: LookAndFeelImportService,
     private timelineInitService: TimelineInitService,
@@ -76,11 +80,12 @@ export class MainFormManagerService {
    */
   public initMainModulesForms(initCollectionFields: boolean) {
     // load the modules required forms
-    this.analyticsInitService.initModule();
-    this.searchInitService.initModule();
-    this.lookAndFeelInitService.initModule();
-    this.timelineInitService.initModule();
     this.mapInitService.initModule(initCollectionFields);
+    this.timelineInitService.initModule();
+    this.searchInitService.initModule();
+    this.analyticsInitService.initModule();
+    this.sideModulesInitService.initModule();
+    this.lookAndFeelInitService.initModule();
 
     this.mainFormService.commonConfig.initKeysToColorFa(new FormArray([]));
 
@@ -108,10 +113,11 @@ export class MainFormManagerService {
     const startingConfig = this.mainFormService.startingConfig.getFg();
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
     const mapConfigLayers = this.mainFormService.mapConfig.getLayersFa();
-    const searchConfigGlobal = this.mainFormService.searchConfig.getGlobalFg();
-    const lookAndFeelConfigGlobal = this.mainFormService.lookAndFeelConfig.getGlobalFg();
     const timelineConfigGlobal = this.mainFormService.timelineConfig.getGlobalFg();
+    const searchConfigGlobal = this.mainFormService.searchConfig.getGlobalFg();
     const analyticsConfigList = this.mainFormService.analyticsConfig.getListFa();
+    const sideModulesConfigGlobal = this.mainFormService.sideModulesConfig.getGlobalFg();
+    const lookAndFeelConfigGlobal = this.mainFormService.lookAndFeelConfig.getGlobalFg();
     const keysToColorList = this.mainFormService.commonConfig.getKeysToColorFa();
 
     const generatedConfig = ConfigExportHelper.process(
@@ -120,6 +126,7 @@ export class MainFormManagerService {
       mapConfigLayers,
       searchConfigGlobal,
       timelineConfigGlobal,
+      sideModulesConfigGlobal,
       lookAndFeelConfigGlobal,
       analyticsConfigList,
       keysToColorList,
@@ -186,11 +193,12 @@ export class MainFormManagerService {
 
   public doImport(config: Config, mapConfig: MapConfig) {
 
-    this.analyticsImportService.doImport(config);
-    this.searchImportService.doImport(config);
-    this.timelineImportService.doImport(config);
-    this.lookAndFeelImportService.doImport(config);
     this.mapImportService.doImport(config, mapConfig);
+    this.timelineImportService.doImport(config);
+    this.searchImportService.doImport(config);
+    this.analyticsImportService.doImport(config);
+    this.sideModulesImportService.doImport(config);
+    this.lookAndFeelImportService.doImport(config);
 
     // load keys to colors
     if (!!config.arlas.web.colorGenerator && !!config.arlas.web.colorGenerator.keysToColors) {
