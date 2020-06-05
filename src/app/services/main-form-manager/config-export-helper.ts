@@ -143,6 +143,8 @@ export class ConfigExportHelper {
             minzoom: modeValues.visibilityStep.zoomMin,
             maxzoom: modeValues.visibilityStep.zoomMax,
             include_fields: [],
+            colors_from_fields: [],
+            provided_fields: [],
             normalization_fields: [],
             metrics: []
         };
@@ -218,11 +220,11 @@ export class ConfigExportHelper {
                 break;
             }
             case PROPERTY_SELECTOR_SOURCE.provided: {
-                layerSource.include_fields.push(layerValues.propertyProvidedFieldCtrl);
+                layerSource.provided_fields.push({ color: layerValues.propertyProvidedFieldCtrl });
                 break;
             }
             case PROPERTY_SELECTOR_SOURCE.generated: {
-                layerSource.color_from_field = layerValues.propertyGeneratedFieldCtrl;
+                layerSource.colors_from_fields.push(layerValues.propertyGeneratedFieldCtrl);
                 break;
             }
             case PROPERTY_SELECTOR_SOURCE.manual: {
