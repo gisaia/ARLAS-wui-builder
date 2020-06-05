@@ -42,6 +42,7 @@ import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-glob
 import {
     LookAndFeelGlobalFormGroup
 } from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
+import { BY_BUCKET_OR_INTERVAL } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
 
 
 
@@ -291,7 +292,7 @@ export class ConfigExportHelper {
             field: timelineAggregation.aggregationField.value
         };
 
-        if (!isDetailed && timelineAggregation.aggregationBucketOrInterval.value) {
+        if (!isDetailed && timelineAggregation.aggregationBucketOrInterval.value === BY_BUCKET_OR_INTERVAL.INTERVAL) {
             aggregationModel.interval = {
                 value: timelineAggregation.aggregationIntervalSize.value,
                 unit: timelineAggregation.aggregationIntervalUnit.value
@@ -738,7 +739,7 @@ export class ConfigExportHelper {
         aggregationModel: AggregationModelConfig,
         aggregationData: any) {
 
-        if (!aggregationData.aggregationBucketOrInterval) {
+        if (aggregationData.aggregationBucketOrInterval === BY_BUCKET_OR_INTERVAL.BUCKET) {
             contrib.numberOfBuckets = aggregationData.aggregationBucketsNumber;
         } else {
             aggregationModel.interval = {

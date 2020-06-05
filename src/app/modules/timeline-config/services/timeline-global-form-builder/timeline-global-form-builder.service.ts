@@ -107,24 +107,24 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
     tabsContainer: {
       dataStep: {
         timeline: {
-          aggregation: this.get('tabsContainer.dataStep.aggregation') as BucketsIntervalFormGroup
+          aggregation: this.get('tabsContainer.dataStep.timeline.aggregation') as BucketsIntervalFormGroup
         },
         detailedTimeline: {
-          bucketsNumber: this.get('tabsContainer.dataStep.bucketsNumber') as SliderFormControl
+          bucketsNumber: this.get('tabsContainer.dataStep.detailedTimeline.bucketsNumber') as SliderFormControl
         }
       },
       renderStep: {
         timeline: {
-          chartTitle: this.get('tabsContainer.renderStepchartTitle') as InputFormControl,
-          chartType: this.get('tabsContainer.renderStep.chartType') as SelectFormControl,
-          dateFormat: this.get('tabsContainer.renderStep.dateFormat') as SelectFormControl,
-          isMultiselectable: this.get('tabsContainer.renderStep.isMultiselectable') as SlideToggleFormControl
+          chartTitle: this.get('tabsContainer.renderStep.timeline.chartTitle') as InputFormControl,
+          chartType: this.get('tabsContainer.renderStep.timeline.chartType') as SelectFormControl,
+          dateFormat: this.get('tabsContainer.renderStep.timeline.dateFormat') as SelectFormControl,
+          isMultiselectable: this.get('tabsContainer.renderStep.timeline.isMultiselectable') as SlideToggleFormControl
         },
         detailedTimeline: {
-          chartTitle: this.get('tabsContainer.renderStep.chartTitle') as InputFormControl,
-          chartType: this.get('tabsContainer.renderStep.chartType') as SelectFormControl,
-          dateFormat: this.get('tabsContainer.renderStep.dateFormat') as SelectFormControl,
-          selectionExtentPercent: this.get('tabsContainer.renderStep.selectionExtentPercent') as SliderFormControl
+          chartTitle: this.get('tabsContainer.renderStep.detailedTimeline.chartTitle') as InputFormControl,
+          chartType: this.get('tabsContainer.renderStep.detailedTimeline.chartType') as SelectFormControl,
+          dateFormat: this.get('tabsContainer.renderStep.detailedTimeline.dateFormat') as SelectFormControl,
+          selectionExtentPercent: this.get('tabsContainer.renderStep.detailedTimeline.selectionExtentPercent') as SliderFormControl
         }
       }
     }

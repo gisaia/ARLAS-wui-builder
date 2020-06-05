@@ -21,6 +21,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { Config, AnalyticComponentConfig } from '@services/main-form-manager/models-config';
 import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timeline-global-form-builder.service';
 import { importElements } from '@services/main-form-manager/tools';
+import { BY_BUCKET_OR_INTERVAL } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -59,7 +60,7 @@ export class TimelineImportService {
         control: timelineDataStep.aggregation.customControls.aggregationField
       },
       {
-        value: !!timelineContributor.aggregationmodels[0].interval,
+        value: !timelineContributor.numberOfBuckets ? BY_BUCKET_OR_INTERVAL.INTERVAL : BY_BUCKET_OR_INTERVAL.BUCKET,
         control: timelineDataStep.aggregation.customControls.aggregationBucketOrInterval
       },
       {
