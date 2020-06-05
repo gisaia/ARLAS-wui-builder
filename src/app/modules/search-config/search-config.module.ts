@@ -18,12 +18,13 @@ under the License.
 */
 import { NgModule } from '@angular/core';
 import { SearchConfigRoutingModule } from './search-config-routing.module';
-import { SearchConfigComponent } from './search-config.component';
 import { GlobalSearchComponent } from './components/global-search/global-search.component';
 import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
-  declarations: [SearchConfigComponent, GlobalSearchComponent],
+  declarations: [
+    GlobalSearchComponent
+  ],
   imports: [
     SearchConfigRoutingModule,
     SharedModule

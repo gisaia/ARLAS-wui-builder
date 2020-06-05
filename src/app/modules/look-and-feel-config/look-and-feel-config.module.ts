@@ -19,13 +19,14 @@ under the License.
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { LookAndFeelConfigRoutingModule } from './look-and-feel-config-routing.module';
-import { LookAndFeelConfigComponent } from './look-and-feel-config.component';
 import { GlobalLookAndFeelComponent } from './components/global-look-and-feel/global-look-and-feel.component';
 
 
 
 @NgModule({
-  declarations: [LookAndFeelConfigComponent, GlobalLookAndFeelComponent],
+  declarations: [
+    GlobalLookAndFeelComponent
+  ],
   imports: [
     LookAndFeelConfigRoutingModule,
     SharedModule
