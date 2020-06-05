@@ -45,84 +45,87 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
         useDetailedTimeline: new SlideToggleFormControl(
           '',
           'Use detailed timeline?',
-          'Description'
+          ''
         ),
-        dataStep: new ConfigFormGroup({
-          timeline: new ConfigFormGroup({
-            aggregation: timelineBucketsIntervalFg,
-          }
-          ).withTitle('Timeline'),
-          detailedTimeline: new ConfigFormGroup({
-            bucketsNumber: new SliderFormControl(
-              '',
-              'Number of buckets',
-              'description',
-              10,
-              200,
-              5
-            )
-          },
-            {
-              dependsOn: () => [this.customControls.useDetailedTimeline],
-              onDependencyChange: (control) =>
-                this.customControls.useDetailedTimeline.value ? control.enable() : control.disable()
+        // using container because form groups with tabs cannot be at same level as form control
+        tabsContainer: new ConfigFormGroup({
+          dataStep: new ConfigFormGroup({
+            timeline: new ConfigFormGroup({
+              aggregation: timelineBucketsIntervalFg,
             }
-          ).withTitle('Detailed timeline')
-        }),
-        renderStep: new ConfigFormGroup({
-          timeline: new ConfigFormGroup({
-            ...TimelineGlobalFormGroup.getCommonsControls(),
-            isMultiselectable: new SlideToggleFormControl(
-              false,
-              'Is multi-selectable',
-              'Description'
-            )
-          }).withTitle('Timeline'),
-          detailedTimeline: new ConfigFormGroup({
-            ...TimelineGlobalFormGroup.getCommonsControls(),
-            selectionExtentPercent: new SliderFormControl(
-              '',
-              'Percent of selection extent',
-              'Description',
-              0,
-              100,
-              5
-            )
-          },
-            {
-              dependsOn: () => [this.customControls.useDetailedTimeline],
-              onDependencyChange: (control) =>
-                this.customControls.useDetailedTimeline.value ? control.enable() : control.disable()
-            }).withTitle('Detailed timeline'),
+            ).withTitle('Timeline'),
+            detailedTimeline: new ConfigFormGroup({
+              bucketsNumber: new SliderFormControl(
+                '',
+                'Number of buckets',
+                'description',
+                10,
+                200,
+                5
+              )
+            },
+              {
+                dependsOn: () => [this.customControls.useDetailedTimeline],
+                onDependencyChange: (control) =>
+                  this.customControls.useDetailedTimeline.value ? control.enable() : control.disable()
+              }
+            ).withTitle('Detailed timeline')
+          }).withTabName('Data'),
+          renderStep: new ConfigFormGroup({
+            timeline: new ConfigFormGroup({
+              ...TimelineGlobalFormGroup.getCommonsControls(),
+              isMultiselectable: new SlideToggleFormControl(
+                false,
+                'Is multi-selectable',
+                'Description'
+              )
+            }).withTitle('Timeline'),
+            detailedTimeline: new ConfigFormGroup({
+              ...TimelineGlobalFormGroup.getCommonsControls(),
+              selectionExtentPercent: new SliderFormControl(
+                '',
+                'Percent of selection extent',
+                'Description',
+                0,
+                100,
+                5
+              )
+            },
+              {
+                dependsOn: () => [this.customControls.useDetailedTimeline],
+                onDependencyChange: (control) =>
+                  this.customControls.useDetailedTimeline.value ? control.enable() : control.disable()
+              }).withTitle('Detailed timeline'),
 
+          }).withTabName('Render')
         })
       });
   }
 
   public customControls = {
     useDetailedTimeline: this.get('useDetailedTimeline') as SlideToggleFormControl,
-    dataStepGrp: this.get('dataStep') as ConfigFormControl,
-    dataStep: {
-      timeline: {
-        aggregation: this.get('dataStep').get('timeline').get('aggregation') as BucketsIntervalFormGroup
+    tabsContainer: {
+      dataStep: {
+        timeline: {
+          aggregation: this.get('tabsContainer.dataStep.aggregation') as BucketsIntervalFormGroup
+        },
+        detailedTimeline: {
+          bucketsNumber: this.get('tabsContainer.dataStep.bucketsNumber') as SliderFormControl
+        }
       },
-      detailedTimeline: {
-        bucketsNumber: this.get('dataStep').get('detailedTimeline').get('bucketsNumber') as SliderFormControl
-      }
-    },
-    renderStepGrp: this.get('renderStep') as ConfigFormControl,
-    renderStep: {
-      timeline: {
-        chartTitle: this.get('renderStep').get('timeline').get('chartTitle') as InputFormControl,
-        chartType: this.get('renderStep').get('timeline').get('chartType') as SelectFormControl,
-        dateFormat: this.get('renderStep').get('timeline').get('dateFormat') as SelectFormControl,
-        isMultiselectable: this.get('renderStep').get('timeline').get('isMultiselectable') as SlideToggleFormControl
-      },
-      detailedTimeline: {
-        chartTitle: this.get('renderStep').get('detailedTimeline').get('chartTitle') as InputFormControl,
-        chartType: this.get('renderStep').get('detailedTimeline').get('chartType') as SelectFormControl,
-        dateFormat: this.get('renderStep').get('detailedTimeline').get('dateFormat') as SelectFormControl,
-        selectionExtentPercent: this.get('renderStep').get('detailedTimeline').get('selectionExtentPercent') as SliderFormControl
+      renderStep: {
+        timeline: {
+          chartTitle: this.get('tabsContainer.renderStepchartTitle') as InputFormControl,
+          chartType: this.get('tabsContainer.renderStep.chartType') as SelectFormControl,
+          dateFormat: this.get('tabsContainer.renderStep.dateFormat') as SelectFormControl,
+          isMultiselectable: this.get('tabsContainer.renderStep.isMultiselectable') as SlideToggleFormControl
+        },
+        detailedTimeline: {
+          chartTitle: this.get('tabsContainer.renderStep.chartTitle') as InputFormControl,
+          chartType: this.get('tabsContainer.renderStep.chartType') as SelectFormControl,
+          dateFormat: this.get('tabsContainer.renderStep.dateFormat') as SelectFormControl,
+          selectionExtentPercent: this.get('tabsContainer.renderStep.selectionExtentPercent') as SliderFormControl
+        }
       }
     }
   };

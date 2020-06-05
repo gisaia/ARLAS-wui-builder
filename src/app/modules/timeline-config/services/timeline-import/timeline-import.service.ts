@@ -18,7 +18,7 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { Config, AnalyticComponentConfig, ContributorConfig } from '@services/main-form-manager/models-config';
+import { Config, AnalyticComponentConfig } from '@services/main-form-manager/models-config';
 import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timeline-global-form-builder.service';
 import { importElements } from '@services/main-form-manager/tools';
 
@@ -42,8 +42,8 @@ export class TimelineImportService {
     const timelineFg = this.mainFormService.timelineConfig.getGlobalFg();
     const hasDetailedTimeline = !!detailedTimelineContributor && !!detailedTimelineComponent;
 
-    const timelineDataStep = timelineFg.customControls.dataStep.timeline;
-    const detailedTimelineDataStep = timelineFg.customControls.dataStep.detailedTimeline;
+    const timelineDataStep = timelineFg.customControls.tabsContainer.dataStep.timeline;
+    const detailedTimelineDataStep = timelineFg.customControls.tabsContainer.dataStep.detailedTimeline;
 
     importElements([
       {
@@ -52,7 +52,7 @@ export class TimelineImportService {
       },
       {
         value: timelineComponent.input.multiselectable,
-        control: timelineFg.customControls.renderStep.timeline.isMultiselectable
+        control: timelineFg.customControls.tabsContainer.renderStep.timeline.isMultiselectable
       },
       {
         value: timelineContributor.aggregationmodels[0].field,
@@ -83,7 +83,7 @@ export class TimelineImportService {
       importElements([
         {
           value: detailedTimelineContributor.selectionExtentPercentage * 100,
-          control: timelineFg.customControls.renderStep.detailedTimeline.selectionExtentPercent
+          control: timelineFg.customControls.tabsContainer.renderStep.detailedTimeline.selectionExtentPercent
         },
         {
           value: detailedTimelineContributor.numberOfBuckets,
@@ -98,7 +98,9 @@ export class TimelineImportService {
     timelineFg: TimelineGlobalFormGroup,
     isDetailed: boolean) {
 
-    const renderStep = isDetailed ? timelineFg.customControls.renderStep.detailedTimeline : timelineFg.customControls.renderStep.timeline;
+    const renderStep = isDetailed ?
+      timelineFg.customControls.tabsContainer.renderStep.detailedTimeline :
+      timelineFg.customControls.tabsContainer.renderStep.timeline;
 
     importElements([
       {
@@ -111,7 +113,7 @@ export class TimelineImportService {
       },
       {
         value: timelineComponent.input.ticksDateFormat,
-        control: timelineFg.customControls.renderStep.timeline.dateFormat
+        control: timelineFg.customControls.tabsContainer.renderStep.timeline.dateFormat
       }
     ]);
   }
