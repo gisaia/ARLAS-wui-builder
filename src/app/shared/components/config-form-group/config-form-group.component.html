@@ -8,7 +8,8 @@
                 <div *ngIf="control.enabled">
                     <div *ngIf="isFormGroup(control); let formGroup">
                         <mat-step label="{{formGroup.stepName | translate}}" [stepControl]="formGroup">
-                            <app-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey">
+                            <app-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey"
+                                isSubGroup="true">
                             </app-config-form-group>
                             <div>
                                 <button mat-button matStepperPrevious
@@ -34,7 +35,8 @@
                                     {{formGroup.tabName | translate}}
                                 </span>
                             </ng-template>
-                            <app-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey">
+                            <app-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey"
+                                isSubGroup="true">
                             </app-config-form-group>
                             <ng-content select="control.key"></ng-content>
                         </mat-tab>
@@ -78,11 +80,12 @@
                     </div>
                 </div>
                 <div *ngIf="isFormGroup(control); let formGroup">
-                    <app-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey">
+                    <app-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey" isSubGroup="true">
                     </app-config-form-group>
                 </div>
                 <div *ngIf="isFormGroupArray(control); let formGroupArray">
-                    <app-config-form-group-array [configFormGroupArray]="formGroupArray" [defaultKey]="defaultKey">
+                    <app-config-form-group-array [configFormGroupArray]="formGroupArray" [defaultKey]="defaultKey"
+                        isSubGroup="true">
                     </app-config-form-group-array>
                 </div>
             </div>

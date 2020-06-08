@@ -155,10 +155,10 @@ export class ConfigFormGroup extends FormGroup {
         super(controls, optionalParams.validatorOrOpts, optionalParams.asyncValidator);
     }
 
-    get dependsOn() { return this.optionalParams.dependsOn; }
-    get onDependencyChange() { return this.optionalParams.onDependencyChange; }
+    public get dependsOn() { return this.optionalParams.dependsOn; }
+    public get onDependencyChange() { return this.optionalParams.onDependencyChange; }
 
-    get controlsRecursively() {
+    public get controlsRecursively() {
         return this.getControls(this);
     }
 
@@ -208,6 +208,11 @@ export class ConfigFormGroup extends FormGroup {
     public enableIf(condition: boolean) {
         if (condition) {
             this.enable();
+            // make sure that the state of all sub-controls is up-to-date against other controls
+            this.controlsRecursively
+                .filter(c => c instanceof ConfigFormGroup || c instanceof ConfigFormControl)
+                .filter((c: ConfigFormGroup | ConfigFormControl) => !!c.onDependencyChange)
+                .forEach((c: ConfigFormGroup | ConfigFormControl) => c.onDependencyChange(c));
         } else {
             // emitEvent: false avoid the cascading effect. When enabling, it is expected to propagate
             // the status update so that dependan fields can update themselves. Whereas when disabling

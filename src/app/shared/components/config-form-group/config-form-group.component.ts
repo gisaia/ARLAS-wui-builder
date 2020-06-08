@@ -46,6 +46,7 @@ import { AbstractControl } from '@angular/forms';
 export class ConfigFormGroupComponent implements OnInit, OnDestroy {
 
   @Input() public configFormGroup: ConfigFormGroup;
+  @Input() public isSubGroup: boolean;
   @Input() public defaultKey: string;
   @ViewChild(MatStepper, { static: false }) private stepper: MatStepper;
   @ViewChildren(ConfigFormGroupComponent) private subConfigFormGroups: QueryList<ConfigFormGroupComponent>;
@@ -58,19 +59,31 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
 
-    this.listenToAllControlsOnDependencyChange();
-    this.initDependentControls();
-    this.markChildControls();
+    /**
+     * The root ConfigFormGroup is responsible of all its sub-controls.
+     * At loading, it browses all the sub-controls to manage there state.
+     * At first, we didn't have a notion or root / subgroup, we just used
+     * to initialize the sub-controls of a group when displaying it; however
+     * some field in a not-displayed (ia not initialized) subgroup may
+     * depend on a displayed field, this was not managed.
+     */
+    if (!this.isSubGroup) {
+      this.listenToAllControlsOnDependencyChange();
+      this.initDependentControls();
+      this.markChildControls();
+    }
   }
 
   public ngOnDestroy(): void {
     this.toUnsubscribe.forEach(u => u.unsubscribe());
   }
 
+
+
   private listenToAllControlsOnDependencyChange() {
     [
-      this.configFormGroup,
-      ...Object.values(this.configFormGroup.controls),
+      ...this.configFormGroup.controlsRecursively,
+      this.configFormGroup
     ]
       .filter(c => c instanceof ConfigFormGroup || c instanceof ConfigFormControl)
       .forEach((c: ConfigFormGroup | ConfigFormControl) => {
@@ -99,8 +112,8 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
    */
   private initDependentControls() {
     [
-      this.configFormGroup,
-      ...Object.values(this.configFormGroup.controls).filter(c => c instanceof ConfigFormControl),
+      ...this.configFormGroup.controlsRecursively,
+      this.configFormGroup
     ]
       .filter((c: ConfigFormControl | ConfigFormGroup) => !!c.dependsOn)
       .forEach(
@@ -118,7 +131,10 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
    * Mark the controls that are child of another control
    */
   private markChildControls() {
-    Object.values(this.configFormGroup.controls)
+    [
+      ...this.configFormGroup.controlsRecursively,
+      this.configFormGroup
+    ]
       .filter(c => c instanceof ConfigFormControl)
       .forEach((c: ConfigFormControl) =>
         c.childs().forEach((child: ConfigFormControl) =>
