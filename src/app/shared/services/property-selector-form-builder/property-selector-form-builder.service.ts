@@ -29,7 +29,7 @@ import {
   ColorPreviewFormControl
 } from '@shared-models/config-form';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
-import { toKeywordOptionsObs, toNumericOrDateOptionsObs } from '@services/collection-service/tools';
+import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toTextOrKeywordOptionsObs } from '@services/collection-service/tools';
 import { Observable } from 'rxjs';
 import { CollectionField } from '@services/collection-service/models';
 import { MatDialog } from '@angular/material';
@@ -73,6 +73,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
           childs: () => [
             this.customControls.propertyFix,
             this.customControls.propertyProvidedFieldCtrl,
+            this.customControls.propertyProvidedFieldLabelCtrl,
             this.customControls.propertyGeneratedFieldCtrl,
             this.customControls.propertyManualFg.propertyManualFieldCtrl,
             this.customControls.propertyManualFg.propertyManualButton,
@@ -142,6 +143,19 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
           dependsOn: () => [this.customControls.propertySource],
           onDependencyChange: (control) =>
             control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided)
+        }
+      ),
+      propertyProvidedFieldLabelCtrl: new SelectFormControl(
+        '',
+        'Label field',
+        'Description',
+        true,
+        toTextOrKeywordOptionsObs(collectionFieldsObs),
+        {
+          dependsOn: () => [this.customControls.propertySource],
+          onDependencyChange: (control) =>
+            control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided),
+          optional: true
         }
       ),
       propertyGeneratedFieldCtrl: new SelectFormControl(
@@ -584,6 +598,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
     propertySource: this.get('propertySource') as SelectFormControl,
     propertyFix: this.get('propertyFix') as ColorFormControl | SliderFormControl,
     propertyProvidedFieldCtrl: this.get('propertyProvidedFieldCtrl') as SelectFormControl,
+    propertyProvidedFieldLabelCtrl: this.get('propertyProvidedFieldLabelCtrl') as SelectFormControl,
     propertyGeneratedFieldCtrl: this.get('propertyGeneratedFieldCtrl') as SelectFormControl,
     propertyManualFg: {
       propertyManualFieldCtrl: this.get('propertyManualFg').get('propertyManualFieldCtrl') as SelectFormControl,
