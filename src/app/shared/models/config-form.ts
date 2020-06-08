@@ -248,7 +248,11 @@ export class ButtonToggleFormControl extends ConfigFormControl {
         optionalParams?: ControlOptionalParams
     ) {
 
-        super(formState, null, description, optionalParams);
+        super(
+            !!formState ? formState : !!options.length ? options[0].value : null,
+            null,
+            description,
+            optionalParams);
     }
 }
 
