@@ -2,17 +2,21 @@ import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectat
 import { MapConfigComponent } from './map-config.component';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+import { FormGroup, FormArray } from '@angular/forms';
 
 describe('MapConfigComponent', () => {
   let spectator: Spectator<MapConfigComponent>;
 
   const createComponent = createComponentFactory({
     component: MapConfigComponent,
-    mocks: [
-      MainFormService
-    ],
     providers: [
-      mockProvider(MainFormManagerService)
+      mockProvider(MainFormManagerService),
+      mockProvider(MainFormService, {
+        mapConfig: {
+          getGlobalFg: () => new FormGroup({}),
+          getLayersFa: () => new FormArray([])
+        }
+      })
     ]
   });
 
@@ -24,7 +28,4 @@ describe('MapConfigComponent', () => {
     expect(spectator.component).toBeTruthy();
   });
 
-  it('should contain 2 tabs', () => {
-    expect(spectator.queryAll('a[mat-tab-link]')).toHaveLength(2);
-  });
 });

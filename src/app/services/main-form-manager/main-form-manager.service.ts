@@ -52,8 +52,6 @@ import { SideModulesImportService } from '@app/modules/side-modules-config/servi
 })
 export class MainFormManagerService {
 
-  public isExportExpected = false;
-
   constructor(
     private logger: NGXLogger,
     private mainFormService: MainFormService,
@@ -93,10 +91,6 @@ export class MainFormManagerService {
   }
 
   public attemptExport(type: EXPORT_TYPE) {
-
-    if (!this.isExportExpected) {
-      this.isExportExpected = true;
-    }
 
     // update the validity of the whole form
     this.mainFormService.mainForm.markAllAsTouched();
