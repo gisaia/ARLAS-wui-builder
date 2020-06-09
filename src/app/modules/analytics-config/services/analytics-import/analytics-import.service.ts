@@ -357,6 +357,14 @@ export class AnalyticsImportService {
       },
 
     ]);
+
+    // unmanaged fields
+    importElements([
+      {
+        value: component.input.customizedCssClass,
+        control: widgetData.customControls.unmanagedFields.renderStep.customizedCssClass
+      }
+    ]);
     return widgetData;
   }
 

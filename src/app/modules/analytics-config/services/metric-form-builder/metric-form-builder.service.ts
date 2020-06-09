@@ -26,6 +26,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import { FormGroup, FormControl } from '@angular/forms';
 
 export class MetricFormGroup extends ConfigFormGroup {
 
@@ -83,6 +84,11 @@ export class MetricFormGroup extends ConfigFormGroup {
           }
         )
       }).withTabName('Render'),
+      unmanagedFields: new FormGroup({
+        renderStep: new FormGroup({
+          customizedCssClass: new FormControl()
+        })
+      })
     });
   }
 
@@ -96,6 +102,11 @@ export class MetricFormGroup extends ConfigFormGroup {
       shortValue: this.get('renderStep').get('shortValue') as SlideToggleFormControl,
       beforeValue: this.get('renderStep').get('beforeValue') as InputFormControl,
       afterValue: this.get('renderStep').get('afterValue') as InputFormControl,
+    },
+    unmanagedFields: {
+      renderStep: {
+        customizedCssClass: this.get('unmanagedFields.renderStep.customizedCssClass')
+      }
     }
   };
 
