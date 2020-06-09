@@ -281,7 +281,7 @@ export class ConfigExportHelper {
             identifier: CHIPSEARCH_IDENTIFIER,
             search_field: searchConfigGlobal.customControls.searchField.value,
             name: searchConfigGlobal.customControls.name.value,
-            icon: 'search',
+            icon: searchConfigGlobal.customControls.unmanagedFields.icon.value,
             autocomplete_field: searchConfigGlobal.customControls.autocompleteField.value,
             autocomplete_size: searchConfigGlobal.customControls.autocompleteSize.value,
         };

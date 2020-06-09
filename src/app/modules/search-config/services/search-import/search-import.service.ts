@@ -54,6 +54,10 @@ export class SearchImportService {
       {
         value: chipsearchContributor.autocomplete_size,
         control: globalSearchFg.customControls.autocompleteSize
+      },
+      {
+        value: chipsearchContributor.icon,
+        control: globalSearchFg.customControls.unmanagedFields.icon
       }
     ]);
   }

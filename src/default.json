@@ -92,7 +92,9 @@
             "name": "Search a ...",
             "searchField": "id",
             "autocompleteField": "internal.fulltext",
-            "icon": "search"
+            "unmanagedFields": {
+                "icon": "search"
+            }
         }
     },
     "lookAndFeel": {
