@@ -243,8 +243,32 @@
                     "termAggregation": {
                         "termAggregationSize": 5
                     }
+                },
+                "unmanagedFields": {
+                    "renderStep": {
+                      "showExportCsv": true,
+                      "isHistogramSelectable": true,
+                      "topOffsetRemoveInterval": 40,
+                      "leftOffsetRemoveInterval": 18,
+                      "brushHandlesHeightWeight": 0.8,
+                      "yAxisStartsFromZero": true,
+                      "xAxisPosition": "bottom",
+                      "descriptionPosition": "bottom",
+                      "xTicks": 4,
+                      "yTicks": 1,
+                      "xLabels": 4,
+                      "yLabels": 4,
+                      "showXTicks": true,
+                      "showYTicks": true,
+                      "showXLabels": true,
+                      "showYLabels": true,
+                      "barWeight": 0.8,
+                      "swimLaneLabelsWidth": 100,
+                      "swimlaneHeight": 20,
+                      "swimlaneBorderRadius": 3
+                    }
                 }
-            }
+            }            
         }
     },
     "sideModules": {

@@ -27,8 +27,8 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { FormArray, FormGroup } from '@angular/forms';
 import { AnalyticsInitService } from '../analytics-init/analytics-init.service';
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
-import { HistogramFormBuilderService } from '../histogram-form-builder/histogram-form-builder.service';
-import { SwimlaneFormBuilderService } from '../swimlane-form-builder/swimlane-form-builder.service';
+import { HistogramFormBuilderService, HistogramFormGroup } from '../histogram-form-builder/histogram-form-builder.service';
+import { SwimlaneFormBuilderService, SwimlaneFormGroup } from '../swimlane-form-builder/swimlane-form-builder.service';
 import { DEFAULT_METRIC_VALUE, MetricCollectControls } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { BucketsIntervalControls, BY_BUCKET_OR_INTERVAL } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
@@ -158,6 +158,102 @@ export class AnalyticsImportService {
         value: contributor.isOneDimension,
         control: unmanagedFields.dataStep.isOneDimension
       },
+      ...this.getHistogramSwimlaneUnmanagedFields(component, widgetData)
+      ,
+      {
+        value: (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve,
+        control: unmanagedFields.renderStep.isSmoothedCurve
+      },
+    ]);
+
+    return widgetData;
+  }
+
+  private getSwimlaneWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
+    const widgetData = this.swimlaneFormBuilder.build();
+    const dataStep = widgetData.customControls.dataStep;
+    const renderStep = widgetData.customControls.renderStep;
+    const termeAggregationFg = dataStep.termAggregation;
+    const dateAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'datehistogram');
+    const termAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'term');
+    const swimlaneInput = component.input as AnalyticComponentSwimlaneInputConfig;
+
+    importElements([
+      {
+        value: component.input.chartTitle,
+        control: dataStep.name
+      },
+      ...this.getAggregationImportElements(
+        contributor,
+        dataStep.aggregation.customControls,
+        dateAggregationModel,
+        component.input.dataType),
+      ...this.getMetricImportElements(
+        dateAggregationModel,
+        dataStep.metric.customControls,
+        contributor.jsonpath),
+      {
+        value: termAggregationModel.field,
+        control: termeAggregationFg.termAggregationField
+      },
+      {
+        value: termAggregationModel.size,
+        control: termeAggregationFg.termAggregationSize
+      },
+      {
+        value: swimlaneInput.swimlaneMode,
+        control: renderStep.swimlaneMode
+      },
+      {
+        value: swimlaneInput.swimlaneRepresentation,
+        control: renderStep.swimlaneRepresentation
+      },
+      {
+        value: swimlaneInput.paletteColors,
+        control: renderStep.paletteColors
+      },
+      {
+        value: swimlaneInput.swimlaneOptions.zerosColor === this.defaultValuesService.getDefaultConfig().swimlaneZeroColor,
+        control: renderStep.isZeroRepresentative
+      },
+      {
+        value: swimlaneInput.swimlaneOptions.zerosColor,
+        control: renderStep.zerosColors
+      },
+      {
+        value: swimlaneInput.swimlaneOptions.nanColor,
+        control: renderStep.NaNColor
+      }
+    ]);
+
+    // unmanaged fields
+    const unmanagedFields = widgetData.customControls.unmanagedFields;
+
+    importElements([
+      ...this.getHistogramSwimlaneUnmanagedFields(component, widgetData),
+      {
+        value: swimlaneInput.swimLaneLabelsWidth,
+        control: unmanagedFields.renderStep.swimLaneLabelsWidth
+      },
+      {
+        value: swimlaneInput.swimlaneHeight,
+        control: unmanagedFields.renderStep.swimlaneHeight
+      },
+      {
+        value: swimlaneInput.swimlaneBorderRadius,
+        control: unmanagedFields.renderStep.swimlaneBorderRadius
+      },
+    ]);
+
+    return widgetData;
+  }
+
+  private getHistogramSwimlaneUnmanagedFields(
+    component: AnalyticComponentConfig,
+    histogramFg: HistogramFormGroup | SwimlaneFormGroup) {
+
+    const unmanagedFields = histogramFg.customControls.unmanagedFields;
+    return [
       {
         value: component.showExportCsv,
         control: unmanagedFields.renderStep.showExportCsv
@@ -225,74 +321,8 @@ export class AnalyticsImportService {
       {
         value: component.input.barWeight,
         control: unmanagedFields.renderStep.barWeight
-      },
-      {
-        value: (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve,
-        control: unmanagedFields.renderStep.isSmoothedCurve
-      },
-    ]);
-
-    return widgetData;
-  }
-
-  private getSwimlaneWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
-    const widgetData = this.swimlaneFormBuilder.build();
-    const dataStep = widgetData.customControls.dataStep;
-    const renderStep = widgetData.customControls.renderStep;
-    const termeAggregationFg = dataStep.termAggregation;
-    const dateAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'datehistogram');
-    const termAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'term');
-    const swimlaneInput = component.input as AnalyticComponentSwimlaneInputConfig;
-
-    importElements([
-      {
-        value: component.input.chartTitle,
-        control: dataStep.name
-      },
-      ...this.getAggregationImportElements(
-        contributor,
-        dataStep.dateAggregation.customControls,
-        dateAggregationModel,
-        component.input.dataType),
-      ...this.getMetricImportElements(
-        dateAggregationModel,
-        dataStep.metric.customControls,
-        contributor.jsonpath),
-      {
-        value: termAggregationModel.field,
-        control: termeAggregationFg.termAggregationField
-      },
-      {
-        value: termAggregationModel.size,
-        control: termeAggregationFg.termAggregationSize
-      },
-      {
-        value: swimlaneInput.swimlaneMode,
-        control: renderStep.swimlaneMode
-      },
-      {
-        value: swimlaneInput.swimlaneRepresentation,
-        control: renderStep.swimlaneRepresentation
-      },
-      {
-        value: swimlaneInput.paletteColors,
-        control: renderStep.paletteColors
-      },
-      {
-        value: swimlaneInput.swimlaneOptions.zerosColor === this.defaultValuesService.getDefaultConfig().swimlaneZeroColor,
-        control: renderStep.isZeroRepresentative
-      },
-      {
-        value: swimlaneInput.swimlaneOptions.zerosColor,
-        control: renderStep.zerosColors
-      },
-      {
-        value: swimlaneInput.swimlaneOptions.nanColor,
-        control: renderStep.NaNColor
       }
-    ]);
-
-    return widgetData;
+    ];
   }
 
   private getMetricWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
