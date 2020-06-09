@@ -211,7 +211,32 @@
                     "chartType": "bars",
                     "showHorizontalLines": true,
                     "ticksDateFormat": "%b %d %Y  %H:%M"
-                }
+                },
+                "unmanagedFields": {
+                    "dataStep": {
+                      "isOneDimension": false
+                    },
+                    "renderStep": {
+                      "showExportCsv": true,
+                      "isHistogramSelectable": true,
+                      "topOffsetRemoveInterval": 40,
+                      "leftOffsetRemoveInterval": 18,
+                      "brushHandlesHeightWeight": 0.8,
+                      "yAxisStartsFromZero": true,
+                      "xAxisPosition": "bottom",
+                      "descriptionPosition": "bottom",
+                      "xTicks": 4,
+                      "yTicks": 1,
+                      "xLabels": 4,
+                      "yLabels": 4,
+                      "showXTicks": true,
+                      "showYTicks": true,
+                      "showXLabels": true,
+                      "showYLabels": true,
+                      "barWeight": 0.8,
+                      "isSmoothedCurve": false
+                    }
+                  }
             },
             "swimlane": {
                 "dataStep": {

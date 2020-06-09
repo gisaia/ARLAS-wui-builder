@@ -24,7 +24,7 @@ import {
   ConfigFormGroup, SlideToggleFormControl, SelectFormControl, InputFormControl
 } from '@shared-models/config-form';
 import { ChartType } from 'arlas-web-components';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import {
   BucketsIntervalFormBuilderService, BucketsIntervalFormGroup
@@ -81,7 +81,32 @@ export class HistogramFormGroup extends ConfigFormGroup {
             false,
             Object.keys(DateFormats).map(df => ({ value: DateFormats[df], label: df }))
           )
-        }).withTabName('Render')
+        }).withTabName('Render'),
+        unmanagedFields: new FormGroup({
+          dataStep: new FormGroup({
+            isOneDimension: new FormControl(),
+          }),
+          renderStep: new FormGroup({
+            showExportCsv: new FormControl(),
+            isHistogramSelectable: new FormControl(),
+            topOffsetRemoveInterval: new FormControl(),
+            leftOffsetRemoveInterval: new FormControl(),
+            brushHandlesHeightWeight: new FormControl(),
+            yAxisStartsFromZero: new FormControl(),
+            xAxisPosition: new FormControl(),
+            descriptionPosition: new FormControl(),
+            xTicks: new FormControl(),
+            yTicks: new FormControl(),
+            xLabels: new FormControl(),
+            yLabels: new FormControl(),
+            showXTicks: new FormControl(),
+            showYTicks: new FormControl(),
+            showXLabels: new FormControl(),
+            showYLabels: new FormControl(),
+            barWeight: new FormControl(),
+            isSmoothedCurve: new FormControl(),
+          })
+        })
       }
     );
   }
@@ -97,6 +122,31 @@ export class HistogramFormGroup extends ConfigFormGroup {
       chartType: this.get('renderStep').get('chartType') as SelectFormControl,
       showHorizontalLines: this.get('renderStep').get('showHorizontalLines') as SlideToggleFormControl,
       ticksDateFormat: this.get('renderStep').get('ticksDateFormat') as SelectFormControl
+    },
+    unmanagedFields: {
+      dataStep: {
+        isOneDimension: this.get('unmanagedFields.dataStep.isOneDimension'),
+      },
+      renderStep: {
+        showExportCsv: this.get('unmanagedFields.renderStep.showExportCsv'),
+        isHistogramSelectable: this.get('unmanagedFields.renderStep.isHistogramSelectable'),
+        topOffsetRemoveInterval: this.get('unmanagedFields.renderStep.topOffsetRemoveInterval'),
+        leftOffsetRemoveInterval: this.get('unmanagedFields.renderStep.leftOffsetRemoveInterval'),
+        brushHandlesHeightWeight: this.get('unmanagedFields.renderStep.brushHandlesHeightWeight'),
+        yAxisStartsFromZero: this.get('unmanagedFields.renderStep.yAxisStartsFromZero'),
+        xAxisPosition: this.get('unmanagedFields.renderStep.xAxisPosition'),
+        descriptionPosition: this.get('unmanagedFields.renderStep.descriptionPosition'),
+        xTicks: this.get('unmanagedFields.renderStep.xTicks'),
+        yTicks: this.get('unmanagedFields.renderStep.yTicks'),
+        xLabels: this.get('unmanagedFields.renderStep.xLabels'),
+        yLabels: this.get('unmanagedFields.renderStep.yLabels'),
+        showXTicks: this.get('unmanagedFields.renderStep.showXTicks'),
+        showYTicks: this.get('unmanagedFields.renderStep.showYTicks'),
+        showXLabels: this.get('unmanagedFields.renderStep.showXLabels'),
+        showYLabels: this.get('unmanagedFields.renderStep.showYLabels'),
+        barWeight: this.get('unmanagedFields.renderStep.barWeight'),
+        isSmoothedCurve: this.get('unmanagedFields.renderStep.isSmoothedCurve'),
+      }
     }
   };
 
