@@ -188,6 +188,10 @@ export class MapImportService {
     }
 
     const colors = layer.paint[layer.type + '-color'];
+    const providedFields = layerSource.provided_fields;
+    if (!!providedFields && providedFields.length > 0 && providedFields[0].label) {
+      colors.push(providedFields[0].label);
+    }
     values.styleStep.colorFg = {};
     this.importPropertySelector(colors, values.styleStep.colorFg, true, isAggregated);
 
@@ -251,8 +255,12 @@ export class MapImportService {
       propertySelectorValues.propertyFix = inputValues;
 
     } else if (inputValues instanceof Array) {
-      if (inputValues.length === 2) {
+      if (inputValues.length === 2 || inputValues.length === 3) {
         const field = (inputValues as Array<string>)[1];
+        let label = '';
+        if (inputValues.length === 3) {
+          label = (inputValues as Array<string>)[2];
+        }
 
         if (field.endsWith('_color')) {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.generated;
@@ -260,6 +268,10 @@ export class MapImportService {
         } else {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided;
           propertySelectorValues.propertyProvidedFieldCtrl = this.replaceUnderscore(field);
+          if (inputValues.length === 3) {
+            propertySelectorValues.propertyProvidedFieldLabelCtrl = this.replaceUnderscore(label);
+          }
+
         }
       } else if (inputValues[0] === 'match') {
         this.importPropertySelectorManual(inputValues, propertySelectorValues);
