@@ -20,7 +20,8 @@ import { Injectable } from '@angular/core';
 import {
   Config, AnalyticComponentConfig, ContributorConfig, AggregationModelConfig,
   AnalyticComponentSwimlaneInputConfig,
-  JSONPATH_COUNT
+  JSONPATH_COUNT,
+  AnalyticComponentHistogramInputConfig
 } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormArray, FormGroup } from '@angular/forms';
@@ -148,6 +149,87 @@ export class AnalyticsImportService {
         value: component.input.ticksDateFormat,
         control: renderStep.ticksDateFormat
       }
+    ]);
+
+    // unmanaged fields
+    const unmanagedFields = widgetData.customControls.unmanagedFields;
+    importElements([
+      {
+        value: contributor.isOneDimension,
+        control: unmanagedFields.dataStep.isOneDimension
+      },
+      {
+        value: component.showExportCsv,
+        control: unmanagedFields.renderStep.showExportCsv
+      },
+      {
+        value: component.input.isHistogramSelectable,
+        control: unmanagedFields.renderStep.isHistogramSelectable
+      },
+      {
+        value: component.input.topOffsetRemoveInterval,
+        control: unmanagedFields.renderStep.topOffsetRemoveInterval
+      },
+      {
+        value: component.input.leftOffsetRemoveInterval,
+        control: unmanagedFields.renderStep.leftOffsetRemoveInterval
+      },
+      {
+        value: component.input.brushHandlesHeightWeight,
+        control: unmanagedFields.renderStep.brushHandlesHeightWeight
+      },
+      {
+        value: component.input.yAxisStartsFromZero,
+        control: unmanagedFields.renderStep.yAxisStartsFromZero
+      },
+      {
+        value: component.input.xAxisPosition,
+        control: unmanagedFields.renderStep.xAxisPosition
+      },
+      {
+        value: component.input.descriptionPosition,
+        control: unmanagedFields.renderStep.descriptionPosition
+      },
+      {
+        value: component.input.xTicks,
+        control: unmanagedFields.renderStep.xTicks
+      },
+      {
+        value: component.input.yTicks,
+        control: unmanagedFields.renderStep.yTicks
+      },
+      {
+        value: component.input.xLabels,
+        control: unmanagedFields.renderStep.xLabels
+      },
+      {
+        value: component.input.yLabels,
+        control: unmanagedFields.renderStep.yLabels
+      },
+      {
+        value: component.input.showXTicks,
+        control: unmanagedFields.renderStep.showXTicks
+      },
+      {
+        value: component.input.showYTicks,
+        control: unmanagedFields.renderStep.showYTicks
+      },
+      {
+        value: component.input.showXLabels,
+        control: unmanagedFields.renderStep.showXLabels
+      },
+      {
+        value: component.input.showYLabels,
+        control: unmanagedFields.renderStep.showYLabels
+      },
+      {
+        value: component.input.barWeight,
+        control: unmanagedFields.renderStep.barWeight
+      },
+      {
+        value: (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve,
+        control: unmanagedFields.renderStep.isSmoothedCurve
+      },
     ]);
 
     return widgetData;

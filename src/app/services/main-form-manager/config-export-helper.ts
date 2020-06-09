@@ -557,7 +557,7 @@ export class ConfigExportHelper {
             ... !!widgetData.renderStep.chartType ?
                 {
                     charttype: widgetData.renderStep.chartType,
-                    isOneDimension: false
+                    isOneDimension: widgetData.unmanagedFields.dataStep.isOneDimension
                 } : {}
         } as ContributorConfig;
     }
@@ -593,35 +593,36 @@ export class ConfigExportHelper {
 
     private static getAnalyticsComponent(widgetType: any, widgetData: any): AnalyticComponentConfig {
 
+        const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
         if ([WIDGET_TYPE.histogram, WIDGET_TYPE.swimlane].indexOf(widgetType) >= 0) {
             const component = {
                 contributorId: this.toSnakeCase(widgetData.dataStep.name),
-                showExportCsv: true,
+                showExportCsv: unmanagedRenderFields.showExportCsv,
                 input: {
                     id: this.toSnakeCase(widgetData.dataStep.name),
-                    isHistogramSelectable: true,
+                    isHistogramSelectable: unmanagedRenderFields.isHistogramSelectable,
                     multiselectable: !!widgetData.renderStep.multiselectable,
-                    topOffsetRemoveInterval: 40,
-                    leftOffsetRemoveInterval: 18,
-                    brushHandlesHeightWeight: 0.8,
-                    yAxisStartsFromZero: true,
+                    topOffsetRemoveInterval: unmanagedRenderFields.topOffsetRemoveInterval,
+                    leftOffsetRemoveInterval: unmanagedRenderFields.leftOffsetRemoveInterval,
+                    brushHandlesHeightWeight: unmanagedRenderFields.brushHandlesHeightWeight,
+                    yAxisStartsFromZero: unmanagedRenderFields.yAxisStartsFromZero,
                     chartType: widgetData.renderStep.chartType,
                     chartTitle: widgetData.dataStep.name,
                     chartWidth: 445, // TODO generated from colspan
                     chartHeight: 100, // TODO generated from colspan
                     customizedCssClass: 'arlas-histogram-analytics', // TODO generated from colspan
-                    xAxisPosition: 'bottom',
-                    descriptionPosition: 'bottom',
-                    xTicks: 4,
-                    yTicks: 1,
-                    xLabels: 4,
-                    yLabels: 4,
-                    showXTicks: true,
-                    showYTicks: true,
-                    showXLabels: true,
-                    showYLabels: true,
+                    xAxisPosition: unmanagedRenderFields.xAxisPosition,
+                    descriptionPosition: unmanagedRenderFields.descriptionPosition,
+                    xTicks: unmanagedRenderFields.xTicks,
+                    yTicks: unmanagedRenderFields.yTicks,
+                    xLabels: unmanagedRenderFields.xLabels,
+                    yLabels: unmanagedRenderFields.yLabels,
+                    showXTicks: unmanagedRenderFields.showXTicks,
+                    showYTicks: unmanagedRenderFields.showYTicks,
+                    showXLabels: unmanagedRenderFields.showXLabels,
+                    showYLabels: unmanagedRenderFields.showYLabels,
                     showHorizontalLines: widgetData.renderStep.showHorizontalLines,
-                    barWeight: 0.8,
+                    barWeight: unmanagedRenderFields.barWeight,
                     dataType:
                         widgetData.dataStep.aggregation.aggregationFieldType === CollectionReferenceDescriptionProperty.TypeEnum.DATE ?
                             'time' : 'numeric'
@@ -632,7 +633,7 @@ export class ConfigExportHelper {
                 case WIDGET_TYPE.histogram: {
                     component.componentType = WIDGET_TYPE.histogram;
                     component.input.ticksDateFormat = widgetData.renderStep.ticksDateFormat;
-                    (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve = false;
+                    (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve = unmanagedRenderFields.isSmoothedCurve;
                     break;
                 }
                 case WIDGET_TYPE.swimlane: {
