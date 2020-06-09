@@ -96,3 +96,9 @@ export function toAllButGeoOptionsObs(collectionFieldsObs: Observable<Array<Coll
         fields => fields
             .filter(f => f.type !== TypeEnum.GEOPOINT && f.type !== TypeEnum.GEOSHAPE))));
 }
+
+export function toTextOrKeywordOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+    return toOptionsObs(collectionFieldsObs.pipe(map(
+        fields => fields
+            .filter(f => f.type === TypeEnum.KEYWORD || f.type === TypeEnum.TEXT))));
+}
