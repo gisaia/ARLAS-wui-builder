@@ -26,6 +26,7 @@ import { Observable } from 'rxjs';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { toKeywordOptionsObs, toTextOptionsObs } from '@services/collection-service/tools';
 import { TranslateService } from '@ngx-translate/core';
+import { FormGroup, FormControl } from '@angular/forms';
 
 export class SearchGlobalFormGroup extends ConfigFormGroup {
 
@@ -62,7 +63,10 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
           1,
           10,
           1
-        )
+        ),
+        unmanagedFields: new FormGroup({
+          icon: new FormControl()
+        })
       }
     );
   }
@@ -71,7 +75,10 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
     name: this.get('name') as InputFormControl,
     searchField: this.get('searchField') as SelectFormControl,
     autocompleteField: this.get('autocompleteField') as SelectFormControl,
-    autocompleteSize: this.get('autocompleteSize') as SliderFormControl
+    autocompleteSize: this.get('autocompleteSize') as SliderFormControl,
+    unmanagedFields: {
+      icon: this.get('unmanagedFields.icon')
+    }
   };
 }
 
