@@ -23,6 +23,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/internal/operators/filter';
 import { map } from 'rxjs/operators';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+import { isFullyTouched } from '@utils/tools';
 
 interface Tab {
   routeurLink: string;
@@ -39,7 +40,6 @@ export class MapConfigComponent implements OnInit {
 
   constructor(
     private mainFormService: MainFormService,
-    private mainFormManager: MainFormManagerService,
     private translate: TranslateService,
     private router: Router) {
 
@@ -53,13 +53,15 @@ export class MapConfigComponent implements OnInit {
   public tabs: Tab[] = [
     {
       routeurLink: 'global', label: this.translate.instant('Global configuration'),
-      hasError: () => this.mainFormManager.isExportExpected &&
-        this.mainFormService.mapConfig.getGlobalFg() && !this.mainFormService.mapConfig.getGlobalFg().valid
+      hasError: () => !!this.mainFormService.mapConfig.getGlobalFg()
+        && this.mainFormService.mapConfig.getGlobalFg().invalid
+        && isFullyTouched(this.mainFormService.mapConfig.getGlobalFg())
     },
     {
       routeurLink: 'layers', label: this.translate.instant('Layers'),
-      hasError: () => this.mainFormManager.isExportExpected && this.mainFormService.mapConfig.getLayersFa()
-        && !this.mainFormService.mapConfig.getLayersFa().valid
+      hasError: () => !!this.mainFormService.mapConfig.getLayersFa()
+        && this.mainFormService.mapConfig.getLayersFa().invalid
+        && isFullyTouched(this.mainFormService.mapConfig.getLayersFa())
     }
   ];
 

@@ -20,7 +20,7 @@ import { Component } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { getNbErrorsInControl } from '@utils/tools';
+import { getNbErrorsInControl, isFullyTouched } from '@utils/tools';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { EXPORT_TYPE } from '@services/main-form-manager/config-export-helper';
 import { PersistenceService } from '@services/persistence/persistence.service';
@@ -108,7 +108,7 @@ export class LeftMenuComponent {
   private updateNbErrors() {
     this.nbErrorsByPage.clear();
     this.pages
-      .filter(p => this.mainFormManager.isExportExpected && !!p.control && !p.control.valid)
+      .filter(p => !!p.control && p.control.invalid && isFullyTouched(p.control))
       .forEach(p =>
         this.nbErrorsByPage.set(p.name, getNbErrorsInControl(p.control))
       );
