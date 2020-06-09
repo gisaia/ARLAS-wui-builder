@@ -257,3 +257,7 @@
 <mat-error *ngIf="control.touched && control?.errors?.notNumeric">
     {{control.label + (' should be an integer value' | translate)}}
 </mat-error>
+
+<mat-error *ngIf="control.touched && control?.errors?.pattern">
+    {{control.label + (' is not valid' | translate)}}
+</mat-error>

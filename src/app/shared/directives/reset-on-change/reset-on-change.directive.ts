@@ -40,7 +40,7 @@ export class ResetOnChangeDirective implements OnInit {
   constructor(
     private elementRef: ElementRef<HTMLInputElement>,
     @Optional() private matSelect: MatSelect,
-    @Optional() private matSlider: MatSlideToggle,
+    @Optional() private matSlideToggle: MatSlideToggle,
     @Optional() private matButtonToggle: MatButtonToggleGroup,
     private logger: NGXLogger,
     private defaultValueService: DefaultValuesService) { }
@@ -50,8 +50,8 @@ export class ResetOnChangeDirective implements OnInit {
       return;
     } else if (this.matSelect) {
       this.matSelect.valueChange.subscribe((value: any) => this.resetDependants());
-    } else if (this.matSlider) {
-      this.matSlider.change.subscribe(
+    } else if (this.matSlideToggle) {
+      this.matSlideToggle.change.subscribe(
         (event: MatSlideToggleChange) => this.resetDependants());
     } else if (this.matButtonToggle) {
       this.matButtonToggle.change.subscribe(
@@ -81,9 +81,10 @@ export class ResetOnChangeDirective implements OnInit {
         control.reset(control.initialValue);
       } else {
         // reset to the default value of the control, or null if no default value prefix provided
-        control.reset(
-          !!this.defaultValuePrefix ? this.defaultValueService.getValue(
-            this.defaultValuePrefix + '.' + this.findParentPath(control)) : null);
+        if (!this.defaultValuePrefix) {
+          return null;
+        }
+        control.reset(this.findDefaultValue(control));
       }
     } else if (control instanceof FormGroup || control instanceof FormArray) {
       // reset inner FormControls
@@ -94,20 +95,30 @@ export class ResetOnChangeDirective implements OnInit {
   }
 
   /**
-   * Find the parent path of the component in a FormGroup.
-   * This is required to reset to default values.
+   *
+   * Search a default value of the control recursively.
+   * If the control has for hierarchy root.subgroup.control
+   * then it first looks for defaultValuePrefix.control
+   * then defaultValuePrefix.subgroup.control
+   * then defaultValuePrefix.root.subgroup.control
    */
-  private findParentPath(control: AbstractControl, path?: string) {
-    if (control.parent) {
+  private findDefaultValue(control: AbstractControl, path?: string) {
+    const searchValue = this.defaultValueService.getValue(!!path ? this.defaultValuePrefix + '.' + path : this.defaultValuePrefix);
+
+    // searchValue is an object if we're not at the final control level
+    if (searchValue && typeof searchValue !== 'object') {
+      return searchValue;
+    } else if (!!control.parent) {
+      // find the name of the control into its parent control
       let controlName: string;
       Object.keys(control.parent.controls).forEach(key => {
         if (control.parent.controls[key] === control) {
           controlName = key;
         }
       });
-      return this.findParentPath(control.parent, path ? controlName + '.' + path : controlName);
+      return this.findDefaultValue(control.parent, !!path ? controlName + '.' + path : controlName);
     } else {
-      return path;
+      return null;
     }
   }
 

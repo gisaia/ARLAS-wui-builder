@@ -16,3 +16,15 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+@import "variables.scss";
+
+.module {
+   margin: 15px 0px;
+
+   ::ng-deep .mat-slide-toggle {
+      line-height: 30px;
+   }
+   .title {
+      @include group-title();
+   }
+}

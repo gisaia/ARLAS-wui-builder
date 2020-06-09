@@ -33,10 +33,11 @@ export class GlobalLookAndFeelComponent implements OnInit {
 
   constructor(
     private mainFormService: MainFormService
-  ) { }
+  ) {
+    this.globalFg = this.mainFormService.lookAndFeelConfig.getGlobalFg();
+  }
 
   public ngOnInit() {
-    this.globalFg = this.mainFormService.lookAndFeelConfig.getGlobalFg();
   }
 
 }

@@ -18,13 +18,11 @@ under the License.
 */
 import { NgModule } from '@angular/core';
 import { TimelineConfigRoutingModule } from './timeline-config-routing.module';
-import { TimelineConfigComponent } from './timeline-config.component';
 import { GlobalTimelineComponent } from './components/global-timeline/global-timeline.component';
 import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [
-    TimelineConfigComponent,
     GlobalTimelineComponent
   ],
   imports: [

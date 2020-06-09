@@ -16,3 +16,19 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { GlobalSideModulesComponent } from './components/global-side-modules/global-side-modules.component';
+
+
+const routes: Routes = [{
+  path: '', children: [
+    { path: '', redirectTo: 'global', pathMatch: 'full' },
+    { path: 'global', component: GlobalSideModulesComponent }
+  ]
+}];
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class SideModulesConfigRoutingModule { }

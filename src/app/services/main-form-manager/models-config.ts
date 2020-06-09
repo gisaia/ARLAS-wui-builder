@@ -34,7 +34,8 @@ export interface Config {
                 components: {
                     chipssearch: ChipSearchConfig;
                 }
-            }
+            },
+
         }
     };
 }
@@ -42,6 +43,12 @@ export interface Config {
 export interface ArlasConfig {
     web: WebConfig;
     server: ServerConfig;
+    tagger?: {
+        url: string;
+        collection: {
+            name: string;
+        }
+    };
 }
 
 export interface ChipSearchConfig {
@@ -54,7 +61,17 @@ export interface WebConfig {
     components: {
         timeline: AnalyticComponentConfig,
         detailedTimeline?: AnalyticComponentConfig,
-        mapgl: MapglComponentConfig
+        mapgl: MapglComponentConfig,
+        share?: {
+            geojson: {
+                max_for_feature: number;
+                max_for_topology: number;
+                sort_excluded_type: Array<string>;
+            }
+        },
+        download?: {
+            auth_type?: string;
+        }
     };
     analytics: Array<AnalyticConfig>;
     colorGenerator: { keysToColors: Array<Array<string>> };

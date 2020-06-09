@@ -16,3 +16,23 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+import { Injectable } from '@angular/core';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { SideModulesGlobalFormBuilderService } from '../side-modules-global-form-builder/side-modules-global-form-builder.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SideModulesInitService {
+
+  constructor(
+    private mainFormService: MainFormService,
+    private sideModulesGlobalFormBuilder: SideModulesGlobalFormBuilderService
+  ) {
+  }
+
+  public initModule() {
+    this.mainFormService.sideModulesConfig.initGlobalFg(
+      this.sideModulesGlobalFormBuilder.build());
+  }
+}

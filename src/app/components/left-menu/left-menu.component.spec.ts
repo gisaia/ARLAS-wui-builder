@@ -28,6 +28,9 @@ describe('LeftMenuComponent', () => {
           analyticsConfig: {
             control: new FormGroup({})
           },
+          sideModulesConfig: {
+            control: new FormGroup({})
+          },
           mainForm: new FormGroup({})
         }),
       mockProvider(MainFormManagerService),
@@ -41,11 +44,6 @@ describe('LeftMenuComponent', () => {
 
   it('should create', () => {
     expect(spectator.component).toBeTruthy();
-  });
-
-  it('should contain 1 image, 7 items', () => {
-    expect(spectator.queryAll('img')).toHaveLength(1);
-    expect(spectator.queryAll('mat-list-item')).toHaveLength(7);
   });
 
 });

@@ -162,6 +162,27 @@
             }
         }
     },
+    "sideModules": {
+        "global": {
+            "useShare": true,
+            "useDownload": true,
+            "useTagger": true,
+            "share": {
+                "maxForFeature": 1234,
+                "maxForTopology": 5678
+            },
+            "tagger": {
+                "serverUrl": "http://tagger.com",
+                "collection": "demo_ais-danmark"
+            },
+            "unmanagedFields": {
+                "sortExcludedTypes": [
+                    "TEXT",
+                     "GEO_POINT"
+                 ]
+            }
+        }
+    },
     "config": {
         "aggregationTermSize": 10,
         "palettes": [

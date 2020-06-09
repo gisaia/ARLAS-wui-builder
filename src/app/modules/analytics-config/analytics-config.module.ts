@@ -18,7 +18,6 @@ under the License.
 */
 import { NgModule } from '@angular/core';
 import { AnalyticsConfigRoutingModule } from './analytics-config-routing.module';
-import { AnalyticsConfigComponent } from './analytics-config.component';
 import { TabsComponent } from './components/tabs/tabs.component';
 import { SharedModule } from '@shared/shared.module';
 import { GroupsComponent } from './components/groups/groups.component';
@@ -37,7 +36,6 @@ import { ResultlistDataComponent } from './components/resultlist-data/resultlist
     ResultlistDataComponent
   ],
   declarations: [
-    AnalyticsConfigComponent,
     TabsComponent,
     GroupsComponent,
     EditGroupComponent,

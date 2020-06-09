@@ -16,18 +16,17 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { SideModulesConfigRoutingModule } from './side-modules-config-routing.module';
+import { GlobalSideModulesComponent } from './components/global-side-modules/global-side-modules.component';
+import { SharedModule } from '@shared/shared.module';
 
-@Component({
-  selector: 'app-analytics-config',
-  templateUrl: './analytics-config.component.html',
-  styleUrls: ['./analytics-config.component.scss']
+
+@NgModule({
+  declarations: [GlobalSideModulesComponent],
+  imports: [
+    SharedModule,
+    SideModulesConfigRoutingModule
+  ]
 })
-export class AnalyticsConfigComponent implements OnInit {
-
-  constructor() { }
-
-  public ngOnInit() {
-  }
-
-}
+export class SideModulesConfigModule { }

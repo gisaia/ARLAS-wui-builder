@@ -1,1 +1,5 @@
-<app-config-form-group [configFormGroup]="globalFg" defaultKey="timeline.global"></app-config-form-group>
+<app-config-form-control [control]="globalFg.customControls.useDetailedTimeline" defaultKey="timeline.global">
+</app-config-form-control>
+
+<app-config-form-group [configFormGroup]="globalFg.customGroups.tabsContainer"
+    defaultKey="timeline.global.tabsContainer"></app-config-form-group>

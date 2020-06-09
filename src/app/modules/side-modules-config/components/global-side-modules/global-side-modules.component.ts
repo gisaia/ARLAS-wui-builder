@@ -16,3 +16,26 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+import { Component, OnInit } from '@angular/core';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { SideModulesGlobalFormGroup } from '../../services/side-modules-global-form-builder/side-modules-global-form-builder.service';
+
+@Component({
+  selector: 'app-global-side-modules',
+  templateUrl: './global-side-modules.component.html',
+  styleUrls: ['./global-side-modules.component.scss']
+})
+export class GlobalSideModulesComponent implements OnInit {
+
+  public globalFg: SideModulesGlobalFormGroup;
+
+  constructor(
+    private mainFormService: MainFormService
+  ) {
+    this.globalFg = this.mainFormService.sideModulesConfig.getGlobalFg();
+  }
+
+  public ngOnInit() {
+  }
+
+}

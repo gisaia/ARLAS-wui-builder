@@ -26,3 +26,12 @@ $config-element-description-background: mat-color($mat-grey, 50);
 $config-element-description-border-color: transparentize(mat-color($mat-indigo, A700), 0.4);
 $config-element-description-text-color: transparentize(mat-color($mat-blue-grey, A700), 0.4);
 $error-color: mat-color($warn-palette);
+
+@mixin group-title() {
+   font-weight: 300;
+   font-size: 24px;
+   line-height: 32px;
+   margin: 40px 0 20px;
+   padding-bottom: 3px;
+   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}

@@ -45,7 +45,10 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
         useDetailedTimeline: new SlideToggleFormControl(
           '',
           'Use detailed timeline?',
-          ''
+          '',
+          {
+            resetDependantsOnChange: true
+          }
         ),
         // using container because form groups with tabs cannot be at same level as form control
         tabsContainer: new ConfigFormGroup({
@@ -67,7 +70,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
               {
                 dependsOn: () => [this.customControls.useDetailedTimeline],
                 onDependencyChange: (control) =>
-                  this.customControls.useDetailedTimeline.value ? control.enable() : control.disable()
+                  control.enableIf(this.customControls.useDetailedTimeline.value)
               }
             ).withTitle('Detailed timeline')
           }).withTabName('Data'),
@@ -94,7 +97,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
               {
                 dependsOn: () => [this.customControls.useDetailedTimeline],
                 onDependencyChange: (control) =>
-                  this.customControls.useDetailedTimeline.value ? control.enable() : control.disable()
+                  control.enableIf(this.customControls.useDetailedTimeline.value)
               }).withTitle('Detailed timeline'),
 
           }).withTabName('Render')
@@ -128,6 +131,16 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
         }
       }
     }
+  };
+
+  public customGroups = {
+    tabsContainer: this.get('tabsContainer') as ConfigFormGroup,
+    dataStep: this.get('tabsContainer.dataStep') as ConfigFormGroup,
+    dataStepTimeline: this.get('tabsContainer.dataStep.timeline') as ConfigFormGroup,
+    dataStepDetailedTimeline: this.get('tabsContainer.dataStep.detailedTimeline') as ConfigFormGroup,
+    renderStep: this.get('tabsContainer.renderStep') as ConfigFormGroup,
+    renderStepTimeline: this.get('tabsContainer.renderStep.timeline') as ConfigFormGroup,
+    renderStepDetailedTimeline: this.get('tabsContainer.renderStep.detailedTimeline') as ConfigFormGroup,
   };
 
   private static getCommonsControls() {

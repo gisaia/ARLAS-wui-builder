@@ -31,11 +31,12 @@
       "@shared-services/*": ["app/shared/services/*"],
       "@utils/*": ["app/utils/*"],
       "@shared/*": ["app/shared/*"],
-      "@look-and-feel-config/*": ["app/modules/look-and-feel-config/*"],
       "@map-config/*": ["app/modules/map-config/*"],
       "@search-config/*": ["app/modules/search-config/*"],
       "@timeline-config/*": ["app/modules/timeline-config/*"],
       "@analytics-config/*": ["app/modules/analytics-config/*"],
+      "@side-modules-config/*": ["app/modules/side-modules-config/*"],
+      "@look-and-feel-config/*": ["app/modules/look-and-feel-config/*"],
       "@assets/*": ["assets/*"],
       "@environments/*": ["environments/*"],
       "@app/*": ["app/*"]      

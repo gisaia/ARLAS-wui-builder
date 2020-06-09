@@ -16,7 +16,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Input, OnDestroy, ViewChild, ViewChildren, ViewEncapsulation, QueryList } from '@angular/core';
+import {
+  Component, OnInit, Input, OnDestroy, ViewChild, ViewChildren, ViewEncapsulation, QueryList, ChangeDetectorRef
+} from '@angular/core';
 import { ConfigFormGroup, ConfigFormControl, ConfigFormGroupArray } from '@shared-models/config-form';
 import { Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -24,6 +26,11 @@ import { MatStepper } from '@angular/material';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { AbstractControl } from '@angular/forms';
 
+/**
+ * TODO this class can probably be optimized.
+ * For example, when we process control.dependsOn() to subscribe to value changes,
+ * this may be grouped into a sigle listener if multiple controls depend on a same one.
+ */
 @Component({
   selector: 'app-config-form-group',
   templateUrl: './config-form-group.component.html',
@@ -46,58 +53,76 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
   public toUnsubscribe: Array<Subscription> = [];
 
   constructor(
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
   ) { }
 
   public ngOnInit() {
 
-    Object.values(this.configFormGroup.controls)
-      .filter(c => c instanceof ConfigFormGroup || c instanceof ConfigFormControl)
-      .forEach((c: ConfigFormGroup | ConfigFormControl) => {
-        this.watchDependenciesChange(c);
-        this.initDependantControls(c);
-
-        if (c instanceof ConfigFormControl) {
-          this.markChildControls(c);
-        }
-      });
+    this.listenToAllControlsOnDependencyChange();
+    this.initDependentControls();
+    this.markChildControls();
   }
 
   public ngOnDestroy(): void {
     this.toUnsubscribe.forEach(u => u.unsubscribe());
   }
 
+  private listenToAllControlsOnDependencyChange() {
+    [
+      this.configFormGroup,
+      ...Object.values(this.configFormGroup.controls),
+    ]
+      .filter(c => c instanceof ConfigFormGroup || c instanceof ConfigFormControl)
+      .forEach((c: ConfigFormGroup | ConfigFormControl) => {
+        this.listenToOnDependencysChange(c);
+      });
+  }
+
   /**
    * Watch all other controls that input control depends on to update itself
    */
-  private watchDependenciesChange(control: ConfigFormControl | ConfigFormGroup) {
+  private listenToOnDependencysChange(control: ConfigFormControl | ConfigFormGroup) {
     if (!!control.dependsOn) {
       control.dependsOn().forEach(dep => {
         this.toUnsubscribe.push(dep.valueChanges.subscribe(v => {
           control.onDependencyChange(control);
         }));
       });
-      // trigger on initial load
+      // trigger on initial load for each control to be on its expected state against other controls
       control.onDependencyChange(control);
     }
   }
 
   /**
-   * Set the list of other controls that depends on input control
+   * For the formgroup and all of its controls, register them to the dependencies.
+   * In the way, each control has a list of the fields that depend on it.
    */
-  private initDependantControls(control: ConfigFormControl | ConfigFormGroup) {
-    control.dependantControls = this.configFormGroup.controlsRecursively
-      .filter(
-        (filterControl: ConfigFormControl) => !!filterControl.dependsOn &&
-          filterControl.dependsOn().indexOf(control) >= 0);
+  private initDependentControls() {
+    [
+      this.configFormGroup,
+      ...Object.values(this.configFormGroup.controls).filter(c => c instanceof ConfigFormControl),
+    ]
+      .filter((c: ConfigFormControl | ConfigFormGroup) => !!c.dependsOn)
+      .forEach(
+        (c: ConfigFormControl | ConfigFormGroup) => {
+          c.dependsOn().forEach(d => {
+            d.dependantControls = d.dependantControls || [];
+            if (d.dependantControls.indexOf(c) < 0) {
+              d.dependantControls.push(c);
+            }
+          });
+        });
   }
 
   /**
    * Mark the controls that are child of another control
    */
-  private markChildControls(control: ConfigFormControl) {
-    control.childs().forEach((child: ConfigFormControl) =>
-      child.isChild = true);
+  private markChildControls() {
+    Object.values(this.configFormGroup.controls)
+      .filter(c => c instanceof ConfigFormControl)
+      .forEach((c: ConfigFormControl) =>
+        c.childs().forEach((child: ConfigFormControl) =>
+          child.isChild = true));
   }
 
   public isFormControl(control: AbstractControl): ConfigFormControl | null {
