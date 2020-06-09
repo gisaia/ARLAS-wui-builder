@@ -425,6 +425,19 @@ export class AnalyticsImportService {
         control: renderStep.multiselectable
       }
     ]);
+
+    // unmanaged fields
+    importElements([
+      {
+        value: component.input.customizedCssClass,
+        control: widgetData.customControls.unmanagedFields.renderStep.customizedCssClass
+      },
+      {
+        value: component.input.diameter,
+        control: widgetData.customControls.unmanagedFields.renderStep.diameter
+      }
+    ]);
+
     return widgetData;
   }
 
