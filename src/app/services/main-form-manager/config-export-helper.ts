@@ -666,7 +666,7 @@ export class ConfigExportHelper {
                 contributorId: this.toSnakeCase(widgetData.dataStep.name),
                 componentType: WIDGET_TYPE.metric,
                 input: {
-                    customizedCssClass: 'power',
+                    customizedCssClass: widgetData.unmanagedFields.renderStep.customizedCssClass,
                     shortValue: !!widgetData.renderStep.shortValue
                 }
             } as AnalyticComponentConfig;
