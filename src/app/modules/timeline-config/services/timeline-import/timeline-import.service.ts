@@ -18,7 +18,7 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { Config, AnalyticComponentConfig } from '@services/main-form-manager/models-config';
+import { Config, AnalyticComponentConfig, AnalyticComponentHistogramInputConfig } from '@services/main-form-manager/models-config';
 import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timeline-global-form-builder.service';
 import { importElements } from '@services/main-form-manager/tools';
 import { BY_BUCKET_OR_INTERVAL } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
@@ -77,6 +77,7 @@ export class TimelineImportService {
       }
     ]);
     this.importCommonElements(timelineComponent, timelineFg, false);
+    this.importUnmanagedFields(timelineComponent, timelineFg, false);
 
     if (hasDetailedTimeline) {
 
@@ -91,6 +92,8 @@ export class TimelineImportService {
           control: detailedTimelineDataStep.bucketsNumber
         }
       ]);
+
+      this.importUnmanagedFields(detailedTimelineComponent, timelineFg, true);
     }
   }
 
@@ -117,6 +120,113 @@ export class TimelineImportService {
         control: timelineFg.customControls.tabsContainer.renderStep.timeline.dateFormat
       }
     ]);
+
+  }
+
+  private importUnmanagedFields(
+    timelineComponent: AnalyticComponentConfig,
+    timelineFg: TimelineGlobalFormGroup,
+    isDetailed: boolean
+  ) {
+    const componentInput = (timelineComponent.input as AnalyticComponentHistogramInputConfig);
+    const unmanagedTimelineFields = timelineFg.customControls.unmanagedFields.renderStep.timeline;
+    const unmanagedDetailedTimelineFields = timelineFg.customControls.unmanagedFields.renderStep.detailedTimeline;
+    const unmanagedFields = isDetailed ? unmanagedDetailedTimelineFields : unmanagedTimelineFields;
+
+    importElements([
+      {
+        value: componentInput.xTicks,
+        control: unmanagedFields.xTicks
+      },
+      {
+        value: componentInput.yTicks,
+        control: unmanagedFields.yTicks
+      },
+      {
+        value: componentInput.xLabels,
+        control: unmanagedFields.xLabels
+      },
+      {
+        value: componentInput.yLabels,
+        control: unmanagedFields.yLabels
+      },
+      {
+        value: componentInput.customizedCssClass,
+        control: unmanagedFields.customizedCssClass
+      },
+      {
+        value: componentInput.chartHeight,
+        control: unmanagedFields.chartHeight
+      },
+      {
+        value: componentInput.brushHandlesHeightWeight,
+        control: unmanagedFields.brushHandlesHeightWeight
+      },
+      {
+        value: componentInput.isHistogramSelectable,
+        control: unmanagedFields.isHistogramSelectable
+      },
+      {
+        value: componentInput.chartWidth,
+        control: unmanagedFields.chartWidth
+      },
+      {
+        value: componentInput.xAxisPosition,
+        control: unmanagedFields.xAxisPosition
+      },
+      {
+        value: componentInput.yAxisStartsFromZero,
+        control: unmanagedFields.yAxisStartsFromZero
+      },
+      {
+        value: componentInput.descriptionPosition,
+        control: unmanagedFields.descriptionPosition
+      },
+      {
+        value: componentInput.showXTicks,
+        control: unmanagedFields.showXTicks
+      },
+      {
+        value: componentInput.showYTicks,
+        control: unmanagedFields.showYTicks
+      },
+      {
+        value: componentInput.showXLabels,
+        control: unmanagedFields.showXLabels
+      },
+      {
+        value: componentInput.showYLabels,
+        control: unmanagedFields.showYLabels
+      },
+      {
+        value: componentInput.showHorizontalLines,
+        control: unmanagedFields.showHorizontalLines
+      },
+      {
+        value: componentInput.isSmoothedCurve,
+        control: unmanagedFields.isSmoothedCurve
+      },
+      {
+        value: componentInput.barWeight,
+        control: unmanagedFields.barWeight
+      },
+    ]);
+
+    if (isDetailed) {
+      importElements([
+        {
+          value: componentInput.multiselectable,
+          control: unmanagedDetailedTimelineFields.multiselectable
+        }
+      ]);
+    } else {
+      importElements([
+        {
+          value: componentInput.topOffsetRemoveInterval,
+          control: unmanagedTimelineFields.topOffsetRemoveInterval
+        }
+      ]);
+    }
   }
 
 }

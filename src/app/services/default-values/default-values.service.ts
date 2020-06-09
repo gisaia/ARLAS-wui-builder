@@ -94,8 +94,12 @@ export class DefaultValuesService {
     this.config = config;
   }
 
-  public getValue(keyPath: string) {
+  public getOptionalValue(keyPath: string) {
     return getObject(this.config, 'root.' + keyPath);
+  }
+
+  public getValue(keyPath: string) {
+    return this.getOptionalValue(keyPath).value;
   }
 
   public getDefaultConfig(): DefaultConfig {

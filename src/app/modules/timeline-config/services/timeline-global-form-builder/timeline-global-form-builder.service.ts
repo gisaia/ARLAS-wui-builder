@@ -29,6 +29,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { ChartType } from 'arlas-web-components';
 import { map } from 'rxjs/operators';
 import { toDateFieldsObs } from '@services/collection-service/tools';
+import { FormGroup, FormControl } from '@angular/forms';
 
 enum DateFormats {
   English = '%b %d %Y  %H:%M',
@@ -101,6 +102,65 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
               }).withTitle('Detailed timeline'),
 
           }).withTabName('Render')
+        }),
+        unmanagedFields: new FormGroup({
+          dataStep: new FormGroup({
+            timeline: new FormGroup({
+              icon: new FormControl(),
+              isOneDimension: new FormControl(),
+            }),
+            detailedTimeline: new FormGroup({
+              icon: new FormControl(),
+              isOneDimension: new FormControl(),
+            })
+          }),
+          renderStep: new FormGroup({
+            timeline: new FormGroup({
+              xTicks: new FormControl(),
+              yTicks: new FormControl(''),
+              xLabels: new FormControl(),
+              yLabels: new FormControl(''),
+              customizedCssClass: new FormControl(),
+              chartHeight: new FormControl(),
+              brushHandlesHeightWeight: new FormControl(''),
+              isHistogramSelectable: new FormControl(''),
+              chartWidth: new FormControl(''),
+              xAxisPosition: new FormControl(),
+              yAxisStartsFromZero: new FormControl(''),
+              descriptionPosition: new FormControl(),
+              showXTicks: new FormControl(''),
+              showYTicks: new FormControl(''),
+              showXLabels: new FormControl(''),
+              showYLabels: new FormControl(''),
+              showHorizontalLines: new FormControl(''),
+              isSmoothedCurve: new FormControl(''),
+              barWeight: new FormControl(''),
+              topOffsetRemoveInterval: new FormControl(),
+            }),
+            detailedTimeline: new FormGroup({
+              xTicks: new FormControl(),
+              yTicks: new FormControl(''),
+              xLabels: new FormControl(),
+              yLabels: new FormControl(''),
+              customizedCssClass: new FormControl(),
+              chartHeight: new FormControl(),
+              multiselectable: new FormControl(),
+              brushHandlesHeightWeight: new FormControl(''),
+              isHistogramSelectable: new FormControl(''),
+              chartWidth: new FormControl(''),
+              xAxisPosition: new FormControl(),
+              yAxisStartsFromZero: new FormControl(''),
+              descriptionPosition: new FormControl(),
+              showXTicks: new FormControl(''),
+              showYTicks: new FormControl(''),
+              showXLabels: new FormControl(''),
+              showYLabels: new FormControl(''),
+              showHorizontalLines: new FormControl(''),
+              isSmoothedCurve: new FormControl(''),
+              barWeight: new FormControl(''),
+            })
+          }),
+
         })
       });
   }
@@ -128,6 +188,64 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
           chartType: this.get('tabsContainer.renderStep.detailedTimeline.chartType') as SelectFormControl,
           dateFormat: this.get('tabsContainer.renderStep.detailedTimeline.dateFormat') as SelectFormControl,
           selectionExtentPercent: this.get('tabsContainer.renderStep.detailedTimeline.selectionExtentPercent') as SliderFormControl
+        }
+      }
+    },
+    unmanagedFields: {
+      dataStep: {
+        timeline: {
+          icon: this.get('unmanagedFields.dataStep.timeline.icon'),
+          isOneDimension: this.get('unmanagedFields.dataStep.timeline.icon'),
+        },
+        detailedTimeline: {
+          icon: this.get('unmanagedFields.dataStep.detailedTimeline.icon'),
+          isOneDimension: this.get('unmanagedFields.dataStep.detailedTimeline.icon'),
+        }
+      },
+      renderStep: {
+        timeline: {
+          xTicks: this.get('unmanagedFields.renderStep.timeline.xTicks'),
+          yTicks: this.get('unmanagedFields.renderStep.timeline.yTicks'),
+          xLabels: this.get('unmanagedFields.renderStep.timeline.xLabels'),
+          yLabels: this.get('unmanagedFields.renderStep.timeline.yLabels'),
+          customizedCssClass: this.get('unmanagedFields.renderStep.timeline.customizedCssClass'),
+          chartHeight: this.get('unmanagedFields.renderStep.timeline.chartHeight'),
+          brushHandlesHeightWeight: this.get('unmanagedFields.renderStep.timeline.brushHandlesHeightWeight'),
+          isHistogramSelectable: this.get('unmanagedFields.renderStep.timeline.isHistogramSelectable'),
+          chartWidth: this.get('unmanagedFields.renderStep.timeline.chartWidth'),
+          xAxisPosition: this.get('unmanagedFields.renderStep.timeline.xAxisPosition'),
+          yAxisStartsFromZero: this.get('unmanagedFields.renderStep.timeline.yAxisStartsFromZero'),
+          descriptionPosition: this.get('unmanagedFields.renderStep.timeline.descriptionPosition'),
+          showXTicks: this.get('unmanagedFields.renderStep.timeline.showXTicks'),
+          showYTicks: this.get('unmanagedFields.renderStep.timeline.showYTicks'),
+          showXLabels: this.get('unmanagedFields.renderStep.timeline.showXLabels'),
+          showYLabels: this.get('unmanagedFields.renderStep.timeline.showYLabels'),
+          showHorizontalLines: this.get('unmanagedFields.renderStep.timeline.showHorizontalLines'),
+          isSmoothedCurve: this.get('unmanagedFields.renderStep.timeline.isSmoothedCurve'),
+          barWeight: this.get('unmanagedFields.renderStep.timeline.barWeight'),
+          topOffsetRemoveInterval: this.get('unmanagedFields.renderStep.timeline.topOffsetRemoveInterval'),
+        },
+        detailedTimeline: {
+          xTicks: this.get('unmanagedFields.renderStep.detailedTimeline.xTicks'),
+          yTicks: this.get('unmanagedFields.renderStep.detailedTimeline.yTicks'),
+          xLabels: this.get('unmanagedFields.renderStep.detailedTimeline.xLabels'),
+          yLabels: this.get('unmanagedFields.renderStep.detailedTimeline.yLabels'),
+          customizedCssClass: this.get('unmanagedFields.renderStep.detailedTimeline.customizedCssClass'),
+          chartHeight: this.get('unmanagedFields.renderStep.detailedTimeline.chartHeight'),
+          multiselectable: this.get('unmanagedFields.renderStep.detailedTimeline.multiselectable'),
+          brushHandlesHeightWeight: this.get('unmanagedFields.renderStep.detailedTimeline.brushHandlesHeightWeight'),
+          isHistogramSelectable: this.get('unmanagedFields.renderStep.detailedTimeline.isHistogramSelectable'),
+          chartWidth: this.get('unmanagedFields.renderStep.detailedTimeline.chartWidth'),
+          xAxisPosition: this.get('unmanagedFields.renderStep.detailedTimeline.xAxisPosition'),
+          yAxisStartsFromZero: this.get('unmanagedFields.renderStep.detailedTimeline.yAxisStartsFromZero'),
+          descriptionPosition: this.get('unmanagedFields.renderStep.detailedTimeline.descriptionPosition'),
+          showXTicks: this.get('unmanagedFields.renderStep.detailedTimeline.showXTicks'),
+          showYTicks: this.get('unmanagedFields.renderStep.detailedTimeline.showYTicks'),
+          showXLabels: this.get('unmanagedFields.renderStep.detailedTimeline.showXLabels'),
+          showYLabels: this.get('unmanagedFields.renderStep.detailedTimeline.showYLabels'),
+          showHorizontalLines: this.get('unmanagedFields.renderStep.detailedTimeline.showHorizontalLines'),
+          isSmoothedCurve: this.get('unmanagedFields.renderStep.detailedTimeline.isSmoothedCurve'),
+          barWeight: this.get('unmanagedFields.renderStep.detailedTimeline.barWeight'),
         }
       }
     }
