@@ -462,7 +462,7 @@ export class ConfigExportHelper {
                 const swimlane = {
                     id: 1,
                     name: widgetData.dataStep.name,
-                    xAxisField: widgetData.dataStep.dateAggregation.aggregationField,
+                    xAxisField: widgetData.dataStep.aggregation.aggregationField,
                     termField: widgetData.dataStep.termAggregation.termAggregationField
                 } as SwimlaneConfig;
 
@@ -476,9 +476,9 @@ export class ConfigExportHelper {
 
                 const dateAggregationModel = {
                     type: 'datehistogram',
-                    field: widgetData.dataStep.dateAggregation.aggregationField
+                    field: widgetData.dataStep.aggregation.aggregationField
                 } as AggregationModelConfig;
-                this.addNumberOfBucketsOrInterval(contrib, dateAggregationModel, widgetData.dataStep.dateAggregation);
+                this.addNumberOfBucketsOrInterval(contrib, dateAggregationModel, widgetData.dataStep.aggregation);
 
                 this.addMetricToAggregationModel(dateAggregationModel, widgetData.dataStep.metric);
 
@@ -639,10 +639,10 @@ export class ConfigExportHelper {
                 case WIDGET_TYPE.swimlane: {
                     component.componentType = WIDGET_TYPE.swimlane;
                     const swimlaneInput = (component.input as AnalyticComponentSwimlaneInputConfig);
-                    swimlaneInput.swimLaneLabelsWidth = 100;
-                    swimlaneInput.swimlaneHeight = 20;
+                    swimlaneInput.swimLaneLabelsWidth = unmanagedRenderFields.swimLaneLabelsWidth;
+                    swimlaneInput.swimlaneHeight = unmanagedRenderFields.swimlaneHeight;
                     swimlaneInput.swimlaneMode = widgetData.renderStep.swimlaneMode;
-                    swimlaneInput.swimlaneBorderRadius = 3;
+                    swimlaneInput.swimlaneBorderRadius = unmanagedRenderFields.swimlaneBorderRadius;
                     swimlaneInput.paletteColors = widgetData.renderStep.paletteColors;
                     swimlaneInput.swimlaneRepresentation = widgetData.renderStep.swimlaneRepresentation;
 

@@ -18,7 +18,7 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { WidgetFormBuilder } from '../widget-form-builder';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import {
   ConfigFormGroup, InputFormControl, SelectFormControl, SliderFormControl,
   SlideToggleFormControl, HuePaletteFormControl, HiddenFormControl, SelectOption, ButtonToggleFormControl
@@ -56,7 +56,7 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
             '',
             'Name',
             'description'),
-          dateAggregation: dateAggregationFg,
+          aggregation: dateAggregationFg,
           termAggregation: new ConfigFormGroup({
             termAggregationField: new SelectFormControl(
               '',
@@ -122,6 +122,33 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
             defaultConfig.swimlaneNanColor
           )
         }).withTabName('Render'),
+        unmanagedFields: new FormGroup({
+          dataStep: new FormGroup({
+            isOneDimension: new FormControl(),
+          }),
+          renderStep: new FormGroup({
+            showExportCsv: new FormControl(),
+            isHistogramSelectable: new FormControl(),
+            topOffsetRemoveInterval: new FormControl(),
+            leftOffsetRemoveInterval: new FormControl(),
+            brushHandlesHeightWeight: new FormControl(),
+            yAxisStartsFromZero: new FormControl(),
+            xAxisPosition: new FormControl(),
+            descriptionPosition: new FormControl(),
+            xTicks: new FormControl(),
+            yTicks: new FormControl(),
+            xLabels: new FormControl(),
+            yLabels: new FormControl(),
+            showXTicks: new FormControl(),
+            showYTicks: new FormControl(),
+            showXLabels: new FormControl(),
+            showYLabels: new FormControl(),
+            barWeight: new FormControl(),
+            swimLaneLabelsWidth: new FormControl(),
+            swimlaneHeight: new FormControl(),
+            swimlaneBorderRadius: new FormControl(),
+          })
+        })
       }
     );
   }
@@ -129,7 +156,7 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
   public customControls = {
     dataStep: {
       name: this.get('dataStep').get('name') as InputFormControl,
-      dateAggregation: this.get('dataStep').get('dateAggregation') as BucketsIntervalFormGroup,
+      aggregation: this.get('dataStep').get('aggregation') as BucketsIntervalFormGroup,
       termAggregation: {
         termAggregationField: this.get('dataStep').get('termAggregation').get('termAggregationField') as SelectFormControl,
         termAggregationSize: this.get('dataStep').get('termAggregation').get('termAggregationSize') as SliderFormControl
@@ -143,6 +170,30 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
       isZeroRepresentative: this.get('renderStep').get('isZeroRepresentative') as SlideToggleFormControl,
       zerosColors: this.get('renderStep').get('zerosColors') as HiddenFormControl,
       NaNColor: this.get('renderStep').get('NaNColor') as HiddenFormControl
+    },
+    unmanagedFields: {
+      renderStep: {
+        showExportCsv: this.get('unmanagedFields.renderStep.showExportCsv'),
+        isHistogramSelectable: this.get('unmanagedFields.renderStep.isHistogramSelectable'),
+        topOffsetRemoveInterval: this.get('unmanagedFields.renderStep.topOffsetRemoveInterval'),
+        leftOffsetRemoveInterval: this.get('unmanagedFields.renderStep.leftOffsetRemoveInterval'),
+        brushHandlesHeightWeight: this.get('unmanagedFields.renderStep.brushHandlesHeightWeight'),
+        yAxisStartsFromZero: this.get('unmanagedFields.renderStep.yAxisStartsFromZero'),
+        xAxisPosition: this.get('unmanagedFields.renderStep.xAxisPosition'),
+        descriptionPosition: this.get('unmanagedFields.renderStep.descriptionPosition'),
+        xTicks: this.get('unmanagedFields.renderStep.xTicks'),
+        yTicks: this.get('unmanagedFields.renderStep.yTicks'),
+        xLabels: this.get('unmanagedFields.renderStep.xLabels'),
+        yLabels: this.get('unmanagedFields.renderStep.yLabels'),
+        showXTicks: this.get('unmanagedFields.renderStep.showXTicks'),
+        showYTicks: this.get('unmanagedFields.renderStep.showYTicks'),
+        showXLabels: this.get('unmanagedFields.renderStep.showXLabels'),
+        showYLabels: this.get('unmanagedFields.renderStep.showYLabels'),
+        barWeight: this.get('unmanagedFields.renderStep.barWeight'),
+        swimLaneLabelsWidth: this.get('unmanagedFields.renderStep.swimLaneLabelsWidth'),
+        swimlaneHeight: this.get('unmanagedFields.renderStep.swimlaneHeight'),
+        swimlaneBorderRadius: this.get('unmanagedFields.renderStep.swimlaneBorderRadius'),
+      }
     }
   };
 
