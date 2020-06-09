@@ -381,41 +381,46 @@ export class ConfigExportHelper {
         const renderStep = isDetailed ? timelineConfigGlobal.customControls.tabsContainer.renderStep.detailedTimeline :
             timelineConfigGlobal.customControls.tabsContainer.renderStep.timeline;
 
+        const unmanagedTimelineFields = timelineConfigGlobal.customControls.unmanagedFields.renderStep.timeline;
+        const unmanagedDetailedTimelineFields = timelineConfigGlobal.customControls.unmanagedFields.renderStep.detailedTimeline;
+        const unmanagedFields = isDetailed ? unmanagedDetailedTimelineFields : unmanagedTimelineFields;
+
         const timelineComponent: AnalyticComponentConfig = {
             contributorId: isDetailed ? 'detailedTimeline' : 'timeline',
             componentType: 'histogram',
             input: {
                 id: isDetailed ? 'histogram-detailed-timeline' : 'histogram-timeline',
-                xTicks: isDetailed ? 5 : 9,
-                yTicks: 2,
-                xLabels: isDetailed ? 5 : 9,
-                yLabels: 2,
+                xTicks: unmanagedFields.xTicks.value,
+                yTicks: unmanagedFields.yTicks.value,
+                xLabels: unmanagedFields.xLabels.value,
+                yLabels: unmanagedFields.yLabels.value,
                 chartTitle: renderStep.chartTitle.value,
-                customizedCssClass: isDetailed ? 'arlas-detailed-timeline' : 'arlas-timeline',
-                chartHeight: isDetailed ? 60 : 128,
-                multiselectable:
-                    isDetailed ? false : timelineConfigGlobal.customControls.tabsContainer.renderStep.timeline.isMultiselectable.value,
-                brushHandlesHeightWeight: 0.8,
+                customizedCssClass: unmanagedFields.customizedCssClass.value,
+                chartHeight: unmanagedFields.chartHeight.value,
+                multiselectable: isDetailed ?
+                    unmanagedDetailedTimelineFields.multiselectable.value :
+                    timelineConfigGlobal.customControls.tabsContainer.renderStep.timeline.isMultiselectable.value,
+                brushHandlesHeightWeight: unmanagedFields.brushHandlesHeightWeight.value,
                 dataType: 'time',
-                isHistogramSelectable: true,
+                isHistogramSelectable: unmanagedFields.isHistogramSelectable.value,
                 ticksDateFormat: renderStep.dateFormat.value,
                 chartType: renderStep.chartType.value,
-                chartWidth: null,
-                xAxisPosition: isDetailed ? 'top' : 'bottom',
-                yAxisStartsFromZero: true,
-                descriptionPosition: isDetailed ? 'bottom' : 'top',
-                showXTicks: true,
-                showYTicks: true,
-                showXLabels: true,
-                showYLabels: true,
-                showHorizontalLines: false,
-                isSmoothedCurve: true,
-                barWeight: 0.8
+                chartWidth: unmanagedFields.chartWidth.value,
+                xAxisPosition: unmanagedFields.xAxisPosition.value,
+                yAxisStartsFromZero: unmanagedFields.yAxisStartsFromZero.value,
+                descriptionPosition: unmanagedFields.descriptionPosition.value,
+                showXTicks: unmanagedFields.showXTicks.value,
+                showYTicks: unmanagedFields.showYTicks.value,
+                showXLabels: unmanagedFields.showXLabels.value,
+                showYLabels: unmanagedFields.showYLabels.value,
+                showHorizontalLines: unmanagedFields.showHorizontalLines.value,
+                isSmoothedCurve: unmanagedFields.isSmoothedCurve.value,
+                barWeight: unmanagedFields.barWeight.value
             } as AnalyticComponentHistogramInputConfig
         };
 
         if (!isDetailed) {
-            timelineComponent.input.topOffsetRemoveInterval = 10;
+            timelineComponent.input.topOffsetRemoveInterval = unmanagedTimelineFields.topOffsetRemoveInterval.value;
         }
 
         return timelineComponent;

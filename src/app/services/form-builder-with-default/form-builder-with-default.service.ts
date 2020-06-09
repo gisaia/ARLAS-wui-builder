@@ -55,9 +55,9 @@ export class FormBuilderWithDefaultService {
         this.setDefaultValueRecursively(path + '.' + c, control.controls[c]);
       });
     } else {
-      const defaultValue = this.defaultValuesService.getValue(path);
-      if (!!defaultValue) {
-        control.setValue(defaultValue);
+      const defaultValue = this.defaultValuesService.getOptionalValue(path);
+      if (defaultValue.isPresent) {
+        control.setValue(defaultValue.value);
       }
     }
   }

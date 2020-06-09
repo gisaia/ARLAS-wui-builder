@@ -130,7 +130,65 @@
                         "selectionExtentPercent": 2
                     }
                 }
-            }            
+            },
+            "unmanagedFields": {
+                "dataStep": {
+                    "timeline": {
+                      "icon": "watch_later",
+                      "isOneDimension": false
+                    },
+                    "detailedTimeline": {
+                      "icon": "watch_later",
+                      "isOneDimension": false
+                    }
+                  },
+                  "renderStep": {
+                    "timeline": {
+                      "xTicks": 9,
+                      "yTicks": 2,
+                      "xLabels": 9,
+                      "yLabels": 2,
+                      "customizedCssClass": "arlas-timeline",
+                      "chartHeight": 128,
+                      "brushHandlesHeightWeight": 0.8,
+                      "isHistogramSelectable": true,
+                      "chartWidth": null,
+                      "xAxisPosition": "bottom",
+                      "yAxisStartsFromZero": true,
+                      "descriptionPosition": "top",
+                      "showXTicks": true,
+                      "showYTicks": true,
+                      "showXLabels": true,
+                      "showYLabels": true,
+                      "showHorizontalLines": false,
+                      "isSmoothedCurve": true,
+                      "barWeight": 0.8,
+                      "topOffsetRemoveInterval": 10
+                    },
+                    "detailedTimeline": {
+                      "xTicks": 5,
+                      "yTicks": 2,
+                      "xLabels": 5,
+                      "yLabels": 2,
+                      "customizedCssClass": "arlas-detailed-timeline",
+                      "chartHeight": 60,
+                      "multiselectable": false,
+                      "brushHandlesHeightWeight": 0.8,
+                      "isHistogramSelectable": true,
+                      "chartWidth": null,
+                      "xAxisPosition": "top",
+                      "yAxisStartsFromZero": true,
+                      "descriptionPosition": "bottom",
+                      "showXTicks": true,
+                      "showYTicks": true,
+                      "showXLabels": true,
+                      "showYLabels": true,
+                      "showHorizontalLines": false,
+                      "isSmoothedCurve": true,
+                      "barWeight": 0.8
+                    }
+                  }
+            }
         }
     },
     "analytics": {

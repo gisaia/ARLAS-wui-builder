@@ -21,13 +21,17 @@ import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/for
 
 export const LOCALSTORAGE_CONFIG_ID_KEY = 'current_config_id';
 
+interface OPTIONAL {
+    isPresent: boolean;
+    value?: any;
+}
 /**
  * Get object or String value of an object from key
  */
-export function getObject(datalayer: any, objectKey: string) {
+export function getObject(datalayer: any, objectKey: string): OPTIONAL {
     // if datalayer doesn't exists, just return
     if (!datalayer) {
-        return null;
+        return { isPresent: false };
     }
     // default return datalayer
     let current = datalayer;
@@ -37,12 +41,12 @@ export function getObject(datalayer: any, objectKey: string) {
         for (let i = 1; i <= numberOfObjectHierarchy; i++) {
             const currentKey = objectKey.split(/\./)[i];
             if (typeof current[currentKey] === 'undefined') {
-                return null;
+                return { isPresent: false };
             }
             current = current[currentKey];
         }
     }
-    return current;
+    return { isPresent: true, value: current };
 }
 
 // recursively update the value and validity of itself and sub-controls (but not ancestors)
