@@ -72,7 +72,7 @@ export class ConfigExportHelper {
 
         const chipssearch: ChipSearchConfig = {
             name: searchConfigGlobal.customControls.name.value,
-            icon: 'search'
+            icon: searchConfigGlobal.customControls.unmanagedFields.icon.value
         };
 
         const config: Config = {
