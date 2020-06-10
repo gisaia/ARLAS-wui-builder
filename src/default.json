@@ -1,6 +1,9 @@
 {
     "global": {
-        "serverUrl": "http://demo.arlas.io/arlas"
+        "serverUrl": "http://demo.arlas.io/arlas",
+        "unmanagedFields": {
+            "maxAgeCache": 120
+        }        
     },
     "map": {
         "global": {

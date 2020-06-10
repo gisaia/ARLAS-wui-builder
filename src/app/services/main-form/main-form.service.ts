@@ -27,6 +27,7 @@ import {
 import {
   SideModulesGlobalFormGroup
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
+import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 
 
 enum MAIN_FORM_KEYS {
@@ -71,10 +72,10 @@ export class MainFormService {
   public startingConfig = new class {
     constructor(public mainForm: FormGroup) { }
 
-    public init(control: FormGroup) {
+    public init(control: StartingConfigFormGroup) {
       this.mainForm.setControl(MAIN_FORM_KEYS.STARTING_CONFIG, control);
     }
-    public getFg = () => this.mainForm.get(MAIN_FORM_KEYS.STARTING_CONFIG) as FormGroup;
+    public getFg = () => this.mainForm.get(MAIN_FORM_KEYS.STARTING_CONFIG) as StartingConfigFormGroup;
 
   }(this.mainForm);
 

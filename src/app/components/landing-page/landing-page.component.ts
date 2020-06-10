@@ -38,6 +38,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { LOCALSTORAGE_CONFIG_ID_KEY } from '@utils/tools';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
+import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
+import { importElements } from '@services/main-form-manager/tools';
 
 enum InitialChoice {
   none = 0,
@@ -73,7 +75,7 @@ export class LandingPageDialogComponent implements OnInit {
     private configService: ArlasConfigService,
     private startupService: StartupService,
     private configDescritor: ArlasConfigurationDescriptor,
-    private formBuilderWithDefault: FormBuilderWithDefaultService,
+    private startingConfigFormBuilder: StartingConfigFormBuilderService,
     private translate: TranslateService,
     private mainFormManager: MainFormManagerService,
     public persistenceService: PersistenceService,
@@ -87,17 +89,8 @@ export class LandingPageDialogComponent implements OnInit {
     localStorage.removeItem(LOCALSTORAGE_CONFIG_ID_KEY);
 
     this.mainFormService.startingConfig.init(
-      this.formBuilderWithDefault.group('global', {
-        serverUrl: new FormControl(null,
-          [
-            Validators.required,
-            Validators.pattern(
-              '(https?://)?(([0-9.]{1,4}){4}(:[0-9]{2,5})|([a-z0-9-.]+)(\\.[a-z-.]+)(:[0-9]{2,5})?|localhost(:[0-9]{2,5}))+([/?].*)?'
-            )
-          ]),
-
-        collections: new FormControl(null, [Validators.required, Validators.maxLength(1)])
-      }));
+      this.startingConfigFormBuilder.build()
+    );
 
     if (this.persistenceService.isAvailable) {
       // Load all config available in persistence
@@ -153,14 +146,6 @@ export class LandingPageDialogComponent implements OnInit {
             + collections.join(', '));
 
         } else {
-          this.mainFormService.startingConfig.getFg().setValue({
-            collections: [configJson.arlas.server.collection.name],
-            serverUrl: configJson.arlas.server.url
-          });
-
-          this.mainFormManager.initMainModulesForms(false);
-
-          this.startupService.setCollection(collection);
           this.mainFormManager.doImport(configJson, configMapJson);
           this.startEvent.next();
         }

@@ -29,25 +29,6 @@ export class FormBuilderWithDefaultService {
     private defaultValuesService: DefaultValuesService,
     private formBuilder: FormBuilder) { }
 
-  public group(
-    defaultValueKey: string,
-    controlsConfig: { [key: string]: any; },
-    options?: AbstractControlOptions | { [key: string]: any; } | null): FormGroup {
-
-    const builtGroup = this.formBuilder.group(controlsConfig, options);
-    this.setDefaultValueRecursively(defaultValueKey, builtGroup);
-    return builtGroup;
-  }
-
-  public control(
-    defaultValueKey: string,
-    validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null
-  ) {
-    const buildControl = this.formBuilder.control('', validatorOrOpts);
-    buildControl.setValue(this.defaultValuesService.getValue(defaultValueKey));
-    return buildControl;
-  }
-
   public setDefaultValueRecursively(path: string, control: AbstractControl) {
 
     if (control instanceof FormGroup || control instanceof FormArray) {

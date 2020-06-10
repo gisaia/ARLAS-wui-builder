@@ -47,6 +47,7 @@ import {
     SideModulesGlobalFormGroup
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
+import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 
 
 
@@ -59,7 +60,7 @@ export enum EXPORT_TYPE {
 export class ConfigExportHelper {
 
     public static process(
-        startingConfig: FormGroup,
+        startingConfig: StartingConfigFormGroup,
         mapConfigGlobal: MapGlobalFormGroup,
         mapConfigLayers: FormArray,
         searchConfigGlobal: SearchGlobalFormGroup,
@@ -90,11 +91,10 @@ export class ConfigExportHelper {
                     options: this.getOptions(lookAndFeelConfigGlobal)
                 },
                 server: {
-                    url: startingConfig.value.serverUrl,
-                    maxAgeCache: 120,
+                    url: startingConfig.customControls.serverUrl.value,
+                    maxAgeCache: startingConfig.customControls.unmanagedFields.maxAgeCache.value,
                     collection: {
-                        name: startingConfig.value.collections[0],
-                        id: 'id'
+                        name: startingConfig.customControls.collections.value[0],
                     }
                 }
             },
