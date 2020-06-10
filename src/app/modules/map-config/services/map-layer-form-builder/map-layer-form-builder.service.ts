@@ -18,7 +18,6 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import {
   GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GRANULARITY, AGGREGATE_GEOMETRY_TYPE
 } from './models';
@@ -41,6 +40,7 @@ import {
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { Observable } from 'rxjs';
 import { valuesToOptions } from '@utils/tools';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 export class MapLayerFormGroup extends ConfigFormGroup {
 
@@ -468,7 +468,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
 export class MapLayerFormBuilderService {
 
   constructor(
-    private formBuilderDefault: FormBuilderWithDefaultService,
+    private defaultValuesService: DefaultValuesService,
     private propertySelectorFormBuilder: PropertySelectorFormBuilderService,
     private mainFormService: MainFormService,
     private collectionService: CollectionService
@@ -484,7 +484,7 @@ export class MapLayerFormBuilderService {
       this.buildFeatureMetric(collectionFields),
       this.buildCluster(collectionFields)
     );
-    this.formBuilderDefault.setDefaultValueRecursively('map.layer', mapLayerFormGroup);
+    this.defaultValuesService.setDefaultValueRecursively('map.layer', mapLayerFormGroup);
     return mapLayerFormGroup;
   }
 
@@ -494,7 +494,7 @@ export class MapLayerFormBuilderService {
       collectionFields,
       this.propertySelectorFormBuilder);
 
-    this.formBuilderDefault.setDefaultValueRecursively('map.layer', featureFormGroup);
+    this.defaultValuesService.setDefaultValueRecursively('map.layer', featureFormGroup);
     return featureFormGroup;
   }
 
@@ -504,7 +504,7 @@ export class MapLayerFormBuilderService {
       collectionFields,
       this.propertySelectorFormBuilder);
 
-    this.formBuilderDefault.setDefaultValueRecursively('map.layer', featureMetricFormGroup);
+    this.defaultValuesService.setDefaultValueRecursively('map.layer', featureMetricFormGroup);
     return featureMetricFormGroup;
   }
 
@@ -514,7 +514,7 @@ export class MapLayerFormBuilderService {
       collectionFields,
       this.propertySelectorFormBuilder);
 
-    this.formBuilderDefault.setDefaultValueRecursively('map.layer', clusterFormGroup);
+    this.defaultValuesService.setDefaultValueRecursively('map.layer', clusterFormGroup);
     return clusterFormGroup;
   }
 

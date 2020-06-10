@@ -17,7 +17,6 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import {
   ConfigFormGroup, InputFormControl, SelectFormControl, SliderFormControl, SelectOption
 } from '@shared-models/config-form';
@@ -27,6 +26,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { toKeywordOptionsObs, toTextOptionsObs } from '@services/collection-service/tools';
 import { TranslateService } from '@ngx-translate/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 export class SearchGlobalFormGroup extends ConfigFormGroup {
 
@@ -88,10 +88,9 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
 export class SearchGlobalFormBuilderService {
 
   constructor(
-    private formBuilderDefault: FormBuilderWithDefaultService,
+    private defaultValuesService: DefaultValuesService,
     private collectionService: CollectionService,
     private mainFormService: MainFormService,
-    private translate: TranslateService
   ) { }
 
   public build() {
@@ -103,7 +102,7 @@ export class SearchGlobalFormBuilderService {
       toKeywordOptionsObs(collectionFields)
     );
 
-    this.formBuilderDefault.setDefaultValueRecursively('search.global', globalFg);
+    this.defaultValuesService.setDefaultValueRecursively('search.global', globalFg);
     return globalFg;
   }
 }

@@ -17,7 +17,6 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import {
   ConfigFormGroup, SlideToggleFormControl, InputFormControl, SelectFormControl, SliderFormControl, ConfigFormControl, HiddenFormControl
 } from '@shared-models/config-form';
@@ -30,6 +29,7 @@ import { ChartType } from 'arlas-web-components';
 import { map } from 'rxjs/operators';
 import { toDateFieldsObs } from '@services/collection-service/tools';
 import { FormGroup, FormControl } from '@angular/forms';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 enum DateFormats {
   English = '%b %d %Y  %H:%M',
@@ -302,7 +302,7 @@ export class TimelineGlobalFormBuilderService {
   constructor(
     private collectionService: CollectionService,
     private mainFormService: MainFormService,
-    private formBuilderDefault: FormBuilderWithDefaultService,
+    private defaultValuesService: DefaultValuesService,
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
   ) { }
 
@@ -323,7 +323,7 @@ export class TimelineGlobalFormBuilderService {
     const timelineFormGroup = new TimelineGlobalFormGroup(
       timelineBucketIntervalFg);
 
-    this.formBuilderDefault.setDefaultValueRecursively(
+    this.defaultValuesService.setDefaultValueRecursively(
       'timeline.global',
       timelineFormGroup);
 

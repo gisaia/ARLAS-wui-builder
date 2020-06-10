@@ -18,11 +18,9 @@ under the License.
 */
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit, Output } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ArlasConfigService } from 'arlas-wui-toolkit';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
@@ -39,7 +37,6 @@ import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-
 import { LOCALSTORAGE_CONFIG_ID_KEY } from '@utils/tools';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
-import { importElements } from '@services/main-form-manager/tools';
 
 enum InitialChoice {
   none = 0,

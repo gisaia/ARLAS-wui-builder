@@ -25,8 +25,8 @@ import { CollectionField } from '@services/collection-service/models';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { WidgetFormBuilder } from '../widget-form-builder';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { FormGroup, FormControl } from '@angular/forms';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 export class MetricFormGroup extends ConfigFormGroup {
 
@@ -122,7 +122,7 @@ export class MetricFormBuilderService extends WidgetFormBuilder {
   constructor(
     protected mainFormService: MainFormService,
     protected collectionService: CollectionService,
-    private formBuilderDefault: FormBuilderWithDefaultService,
+    private defaultValuesService: DefaultValuesService,
   ) {
     super(collectionService, mainFormService);
   }
@@ -132,7 +132,7 @@ export class MetricFormBuilderService extends WidgetFormBuilder {
     const formGroup = new MetricFormGroup(
       this.collectionService.getCollectionFields(this.mainFormService.getCollections()[0])
     );
-    this.formBuilderDefault.setDefaultValueRecursively(this.defaultKey, formGroup);
+    this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
 
     return formGroup;
   }

@@ -25,7 +25,6 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { Observable } from 'rxjs';
 import { CollectionField } from '@services/collection-service/models';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { KeywordColor, DialogColorTableData } from '@map-config/components/dialog-color-table/models';
 import { FormControl, FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
@@ -175,10 +174,9 @@ export class DonutFormBuilderService extends WidgetFormBuilder {
   constructor(
     protected collectionService: CollectionService,
     protected mainFormService: MainFormService,
-    private formBuilderDefault: FormBuilderWithDefaultService,
+    private defaultValuesService: DefaultValuesService,
     private dialog: MatDialog,
     private colorService: ArlasColorGeneratorLoader,
-    private defaultValuesService: DefaultValuesService
   ) {
     super(collectionService, mainFormService);
   }
@@ -194,7 +192,7 @@ export class DonutFormBuilderService extends WidgetFormBuilder {
       this.collectionService,
       this.colorService
     );
-    this.formBuilderDefault.setDefaultValueRecursively(this.defaultKey, formGroup);
+    this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
 
     return formGroup;
   }

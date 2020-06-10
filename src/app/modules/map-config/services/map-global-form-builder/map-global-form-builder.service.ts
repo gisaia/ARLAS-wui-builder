@@ -18,11 +18,11 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { FormArray, FormGroup, FormControl } from '@angular/forms';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import {
   ConfigFormGroup, SelectFormControl, SliderFormControl, InputFormControl, SlideToggleFormControl, ConfigFormGroupArray
 } from '@shared-models/config-form';
 import { Expression } from 'arlas-api';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 export class MapGlobalFormGroup extends ConfigFormGroup {
 
@@ -169,12 +169,12 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
 export class MapGlobalFormBuilderService {
 
   constructor(
-    protected formBuilderDefault: FormBuilderWithDefaultService
+    private defaultValuesService: DefaultValuesService,
   ) { }
 
   public build() {
     const mapGlobalFormGroup = new MapGlobalFormGroup();
-    this.formBuilderDefault.setDefaultValueRecursively('map.global', mapGlobalFormGroup);
+    this.defaultValuesService.setDefaultValueRecursively('map.global', mapGlobalFormGroup);
     return mapGlobalFormGroup;
   }
 

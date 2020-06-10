@@ -25,6 +25,7 @@ import * as draftSchema from 'ajv/lib/refs/json-schema-draft-06.json';
 import { NGXLogger } from 'ngx-logger';
 import { flatMap } from 'rxjs/operators';
 import * as defaultValuesSchema from './defaultValues.schema.json';
+import { AbstractControl, FormGroup, FormArray } from '@angular/forms';
 
 export interface DefaultConfig {
   aggregationTermSize: number;
@@ -104,5 +105,22 @@ export class DefaultValuesService {
 
   public getDefaultConfig(): DefaultConfig {
     return this.getValue('config') as DefaultConfig;
+  }
+
+  /**
+   * Set the default values into the control and its sub-controls recursively
+   */
+  public setDefaultValueRecursively(path: string, control: AbstractControl) {
+
+    if (control instanceof FormGroup || control instanceof FormArray) {
+      Object.keys(control.controls).forEach(c => {
+        this.setDefaultValueRecursively(path + '.' + c, control.controls[c]);
+      });
+    } else {
+      const defaultValue = this.getOptionalValue(path);
+      if (defaultValue.isPresent) {
+        control.setValue(defaultValue.value);
+      }
+    }
   }
 }

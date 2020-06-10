@@ -20,12 +20,12 @@ import { Injectable } from '@angular/core';
 import {
   ConfigFormGroup, SlideToggleFormControl, SliderFormControl, InputFormControl, SelectFormControl
 } from '@shared-models/config-form';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { urlValidator } from '@utils/validators';
 import { FormGroup, FormControl } from '@angular/forms';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 export class SideModulesGlobalFormGroup extends ConfigFormGroup {
 
@@ -158,7 +158,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
 export class SideModulesGlobalFormBuilderService {
 
   constructor(
-    private formBuilderDefault: FormBuilderWithDefaultService,
+    private defaultValuesService: DefaultValuesService,
     private configDescritor: ArlasConfigurationDescriptor,
   ) { }
 
@@ -166,7 +166,7 @@ export class SideModulesGlobalFormBuilderService {
     const globalFg = new SideModulesGlobalFormGroup(
       this.configDescritor.getAllCollections());
 
-    this.formBuilderDefault.setDefaultValueRecursively('sideModules.global', globalFg);
+    this.defaultValuesService.setDefaultValueRecursively('sideModules.global', globalFg);
     return globalFg;
   }
 }
