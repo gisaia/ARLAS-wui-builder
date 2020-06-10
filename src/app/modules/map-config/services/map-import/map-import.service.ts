@@ -19,7 +19,6 @@ under the License.
 import { Injectable } from '@angular/core';
 import { MapConfig, Layer } from '@services/main-form-manager/models-map-config';
 import { Config, MapglComponentConfig, ContributorConfig } from '@services/main-form-manager/models-config';
-import { MapInitService } from '../map-init/map-init.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { importElements } from '@services/main-form-manager/tools';
 import { MapLayerFormBuilderService } from '../map-layer-form-builder/map-layer-form-builder.service';
@@ -30,6 +29,7 @@ import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '../map-layer-form-builder/
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
+import { COUNT_OR_METRIC } from '@shared-services/property-selector-form-builder/models';
 
 @Injectable({
   providedIn: 'root'
@@ -205,19 +205,19 @@ export class MapImportService {
 
     if (layer.type === GEOMETRY_TYPE.line.toString()) {
       values.styleStep.widthFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-width'], values.styleStep.widthFg, false, isAggregated);
+      this.importPropertySelector(layer.paint[layer.type + '-width'], values.styleStep.widthFg, false, isAggregated, layerSource);
 
     } else if (layer.type === GEOMETRY_TYPE.circle.toString()) {
       values.styleStep.radiusFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-radius'], values.styleStep.radiusFg, false, isAggregated);
+      this.importPropertySelector(layer.paint[layer.type + '-radius'], values.styleStep.radiusFg, false, isAggregated, layerSource);
 
     } else if (layer.type === GEOMETRY_TYPE.heatmap.toString()) {
       values.styleStep.intensityFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-intensity'], values.styleStep.intensityFg, false, isAggregated);
+      this.importPropertySelector(layer.paint[layer.type + '-intensity'], values.styleStep.intensityFg, false, isAggregated, layerSource);
       values.styleStep.weightFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-weight'], values.styleStep.weightFg, false, isAggregated);
+      this.importPropertySelector(layer.paint[layer.type + '-weight'], values.styleStep.weightFg, false, isAggregated, layerSource);
       values.styleStep.radiusFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-radius'], values.styleStep.radiusFg, false, isAggregated);
+      this.importPropertySelector(layer.paint[layer.type + '-radius'], values.styleStep.radiusFg, false, isAggregated, layerSource);
     }
 
     const colors = layer.paint[layer.type + '-color'];
@@ -226,7 +226,7 @@ export class MapImportService {
       colors.push(providedFields[0].label);
     }
     values.styleStep.colorFg = {};
-    this.importPropertySelector(colors, values.styleStep.colorFg, true, isAggregated);
+    this.importPropertySelector(colors, values.styleStep.colorFg, true, isAggregated, layerSource);
 
     layerMode === LAYER_MODE.features ? this.importLayerFeatures(values, layer, layerSource) :
       layerMode === LAYER_MODE.featureMetric ? this.importLayerFeaturesMetric(values, layer, layerSource) :
@@ -281,7 +281,12 @@ export class MapImportService {
     values.styleStep.geometryType = layer.type;
   }
 
-  private importPropertySelector(inputValues: any, propertySelectorValues: any, isColor: boolean, isAggregated: boolean) {
+  private importPropertySelector(
+    inputValues: any,
+    propertySelectorValues: any,
+    isColor: boolean,
+    isAggregated: boolean,
+    layerSource: LayerSourceConfig) {
 
     if (typeof inputValues === 'string' || typeof inputValues === 'number') {
       propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.fix;
@@ -309,7 +314,7 @@ export class MapImportService {
       } else if (inputValues[0] === 'match') {
         this.importPropertySelectorManual(inputValues, propertySelectorValues);
       } else if (inputValues[0] === 'interpolate') {
-        this.importPropertySelectorInterpolated(inputValues, propertySelectorValues, isColor, isAggregated);
+        this.importPropertySelectorInterpolated(inputValues, propertySelectorValues, isColor, isAggregated, layerSource);
       }
     }
   }
@@ -338,7 +343,12 @@ export class MapImportService {
     );
   }
 
-  private importPropertySelectorInterpolated(inputValues: any, propertySelectorValues: any, isColor: boolean, isAggregated: boolean) {
+  private importPropertySelectorInterpolated(
+    inputValues: any,
+    propertySelectorValues: any,
+    isColor: boolean,
+    isAggregated: boolean,
+    layerSource: LayerSourceConfig) {
 
     if ((inputValues[2] as Array<string>)[0] === 'heatmap-density') {
       propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.heatmap_density;
@@ -350,7 +360,7 @@ export class MapImportService {
 
       if (getValue.startsWith('count')) {
         propertySelectorValues.propertyInterpolatedFg = {
-          propertyInterpolatedCountOrMetricCtrl: false,
+          propertyInterpolatedCountOrMetricCtrl: COUNT_OR_METRIC.COUNT,
           propertyInterpolatedCountNormalizeCtrl: getValue.endsWith('_:normalized')
         };
 
@@ -363,12 +373,10 @@ export class MapImportService {
         };
 
         if (isAggregated) {
-          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl = true;
+          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl = COUNT_OR_METRIC.METRIC;
           const getValueParts = getValue.split('_');
-          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMetricCtrl =
-            getValueParts[getValueParts.length - 2].toUpperCase();
-          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl =
-            getValueParts.splice(0, getValueParts.length - 2).join('.');
+          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMetricCtrl = layerSource.metrics[0].metric;
+          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = layerSource.metrics[0].field;
         } else {
           propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = this.replaceUnderscore(getValue.split(':')[0]);
 

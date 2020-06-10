@@ -35,3 +35,8 @@ export interface ProportionedValues {
     proportion: number;
     value: string | number;
 }
+
+export enum COUNT_OR_METRIC {
+    COUNT = 'count',
+    METRIC = 'metric'
+}

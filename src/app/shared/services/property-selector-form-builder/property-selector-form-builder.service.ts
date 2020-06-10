@@ -18,7 +18,7 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
+import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE, COUNT_OR_METRIC } from '@shared-services/property-selector-form-builder/models';
 import {
   ConfigFormGroup, SelectFormControl, ColorFormControl, SliderFormControl, ButtonFormControl,
   SlideToggleFormControl,
@@ -43,10 +43,6 @@ import { DialogPaletteSelectorComponent } from '@map-config/components/dialog-pa
 import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { valuesToOptions } from '@utils/tools';
 
-enum COUNT_OR_METRIC {
-  COUNT = 'count',
-  METRIC = 'metric'
-}
 export class PropertySelectorFormGroup extends ConfigFormGroup {
 
   constructor(
