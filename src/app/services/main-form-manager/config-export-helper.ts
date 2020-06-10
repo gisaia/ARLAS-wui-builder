@@ -46,6 +46,7 @@ import { BY_BUCKET_OR_INTERVAL } from '@analytics-config/services/buckets-interv
 import {
     SideModulesGlobalFormGroup
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
+import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 
 
 
@@ -59,7 +60,7 @@ export class ConfigExportHelper {
 
     public static process(
         startingConfig: FormGroup,
-        mapConfigGlobal: FormGroup,
+        mapConfigGlobal: MapGlobalFormGroup,
         mapConfigLayers: FormArray,
         searchConfigGlobal: SearchGlobalFormGroup,
         timelineConfigGlobal: TimelineGlobalFormGroup,
@@ -201,7 +202,7 @@ export class ConfigExportHelper {
         return layerSource;
     }
     public static getMapContributor(
-        mapConfigGlobal: FormGroup,
+        mapConfigGlobal: MapGlobalFormGroup,
         mapConfigLayers: FormArray): ContributorConfig {
 
         const mapContributor: ContributorConfig = {
@@ -209,7 +210,7 @@ export class ConfigExportHelper {
             identifier: 'mapbox',
             geoQueryOp: mapConfigGlobal.value.geographicalOperator,
             geoQueryField: mapConfigGlobal.value.requestGeometries[0].requestGeom,
-            icon: 'check_box_outline_blank',
+            icon: mapConfigGlobal.customControls.unmanagedFields.icon.value,
             layers_sources: []
         };
         const layersSources: Array<LayerSourceConfig> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
@@ -328,50 +329,44 @@ export class ConfigExportHelper {
         return contributor;
     }
 
-    private static getMapComponent(mapConfigGlobal: any, mapConfigLayers: FormArray): MapglComponentConfig {
+    private static getMapComponent(mapConfigGlobal: MapGlobalFormGroup, mapConfigLayers: FormArray): MapglComponentConfig {
 
+        const customControls = mapConfigGlobal.customControls;
         const visualisations = {};
         const layers: string[] = new Array<string>();
         mapConfigLayers.controls.map(layer => {
             layers.push(layer.value.name);
         });
-        // tslint:disable-next-line: no-string-literal
-        visualisations['set1'] = layers;
+        const defaultSet = 'set1';
+        visualisations[defaultSet] = layers;
 
+        // TODO keep existing visualisation set during import / export
         const visualisationsSets: MapComponentInputLayersSetsConfig = {
             visualisations,
-            default: ['set1']
+            default: [defaultSet]
         };
 
         const mapComponent: MapglComponentConfig = {
-            allowMapExtend: mapConfigGlobal.value.allowMapExtend,
-            nbVerticesLimit: 100,
+            allowMapExtend: customControls.allowMapExtend.value,
+            nbVerticesLimit: customControls.unmanagedFields.nbVerticesLimit.value,
             input: {
-                defaultBasemapStyle: {
-                    name: 'Positron',
-                    styleFile: 'https://api.maptiler.com/maps/positron/style.json?key=xIhbu1RwgdbxfZNmoXn4'
-                },
-                basemapStyles: [
-                    {
-                        name: 'Positron',
-                        styleFile: 'https://api.maptiler.com/maps/positron/style.json?key=xIhbu1RwgdbxfZNmoXn4'
-                    }
-                ],
-                margePanForLoad: mapConfigGlobal.value.margePanForLoad,
-                margePanForTest: mapConfigGlobal.value.margePanForTest,
-                initZoom: mapConfigGlobal.value.initZoom,
+                defaultBasemapStyle: customControls.unmanagedFields.defaultBasemapStyle.value,
+                basemapStyles: customControls.unmanagedFields.basemapStyles.value,
+                margePanForLoad: customControls.margePanForLoad.value,
+                margePanForTest: customControls.margePanForTest.value,
+                initZoom: customControls.initZoom.value,
                 initCenter: [
-                    mapConfigGlobal.value.initCenterLat,
-                    mapConfigGlobal.value.initCenterLon
+                    customControls.initCenterLat.value,
+                    customControls.initCenterLon.value
                 ],
-                displayScale: mapConfigGlobal.value.displayScale,
-                idFeatureField: mapConfigGlobal.value.requestGeometries[0].idFeatureField,
+                displayScale: customControls.displayScale.value,
+                idFeatureField: customControls.requestGeometries.value[0].idFeatureField,
                 mapLayers: {
                     layers: [],
                     events: {
-                        zoomOnClick: [],
-                        emitOnClick: [],
-                        onHover: [],
+                        zoomOnClick: customControls.unmanagedFields.mapLayers.events.zoomOnClick.value,
+                        emitOnClick: customControls.unmanagedFields.mapLayers.events.emitOnClick.value,
+                        onHover: customControls.unmanagedFields.mapLayers.events.onHover.value,
                     },
                     externalEventLayers: new Array<{ id: string, on: string }>(),
                     visualisations_sets: visualisationsSets
