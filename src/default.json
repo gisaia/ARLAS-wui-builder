@@ -11,7 +11,28 @@
             "allowMapExtend": true,
             "initCenterLat": 9.667969,
             "initCenterLon": 55.627996,
-            "displayScale": true
+            "displayScale": true,
+            "unmanagedFields": {
+                "icon": "check_box_outline_blank",
+                "nbVerticesLimit": 100,
+                "defaultBasemapStyle": {
+                    "name": "Positron",
+                    "styleFile": "https://api.maptiler.com/maps/positron/style.json?key=xIhbu1RwgdbxfZNmoXn4"
+                },
+                "basemapStyles": [
+                    {
+                        "name": "Positron",
+                        "styleFile": "https://api.maptiler.com/maps/positron/style.json?key=xIhbu1RwgdbxfZNmoXn4"
+                    }
+                ],
+                "mapLayers": {
+                  "events": {
+                    "zoomOnClick": [],
+                    "emitOnClick": [],
+                    "onHover": []
+                  }
+                }
+              }
         },
         "layer": {
             "featuresFg": {

@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { FormArray } from '@angular/forms';
+import { FormArray, FormGroup, FormControl } from '@angular/forms';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import {
   ConfigFormGroup, SelectFormControl, SliderFormControl, InputFormControl, SlideToggleFormControl, ConfigFormGroupArray
@@ -88,6 +88,19 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
         '',
         'number'
       ),
+      unmanagedFields: new FormGroup({
+        icon: new FormControl(),
+        nbVerticesLimit: new FormControl(),
+        defaultBasemapStyle: new FormControl(),
+        basemapStyles: new FormControl(),
+        mapLayers: new FormGroup({
+          events: new FormGroup({
+            zoomOnClick: new FormControl(),
+            emitOnClick: new FormControl(),
+            onHover: new FormControl(),
+          })
+        })
+      })
     });
   }
 
@@ -101,6 +114,19 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
     displayScale: this.get('displayScale') as SlideToggleFormControl,
     margePanForLoad: this.get('margePanForLoad') as InputFormControl,
     margePanForTest: this.get('margePanForTest') as InputFormControl,
+    unmanagedFields: {
+      icon: this.get('unmanagedFields.icon'),
+      nbVerticesLimit: this.get('unmanagedFields.nbVerticesLimit'),
+      defaultBasemapStyle: this.get('unmanagedFields.defaultBasemapStyle'),
+      basemapStyles: this.get('unmanagedFields.basemapStyles'),
+      mapLayers: {
+        events: {
+          zoomOnClick: this.get('unmanagedFields.mapLayers.events.zoomOnClick'),
+          emitOnClick: this.get('unmanagedFields.mapLayers.events.emitOnClick'),
+          onHover: this.get('unmanagedFields.mapLayers.events.onHover'),
+        }
+      }
+    }
   };
 }
 

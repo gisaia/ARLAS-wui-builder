@@ -109,6 +109,39 @@ export class MapImportService {
       }
     ]);
 
+    // unmanaged fields
+    const unmanagedControls = mapGlobalForm.customControls.unmanagedFields;
+    importElements([
+      {
+        value: mapContrib.icon,
+        control: unmanagedControls.icon
+      },
+      {
+        value: mapgl.nbVerticesLimit,
+        control: unmanagedControls.nbVerticesLimit
+      },
+      {
+        value: mapgl.input.defaultBasemapStyle,
+        control: unmanagedControls.defaultBasemapStyle
+      },
+      {
+        value: mapgl.input.basemapStyles,
+        control: unmanagedControls.basemapStyles
+      },
+      {
+        value: mapgl.input.mapLayers.events.zoomOnClick,
+        control: unmanagedControls.mapLayers.events.zoomOnClick
+      },
+      {
+        value: mapgl.input.mapLayers.events.emitOnClick,
+        control: unmanagedControls.mapLayers.events.emitOnClick
+      },
+      {
+        value: mapgl.input.mapLayers.events.onHover,
+        control: unmanagedControls.mapLayers.events.onHover
+      },
+    ]);
+
   }
 
   private importLayer(
