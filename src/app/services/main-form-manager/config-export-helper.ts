@@ -593,8 +593,8 @@ export class ConfigExportHelper {
 
     private static getAnalyticsComponent(widgetType: any, widgetData: any): AnalyticComponentConfig {
 
-        const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
         if ([WIDGET_TYPE.histogram, WIDGET_TYPE.swimlane].indexOf(widgetType) >= 0) {
+            const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
             const component = {
                 contributorId: this.toSnakeCase(widgetData.dataStep.name),
                 showExportCsv: unmanagedRenderFields.showExportCsv,
@@ -698,8 +698,8 @@ export class ConfigExportHelper {
                 componentType: WIDGET_TYPE.donut,
                 input: {
                     id: this.toSnakeCase(widgetData.dataStep.name),
-                    customizedCssClass: 'arlas-donuts-analytics',
-                    diameter: 150,
+                    customizedCssClass: widgetData.unmanagedFields.renderStep.customizedCssClass,
+                    diameter: widgetData.unmanagedFields.renderStep.diameter,
                     multiselectable: !!widgetData.renderStep.multiselectable,
                     opacity: widgetData.renderStep.opacity
                 }

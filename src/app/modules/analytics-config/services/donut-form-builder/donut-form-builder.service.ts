@@ -120,7 +120,13 @@ export class DonutConfigForm extends ConfigFormGroup {
                 || Array.from(this.customControls.dataStep.aggregationmodels.value).length === 0;
             }
           })
-      }).withTabName('Render')
+      }).withTabName('Render'),
+      unmanagedFields: new FormGroup({
+        renderStep: new FormGroup({
+          customizedCssClass: new FormControl(),
+          diameter: new FormControl(),
+        })
+      })
     });
   }
 
@@ -133,6 +139,12 @@ export class DonutConfigForm extends ConfigFormGroup {
       opacity: this.get('renderStep').get('opacity') as SliderFormControl,
       multiselectable: this.get('renderStep').get('multiselectable') as SlideToggleFormControl,
       keysToColorsButton: this.get('renderStep').get('keysToColorsButton') as ButtonFormControl,
+    },
+    unmanagedFields: {
+      renderStep: {
+        customizedCssClass: this.get('unmanagedFields.renderStep.customizedCssClass'),
+        diameter: this.get('unmanagedFields.renderStep.diameter'),
+      }
     }
   };
 

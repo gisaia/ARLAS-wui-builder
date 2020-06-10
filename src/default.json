@@ -275,7 +275,15 @@
                         "customizedCssClass": "power"
                     }
                 }
-            }            
+            },
+            "donut": {
+                "unmanagedFields": {
+                    "renderStep": {
+                      "customizedCssClass": "arlas-donuts-analytics",
+                      "diameter": 150
+                    }
+                  }
+            }        
         }
     },
     "sideModules": {
