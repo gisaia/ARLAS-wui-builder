@@ -748,7 +748,7 @@ export class ConfigExportHelper {
         if (sideModulesControls.useDownload.value) {
             config.arlas.web.components.download = {};
             if (sideModulesControls.download.basicAuthent.value) {
-                config.arlas.web.components.download.auth_type = 'basic';
+                config.arlas.web.components.download.auth_type = sideModulesControls.unmanagedFields.download.authType.value;
             }
         }
 

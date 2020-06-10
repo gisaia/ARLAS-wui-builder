@@ -344,7 +344,10 @@
                 "sortExcludedTypes": [
                     "TEXT",
                      "GEO_POINT"
-                 ]
+                 ],
+                 "download": {
+                    "authType": "basic"
+                 }
             }
         }
     },

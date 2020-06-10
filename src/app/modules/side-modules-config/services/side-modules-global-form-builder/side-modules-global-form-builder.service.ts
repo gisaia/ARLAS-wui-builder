@@ -113,7 +113,10 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
           onDependencyChange: (control) => control.enableIf(this.customControls.useTagger.value)
         }),
       unmanagedFields: new FormGroup({
-        sortExcludedTypes: new FormControl()
+        sortExcludedTypes: new FormControl(),
+        download: new FormGroup({
+          authType: new FormControl()
+        })
       })
     });
   }
@@ -135,6 +138,9 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
     },
     unmanagedFields: {
       sortExcludedTypes: this.get('unmanagedFields.sortExcludedTypes'),
+      download: {
+        authType: this.get('unmanagedFields.download.authType')
+      }
     }
   };
 
