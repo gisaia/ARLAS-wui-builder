@@ -18,7 +18,7 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { Config, AnalyticComponentConfig, AnalyticComponentHistogramInputConfig } from '@services/main-form-manager/models-config';
+import { Config, AnalyticComponentConfig, AnalyticComponentHistogramInputConfig, ContributorConfig } from '@services/main-form-manager/models-config';
 import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timeline-global-form-builder.service';
 import { importElements } from '@services/main-form-manager/tools';
 import { BY_BUCKET_OR_INTERVAL } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
@@ -77,7 +77,7 @@ export class TimelineImportService {
       }
     ]);
     this.importCommonElements(timelineComponent, timelineFg, false);
-    this.importUnmanagedFields(timelineComponent, timelineFg, false);
+    this.importUnmanagedFields(timelineContributor, timelineComponent, timelineFg, false);
 
     if (hasDetailedTimeline) {
 
@@ -93,7 +93,7 @@ export class TimelineImportService {
         }
       ]);
 
-      this.importUnmanagedFields(detailedTimelineComponent, timelineFg, true);
+      this.importUnmanagedFields(detailedTimelineContributor, detailedTimelineComponent, timelineFg, true);
     }
   }
 
@@ -124,91 +124,108 @@ export class TimelineImportService {
   }
 
   private importUnmanagedFields(
+    contributor: ContributorConfig,
     timelineComponent: AnalyticComponentConfig,
     timelineFg: TimelineGlobalFormGroup,
     isDetailed: boolean
   ) {
     const componentInput = (timelineComponent.input as AnalyticComponentHistogramInputConfig);
-    const unmanagedTimelineFields = timelineFg.customControls.unmanagedFields.renderStep.timeline;
-    const unmanagedDetailedTimelineFields = timelineFg.customControls.unmanagedFields.renderStep.detailedTimeline;
-    const unmanagedFields = isDetailed ? unmanagedDetailedTimelineFields : unmanagedTimelineFields;
+    const unmanagedDataFields = isDetailed ?
+      timelineFg.customControls.unmanagedFields.dataStep.detailedTimeline :
+      timelineFg.customControls.unmanagedFields.dataStep.timeline;
+    const unmanagedRenderTimelineFields = timelineFg.customControls.unmanagedFields.renderStep.timeline;
+    const unmanagedRenderDetailedTimelineFields = timelineFg.customControls.unmanagedFields.renderStep.detailedTimeline;
+    const unmanagedRenderFields = isDetailed ? unmanagedRenderDetailedTimelineFields : unmanagedRenderTimelineFields;
+
 
     importElements([
       {
+        value: contributor.name,
+        control: unmanagedDataFields.name
+      },
+      {
+        value: contributor.icon,
+        control: unmanagedDataFields.icon
+      },
+      {
+        value: contributor.isOneDimension,
+        control: unmanagedDataFields.isOneDimension
+      },
+      {
         value: componentInput.xTicks,
-        control: unmanagedFields.xTicks
+        control: unmanagedRenderFields.xTicks
       },
       {
         value: componentInput.yTicks,
-        control: unmanagedFields.yTicks
+        control: unmanagedRenderFields.yTicks
       },
       {
         value: componentInput.xLabels,
-        control: unmanagedFields.xLabels
+        control: unmanagedRenderFields.xLabels
       },
       {
         value: componentInput.yLabels,
-        control: unmanagedFields.yLabels
+        control: unmanagedRenderFields.yLabels
       },
       {
         value: componentInput.customizedCssClass,
-        control: unmanagedFields.customizedCssClass
+        control: unmanagedRenderFields.customizedCssClass
       },
       {
         value: componentInput.chartHeight,
-        control: unmanagedFields.chartHeight
+        control: unmanagedRenderFields.chartHeight
       },
       {
         value: componentInput.brushHandlesHeightWeight,
-        control: unmanagedFields.brushHandlesHeightWeight
+        control: unmanagedRenderFields.brushHandlesHeightWeight
       },
       {
         value: componentInput.isHistogramSelectable,
-        control: unmanagedFields.isHistogramSelectable
+        control: unmanagedRenderFields.isHistogramSelectable
       },
       {
         value: componentInput.chartWidth,
-        control: unmanagedFields.chartWidth
+        control: unmanagedRenderFields.chartWidth
       },
       {
         value: componentInput.xAxisPosition,
-        control: unmanagedFields.xAxisPosition
+        control: unmanagedRenderFields.xAxisPosition
       },
       {
         value: componentInput.yAxisStartsFromZero,
-        control: unmanagedFields.yAxisStartsFromZero
+        control: unmanagedRenderFields.yAxisStartsFromZero
       },
       {
         value: componentInput.descriptionPosition,
-        control: unmanagedFields.descriptionPosition
+        control: unmanagedRenderFields.descriptionPosition
       },
       {
         value: componentInput.showXTicks,
-        control: unmanagedFields.showXTicks
+        control: unmanagedRenderFields.showXTicks
       },
       {
         value: componentInput.showYTicks,
-        control: unmanagedFields.showYTicks
+        control: unmanagedRenderFields.showYTicks
       },
       {
         value: componentInput.showXLabels,
-        control: unmanagedFields.showXLabels
+        control: unmanagedRenderFields.showXLabels
       },
       {
         value: componentInput.showYLabels,
-        control: unmanagedFields.showYLabels
+        control: unmanagedRenderFields.showYLabels
       },
       {
         value: componentInput.showHorizontalLines,
-        control: unmanagedFields.showHorizontalLines
+        control: unmanagedRenderFields.showHorizontalLines
       },
       {
         value: componentInput.isSmoothedCurve,
-        control: unmanagedFields.isSmoothedCurve
+        control: unmanagedRenderFields.isSmoothedCurve
       },
       {
         value: componentInput.barWeight,
-        control: unmanagedFields.barWeight
+        control: unmanagedRenderFields.barWeight
       },
     ]);
 
@@ -216,14 +233,14 @@ export class TimelineImportService {
       importElements([
         {
           value: componentInput.multiselectable,
-          control: unmanagedDetailedTimelineFields.multiselectable
+          control: unmanagedRenderDetailedTimelineFields.multiselectable
         }
       ]);
     } else {
       importElements([
         {
           value: componentInput.topOffsetRemoveInterval,
-          control: unmanagedTimelineFields.topOffsetRemoveInterval
+          control: unmanagedRenderTimelineFields.topOffsetRemoveInterval
         }
       ]);
     }

@@ -106,10 +106,12 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
         unmanagedFields: new FormGroup({
           dataStep: new FormGroup({
             timeline: new FormGroup({
+              name: new FormControl(),
               icon: new FormControl(),
               isOneDimension: new FormControl(),
             }),
             detailedTimeline: new FormGroup({
+              name: new FormControl(),
               icon: new FormControl(),
               isOneDimension: new FormControl(),
             })
@@ -194,12 +196,14 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
     unmanagedFields: {
       dataStep: {
         timeline: {
+          name: this.get('unmanagedFields.dataStep.timeline.name'),
           icon: this.get('unmanagedFields.dataStep.timeline.icon'),
-          isOneDimension: this.get('unmanagedFields.dataStep.timeline.icon'),
+          isOneDimension: this.get('unmanagedFields.dataStep.timeline.isOneDimension'),
         },
         detailedTimeline: {
+          name: this.get('unmanagedFields.dataStep.detailedTimeline.name'),
           icon: this.get('unmanagedFields.dataStep.detailedTimeline.icon'),
-          isOneDimension: this.get('unmanagedFields.dataStep.detailedTimeline.icon'),
+          isOneDimension: this.get('unmanagedFields.dataStep.detailedTimeline.isOneDimension'),
         }
       },
       renderStep: {

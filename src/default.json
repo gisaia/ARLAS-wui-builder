@@ -155,10 +155,12 @@
             "unmanagedFields": {
                 "dataStep": {
                     "timeline": {
+                      "name": "Timeline",
                       "icon": "watch_later",
                       "isOneDimension": false
                     },
                     "detailedTimeline": {
+                      "name": "Timeline",
                       "icon": "watch_later",
                       "isOneDimension": false
                     }

@@ -293,13 +293,16 @@ export class ConfigExportHelper {
 
         const timelineAggregation = timelineConfigGlobal.customControls.tabsContainer.dataStep.timeline.aggregation.customControls;
         const detailedTimelineDataStep = timelineConfigGlobal.customControls.tabsContainer.dataStep.detailedTimeline;
+        const unmanagedDataFields = isDetailed ?
+            timelineConfigGlobal.customControls.unmanagedFields.dataStep.detailedTimeline :
+            timelineConfigGlobal.customControls.unmanagedFields.dataStep.timeline;
 
         const contributor: ContributorConfig = {
             type: isDetailed ? 'detailedhistogram' : 'histogram',
             identifier: isDetailed ? 'detailedTimeline' : 'timeline',
-            name: 'Timeline',
-            icon: 'watch_later',
-            isOneDimension: false
+            name: unmanagedDataFields.name.value,
+            icon: unmanagedDataFields.icon.value,
+            isOneDimension: unmanagedDataFields.isOneDimension.value
         };
 
         const aggregationModel: AggregationModelConfig = {
