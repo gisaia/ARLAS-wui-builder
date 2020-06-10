@@ -26,7 +26,7 @@ import {
   ComponentFormControl
 } from '@shared-models/config-form';
 import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
-import { FormArray, Validators, FormGroup } from '@angular/forms';
+import { FormArray, Validators, FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { toOptionsObs, NUMERIC_OR_DATE_OR_TEXT_TYPES } from '@services/collection-service/tools';
 import { CollectionReferenceDescription } from 'arlas-api';
@@ -97,7 +97,25 @@ export class ResultlistConfigForm extends ConfigFormGroup {
             onDependencyChange: (control) => control.enableIf(this.customControls.renderStep.useColorService.value)
           }
         )
-      }).withTabName('Render')
+      }).withTabName('Render'),
+      unmanagedFields: new FormGroup({
+        dataStep: new FormGroup({}),
+        renderStep: new FormGroup({
+          tableWidth: new FormControl(),
+          globalActionsList: new FormControl(),
+          nLastLines: new FormControl(),
+          detailedGridHeight: new FormControl(),
+          nbGridColumns: new FormControl(),
+          defautMode: new FormControl(),
+          isBodyHidden: new FormControl(),
+          isGeoSortActived: new FormControl(),
+          isAutoGeoSortActived: new FormControl(),
+          selectedItemsEvent: new FormControl(),
+          consultedItemEvent: new FormControl(),
+          actionOnItemEvent: new FormControl(),
+          globalActionEvent: new FormControl(),
+        }),
+      })
     });
   }
 
@@ -118,6 +136,24 @@ export class ResultlistConfigForm extends ConfigFormGroup {
       displayFilters: this.get('renderStep.displayFilters') as SlideToggleFormControl,
       useColorService: this.get('renderStep.useColorService') as SlideToggleFormControl,
       cellBackgroundStyle: this.get('renderStep.cellBackgroundStyle') as SelectFormControl,
+    },
+    unmanagedFields: {
+      dataStep: {},
+      renderStep: {
+        tableWidth: this.get('unmanagedFields.renderStep.tableWidth'),
+        globalActionsList: this.get('unmanagedFields.renderStep.globalActionsList'),
+        nLastLines: this.get('unmanagedFields.renderStep.nLastLines'),
+        detailedGridHeight: this.get('unmanagedFields.renderStep.detailedGridHeight'),
+        nbGridColumns: this.get('unmanagedFields.renderStep.nbGridColumns'),
+        defautMode: this.get('unmanagedFields.renderStep.defautMode'),
+        isBodyHidden: this.get('unmanagedFields.renderStep.isBodyHidden'),
+        isGeoSortActived: this.get('unmanagedFields.renderStep.isGeoSortActived'),
+        isAutoGeoSortActived: this.get('unmanagedFields.renderStep.isAutoGeoSortActived'),
+        selectedItemsEvent: this.get('unmanagedFields.renderStep.selectedItemsEvent'),
+        consultedItemEvent: this.get('unmanagedFields.renderStep.consultedItemEvent'),
+        actionOnItemEvent: this.get('unmanagedFields.renderStep.actionOnItemEvent'),
+        globalActionEvent: this.get('unmanagedFields.renderStep.globalActionEvent'),
+      }
     }
   };
 }

@@ -283,7 +283,27 @@
                       "diameter": 150
                     }
                   }
-            }        
+            },
+            "resultlist"   : {
+                "unmanagedFields": {
+                    "dataStep": {},
+                    "renderStep": {
+                      "tableWidth": 455,
+                      "globalActionsList": [],
+                      "nLastLines": 3,
+                      "detailedGridHeight": 25,
+                      "nbGridColumns": 3,
+                      "defautMode": "list",
+                      "isBodyHidden": false,
+                      "isGeoSortActived": false,
+                      "isAutoGeoSortActived": true,
+                      "selectedItemsEvent": null,
+                      "consultedItemEvent": null,
+                      "actionOnItemEvent": null,
+                      "globalActionEvent": null
+                    }
+                }
+            }
         }
     },
     "sideModules": {

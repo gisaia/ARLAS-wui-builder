@@ -529,6 +529,65 @@ export class AnalyticsImportService {
 
         widgetData.customControls.dataStep.details.push(detail);
       });
+
+    // unmanaged fields
+    const componentInput = component.input;
+    const unmanagedRenderFields = widgetData.customControls.unmanagedFields.renderStep;
+    importElements([
+      {
+        value: component.input.tableWidth,
+        control: unmanagedRenderFields.tableWidth
+      },
+      {
+        value: component.input.globalActionsList,
+        control: unmanagedRenderFields.globalActionsList
+      },
+      {
+        value: component.input.nLastLines,
+        control: unmanagedRenderFields.nLastLines
+      },
+      {
+        value: component.input.detailedGridHeight,
+        control: unmanagedRenderFields.detailedGridHeight
+      },
+      {
+        value: component.input.nbGridColumns,
+        control: unmanagedRenderFields.nbGridColumns
+      },
+      {
+        value: component.input.defautMode,
+        control: unmanagedRenderFields.defautMode
+      },
+      {
+        value: component.input.isBodyHidden,
+        control: unmanagedRenderFields.isBodyHidden
+      },
+      {
+        value: component.input.isGeoSortActived,
+        control: unmanagedRenderFields.isGeoSortActived
+      },
+      {
+        value: component.input.isAutoGeoSortActived,
+        control: unmanagedRenderFields.isAutoGeoSortActived
+      },
+      {
+        value: component.input.selectedItemsEvent,
+        control: unmanagedRenderFields.selectedItemsEvent
+      },
+      {
+        value: component.input.consultedItemEvent,
+        control: unmanagedRenderFields.consultedItemEvent
+      },
+      {
+        value: component.input.actionOnItemEvent,
+        control: unmanagedRenderFields.actionOnItemEvent
+      },
+      {
+        value: component.input.globalActionEvent,
+        control: unmanagedRenderFields.globalActionEvent
+      },
+    ]);
+
     return widgetData;
   }
 
