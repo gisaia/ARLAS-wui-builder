@@ -593,8 +593,8 @@ export class ConfigExportHelper {
 
     private static getAnalyticsComponent(widgetType: any, widgetData: any): AnalyticComponentConfig {
 
+        const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
         if ([WIDGET_TYPE.histogram, WIDGET_TYPE.swimlane].indexOf(widgetType) >= 0) {
-            const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
             const component = {
                 contributorId: this.toSnakeCase(widgetData.dataStep.name),
                 showExportCsv: unmanagedRenderFields.showExportCsv,
@@ -666,7 +666,7 @@ export class ConfigExportHelper {
                 contributorId: this.toSnakeCase(widgetData.dataStep.name),
                 componentType: WIDGET_TYPE.metric,
                 input: {
-                    customizedCssClass: widgetData.unmanagedFields.renderStep.customizedCssClass,
+                    customizedCssClass: unmanagedRenderFields.customizedCssClass,
                     shortValue: !!widgetData.renderStep.shortValue
                 }
             } as AnalyticComponentConfig;
@@ -698,8 +698,8 @@ export class ConfigExportHelper {
                 componentType: WIDGET_TYPE.donut,
                 input: {
                     id: this.toSnakeCase(widgetData.dataStep.name),
-                    customizedCssClass: widgetData.unmanagedFields.renderStep.customizedCssClass,
-                    diameter: widgetData.unmanagedFields.renderStep.diameter,
+                    customizedCssClass: unmanagedRenderFields.customizedCssClass,
+                    diameter: unmanagedRenderFields.diameter,
                     multiselectable: !!widgetData.renderStep.multiselectable,
                     opacity: widgetData.renderStep.opacity
                 }
@@ -712,22 +712,22 @@ export class ConfigExportHelper {
                 componentType: WIDGET_TYPE.resultlist,
                 input: {
                     id: this.toSnakeCase(widgetData.dataStep.name),
-                    tableWidth: 455,
-                    globalActionsList: [],
+                    tableWidth: unmanagedRenderFields.tableWidth,
+                    globalActionsList: unmanagedRenderFields.globalActionsList,
                     searchSize: widgetData.dataStep.searchSize,
-                    nLastLines: 3,
-                    detailedGridHeight: 25,
-                    nbGridColumns: 3,
-                    defautMode: 'list',
-                    displayFilters: widgetData.renderStep.displayFilters,
-                    isBodyHidden: false,
-                    isGeoSortActived: false,
-                    isAutoGeoSortActived: true,
-                    selectedItemsEvent: null,
-                    consultedItemEvent: null,
-                    actionOnItemEvent: null,
-                    globalActionEvent: null,
-                    useColorService: widgetData.renderStep.useColorService,
+                    nLastLines: unmanagedRenderFields.nLastLines,
+                    detailedGridHeight: unmanagedRenderFields.detailedGridHeight,
+                    nbGridColumns: unmanagedRenderFields.nbGridColumns,
+                    defautMode: unmanagedRenderFields.defautMode,
+                    displayFilters: !!widgetData.renderStep.displayFilters,
+                    isBodyHidden: unmanagedRenderFields.isBodyHidden,
+                    isGeoSortActived: unmanagedRenderFields.isGeoSortActived,
+                    isAutoGeoSortActived: unmanagedRenderFields.isAutoGeoSortActived,
+                    selectedItemsEvent: unmanagedRenderFields.selectedItemsEvent,
+                    consultedItemEvent: unmanagedRenderFields.consultedItemEvent,
+                    actionOnItemEvent: unmanagedRenderFields.actionOnItemEvent,
+                    globalActionEvent: unmanagedRenderFields.globalActionEvent,
+                    useColorService: !!widgetData.renderStep.useColorService,
                     cellBackgroundStyle: widgetData.renderStep.cellBackgroundStyle
                 }
             } as AnalyticComponentConfig;
