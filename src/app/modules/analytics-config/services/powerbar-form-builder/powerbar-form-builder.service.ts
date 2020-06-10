@@ -134,7 +134,8 @@ export class PowerbarConfigForm extends ConfigFormGroup {
           'Display the filter',
           'description'
         )
-      }).withTabName('Data')
+      }).withTabName('Data'),
+      unmanagedFields: new FormGroup({}) // for consistency with other widgets form builders
     });
   }
 
@@ -149,7 +150,8 @@ export class PowerbarConfigForm extends ConfigFormGroup {
       useColorService: this.get('renderStep').get('useColorService') as SlideToggleFormControl,
       keysToColorsButton: this.get('renderStep').get('keysToColorsButton') as ButtonFormControl,
       displayFilter: this.get('renderStep').get('displayFilter') as SlideToggleFormControl,
-    }
+    },
+    unmanagedFields: {}
   };
 
   private addToColorManualValuesCtrl(kc: KeywordColor, index?: number) {
