@@ -1,5 +1,6 @@
 import { Layer } from './models-map-config';
 import { BasemapStyle } from 'arlas-web-components/components/mapgl/model/mapLayers';
+import { VisualisationSetConfig } from 'arlas-web-components';
 
 /*
 Licensed to Gisaïa under one or more contributor
@@ -244,24 +245,19 @@ export interface MapComponentInputConfig {
     displayScale: boolean;
     idFeatureField: string;
     mapLayers: MapComponentInputMapLayersConfig;
+    visualisations_sets: Array<VisualisationSetConfig>;
 }
 
 export interface MapComponentInputMapLayersConfig {
     layers: Array<Layer>;
     events: MapComponentInputMapLayersEventsConfig;
     externalEventLayers: Array<{ id: string, on: string }>;
-    visualisations_sets: MapComponentInputLayersSetsConfig;
 }
 
 export interface MapComponentInputMapLayersEventsConfig {
     zoomOnClick: Array<string>;
     emitOnClick: Array<string>;
     onHover: Array<string>;
-}
-
-export interface MapComponentInputLayersSetsConfig {
-    visualisations: any;
-    default: Array<string>;
 }
 
 export interface AggregationModelConfig {

@@ -35,7 +35,7 @@ import { CLUSTER_GEOMETRY_TYPE } from '@map-config/services/map-layer-form-build
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
-import { MapComponentInputConfig, MapComponentInputMapLayersConfig, MapComponentInputLayersSetsConfig } from './models-config';
+import { MapComponentInputConfig, MapComponentInputMapLayersConfig } from './models-config';
 import { LayerSourceConfig, getSourceName, ColorConfig } from 'arlas-web-contributors';
 import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
@@ -48,8 +48,7 @@ import {
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
-
-
+import { VisualisationSetConfig } from 'arlas-web-components';
 
 export enum EXPORT_TYPE {
     json = 'json',
@@ -335,19 +334,19 @@ export class ConfigExportHelper {
     private static getMapComponent(mapConfigGlobal: MapGlobalFormGroup, mapConfigLayers: FormArray): MapglComponentConfig {
 
         const customControls = mapConfigGlobal.customControls;
-        const visualisations = {};
-        const layers: string[] = new Array<string>();
-        mapConfigLayers.controls.map(layer => {
-            layers.push(layer.value.name);
+        const layers: Set<string> = new Set<string>();
+        mapConfigLayers.controls.forEach(layer => {
+            layers.add(layer.value.name);
         });
-        const defaultSet = 'set1';
-        visualisations[defaultSet] = layers;
 
         // TODO keep existing visualisation set during import / export
-        const visualisationsSets: MapComponentInputLayersSetsConfig = {
-            visualisations,
-            default: [defaultSet]
-        };
+        const visualisationsSets: Array<VisualisationSetConfig> = [
+            {
+                name: 'layers',
+                layers,
+                enabled: true
+            }
+        ];
 
         const mapComponent: MapglComponentConfig = {
             allowMapExtend: customControls.allowMapExtend.value,
@@ -371,9 +370,9 @@ export class ConfigExportHelper {
                         emitOnClick: customControls.unmanagedFields.mapLayers.events.emitOnClick.value,
                         onHover: customControls.unmanagedFields.mapLayers.events.onHover.value,
                     },
-                    externalEventLayers: new Array<{ id: string, on: string }>(),
-                    visualisations_sets: visualisationsSets
-                } as MapComponentInputMapLayersConfig
+                    externalEventLayers: new Array<{ id: string, on: string }>()
+                } as MapComponentInputMapLayersConfig,
+                visualisations_sets: visualisationsSets
             } as MapComponentInputConfig
         };
 

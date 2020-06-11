@@ -19,7 +19,6 @@ under the License.
 import { Injectable } from '@angular/core';
 import { MapConfig, Layer } from '@services/main-form-manager/models-map-config';
 import { Config, MapglComponentConfig, ContributorConfig } from '@services/main-form-manager/models-config';
-import { MapInitService } from '../map-init/map-init.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { importElements } from '@services/main-form-manager/tools';
 import { MapLayerFormBuilderService } from '../map-layer-form-builder/map-layer-form-builder.service';
