@@ -144,6 +144,9 @@ export class EditGroupComponent implements OnInit {
 
   public updatePreview() {
     this.formGroup.controls.preview.setValue([]);
+    if (this.formGroup.invalid) {
+      return;
+    }
     setTimeout(() =>
       this.formGroup.controls.preview.setValue([ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1)]), 0);
     this.cdr.detectChanges();
