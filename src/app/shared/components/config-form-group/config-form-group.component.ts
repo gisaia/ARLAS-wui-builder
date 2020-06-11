@@ -102,7 +102,7 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
         }));
       });
       // trigger on initial load for each control to be on its expected state against other controls
-      control.onDependencyChange(control);
+      control.onDependencyChange(control, true);
     }
   }
 

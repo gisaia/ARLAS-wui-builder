@@ -104,9 +104,13 @@ interface ControlOptionalParams {
     // getter the other controls that it depends on
     dependsOn?: () => Array<ConfigFormControl | ConfigFormGroup>;
 
-    // callback to be executed when a dependency changes
-    // it is also executed at loading, so it may be used without any 'dependsOn' to be executed only once
-    onDependencyChange?: (c: ConfigFormControl | ConfigFormGroup) => void;
+    /**
+     * Callback to be executed when a dependency changes.
+     * It is also executed during import or by loading the object from a ConfigFormGroupComponent
+     * c : the ConfigForm object
+     * isLoading: indicates if the is exeuted on initial load or import
+     */
+    onDependencyChange?: (c: ConfigFormControl | ConfigFormGroup, isLoading?: boolean) => void;
 
     // indicates if other fields that depends on this one, should be reset when this one changes
     resetDependantsOnChange?: boolean;
@@ -130,8 +134,13 @@ interface GroupOptionalParams {
     // getter the other controls that it depends on
     dependsOn?: () => Array<ConfigFormControl>;
 
-    // callback to be executed when a dependency changes
-    onDependencyChange?: (c: ConfigFormControl | ConfigFormGroup) => void;
+    /**
+     * Callback to be executed when a dependency changes.
+     * It is also executed during import or by loading the object from a ConfigFormGroupComponent
+     * c : the ConfigForm object
+     * isLoading: indicates if the is exeuted on initial load or import
+     */
+    onDependencyChange?: (c: ConfigFormControl | ConfigFormGroup, isLoading?: boolean) => void;
 
     validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null;
     asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null;
