@@ -37,56 +37,54 @@ export class SideModulesImportService {
 
     const sideModulesGlobal = this.mainFormService.sideModulesConfig.getGlobalFg().customControls;
 
-    if (!!shareComponent) {
-      importElements([
-        {
-          value: true,
-          control: sideModulesGlobal.useShare
-        },
-        {
-          value: shareComponent.geojson.max_for_feature,
-          control: sideModulesGlobal.share.maxForFeature
-        },
-        {
-          value: shareComponent.geojson.max_for_topology,
-          control: sideModulesGlobal.share.maxForTopology
-        },
-        {
-          value: shareComponent.geojson.sort_excluded_type,
-          control: sideModulesGlobal.unmanagedFields.sortExcludedTypes
-        }
-      ]);
-    }
+    importElements([
+      {
+        value: !!shareComponent,
+        control: sideModulesGlobal.useShare
+      },
+      {
+        value: !!shareComponent ? shareComponent.geojson.max_for_feature : null,
+        control: sideModulesGlobal.share.maxForFeature
+      },
+      {
+        value: !!shareComponent ? shareComponent.geojson.max_for_topology : null,
+        control: sideModulesGlobal.share.maxForTopology
+      },
+      {
+        value: !!shareComponent ? shareComponent.geojson.sort_excluded_type : null,
+        control: sideModulesGlobal.unmanagedFields.sortExcludedTypes
+      }
+    ]);
 
-    if (!!downloadComponent) {
-      importElements([
-        {
-          value: true,
-          control: sideModulesGlobal.useDownload
-        },
-        {
-          value: !!downloadComponent.auth_type,
-          control: sideModulesGlobal.download.basicAuthent
-        },
-      ]);
-    }
+    importElements([
+      {
+        value: !!downloadComponent,
+        control: sideModulesGlobal.useDownload
+      },
+      {
+        value: !!downloadComponent ? !!downloadComponent.auth_type : null,
+        control: sideModulesGlobal.download.basicAuthent
+      },
+      {
+        value: !!downloadComponent ? downloadComponent.auth_type : null,
+        control: sideModulesGlobal.unmanagedFields.download.authType
+      },
+    ]);
 
-    if (!!tagger) {
-      importElements([
-        {
-          value: true,
-          control: sideModulesGlobal.useTagger
-        },
-        {
-          value: tagger.url,
-          control: sideModulesGlobal.tagger.serverUrl
-        },
-        {
-          value: tagger.collection,
-          control: sideModulesGlobal.tagger.collection
-        },
-      ]);
-    }
+    importElements([
+      {
+        value: !!tagger,
+        control: sideModulesGlobal.useTagger
+      },
+      {
+        value: !!tagger ? tagger.url : null,
+        control: sideModulesGlobal.tagger.serverUrl
+      },
+      {
+        value: !!tagger ? tagger.collection : null,
+        control: sideModulesGlobal.tagger.collection
+      },
+    ]);
   }
 
 }

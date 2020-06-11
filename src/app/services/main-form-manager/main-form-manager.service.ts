@@ -45,6 +45,8 @@ import { LookAndFeelInitService } from '@app/modules/look-and-feel-config/servic
 import { LookAndFeelImportService } from '@look-and-feel-config/services/look-and-feel-import/look-and-feel-import.service';
 import { SideModulesInitService } from '@app/modules/side-modules-config/services/side-modules-init/side-modules-init.service';
 import { SideModulesImportService } from '@app/modules/side-modules-config/services/side-modules-import/side-modules-import.service';
+import { importElements } from './tools';
+import { StartupService } from '@services/startup/startup.service';
 
 
 @Injectable({
@@ -70,7 +72,8 @@ export class MainFormManagerService {
     private translate: TranslateService,
     private mapInitService: MapInitService,
     private mapImportService: MapImportService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private startupService: StartupService,
   ) { }
 
   /**
@@ -186,6 +189,25 @@ export class MainFormManagerService {
   }
 
   public doImport(config: Config, mapConfig: MapConfig) {
+
+    const startingConfigControls = this.mainFormService.startingConfig.getFg().customControls;
+    importElements([
+      {
+        value: config.arlas.server.url,
+        control: startingConfigControls.serverUrl
+      },
+      {
+        value: [config.arlas.server.collection.name],
+        control: startingConfigControls.collections
+      },
+      {
+        value: config.arlas.server.maxAgeCache,
+        control: startingConfigControls.unmanagedFields.maxAgeCache
+      },
+    ]);
+
+    this.initMainModulesForms(false);
+    this.startupService.setCollection(config.arlas.server.collection.name);
 
     this.mapImportService.doImport(config, mapConfig);
     this.timelineImportService.doImport(config);

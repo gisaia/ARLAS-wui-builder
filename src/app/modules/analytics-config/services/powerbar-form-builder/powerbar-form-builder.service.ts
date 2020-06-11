@@ -32,7 +32,6 @@ import { MatDialog } from '@angular/material';
 import { FormArray, FormGroup, FormControl } from '@angular/forms';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 
 export class PowerbarConfigForm extends ConfigFormGroup {
 
@@ -181,7 +180,6 @@ export class PowerbarFormBuilderService extends WidgetFormBuilder {
     private dialog: MatDialog,
     private colorService: ArlasColorGeneratorLoader,
     private defaultValuesService: DefaultValuesService,
-    private formBuilderDefault: FormBuilderWithDefaultService
   ) {
     super(collectionService, mainFormService);
   }
@@ -197,7 +195,7 @@ export class PowerbarFormBuilderService extends WidgetFormBuilder {
       this.collectionService,
       this.colorService
     );
-    this.formBuilderDefault.setDefaultValueRecursively(this.defaultKey, formGroup);
+    this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
 
     return formGroup;
   }

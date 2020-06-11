@@ -25,12 +25,12 @@ import {
   HiddenFormControl,
   ComponentFormControl
 } from '@shared-models/config-form';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { FormArray, Validators, FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { toOptionsObs, NUMERIC_OR_DATE_OR_TEXT_TYPES } from '@services/collection-service/tools';
 import { CollectionReferenceDescription } from 'arlas-api';
 import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 export class ResultlistConfigForm extends ConfigFormGroup {
 
@@ -267,7 +267,7 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
   constructor(
     protected collectionService: CollectionService,
     protected mainFormService: MainFormService,
-    private formBuilderDefault: FormBuilderWithDefaultService,
+    private defaultValuesService: DefaultValuesService,
   ) {
     super(collectionService, mainFormService);
   }
@@ -277,7 +277,7 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
       this.collectionService.getDescribe(
         this.mainFormService.getCollections()[0]
       ));
-    this.formBuilderDefault.setDefaultValueRecursively(this.defaultKey, formGroup);
+    this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
     return formGroup;
   }
 

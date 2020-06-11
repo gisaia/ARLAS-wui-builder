@@ -18,8 +18,8 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { ConfigFormGroup, SlideToggleFormControl, SliderFormControl } from '@shared-models/config-form';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { SelectFormControl } from '../../../../shared/models/config-form';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
 
@@ -100,13 +100,13 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
 export class LookAndFeelGlobalFormBuilderService {
 
   constructor(
-    private formBuilderDefault: FormBuilderWithDefaultService
+    private defaultValuesService: DefaultValuesService,
   ) { }
 
   public build() {
     const globalFg = new LookAndFeelGlobalFormGroup();
 
-    this.formBuilderDefault.setDefaultValueRecursively('lookAndFeel.global', globalFg);
+    this.defaultValuesService.setDefaultValueRecursively('lookAndFeel.global', globalFg);
     return globalFg;
   }
 }

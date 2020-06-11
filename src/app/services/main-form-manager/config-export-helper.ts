@@ -47,6 +47,7 @@ import {
     SideModulesGlobalFormGroup
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
+import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 
 
 
@@ -59,7 +60,7 @@ export enum EXPORT_TYPE {
 export class ConfigExportHelper {
 
     public static process(
-        startingConfig: FormGroup,
+        startingConfig: StartingConfigFormGroup,
         mapConfigGlobal: MapGlobalFormGroup,
         mapConfigLayers: FormArray,
         searchConfigGlobal: SearchGlobalFormGroup,
@@ -72,7 +73,7 @@ export class ConfigExportHelper {
 
         const chipssearch: ChipSearchConfig = {
             name: searchConfigGlobal.customControls.name.value,
-            icon: 'search'
+            icon: searchConfigGlobal.customControls.unmanagedFields.icon.value
         };
 
         const config: Config = {
@@ -90,11 +91,10 @@ export class ConfigExportHelper {
                     options: this.getOptions(lookAndFeelConfigGlobal)
                 },
                 server: {
-                    url: startingConfig.value.serverUrl,
-                    maxAgeCache: 120,
+                    url: startingConfig.customControls.serverUrl.value,
+                    maxAgeCache: startingConfig.customControls.unmanagedFields.maxAgeCache.value,
                     collection: {
-                        name: startingConfig.value.collections[0],
-                        id: 'id'
+                        name: startingConfig.customControls.collections.value[0],
                     }
                 }
             },
@@ -293,13 +293,16 @@ export class ConfigExportHelper {
 
         const timelineAggregation = timelineConfigGlobal.customControls.tabsContainer.dataStep.timeline.aggregation.customControls;
         const detailedTimelineDataStep = timelineConfigGlobal.customControls.tabsContainer.dataStep.detailedTimeline;
+        const unmanagedDataFields = isDetailed ?
+            timelineConfigGlobal.customControls.unmanagedFields.dataStep.detailedTimeline :
+            timelineConfigGlobal.customControls.unmanagedFields.dataStep.timeline;
 
         const contributor: ContributorConfig = {
             type: isDetailed ? 'detailedhistogram' : 'histogram',
             identifier: isDetailed ? 'detailedTimeline' : 'timeline',
-            name: 'Timeline',
-            icon: 'watch_later',
-            isOneDimension: false
+            name: unmanagedDataFields.name.value,
+            icon: unmanagedDataFields.icon.value,
+            isOneDimension: unmanagedDataFields.isOneDimension.value
         };
 
         const aggregationModel: AggregationModelConfig = {
@@ -748,7 +751,7 @@ export class ConfigExportHelper {
         if (sideModulesControls.useDownload.value) {
             config.arlas.web.components.download = {};
             if (sideModulesControls.download.basicAuthent.value) {
-                config.arlas.web.components.download.auth_type = 'basic';
+                config.arlas.web.components.download.auth_type = sideModulesControls.unmanagedFields.download.authType.value;
             }
         }
 

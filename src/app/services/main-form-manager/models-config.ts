@@ -96,7 +96,6 @@ export interface ServerConfig {
     url: string;
     collection: {
         name: string;
-        id: string;
     };
     maxAgeCache: number;
 }

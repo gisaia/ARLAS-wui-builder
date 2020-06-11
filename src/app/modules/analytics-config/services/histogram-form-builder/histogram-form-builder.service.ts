@@ -19,7 +19,6 @@ under the License.
 import { Injectable } from '@angular/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import {
   ConfigFormGroup, SlideToggleFormControl, SelectFormControl, InputFormControl
 } from '@shared-models/config-form';
@@ -33,6 +32,7 @@ import {
   MetricCollectFormBuilderService, MetricCollectFormGroup
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { toNumericOrDateFieldsObs } from '@services/collection-service/tools';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 // TODO put in common with timeline
 enum DateFormats {
@@ -163,8 +163,8 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
   constructor(
     protected collectionService: CollectionService,
     protected mainFormService: MainFormService,
-    private formBuilderDefault: FormBuilderWithDefaultService,
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
+    private defaultValuesService: DefaultValuesService,
     private metricBuilderService: MetricCollectFormBuilderService
   ) {
     super(collectionService, mainFormService);
@@ -180,7 +180,7 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
       this.metricBuilderService.build(collectionFieldsObs)
     );
 
-    this.formBuilderDefault.setDefaultValueRecursively(this.defaultKey, formGroup);
+    this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
 
     return formGroup;
   }

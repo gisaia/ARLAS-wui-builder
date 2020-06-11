@@ -18,11 +18,9 @@ under the License.
 */
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit, Output } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ArlasConfigService } from 'arlas-wui-toolkit';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
@@ -38,6 +36,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { LOCALSTORAGE_CONFIG_ID_KEY } from '@utils/tools';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
+import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 
 enum InitialChoice {
   none = 0,
@@ -73,7 +72,7 @@ export class LandingPageDialogComponent implements OnInit {
     private configService: ArlasConfigService,
     private startupService: StartupService,
     private configDescritor: ArlasConfigurationDescriptor,
-    private formBuilderWithDefault: FormBuilderWithDefaultService,
+    private startingConfigFormBuilder: StartingConfigFormBuilderService,
     private translate: TranslateService,
     private mainFormManager: MainFormManagerService,
     public persistenceService: PersistenceService,
@@ -87,17 +86,8 @@ export class LandingPageDialogComponent implements OnInit {
     localStorage.removeItem(LOCALSTORAGE_CONFIG_ID_KEY);
 
     this.mainFormService.startingConfig.init(
-      this.formBuilderWithDefault.group('global', {
-        serverUrl: new FormControl(null,
-          [
-            Validators.required,
-            Validators.pattern(
-              '(https?://)?(([0-9.]{1,4}){4}(:[0-9]{2,5})|([a-z0-9-.]+)(\\.[a-z-.]+)(:[0-9]{2,5})?|localhost(:[0-9]{2,5}))+([/?].*)?'
-            )
-          ]),
-
-        collections: new FormControl(null, [Validators.required, Validators.maxLength(1)])
-      }));
+      this.startingConfigFormBuilder.build()
+    );
 
     if (this.persistenceService.isAvailable) {
       // Load all config available in persistence
@@ -153,14 +143,6 @@ export class LandingPageDialogComponent implements OnInit {
             + collections.join(', '));
 
         } else {
-          this.mainFormService.startingConfig.getFg().setValue({
-            collections: [configJson.arlas.server.collection.name],
-            serverUrl: configJson.arlas.server.url
-          });
-
-          this.mainFormManager.initMainModulesForms(false);
-
-          this.startupService.setCollection(collection);
           this.mainFormManager.doImport(configJson, configMapJson);
           this.startEvent.next();
         }

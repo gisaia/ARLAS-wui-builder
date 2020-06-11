@@ -1,6 +1,9 @@
 {
     "global": {
-        "serverUrl": "http://demo.arlas.io/arlas"
+        "serverUrl": "http://demo.arlas.io/arlas",
+        "unmanagedFields": {
+            "maxAgeCache": 120
+        }        
     },
     "map": {
         "global": {
@@ -155,10 +158,12 @@
             "unmanagedFields": {
                 "dataStep": {
                     "timeline": {
+                      "name": "Timeline",
                       "icon": "watch_later",
                       "isOneDimension": false
                     },
                     "detailedTimeline": {
+                      "name": "Timeline",
                       "icon": "watch_later",
                       "isOneDimension": false
                     }
@@ -344,7 +349,10 @@
                 "sortExcludedTypes": [
                     "TEXT",
                      "GEO_POINT"
-                 ]
+                 ],
+                 "download": {
+                    "authType": "basic"
+                 }
             }
         }
     },

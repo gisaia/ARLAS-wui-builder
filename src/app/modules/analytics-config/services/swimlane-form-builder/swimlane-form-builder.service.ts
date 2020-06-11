@@ -23,7 +23,6 @@ import {
   ConfigFormGroup, InputFormControl, SelectFormControl, SliderFormControl,
   SlideToggleFormControl, HuePaletteFormControl, HiddenFormControl, SelectOption, ButtonToggleFormControl
 } from '@shared-models/config-form';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { SwimlaneMode } from 'arlas-web-components';
@@ -208,7 +207,6 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
   public widgetFormGroup: FormGroup;
 
   constructor(
-    private formBuilderDefault: FormBuilderWithDefaultService,
     protected collectionService: CollectionService,
     protected mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,
@@ -233,7 +231,7 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
       this.defaultValuesService.getDefaultConfig(),
       toKeywordOptionsObs(collectionFieldsObs));
 
-    this.formBuilderDefault.setDefaultValueRecursively(this.defaultKey, formGroup);
+    this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
 
     return formGroup;
   }

@@ -18,8 +18,6 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
-import { Validators } from '@angular/forms';
 import { TimelineGlobalFormBuilderService } from '../timeline-global-form-builder/timeline-global-form-builder.service';
 
 @Injectable({
