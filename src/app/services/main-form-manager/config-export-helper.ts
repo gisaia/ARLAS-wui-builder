@@ -681,7 +681,8 @@ export class ConfigExportHelper {
                 contributorId: this.toSnakeCase(widgetData.dataStep.name),
                 componentType: WIDGET_TYPE.powerbars,
                 input: {
-                    chartTitle: widgetData.renderStep.powerbarTitle,
+                    chartTitle: widgetData.dataStep.name,
+                    powerbarTitle: widgetData.renderStep.powerbarTitle,
                     displayFilter: !!widgetData.renderStep.displayFilter,
                     useColorService: !!widgetData.renderStep.useColorService
                 }
