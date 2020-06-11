@@ -262,11 +262,11 @@ export class MainFormManagerService {
   private updateControlsFromOtherControls(control: AbstractControl) {
     if (control instanceof ConfigFormControl) {
       if (!!control.dependsOn) {
-        control.onDependencyChange(control);
+        control.onDependencyChange(control, true);
       }
     } else if (control instanceof ConfigFormGroup) {
       if (!!control.dependsOn) {
-        control.onDependencyChange(control);
+        control.onDependencyChange(control, true);
       }
       if (control.status !== 'DISABLED') {
         // if form group is disabled, k
