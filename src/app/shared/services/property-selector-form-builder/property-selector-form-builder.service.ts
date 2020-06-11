@@ -368,7 +368,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
               this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
               this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
             ],
-            onDependencyChange: (control) => {
+            onDependencyChange: (control, isLoading) => {
               const doEnable =
                 (!isAggregated ||
                   this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.METRIC)
@@ -376,7 +376,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                 && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value;
               control.enableIf(doEnable);
 
-              if (doEnable) {
+              if (doEnable && !isLoading) {
                 collectionService.getComputationMetric(
                   collection,
                   this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value,
@@ -399,7 +399,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
               this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
               this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
             ],
-            onDependencyChange: (control) => {
+            onDependencyChange: (control, isLoading) => {
               const doEnable =
                 (!isAggregated ||
                   this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.METRIC)
@@ -407,7 +407,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                 && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value;
               control.enableIf(doEnable);
 
-              if (doEnable) {
+              if (doEnable && !isLoading) {
                 const metric = this.customControls.propertyInterpolatedFg.propertyInterpolatedMetricCtrl.value === METRIC_TYPES.SUM ?
                   METRIC_TYPES.SUM : METRIC_TYPES.MAX;
                 collectionService.getComputationMetric(
@@ -425,6 +425,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
           // define label, used for error message, only for colors => otherwise interpolation is done automatically
           propertyType === PROPERTY_TYPE.color ? 'A Palette' : undefined,
           {
+            resetDependantsOnChange: true,
             dependsOn: () => [
               this.customControls.propertySource,
               this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl,
