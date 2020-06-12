@@ -90,13 +90,12 @@ export class DialogPaletteSelectorComponent implements OnInit {
     this.selectedPalette = this.defaultPalettes[index].slice();
   }
 
+  // reverse the colors but not the proportions
   public reverse() {
-    this.selectedPalette = this.selectedPalette.map((c: ProportionedValues) => {
-      return {
-        value: c.value,
-        proportion: 1 - c.proportion
-      };
-    }).reverse();
+    const proportions = this.selectedPalette.map(p => p.proportion);
+    const values = this.selectedPalette.map(p => p.value);
+    this.selectedPalette = values.reverse().map(
+      (value, index) => ({ proportion: proportions[index], value }));
   }
 
   public add(index: number) {

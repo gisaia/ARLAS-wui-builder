@@ -484,7 +484,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
               isAggregated &&
               this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT;
             const doNormalize =
-              !isAggregated && this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
+              !isAggregatedCount && this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
               || isAggregatedCount && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl.value;
             const isDensity = this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.heatmap_density;
 
