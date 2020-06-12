@@ -2,6 +2,7 @@ import { LayersComponent } from './layers.component';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormArray } from '@angular/forms';
+import { MapglLegendModule, MapglLayerIconModule } from 'arlas-web-components';
 import {
   ArlasCollaborativesearchService, ArlasStartupService,
   ArlasConfigService, CONFIG_UPDATER
@@ -20,6 +21,9 @@ describe('LayersComponent', () => {
           getLayersFa: () => new FormArray([])
         }
       })
+    ],
+    imports: [
+      MapglLayerIconModule, MapglLegendModule
     ],
     component: LayersComponent,
   });

@@ -68,44 +68,12 @@ export class LayersComponent implements OnInit {
     this.layersFa.value.map(layer => {
       const modeValues = layer.mode === LAYER_MODE.features ? layer.featuresFg :
         (layer.mode === LAYER_MODE.featureMetric ? layer.featureMetricFg : layer.clusterFg);
-      const paint = this.getLayerPaint(modeValues, layer.mode);
+      const paint = ConfigMapExportHelper.getLayerPaint(modeValues, layer.mode);
       this.layerLegend.set(
         layer.name + '#' + layer.mode,
         { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint) }
       );
     });
-  }
-
-  public getLayerPaint(modeValues, mode: LAYER_MODE) {
-    const paint: Paint = {};
-    const colorOpacity = modeValues.styleStep.opacity;
-    const color = ConfigMapExportHelper.getMapProperty(modeValues.styleStep.colorFg, mode);
-    switch (modeValues.styleStep.geometryType) {
-      case GEOMETRY_TYPE.fill: {
-        paint['fill-opacity'] = colorOpacity;
-        paint['fill-color'] = color;
-        break;
-      }
-      case GEOMETRY_TYPE.line: {
-        paint['line-opacity'] = colorOpacity;
-        paint['line-color'] = color;
-        paint['line-width'] = ConfigMapExportHelper.getMapProperty(modeValues.styleStep.widthFg, mode);
-        break;
-      }
-      case GEOMETRY_TYPE.circle: {
-        paint['circle-opacity'] = colorOpacity;
-        paint['circle-color'] = color;
-        paint['circle-radius'] = +ConfigMapExportHelper.getMapProperty(modeValues.styleStep.radiusFg, mode);
-        break;
-      }
-      case GEOMETRY_TYPE.heatmap: {
-        paint['heatmap-color'] = color;
-        paint['heatmap-intensity'] = ConfigMapExportHelper.getMapProperty(modeValues.styleStep.intensityFg, mode);
-        paint['heatmap-weight'] = ConfigMapExportHelper.getMapProperty(modeValues.styleStep.weightFg, mode);
-        paint['heatmap-radius'] = ConfigMapExportHelper.getMapProperty(modeValues.styleStep.radiusFg, mode);
-      }
-    }
-    return paint;
   }
 
   public getLayer(layerFg, modeValues, paint) {

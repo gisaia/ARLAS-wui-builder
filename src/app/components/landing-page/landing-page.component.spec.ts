@@ -9,6 +9,7 @@ import { ArlasCollaborativesearchService, ArlasConfigService, ArlasStartupServic
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { NGXLogger } from 'ngx-logger';
 import { LandingPageComponent, LandingPageDialogComponent } from './landing-page.component';
+import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 
 describe('LandingPageComponent', () => {
   let spectator: Spectator<LandingPageComponent>;
@@ -29,6 +30,7 @@ describe('LandingPageComponent', () => {
       mockProvider(ArlasConfigurationDescriptor),
       mockProvider(HttpClient),
       mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(StartingConfigFormBuilderService),
       { provide: GET_OPTIONS, useValue: {} }
     ],
     entryComponents: [
