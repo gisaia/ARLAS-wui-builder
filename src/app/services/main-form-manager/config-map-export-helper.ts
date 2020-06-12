@@ -117,10 +117,10 @@ export class ConfigMapExportHelper {
                 const interpolatedValues = fgValues.propertyInterpolatedFg;
                 let interpolatedColor: Array<string | Array<string | number>>;
                 const getField = () =>
-                    (mode === LAYER_MODE.features && interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'metric')
-                        ? interpolatedValues.propertyInterpolatedFieldCtrl :
-                        interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
-                        (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_';
+                    (interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'metric')
+                        ? interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
+                        (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_' :
+                        interpolatedValues.propertyInterpolatedFieldCtrl;
 
                 if (mode !== LAYER_MODE.features && interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'count') {
                     // for types FEATURE-METRIC and CLUSTER, if we interpolate by count
