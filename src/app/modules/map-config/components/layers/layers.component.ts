@@ -27,8 +27,12 @@ import { ArlasCollaborativesearchService, ArlasConfigService } from 'arlas-wui-t
 import { FormArray } from '@angular/forms';
 import { StartupService } from '@services/startup/startup.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
-import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
+import { ConfigMapExportHelper, VISIBILITY } from '@services/main-form-manager/config-map-export-helper';
 import { camelize } from '@utils/tools';
+import { MapglLegendComponent } from 'arlas-web-components';
+import { Paint, Layer as LayerMap } from '@services/main-form-manager/models-map-config';
+import { LAYER_MODE } from '@map-config/components/edit-layer/models';
+import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
 
 export interface Layer {
   id: string;
@@ -43,8 +47,10 @@ export interface Layer {
 })
 export class LayersComponent implements OnInit {
 
-  public displayedColumns: string[] = ['name', 'mode', 'collection', 'zoomMin', 'zoomMax', 'action'];
+  public displayedColumns: string[] = ['representation', 'name', 'mode', 'collection', 'zoomMin', 'zoomMax', 'action'];
   public layersFa: FormArray;
+
+  public layerLegend: Map<string, { layer: any, colorLegend: any }> = new Map();
 
   constructor(
     protected mainFormService: MainFormService,
@@ -59,6 +65,72 @@ export class LayersComponent implements OnInit {
   }
 
   public ngOnInit() {
+    this.layersFa.value.map(layer => {
+      const modeValues = layer.mode === LAYER_MODE.features ? layer.featuresFg :
+        (layer.mode === LAYER_MODE.featureMetric ? layer.featureMetricFg : layer.clusterFg);
+      const paint = this.getLayerPaint(modeValues, layer.mode);
+      this.layerLegend.set(
+        layer.name + '#' + layer.mode,
+        { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint) }
+      );
+    });
+  }
+
+  public getLayerPaint(modeValues, mode: LAYER_MODE) {
+    const paint: Paint = {};
+    const colorOpacity = modeValues.styleStep.opacity;
+    const color = ConfigMapExportHelper.getMapProperty(modeValues.styleStep.colorFg, mode);
+    switch (modeValues.styleStep.geometryType) {
+      case GEOMETRY_TYPE.fill: {
+        paint['fill-opacity'] = colorOpacity;
+        paint['fill-color'] = color;
+        break;
+      }
+      case GEOMETRY_TYPE.line: {
+        paint['line-opacity'] = colorOpacity;
+        paint['line-color'] = color;
+        paint['line-width'] = ConfigMapExportHelper.getMapProperty(modeValues.styleStep.widthFg, mode);
+        break;
+      }
+      case GEOMETRY_TYPE.circle: {
+        paint['circle-opacity'] = colorOpacity;
+        paint['circle-color'] = color;
+        paint['circle-radius'] = +ConfigMapExportHelper.getMapProperty(modeValues.styleStep.radiusFg, mode);
+        break;
+      }
+      case GEOMETRY_TYPE.heatmap: {
+        paint['heatmap-color'] = color;
+        paint['heatmap-intensity'] = ConfigMapExportHelper.getMapProperty(modeValues.styleStep.intensityFg, mode);
+        paint['heatmap-weight'] = ConfigMapExportHelper.getMapProperty(modeValues.styleStep.weightFg, mode);
+        paint['heatmap-radius'] = ConfigMapExportHelper.getMapProperty(modeValues.styleStep.radiusFg, mode);
+      }
+    }
+    return paint;
+  }
+
+  public getLayer(layerFg, modeValues, paint) {
+
+    const sourceName = layerFg.mode === LAYER_MODE.features ? 'feature' :
+      (layerFg.mode === LAYER_MODE.featureMetric ? 'feature-metric' : 'cluster');
+
+    const layer: LayerMap = {
+      id: layerFg.name,
+      type: modeValues.styleStep.geometryType,
+      source: sourceName,
+      minzoom: modeValues.visibilityStep.zoomMin,
+      maxzoom: modeValues.visibilityStep.zoomMax,
+      layout: {
+        visibility: modeValues.visibilityStep.visible ? VISIBILITY.visible : VISIBILITY.none
+      },
+      paint
+    };
+    return layer;
+  }
+
+  public getColorLegend(paint) {
+    const styleColor = paint['circle-color'] || paint['heatmap-color'] || paint['fill-color'] || paint['line-color'];
+    const colorLegend = MapglLegendComponent.buildColorLegend(styleColor as any, true, null);
+    return colorLegend[0];
   }
 
   public confirmDelete(layerId: number, layerName: string): void {

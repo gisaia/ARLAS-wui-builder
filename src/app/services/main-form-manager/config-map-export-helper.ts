@@ -91,7 +91,7 @@ export class ConfigMapExportHelper {
         return mapConfig;
     }
 
-    private static getMapProperty(fgValues: any, mode: LAYER_MODE) {
+    public static getMapProperty(fgValues: any, mode: LAYER_MODE) {
         switch (fgValues.propertySource) {
             case PROPERTY_SELECTOR_SOURCE.fix:
                 return fgValues.propertyFix;
@@ -111,11 +111,13 @@ export class ConfigMapExportHelper {
 
                 const interpolatedValues = fgValues.propertyInterpolatedFg;
                 let interpolatedColor: Array<string | Array<string | number>>;
-                const getField = () => (mode === LAYER_MODE.features) ? interpolatedValues.propertyInterpolatedFieldCtrl :
-                    interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
-                    (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_';
+                const getField = () =>
+                    (mode === LAYER_MODE.features && interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'metric')
+                        ? interpolatedValues.propertyInterpolatedFieldCtrl :
+                        interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
+                        (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_';
 
-                if (mode !== LAYER_MODE.features && !interpolatedValues.propertyInterpolatedCountOrMetricCtrl) {
+                if (mode !== LAYER_MODE.features && interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'count') {
                     // for types FEATURE-METRIC and CLUSTER, if we interpolate by count
                     interpolatedColor = [
                         'interpolate',
