@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit, AfterContentChecked, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
 import { MainFormService } from '@services/main-form/main-form.service';
@@ -25,6 +25,7 @@ import { NGXLogger } from 'ngx-logger';
 import { LAYER_MODE } from './models';
 import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { KeywordColor } from '../dialog-color-table/models';
 
 @Component({
   selector: 'app-edit-layer',
@@ -70,8 +71,11 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
           if (layerIndex >= 0) {
             // cannot simply update the existing form instance because we want to allow cancellation
             // so we rather propagate the existing form properties
-            const existingLayerFg = this.getLayerAt(layerIndex);
+            const existingLayerFg = this.getLayerAt(layerIndex) as MapLayerFormGroup;
             this.layerFg.patchValue(existingLayerFg.value);
+            this.populateManualValuesFormArray(existingLayerFg);
+
+
           } else {
             this.navigateToParentPage();
             this.logger.error('Unknown layer ID');
@@ -79,6 +83,25 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
         }
       });
     }
+  }
+
+  // you may ask yourself "hey, this b*** breaker Laurent always f**** me to avoid code duplication
+  // and here is code duplication. This is Laurent last day, and he didn't find any way to avoid it
+  // by keeping the whole typing. Figure it out.
+  // PS: Sebastian, you're a jerk
+  private populateManualValuesFormArray(existingLayerFg: MapLayerFormGroup) {
+    (existingLayerFg.customControls.featuresFg.colorFg.customControls.propertyManualFg.propertyManualValuesCtrl.value
+      || [] as Array<KeywordColor>).forEach(kc =>
+        this.layerFg.customControls.featuresFg.colorFg.addToColorManualValuesCtrl(kc));
+
+    (existingLayerFg.customControls.featureMetricFg.colorFg.customControls.propertyManualFg.propertyManualValuesCtrl.value
+      || [] as Array<KeywordColor>).forEach(kc =>
+        this.layerFg.customControls.featureMetricFg.colorFg.addToColorManualValuesCtrl(kc));
+
+    (existingLayerFg.customControls.clusterFg.colorFg.customControls.propertyManualFg.propertyManualValuesCtrl.value
+      || [] as Array<KeywordColor>).forEach(kc =>
+        this.layerFg.customControls.clusterFg.colorFg.addToColorManualValuesCtrl(kc));
+
   }
 
   private navigateToParentPage() {
