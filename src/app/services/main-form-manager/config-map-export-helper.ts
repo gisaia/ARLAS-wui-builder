@@ -39,35 +39,8 @@ export class ConfigMapExportHelper {
             const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
                 (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
 
-            const paint: Paint = {};
-            const colorOpacity = modeValues.styleStep.opacity;
-            const color = this.getMapProperty(modeValues.styleStep.colorFg, mode);
+            const paint = this.getLayerPaint(modeValues, mode);
 
-            switch (modeValues.styleStep.geometryType) {
-                case GEOMETRY_TYPE.fill: {
-                    paint['fill-opacity'] = colorOpacity;
-                    paint['fill-color'] = color;
-                    break;
-                }
-                case GEOMETRY_TYPE.line: {
-                    paint['line-opacity'] = colorOpacity;
-                    paint['line-color'] = color;
-                    paint['line-width'] = this.getMapProperty(modeValues.styleStep.widthFg, mode);
-                    break;
-                }
-                case GEOMETRY_TYPE.circle: {
-                    paint['circle-opacity'] = colorOpacity;
-                    paint['circle-color'] = color;
-                    paint['circle-radius'] = +this.getMapProperty(modeValues.styleStep.radiusFg, mode);
-                    break;
-                }
-                case GEOMETRY_TYPE.heatmap: {
-                    paint['heatmap-color'] = color;
-                    paint['heatmap-intensity'] = this.getMapProperty(modeValues.styleStep.intensityFg, mode);
-                    paint['heatmap-weight'] = this.getMapProperty(modeValues.styleStep.weightFg, mode);
-                    paint['heatmap-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
-                }
-            }
             const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
             const layer: Layer = {
                 id: layerFg.value.name,
@@ -91,7 +64,39 @@ export class ConfigMapExportHelper {
         return mapConfig;
     }
 
-    private static getMapProperty(fgValues: any, mode: LAYER_MODE) {
+    public static getLayerPaint(modeValues, mode) {
+        const paint: Paint = {};
+        const colorOpacity = modeValues.styleStep.opacity;
+        const color = this.getMapProperty(modeValues.styleStep.colorFg, mode);
+        switch (modeValues.styleStep.geometryType) {
+            case GEOMETRY_TYPE.fill: {
+                paint['fill-opacity'] = colorOpacity;
+                paint['fill-color'] = color;
+                break;
+            }
+            case GEOMETRY_TYPE.line: {
+                paint['line-opacity'] = colorOpacity;
+                paint['line-color'] = color;
+                paint['line-width'] = this.getMapProperty(modeValues.styleStep.widthFg, mode);
+                break;
+            }
+            case GEOMETRY_TYPE.circle: {
+                paint['circle-opacity'] = colorOpacity;
+                paint['circle-color'] = color;
+                paint['circle-radius'] = +this.getMapProperty(modeValues.styleStep.radiusFg, mode);
+                break;
+            }
+            case GEOMETRY_TYPE.heatmap: {
+                paint['heatmap-color'] = color;
+                paint['heatmap-intensity'] = this.getMapProperty(modeValues.styleStep.intensityFg, mode);
+                paint['heatmap-weight'] = this.getMapProperty(modeValues.styleStep.weightFg, mode);
+                paint['heatmap-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
+            }
+        }
+        return paint;
+    }
+
+    public static getMapProperty(fgValues: any, mode: LAYER_MODE) {
         switch (fgValues.propertySource) {
             case PROPERTY_SELECTOR_SOURCE.fix:
                 return fgValues.propertyFix;
@@ -111,11 +116,13 @@ export class ConfigMapExportHelper {
 
                 const interpolatedValues = fgValues.propertyInterpolatedFg;
                 let interpolatedColor: Array<string | Array<string | number>>;
-                const getField = () => (mode === LAYER_MODE.features) ? interpolatedValues.propertyInterpolatedFieldCtrl :
-                    interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
-                    (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_';
+                const getField = () =>
+                    (mode === LAYER_MODE.features && interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'metric')
+                        ? interpolatedValues.propertyInterpolatedFieldCtrl :
+                        interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
+                        (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_';
 
-                if (mode !== LAYER_MODE.features && !interpolatedValues.propertyInterpolatedCountOrMetricCtrl) {
+                if (mode !== LAYER_MODE.features && interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'count') {
                     // for types FEATURE-METRIC and CLUSTER, if we interpolate by count
                     interpolatedColor = [
                         'interpolate',

@@ -44,8 +44,6 @@ enum InitialChoice {
   load = 2
 }
 
-
-
 @Component({
   templateUrl: './landing-page-dialog.component.html',
   styleUrls: ['./landing-page-dialog.component.scss']

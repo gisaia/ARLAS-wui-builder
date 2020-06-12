@@ -28,7 +28,7 @@ import { LayersComponent } from './components/layers/layers.component';
 import { MapConfigRoutingModule } from './map-config-routing.module';
 import { MapConfigComponent } from './map-config.component';
 import { PreviewModalComponent } from './components/preview-modal/preview-modal.component';
-import { MapglComponent, MapglModule } from 'arlas-web-components';
+import { MapglComponent, MapglModule, MapglLayerIconModule, MapglLegendModule } from 'arlas-web-components';
 
 @NgModule({
   entryComponents: [
@@ -50,6 +50,8 @@ import { MapglComponent, MapglModule } from 'arlas-web-components';
   imports: [
     MapConfigRoutingModule,
     MapglModule,
+    MapglLayerIconModule,
+    MapglLegendModule,
     SharedModule
   ],
   providers: [

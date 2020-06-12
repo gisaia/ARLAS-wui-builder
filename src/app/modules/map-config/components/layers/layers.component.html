@@ -19,6 +19,13 @@
         <td mat-cell *matCellDef="let element"> {{element[camelize(element.mode) + 'Fg'].collectionStep.collection}} </td>
     </ng-container>
 
+    <ng-container matColumnDef="representation">
+        <th mat-header-cell *matHeaderCellDef>{{'#' | translate}}</th>
+        <td mat-cell *matCellDef="let element">
+            <arlas-mapgl-layer-icon [layer]="layerLegend.get(element.name + '#' + element.mode).layer" [colorLegend]="layerLegend.get(element.name + '#' + element.mode).colorLegend"></arlas-mapgl-layer-icon>
+        </td>
+    </ng-container>
+
     <ng-container matColumnDef="zoomMin">
         <th mat-header-cell *matHeaderCellDef>{{'Zoom min' | translate}}</th>
         <td mat-cell *matCellDef="let element"> {{element[camelize(element.mode) + 'Fg'].visibilityStep.zoomMin}} </td>
