@@ -192,8 +192,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
             .afterClosed().subscribe((result: Array<KeywordColor>) => {
               if (result !== undefined) {
                 this.customControls.propertyManualFg.propertyManualValuesCtrl.clear();
-                result.forEach((k: KeywordColor) => {
-                  this.addToColorManualValuesCtrl(k);
+                result.forEach((kc: KeywordColor) => {
+                  this.addToColorManualValuesCtrl(kc);
                 });
               }
             }),
@@ -203,22 +203,23 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
             dependsOn: () => [this.customControls.propertyManualFg.propertyManualFieldCtrl],
             onDependencyChange: (control) => {
               const field = this.customControls.propertyManualFg.propertyManualFieldCtrl.value;
-              this.customControls.propertyManualFg.propertyManualValuesCtrl.clear();
-
               control.enableIf(!!field);
-              if (field) {
-                control.enable();
+
+              // an possible issue is that deleted keyword may be added automatically:
+              // as this `onDependencyChange` method is also executed on loading, the code below
+              // will automatically get the main terms and add them to the manual values,
+              // with their default value
+              // With the global color map (not implemented yet), this shouldn't be a problem anymore
+              if (!!field) {
                 collectionService.getTermAggregation(collection, field).then((keywords: Array<string>) => {
-                  keywords.forEach((k: string) => {
-                    this.addToColorManualValuesCtrl({
-                      keyword: k,
-                      color: colorService.getColor(k)
+                  const existingKeywords =
+                    (this.customControls.propertyManualFg.propertyManualValuesCtrl.value as Array<KeywordColor>)
+                      .map(v => v.keyword);
+                  [...keywords, 'OTHER']
+                    .filter(k => existingKeywords.indexOf(k) < 0)
+                    .forEach((k: string) => {
+                      this.addToColorManualValuesCtrl({ keyword: k, color: colorService.getColor(k) });
                     });
-                  });
-                  this.addToColorManualValuesCtrl({
-                    keyword: 'OTHER',
-                    color: defaultConfig.otherColor
-                  });
                 });
               }
             }
@@ -665,7 +666,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
     control.enableIf(doEnable);
   }
 
-  private addToColorManualValuesCtrl(kc: KeywordColor) {
+  public addToColorManualValuesCtrl(kc: KeywordColor) {
     const keywordColorGrp = new FormGroup({
       keyword: new FormControl(kc.keyword),
       color: new FormControl(kc.color)

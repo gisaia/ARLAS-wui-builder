@@ -30,6 +30,7 @@ import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/p
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
 import { COUNT_OR_METRIC } from '@shared-services/property-selector-form-builder/models';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -234,6 +235,11 @@ export class MapImportService {
           (() => { })();
 
     typeFg.patchValue(values);
+
+    // populate manual values FormArray
+    const manualValues = (((values.styleStep || {}).colorFg || {}).propertyManualFg || {}).propertyManualValuesCtrl as Array<KeywordColor>;
+    (manualValues || []).forEach(kc =>
+      typeFg.colorFg.addToColorManualValuesCtrl(kc));
 
     return layerFg;
   }
