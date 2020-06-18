@@ -37,6 +37,7 @@ import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-
 import { LOCALSTORAGE_CONFIG_ID_KEY } from '@utils/tools';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
+import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
 
 enum InitialChoice {
   none = 0,
@@ -74,7 +75,9 @@ export class LandingPageDialogComponent implements OnInit {
     private translate: TranslateService,
     private mainFormManager: MainFormManagerService,
     public persistenceService: PersistenceService,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private authService: AuthentificationService
+  ) { }
 
   public ngOnInit(): void {
     // Reset and clean the content of all forms
@@ -88,8 +91,11 @@ export class LandingPageDialogComponent implements OnInit {
     );
 
     if (this.persistenceService.isAvailable) {
-      // Load all config available in persistence
-      this.getConfigList();
+      if (!this.persistenceService.isAuthAvailable ||
+        (this.persistenceService.isAuthAvailable && this.persistenceService.isAuthenticate)) {
+        // Load all config available in persistence
+        this.getConfigList();
+      }
     }
 
   }
@@ -255,6 +261,10 @@ export class LandingPageDialogComponent implements OnInit {
     this.configService.setConfig(newConf);
     // Update collaborative search Service with the new url
     return this.startupService.setCollaborativeService(newConf);
+  }
+
+  public login() {
+    this.authService.login();
   }
 }
 

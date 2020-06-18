@@ -25,6 +25,7 @@ import { Configuration, PersistenceApi, Data, DataResource } from 'arlas-persist
 import { EnvService } from '@services/env/env.service';
 import { map, mergeMap, flatMap } from 'rxjs/operators';
 import { ConfigPersistence } from '@services/main-form-manager/models-config';
+import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
 
 // tslint:disable-next-line: ban-types
 export const GET_OPTIONS = new InjectionToken<(Function)>('get_options');
@@ -37,17 +38,24 @@ export class PersistenceService {
 
   private persistenceApi: PersistenceApi;
   public isAvailable = false;
+  public isAuthenticate = false;
+  public isAuthAvailable = false;
 
   constructor(
     private envService: EnvService,
-    @Inject(GET_OPTIONS) private getOptions
+    @Inject(GET_OPTIONS) private getOptions,
+    private authentificationService: AuthentificationService
   ) {
     const configuration = new Configuration();
-    if (this.envService.persistenceUrl !== '') {
-      const baseUrl = this.envService.persistenceUrl;
-      this.persistenceApi = new PersistenceApi(configuration, baseUrl, portableFetch);
-      this.isAvailable = true;
-    }
+    this.isAuthAvailable = !!this.authentificationService.authConfig;
+    this.authentificationService.isAuthenticated.subscribe( isAuth => {
+      this.isAuthenticate = isAuth;
+      if (this.envService.persistenceUrl !== '') {
+        const baseUrl = this.envService.persistenceUrl;
+        this.persistenceApi = new PersistenceApi(configuration, baseUrl, portableFetch);
+        this.isAvailable = true;
+      }
+    });
   }
 
 
