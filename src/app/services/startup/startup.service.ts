@@ -45,11 +45,20 @@ export class StartupService {
     private injector: Injector
   ) { }
 
-  public init(): Promise<string> {
-    // Init app with an empty configuration
-    return this.setConfigService({})
+  public init(configFilePath: string): Promise<string> {
+    let configData;
+    const ret = this.http
+      .get(configFilePath)
+      .pipe(flatMap((response) => {
+        configData = response;
+        return Promise.resolve(configData);
+      })).toPromise()
+      .then((data) => this.validateConfiguration(data))
+      .then((data) => this.setConfigService(data))
+      .then((data) => this.setAuthentService(data))
       // Init app with the language read from url
       .then(() => this.translationLoaded());
+    return ret;
   }
 
   // This funcion could be used to valid an existing loaded conf
@@ -63,6 +72,7 @@ export class StartupService {
       })).toPromise()
       .then(() => this.validateConfiguration(configData))
       .then((data) => this.setConfigService(data))
+      .then((data) => this.setAuthentService(data))
       .then((data) => this.setCollaborativeService(data))
       .catch((err: any) => {
         console.error(err);
@@ -152,5 +162,21 @@ export class StartupService {
       currentConfig.arlas.web.contributors = [];
     }
     return currentConfig;
+  }
+
+  public setAuthentService(data) {
+
+    return new Promise<any>((resolve, reject) => {
+      if (this.configService.getValue('arlas.authentification')) {
+        const useAuthentForArlas = this.configService.getValue('arlas.authentification.useAuthentForArlas');
+        const useDiscovery = this.configService.getValue('arlas.authentification.useDiscovery');
+        const authService = this.injector.get('AuthentificationService')[0];
+        authService.initAuthService(this.configService, useDiscovery, useAuthentForArlas).then(() => {
+          resolve([data, useAuthentForArlas]);
+        });
+      } else {
+        resolve(data);
+      }
+    });
   }
 }

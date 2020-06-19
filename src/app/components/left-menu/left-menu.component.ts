@@ -24,6 +24,8 @@ import { getNbErrorsInControl, isFullyTouched } from '@utils/tools';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { EXPORT_TYPE } from '@services/main-form-manager/config-export-helper';
 import { PersistenceService } from '@services/persistence/persistence.service';
+import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
+import { Router } from '@angular/router';
 
 interface Page {
   link: string;
@@ -48,7 +50,9 @@ export class LeftMenuComponent {
     private mainFormService: MainFormService,
     private mainFormManager: MainFormManagerService,
     private translate: TranslateService,
-    public persistenceService: PersistenceService
+    public persistenceService: PersistenceService,
+    private authService: AuthentificationService,
+    private router: Router
   ) {
     // recompute nberrors of each page anytime the mainform validity changes
     this.mainFormService.mainForm.statusChanges.subscribe(st => this.updateNbErrors());
@@ -115,7 +119,8 @@ export class LeftMenuComponent {
   }
 
   public save(event) {
-    if (this.persistenceService.isAvailable) {
+    if (this.persistenceService.isAvailable &&
+      (!this.persistenceService.isAuthAvailable || ( this.persistenceService.isAuthAvailable && this.persistenceService.isAuthenticate ))) {
       this.mainFormManager.attemptExport(EXPORT_TYPE.persistence);
       this.updateNbErrors();
     } else {
@@ -128,4 +133,8 @@ export class LeftMenuComponent {
     this.updateNbErrors();
   }
 
+  public logout() {
+    this.authService.logout();
+    this.router.navigate(['']);
+  }
 }

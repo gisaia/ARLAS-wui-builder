@@ -23,7 +23,8 @@
   <div>
     <div class="action-list">
       <mat-nav-list>
-        <mat-list-item matTooltip="{{'Save' | translate}}" (click)="save($event)" [class.disabled-item]="!this.persistenceService.isAvailable">
+        <mat-list-item matTooltip="{{'Save' | translate}}" (click)="save($event)" 
+        [class.disabled-item]="!this.persistenceService.isAvailable || (!this.persistenceService.isAuthenticate && this.persistenceService.isAuthAvailable)">
           <button mat-icon-button >
             <mat-icon>save</mat-icon>
             <span>{{'Save' | translate}}</span>
@@ -33,6 +34,12 @@
           <button mat-icon-button>
             <mat-icon>save_alt</mat-icon>
             <span>{{'Download' | translate}}</span>
+          </button>
+        </mat-list-item>
+        <mat-list-item matTooltip="{{'Log Out' | translate}}" (click)="logout()" *ngIf="this.persistenceService.isAuthenticate">
+          <button mat-icon-button>
+            <mat-icon>lock_open</mat-icon>
+            <span>{{'Log Out' | translate}}</span>
           </button>
         </mat-list-item>
       </mat-nav-list>

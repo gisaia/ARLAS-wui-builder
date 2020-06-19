@@ -256,9 +256,9 @@ export class ConfigExportHelper {
                         layerSource.include_fields.push(interpolatedValues.propertyInterpolatedFieldCtrl);
                     }
                 } else {
-                    if (!interpolatedValues.propertyInterpolatedCountOrMetricCtrl) {
+                    if (interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'count') {
                         layerSource.metrics.push({
-                            field: 'count',
+                            field: '',
                             metric: 'count',
                             normalize: !!interpolatedValues.propertyInterpolatedCountNormalizeCtrl
                         });

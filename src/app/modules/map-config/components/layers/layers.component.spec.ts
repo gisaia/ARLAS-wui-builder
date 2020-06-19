@@ -3,6 +3,7 @@ import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectat
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormArray } from '@angular/forms';
 import { MapglLegendModule, MapglLayerIconModule } from 'arlas-web-components';
+import { ArlasConfigurationUpdaterService } from 'arlas-wui-toolkit/services/configuration-updater/configurationUpdater.service';
 import {
   ArlasCollaborativesearchService, ArlasStartupService,
   ArlasConfigService, CONFIG_UPDATER
@@ -12,9 +13,10 @@ describe('LayersComponent', () => {
   let spectator: Spectator<LayersComponent>;
   const createComponent = createComponentFactory({
     providers: [
-      ArlasStartupService,
-      ArlasCollaborativesearchService,
-      ArlasConfigService,
+      mockProvider(ArlasConfigService),
+      mockProvider(ArlasStartupService),
+      mockProvider(ArlasCollaborativesearchService),
+      mockProvider(ArlasConfigurationUpdaterService),
       { provide: CONFIG_UPDATER, useValue: {} },
       mockProvider(MainFormService, {
         mapConfig: {

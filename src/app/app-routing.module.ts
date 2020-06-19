@@ -25,6 +25,7 @@ import { PageNotFoundComponent } from '@components/page-not-found/page-not-found
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
+  { path: 'callback', redirectTo: '' },
   {
     path: 'map-config',
     loadChildren: () => import('./modules/map-config/map-config.module').then(m => m.MapConfigModule),
