@@ -32,6 +32,17 @@ under the License.
     padding: 15px;
   }
 
+  .action-list{
+    .disabled-item{
+      cursor: not-allowed;
+      color: rgba(0, 0, 0, 0.26);
+
+      button{
+        cursor: not-allowed;
+      }
+    }
+  }
+
   mat-icon {
     padding-right: 5px;
   }

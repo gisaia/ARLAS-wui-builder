@@ -49,6 +49,8 @@ import { AuthentificationService } from 'arlas-wui-toolkit/services/authentifica
 import { GET_OPTIONS } from '@services/persistence/persistence.service';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { EnvServiceProvider } from '@services/env/env.service.provider';
+import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
+import { LookAndFeelConfigModule } from '@look-and-feel-config/look-and-feel-config.module';
 
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
@@ -56,13 +58,17 @@ export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   return load;
 }
 export function startupServiceFactory(startupService: StartupService) {
-  const init = () => startupService.init();
+  const init = () => startupService.init('config.json');
   return init;
+}
+
+export function auhtentServiceFactory(service: AuthentificationService) {
+  return service;
 }
 
 export function getOptionsFactory(arlasAuthService: AuthentificationService): any {
   const getOptions = () => {
-    const token = !!arlasAuthService.accessToken ? arlasAuthService.accessToken : null;
+    const token = !!arlasAuthService.identityClaims ? (arlasAuthService.identityClaims as any).nickname : null;
     if (token !== null) {
       return {
         headers: {
@@ -90,6 +96,7 @@ export function getOptionsFactory(arlasAuthService: AuthentificationService): an
     BrowserAnimationsModule,
     MapConfigModule,
     SearchConfigModule,
+    LookAndFeelConfigModule,
     SharedModule,
     TimelineConfigModule,
     TranslateModule.forRoot({
@@ -125,6 +132,12 @@ export function getOptionsFactory(arlasAuthService: AuthentificationService): an
       multi: true
     },
     {
+      provide: 'AuthentificationService',
+      useFactory: auhtentServiceFactory,
+      deps: [AuthentificationService],
+      multi: true
+    },
+    {
       provide: ArlasWalkthroughService,
       useClass: WalkthroughService
     },
@@ -147,6 +160,6 @@ export function getOptionsFactory(arlasAuthService: AuthentificationService): an
     }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [LandingPageDialogComponent]
+  entryComponents: [LandingPageDialogComponent, InputModalComponent]
 })
 export class AppModule { }

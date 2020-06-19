@@ -24,16 +24,51 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { WIDGET_TYPE } from './models';
 import { MatDialog } from '@angular/material';
 import { EditWidgetDialogComponent } from '../edit-widget-dialog/edit-widget-dialog.component';
-import { NGXLogger } from 'ngx-logger';
 import { EditWidgetDialogData } from '../edit-widget-dialog/models';
-import { ArlasCollaborativesearchService, ArlasStartupService, ArlasConfigService } from 'arlas-wui-toolkit';
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
-import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
-import { HistogramComponent } from 'arlas-web-components';
-import { HistogramContributor } from 'arlas-web-contributors';
 import { OperationEnum } from 'arlas-web-core';
-import { StartupService } from '@services/startup/startup.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
+import { MatDialogRef } from '@angular/material/dialog';
+
+@Component({
+  selector: 'app-add-widget-dialog',
+  templateUrl: './edit-group-add-widget.component.html',
+  styleUrls: ['./edit-group-add-widget.component.scss']
+})
+export class AddWidgetDialogComponent {
+  public widgetType: Array<string> = [];
+
+  public contentTypes = [
+    [WIDGET_TYPE.histogram],
+    [WIDGET_TYPE.donut],
+    [WIDGET_TYPE.powerbars],
+    [WIDGET_TYPE.resultlist],
+    [WIDGET_TYPE.metric],
+    [WIDGET_TYPE.swimlane],
+    [WIDGET_TYPE.metric, WIDGET_TYPE.metric],
+    [WIDGET_TYPE.donut, WIDGET_TYPE.powerbars],
+    [WIDGET_TYPE.donut, WIDGET_TYPE.swimlane],
+    [WIDGET_TYPE.histogram, WIDGET_TYPE.histogram],
+    [WIDGET_TYPE.powerbars, WIDGET_TYPE.powerbars],
+    [WIDGET_TYPE.metric, WIDGET_TYPE.metric, WIDGET_TYPE.metric],
+    [WIDGET_TYPE.powerbars, WIDGET_TYPE.powerbars, WIDGET_TYPE.powerbars]
+  ];
+  public getContentTypes = (nbWidgets: number) => this.contentTypes.filter(elmt => elmt.length === nbWidgets);
+
+  constructor(
+    public dialogRef: MatDialogRef<AddWidgetDialogComponent>
+  ) { }
+
+  public cancel(): void {
+    this.dialogRef.close();
+  }
+
+  public pressEvent(event: KeyboardEvent) {
+    if (event.code === 'Enter' && this.widgetType) {
+      this.dialogRef.close(this.widgetType);
+    }
+  }
+}
 
 @Component({
   selector: 'app-edit-group',
@@ -45,30 +80,10 @@ export class EditGroupComponent implements OnInit {
   @Input() public formGroup: FormGroup;
   @Output() public remove = new EventEmitter();
 
-  public contentTypes = [
-    [WIDGET_TYPE.histogram],
-    [WIDGET_TYPE.donut],
-    [WIDGET_TYPE.powerbar],
-    [WIDGET_TYPE.resultlist],
-    [WIDGET_TYPE.metric],
-    [WIDGET_TYPE.swimlane],
-    [WIDGET_TYPE.metric, WIDGET_TYPE.metric],
-    [WIDGET_TYPE.donut, WIDGET_TYPE.powerbar],
-    [WIDGET_TYPE.donut, WIDGET_TYPE.swimlane],
-    [WIDGET_TYPE.histogram, WIDGET_TYPE.histogram],
-    [WIDGET_TYPE.powerbar, WIDGET_TYPE.powerbar],
-    [WIDGET_TYPE.metric, WIDGET_TYPE.metric, WIDGET_TYPE.metric],
-    [WIDGET_TYPE.powerbar, WIDGET_TYPE.powerbar, WIDGET_TYPE.powerbar]
-  ];
-  public getContentTypes = (nbWidgets: number) => this.contentTypes.filter(elmt => elmt.length === nbWidgets);
+
   constructor(
     private dialog: MatDialog,
-    private logger: NGXLogger,
     private cdr: ChangeDetectorRef,
-    private arlasStartupService: ArlasStartupService,
-    private collaborativesearchService: ArlasCollaborativesearchService,
-    private configService: ArlasConfigService,
-    private startupService: StartupService,
     private analyticsInitService: AnalyticsInitService
   ) { }
 
@@ -85,6 +100,16 @@ export class EditGroupComponent implements OnInit {
     });
   }
 
+  public addWidget() {
+    this.dialog.open(AddWidgetDialogComponent, {})
+      .afterClosed().subscribe(result => {
+        if (result) {
+          this.formGroup.controls.contentType.setValue(result);
+          this.editWidget(this.contentTypeValue.length - 1);
+        }
+      });
+  }
+
   public editWidget(widgetIndex: number) {
     const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup;
     this.dialog.open(EditWidgetDialogComponent, {
@@ -96,27 +121,35 @@ export class EditGroupComponent implements OnInit {
       .afterClosed().subscribe(result => {
         if (result) {
           widgetFg.setControl('widgetData', result);
-          this.analyticsInitService.createPreviewContributor(this.formGroup, widgetFg);
+          const contrib = this.analyticsInitService.createContributor(
+            widgetFg.value.widgetType,
+            widgetFg.value.widgetData,
+            this.formGroup.controls.icon.value
+          );
+          this.updatePreview();
+          contrib.updateFromCollaboration({
+            id: '',
+            operation: OperationEnum.add,
+            all: false
+          });
           this.cdr.detectChanges();
         }
       });
   }
 
+  public onIconPickerSelect(icon: string): void {
+    this.formGroup.controls.icon.setValue(icon);
+    this.updatePreview();
+  }
 
-  public createContributor = (widgetType, widgetData, icon) => {
-    const contribConfig = ConfigExportHelper.getAnalyticsContributor(widgetType, widgetData, icon) as any;
-    const currentConfig = this.startupService.getConfigWithInitContrib();
-    if (this.arlasStartupService.contributorRegistry.get(contribConfig.identifier) === undefined) {
-      currentConfig.arlas.web.contributors.push(contribConfig);
-      this.configService.setConfig(currentConfig);
-      const contributor = ContributorBuilder.buildContributor(WIDGET_TYPE[widgetType],
-        contribConfig.identifier,
-        this.configService,
-        this.collaborativesearchService);
-      this.arlasStartupService.contributorRegistry
-        .set(contribConfig.identifier, contributor);
+  public updatePreview() {
+    this.formGroup.controls.preview.setValue([]);
+    if (this.formGroup.invalid) {
+      return;
     }
-    return this.arlasStartupService.contributorRegistry.get(contribConfig.identifier);
+    setTimeout(() =>
+      this.formGroup.controls.preview.setValue([ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1)]), 0);
+    this.cdr.detectChanges();
   }
 
   get contentType() {
@@ -131,3 +164,5 @@ export class EditGroupComponent implements OnInit {
     return this.formGroup.controls.content as FormArray;
   }
 }
+
+

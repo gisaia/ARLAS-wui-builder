@@ -33,6 +33,9 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import 'zone.js/dist/zone-testing';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatMenuModule } from '@angular/material/menu';
+import { IconPickerModule } from 'ngx-icon-picker';
 
 // define modules to be injected in every test
 defineGlobalsInjections({
@@ -66,7 +69,10 @@ defineGlobalsInjections({
     TranslateModule.forRoot({ loader: { provide: TranslateLoader, useClass: TranslateFakeLoader } }),
     MatBadgeModule,
     HttpClientModule,
-    DragDropModule
+    DragDropModule,
+    MatButtonToggleModule,
+    MatMenuModule,
+    IconPickerModule
   ],
   providers: [
     mockProvider(NGXLogger),

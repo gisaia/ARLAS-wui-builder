@@ -25,6 +25,7 @@ import { PageNotFoundComponent } from '@components/page-not-found/page-not-found
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
+  { path: 'callback', redirectTo: '' },
   {
     path: 'map-config',
     loadChildren: () => import('./modules/map-config/map-config.module').then(m => m.MapConfigModule),
@@ -45,11 +46,21 @@ const routes: Routes = [
     loadChildren: () => import('./modules/analytics-config/analytics-config.module').then(m => m.AnalyticsConfigModule),
     canActivate: [MainFormInitializedGuard]
   },
+  {
+    path: 'side-modules',
+    loadChildren: () => import('./modules/side-modules-config/side-modules-config.module').then(m => m.SideModulesConfigModule),
+    canActivate: [MainFormInitializedGuard]
+  },
+  {
+    path: 'look-and-feel',
+    loadChildren: () => import('./modules/look-and-feel-config/look-and-feel-config.module').then(m => m.LookAndFeelConfigModule),
+    canActivate: [MainFormInitializedGuard]
+  },
   { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

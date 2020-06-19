@@ -19,19 +19,20 @@ under the License.
 import { Injectable } from '@angular/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import {
   ConfigFormGroup, SlideToggleFormControl, SelectFormControl, InputFormControl
 } from '@shared-models/config-form';
 import { ChartType } from 'arlas-web-components';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import {
   BucketsIntervalFormBuilderService, BucketsIntervalFormGroup
 } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
-import { MetricFormBuilderService, MetricFormGroup } from '../metric-form-builder/metric-form-builder.service';
-import { CollectionField } from '@services/collection-service/models';
-import { Observable } from 'rxjs';
+import {
+  MetricCollectFormBuilderService, MetricCollectFormGroup
+} from '../metric-collect-form-builder/metric-collect-form-builder.service';
+import { toNumericOrDateFieldsObs } from '@services/collection-service/tools';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 // TODO put in common with timeline
 enum DateFormats {
@@ -43,7 +44,7 @@ export class HistogramFormGroup extends ConfigFormGroup {
 
   constructor(
     bucketsIntervalFg: BucketsIntervalFormGroup,
-    metricFg: MetricFormGroup
+    metricFg: MetricCollectFormGroup
   ) {
     super(
       {
@@ -54,7 +55,7 @@ export class HistogramFormGroup extends ConfigFormGroup {
             'description'),
           aggregation: bucketsIntervalFg,
           metric: metricFg
-        }),
+        }).withTabName('Data'),
         renderStep: new ConfigFormGroup({
           multiselectable: new SlideToggleFormControl(
             '',
@@ -80,6 +81,31 @@ export class HistogramFormGroup extends ConfigFormGroup {
             false,
             Object.keys(DateFormats).map(df => ({ value: DateFormats[df], label: df }))
           )
+        }).withTabName('Render'),
+        unmanagedFields: new FormGroup({
+          dataStep: new FormGroup({
+            isOneDimension: new FormControl(),
+          }),
+          renderStep: new FormGroup({
+            showExportCsv: new FormControl(),
+            isHistogramSelectable: new FormControl(),
+            topOffsetRemoveInterval: new FormControl(),
+            leftOffsetRemoveInterval: new FormControl(),
+            brushHandlesHeightWeight: new FormControl(),
+            yAxisStartsFromZero: new FormControl(),
+            xAxisPosition: new FormControl(),
+            descriptionPosition: new FormControl(),
+            xTicks: new FormControl(),
+            yTicks: new FormControl(),
+            xLabels: new FormControl(),
+            yLabels: new FormControl(),
+            showXTicks: new FormControl(),
+            showYTicks: new FormControl(),
+            showXLabels: new FormControl(),
+            showYLabels: new FormControl(),
+            barWeight: new FormControl(),
+            isSmoothedCurve: new FormControl(),
+          })
         })
       }
     );
@@ -89,13 +115,38 @@ export class HistogramFormGroup extends ConfigFormGroup {
     dataStep: {
       name: this.get('dataStep').get('name') as InputFormControl,
       aggregation: this.get('dataStep').get('aggregation') as BucketsIntervalFormGroup,
-      metric: this.get('dataStep').get('metric') as MetricFormGroup
+      metric: this.get('dataStep').get('metric') as MetricCollectFormGroup
     },
     renderStep: {
       multiselectable: this.get('renderStep').get('multiselectable') as SlideToggleFormControl,
       chartType: this.get('renderStep').get('chartType') as SelectFormControl,
       showHorizontalLines: this.get('renderStep').get('showHorizontalLines') as SlideToggleFormControl,
       ticksDateFormat: this.get('renderStep').get('ticksDateFormat') as SelectFormControl
+    },
+    unmanagedFields: {
+      dataStep: {
+        isOneDimension: this.get('unmanagedFields.dataStep.isOneDimension'),
+      },
+      renderStep: {
+        showExportCsv: this.get('unmanagedFields.renderStep.showExportCsv'),
+        isHistogramSelectable: this.get('unmanagedFields.renderStep.isHistogramSelectable'),
+        topOffsetRemoveInterval: this.get('unmanagedFields.renderStep.topOffsetRemoveInterval'),
+        leftOffsetRemoveInterval: this.get('unmanagedFields.renderStep.leftOffsetRemoveInterval'),
+        brushHandlesHeightWeight: this.get('unmanagedFields.renderStep.brushHandlesHeightWeight'),
+        yAxisStartsFromZero: this.get('unmanagedFields.renderStep.yAxisStartsFromZero'),
+        xAxisPosition: this.get('unmanagedFields.renderStep.xAxisPosition'),
+        descriptionPosition: this.get('unmanagedFields.renderStep.descriptionPosition'),
+        xTicks: this.get('unmanagedFields.renderStep.xTicks'),
+        yTicks: this.get('unmanagedFields.renderStep.yTicks'),
+        xLabels: this.get('unmanagedFields.renderStep.xLabels'),
+        yLabels: this.get('unmanagedFields.renderStep.yLabels'),
+        showXTicks: this.get('unmanagedFields.renderStep.showXTicks'),
+        showYTicks: this.get('unmanagedFields.renderStep.showYTicks'),
+        showXLabels: this.get('unmanagedFields.renderStep.showXLabels'),
+        showYLabels: this.get('unmanagedFields.renderStep.showYLabels'),
+        barWeight: this.get('unmanagedFields.renderStep.barWeight'),
+        isSmoothedCurve: this.get('unmanagedFields.renderStep.isSmoothedCurve'),
+      }
     }
   };
 
@@ -112,9 +163,9 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
   constructor(
     protected collectionService: CollectionService,
     protected mainFormService: MainFormService,
-    private formBuilderDefault: FormBuilderWithDefaultService,
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
-    private metricBuilderService: MetricFormBuilderService
+    private defaultValuesService: DefaultValuesService,
+    private metricBuilderService: MetricCollectFormBuilderService
   ) {
     super(collectionService, mainFormService);
   }
@@ -125,11 +176,11 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
       this.mainFormService.getCollections()[0]);
 
     const formGroup = new HistogramFormGroup(
-      this.bucketsIntervalBuilderService.build(collectionFieldsObs),
+      this.bucketsIntervalBuilderService.build(toNumericOrDateFieldsObs(collectionFieldsObs)),
       this.metricBuilderService.build(collectionFieldsObs)
     );
 
-    this.formBuilderDefault.setDefaultValueRecursively(this.defaultKey, formGroup);
+    this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
 
     return formGroup;
   }

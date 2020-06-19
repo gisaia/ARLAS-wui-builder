@@ -17,6 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 @import "./theme.scss";
+@import "./variables.scss";
 
 @font-face {
   font-family: "Material Icons";
@@ -25,6 +26,9 @@ under the License.
   src: local("Material Icons"), local("MaterialIcons-Regular"),
     url("./assets/fonts/material-icons.woff2") format("woff2");
 }
+
+$accent-color: mat-color($accent-palette);
+$primary-color: mat-color($primary-palette);
 
 body {
   width: 100%;
@@ -98,13 +102,32 @@ body {
   }
 }
 
+// force mat-slider background when set to min value
+.mat-slider-min-value.mat-slider-thumb-label-showing .mat-slider-thumb-label {
+  background-color: $accent-color;
+}
+
+.mat-slider-min-value.mat-slider-thumb-label-showing.cdk-focused .mat-slider-thumb-label {
+  background-color: $accent-color;
+}
+
 .dialog-with-overflow mat-dialog-container {
   overflow: visible;
 }
 
 #mapgl {
   width: 80% !important;
-  height: 80%!important;
-  margin: -24px!important;
+  height: 80% !important;
+  margin: -24px !important;
   position: absolute;
+}
+
+.mat-button-toggle-group {
+  mat-button-toggle.mat-button-toggle-checked {
+    background-color: white !important;
+  }
+  mat-button-toggle:not(.mat-button-toggle-checked) {
+    background-color: rgb(224, 224, 224) !important;
+    color: rgb(0, 0, 0, 0.25) !important;
+  }
 }

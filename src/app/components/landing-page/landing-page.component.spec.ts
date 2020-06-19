@@ -3,9 +3,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { GET_OPTIONS } from '@services/persistence/persistence.service';
+import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import { StartupService } from '@services/startup/startup.service';
 import { SharedModule } from '@shared/shared.module';
-import { ArlasCollaborativesearchService, ArlasConfigService, ArlasStartupService } from 'arlas-wui-toolkit';
+import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService, ArlasStartupService } from 'arlas-wui-toolkit';
+import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { NGXLogger } from 'ngx-logger';
 import { LandingPageComponent, LandingPageDialogComponent } from './landing-page.component';
@@ -28,7 +30,10 @@ describe('LandingPageComponent', () => {
       mockProvider(ArlasStartupService),
       mockProvider(ArlasConfigurationDescriptor),
       mockProvider(HttpClient),
-      {provide: GET_OPTIONS, useValue: {}}
+      mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(StartingConfigFormBuilderService),
+      mockProvider(AuthentificationService),
+      { provide: GET_OPTIONS, useValue: {} }
     ],
     entryComponents: [
       LandingPageDialogComponent

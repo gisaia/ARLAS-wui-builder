@@ -18,29 +18,38 @@ under the License.
 */
 import { NgModule } from '@angular/core';
 import { AnalyticsConfigRoutingModule } from './analytics-config-routing.module';
-import { AnalyticsConfigComponent } from './analytics-config.component';
 import { TabsComponent } from './components/tabs/tabs.component';
 import { SharedModule } from '@shared/shared.module';
 import { GroupsComponent } from './components/groups/groups.component';
-import { EditGroupComponent } from './components/edit-group/edit-group.component';
+import { EditGroupComponent, AddWidgetDialogComponent } from './components/edit-group/edit-group.component';
 import { EditWidgetDialogComponent } from './components/edit-widget-dialog/edit-widget-dialog.component';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
+import { IconPickerModule } from 'ngx-icon-picker';
+import { EditResultlistColumnsComponent } from './components/edit-resultlist-columns/edit-resultlist-columns.component';
+import { EditResultlistDetailsComponent } from './components/edit-resultlist-details/edit-resultlist-details.component';
+import { ResultlistDataComponent } from './components/resultlist-data/resultlist-data.component';
 
 @NgModule({
   entryComponents: [
-    EditWidgetDialogComponent
+    EditWidgetDialogComponent,
+    AddWidgetDialogComponent,
+    ResultlistDataComponent
   ],
   declarations: [
-    AnalyticsConfigComponent,
     TabsComponent,
     GroupsComponent,
     EditGroupComponent,
-    EditWidgetDialogComponent
+    EditWidgetDialogComponent,
+    AddWidgetDialogComponent,
+    EditResultlistColumnsComponent,
+    EditResultlistDetailsComponent,
+    ResultlistDataComponent
   ],
   imports: [
     ArlasToolkitSharedModule,
     SharedModule,
-    AnalyticsConfigRoutingModule
+    AnalyticsConfigRoutingModule,
+    IconPickerModule
   ]
 })
 export class AnalyticsConfigModule { }

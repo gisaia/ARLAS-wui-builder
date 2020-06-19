@@ -18,8 +18,12 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { Config, AnalyticComponentConfig, ContributorConfig } from '@services/main-form-manager/models-config';
-import { TimelineFormGroup } from '../timeline-form-builder/timeline-form-builder.service';
+import {
+  Config, AnalyticComponentConfig, AnalyticComponentHistogramInputConfig, ContributorConfig
+} from '@services/main-form-manager/models-config';
+import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timeline-global-form-builder.service';
+import { importElements } from '@services/main-form-manager/tools';
+import { BY_BUCKET_OR_INTERVAL } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -41,39 +45,207 @@ export class TimelineImportService {
     const timelineFg = this.mainFormService.timelineConfig.getGlobalFg();
     const hasDetailedTimeline = !!detailedTimelineContributor && !!detailedTimelineComponent;
 
-    // as timeline form is still using sub-forms, due to their nature we cannot get an instance to their form controls.
-    // We can only set the value of the parent Form Control, angular will then propagate to every sub-control.
-    // TODO after turning timeline forms to config forms, use a direct reference to the field, like in Search module
+    const timelineDataStep = timelineFg.customControls.tabsContainer.dataStep.timeline;
+    const detailedTimelineDataStep = timelineFg.customControls.tabsContainer.dataStep.detailedTimeline;
 
-    timelineFg.patchValue({
-      useDetailedTimeline: hasDetailedTimeline,
-      timeline: this.getTimelineFormGroupValue(false, timelineContributor, timelineComponent)
-    });
+    importElements([
+      {
+        value: hasDetailedTimeline,
+        control: timelineFg.customControls.useDetailedTimeline
+      },
+      {
+        value: timelineComponent.input.multiselectable,
+        control: timelineFg.customControls.tabsContainer.renderStep.timeline.isMultiselectable
+      },
+      {
+        value: timelineContributor.aggregationmodels[0].field,
+        control: timelineDataStep.aggregation.customControls.aggregationField
+      },
+      {
+        value: !timelineContributor.numberOfBuckets ? BY_BUCKET_OR_INTERVAL.INTERVAL : BY_BUCKET_OR_INTERVAL.BUCKET,
+        control: timelineDataStep.aggregation.customControls.aggregationBucketOrInterval
+      },
+      {
+        value: timelineContributor.numberOfBuckets,
+        control: timelineDataStep.aggregation.customControls.aggregationBucketsNumber
+      },
+      {
+        value: !!timelineContributor.aggregationmodels[0].interval ? timelineContributor.aggregationmodels[0].interval.unit : null,
+        control: timelineDataStep.aggregation.customControls.aggregationIntervalUnit
+      },
+      {
+        value: !!timelineContributor.aggregationmodels[0].interval ? timelineContributor.aggregationmodels[0].interval.value : null,
+        control: timelineDataStep.aggregation.customControls.aggregationIntervalSize
+      }
+    ]);
+    this.importCommonElements(timelineComponent, timelineFg, false);
+    this.importUnmanagedFields(timelineContributor, timelineComponent, timelineFg, false);
 
     if (hasDetailedTimeline) {
-      timelineFg.patchValue({
-        detailedTimeline: this.getTimelineFormGroupValue(true, detailedTimelineContributor, detailedTimelineComponent)
-      });
+
+      this.importCommonElements(detailedTimelineComponent, timelineFg, true);
+      importElements([
+        {
+          value: detailedTimelineContributor.selectionExtentPercentage * 100,
+          control: timelineFg.customControls.tabsContainer.renderStep.detailedTimeline.selectionExtentPercent
+        },
+        {
+          value: detailedTimelineContributor.numberOfBuckets,
+          control: detailedTimelineDataStep.bucketsNumber
+        }
+      ]);
+
+      this.importUnmanagedFields(detailedTimelineContributor, detailedTimelineComponent, timelineFg, true);
     }
+  }
+
+  private importCommonElements(
+    timelineComponent: AnalyticComponentConfig,
+    timelineFg: TimelineGlobalFormGroup,
+    isDetailed: boolean) {
+
+    const renderStep = isDetailed ?
+      timelineFg.customControls.tabsContainer.renderStep.detailedTimeline :
+      timelineFg.customControls.tabsContainer.renderStep.timeline;
+
+    importElements([
+      {
+        value: timelineComponent.input.chartTitle,
+        control: renderStep.chartTitle
+      },
+      {
+        value: timelineComponent.input.chartType,
+        control: renderStep.chartType
+      },
+      {
+        value: timelineComponent.input.ticksDateFormat,
+        control: timelineFg.customControls.tabsContainer.renderStep.timeline.dateFormat
+      }
+    ]);
 
   }
 
-  public getTimelineFormGroupValue(isDetailedTimeline: boolean, contributor: ContributorConfig, component: AnalyticComponentConfig) {
-    return {
-      isDetailedTimeline,
-      field: contributor.aggregationmodels[0].field,
-      bucketOrInterval: !!contributor.aggregationmodels[0].interval,
-      bucketsNumber: contributor.numberOfBuckets,
-      intervalUnit: !!contributor.aggregationmodels[0].interval ?
-        !!contributor.aggregationmodels[0].interval.unit : null,
-      intervalSize: !!contributor.aggregationmodels[0].interval ?
-        !!contributor.aggregationmodels[0].interval.value : null,
-      chartTitle: component.input.chartTitle,
-      chartType: component.input.chartType,
-      dateFormat: component.input.ticksDateFormat,
-      isMultiselectable: component.input.multiselectable,
-      selectionExtentPercent: contributor.selectionExtentPercentage * 100,
-    };
+  private importUnmanagedFields(
+    contributor: ContributorConfig,
+    timelineComponent: AnalyticComponentConfig,
+    timelineFg: TimelineGlobalFormGroup,
+    isDetailed: boolean
+  ) {
+    const componentInput = (timelineComponent.input as AnalyticComponentHistogramInputConfig);
+    const unmanagedDataFields = isDetailed ?
+      timelineFg.customControls.unmanagedFields.dataStep.detailedTimeline :
+      timelineFg.customControls.unmanagedFields.dataStep.timeline;
+    const unmanagedRenderTimelineFields = timelineFg.customControls.unmanagedFields.renderStep.timeline;
+    const unmanagedRenderDetailedTimelineFields = timelineFg.customControls.unmanagedFields.renderStep.detailedTimeline;
+    const unmanagedRenderFields = isDetailed ? unmanagedRenderDetailedTimelineFields : unmanagedRenderTimelineFields;
+
+
+    importElements([
+      {
+        value: contributor.name,
+        control: unmanagedDataFields.name
+      },
+      {
+        value: contributor.icon,
+        control: unmanagedDataFields.icon
+      },
+      {
+        value: contributor.isOneDimension,
+        control: unmanagedDataFields.isOneDimension
+      },
+      {
+        value: componentInput.xTicks,
+        control: unmanagedRenderFields.xTicks
+      },
+      {
+        value: componentInput.yTicks,
+        control: unmanagedRenderFields.yTicks
+      },
+      {
+        value: componentInput.xLabels,
+        control: unmanagedRenderFields.xLabels
+      },
+      {
+        value: componentInput.yLabels,
+        control: unmanagedRenderFields.yLabels
+      },
+      {
+        value: componentInput.customizedCssClass,
+        control: unmanagedRenderFields.customizedCssClass
+      },
+      {
+        value: componentInput.chartHeight,
+        control: unmanagedRenderFields.chartHeight
+      },
+      {
+        value: componentInput.brushHandlesHeightWeight,
+        control: unmanagedRenderFields.brushHandlesHeightWeight
+      },
+      {
+        value: componentInput.isHistogramSelectable,
+        control: unmanagedRenderFields.isHistogramSelectable
+      },
+      {
+        value: componentInput.chartWidth,
+        control: unmanagedRenderFields.chartWidth
+      },
+      {
+        value: componentInput.xAxisPosition,
+        control: unmanagedRenderFields.xAxisPosition
+      },
+      {
+        value: componentInput.yAxisStartsFromZero,
+        control: unmanagedRenderFields.yAxisStartsFromZero
+      },
+      {
+        value: componentInput.descriptionPosition,
+        control: unmanagedRenderFields.descriptionPosition
+      },
+      {
+        value: componentInput.showXTicks,
+        control: unmanagedRenderFields.showXTicks
+      },
+      {
+        value: componentInput.showYTicks,
+        control: unmanagedRenderFields.showYTicks
+      },
+      {
+        value: componentInput.showXLabels,
+        control: unmanagedRenderFields.showXLabels
+      },
+      {
+        value: componentInput.showYLabels,
+        control: unmanagedRenderFields.showYLabels
+      },
+      {
+        value: componentInput.showHorizontalLines,
+        control: unmanagedRenderFields.showHorizontalLines
+      },
+      {
+        value: componentInput.isSmoothedCurve,
+        control: unmanagedRenderFields.isSmoothedCurve
+      },
+      {
+        value: componentInput.barWeight,
+        control: unmanagedRenderFields.barWeight
+      },
+    ]);
+
+    if (isDetailed) {
+      importElements([
+        {
+          value: componentInput.multiselectable,
+          control: unmanagedRenderDetailedTimelineFields.multiselectable
+        }
+      ]);
+    } else {
+      importElements([
+        {
+          value: componentInput.topOffsetRemoveInterval,
+          control: unmanagedRenderTimelineFields.topOffsetRemoveInterval
+        }
+      ]);
+    }
   }
 
 }

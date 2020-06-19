@@ -21,6 +21,6 @@ under the License.
 }
 
 .content {
-  height: 100%;
   margin: 20px;
+  height: calc(100vh - 40px);
 }

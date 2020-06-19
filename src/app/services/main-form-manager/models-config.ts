@@ -1,5 +1,6 @@
 import { Layer } from './models-map-config';
 import { BasemapStyle } from 'arlas-web-components/components/mapgl/model/mapLayers';
+import { VisualisationSetConfig } from 'arlas-web-components';
 
 /*
 Licensed to Gisaïa under one or more contributor
@@ -34,7 +35,8 @@ export interface Config {
                 components: {
                     chipssearch: ChipSearchConfig;
                 }
-            }
+            },
+
         }
     };
 }
@@ -42,6 +44,12 @@ export interface Config {
 export interface ArlasConfig {
     web: WebConfig;
     server: ServerConfig;
+    tagger?: {
+        url: string;
+        collection: {
+            name: string;
+        }
+    };
 }
 
 export interface ChipSearchConfig {
@@ -54,16 +62,41 @@ export interface WebConfig {
     components: {
         timeline: AnalyticComponentConfig,
         detailedTimeline?: AnalyticComponentConfig,
-        mapgl: MapglComponentConfig
+        mapgl: MapglComponentConfig,
+        share?: {
+            geojson: {
+                max_for_feature: number;
+                max_for_topology: number;
+                sort_excluded_type: Array<string>;
+            }
+        },
+        download?: {
+            auth_type?: string;
+        }
     };
     analytics: Array<AnalyticConfig>;
+    colorGenerator: { keysToColors: Array<Array<string>> };
+    options?: WebConfigOptions;
+}
+
+export interface WebConfigOptions {
+    dragItems?: boolean;
+    zoomToData?: boolean;
+    indicators?: boolean;
+    spinner?: SpinnerOptions;
+}
+
+export interface SpinnerOptions {
+    show: boolean;
+    diameter?: string;
+    color?: string;
+    strokeWidth?: number;
 }
 
 export interface ServerConfig {
     url: string;
     collection: {
         name: string;
-        id: string;
     };
     maxAgeCache: number;
 }
@@ -89,6 +122,16 @@ export interface ContributorConfig {
     datatype?: string;
     jsonpath?: string;
     swimlanes?: Array<SwimlaneConfig>;
+    function?: string;
+    metrics?: Array<{ field: string, metric: string }>;
+    search_size?: number;
+    fieldsConfiguration?: { idFieldName: string };
+    columns?: Array<{ columnName: string, fieldName: string, dataType: string, process: string }>;
+    details?: Array<{
+        name: string,
+        order: number,
+        fields: Array<{ path: string, label: string, process: string }>
+    }>;
 }
 
 export interface SwimlaneConfig {
@@ -128,7 +171,7 @@ export interface AnalyticComponentInputConfig {
     chartTitle: string;
     chartWidth: number;
     chartHeight: number;
-    customizedCssClass: string;
+    customizedCssClass?: string;
     xAxisPosition: string;
     descriptionPosition: string;
     xTicks: number;
@@ -141,6 +184,30 @@ export interface AnalyticComponentInputConfig {
     showYLabels: boolean;
     showHorizontalLines: boolean;
     barWeight: number;
+    beforeValue?: string;
+    afterValue?: string;
+    shortValue?: boolean;
+    displayFilter?: boolean;
+    useColorService?: boolean;
+    opacity?: number;
+    powerbarTitle?: string;
+    diameter?: number;
+    tableWidth?: number;
+    globalActionsList?: Array<any>;
+    searchSize?: number;
+    nLastLines?: number;
+    detailedGridHeight?: number;
+    nbGridColumns?: number;
+    defautMode?: string;
+    displayFilters?: boolean;
+    isBodyHidden?: boolean;
+    isGeoSortActived?: boolean;
+    isAutoGeoSortActived?: boolean;
+    selectedItemsEvent?: any;
+    consultedItemEvent?: any;
+    actionOnItemEvent?: any;
+    globalActionEvent?: any;
+    cellBackgroundStyle?: string;
 }
 
 export interface AnalyticComponentHistogramInputConfig extends AnalyticComponentInputConfig {
@@ -159,7 +226,7 @@ export interface AnalyticComponentSwimlaneInputConfig extends AnalyticComponentI
 
 export interface AnalyticComponentSwimlaneInputOptionsConfig {
     zerosColor?: string;
-    nanColors?: string;
+    nanColor?: string;
 }
 
 export interface MapglComponentConfig {
@@ -178,24 +245,19 @@ export interface MapComponentInputConfig {
     displayScale: boolean;
     idFeatureField: string;
     mapLayers: MapComponentInputMapLayersConfig;
+    visualisations_sets: Array<VisualisationSetConfig>;
 }
 
 export interface MapComponentInputMapLayersConfig {
     layers: Array<Layer>;
     events: MapComponentInputMapLayersEventsConfig;
     externalEventLayers: Array<{ id: string, on: string }>;
-    visualisations_sets: MapComponentInputLayersSetsConfig;
 }
 
 export interface MapComponentInputMapLayersEventsConfig {
     zoomOnClick: Array<string>;
     emitOnClick: Array<string>;
     onHover: Array<string>;
-}
-
-export interface MapComponentInputLayersSetsConfig {
-    visualisations: any;
-    default: Array<string>;
 }
 
 export interface AggregationModelConfig {
@@ -217,4 +279,9 @@ export interface AggregationModelMetricConfig {
 export interface NormalizationFieldConfig {
     on: string;
     per: string;
+}
+
+export interface ConfigPersistence {
+    name: string;
+    config: string;
 }

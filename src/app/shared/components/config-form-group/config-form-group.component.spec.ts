@@ -5,6 +5,7 @@ import { ConfigFormControlComponent } from '@shared-components/config-form-contr
 import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
 import { ConfigFormGroup } from '@shared-models/config-form';
 import { ObjectvaluesPipe } from '@shared/pipes/objectvalues.pipe';
+import { ConfigFormGroupArrayComponent } from '@shared-components/config-form-group-array/config-form-group-array.component';
 
 describe('ConfigFormGroupComponent', () => {
   let spectator: Spectator<ConfigFormGroupComponent>;
@@ -13,6 +14,7 @@ describe('ConfigFormGroupComponent', () => {
     component: ConfigFormGroupComponent,
     declarations: [
       MockComponent(ConfigFormControlComponent),
+      MockComponent(ConfigFormGroupArrayComponent),
       MockComponent(ConfigElementComponent),
       ObjectvaluesPipe
     ]

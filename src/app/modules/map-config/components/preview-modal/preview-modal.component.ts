@@ -45,7 +45,7 @@ export class PreviewModalComponent implements OnInit, AfterViewInit {
   constructor(
     public dialogRef: MatDialogRef<PreviewModalComponent>,
     @Inject(MAT_DIALOG_DATA) public dataMap: MapglComponentInput,
-    private collaborativeService: ArlasCollaborativesearchService ) {
+    private collaborativeService: ArlasCollaborativesearchService) {
     const layerID = dataMap.layers.length > 0 ? dataMap.layers[0].id : undefined;
     this.mapglContributor = dataMap.mapglContributor;
     this.mapComponentConfig = {
@@ -99,12 +99,13 @@ export class PreviewModalComponent implements OnInit, AfterViewInit {
           ]
         }
       },
-      visualisations_sets: {
-        visualisations: {
-          set1: [layerID],
-        },
-        default: ['set1']
-      }
+      visualisations_sets: [
+        {
+          name: 'layers',
+          layers: [layerID],
+          enabled: true
+        }
+      ]
     };
   }
 
@@ -114,7 +115,7 @@ export class PreviewModalComponent implements OnInit, AfterViewInit {
 
   public ngAfterViewInit() {
     this.mapglComponent.onMapLoaded.subscribe(isLoaded => {
-      if (isLoaded && !!this.mapglContributor ) {
+      if (isLoaded && !!this.mapglContributor) {
         this.mapglContributor.updateData = true;
         this.mapglContributor.fetchData(null);
         this.mapglContributor.setSelection(null, this.collaborativeService.getCollaboration(this.mapglContributor.identifier));

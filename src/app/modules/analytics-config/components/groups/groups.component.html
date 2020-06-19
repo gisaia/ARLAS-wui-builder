@@ -3,14 +3,22 @@
         {{'At least one group is required within a tab' | translate}}
     </mat-error>
     <div formArrayName="groupsFa" cdkDropList (cdkDropListDropped)="drop($event)">
-        <div *ngFor="let group of groupsFa.controls; index as gi;" [formGroupName]="gi" cdkDrag>
-            <app-edit-group [formGroup]="group" (remove)="remove(gi)"></app-edit-group>
+        <div *ngFor="let group of groupsFa.controls; index as gi;" [formGroupName]="gi" cdkDrag class="group">
+            <button *cdkDragPreview mat-button><mat-icon>drag_indicator</mat-icon>{{'Move' | translate }}</button>
+            <div class="header" cdkDragHandle>
+                <button mat-button [matTooltip]="'Move group' | translate"><mat-icon>drag_indicator</mat-icon>{{'Move' | translate }}</button>
+                <button mat-button (click)="remove(gi)" [matTooltip]="'Delete group' | translate"><mat-icon>delete</mat-icon>{{'Delete' | translate }}</button>
+            </div>
+            <app-edit-group [formGroup]="group" (remove)="remove(gi)" >
+            </app-edit-group>
+            <div class="placeholder" *cdkDragPlaceholder></div>
         </div>
     </div>
 
     <div class="add-button">
-        <button mat-fab (click)="addGroup()" [matTooltip]="'Add group' | translate">
+        <button mat-raised-button color="primary" (click)="addGroup()" [matTooltip]="'Add a group' | translate">
             <mat-icon>add</mat-icon>
+            {{'Add a group' | translate}}
         </button>
     </div>
 </div>

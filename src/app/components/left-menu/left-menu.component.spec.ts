@@ -3,6 +3,8 @@ import { LeftMenuComponent } from './left-menu.component';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormGroup } from '@angular/forms';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+import { GET_OPTIONS } from '@services/persistence/persistence.service';
+import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
 
 describe('LeftMenuComponent', () => {
   let spectator: Spectator<LeftMenuComponent>;
@@ -18,15 +20,23 @@ describe('LeftMenuComponent', () => {
           searchConfig: {
             control: new FormGroup({})
           },
+          lookAndFeelConfig: {
+            control: new FormGroup({})
+          },
           timelineConfig: {
             control: new FormGroup({})
           },
           analyticsConfig: {
             control: new FormGroup({})
           },
+          sideModulesConfig: {
+            control: new FormGroup({})
+          },
           mainForm: new FormGroup({})
         }),
-      mockProvider(MainFormManagerService)
+      mockProvider(MainFormManagerService),
+      mockProvider(AuthentificationService),
+      { provide: GET_OPTIONS, useValue: {} }
     ]
   });
 
@@ -36,11 +46,6 @@ describe('LeftMenuComponent', () => {
 
   it('should create', () => {
     expect(spectator.component).toBeTruthy();
-  });
-
-  it('should contain 1 image, 7 items', () => {
-    expect(spectator.queryAll('img')).toHaveLength(1);
-    expect(spectator.queryAll('mat-list-item')).toHaveLength(7);
   });
 
 });

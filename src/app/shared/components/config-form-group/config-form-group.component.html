@@ -1,34 +1,93 @@
 <div [formGroup]="configFormGroup">
-    <h3 *ngIf="configFormGroup.title" class="form-group-title">{{configFormGroup.title | translate}}</h3>
-    <div *ngFor="let control of configFormGroup.controls | objectvalues">
-        <div *ngIf="control.enabled">
-            <div *ngIf="isFormControl(control); let formControl">
-                <div *ngIf="!formControl.isChild">
-                    <app-config-element>
-                        <div form-fields>
-                            <app-config-form-control [control]="formControl" [defaultKey]="defaultKey">
-                            </app-config-form-control>
-                            <div *ngFor="let child of formControl.childs()">
-                                <div *ngIf="child.enabled">
-                                    <app-config-form-control [control]="child" [defaultKey]="defaultKey">
-                                    </app-config-form-control>
-                                </div>
+    <h3 *ngIf="configFormGroup.title" class="form-control-title">{{configFormGroup.title | translate}}</h3>
+
+    <!-- TODO try to factorize code in case of stepper / tab / none -->
+    <div *ngIf="hasChildSteps()">
+        <mat-horizontal-stepper #stepper class="stepper-for-config-element">
+            <div *ngFor="let control of configFormGroup.controls | objectvalues">
+                <div *ngIf="control.enabled">
+                    <div *ngIf="isFormGroup(control); let formGroup">
+                        <mat-step label="{{formGroup.stepName | translate}}" [stepControl]="formGroup">
+                            <app-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey"
+                                isSubGroup="true">
+                            </app-config-form-group>
+                            <div>
+                                <button mat-button matStepperPrevious
+                                    *ngIf="!isFirstControl(formGroup)">{{ 'Back' | translate}}</button>
+                                <button mat-button matStepperNext type="button"
+                                    *ngIf="!isLastControl(formGroup)">{{ 'Next' | translate}}</button>
                             </div>
-                        </div>
-                        <div description>
-                            {{ control.description | translate}}
-                            <div *ngFor="let child of formControl.childs()">
-                                <div *ngIf="child.enabled">
-                                    {{ child.description | translate}}
-                                </div>
-                            </div>
-                        </div>
-                    </app-config-element>
+                        </mat-step>
+                    </div>
                 </div>
             </div>
-            <div *ngIf="isFormGroup(control); let formGroup">
-                <app-config-form-group [configFormGroup]="formGroup">
-                </app-config-form-group>
+        </mat-horizontal-stepper>
+    </div>
+
+    <div *ngIf="hasChildTabs()">
+        <mat-tab-group mat-stretch-tabs>
+            <div *ngFor="let control of configFormGroup.controls | keyvalue">
+                <div *ngIf="control.value.enabled">
+                    <div *ngIf="isFormGroup(control.value); let formGroup">
+                        <mat-tab #tab>
+                            <ng-template mat-tab-label>
+                                <span [class.tab-error]="formGroup.touched && formGroup.invalid && !tab.isActive">
+                                    {{formGroup.tabName | translate}}
+                                </span>
+                            </ng-template>
+                            <app-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey"
+                                isSubGroup="true">
+                            </app-config-form-group>
+                            <ng-content select="control.key"></ng-content>
+                        </mat-tab>
+                    </div>
+                </div>
+            </div>
+        </mat-tab-group>
+    </div>
+
+    <div *ngIf="!hasChildSteps() && !hasChildTabs()">
+        <div *ngFor="let control of configFormGroup.controls | objectvalues">
+            <div *ngIf="control.enabled">
+                <div *ngIf="isFormControl(control); let formControl">
+                    <div *ngIf="!formControl.isChild">
+                        <h3 *ngIf="formControl.title" class="form-control-title">{{formControl.title | translate}}</h3>
+                        <app-config-element [fullSize]="!control.description">
+                            <div form-fields>
+                                <app-config-form-control [control]="formControl" [defaultKey]="defaultKey">
+                                </app-config-form-control>
+                                <div *ngFor="let child of formControl.childs()">
+                                    <div *ngIf="child.enabled">
+                                        <app-config-form-control [control]="child" [defaultKey]="defaultKey">
+                                        </app-config-form-control>
+                                    </div>
+                                </div>
+                            </div>
+                            <div description *ngIf="control.description">
+                                <div *ngIf="control.isDescriptionHtml" [innerHtml]="trustHtml(control.description)">
+                                </div>
+                                <div *ngIf="!control.isDescriptionHtml">
+                                    {{ control.description | translate}}
+                                </div>
+
+                                <div *ngFor="let child of formControl.childs()">
+                                    <div *ngIf="child.enabled">
+                                        {{ child.description | translate}}
+                                    </div>
+                                </div>
+                            </div>
+                        </app-config-element>
+                    </div>
+                </div>
+                <div *ngIf="isFormGroup(control); let formGroup">
+                    <app-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey" isSubGroup="true">
+                    </app-config-form-group>
+                </div>
+                <div *ngIf="isFormGroupArray(control); let formGroupArray">
+                    <app-config-form-group-array [configFormGroupArray]="formGroupArray" [defaultKey]="defaultKey"
+                        isSubGroup="true">
+                    </app-config-form-group-array>
+                </div>
             </div>
         </div>
     </div>

@@ -18,19 +18,26 @@ under the License.
 */
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit, Output } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ArlasConfigService } from 'arlas-wui-toolkit';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs';
 import { StartupService } from '../../services/startup/startup.service';
-import { Config } from '@services/main-form-manager/models-config';
+import { Config, ConfigPersistence } from '@services/main-form-manager/models-config';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+import { MapConfig } from '@services/main-form-manager/models-map-config';
+import { PersistenceService } from '@services/persistence/persistence.service';
+import { DataResource } from 'arlas-persistence-api';
+import { PageEvent } from '@angular/material/paginator';
+import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { LOCALSTORAGE_CONFIG_ID_KEY } from '@utils/tools';
+import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
+import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
+import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
 
 enum InitialChoice {
   none = 0,
@@ -50,6 +57,12 @@ export class LandingPageDialogComponent implements OnInit {
   public availablesCollections: string[];
   public InitialChoice = InitialChoice;
 
+  public configurations = [];
+  public displayedColumns: string[] = ['id', 'creation', 'detail'];
+  public configurationsLength = 0;
+  public configPageNumber = 0;
+  public configPageSize = 5;
+
   constructor(
     public dialogRef: MatDialogRef<LandingPageDialogComponent>,
     public mainFormService: MainFormService,
@@ -58,27 +71,33 @@ export class LandingPageDialogComponent implements OnInit {
     private configService: ArlasConfigService,
     private startupService: StartupService,
     private configDescritor: ArlasConfigurationDescriptor,
-    private formBuilderWithDefault: FormBuilderWithDefaultService,
+    private startingConfigFormBuilder: StartingConfigFormBuilderService,
     private translate: TranslateService,
-    private mainFormManager: MainFormManagerService) { }
+    private mainFormManager: MainFormManagerService,
+    public persistenceService: PersistenceService,
+    private dialog: MatDialog,
+    private authService: AuthentificationService
+  ) { }
 
   public ngOnInit(): void {
     // Reset and clean the content of all forms
     this.mainFormService.resetMainForm();
-    this.mainFormManager.initMainModulesForms();
+
+    // Reset current config id
+    localStorage.removeItem(LOCALSTORAGE_CONFIG_ID_KEY);
 
     this.mainFormService.startingConfig.init(
-      this.formBuilderWithDefault.group('global', {
-        serverUrl: new FormControl(null,
-          [
-            Validators.required,
-            Validators.pattern(
-              '(https?://)?(([0-9.]{1,4}){4}(:[0-9]{2,5})|([a-z0-9-.]+)(\\.[a-z-.]+)(:[0-9]{2,5})?|localhost(:[0-9]{2,5}))+([/?].*)?'
-            )
-          ]),
+      this.startingConfigFormBuilder.build()
+    );
 
-        collections: new FormControl(null, [Validators.required, Validators.maxLength(1)])
-      }));
+    if (this.persistenceService.isAvailable) {
+      if (!this.persistenceService.isAuthAvailable ||
+        (this.persistenceService.isAuthAvailable && this.persistenceService.isAuthenticate)) {
+        // Load all config available in persistence
+        this.getConfigList();
+      }
+    }
+
   }
 
   public cancel(): void {
@@ -110,17 +129,52 @@ export class LandingPageDialogComponent implements OnInit {
   public saveConfig() {
     const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('collections').value;
     this.startupService.setCollection(collection);
+    this.mainFormManager.initMainModulesForms(true);
     this.startEvent.next();
   }
 
-  public upload(files: File[]) {
+  public initWithConfig(configJson: Config, configMapJson: MapConfig) {
+    this.getServerCollections(configJson.arlas.server.url).then(() => {
 
-    if (!files.length) {
-      // user cancelled with no file
-      return;
-    }
-    const fileReader = new FileReader();
-    fileReader.onload = (e) => {
+      this.configDescritor.getAllCollections().subscribe(collections => {
+        const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
+
+        if (!collection) {
+          this.logger.error(
+            this.translate.instant('Collection ')
+            + configJson.arlas.server.collection.name
+            + this.translate.instant(' unknown. Available collections: ')
+            + collections.join(', '));
+
+        } else {
+          this.mainFormManager.doImport(configJson, configMapJson);
+          this.startEvent.next();
+        }
+      });
+    });
+  }
+
+  public upload(configFile: File, mapConfigFile: File) {
+
+    const readAndParsePromise = (file: File) => new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.onload = (e) => {
+        try {
+          resolve(JSON.parse(fileReader.result.toString()));
+        } catch (excp) {
+          reject(excp);
+        }
+      };
+      fileReader.onerror = (err) => reject(err);
+      fileReader.readAsText(file);
+    });
+
+    Promise.all([
+      readAndParsePromise(configFile), readAndParsePromise(mapConfigFile)
+    ]).then(values => {
+      const configJson = values[0] as Config;
+      const configMapJson = values[1] as MapConfig;
+
       // I think we need to think about two options for this part
       // A config file store in a database with arlas-persistence
       // A config file store on the file system of the user computer
@@ -128,25 +182,75 @@ export class LandingPageDialogComponent implements OnInit {
       // const newUrl = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('serverUrl').value;
       // this.startupService.validLoadedConfig(newUrl)
 
-      const jsonConfig: Config = JSON.parse(fileReader.result.toString());
-      this.getServerCollections(jsonConfig.arlas.server.url).then(() => {
+      this.initWithConfig(configJson, configMapJson);
 
-        this.configDescritor.getAllCollections().subscribe(collections => {
-          const collection = (collections.find(c => c === jsonConfig.arlas.server.collection.name));
+    }).catch(err => this.logger.error(this.translate.instant('Could not load config files ') + err));
+  }
 
-          if (!collection) {
-            this.logger.error(
-              this.translate.instant('Collection ' + jsonConfig.arlas.server.collection.name + ' unknown. Available collections: ')
-              + collections);
+  public loadConfig(id: string) {
+    this.persistenceService.get(id).subscribe(data => {
+      const config = JSON.parse(data.doc_value) as ConfigPersistence;
+      const configJson = JSON.parse(config.config) as Config;
+      const configMapJson = configJson.arlas.web.components.mapgl.input.mapLayers as MapConfig;
+      this.initWithConfig(configJson, configMapJson);
+      localStorage.setItem(LOCALSTORAGE_CONFIG_ID_KEY, id);
+    });
+  }
 
-          } else {
-            this.startupService.setCollection(collection);
-            this.mainFormManager.doImport(jsonConfig);
-          }
+  public duplicateConfig(id: string) {
+    const dialogRef = this.dialog.open(InputModalComponent);
+    dialogRef.afterClosed().subscribe(configName => {
+      if (configName) {
+        this.persistenceService.duplicate(id, configName).subscribe(() => {
+          this.getConfigList();
+        });
+      }
+    });
+  }
+
+  public removeConfig(id: string) {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '400px',
+      data: { message: this.translate.instant('delete this configuration') }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.persistenceService.delete(id).subscribe(() => {
+          this.getConfigList();
+        });
+      }
+    });
+  }
+
+  public viewConfig(id: string) {
+    // TODO
+  }
+
+  public getConfigList() {
+    this.persistenceService.list(this.configPageSize, this.configPageNumber + 1, 'desc')
+      .subscribe((dataResource: DataResource) => {
+        this.configurationsLength = dataResource.total;
+        this.configurations = (dataResource.data || []).map(data => {
+          const currentConfig = JSON.parse(data.doc_value) as ConfigPersistence;
+          const newData = Object.assign({}, data, { name: currentConfig.name });
+          return newData;
         });
       });
-    };
-    fileReader.readAsText(files[0]);
+  }
+
+  public pageChange(pageEvent: PageEvent) {
+    this.configPageNumber = pageEvent.pageIndex;
+    this.configPageSize = pageEvent.pageSize;
+    this.getConfigList();
+  }
+
+  public openPersistenceManagement(event) {
+    if (this.persistenceService.isAvailable) {
+      this.configChoice = InitialChoice.load;
+    } else {
+      event.stopPropagation();
+    }
   }
 
   private getServerCollections(serverUrl: string) {
@@ -159,6 +263,9 @@ export class LandingPageDialogComponent implements OnInit {
     return this.startupService.setCollaborativeService(newConf);
   }
 
+  public login() {
+    this.authService.login();
+  }
 }
 
 @Component({

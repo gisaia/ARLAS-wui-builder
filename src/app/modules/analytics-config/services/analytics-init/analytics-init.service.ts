@@ -24,6 +24,7 @@ import { ArlasStartupService, ArlasCollaborativesearchService, ArlasConfigServic
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { OperationEnum } from 'arlas-web-core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,8 @@ export class AnalyticsInitService {
     private mainFormService: MainFormService,
     private arlasStartupService: ArlasStartupService,
     private collaborativesearchService: ArlasCollaborativesearchService,
-    private configService: ArlasConfigService
+    private configService: ArlasConfigService,
+    private translate: TranslateService
   ) { }
 
   public initModule() {
@@ -68,14 +70,14 @@ export class AnalyticsInitService {
     ));
   }
 
-  public initNewGroup() {
+  public initNewGroup(name: string) {
     return this.formBuilder.group({
       icon: [
         null,
         Validators.required
       ],
       title: [
-        null,
+        name,
         Validators.required
       ],
       contentType: [
@@ -107,7 +109,7 @@ export class AnalyticsInitService {
     });
   }
 
-  private createContributor(widgetType: string, widgetData: any, icon: string) {
+  public createContributor(widgetType: string, widgetData: any, icon: string) {
     const contribConfig = ConfigExportHelper.getAnalyticsContributor(widgetType, widgetData, icon) as any;
     const currentConfig = this.configService.getConfig() as any;
 
@@ -117,15 +119,22 @@ export class AnalyticsInitService {
 
     if (!this.arlasStartupService.contributorRegistry.has(contribConfig.identifier)) {
       currentConfig.arlas.web.contributors.push(contribConfig);
-      this.configService.setConfig(currentConfig);
-      const contributor = ContributorBuilder.buildContributor(
-        WIDGET_TYPE[widgetType],
-        contribConfig.identifier,
-        this.configService,
-        this.collaborativesearchService);
-      this.arlasStartupService.contributorRegistry.set(
-        contribConfig.identifier, contributor);
+    } else {
+      const contributorsWithMetric = currentConfig.arlas.web.contributors.filter(config => config.identifier !== contribConfig.identifier);
+      contributorsWithMetric.push(contribConfig);
+      currentConfig.arlas.web.contributors = contributorsWithMetric;
     }
+    this.configService.setConfig(currentConfig);
+
+    // TODO do something more robust
+    const contribType = [WIDGET_TYPE.powerbars.toString(), WIDGET_TYPE.donut.toString()].indexOf(widgetType) >= 0 ? 'tree' : widgetType;
+    const contributor = ContributorBuilder.buildContributor(
+      contribType,
+      contribConfig.identifier,
+      this.configService,
+      this.collaborativesearchService);
+    this.arlasStartupService.contributorRegistry.set(
+      contribConfig.identifier, contributor);
     return this.arlasStartupService.contributorRegistry.get(contribConfig.identifier);
   }
 

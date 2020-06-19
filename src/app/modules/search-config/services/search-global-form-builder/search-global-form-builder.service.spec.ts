@@ -1,11 +1,15 @@
 import { SearchGlobalFormBuilderService } from './search-global-form-builder.service';
-import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
+import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 describe('SearchGlobalFormBuilderService', () => {
   let spectator: SpectatorService<SearchGlobalFormBuilderService>;
 
   const createService = createServiceFactory({
-    service: SearchGlobalFormBuilderService
+    service: SearchGlobalFormBuilderService,
+    providers: [
+      mockProvider(CollectionService),
+    ]
   });
 
   beforeEach(() => {

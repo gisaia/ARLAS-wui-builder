@@ -1,8 +1,9 @@
 import { GlobalMapComponent } from './global-map.component';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
-import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
 import { MockComponent } from 'ng-mocks';
-import { CollectionService } from '@services/collection-service/collection.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 
 describe('GlobalMapComponent', () => {
 
@@ -10,17 +11,22 @@ describe('GlobalMapComponent', () => {
   const createComponent = createComponentFactory({
     component: GlobalMapComponent,
     declarations: [
-      MockComponent(ConfigElementComponent)
+      MockComponent(ConfigFormGroupComponent)
     ],
-    mocks: [
-      CollectionService
+    providers: [
+      mockProvider(MainFormService, {
+        mapConfig: {
+          getGlobalFg: () => new MapGlobalFormGroup()
+        },
+        getCollections: () => ['collection']
+      }),
     ]
   });
 
   beforeEach(() => spectator = createComponent());
 
-  it('should contain 2 config elements', () => {
-    expect(spectator.queryAll('app-config-element')).toHaveLength(8);
+  it('should create', () => {
+    expect(spectator.component).toBeTruthy();
   });
 
 });

@@ -17,69 +17,26 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CollectionService, FIELD_TYPES } from '@services/collection-service/collection.service';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { Expression } from 'arlas-api';
-import { GlobalMapComponentForm as GlobalMapComponentForm } from './global-map.component.form';
+import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 
 @Component({
   selector: 'app-global',
   templateUrl: './global-map.component.html',
   styleUrls: ['./global-map.component.scss']
 })
-export class GlobalMapComponent extends GlobalMapComponentForm implements OnInit {
+export class GlobalMapComponent implements OnInit {
 
-  public operators = [
-    Expression.OpEnum.Intersects,
-    Expression.OpEnum.Notintersects,
-    Expression.OpEnum.Notwithin,
-    Expression.OpEnum.Within
-  ];
-  public collections: string[];
-  public geoFieldsByCollection: Map<string, string[]> = new Map<string, string[]>();
-  public keywordFieldsByCollection: Map<string, string[]> = new Map<string, string[]>();
-  public formArrayGeom: FormArray = new FormArray([]);
+
+  public globalFg: MapGlobalFormGroup;
 
   constructor(
     public mainFormService: MainFormService,
-    protected formBuilderDefault: FormBuilderWithDefaultService,
-    private collectionService: CollectionService) {
-
-    super(mainFormService, formBuilderDefault);
+  ) {
+    this.globalFg = this.mainFormService.mapConfig.getGlobalFg();
   }
 
   public ngOnInit() {
-    this.collections = this.mainFormService.getCollections();
-    this.collections.forEach((collection) => {
-
-      this.collectionService.getCollectionFieldsNames(collection, [FIELD_TYPES.GEOPOINT, FIELD_TYPES.GEOSHAPE]).subscribe(fields => {
-        this.geoFieldsByCollection.set(collection, fields);
-      });
-      this.collectionService.getCollectionFieldsNames(collection, [FIELD_TYPES.KEYWORD]).subscribe(fields => {
-        this.keywordFieldsByCollection.set(collection, fields);
-      });
-
-      // Push a new FormGroup iff the FormArray (requestGeometries) doesn't contains
-      // as many controls that there is select collection
-      if (this.requestGeometries.length < this.collections.length) {
-        this.collectionService.getCollectionParamFields(collection).subscribe(params => {
-          this.requestGeometries.push(new FormGroup({
-            collection: new FormControl({ value: collection, disabled: true }),
-            requestGeom: new FormControl(params.geometry_path, Validators.required),
-            idFeatureField : new FormControl(params.id_path, Validators.required),
-          }));
-        });
-      }
-    });
   }
 
-  public getGeoFields(collection: string): string[] {
-    return this.geoFieldsByCollection.get(collection);
-  }
-
-  public getKeywordFields(collection: string): string[] {
-    return this.keywordFieldsByCollection.get(collection);
-  }
 }

@@ -18,14 +18,21 @@ under the License.
 */
 
 import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/forms';
+import { ConfigFormGroup, ConfigFormControl } from '@shared-models/config-form';
 
+export const LOCALSTORAGE_CONFIG_ID_KEY = 'current_config_id';
+
+interface OPTIONAL {
+    isPresent: boolean;
+    value?: any;
+}
 /**
  * Get object or String value of an object from key
  */
-export function getObject(datalayer: any, objectKey: string) {
+export function getObject(datalayer: any, objectKey: string): OPTIONAL {
     // if datalayer doesn't exists, just return
     if (!datalayer) {
-        return null;
+        return { isPresent: false };
     }
     // default return datalayer
     let current = datalayer;
@@ -35,12 +42,12 @@ export function getObject(datalayer: any, objectKey: string) {
         for (let i = 1; i <= numberOfObjectHierarchy; i++) {
             const currentKey = objectKey.split(/\./)[i];
             if (typeof current[currentKey] === 'undefined') {
-                return null;
+                return { isPresent: false };
             }
             current = current[currentKey];
         }
     }
-    return current;
+    return { isPresent: true, value: current };
 }
 
 // recursively update the value and validity of itself and sub-controls (but not ancestors)
@@ -51,6 +58,27 @@ export function updateValueAndValidity(control: AbstractControl, onlySelf: boole
             updateValueAndValidity(control.get(key), onlySelf, emitEvent);
         });
     }
+}
+
+/**
+ * Check that all sub-controls of a control have been touched.
+ * This is the case when we try to export => material touches all controls,
+ * so it can be detected to detect an export and display remaining errors.
+ */
+export function isFullyTouched(control: AbstractControl): boolean {
+
+    if (control instanceof FormControl) {
+        return control.touched;
+    } else if (control.touched && (control instanceof FormGroup || control instanceof FormArray)) {
+        if (control.controls.length === 0) {
+            return control.touched;
+        } else if (control.controls.length === 1) {
+            return Object.values(control.controls)[0].touched;
+        } else {
+            return Object.values(control.controls).map(c => isFullyTouched(c)).reduce((b1, b2) => b1 && b2);
+        }
+    }
+    return false;
 }
 
 export function getNbErrorsInControl(control: AbstractControl): number {
@@ -108,5 +136,21 @@ export function moveInFormArray(previousIndex: number, newIndex: number, fa: For
         fa.insert(newIndex, previousTab);
         fa.removeAt(previousIndex + 1);
     }
+}
+
+export function valuesToOptions(values: Array<string>) {
+    return values.map(v => ({
+        label: v.charAt(0).toUpperCase() + v.slice(1),
+        value: v
+    }));
+}
+
+export function camelize(str) {
+    return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
+        if (+match === 0) {
+            return '';
+        }
+        return index === 0 ? match.toLowerCase() : match.toUpperCase();
+    });
 }
 

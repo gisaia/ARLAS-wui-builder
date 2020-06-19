@@ -20,6 +20,7 @@ under the License.
 
 .tab-wrapper {
   display: flex;
+  height: 100%;
 
   mat-tab-group {
     flex: 1;
@@ -47,5 +48,25 @@ under the License.
         }
       }
     }
+
+    ::ng-deep .mat-tab-body-wrapper{
+      height: 100%;
+    }
+
+    ::ng-deep .mat-tab-body-content{
+      height: 100%;
+    }
+
+    ::ng-deep .mat-tab-labels :last-child.mat-tab-label {
+      min-width: 0;
+      padding: 0 12px;
+      color: unset;
+      opacity: unset;
+    }
   }
+
+  .no-tabs{
+    padding: 20px;
+  }
+  
 }

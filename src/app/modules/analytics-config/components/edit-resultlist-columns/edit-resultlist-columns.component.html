@@ -1,0 +1,21 @@
+<div class="columns-wrapper">
+    <div *ngFor="let column of columns; let i = index" class="column">
+        <button mat-icon-button (click)="deleteColumn(i)">
+            <mat-icon>delete</mat-icon>
+        </button>
+        <app-config-form-control [control]="column.controls.columnName"></app-config-form-control>
+        <app-config-form-control [control]="column.controls.fieldName"></app-config-form-control>
+        <app-config-form-control [control]="column.controls.dataType"></app-config-form-control>
+        <app-config-form-control [control]="column.controls.process"></app-config-form-control>
+    </div>
+</div>
+
+<mat-error *ngIf="control.touched && control?.hasError('required')">{{'At least one column is required' | translate}}
+</mat-error>
+<div class="button-wrapper">
+    <button mat-raised-button color="primary" (click)="addColumn()" [matTooltip]="'Add a column' | translate"
+        type="button">
+        <mat-icon>add</mat-icon>
+        {{'Add a column' | translate}}
+    </button>
+</div>

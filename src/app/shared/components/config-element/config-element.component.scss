@@ -46,7 +46,7 @@ under the License.
 
     .description {
       align-self: center;
-      margin-left: 36px;
+      max-width: 50%;
       font-size: 14px;
       color: $config-element-description-text-color;
       line-height: 1.6;
@@ -56,11 +56,13 @@ under the License.
     }
 
     .description:not(:empty) {
+      margin-left: 36px;
       padding: 10px;
     }
 
     .full-size {
       flex: 1;
+      padding: 0px;
     }
   }
 }

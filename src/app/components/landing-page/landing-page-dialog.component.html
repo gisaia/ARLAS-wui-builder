@@ -1,12 +1,69 @@
-<div class="landing-container" *ngIf="!configChoice">
-    <div class="bloc" (click)="configChoice = InitialChoice.setup">
-        <mat-icon>add</mat-icon>
-        <span>{{'New configuration' | translate}}</span>
-    </div>
-    <div class="bloc" (click)="configChoice = InitialChoice.load">
-        <mat-icon>get_app</mat-icon>
-        <span>{{'Import from file' | translate}}</span>
-    </div>
+<div *ngIf="!configChoice">
+    <h2 mat-dialog-title>{{'Available configurations' | translate}}</h2>
+    <mat-dialog-content class="load-content">
+        <div *ngIf="this.persistenceService.isAuthAvailable && !persistenceService.isAuthenticate">
+            {{'Log in to access saved configurations' | translate}}
+            <button mat-raised-button color="primary" (click)="login()">{{'Log In' | translate}}</button>
+        </div>
+        <ng-container *ngIf="this.persistenceService.isAvailable && (!this.persistenceService.isAuthAvailable || (this.persistenceService.isAuthAvailable && this.persistenceService.isAuthenticate )) ">
+            <table mat-table [dataSource]="configurations">
+
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef>{{'Name' | translate}}</th>
+                    <td mat-cell *matCellDef="let config">{{config.name}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="creation">
+                    <th mat-header-cell *matHeaderCellDef>{{'Creation date' | translate}}</th>
+                    <td mat-cell *matCellDef="let config">
+                        <ng-container *ngIf="config.creation_date != 0">{{config.creation_date | date:'short'}}
+                        </ng-container>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="detail">
+                    <th mat-header-cell *matHeaderCellDef>{{'Actions' | translate}}</th>
+                    <td mat-cell *matCellDef="let config">
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="viewConfig(config.id)">
+                                <mat-icon>visibility</mat-icon>
+                                <span>{{'View' | translate}}</span>
+                            </button>
+                            <button mat-menu-item (click)="loadConfig(config.id)">
+                                <mat-icon>edit</mat-icon>
+                                <span>{{'Edit' | translate}}</span>
+                            </button>
+                            <button mat-menu-item (click)="duplicateConfig(config.id)">
+                                <mat-icon>filter_none</mat-icon>
+                                <span>{{'Duplicate' | translate}}</span>
+                            </button>
+                            <button mat-menu-item (click)="removeConfig(config.id)">
+                                <mat-icon>delete</mat-icon>
+                                <span>{{'Delete' | translate}}</span>
+                            </button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let config; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [pageIndex]="this.configPageNumber" [pageSize]="this.configPageSize"
+                [length]="configurationsLength" [showFirstLastButtons]=true (page)="pageChange($event)">
+            </mat-paginator>
+        </ng-container>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <div>
+            <button mat-raised-button color="primary"
+                (click)="configChoice = InitialChoice.setup">{{'New configuration' | translate}}</button>
+            <button mat-raised-button color="primary"
+                (click)="configChoice = InitialChoice.load">{{'Import from file' | translate}}</button>
+        </div>
+    </mat-dialog-actions>
 </div>
 <ng-container *ngIf="configChoice === InitialChoice.setup">
     <h2 mat-dialog-title>{{'New configuration' | translate}}</h2>
@@ -23,7 +80,7 @@
                     <button
                         (click)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
                         [disabled]="this.mainFormService.startingConfig.getFg().get('serverUrl').invalid"
-                        mat-raised-button color="primary">{{'Show collections' | translate}}</button>
+                        mat-raised-button color="accent">{{'Show collections' | translate}}</button>
                 </div>
             </app-config-element>
             <app-config-element *ngIf="isServerReady">
@@ -45,25 +102,47 @@
         </div>
     </mat-dialog-content>
     <mat-dialog-actions>
+        <button mat-button (click)="configChoice = InitialChoice.none">{{'Back' | translate}}</button>
         <button (click)="saveConfig()" [disabled]="this.mainFormService.startingConfig.getFg().invalid"
             mat-raised-button color="primary">{{'Start configuration' | translate}}</button>
     </mat-dialog-actions>
 </ng-container>
 
 <ng-container *ngIf="configChoice === InitialChoice.load">
+
+
     <h2 mat-dialog-title>{{'Import a file' | translate}}</h2>
     <mat-dialog-content class="import-content">
-        <div>
-            <!-- No material file input exists, so we hide the basic input behind a material button -->
-            <button type="button" mat-raised-button (click)="fileInput.click()">Select a File</button>
-            <input hidden (change)="upload($event.target.files)" #fileInput type="file">
-        </div>
-        <div *ngIf="this.mainFormService.startingConfig.getFg().valid" class="import-valid">
-            {{'File imported successfully' | translate}}
+        <div class="upload-files">
+            <div class="upload-single-files">
+                <!-- No material file input exists, so we hide the basic input behind a material button -->
+                <button type="button" mat-raised-button color="accent" (click)="confFileInput.click()">
+                    Select a config.json file
+                    <span *ngIf="confFileInput.files.length" class="upload-check">
+                        <mat-icon>check</mat-icon>
+                    </span>
+                </button>
+                <!-- (change), even empty, needed to refresh the UI -->
+                <input hidden (change)="null" #confFileInput type="file">
+            </div>
+            <div class="upload-single-files">
+                <!-- No material file input exists, so we hide the basic input behind a material button -->
+                <button type="button" mat-raised-button color="accent" (click)="mapFileInput.click()">
+                    Select a config.map.json file
+                    <span *ngIf="mapFileInput.files.length" class="upload-check">
+                        <mat-icon>check</mat-icon>
+                    </span>
+                </button>
+                <!-- (change), even empty, needed to refresh the UI -->
+                <input hidden (change)="null" #mapFileInput type="file">
+            </div>
         </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button (click)="this.startEvent.next();" [disabled]="this.mainFormService.startingConfig.getFg().invalid"
-            mat-raised-button color="primary">{{'Start configuration' | translate}}</button>
+        <button mat-button (click)="configChoice = InitialChoice.none">{{'Back' | translate}}</button>
+        <button (click)="upload(confFileInput.files[0], mapFileInput.files[0]);"
+            [disabled]="!confFileInput.files.length || !mapFileInput.files.length" mat-raised-button
+            color="primary">{{'Start configuration' | translate}}</button>
     </mat-dialog-actions>
+
 </ng-container>

@@ -17,29 +17,68 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { FormBuilderWithDefaultService } from '@services/form-builder-with-default/form-builder-with-default.service';
+import {
+  ConfigFormGroup, InputFormControl, SelectFormControl, SliderFormControl, SelectOption
+} from '@shared-models/config-form';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { Observable } from 'rxjs';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { toKeywordOptionsObs, toTextOptionsObs } from '@services/collection-service/tools';
+import { TranslateService } from '@ngx-translate/core';
+import { FormGroup, FormControl } from '@angular/forms';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
-export class SearchGlobalFormGroup extends FormGroup {
+export class SearchGlobalFormGroup extends ConfigFormGroup {
 
-  constructor() {
+  constructor(
+    textFieldsObs: Observable<Array<SelectOption>>,
+    keywordFieldsObs: Observable<Array<SelectOption>>
+  ) {
     super(
       {
-        name: new FormControl(null, Validators.required),
-        searchField: new FormControl(null, Validators.required),
-        autocompleteField: new FormControl(null, Validators.required),
-        autocompleteSize: new FormControl(null, Validators.required),
-        icon: new FormControl(null, Validators.required)
+        name: new InputFormControl(
+          null,
+          'Name',
+          'It is used to...',
+          null,
+          { title: 'Search' }),
+        searchField: new SelectFormControl(
+          null,
+          'Search field',
+          'It is used to...',
+          true,
+          textFieldsObs
+        ),
+        autocompleteField: new SelectFormControl(
+          null,
+          'Autocomplete field',
+          'It is used to...',
+          true,
+          keywordFieldsObs
+        ),
+        autocompleteSize: new SliderFormControl(
+          null,
+          'Autocomplete size',
+          'It is used to...',
+          1,
+          10,
+          1
+        ),
+        unmanagedFields: new FormGroup({
+          icon: new FormControl()
+        })
       }
     );
   }
 
   public customControls = {
-    name: this.get('name') as FormControl,
-    searchField: this.get('searchField') as FormControl,
-    autocompleteField: this.get('autocompleteField') as FormControl,
-    autocompleteSize: this.get('autocompleteSize') as FormControl,
-    icon: this.get('icon') as FormControl
+    name: this.get('name') as InputFormControl,
+    searchField: this.get('searchField') as SelectFormControl,
+    autocompleteField: this.get('autocompleteField') as SelectFormControl,
+    autocompleteSize: this.get('autocompleteSize') as SliderFormControl,
+    unmanagedFields: {
+      icon: this.get('unmanagedFields.icon')
+    }
   };
 }
 
@@ -49,12 +88,21 @@ export class SearchGlobalFormGroup extends FormGroup {
 export class SearchGlobalFormBuilderService {
 
   constructor(
-    private formBuilderDefault: FormBuilderWithDefaultService
+    private defaultValuesService: DefaultValuesService,
+    private collectionService: CollectionService,
+    private mainFormService: MainFormService,
   ) { }
 
   public build() {
-    const globalFg = new SearchGlobalFormGroup();
-    this.formBuilderDefault.setDefaultValueRecursively('search.global', globalFg);
+    const collectionFields = this.collectionService
+      .getCollectionFields(this.mainFormService.getCollections()[0]);
+
+    const globalFg = new SearchGlobalFormGroup(
+      toTextOptionsObs(collectionFields),
+      toKeywordOptionsObs(collectionFields)
+    );
+
+    this.defaultValuesService.setDefaultValueRecursively('search.global', globalFg);
     return globalFg;
   }
 }

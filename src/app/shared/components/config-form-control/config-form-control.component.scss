@@ -18,6 +18,11 @@ under the License.
 */
 
 @import "variables.scss";
+$accent-color: mat-color($accent-palette);
+$primary-color: mat-color($primary-palette);
+
+$accent-color-light: mat-color($accent-palette, 300);
+$primary-color-light: mat-color($primary-palette, 300);
 
 .control-error {
     color: $error-color;
@@ -26,8 +31,104 @@ under the License.
 mat-option {
     margin: 2px 0px;
 
-    &:hover,
-    &.mat-active {
-        margin: 2px 0px 2px 5px;
+    &.mat-selected.option-color-primary {
+        background-color: $primary-color-light !important;
+        color: white !important;
+    }
+
+    &.mat-selected.option-color-accent {
+        background-color: $accent-color-light !important;
+        color: black !important;
+    }
+
+    &.option-color-primary {
+        background-color: $primary-color;
+        color: white;
+        &:hover {
+            background-color: $primary-color-light;
+        }
+    }
+
+    &.option-color-accent {
+        background-color: $accent-color;
+        color: black;
+        &:hover {
+            background-color: $accent-color-light;
+        }
+    }
+}
+
+.icon-form-control {
+    display: flex;
+    align-items: center;
+}
+
+.order-select-form-control {
+    mat-form-field {
+        width: 180px;
+        &.sort-list {
+            width: 50%;
+        }
+    }
+
+    mat-radio-group {
+        padding: 0 5px;
+        mat-radio-button {
+            width: 80px;
+            font-size: 0.9rem;
+        }
+    }
+}
+
+.metric-field-form-control {
+    .action-container {
+        // prevent to expend width with the parent
+        width: fit-content;
+        .field-add-container {
+            display: flex;
+
+            .field-container {
+                flex-grow: 5;
+
+                mat-form-field {
+                    width: 90%;
+                }
+            }
+
+            .add-container {
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+
+    .chips-container {
+        margin-top: 15px;
+    }
+}
+
+.textarea-form-control {
+    mat-form-field {
+        width: 100%;
+    }
+}
+
+.button-form-control {
+    button {
+        margin-left: 24px;
+    }
+
+    .disabled-button-message {
+        color: #666699;
+        font-size: 12px;
+        margin-left: 2px;
+    }
+}
+
+.color-preview-form-control {
+    margin: 10px 0px;
+    .color-preview {
+        width: 180px;
+        height: 35px;
     }
 }

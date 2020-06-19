@@ -17,12 +17,10 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit, Input } from '@angular/core';
-import { FormArray, FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
-import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material';
-import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { ContributorConfig } from '@services/main-form-manager/models-config';
 import {
@@ -31,6 +29,9 @@ import {
 } from 'arlas-wui-toolkit/services/startup/startup.service';
 
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
+import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { TranslateService } from '@ngx-translate/core';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 @Component({
   selector: 'app-groups',
@@ -42,11 +43,12 @@ export class GroupsComponent implements OnInit {
   @Input() public contentFg: FormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private defaultValuesService: DefaultValuesService,
     public dialog: MatDialog,
     private arlasStartupService: ArlasStartupService,
     private configService: ArlasConfigService,
-    private analyticsInitService: AnalyticsInitService
+    private analyticsInitService: AnalyticsInitService,
+    private translate: TranslateService
   ) {
   }
 
@@ -55,26 +57,39 @@ export class GroupsComponent implements OnInit {
   }
 
   public addGroup() {
-    this.groupsFa.push(this.analyticsInitService.initNewGroup());
+    this.groupsFa.push(this.analyticsInitService.initNewGroup(
+      this.translate.instant(
+        this.defaultValuesService.getValue('analytics.groups.new'))
+      )
+    );
   }
 
   public remove(gi) {
-    let currentContributors = this.configService.getValue('arlas.web.contributors') as Array<ContributorConfig>;
-    if (currentContributors !== undefined) {
-      this.groupsFa.at(gi).value.content.forEach(c => {
-        if (c.widgetData) {
-          const contributorId = ConfigExportHelper.toSnakeCase(c.widgetData.dataStep.name);
-          // remove contributors from registry
-          this.arlasStartupService.contributorRegistry.delete(contributorId);
-          // remove contributors from config
-          currentContributors = currentContributors.filter(config => config.identifier !== contributorId);
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '400px',
+      data: { message: this.translate.instant('delete this group') }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let currentContributors = this.configService.getValue('arlas.web.contributors') as Array<ContributorConfig>;
+        if (currentContributors !== undefined) {
+          this.groupsFa.at(gi).value.content.forEach(c => {
+            if (c.widgetData && c.widgetData.dataStep) {
+              const contributorId = ConfigExportHelper.toSnakeCase(c.widgetData.dataStep.name);
+              // remove contributors from registry
+              this.arlasStartupService.contributorRegistry.delete(contributorId);
+              // remove contributors from config
+              currentContributors = currentContributors.filter(config => config.identifier !== contributorId);
+            }
+          });
+          // set new config
+          const currentConfig = this.configService.getConfig() as any;
+          currentConfig.arlas.web.contributors = currentContributors;
         }
-      });
-      // set new config
-      const currentConfig = this.configService.getConfig() as any;
-      currentConfig.arlas.web.contributors = currentContributors;
-    }
-    this.groupsFa.removeAt(gi);
+        this.groupsFa.removeAt(gi);
+      }
+    });
   }
 
   get groupsFa() {

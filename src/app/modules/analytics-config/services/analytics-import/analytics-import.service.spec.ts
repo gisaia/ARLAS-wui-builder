@@ -1,7 +1,7 @@
 import { AnalyticsImportService } from './analytics-import.service';
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasStartupService, ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
+import { ArlasStartupService, ArlasCollaborativesearchService, ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 describe('AnalyticsImportService', () => {
   let spectator: SpectatorService<AnalyticsImportService>;
@@ -12,6 +12,7 @@ describe('AnalyticsImportService', () => {
       mockProvider(CollectionService),
       mockProvider(ArlasStartupService),
       mockProvider(ArlasCollaborativesearchService),
+      mockProvider(ArlasColorGeneratorLoader),
     ]
   });
 

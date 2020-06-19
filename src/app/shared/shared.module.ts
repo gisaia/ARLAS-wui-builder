@@ -45,6 +45,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatListModule } from '@angular/material/list';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatMenuModule } from '@angular/material/menu';
 
 // other libs imports
 import { ColorPickerModule } from 'ngx-color-picker';
@@ -56,12 +59,13 @@ import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.
 import { AlertOnChangeDirective } from './directives/alert-on-change/alert-on-change.directive';
 import { ColorPickerWrapperComponent } from './components/color-picker-wrapper/color-picker-wrapper.component';
 import { ResetOnChangeDirective } from './directives/reset-on-change/reset-on-change.directive';
-import { PropertySelectorComponent } from './components/property-selector/property-selector.component';
 import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
 import { AutoFocusDirective } from './directives/auto-focus/auto-focus.directive';
-import { ConfigFormGroupComponent as ConfigFormGroupComponent } from './components/config-form-group/config-form-group.component';
+import { ConfigFormGroupComponent } from './components/config-form-group/config-form-group.component';
 import { ConfigFormControlComponent } from './components/config-form-control/config-form-control.component';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
+import { InputModalComponent } from './components/input-modal/input-modal.component';
+import { ConfigFormGroupArrayComponent } from './components/config-form-group-array/config-form-group-array.component';
 
 @NgModule({
   declarations: [
@@ -70,11 +74,12 @@ import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
     AlertOnChangeDirective,
     ColorPickerWrapperComponent,
     ResetOnChangeDirective,
-    PropertySelectorComponent,
     ObjectvaluesPipe,
     AutoFocusDirective,
     ConfigFormGroupComponent,
-    ConfigFormControlComponent
+    ConfigFormControlComponent,
+    InputModalComponent,
+    ConfigFormGroupArrayComponent
   ],
   imports: [
     ArlasToolkitSharedModule,
@@ -105,18 +110,22 @@ import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
     MatSidenavModule,
     MatBadgeModule,
     MatListModule,
-    HttpClientModule
+    MatButtonToggleModule,
+    HttpClientModule,
+    MatPaginatorModule,
+    MatMenuModule
   ],
   exports: [
     ConfigElementComponent,
     ConfirmModalComponent,
+    InputModalComponent,
     AlertOnChangeDirective,
     ColorPickerWrapperComponent,
     ResetOnChangeDirective,
-    PropertySelectorComponent,
     ObjectvaluesPipe,
     AutoFocusDirective,
     ConfigFormGroupComponent,
+    ConfigFormControlComponent,
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
@@ -143,7 +152,9 @@ import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
     MatSidenavModule,
     MatBadgeModule,
     MatListModule,
-    HttpClientModule
+    HttpClientModule,
+    MatPaginatorModule,
+    MatMenuModule
   ]
 })
 export class SharedModule { }

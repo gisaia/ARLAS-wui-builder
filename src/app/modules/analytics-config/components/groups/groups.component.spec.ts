@@ -1,5 +1,5 @@
 import { GroupsComponent } from './groups.component';
-import { Spectator, createComponentFactory } from '@ngneat/spectator';
+import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { FormGroup } from '@angular/forms';
 import { MockComponent } from 'ng-mocks';
 import { EditGroupComponent } from '../edit-group/edit-group.component';
@@ -7,6 +7,7 @@ import {
   ArlasStartupService, ArlasConfigService,
   ArlasCollaborativesearchService, CONFIG_UPDATER
 } from 'arlas-wui-toolkit/services/startup/startup.service';
+import { ArlasConfigurationUpdaterService } from 'arlas-wui-toolkit/services/configuration-updater/configurationUpdater.service';
 
 describe('GroupsComponent', () => {
   let spectator: Spectator<GroupsComponent>;
@@ -16,9 +17,11 @@ describe('GroupsComponent', () => {
     declarations: [
       MockComponent(EditGroupComponent)
     ],
-    providers: [ArlasStartupService,
-      ArlasConfigService,
-      ArlasCollaborativesearchService,
+    providers: [
+      mockProvider(ArlasConfigService),
+      mockProvider(ArlasStartupService),
+      mockProvider(ArlasCollaborativesearchService),
+      mockProvider(ArlasConfigurationUpdaterService),
       { provide: CONFIG_UPDATER, useValue: {} }
     ]
   });

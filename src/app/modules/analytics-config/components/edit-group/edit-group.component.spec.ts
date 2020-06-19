@@ -1,5 +1,5 @@
-import { EditGroupComponent } from './edit-group.component';
-import { Spectator, createComponentFactory } from '@ngneat/spectator';
+import { EditGroupComponent, AddWidgetDialogComponent } from './edit-group.component';
+import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { FormGroup, FormControl } from '@angular/forms';
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
 import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
@@ -9,6 +9,8 @@ import {
   ArlasCollaborativesearchService, ArlasStartupService,
   ArlasConfigService, CONFIG_UPDATER
 } from 'arlas-wui-toolkit/services/startup/startup.service';
+import { IconPickerComponent } from 'ngx-icon-picker';
+import { ArlasConfigurationUpdaterService } from 'arlas-wui-toolkit/services/configuration-updater/configurationUpdater.service';
 
 describe('EditGroupComponent', () => {
   let spectator: Spectator<EditGroupComponent>;
@@ -18,13 +20,18 @@ describe('EditGroupComponent', () => {
     declarations: [
       AlertOnChangeDirective,
       ResetOnChangeDirective,
-      MockComponent(AnalyticsBoardComponent)
+      MockComponent(AnalyticsBoardComponent),
+      MockComponent(IconPickerComponent)
     ],
     providers: [
-      ArlasStartupService,
-      ArlasCollaborativesearchService,
-      ArlasConfigService,
+      mockProvider(ArlasConfigService),
+      mockProvider(ArlasStartupService),
+      mockProvider(ArlasCollaborativesearchService),
+      mockProvider(ArlasConfigurationUpdaterService),
       { provide: CONFIG_UPDATER, useValue: {} }
+    ],
+    entryComponents: [
+      AddWidgetDialogComponent
     ]
   });
 
@@ -35,7 +42,7 @@ describe('EditGroupComponent', () => {
           icon: new FormControl(''),
           title: new FormControl(''),
           contentType: new FormControl(''),
-          content: new FormControl(''),
+          content: new FormControl([]),
           preview: new FormControl([])
         })
       }

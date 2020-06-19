@@ -16,33 +16,24 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { CollectionService, FIELD_TYPES } from '@services/collection-service/collection.service';
-import { FormGroup } from '@angular/forms';
+import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 
 @Component({
   selector: 'app-global-search',
   templateUrl: './global-search.component.html',
   styleUrls: ['./global-search.component.scss']
 })
-export class GlobalSearchComponent implements OnInit {
+export class GlobalSearchComponent {
 
-  public keywordFields: Array<string>;
-  public globalFg: FormGroup;
+  public globalFg: SearchGlobalFormGroup;
 
   constructor(
-    private collectionService: CollectionService,
     private mainFormService: MainFormService
   ) {
 
     this.globalFg = this.mainFormService.searchConfig.getGlobalFg();
-  }
-
-  public ngOnInit() {
-    // TODO use multi collection instead of the first one
-    this.collectionService.getCollectionFieldsNames(this.mainFormService.getCollections()[0], [FIELD_TYPES.KEYWORD])
-      .subscribe(fields => this.keywordFields = fields);
   }
 
 }

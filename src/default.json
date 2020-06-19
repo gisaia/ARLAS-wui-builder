@@ -1,6 +1,9 @@
 {
     "global": {
-        "serverUrl": "http://demo.arlas.io/arlas"
+        "serverUrl": "http://demo.arlas.io/arlas",
+        "unmanagedFields": {
+            "maxAgeCache": 120
+        }        
     },
     "map": {
         "global": {
@@ -11,33 +14,99 @@
             "allowMapExtend": true,
             "initCenterLat": 9.667969,
             "initCenterLon": 55.627996,
-            "displayScale": true
+            "displayScale": true,
+            "unmanagedFields": {
+                "icon": "check_box_outline_blank",
+                "nbVerticesLimit": 100,
+                "defaultBasemapStyle": {
+                    "name": "Positron",
+                    "styleFile": "https://api.maptiler.com/maps/positron/style.json?key=xIhbu1RwgdbxfZNmoXn4"
+                },
+                "basemapStyles": [
+                    {
+                        "name": "Positron",
+                        "styleFile": "https://api.maptiler.com/maps/positron/style.json?key=xIhbu1RwgdbxfZNmoXn4"
+                    }
+                ],
+                "mapLayers": {
+                  "events": {
+                    "zoomOnClick": [],
+                    "emitOnClick": [],
+                    "onHover": []
+                  }
+                }
+              }
         },
         "layer": {
-            "collectionStep": {
-                "collection": "demo_ais-danmark"
-            },
-            "geometryStep": {
-                "geometry": "position.location",
-                "granularity": "Coarse"
-            },
-            "visibilityStep": {
-                "visible": true,
-                "zoomMin": 10,
-                "zoomMax": 10,
-                "featuresMax": 7500,
-                "featuresMin": 7500
-            },
-            "styleStep": {
-                "geometryType": "fill",
-                "opacity": 0.5,
-                "colorFg": {
-                    "propertySource": "Fix",
-                    "propertyFix": "#abcdef"
+            "featuresFg": {
+                "geometryStep": {
+                    "geometry": "position.location",
+                    "granularity": "Coarse"
                 },
-                "radiusFg": {
-                    "propertySource": "Fix",
-                    "propertyFix": 1.5
+                "visibilityStep": {
+                    "visible": true,
+                    "zoomMin": 10,
+                    "zoomMax": 10,
+                    "featuresMax": 7500
+                },
+                "styleStep": {
+                    "geometryType": "fill",
+                    "opacity": 0.5,
+                    "colorFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": "#abcdef"
+                    },
+                    "radiusFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1.5
+                    }
+                }
+            },
+            "featureMetricFg": {
+                "geometryStep": {
+                    "geometry": "position.location",
+                    "granularity": "Coarse"
+                },
+                "visibilityStep": {
+                    "visible": true,
+                    "zoomMin": 10,
+                    "zoomMax": 10,
+                    "featuresMax": 7500
+                },
+                "styleStep": {
+                    "geometryType": "fill",
+                    "opacity": 0.5,
+                    "colorFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": "#abcdef"
+                    },
+                    "radiusFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1.5
+                    }
+                }
+            },
+            "clusterFg": {
+                "geometryStep": {
+                    "geometry": "position.location",
+                    "granularity": "Coarse"
+                },
+                "visibilityStep": {
+                    "visible": true,
+                    "zoomMin": 10,
+                    "zoomMax": 10,
+                    "featuresMax": 7500
+                },
+                "styleStep": {
+                    "geometryType": "fill",
+                    "opacity": 0.5,
+                    "colorFg": {
+                        "propertyFix": "#abcdef"
+                    },
+                    "radiusFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1.5
+                    }
                 }
             }
         }
@@ -46,34 +115,115 @@
         "global": {
             "name": "Search a ...",
             "searchField": "id",
-            "autocompleteField": "id",
-            "icon": "search"
+            "autocompleteField": "internal.fulltext",
+            "unmanagedFields": {
+                "icon": "search"
+            }
+        }
+    },
+    "lookAndFeel": {
+        "global": {
+            "dragAndDrop": true
         }
     },
     "timeline": {
         "global": {
-            "useDetailedTimeline": true,
-            "timeline": {
-                "field": "position.timestamp",
-                "bucketsNumber": 22,
-                "intervalSize": 10,
-                "chartTitle": "title",
-                "chartType": "area"
+            "useDetailedTimeline": false,
+            "tabsContainer": {
+                "dataStep": {
+                    "timeline": {
+                        "aggregation": {
+                            "aggregationBucketOrInterval": "bucket",
+                            "aggregationBucketsNumber": 22
+                        }
+                    },
+                    "detailedTimeline": {
+                        "bucketsNumber": 44
+                    }
+                },
+                "renderStep": {
+                    "timeline": {
+                        "chartTitle": "title",
+                        "chartType": "area",
+                        "dateFormat": "%b %d %Y  %H:%M"
+                    },
+                    "detailedTimeline": {
+                        "chartTitle": "detailed title",
+                        "chartType": "area",
+                        "dateFormat": "%b %d %Y  %H:%M",
+                        "selectionExtentPercent": 2
+                    }
+                }
             },
-            "detailedTimeline": {
-                "field": "position.timestamp",
-                "bucketsNumber": 44,
-                "intervalSize": 10,
-                "chartTitle": "title",
-                "chartType": "area",
-                "selectionExtentPercent": 2
+            "unmanagedFields": {
+                "dataStep": {
+                    "timeline": {
+                      "name": "Timeline",
+                      "icon": "watch_later",
+                      "isOneDimension": false
+                    },
+                    "detailedTimeline": {
+                      "name": "Timeline",
+                      "icon": "watch_later",
+                      "isOneDimension": false
+                    }
+                  },
+                  "renderStep": {
+                    "timeline": {
+                      "xTicks": 9,
+                      "yTicks": 2,
+                      "xLabels": 9,
+                      "yLabels": 2,
+                      "customizedCssClass": "arlas-timeline",
+                      "chartHeight": 128,
+                      "brushHandlesHeightWeight": 0.8,
+                      "isHistogramSelectable": true,
+                      "chartWidth": null,
+                      "xAxisPosition": "bottom",
+                      "yAxisStartsFromZero": true,
+                      "descriptionPosition": "top",
+                      "showXTicks": true,
+                      "showYTicks": true,
+                      "showXLabels": true,
+                      "showYLabels": true,
+                      "showHorizontalLines": false,
+                      "isSmoothedCurve": true,
+                      "barWeight": 0.8,
+                      "topOffsetRemoveInterval": 10
+                    },
+                    "detailedTimeline": {
+                      "xTicks": 5,
+                      "yTicks": 2,
+                      "xLabels": 5,
+                      "yLabels": 2,
+                      "customizedCssClass": "arlas-detailed-timeline",
+                      "chartHeight": 60,
+                      "multiselectable": false,
+                      "brushHandlesHeightWeight": 0.8,
+                      "isHistogramSelectable": true,
+                      "chartWidth": null,
+                      "xAxisPosition": "top",
+                      "yAxisStartsFromZero": true,
+                      "descriptionPosition": "bottom",
+                      "showXTicks": true,
+                      "showYTicks": true,
+                      "showXLabels": true,
+                      "showYLabels": true,
+                      "showHorizontalLines": false,
+                      "isSmoothedCurve": true,
+                      "barWeight": 0.8
+                    }
+                  }
             }
         }
     },
     "analytics": {
         "tabs": {
             "default": "Default",
-            "new": "New"
+            "new": "New tab"
+        },
+        "groups": {
+            "new": "New group"
         },
         "widgets": {
             "histogram": {
@@ -87,12 +237,127 @@
                     "chartType": "bars",
                     "showHorizontalLines": true,
                     "ticksDateFormat": "%b %d %Y  %H:%M"
+                },
+                "unmanagedFields": {
+                    "dataStep": {
+                      "isOneDimension": false
+                    },
+                    "renderStep": {
+                      "showExportCsv": true,
+                      "isHistogramSelectable": true,
+                      "topOffsetRemoveInterval": 40,
+                      "leftOffsetRemoveInterval": 18,
+                      "brushHandlesHeightWeight": 0.8,
+                      "yAxisStartsFromZero": true,
+                      "xAxisPosition": "bottom",
+                      "descriptionPosition": "bottom",
+                      "xTicks": 4,
+                      "yTicks": 1,
+                      "xLabels": 4,
+                      "yLabels": 4,
+                      "showXTicks": true,
+                      "showYTicks": true,
+                      "showXLabels": true,
+                      "showYLabels": true,
+                      "barWeight": 0.8,
+                      "isSmoothedCurve": false
+                    }
+                  }
+            },
+            "swimlane": {
+                "dataStep": {
+                    "termAggregation": {
+                        "termAggregationSize": 5
+                    }
+                },
+                "unmanagedFields": {
+                    "renderStep": {
+                      "showExportCsv": true,
+                      "isHistogramSelectable": true,
+                      "topOffsetRemoveInterval": 40,
+                      "leftOffsetRemoveInterval": 18,
+                      "brushHandlesHeightWeight": 0.8,
+                      "yAxisStartsFromZero": true,
+                      "xAxisPosition": "bottom",
+                      "descriptionPosition": "bottom",
+                      "xTicks": 4,
+                      "yTicks": 1,
+                      "xLabels": 4,
+                      "yLabels": 4,
+                      "showXTicks": true,
+                      "showYTicks": true,
+                      "showXLabels": true,
+                      "showYLabels": true,
+                      "barWeight": 0.8,
+                      "swimLaneLabelsWidth": 100,
+                      "swimlaneHeight": 20,
+                      "swimlaneBorderRadius": 3
+                    }
+                }
+            },
+            "metric": {
+                "unmanagedFields": {
+                    "renderStep": {
+                        "customizedCssClass": "power"
+                    }
+                }
+            },
+            "donut": {
+                "unmanagedFields": {
+                    "renderStep": {
+                      "customizedCssClass": "arlas-donuts-analytics",
+                      "diameter": 150
+                    }
+                  }
+            },
+            "resultlist"   : {
+                "unmanagedFields": {
+                    "dataStep": {},
+                    "renderStep": {
+                      "tableWidth": 455,
+                      "globalActionsList": [],
+                      "nLastLines": 3,
+                      "detailedGridHeight": 25,
+                      "nbGridColumns": 3,
+                      "defautMode": "list",
+                      "isBodyHidden": false,
+                      "isGeoSortActived": false,
+                      "isAutoGeoSortActived": true,
+                      "selectedItemsEvent": null,
+                      "consultedItemEvent": null,
+                      "actionOnItemEvent": null,
+                      "globalActionEvent": null
+                    }
                 }
             }
         }
     },
+    "sideModules": {
+        "global": {
+            "useShare": true,
+            "useDownload": true,
+            "useTagger": true,
+            "share": {
+                "maxForFeature": 1234,
+                "maxForTopology": 5678
+            },
+            "tagger": {
+                "serverUrl": "http://tagger.com",
+                "collection": "demo_ais-danmark"
+            },
+            "unmanagedFields": {
+                "sortExcludedTypes": [
+                    "TEXT",
+                     "GEO_POINT"
+                 ],
+                 "download": {
+                    "authType": "basic"
+                 }
+            }
+        }
+    },
     "config": {
-        "aggregationTermSize": 20,
+        "aggregationTermSize": 10,
         "palettes": [
             [
                 "#065143",

@@ -20,8 +20,12 @@ import { Component } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { getNbErrorsInControl } from '@utils/tools';
+import { getNbErrorsInControl, isFullyTouched } from '@utils/tools';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+import { EXPORT_TYPE } from '@services/main-form-manager/config-export-helper';
+import { PersistenceService } from '@services/persistence/persistence.service';
+import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
+import { Router } from '@angular/router';
 
 interface Page {
   link: string;
@@ -45,7 +49,10 @@ export class LeftMenuComponent {
   constructor(
     private mainFormService: MainFormService,
     private mainFormManager: MainFormManagerService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    public persistenceService: PersistenceService,
+    private authService: AuthentificationService,
+    private router: Router
   ) {
     // recompute nberrors of each page anytime the mainform validity changes
     this.mainFormService.mainForm.statusChanges.subscribe(st => this.updateNbErrors());
@@ -85,26 +92,49 @@ export class LeftMenuComponent {
       control: this.mainFormService.analyticsConfig.control
     },
     {
+      name: 'Side Modules',
+      link: '/side-modules',
+      icon: 'view_column',
+      tooltip: this.translate.instant('Side modules configuration'),
+      enabled: true,
+      control: this.mainFormService.sideModulesConfig.control
+    },
+    {
       name: 'Look \'n feel',
-      link: 'some-link',
-      icon: 'send',
+      link: '/look-and-feel',
+      icon: 'opacity',
       tooltip: this.translate.instant('Look \'n fell configuration'),
-      enabled: false
+      enabled: true,
+      control: this.mainFormService.lookAndFeelConfig.control
     },
   ];
 
   private updateNbErrors() {
     this.nbErrorsByPage.clear();
     this.pages
-      .filter(p => this.mainFormManager.isExportExpected && !!p.control && !p.control.valid)
+      .filter(p => !!p.control && p.control.invalid && isFullyTouched(p.control))
       .forEach(p =>
         this.nbErrorsByPage.set(p.name, getNbErrorsInControl(p.control))
       );
   }
 
-  public save() {
-    this.mainFormManager.attemptExport();
+  public save(event) {
+    if (this.persistenceService.isAvailable &&
+      (!this.persistenceService.isAuthAvailable || ( this.persistenceService.isAuthAvailable && this.persistenceService.isAuthenticate ))) {
+      this.mainFormManager.attemptExport(EXPORT_TYPE.persistence);
+      this.updateNbErrors();
+    } else {
+      event.stopPropagation();
+    }
+  }
+
+  public export() {
+    this.mainFormManager.attemptExport(EXPORT_TYPE.json);
     this.updateNbErrors();
   }
 
+  public logout() {
+    this.authService.logout();
+    this.router.navigate(['']);
+  }
 }

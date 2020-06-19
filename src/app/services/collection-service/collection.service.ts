@@ -30,6 +30,8 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 export import FIELD_TYPES = CollectionReferenceDescriptionProperty.TypeEnum;
 export import METRIC_TYPES = ComputationRequest.MetricEnum;
 import { CollectionField } from './models';
+import { projType } from 'arlas-web-core';
+import { Hits } from 'arlas-api';
 
 @Injectable({
   providedIn: 'root'
@@ -43,14 +45,17 @@ export class CollectionService {
     private logger: NGXLogger
   ) { }
 
+  public getDescribe(collection: string): Observable<CollectionReferenceDescription> {
+    return this.collabSearchService.describe(collection);
+  }
+
   public getCollectionFields(collection: string, types?: Array<FIELD_TYPES>, exclude: boolean = false)
     : Observable<Array<CollectionField>> {
 
     this.spinner.show();
 
-    const result: Observable<Array<CollectionField>> = this.collabSearchService.describe(collection).pipe(map(
-      (c: CollectionReferenceDescriptionProperty) => {
-
+    const result: Observable<Array<CollectionField>> = this.getDescribe(collection).pipe(map(
+      (c: CollectionReferenceDescription) => {
         const getSubFields = (properties: CollectionReferenceDescriptionProperty, parentPath?: string):
           Array<CollectionField> => {
 
@@ -98,6 +103,11 @@ export class CollectionService {
       .finally(() => this.spinner.hide());
   }
 
+  public countNbDocuments(): Observable<Hits> {
+    return this.collabSearchService.resolveButNotHits([projType.count, {}],
+      this.collabSearchService.collaborations, null, null, false, 120);
+  }
+
   public getTermAggregation(collection: string, field: string, showSpinner: boolean = true, filter?: Filter): Promise<Array<string>> {
 
     if (showSpinner) {
@@ -122,14 +132,6 @@ export class CollectionService {
         }
       });
   }
-
-  public getCollectionParamFields(collection: string): Observable<CollectionReferenceParameters> {
-    return this.collabSearchService.describe(collection).pipe(map((collectionDescription: CollectionReferenceDescription) => {
-      return collectionDescription.params;
-    }));
-
-  }
-
 
   public getTermAggregationStartWith(collection: string, field: string, startWith: string) {
     return this.getTermAggregation(

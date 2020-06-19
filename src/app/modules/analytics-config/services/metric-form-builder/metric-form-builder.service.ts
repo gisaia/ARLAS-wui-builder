@@ -17,108 +17,123 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { ConfigFormGroup, SelectFormControl, InputFormControl } from '@shared-models/config-form';
-import { Metric } from 'arlas-api';
-import { CollectionField } from '@services/collection-service/models';
+import {
+  ConfigFormGroup, InputFormControl, MetricWithFieldListFormControl, TextareaFormControl, SlideToggleFormControl
+} from '@shared-models/config-form';
 import { Observable } from 'rxjs';
-import { NUMERIC_OR_DATE_TYPES } from '@services/collection-service/tools';
-
-export const DEFAULT_METRIC_VALUE = 'COUNT';
-
-export interface MetricControls {
-  metricCollectFunction: SelectFormControl;
-  metricCollectField: SelectFormControl;
-  metricValue: SelectFormControl;
-}
+import { CollectionField } from '@services/collection-service/models';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { WidgetFormBuilder } from '../widget-form-builder';
+import { FormGroup, FormControl } from '@angular/forms';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 export class MetricFormGroup extends ConfigFormGroup {
 
-  public get metricCollectFunction() {
-    return this.get('metricCollectFunction') as InputFormControl;
-  }
-
-  constructor(collectionFieldsObs: Observable<Array<CollectionField>>) {
-    super(
-      {
-        metricCollectFunction: new SelectFormControl(
+  constructor(
+    collectionFields: Observable<Array<CollectionField>>
+  ) {
+    super({
+      dataStep: new ConfigFormGroup({
+        name: new InputFormControl(
           '',
-          'Metric collect function',
+          'Title',
+          'Description'
+        ),
+        metrics: new MetricWithFieldListFormControl(
+          '',
+          'metric/field',
+          '',
+          collectionFields
+        ),
+        function: new TextareaFormControl(
+          '',
+          'Function',
           'Description',
-          false,
-          [Metric.CollectFctEnum.AVG.toString(), Metric.CollectFctEnum.CARDINALITY.toString(),
-          Metric.CollectFctEnum.MAX.toString(), Metric.CollectFctEnum.MIN.toString(),
-          Metric.CollectFctEnum.SUM.toString()].map(value => ({ value, label: value })),
+          undefined,
+          {
+            optional: true
+          }
+        )
+      }).withTabName('Data'),
+      renderStep: new ConfigFormGroup({
+        shortValue: new SlideToggleFormControl(
+          '',
+          'Short value',
+          'Description',
           {
             optional: true
           }
         ),
-        metricCollectField: new SelectFormControl(
+        beforeValue: new InputFormControl(
           '',
-          'Metric collect field',
+          'Before value',
           'Description',
-          true,
-          [],
+          'text',
           {
-            dependsOn: () => [this.metricCollectFunction],
-            onDependencyChange: (control: SelectFormControl) => {
-              if (this.metricCollectFunction.value) {
-
-                control.enable();
-
-                const filterCallback = (field: CollectionField) =>
-                  this.metricCollectFunction.value === Metric.CollectFctEnum.CARDINALITY ?
-                    field : NUMERIC_OR_DATE_TYPES.indexOf(field.type) >= 0;
-
-                collectionFieldsObs.subscribe(
-                  fields => control.setSyncOptions(
-                    fields
-                      .filter(filterCallback)
-                      .map(f => ({ value: f.name, label: f.name }))));
-              } else {
-                control.disable();
-              }
-            }
+            optional: true
           }
         ),
-        metricValue: new SelectFormControl(
+        afterValue: new InputFormControl(
           '',
-          'Value used in aggregation',
-          'description',
-          false,
-          [],
+          'After value',
+          'Description',
+          'text',
           {
-            dependsOn: () => [this.metricCollectFunction],
-            onDependencyChange: (control: SelectFormControl) => {
-              // exclude metricCollectFunction.value if falsy
-              control.setSyncOptions([this.metricCollectFunction.value, DEFAULT_METRIC_VALUE]
-                .filter(Boolean)
-                .map(value => ({ value, label: value })));
-            }
+            optional: true
           }
         )
-      }
-    );
+      }).withTabName('Render'),
+      unmanagedFields: new FormGroup({
+        renderStep: new FormGroup({
+          customizedCssClass: new FormControl()
+        })
+      })
+    });
   }
 
   public customControls = {
-    metricCollectFunction: this.get('metricCollectFunction') as SelectFormControl,
-    metricCollectField: this.get('metricCollectField') as SelectFormControl,
-    metricValue: this.get('metricValue') as SelectFormControl,
-  } as MetricControls;
+    dataStep: {
+      name: this.get('dataStep').get('name') as InputFormControl,
+      metrics: this.get('dataStep').get('metrics') as MetricWithFieldListFormControl,
+      function: this.get('dataStep').get('function') as TextareaFormControl,
+    },
+    renderStep: {
+      shortValue: this.get('renderStep').get('shortValue') as SlideToggleFormControl,
+      beforeValue: this.get('renderStep').get('beforeValue') as InputFormControl,
+      afterValue: this.get('renderStep').get('afterValue') as InputFormControl,
+    },
+    unmanagedFields: {
+      renderStep: {
+        customizedCssClass: this.get('unmanagedFields.renderStep.customizedCssClass')
+      }
+    }
+  };
 
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class MetricFormBuilderService {
+export class MetricFormBuilderService extends WidgetFormBuilder {
 
-  public formGroup: ConfigFormGroup;
+  public defaultKey = 'analytics.widgets.metric';
 
-  constructor() { }
-
-  public build(collectionFieldsObs: Observable<Array<CollectionField>>) {
-    return new MetricFormGroup(collectionFieldsObs);
+  constructor(
+    protected mainFormService: MainFormService,
+    protected collectionService: CollectionService,
+    private defaultValuesService: DefaultValuesService,
+  ) {
+    super(collectionService, mainFormService);
   }
 
+  public build() {
+
+    const formGroup = new MetricFormGroup(
+      this.collectionService.getCollectionFields(this.mainFormService.getCollections()[0])
+    );
+    this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
+
+    return formGroup;
+  }
 }
