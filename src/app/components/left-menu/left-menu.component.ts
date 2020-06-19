@@ -119,8 +119,8 @@ export class LeftMenuComponent {
   }
 
   public save(event) {
-    if (this.persistenceService.isAvailable
-      || (this.persistenceService.isAvailable && this.persistenceService.isAuthenticate && this.persistenceService.isAuthAvailable)) {
+    if (this.persistenceService.isAvailable &&
+      (!this.persistenceService.isAuthAvailable || ( this.persistenceService.isAuthAvailable && this.persistenceService.isAuthenticate ))) {
       this.mainFormManager.attemptExport(EXPORT_TYPE.persistence);
       this.updateNbErrors();
     } else {
