@@ -1,21 +1,5 @@
 {
     "arlas": {
-        "authentification": {
-            "useAuthentForArlas": false,
-            "useDiscovery": true,
-            "issuer": "https://dev-ss4oboli.eu.auth0.com/",
-            "clientId": "jV7flLewGpgYuyMJVUl0fZV35K6JoCLl",
-            "tokenEndpoint": "",
-            "userinfoEndpoint": "",
-            "loginUrl": "",
-            "scope": "openid profile",
-            "responseType": "id_token token",
-            "jwksEndpoint": "",
-            "silentRefreshTimeout": 5000,
-            "timeoutFactor": 0.9,
-            "sessionChecksEnabled": true,
-            "showDebugInformation": true,
-            "clearHashAfterLogin": false
-        }
+        
     }
 }

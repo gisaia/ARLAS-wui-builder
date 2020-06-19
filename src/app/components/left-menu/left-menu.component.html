@@ -23,7 +23,8 @@
   <div>
     <div class="action-list">
       <mat-nav-list>
-        <mat-list-item matTooltip="{{'Save' | translate}}" (click)="save($event)" [class.disabled-item]="!this.persistenceService.isAvailable || !this.persistenceService.isAuthenticate">
+        <mat-list-item matTooltip="{{'Save' | translate}}" (click)="save($event)" 
+        [class.disabled-item]="!this.persistenceService.isAvailable || (!this.persistenceService.isAuthenticate && this.persistenceService.isAuthAvailable)">
           <button mat-icon-button >
             <mat-icon>save</mat-icon>
             <span>{{'Save' | translate}}</span>

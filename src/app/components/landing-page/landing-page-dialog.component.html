@@ -5,7 +5,7 @@
             {{'Log in to access saved configurations' | translate}}
             <button mat-raised-button color="primary" (click)="login()">{{'Log In' | translate}}</button>
         </div>
-        <ng-container *ngIf="this.persistenceService.isAvailable">
+        <ng-container *ngIf="this.persistenceService.isAvailable && (!this.persistenceService.isAuthAvailable || (this.persistenceService.isAuthAvailable && this.persistenceService.isAuthenticate )) ">
             <table mat-table [dataSource]="configurations">
 
                 <ng-container matColumnDef="id">

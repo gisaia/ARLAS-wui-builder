@@ -48,14 +48,23 @@ export class PersistenceService {
   ) {
     const configuration = new Configuration();
     this.isAuthAvailable = !!this.authentificationService.authConfig;
-    this.authentificationService.isAuthenticated.subscribe( isAuth => {
-      this.isAuthenticate = isAuth;
+    if (this.isAuthAvailable) {
+      this.authentificationService.isAuthenticated.subscribe(isAuth => {
+        this.isAuthenticate = isAuth;
+        if (this.envService.persistenceUrl !== '') {
+          const baseUrl = this.envService.persistenceUrl;
+          this.persistenceApi = new PersistenceApi(configuration, baseUrl, portableFetch);
+          this.isAvailable = true;
+        }
+      });
+    } else {
       if (this.envService.persistenceUrl !== '') {
         const baseUrl = this.envService.persistenceUrl;
         this.persistenceApi = new PersistenceApi(configuration, baseUrl, portableFetch);
         this.isAvailable = true;
       }
-    });
+    }
+
   }
 
 
