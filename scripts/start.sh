@@ -1,4 +1,5 @@
 #!/bin/sh
+
 # Licensed to Gisaïa under one or more contributor
 # license agreements. See the NOTICE.txt file distributed with
 # this work for additional information regarding copyright
@@ -15,6 +16,17 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
+fetchConfiguration(){
+  echo "Download the BUILDER configuration file from \"${ARLAS_BUILDER_CONFIGURATION_URL}\" ..."
+  curl ${ARLAS_BUILDER_CONFIGURATION_URL} -o /usr/share/nginx/html/config.json && echo "Configuration file downloaded with success." || (echo "Failed to download the configuration file."; exit 1)
+}
+
+if [ -z "${ARLAS_BUILDER_CONFIGURATION_URL}" ]; then
+  echo "The default builder container configuration file is used"
+else
+  fetchConfiguration;
+fi
 
 fetchI18nENContent(){
   echo "Download the en.json file from \"${ARLAS_WUI_I18N_EN_URL}\" ..."
