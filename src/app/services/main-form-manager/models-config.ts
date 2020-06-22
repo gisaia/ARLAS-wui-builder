@@ -39,6 +39,12 @@ export interface Config {
 
         }
     };
+    extraConfigs: Array<ArlasExtraConfig>;
+}
+export interface ArlasExtraConfig {
+    configPath: string;
+    replacedAttribute: string;
+    replacer: string;
 }
 
 export interface ArlasConfig {
@@ -107,7 +113,7 @@ export interface ContributorConfig {
     geoQueryOp?: string;
     geoQueryField?: string;
     layers_sources?: Array<LayerSourceConfig>;
-    name?: string;
+    name: string;
     title?: string;
     charttype?: string;
     search_field?: string;
