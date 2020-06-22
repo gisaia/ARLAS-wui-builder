@@ -21,7 +21,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
-import { PreviewModalComponent } from '../preview-modal/preview-modal.component';
+import { PreviewComponent } from '../preview/preview.component';
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
 import { ArlasCollaborativesearchService, ArlasConfigService } from 'arlas-wui-toolkit';
 import { FormArray } from '@angular/forms';
@@ -121,9 +121,9 @@ export class LayersComponent implements OnInit {
     const formGroupIndex = (this.layersFa.value as any[]).findIndex(el => el.id === layerId);
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
     const mapConfigLayers = new FormArray([this.layersFa.at(formGroupIndex)]);
-    // Get contributor config for this layer
     // Get config.map part for this layer
     const configMap = ConfigMapExportHelper.process(mapConfigLayers);
+    // Get contributor config for this layer
     const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers);
     // Add contributor part in arlasConfigService
     // Add web contributors in config if not exist
@@ -140,18 +140,15 @@ export class LayersComponent implements OnInit {
       'mapbox',
       this.configService,
       this.collaborativesearchService);
-    const dialogRef = this.dialog.open(PreviewModalComponent, {
+    const mapComponentConfigValue = ConfigExportHelper.getMapComponent(mapConfigGlobal, mapConfigLayers);
+    mapComponentConfigValue.input.mapLayers.layers = configMap.layers;
+    const dialogRef = this.dialog.open(PreviewComponent, {
+      panelClass: 'map-preview',
       width: '80%',
       height: '80%',
       data: {
         mapglContributor: contributor,
-        idField: 'id',
-        initZoom: 15,
-        initCenter: [
-          -5.49213,
-          36.18482
-        ],
-        layers: configMap.layers
+        mapComponentConfig: mapComponentConfigValue
       }
     });
     dialogRef.afterClosed().subscribe(() => {

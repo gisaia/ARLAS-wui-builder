@@ -116,11 +116,25 @@ body {
 }
 
 #mapgl {
+  width: 100% !important;
+  top: 70px !important;
+  height: unset !important;
+  position: absolute !important;
+  bottom: 0px !important;
+  right: 0px !important;
+}
+
+.map-preview #mapgl {
   width: 80% !important;
   height: 80% !important;
   margin: -24px !important;
-  position: absolute;
+  position: absolute !important;
+  bottom: unset !important;
+  right: unset !important;
+  top: unset !important;
+
 }
+
 
 .mat-button-toggle-group {
   mat-button-toggle.mat-button-toggle-checked {

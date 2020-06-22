@@ -63,6 +63,13 @@ export class MapConfigComponent implements OnInit {
         && this.mainFormService.mapConfig.getLayersFa().invalid
         && isFullyTouched(this.mainFormService.mapConfig.getLayersFa())
     }
+    ,
+    {
+      routeurLink: 'preview', label: this.translate.instant('Preview'),
+      hasError: () => !!this.mainFormService.mapConfig.getLayersFa()
+        && this.mainFormService.mapConfig.getLayersFa().invalid
+        && isFullyTouched(this.mainFormService.mapConfig.getLayersFa())
+    }
   ];
 
   public activeTab = this.tabs[0];
