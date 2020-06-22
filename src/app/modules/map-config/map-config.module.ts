@@ -27,8 +27,9 @@ import { GlobalMapComponent } from './components/global-map/global-map.component
 import { LayersComponent } from './components/layers/layers.component';
 import { MapConfigRoutingModule } from './map-config-routing.module';
 import { MapConfigComponent } from './map-config.component';
-import { PreviewModalComponent } from './components/preview-modal/preview-modal.component';
+import { PreviewComponent } from './components/preview/preview.component';
 import { MapglComponent, MapglModule, MapglLayerIconModule, MapglLegendModule } from 'arlas-web-components';
+import { MAT_DIALOG_DATA } from '@angular/material';
 
 @NgModule({
   entryComponents: [
@@ -36,7 +37,7 @@ import { MapglComponent, MapglModule, MapglLayerIconModule, MapglLegendModule } 
     DialogColorTableComponent,
     DialogPaletteSelectorComponent,
     MapglComponent,
-    PreviewModalComponent
+    PreviewComponent
   ],
   declarations: [
     MapConfigComponent,
@@ -45,7 +46,7 @@ import { MapglComponent, MapglModule, MapglLayerIconModule, MapglLegendModule } 
     EditLayerComponent,
     DialogColorTableComponent,
     DialogPaletteSelectorComponent,
-    PreviewModalComponent
+    PreviewComponent
   ],
   imports: [
     MapConfigRoutingModule,
@@ -55,7 +56,9 @@ import { MapglComponent, MapglModule, MapglLayerIconModule, MapglLegendModule } 
     SharedModule
   ],
   providers: [
-    ConfirmExitGuard
+    ConfirmExitGuard,
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+
   ]
 })
 export class MapConfigModule { }

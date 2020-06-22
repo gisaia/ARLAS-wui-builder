@@ -23,6 +23,7 @@ import { GlobalMapComponent } from './components/global-map/global-map.component
 import { LayersComponent } from './components/layers/layers.component';
 import { EditLayerComponent } from './components/edit-layer/edit-layer.component';
 import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
+import { PreviewComponent } from './components/preview/preview.component';
 
 
 const routes: Routes = [
@@ -30,6 +31,7 @@ const routes: Routes = [
     path: '', component: MapConfigComponent, children: [
       { path: '', redirectTo: 'global', pathMatch: 'full' },
       { path: 'global', component: GlobalMapComponent },
+      { path: 'preview', component: PreviewComponent },
       {
         path: 'layers', children: [
           { path: '', component: LayersComponent, pathMatch: 'full' },

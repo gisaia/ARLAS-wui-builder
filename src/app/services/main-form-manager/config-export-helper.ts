@@ -220,6 +220,54 @@ export class ConfigExportHelper {
         return mapContributor;
     }
 
+    public static getMapComponent(mapConfigGlobal: MapGlobalFormGroup, mapConfigLayers: FormArray): MapglComponentConfig {
+
+        const customControls = mapConfigGlobal.customControls;
+        const layers: Set<string> = new Set<string>();
+        mapConfigLayers.controls.forEach(layer => {
+            layers.add(layer.value.name);
+        });
+
+        // TODO keep existing visualisation set during import / export
+        const visualisationsSets: Array<VisualisationSetConfig> = [
+            {
+                name: 'layers',
+                layers,
+                enabled: true
+            }
+        ];
+
+        const mapComponent: MapglComponentConfig = {
+            allowMapExtend: customControls.allowMapExtend.value,
+            nbVerticesLimit: customControls.unmanagedFields.nbVerticesLimit.value,
+            input: {
+                defaultBasemapStyle: customControls.unmanagedFields.defaultBasemapStyle.value,
+                basemapStyles: customControls.unmanagedFields.basemapStyles.value,
+                margePanForLoad: customControls.margePanForLoad.value,
+                margePanForTest: customControls.margePanForTest.value,
+                initZoom: customControls.initZoom.value,
+                initCenter: [
+                    customControls.initCenterLat.value,
+                    customControls.initCenterLon.value
+                ],
+                displayScale: customControls.displayScale.value,
+                idFeatureField: customControls.requestGeometries.value[0].idFeatureField,
+                mapLayers: {
+                    layers: [],
+                    events: {
+                        zoomOnClick: customControls.unmanagedFields.mapLayers.events.zoomOnClick.value,
+                        emitOnClick: customControls.unmanagedFields.mapLayers.events.emitOnClick.value,
+                        onHover: customControls.unmanagedFields.mapLayers.events.onHover.value,
+                    },
+                    externalEventLayers: new Array<{ id: string, on: string }>()
+                } as MapComponentInputMapLayersConfig,
+                visualisations_sets: visualisationsSets
+            } as MapComponentInputConfig
+        };
+
+        return mapComponent;
+    }
+
     private static addLayerSourceInterpolationData(layerSource: LayerSourceConfig, layerValues: any, mode: LAYER_MODE) {
         switch (layerValues.propertySource) {
             case PROPERTY_SELECTOR_SOURCE.fix: {
@@ -329,54 +377,6 @@ export class ConfigExportHelper {
         }
 
         return contributor;
-    }
-
-    private static getMapComponent(mapConfigGlobal: MapGlobalFormGroup, mapConfigLayers: FormArray): MapglComponentConfig {
-
-        const customControls = mapConfigGlobal.customControls;
-        const layers: Set<string> = new Set<string>();
-        mapConfigLayers.controls.forEach(layer => {
-            layers.add(layer.value.name);
-        });
-
-        // TODO keep existing visualisation set during import / export
-        const visualisationsSets: Array<VisualisationSetConfig> = [
-            {
-                name: 'layers',
-                layers,
-                enabled: true
-            }
-        ];
-
-        const mapComponent: MapglComponentConfig = {
-            allowMapExtend: customControls.allowMapExtend.value,
-            nbVerticesLimit: customControls.unmanagedFields.nbVerticesLimit.value,
-            input: {
-                defaultBasemapStyle: customControls.unmanagedFields.defaultBasemapStyle.value,
-                basemapStyles: customControls.unmanagedFields.basemapStyles.value,
-                margePanForLoad: customControls.margePanForLoad.value,
-                margePanForTest: customControls.margePanForTest.value,
-                initZoom: customControls.initZoom.value,
-                initCenter: [
-                    customControls.initCenterLat.value,
-                    customControls.initCenterLon.value
-                ],
-                displayScale: customControls.displayScale.value,
-                idFeatureField: customControls.requestGeometries.value[0].idFeatureField,
-                mapLayers: {
-                    layers: [],
-                    events: {
-                        zoomOnClick: customControls.unmanagedFields.mapLayers.events.zoomOnClick.value,
-                        emitOnClick: customControls.unmanagedFields.mapLayers.events.emitOnClick.value,
-                        onHover: customControls.unmanagedFields.mapLayers.events.onHover.value,
-                    },
-                    externalEventLayers: new Array<{ id: string, on: string }>()
-                } as MapComponentInputMapLayersConfig,
-                visualisations_sets: visualisationsSets
-            } as MapComponentInputConfig
-        };
-
-        return mapComponent;
     }
 
     private static getTimelineComponent(timelineConfigGlobal: TimelineGlobalFormGroup, isDetailed: boolean): AnalyticComponentConfig {

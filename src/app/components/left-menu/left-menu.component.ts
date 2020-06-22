@@ -120,7 +120,7 @@ export class LeftMenuComponent {
 
   public save(event) {
     if (this.persistenceService.isAvailable &&
-      (!this.persistenceService.isAuthAvailable || ( this.persistenceService.isAuthAvailable && this.persistenceService.isAuthenticate ))) {
+      (!this.persistenceService.isAuthAvailable || (this.persistenceService.isAuthAvailable && this.persistenceService.isAuthenticate))) {
       this.mainFormManager.attemptExport(EXPORT_TYPE.persistence);
       this.updateNbErrors();
     } else {
@@ -136,5 +136,13 @@ export class LeftMenuComponent {
   public logout() {
     this.authService.logout();
     this.router.navigate(['']);
+
+  }
+
+  public expand() {
+    this.isLabelDisplayed = !this.isLabelDisplayed;
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 100);
   }
 }

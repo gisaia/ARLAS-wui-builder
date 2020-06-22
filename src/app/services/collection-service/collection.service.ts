@@ -58,27 +58,26 @@ export class CollectionService {
       (c: CollectionReferenceDescription) => {
         const getSubFields = (properties: CollectionReferenceDescriptionProperty, parentPath?: string):
           Array<CollectionField> => {
+          if (properties !== null && properties !== undefined) {
+            return Object.keys(properties).flatMap(key => {
+              const path = parentPath ? parentPath + '.' + key : key;
+              const property = properties[key];
+              if (property.type === CollectionReferenceDescriptionProperty.TypeEnum.OBJECT) {
+                return getSubFields(property.properties, path);
 
-          return Object.keys(properties).flatMap(key => {
-            const path = parentPath ? parentPath + '.' + key : key;
-            const property = properties[key];
-            if (property.type === CollectionReferenceDescriptionProperty.TypeEnum.OBJECT) {
-              return getSubFields(property.properties, path);
-
-            } else if (!exclude && (!types || types.includes(property.type))) {
-              return { name: path, type: property.type };
-            } else if (exclude && (!types || !types.includes(property.type))) {
-              return { name: path, type: property.type };
-            } else {
-              return null;
-            }
-          }).filter(p => p !== null);
+              } else if (!exclude && (!types || types.includes(property.type))) {
+                return { name: path, type: property.type };
+              } else if (exclude && (!types || !types.includes(property.type))) {
+                return { name: path, type: property.type };
+              } else {
+                return null;
+              }
+            }).filter(p => p !== null && p !== undefined);
+          }
         };
-
         return getSubFields(c.properties).sort();
       }))
       .pipe(finalize(() => this.spinner.hide()));
-
     return result;
   }
 
