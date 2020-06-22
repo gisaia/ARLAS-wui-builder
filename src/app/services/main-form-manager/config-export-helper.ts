@@ -105,7 +105,14 @@ export class ConfigExportHelper {
                         }
                     }
                 }
-            }
+            },
+            extraConfigs : [
+                {
+                    configPath: 'config.map.json',
+                    replacedAttribute: 'arlas.web.components.mapgl.input.mapLayers.layers',
+                    replacer: 'layers'
+                }
+            ]
         };
 
         config.arlas.web.contributors.push(this.getMapContributor(mapConfigGlobal, mapConfigLayers));
@@ -207,6 +214,7 @@ export class ConfigExportHelper {
         const mapContributor: ContributorConfig = {
             type: 'map',
             identifier: 'mapbox',
+            name: 'map',
             geoQueryOp: mapConfigGlobal.value.geographicalOperator,
             geoQueryField: mapConfigGlobal.value.requestGeometries[0].requestGeom,
             icon: mapConfigGlobal.customControls.unmanagedFields.icon.value,
