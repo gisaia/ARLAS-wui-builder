@@ -28,6 +28,7 @@ import { Observable } from 'rxjs';
 import { CollectionField } from '@services/collection-service/models';
 import { toOptionsObs } from '@services/collection-service/tools';
 import { integerValidator } from '@utils/validators';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 export interface BucketsIntervalControls {
   aggregationField: SelectFormControl;
@@ -51,8 +52,8 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
       {
         aggregationField: new SelectFormControl(
           '',
-          'Aggregation field',
-          'description',
+          marker('Aggregation field'),
+          marker('Aggregation field description'),
           true,
           toOptionsObs(fieldsObs),
           {
@@ -79,10 +80,10 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
         aggregationBucketOrInterval: new ButtonToggleFormControl(
           '',
           [
-            { label: 'By bucket', value: BY_BUCKET_OR_INTERVAL.BUCKET },
-            { label: 'By interval', value: BY_BUCKET_OR_INTERVAL.INTERVAL },
+            { label: marker('By bucket'), value: BY_BUCKET_OR_INTERVAL.BUCKET },
+            { label: marker('By interval'), value: BY_BUCKET_OR_INTERVAL.INTERVAL },
           ],
-          'description',
+          marker('Choose aggreagation Mode'),
           {
             resetDependantsOnChange: true,
             childs: () => [
@@ -94,8 +95,8 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
         ),
         aggregationBucketsNumber: new SliderFormControl(
           '',
-          'Number of buckets',
-          'description',
+          marker('Number of buckets'),
+          marker('Number of buckets description'),
           10,
           200,
           5,
@@ -109,8 +110,8 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
         ),
         aggregationIntervalUnit: new SelectFormControl(
           '',
-          'Interval unit',
-          'description',
+          marker('Interval unit'),
+          marker('Interval unit description'),
           false,
           Array.from(new Set(
             Object.keys(Interval.UnitEnum).map(u => u.charAt(0).toUpperCase() + u.slice(1))))
@@ -137,8 +138,8 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
         ),
         aggregationIntervalSize: new InputFormControl(
           '',
-          'Interval size',
-          'description',
+          marker('Interval size'),
+          marker('Interval size description'),
           'number',
           {
             dependsOn: () => [this.customControls.aggregationBucketOrInterval],
@@ -167,7 +168,8 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
 })
 export class BucketsIntervalFormBuilderService {
 
-  constructor() {
+  constructor(
+  ) {
   }
 
   public build(fieldsObs: Observable<Array<CollectionField>>) {

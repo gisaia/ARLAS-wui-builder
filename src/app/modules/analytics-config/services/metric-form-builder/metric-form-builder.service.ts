@@ -27,6 +27,7 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { FormGroup, FormControl } from '@angular/forms';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 export class MetricFormGroup extends ConfigFormGroup {
 
@@ -37,8 +38,8 @@ export class MetricFormGroup extends ConfigFormGroup {
       dataStep: new ConfigFormGroup({
         name: new InputFormControl(
           '',
-          'Title',
-          'Description'
+          marker('Title'),
+          marker('Metric title description')
         ),
         metrics: new MetricWithFieldListFormControl(
           '',
@@ -48,27 +49,27 @@ export class MetricFormGroup extends ConfigFormGroup {
         ),
         function: new TextareaFormControl(
           '',
-          'Function',
-          'Description',
+          marker('Function'),
+          marker('metric function description'),
           undefined,
           {
             optional: true
           }
         )
-      }).withTabName('Data'),
+      }).withTabName(marker('Data')),
       renderStep: new ConfigFormGroup({
         shortValue: new SlideToggleFormControl(
           '',
-          'Short value',
-          'Description',
+          marker('Short value'),
+          marker('Short value description'),
           {
             optional: true
           }
         ),
         beforeValue: new InputFormControl(
           '',
-          'Before value',
-          'Description',
+          marker('Before value'),
+          marker('Before value description'),
           'text',
           {
             optional: true
@@ -76,14 +77,14 @@ export class MetricFormGroup extends ConfigFormGroup {
         ),
         afterValue: new InputFormControl(
           '',
-          'After value',
-          'Description',
+          marker('After value'),
+          marker('After value description'),
           'text',
           {
             optional: true
           }
         )
-      }).withTabName('Render'),
+      }).withTabName(marker('Render')),
       unmanagedFields: new FormGroup({
         renderStep: new FormGroup({
           customizedCssClass: new FormControl()

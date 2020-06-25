@@ -32,6 +32,7 @@ import { MatDialog } from '@angular/material';
 import { FormArray, FormGroup, FormControl } from '@angular/forms';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 export class PowerbarConfigForm extends ConfigFormGroup {
 
@@ -48,35 +49,35 @@ export class PowerbarConfigForm extends ConfigFormGroup {
       dataStep: new ConfigFormGroup({
         name: new InputFormControl(
           '',
-          'title',
-          'description'
+          marker('title'),
+          marker('Powerbar title description')
         ),
         aggregationField: new SelectFormControl(
           '',
-          'Field',
-          'Description',
+          marker('Field'),
+          marker('Powerbar field description'),
           true,
           toKeywordOptionsObs(collectionFields)
         ),
         aggregationSize: new SliderFormControl(
           '',
-          'Size',
-          'Description',
+          marker('Size'),
+          marker('powerbar size description'),
           0,
           100,
           1
         )
-      }).withTabName('Data'),
+      }).withTabName(marker('Data')),
       renderStep: new ConfigFormGroup({
         powerbarTitle: new InputFormControl(
           '',
-          'Powerbar title',
-          'Description'
+          marker('Powerbar title'),
+          marker('Powerbar title description')
         ),
         useColorService: new SlideToggleFormControl(
           '',
-          'Manually associate colors',
-          'description',
+          marker('Manually associate colors'),
+          marker('Powerbar manually associate colors description'),
           {
             childs: () => [
               this.customControls.renderStep.keysToColorsButton
@@ -85,8 +86,8 @@ export class PowerbarConfigForm extends ConfigFormGroup {
         ),
         keysToColorsButton: new ButtonFormControl(
           '',
-          'Manage colors',
-          'Description',
+          marker('Manage colors'),
+          marker('Powerbar manage colors description'),
           () => collectionService.getTermAggregation(collection, this.customControls.dataStep.aggregationField.value)
             .then((keywords: Array<string>) => {
               keywords.forEach((k: string, index: number) => {
@@ -131,10 +132,10 @@ export class PowerbarConfigForm extends ConfigFormGroup {
           }),
         displayFilter: new SlideToggleFormControl(
           '',
-          'Display the filter',
-          'description'
+          marker('Display the filter'),
+          marker('powerbar display filter description')
         )
-      }).withTabName('Data'),
+      }).withTabName(marker('Data')),
       unmanagedFields: new FormGroup({}) // for consistency with other widgets form builders
     });
   }

@@ -33,6 +33,7 @@ import {
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { toNumericOrDateFieldsObs } from '@services/collection-service/tools';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 // TODO put in common with timeline
 enum DateFormats {
@@ -51,37 +52,38 @@ export class HistogramFormGroup extends ConfigFormGroup {
         dataStep: new ConfigFormGroup({
           name: new InputFormControl(
             '',
-            'Name',
-            'description'),
+            marker('Name'),
+            marker('histogram name description')
+          ),
           aggregation: bucketsIntervalFg,
           metric: metricFg
-        }).withTabName('Data'),
+        }).withTabName(marker('Data')),
         renderStep: new ConfigFormGroup({
           multiselectable: new SlideToggleFormControl(
             '',
-            'Is multiselectable?',
-            'description'
+            marker('Is multiselectable?'),
+            marker('histogram multiselectable description')
           ),
           chartType: new SelectFormControl(
             '',
-            'Chart type',
-            'description',
+            marker('Chart type'),
+            marker('chart type description'),
             false,
             [ChartType[ChartType.area], ChartType[ChartType.bars]].map(value => ({ value, label: value }))
           ),
           showHorizontalLines: new SlideToggleFormControl(
             '',
-            'Show horizontal lines?',
-            'description'
+            marker('Show horizontal lines?'),
+            marker('Show horizontal lines description')
           ),
           ticksDateFormat: new SelectFormControl(
             '',
-            'Date format',
-            'description',
+            marker('Date format'),
+            marker('Date format description'),
             false,
             Object.keys(DateFormats).map(df => ({ value: DateFormats[df], label: df }))
           )
-        }).withTabName('Render'),
+        }).withTabName(marker('Render')),
         unmanagedFields: new FormGroup({
           dataStep: new FormGroup({
             isOneDimension: new FormControl(),

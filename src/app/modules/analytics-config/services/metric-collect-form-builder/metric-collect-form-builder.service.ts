@@ -22,6 +22,7 @@ import { Metric } from 'arlas-api';
 import { CollectionField } from '@services/collection-service/models';
 import { Observable } from 'rxjs';
 import { NUMERIC_OR_DATE_TYPES } from '@services/collection-service/tools';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 export const DEFAULT_METRIC_VALUE = 'COUNT';
 
@@ -42,8 +43,8 @@ export class MetricCollectFormGroup extends ConfigFormGroup {
       {
         metricCollectFunction: new SelectFormControl(
           '',
-          'Metric collect function',
-          'Description',
+          marker('Metric collect function'),
+          marker('Metric collect function Description'),
           false,
           [Metric.CollectFctEnum.AVG.toString(), Metric.CollectFctEnum.CARDINALITY.toString(),
           Metric.CollectFctEnum.MAX.toString(), Metric.CollectFctEnum.MIN.toString(),
@@ -54,8 +55,8 @@ export class MetricCollectFormGroup extends ConfigFormGroup {
         ),
         metricCollectField: new SelectFormControl(
           '',
-          'Metric collect field',
-          'Description',
+          marker('Metric collect field'),
+          marker('Metric collect field Description'),
           true,
           [],
           {
@@ -82,8 +83,8 @@ export class MetricCollectFormGroup extends ConfigFormGroup {
         ),
         metricValue: new SelectFormControl(
           '',
-          'Value used in aggregation',
-          'description',
+          marker('Value used in aggregation'),
+          marker('Value used in aggregation description'),
           false,
           [],
           {

@@ -35,6 +35,7 @@ import {
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { Observable } from 'rxjs';
 import { toKeywordOptionsObs, toDateFieldsObs } from '@services/collection-service/tools';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 enum SWIMLANE_REPRESENTATION {
   GLOBALLY = 'global',
@@ -53,31 +54,32 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
         dataStep: new ConfigFormGroup({
           name: new InputFormControl(
             '',
-            'Name',
-            'description'),
+            marker('Name'),
+            marker('Swimlane name description')
+          ),
           aggregation: dateAggregationFg,
           termAggregation: new ConfigFormGroup({
             termAggregationField: new SelectFormControl(
               '',
-              'Term field',
-              'description',
+              marker('Term field'),
+              marker('Term field description'),
               true,
               keywordsFieldsObs),
             termAggregationSize: new SliderFormControl(
               '',
-              'Term size',
-              'description',
+              marker('Term size'),
+              marker('Term size description'),
               0,
               10,
               1)
-          }).withTitle('Term aggregation'),
+          }).withTitle(marker('Term aggregation')),
           metric: metricFg
-        }).withTabName('Data'),
+        }).withTabName(marker('Data')),
         renderStep: new ConfigFormGroup({
           swimlaneMode: new SelectFormControl(
             '',
-            'Swimlane mode',
-            'description',
+            marker('Swimlane mode'),
+            marker('Swimlane mode description'),
             false,
             [
               { value: SwimlaneMode[SwimlaneMode.fixedHeight].toString(), label: 'Fixed height' },
@@ -88,22 +90,22 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
           swimlaneRepresentation: new ButtonToggleFormControl(
             '',
             [
-              { label: 'Represent globally', value: SWIMLANE_REPRESENTATION.GLOBALLY },
-              { label: 'or by column', value: SWIMLANE_REPRESENTATION.BY_COLUMN },
+              { label: marker('Represent globally'), value: SWIMLANE_REPRESENTATION.GLOBALLY },
+              { label: marker('By column'), value: SWIMLANE_REPRESENTATION.BY_COLUMN },
             ]
             ,
-            'description'
+            marker('Swimlane representation description')
           ),
           paletteColors: new HuePaletteFormControl(
             '',
-            'Palette colors',
-            'description',
+            marker('Palette colors'),
+            marker('Palette colors description'),
             defaultConfig.huePalettes
           ),
           isZeroRepresentative: new SlideToggleFormControl(
             '',
-            'Is zero representative?',
-            'Description',
+            marker('Is zero representative?'),
+            marker('Is zero representative description'),
             {
               childs: () => [this.customControls.renderStep.zerosColors, this.customControls.renderStep.NaNColor]
             }
@@ -120,7 +122,7 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
           NaNColor: new HiddenFormControl(
             defaultConfig.swimlaneNanColor
           )
-        }).withTabName('Render'),
+        }).withTabName(marker('Render')),
         unmanagedFields: new FormGroup({
           dataStep: new FormGroup({
             isOneDimension: new FormControl(),
@@ -224,10 +226,10 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
     const formGroup = new SwimlaneFormGroup(
       this.bucketsIntervalBuilderService
         .build(toDateFieldsObs(collectionFieldsObs))
-        .withTitle('Date aggregation'),
+        .withTitle(marker('Date aggregation')),
       this.metricBuilderService
         .build(collectionFieldsObs)
-        .withTitle('Metric'),
+        .withTitle(marker('Metric')),
       this.defaultValuesService.getDefaultConfig(),
       toKeywordOptionsObs(collectionFieldsObs));
 
