@@ -17,16 +17,14 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import {
-  ConfigFormGroup, InputFormControl, SelectFormControl, SliderFormControl, SelectOption
-} from '@shared-models/config-form';
+import { FormControl, FormGroup } from '@angular/forms';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { Observable } from 'rxjs';
-import { MainFormService } from '@services/main-form/main-form.service';
 import { toKeywordOptionsObs, toTextOptionsObs } from '@services/collection-service/tools';
-import { TranslateService } from '@ngx-translate/core';
-import { FormGroup, FormControl } from '@angular/forms';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfigFormGroup, InputFormControl, SelectFormControl, SelectOption, SliderFormControl } from '@shared-models/config-form';
+import { Observable } from 'rxjs';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 export class SearchGlobalFormGroup extends ConfigFormGroup {
 
@@ -38,28 +36,28 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
       {
         name: new InputFormControl(
           null,
-          'Name',
-          'It is used to...',
+          marker('Name'),
+          marker('Saerch name descritpion'),
           null,
           { title: 'Search' }),
         searchField: new SelectFormControl(
           null,
-          'Search field',
-          'It is used to...',
+          marker('Search field'),
+          marker('Search field description'),
           true,
           textFieldsObs
         ),
         autocompleteField: new SelectFormControl(
           null,
-          'Autocomplete field',
-          'It is used to...',
+          marker('Autocomplete field'),
+          marker('Autocomplete field description'),
           true,
           keywordFieldsObs
         ),
         autocompleteSize: new SliderFormControl(
           null,
-          'Autocomplete size',
-          'It is used to...',
+          marker('Autocomplete size'),
+          marker('Autocomplete size description'),
           1,
           10,
           1

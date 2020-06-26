@@ -18,29 +18,26 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import {
-  GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GRANULARITY, AGGREGATE_GEOMETRY_TYPE
-} from './models';
-import {
-  PropertySelectorFormGroup, PropertySelectorFormBuilderService
-} from '@shared/services/property-selector-form-builder/property-selector-form-builder.service';
-import { PROPERTY_TYPE, PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
-import { CollectionField } from '@services/collection-service/models';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { toGeoOptionsObs, toKeywordOptionsObs, toGeoPointOptionsObs, toAllButGeoOptionsObs } from '@services/collection-service/tools';
+import { CollectionField } from '@services/collection-service/models';
+import { toAllButGeoOptionsObs, toGeoOptionsObs, toGeoPointOptionsObs, toKeywordOptionsObs } from '@services/collection-service/tools';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
-  SelectFormControl, HiddenFormControl, SlideToggleFormControl,
-  SliderFormControl,
-  ConfigFormGroup,
+  ConfigFormGroup, HiddenFormControl,
   InputFormControl,
-  SelectOption,
-  OrderedSelectFormControl
+  OrderedSelectFormControl, SelectFormControl,
+  SliderFormControl, SlideToggleFormControl
 } from '@shared-models/config-form';
-import { LAYER_MODE } from '@map-config/components/edit-layer/models';
-import { Observable } from 'rxjs';
+import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
+import {
+  PropertySelectorFormBuilderService, PropertySelectorFormGroup 
+} from '@shared/services/property-selector-form-builder/property-selector-form-builder.service';
 import { valuesToOptions } from '@utils/tools';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { Observable } from 'rxjs';
+import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE, GRANULARITY } from './models';
 
 export class MapLayerFormGroup extends ConfigFormGroup {
 
@@ -52,16 +49,16 @@ export class MapLayerFormGroup extends ConfigFormGroup {
     super({
       name: new InputFormControl(
         '',
-        'Name',
-        'Name of the layer. Only used for visualization.',
+        marker('Name'),
+        marker('Name of the layer. Only used for visualization.'),
         'text',
         {
           childs: () => [this.customControls.id]
         }),
       mode: new SelectFormControl(
         '',
-        'Mode',
-        'Mode of the layer.',
+        marker('Mode'),
+        marker('Mode of the layer.'),
         false,
         [
           { label: LAYER_MODE.features, value: LAYER_MODE.features },
@@ -119,25 +116,25 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
       collectionStep: new ConfigFormGroup({
         collection: new SelectFormControl(
           collections.length === 1 ? collections[0] : '',
-          'Collection',
+          marker('Collection'),
           '',
           false,
           collections.map(c => ({ label: c, value: c }))
         )
-      }).withStepName('Collection'),
+      }).withStepName(marker('Collection')),
       geometryStep: new ConfigFormGroup({
         ...geometryFormControls
-      }).withStepName('Geometry'),
+      }).withStepName(marker('Geometry')),
       visibilityStep: new ConfigFormGroup({
         visible: new SlideToggleFormControl(
           '',
-          'Visible',
-          'Description'
+          marker('Visible'),
+          marker('Whether the layer is visible or not')
         ),
         zoomMin: new SliderFormControl(
           '',
-          'Zoom min',
-          'zoom min etc.',
+          marker('Zoom min'),
+          marker('zoom min description'),
           1,
           20,
           1,
@@ -145,8 +142,8 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         ),
         zoomMax: new SliderFormControl(
           '',
-          'Zoom max',
-          'zoom max etc.',
+          marker('Zoom max'),
+          marker('zoom max description'),
           1,
           20,
           1,
@@ -154,13 +151,13 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           () => this.zoomMin
         ),
         ...visibilityFormControls
-      }).withStepName('Visibility'),
+      }).withStepName(marker('Visibility')),
       styleStep: new ConfigFormGroup({
         ...styleFormControls,
         geometryType: new SelectFormControl(
           '',
-          'Geometry type',
-          '',
+          marker('Geometry type'),
+          marker('Geometry type description'),
           false,
           valuesToOptions(geometryTypes),
           {
@@ -169,8 +166,8 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         ),
         opacity: new SliderFormControl(
           '',
-          'Opacity',
-          'opacity ...',
+          marker('Opacity'),
+          marker('opacity description'),
           0,
           1,
           0.1
@@ -224,7 +221,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.heatmap))
 
-      }).withStepName('Style')
+      }).withStepName(marker('Style'))
     });
 
   }
@@ -274,20 +271,20 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
       {
         geometry: new SelectFormControl(
           '',
-          'Rendered geometry',
-          '',
+          marker('Rendered geometry'),
+          marker('Rendered geometry description'),
           false,
           toGeoOptionsObs(collectionFields),
           {
-            title: 'Rendered geometry'
+            title: marker('Rendered geometry')
           }
         ),
         ...geometryFormControls
       }, {
       featuresMax: new SliderFormControl(
         '',
-        'Features max',
-        'Features max etc...',
+        marker('Features max'),
+        marker('Maximum number of features to display this layer'),
         0,
         10000,
         100
@@ -316,23 +313,23 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
       {
         geometryId: new SelectFormControl(
           '',
-          'Geometry ID',
-          '',
+          marker('Geometry ID'),
+          marker('Geometry ID description'),
           true,
           toKeywordOptionsObs(collectionFields)
         ),
         granularity: new SelectFormControl(
           '',
-          'Granularity',
-          '',
+          marker('Granularity'),
+          marker('Granularity description'),
           false,
           [
-            { label: 'Coarse', value: GRANULARITY.coarse },
-            { label: 'Fine', value: GRANULARITY.fine },
-            { label: 'Finest', value: GRANULARITY.finest },
+            { label: marker('Coarse'), value: GRANULARITY.coarse },
+            { label: marker('Fine'), value: GRANULARITY.fine },
+            { label: marker('Finest'), value: GRANULARITY.finest },
           ],
           {
-            title: 'Granularity'
+            title: marker('Granularity')
           }
         )
       });
@@ -361,49 +358,49 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
       {
         aggGeometry: new SelectFormControl(
           '',
-          'Aggregation field',
-          'Choose the aggregation field...',
+          marker('Aggregation field'),
+          marker('Choose the aggregation field'),
           false,
           toGeoPointOptionsObs(collectionFields),
           {
-            title: 'Requested geometry'
+            title: marker('Requested geometry')
           }
         ),
         granularity: new SelectFormControl(
           '',
-          'Granularity',
-          '',
+          marker('Granularity'),
+          marker('Granularity description'),
           false,
           [
-            { label: 'Coarse', value: GRANULARITY.coarse },
-            { label: 'Fine', value: GRANULARITY.fine },
-            { label: 'Finest', value: GRANULARITY.finest },
+            { label: marker('Coarse'), value: GRANULARITY.coarse },
+            { label: marker('Fine'), value: GRANULARITY.fine },
+            { label: marker('Finest'), value: GRANULARITY.finest },
           ]
         ),
         clusterGeometryType: new SelectFormControl(
           '',
-          'Type',
-          '',
+          marker('Type'),
+          marker('Geometry type description'),
           false,
           [
-            { label: 'Aggregated geometry', value: CLUSTER_GEOMETRY_TYPE.aggregated_geometry },
-            { label: 'Raw Geometry', value: CLUSTER_GEOMETRY_TYPE.raw_geometry }
+            { label: marker('Aggregated geometry'), value: CLUSTER_GEOMETRY_TYPE.aggregated_geometry },
+            { label: marker('Raw Geometry'), value: CLUSTER_GEOMETRY_TYPE.raw_geometry }
           ],
           {
             resetDependantsOnChange: true,
-            title: 'Displayed geometry'
+            title: marker('Displayed geometry')
           }
         ),
         aggregatedGeometry: new SelectFormControl(
           '',
-          'Type',
+          marker('Type'),
           '',
           false,
           [
-            { label: 'Cell center', value: AGGREGATE_GEOMETRY_TYPE.geohash_center },
-            { label: 'Cell', value: AGGREGATE_GEOMETRY_TYPE.geohash },
-            { label: 'Data cell bbox', value: AGGREGATE_GEOMETRY_TYPE.bbox },
-            { label: 'Data cell centroid', value: AGGREGATE_GEOMETRY_TYPE.centroid }
+            { label: marker('Cell center'), value: AGGREGATE_GEOMETRY_TYPE.geohash_center },
+            { label: marker('Cell'), value: AGGREGATE_GEOMETRY_TYPE.geohash },
+            { label: marker('Data cell bbox'), value: AGGREGATE_GEOMETRY_TYPE.bbox },
+            { label: marker('Data cell centroid'), value: AGGREGATE_GEOMETRY_TYPE.centroid }
           ],
           {
             dependsOn: () => [this.clusterGeometryType],
@@ -412,7 +409,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
         ),
         rawGeometry: new SelectFormControl(
           '',
-          'Field',
+          marker('Field'),
           '',
           false,
           toGeoOptionsObs(collectionFields),
@@ -425,7 +422,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
         ),
         clusterSort: new OrderedSelectFormControl(
           '',
-          'Order field',
+          marker('Order field'),
           '',
           false,
           toAllButGeoOptionsObs(collectionFields),
@@ -439,8 +436,8 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
       {
         featuresMin: new SliderFormControl(
           '',
-          'Minimum features',
-          'Minimum number of features to display this layer',
+          marker('Minimum features'),
+          marker('Minimum number of features to display this layer'),
           0,
           10000,
           100

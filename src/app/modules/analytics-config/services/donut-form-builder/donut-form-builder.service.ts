@@ -54,10 +54,10 @@ export class DonutConfigForm extends ConfigFormGroup {
         aggregationmodels: new FieldWithSizeListFormControl(
           '',
           '',
-          marker('description'),
+          marker('donut field description'),
           collectionFields
         )
-      }).withTabName('Data'),
+      }).withTabName(marker('Data')),
       renderStep: new ConfigFormGroup({
         opacity: new SliderFormControl(
           '',

@@ -42,6 +42,7 @@ import { DialogPaletteSelectorData } from '@map-config/components/dialog-palette
 import { DialogPaletteSelectorComponent } from '@map-config/components/dialog-palette-selector/dialog-palette-selector.component';
 import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { valuesToOptions } from '@utils/tools';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 export class PropertySelectorFormGroup extends ConfigFormGroup {
 
@@ -108,8 +109,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
       propertyFix: propertyType === PROPERTY_TYPE.color ?
         new ColorFormControl(
           '',
-          'Fixed ' + propertyName,
-          'description',
+          marker('Fixed') + ' ' + propertyName,
+          marker('Color fixed description'),
           {
             dependsOn: () => [this.customControls.propertySource],
             onDependencyChange: (control) => control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix)
@@ -117,8 +118,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ) :
         new SliderFormControl(
           '',
-          'Fixed ' + propertyName,
-          'Description',
+          marker('Fixed') + ' ' + propertyName,
+          marker('Slider fixed value description'),
           defaultConfig[propertyName + 'Min'],
           defaultConfig[propertyName + 'Max'],
           defaultConfig[propertyName + 'Step'],
@@ -131,8 +132,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
       propertyProvidedFieldCtrl: new SelectFormControl(
         '',
-        'Source field',
-        'Description',
+        marker('Source field'),
+        marker('Provided source field description'),
         true,
         toKeywordOptionsObs(collectionFieldsObs),
         {
@@ -143,8 +144,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
       ),
       propertyProvidedFieldLabelCtrl: new SelectFormControl(
         '',
-        'Label field',
-        'Description',
+        marker('Label field'),
+        marker('label field description'),
         true,
         toTextOrKeywordOptionsObs(collectionFieldsObs),
         {
@@ -156,8 +157,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
       ),
       propertyGeneratedFieldCtrl: new SelectFormControl(
         '',
-        'Source field',
-        'Description',
+        marker('Source field'),
+        marker('Generated source field description'),
         true,
         toKeywordOptionsObs(collectionFieldsObs),
         {
@@ -169,8 +170,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
       propertyManualFg: new ConfigFormGroup({
         propertyManualFieldCtrl: new SelectFormControl(
           '',
-          'Source field',
-          'Description',
+          marker('Source field'),
+          marker('Manual source field description'),
           true,
           toKeywordOptionsObs(collectionFieldsObs),
           {
@@ -179,8 +180,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
         propertyManualButton: new ButtonFormControl(
           '',
-          'Manage colors',
-          'Description',
+          marker('Manage colors'),
+          marker('Manage colors description'),
           () => dialog.open(DialogColorTableComponent, {
             data: {
               collection,
@@ -236,8 +237,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         propertyInterpolatedCountOrMetricCtrl: new ButtonToggleFormControl(
           '',
           [
-            { label: 'Count', value: COUNT_OR_METRIC.COUNT },
-            { label: 'Metric', value: COUNT_OR_METRIC.METRIC },
+            { label: marker('Count'), value: COUNT_OR_METRIC.COUNT },
+            { label: marker('Metric'), value: COUNT_OR_METRIC.METRIC },
           ],
           '',
           {
@@ -249,7 +250,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
         propertyInterpolatedCountNormalizeCtrl: new SlideToggleFormControl(
           '',
-          'Normalize',
+          marker('Normalize'),
           '',
           {
             dependsOn: () => [
@@ -274,7 +275,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
         propertyInterpolatedMetricCtrl: new SelectFormControl(
           '',
-          'Metric',
+          marker('Metric'),
           '',
           false,
           [METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX]
@@ -288,8 +289,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
         propertyInterpolatedFieldCtrl: new SelectFormControl(
           '',
-          'Source field',
-          'Description',
+          marker('Source field'),
+          marker('Interpolated source field description'),
           true,
           toNumericOrDateOptionsObs(collectionFieldsObs),
           {
@@ -308,8 +309,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
         propertyInterpolatedNormalizeCtrl: new SlideToggleFormControl(
           '',
-          'Normalize',
-          'Description',
+          marker('Normalize'),
+          '',
           {
             dependsOn: () => [
               this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
@@ -324,8 +325,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
         propertyInterpolatedNormalizeByKeyCtrl: new SlideToggleFormControl(
           '',
-          'Normalize by key?',
-          'Description',
+          marker('Normalize by key?'),
+          marker('Normalize by key description'),
           {
             resetDependantsOnChange: true,
             dependsOn: () =>
@@ -341,8 +342,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
         propertyInterpolatedNormalizeLocalFieldCtrl: new SelectFormControl(
           '',
-          'Key',
-          'Description',
+          marker('Key'),
+          marker('Normalize key field description'),
           true,
           toKeywordOptionsObs(collectionFieldsObs),
           {
@@ -359,8 +360,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
         propertyInterpolatedMinFieldValueCtrl: new InputFormControl(
           '',
-          'Minimum value',
-          'Description',
+          marker('Minimum value'),
+          marker('Interpolated min value description'),
           'number',
           {
             resetDependantsOnChange: true,
@@ -390,8 +391,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
         propertyInterpolatedMaxFieldValueCtrl: new InputFormControl(
           '',
-          'Maximum value',
-          'Description',
+          marker('Maximum value'),
+          marker('Interpolated max value description'),
           'number',
           {
             resetDependantsOnChange: true,
@@ -424,7 +425,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         propertyInterpolatedValuesCtrl: new HiddenFormControl(
           '',
           // define label, used for error message, only for colors => otherwise interpolation is done automatically
-          propertyType === PROPERTY_TYPE.color ? 'A Palette' : undefined,
+          propertyType === PROPERTY_TYPE.color ? marker('A Palette') : undefined,
           {
             resetDependantsOnChange: true,
             dependsOn: () => [
@@ -478,8 +479,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
         propertyInterpolatedValuesButton: new ButtonFormControl(
           '',
-          'Manage palette',
-          'Description',
+          marker('Manage palette'),
+          marker('Manage palette description'),
           () => {
             const isAggregatedCount =
               isAggregated &&
@@ -543,8 +544,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
         propertyInterpolatedMinValueCtrl: new SliderFormControl(
           '',
-          'Minimum ' + propertyName,
-          'description',
+          marker('Minimum') + ' ' + propertyName,
+          marker('Min value description'),
           defaultConfig[propertyName + 'Min'],
           defaultConfig[propertyName + 'Max'],
           defaultConfig[propertyName + 'Step'],
@@ -563,8 +564,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
         propertyInterpolatedMaxValueCtrl: new SliderFormControl(
           '',
-          'Maximum ' + propertyName,
-          'description',
+          marker('Maximum') + ' ' + propertyName,
+          marker('Max value description'),
           defaultConfig[propertyName + 'Min'],
           defaultConfig[propertyName + 'Max'],
           defaultConfig[propertyName + 'Step'],

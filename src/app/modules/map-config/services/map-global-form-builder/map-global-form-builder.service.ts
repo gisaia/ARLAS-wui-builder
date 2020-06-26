@@ -23,6 +23,7 @@ import {
 } from '@shared-models/config-form';
 import { Expression } from 'arlas-api';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 export class MapGlobalFormGroup extends ConfigFormGroup {
 
@@ -30,8 +31,8 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
     super({
       geographicalOperator: new SelectFormControl(
         null,
-        'Geographical operator',
-        'It is used to..?',
+        marker('Geographical operator'),
+        marker('Geographical operator description'),
         false,
         [
           Expression.OpEnum.Intersects,
@@ -46,16 +47,16 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
       requestGeometries: new ConfigFormGroupArray([]),
       initZoom: new SliderFormControl(
         '',
-        'Initial zoom',
-        '...',
+        marker('Initial zoom'),
+        marker('Initial zoom description'),
         1,
         18,
         1
       ),
       initCenterLat: new InputFormControl(
         '',
-        'Init center latitude',
-        '...',
+        marker('Init center latitude'),
+        marker('Init center latitude description'),
         'text',
         {
           childs: () => [this.customControls.initCenterLon]
@@ -63,29 +64,29 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
       ),
       initCenterLon: new InputFormControl(
         '',
-        'Init center longitude',
-        '...',
+        marker('Init center longitude'),
+        marker('Init center longitude description'),
       ),
       allowMapExtend: new SlideToggleFormControl(
         '',
-        'Allow map extend',
-        ''
+        marker('Allow map extend'),
+        marker('Allow map extend description'),
       ),
       displayScale: new SlideToggleFormControl(
         '',
-        'Display scale',
-        ''
+        marker('Display scale'),
+        marker('Display scale description'),
       ),
       margePanForLoad: new InputFormControl(
         '',
-        'MargePanForLoad',
-        '',
+        marker('MargePanForLoad'),
+        marker('MargePanForLoad description'),
         'number'
       ),
       margePanForTest: new InputFormControl(
         '',
-        'MargePanForTest',
-        '',
+        marker('MargePanForTest'),
+        marker('MargePanForTest description'),
         'number'
       ),
       unmanagedFields: new FormGroup({
@@ -135,21 +136,20 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
     super({
       collection: new InputFormControl(
         { value: collection, disabled: true },
-        '',
-        'Collection',
-
+        marker('Collection'),
+        ''
       ),
       requestGeom: new SelectFormControl(
         geometryPath,
-        'Geographical field',
-        '',
+        marker('Geographical field'),
+        marker('Geographical field description'),
         true,
         []
       ),
       idFeatureField: new SelectFormControl(
         idPath,
-        'Id feature field',
-        '',
+        marker('Id feature field'),
+        marker('Id feature field description'),
         true,
         []
       ),

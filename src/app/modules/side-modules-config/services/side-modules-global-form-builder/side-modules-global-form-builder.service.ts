@@ -17,15 +17,20 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 import {
-  ConfigFormGroup, SlideToggleFormControl, SliderFormControl, InputFormControl, SelectFormControl
+  ConfigFormGroup,
+  InputFormControl,
+  SelectFormControl,
+  SliderFormControl,
+  SlideToggleFormControl
 } from '@shared-models/config-form';
+import { urlValidator } from '@utils/validators';
+import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
-import { urlValidator } from '@utils/validators';
-import { FormGroup, FormControl } from '@angular/forms';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 export class SideModulesGlobalFormGroup extends ConfigFormGroup {
 
@@ -33,7 +38,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
     super({
       useShare: new SlideToggleFormControl(
         '',
-        'Share module',
+        marker('Share module'),
         '',
         {
           resetDependantsOnChange: true
@@ -41,7 +46,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
       ),
       useDownload: new SlideToggleFormControl(
         '',
-        'Download module',
+        marker('Download module'),
         '',
         {
           resetDependantsOnChange: true
@@ -49,7 +54,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
       ),
       useTagger: new SlideToggleFormControl(
         '',
-        'Tagger module',
+        marker('Tagger module'),
         '',
         {
           resetDependantsOnChange: true
@@ -58,7 +63,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
       share: new ConfigFormGroup({
         maxForFeature: new SliderFormControl(
           '',
-          'Max for feature',
+          marker('Max for feature'),
           '',
           100,
           10000,
@@ -66,7 +71,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
         ),
         maxForTopology: new SliderFormControl(
           '',
-          'Feature metrics',
+          marker('Feature metrics'),
           '',
           100,
           10000,
@@ -80,7 +85,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
       download: new ConfigFormGroup({
         basicAuthent: new SlideToggleFormControl(
           '',
-          'With basic authentification',
+          marker('With basic authentification'),
           ''
         )
       },
@@ -88,30 +93,32 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
           dependsOn: () => [this.customControls.useDownload],
           onDependencyChange: (control) => control.enableIf(this.customControls.useDownload.value)
         }),
-      tagger: new ConfigFormGroup({
-        serverUrl: new InputFormControl(
-          '',
-          'Tagger server URL',
-          '',
-          undefined,
-          {
-            validators: [urlValidator]
-          }
-        ),
-        collection: new SelectFormControl(
-          '',
-          'Collection',
-          '',
-          true,
-          collectionsObs.pipe(map(collections => collections.map(c => ({
-            label: c, value: c
-          })))),
-        )
-      },
+      tagger: new ConfigFormGroup(
+        {
+          serverUrl: new InputFormControl(
+            '',
+            marker('Tagger server URL'),
+            '',
+            undefined,
+            {
+              validators: [urlValidator]
+            }
+          ),
+          collection: new SelectFormControl(
+            '',
+            marker('Collection'),
+            '',
+            true,
+            collectionsObs.pipe(map(collections => collections.map(c => ({
+              label: c, value: c
+            })))),
+          )
+        },
         {
           dependsOn: () => [this.customControls.useTagger],
           onDependencyChange: (control) => control.enableIf(this.customControls.useTagger.value)
-        }),
+        }
+      ),
       unmanagedFields: new FormGroup({
         sortExcludedTypes: new FormControl(),
         download: new FormGroup({

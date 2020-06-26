@@ -30,6 +30,7 @@ import { map } from 'rxjs/operators';
 import { toDateFieldsObs } from '@services/collection-service/tools';
 import { FormGroup, FormControl } from '@angular/forms';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 enum DateFormats {
   English = '%b %d %Y  %H:%M',
@@ -45,7 +46,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
       {
         useDetailedTimeline: new SlideToggleFormControl(
           '',
-          'Use detailed timeline?',
+          marker('Use detailed timeline?'),
           '',
           {
             resetDependantsOnChange: true
@@ -57,12 +58,12 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
             timeline: new ConfigFormGroup({
               aggregation: timelineBucketsIntervalFg,
             }
-            ).withTitle('Timeline'),
+            ).withTitle(marker('Timeline')),
             detailedTimeline: new ConfigFormGroup({
               bucketsNumber: new SliderFormControl(
                 '',
-                'Number of buckets',
-                'description',
+                marker('Number of buckets'),
+                marker('Number of buckets description'),
                 10,
                 200,
                 5
@@ -73,23 +74,23 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                 onDependencyChange: (control) =>
                   control.enableIf(this.customControls.useDetailedTimeline.value)
               }
-            ).withTitle('Detailed timeline')
-          }).withTabName('Data'),
+            ).withTitle(marker('Detailed timeline'))
+          }).withTabName(marker('Data')),
           renderStep: new ConfigFormGroup({
             timeline: new ConfigFormGroup({
               ...TimelineGlobalFormGroup.getCommonsControls(),
               isMultiselectable: new SlideToggleFormControl(
                 false,
-                'Is multi-selectable',
-                'Description'
+                marker('Is multi-selectable'),
+                marker('Is timeline multi-selectable description')
               )
             }).withTitle('Timeline'),
             detailedTimeline: new ConfigFormGroup({
               ...TimelineGlobalFormGroup.getCommonsControls(),
               selectionExtentPercent: new SliderFormControl(
                 '',
-                'Percent of selection extent',
-                'Description',
+                marker('Percent of selection extent'),
+                marker('Timeline percent of selection extent description'),
                 0,
                 100,
                 5
@@ -99,9 +100,9 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                 dependsOn: () => [this.customControls.useDetailedTimeline],
                 onDependencyChange: (control) =>
                   control.enableIf(this.customControls.useDetailedTimeline.value)
-              }).withTitle('Detailed timeline'),
+              }).withTitle(marker('Detailed timeline')),
 
-          }).withTabName('Render')
+          }).withTabName(marker('Render'))
         }),
         unmanagedFields: new FormGroup({
           dataStep: new FormGroup({
@@ -269,21 +270,21 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
     return {
       chartTitle: new InputFormControl(
         '',
-        'Chart title',
-        'Description'
+        marker('Chart title'),
+        marker('Chart title description')
       ),
       chartType: new SelectFormControl(
         '',
-        'Chart type',
-        'Description',
+        marker('Chart type'),
+        marker('Chart type description'),
         false,
         [ChartType[ChartType.area], ChartType[ChartType.bars]].map(s =>
           ({ label: s, value: s }))
       ),
       dateFormat: new SelectFormControl(
         '',
-        'Date format',
-        'Description',
+        marker('Date format'),
+        marker('Date format description'),
         false,
         Object.keys(DateFormats).map(df => ({
           label: df + ' (' + DateFormats[df] + ')', value: DateFormats[df]
