@@ -33,7 +33,7 @@ import {
 } from '@shared-models/config-form';
 import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
 import {
-  PropertySelectorFormBuilderService, PropertySelectorFormGroup 
+  PropertySelectorFormBuilderService, PropertySelectorFormGroup
 } from '@shared/services/property-selector-form-builder/property-selector-form-builder.service';
 import { valuesToOptions } from '@utils/tools';
 import { Observable } from 'rxjs';
