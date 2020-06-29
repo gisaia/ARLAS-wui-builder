@@ -22,7 +22,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 // material imports
 import { MatDialogModule } from '@angular/material/dialog';
@@ -51,7 +51,6 @@ import { MatMenuModule } from '@angular/material/menu';
 
 // other libs imports
 import { ColorPickerModule } from 'ngx-color-picker';
-import { TranslateModule } from '@ngx-translate/core';
 
 // shared imports
 import { ConfigElementComponent } from './components/config-element/config-element.component';
@@ -66,6 +65,8 @@ import { ConfigFormControlComponent } from './components/config-form-control/con
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
 import { InputModalComponent } from './components/input-modal/input-modal.component';
 import { ConfigFormGroupArrayComponent } from './components/config-form-group-array/config-form-group-array.component';
+import { TranslationSharedModule } from './translation-shared.module';
+
 
 @NgModule({
   declarations: [
@@ -89,7 +90,6 @@ import { ConfigFormGroupArrayComponent } from './components/config-form-group-ar
     MatButtonModule,
     MatFormFieldModule,
     ColorPickerModule,
-    TranslateModule,
     MatSelectModule,
     MatSlideToggleModule,
     ReactiveFormsModule,
@@ -113,7 +113,8 @@ import { ConfigFormGroupArrayComponent } from './components/config-form-group-ar
     MatButtonToggleModule,
     HttpClientModule,
     MatPaginatorModule,
-    MatMenuModule
+    MatMenuModule,
+    TranslationSharedModule
   ],
   exports: [
     ConfigElementComponent,
@@ -139,7 +140,6 @@ import { ConfigFormGroupArrayComponent } from './components/config-form-group-ar
     MatSliderModule,
     MatIconModule,
     ColorPickerModule,
-    TranslateModule,
     MatTabsModule,
     MatTableModule,
     MatStepperModule,
@@ -154,7 +154,8 @@ import { ConfigFormGroupArrayComponent } from './components/config-form-group-ar
     MatListModule,
     HttpClientModule,
     MatPaginatorModule,
-    MatMenuModule
+    MatMenuModule,
+    TranslationSharedModule
   ]
 })
 export class SharedModule { }

@@ -30,6 +30,7 @@ import { MapConfigComponent } from './map-config.component';
 import { PreviewComponent } from './components/preview/preview.component';
 import { MapglComponent, MapglModule, MapglLayerIconModule, MapglLegendModule } from 'arlas-web-components';
 import { MAT_DIALOG_DATA } from '@angular/material';
+import { TranslationSharedModule } from '@shared/translation-shared.module';
 
 @NgModule({
   entryComponents: [

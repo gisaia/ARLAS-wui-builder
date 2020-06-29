@@ -28,6 +28,8 @@
     "@angular/platform-browser-dynamic": "~8.2.10",
     "@angular/router": "~8.2.10",
     "@types/file-saver": "^2.0.1",
+    "@ngx-translate/core": "^12.1.2",
+    "@ngx-translate/http-loader": "^4.0.0",
     "ajv": "^6.4.0",
     "ajv-keywords": "^3.4.0",
     "arlas-wui-toolkit": "13.0.0",
