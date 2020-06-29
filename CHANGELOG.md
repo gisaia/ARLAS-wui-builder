@@ -1,5 +1,19 @@
 # Change Log
 
+## [v0.0.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v0.0.4) (2020-06-29)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v0.0.3...v0.0.4)
+
+**New stuff:**
+
+- Add layer preview in map config [\#79](https://github.com/gisaia/ARLAS-wui-builder/issues/79)
+- Add global map preview [\#215](https://github.com/gisaia/ARLAS-wui-builder/pull/215) ([mbarbet](https://github.com/mbarbet))
+
+**Fixed bugs:**
+
+- Extra config part is missing in config.json [\#218](https://github.com/gisaia/ARLAS-wui-builder/issues/218)
+- Map contributor name is missing in configuration [\#217](https://github.com/gisaia/ARLAS-wui-builder/issues/217)
+
 ## [v0.0.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v0.0.3) (2020-06-19)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/0.0.2...v0.0.3)
