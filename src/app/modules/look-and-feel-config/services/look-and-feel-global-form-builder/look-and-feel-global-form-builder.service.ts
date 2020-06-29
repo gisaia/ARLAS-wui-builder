@@ -17,9 +17,9 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { ConfigFormGroup, SlideToggleFormControl, SliderFormControl } from '@shared-models/config-form';
-import { SelectFormControl } from '../../../../shared/models/config-form';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { ConfigFormGroup, SelectFormControl, SliderFormControl, SlideToggleFormControl } from '@shared-models/config-form';
 
 export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
 
@@ -29,33 +29,33 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
       {
         dragAndDrop: new SlideToggleFormControl(
           '',
-          'Drag and drop',
-          'description',
+          marker('Drag and drop'),
+          marker('Drag and drop description'),
           { title: 'Look and feel' }
         ),
         zoomToData: new SlideToggleFormControl(
           '',
-          'Zoom to data',
-          'description'
+          marker('Zoom to data'),
+          marker('Zoom to data description')
         ),
         indicators: new SlideToggleFormControl(
           '',
-          'Display indicators',
-          'description'
+          marker('Display indicators'),
+          marker('Display indicators description')
         ),
         spinner: new SlideToggleFormControl(
           '',
-          'Display spinners',
-          'description',
+          marker('Display spinners'),
+          marker('Display spinners description'),
         ),
         spinnerColor: new SelectFormControl(
           '',
-          'Spinners color',
-          'description',
+          marker('Spinners color'),
+          marker('Spinners color description'),
           null,
           [
-            { label: 'Primary', value: 'primary' },
-            { label: 'Accent', value: 'accent' }
+            { label: marker('Primary'), value: 'primary' },
+            { label: marker('Accent'), value: 'accent' }
           ],
           {
             dependsOn: () => [this.customControls.spinner],
@@ -65,8 +65,8 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
         ),
         spinnerDiameter: new SliderFormControl(
           '',
-          'Spinner diameter',
-          'description',
+          marker('Spinner diameter'),
+          marker('Spinner diameter description'),
           10,
           100,
           10,

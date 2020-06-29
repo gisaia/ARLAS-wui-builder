@@ -31,6 +31,7 @@ import { MatDialog } from '@angular/material';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 export class DonutConfigForm extends ConfigFormGroup {
 
@@ -41,40 +42,40 @@ export class DonutConfigForm extends ConfigFormGroup {
     defaultConfig: DefaultConfig,
     dialog: MatDialog,
     collectionService: CollectionService,
-    private colorService: ArlasColorGeneratorLoader,
+    private colorService: ArlasColorGeneratorLoader
   ) {
     super({
       dataStep: new ConfigFormGroup({
         name: new InputFormControl(
           '',
-          'title',
-          'description'
+          marker('title'),
+          marker('donut title description')
         ),
         aggregationmodels: new FieldWithSizeListFormControl(
           '',
           '',
-          'description',
+          marker('donut field description'),
           collectionFields
         )
-      }).withTabName('Data'),
+      }).withTabName(marker('Data')),
       renderStep: new ConfigFormGroup({
         opacity: new SliderFormControl(
           '',
-          'Opacity',
-          'description',
+          marker('Opacity'),
+          marker('donut opacity description'),
           0,
           100,
           1
         ),
         multiselectable: new SlideToggleFormControl(
           '',
-          'Multiselectable',
-          'description'
+          marker('Multiselectable'),
+          marker('Donut multiselectable description')
         ),
         keysToColorsButton: new ButtonFormControl(
           '',
-          'Manage colors',
-          'Description',
+          marker('Manage colors'),
+          marker('Donut manage colors description'),
           // TODO put in common with powerbar
           () => collectionService.getTermAggregation(
             collection,
@@ -176,7 +177,7 @@ export class DonutFormBuilderService extends WidgetFormBuilder {
     protected mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,
     private dialog: MatDialog,
-    private colorService: ArlasColorGeneratorLoader,
+    private colorService: ArlasColorGeneratorLoader
   ) {
     super(collectionService, mainFormService);
   }

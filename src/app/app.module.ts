@@ -41,8 +41,8 @@ import { StartupService } from '@services/startup/startup.service';
 import { ArlasWalkthroughService } from 'arlas-wui-toolkit/services/walkthrough/walkthrough.service';
 import { WalkthroughService } from '@services/walkthrough/walkthrough.service';
 import { AnalyticsConfigModule } from './modules/analytics-config/analytics-config.module';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { CustomTranslateLoader } from 'arlas-wui-toolkit/shared.module';
+
+
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS, GestureConfig } from '@angular/material';
 import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
@@ -51,7 +51,29 @@ import { OAuthModule } from 'angular-oauth2-oidc';
 import { EnvServiceProvider } from '@services/env/env.service.provider';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { LookAndFeelConfigModule } from '@look-and-feel-config/look-and-feel-config.module';
+import { Observable } from 'rxjs/internal/Observable';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
+export class CustomTranslateLoader implements TranslateLoader {
+
+  constructor(private http: HttpClient) { }
+
+  public getTranslation(lang: string): Observable<any> {
+    const apiAddress = 'assets/i18n/' + lang + '.json?' + Date.now();
+    return Observable.create(observer => {
+      this.http.get(apiAddress).subscribe(
+        res => {
+          observer.next(res);
+          observer.complete();
+        },
+        error => {
+          // failed to retrieve requested language file, use default
+          observer.complete(); // => Default language is already loaded
+        }
+      );
+    });
+  }
+}
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -104,7 +126,8 @@ export function getOptionsFactory(arlasAuthService: AuthentificationService): an
         provide: TranslateLoader,
         useClass: CustomTranslateLoader,
         deps: [HttpClient]
-      }
+      },
+      isolate: false
     }),
     LoggerModule.forRoot({
       level: environment.logLevel,

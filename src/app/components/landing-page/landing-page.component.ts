@@ -296,7 +296,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
     this.openChoice();
     this.startEvent.subscribe(state => {
       this.dialogRef.close();
-      this.router.navigate(['map-config']);
+      this.router.navigate(['map-config'], { queryParamsHandling: 'preserve'});
       this.logger.info(this.translate.instant('Ready to access server'));
     });
   }

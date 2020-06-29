@@ -9,7 +9,7 @@
   
   <div>
     <mat-nav-list>
-      <mat-list-item *ngFor="let page of pages" [matTooltip]="page?.tooltip" [routerLink]="page?.link">
+      <mat-list-item *ngFor="let page of pages" [matTooltip]="page?.tooltip" [routerLink]="page?.link" queryParamsHandling="preserve">
         <button mat-icon-button [disabled]="!page?.enabled" routerLinkActive="mat-accent">
           <mat-icon [matBadge]="nbErrorsByPage.get(page.name)" [matBadgeHidden]="!nbErrorsByPage.get(page.name)"
             matBadgePosition="above before" matBadgeColor="warn">

@@ -31,6 +31,7 @@ import { toOptionsObs, NUMERIC_OR_DATE_OR_TEXT_TYPES } from '@services/collectio
 import { CollectionReferenceDescription } from 'arlas-api';
 import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 export class ResultlistConfigForm extends ConfigFormGroup {
 
@@ -41,8 +42,8 @@ export class ResultlistConfigForm extends ConfigFormGroup {
       dataStep: new ConfigFormGroup({
         name: new InputFormControl(
           '',
-          'title',
-          'description',
+          marker('title'),
+          marker('Result list title description'),
           undefined,
           {
             childs: () => [this.customControls.dataStep.idFieldName]
@@ -50,8 +51,8 @@ export class ResultlistConfigForm extends ConfigFormGroup {
         ),
         searchSize: new SliderFormControl(
           '',
-          'Search size',
-          'description',
+          marker('Search size'),
+          marker('Search size description'),
           10,
           500,
           10
@@ -71,33 +72,33 @@ export class ResultlistConfigForm extends ConfigFormGroup {
             control: () => this.customGroups.dataStep
           }
         )
-      }).withTabName('Data'),
+      }).withTabName(marker('Data')),
       renderStep: new ConfigFormGroup({
         displayFilters: new SlideToggleFormControl(
           '',
-          'Display filters',
-          'Description'
+          marker('Display filters'),
+          marker('Display filters description')
         ),
         useColorService: new SlideToggleFormControl(
           '',
-          'Display filters',
-          'Description'
+          marker('Display filters'),
+          marker('Display filters description')
         ),
         cellBackgroundStyle: new SelectFormControl(
           '',
-          'Background style of cells',
-          'Description',
+          marker('Background style of cells'),
+          marker('Background style of cells Description'),
           false,
           [
-            { label: 'Filled', value: 'filled' },
-            { label: 'Outlined', value: 'outlined' },
+            { label: marker('Filled'), value: 'filled' },
+            { label: marker('Outlined'), value: 'outlined' },
           ],
           {
             dependsOn: () => [this.customControls.renderStep.useColorService],
             onDependencyChange: (control) => control.enableIf(this.customControls.renderStep.useColorService.value)
           }
         )
-      }).withTabName('Render'),
+      }).withTabName(marker('Render')),
       unmanagedFields: new FormGroup({
         dataStep: new FormGroup({}),
         renderStep: new FormGroup({
@@ -164,19 +165,19 @@ export class ResultlistColumnFormGroup extends FormGroup {
     super({
       columnName: new InputFormControl(
         '',
-        'Column name',
+        marker('Column name'),
         ''
       ),
       fieldName: new SelectFormControl(
         '',
-        'Field',
+        marker('Field'),
         '',
         true,
         fieldsObs
       ),
       dataType: new InputFormControl(
         '',
-        'Unit of the column',
+        marker('Unit of the column'),
         '',
         undefined,
         {
@@ -185,7 +186,7 @@ export class ResultlistColumnFormGroup extends FormGroup {
       ),
       process: new TextareaFormControl(
         '',
-        'Transformation',
+        marker('Transformation'),
         '',
         1,
         {
@@ -209,7 +210,7 @@ export class ResultlistDetailFormGroup extends FormGroup {
     super({
       name: new InputFormControl(
         '',
-        'Section',
+        marker('Section'),
         ''
       ),
       fields: new FormArray([], Validators.required)
@@ -228,19 +229,19 @@ export class ResultlistDetailFieldFormGroup extends FormGroup {
     super({
       label: new InputFormControl(
         '',
-        'Field name',
+        marker('Field name'),
         ''
       ),
       path: new SelectFormControl(
         '',
-        'Field',
+        marker('Field'),
         '',
         true,
         fieldsObs
       ),
       process: new TextareaFormControl(
         '',
-        'Transformation',
+        marker('Transformation'),
         '',
         1,
         {
