@@ -28,7 +28,13 @@ import { IconPickerModule } from 'ngx-icon-picker';
 import { EditResultlistColumnsComponent } from './components/edit-resultlist-columns/edit-resultlist-columns.component';
 import { EditResultlistDetailsComponent } from './components/edit-resultlist-details/edit-resultlist-details.component';
 import { ResultlistDataComponent } from './components/resultlist-data/resultlist-data.component';
-import { TranslationSharedModule } from '@shared/translation-shared.module';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+}
 
 @NgModule({
   entryComponents: [
@@ -50,7 +56,14 @@ import { TranslationSharedModule } from '@shared/translation-shared.module';
     ArlasToolkitSharedModule,
     SharedModule,
     AnalyticsConfigRoutingModule,
-    IconPickerModule
+    IconPickerModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      }
+    })
   ]
 })
 export class AnalyticsConfigModule { }

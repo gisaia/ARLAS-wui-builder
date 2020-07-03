@@ -51,29 +51,9 @@ import { OAuthModule } from 'angular-oauth2-oidc';
 import { EnvServiceProvider } from '@services/env/env.service.provider';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { LookAndFeelConfigModule } from '@look-and-feel-config/look-and-feel-config.module';
-import { Observable } from 'rxjs/internal/Observable';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-
-export class CustomTranslateLoader implements TranslateLoader {
-
-  constructor(private http: HttpClient) { }
-
-  public getTranslation(lang: string): Observable<any> {
-    const apiAddress = 'assets/i18n/' + lang + '.json?' + Date.now();
-    return Observable.create(observer => {
-      this.http.get(apiAddress).subscribe(
-        res => {
-          observer.next(res);
-          observer.complete();
-        },
-        error => {
-          // failed to retrieve requested language file, use default
-          observer.complete(); // => Default language is already loaded
-        }
-      );
-    });
-  }
-}
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { CustomTranslateLoader } from 'arlas-wui-toolkit/shared.module';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -104,6 +84,10 @@ export function getOptionsFactory(arlasAuthService: AuthentificationService): an
   return getOptions;
 }
 
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -124,10 +108,9 @@ export function getOptionsFactory(arlasAuthService: AuthentificationService): an
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useClass: CustomTranslateLoader,
+        useFactory: (createTranslateLoader),
         deps: [HttpClient]
-      },
-      isolate: false
+      }
     }),
     LoggerModule.forRoot({
       level: environment.logLevel,

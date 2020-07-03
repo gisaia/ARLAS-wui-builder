@@ -20,8 +20,13 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { LookAndFeelConfigRoutingModule } from './look-and-feel-config-routing.module';
 import { GlobalLookAndFeelComponent } from './components/global-look-and-feel/global-look-and-feel.component';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
-
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -29,7 +34,14 @@ import { GlobalLookAndFeelComponent } from './components/global-look-and-feel/gl
   ],
   imports: [
     LookAndFeelConfigRoutingModule,
-    SharedModule
+    SharedModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      }
+    })
   ]
 })
 export class LookAndFeelConfigModule { }

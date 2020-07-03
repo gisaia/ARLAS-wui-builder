@@ -154,8 +154,7 @@ import { TranslationSharedModule } from './translation-shared.module';
     MatListModule,
     HttpClientModule,
     MatPaginatorModule,
-    MatMenuModule,
-    TranslationSharedModule
+    MatMenuModule
   ]
 })
 export class SharedModule { }

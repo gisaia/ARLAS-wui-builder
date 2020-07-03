@@ -20,6 +20,13 @@ import { NgModule } from '@angular/core';
 import { TimelineConfigRoutingModule } from './timeline-config-routing.module';
 import { GlobalTimelineComponent } from './components/global-timeline/global-timeline.component';
 import { SharedModule } from '@shared/shared.module';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -27,7 +34,14 @@ import { SharedModule } from '@shared/shared.module';
   ],
   imports: [
     TimelineConfigRoutingModule,
-    SharedModule
+    SharedModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      }
+    })
   ]
 })
 export class TimelineConfigModule { }
