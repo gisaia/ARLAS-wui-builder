@@ -18,7 +18,7 @@ under the License.
 */
 
 // angular imports
-import { NgModule } from '@angular/core';
+import { NgModule, Injector } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -65,8 +65,14 @@ import { ConfigFormControlComponent } from './components/config-form-control/con
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit/shared.module';
 import { InputModalComponent } from './components/input-modal/input-modal.component';
 import { ConfigFormGroupArrayComponent } from './components/config-form-group-array/config-form-group-array.component';
-import { TranslationSharedModule } from './translation-shared.module';
+import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { StartupService } from '@services/startup/startup.service';
 
+
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -114,7 +120,16 @@ import { TranslationSharedModule } from './translation-shared.module';
     HttpClientModule,
     MatPaginatorModule,
     MatMenuModule,
-    TranslationSharedModule
+    TranslateModule.forChild({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      },
+      extend: true,
+      isolate: false
+
+    }),
   ],
   exports: [
     ConfigElementComponent,
@@ -154,7 +169,12 @@ import { TranslationSharedModule } from './translation-shared.module';
     MatListModule,
     HttpClientModule,
     MatPaginatorModule,
-    MatMenuModule
+    MatMenuModule,
+    TranslateModule
   ]
 })
-export class SharedModule { }
+export class SharedModule {
+  constructor(translateService: TranslateService, injector: Injector) {
+    StartupService.translationLoaded(translateService, injector);
+  }
+}

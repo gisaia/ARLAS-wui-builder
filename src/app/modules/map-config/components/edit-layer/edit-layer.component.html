@@ -3,5 +3,5 @@
 <div class="action-buttons">
     <button mat-raised-button color="primary" type="submit" (click)="submit()">{{ 'Save layer' | translate}} </button>
     <button class="cancel-button" mat-raised-button (click)="forceCanExit = true"
-        [routerLink]="['', 'map-config', 'layers']">{{ 'Cancel' | translate}} </button>
+        [routerLink]="['', 'map-config', 'layers']" queryParamsHandling="preserve">{{ 'Cancel' | translate}} </button>
 </div>

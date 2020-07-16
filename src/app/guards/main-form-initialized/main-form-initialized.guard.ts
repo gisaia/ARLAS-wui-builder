@@ -42,7 +42,7 @@ export class MainFormInitializedGuard implements CanActivate {
       return true;
 
     } else {
-      this.router.navigate(['']);
+      this.router.navigate([''], { queryParamsHandling: 'preserve' });
       return false;
     }
   }

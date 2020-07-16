@@ -35,8 +35,32 @@ import * as arlasConfSchema from './builderconfig.schema.json';
 export class StartupService {
 
   public contributorRegistry: Map<string, any> = new Map<string, any>();
-
-
+  
+  public static translationLoaded(translateService: TranslateService, injector) {
+    return new Promise<any>((resolve: any) => {
+      const url = window.location.href;
+      const paramLangage = 'lg';
+      // Set default language to current browser language
+      let langToSet = navigator.language.slice(0, 2);
+      const regex = new RegExp('[?&]' + paramLangage + '(=([^&#]*)|&|#|$)');
+      const results = regex.exec(url);
+      if (results && results[2]) {
+        langToSet = decodeURIComponent(results[2].replace(/\+/g, ' '));
+      }
+      const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
+      locationInitialized.then(() => {
+        translateService.setDefaultLang('en');
+        translateService.use(langToSet).subscribe(() => {
+          console.log(`Successfully initialized '${langToSet}' language.`);
+        }, err => {
+          console.error(`Problem with '${langToSet}' language initialization.'`);
+        }, () => {
+          resolve(`Successfully initialized '${langToSet}' language.`);
+        });
+      });
+    });
+  }
+  
   constructor(
     private http: HttpClient,
     private configService: ArlasConfigService,
@@ -57,7 +81,7 @@ export class StartupService {
       .then((data) => this.setConfigService(data))
       .then((data) => this.setAuthentService(data))
       // Init app with the language read from url
-      .then(() => this.translationLoaded());
+      .then(() => StartupService.translationLoaded(this.translateService, this.injector));
     return ret;
   }
 
@@ -101,30 +125,6 @@ export class StartupService {
     });
   }
 
-  public translationLoaded() {
-    return new Promise<any>((resolve: any) => {
-      const url = window.location.href;
-      const paramLangage = 'lg';
-      // Set default language to current browser language
-      let langToSet = navigator.language.slice(0, 2);
-      const regex = new RegExp('[?&]' + paramLangage + '(=([^&#]*)|&|#|$)');
-      const results = regex.exec(url);
-      if (results && results[2]) {
-        langToSet = decodeURIComponent(results[2].replace(/\+/g, ' '));
-      }
-      const locationInitialized = this.injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
-      locationInitialized.then(() => {
-        this.translateService.setDefaultLang('en');
-        this.translateService.use(langToSet).subscribe(() => {
-          console.log(`Successfully initialized '${langToSet}' language.`);
-        }, err => {
-          console.error(`Problem with '${langToSet}' language initialization.'`);
-        }, () => {
-          resolve(`Successfully initialized '${langToSet}' language.`);
-        });
-      });
-    });
-  }
 
   public setConfigService(data) {
     return new Promise<any>((resolve, reject) => {

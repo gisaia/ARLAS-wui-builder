@@ -20,26 +20,12 @@ import { NgModule } from '@angular/core';
 import { SideModulesConfigRoutingModule } from './side-modules-config-routing.module';
 import { GlobalSideModulesComponent } from './components/global-side-modules/global-side-modules.component';
 import { SharedModule } from '@shared/shared.module';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { HttpClient } from '@angular/common/http';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
-}
 
 @NgModule({
   declarations: [GlobalSideModulesComponent],
   imports: [
     SharedModule,
-    SideModulesConfigRoutingModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient]
-      }
-    })
+    SideModulesConfigRoutingModule
   ]
 })
 export class SideModulesConfigModule { }

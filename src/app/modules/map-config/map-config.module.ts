@@ -30,13 +30,6 @@ import { MapConfigComponent } from './map-config.component';
 import { PreviewComponent } from './components/preview/preview.component';
 import { MapglComponent, MapglModule, MapglLayerIconModule, MapglLegendModule } from 'arlas-web-components';
 import { MAT_DIALOG_DATA } from '@angular/material';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { HttpClient } from '@angular/common/http';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
-}
 
 @NgModule({
   entryComponents: [
@@ -60,14 +53,8 @@ export function createTranslateLoader(http: HttpClient) {
     MapglModule,
     MapglLayerIconModule,
     MapglLegendModule,
-    SharedModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient]
-      }
-    })
+    SharedModule
+
   ],
   providers: [
     ConfirmExitGuard,
@@ -75,4 +62,4 @@ export function createTranslateLoader(http: HttpClient) {
 
   ]
 })
-export class MapConfigModule { }
+export class MapConfigModule {}

@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router, NavigationEnd } from '@angular/router';
@@ -43,29 +43,29 @@ export class MapConfigComponent implements OnInit {
     private translate: TranslateService,
     private router: Router) {
 
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd),
-        map(navEnd => (navEnd as NavigationEnd).urlAfterRedirects))
-      .subscribe(url => this.activeTab = this.tabs.find(tabs => url.indexOf(tabs.routeurLink) > 0));
-  }
+      this.router.events
+        .pipe(filter(event => event instanceof NavigationEnd),
+          map(navEnd => (navEnd as NavigationEnd).urlAfterRedirects))
+        .subscribe(url => this.activeTab = this.tabs.find(tabs => url.indexOf(tabs.routeurLink) > 0));
+    }
 
 
   public tabs: Tab[] = [
     {
-      routeurLink: 'global', label: this.translate.instant('Global configuration'),
+      routeurLink: 'global', label: 'Global configuration',
       hasError: () => !!this.mainFormService.mapConfig.getGlobalFg()
         && this.mainFormService.mapConfig.getGlobalFg().invalid
         && isFullyTouched(this.mainFormService.mapConfig.getGlobalFg())
     },
     {
-      routeurLink: 'layers', label: this.translate.instant('Layers'),
+      routeurLink: 'layers', label: 'Layers',
       hasError: () => !!this.mainFormService.mapConfig.getLayersFa()
         && this.mainFormService.mapConfig.getLayersFa().invalid
         && isFullyTouched(this.mainFormService.mapConfig.getLayersFa())
     }
     ,
     {
-      routeurLink: 'preview', label: this.translate.instant('Preview'),
+      routeurLink: 'preview', label: 'Preview',
       hasError: () => !!this.mainFormService.mapConfig.getLayersFa()
         && this.mainFormService.mapConfig.getLayersFa().invalid
         && isFullyTouched(this.mainFormService.mapConfig.getLayersFa())
@@ -74,7 +74,6 @@ export class MapConfigComponent implements OnInit {
 
   public activeTab = this.tabs[0];
 
-  public ngOnInit() {
-  }
+  public ngOnInit() {}
 
 }

@@ -135,7 +135,7 @@ export class LeftMenuComponent {
 
   public logout() {
     this.authService.logout();
-    this.router.navigate(['']);
+    this.router.navigate([''], { queryParamsHandling: 'preserve' });
 
   }
 

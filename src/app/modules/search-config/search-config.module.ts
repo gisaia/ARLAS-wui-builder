@@ -20,13 +20,6 @@ import { NgModule } from '@angular/core';
 import { SearchConfigRoutingModule } from './search-config-routing.module';
 import { GlobalSearchComponent } from './components/global-search/global-search.component';
 import { SharedModule } from '@shared/shared.module';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpClient } from '@angular/common/http';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
-}
 
 @NgModule({
   declarations: [
@@ -34,14 +27,7 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   imports: [
     SearchConfigRoutingModule,
-    SharedModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient]
-      }
-    })
+    SharedModule
   ]
 })
 export class SearchConfigModule { }

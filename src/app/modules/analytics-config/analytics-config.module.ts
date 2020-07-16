@@ -32,10 +32,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
-}
-
 @NgModule({
   entryComponents: [
     EditWidgetDialogComponent,
@@ -56,14 +52,7 @@ export function createTranslateLoader(http: HttpClient) {
     ArlasToolkitSharedModule,
     SharedModule,
     AnalyticsConfigRoutingModule,
-    IconPickerModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient]
-      }
-    })
+    IconPickerModule
   ]
 })
 export class AnalyticsConfigModule { }
