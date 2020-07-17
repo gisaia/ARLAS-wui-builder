@@ -43,10 +43,10 @@ export class MapConfigComponent implements OnInit {
     private translate: TranslateService,
     private router: Router) {
 
-      this.router.events
-        .pipe(filter(event => event instanceof NavigationEnd),
-          map(navEnd => (navEnd as NavigationEnd).urlAfterRedirects))
-        .subscribe(url => this.activeTab = this.tabs.find(tabs => url.indexOf(tabs.routeurLink) > 0));
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd),
+        map(navEnd => (navEnd as NavigationEnd).urlAfterRedirects))
+      .subscribe(url => this.activeTab = this.tabs.find(tabs => url.indexOf(tabs.routeurLink) > 0));
     }
 
 

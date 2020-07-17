@@ -20,9 +20,6 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { LookAndFeelConfigRoutingModule } from './look-and-feel-config-routing.module';
 import { GlobalLookAndFeelComponent } from './components/global-look-and-feel/global-look-and-feel.component';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpClient } from '@angular/common/http';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
