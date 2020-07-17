@@ -128,8 +128,7 @@ export function createTranslateLoader(http: HttpClient) {
       },
       extend: true,
       isolate: false
-
-    }),
+    })
   ],
   exports: [
     ConfigElementComponent,

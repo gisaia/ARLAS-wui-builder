@@ -35,7 +35,7 @@ import * as arlasConfSchema from './builderconfig.schema.json';
 export class StartupService {
 
   public contributorRegistry: Map<string, any> = new Map<string, any>();
-  
+
   public static translationLoaded(translateService: TranslateService, injector) {
     return new Promise<any>((resolve: any) => {
       const url = window.location.href;
@@ -60,7 +60,7 @@ export class StartupService {
       });
     });
   }
-  
+
   constructor(
     private http: HttpClient,
     private configService: ArlasConfigService,
