@@ -21,8 +21,6 @@ import { SharedModule } from '@shared/shared.module';
 import { LookAndFeelConfigRoutingModule } from './look-and-feel-config-routing.module';
 import { GlobalLookAndFeelComponent } from './components/global-look-and-feel/global-look-and-feel.component';
 
-
-
 @NgModule({
   declarations: [
     GlobalLookAndFeelComponent

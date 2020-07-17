@@ -1,6 +1,6 @@
 <div class="menu_container" [class.hide-label]="!isLabelDisplayed">
   <div class="logo">
-    <a matTooltip="Back to home page" [routerLink]="['/']">
+    <a matTooltip="Back to home page" [routerLink]="['/']" queryParamsHandling="preserve">
       <!-- Get free from https://www.jing.fm/iclipt/u2q8t4r5e6y3q8r5/ -->
       <img src="assets/img/logo-full.png" *ngIf="isLabelDisplayed" />
       <img src="assets/img/logo-cropped.png" *ngIf="!isLabelDisplayed" />

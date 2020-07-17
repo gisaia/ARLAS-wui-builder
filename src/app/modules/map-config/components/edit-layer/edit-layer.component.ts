@@ -105,7 +105,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
   }
 
   private navigateToParentPage() {
-    this.router.navigate(['', 'map-config', 'layers']);
+    this.router.navigate(['', 'map-config', 'layers'], { queryParamsHandling: 'preserve' });
   }
 
   public submit() {

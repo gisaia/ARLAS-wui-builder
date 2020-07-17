@@ -21,7 +21,6 @@ import { SideModulesConfigRoutingModule } from './side-modules-config-routing.mo
 import { GlobalSideModulesComponent } from './components/global-side-modules/global-side-modules.component';
 import { SharedModule } from '@shared/shared.module';
 
-
 @NgModule({
   declarations: [GlobalSideModulesComponent],
   imports: [

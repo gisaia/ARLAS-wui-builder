@@ -28,7 +28,6 @@ import { IconPickerModule } from 'ngx-icon-picker';
 import { EditResultlistColumnsComponent } from './components/edit-resultlist-columns/edit-resultlist-columns.component';
 import { EditResultlistDetailsComponent } from './components/edit-resultlist-details/edit-resultlist-details.component';
 import { ResultlistDataComponent } from './components/resultlist-data/resultlist-data.component';
-import { TranslationSharedModule } from '@shared/translation-shared.module';
 
 @NgModule({
   entryComponents: [

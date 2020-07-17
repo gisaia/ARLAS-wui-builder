@@ -21,27 +21,10 @@ under the License.
 import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { Observable } from 'rxjs/internal/Observable';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-export class CustomTranslateLoader implements TranslateLoader {
-
-  constructor(private http: HttpClient) { }
-
-  public getTranslation(lang: string): Observable<any> {
-    const apiAddress = 'assets/i18n/' + lang + '.json?' + Date.now();
-    return Observable.create(observer => {
-      this.http.get(apiAddress).subscribe(
-        res => {
-          observer.next(res);
-          observer.complete();
-        },
-        error => {
-          // failed to retrieve requested language file, use default
-          observer.complete(); // => Default language is already loaded
-        }
-      );
-    });
-  }
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
 }
 
 @NgModule({
@@ -49,7 +32,7 @@ export class CustomTranslateLoader implements TranslateLoader {
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
-        useClass: CustomTranslateLoader,
+        useFactory: (createTranslateLoader),
         deps: [HttpClient]
       },
       isolate: false
