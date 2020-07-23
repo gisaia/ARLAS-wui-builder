@@ -29,7 +29,7 @@ import { LayerSourceConfig } from 'arlas-web-contributors';
 
 export interface Config {
     arlas: ArlasConfig;
-    arlasWui: {
+    'arlas-wui': {
         web: {
             app: {
                 components: {
@@ -39,7 +39,7 @@ export interface Config {
 
         }
     };
-    extraConfigs: Array<ArlasExtraConfig>;
+    extraConfigs?: Array<ArlasExtraConfig>;
 }
 export interface ArlasExtraConfig {
     configPath: string;

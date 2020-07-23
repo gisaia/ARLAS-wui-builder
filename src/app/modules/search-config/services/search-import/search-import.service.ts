@@ -34,7 +34,7 @@ export class SearchImportService {
   public doImport(config: Config) {
 
     const chipsearchContributor = config.arlas.web.contributors.find(c => c.identifier === CHIPSEARCH_IDENTIFIER);
-    const chipsearchComponent = config.arlasWui.web.app.components.chipssearch;
+    const chipsearchComponent = config['arlas-wui'].web.app.components.chipssearch;
 
     const globalSearchFg = this.mainFormService.searchConfig.getGlobalFg() as SearchGlobalFormGroup;
 

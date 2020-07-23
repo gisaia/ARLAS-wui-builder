@@ -53,7 +53,6 @@ import { InputModalComponent } from '@shared-components/input-modal/input-modal.
 import { LookAndFeelConfigModule } from '@look-and-feel-config/look-and-feel-config.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { CustomTranslateLoader } from 'arlas-wui-toolkit/shared.module';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -70,15 +69,15 @@ export function auhtentServiceFactory(service: AuthentificationService) {
 
 export function getOptionsFactory(arlasAuthService: AuthentificationService): any {
   const getOptions = () => {
-    const token = !!arlasAuthService.identityClaims ? (arlasAuthService.identityClaims as any).nickname : null;
+    const token = !!arlasAuthService.idToken ? arlasAuthService.idToken : null;
     if (token !== null) {
       return {
         headers: {
-          'X-Forwarded-User': token
+          Authorization: 'bearer ' + token
         }
       };
     } else {
-      return environment.noToken;
+      return {};
     }
   };
   return getOptions;
