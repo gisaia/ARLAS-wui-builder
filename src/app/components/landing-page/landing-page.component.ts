@@ -31,7 +31,7 @@ import { Config, ConfigPersistence } from '@services/main-form-manager/models-co
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MapConfig } from '@services/main-form-manager/models-map-config';
 import { PersistenceService } from '@services/persistence/persistence.service';
-import { DataResource } from 'arlas-persistence-api';
+import { DataResource, DataWithLinks } from 'arlas-persistence-api';
 import { PageEvent } from '@angular/material/paginator';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { LOCALSTORAGE_CONFIG_ID_KEY } from '@utils/tools';
@@ -57,7 +57,7 @@ export class LandingPageDialogComponent implements OnInit {
   public availablesCollections: string[];
   public InitialChoice = InitialChoice;
 
-  public configurations = [];
+  public configurations: DataWithLinks[] = [];
   public displayedColumns: string[] = ['id', 'creation', 'detail'];
   public configurationsLength = 0;
   public configPageNumber = 0;
@@ -189,8 +189,7 @@ export class LandingPageDialogComponent implements OnInit {
 
   public loadConfig(id: string) {
     this.persistenceService.get(id).subscribe(data => {
-      const config = JSON.parse(data.doc_value) as ConfigPersistence;
-      const configJson = JSON.parse(config.config) as Config;
+      const configJson = JSON.parse(data.doc_value) as Config;
       const configMapJson = configJson.arlas.web.components.mapgl.input.mapLayers as MapConfig;
       this.initWithConfig(configJson, configMapJson);
       localStorage.setItem(LOCALSTORAGE_CONFIG_ID_KEY, id);
@@ -231,11 +230,7 @@ export class LandingPageDialogComponent implements OnInit {
     this.persistenceService.list(this.configPageSize, this.configPageNumber + 1, 'desc')
       .subscribe((dataResource: DataResource) => {
         this.configurationsLength = dataResource.total;
-        this.configurations = (dataResource.data || []).map(data => {
-          const currentConfig = JSON.parse(data.doc_value) as ConfigPersistence;
-          const newData = Object.assign({}, data, { name: currentConfig.name });
-          return newData;
-        });
+        this.configurations = dataResource.data;
       });
   }
 

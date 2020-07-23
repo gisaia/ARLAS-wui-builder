@@ -133,24 +133,25 @@ export class MainFormManagerService {
 
     if (this.persistenceService.isAvailable && type === EXPORT_TYPE.persistence) {
 
-      const configObject: ConfigPersistence = {
-        name: 'New config',
-        config: JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
-          generatedMapConfig.layers
-        ))
-      };
+
+      // remove extraConfigs property if persistence is used
+      delete generatedConfig.extraConfigs;
+      const conf: any = JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
+        generatedMapConfig.layers
+      ));
 
       if (localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY)) {
         // Update existing
         this.persistenceService.get(localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY)).subscribe(data => {
-          configObject.name = (JSON.parse(data.doc_value) as ConfigPersistence).name;
+
           this.persistenceService.update(
             localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY),
-            JSON.stringify(configObject)
+            conf,
+            new Date(data.last_update_date).getTime()
           ).subscribe(
             () => {
               this.snackbar.open(
-                this.translate.instant('Configuration updated !') + ' (' + configObject.name + ')'
+                this.translate.instant('Configuration updated !') + ' (' + data.doc_key + ')'
               );
             },
             () => {
@@ -162,15 +163,13 @@ export class MainFormManagerService {
         // Create new config
         const dialogRef = this.dialog.open(InputModalComponent);
         dialogRef.afterClosed().subscribe(configName => {
-          if (configName) {
-            configObject.name = configName;
-          }
           this.persistenceService.create(
-            JSON.stringify(configObject)
+            conf,
+            configName
           ).subscribe(
             () => {
               this.snackbar.open(
-                this.translate.instant('Configuration saved !') + ' (' + configObject.name + ')'
+                this.translate.instant('Configuration saved !') + ' (' + configName + ')'
               );
             },
             () => {

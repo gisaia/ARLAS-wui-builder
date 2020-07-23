@@ -16,16 +16,14 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Injectable, InjectionToken, Inject } from '@angular/core';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { EnvService } from '@services/env/env.service';
+import { Configuration, DataResource, DataWithLinks, PersistApi } from 'arlas-persistence-api';
+import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
 import * as portableFetch from 'portable-fetch';
-
 import { Observable } from 'rxjs/internal/Observable';
 import { from } from 'rxjs/internal/observable/from';
-import { Configuration, PersistenceApi, Data, DataResource } from 'arlas-persistence-api';
-import { EnvService } from '@services/env/env.service';
-import { map, mergeMap, flatMap } from 'rxjs/operators';
-import { ConfigPersistence } from '@services/main-form-manager/models-config';
-import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
+import { flatMap, map } from 'rxjs/operators';
 
 // tslint:disable-next-line: ban-types
 export const GET_OPTIONS = new InjectionToken<(Function)>('get_options');
@@ -36,7 +34,7 @@ export const OBJECT_TYPE = 'config.json';
 })
 export class PersistenceService {
 
-  private persistenceApi: PersistenceApi;
+  private persistenceApi: PersistApi;
   public isAvailable = false;
   public isAuthenticate = false;
   public isAuthAvailable = false;
@@ -53,14 +51,14 @@ export class PersistenceService {
         this.isAuthenticate = isAuth;
         if (this.envService.persistenceUrl !== '') {
           const baseUrl = this.envService.persistenceUrl;
-          this.persistenceApi = new PersistenceApi(configuration, baseUrl, portableFetch);
+          this.persistenceApi = new PersistApi(configuration, baseUrl, portableFetch);
           this.isAvailable = true;
         }
       });
     } else {
       if (this.envService.persistenceUrl !== '') {
         const baseUrl = this.envService.persistenceUrl;
-        this.persistenceApi = new PersistenceApi(configuration, baseUrl, portableFetch);
+        this.persistenceApi = new PersistApi(configuration, baseUrl, portableFetch);
         this.isAvailable = true;
       }
     }
@@ -68,15 +66,15 @@ export class PersistenceService {
   }
 
 
-  public delete(id: string): Observable<Data> {
-    return from(this.persistenceApi._delete(id, false, this.getOptions()));
+  public delete(id: string): Observable<DataWithLinks> {
+    return from(this.persistenceApi.deleteById(id, false, this.getOptions()));
   }
 
-  public create(value: string): Observable<Data> {
-    return from(this.persistenceApi.create(OBJECT_TYPE, value, false, this.getOptions()));
+  public create(value: string, name: string, readers?: string[], writers?: string[]): Observable<DataWithLinks> {
+    return from(this.persistenceApi.create(OBJECT_TYPE, name, value, readers, writers, false, this.getOptions()));
 
   }
-  public get(id: string): Observable<Data> {
+  public get(id: string): Observable<DataWithLinks> {
     return from(this.persistenceApi.get(id, false, this.getOptions()));
 
   }
@@ -84,21 +82,16 @@ export class PersistenceService {
     return from(this.persistenceApi.list(OBJECT_TYPE, size, page, order, false, this.getOptions()));
 
   }
-  public update(id: string, value: string): Observable<Data> {
-    return from(this.persistenceApi.update(id, value, false, this.getOptions()));
+  public update(
+    id: string, value: string, lastUpdate: number, name?: string, readers?: string[], writers?: string[]
+  ): Observable<DataWithLinks> {
+    return from(this.persistenceApi.update(id, value, lastUpdate, name, readers, writers, false, this.getOptions()));
   }
 
-  public duplicate(id: string, newName?: string): Observable<Data> {
+  public duplicate(id: string, newName?: string): Observable<DataWithLinks> {
     return this.get(id).pipe(
-      map(data => data.doc_value),
-      map(docValue => {
-        const duplicateConfig = JSON.parse(docValue) as ConfigPersistence;
-        if (newName !== '') {
-          duplicateConfig.name = newName;
-        } else {
-          duplicateConfig.name = 'Copy of ' + duplicateConfig.name;
-        }
-        return this.create(JSON.stringify(duplicateConfig));
+      map(data =>  {
+        return this.create(data.doc_value, newName ? newName : 'Copy of ' + data.doc_key);
       }),
       flatMap(a => a)
     );

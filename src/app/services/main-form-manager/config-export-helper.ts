@@ -97,7 +97,7 @@ export class ConfigExportHelper {
                     }
                 }
             },
-            arlasWui: {
+            'arlas-wui': {
                 web: {
                     app: {
                         components: {
