@@ -1,5 +1,18 @@
 # Change Log
 
+## [v0.0.5](https://github.com/gisaia/ARLAS-wui-builder/tree/v0.0.5) (2020-07-24)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v0.0.4...v0.0.5)
+
+**New stuff:**
+
+- Add a route to load a configuration from persistence [\#233](https://github.com/gisaia/ARLAS-wui-builder/issues/233)
+
+**Fixed bugs:**
+
+- Persisted configuration has 'arlasWui' attribute instead of 'arlas-wui' [\#227](https://github.com/gisaia/ARLAS-wui-builder/issues/227)
+- Configuration stored in persistence should not contain 'extraConfigs' attribute [\#226](https://github.com/gisaia/ARLAS-wui-builder/issues/226)
+
 ## [v0.0.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v0.0.4) (2020-06-29)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v0.0.3...v0.0.4)
@@ -11,6 +24,7 @@
 
 **Fixed bugs:**
 
+- Translation are not take into account in sub modules [\#222](https://github.com/gisaia/ARLAS-wui-builder/issues/222)
 - Extra config part is missing in config.json [\#218](https://github.com/gisaia/ARLAS-wui-builder/issues/218)
 - Map contributor name is missing in configuration [\#217](https://github.com/gisaia/ARLAS-wui-builder/issues/217)
 
