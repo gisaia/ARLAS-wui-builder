@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod --aot --base-href='/'",
+    "build": "ng build --prod --aot --base-href='$ARLAS_BUILDER_BASE_HREF/'",
     "build:stats": "ng build --stats-json",
     "test": "ng test",
     "lint": "ng lint",

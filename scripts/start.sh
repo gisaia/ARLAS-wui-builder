@@ -58,6 +58,30 @@ else
   echo ${ARLAS_PERSISTENCE_URL} "is used for 'arlas.persistence-server.url'"
 fi
 
+# Set App base path
+if [ -z "${ARLAS_BUILDER_APP_PATH}" ]; then
+  ARLAS_BUILDER_APP_PATH=""
+  export ARLAS_BUILDER_APP_PATH
+  echo "No specific path for the app"
+else
+  echo ${ARLAS_BUILDER_APP_PATH}  "is used as app base path "
+fi
+
+# Set App base href
+if [ -z "${ARLAS_BUILDER_BASE_HREF}" ]; then
+  ARLAS_BUILDER_BASE_HREF=""
+  export ARLAS_BUILDER_BASE_HREF
+  echo "No specific base href for the app"
+else
+  echo ${ARLAS_BUILDER_BASE_HREF}  "is used as app base href "
+fi
+
+envsubst '$ARLAS_BUILDER_BASE_HREF' < /usr/share/nginx/html/index.html > /usr/share/nginx/html/index.html.tmp
+mv /usr/share/nginx/html/index.html.tmp /usr/share/nginx/html/index.html
+
+envsubst '$ARLAS_BUILDER_APP_PATH' < /etc/nginx/conf.d/default.conf > /etc/nginx/conf.d/default.conf.tmp
+mv /etc/nginx/conf.d/default.conf.tmp /etc/nginx/conf.d/default.conf
+
 
 envsubst '$ARLAS_PERSISTENCE_URL' < /usr/share/nginx/html/env.js > /usr/share/nginx/html/env.js.tmp
 mv /usr/share/nginx/html/env.js.tmp /usr/share/nginx/html/env.js
