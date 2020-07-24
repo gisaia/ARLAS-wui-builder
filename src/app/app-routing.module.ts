@@ -24,7 +24,13 @@ import { PageNotFoundComponent } from '@components/page-not-found/page-not-found
 
 
 const routes: Routes = [
-  { path: '', component: LandingPageComponent },
+  { path: '', component: LandingPageComponent},
+  {
+    path: 'load', children: [
+      { path: '', component: LandingPageComponent, pathMatch: 'full' },
+      { path: ':id', component: LandingPageComponent}
+    ]
+  },
   { path: 'callback', redirectTo: '' },
   {
     path: 'map-config',

@@ -17,9 +17,9 @@ specific language governing permissions and limitations
 under the License.
 */
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, Output } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { AfterViewInit, Component, OnInit, Output, Inject } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ArlasConfigService } from 'arlas-wui-toolkit';
@@ -27,7 +27,7 @@ import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configu
 import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs';
 import { StartupService } from '../../services/startup/startup.service';
-import { Config, ConfigPersistence } from '@services/main-form-manager/models-config';
+import { Config } from '@services/main-form-manager/models-config';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MapConfig } from '@services/main-form-manager/models-map-config';
 import { PersistenceService } from '@services/persistence/persistence.service';
@@ -35,7 +35,7 @@ import { DataResource, DataWithLinks } from 'arlas-persistence-api';
 import { PageEvent } from '@angular/material/paginator';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { LOCALSTORAGE_CONFIG_ID_KEY } from '@utils/tools';
-import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
+import { InputModalComponent, DialogData } from '@shared-components/input-modal/input-modal.component';
 import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
 
@@ -76,10 +76,15 @@ export class LandingPageDialogComponent implements OnInit {
     private mainFormManager: MainFormManagerService,
     public persistenceService: PersistenceService,
     private dialog: MatDialog,
-    private authService: AuthentificationService
+    private authService: AuthentificationService,
+    private activatedRoute: ActivatedRoute,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
 
   public ngOnInit(): void {
+    if (this.data.message !== '-1') {
+      this.loadConfig(this.data.message);
+    }
     // Reset and clean the content of all forms
     this.mainFormService.resetMainForm();
 
@@ -273,17 +278,23 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
   @Output() public startEvent: Subject<boolean> = new Subject<boolean>();
   public dialogRef: MatDialogRef<LandingPageDialogComponent>;
 
+  private confId = '-1';
+
   constructor(
     private dialog: MatDialog,
     private logger: NGXLogger,
     private router: Router,
-    private translate: TranslateService) { }
+    private translate: TranslateService,
+    private activatedRoute: ActivatedRoute) { }
 
   public ngOnInit(): void {
+    if (this.activatedRoute.snapshot.paramMap.has('id')) {
+      this.confId = this.activatedRoute.snapshot.paramMap.get('id');
+    }
   }
 
   public openChoice() {
-    this.dialogRef = this.dialog.open(LandingPageDialogComponent, { disableClose: true });
+    this.dialogRef = this.dialog.open(LandingPageDialogComponent, { disableClose: true, data: { message: this.confId } });
     this.dialogRef.componentInstance.startEvent.subscribe(mode => this.startEvent.next(mode));
   }
 
@@ -291,7 +302,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
     this.openChoice();
     this.startEvent.subscribe(state => {
       this.dialogRef.close();
-      this.router.navigate(['map-config'], { queryParamsHandling: 'preserve'});
+      this.router.navigate(['map-config'], { queryParamsHandling: 'preserve' });
       this.logger.info(this.translate.instant('Ready to access server'));
     });
   }
