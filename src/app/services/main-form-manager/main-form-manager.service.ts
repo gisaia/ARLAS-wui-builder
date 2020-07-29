@@ -136,10 +136,11 @@ export class MainFormManagerService {
 
       // remove extraConfigs property if persistence is used
       delete generatedConfig.extraConfigs;
+      // transform sets to arrays in order to be stringified
+      generatedConfig.arlas.web.components.mapgl.input.visualisations_sets.forEach(vs => vs.layers = Array.from(vs.layers));
       const conf: any = JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
         generatedMapConfig.layers
       ));
-
       if (localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY)) {
         // Update existing
         this.persistenceService.get(localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY)).subscribe(data => {
