@@ -75,7 +75,7 @@ export class PersistenceService {
 
   }
   public get(id: string): Observable<DataWithLinks> {
-    return from(this.persistenceApi.get(id, false, this.getOptions()));
+    return from(this.persistenceApi.getById(id, false, this.getOptions()));
 
   }
   public list(size: number, page: number, order: string): Observable<DataResource> {
