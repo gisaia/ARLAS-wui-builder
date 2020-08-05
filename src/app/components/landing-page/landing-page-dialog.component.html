@@ -1,11 +1,11 @@
 <div *ngIf="!configChoice">
     <h2 mat-dialog-title>{{'Available configurations' | translate}}</h2>
     <mat-dialog-content class="load-content">
-        <div *ngIf="this.persistenceService.isAuthAvailable && !persistenceService.isAuthenticate">
+        <div *ngIf="showLoginButton">
             {{'Log in to access saved configurations' | translate}}
             <button mat-raised-button color="primary" (click)="login()">{{'Log In' | translate}}</button>
         </div>
-        <ng-container *ngIf="this.persistenceService.isAvailable && (!this.persistenceService.isAuthAvailable || (this.persistenceService.isAuthAvailable && this.persistenceService.isAuthenticate )) ">
+        <ng-container *ngIf="this.persistenceService.isAvailable">
             <table mat-table [dataSource]="configurations">
 
                 <ng-container matColumnDef="id">

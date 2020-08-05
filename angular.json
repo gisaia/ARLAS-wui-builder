@@ -28,6 +28,7 @@
               "src/assets",
               "src/default.json",
               "src/config.json",
+              "src/settings.yaml",
               "src/env.js"
             ],
             "styles": [
@@ -99,7 +100,8 @@
               "src/assets",
               "src/default.json",
               "src/config.json",
-              "src/env.js"
+              "src/env.js",
+              "src/settings.yaml"
             ],
             "styles": [
               "src/styles.scss"

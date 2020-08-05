@@ -24,9 +24,9 @@ import * as portableFetch from 'portable-fetch';
 import { Observable } from 'rxjs/internal/Observable';
 import { from } from 'rxjs/internal/observable/from';
 import { flatMap, map } from 'rxjs/operators';
+import { GET_OPTIONS } from 'arlas-wui-toolkit/services/persistence/persistence.service';
 
 // tslint:disable-next-line: ban-types
-export const GET_OPTIONS = new InjectionToken<(Function)>('get_options');
 export const OBJECT_TYPE = 'config.json';
 
 @Injectable({

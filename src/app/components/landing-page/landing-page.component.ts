@@ -26,11 +26,10 @@ import { ArlasConfigService } from 'arlas-wui-toolkit';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs';
-import { StartupService } from '../../services/startup/startup.service';
+import { StartupService, ZONE_WUI_BUILDER } from '../../services/startup/startup.service';
 import { Config } from '@services/main-form-manager/models-config';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MapConfig } from '@services/main-form-manager/models-map-config';
-import { PersistenceService } from '@services/persistence/persistence.service';
 import { DataResource, DataWithLinks } from 'arlas-persistence-api';
 import { PageEvent } from '@angular/material/paginator';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
@@ -38,6 +37,8 @@ import { LOCALSTORAGE_CONFIG_ID_KEY } from '@utils/tools';
 import { InputModalComponent, DialogData } from '@shared-components/input-modal/input-modal.component';
 import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
+import { ErrorService } from 'arlas-wui-toolkit/services/error/error.service';
+import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persistence.service';
 
 enum InitialChoice {
   none = 0,
@@ -63,6 +64,10 @@ export class LandingPageDialogComponent implements OnInit {
   public configPageNumber = 0;
   public configPageSize = 5;
 
+  public showLoginButton = true;
+  public isAuthenticated = false;
+  public isAnonymous = false;
+
   constructor(
     public dialogRef: MatDialogRef<LandingPageDialogComponent>,
     public mainFormService: MainFormService,
@@ -77,7 +82,7 @@ export class LandingPageDialogComponent implements OnInit {
     public persistenceService: PersistenceService,
     private dialog: MatDialog,
     private authService: AuthentificationService,
-    private activatedRoute: ActivatedRoute,
+    private errorService: ErrorService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
 
@@ -94,14 +99,31 @@ export class LandingPageDialogComponent implements OnInit {
     this.mainFormService.startingConfig.init(
       this.startingConfigFormBuilder.build()
     );
+    // when authentication is not enabled :
+    //  - force logout
+    //  - anonymous mode is enabled
+    if (!this.authService.authConfigValue || !this.authService.authConfigValue.use_authent) {
+      this.authService.logout();
+      this.isAnonymous = true;
+    }
 
-    if (this.persistenceService.isAvailable) {
-      if (!this.persistenceService.isAuthAvailable ||
-        (this.persistenceService.isAuthAvailable && this.persistenceService.isAuthenticate)) {
-        // Load all config available in persistence
+    this.authService.isAuthenticated.subscribe(isAuthenticated => {
+      console.log(isAuthenticated)
+      // show login button when authentication is enabled in settings.yaml file && the app is not authenticated
+      this.showLoginButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent && !isAuthenticated;
+      this.isAuthenticated = isAuthenticated;
+      console.log(this.persistenceService.isAvailable)
+      if (this.persistenceService.isAvailable && isAuthenticated) {
         this.getConfigList();
       }
+    });
+
+    // if persistence is configured and anonymous mode is enable, we fetch the configuration accessible as anonymous
+    // if ARLAS-persistence doesn't allow anonymous access, a suitable error is displayed in a modal
+    if (this.persistenceService.isAvailable && this.isAnonymous) {
+      this.getConfigList();
     }
+
 
   }
 
@@ -205,7 +227,7 @@ export class LandingPageDialogComponent implements OnInit {
     const dialogRef = this.dialog.open(InputModalComponent);
     dialogRef.afterClosed().subscribe(configName => {
       if (configName) {
-        this.persistenceService.duplicate(id, configName).subscribe(() => {
+        this.persistenceService.duplicate(ZONE_WUI_BUILDER, id, configName).subscribe(() => {
           this.getConfigList();
         });
       }
@@ -232,10 +254,33 @@ export class LandingPageDialogComponent implements OnInit {
   }
 
   public getConfigList() {
-    this.persistenceService.list(this.configPageSize, this.configPageNumber + 1, 'desc')
-      .subscribe((dataResource: DataResource) => {
-        this.configurationsLength = dataResource.total;
-        this.configurations = dataResource.data;
+    console.log('ok')
+    this.persistenceService.list(ZONE_WUI_BUILDER, this.configPageSize, this.configPageNumber + 1, 'desc')
+      .subscribe({
+        next: (dataResource: DataResource) => {
+          console.log(dataResource)
+          this.configurationsLength = dataResource.total;
+          this.configurations = dataResource.data;        },
+        error : (msg) => {
+          let message = '';
+          if (msg.url) {
+            message = '- An ARLAS-persistence error occured: unauthorized access \n' +
+             '   - url: ' + msg.url + '\n' + '   - status : ' + msg.status;
+          } else {
+            message = msg.toString();
+          }
+          const error = {
+              origin: 'ARLAS-persistence',
+              message,
+              reason: 'Please check if you\'re authenticated to have access to ARLAS-persistence server'
+          };
+          if (!this.authService.authConfigValue || !!this.authService.authConfigValue.use_authent) {
+            error.reason = 'Please enable authentication by \n- setting ${ARLAS_USE_AUTHENT}' +
+            ' env variable to `true` \nor \n- setting "authentication.use_authent" to `true` in settings.yaml file';
+          }
+          this.errorService.errorEmitter.next(error);
+          console.log('Error Getting Location: ', msg);
+        }
       });
   }
 
