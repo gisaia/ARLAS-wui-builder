@@ -29,6 +29,7 @@
               "src/default.json",
               "src/config.json",
               "src/settings.yaml",
+              "src/silent-refresh.html",
               "src/env.js"
             ],
             "styles": [
@@ -101,7 +102,8 @@
               "src/default.json",
               "src/config.json",
               "src/env.js",
-              "src/settings.yaml"
+              "src/settings.yaml",
+              "src/silent-refresh.html"
             ],
             "styles": [
               "src/styles.scss"

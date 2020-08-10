@@ -24,7 +24,7 @@
     <div class="action-list">
       <mat-nav-list>
         <mat-list-item matTooltip="{{'Save' | translate}}" (click)="save($event)" 
-        [class.disabled-item]="!this.persistenceService.isAvailable || (!this.persistenceService.isAuthenticate && this.persistenceService.isAuthAvailable)">
+        [class.disabled-item]="!this.persistenceService.isAvailable">
           <button mat-icon-button >
             <mat-icon>save</mat-icon>
             <span>{{'Save' | translate}}</span>
@@ -36,7 +36,7 @@
             <span>{{'Download' | translate}}</span>
           </button>
         </mat-list-item>
-        <mat-list-item matTooltip="{{'Log Out' | translate}}" (click)="logout()" *ngIf="this.persistenceService.isAuthenticate">
+        <mat-list-item matTooltip="{{'Log Out' | translate}}" (click)="logout()" >
           <button mat-icon-button>
             <mat-icon>lock_open</mat-icon>
             <span>{{'Log Out' | translate}}</span>

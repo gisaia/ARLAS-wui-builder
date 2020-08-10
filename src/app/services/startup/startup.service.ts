@@ -167,8 +167,8 @@ export class StartupService {
   }
 
   public setAuthentService(data) {
-
-    return new Promise<any>((resolve, reject) => {
+    console.log('fuckk')
+    return new Promise<any>((resolve, reject) => {  
       if (this.configService.getValue('arlas.authentification')) {
         const useAuthentForArlas = this.configService.getValue('arlas.authentification.useAuthentForArlas');
         const useDiscovery = this.configService.getValue('arlas.authentification.useDiscovery');
