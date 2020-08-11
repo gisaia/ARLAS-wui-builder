@@ -8,7 +8,6 @@ authentication:
   issuer: https://arlas-cloud-abc.eu.auth0.com/
   client_id: 9mIJ966gS95riVkYJESrudLEq3D5S2os
   scope: "openid profile"
-  redirect_uri: http://localhost:4200/callback
   silent_refresh_redirect_uri: http://localhost:4200/silent-refresh.html
   require_https: true
   response_type: "id_token token"
@@ -18,6 +17,7 @@ authentication:
   clear_hash_after_login: false
   disable_at_hash_check: false
   show_debug_information: true
+  logout_url: https://arlas-cloud-abc.eu.auth0.com/v2/logout?returnTo=http://localhost:4200
   storage: sessionstorage
 persistence:
   url: 'http://localhost:19997/arlas_persistence_server'

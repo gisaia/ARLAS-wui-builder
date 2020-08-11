@@ -67,6 +67,7 @@ export class LandingPageDialogComponent implements OnInit {
   public showLoginButton = true;
   public isAuthenticated = false;
   public isAnonymous = false;
+  private errorAlreadyThrown = false;
 
   constructor(
     public dialogRef: MatDialogRef<LandingPageDialogComponent>,
@@ -254,32 +255,35 @@ export class LandingPageDialogComponent implements OnInit {
   }
 
   public getConfigList() {
-    console.log('ok')
     this.persistenceService.list(ZONE_WUI_BUILDER, this.configPageSize, this.configPageNumber + 1, 'desc')
       .subscribe({
         next: (dataResource: DataResource) => {
-          console.log(dataResource)
           this.configurationsLength = dataResource.total;
           this.configurations = dataResource.data;        },
         error : (msg) => {
-          let message = '';
-          if (msg.url) {
-            message = '- An ARLAS-persistence error occured: unauthorized access \n' +
-             '   - url: ' + msg.url + '\n' + '   - status : ' + msg.status;
-          } else {
-            message = msg.toString();
+          if (!this.errorAlreadyThrown) {
+            let message = '';
+            if (msg.url) {
+              message =
+              '- An ARLAS-persistence error occured: ' + (msg.status === 404 ? 'unreachable server \n' : 'unauthorized access \n') +
+              '   - url: ' + msg.url + '\n' + '   - status : ' + msg.status;
+            } else {
+              message = msg.toString();
+            }
+            const error = {
+                origin: 'ARLAS-persistence',
+                message,
+                reason: (msg.status === 404 ? 'Please check if ARLAS-persistence server is up & running,' +
+                ' and that you have access to the asked endpoint' :
+                'Please check if you\'re authenticated to have access to ARLAS-persistence server')
+            };
+            if (msg.status === 403 && (!this.authService.authConfigValue || !this.authService.authConfigValue.use_authent)) {
+              error.reason = 'Please enable authentication by \n- setting ${ARLAS_USE_AUTHENT}' +
+              ' env variable to `true` \nor \n- setting "authentication.use_authent" to `true` in settings.yaml file';
+            }
+            this.errorService.errorEmitter.next(error);
           }
-          const error = {
-              origin: 'ARLAS-persistence',
-              message,
-              reason: 'Please check if you\'re authenticated to have access to ARLAS-persistence server'
-          };
-          if (!this.authService.authConfigValue || !!this.authService.authConfigValue.use_authent) {
-            error.reason = 'Please enable authentication by \n- setting ${ARLAS_USE_AUTHENT}' +
-            ' env variable to `true` \nor \n- setting "authentication.use_authent" to `true` in settings.yaml file';
-          }
-          this.errorService.errorEmitter.next(error);
-          console.log('Error Getting Location: ', msg);
+          this.errorAlreadyThrown = true;
         }
       });
   }
