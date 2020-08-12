@@ -47,7 +47,6 @@ import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configu
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS, GestureConfig } from '@angular/material';
 import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
 import { OAuthModule } from 'angular-oauth2-oidc';
-import { EnvServiceProvider } from '@services/env/env.service.provider';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { LookAndFeelConfigModule } from '@look-and-feel-config/look-and-feel-config.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -109,7 +108,6 @@ export function createTranslateLoader(http: HttpClient) {
     OAuthModule.forRoot()
   ],
   providers: [
-    EnvServiceProvider,
     forwardRef(() => ArlasConfigurationDescriptor),
     forwardRef(() => ArlasCollaborativesearchService),
     forwardRef(() => ArlasColorGeneratorLoader),
