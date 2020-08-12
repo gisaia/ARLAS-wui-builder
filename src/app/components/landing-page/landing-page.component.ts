@@ -109,11 +109,9 @@ export class LandingPageDialogComponent implements OnInit {
     }
 
     this.authService.isAuthenticated.subscribe(isAuthenticated => {
-      console.log(isAuthenticated)
       // show login button when authentication is enabled in settings.yaml file && the app is not authenticated
       this.showLoginButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent && !isAuthenticated;
       this.isAuthenticated = isAuthenticated;
-      console.log(this.persistenceService.isAvailable)
       if (this.persistenceService.isAvailable && isAuthenticated) {
         this.getConfigList();
       }
