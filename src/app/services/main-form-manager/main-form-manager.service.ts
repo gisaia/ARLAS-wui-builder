@@ -165,8 +165,8 @@ export class MainFormManagerService {
         dialogRef.afterClosed().subscribe(configName => {
           this.persistenceService.create(
             ZONE_WUI_BUILDER,
-            conf,
-            configName
+            configName,
+            conf
           ).subscribe(
             () => {
               this.snackbar.open(
