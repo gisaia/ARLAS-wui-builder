@@ -13,6 +13,7 @@ import { LandingPageComponent, LandingPageDialogComponent } from './landing-page
 import { GET_OPTIONS } from 'arlas-wui-toolkit/services/persistence/persistence.service';
 import { ErrorModalModule } from 'arlas-wui-toolkit/components/errormodal/errormodal.module';
 import { getOptionsFactory } from 'arlas-wui-toolkit/app.module';
+import { ConfigMenuModule } from 'arlas-wui-toolkit/components/config-manager/config-menu/config-menu.module';
 
 describe('LandingPageComponent', () => {
   let spectator: Spectator<LandingPageComponent>;
@@ -21,7 +22,8 @@ describe('LandingPageComponent', () => {
     component: LandingPageComponent,
     imports: [
       SharedModule,
-      ErrorModalModule
+      ErrorModalModule,
+      ConfigMenuModule
     ],
     providers: [
       mockProvider(MatDialogRef),

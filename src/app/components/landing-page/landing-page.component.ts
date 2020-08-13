@@ -22,12 +22,11 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ArlasConfigService } from 'arlas-wui-toolkit';
+import { ArlasConfigService, ConfigAction, ConfigActionEnum } from 'arlas-wui-toolkit';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs';
 import { StartupService, ZONE_WUI_BUILDER } from '../../services/startup/startup.service';
-import { Config } from '@services/main-form-manager/models-config';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MapConfig } from '@services/main-form-manager/models-map-config';
 import { DataResource, DataWithLinks } from 'arlas-persistence-api';
@@ -39,11 +38,20 @@ import { StartingConfigFormBuilderService } from '@services/starting-config-form
 import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
 import { ErrorService } from 'arlas-wui-toolkit/services/error/error.service';
 import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persistence.service';
+import { Config } from '@services/main-form-manager/models-config';
+import { map } from 'rxjs/internal/operators/map';
+import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
 
 enum InitialChoice {
   none = 0,
   setup = 1,
   load = 2
+}
+
+export interface Configuration {
+  name: string;
+  last_update_date: any;
+  actions: Array<ConfigAction>;
 }
 
 @Component({
@@ -58,15 +66,16 @@ export class LandingPageDialogComponent implements OnInit {
   public availablesCollections: string[];
   public InitialChoice = InitialChoice;
 
-  public configurations: DataWithLinks[] = [];
+  public configurations: Configuration[] = [];
   public displayedColumns: string[] = ['id', 'creation', 'detail'];
   public configurationsLength = 0;
   public configPageNumber = 0;
   public configPageSize = 5;
 
   public showLoginButton = true;
+  public showLogOutButton = false;
+
   public isAuthenticated = false;
-  public isAnonymous = false;
   private errorAlreadyThrown = false;
 
   constructor(
@@ -84,6 +93,7 @@ export class LandingPageDialogComponent implements OnInit {
     private dialog: MatDialog,
     private authService: AuthentificationService,
     private errorService: ErrorService,
+    private arlasSettingsService: ArlasSettingsService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
 
@@ -100,30 +110,26 @@ export class LandingPageDialogComponent implements OnInit {
     this.mainFormService.startingConfig.init(
       this.startingConfigFormBuilder.build()
     );
-    // when authentication is not enabled :
-    //  - force logout
-    //  - anonymous mode is enabled
-    if (!this.authService.authConfigValue || !this.authService.authConfigValue.use_authent) {
-      this.authService.logout();
-      this.isAnonymous = true;
-    }
 
-    this.authService.isAuthenticated.subscribe(isAuthenticated => {
+    this.authService.canActivateProtectedRoutes.subscribe(isAuthenticated => {
       // show login button when authentication is enabled in settings.yaml file && the app is not authenticated
       this.showLoginButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent && !isAuthenticated;
+      this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent && isAuthenticated;
       this.isAuthenticated = isAuthenticated;
-      if (this.persistenceService.isAvailable && isAuthenticated) {
+      if (this.persistenceService.isAvailable) {
         this.getConfigList();
       }
     });
 
     // if persistence is configured and anonymous mode is enable, we fetch the configuration accessible as anonymous
     // if ARLAS-persistence doesn't allow anonymous access, a suitable error is displayed in a modal
-    if (this.persistenceService.isAvailable && this.isAnonymous) {
+    if (this.persistenceService.isAvailable) {
       this.getConfigList();
     }
+  }
 
-
+  public logout() {
+    this.authService.logout();
   }
 
   public cancel(): void {
@@ -161,7 +167,6 @@ export class LandingPageDialogComponent implements OnInit {
 
   public initWithConfig(configJson: Config, configMapJson: MapConfig) {
     this.getServerCollections(configJson.arlas.server.url).then(() => {
-
       this.configDescritor.getAllCollections().subscribe(collections => {
         const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
 
@@ -213,71 +218,100 @@ export class LandingPageDialogComponent implements OnInit {
     }).catch(err => this.logger.error(this.translate.instant('Could not load config files ') + err));
   }
 
-  public loadConfig(id: string) {
-    this.persistenceService.get(id).subscribe(data => {
-      const configJson = JSON.parse(data.doc_value) as Config;
-      const configMapJson = configJson.arlas.web.components.mapgl.input.mapLayers as MapConfig;
-      this.initWithConfig(configJson, configMapJson);
-      localStorage.setItem(LOCALSTORAGE_CONFIG_ID_KEY, id);
-    });
+  public afterAction(event: ConfigAction) {
+    if (event.type === ConfigActionEnum.EDIT) {
+      this.loadConfig(event.config.id);
+      this.dialogRef.close();
+    } else {
+      this.getConfigList();
+    }
   }
 
-  public duplicateConfig(id: string) {
-    const dialogRef = this.dialog.open(InputModalComponent);
-    dialogRef.afterClosed().subscribe(configName => {
-      if (configName) {
-        this.persistenceService.duplicate(ZONE_WUI_BUILDER, id, configName).subscribe(() => {
-          this.getConfigList();
-        });
-      }
+  public computeData(data: DataWithLinks): Configuration {
+    const actions: Array<ConfigAction> = new Array();
+    const config = {
+      id: data.id,
+      name: data.doc_key,
+      value: data.doc_value,
+      readers: data.doc_readers,
+      writers: data.doc_writers,
+      lastUpdate: +data.last_update_date,
+      zone: data.doc_zone
+    };
+    actions.push({
+      config,
+      configIdParam: 'config_id',
+      type: ConfigActionEnum.VIEW
     });
-  }
+    actions.push({
+      config,
+      type: ConfigActionEnum.EDIT,
+      enabled: data.updatable
+    });
+    actions.push({
+      config,
+      type: ConfigActionEnum.DUPLICATE,
+      name: data.doc_key
+    });
+    actions.push({
+      config,
+      type: ConfigActionEnum.SHARE,
+      enabled: data.updatable
 
-  public removeConfig(id: string) {
-    const dialogRef = this.dialog.open(ConfirmModalComponent, {
-      width: '400px',
-      data: { message: this.translate.instant('delete this configuration') }
+    });
+    actions.push({
+      config,
+      type: ConfigActionEnum.DELETE,
+      enabled: data.updatable
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.persistenceService.delete(id).subscribe(() => {
-          this.getConfigList();
-        });
-      }
-    });
-  }
 
-  public viewConfig(id: string) {
-    // TODO
+    return {
+      name: data.doc_key,
+      last_update_date: data.last_update_date,
+      actions
+    };
+
   }
 
   public getConfigList() {
     this.persistenceService.list(ZONE_WUI_BUILDER, this.configPageSize, this.configPageNumber + 1, 'desc')
+      .pipe(map(data => {
+        if (data.data !== undefined) {
+          return [data.total, data.data.map(d => this.computeData(d))];
+        } else {
+          return [data.total, []];
+        }
+      }))
       .subscribe({
-        next: (dataResource: DataResource) => {
-          this.configurationsLength = dataResource.total;
-          this.configurations = dataResource.data;        },
-        error : (msg) => {
+        next: (result) => {
+          this.configurationsLength = result[0] as number;
+          this.configurations = result[1] as Configuration[];
+          this.configurations.forEach(c => {
+            c.actions.filter(a => a.type === ConfigActionEnum.VIEW)
+              .map(a => a.url = this.arlasSettingsService.getArlasWuiUrl());
+          });
+        },
+        error: (msg) => {
           if (!this.errorAlreadyThrown) {
             let message = '';
             if (msg.url) {
               message =
-              '- An ARLAS-persistence error occured: ' + (msg.status === 404 ? 'unreachable server \n' : 'unauthorized access \n') +
-              '   - url: ' + msg.url + '\n' + '   - status : ' + msg.status;
+                '- An ARLAS-persistence error occured: ' + (msg.status === 404 ? 'unreachable server \n' : 'unauthorized access \n') +
+                '   - url: ' + msg.url + '\n' + '   - status : ' + msg.status;
             } else {
               message = msg.toString();
             }
             const error = {
-                origin: 'ARLAS-persistence',
-                message,
-                reason: (msg.status === 404 ? 'Please check if ARLAS-persistence server is up & running,' +
+              origin: 'ARLAS-persistence',
+              message,
+              reason: (msg.status === 404 ? 'Please check if ARLAS-persistence server is up & running,' +
                 ' and that you have access to the asked endpoint' :
                 'Please check if you\'re authenticated to have access to ARLAS-persistence server')
             };
             if (msg.status === 403 && (!this.authService.authConfigValue || !this.authService.authConfigValue.use_authent)) {
               error.reason = 'Please enable authentication by \n- setting ${ARLAS_USE_AUTHENT}' +
-              ' env variable to `true` \nor \n- setting "authentication.use_authent" to `true` in settings.yaml file';
+                ' env variable to `true` \nor \n- setting "authentication.use_authent" to `true` in settings.yaml file';
             }
             this.errorService.errorEmitter.next(error);
           }
@@ -285,6 +319,7 @@ export class LandingPageDialogComponent implements OnInit {
         }
       });
   }
+
 
   public pageChange(pageEvent: PageEvent) {
     this.configPageNumber = pageEvent.pageIndex;
@@ -312,6 +347,15 @@ export class LandingPageDialogComponent implements OnInit {
 
   public login() {
     this.authService.login();
+  }
+
+  public loadConfig(id: string) {
+    this.persistenceService.get(id).subscribe(data => {
+      const configJson = JSON.parse(data.doc_value) as Config;
+      const configMapJson = configJson.arlas.web.components.mapgl.input.mapLayers as MapConfig;
+      this.initWithConfig(configJson, configMapJson);
+      localStorage.setItem(LOCALSTORAGE_CONFIG_ID_KEY, id);
+    });
   }
 }
 
