@@ -318,7 +318,7 @@
 	"Select a config.json file": "Charger config.json",
 	"Select a config.map.json file": "Charger config.map.json",
 	"User info": "Infos utilisateur",
-    "Share":"Partager",
+	"Share":"Partager",
     "ITEMS_PER_PAGE_LABEL":"Items par page",
     "NEXT_PAGE_LABEL":"Page suivante",
     "PREVIOUS_PAGE_LABEL":"Page précédente",

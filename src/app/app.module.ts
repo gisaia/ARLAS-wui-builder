@@ -58,6 +58,7 @@ import { configUpdaterFactory, getOptionsFactory } from 'arlas-wui-toolkit/app.m
 import { GET_OPTIONS } from 'arlas-wui-toolkit/services/persistence/persistence.service';
 import { ConfigMenuModule } from 'arlas-wui-toolkit/components/config-manager/config-menu/config-menu.module';
 import { PaginatorI18n } from 'arlas-wui-toolkit/tools/paginatori18n';
+import { UserInfosComponent } from 'arlas-wui-toolkit/components/user-infos/user-infos.component';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -171,6 +172,7 @@ export function createTranslateLoader(http: HttpClient) {
     },
   ],
   bootstrap: [AppComponent],
-  entryComponents: [LandingPageDialogComponent, InputModalComponent]
+  entryComponents: [LandingPageDialogComponent, InputModalComponent,
+    UserInfosComponent]
 })
 export class AppModule { }

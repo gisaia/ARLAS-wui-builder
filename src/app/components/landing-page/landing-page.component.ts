@@ -41,6 +41,7 @@ import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persi
 import { Config } from '@services/main-form-manager/models-config';
 import { map } from 'rxjs/internal/operators/map';
 import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
+import { UserInfosComponent } from 'arlas-wui-toolkit//components/user-infos/user-infos.component';
 
 enum InitialChoice {
   none = 0,
@@ -72,11 +73,13 @@ export class LandingPageDialogComponent implements OnInit {
   public configPageNumber = 0;
   public configPageSize = 5;
 
-  public showLoginButton = true;
-  public showLogOutButton = false;
+  public showLoginButton: boolean;
+  public showLogOutButton: boolean;
 
   public isAuthenticated = false;
   private errorAlreadyThrown = false;
+  public name: string;
+  public avatar: string;
 
   constructor(
     public dialogRef: MatDialogRef<LandingPageDialogComponent>,
@@ -95,7 +98,10 @@ export class LandingPageDialogComponent implements OnInit {
     private errorService: ErrorService,
     private arlasSettingsService: ArlasSettingsService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) { }
+  ) {
+    this.showLoginButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
+    this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
+  }
 
   public ngOnInit(): void {
     if (this.data.message !== '-1') {
@@ -110,7 +116,7 @@ export class LandingPageDialogComponent implements OnInit {
     this.mainFormService.startingConfig.init(
       this.startingConfigFormBuilder.build()
     );
-
+    const claims = this.authService.identityClaims as any;
     this.authService.canActivateProtectedRoutes.subscribe(isAuthenticated => {
       // show login button when authentication is enabled in settings.yaml file && the app is not authenticated
       this.showLoginButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent && !isAuthenticated;
@@ -118,6 +124,13 @@ export class LandingPageDialogComponent implements OnInit {
       this.isAuthenticated = isAuthenticated;
       if (this.persistenceService.isAvailable) {
         this.getConfigList();
+      }
+      if (isAuthenticated) {
+        this.name = claims.nickname;
+        this.avatar = claims.picture;
+      } else {
+        this.name = '';
+        this.avatar = '';
       }
     });
 
@@ -221,7 +234,6 @@ export class LandingPageDialogComponent implements OnInit {
   public afterAction(event: ConfigAction) {
     if (event.type === ConfigActionEnum.EDIT) {
       this.loadConfig(event.config.id);
-      this.dialogRef.close();
     } else {
       this.getConfigList();
     }
@@ -352,10 +364,18 @@ export class LandingPageDialogComponent implements OnInit {
   public loadConfig(id: string) {
     this.persistenceService.get(id).subscribe(data => {
       const configJson = JSON.parse(data.doc_value) as Config;
-      const configMapJson = configJson.arlas.web.components.mapgl.input.mapLayers as MapConfig;
-      this.initWithConfig(configJson, configMapJson);
+      if (configJson.arlas !== undefined) {
+        const configMapJson = configJson.arlas.web.components.mapgl.input.mapLayers as MapConfig;
+        this.initWithConfig(configJson, configMapJson);
+      } else {
+        this.configChoice = InitialChoice.setup;
+      }
+
       localStorage.setItem(LOCALSTORAGE_CONFIG_ID_KEY, id);
     });
+  }
+  public getUserInfos() {
+    this.dialog.open(UserInfosComponent);
   }
 }
 
@@ -376,7 +396,8 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
     private logger: NGXLogger,
     private router: Router,
     private translate: TranslateService,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute) {
+  }
 
   public ngOnInit(): void {
     if (this.activatedRoute.snapshot.paramMap.has('id')) {
