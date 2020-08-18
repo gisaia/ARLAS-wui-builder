@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/spectator';
-import { ArlasCollaborativesearchService, ArlasConfigService } from 'arlas-wui-toolkit';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
+import { ArlasCollaborativesearchService, ArlasConfigService, ArlasStartupService } from 'arlas-wui-toolkit';
 import { StartupService } from './startup.service';
 
 describe('StartupService', () => {
@@ -10,7 +10,8 @@ describe('StartupService', () => {
     mocks: [
       ArlasConfigService,
       ArlasCollaborativesearchService,
-      HttpClient
+      HttpClient,
+      ArlasStartupService
     ]
   });
 

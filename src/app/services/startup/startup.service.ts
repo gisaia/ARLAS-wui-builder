@@ -18,16 +18,19 @@ under the License.
 */
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, Inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import ajv from 'ajv';
 import * as ajvKeywords from 'ajv-keywords/keywords/uniqueItemProperties';
 import * as draftSchema from 'ajv/lib/refs/json-schema-draft-06.json';
 import { Configuration } from 'arlas-api';
-import { ArlasCollaborativesearchService, ArlasConfigService, ArlasExploreApi } from 'arlas-wui-toolkit';
+import { ArlasCollaborativesearchService, ArlasConfigService, ArlasExploreApi,
+  ArlasStartupService, ArlasSettings } from 'arlas-wui-toolkit';
 import * as portableFetch from 'portable-fetch';
 import { flatMap } from 'rxjs/operators';
 import * as arlasConfSchema from './builderconfig.schema.json';
+
+export const ZONE_WUI_BUILDER = 'config.json';
 
 @Injectable({
   providedIn: 'root'
@@ -62,75 +65,25 @@ export class StartupService {
   }
 
   constructor(
-    private http: HttpClient,
     private configService: ArlasConfigService,
     private arlasCss: ArlasCollaborativesearchService,
-    private translateService: TranslateService,
-    private injector: Injector
-  ) { }
+    private arlasStartupService: ArlasStartupService,
+    private injector: Injector,
+    private http: HttpClient,
+    private translateService: TranslateService) {}
 
-  public init(configFilePath: string): Promise<string> {
-    let configData;
-    const ret = this.http
-      .get(configFilePath)
-      .pipe(flatMap((response) => {
-        configData = response;
-        return Promise.resolve(configData);
-      })).toPromise()
-      .then((data) => this.validateConfiguration(data))
-      .then((data) => this.setConfigService(data))
-      .then((data) => this.setAuthentService(data))
+  public init(): Promise<string> {
+    return this.arlasStartupService.applyAppSettings()
+        .then((s: ArlasSettings) => this.arlasStartupService.authenticate(s))
+        .then((s: ArlasSettings) => this.arlasStartupService.enrichHeaders(s))
+        .then((s: ArlasSettings) => {
+          return new Promise((resolve, reject) => {
+            this.configService.setConfig({});
+            resolve('Successfullly initialized app');
+          });
+        })
       // Init app with the language read from url
       .then(() => StartupService.translationLoaded(this.translateService, this.injector));
-    return ret;
-  }
-
-  // This funcion could be used to valid an existing loaded conf
-  public validLoadedConfig(configFilePath: string): Promise<boolean> {
-    let configData;
-    const ret = this.http
-      .get(configFilePath)
-      .pipe(flatMap((response) => {
-        configData = response;
-        return Promise.resolve(null);
-      })).toPromise()
-      .then(() => this.validateConfiguration(configData))
-      .then((data) => this.setConfigService(data))
-      .then((data) => this.setAuthentService(data))
-      .then((data) => this.setCollaborativeService(data))
-      .catch((err: any) => {
-        console.error(err);
-        return Promise.resolve(null);
-      });
-    return ret.then((x) => true);
-  }
-
-  public validateConfiguration(data) {
-    return new Promise<any>((resolve, reject) => {
-      const ajvObj = ajv();
-      ajvKeywords(ajvObj);
-      const validateConfig = ajvObj
-        .addMetaSchema(draftSchema.default)
-        .compile((arlasConfSchema as any).default);
-      if (validateConfig(data) === false) {
-        const errorMessagesList = new Array<string>();
-        errorMessagesList.push(
-          validateConfig.errors[0].dataPath + ' ' +
-          validateConfig.errors[0].message
-        );
-        reject(new Error(errorMessagesList.join(' ')));
-      } else {
-        resolve(data);
-      }
-    });
-  }
-
-
-  public setConfigService(data) {
-    return new Promise<any>((resolve, reject) => {
-      this.configService.setConfig(data);
-      resolve(this.configService.getConfig());
-    });
   }
 
   public setCollaborativeService(data) {
@@ -162,21 +115,5 @@ export class StartupService {
       currentConfig.arlas.web.contributors = [];
     }
     return currentConfig;
-  }
-
-  public setAuthentService(data) {
-
-    return new Promise<any>((resolve, reject) => {
-      if (this.configService.getValue('arlas.authentification')) {
-        const useAuthentForArlas = this.configService.getValue('arlas.authentification.useAuthentForArlas');
-        const useDiscovery = this.configService.getValue('arlas.authentification.useDiscovery');
-        const authService = this.injector.get('AuthentificationService')[0];
-        authService.initAuthService(this.configService, useDiscovery, useAuthentForArlas).then(() => {
-          resolve([data, useAuthentForArlas]);
-        });
-      } else {
-        resolve(data);
-      }
-    });
   }
 }

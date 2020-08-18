@@ -30,8 +30,6 @@ import { SearchInitService } from '@search-config/services/search-init/search-in
 import { SearchImportService } from '@search-config/services/search-import/search-import.service';
 import { TimelineInitService } from '@timeline-config/services/timeline-init/timeline-init.service';
 import { TimelineImportService } from '@timeline-config/services/timeline-import/timeline-import.service';
-import { PersistenceService } from '@services/persistence/persistence.service';
-import { EnvService } from '../env/env.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { MapConfig } from './models-map-config';
@@ -46,7 +44,8 @@ import { LookAndFeelImportService } from '@look-and-feel-config/services/look-an
 import { SideModulesInitService } from '@app/modules/side-modules-config/services/side-modules-init/side-modules-init.service';
 import { SideModulesImportService } from '@app/modules/side-modules-config/services/side-modules-import/side-modules-import.service';
 import { importElements } from './tools';
-import { StartupService } from '@services/startup/startup.service';
+import { StartupService, ZONE_WUI_BUILDER } from '@services/startup/startup.service';
+import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persistence.service';
 
 
 @Injectable({
@@ -165,8 +164,9 @@ export class MainFormManagerService {
         const dialogRef = this.dialog.open(InputModalComponent);
         dialogRef.afterClosed().subscribe(configName => {
           this.persistenceService.create(
-            conf,
-            configName
+            ZONE_WUI_BUILDER,
+            configName,
+            conf
           ).subscribe(
             () => {
               this.snackbar.open(

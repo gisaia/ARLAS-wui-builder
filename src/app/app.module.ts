@@ -44,43 +44,33 @@ import { AnalyticsConfigModule } from './modules/analytics-config/analytics-conf
 
 
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS, GestureConfig } from '@angular/material';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS, GestureConfig, MatPaginatorIntl } from '@angular/material';
 import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
-import { GET_OPTIONS } from '@services/persistence/persistence.service';
 import { OAuthModule } from 'angular-oauth2-oidc';
-import { EnvServiceProvider } from '@services/env/env.service.provider';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { LookAndFeelConfigModule } from '@look-and-feel-config/look-and-feel-config.module';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ArlasConfigurationUpdaterService } from 'arlas-wui-toolkit/services/configuration-updater/configurationUpdater.service';
+import { FETCH_OPTIONS, CONFIG_UPDATER } from 'arlas-wui-toolkit/services/startup/startup.service';
+import { ErrorModalModule } from 'arlas-wui-toolkit/components/errormodal/errormodal.module';
+import { configUpdaterFactory, getOptionsFactory } from 'arlas-wui-toolkit/app.module';
+import { GET_OPTIONS } from 'arlas-wui-toolkit/services/persistence/persistence.service';
+import { ConfigMenuModule } from 'arlas-wui-toolkit/components/config-manager/config-menu/config-menu.module';
+import { PaginatorI18n } from 'arlas-wui-toolkit/tools/paginatori18n';
+import { UserInfosComponent } from 'arlas-wui-toolkit/components/user-infos/user-infos.component';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
   return load;
 }
 export function startupServiceFactory(startupService: StartupService) {
-  const init = () => startupService.init('config.json');
+  const init = () => startupService.init();
   return init;
 }
 
 export function auhtentServiceFactory(service: AuthentificationService) {
   return service;
-}
-
-export function getOptionsFactory(arlasAuthService: AuthentificationService): any {
-  const getOptions = () => {
-    const token = !!arlasAuthService.idToken ? arlasAuthService.idToken : null;
-    if (token !== null) {
-      return {
-        headers: {
-          Authorization: 'bearer ' + token
-        }
-      };
-    } else {
-      return {};
-    }
-  };
-  return getOptions;
 }
 
 export function createTranslateLoader(http: HttpClient) {
@@ -99,9 +89,11 @@ export function createTranslateLoader(http: HttpClient) {
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ErrorModalModule,
     MapConfigModule,
     SearchConfigModule,
     LookAndFeelConfigModule,
+    ConfigMenuModule,
     SharedModule,
     TimelineConfigModule,
     TranslateModule.forRoot({
@@ -120,10 +112,10 @@ export function createTranslateLoader(http: HttpClient) {
     OAuthModule.forRoot()
   ],
   providers: [
-    EnvServiceProvider,
     forwardRef(() => ArlasConfigurationDescriptor),
     forwardRef(() => ArlasCollaborativesearchService),
     forwardRef(() => ArlasColorGeneratorLoader),
+    forwardRef(() => ArlasStartupService),
     {
       provide: APP_INITIALIZER,
       useFactory: loadServiceFactory,
@@ -143,12 +135,22 @@ export function createTranslateLoader(http: HttpClient) {
       multi: true
     },
     {
+      provide: GET_OPTIONS,
+      useFactory: getOptionsFactory,
+      deps: [AuthentificationService]
+    },
+    {
       provide: ArlasWalkthroughService,
       useClass: WalkthroughService
     },
     {
-      provide: ArlasStartupService,
-      useClass: StartupService
+      provide: ArlasConfigurationUpdaterService,
+      useClass: ArlasConfigurationUpdaterService
+    },
+    { provide: FETCH_OPTIONS, useValue: {} },
+    {
+      provide: CONFIG_UPDATER,
+      useValue: configUpdaterFactory
     },
     {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
@@ -162,9 +164,15 @@ export function createTranslateLoader(http: HttpClient) {
       provide: GET_OPTIONS,
       useFactory: getOptionsFactory,
       deps: [AuthentificationService]
-    }
+    },
+    {
+      provide: MatPaginatorIntl,
+      deps: [TranslateService],
+      useFactory: (translateService: TranslateService) => new PaginatorI18n(translateService).getPaginatorIntl()
+    },
   ],
   bootstrap: [AppComponent],
-  entryComponents: [LandingPageDialogComponent, InputModalComponent]
+  entryComponents: [LandingPageDialogComponent, InputModalComponent,
+    UserInfosComponent]
 })
 export class AppModule { }
