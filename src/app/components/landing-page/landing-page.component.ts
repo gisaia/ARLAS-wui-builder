@@ -317,7 +317,8 @@ export class LandingPageDialogComponent implements OnInit {
             const error = {
               origin: 'ARLAS-persistence',
               message,
-              reason: (msg.status === 404 ? 'Please check if ARLAS-persistence server is up & running,' +
+              reason: (msg.status === 404 || msg.toString().includes('Failed to fetch') ?
+                'Please check if ARLAS-persistence server is up & running,' +
                 ' and that you have access to the asked endpoint' :
                 'Please check if you\'re authenticated to have access to ARLAS-persistence server')
             };
@@ -411,7 +412,9 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit() {
-    this.openChoice();
+    // the set timeout is a hack to display dialog after 'callback' redirection. Otherwise the dialog is not opened in that case.
+    // https://stackoverflow.com/questions/779379/why-is-settimeoutfn-0-sometimes-useful
+    setTimeout(() => this.openChoice(), 0);
     this.startEvent.subscribe(state => {
       this.dialogRef.close();
       this.router.navigate(['map-config'], { queryParamsHandling: 'preserve' });
