@@ -18,17 +18,12 @@ under the License.
 */
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Injector, Inject } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import ajv from 'ajv';
-import * as ajvKeywords from 'ajv-keywords/keywords/uniqueItemProperties';
-import * as draftSchema from 'ajv/lib/refs/json-schema-draft-06.json';
 import { Configuration } from 'arlas-api';
 import { ArlasCollaborativesearchService, ArlasConfigService, ArlasExploreApi,
   ArlasStartupService, ArlasSettings } from 'arlas-wui-toolkit';
 import * as portableFetch from 'portable-fetch';
-import { flatMap } from 'rxjs/operators';
-import * as arlasConfSchema from './builderconfig.schema.json';
 
 export const ZONE_WUI_BUILDER = 'config.json';
 

@@ -54,6 +54,8 @@ enum MAIN_FORM_KEYS {
 })
 export class MainFormService {
 
+  public configurationId: string;
+
   public mainForm = new FormGroup({
     [MAIN_FORM_KEYS.STARTING_CONFIG]: new FormGroup({}),
     [MAIN_FORM_KEYS.COMMON_CONFIG]: new FormGroup({}),

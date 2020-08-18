@@ -18,13 +18,13 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { updateValueAndValidity, LOCALSTORAGE_CONFIG_ID_KEY } from '@utils/tools';
+import { updateValueAndValidity } from '@utils/tools';
 import * as FileSaver from 'file-saver';
 import { NGXLogger } from 'ngx-logger';
 import { ConfigExportHelper, EXPORT_TYPE } from './config-export-helper';
 import { ConfigMapExportHelper } from './config-map-export-helper';
 import { AnalyticsImportService } from '@analytics-config/services/analytics-import/analytics-import.service';
-import { Config, ConfigPersistence } from './models-config';
+import { Config } from './models-config';
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { SearchInitService } from '@search-config/services/search-init/search-init.service';
 import { SearchImportService } from '@search-config/services/search-import/search-import.service';
@@ -140,12 +140,12 @@ export class MainFormManagerService {
       const conf: any = JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
         generatedMapConfig.layers
       ));
-      if (localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY)) {
+      if (this.mainFormService.configurationId) {
         // Update existing
-        this.persistenceService.get(localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY)).subscribe(data => {
+        this.persistenceService.get(this.mainFormService.configurationId).subscribe(data => {
 
           this.persistenceService.update(
-            localStorage.getItem(LOCALSTORAGE_CONFIG_ID_KEY),
+            this.mainFormService.configurationId,
             conf,
             new Date(data.last_update_date).getTime()
           ).subscribe(

@@ -29,11 +29,9 @@ import { Subject } from 'rxjs';
 import { StartupService, ZONE_WUI_BUILDER } from '../../services/startup/startup.service';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MapConfig } from '@services/main-form-manager/models-map-config';
-import { DataResource, DataWithLinks } from 'arlas-persistence-api';
+import { DataWithLinks } from 'arlas-persistence-api';
 import { PageEvent } from '@angular/material/paginator';
-import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
-import { LOCALSTORAGE_CONFIG_ID_KEY } from '@utils/tools';
-import { InputModalComponent, DialogData } from '@shared-components/input-modal/input-modal.component';
+import { DialogData } from '@shared-components/input-modal/input-modal.component';
 import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
 import { ErrorService } from 'arlas-wui-toolkit/services/error/error.service';
@@ -111,7 +109,7 @@ export class LandingPageDialogComponent implements OnInit {
     this.mainFormService.resetMainForm();
 
     // Reset current config id
-    localStorage.removeItem(LOCALSTORAGE_CONFIG_ID_KEY);
+    this.mainFormService.configurationId = undefined;
 
     this.mainFormService.startingConfig.init(
       this.startingConfigFormBuilder.build()
@@ -371,8 +369,7 @@ export class LandingPageDialogComponent implements OnInit {
       } else {
         this.configChoice = InitialChoice.setup;
       }
-
-      localStorage.setItem(LOCALSTORAGE_CONFIG_ID_KEY, id);
+      this.mainFormService.configurationId = id;
     });
   }
   public getUserInfos() {
