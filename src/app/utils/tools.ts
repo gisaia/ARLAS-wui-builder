@@ -18,9 +18,6 @@ under the License.
 */
 
 import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/forms';
-import { ConfigFormGroup, ConfigFormControl } from '@shared-models/config-form';
-
-export const LOCALSTORAGE_CONFIG_ID_KEY = 'current_config_id';
 
 interface OPTIONAL {
     isPresent: boolean;
