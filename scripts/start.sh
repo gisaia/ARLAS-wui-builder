@@ -75,7 +75,7 @@ mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
 
 ### URL to ARLAS-persistence
 if [ -z "${ARLAS_PERSISTENCE_URL}" ]; then
-  ARLAS_PERSISTENCE_URL="'http://localhost:19997/arlas_persistence_server'"
+  ARLAS_PERSISTENCE_URL="http://localhost:19997/arlas_persistence_server"
   export ARLAS_PERSISTENCE_URL
   echo "The default ARLAS-persistence url '${ARLAS_PERSISTENCE_URL}' is used"
 else
@@ -83,6 +83,17 @@ else
 fi
 envsubst '$ARLAS_PERSISTENCE_URL' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
 mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
+
+### URL to ARLAS-server
+if [ -z "${ARLAS_SERVER_URL}" ]; then
+  ARLAS_SERVER_URL="http://demo.arlas.io/arlas"
+  export ARLAS_SERVER_URL
+  echo "The default ARLAS-server url '${ARLAS_SERVER_URL}' is used"
+else
+  echo ${ARLAS_SERVER_URL} "is used for 'global.serverUrl' in default.json file"
+fi
+envsubst '$ARLAS_SERVER_URL' < /usr/share/nginx/html/default.json > /usr/share/nginx/html/default.json.tmp
+mv /usr/share/nginx/html/default.json.tmp /usr/share/nginx/html/default.json
 
 ## AUTHENTICATION
 ### ARLAS_USE_AUTHENT

@@ -1,6 +1,6 @@
 {
     "global": {
-        "serverUrl": "http://demo.arlas.io/arlas",
+        "serverUrl": "${ARLAS_SERVER_URL}",
         "unmanagedFields": {
             "maxAgeCache": 120
         }        
