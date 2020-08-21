@@ -1,15 +1,15 @@
 <div class="menu_container" [class.hide-label]="!isLabelDisplayed">
   <div class="logo">
     <a matTooltip="Back to home page" [routerLink]="['/']" queryParamsHandling="preserve">
-      <!-- Get free from https://www.jing.fm/iclipt/u2q8t4r5e6y3q8r5/ -->
-      <img src="assets/img/logo-full.png" *ngIf="isLabelDisplayed" />
-      <img src="assets/img/logo-cropped.png" *ngIf="!isLabelDisplayed" />
+      <img src="assets/img/logo-only.png" />
     </a>
+    <span>ARLAS Builder</span>
   </div>
-  
+
   <div>
     <mat-nav-list>
-      <mat-list-item *ngFor="let page of pages" [matTooltip]="page?.tooltip" [routerLink]="page?.link" queryParamsHandling="preserve">
+      <mat-list-item *ngFor="let page of pages" [matTooltip]="page?.tooltip" [routerLink]="page?.link" routerLinkActive="active-menu"
+        queryParamsHandling="preserve">
         <button mat-icon-button [disabled]="!page?.enabled" routerLinkActive="mat-accent">
           <mat-icon [matBadge]="nbErrorsByPage.get(page.name)" [matBadgeHidden]="!nbErrorsByPage.get(page.name)"
             matBadgePosition="above before" matBadgeColor="warn">
@@ -23,9 +23,10 @@
   <div>
     <div class="action-list">
       <mat-nav-list>
-        <mat-list-item matTooltip="{{'Save' | translate}}" (click)="save($event)" 
-        [class.disabled-item]="!this.persistenceService.isAvailable">
-          <button mat-icon-button >
+        <mat-divider></mat-divider>
+        <mat-list-item matTooltip="{{'Save' | translate}}" (click)="save($event)"
+          [class.disabled-item]="!this.persistenceService.isAvailable">
+          <button mat-icon-button>
             <mat-icon>save</mat-icon>
             <span>{{'Save' | translate}}</span>
           </button>
@@ -36,13 +37,14 @@
             <span>{{'Download' | translate}}</span>
           </button>
         </mat-list-item>
+        <mat-divider></mat-divider>
         <mat-list-item *ngIf="showLogOutButton" matTooltip="{{'User info' | translate}}" (click)="getUserInfos()">
-            <button mat-icon-button>
-              <img src="{{avatar}}"  class="user_info_img">
-              <span  class="label-user-name">{{name}}</span>
-            </button>
-          </mat-list-item>
-        <mat-list-item  *ngIf="showLogOutButton" matTooltip="{{'Log Out' | translate}}" (click)="logout()" >
+          <button mat-icon-button>
+            <img src="{{avatar}}" class="user_avatar">
+            <span class="user_name">{{name}}</span>
+          </button>
+        </mat-list-item>
+        <mat-list-item *ngIf="showLogOutButton" matTooltip="{{'Log Out' | translate}}" (click)="logout()">
           <button mat-icon-button>
             <mat-icon>lock_open</mat-icon>
             <span>{{'Log Out' | translate}}</span>
@@ -51,8 +53,7 @@
       </mat-nav-list>
     </div>
     <div class="toggler">
-      <button mat-icon-button (click)="expand()"
-        [matTooltip]="isLabelDisplayed? 'reduce' : 'expand'">
+      <button mat-icon-button (click)="expand()" [matTooltip]="isLabelDisplayed? 'reduce' : 'expand'">
         <mat-icon>{{ isLabelDisplayed ? 'arrow_left' : 'arrow_right' }}</mat-icon>
       </button>
     </div>

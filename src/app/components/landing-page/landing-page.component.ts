@@ -320,11 +320,9 @@ export class LandingPageDialogComponent implements OnInit {
                 ' and that you have access to the asked endpoint' :
                 'Please check if you\'re authenticated to have access to ARLAS-persistence server')
             };
-            if (msg.status === 403 && (!this.authService.authConfigValue || !this.authService.authConfigValue.use_authent)) {
-              error.reason = 'Please enable authentication by \n- setting ${ARLAS_USE_AUTHENT}' +
-                ' env variable to `true` \nor \n- setting "authentication.use_authent" to `true` in settings.yaml file';
+            if (msg.status !== 403 && msg.status !== 401) {
+              this.errorService.errorEmitter.next(error);
             }
-            this.errorService.errorEmitter.next(error);
           }
           this.errorAlreadyThrown = true;
         }

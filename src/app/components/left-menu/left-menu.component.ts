@@ -27,7 +27,7 @@ import { AuthentificationService } from 'arlas-wui-toolkit/services/authentifica
 import { Router } from '@angular/router';
 import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persistence.service';
 import { MatDialog } from '@angular/material/dialog';
-import { UserInfosComponent } from 'arlas-wui-toolkit//components/user-infos/user-infos.component';
+import { UserInfosComponent } from 'arlas-wui-toolkit/components/user-infos/user-infos.component';
 
 interface Page {
   link: string;
