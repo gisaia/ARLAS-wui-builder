@@ -27,6 +27,9 @@ $config-element-description-border-color: transparentize(mat-color($mat-indigo, 
 $config-element-description-text-color: transparentize(mat-color($mat-blue-grey, A700), 0.4);
 $error-color: mat-color($warn-palette);
 
+$primaryColor: mat-color($primary-palette);
+$accentColor: mat-color($accent-palette);
+
 @mixin group-title() {
    font-weight: 300;
    font-size: 24px;

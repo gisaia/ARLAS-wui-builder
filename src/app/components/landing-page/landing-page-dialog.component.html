@@ -1,10 +1,5 @@
 <div *ngIf="!configChoice">
-    <div *ngIf="showLogOutButton" matTooltip="{{'User info' | translate}}" (click)="getUserInfos()">
-        <button mat-icon-button>
-            <img src="{{avatar}}" class="user_info_img">
-            <span class="label-user-name">{{name}}</span>
-        </button>
-    </div>
+    
     <h2 mat-dialog-title *ngIf="this.persistenceService.isAvailable">{{'Available configurations' | translate}}</h2>
     <mat-dialog-content class="load-content">
         <div *ngIf="showLoginButton">
@@ -42,11 +37,15 @@
             </mat-paginator>
         </ng-container>
     </mat-dialog-content>
-    <mat-dialog-actions>
-        <div>
+    <mat-dialog-actions class="actions">
+        <div class="buttons" style="width: 100%;">
             <button mat-raised-button color="primary" (click)="configChoice = InitialChoice.setup">{{'New configuration' | translate}}</button>
             <button mat-raised-button color="primary" (click)="configChoice = InitialChoice.load">{{'Import from file' | translate}}</button>
-            <button mat-raised-button color="primary" *ngIf="showLogOutButton" (click)="logout()">{{'Log Out' | translate}}</button>
+            <button class="right" mat-raised-button color="primary" *ngIf="showLogOutButton" (click)="logout()">{{'Log Out' | translate}}</button>
+            <button class="right" style="margin-left:40px" mat-button *ngIf="showLogOutButton" matTooltip="{{'User info' | translate}}" (click)="getUserInfos()">
+                <img src="{{avatar}}" class="user_info_img">
+                {{name}}
+            </button>
         </div>
     </mat-dialog-actions>
 </div>

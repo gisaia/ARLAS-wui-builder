@@ -16,6 +16,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+
+@import "variables.scss";
+
 .menu_container {
   height: 100%;
   display: flex;
@@ -23,7 +26,17 @@ under the License.
   justify-content: space-between;
 
   .logo {
-    padding: 10px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    
+    span{
+      font-size: 1.3em;
+    }
+  }
+
+  .active-menu{
+    background-color: rgba($accentColor, 0.2);
   }
 
   .toggler {
@@ -32,14 +45,22 @@ under the License.
     padding: 15px;
   }
 
-  .action-list{
-    .disabled-item{
+  .action-list {
+    .disabled-item {
       cursor: not-allowed;
       color: rgba(0, 0, 0, 0.26);
 
-      button{
+      button {
         cursor: not-allowed;
       }
+    }
+
+    .user_avatar {
+      vertical-align: middle;
+      height: 26px;
+    }
+    .user_name {
+      margin-left: 5px;
     }
   }
 
@@ -50,13 +71,4 @@ under the License.
   &.hide-label span {
     display: none;
   }
-}
-
-.label-user-name{
-  display:inline-block!important;
-  margin-left:5px
-}
-.user_info_img{
-  vertical-align: middle; 
-  height:26px
 }
