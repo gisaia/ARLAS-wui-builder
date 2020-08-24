@@ -69,7 +69,6 @@ export class ConfigExportHelper {
         analyticsConfigList: FormArray,
         keysToColorList: FormArray,
     ): any {
-
         const chipssearch: ChipSearchConfig = {
             name: searchConfigGlobal.customControls.name.value,
             icon: searchConfigGlobal.customControls.unmanagedFields.icon.value
@@ -568,7 +567,6 @@ export class ConfigExportHelper {
     }
 
     public static getAnalyticsGroup(tabName: string, group: any, groupIndex: number) {
-
         const groupAnalytic = {
             groupId: tabName + '-' + groupIndex.toString(),
             title: group.title,
@@ -576,12 +574,9 @@ export class ConfigExportHelper {
             icon: group.icon,
             components: []
         } as AnalyticConfig;
-
-
         group.content.forEach(widget => {
             groupAnalytic.components.push(this.getAnalyticsComponent(widget.widgetType, widget.widgetData));
         });
-
         return groupAnalytic;
     }
 
@@ -597,7 +592,6 @@ export class ConfigExportHelper {
     }
 
     private static getAnalyticsComponent(widgetType: any, widgetData: any): AnalyticComponentConfig {
-
         const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
         if ([WIDGET_TYPE.histogram, WIDGET_TYPE.swimlane].indexOf(widgetType) >= 0) {
             const component = {

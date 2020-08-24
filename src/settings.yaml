@@ -2,7 +2,7 @@
 ############   AUTHENTICATION SETTINGS   ###############
 ########################################################
 authentication:
-    use_authent: true
+  use_authent: true
   force_connect: false
   use_discovery: true
   issuer: https://arlas-cloud-abc.eu.auth0.com/

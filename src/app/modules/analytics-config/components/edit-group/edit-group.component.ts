@@ -44,14 +44,7 @@ export class AddWidgetDialogComponent {
     [WIDGET_TYPE.powerbars],
     [WIDGET_TYPE.resultlist],
     [WIDGET_TYPE.metric],
-    [WIDGET_TYPE.swimlane],
-    [WIDGET_TYPE.metric, WIDGET_TYPE.metric],
-    [WIDGET_TYPE.donut, WIDGET_TYPE.powerbars],
-    [WIDGET_TYPE.donut, WIDGET_TYPE.swimlane],
-    [WIDGET_TYPE.histogram, WIDGET_TYPE.histogram],
-    [WIDGET_TYPE.powerbars, WIDGET_TYPE.powerbars],
-    [WIDGET_TYPE.metric, WIDGET_TYPE.metric, WIDGET_TYPE.metric],
-    [WIDGET_TYPE.powerbars, WIDGET_TYPE.powerbars, WIDGET_TYPE.powerbars]
+    [WIDGET_TYPE.swimlane]
   ];
   public getContentTypes = (nbWidgets: number) => this.contentTypes.filter(elmt => elmt.length === nbWidgets);
 
@@ -95,8 +88,17 @@ export class EditGroupComponent implements OnInit {
    */
   private resetWidgetsOnTypeChange() {
     this.contentType.valueChanges.subscribe(values => {
-      this.content.clear();
-      values.forEach(v => this.content.push(this.analyticsInitService.initNewWidget(v)));
+      // if a widget is removed
+      if (this.contentTypeValue.length < this.content.length) {
+        this.content.removeAt(this.content.length - 1);
+      } else {
+        // if a new widget is added
+        values.forEach((v, i) => {
+          if (i === this.content.length) {
+            this.content.push(this.analyticsInitService.initNewWidget(v));
+          }
+        });
+      }
     });
   }
 
@@ -104,7 +106,9 @@ export class EditGroupComponent implements OnInit {
     this.dialog.open(AddWidgetDialogComponent, {})
       .afterClosed().subscribe(result => {
         if (result) {
-          this.formGroup.controls.contentType.setValue(result);
+          // add the new widget to the previous ones if they exist
+          const finalResult = this.contentTypeValue ? this.contentTypeValue.concat(result) : result;
+          this.formGroup.controls.contentType.setValue(finalResult);
           this.editWidget(this.contentTypeValue.length - 1);
         }
       });
@@ -144,9 +148,6 @@ export class EditGroupComponent implements OnInit {
 
   public updatePreview() {
     this.formGroup.controls.preview.setValue([]);
-    if (this.formGroup.invalid) {
-      return;
-    }
     setTimeout(() =>
       this.formGroup.controls.preview.setValue([ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, 1)]), 0);
     this.cdr.detectChanges();

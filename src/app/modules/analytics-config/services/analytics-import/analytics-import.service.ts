@@ -69,41 +69,43 @@ export class AnalyticsImportService {
         this.analyticsInitService.initTabContent(tab.controls.contentFg as FormGroup);
         const newGroup = this.analyticsInitService.initNewGroup('');
 
-        const isHistogram = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.histogram;
-        const isSwimlane = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.swimlane;
-        const isMetric = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.metric;
-        const isPowerbar = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.powerbars;
-        const isDonut = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.donut;
-        const isResultlist = analyticGroup.components.length === 1 && analyticGroup.components[0].componentType === WIDGET_TYPE.resultlist;
+        // manage list of widgets
+        const contentTypes = new Array();
+        analyticGroup.components.forEach(c => {
+          const widget = this.analyticsInitService.initNewWidget(c.componentType);
+          const contributorId = c.contributorId;
+          const contributor = config.arlas.web.contributors.find(contrib => contrib.identifier === contributorId);
+          let widgetData;
+          if (c.componentType === WIDGET_TYPE.histogram) {
+            contentTypes.push(WIDGET_TYPE.histogram);
+            widgetData = this.getHistogramWidgetData(c, contributor);
+          } else if (c.componentType === WIDGET_TYPE.swimlane) {
+            contentTypes.push(WIDGET_TYPE.swimlane);
+            widgetData = this.getSwimlaneWidgetData(c, contributor);
+          } else if (c.componentType === WIDGET_TYPE.metric) {
+            contentTypes.push(WIDGET_TYPE.metric);
+            widgetData = this.getMetricWidgetData(c, contributor);
+          } else if (c.componentType === WIDGET_TYPE.powerbars) {
+            contentTypes.push(WIDGET_TYPE.powerbars);
+            widgetData = this.getPowerbarWidgetData(c, contributor);
+          } else if (c.componentType === WIDGET_TYPE.donut) {
+            contentTypes.push(WIDGET_TYPE.donut);
+            widgetData = this.getDonutWidgetData(c, contributor);
+          } else if (c.componentType === WIDGET_TYPE.resultlist) {
+            contentTypes.push(WIDGET_TYPE.resultlist);
+            widgetData = this.getResultlistWidgetData(c, contributor);
+          }
+          widget.setControl('widgetData', widgetData);
 
+          (newGroup.controls.content as FormArray).push(widget);
+          this.analyticsInitService.createPreviewContributor(newGroup, widget);
+        });
         newGroup.patchValue({
           icon: analyticGroup.icon,
           title: analyticGroup.title,
-          contentType:
-            isHistogram ? [WIDGET_TYPE.histogram] : isSwimlane ? [WIDGET_TYPE.swimlane] : isMetric ? [WIDGET_TYPE.metric] :
-              isPowerbar ? [WIDGET_TYPE.powerbars] : isDonut ? [WIDGET_TYPE.donut] : isResultlist ? [WIDGET_TYPE.resultlist]
-                : ''
+          contentType: contentTypes
         });
-
-        // TODO manage a list of widgets
-        const widget = this.analyticsInitService.initNewWidget(analyticGroup.components[0].componentType);
-        const contributorId = analyticGroup.components[0].contributorId;
-        const contributor = config.arlas.web.contributors.find(contrib => contrib.identifier === contributorId);
-
-        const widgetData = isHistogram ? this.getHistogramWidgetData(analyticGroup.components[0], contributor) :
-          isSwimlane ? this.getSwimlaneWidgetData(analyticGroup.components[0], contributor) :
-            isMetric ? this.getMetricWidgetData(analyticGroup.components[0], contributor) :
-              isPowerbar ? this.getPowerbarWidgetData(analyticGroup.components[0], contributor) :
-                isDonut ? this.getDonutWidgetData(analyticGroup.components[0], contributor) :
-                  isResultlist ? this.getResultlistWidgetData(analyticGroup.components[0], contributor) :
-                    new FormGroup({});
-        widget.setControl('widgetData', widgetData);
-
-        (newGroup.controls.content as FormArray).push(widget);
-        this.analyticsInitService.createPreviewContributor(newGroup, widget);
-
         ((tab.controls.contentFg as FormGroup).controls.groupsFa as FormArray).push(newGroup);
-
       });
     }
 
@@ -213,15 +215,18 @@ export class AnalyticsImportService {
         control: renderStep.paletteColors
       },
       {
-        value: swimlaneInput.swimlaneOptions.zerosColor === this.defaultValuesService.getDefaultConfig().swimlaneZeroColor,
+        value: !!swimlaneInput && !!swimlaneInput.swimlaneOptions &&
+          swimlaneInput.swimlaneOptions.zerosColor === this.defaultValuesService.getDefaultConfig().swimlaneZeroColor,
         control: renderStep.isZeroRepresentative
       },
       {
-        value: swimlaneInput.swimlaneOptions.zerosColor,
+        value: !!swimlaneInput && !!swimlaneInput.swimlaneOptions &&
+          swimlaneInput.swimlaneOptions.zerosColor ? swimlaneInput.swimlaneOptions.zerosColor : '#333',
         control: renderStep.zerosColors
       },
       {
-        value: swimlaneInput.swimlaneOptions.nanColor,
+        value: !!swimlaneInput && !!swimlaneInput.swimlaneOptions &&
+          swimlaneInput.swimlaneOptions.nanColor ? swimlaneInput.swimlaneOptions.nanColor : '#333',
         control: renderStep.NaNColor
       }
     ]);
@@ -329,7 +334,6 @@ export class AnalyticsImportService {
     const widgetData = this.metricFormBuilder.build();
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
-
     importElements([
       {
         value: contributor.title,
