@@ -190,7 +190,7 @@ export class MapImportService {
       geometryStep: {
       },
       visibilityStep: {
-        visible: layer.layout.visibility === VISIBILITY.visible,
+        visible: (!!layer.layout && !!layer.layout.visibility) ? layer.layout.visibility === VISIBILITY.visible : true,
         zoomMin: layer.minzoom,
         zoomMax: layer.maxzoom,
       },

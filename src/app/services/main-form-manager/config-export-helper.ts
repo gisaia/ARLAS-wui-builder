@@ -69,7 +69,6 @@ export class ConfigExportHelper {
         analyticsConfigList: FormArray,
         keysToColorList: FormArray,
     ): any {
-
         const chipssearch: ChipSearchConfig = {
             name: searchConfigGlobal.customControls.name.value,
             icon: searchConfigGlobal.customControls.unmanagedFields.icon.value
@@ -568,7 +567,6 @@ export class ConfigExportHelper {
     }
 
     public static getAnalyticsGroup(tabName: string, group: any, groupIndex: number) {
-
         const groupAnalytic = {
             groupId: tabName + '-' + groupIndex.toString(),
             title: group.title,
@@ -576,12 +574,9 @@ export class ConfigExportHelper {
             icon: group.icon,
             components: []
         } as AnalyticConfig;
-
-
         group.content.forEach(widget => {
             groupAnalytic.components.push(this.getAnalyticsComponent(widget.widgetType, widget.widgetData));
         });
-
         return groupAnalytic;
     }
 
@@ -597,7 +592,6 @@ export class ConfigExportHelper {
     }
 
     private static getAnalyticsComponent(widgetType: any, widgetData: any): AnalyticComponentConfig {
-
         const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
         if ([WIDGET_TYPE.histogram, WIDGET_TYPE.swimlane].indexOf(widgetType) >= 0) {
             const component = {
@@ -615,7 +609,8 @@ export class ConfigExportHelper {
                     chartTitle: widgetData.dataStep.name,
                     chartWidth: 445, // TODO generated from colspan
                     chartHeight: 100, // TODO generated from colspan
-                    customizedCssClass: 'arlas-histogram-analytics', // TODO generated from colspan
+                    customizedCssClass: widgetData.dataStep.aggregation.aggregationFieldType === 'numeric' ? 'arlas-histogram-analytics' :
+                        'arlas-timeline-analytics',
                     xAxisPosition: unmanagedRenderFields.xAxisPosition,
                     descriptionPosition: unmanagedRenderFields.descriptionPosition,
                     xTicks: unmanagedRenderFields.xTicks,
@@ -628,9 +623,7 @@ export class ConfigExportHelper {
                     showYLabels: unmanagedRenderFields.showYLabels,
                     showHorizontalLines: widgetData.renderStep.showHorizontalLines,
                     barWeight: unmanagedRenderFields.barWeight,
-                    dataType:
-                        widgetData.dataStep.aggregation.aggregationFieldType === CollectionReferenceDescriptionProperty.TypeEnum.DATE ?
-                            'time' : 'numeric'
+                    dataType: widgetData.dataStep.aggregation.aggregationFieldType
                 } as AnalyticComponentInputConfig
             } as AnalyticComponentConfig;
 
