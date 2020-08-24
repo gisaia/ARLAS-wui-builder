@@ -609,7 +609,8 @@ export class ConfigExportHelper {
                     chartTitle: widgetData.dataStep.name,
                     chartWidth: 445, // TODO generated from colspan
                     chartHeight: 100, // TODO generated from colspan
-                    customizedCssClass: 'arlas-histogram-analytics', // TODO generated from colspan
+                    customizedCssClass: widgetData.dataStep.aggregation.aggregationFieldType === 'numeric' ? 'arlas-histogram-analytics' :
+                        'arlas-timeline-analytics',
                     xAxisPosition: unmanagedRenderFields.xAxisPosition,
                     descriptionPosition: unmanagedRenderFields.descriptionPosition,
                     xTicks: unmanagedRenderFields.xTicks,
@@ -622,9 +623,7 @@ export class ConfigExportHelper {
                     showYLabels: unmanagedRenderFields.showYLabels,
                     showHorizontalLines: widgetData.renderStep.showHorizontalLines,
                     barWeight: unmanagedRenderFields.barWeight,
-                    dataType:
-                        widgetData.dataStep.aggregation.aggregationFieldType === CollectionReferenceDescriptionProperty.TypeEnum.DATE ?
-                            'time' : 'numeric'
+                    dataType: widgetData.dataStep.aggregation.aggregationFieldType
                 } as AnalyticComponentInputConfig
             } as AnalyticComponentConfig;
 

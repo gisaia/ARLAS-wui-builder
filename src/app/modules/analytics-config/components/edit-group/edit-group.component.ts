@@ -115,7 +115,6 @@ export class EditGroupComponent implements OnInit {
 
   public editWidget(widgetIndex: number) {
     const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup;
-    console.log(this.content.controls[0].value)
     this.dialog.open(EditWidgetDialogComponent, {
       data: {
         widgetType: widgetFg.value.widgetType,
