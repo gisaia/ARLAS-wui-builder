@@ -33,7 +33,7 @@
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
             <mat-option *ngIf="typedControl.optional"></mat-option>
             <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value"
-                [ngClass]="'option-color-' + opt.value">
+                [ngClass]="'option-color-' + opt.value" [matTooltip]="opt.label | translate">
                 {{opt.label | translate}}
             </mat-option>
         </mat-select>
@@ -47,7 +47,7 @@
             [ngStyle]="{'backgroundImage': typedControl.value ? 'linear-gradient(to left, ' + typedControl.getCurrentOption().label + ')' : null}">
             <mat-option *ngIf="typedControl.optional"></mat-option>
             <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value"
-                [ngStyle]="{'backgroundImage': 'linear-gradient(to left, ' + opt.label + ')'}">
+                [ngStyle]="{'backgroundImage': 'linear-gradient(to left, ' + opt.label + ')'}" [matTooltip]="opt.label | translate">
             </mat-option>
         </mat-select>
     </mat-form-field>
@@ -67,7 +67,7 @@
         </button>
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
             <mat-option *ngIf="typedControl.optional"></mat-option>
-            <mat-option *ngFor="let opt of typedControl.filteredOptions" [value]="opt.value">
+            <mat-option *ngFor="let opt of typedControl.filteredOptions" [value]="opt.value" [matTooltip]="opt.label | translate">
                 {{opt.label | translate}}
             </mat-option>
         </mat-autocomplete>
@@ -81,7 +81,7 @@
             <mat-label>{{ typedControl.label | translate}}</mat-label>
             <mat-select #selectSort>
                 <mat-option *ngIf="typedControl.optional"></mat-option>
-                <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value">
+                <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value" [matTooltip]="opt.label | translate">
                     {{opt.label | translate}}
                 </mat-option>
             </mat-select>
@@ -123,7 +123,7 @@
                             [formControl]="typedControl.fieldCtrl">
 
                         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                            <mat-option *ngFor="let opt of typedControl.autocompleteFilteredFields" [value]="opt.value">
+                            <mat-option *ngFor="let opt of typedControl.autocompleteFilteredFields" [value]="opt.value" [matTooltip]="opt.label | translate">
                                 {{opt.label | translate}}
                             </mat-option>
                         </mat-autocomplete>
@@ -167,7 +167,7 @@
                             [formControl]="typedControl.fieldCtrl">
 
                         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                            <mat-option *ngFor="let opt of typedControl.autocompleteFilteredFields" [value]="opt.value">
+                            <mat-option *ngFor="let opt of typedControl.autocompleteFilteredFields" [value]="opt.value" [matTooltip]="opt.label | translate">
                                 {{opt.label | translate}}
                             </mat-option>
                         </mat-autocomplete>
