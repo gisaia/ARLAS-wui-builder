@@ -81,7 +81,13 @@ export class HistogramFormGroup extends ConfigFormGroup {
             marker('Date format'),
             marker('Date format description'),
             false,
-            Object.keys(DateFormats).map(df => ({ value: DateFormats[df], label: df }))
+            Object.keys(DateFormats).map(df => ({ value: DateFormats[df], label: df + '  (' + DateFormats[df] + ')' })),
+            {
+              optional: true,
+              dependsOn: () => [this.customControls.dataStep.aggregation],
+              onDependencyChange: (control) =>
+                control.enableIf(this.customControls.dataStep.aggregation.value.aggregationFieldType === 'time')
+            }
           )
         }).withTabName(marker('Render')),
         unmanagedFields: new FormGroup({
