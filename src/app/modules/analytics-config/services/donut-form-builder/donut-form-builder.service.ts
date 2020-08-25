@@ -120,7 +120,7 @@ export class DonutConfigForm extends ConfigFormGroup {
                 || Array.from(this.customControls.dataStep.aggregationmodels.value).length === 0;
             }
           })
-      }).withTabName('Render'),
+      }).withTabName(marker('Render')),
       unmanagedFields: new FormGroup({
         renderStep: new FormGroup({
           customizedCssClass: new FormControl(),

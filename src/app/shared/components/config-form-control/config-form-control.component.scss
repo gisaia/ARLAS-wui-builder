@@ -65,7 +65,7 @@ mat-option {
 
 .order-select-form-control {
     mat-form-field {
-        width: 180px;
+        width: fit-content;
         &.sort-list {
             width: 50%;
         }
@@ -128,7 +128,8 @@ mat-option {
 .color-preview-form-control {
     margin: 10px 0px;
     .color-preview {
-        width: 180px;
+        width: fit-content;
         height: 35px;
     }
 }
+

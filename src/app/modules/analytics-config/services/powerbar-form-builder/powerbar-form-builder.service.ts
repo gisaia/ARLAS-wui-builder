@@ -135,7 +135,7 @@ export class PowerbarConfigForm extends ConfigFormGroup {
           marker('Display the filter'),
           marker('powerbar display filter description')
         )
-      }).withTabName(marker('Data')),
+      }).withTabName(marker('Render')),
       unmanagedFields: new FormGroup({}) // for consistency with other widgets form builders
     });
   }
