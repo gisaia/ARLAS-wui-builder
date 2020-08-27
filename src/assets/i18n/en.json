@@ -342,5 +342,17 @@
     "Connection":"Connection",
     "Continue":"Continue",
     "Unauthorized action":"Unauthorized action",
-    "You are not authorized to access at this ressource.":"You are not authorized to access at this ressource."
+	"You are not authorized to access at this ressource.":"You are not authorized to access at this ressource.",
+	"layer description": "A layer helps you analyse a geographical information in your collection. You can customise what geographical data to display and how to render it.",
+	"visualisation set description": "A visualisation set is a space where to organise layers that have to be displayed/hidden together.",
+	"Visualisation sets": "Visualisation sets",
+	"Add visualisation": "Add a Visualisation set",
+	"Displayed by default":"Displayed by default",
+	"Displayed": "Displayed by default",
+	"Name of the visualisation set.": "Name of the visualisation set",
+	"When loading the map, this visualisation sets is displayed/not displayed.": "When the map is loaded, the layers put in this Visualisation set will be displayed/hidden",
+	"Edit a visualisation set": "Edit a visualisation set",
+	"Edit a layer": "Edit a layer",
+	"The layer can be put in one or several visualisation sets": "The layer can be put in one or several visualisation sets",
+	"At least one visualisation set should be assigned to this layer": "At least one visualisation set should be assigned to this layer"
 }

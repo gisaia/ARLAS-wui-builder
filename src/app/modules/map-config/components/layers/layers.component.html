@@ -1,6 +1,11 @@
-<button mat-raised-button color="primary" class="add-layer" [routerLink]="['add']" queryParamsHandling="preserve">
-    {{'Add layer' | translate}}
-</button>
+<div style="display: flex; margin: 10px 0">
+    <button mat-raised-button color="primary" class="add-layer" [routerLink]="['add']" queryParamsHandling="preserve">
+        {{'Add layer' | translate}}
+    </button>
+    <div class="description">
+        {{'layer description' | translate}}
+    </div>
+</div>
 
 <table mat-table [dataSource]="layersFa.value" class="mat-elevation-z8">
 

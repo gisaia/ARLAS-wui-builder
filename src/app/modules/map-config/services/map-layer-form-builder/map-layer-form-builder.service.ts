@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormArray } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup, ValidatorFn } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -76,6 +76,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         marker('The layer can be put in one or several visualisation sets'),
         vFa.value,
         {
+          validators: [requireCheckboxesToBeCheckedValidator()],
           dependsOn: () => [this.customControls.name],
           onDependencyChange: (control: VisualisationCheckboxFormControl) => {
             // updates the selected layers en each visualisation set
@@ -548,4 +549,24 @@ export class MapLayerFormBuilderService {
   }
 
 
+}
+
+export function requireCheckboxesToBeCheckedValidator(minRequired = 1): ValidatorFn {
+  return function validate(formGroup: FormGroup) {
+    let checked = 0;
+    if (formGroup.value) {
+      formGroup.value.forEach((key) => {
+        if (key.include) {
+          checked ++;
+        }
+      });
+    }
+
+    if (checked < minRequired) {
+      return {
+        requireCheckboxesToBeChecked: true,
+      };
+    }
+    return null;
+  };
 }

@@ -64,25 +64,6 @@ export class VisualisationsComponent implements OnInit {
 
   }
 
-  public getLayer(layerFg, modeValues, paint) {
-
-    const sourceName = layerFg.mode === LAYER_MODE.features ? 'feature' :
-      (layerFg.mode === LAYER_MODE.featureMetric ? 'feature-metric' : 'cluster');
-
-    const layer: LayerMap = {
-      id: layerFg.name,
-      type: modeValues.styleStep.geometryType,
-      source: sourceName,
-      minzoom: modeValues.visibilityStep.zoomMin,
-      maxzoom: modeValues.visibilityStep.zoomMax,
-      layout: {
-        visibility: modeValues.visibilityStep.visible ? VISIBILITY.visible : VISIBILITY.none
-      },
-      paint
-    };
-    return layer;
-  }
-
   public camelize(text: string): string {
     return camelize(text);
   }

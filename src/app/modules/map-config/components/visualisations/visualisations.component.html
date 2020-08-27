@@ -1,6 +1,11 @@
-<button mat-raised-button color="primary" class="add-layer" [routerLink]="['add']" queryParamsHandling="preserve">
-    {{'Add visualisation' | translate}}
-</button>
+<div style="display: flex; margin: 10px 0">
+    <button mat-raised-button color="primary" class="add-visu" [routerLink]="['add']" queryParamsHandling="preserve">
+        {{'Add visualisation' | translate}}
+    </button>
+    <div class="description">
+        {{'visualisation set description' | translate}}
+    </div>
+</div>
 
 <table mat-table [dataSource]="visualisationsFa.value" class="mat-elevation-z8">
 

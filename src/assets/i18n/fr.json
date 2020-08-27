@@ -11,7 +11,7 @@
 	"Analytics configuration": "Configuration des widgets",
 	"Side modules configuration": "Configuration des autres composants",
 	"Look 'n fell configuration": "Look 'n fell configuration?",
-	"Exit without saving ?": "Quitter sans sauvegarder?",
+	"Exit without saving ?": "quitter sans sauvegarder?",
 	"delete this group": "Supprimer ce groupe",
 	"Aggregation field": "Champs d'aggregation",
 	"Aggregation field description": "",
@@ -345,5 +345,17 @@
     "Connection":"Connexion",
     "Continue":"Continuer",
     "Unauthorized action":"Action non autorisée",
-    "You are not authorized to access at this ressource.":"Vous n'êtes pas autorisé à accéder à cette ressource."
+    "You are not authorized to access at this ressource.":"Vous n'êtes pas autorisé à accéder à cette ressource.",
+	"layer description": "Une couche cartographique vous permet d'analyser une donnée géographique présente dans la collection. Vous pouvez personnaliser la donnée géographique à afficher et le rendu de cette donnée.",
+	"visualisation set description": "Un espace de visualisation est destiné à y placer des couches cartographiques qui seront affichées/masquées ensemble.",
+	"Visualisation sets": "Espaces de visualisation",
+	"Add visualisation": "Ajouter un Espace de visualisation",
+	"Displayed by default": "Affiché par défaut",
+	"Displayed": "Affiché par défaut",
+	"Name of the visualisation set.": "Nom de l'Espace de visualisation",
+	"When loading the map, this visualisation sets is displayed/not displayed.": "Au chargement de la carte, les couches cartagoraphiques placées dans cet espace seront affichées/masquées",
+	"Edit a visualisation set": "Editer un Espace de visualisation",
+	"Edit a layer": "Editer une couche cartographique",
+	"The layer can be put in one or several visualisation sets": "Placer la couche cartographique dans un ou plusieurs Espaces de visualisation",
+	"At least one visualisation set should be assigned to this layer": "La couche cartographique doit être placée dans, au moins, un Espace de travail."
 }

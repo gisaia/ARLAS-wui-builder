@@ -260,6 +260,7 @@ export class SlideToggleFormControl extends ConfigFormControl {
 
 export class VisualisationCheckboxFormControl extends ConfigFormControl {
     public syncOptions: Array<VisualisationCheckboxOption> = [];
+    public hasLayer = false;
 
     constructor(
         formState: any,
@@ -278,6 +279,8 @@ export class VisualisationCheckboxFormControl extends ConfigFormControl {
     }
     public setSyncOptions(newOptions: Array<VisualisationCheckboxOption>) {
         this.syncOptions = newOptions;
+        this.hasLayer = this.syncOptions.filter(s => s.include).length > 0;
+        this.updateValueAndValidity();
     }
 
     public addLayer(add: MatCheckboxChange, vs: string) {
@@ -292,6 +295,7 @@ export class VisualisationCheckboxFormControl extends ConfigFormControl {
         }
         const set = new Set(visu.layers);
         visu.include = add.checked;
+        this.setSyncOptions(this.syncOptions);
     }
 }
 

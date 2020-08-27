@@ -123,24 +123,13 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
       this.logger.warn('validation failed', this.layerFg);
       return;
     }
-
-    if (!this.isNewLayer()) {
-      // delete current layer in order to recreate it with a new id
-      const layerIndex = this.getLayerIndex(this.layerFg.customControls.id.value);
-      if (layerIndex >= 0) {
-        this.layersFa.removeAt(layerIndex);
-      } else {
-        this.logger.error('There was an error while saving the layer, unknown layer ID');
-      }
-    }
-
-    const newId = this.layersValues.reduce((acc, val) => acc.id > val.id ? acc.id : val.id, 0) + 1;
-    this.layerFg.customControls.id.setValue(newId);
     const savedVisualisations = this.layerFg.customControls.visualisation.syncOptions;
-    // update visualisations form array
     const visualisationValue = this.visualisationsFa.value;
     const layerName = this.layerFg.customControls.name.value;
     if (savedVisualisations.length <= 1 && this.visualisationsFa.length === 0) {
+      // if we create a layer and there is no visualisation set yet, then
+      // we create a visualisation set called 'All layers' and assign the
+      // layer to it
       const visualisationFg = this.mapVisualisationFormBuilder.buildVisualisation();
       visualisationFg.customControls.displayed.setValue(true);
       visualisationFg.customControls.name.setValue('All layers');
@@ -148,6 +137,8 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
       visualisationFg.customControls.id.setValue(0);
       this.visualisationsFa.insert(0, visualisationFg);
     } else {
+      // we update the visualisations form array base on the checked visualisations of the
+      // created/edited layer
       visualisationValue.forEach(v => {
         const visu = savedVisualisations.find(vs => vs.name === v.name);
         const set = new Set(v.layers);
@@ -156,7 +147,18 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
       });
       this.visualisationsFa.setValue(visualisationValue);
     }
-    this.layersFa.insert(newId, this.layerFg);
+    if (!this.isNewLayer()) {
+      const layerIndex = this.getLayerIndex(this.layerFg.customControls.id.value);
+      if (layerIndex < 0) {
+        this.logger.error('There was an error while saving the layer, unknown layer ID');
+      }
+      this.layersFa.setControl(layerIndex, this.layerFg);
+    } else {
+      const newId = this.layersValues.reduce((acc, val) => acc.id > val.id ? acc.id : val.id, 0) + 1;
+      this.layerFg.customControls.id.setValue(newId);
+      this.layersFa.insert(newId, this.layerFg);
+    }
+
     this.layerFg.markAsPristine();
     this.navigateToParentPage();
   }
