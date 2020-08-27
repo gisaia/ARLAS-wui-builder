@@ -24,6 +24,8 @@ import { LayersComponent } from './components/layers/layers.component';
 import { EditLayerComponent } from './components/edit-layer/edit-layer.component';
 import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
 import { PreviewComponent } from './components/preview/preview.component';
+import { VisualisationsComponent } from './components/visualisations/visualisations.component';
+import { EditVisualisationComponent } from './components/edit-visualisation/edit-visualisation.component';
 
 
 const routes: Routes = [
@@ -37,6 +39,13 @@ const routes: Routes = [
           { path: '', component: LayersComponent, pathMatch: 'full' },
           { path: 'add', component: EditLayerComponent, canDeactivate: [ConfirmExitGuard] },
           { path: 'edit/:id', component: EditLayerComponent, canDeactivate: [ConfirmExitGuard] }
+        ]
+      },
+      {
+        path: 'visualisations', children: [
+          { path: '', component: VisualisationsComponent, pathMatch: 'full' },
+          { path: 'add', component: EditVisualisationComponent, canDeactivate: [ConfirmExitGuard] },
+          { path: 'edit/:id', component: EditVisualisationComponent, canDeactivate: [ConfirmExitGuard] }
         ]
       }
     ]

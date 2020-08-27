@@ -58,6 +58,12 @@ export class MapConfigComponent implements OnInit {
         && isFullyTouched(this.mainFormService.mapConfig.getGlobalFg())
     },
     {
+      routeurLink: 'visualisations', label: 'Visualisation sets',
+      hasError: () => !!this.mainFormService.mapConfig.getGlobalFg()
+        && this.mainFormService.mapConfig.getGlobalFg().invalid
+        && isFullyTouched(this.mainFormService.mapConfig.getGlobalFg())
+    },
+    {
       routeurLink: 'layers', label: 'Layers',
       hasError: () => !!this.mainFormService.mapConfig.getLayersFa()
         && this.mainFormService.mapConfig.getLayersFa().invalid

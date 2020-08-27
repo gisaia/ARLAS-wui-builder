@@ -40,6 +40,18 @@
     </mat-form-field>
 </div>
 
+<div *ngIf="isCheckbox(); let typedControl">
+        <mat-label>{{ typedControl.label | translate}}</mat-label>
+        <div *ngIf="!typedControl.syncOptions || typedControl.syncOptions.length == 0">
+            <mat-checkbox (change)="typedControl.addLayer($event, 'All layers')"  [checked]="true" [disabled]="true" ></mat-checkbox>
+            <span style="font-size: 0.9em; color: #444; margin-left: 5px;">{{'All layers' | translate}}</span>
+        </div>
+        <div *ngFor="let opt of typedControl.syncOptions">
+            <mat-checkbox [checked]="opt.include || typedControl.syncOptions.length === 1" [disabled]="typedControl.syncOptions.length === 1" (change)="typedControl.addLayer($event, opt.name)"  ></mat-checkbox>
+            <span style="font-size: 0.9em; color: #444; margin-left: 5px;">{{opt.name}}</span>
+        </div>
+</div>
+
 <div *ngIf="isHuePalette(); let typedControl" class="control-hue-palette">
     <mat-form-field>
         <mat-label>{{ typedControl.label | translate}}</mat-label>

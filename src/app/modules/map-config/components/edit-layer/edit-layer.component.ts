@@ -26,6 +26,8 @@ import { LAYER_MODE } from './models';
 import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { KeywordColor } from '../dialog-color-table/models';
+// tslint:disable-next-line: max-line-length
+import { MapVisualisationFormBuilderService } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 
 @Component({
   selector: 'app-edit-layer',
@@ -35,6 +37,7 @@ import { KeywordColor } from '../dialog-color-table/models';
 export class EditLayerComponent implements OnInit, CanComponentExit, AfterContentChecked {
 
   private layersFa: FormArray;
+  private visualisationsFa: FormArray;
   private layersValues: any[] = [];
   public forceCanExit: boolean;
   public LAYER_MODE = LAYER_MODE;
@@ -44,6 +47,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
 
   constructor(
     protected mapLayerFormBuilder: MapLayerFormBuilderService,
+    protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
     private mainFormService: MainFormService,
     private route: ActivatedRoute,
     private cdref: ChangeDetectorRef,
@@ -56,6 +60,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
   public ngOnInit() {
 
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
+    this.visualisationsFa = this.mainFormService.mapConfig.getVisualisationsFa();
 
     if (this.layersFa == null) {
       this.logger.error('Error initializing the page, layers form group is missing');
@@ -131,6 +136,26 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
 
     const newId = this.layersValues.reduce((acc, val) => acc.id > val.id ? acc.id : val.id, 0) + 1;
     this.layerFg.customControls.id.setValue(newId);
+    const savedVisualisations = this.layerFg.customControls.visualisation.syncOptions;
+    // update visualisations form array
+    const visualisationValue = this.visualisationsFa.value;
+    const layerName = this.layerFg.customControls.name.value;
+    if (savedVisualisations.length <= 1 && this.visualisationsFa.length === 0) {
+      const visualisationFg = this.mapVisualisationFormBuilder.buildVisualisation();
+      visualisationFg.customControls.displayed.setValue(true);
+      visualisationFg.customControls.name.setValue('All layers');
+      visualisationFg.customControls.layers.setValue([layerName]);
+      visualisationFg.customControls.id.setValue(0);
+      this.visualisationsFa.insert(0, visualisationFg);
+    } else {
+      visualisationValue.forEach(v => {
+        const visu = savedVisualisations.find(vs => vs.name === v.name);
+        const set = new Set(v.layers);
+        visu.include ? set.add(layerName) : set.delete(layerName) ;
+        v.layers = Array.from(set);
+      });
+      this.visualisationsFa.setValue(visualisationValue);
+    }
     this.layersFa.insert(newId, this.layerFg);
     this.layerFg.markAsPristine();
     this.navigateToParentPage();

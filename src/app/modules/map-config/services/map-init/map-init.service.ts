@@ -43,6 +43,10 @@ export class MapInitService {
       new FormArray([], [Validators.required])
     );
 
+    this.mainFormService.mapConfig.initVisualisationsFa(
+      new FormArray([], [Validators.required])
+    );
+
     if (initCollectionFields) {
       this.initCollectionFields();
     }

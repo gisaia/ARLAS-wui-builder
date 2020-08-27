@@ -30,6 +30,8 @@ import { MapConfigComponent } from './map-config.component';
 import { PreviewComponent } from './components/preview/preview.component';
 import { MapglComponent, MapglModule, MapglLayerIconModule, MapglLegendModule } from 'arlas-web-components';
 import { MAT_DIALOG_DATA } from '@angular/material';
+import { VisualisationsComponent } from './components/visualisations/visualisations.component';
+import { EditVisualisationComponent } from './components/edit-visualisation/edit-visualisation.component';
 
 @NgModule({
   entryComponents: [
@@ -44,9 +46,11 @@ import { MAT_DIALOG_DATA } from '@angular/material';
     GlobalMapComponent,
     LayersComponent,
     EditLayerComponent,
+    EditVisualisationComponent,
     DialogColorTableComponent,
     DialogPaletteSelectorComponent,
-    PreviewComponent
+    PreviewComponent,
+    VisualisationsComponent
   ],
   imports: [
     MapConfigRoutingModule,

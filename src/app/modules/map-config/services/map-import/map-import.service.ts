@@ -30,7 +30,9 @@ import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/p
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
 import { COUNT_OR_METRIC } from '@shared-services/property-selector-form-builder/models';
-import { FormControl, FormGroup } from '@angular/forms';
+import { VisualisationSetConfig } from 'arlas-web-components';
+import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
+import { visitAll } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +42,8 @@ export class MapImportService {
   constructor(
     private mainFormService: MainFormService,
     private mapGlobalFormBuilder: MapGlobalFormBuilderService,
-    private mapLayerFormBuilder: MapLayerFormBuilderService
+    private mapLayerFormBuilder: MapLayerFormBuilderService,
+    private mapVisualisationFormBuilder: MapVisualisationFormBuilderService
   ) { }
   public doImport(config: Config, mapConfig: MapConfig) {
 
@@ -48,6 +51,9 @@ export class MapImportService {
     const mapContrib = config.arlas.web.contributors.find(c => c.identifier === 'mapbox');
     const layersSources = mapContrib.layers_sources;
     const layers = mapConfig.layers;
+
+    const visualisationSets: Array<VisualisationSetConfig> = config.arlas.web.components.mapgl.input.visualisations_sets;
+
     const collectionName = config.arlas.server.collection.name;
     let layerId = 0;
 
@@ -55,8 +61,14 @@ export class MapImportService {
 
     layers.forEach(layer => {
       const layerSource = layersSources.find(s => s.id === layer.id);
-      const layerFg = this.importLayer(layer, layerSource, collectionName, layerId++);
+      const layerFg = this.importLayer(layer, layerSource, collectionName, layerId++, visualisationSets);
       this.mainFormService.mapConfig.getLayersFa().push(layerFg);
+    });
+
+    let visuId = 0;
+    visualisationSets.forEach(vs => {
+      const visualisationFg = this.importVisualisations(vs, visuId++);
+      this.mainFormService.mapConfig.getVisualisationsFa().push(visualisationFg);
     });
   }
 
@@ -74,7 +86,6 @@ export class MapImportService {
         mapgl.input.idFeatureField
       )
     );
-
     importElements([
       {
         value: mapContrib.geoQueryOp,
@@ -145,11 +156,34 @@ export class MapImportService {
 
   }
 
+  private importVisualisations(visualisationSet: VisualisationSetConfig, visuId: number) {
+    const visualisationFg = this.mapVisualisationFormBuilder.buildVisualisation();
+    importElements([
+      {
+        value: visualisationSet.name,
+        control: visualisationFg.customControls.name
+      },
+      {
+        value: visualisationSet.enabled,
+        control: visualisationFg.customControls.displayed
+      },
+      {
+        value: visualisationSet.layers,
+        control: visualisationFg.customControls.layers
+      },
+      {
+        value: visuId,
+        control: visualisationFg.customControls.id
+      }
+    ]);
+    return visualisationFg;
+  }
   private importLayer(
     layer: Layer,
     layerSource: LayerSourceConfig,
     collectionName: string,
-    layerId: number) {
+    layerId: number,
+    visualisationSets: Array<VisualisationSetConfig>) {
 
     const type = layer.source.split('-')[0];
     // TODO extract type with toolkit, once it is available (contrary of `getSourceName`)
@@ -157,9 +191,7 @@ export class MapImportService {
       type === 'feature' ? LAYER_MODE.features :
         type === 'cluster' ? LAYER_MODE.cluster :
           null;
-
     const layerFg = this.mapLayerFormBuilder.buildLayer();
-
     importElements([
       {
         value: layer.id,
@@ -168,6 +200,10 @@ export class MapImportService {
       {
         value: layerMode,
         control: layerFg.customControls.mode
+      },
+      {
+        value: visualisationSets,
+        control: layerFg.customControls.visualisation
       },
       {
         value: layerId,
