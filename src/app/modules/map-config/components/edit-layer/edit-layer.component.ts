@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit, AfterContentChecked, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { FormArray, FormGroup, FormControl } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
 import { MainFormService } from '@services/main-form/main-form.service';
@@ -26,8 +26,9 @@ import { LAYER_MODE } from './models';
 import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { KeywordColor } from '../dialog-color-table/models';
-// tslint:disable-next-line: max-line-length
-import { MapVisualisationFormBuilderService } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
+import {
+  MapVisualisationFormBuilderService
+} from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 
 @Component({
   selector: 'app-edit-layer',

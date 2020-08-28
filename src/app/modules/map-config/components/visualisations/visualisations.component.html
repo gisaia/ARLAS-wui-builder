@@ -15,17 +15,17 @@
     </ng-container>
 
     <ng-container matColumnDef="layers">
-        <th mat-header-cell *matHeaderCellDef>{{'Layers' | translate}}</th>
+        <th style="width: 60%;" mat-header-cell *matHeaderCellDef>{{'Layers' | translate}}</th>
         <td mat-cell *matCellDef="let element">
-            <div>
-                <span style="display: block;" *ngFor="let l of element.layers"> - {{l}}</span>
+            <div style="display: flex;">
+                <span style="display: inline-block; margin-right: 5px;" *ngFor="let l of element.layers"> • {{l}}</span>
             </div>
         </td>
     </ng-container>
 
     <ng-container matColumnDef="displayed">
-        <th mat-header-cell *matHeaderCellDef>{{'Displayed by default' | translate}}</th>
-        <td mat-cell *matCellDef="let element"> 
+        <th style="width: 8%; text-align: center;" mat-header-cell *matHeaderCellDef>{{'Displayed by default' | translate}}</th>
+        <td style="text-align: center;" mat-cell *matCellDef="let element"> 
             <mat-checkbox [checked]="element.displayed" [disabled]="true"></mat-checkbox>
         </td>
     </ng-container>
