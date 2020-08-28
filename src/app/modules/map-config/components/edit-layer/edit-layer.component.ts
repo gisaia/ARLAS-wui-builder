@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit, AfterContentChecked, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { FormArray, FormGroup, FormControl } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
 import { MainFormService } from '@services/main-form/main-form.service';
@@ -26,6 +26,9 @@ import { LAYER_MODE } from './models';
 import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { KeywordColor } from '../dialog-color-table/models';
+import {
+  MapVisualisationFormBuilderService
+} from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 
 @Component({
   selector: 'app-edit-layer',
@@ -35,6 +38,7 @@ import { KeywordColor } from '../dialog-color-table/models';
 export class EditLayerComponent implements OnInit, CanComponentExit, AfterContentChecked {
 
   private layersFa: FormArray;
+  private visualisationsFa: FormArray;
   private layersValues: any[] = [];
   public forceCanExit: boolean;
   public LAYER_MODE = LAYER_MODE;
@@ -44,6 +48,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
 
   constructor(
     protected mapLayerFormBuilder: MapLayerFormBuilderService,
+    protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
     private mainFormService: MainFormService,
     private route: ActivatedRoute,
     private cdref: ChangeDetectorRef,
@@ -56,6 +61,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
   public ngOnInit() {
 
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
+    this.visualisationsFa = this.mainFormService.mapConfig.getVisualisationsFa();
 
     if (this.layersFa == null) {
       this.logger.error('Error initializing the page, layers form group is missing');
@@ -118,20 +124,42 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
       this.logger.warn('validation failed', this.layerFg);
       return;
     }
-
+    const savedVisualisations = this.layerFg.customControls.visualisation.syncOptions;
+    const visualisationValue = this.visualisationsFa.value;
+    const layerName = this.layerFg.customControls.name.value;
+    if (savedVisualisations.length <= 1 && this.visualisationsFa.length === 0) {
+      // if we create a layer and there is no visualisation set yet, then
+      // we create a visualisation set called 'All layers' and assign the
+      // layer to it
+      const visualisationFg = this.mapVisualisationFormBuilder.buildVisualisation();
+      visualisationFg.customControls.displayed.setValue(true);
+      visualisationFg.customControls.name.setValue('All layers');
+      visualisationFg.customControls.layers.setValue([layerName]);
+      visualisationFg.customControls.id.setValue(0);
+      this.visualisationsFa.insert(0, visualisationFg);
+    } else {
+      // we update the visualisations form array base on the checked visualisations of the
+      // created/edited layer
+      visualisationValue.forEach(v => {
+        const visu = savedVisualisations.find(vs => vs.name === v.name);
+        const set = new Set(v.layers);
+        visu.include ? set.add(layerName) : set.delete(layerName) ;
+        v.layers = Array.from(set);
+      });
+      this.visualisationsFa.setValue(visualisationValue);
+    }
     if (!this.isNewLayer()) {
-      // delete current layer in order to recreate it with a new id
       const layerIndex = this.getLayerIndex(this.layerFg.customControls.id.value);
-      if (layerIndex >= 0) {
-        this.layersFa.removeAt(layerIndex);
-      } else {
+      if (layerIndex < 0) {
         this.logger.error('There was an error while saving the layer, unknown layer ID');
       }
+      this.layersFa.setControl(layerIndex, this.layerFg);
+    } else {
+      const newId = this.layersValues.reduce((acc, val) => acc.id > val.id ? acc.id : val.id, 0) + 1;
+      this.layerFg.customControls.id.setValue(newId);
+      this.layersFa.insert(newId, this.layerFg);
     }
 
-    const newId = this.layersValues.reduce((acc, val) => acc.id > val.id ? acc.id : val.id, 0) + 1;
-    this.layerFg.customControls.id.setValue(newId);
-    this.layersFa.insert(newId, this.layerFg);
     this.layerFg.markAsPristine();
     this.navigateToParentPage();
   }

@@ -34,6 +34,7 @@ enum MAIN_FORM_KEYS {
   STARTING_CONFIG = 'StartingConfig',
   MAP_CONFIG = 'MapConfig',
   MAP_CONFIG_LAYERS = 'MapConfigLayers',
+  MAP_CONFIG_VISUALISATIONS = 'MapConfigVisualisations',
   MAP_CONFIG_GLOBAL = 'MapConfigGlobal',
   SEARCH_CONFIG = 'SearchConfig',
   SEARCH_CONFIG_GLOBAL = 'SearchConfigGlobal',
@@ -87,8 +88,14 @@ export class MainFormService {
 
     public initGlobalFg = (fg: MapGlobalFormGroup) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL, fg);
     public initLayersFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS, fa);
+    public initVisualisationsFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_VISUALISATIONS, fa);
     public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL) as MapGlobalFormGroup;
-    public getLayersFa = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS) as FormArray;
+    public getLayersFa = () => {
+      return this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS) as FormArray;
+    }
+    public getVisualisationsFa = () => {
+      return this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_VISUALISATIONS) as FormArray;
+    }
 
   }(this.mainForm.get(MAIN_FORM_KEYS.MAP_CONFIG) as FormGroup);
 

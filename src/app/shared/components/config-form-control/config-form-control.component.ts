@@ -24,9 +24,9 @@ import {
   ConfigFormControl, SlideToggleFormControl, SliderFormControl, SelectFormControl, InputFormControl,
   ColorFormControl, HuePaletteFormControl, HiddenFormControl, IconFormControl, ButtonFormControl,
   OrderedSelectFormControl, MetricWithFieldListFormControl as MetricFieldListFormControl, TextareaFormControl,
-  MetricWithFieldListFormControl, FieldWithSizeListFormControl, ButtonToggleFormControl, ColorPreviewFormControl, ComponentFormControl
+  MetricWithFieldListFormControl, FieldWithSizeListFormControl, ButtonToggleFormControl, ColorPreviewFormControl,
+  ComponentFormControl, VisualisationCheckboxFormControl
 } from '@shared-models/config-form';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-config-form-control',
@@ -79,6 +79,11 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
 
   public isSlider(): SliderFormControl | null {
     return Object.getPrototypeOf(this.control) === SliderFormControl.prototype ? this.control as SliderFormControl : null;
+  }
+
+  public isCheckbox(): VisualisationCheckboxFormControl | null {
+    return Object.getPrototypeOf(this.control)
+      === VisualisationCheckboxFormControl.prototype ? this.control as VisualisationCheckboxFormControl : null;
   }
 
   public isSelect(): SelectFormControl | null {

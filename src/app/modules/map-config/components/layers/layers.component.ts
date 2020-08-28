@@ -67,12 +67,12 @@ export class LayersComponent implements OnInit {
   public ngOnInit() {
     this.layersFa.value.map(layer => {
       const modeValues = layer.mode === LAYER_MODE.features ? layer.featuresFg :
-        (layer.mode === LAYER_MODE.featureMetric ? layer.featureMetricFg : layer.clusterFg);
+      (layer.mode === LAYER_MODE.featureMetric ? layer.featureMetricFg : layer.clusterFg);
       const paint = ConfigMapExportHelper.getLayerPaint(modeValues, layer.mode);
       this.layerLegend.set(
         layer.name + '#' + layer.mode,
         { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint) }
-      );
+        );
     });
   }
 

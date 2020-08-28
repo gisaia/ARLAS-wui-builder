@@ -25,6 +25,7 @@ import { CollectionField } from '@services/collection-service/models';
 import { METRIC_TYPES } from '@services/collection-service/collection.service';
 import { toKeywordOptionsObs, toNumericOrDateOptionsObs } from '@services/collection-service/tools';
 import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
+import { MatCheckboxChange } from '@angular/material';
 
 /**
  * These are wrappers above existing FormGroup and FormControl in order to add a custom behavior.
@@ -37,7 +38,11 @@ export interface SelectOption {
     value: any;
     label: any;
 }
-
+export interface VisualisationCheckboxOption {
+    include: boolean;
+    name: any;
+    layers: string[];
+}
 export abstract class ConfigFormControl extends FormControl {
 
     // reference to other controls that depends on this one
@@ -250,6 +255,47 @@ export class SlideToggleFormControl extends ConfigFormControl {
     ) {
 
         super(formState, label, description, { ...optionalParams, ... { optional: true } });
+    }
+}
+
+export class VisualisationCheckboxFormControl extends ConfigFormControl {
+    public syncOptions: Array<VisualisationCheckboxOption> = [];
+    public hasLayer = false;
+
+    constructor(
+        formState: any,
+        label: string,
+        description: string,
+        options: Array<VisualisationCheckboxOption> | Observable<Array<VisualisationCheckboxOption>>,
+        optionalParams?: ControlOptionalParams
+    ) {
+
+        super(formState, label, description, { ...optionalParams, ... { optional: true } });
+        if (options instanceof Observable) {
+            options.subscribe(opts => this.setSyncOptions(opts));
+        } else if (options instanceof Array) {
+            this.setSyncOptions(options);
+        }
+    }
+    public setSyncOptions(newOptions: Array<VisualisationCheckboxOption>) {
+        this.syncOptions = newOptions;
+        this.hasLayer = this.syncOptions.filter(s => s.include).length > 0;
+        this.updateValueAndValidity();
+    }
+
+    public addLayer(add: MatCheckboxChange, vs: string) {
+        let visu = this.syncOptions.find(s => s.name === vs);
+        if (!visu) {
+            visu = {
+                name: vs,
+                layers: [],
+                include: false
+            };
+            this.syncOptions.push(visu);
+        }
+        const set = new Set(visu.layers);
+        visu.include = add.checked;
+        this.setSyncOptions(this.syncOptions);
     }
 }
 
@@ -511,13 +557,16 @@ export class HuePaletteFormControl extends SelectFormControl {
 }
 
 export class HiddenFormControl extends ConfigFormControl {
+    public data: Array<any>;
     constructor(
         formState: any,
         // label can be used to display an error with this label, if it is not valid
         label?: string,
-        optionalParams?: ControlOptionalParams
+        optionalParams?: ControlOptionalParams,
+        options?: Array<any>,
     ) {
         super(formState, label, null, optionalParams);
+        this.data = options;
     }
 }
 

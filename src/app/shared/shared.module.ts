@@ -68,6 +68,7 @@ import { ConfigFormGroupArrayComponent } from './components/config-form-group-ar
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { StartupService } from '@services/startup/startup.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -95,6 +96,7 @@ export function createTranslateLoader(http: HttpClient) {
     MatCardModule,
     MatButtonModule,
     MatFormFieldModule,
+    MatCheckboxModule,
     ColorPickerModule,
     MatSelectModule,
     MatSlideToggleModule,
@@ -168,6 +170,7 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClientModule,
     MatPaginatorModule,
     MatMenuModule,
+    MatCheckboxModule,
     TranslateModule
   ]
 })

@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup, ValidatorFn } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -29,7 +29,7 @@ import {
   ConfigFormGroup, HiddenFormControl,
   InputFormControl,
   OrderedSelectFormControl, SelectFormControl,
-  SliderFormControl, SlideToggleFormControl
+  SliderFormControl, SlideToggleFormControl, VisualisationCheckboxFormControl, VisualisationCheckboxOption
 } from '@shared-models/config-form';
 import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
 import {
@@ -45,6 +45,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
     featuresFg: MapLayerTypeFeaturesFormGroup,
     featureMetricFg: MapLayerTypeFeatureMetricFormGroup,
     clusterFg: MapLayerTypeClusterFormGroup,
+    vFa: FormArray
   ) {
     super({
       name: new InputFormControl(
@@ -67,6 +68,37 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         ],
         {
           resetDependantsOnChange: true
+        }
+      ),
+      visualisation: new VisualisationCheckboxFormControl(
+        '',
+        marker('Visualisation sets'),
+        marker('The layer can be put in one or several visualisation sets'),
+        vFa.value,
+        {
+          validators: [requireCheckboxesToBeCheckedValidator()],
+          dependsOn: () => [this.customControls.name],
+          onDependencyChange: (control: VisualisationCheckboxFormControl) => {
+            // updates the selected layers en each visualisation set
+            const controlsValues = [];
+            vFa.value.forEach(vf => {
+              controlsValues.push({
+                name: vf.name,
+                layers: vf.layers,
+                include: false
+              });
+            });
+            control.setValue(controlsValues);
+            const visualisationControl = control.value as Array<VisualisationCheckboxOption>;
+            const layerName = this.customControls.name.value;
+            // check if the edited layer is already asigned to some visualisation sets
+            // in order to check the checkbox
+            visualisationControl.forEach(v => {
+              v.include = ((new Set(v.layers)).has(layerName));
+            });
+            control.setSyncOptions(visualisationControl);
+          },
+          optional: true
         }
       ),
       id: new HiddenFormControl(
@@ -93,6 +125,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
   public customControls = {
     name: this.get('name') as InputFormControl,
     mode: this.get('mode') as SelectFormControl,
+    visualisation: this.get('visualisation') as VisualisationCheckboxFormControl,
     id: this.get('id') as HiddenFormControl,
     featuresFg: this.get('featuresFg') as MapLayerTypeFeaturesFormGroup,
     featureMetricFg: this.get('featureMetricFg') as MapLayerTypeFeatureMetricFormGroup,
@@ -475,11 +508,11 @@ export class MapLayerFormBuilderService {
     const collectionFields = this.collectionService.getCollectionFields(
       this.mainFormService.getCollections()[0]
     );
-
     const mapLayerFormGroup = new MapLayerFormGroup(
       this.buildFeatures(collectionFields),
       this.buildFeatureMetric(collectionFields),
-      this.buildCluster(collectionFields)
+      this.buildCluster(collectionFields),
+      this.mainFormService.mapConfig.getVisualisationsFa()
     );
     this.defaultValuesService.setDefaultValueRecursively('map.layer', mapLayerFormGroup);
     return mapLayerFormGroup;
@@ -516,4 +549,24 @@ export class MapLayerFormBuilderService {
   }
 
 
+}
+
+export function requireCheckboxesToBeCheckedValidator(minRequired = 1): ValidatorFn {
+  return function validate(formGroup: FormGroup) {
+    let checked = 0;
+    if (formGroup.value) {
+      formGroup.value.forEach((key) => {
+        if (key.include) {
+          checked ++;
+        }
+      });
+    }
+
+    if (checked < minRequired) {
+      return {
+        requireCheckboxesToBeChecked: true,
+      };
+    }
+    return null;
+  };
 }

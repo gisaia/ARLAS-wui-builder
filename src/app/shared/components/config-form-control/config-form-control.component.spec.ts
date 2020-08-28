@@ -5,12 +5,16 @@ import { SlideToggleFormControl } from '@shared-models/config-form';
 import { MockComponent } from 'ng-mocks';
 import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 describe('ConfigFormControlComponent', () => {
   let spectator: Spectator<ConfigFormControlComponent>;
 
   const createComponent = createComponentFactory({
     component: ConfigFormControlComponent,
+    imports: [
+      MatCheckboxModule
+    ],
     declarations: [
       ResetOnChangeDirective,
       AlertOnChangeDirective,
