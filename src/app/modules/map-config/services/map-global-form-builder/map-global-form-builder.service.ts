@@ -24,6 +24,11 @@ import {
 import { Expression } from 'arlas-api';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { toGeoOptionsObs } from '@services/collection-service/tools';
+import { Observable } from 'rxjs';
+import { CollectionField } from '@services/collection-service/models';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { MainFormService } from '@services/main-form/main-form.service';
 
 export class MapGlobalFormGroup extends ConfigFormGroup {
 
@@ -132,7 +137,8 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
 }
 
 export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
-  constructor(collection: string, geometryPath: string, idPath: string) {
+  constructor(collection: string, geometryPath: string, collectionFields: Observable<Array<CollectionField>>,
+    ) {
     super({
       collection: new InputFormControl(
         { value: collection, disabled: true },
@@ -144,22 +150,14 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
         marker('Geographical field'),
         marker('Geographical field description'),
         true,
-        []
-      ),
-      idFeatureField: new SelectFormControl(
-        idPath,
-        marker('Id feature field'),
-        marker('Id feature field description'),
-        true,
-        []
-      ),
+        toGeoOptionsObs(collectionFields),
+      )
     });
   }
 
   public customControls = {
     collection: this.get('collection') as InputFormControl,
-    requestGeom: this.get('requestGeom') as SelectFormControl,
-    idFeatureField: this.get('idFeatureField') as SelectFormControl,
+    requestGeom: this.get('requestGeom') as SelectFormControl
   };
 }
 
@@ -170,6 +168,9 @@ export class MapGlobalFormBuilderService {
 
   constructor(
     private defaultValuesService: DefaultValuesService,
+    private mainFormService: MainFormService,
+    private collectionService: CollectionService
+
   ) { }
 
   public build() {
@@ -178,8 +179,11 @@ export class MapGlobalFormBuilderService {
     return mapGlobalFormGroup;
   }
 
-  public buildRequestGeometry(collection: string, geometryPath: string, idPath: string) {
-    return new MapGlobalRequestGeometryFormGroup(collection, geometryPath, idPath);
+  public buildRequestGeometry(collection: string, geometryPath: string) {
+    const collectionFields = this.collectionService.getCollectionFields(
+      this.mainFormService.getCollections()[0]
+    );
+    return new MapGlobalRequestGeometryFormGroup(collection, geometryPath, collectionFields);
   }
 
 }

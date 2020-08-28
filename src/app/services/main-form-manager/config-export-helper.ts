@@ -214,8 +214,8 @@ export class ConfigExportHelper {
             type: 'map',
             identifier: 'mapbox',
             name: 'map',
-            geoQueryOp: mapConfigGlobal.value.geographicalOperator,
-            geoQueryField: mapConfigGlobal.value.requestGeometries[0].requestGeom,
+            geo_query_op: mapConfigGlobal.value.geographicalOperator,
+            geo_query_field: mapConfigGlobal.value.requestGeometries[0].requestGeom,
             icon: mapConfigGlobal.customControls.unmanagedFields.icon.value,
             layers_sources: []
         };
@@ -642,16 +642,16 @@ export class ConfigExportHelper {
                     swimlaneInput.swimlaneMode = widgetData.renderStep.swimlaneMode;
                     swimlaneInput.swimlaneBorderRadius = unmanagedRenderFields.swimlaneBorderRadius;
                     swimlaneInput.paletteColors = widgetData.renderStep.paletteColors;
-                    swimlaneInput.swimlaneRepresentation = widgetData.renderStep.swimlaneRepresentation;
+                    swimlaneInput.swimlane_representation = widgetData.renderStep.swimlaneRepresentation;
 
                     const swimlaneOptions = {} as AnalyticComponentSwimlaneInputOptionsConfig;
-                    swimlaneOptions.nanColor = widgetData.renderStep.NaNColor;
+                    swimlaneOptions.nan_color = widgetData.renderStep.NaNColor;
 
                     if (!!widgetData.renderStep.zerosColors) {
-                        swimlaneOptions.zerosColor = widgetData.renderStep.zerosColors;
+                        swimlaneOptions.zeros_color = widgetData.renderStep.zerosColors;
                     }
 
-                    swimlaneInput.swimlaneOptions = swimlaneOptions;
+                    swimlaneInput.swimlane_options = swimlaneOptions;
 
                     break;
                 }

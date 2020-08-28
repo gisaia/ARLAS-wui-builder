@@ -82,13 +82,12 @@ export class MapImportService {
     mapGlobalForm.customControls.requestGeometries.push(
       this.mapGlobalFormBuilder.buildRequestGeometry(
         collection,
-        mapContrib.geoQueryField,
-        mapgl.input.idFeatureField
+        mapContrib.geo_query_field
       )
     );
     importElements([
       {
-        value: mapContrib.geoQueryOp,
+        value: mapContrib.geo_query_op.toLowerCase(),
         control: mapGlobalForm.customControls.geographicalOperator
       },
       {
@@ -227,8 +226,8 @@ export class MapImportService {
       },
       visibilityStep: {
         visible: (!!layer.layout && !!layer.layout.visibility) ? layer.layout.visibility === VISIBILITY.visible : true,
-        zoomMin: layer.minzoom,
-        zoomMax: layer.maxzoom,
+        zoomMin: !!layer.minzoom ? layer.minzoom : 0,
+        zoomMax: !!layer.maxzoom ? layer.maxzoom : 24,
       },
       styleStep: {
         colorFg: {
