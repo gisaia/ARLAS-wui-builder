@@ -32,7 +32,6 @@ import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-glob
 import { COUNT_OR_METRIC } from '@shared-services/property-selector-form-builder/models';
 import { VisualisationSetConfig } from 'arlas-web-components';
 import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
-import { visitAll } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -82,13 +81,12 @@ export class MapImportService {
     mapGlobalForm.customControls.requestGeometries.push(
       this.mapGlobalFormBuilder.buildRequestGeometry(
         collection,
-        mapContrib.geoQueryField,
-        mapgl.input.idFeatureField
+        mapContrib.geo_query_field
       )
     );
     importElements([
       {
-        value: mapContrib.geoQueryOp,
+        value: mapContrib.geo_query_op.toLowerCase(),
         control: mapGlobalForm.customControls.geographicalOperator
       },
       {
@@ -227,8 +225,8 @@ export class MapImportService {
       },
       visibilityStep: {
         visible: (!!layer.layout && !!layer.layout.visibility) ? layer.layout.visibility === VISIBILITY.visible : true,
-        zoomMin: layer.minzoom,
-        zoomMax: layer.maxzoom,
+        zoomMin: !!layer.minzoom ? layer.minzoom : 0,
+        zoomMax: !!layer.maxzoom ? layer.maxzoom : 22,
       },
       styleStep: {
         colorFg: {

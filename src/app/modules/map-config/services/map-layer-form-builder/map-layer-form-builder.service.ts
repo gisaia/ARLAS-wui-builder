@@ -168,8 +168,8 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           '',
           marker('Zoom min'),
           marker('zoom min description'),
-          1,
-          20,
+          0,
+          22,
           1,
           () => this.zoomMax
         ),
@@ -177,8 +177,8 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           '',
           marker('Zoom max'),
           marker('zoom max description'),
-          1,
-          20,
+          0,
+          22,
           1,
           undefined,
           () => this.zoomMin

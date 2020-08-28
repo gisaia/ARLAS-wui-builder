@@ -207,7 +207,7 @@ export class AnalyticsImportService {
         control: renderStep.swimlaneMode
       },
       {
-        value: swimlaneInput.swimlaneRepresentation,
+        value: swimlaneInput.swimlane_representation,
         control: renderStep.swimlaneRepresentation
       },
       {
@@ -215,18 +215,18 @@ export class AnalyticsImportService {
         control: renderStep.paletteColors
       },
       {
-        value: !!swimlaneInput && !!swimlaneInput.swimlaneOptions &&
-          swimlaneInput.swimlaneOptions.zerosColor === this.defaultValuesService.getDefaultConfig().swimlaneZeroColor,
+        value: !!swimlaneInput && !!swimlaneInput.swimlane_options &&
+          swimlaneInput.swimlane_options.zeros_color === this.defaultValuesService.getDefaultConfig().swimlaneZeroColor,
         control: renderStep.isZeroRepresentative
       },
       {
-        value: !!swimlaneInput && !!swimlaneInput.swimlaneOptions &&
-          swimlaneInput.swimlaneOptions.zerosColor ? swimlaneInput.swimlaneOptions.zerosColor : '#333',
+        value: !!swimlaneInput && !!swimlaneInput.swimlane_options &&
+          swimlaneInput.swimlane_options.zeros_color ? swimlaneInput.swimlane_options.zeros_color : '#333',
         control: renderStep.zerosColors
       },
       {
-        value: !!swimlaneInput && !!swimlaneInput.swimlaneOptions &&
-          swimlaneInput.swimlaneOptions.nanColor ? swimlaneInput.swimlaneOptions.nanColor : '#333',
+        value: !!swimlaneInput && !!swimlaneInput.swimlane_options &&
+          swimlaneInput.swimlane_options.nan_color ? swimlaneInput.swimlane_options.nan_color : '#333',
         control: renderStep.NaNColor
       }
     ]);

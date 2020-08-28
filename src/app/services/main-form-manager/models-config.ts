@@ -110,8 +110,8 @@ export interface ServerConfig {
 export interface ContributorConfig {
     type: string;
     identifier: string;
-    geoQueryOp?: string;
-    geoQueryField?: string;
+    geo_query_op?: string;
+    geo_query_field?: string;
     layers_sources?: Array<LayerSourceConfig>;
     name: string;
     title?: string;
@@ -226,13 +226,13 @@ export interface AnalyticComponentSwimlaneInputConfig extends AnalyticComponentI
     swimlaneMode: string;
     swimlaneBorderRadius: number;
     paletteColors: [number, number];
-    swimlaneRepresentation: string;
-    swimlaneOptions: AnalyticComponentSwimlaneInputOptionsConfig;
+    swimlane_representation: string;
+    swimlane_options: AnalyticComponentSwimlaneInputOptionsConfig;
 }
 
 export interface AnalyticComponentSwimlaneInputOptionsConfig {
-    zerosColor?: string;
-    nanColor?: string;
+    zeros_color?: string;
+    nan_color?: string;
 }
 
 export interface MapglComponentConfig {
