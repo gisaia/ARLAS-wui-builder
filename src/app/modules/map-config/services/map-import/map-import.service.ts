@@ -227,7 +227,7 @@ export class MapImportService {
       visibilityStep: {
         visible: (!!layer.layout && !!layer.layout.visibility) ? layer.layout.visibility === VISIBILITY.visible : true,
         zoomMin: !!layer.minzoom ? layer.minzoom : 0,
-        zoomMax: !!layer.maxzoom ? layer.maxzoom : 24,
+        zoomMax: !!layer.maxzoom ? layer.maxzoom : 22,
       },
       styleStep: {
         colorFg: {
