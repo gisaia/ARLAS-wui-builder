@@ -441,7 +441,7 @@ export class ConfigExportHelper {
         // TODO use customControls from widgets config form groups, like the Search export
         switch (widgetType) {
             case WIDGET_TYPE.histogram: {
-                const contrib = this.getWidgetContributor(widgetData, icon);
+                const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'histogram';
 
                 const aggregationModel = {
@@ -461,7 +461,7 @@ export class ConfigExportHelper {
                 return contrib;
             }
             case WIDGET_TYPE.swimlane: {
-                const contrib = this.getWidgetContributor(widgetData, icon);
+                const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'swimlane';
                 const swimlane = {
                     id: 1,
@@ -495,7 +495,7 @@ export class ConfigExportHelper {
                 return contrib;
             }
             case WIDGET_TYPE.metric: {
-                const contrib = this.getWidgetContributor(widgetData, icon);
+                const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'metric';
                 contrib.function = !!widgetData.dataStep.function ? widgetData.dataStep.function : 'm[0]';
                 contrib.metrics = Array.from(widgetData.dataStep.metrics);
@@ -503,7 +503,7 @@ export class ConfigExportHelper {
                 return contrib;
             }
             case WIDGET_TYPE.powerbars: {
-                const contrib = this.getWidgetContributor(widgetData, icon);
+                const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'tree';
                 contrib.aggregationmodels = [
                     {
@@ -515,7 +515,7 @@ export class ConfigExportHelper {
                 return contrib;
             }
             case WIDGET_TYPE.donut: {
-                const contrib = this.getWidgetContributor(widgetData, icon);
+                const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'tree';
                 contrib.aggregationmodels = Array.from(widgetData.dataStep.aggregationmodels).map((agg: any) => {
                     agg.type = 'term';
@@ -524,7 +524,7 @@ export class ConfigExportHelper {
                 return contrib;
             }
             case WIDGET_TYPE.resultlist: {
-                const contrib = this.getWidgetContributor(widgetData, icon);
+                const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'resultlist';
                 contrib.search_size = widgetData.dataStep.searchSize;
                 contrib.fieldsConfiguration = { idFieldName: widgetData.dataStep.idFieldName };
@@ -552,9 +552,9 @@ export class ConfigExportHelper {
         }
     }
 
-    private static getWidgetContributor(widgetData: any, icon: string) {
+    private static getWidgetContributor(widgetData: any, widgetType: any, icon: string) {
         return {
-            identifier: this.toSnakeCase(widgetData.dataStep.name),
+            identifier: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
             name: widgetData.dataStep.name,
             title: widgetData.dataStep.name,
             icon,
@@ -595,10 +595,10 @@ export class ConfigExportHelper {
         const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
         if ([WIDGET_TYPE.histogram, WIDGET_TYPE.swimlane].indexOf(widgetType) >= 0) {
             const component = {
-                contributorId: this.toSnakeCase(widgetData.dataStep.name),
+                contributorId: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
                 showExportCsv: unmanagedRenderFields.showExportCsv,
                 input: {
-                    id: this.toSnakeCase(widgetData.dataStep.name),
+                    id: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
                     isHistogramSelectable: unmanagedRenderFields.isHistogramSelectable,
                     multiselectable: !!widgetData.renderStep.multiselectable,
                     topOffsetRemoveInterval: unmanagedRenderFields.topOffsetRemoveInterval,
@@ -661,7 +661,7 @@ export class ConfigExportHelper {
 
         } else if (widgetType === WIDGET_TYPE.metric) {
             const component = {
-                contributorId: this.toSnakeCase(widgetData.dataStep.name),
+                contributorId: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
                 componentType: WIDGET_TYPE.metric,
                 input: {
                     customizedCssClass: unmanagedRenderFields.customizedCssClass,
@@ -679,7 +679,7 @@ export class ConfigExportHelper {
 
         } else if (widgetType === WIDGET_TYPE.powerbars) {
             const component = {
-                contributorId: this.toSnakeCase(widgetData.dataStep.name),
+                contributorId: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
                 componentType: WIDGET_TYPE.powerbars,
                 input: {
                     chartTitle: widgetData.dataStep.name,
@@ -693,10 +693,10 @@ export class ConfigExportHelper {
 
         } else if (widgetType === WIDGET_TYPE.donut) {
             const component = {
-                contributorId: this.toSnakeCase(widgetData.dataStep.name),
+                contributorId: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
                 componentType: WIDGET_TYPE.donut,
                 input: {
-                    id: this.toSnakeCase(widgetData.dataStep.name),
+                    id: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
                     customizedCssClass: unmanagedRenderFields.customizedCssClass,
                     diameter: unmanagedRenderFields.diameter,
                     multiselectable: !!widgetData.renderStep.multiselectable,
@@ -707,10 +707,10 @@ export class ConfigExportHelper {
             return component;
         } else if (widgetType === WIDGET_TYPE.resultlist) {
             const component = {
-                contributorId: this.toSnakeCase(widgetData.dataStep.name),
+                contributorId: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
                 componentType: WIDGET_TYPE.resultlist,
                 input: {
-                    id: this.toSnakeCase(widgetData.dataStep.name),
+                    id: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
                     tableWidth: unmanagedRenderFields.tableWidth,
                     globalActionsList: unmanagedRenderFields.globalActionsList,
                     searchSize: widgetData.dataStep.searchSize,
@@ -805,5 +805,4 @@ export class ConfigExportHelper {
                 .map(x => x.toLowerCase())
                 .join('_');
     }
-
 }

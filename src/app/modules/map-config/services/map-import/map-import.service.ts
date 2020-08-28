@@ -32,7 +32,6 @@ import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-glob
 import { COUNT_OR_METRIC } from '@shared-services/property-selector-form-builder/models';
 import { VisualisationSetConfig } from 'arlas-web-components';
 import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
-import { visitAll } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
