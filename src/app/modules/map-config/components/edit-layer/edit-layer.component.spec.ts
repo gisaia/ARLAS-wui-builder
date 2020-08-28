@@ -11,6 +11,9 @@ import { EditLayerComponent } from './edit-layer.component';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { MapLayerFormBuilderService } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { ConfigFormGroup } from '@shared-models/config-form';
+import {
+  MapVisualisationFormBuilderService
+} from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 
 @Component({ template: '' }) class DummyComponent { }
 
@@ -24,11 +27,15 @@ describe('EditLayerComponent', () => {
     providers: [
       mockProvider(MainFormService, {
         mapConfig: {
-          getLayersFa: () => new FormArray([])
+          getLayersFa: () => new FormArray([]),
+          getVisualisationsFa: () => new FormArray([])
         }
       }),
       mockProvider(MapLayerFormBuilderService, {
         buildLayer: () => new ConfigFormGroup({})
+      }),
+      mockProvider(MapVisualisationFormBuilderService, {
+        buildVisualisation: () => new ConfigFormGroup({})
       })
     ],
     declarations: [
