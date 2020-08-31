@@ -37,8 +37,8 @@ import {
 } from '@shared/services/property-selector-form-builder/property-selector-form-builder.service';
 import { valuesToOptions } from '@utils/tools';
 import { Observable } from 'rxjs';
-import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE, GRANULARITY } from './models';
-
+import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE } from './models';
+import { Granularity } from 'arlas-web-contributors/models/models';
 export class MapLayerFormGroup extends ConfigFormGroup {
 
   constructor(
@@ -357,9 +357,10 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
           marker('Granularity description'),
           false,
           [
-            { label: marker('Coarse'), value: GRANULARITY.coarse },
-            { label: marker('Fine'), value: GRANULARITY.fine },
-            { label: marker('Finest'), value: GRANULARITY.finest },
+            { label: marker('Coarse'), value: Granularity.coarse },
+            { label: marker('Medium'), value: Granularity.medium },
+            { label: marker('Fine'), value: Granularity.fine },
+            { label: marker('Finest'), value: Granularity.finest }
           ],
           {
             title: marker('Granularity')
@@ -405,9 +406,10 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
           marker('Granularity description'),
           false,
           [
-            { label: marker('Coarse'), value: GRANULARITY.coarse },
-            { label: marker('Fine'), value: GRANULARITY.fine },
-            { label: marker('Finest'), value: GRANULARITY.finest },
+            { label: marker('Coarse'), value: Granularity.coarse },
+            { label: marker('Medium'), value: Granularity.medium },
+            { label: marker('Fine'), value: Granularity.fine },
+            { label: marker('Finest'), value: Granularity.finest }
           ]
         ),
         clusterGeometryType: new SelectFormControl(

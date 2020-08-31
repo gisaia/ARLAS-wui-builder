@@ -164,7 +164,7 @@ export class ConfigMapExportHelper {
 
                 ];
                 return densityColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
-                    .flatMap(pc => [(pc.proportion === 0 ? 0.000000000001 : pc.proportion), pc.value]));
+                    .flatMap(pc => [(pc.proportion === 0 ? 0.0000000000001 : pc.proportion), pc.value]));
             }
         }
     }
