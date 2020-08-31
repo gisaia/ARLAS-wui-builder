@@ -19,7 +19,7 @@ under the License.
 import { Injectable } from '@angular/core';
 import { FormArray, FormGroup, FormControl } from '@angular/forms';
 import {
-  ConfigFormGroup, SelectFormControl, SliderFormControl, InputFormControl, SlideToggleFormControl, ConfigFormGroupArray
+  ConfigFormGroup, SelectFormControl, SliderFormControl, InputFormControl, SlideToggleFormControl, ConfigFormGroupArray, HiddenFormControl
 } from '@shared-models/config-form';
 import { Expression } from 'arlas-api';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
@@ -137,7 +137,7 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
 }
 
 export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
-  constructor(collection: string, geometryPath: string, collectionFields: Observable<Array<CollectionField>>,
+  constructor(collection: string, geometryPath: string, idPath: string, collectionFields: Observable<Array<CollectionField>>,
     ) {
     super({
       collection: new InputFormControl(
@@ -151,6 +151,16 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
         marker('Geographical field description'),
         true,
         toGeoOptionsObs(collectionFields),
+      ),
+      idPath: new HiddenFormControl(
+        idPath,
+        null,
+        {
+          onDependencyChange: (control) => {
+            control.setValue(idPath);
+          },
+          optional: false
+        }
       )
     });
   }
@@ -179,11 +189,11 @@ export class MapGlobalFormBuilderService {
     return mapGlobalFormGroup;
   }
 
-  public buildRequestGeometry(collection: string, geometryPath: string) {
+  public buildRequestGeometry(collection: string, geometryPath: string, idPath: string) {
     const collectionFields = this.collectionService.getCollectionFields(
       this.mainFormService.getCollections()[0]
     );
-    return new MapGlobalRequestGeometryFormGroup(collection, geometryPath, collectionFields);
+    return new MapGlobalRequestGeometryFormGroup(collection, geometryPath, idPath, collectionFields);
   }
 
 }

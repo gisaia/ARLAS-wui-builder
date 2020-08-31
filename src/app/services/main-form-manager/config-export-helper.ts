@@ -49,6 +49,7 @@ import {
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import { VisualisationSetConfig } from 'arlas-web-components';
+import { titleCase } from '@services/collection-service/tools';
 
 export enum EXPORT_TYPE {
     json = 'json',
@@ -215,7 +216,7 @@ export class ConfigExportHelper {
             type: 'map',
             identifier: 'mapbox',
             name: 'map',
-            geo_query_op: mapConfigGlobal.value.geographicalOperator,
+            geo_query_op: titleCase(mapConfigGlobal.value.geographicalOperator),
             geo_query_field: mapConfigGlobal.value.requestGeometries[0].requestGeom,
             icon: mapConfigGlobal.customControls.unmanagedFields.icon.value,
             layers_sources: []
@@ -272,7 +273,7 @@ export class ConfigExportHelper {
                     customControls.initCenterLon.value
                 ],
                 displayScale: customControls.displayScale.value,
-                idFeatureField: customControls.requestGeometries.value[0].idFeatureField,
+                idFeatureField: customControls.requestGeometries.value[0].idPath,
                 mapLayers: {
                     layers: [],
                     events: {

@@ -60,7 +60,8 @@ export class MapInitService {
         this.mainFormService.mapConfig.getGlobalFg().customControls.requestGeometries.push(
           this.mapGlobalFormBuilder.buildRequestGeometry(
             collection,
-            params.params.geometry_path
+            params.params.geometry_path,
+            params.params.id_path
           )
         );
       });
