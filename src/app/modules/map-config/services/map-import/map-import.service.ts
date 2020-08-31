@@ -81,7 +81,8 @@ export class MapImportService {
     mapGlobalForm.customControls.requestGeometries.push(
       this.mapGlobalFormBuilder.buildRequestGeometry(
         collection,
-        mapContrib.geo_query_field
+        mapContrib.geo_query_field,
+        mapgl.input.idFeatureField
       )
     );
     importElements([

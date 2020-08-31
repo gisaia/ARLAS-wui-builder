@@ -102,3 +102,7 @@ export function toTextOrKeywordOptionsObs(collectionFieldsObs: Observable<Array<
         fields => fields
             .filter(f => f.type === TypeEnum.KEYWORD || f.type === TypeEnum.TEXT))));
 }
+
+export function titleCase(str) {
+    return str.toLowerCase().replace(/./, (x) => x.toUpperCase()).replace(/[^']\b\w/g, (y) => y.toUpperCase());
+}
