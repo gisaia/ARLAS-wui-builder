@@ -80,7 +80,7 @@ export class LeftMenuComponent {
 
   public pages: Page[] = [
     {
-      name: 'Map',
+      name: this.translate.instant('Map'),
       link: '/map-config',
       icon: 'map',
       tooltip: this.translate.instant('Map configuration'),
@@ -88,7 +88,7 @@ export class LeftMenuComponent {
       control: this.mainFormService.mapConfig.control
     },
     {
-      name: 'Timeline',
+      name: this.translate.instant('Timeline'),
       link: '/timeline-config',
       icon: 'timeline',
       tooltip: this.translate.instant('Timeline configuration'),
@@ -96,7 +96,7 @@ export class LeftMenuComponent {
       control: this.mainFormService.timelineConfig.control
     },
     {
-      name: 'Search',
+      name: this.translate.instant('Search'),
       link: '/search-config',
       icon: 'search',
       tooltip: this.translate.instant('Search configuration'),
@@ -104,7 +104,7 @@ export class LeftMenuComponent {
       control: this.mainFormService.searchConfig.control
     },
     {
-      name: 'Analytics',
+      name: this.translate.instant('Analytics'),
       link: '/analytics-config',
       icon: 'bar_chart',
       tooltip: this.translate.instant('Analytics configuration'),
@@ -112,7 +112,7 @@ export class LeftMenuComponent {
       control: this.mainFormService.analyticsConfig.control
     },
     {
-      name: 'Side Modules',
+      name: this.translate.instant('Side Modules'),
       link: '/side-modules',
       icon: 'view_column',
       tooltip: this.translate.instant('Side modules configuration'),
@@ -120,7 +120,7 @@ export class LeftMenuComponent {
       control: this.mainFormService.sideModulesConfig.control
     },
     {
-      name: 'Look \'n feel',
+      name: this.translate.instant('Look \'n feel'),
       link: '/look-and-feel',
       icon: 'opacity',
       tooltip: this.translate.instant('Look \'n fell configuration'),

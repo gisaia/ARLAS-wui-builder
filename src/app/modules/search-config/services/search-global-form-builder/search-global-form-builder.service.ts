@@ -37,7 +37,7 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
         name: new InputFormControl(
           null,
           marker('Name'),
-          marker('Saerch name descritpion'),
+          marker('Search name descritpion'),
           null,
           { title: 'Search' }),
         searchField: new SelectFormControl(
