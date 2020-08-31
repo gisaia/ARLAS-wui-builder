@@ -163,7 +163,10 @@ export class ConfigMapExportHelper {
                     'rgba(0, 0, 0, 0)',
 
                 ];
+                const hasNearZero = (interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
+                    .filter(pc => pc.proportion > 0 && pc.proportion <= 0.01).length > 0;
                 return densityColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
+                    .filter(pc => hasNearZero ? pc.proportion > 0 : pc.proportion >= 0)
                     .flatMap(pc => [(pc.proportion === 0 ? 0.000000000001 : pc.proportion), pc.value]));
             }
         }

@@ -30,12 +30,6 @@ export enum AGGREGATE_GEOMETRY_TYPE {
     centroid = 'centroid'
 }
 
-export enum GRANULARITY {
-    coarse = 'Coarse',
-    fine = 'Fine',
-    finest = 'Finest'
-}
-
 export enum CLUSTER_GEOMETRY_TYPE {
     aggregated_geometry = 'aggregated_geometry',
     raw_geometry = 'raw_geometry'

@@ -62,6 +62,7 @@ export class ConfigExportHelper {
         startingConfig: StartingConfigFormGroup,
         mapConfigGlobal: MapGlobalFormGroup,
         mapConfigLayers: FormArray,
+        mapConfigVisualisations: FormArray,
         searchConfigGlobal: SearchGlobalFormGroup,
         timelineConfigGlobal: TimelineGlobalFormGroup,
         sideModulesGlobal: SideModulesGlobalFormGroup,
@@ -80,7 +81,7 @@ export class ConfigExportHelper {
                     contributors: [],
                     components: {
                         timeline: this.getTimelineComponent(timelineConfigGlobal, false),
-                        mapgl: this.getMapComponent(mapConfigGlobal, mapConfigLayers)
+                        mapgl: this.getMapComponent(mapConfigGlobal, mapConfigLayers, mapConfigVisualisations)
                     },
                     analytics: [],
                     colorGenerator: {
@@ -105,7 +106,7 @@ export class ConfigExportHelper {
                     }
                 }
             },
-            extraConfigs : [
+            extraConfigs: [
                 {
                     configPath: 'config.map.json',
                     replacedAttribute: 'arlas.web.components.mapgl.input.mapLayers.layers',
@@ -227,7 +228,8 @@ export class ConfigExportHelper {
         return mapContributor;
     }
 
-    public static getMapComponent(mapConfigGlobal: MapGlobalFormGroup, mapConfigLayers: FormArray): MapglComponentConfig {
+    public static getMapComponent(mapConfigGlobal: MapGlobalFormGroup, mapConfigLayers: FormArray,
+                                  mapConfigVisualisations: FormArray, layerName?): MapglComponentConfig {
 
         const customControls = mapConfigGlobal.customControls;
         const layers: Set<string> = new Set<string>();
@@ -235,15 +237,27 @@ export class ConfigExportHelper {
             layers.add(layer.value.name);
         });
 
-        // TODO keep existing visualisation set during import / export
         const visualisationsSets: Array<VisualisationSetConfig> = [
-            {
-                name: 'layers',
-                layers,
-                enabled: true
-            }
         ];
-
+        if (!layerName) {
+            mapConfigVisualisations.controls.forEach(visu => visualisationsSets.push({
+                name: visu.value.name,
+                layers: visu.value.layers,
+                enabled: visu.value.displayed
+            }));
+        } else {
+            // to preview one layer
+            mapConfigVisualisations.controls.forEach(visu => {
+                const hasLayer = (new Set(visu.value.layers).has(layerName));
+                if (hasLayer) {
+                    visualisationsSets.push({
+                        name: visu.value.name,
+                        layers: new Set([layerName]),
+                        enabled: visu.value.displayed
+                    });
+                }
+            });
+        }
         const mapComponent: MapglComponentConfig = {
             allowMapExtend: customControls.allowMapExtend.value,
             nbVerticesLimit: customControls.unmanagedFields.nbVerticesLimit.value,

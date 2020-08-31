@@ -121,6 +121,7 @@ export class LayersComponent implements OnInit {
     const formGroupIndex = (this.layersFa.value as any[]).findIndex(el => el.id === layerId);
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
     const mapConfigLayers = new FormArray([this.layersFa.at(formGroupIndex)]);
+    const mapConfigVisualisations = this.mainFormService.mapConfig.getVisualisationsFa();
     // Get config.map part for this layer
     const configMap = ConfigMapExportHelper.process(mapConfigLayers);
     // Get contributor config for this layer
@@ -140,7 +141,8 @@ export class LayersComponent implements OnInit {
       'mapbox',
       this.configService,
       this.collaborativesearchService);
-    const mapComponentConfigValue = ConfigExportHelper.getMapComponent(mapConfigGlobal, mapConfigLayers);
+    const mapComponentConfigValue = ConfigExportHelper.getMapComponent(mapConfigGlobal, mapConfigLayers,
+      mapConfigVisualisations, layerName);
     mapComponentConfigValue.input.mapLayers.layers = configMap.layers;
     const dialogRef = this.dialog.open(PreviewComponent, {
       panelClass: 'map-preview',

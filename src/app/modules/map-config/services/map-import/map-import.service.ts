@@ -217,6 +217,8 @@ export class MapImportService {
 
     typeFg.enable();
 
+    const minzoom = !!layer.minzoom ? layer.minzoom : (!!layerSource.minzoom ? layerSource.minzoom : 0);
+    const maxzoom = !!layer.maxzoom ? layer.maxzoom : (!!layerSource.maxzoom ? layerSource.maxzoom : 22);
     const values: any = {
       collectionStep: {
         collection: collectionName
@@ -225,8 +227,8 @@ export class MapImportService {
       },
       visibilityStep: {
         visible: (!!layer.layout && !!layer.layout.visibility) ? layer.layout.visibility === VISIBILITY.visible : true,
-        zoomMin: !!layer.minzoom ? layer.minzoom : 0,
-        zoomMax: !!layer.maxzoom ? layer.maxzoom : 22,
+        zoomMin: minzoom,
+        zoomMax: maxzoom,
       },
       styleStep: {
         colorFg: {
