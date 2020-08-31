@@ -141,7 +141,8 @@ export class LayersComponent implements OnInit {
       'mapbox',
       this.configService,
       this.collaborativesearchService);
-    const mapComponentConfigValue = ConfigExportHelper.getMapComponent(mapConfigGlobal, mapConfigLayers, mapConfigVisualisations, layerName);
+    const mapComponentConfigValue = ConfigExportHelper.getMapComponent(mapConfigGlobal, mapConfigLayers,
+      mapConfigVisualisations, layerName);
     mapComponentConfigValue.input.mapLayers.layers = configMap.layers;
     const dialogRef = this.dialog.open(PreviewComponent, {
       panelClass: 'map-preview',
