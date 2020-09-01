@@ -21,15 +21,14 @@ import { ConfigFormGroup, SelectFormControl, InputFormControl } from '@shared-mo
 import { Metric } from 'arlas-api';
 import { CollectionField } from '@services/collection-service/models';
 import { Observable } from 'rxjs';
-import { NUMERIC_OR_DATE_TYPES } from '@services/collection-service/tools';
+import { NUMERIC_OR_DATE_TYPES, titleCase } from '@services/collection-service/tools';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
-export const DEFAULT_METRIC_VALUE = 'COUNT';
+export const DEFAULT_METRIC_VALUE = 'Count';
 
 export interface MetricCollectControls {
   metricCollectFunction: SelectFormControl;
   metricCollectField: SelectFormControl;
-  metricValue: SelectFormControl;
 }
 
 export class MetricCollectFormGroup extends ConfigFormGroup {
@@ -46,9 +45,9 @@ export class MetricCollectFormGroup extends ConfigFormGroup {
           marker('Metric collect function'),
           marker('Metric collect function Description'),
           false,
-          [Metric.CollectFctEnum.AVG.toString(), Metric.CollectFctEnum.CARDINALITY.toString(),
+          ['Count', Metric.CollectFctEnum.AVG.toString(), Metric.CollectFctEnum.CARDINALITY.toString(),
           Metric.CollectFctEnum.MAX.toString(), Metric.CollectFctEnum.MIN.toString(),
-          Metric.CollectFctEnum.SUM.toString()].map(value => ({ value, label: value })),
+          Metric.CollectFctEnum.SUM.toString()].map(value => ({ value, label: titleCase(value) })),
           {
             optional: true
           }
@@ -62,7 +61,7 @@ export class MetricCollectFormGroup extends ConfigFormGroup {
           {
             dependsOn: () => [this.metricCollectFunction],
             onDependencyChange: (control: SelectFormControl) => {
-              if (this.metricCollectFunction.value) {
+              if (this.metricCollectFunction.value && this.metricCollectFunction.value !== 'Count') {
 
                 control.enable();
 
@@ -80,22 +79,6 @@ export class MetricCollectFormGroup extends ConfigFormGroup {
               }
             }
           }
-        ),
-        metricValue: new SelectFormControl(
-          '',
-          marker('Value used in aggregation'),
-          marker('Value used in aggregation description'),
-          false,
-          [],
-          {
-            dependsOn: () => [this.metricCollectFunction],
-            onDependencyChange: (control: SelectFormControl) => {
-              // exclude metricCollectFunction.value if falsy
-              control.setSyncOptions([this.metricCollectFunction.value, DEFAULT_METRIC_VALUE]
-                .filter(Boolean)
-                .map(value => ({ value, label: value })));
-            }
-          }
         )
       }
     );
@@ -103,8 +86,7 @@ export class MetricCollectFormGroup extends ConfigFormGroup {
 
   public customControls = {
     metricCollectFunction: this.get('metricCollectFunction') as SelectFormControl,
-    metricCollectField: this.get('metricCollectField') as SelectFormControl,
-    metricValue: this.get('metricValue') as SelectFormControl,
+    metricCollectField: this.get('metricCollectField') as SelectFormControl
   } as MetricCollectControls;
 
 }

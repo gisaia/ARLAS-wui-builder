@@ -425,15 +425,15 @@ export class ConfigExportHelper {
                 shortYLabels: unmanagedFields.shortYLabels.value,
                 chartTitle: renderStep.chartTitle.value,
                 customizedCssClass: unmanagedFields.customizedCssClass.value,
-                chartHeight: unmanagedFields.chartHeight.value,
                 multiselectable: isDetailed ?
-                    unmanagedDetailedTimelineFields.multiselectable.value :
-                    timelineConfigGlobal.customControls.tabsContainer.renderStep.timeline.isMultiselectable.value,
+                unmanagedDetailedTimelineFields.multiselectable.value :
+                timelineConfigGlobal.customControls.tabsContainer.renderStep.timeline.isMultiselectable.value,
                 brushHandlesHeightWeight: unmanagedFields.brushHandlesHeightWeight.value,
                 dataType: 'time',
                 isHistogramSelectable: unmanagedFields.isHistogramSelectable.value,
                 ticksDateFormat: renderStep.dateFormat.value,
                 chartType: renderStep.chartType.value,
+                chartHeight: unmanagedFields.chartHeight.value,
                 chartWidth: unmanagedFields.chartWidth.value,
                 xAxisPosition: unmanagedFields.xAxisPosition.value,
                 yAxisStartsFromZero: unmanagedFields.yAxisStartsFromZero.value,
@@ -472,7 +472,7 @@ export class ConfigExportHelper {
 
                 this.addMetricToAggregationModel(aggregationModel, widgetData.dataStep.metric);
 
-                contrib.jsonpath = widgetData.dataStep.metric.metricValue === DEFAULT_METRIC_VALUE ?
+                contrib.jsonpath = widgetData.dataStep.metric.metricCollectFunction === DEFAULT_METRIC_VALUE ?
                     JSONPATH_COUNT : JSONPATH_METRIC;
 
                 contrib.aggregationmodels = [aggregationModel];
@@ -508,7 +508,7 @@ export class ConfigExportHelper {
                 swimlane.aggregationmodels.push(dateAggregationModel);
                 contrib.swimlanes = [swimlane];
 
-                contrib.jsonpath = widgetData.dataStep.metric.metricValue === DEFAULT_METRIC_VALUE ?
+                contrib.jsonpath = widgetData.dataStep.metric.metricCollectFunction === DEFAULT_METRIC_VALUE ?
                     '$.count' : '$.metrics[0].value';
 
                 return contrib;
@@ -600,7 +600,7 @@ export class ConfigExportHelper {
     }
 
     private static addMetricToAggregationModel(aggregationModel: AggregationModelConfig, metricData: any) {
-        if (!!metricData.metricCollectFunction) {
+        if (!!metricData.metricCollectFunction && metricData.metricCollectFunction !== DEFAULT_METRIC_VALUE) {
             aggregationModel.metrics = [
                 {
                     collect_fct: metricData.metricCollectFunction,
@@ -626,8 +626,8 @@ export class ConfigExportHelper {
                     yAxisStartsFromZero: unmanagedRenderFields.yAxisStartsFromZero,
                     chartType: widgetData.renderStep.chartType,
                     chartTitle: widgetData.dataStep.name,
-                    chartWidth: 445, // TODO generated from colspan
-                    chartHeight: 100, // TODO generated from colspan
+                    chartHeight: unmanagedRenderFields.chartHeight,
+                    chartWidth: unmanagedRenderFields.chartWidth,
                     customizedCssClass: widgetData.dataStep.aggregation.aggregationFieldType === 'numeric' ? 'arlas-histogram-analytics' :
                         'arlas-timeline-analytics',
                     xAxisPosition: unmanagedRenderFields.xAxisPosition,

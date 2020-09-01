@@ -46,7 +46,8 @@ under the License.
 
     .description {
       align-self: center;
-      max-width: 50%;
+      max-width: 70%;
+      white-space: pre-wrap;
       font-size: 14px;
       color: $config-element-description-text-color;
       line-height: 1.6;

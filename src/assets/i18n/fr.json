@@ -51,7 +51,6 @@
 	"Date format": "Format des dates",
 	"Date format description": "Format d'affichage des dates",
 	"Metric collect function": "Métrique d'aggregation",
-	"Metric collect function Description": "Métrique utilisée pour agréger les données de chaque case de l'histogramme",
 	"Metric collect field": "Champs agrégé",
 	"Metric collect field Description": "Champs sur lequel la métrique d'agrégation est calculée",
 	"Value used in aggregation": "Métrique utilisée?",
@@ -386,5 +385,12 @@
 	"Interpolated": "Interpolée",
 	"Generated": "Générée",
 	"Manual": "Manuelle",
-	"Provided": "Fournie"
+	"Provided": "Fournie",
+	"Avg": "Moyenne",
+	"Min": "Minimum",
+	"Max": "Maximum",
+	"Sum": "Somme",
+	"Cardinality": "Cardinalité",
+	"Metric collect function Description": "Métrique utilisée pour agréger les données de chaque case : \n - Décompte. (Distribution du champ d'agrégation choisi plus haut) \n - Moyenne. (Evolution de la moyenne du 'champ de la métrique' selon le champ d'agrégation) \n - Minimum. (Evolution de la valeur minimale du 'champ de la métrique' selon le champ d'agrégation) \n - Maximum. (Evolution de la valeur maximale du 'champ de la métrique' selon le champ d'agrégation) \n - Somme. (Evolution de la somme des valeurs du 'champ de la métrique' selon le champ d'agrégation) \n - Cardinalité. (Evolution du nombre de valeurs distinctes du 'champ de la métrique' selon le champ d'agrégation)"
+
 }

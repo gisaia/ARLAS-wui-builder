@@ -117,6 +117,8 @@ export class HistogramFormGroup extends ConfigFormGroup {
             shortYLabels: new FormControl(),
             barWeight: new FormControl(),
             isSmoothedCurve: new FormControl(),
+            chartWidth: new FormControl(),
+            chartHeight: new FormControl()
           })
         })
       }
@@ -162,6 +164,8 @@ export class HistogramFormGroup extends ConfigFormGroup {
         shortYLabels: this.get('unmanagedFields.renderStep.shortYLabels'),
         barWeight: this.get('unmanagedFields.renderStep.barWeight'),
         isSmoothedCurve: this.get('unmanagedFields.renderStep.isSmoothedCurve'),
+        chartWidth: this.get('unmanagedFields.renderStep.chartWidth'),
+        chartHeight: this.get('unmanagedFields.renderStep.chartHeight'),
       }
     }
   };

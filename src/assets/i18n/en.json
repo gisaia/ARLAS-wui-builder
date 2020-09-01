@@ -1,6 +1,6 @@
 {
 	"Unable to access the server. Please, verify the url.": "Unable to access the server. Please, verify the url.",
-	"Collection ": "Collection ",
+	"Collection ": "Collection",
 	" unknown. Available collections: ": " unknown. Available collections: ",
 	"Could not load config files ": "Could not load config files ",
 	"Ready to access server": "Ready to access server",
@@ -51,7 +51,6 @@
 	"Date format": "Date format",
 	"Date format description": "Date format description",
 	"Metric collect function": "Metric collect function",
-	"Metric collect function Description": "Metric collect function Description",
 	"Metric collect field": "Metric collect field",
 	"Metric collect field Description": "Metric collect field Description",
 	"Value used in aggregation": "Value used in aggregation",
@@ -386,5 +385,12 @@
 	"Interpolated": "Interpolated",
 	"Generated": "Generated",
 	"Manual": "Manual",
-	"Provided": "Provided"
+	"Provided": "Provided",
+	"Avg": "Average",
+	"Min": "Minimum",
+	"Max": "Maximum",
+	"Sum": "Sum",
+	"Cardinality": "Cardinality",
+	"Metric collect function Description": "Choose a metric: \n - Count. (Distribution of the aggregation field) \n - Average. ('Metric field' average evolution over the aggregation field) \n - Minimum. ('Metric field' minimum evolution over the aggregation field) \n - Maximum. ('Metric field' maximum evolution over the aggregation field) \n - Sum. ('Metric field' sum evolution over the aggregation field) \n - Cardinality. ('Metric field' distinct values evolution over the aggregation field)"
+
 }
