@@ -69,11 +69,6 @@ export class PowerbarConfigForm extends ConfigFormGroup {
         )
       }).withTabName(marker('Data')),
       renderStep: new ConfigFormGroup({
-        powerbarTitle: new InputFormControl(
-          '',
-          marker('Powerbar title'),
-          marker('Powerbar title description')
-        ),
         useColorService: new SlideToggleFormControl(
           '',
           marker('Manually associate colors'),
@@ -147,7 +142,6 @@ export class PowerbarConfigForm extends ConfigFormGroup {
       aggregationSize: this.get('dataStep').get('aggregationSize') as SliderFormControl,
     },
     renderStep: {
-      powerbarTitle: this.get('renderStep').get('powerbarTitle') as InputFormControl,
       useColorService: this.get('renderStep').get('useColorService') as SlideToggleFormControl,
       keysToColorsButton: this.get('renderStep').get('keysToColorsButton') as ButtonFormControl,
       displayFilter: this.get('renderStep').get('displayFilter') as SlideToggleFormControl,

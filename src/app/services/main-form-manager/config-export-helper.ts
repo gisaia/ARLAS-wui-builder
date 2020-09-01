@@ -706,7 +706,7 @@ export class ConfigExportHelper {
                 componentType: WIDGET_TYPE.powerbars,
                 input: {
                     chartTitle: widgetData.dataStep.name,
-                    powerbarTitle: widgetData.renderStep.powerbarTitle,
+                    powerbarTitle: widgetData.dataStep.name,
                     displayFilter: !!widgetData.renderStep.displayFilter,
                     useColorService: !!widgetData.renderStep.useColorService
                 }

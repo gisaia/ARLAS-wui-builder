@@ -413,10 +413,6 @@ export class AnalyticsImportService {
         control: dataStep.aggregationSize
       },
       {
-        value: component.input.powerbarTitle,
-        control: renderStep.powerbarTitle
-      },
-      {
         value: component.input.displayFilter,
         control: renderStep.displayFilter
       },

@@ -81,8 +81,8 @@ export class ResultlistConfigForm extends ConfigFormGroup {
         ),
         useColorService: new SlideToggleFormControl(
           '',
-          marker('Display filters'),
-          marker('Display filters description')
+          marker('Use color service'),
+          marker('Use color service description')
         ),
         cellBackgroundStyle: new SelectFormControl(
           '',
