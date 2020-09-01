@@ -152,6 +152,8 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
             swimLaneLabelsWidth: new FormControl(),
             swimlaneHeight: new FormControl(),
             swimlaneBorderRadius: new FormControl(),
+            chartWidth: new FormControl(),
+            chartHeight: new FormControl()
           })
         })
       }
@@ -202,6 +204,8 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
         swimLaneLabelsWidth: this.get('unmanagedFields.renderStep.swimLaneLabelsWidth'),
         swimlaneHeight: this.get('unmanagedFields.renderStep.swimlaneHeight'),
         swimlaneBorderRadius: this.get('unmanagedFields.renderStep.swimlaneBorderRadius'),
+        chartWidth: this.get('unmanagedFields.renderStep.chartWidth'),
+        chartHeight: this.get('unmanagedFields.renderStep.chartHeight'),
       }
     }
   };

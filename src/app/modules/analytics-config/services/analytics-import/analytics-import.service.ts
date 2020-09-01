@@ -132,8 +132,7 @@ export class AnalyticsImportService {
       ,
       ...this.getMetricImportElements(
         contribAggregationModel,
-        dataStep.metric.customControls,
-        contributor.jsonpath),
+        dataStep.metric.customControls),
       ,
       {
         value: component.input.multiselectable,
@@ -192,8 +191,7 @@ export class AnalyticsImportService {
         component.input.dataType),
       ...this.getMetricImportElements(
         dateAggregationModel,
-        dataStep.metric.customControls,
-        contributor.jsonpath),
+        dataStep.metric.customControls),
       {
         value: termAggregationModel.field,
         control: termeAggregationFg.termAggregationField
@@ -247,7 +245,7 @@ export class AnalyticsImportService {
       {
         value: swimlaneInput.swimlaneBorderRadius,
         control: unmanagedFields.renderStep.swimlaneBorderRadius
-      },
+      }
     ]);
 
     return widgetData;
@@ -342,6 +340,14 @@ export class AnalyticsImportService {
       {
         value: component.input.barWeight,
         control: unmanagedFields.renderStep.barWeight
+      },
+      {
+        value: !!component.input.chartHeight ? component.input.chartHeight : 200,
+        control: unmanagedFields.renderStep.chartHeight
+      },
+      {
+        value: !!component.input.chartWidth ? component.input.chartWidth : 445,
+        control: unmanagedFields.renderStep.chartWidth
       }
     ];
   }
@@ -645,21 +651,15 @@ export class AnalyticsImportService {
 
   private getMetricImportElements(
     contribAggregationModel: AggregationModelConfig,
-    metricControls: MetricCollectControls,
-    jsonpath: string) {
+    metricControls: MetricCollectControls) {
 
     return [
-      {
-        value: !contribAggregationModel.metrics || jsonpath === JSONPATH_COUNT ?
-          DEFAULT_METRIC_VALUE : contribAggregationModel.metrics[0].collect_fct,
-        control: metricControls.metricValue
-      },
       {
         value: contribAggregationModel.metrics ? contribAggregationModel.metrics[0].collect_field : null,
         control: metricControls.metricCollectField
       },
       {
-        value: contribAggregationModel.metrics ? contribAggregationModel.metrics[0].collect_fct : null,
+        value: contribAggregationModel.metrics ? contribAggregationModel.metrics[0].collect_fct.toUpperCase() : DEFAULT_METRIC_VALUE,
         control: metricControls.metricCollectFunction
       }
     ] as Array<ImportElement>;
