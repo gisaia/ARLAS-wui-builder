@@ -184,10 +184,14 @@ export interface AnalyticComponentInputConfig {
     yTicks: number;
     xLabels: number;
     yLabels: number;
+    xUnit: string;
+    yUnit: string;
+    chartXLabel: string;
     showXTicks: boolean;
     showYTicks: boolean;
     showXLabels: boolean;
     showYLabels: boolean;
+    shortYLabels: boolean;
     showHorizontalLines: boolean;
     barWeight: number;
     beforeValue?: string;

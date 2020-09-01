@@ -170,6 +170,22 @@ export class TimelineImportService {
         control: unmanagedRenderFields.yLabels
       },
       {
+        value: componentInput.xUnit,
+        control: unmanagedRenderFields.xUnit
+      },
+      {
+        value: componentInput.yUnit,
+        control: unmanagedRenderFields.yUnit
+      },
+      {
+        value: componentInput.chartXLabel,
+        control: unmanagedRenderFields.chartXLabel
+      },
+      {
+        value: componentInput.shortYLabels,
+        control: unmanagedRenderFields.shortYLabels
+      },
+      {
         value: componentInput.customizedCssClass,
         control: unmanagedRenderFields.customizedCssClass
       },
