@@ -368,5 +368,21 @@
 	"Duplicate": "Duplicate",
 	"Select a config.json file": "Select a config.json file",
 	"Select a config.map.json file": "Select a config.map.json file",
-	"Warning, changing this field's value will reset some other fields":"Warning, changing this field's value will reset some other fields"
+	"Warning, changing this field's value will reset some other fields":"Warning, changing this field's value will reset some other fields",
+	"within": "within",
+	"intersects": "intersects",
+	"notwithin": "not within",
+	"notintersects": "not intersects",
+	"Features": "Features",
+	"Feature Metric": "Feature Metric",
+	"Cluster": "Cluster",
+	"Fill": "Polygon",
+	"Line": "Line",
+	"Circle": "Circle",
+	"Fix": "Fix",
+	"Interpolated": "Interpolated",
+	"Generated": "Generated", 
+	"Manual": "Manual",
+	"Provided": "Provided",
+	"Add keyword": "Add keyword"
 }

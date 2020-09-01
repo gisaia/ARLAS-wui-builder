@@ -49,7 +49,7 @@ export class PowerbarConfigForm extends ConfigFormGroup {
       dataStep: new ConfigFormGroup({
         name: new InputFormControl(
           '',
-          marker('title'),
+          marker('Title'),
           marker('Powerbar title description')
         ),
         aggregationField: new SelectFormControl(

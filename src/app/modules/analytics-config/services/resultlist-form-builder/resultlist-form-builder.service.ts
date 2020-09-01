@@ -42,7 +42,7 @@ export class ResultlistConfigForm extends ConfigFormGroup {
       dataStep: new ConfigFormGroup({
         name: new InputFormControl(
           '',
-          marker('title'),
+          marker('Title'),
           marker('Result list title description'),
           undefined,
           {

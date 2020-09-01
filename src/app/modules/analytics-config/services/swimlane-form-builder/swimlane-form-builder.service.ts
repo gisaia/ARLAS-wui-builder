@@ -82,9 +82,9 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
             marker('Swimlane mode description'),
             false,
             [
-              { value: SwimlaneMode[SwimlaneMode.fixedHeight].toString(), label: 'Fixed height' },
-              { value: SwimlaneMode[SwimlaneMode.variableHeight].toString(), label: 'Variable height' },
-              { value: SwimlaneMode[SwimlaneMode.circles].toString(), label: 'Circles' }
+              { value: SwimlaneMode[SwimlaneMode.fixedHeight].toString(), label: marker('Fixed height') },
+              { value: SwimlaneMode[SwimlaneMode.variableHeight].toString(), label: marker('Variable height') },
+              { value: SwimlaneMode[SwimlaneMode.circles].toString(), label: marker('Circles') }
             ]
           ),
           swimlaneRepresentation: new ButtonToggleFormControl(

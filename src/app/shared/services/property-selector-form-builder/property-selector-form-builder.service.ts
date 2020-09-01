@@ -63,7 +63,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
       propertySource: new SelectFormControl(
         '',
         propertyName.charAt(0).toUpperCase() + propertyName.slice(1),
-        'description',
+        ' ',
         false,
         valuesToOptions(sources),
         {

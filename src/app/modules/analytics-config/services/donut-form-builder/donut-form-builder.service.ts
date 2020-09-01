@@ -48,7 +48,7 @@ export class DonutConfigForm extends ConfigFormGroup {
       dataStep: new ConfigFormGroup({
         name: new InputFormControl(
           '',
-          marker('title'),
+          marker('Title'),
           marker('donut title description')
         ),
         aggregationmodels: new FieldWithSizeListFormControl(

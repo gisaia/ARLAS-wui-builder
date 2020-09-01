@@ -414,7 +414,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
         ),
         clusterGeometryType: new SelectFormControl(
           '',
-          marker('Type'),
+          marker('Geometry type'),
           marker('Geometry type description'),
           false,
           [
@@ -428,8 +428,8 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
         ),
         aggregatedGeometry: new SelectFormControl(
           '',
-          marker('Type'),
-          '',
+          marker('Aggregated geometry type'),
+          marker('Aggregated geometry type description'),
           false,
           [
             { label: marker('Cell center'), value: AGGREGATE_GEOMETRY_TYPE.geohash_center },

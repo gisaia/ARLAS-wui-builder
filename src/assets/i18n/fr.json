@@ -368,5 +368,21 @@
 	"Duplicate": "Dupliquer",
 	"Select a config.json file": "Charger config.json",
 	"Select a config.map.json file": "Charger config.map.json",
-	"Warning, changing this field's value will reset some other fields": "Modifier cette valeur entraine la remise à zéro d'autres champs"
+	"Warning, changing this field's value will reset some other fields": "Modifier cette valeur entraine la remise à zéro d'autres champs",
+	"within": "contient",
+	"intersects": "intersecte",
+	"notwithin": "ne contient pas",
+	"notintersects": "n'intersecte pas",
+	"Features": "Features",
+	"Feature Metric": "Feature Metric",
+	"Cluster": "Cluster",
+	"Fill": "Polygone",
+	"Line": "Ligne",
+	"Circle": "Cercle",
+	"Fix": "Fixe",
+	"Interpolated": "Interpolée",
+	"Generated": "Générée", 
+	"Manual": "Manuelle",
+	"Provided": "Fournie",
+	"Add keyword": "Ajouter une entrée"
 }
