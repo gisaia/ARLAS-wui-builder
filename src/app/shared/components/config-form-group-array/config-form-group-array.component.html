@@ -11,7 +11,7 @@
         </div>
         <div description>
             <div *ngFor="let control of formGroup.configFormControls ">
-                {{control.description}}
+                {{control.description | translate}}
             </div>
         </div>
     </app-config-element>
