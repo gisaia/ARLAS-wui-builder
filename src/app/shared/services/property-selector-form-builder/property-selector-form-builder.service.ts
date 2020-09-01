@@ -480,7 +480,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         propertyInterpolatedValuesButton: new ButtonFormControl(
           '',
           marker('Manage palette'),
-          marker('Manage palette description'),
+          '',
           () => {
             const isAggregatedCount =
               isAggregated &&
