@@ -83,7 +83,7 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
             { label: marker('By bucket'), value: BY_BUCKET_OR_INTERVAL.BUCKET },
             { label: marker('By interval'), value: BY_BUCKET_OR_INTERVAL.INTERVAL },
           ],
-          marker('Choose aggreagation Mode'),
+          marker('Choose aggregation Mode'),
           {
             resetDependantsOnChange: true,
             childs: () => [

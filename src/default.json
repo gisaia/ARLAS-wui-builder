@@ -113,7 +113,6 @@
     },
     "search": {
         "global": {
-            "name": "Search a ...",
             "searchField": "id",
             "autocompleteField": "internal.fulltext",
             "unmanagedFields": {

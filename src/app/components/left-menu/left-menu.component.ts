@@ -28,6 +28,7 @@ import { Router } from '@angular/router';
 import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persistence.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UserInfosComponent } from 'arlas-wui-toolkit/components/user-infos/user-infos.component';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 interface Page {
   link: string;
@@ -80,50 +81,50 @@ export class LeftMenuComponent {
 
   public pages: Page[] = [
     {
-      name: 'Map',
+      name: marker('Map'),
       link: '/map-config',
       icon: 'map',
-      tooltip: this.translate.instant('Map configuration'),
+      tooltip: marker('Map configuration'),
       enabled: true,
       control: this.mainFormService.mapConfig.control
     },
     {
-      name: 'Timeline',
+      name: marker('Timeline'),
       link: '/timeline-config',
       icon: 'timeline',
-      tooltip: this.translate.instant('Timeline configuration'),
+      tooltip: marker('Timeline configuration'),
       enabled: true,
       control: this.mainFormService.timelineConfig.control
     },
     {
-      name: 'Search',
+      name: marker('Search'),
       link: '/search-config',
       icon: 'search',
-      tooltip: this.translate.instant('Search configuration'),
+      tooltip: marker('Search configuration'),
       enabled: true,
       control: this.mainFormService.searchConfig.control
     },
     {
-      name: 'Analytics',
+      name: marker('Analytics'),
       link: '/analytics-config',
       icon: 'bar_chart',
-      tooltip: this.translate.instant('Analytics configuration'),
+      tooltip: marker('Analytics configuration'),
       enabled: true,
       control: this.mainFormService.analyticsConfig.control
     },
     {
-      name: 'Side Modules',
+      name: marker('Side Modules'),
       link: '/side-modules',
       icon: 'view_column',
-      tooltip: this.translate.instant('Side modules configuration'),
+      tooltip: marker('Side modules configuration'),
       enabled: true,
       control: this.mainFormService.sideModulesConfig.control
     },
     {
-      name: 'Look \'n feel',
+      name: marker('Look \'n feel'),
       link: '/look-and-feel',
       icon: 'opacity',
-      tooltip: this.translate.instant('Look \'n fell configuration'),
+      tooltip: marker('Look \'n fell configuration'),
       enabled: true,
       control: this.mainFormService.lookAndFeelConfig.control
     },

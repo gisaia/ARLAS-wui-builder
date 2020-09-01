@@ -7,7 +7,7 @@
                 <mat-header-cell *matHeaderCellDef>
                     <div class="add-header">
                         <mat-form-field class="add-input">
-                            <input type="text" placeholder="Add keyword / color" matInput [matAutocomplete]="auto"
+                            <input type="text" placeholder="{{'Add keyword' | translate}}" matInput [matAutocomplete]="auto"
                                 [formControl]="newKeywordCtrl">
                             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                                 <mat-option *ngFor="let option of newKeywordValues | async" [value]="option">

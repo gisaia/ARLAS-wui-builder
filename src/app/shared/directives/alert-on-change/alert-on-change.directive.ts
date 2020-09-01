@@ -56,7 +56,7 @@ export class AlertOnChangeDirective implements OnInit {
       nativeElement.onfocus = (e: Event) => {
         const anyDependantDirty = this.dependants == null || this.dependants.filter(d => d.dirty).length > 0;
         if (anyDependantDirty && !!nativeElement.value) {
-          this.snackBar.open(this.translate.instant('Carreful!') + ' ' + this.translate.instant(this.alertMessage));
+          this.snackBar.open(this.translate.instant('Careful!') + ' ' + this.translate.instant(this.alertMessage));
         }
       };
     }
@@ -70,7 +70,7 @@ export class AlertOnChangeDirective implements OnInit {
     const anyDependantHasValue = this.dependants == null || this.dependants.filter(d => d.value !== null).length > 0;
     // display the warning only if a value is already set AND if any dependency has been changed
     if (anyDependantHasValue && selectedHasBeenOpen && !this.select.empty) {
-      this.snackBar.open(this.translate.instant('Carreful!') + ' ' + this.translate.instant(this.alertMessage));
+      this.snackBar.open(this.translate.instant('Careful!') + ' ' + this.translate.instant(this.alertMessage));
     }
   }
 
