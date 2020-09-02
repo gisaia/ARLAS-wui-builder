@@ -342,7 +342,7 @@ export class AnalyticsImportService {
         control: unmanagedFields.renderStep.barWeight
       },
       {
-        value: !!component.input.chartHeight ? component.input.chartHeight : 200,
+        value: !!component.input.chartHeight ? component.input.chartHeight : 100,
         control: unmanagedFields.renderStep.chartHeight
       },
       {

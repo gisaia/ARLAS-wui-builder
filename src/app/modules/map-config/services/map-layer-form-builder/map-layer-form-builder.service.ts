@@ -392,8 +392,8 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
       {
         aggGeometry: new SelectFormControl(
           '',
-          marker('Aggregation field'),
-          marker('Choose the aggregation field'),
+          marker('geo ggregation field'),
+          marker('Choose the geo aggregation field'),
           false,
           toGeoPointOptionsObs(collectionFields),
           {
@@ -414,8 +414,8 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
         ),
         clusterGeometryType: new SelectFormControl(
           '',
-          marker('Geometry type'),
-          marker('Geometry type description'),
+          marker('cluster geometry type'),
+          marker('cluster geometry type description'),
           false,
           [
             { label: marker('Aggregated geometry'), value: CLUSTER_GEOMETRY_TYPE.aggregated_geometry },

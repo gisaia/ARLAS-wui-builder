@@ -433,8 +433,8 @@ export class ConfigExportHelper {
                 isHistogramSelectable: unmanagedFields.isHistogramSelectable.value,
                 ticksDateFormat: renderStep.dateFormat.value,
                 chartType: renderStep.chartType.value,
-                chartHeight: unmanagedFields.chartHeight.value,
-                chartWidth: unmanagedFields.chartWidth.value,
+                chartHeight: !!unmanagedFields.chartHeight.value ? unmanagedFields.chartHeight.value : 100,
+                chartWidth: !!unmanagedFields.chartWidth.value ? unmanagedFields.chartWidth.value : 445,
                 xAxisPosition: unmanagedFields.xAxisPosition.value,
                 yAxisStartsFromZero: unmanagedFields.yAxisStartsFromZero.value,
                 descriptionPosition: unmanagedFields.descriptionPosition.value,
@@ -506,10 +506,9 @@ export class ConfigExportHelper {
                 this.addMetricToAggregationModel(dateAggregationModel, widgetData.dataStep.metric);
 
                 swimlane.aggregationmodels.push(dateAggregationModel);
-                contrib.swimlanes = [swimlane];
-
-                contrib.jsonpath = widgetData.dataStep.metric.metricCollectFunction === DEFAULT_METRIC_VALUE ?
+                swimlane.jsonpath = widgetData.dataStep.metric.metricCollectFunction === DEFAULT_METRIC_VALUE ?
                     '$.count' : '$.metrics[0].value';
+                contrib.swimlanes = [swimlane];
 
                 return contrib;
             }
@@ -603,7 +602,7 @@ export class ConfigExportHelper {
         if (!!metricData.metricCollectFunction && metricData.metricCollectFunction !== DEFAULT_METRIC_VALUE) {
             aggregationModel.metrics = [
                 {
-                    collect_fct: metricData.metricCollectFunction,
+                    collect_fct: metricData.metricCollectFunction.toLowerCase(),
                     collect_field: metricData.metricCollectField
                 }
             ];
@@ -626,8 +625,8 @@ export class ConfigExportHelper {
                     yAxisStartsFromZero: unmanagedRenderFields.yAxisStartsFromZero,
                     chartType: widgetData.renderStep.chartType,
                     chartTitle: widgetData.dataStep.name,
-                    chartHeight: unmanagedRenderFields.chartHeight,
-                    chartWidth: unmanagedRenderFields.chartWidth,
+                    chartHeight: !!unmanagedRenderFields.chartHeight ? unmanagedRenderFields.chartHeight : 100,
+                    chartWidth: !!unmanagedRenderFields.chartWidth ? unmanagedRenderFields.chartWidth : 445,
                     customizedCssClass: widgetData.dataStep.aggregation.aggregationFieldType === 'numeric' ? 'arlas-histogram-analytics' :
                         'arlas-timeline-analytics',
                     xAxisPosition: unmanagedRenderFields.xAxisPosition,

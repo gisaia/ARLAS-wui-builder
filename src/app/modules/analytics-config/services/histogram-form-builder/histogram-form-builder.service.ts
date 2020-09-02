@@ -196,7 +196,7 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
       this.mainFormService.getCollections()[0]);
 
     const formGroup = new HistogramFormGroup(
-      this.bucketsIntervalBuilderService.build(toNumericOrDateFieldsObs(collectionFieldsObs)),
+      this.bucketsIntervalBuilderService.build(toNumericOrDateFieldsObs(collectionFieldsObs), 'histogram'),
       this.metricBuilderService.build(collectionFieldsObs)
     );
 
