@@ -335,7 +335,7 @@ export class TimelineGlobalFormBuilderService {
         return a.name.localeCompare(b.name);
       })));
 
-    const timelineBucketIntervalFg = this.bucketsIntervalBuilderService.build(longDateFields, true);
+    const timelineBucketIntervalFg = this.bucketsIntervalBuilderService.build(longDateFields, 'temporal');
 
     const timelineFormGroup = new TimelineGlobalFormGroup(
       timelineBucketIntervalFg);

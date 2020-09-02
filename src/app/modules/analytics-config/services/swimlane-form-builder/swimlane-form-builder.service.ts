@@ -237,7 +237,7 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
 
     const formGroup = new SwimlaneFormGroup(
       this.bucketsIntervalBuilderService
-        .build(toDateFieldsObs(collectionFieldsObs))
+        .build(toDateFieldsObs(collectionFieldsObs), 'swimlane')
         .withTitle(marker('Date aggregation')),
       this.metricBuilderService
         .build(collectionFieldsObs)

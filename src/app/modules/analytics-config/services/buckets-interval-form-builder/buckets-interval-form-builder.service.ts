@@ -46,14 +46,14 @@ export enum BY_BUCKET_OR_INTERVAL {
 export class BucketsIntervalFormGroup extends ConfigFormGroup {
 
   constructor(
-    fieldsObs: Observable<Array<CollectionField>>, temporalBucket?: boolean) {
+    fieldsObs: Observable<Array<CollectionField>>, bucketType?: string) {
 
     super(
       {
         aggregationField: new SelectFormControl(
           '',
-          marker(temporalBucket ? 'Aggregation temporal field' : 'Aggregation field'),
-          marker(temporalBucket ? 'Aggregation temporal field description' : 'Aggregation field description'),
+          marker(bucketType + ' aggregation field'),
+          marker(bucketType + ' aggregation field description'),
           true,
           toOptionsObs(fieldsObs),
           {
@@ -83,7 +83,7 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
             { label: marker('By bucket'), value: BY_BUCKET_OR_INTERVAL.BUCKET },
             { label: marker('By interval'), value: BY_BUCKET_OR_INTERVAL.INTERVAL },
           ],
-          marker(temporalBucket ? 'Choose temporal aggregation Mode' : 'Choose aggregation Mode'),
+          marker('Choose ' + bucketType + ' aggregation Mode'),
           {
             resetDependantsOnChange: true,
             childs: () => [
@@ -172,9 +172,9 @@ export class BucketsIntervalFormBuilderService {
   ) {
   }
 
-  public build(fieldsObs: Observable<Array<CollectionField>>, temporalBucket?: boolean) {
+  public build(fieldsObs: Observable<Array<CollectionField>>, bucketType: string) {
 
-    return new BucketsIntervalFormGroup(fieldsObs, temporalBucket);
+    return new BucketsIntervalFormGroup(fieldsObs, bucketType);
   }
 
 }
