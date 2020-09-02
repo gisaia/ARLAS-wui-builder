@@ -137,6 +137,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
   constructor(
     collections: Array<string>,
+    type: string,
     geometryTypes: Array<GEOMETRY_TYPE>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService,
     isAggregated: boolean,
@@ -189,8 +190,8 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         ...styleFormControls,
         geometryType: new SelectFormControl(
           '',
-          marker('Geometry type'),
-          marker('Geometry type description'),
+          marker('geometry ' + type + ' shape'),
+          marker('geometry ' + type + ' shape description'),
           false,
           valuesToOptions(geometryTypes),
           {
@@ -282,6 +283,7 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
 
   constructor(
     collections: Array<string>,
+    type: string,
     collectionFields: Observable<Array<CollectionField>>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService,
     isAggregated: boolean = false,
@@ -290,6 +292,7 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
 
     super(
       collections,
+      type,
       [
         GEOMETRY_TYPE.fill,
         GEOMETRY_TYPE.line,
@@ -304,12 +307,12 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
       {
         geometry: new SelectFormControl(
           '',
-          marker('Rendered geometry'),
-          marker('Rendered geometry description'),
+          marker('Layer geometry field'),
+          marker('Layer geometry field description'),
           false,
           toGeoOptionsObs(collectionFields),
           {
-            title: marker('Rendered geometry')
+            title: marker('Layer rendered geometry')
           }
         ),
         ...geometryFormControls
@@ -340,6 +343,7 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
   ) {
     super(
       collections,
+      'feature-metric',
       collectionFields,
       propertySelectorFormBuilder,
       true,
@@ -379,6 +383,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
   ) {
     super(
       collections,
+      'cluster',
       [
         GEOMETRY_TYPE.fill,
         GEOMETRY_TYPE.circle,
@@ -392,7 +397,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
       {
         aggGeometry: new SelectFormControl(
           '',
-          marker('geo ggregation field'),
+          marker('geo aggregation field'),
           marker('Choose the geo aggregation field'),
           false,
           toGeoPointOptionsObs(collectionFields),
@@ -444,7 +449,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
         ),
         rawGeometry: new SelectFormControl(
           '',
-          marker('Field'),
+          marker('geometry field'),
           '',
           false,
           toGeoOptionsObs(collectionFields),
@@ -523,6 +528,7 @@ export class MapLayerFormBuilderService {
   private buildFeatures(collectionFields: Observable<Array<CollectionField>>) {
     const featureFormGroup = new MapLayerTypeFeaturesFormGroup(
       this.mainFormService.getCollections(),
+      'feature',
       collectionFields,
       this.propertySelectorFormBuilder);
 
