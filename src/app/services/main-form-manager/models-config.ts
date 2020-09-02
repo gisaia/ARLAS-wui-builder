@@ -146,6 +146,7 @@ export interface SwimlaneConfig {
     xAxisField: string;
     termField: string;
     aggregationmodels?: Array<AggregationModelConfig>;
+    jsonpath: string;
 }
 
 export interface AnalyticConfig {
