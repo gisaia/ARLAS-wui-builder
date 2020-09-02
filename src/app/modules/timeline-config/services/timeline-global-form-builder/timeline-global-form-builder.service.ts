@@ -63,7 +63,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
               bucketsNumber: new SliderFormControl(
                 '',
                 marker('Number of buckets'),
-                marker('Number of buckets description'),
+                marker(''),
                 10,
                 200,
                 5
@@ -335,7 +335,7 @@ export class TimelineGlobalFormBuilderService {
         return a.name.localeCompare(b.name);
       })));
 
-    const timelineBucketIntervalFg = this.bucketsIntervalBuilderService.build(longDateFields);
+    const timelineBucketIntervalFg = this.bucketsIntervalBuilderService.build(longDateFields, true);
 
     const timelineFormGroup = new TimelineGlobalFormGroup(
       timelineBucketIntervalFg);
