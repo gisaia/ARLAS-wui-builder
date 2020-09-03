@@ -241,7 +241,7 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
         .withTitle(marker('Date aggregation')),
       this.metricBuilderService
         .build(collectionFieldsObs)
-        .withTitle(marker('Metric')),
+        .withTitle(marker('swimlane metric')),
       this.defaultValuesService.getDefaultConfig(),
       toKeywordOptionsObs(collectionFieldsObs));
 

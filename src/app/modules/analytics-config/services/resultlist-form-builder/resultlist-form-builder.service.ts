@@ -170,7 +170,7 @@ export class ResultlistColumnFormGroup extends FormGroup {
       ),
       fieldName: new SelectFormControl(
         '',
-        marker('Field'),
+        marker('Column field'),
         '',
         true,
         fieldsObs
@@ -229,12 +229,12 @@ export class ResultlistDetailFieldFormGroup extends FormGroup {
     super({
       label: new InputFormControl(
         '',
-        marker('Field name'),
+        marker('Detail label'),
         ''
       ),
       path: new SelectFormControl(
         '',
-        marker('Field'),
+        marker('Detail field'),
         '',
         true,
         fieldsObs

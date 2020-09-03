@@ -133,7 +133,7 @@
             <div class="field-add-container">
                 <div class="field-container">
                     <mat-form-field>
-                        <mat-label>{{'Field' | translate}}</mat-label>
+                        <mat-label>{{'metric field' | translate}}</mat-label>
                         <input type="text" matInput [matAutocomplete]="auto" #autocompleteInput
                             [formControl]="typedControl.fieldCtrl">
 
@@ -170,14 +170,14 @@
     <div>
         <div class="action-container">
             <div>
-                <mat-label>{{ 'Size' | translate}}</mat-label>
+                <mat-label>{{ 'donut size' | translate}}</mat-label>
                 <mat-slider thumbLabel [formControl]="typedControl.sizeCtrl" [min]="0" [max]="100" [step]="1">
                 </mat-slider>
             </div>
             <div class="field-add-container">
                 <div class="field-container">
                     <mat-form-field>
-                        <mat-label>{{'Field' | translate}}</mat-label>
+                        <mat-label>{{'donut field' | translate}}</mat-label>
                         <input type="text" matInput [matAutocomplete]="auto" #autocompleteInput
                             [formControl]="typedControl.fieldCtrl">
 

@@ -1,6 +1,6 @@
 <div mat-dialog-content>
     <mat-form-field>
-        <mat-label>Type</mat-label>
+        <mat-label>{{'widget type' | translate}}</mat-label>
         <mat-select  appAlertOnChange="changing the type will reset the set-up widgets"
             appResetOnChange [(ngModel)]="widgetType">
                 <mat-option *ngFor="let types of this.contentTypes" [value]="types">

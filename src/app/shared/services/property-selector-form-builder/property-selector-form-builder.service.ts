@@ -275,7 +275,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
         propertyInterpolatedMetricCtrl: new SelectFormControl(
           '',
-          marker('Metric'),
+          marker('map metric'),
           '',
           false,
           [METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX]
