@@ -38,15 +38,14 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class AddWidgetDialogComponent {
   public widgetType: Array<string> = [];
 
-  public contentTypes = [
-    [WIDGET_TYPE.histogram],
-    [WIDGET_TYPE.donut],
-    [WIDGET_TYPE.powerbars],
-    [WIDGET_TYPE.resultlist],
-    [WIDGET_TYPE.metric],
-    [WIDGET_TYPE.swimlane]
+  public contentTypes: { label: WIDGET_TYPE, icon: string }[] = [
+    { label: WIDGET_TYPE.histogram, icon: 'bar_chart' },
+    { label: WIDGET_TYPE.donut, icon: 'pie_chart' },
+    { label: WIDGET_TYPE.powerbars, icon: 'sort' },
+    { label: WIDGET_TYPE.resultlist, icon: 'table_chart' },
+    { label: WIDGET_TYPE.metric, icon: 'functions' },
+    { label: WIDGET_TYPE.swimlane, icon: 'waves' }
   ];
-
   constructor(
     public dialogRef: MatDialogRef<AddWidgetDialogComponent>
   ) { }
@@ -102,7 +101,7 @@ export class EditGroupComponent implements OnInit {
   }
 
   public addWidget() {
-    this.dialog.open(AddWidgetDialogComponent, {})
+    this.dialog.open(AddWidgetDialogComponent, {width: '350px'})
       .afterClosed().subscribe(result => {
         if (result) {
           // add the new widget to the previous ones if they exist
