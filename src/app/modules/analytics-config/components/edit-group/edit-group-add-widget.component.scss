@@ -16,3 +16,47 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+
+@import "variables.scss";
+
+.group {
+   display: flex;
+   flex-flow: row wrap;
+
+   .widget-type {
+      flex: 1;
+      
+      border: 1px solid grey;
+      border-radius: 5px;
+      margin: 5px 10px 5px 0;
+      cursor: pointer;
+
+      &.mat-radio-checked{
+         background-color: $accentColor;
+         color: white;
+         border-color: $accentColor;
+      }
+
+      &:hover{
+         background-color: rgba($accentColor, 0.2);
+         border-color: $accentColor;
+         color: $accentColor
+      }
+
+      .icon{
+         vertical-align: top;
+      }
+
+      ::ng-deep .mat-radio-label {
+         padding: 10px;
+
+         .mat-radio-container {
+            display: none !important;
+         }
+
+         .mat-radio-label-content{
+            padding-left: 0;
+         }
+      }
+   }
+}

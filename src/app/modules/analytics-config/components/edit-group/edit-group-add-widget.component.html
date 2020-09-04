@@ -1,16 +1,16 @@
+<div mat-dialog-title>
+    {{'Choose widget type' | translate}}
+</div>
 <div mat-dialog-content>
-    <mat-form-field>
-        <mat-label>{{'widget type' | translate}}</mat-label>
-        <mat-select  appAlertOnChange="changing the type will reset the set-up widgets"
-            appResetOnChange [(ngModel)]="widgetType">
-                <mat-option *ngFor="let types of this.contentTypes" [value]="types">
-                    {{types.join(' / ') | translate}}
-                </mat-option>
-        </mat-select>
-    </mat-form-field>
+    <mat-radio-group [(ngModel)]="widgetType" class="group">
+            <mat-radio-button *ngFor="let types of this.contentTypes" class="widget-type" [value]="types.label">
+                <mat-icon class="icon">{{types.icon}}</mat-icon>
+                {{types.label | translate}}
+            </mat-radio-button>
+    </mat-radio-group>
 </div>
 <div mat-dialog-actions>
     <button mat-raised-button class="modal_button" color="primary" [mat-dialog-close]="widgetType" [disabled]="!widgetType"
-        tabindex="2">{{ 'OK' | translate }}</button>
+        tabindex="2">{{ 'Add' | translate }}</button>
     <button mat-raised-button class="modal_button" (click)="cancel()" tabindex="-1">{{ 'Cancel' | translate }}</button>
 </div>
