@@ -116,13 +116,13 @@ export class AnalyticsImportService {
     const widgetData = this.histogramFormBuilder.build();
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
-
+    const title = widgetData.customControls.title;
     const contribAggregationModel = contributor.aggregationmodels[0];
 
     importElements([
       {
         value: component.input.chartTitle,
-        control: dataStep.name
+        control: title
       },
       ...this.getAggregationImportElements(
         contributor,
@@ -174,6 +174,7 @@ export class AnalyticsImportService {
     const widgetData = this.swimlaneFormBuilder.build();
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
+    const title = widgetData.customControls.title;
     const termeAggregationFg = dataStep.termAggregation;
     const dateAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'datehistogram');
     const termAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'term');
@@ -182,7 +183,7 @@ export class AnalyticsImportService {
     importElements([
       {
         value: component.input.chartTitle,
-        control: dataStep.name
+        control: title
       },
       ...this.getAggregationImportElements(
         contributor,
@@ -356,10 +357,11 @@ export class AnalyticsImportService {
     const widgetData = this.metricFormBuilder.build();
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
+    const title = widgetData.customControls.title;
     importElements([
       {
         value: contributor.title,
-        control: dataStep.name
+        control: title
       },
       {
         value: !!contributor.function && contributor.function === 'm[0]' ? '' : contributor.function,
@@ -398,11 +400,12 @@ export class AnalyticsImportService {
     const widgetData = this.powerbarFormBuilder.build();
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
+    const title = widgetData.customControls.title;
 
     importElements([
       {
         value: contributor.title,
-        control: dataStep.name
+        control: title
       },
       {
         value: contributor.aggregationmodels[0].field,
@@ -428,11 +431,12 @@ export class AnalyticsImportService {
     const widgetData = this.donutFormBuilder.build();
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
+    const title = widgetData.customControls.title;
 
     importElements([
       {
         value: contributor.title,
-        control: dataStep.name
+        control: title
       },
       {
         value: contributor.aggregationmodels,
@@ -467,11 +471,12 @@ export class AnalyticsImportService {
     const widgetData = this.resultlistFormBuilder.build();
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
+    const title = widgetData.customControls.title;
 
     importElements([
       {
         value: contributor.name,
-        control: dataStep.name
+        control: title
       },
       {
         value: contributor.search_size,

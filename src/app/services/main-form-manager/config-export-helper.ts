@@ -484,7 +484,7 @@ export class ConfigExportHelper {
                 contrib.type = 'swimlane';
                 const swimlane = {
                     id: 1,
-                    name: widgetData.dataStep.name,
+                    name: widgetData.title,
                     xAxisField: widgetData.dataStep.aggregation.aggregationField,
                     termField: widgetData.dataStep.termAggregation.termAggregationField
                 } as SwimlaneConfig;
@@ -572,9 +572,9 @@ export class ConfigExportHelper {
 
     private static getWidgetContributor(widgetData: any, widgetType: any, icon: string) {
         return {
-            identifier: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
-            name: widgetData.dataStep.name,
-            title: widgetData.dataStep.name,
+            identifier: this.toSnakeCase(widgetData.title + '_' + widgetType),
+            name: widgetData.title,
+            title: widgetData.title,
             icon,
             ... !!widgetData.renderStep.chartType ?
                 {
@@ -611,12 +611,14 @@ export class ConfigExportHelper {
 
     private static getAnalyticsComponent(widgetType: any, widgetData: any): AnalyticComponentConfig {
         const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
+
         if ([WIDGET_TYPE.histogram, WIDGET_TYPE.swimlane].indexOf(widgetType) >= 0) {
+            const title = widgetData.title;
             const component = {
-                contributorId: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
+                contributorId: this.toSnakeCase(title + '_' + widgetType),
                 showExportCsv: unmanagedRenderFields.showExportCsv,
                 input: {
-                    id: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
+                    id: this.toSnakeCase(title + '_' + widgetType),
                     isHistogramSelectable: unmanagedRenderFields.isHistogramSelectable,
                     multiselectable: !!widgetData.renderStep.multiselectable,
                     topOffsetRemoveInterval: unmanagedRenderFields.topOffsetRemoveInterval,
@@ -624,7 +626,7 @@ export class ConfigExportHelper {
                     brushHandlesHeightWeight: unmanagedRenderFields.brushHandlesHeightWeight,
                     yAxisStartsFromZero: unmanagedRenderFields.yAxisStartsFromZero,
                     chartType: widgetData.renderStep.chartType,
-                    chartTitle: widgetData.dataStep.name,
+                    chartTitle: title,
                     chartHeight: !!unmanagedRenderFields.chartHeight ? unmanagedRenderFields.chartHeight : 100,
                     chartWidth: !!unmanagedRenderFields.chartWidth ? unmanagedRenderFields.chartWidth : 445,
                     customizedCssClass: widgetData.dataStep.aggregation.aggregationFieldType === 'numeric' ? 'arlas-histogram-analytics' :
@@ -683,7 +685,7 @@ export class ConfigExportHelper {
 
         } else if (widgetType === WIDGET_TYPE.metric) {
             const component = {
-                contributorId: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
+                contributorId: this.toSnakeCase(widgetData.title + '_' + widgetType),
                 componentType: WIDGET_TYPE.metric,
                 input: {
                     customizedCssClass: unmanagedRenderFields.customizedCssClass,
@@ -701,11 +703,11 @@ export class ConfigExportHelper {
 
         } else if (widgetType === WIDGET_TYPE.powerbars) {
             const component = {
-                contributorId: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
+                contributorId: this.toSnakeCase(widgetData.title + '_' + widgetType),
                 componentType: WIDGET_TYPE.powerbars,
                 input: {
-                    chartTitle: widgetData.dataStep.name,
-                    powerbarTitle: widgetData.dataStep.name,
+                    chartTitle: widgetData.title,
+                    powerbarTitle: widgetData.title,
                     displayFilter: !!widgetData.renderStep.displayFilter,
                     useColorService: !!widgetData.renderStep.useColorService
                 }
@@ -715,10 +717,10 @@ export class ConfigExportHelper {
 
         } else if (widgetType === WIDGET_TYPE.donut) {
             const component = {
-                contributorId: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
+                contributorId: this.toSnakeCase(widgetData.title + '_' + widgetType),
                 componentType: WIDGET_TYPE.donut,
                 input: {
-                    id: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
+                    id: this.toSnakeCase(widgetData.title + '_' + widgetType),
                     customizedCssClass: unmanagedRenderFields.customizedCssClass,
                     diameter: unmanagedRenderFields.diameter,
                     multiselectable: !!widgetData.renderStep.multiselectable,
@@ -729,10 +731,10 @@ export class ConfigExportHelper {
             return component;
         } else if (widgetType === WIDGET_TYPE.resultlist) {
             const component = {
-                contributorId: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
+                contributorId: this.toSnakeCase(widgetData.title + '_' + widgetType),
                 componentType: WIDGET_TYPE.resultlist,
                 input: {
-                    id: this.toSnakeCase(widgetData.dataStep.name + '_' + widgetType),
+                    id: this.toSnakeCase(widgetData.title + '_' + widgetType),
                     tableWidth: unmanagedRenderFields.tableWidth,
                     globalActionsList: unmanagedRenderFields.globalActionsList,
                     searchSize: widgetData.dataStep.searchSize,

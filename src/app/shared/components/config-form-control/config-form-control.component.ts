@@ -25,7 +25,7 @@ import {
   ColorFormControl, HuePaletteFormControl, HiddenFormControl, IconFormControl, ButtonFormControl,
   OrderedSelectFormControl, MetricWithFieldListFormControl as MetricFieldListFormControl, TextareaFormControl,
   MetricWithFieldListFormControl, FieldWithSizeListFormControl, ButtonToggleFormControl, ColorPreviewFormControl,
-  ComponentFormControl, VisualisationCheckboxFormControl
+  ComponentFormControl, VisualisationCheckboxFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 
 @Component({
@@ -103,7 +103,12 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   }
 
   public isInput(): InputFormControl | null {
-    return Object.getPrototypeOf(this.control) === InputFormControl.prototype ? this.control as InputFormControl : null;
+    return (Object.getPrototypeOf(this.control) === InputFormControl.prototype &&
+      Object.getPrototypeOf(this.control) !== TitleInputFormControl.prototype) ? this.control as InputFormControl : null;
+  }
+
+  public isTitleInput(): InputFormControl | null {
+    return Object.getPrototypeOf(this.control) === TitleInputFormControl.prototype ? this.control as TitleInputFormControl : null;
   }
 
   public isIcon(): IconFormControl | null {

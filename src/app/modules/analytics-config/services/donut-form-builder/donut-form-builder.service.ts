@@ -18,7 +18,7 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import {
-  ConfigFormGroup, InputFormControl, FieldWithSizeListFormControl, SliderFormControl, SlideToggleFormControl, ButtonFormControl
+  ConfigFormGroup, FieldWithSizeListFormControl, SliderFormControl, SlideToggleFormControl, ButtonFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { MainFormService } from '@services/main-form/main-form.service';
@@ -45,12 +45,12 @@ export class DonutConfigForm extends ConfigFormGroup {
     private colorService: ArlasColorGeneratorLoader
   ) {
     super({
+      title: new TitleInputFormControl(
+        '',
+        marker('donut title'),
+        marker('donut title description')
+      ),
       dataStep: new ConfigFormGroup({
-        name: new InputFormControl(
-          '',
-          marker('Title'),
-          marker('donut title description')
-        ),
         aggregationmodels: new FieldWithSizeListFormControl(
           '',
           '',
@@ -131,8 +131,8 @@ export class DonutConfigForm extends ConfigFormGroup {
   }
 
   public customControls = {
+    title: this.get('title') as TitleInputFormControl,
     dataStep: {
-      name: this.get('dataStep').get('name') as InputFormControl,
       aggregationmodels: this.get('dataStep').get('aggregationmodels') as FieldWithSizeListFormControl,
     },
     renderStep: {

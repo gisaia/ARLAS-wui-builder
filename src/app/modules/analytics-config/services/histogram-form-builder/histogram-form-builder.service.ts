@@ -20,7 +20,7 @@ import { Injectable } from '@angular/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
-  ConfigFormGroup, SlideToggleFormControl, SelectFormControl, InputFormControl
+  ConfigFormGroup, SlideToggleFormControl, SelectFormControl, InputFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { ChartType } from 'arlas-web-components';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -49,14 +49,14 @@ export class HistogramFormGroup extends ConfigFormGroup {
   ) {
     super(
       {
+        title: new TitleInputFormControl(
+          '',
+          marker('histogram title'),
+          marker('histogram title description')
+        ),
         dataStep: new ConfigFormGroup({
-          name: new InputFormControl(
-            '',
-            marker('Name'),
-            marker('histogram name description')
-          ),
-          aggregation: bucketsIntervalFg,
-          metric: metricFg
+          aggregation: bucketsIntervalFg.withTitle(marker('histogram x-Axis')),
+          metric: metricFg.withTitle(marker('histogram y-Axis'))
         }).withTabName(marker('Data')),
         renderStep: new ConfigFormGroup({
           multiselectable: new SlideToggleFormControl(
@@ -126,8 +126,8 @@ export class HistogramFormGroup extends ConfigFormGroup {
   }
 
   public customControls = {
+    title: this.get('title') as TitleInputFormControl,
     dataStep: {
-      name: this.get('dataStep').get('name') as InputFormControl,
       aggregation: this.get('dataStep').get('aggregation') as BucketsIntervalFormGroup,
       metric: this.get('dataStep').get('metric') as MetricCollectFormGroup
     },
@@ -197,7 +197,7 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
 
     const formGroup = new HistogramFormGroup(
       this.bucketsIntervalBuilderService.build(toNumericOrDateFieldsObs(collectionFieldsObs), 'histogram'),
-      this.metricBuilderService.build(collectionFieldsObs)
+      this.metricBuilderService.build(collectionFieldsObs, 'histogram')
     );
 
     this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
