@@ -105,7 +105,10 @@ export class EditGroupComponent implements OnInit {
       .afterClosed().subscribe(result => {
         if (result) {
           // add the new widget to the previous ones if they exist
-          const finalResult = this.contentTypeValue ? this.contentTypeValue.concat(result) : result;
+          if (!!this.contentTypeValue) {
+            this.contentTypeValue.push(result);
+          }
+          const finalResult = this.contentTypeValue ? this.contentTypeValue : [result];
           this.formGroup.controls.contentType.setValue(finalResult);
           this.editWidget(this.contentTypeValue.length - 1);
         }

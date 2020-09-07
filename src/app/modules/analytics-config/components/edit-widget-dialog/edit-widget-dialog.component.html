@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>{{dialogData.widgetType | translate | titlecase }}</h1>
-
+<app-config-form-control *ngIf="formGroup.controls['title']" [control]="formGroup.controls['title']"></app-config-form-control>
 <div mat-dialog-content>
 
     <app-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey">
@@ -8,6 +8,6 @@
 </div>
 
 <div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]>Cancel</button>
-    <button cdkFocusInitial (click)="save()" mat-raised-button>Save</button>
+    <button mat-button [mat-dialog-close]>{{'Cancel' | translate}}</button>
+    <button cdkFocusInitial (click)="save()" mat-raised-button>{{'Save' | translate}}</button>
 </div>

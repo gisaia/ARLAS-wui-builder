@@ -18,7 +18,7 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import {
-  ConfigFormGroup, InputFormControl, MetricWithFieldListFormControl, TextareaFormControl, SlideToggleFormControl
+  ConfigFormGroup, InputFormControl, MetricWithFieldListFormControl, TextareaFormControl, SlideToggleFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { Observable } from 'rxjs';
 import { CollectionField } from '@services/collection-service/models';
@@ -35,12 +35,12 @@ export class MetricFormGroup extends ConfigFormGroup {
     collectionFields: Observable<Array<CollectionField>>
   ) {
     super({
+      title: new TitleInputFormControl(
+        '',
+        marker('metric title'),
+        marker('metric title description')
+      ),
       dataStep: new ConfigFormGroup({
-        name: new InputFormControl(
-          '',
-          marker('Title'),
-          marker('Metric title description')
-        ),
         metrics: new MetricWithFieldListFormControl(
           '',
           'metric/field',
@@ -94,8 +94,8 @@ export class MetricFormGroup extends ConfigFormGroup {
   }
 
   public customControls = {
+    title: this.get('title') as TitleInputFormControl,
     dataStep: {
-      name: this.get('dataStep').get('name') as InputFormControl,
       metrics: this.get('dataStep').get('metrics') as MetricWithFieldListFormControl,
       function: this.get('dataStep').get('function') as TextareaFormControl,
     },

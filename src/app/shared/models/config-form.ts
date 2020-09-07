@@ -607,8 +607,19 @@ export class InputFormControl extends ConfigFormControl {
         description: string,
         public inputType: string = 'text',
         optionalParams?: ControlOptionalParams) {
-
         super(formState, label, description, optionalParams);
+    }
+}
+
+export class TitleInputFormControl extends InputFormControl {
+    public inputAim = 'title';
+    constructor(
+        formState: any,
+        label: string,
+        description: string,
+        public inputType: string = 'text',
+        optionalParams?: ControlOptionalParams) {
+        super(formState, label, description, 'text', optionalParams);
     }
 }
 

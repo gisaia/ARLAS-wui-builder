@@ -18,7 +18,7 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import {
-  ConfigFormGroup, InputFormControl, SlideToggleFormControl, SelectFormControl, SliderFormControl, ButtonFormControl
+  ConfigFormGroup, InputFormControl, SlideToggleFormControl, SelectFormControl, SliderFormControl, ButtonFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -46,12 +46,12 @@ export class PowerbarConfigForm extends ConfigFormGroup {
     private colorService: ArlasColorGeneratorLoader,
   ) {
     super({
+      title: new TitleInputFormControl(
+        '',
+        marker('powerbar title'),
+        marker('powerbar title description')
+      ),
       dataStep: new ConfigFormGroup({
-        name: new InputFormControl(
-          '',
-          marker('Powerbar title'),
-          marker('Powerbar title description')
-        ),
         aggregationField: new SelectFormControl(
           '',
           marker('Powerbar field'),
@@ -136,8 +136,8 @@ export class PowerbarConfigForm extends ConfigFormGroup {
   }
 
   public customControls = {
+    title: this.get('title') as TitleInputFormControl,
     dataStep: {
-      name: this.get('dataStep').get('name') as InputFormControl,
       aggregationField: this.get('dataStep').get('aggregationField') as SelectFormControl,
       aggregationSize: this.get('dataStep').get('aggregationSize') as SliderFormControl,
     },

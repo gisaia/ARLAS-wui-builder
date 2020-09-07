@@ -21,7 +21,7 @@ import { WidgetFormBuilder } from '../widget-form-builder';
 import { FormGroup, FormControl } from '@angular/forms';
 import {
   ConfigFormGroup, InputFormControl, SelectFormControl, SliderFormControl,
-  SlideToggleFormControl, HuePaletteFormControl, HiddenFormControl, SelectOption, ButtonToggleFormControl
+  SlideToggleFormControl, HuePaletteFormControl, HiddenFormControl, SelectOption, ButtonToggleFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
@@ -51,12 +51,12 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
   ) {
     super(
       {
+        title: new TitleInputFormControl(
+          '',
+          marker('swimlane title'),
+          marker('swimlane title description')
+        ),
         dataStep: new ConfigFormGroup({
-          name: new InputFormControl(
-            '',
-            marker('Name'),
-            marker('Swimlane name description')
-          ),
           aggregation: dateAggregationFg,
           termAggregation: new ConfigFormGroup({
             termAggregationField: new SelectFormControl(
@@ -161,8 +161,8 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
   }
 
   public customControls = {
+    title: this.get('title') as TitleInputFormControl,
     dataStep: {
-      name: this.get('dataStep').get('name') as InputFormControl,
       aggregation: this.get('dataStep').get('aggregation') as BucketsIntervalFormGroup,
       termAggregation: {
         termAggregationField: this.get('dataStep').get('termAggregation').get('termAggregationField') as SelectFormControl,
@@ -240,7 +240,7 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
         .build(toDateFieldsObs(collectionFieldsObs), 'swimlane')
         .withTitle(marker('Date aggregation')),
       this.metricBuilderService
-        .build(collectionFieldsObs)
+        .build(collectionFieldsObs, 'swimlane')
         .withTitle(marker('swimlane metric')),
       this.defaultValuesService.getDefaultConfig(),
       toKeywordOptionsObs(collectionFieldsObs));

@@ -23,7 +23,8 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import {
   ConfigFormGroup, InputFormControl, SliderFormControl, SlideToggleFormControl, SelectFormControl, TextareaFormControl, SelectOption,
   HiddenFormControl,
-  ComponentFormControl
+  ComponentFormControl,
+  TitleInputFormControl
 } from '@shared-models/config-form';
 import { FormArray, Validators, FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -39,16 +40,16 @@ export class ResultlistConfigForm extends ConfigFormGroup {
     describe: Observable<CollectionReferenceDescription>
   ) {
     super({
+      title: new InputFormControl(
+        '',
+        marker('resultlist title'),
+        marker('resultlist title description'),
+        undefined,
+        {
+          childs: () => [this.customControls.dataStep.idFieldName]
+        }
+      ),
       dataStep: new ConfigFormGroup({
-        name: new InputFormControl(
-          '',
-          marker('Title'),
-          marker('Result list title description'),
-          undefined,
-          {
-            childs: () => [this.customControls.dataStep.idFieldName]
-          }
-        ),
         searchSize: new SliderFormControl(
           '',
           marker('Search size'),
@@ -126,8 +127,8 @@ export class ResultlistConfigForm extends ConfigFormGroup {
   };
 
   public customControls = {
+    title: this.get('title') as TitleInputFormControl,
     dataStep: {
-      name: this.get('dataStep.name') as InputFormControl,
       searchSize: this.get('dataStep.searchSize') as SliderFormControl,
       columns: this.get('dataStep.columns') as FormArray,
       details: this.get('dataStep.details') as FormArray,

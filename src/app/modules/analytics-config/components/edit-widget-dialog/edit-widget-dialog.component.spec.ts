@@ -8,8 +8,8 @@ import { of } from 'rxjs';
 import { HistogramFormBuilderService } from '../../services/histogram-form-builder/histogram-form-builder.service';
 import { FormGroup } from '@angular/forms';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-import { EditResultlistColumnsComponent } from '../edit-resultlist-columns/edit-resultlist-columns.component';
 import { ResultlistDataComponent } from '../resultlist-data/resultlist-data.component';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
 
 describe('EditWidgetDialogComponent', () => {
   let spectator: Spectator<EditWidgetDialogComponent>;
@@ -34,6 +34,7 @@ describe('EditWidgetDialogComponent', () => {
     declarations: [
       MockComponent(ConfigFormGroupComponent),
       MockComponent(ResultlistDataComponent),
+      MockComponent(ConfigFormControlComponent),
     ],
     mocks: [
       MatDialogRef

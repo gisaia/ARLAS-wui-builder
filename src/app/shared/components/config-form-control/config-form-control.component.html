@@ -219,6 +219,15 @@
     </mat-form-field>
 </div>
 
+<div *ngIf="isTitleInput(); let typedControl">
+    <span style="margin-right: 10px;">{{'Title' | translate}}</span>
+    <mat-form-field>
+        <input matInput [formControl]="typedControl" [placeholder]="typedControl.label | translate" [type]="typedControl.inputType" [required]="!typedControl.optional"
+            [appResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
+            [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
+    </mat-form-field>
+</div>
+
 <div *ngIf="isIcon(); let typedControl" class="icon-form-control">
     <mat-form-field>
         <mat-label>{{ typedControl.label | translate}}</mat-label>

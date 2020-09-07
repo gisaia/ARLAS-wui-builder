@@ -37,13 +37,13 @@ export class MetricCollectFormGroup extends ConfigFormGroup {
     return this.get('metricCollectFunction') as InputFormControl;
   }
 
-  constructor(collectionFieldsObs: Observable<Array<CollectionField>>) {
+  constructor(collectionFieldsObs: Observable<Array<CollectionField>>, type: string) {
     super(
       {
         metricCollectFunction: new SelectFormControl(
           '',
-          marker('Metric collect function'),
-          marker('Metric collect function Description'),
+          marker(type + ' metric collect function'),
+          marker(type + ' metric collect function Description'),
           false,
           ['Count', Metric.CollectFctEnum.AVG.toString(), Metric.CollectFctEnum.CARDINALITY.toString(),
           Metric.CollectFctEnum.MAX.toString(), Metric.CollectFctEnum.MIN.toString(),
@@ -54,8 +54,8 @@ export class MetricCollectFormGroup extends ConfigFormGroup {
         ),
         metricCollectField: new SelectFormControl(
           '',
-          marker('Metric collect field'),
-          marker('Metric collect field Description'),
+          marker(type + ' metric collect field'),
+          marker(type + ' metric collect field Description'),
           true,
           [],
           {
@@ -100,8 +100,8 @@ export class MetricCollectFormBuilderService {
 
   constructor() { }
 
-  public build(collectionFieldsObs: Observable<Array<CollectionField>>) {
-    return new MetricCollectFormGroup(collectionFieldsObs);
+  public build(collectionFieldsObs: Observable<Array<CollectionField>>, type: string) {
+    return new MetricCollectFormGroup(collectionFieldsObs, type);
   }
 
 }
