@@ -49,7 +49,10 @@ export class MetricCollectFormGroup extends ConfigFormGroup {
           Metric.CollectFctEnum.MAX.toString(), Metric.CollectFctEnum.MIN.toString(),
           Metric.CollectFctEnum.SUM.toString()].map(value => ({ value, label: titleCase(value) })),
           {
-            optional: true
+            optional: true,
+            childs: () => [
+              this.customControls.metricCollectField
+            ]
           }
         ),
         metricCollectField: new SelectFormControl(

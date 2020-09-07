@@ -31,25 +31,8 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { MainFormService } from '@services/main-form/main-form.service';
 
 export class MapGlobalFormGroup extends ConfigFormGroup {
-
   constructor() {
     super({
-      geographicalOperator: new SelectFormControl(
-        null,
-        marker('Geographical operator'),
-        marker('Geographical operator description'),
-        false,
-        [
-          Expression.OpEnum.Intersects,
-          Expression.OpEnum.Notintersects,
-          Expression.OpEnum.Notwithin,
-          Expression.OpEnum.Within
-        ].map(op => ({
-          label: op,
-          value: op
-        }))
-      ),
-      requestGeometries: new ConfigFormGroupArray([]),
       initZoom: new SliderFormControl(
         '',
         marker('Initial zoom'),
@@ -72,6 +55,22 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
         marker('Init center longitude'),
         marker('Init center longitude description'),
       ),
+      geographicalOperator: new SelectFormControl(
+        null,
+        marker('Geographical operator'),
+        marker('Geographical operator description'),
+        false,
+        [
+          Expression.OpEnum.Intersects,
+          Expression.OpEnum.Notintersects,
+          Expression.OpEnum.Notwithin,
+          Expression.OpEnum.Within
+        ].map(op => ({
+          label: op,
+          value: op
+        }))
+      ),
+      requestGeometries: new ConfigFormGroupArray([]),
       allowMapExtend: new SlideToggleFormControl(
         '',
         marker('Allow map extend'),
@@ -138,7 +137,7 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
 
 export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
   constructor(collection: string, geometryPath: string, idPath: string, collectionFields: Observable<Array<CollectionField>>,
-    ) {
+  ) {
     super({
       collection: new InputFormControl(
         { value: collection, disabled: true },
