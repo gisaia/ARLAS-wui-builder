@@ -29,6 +29,7 @@ import { AnalyticsInitService } from '@analytics-config/services/analytics-init/
 import { OperationEnum } from 'arlas-web-core';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-add-widget-dialog',
@@ -101,7 +102,7 @@ export class EditGroupComponent implements OnInit {
   }
 
   public addWidget() {
-    this.dialog.open(AddWidgetDialogComponent, {width: '350px'})
+    this.dialog.open(AddWidgetDialogComponent, { width: '350px' })
       .afterClosed().subscribe(result => {
         if (result) {
           // add the new widget to the previous ones if they exist
@@ -110,12 +111,12 @@ export class EditGroupComponent implements OnInit {
           }
           const finalResult = this.contentTypeValue ? this.contentTypeValue : [result];
           this.formGroup.controls.contentType.setValue(finalResult);
-          this.editWidget(this.contentTypeValue.length - 1);
+          this.editWidget(this.contentTypeValue.length - 1, true);
         }
       });
   }
 
-  public editWidget(widgetIndex: number) {
+  public editWidget(widgetIndex: number, newWidget?: boolean) {
     const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup;
     this.dialog.open(EditWidgetDialogComponent, {
       data: {
@@ -138,8 +139,31 @@ export class EditGroupComponent implements OnInit {
             all: false
           });
           this.cdr.detectChanges();
+        } else {
+          if (newWidget) {
+            // delete a new created widget after clicking on cancel
+            this.content.removeAt(this.content.length - 1);
+            this.contentTypeValue.pop();
+            this.formGroup.controls.contentType.setValue(this.contentTypeValue);
+          }
         }
       });
+  }
+
+  public deleteWidget(widgetIndex: number) {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '400px',
+      data: { message: 'delete the widget' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.content.removeAt(widgetIndex);
+        this.contentTypeValue.splice(widgetIndex, 1);
+        this.formGroup.controls.contentType.setValue(this.contentTypeValue);
+        this.updatePreview();
+      }
+    });
   }
 
   public onIconPickerSelect(icon: string): void {

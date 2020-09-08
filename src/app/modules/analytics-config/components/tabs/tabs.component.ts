@@ -101,7 +101,7 @@ export class TabsComponent {
   public removeTab(tabIndex: number) {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
-      data: { message: this.translate.instant('delete this tab') }
+      data: { message: 'delete this tab' }
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -55,7 +55,6 @@ export class LayersComponent implements OnInit {
   constructor(
     protected mainFormService: MainFormService,
     public dialog: MatDialog,
-    private translate: TranslateService,
     private collaborativesearchService: ArlasCollaborativesearchService,
     private configService: ArlasConfigService,
     private startupService: StartupService,
@@ -104,7 +103,7 @@ export class LayersComponent implements OnInit {
   public confirmDelete(layerId: number, layerName: string): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
-      data: { message: this.translate.instant('delete the layer') + ' ' + layerName + '?' }
+      data: { message: 'delete the layer' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
