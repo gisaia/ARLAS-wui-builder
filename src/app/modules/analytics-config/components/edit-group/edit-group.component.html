@@ -28,11 +28,18 @@
                 </div>
             </div>
             <div class="edit-widgets">
-                    <button *ngFor="let comp of contentTypeValue; index as ci;" mat-raised-button (click)="editWidget(ci)" [matTooltip]="content.controls[ci].value.widgetData?.title">
+                    <div *ngFor="let comp of contentTypeValue; index as ci;" mat-raised-button>
                         <div class="invalid-widget-edition" *ngIf="!content.controls[ci].valid" [matTooltip]="'The widget has invalid inputs. Edit to fix them.' | translate">!</div>
-                        <mat-icon>edit</mat-icon>
-                        {{('Edit' | translate) + ' ' + content.controls[ci].value.widgetData?.title}}
-                    </button>
+                        <span [matTooltip]="content.controls[ci].value.widgetData?.title">{{content.controls[ci].value.widgetData?.title}}</span>
+                        <button mat-icon-button (click)="editWidget(ci)"
+                            [matTooltip]="'Edit' | translate">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="deleteWidget(ci)"
+                            [matTooltip]="'Delete' | translate">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
                     <button  class="add" mat-raised-button (click)="addWidget()">
                         <mat-icon>add</mat-icon>
                         {{'Add a widget' | translate}}

@@ -36,8 +36,7 @@ export interface CanComponentExit {
 export class ConfirmExitGuard implements CanDeactivate<CanComponentExit> {
 
   constructor(
-    public dialog: MatDialog,
-    private translate: TranslateService) {
+    public dialog: MatDialog) {
   }
 
   public canDeactivate(
@@ -54,7 +53,7 @@ export class ConfirmExitGuard implements CanDeactivate<CanComponentExit> {
     if (!component.canExit()) {
       const dialogRef = this.dialog.open(ConfirmModalComponent, {
         width: '400px',
-        data: { message: this.translate.instant('Exit without saving ?') }
+        data: { message: 'Exit without saving ?' }
       });
       return dialogRef.afterClosed();
     } else {

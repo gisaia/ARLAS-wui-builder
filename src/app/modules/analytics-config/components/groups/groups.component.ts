@@ -67,7 +67,7 @@ export class GroupsComponent implements OnInit {
   public remove(gi) {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
-      data: { message: this.translate.instant('delete this group') }
+      data: { message: 'delete this group' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
