@@ -148,6 +148,7 @@ export function createTranslateLoader(http: HttpClient) {
     MatDialogModule,
     MatCardModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatFormFieldModule,
     MatSelectModule,
     MatSlideToggleModule,
