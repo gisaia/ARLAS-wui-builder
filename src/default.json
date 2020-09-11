@@ -101,7 +101,6 @@
                     "geometryType": "fill",
                     "opacity": 0.5,
                     "colorFg": {
-                        "propertySource": "Fix",
                         "propertyFix": "#abcdef"
                     },
                     "radiusFg": {
@@ -114,8 +113,7 @@
     },
     "search": {
         "global": {
-            "name": "Search a ...",
-            "searchField": "id",
+            "searchField": "internal.fulltext",
             "autocompleteField": "internal.fulltext",
             "unmanagedFields": {
                 "icon": "search"
