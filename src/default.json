@@ -8,12 +8,12 @@
     "map": {
         "global": {
             "geographicalOperator": "intersects",
-            "margePanForLoad": 40,
-            "margePanForTest": 2,
+            "margePanForLoad": 5,
+            "margePanForTest": 5,
             "initZoom": 2,
             "allowMapExtend": true,
-            "initCenterLat": 9.667969,
-            "initCenterLon": 55.627996,
+            "initCenterLat": 0,
+            "initCenterLon": 0,
             "displayScale": true,
             "unmanagedFields": {
                 "icon": "check_box_outline_blank",
@@ -45,9 +45,9 @@
                 },
                 "visibilityStep": {
                     "visible": true,
-                    "zoomMin": 10,
-                    "zoomMax": 10,
-                    "featuresMax": 7500
+                    "zoomMin": 0,
+                    "zoomMax": 22,
+                    "featuresMax": 5000
                 },
                 "styleStep": {
                     "geometryType": "fill",
@@ -69,9 +69,9 @@
                 },
                 "visibilityStep": {
                     "visible": true,
-                    "zoomMin": 10,
-                    "zoomMax": 10,
-                    "featuresMax": 7500
+                    "zoomMin": 0,
+                    "zoomMax": 22,
+                    "featuresMax": 5000
                 },
                 "styleStep": {
                     "geometryType": "fill",
@@ -93,9 +93,9 @@
                 },
                 "visibilityStep": {
                     "visible": true,
-                    "zoomMin": 10,
-                    "zoomMax": 10,
-                    "featuresMax": 7500
+                    "zoomMin": 0,
+                    "zoomMax": 22,
+                    "featuresMin": 5000
                 },
                 "styleStep": {
                     "geometryType": "fill",
@@ -113,7 +113,7 @@
     },
     "search": {
         "global": {
-            "searchField": "id",
+            "searchField": "internal.fulltext",
             "autocompleteField": "internal.fulltext",
             "unmanagedFields": {
                 "icon": "search"
@@ -133,11 +133,11 @@
                     "timeline": {
                         "aggregation": {
                             "aggregationBucketOrInterval": "bucket",
-                            "aggregationBucketsNumber": 22
+                            "aggregationBucketsNumber": 50
                         }
                     },
                     "detailedTimeline": {
-                        "bucketsNumber": 44
+                        "bucketsNumber": 50
                     }
                 },
                 "renderStep": {
@@ -173,6 +173,10 @@
                       "yTicks": 2,
                       "xLabels": 9,
                       "yLabels": 2,
+                      "xUnit": "",
+                      "yUnit": "",
+                      "chartXLabel": "",
+                      "shortYLabels": false,
                       "customizedCssClass": "arlas-timeline",
                       "chartHeight": 128,
                       "brushHandlesHeightWeight": 0.8,
@@ -195,6 +199,10 @@
                       "yTicks": 2,
                       "xLabels": 5,
                       "yLabels": 2,
+                      "xUnit": "",
+                      "yUnit": "",
+                      "chartXLabel": "",
+                      "shortYLabels": false,
                       "customizedCssClass": "arlas-detailed-timeline",
                       "chartHeight": 60,
                       "multiselectable": false,
@@ -258,6 +266,10 @@
                       "showYTicks": true,
                       "showXLabels": true,
                       "showYLabels": true,
+                      "xUnit": "",
+                      "yUnit": "",
+                      "chartXLabel": "",
+                      "shortYLabels": false,
                       "barWeight": 0.8,
                       "isSmoothedCurve": false
                     }
@@ -287,6 +299,10 @@
                       "showYTicks": true,
                       "showXLabels": true,
                       "showYLabels": true,
+                      "xUnit": "",
+                      "yUnit": "",
+                      "chartXLabel": "",
+                      "shortYLabels": false,
                       "barWeight": 0.8,
                       "swimLaneLabelsWidth": 100,
                       "swimlaneHeight": 20,
