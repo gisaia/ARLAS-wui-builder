@@ -39,7 +39,12 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
         marker('Initial zoom description'),
         1,
         18,
-        1
+        1,
+        null,
+        null,
+        {
+          title: marker('Map initialisation')
+        }
       ),
       initCenterLat: new InputFormControl(
         '',
@@ -55,6 +60,16 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
         marker('Init center longitude'),
         marker('Init center longitude description'),
       ),
+      allowMapExtend: new SlideToggleFormControl(
+        '',
+        marker('Allow map extend'),
+        marker('Allow map extend description'),
+      ),
+      displayScale: new SlideToggleFormControl(
+        '',
+        marker('Display scale'),
+        marker('Display scale description'),
+      ),
       geographicalOperator: new SelectFormControl(
         null,
         marker('Geographical operator'),
@@ -68,24 +83,20 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
         ].map(op => ({
           label: op,
           value: op
-        }))
+        })),
+        {
+          title: marker('Querying data on the map')
+        }
       ),
       requestGeometries: new ConfigFormGroupArray([]),
-      allowMapExtend: new SlideToggleFormControl(
-        '',
-        marker('Allow map extend'),
-        marker('Allow map extend description'),
-      ),
-      displayScale: new SlideToggleFormControl(
-        '',
-        marker('Display scale'),
-        marker('Display scale description'),
-      ),
       margePanForLoad: new InputFormControl(
         '',
         marker('MargePanForLoad'),
         marker('MargePanForLoad description'),
-        'number'
+        'number',
+        {
+          title: marker('Advanced')
+        }
       ),
       margePanForTest: new InputFormControl(
         '',
