@@ -20,6 +20,8 @@ under the License.
 
 .form-control-title {
    @include group-title();
+   font-size: 22px;
+   margin: 10px 0 5px 10px;
 }
 
 .tab-error {
