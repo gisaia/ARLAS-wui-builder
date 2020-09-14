@@ -41,6 +41,7 @@ describe('EditGroupComponent', () => {
         formGroup: new FormGroup({
           icon: new FormControl(''),
           title: new FormControl(''),
+          itemPerLine: new FormControl(''),
           contentType: new FormControl(''),
           content: new FormControl([]),
           preview: new FormControl([])

@@ -44,7 +44,7 @@ $primary-color: mat-color($primary-palette);
     }
 
     .edit-group-form {
-        padding: 20px 20px;
+        padding: 10px;
         margin: 2px;
         border-radius: 4px;
         display: flex;
@@ -54,12 +54,15 @@ $primary-color: mat-color($primary-palette);
         .fields {
             display: flex;
             flex-direction: row;
-            justify-content: space-evenly;
+            justify-content: space-between;
             flex-wrap: wrap;
 
             .icon {
+                width: 24px !important;
+                
                 ::ng-deep .mat-form-field-flex {
                     align-items: flex-end;
+                    width: 24px !important;
 
                     .mat-form-field-prefix {
                         margin-right: 5px;

@@ -229,8 +229,9 @@ export class ConfigExportHelper {
         return mapContributor;
     }
 
-    public static getMapComponent(mapConfigGlobal: MapGlobalFormGroup, mapConfigLayers: FormArray,
-                                  mapConfigVisualisations: FormArray, layerName?): MapglComponentConfig {
+    public static getMapComponent(
+        mapConfigGlobal: MapGlobalFormGroup, mapConfigLayers: FormArray,
+        mapConfigVisualisations: FormArray, layerName?): MapglComponentConfig {
 
         const customControls = mapConfigGlobal.customControls;
         const layers: Set<string> = new Set<string>();
@@ -426,8 +427,8 @@ export class ConfigExportHelper {
                 chartTitle: renderStep.chartTitle.value,
                 customizedCssClass: unmanagedFields.customizedCssClass.value,
                 multiselectable: isDetailed ?
-                unmanagedDetailedTimelineFields.multiselectable.value :
-                timelineConfigGlobal.customControls.tabsContainer.renderStep.timeline.isMultiselectable.value,
+                    unmanagedDetailedTimelineFields.multiselectable.value :
+                    timelineConfigGlobal.customControls.tabsContainer.renderStep.timeline.isMultiselectable.value,
                 brushHandlesHeightWeight: unmanagedFields.brushHandlesHeightWeight.value,
                 dataType: 'time',
                 isHistogramSelectable: unmanagedFields.isHistogramSelectable.value,
@@ -593,7 +594,7 @@ export class ConfigExportHelper {
             components: []
         } as AnalyticConfig;
         group.content.forEach(widget => {
-            groupAnalytic.components.push(this.getAnalyticsComponent(widget.widgetType, widget.widgetData));
+            groupAnalytic.components.push(this.getAnalyticsComponent(widget.widgetType, widget.widgetData, group.itemPerLine));
         });
         return groupAnalytic;
     }
@@ -609,8 +610,9 @@ export class ConfigExportHelper {
         }
     }
 
-    private static getAnalyticsComponent(widgetType: any, widgetData: any): AnalyticComponentConfig {
+    private static getAnalyticsComponent(widgetType: any, widgetData: any, itemPerLine: number): AnalyticComponentConfig {
         const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
+        const analyticsBoardWidth = 445;
 
         if ([WIDGET_TYPE.histogram, WIDGET_TYPE.swimlane].indexOf(widgetType) >= 0) {
             const title = widgetData.title;
@@ -628,7 +630,8 @@ export class ConfigExportHelper {
                     chartType: widgetData.renderStep.chartType,
                     chartTitle: title,
                     chartHeight: !!unmanagedRenderFields.chartHeight ? unmanagedRenderFields.chartHeight : 100,
-                    chartWidth: !!unmanagedRenderFields.chartWidth ? unmanagedRenderFields.chartWidth : 445,
+                    chartWidth: !!itemPerLine && itemPerLine !== 1 ?
+                        Math.ceil(analyticsBoardWidth / itemPerLine) - 12 : analyticsBoardWidth, // 12 => margin and padding left/right
                     customizedCssClass: widgetData.dataStep.aggregation.aggregationFieldType === 'numeric' ? 'arlas-histogram-analytics' :
                         'arlas-timeline-analytics',
                     xAxisPosition: unmanagedRenderFields.xAxisPosition,
@@ -689,7 +692,9 @@ export class ConfigExportHelper {
                 componentType: WIDGET_TYPE.metric,
                 input: {
                     customizedCssClass: unmanagedRenderFields.customizedCssClass,
-                    shortValue: !!widgetData.renderStep.shortValue
+                    shortValue: !!widgetData.renderStep.shortValue,
+                    chartWidth: !!itemPerLine ?
+                        Math.ceil(analyticsBoardWidth / itemPerLine) - 12 : null // 12 => margin and padding left/right
                 }
             } as AnalyticComponentConfig;
             if (widgetData.renderStep.beforeValue) {
@@ -709,7 +714,9 @@ export class ConfigExportHelper {
                     chartTitle: widgetData.title,
                     powerbarTitle: widgetData.title,
                     displayFilter: !!widgetData.renderStep.displayFilter,
-                    useColorService: !!widgetData.renderStep.useColorService
+                    useColorService: !!widgetData.renderStep.useColorService,
+                    chartWidth: !!itemPerLine ?
+                        Math.ceil(analyticsBoardWidth / itemPerLine) - 12 : null // 12 => margin and padding left/right
                 }
             } as AnalyticComponentConfig;
 
@@ -722,7 +729,7 @@ export class ConfigExportHelper {
                 input: {
                     id: this.toSnakeCase(widgetData.title + '_' + widgetType),
                     customizedCssClass: unmanagedRenderFields.customizedCssClass,
-                    diameter: unmanagedRenderFields.diameter,
+                    diameter: 175,
                     multiselectable: !!widgetData.renderStep.multiselectable,
                     opacity: widgetData.renderStep.opacity
                 }
@@ -735,7 +742,8 @@ export class ConfigExportHelper {
                 componentType: WIDGET_TYPE.resultlist,
                 input: {
                     id: this.toSnakeCase(widgetData.title + '_' + widgetType),
-                    tableWidth: unmanagedRenderFields.tableWidth,
+                    tableWidth: !!itemPerLine ?
+                        Math.ceil(analyticsBoardWidth / itemPerLine) - 12 : analyticsBoardWidth, // 12 => margin and padding left/right
                     globalActionsList: unmanagedRenderFields.globalActionsList,
                     searchSize: widgetData.dataStep.searchSize,
                     nLastLines: unmanagedRenderFields.nLastLines,

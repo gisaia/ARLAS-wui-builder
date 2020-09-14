@@ -80,6 +80,9 @@ export class AnalyticsInitService {
         name,
         Validators.required
       ],
+      itemPerLine: [
+        null
+      ],
       contentType: [
         null,
         Validators.required

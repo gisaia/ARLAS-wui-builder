@@ -4,12 +4,12 @@
             <div class="fields">
                 <div>
                     <mat-form-field class="icon">
-                        <mat-label>{{'Icon' | translate}}</mat-label>
-                        <mat-icon matPrefix>{{this.formGroup.controls.icon.value}}</mat-icon>
-                        <input matInput formControlName="icon" [iconPicker]="this.formGroup.controls.icon.value"
-                            [ipIconPack]="['mat']" [ipFallbackIcon]="'poll'" [ipPosition]="'right'" 
-                            [ipButtonStyleClass]="'mat-raised-button'" [ipMaxHeight]="'160px'"
-                            (iconPickerSelect)="onIconPickerSelect($event)" />
+                        <mat-icon matPrefix style="cursor: pointer;" (click)="iconInput.click()">
+                            {{this.formGroup.controls.icon.value}}</mat-icon>
+                        <input #iconInput matInput formControlName="icon"
+                            [iconPicker]="this.formGroup.controls.icon.value" [ipIconPack]="['mat']"
+                            [ipFallbackIcon]="'poll'" [ipPosition]="'right'" [ipButtonStyleClass]="'mat-raised-button'"
+                            [ipMaxHeight]="'160px'" (iconPickerSelect)="onIconPickerSelect($event)" />
                     </mat-form-field>
                 </div>
                 <div>
@@ -19,7 +19,23 @@
                     </mat-form-field>
                 </div>
                 <div>
-                    <mat-error *ngIf="formGroup.controls.content.touched && formGroup.controls.content.invalid">
+                    <mat-button-toggle-group (change)="updatePreview()" formControlName="itemPerLine">
+                        <!-- <mat-button-toggle aria-label="Dynamic">
+                            <mat-icon>view_quilt</mat-icon>
+                        </mat-button-toggle> -->
+                        <mat-button-toggle value="1" matTooltip="{{'One per line' | translate}}">
+                            <mat-icon>view_agenda</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="2" matTooltip="{{'Two columns' | translate}}">
+                            <mat-icon style="transform: rotate(90deg);">view_agenda</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="3" matTooltip="{{'Three columns' | translate}}">
+                            <mat-icon>view_week</mat-icon>
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+                <div *ngIf="formGroup.controls.content.touched && formGroup.controls.content.invalid">
+                    <mat-error>
                         {{ contentTypeValue.length | i18nPlural:{
                             '=1': 'The widget within isn\'t valid' | translate, 
                             'other': 'The widgets within aren\'t valid' | translate
@@ -28,22 +44,22 @@
                 </div>
             </div>
             <div class="edit-widgets">
-                    <div *ngFor="let comp of contentTypeValue; index as ci;" mat-raised-button>
-                        <div class="invalid-widget-edition" *ngIf="!content.controls[ci].valid" [matTooltip]="'The widget has invalid inputs. Edit to fix them.' | translate">!</div>
-                        <span [matTooltip]="content.controls[ci].value.widgetData?.title">{{content.controls[ci].value.widgetData?.title}}</span>
-                        <button mat-icon-button (click)="editWidget(ci)"
-                            [matTooltip]="'Edit' | translate">
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                        <button mat-icon-button (click)="deleteWidget(ci)"
-                            [matTooltip]="'Delete' | translate">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </div>
-                    <button  class="add" mat-raised-button (click)="addWidget()">
-                        <mat-icon>add</mat-icon>
-                        {{'Add a widget' | translate}}
+                <div *ngFor="let comp of contentTypeValue; index as ci;" mat-raised-button>
+                    <div class="invalid-widget-edition" *ngIf="!content.controls[ci].valid"
+                        [matTooltip]="'The widget has invalid inputs. Edit to fix them.' | translate">!</div>
+                    <span
+                        [matTooltip]="content.controls[ci].value.widgetData?.title">{{content.controls[ci].value.widgetData?.title}}</span>
+                    <button mat-icon-button (click)="editWidget(ci)" [matTooltip]="'Edit' | translate">
+                        <mat-icon>edit</mat-icon>
                     </button>
+                    <button mat-icon-button (click)="deleteWidget(ci)" [matTooltip]="'Delete' | translate">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+                <button class="add" mat-raised-button (click)="addWidget()">
+                    <mat-icon>add</mat-icon>
+                    {{'Add a widget' | translate}}
+                </button>
             </div>
         </div>
     </div>
