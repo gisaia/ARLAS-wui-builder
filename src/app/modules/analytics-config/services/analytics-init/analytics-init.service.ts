@@ -31,6 +31,8 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AnalyticsInitService {
 
+  public groupIndex = 0;
+
   constructor(
     private formBuilder: FormBuilder,
     private mainFormService: MainFormService,
@@ -104,7 +106,7 @@ export class AnalyticsInitService {
       widgetFg.value.widgetType,
       widgetFg.value.widgetData,
       groupFg.controls.icon.value);
-    groupFg.controls.preview.setValue([ConfigExportHelper.getAnalyticsGroup('preview', groupFg.value, 1)]);
+    groupFg.controls.preview.setValue(ConfigExportHelper.getAnalyticsGroup('preview', groupFg.value, this.groupIndex++));
     contrib.updateFromCollaboration({
       id: '',
       operation: OperationEnum.add,

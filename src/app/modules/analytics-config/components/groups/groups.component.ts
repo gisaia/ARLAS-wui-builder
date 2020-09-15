@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
@@ -42,13 +42,16 @@ export class GroupsComponent implements OnInit {
 
   @Input() public contentFg: FormGroup;
 
+  public groupsPreview = [];
+
   constructor(
     private defaultValuesService: DefaultValuesService,
     public dialog: MatDialog,
     private arlasStartupService: ArlasStartupService,
     private configService: ArlasConfigService,
     private analyticsInitService: AnalyticsInitService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private cdr: ChangeDetectorRef,
   ) {
   }
 
@@ -60,7 +63,7 @@ export class GroupsComponent implements OnInit {
     this.groupsFa.push(this.analyticsInitService.initNewGroup(
       this.translate.instant(
         this.defaultValuesService.getValue('analytics.groups.new'))
-      )
+    )
     );
   }
 
@@ -96,7 +99,18 @@ export class GroupsComponent implements OnInit {
     return this.contentFg.get('groupsFa') as FormArray;
   }
 
+  public updateAnalytics() {
+    const analytics = [];
+    this.groupsPreview = [];
+    this.cdr.detectChanges();
+    this.groupsFa.value.forEach(group => {
+      analytics.push(group.preview);
+    });
+    this.groupsPreview = analytics;
+  }
+
   public drop(event: CdkDragDrop<string[]>) {
     moveItemInFormArray(event.previousIndex, event.currentIndex, this.groupsFa);
+    this.updateAnalytics();
   }
 }
