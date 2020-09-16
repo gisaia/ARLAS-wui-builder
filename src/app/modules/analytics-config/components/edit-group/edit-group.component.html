@@ -56,15 +56,11 @@
                         <mat-icon>delete</mat-icon>
                     </button>
                 </div>
-                <button class="add" mat-raised-button (click)="addWidget()">
+                <button class="add" mat-raised-button [matTooltip]="'Add a widget' | translate" (click)="addWidget()">
                     <mat-icon>add</mat-icon>
-                    {{'Add a widget' | translate}}
                 </button>
             </div>
         </div>
     </div>
-    <div class="preview-group" *ngIf="formGroup.value.preview.length > 0">
-        <arlas-analytics-board [groups]="formGroup.value.preview" [showSpinner]="true"></arlas-analytics-board>
-    </div>
-    <div class="preview-placeholder" *ngIf="formGroup.value.preview.length == 0"></div>
+    
 </div>

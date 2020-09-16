@@ -2,23 +2,38 @@
     <mat-error *ngIf="groupsFa.touched && groupsFa?.errors?.required">
         {{'At least one group is required within a tab' | translate}}
     </mat-error>
-    <div formArrayName="groupsFa" cdkDropList (cdkDropListDropped)="drop($event)">
-        <div *ngFor="let group of groupsFa.controls; index as gi;" [formGroupName]="gi" cdkDrag class="group">
-            <button *cdkDragPreview mat-button><mat-icon>drag_indicator</mat-icon>{{'Move' | translate }}</button>
-            <div class="header" cdkDragHandle>
-                <button mat-button [matTooltip]="'Move group' | translate"><mat-icon>drag_indicator</mat-icon>{{'Move' | translate }}</button>
-                <button mat-button (click)="remove(gi)" [matTooltip]="'Delete group' | translate"><mat-icon>delete</mat-icon>{{'Delete' | translate }}</button>
+    <div class="bloc">
+        <div formArrayName="groupsFa" cdkDropList (cdkDropListDropped)="drop($event)">
+            <div *ngFor="let group of groupsFa.controls; index as gi;" [formGroupName]="gi" cdkDrag class="group">
+                <button *cdkDragPreview mat-button>
+                    <mat-icon>unfold_more</mat-icon>{{'Move' | translate}}
+                </button>
+                <div class="header" cdkDragHandle>
+                    <button mat-icon-button [matTooltip]="'Move group' | translate">
+                        <mat-icon>drag_indicator</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="remove(gi)" [matTooltip]="'Delete group' | translate">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+                <app-edit-group [formGroup]="group" (updateDisplay)="updateAnalytics()" (remove)="remove(gi)">
+                </app-edit-group>
+
+
+                <div class="placeholder" *cdkDragPlaceholder></div>
             </div>
-            <app-edit-group [formGroup]="group" (remove)="remove(gi)" >
-            </app-edit-group>
-            <div class="placeholder" *cdkDragPlaceholder></div>
+            <div class="add-button">
+                <button mat-raised-button color="primary" (click)="addGroup()" [matTooltip]="'Add a group' | translate">
+                    <mat-icon>add</mat-icon>
+                    {{'Add a group' | translate}}
+                </button>
+            </div>
+        </div>
+
+        <div class="preview-group" *ngIf="groupsPreview.length > 0">
+            <arlas-analytics-board [groups]="groupsPreview" [showSpinner]="true"></arlas-analytics-board>
         </div>
     </div>
 
-    <div class="add-button">
-        <button mat-raised-button color="primary" (click)="addGroup()" [matTooltip]="'Add a group' | translate">
-            <mat-icon>add</mat-icon>
-            {{'Add a group' | translate}}
-        </button>
-    </div>
+    
 </div>
