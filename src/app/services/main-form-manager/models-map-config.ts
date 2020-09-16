@@ -29,6 +29,7 @@ export interface Layer {
     minzoom: number;
     maxzoom: number;
     paint: Paint;
+    filter?: Array<any>;
 }
 
 export interface Layout {

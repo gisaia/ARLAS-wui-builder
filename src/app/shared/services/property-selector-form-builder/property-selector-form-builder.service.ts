@@ -45,7 +45,6 @@ import { valuesToOptions } from '@utils/tools';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 export class PropertySelectorFormGroup extends ConfigFormGroup {
-
   constructor(
     defaultConfig: DefaultConfig,
     dialog: MatDialog,
@@ -377,14 +376,20 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                 && !this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
                 && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value;
               control.enableIf(doEnable);
-
               if (doEnable && !isLoading) {
-                collectionService.getComputationMetric(
+                const allValuesCtr = this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesCtrl;
+                // if we import a config we take the min value already in the config, else we calculate the min of the field
+                if (!!allValuesCtr.value && allValuesCtr.value.length > 2 &&
+                  allValuesCtr.value[0].proportion + '' !== NaN.toString()) {
+                  control.setValue(+allValuesCtr.value[0].proportion);
+                } else if (!control.value) {
+                  collectionService.getComputationMetric(
                   collection,
                   this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value,
                   METRIC_TYPES.MIN)
                   .then(min =>
                     control.setValue(min));
+                }
               }
             }
           }
@@ -408,16 +413,22 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                 && !this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
                 && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value;
               control.enableIf(doEnable);
-
               if (doEnable && !isLoading) {
                 const metric = this.customControls.propertyInterpolatedFg.propertyInterpolatedMetricCtrl.value === METRIC_TYPES.SUM ?
                   METRIC_TYPES.SUM : METRIC_TYPES.MAX;
-                collectionService.getComputationMetric(
-                  collection,
-                  this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value,
-                  metric)
-                  .then(sum =>
-                    control.setValue(sum));
+                const allValuesCtr = this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesCtrl;
+                // if we import a config we take the max value already in the config, else we calculate the max of the field
+                if (!!allValuesCtr.value && allValuesCtr.value.length > 2 &&
+                  allValuesCtr.value[allValuesCtr.value.length - 1].proportion + '' !== NaN.toString()) {
+                  control.setValue(+allValuesCtr.value[allValuesCtr.value.length - 1].proportion);
+                } else {
+                  collectionService.getComputationMetric(
+                    collection,
+                    this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value,
+                    metric)
+                    .then(sum =>
+                      control.setValue(sum));
+                }
               }
             }
           }
@@ -441,15 +452,11 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
               this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl,
             ],
             onDependencyChange: (control) => {
-              // enable if a color or a number can be interpolated
-              this.enableControlIfColorInterpolable(control as ConfigFormControl, isAggregated, false);
-
               // if propertyType is not color => create interpolation values from the min and max
               // (other the palette dialog will update the interpolation values)
               if (propertyType === PROPERTY_TYPE.number &&
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl.valid &&
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl.valid) {
-
                 const isAggregatedCount =
                   isAggregated &&
                   this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT;
@@ -464,15 +471,22 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                   parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value, 10);
                 const minInterpolatedValue = this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl.value;
                 const maxInterpolatedValue = this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl.value;
-
-                control.setValue(
-                  [...Array(6).keys()].map(k =>
-                    ({
-                      proportion: minValue + (maxValue - minValue) * k / 5,
-                      value: minInterpolatedValue + (maxInterpolatedValue - minInterpolatedValue) * k / 5
-                    })
-                  )
-                );
+                // if we import a config where we don't interpolate linearly, we will maintain this custom interpolation
+                // as long as we don't change the dependants values : max, min, normalise. If we change those values, we lose
+                // the custom interpolation
+                if (!control.value || +control.value[0].proportion !== minValue ||
+                  +control.value[control.value.length - 1].proportion !== maxValue) {
+                 control.setValue(
+                   [...Array(6).keys()].map(k =>
+                     ({
+                       proportion: minValue + (maxValue - minValue) * k / 5,
+                       value: minInterpolatedValue + (maxInterpolatedValue - minInterpolatedValue) * k / 5
+                     })
+                   )
+                 );
+                }
+                // enable if a color or a number can be interpolated
+                this.enableControlIfColorInterpolable(control as ConfigFormControl, isAggregated, false);
               }
             }
           }
@@ -643,7 +657,6 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
    * => this method helps only to avoid code duplication
    */
   private enableControlIfColorInterpolable(control: ConfigFormControl, isAggregated: boolean, onlyColor: boolean) {
-
     let doEnable = false;
     if (onlyColor && this.propertyType !== PROPERTY_TYPE.color) {
       // NOP
@@ -655,7 +668,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
     } else if (!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
       && !Number.isNaN(parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl.value, 10))
       && !Number.isNaN(parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value, 10))) {
-      doEnable = true;
+        doEnable = true;
     } else if (!!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
       && !this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeByKeyCtrl.value) {
       doEnable = true;

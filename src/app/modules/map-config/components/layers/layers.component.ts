@@ -89,7 +89,8 @@ export class LayersComponent implements OnInit {
       layout: {
         visibility: modeValues.visibilityStep.visible ? VISIBILITY.visible : VISIBILITY.none
       },
-      paint
+      paint,
+      filter: modeValues.styleStep.filter
     };
     return layer;
   }
