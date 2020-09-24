@@ -382,7 +382,7 @@ export class ConfigExportHelper {
 
         if (!isDetailed && timelineAggregation.aggregationBucketOrInterval.value === BY_BUCKET_OR_INTERVAL.INTERVAL) {
             aggregationModel.interval = {
-                value: timelineAggregation.aggregationIntervalSize.value,
+                value: parseInt(timelineAggregation.aggregationIntervalSize.value, 10),
                 unit: timelineAggregation.aggregationIntervalUnit.value
             };
         } else if (!isDetailed) {
@@ -822,7 +822,7 @@ export class ConfigExportHelper {
             contrib.numberOfBuckets = aggregationData.aggregationBucketsNumber;
         } else {
             aggregationModel.interval = {
-                value: aggregationData.aggregationIntervalSize
+                value: parseInt(aggregationData.aggregationIntervalSize, 10)
             };
             if (!!aggregationData.aggregationIntervalUnit) {
                 aggregationModel.interval.unit = aggregationData.aggregationIntervalUnit;
