@@ -87,7 +87,7 @@ export class MapImportService {
     );
     importElements([
       {
-        value: mapContrib.geo_query_op.toLowerCase(),
+        value: !!mapContrib.geo_query_op ? mapContrib.geo_query_op.toLowerCase() : 'intersects',
         control: mapGlobalForm.customControls.geographicalOperator
       },
       {
@@ -292,6 +292,8 @@ export class MapImportService {
     values.geometryStep.geometry = layerSource.returned_geometry;
     values.visibilityStep.featuresMax = layerSource.maxfeatures;
     values.styleStep.geometryType = layer.type;
+    values.styleStep.filter = layer.filter;
+
   }
 
   private importLayerFeaturesMetric(
@@ -322,6 +324,8 @@ export class MapImportService {
     values.geometryStep.clusterSort = isGeometryTypeRaw ? layerSource.raw_geometry.sort : null;
     values.visibilityStep.featuresMin = layerSource.minfeatures;
     values.styleStep.geometryType = layer.type;
+    values.styleStep.filter = layer.filter;
+
   }
 
   private importPropertySelector(
@@ -392,51 +396,49 @@ export class MapImportService {
     isColor: boolean,
     isAggregated: boolean,
     layerSource: LayerSourceConfig) {
-
-    if ((inputValues[2] as Array<string>)[0] === 'heatmap-density') {
-      propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.heatmap_density;
-      propertySelectorValues.propertyInterpolatedFg = {};
-
-    } else {
-      propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.interpolated;
-      const getValue = (inputValues[2] as Array<string>)[1];
-
-      if (getValue.startsWith('count')) {
-        propertySelectorValues.propertyInterpolatedFg = {
-          propertyInterpolatedCountOrMetricCtrl: COUNT_OR_METRIC.COUNT,
-          propertyInterpolatedCountNormalizeCtrl: getValue.endsWith('_:normalized')
-        };
+      if ((inputValues[2] as Array<string>)[0] === 'heatmap-density') {
+        propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.heatmap_density;
+        propertySelectorValues.propertyInterpolatedFg = {};
 
       } else {
-        const isNormalize = getValue.split(':')[1] === NORMALIZED;
+        propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.interpolated;
+        const getValue = (inputValues[2] as Array<string>)[1];
 
-        propertySelectorValues.propertyInterpolatedFg = {
-          propertyInterpolatedNormalizeCtrl: isNormalize,
-          propertyInterpolatedNormalizeByKeyCtrl: isNormalize ? getValue.split(':').length === 3 : null,
-        };
+        if (getValue.startsWith('count')) {
+          propertySelectorValues.propertyInterpolatedFg = {
+            propertyInterpolatedCountOrMetricCtrl: COUNT_OR_METRIC.COUNT,
+            propertyInterpolatedCountNormalizeCtrl: getValue.endsWith('_:normalized')
+          };
 
-        if (isAggregated) {
-          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl = COUNT_OR_METRIC.METRIC;
-          const getValueParts = getValue.split('_');
-          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMetricCtrl = layerSource.metrics[0].metric;
-          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = layerSource.metrics[0].field;
         } else {
-          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = this.replaceUnderscore(getValue.split(':')[0]);
+          const isNormalize = getValue.split(':')[1] === NORMALIZED;
 
-          if (isNormalize && getValue.split(':').length > 2) {
-            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl =
-              this.replaceUnderscore(getValue.split(':')[2]);
+          propertySelectorValues.propertyInterpolatedFg = {
+            propertyInterpolatedNormalizeCtrl: isNormalize,
+            propertyInterpolatedNormalizeByKeyCtrl: isNormalize ? getValue.split(':').length === 3 : null,
+          };
+
+          if (isAggregated) {
+            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl = COUNT_OR_METRIC.METRIC;
+            const getValueParts = getValue.split('_');
+            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMetricCtrl =
+              layerSource.metrics[0].metric.toString().toUpperCase();
+            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = layerSource.metrics[0].field;
+          } else {
+            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = this.replaceUnderscore(getValue.split(':')[0]);
+
+            if (isNormalize && getValue.split(':').length > 2) {
+              propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl =
+                this.replaceUnderscore(getValue.split(':')[2]);
+            }
+          }
+
+          if (!propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl) {
+            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl = inputValues[3];
+            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl = inputValues[inputValues.length - 2];
           }
         }
-
-        if (!propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl) {
-          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl = inputValues[3];
-          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl = inputValues[inputValues.length - 2];
-        }
       }
-    }
-
-    if (isColor) {
       propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedValuesCtrl = new Array<ProportionedValues>();
       for (let i = 3; i < inputValues.length; i = i + 2) {
         propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedValuesCtrl.push({
@@ -444,10 +446,8 @@ export class MapImportService {
           value: inputValues[i + 1]
         });
       }
-    } else {
       propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl = inputValues[4];
       propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl = inputValues.pop();
-    }
   }
 
   private replaceUnderscore = (value) => value.replace(/\_/g, '.');

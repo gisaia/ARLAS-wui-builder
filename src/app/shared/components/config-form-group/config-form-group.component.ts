@@ -176,8 +176,8 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
    * Usefull to update the stepper's state (if there is any)
    */
   public submit() {
-    this.subConfigFormGroups.forEach(s => s.submit());
 
+    this.subConfigFormGroups.forEach(s => s.submit());
     if (!!this.stepper) {
       this.stepper.steps.setDirty();
       this.stepper.steps.forEach(s => s.interacted = true);

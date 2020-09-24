@@ -51,8 +51,12 @@ export class ConfigMapExportHelper {
                 layout: {
                     visibility: modeValues.visibilityStep.visible ? VISIBILITY.visible : VISIBILITY.none
                 },
-                paint,
+                paint
             };
+
+            if (modeValues.styleStep.filter) {
+                layer.filter = modeValues.styleStep.filter;
+            }
 
             return layer;
         });
@@ -83,7 +87,7 @@ export class ConfigMapExportHelper {
             case GEOMETRY_TYPE.circle: {
                 paint['circle-opacity'] = colorOpacity;
                 paint['circle-color'] = color;
-                paint['circle-radius'] = +this.getMapProperty(modeValues.styleStep.radiusFg, mode);
+                paint['circle-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
                 break;
             }
             case GEOMETRY_TYPE.heatmap: {

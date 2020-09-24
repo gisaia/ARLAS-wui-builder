@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup, ValidatorFn, FormControl } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -198,6 +198,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             resetDependantsOnChange: true
           }
         ),
+        filter: new FormControl(),
         opacity: new SliderFormControl(
           '',
           marker('Opacity'),
@@ -276,6 +277,8 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   public get radiusFg() { return this.styleStep.get('radiusFg') as PropertySelectorFormGroup; }
   public get weightFg() { return this.styleStep.get('weightFg') as PropertySelectorFormGroup; }
   public get intensityFg() { return this.styleStep.get('intensityFg') as PropertySelectorFormGroup; }
+  public get filter() { return this.styleStep.get('filter') as FormGroup; }
+
 
 }
 
