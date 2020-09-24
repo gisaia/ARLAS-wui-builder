@@ -49,12 +49,19 @@
                         [matTooltip]="'The widget has invalid inputs. Edit to fix them.' | translate">!</div>
                     <span
                         [matTooltip]="content.controls[ci].value.widgetData?.title">{{content.controls[ci].value.widgetData?.title}}</span>
-                    <button mat-icon-button (click)="editWidget(ci)" [matTooltip]="'Edit' | translate">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="deleteWidget(ci)" [matTooltip]="'Delete' | translate">
-                        <mat-icon>delete</mat-icon>
-                    </button>
+                        <button mat-icon-button [matMenuTriggerFor]="menuEditWidget">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menuEditWidget="matMenu">
+                            <button mat-menu-item (click)="editWidget(ci)">
+                                <mat-icon>edit</mat-icon>
+                                <span>{{'Edit' | translate}}</span>
+                            </button>
+                            <button mat-menu-item (click)="deleteWidget(ci)">
+                                <mat-icon>delete</mat-icon>
+                                <span>{{'Delete' | translate}}</span>
+                            </button>
+                        </mat-menu>
                 </div>
                 <button class="add" mat-raised-button [matTooltip]="'Add a widget' | translate" (click)="addWidget()">
                     <mat-icon>add</mat-icon>
