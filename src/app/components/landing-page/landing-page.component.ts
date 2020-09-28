@@ -40,6 +40,7 @@ import { Config } from '@services/main-form-manager/models-config';
 import { map } from 'rxjs/internal/operators/map';
 import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
 import { UserInfosComponent } from 'arlas-wui-toolkit//components/user-infos/user-infos.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 enum InitialChoice {
   none = 0,
@@ -57,7 +58,7 @@ export interface Configuration {
   templateUrl: './landing-page-dialog.component.html',
   styleUrls: ['./landing-page-dialog.component.scss']
 })
-export class LandingPageDialogComponent implements OnInit {
+export class LandingPageDialogComponent implements OnInit, AfterViewInit {
   @Output() public startEvent: Subject<boolean> = new Subject<boolean>();
 
   public configChoice = InitialChoice.none;
@@ -95,12 +96,17 @@ export class LandingPageDialogComponent implements OnInit {
     private authService: AuthentificationService,
     private errorService: ErrorService,
     private arlasSettingsService: ArlasSettingsService,
+    private spinner: NgxSpinnerService,
+
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
     this.showLoginButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
     this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
   }
 
+  public ngAfterViewInit() {
+
+  }
   public ngOnInit(): void {
     if (this.data.message !== '-1') {
       this.loadConfig(this.data.message);
@@ -189,9 +195,16 @@ export class LandingPageDialogComponent implements OnInit {
             + collections.join(', '));
 
         } else {
-          this.mainFormManager.doImport(configJson, configMapJson);
-          this.startEvent.next();
-        }
+          this.spinner.show('importconfig');
+          /** hack in order to trigger the spinner 'importconfig'
+           * otherwise, we will think the application is not loading
+           */
+          setTimeout(() => {
+            this.mainFormManager.doImport(configJson, configMapJson);
+            this.startEvent.next();
+            this.spinner.hide('importconfig');
+            }, 100);
+          }
       });
     });
   }
@@ -216,7 +229,6 @@ export class LandingPageDialogComponent implements OnInit {
     ]).then(values => {
       const configJson = values[0] as Config;
       const configMapJson = values[1] as MapConfig;
-
       // I think we need to think about two options for this part
       // A config file store in a database with arlas-persistence
       // A config file store on the file system of the user computer

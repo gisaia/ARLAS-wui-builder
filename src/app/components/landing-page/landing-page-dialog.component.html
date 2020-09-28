@@ -119,7 +119,11 @@
     <mat-dialog-actions>
         <button mat-button (click)="configChoice = InitialChoice.none">{{'Back' | translate}}</button>
         <button (click)="upload(confFileInput.files[0], mapFileInput.files[0]);" [disabled]="!confFileInput.files.length || !mapFileInput.files.length"
-            mat-raised-button color="primary">{{'Start configuration' | translate}}</button>
-    </mat-dialog-actions>
+            mat-raised-button color="primary">
 
+            {{'Start configuration' | translate}}</button>
+    </mat-dialog-actions>
+    <ngx-spinner [name]="'importconfig'" bdOpacity="0.2" bdColor="rgba(51,51,51,0.6)" size="medium" color="#fff" type="ball-clip-rotate">
+        <p style="color: white"> {{'Importing configuration...' | translate }} </p>
+    </ngx-spinner>
 </ng-container>
