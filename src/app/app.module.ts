@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { NgModule, APP_INITIALIZER, forwardRef } from '@angular/core';
+import { NgModule, APP_INITIALIZER, forwardRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
@@ -171,6 +171,8 @@ export function createTranslateLoader(http: HttpClient) {
       useFactory: (translateService: TranslateService) => new PaginatorI18n(translateService).getPaginatorIntl()
     },
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+
   bootstrap: [AppComponent],
   entryComponents: [LandingPageDialogComponent, InputModalComponent,
     UserInfosComponent]

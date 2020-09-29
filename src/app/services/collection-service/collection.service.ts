@@ -38,6 +38,8 @@ import { Hits } from 'arlas-api';
 })
 export class CollectionService {
 
+  private collectionsDescriptions = new Map<string, Observable<CollectionReferenceDescription>>();
+
   constructor(
     private collabSearchService: ArlasCollaborativesearchService,
     private spinner: NgxSpinnerService,
@@ -46,7 +48,14 @@ export class CollectionService {
   ) { }
 
   public getDescribe(collection: string): Observable<CollectionReferenceDescription> {
-    return this.collabSearchService.describe(collection);
+    const describtionObs = this.collectionsDescriptions.get(collection);
+    if (!describtionObs) {
+      const describe = this.collabSearchService.describe(collection);
+      this.collectionsDescriptions.set(collection, describe);
+      return describe;
+    } else {
+      return describtionObs;
+    }
   }
 
   public getCollectionFields(collection: string, types?: Array<FIELD_TYPES>, exclude: boolean = false)
@@ -95,7 +104,8 @@ export class CollectionService {
     };
     this.spinner.show();
 
-    return this.collabSearchService.getExploreApi().computePost(collection, computation).then(ag => {
+    return this.collabSearchService.getExploreApi().computePost(collection, computation, false, 120,
+      this.collabSearchService.getFetchOptions()).then(ag => {
       this.spinner.hide();
       return ag.value;
     })
@@ -122,7 +132,8 @@ export class CollectionService {
       filter
     };
 
-    return this.collabSearchService.getExploreApi().aggregatePost(collection, aggreationRequest).then((a: AggregationResponse) => {
+    return this.collabSearchService.getExploreApi().aggregatePost(collection, aggreationRequest, false, 120,
+      this.collabSearchService.getFetchOptions()).then((a: AggregationResponse) => {
       return a.elements ? a.elements.map(e => e.key) : [];
     })
       .finally(() => {
