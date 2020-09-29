@@ -58,7 +58,7 @@ export interface Configuration {
   templateUrl: './landing-page-dialog.component.html',
   styleUrls: ['./landing-page-dialog.component.scss']
 })
-export class LandingPageDialogComponent implements OnInit, AfterViewInit {
+export class LandingPageDialogComponent implements OnInit {
   @Output() public startEvent: Subject<boolean> = new Subject<boolean>();
 
   public configChoice = InitialChoice.none;
@@ -104,9 +104,6 @@ export class LandingPageDialogComponent implements OnInit, AfterViewInit {
     this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
   }
 
-  public ngAfterViewInit() {
-
-  }
   public ngOnInit(): void {
     if (this.data.message !== '-1') {
       this.loadConfig(this.data.message);
