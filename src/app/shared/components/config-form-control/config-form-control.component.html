@@ -43,12 +43,11 @@
 <div *ngIf="isCheckbox(); let typedControl">
         <mat-label>{{ typedControl.label | translate}}</mat-label>
         <div *ngIf="!typedControl.syncOptions || typedControl.syncOptions.length == 0">
-            <mat-checkbox (change)="typedControl.addLayer($event, 'All layers')"></mat-checkbox>
-            <span style="font-size: 0.9em; color: #444; margin-left: 5px;">{{'All layers' | translate}}</span>
+            <mat-checkbox class="checkbox" (change)="typedControl.addLayer($event, 'All layers')">{{'All layers' | translate}}</mat-checkbox>
+            
         </div>
         <div *ngFor="let opt of typedControl.syncOptions">
-            <mat-checkbox [checked]="opt.include" (change)="typedControl.addLayer($event, opt.name)"  ></mat-checkbox>
-            <span style="font-size: 0.9em; color: #444; margin-left: 5px;">{{opt.name}}</span>
+            <mat-checkbox class="checkbox" [checked]="opt.include" (change)="typedControl.addLayer($event, opt.name)">{{opt.name}}</mat-checkbox>
         </div>
         <mat-error *ngIf="!typedControl.hasLayer">
             {{ 'At least one visualisation set should be assigned to this layer' | translate}}

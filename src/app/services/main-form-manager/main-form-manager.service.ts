@@ -46,6 +46,7 @@ import { SideModulesImportService } from '@app/modules/side-modules-config/servi
 import { importElements } from './tools';
 import { StartupService, ZONE_WUI_BUILDER } from '@services/startup/startup.service';
 import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persistence.service';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -73,6 +74,7 @@ export class MainFormManagerService {
     private mapImportService: MapImportService,
     private dialog: MatDialog,
     private startupService: StartupService,
+    private router: Router
   ) { }
 
   /**
@@ -170,10 +172,14 @@ export class MainFormManagerService {
             configName,
             conf
           ).subscribe(
-            () => {
+            (data) => {
               this.snackbar.open(
                 this.translate.instant('Configuration saved !') + ' (' + configName + ')'
               );
+              this.doImport(generatedConfig, generatedMapConfig);
+              this.mainFormService.configurationId = data.id;
+              this.mainFormService.configChange.next({ id: data.id, name: data.doc_key });
+              this.router.navigate(['map-config'], { queryParamsHandling: 'preserve' });
             },
             () => {
               this.snackbar.open(this.translate.instant('Error : Configuration not saved'));

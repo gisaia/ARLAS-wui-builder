@@ -59,6 +59,7 @@ import { GET_OPTIONS } from 'arlas-wui-toolkit/services/persistence/persistence.
 import { ConfigMenuModule } from 'arlas-wui-toolkit/components/config-manager/config-menu/config-menu.module';
 import { PaginatorI18n } from 'arlas-wui-toolkit/tools/paginatori18n';
 import { UserInfosComponent } from 'arlas-wui-toolkit/components/user-infos/user-infos.component';
+import { StatusComponent } from './components/status/status.component';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -83,7 +84,8 @@ export function createTranslateLoader(http: HttpClient) {
     LeftMenuComponent,
     PageNotFoundComponent,
     LandingPageComponent,
-    LandingPageDialogComponent
+    LandingPageDialogComponent,
+    StatusComponent
   ],
   imports: [
     BrowserModule,
@@ -154,7 +156,7 @@ export function createTranslateLoader(http: HttpClient) {
     },
     {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
-      useValue: { duration: 2500, verticalPosition: 'top' }
+      useValue: { duration: 2500, verticalPosition: 'bottom' }
     },
     {
       provide: HAMMER_GESTURE_CONFIG,

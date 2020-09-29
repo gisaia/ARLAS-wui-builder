@@ -133,3 +133,8 @@ mat-option {
     }
 }
 
+.checkbox {
+    &::ng-deep .mat-checkbox-label {
+        font-size: 0.9em;
+    }
+}
