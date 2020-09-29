@@ -1,0 +1,10 @@
+<div class="status-container" *ngIf="configName && displayCurrentConfig">
+    <div class="inner">
+        {{ 'Editing configuration' | translate}} : {{configName}}
+    </div>
+</div>
+<div class="status-container" *ngIf="!configName && displayCurrentConfig">
+    <div class="inner">
+        {{ 'Create configuration' | translate}}
+    </div>
+</div>

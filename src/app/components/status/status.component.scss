@@ -16,13 +16,14 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-
 @import "variables.scss";
 
-.tab-error {
-  color: $error-color;
-}
-
-.toggle-detailed-timeline {
-  padding-top: 20px;
+.status-container {
+    border-bottom: 1px dashed $primaryColor;
+   
+    .inner {
+        color: #000;
+        padding: 7px 10px;
+        height: 20px;
+    }
 }

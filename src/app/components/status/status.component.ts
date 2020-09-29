@@ -16,13 +16,30 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { MainFormService } from '@services/main-form/main-form.service';
 
-@import "variables.scss";
+@Component({
+  selector: 'app-status',
+  templateUrl: './status.component.html',
+  styleUrls: ['./status.component.scss']
+})
+export class StatusComponent implements OnInit {
 
-.tab-error {
-  color: $error-color;
-}
+  public configName = undefined;
+  public displayCurrentConfig = false;
 
-.toggle-detailed-timeline {
-  padding-top: 20px;
+  constructor(
+    private mainService: MainFormService,
+    private cdr: ChangeDetectorRef
+  ) { }
+
+  public ngOnInit() {
+    this.mainService.configChange.subscribe(config => {
+      this.configName = config.name;
+      this.displayCurrentConfig = true;
+      this.cdr.detectChanges();
+    });
+  }
+
 }

@@ -28,6 +28,7 @@ import {
   SideModulesGlobalFormGroup
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
+import { Subject } from 'rxjs/internal/Subject';
 
 
 enum MAIN_FORM_KEYS {
@@ -56,6 +57,8 @@ enum MAIN_FORM_KEYS {
 export class MainFormService {
 
   public configurationId: string;
+
+  public configChange: Subject<{id: string, name: string}> = new Subject<{id: string, name: string}>();
 
   public mainForm = new FormGroup({
     [MAIN_FORM_KEYS.STARTING_CONFIG]: new FormGroup({}),

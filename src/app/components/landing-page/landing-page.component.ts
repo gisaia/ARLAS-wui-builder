@@ -113,6 +113,7 @@ export class LandingPageDialogComponent implements OnInit {
 
     // Reset current config id
     this.mainFormService.configurationId = undefined;
+    this.mainFormService.configChange.next({ id: undefined, name: undefined });
 
     this.mainFormService.startingConfig.init(
       this.startingConfigFormBuilder.build()
@@ -179,7 +180,7 @@ export class LandingPageDialogComponent implements OnInit {
     this.startEvent.next();
   }
 
-  public initWithConfig(configJson: Config, configMapJson: MapConfig) {
+  public initWithConfig(configJson: Config, configMapJson: MapConfig, configId?: string, configName?: string) {
     this.getServerCollections(configJson.arlas.server.url).then(() => {
       this.configDescritor.getAllCollections().subscribe(collections => {
         const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
@@ -200,8 +201,11 @@ export class LandingPageDialogComponent implements OnInit {
             this.mainFormManager.doImport(configJson, configMapJson);
             this.startEvent.next();
             this.spinner.hide('importconfig');
-            }, 100);
-          }
+          }, 100);
+        }
+        if (!!configId && !!configName) {
+          this.mainFormService.configChange.next({ id: configId, name: configName });
+        }
       });
     });
   }
@@ -372,7 +376,7 @@ export class LandingPageDialogComponent implements OnInit {
       const configJson = JSON.parse(data.doc_value) as Config;
       if (configJson.arlas !== undefined) {
         const configMapJson = configJson.arlas.web.components.mapgl.input.mapLayers as MapConfig;
-        this.initWithConfig(configJson, configMapJson);
+        this.initWithConfig(configJson, configMapJson, id, data.doc_key);
       } else {
         this.configChoice = InitialChoice.setup;
       }
