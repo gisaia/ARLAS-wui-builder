@@ -201,8 +201,11 @@ export class LandingPageDialogComponent implements OnInit {
             this.mainFormManager.doImport(configJson, configMapJson);
             this.startEvent.next();
             this.spinner.hide('importconfig');
-            }, 100);
-          }
+          }, 100);
+        }
+        if (!!configId && !!configName) {
+          this.mainFormService.configChange.next({ id: configId, name: configName });
+        }
       });
     });
   }
