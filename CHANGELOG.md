@@ -1,5 +1,39 @@
 # Change Log
 
+## [v14.0.0-rc.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.0.0-rc.1) (2020-09-29)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v0.0.6-beta.1...v14.0.0-rc.1)
+
+**New stuff:**
+
+- Deal with 401/403 errors when we save a config with persistence [\#248](https://github.com/gisaia/ARLAS-wui-builder/issues/248)
+- Open modal with login again message after 403 or silent-refresh error [\#247](https://github.com/gisaia/ARLAS-wui-builder/issues/247)
+- Enrich header to access a protected ARLAS-server [\#237](https://github.com/gisaia/ARLAS-wui-builder/issues/237)
+- Manage Visualisation sets [\#230](https://github.com/gisaia/ARLAS-wui-builder/issues/230)
+- Add 'Medium' granularity for cluster and feature-metric layers [\#224](https://github.com/gisaia/ARLAS-wui-builder/issues/224)
+
+**Fixed bugs:**
+
+- Histogram / Timeline configuration : interval value is a string instead of a number [\#276](https://github.com/gisaia/ARLAS-wui-builder/issues/276)
+- After saving a new configuration, user cannot update it until the app was reloaded [\#275](https://github.com/gisaia/ARLAS-wui-builder/issues/275)
+- App crash in analytics group creation when a widget is defined [\#246](https://github.com/gisaia/ARLAS-wui-builder/issues/246)
+- TranslateHttpLoader use hardcoding /assets/i18n and doest not work with custum app base href [\#241](https://github.com/gisaia/ARLAS-wui-builder/issues/241)
+- Fix generation of contributor names  [\#174](https://github.com/gisaia/ARLAS-wui-builder/issues/174)
+
+## [v0.0.6-beta.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v0.0.6-beta.1) (2020-08-25)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v0.0.5...v0.0.6-beta.1)
+
+**New stuff:**
+
+- Add docker env variable to set a default server URL [\#132](https://github.com/gisaia/ARLAS-wui-builder/issues/132)
+
+**Fixed bugs:**
+
+- Store conf id to update with unique key LOCALSTORAGE\_CONFIG\_ID\_KEY in localstorage   [\#240](https://github.com/gisaia/ARLAS-wui-builder/issues/240)
+- Bug after Log out then log in [\#239](https://github.com/gisaia/ARLAS-wui-builder/issues/239)
+- Persisted configuration doesn't set the visualisation set layers correctly [\#228](https://github.com/gisaia/ARLAS-wui-builder/issues/228)
+
 ## [v0.0.5](https://github.com/gisaia/ARLAS-wui-builder/tree/v0.0.5) (2020-07-24)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v0.0.4...v0.0.5)
