@@ -1,4 +1,5 @@
 import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
+import { StatusComponent } from '@components/status/status.component';
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
 import { MockComponent } from 'ng-mocks';
 import { AppComponent } from './app.component';
@@ -9,7 +10,8 @@ describe('AppComponent', () => {
   const createComponent = createComponentFactory({
     component: AppComponent,
     declarations: [
-      MockComponent(LeftMenuComponent)
+      MockComponent(LeftMenuComponent),
+      MockComponent(StatusComponent)
     ]
   });
 

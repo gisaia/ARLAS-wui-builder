@@ -1,25 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StatusComponent } from './status.component';
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
 
 describe('StatusComponent', () => {
-  let component: StatusComponent;
-  let fixture: ComponentFixture<StatusComponent>;
+  let spectator: Spectator<StatusComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ StatusComponent ]
-    })
-    .compileComponents();
-  }));
+  const createComponent = createComponentFactory({
+    component: StatusComponent
+  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StatusComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    spectator = createComponent();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(spectator.component).toBeTruthy();
   });
 });
