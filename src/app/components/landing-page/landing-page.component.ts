@@ -135,10 +135,9 @@ export class LandingPageDialogComponent implements OnInit {
         this.avatar = '';
       }
     });
-
-    // if persistence is configured and anonymous mode is enable, we fetch the configuration accessible as anonymous
+    // if persistence is configured and anonymous mode is enabled, we fetch the configuration accessible as anonymous
     // if ARLAS-persistence doesn't allow anonymous access, a suitable error is displayed in a modal
-    if (this.persistenceService.isAvailable && !this.authService.authConfigValue && !this.authService.authConfigValue.use_authent) {
+    if (this.persistenceService.isAvailable && (!this.authService.authConfigValue || !this.authService.authConfigValue.use_authent)) {
       this.getConfigList();
     }
   }

@@ -51,7 +51,7 @@
                 },
                 "styleStep": {
                     "geometryType": "fill",
-                    "opacity": 0.5,
+                    "opacity": 1,
                     "colorFg": {
                         "propertySource": "Fix",
                         "propertyFix": "#abcdef"
@@ -75,7 +75,7 @@
                 },
                 "styleStep": {
                     "geometryType": "fill",
-                    "opacity": 0.5,
+                    "opacity": 1,
                     "colorFg": {
                         "propertySource": "Fix",
                         "propertyFix": "#abcdef"
@@ -99,7 +99,7 @@
                 },
                 "styleStep": {
                     "geometryType": "fill",
-                    "opacity": 0.5,
+                    "opacity": 0.7,
                     "colorFg": {
                         "propertyFix": "#abcdef"
                     },
@@ -375,20 +375,30 @@
         "aggregationTermSize": 10,
         "palettes": [
             [
-                "#065143",
-                "#ce1483"
-            ],
-            [
-                "#6d213c",
-                "#946846",
-                "#baab68"
-            ],
-            [
                 "#eecf6d",
                 "#d5ac4e",
                 "#8b6220",
                 "#720e07",
                 "#45050c"
+            ],
+            [
+                "#53d9e8",
+                "#29AFFB",
+                "#2874FA",
+                "#3b69fa",
+                "#eb79fc",
+                "#ef586c"
+            ],
+            [
+                "#cee897",
+                "#9dc95b",
+                "#4bc71e",
+                "#1bc473",
+                "#16ccc9",
+                "#3619cf",
+                "#9317d1",
+                "#d11799",
+                "#cf1919"
             ]
         ],
         "colorPickerPresets": [
