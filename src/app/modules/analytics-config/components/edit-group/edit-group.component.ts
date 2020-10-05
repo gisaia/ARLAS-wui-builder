@@ -30,6 +30,7 @@ import { OperationEnum } from 'arlas-web-core';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { Subject } from 'rxjs/internal/Subject';
 
 @Component({
   selector: 'app-add-widget-dialog',
@@ -70,8 +71,10 @@ export class AddWidgetDialogComponent {
 export class EditGroupComponent implements OnInit {
 
   @Input() public formGroup: FormGroup;
+  @Input() public updateDisplay: Subject<any>;
   @Output() public remove = new EventEmitter();
-  @Output() public updateDisplay = new EventEmitter();
+
+  public content: FormArray;
 
   constructor(
     private dialog: MatDialog,
@@ -80,6 +83,7 @@ export class EditGroupComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
+    this.content = this.formGroup.controls.content as FormArray;
     this.resetWidgetsOnTypeChange();
   }
   /**
@@ -188,10 +192,6 @@ export class EditGroupComponent implements OnInit {
 
   get contentTypeValue() {
     return this.formGroup.controls.contentType.value as Array<string>;
-  }
-
-  get content() {
-    return this.formGroup.controls.content as FormArray;
   }
 }
 
