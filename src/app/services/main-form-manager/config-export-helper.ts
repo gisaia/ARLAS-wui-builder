@@ -510,7 +510,6 @@ export class ConfigExportHelper {
                 swimlane.jsonpath = widgetData.dataStep.metric.metricCollectFunction === DEFAULT_METRIC_VALUE ?
                     '$.count' : '$.metrics[0].value';
                 contrib.swimlanes = [swimlane];
-
                 return contrib;
             }
             case WIDGET_TYPE.metric: {

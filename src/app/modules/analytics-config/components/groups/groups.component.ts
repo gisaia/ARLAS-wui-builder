@@ -32,7 +32,8 @@ import { AnalyticsInitService } from '@analytics-config/services/analytics-init/
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { TranslateService } from '@ngx-translate/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-
+import { Subject } from 'rxjs/internal/Subject';
+import { debounceTime } from 'rxjs/operators';
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
@@ -41,6 +42,8 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 export class GroupsComponent implements OnInit {
 
   @Input() public contentFg: FormGroup;
+
+  public updateDisplay: Subject<any> = new Subject<any>();
 
   public groupsPreview = [];
 
@@ -57,6 +60,9 @@ export class GroupsComponent implements OnInit {
 
   public ngOnInit() {
     this.analyticsInitService.initTabContent(this.contentFg);
+    this.updateDisplay.pipe(
+      debounceTime(200)
+    ).subscribe(() => this.updateAnalytics());
   }
 
   public addGroup() {
@@ -100,6 +106,8 @@ export class GroupsComponent implements OnInit {
   }
 
   public updateAnalytics() {
+
+
     const analytics = [];
     this.groupsPreview = [];
     this.cdr.detectChanges();
