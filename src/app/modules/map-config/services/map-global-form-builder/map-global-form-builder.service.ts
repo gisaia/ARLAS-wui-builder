@@ -50,7 +50,7 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
         '',
         marker('Init center latitude'),
         marker('Init center latitude description'),
-        'text',
+        'number',
         {
           childs: () => [this.customControls.initCenterLon]
         }
@@ -59,6 +59,7 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
         '',
         marker('Init center longitude'),
         marker('Init center longitude description'),
+        'number'
       ),
       allowMapExtend: new SlideToggleFormControl(
         '',
