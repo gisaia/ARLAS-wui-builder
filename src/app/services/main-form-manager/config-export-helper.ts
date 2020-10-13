@@ -270,8 +270,8 @@ export class ConfigExportHelper {
                 margePanForTest: customControls.margePanForTest.value,
                 initZoom: customControls.initZoom.value,
                 initCenter: [
-                    customControls.initCenterLat.value,
-                    customControls.initCenterLon.value
+                    +customControls.initCenterLon.value,
+                    +customControls.initCenterLat.value
                 ],
                 displayScale: customControls.displayScale.value,
                 idFeatureField: customControls.requestGeometries.value[0].idPath,

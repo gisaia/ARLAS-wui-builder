@@ -107,11 +107,11 @@ export class MapImportService {
         control: mapGlobalForm.customControls.initZoom
       },
       {
-        value: mapgl.input.initCenter[0],
+        value: mapgl.input.initCenter[1],
         control: mapGlobalForm.customControls.initCenterLat
       },
       {
-        value: mapgl.input.initCenter[1],
+        value: mapgl.input.initCenter[0],
         control: mapGlobalForm.customControls.initCenterLon
       },
       {
