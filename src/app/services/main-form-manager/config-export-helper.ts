@@ -34,7 +34,6 @@ import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-for
 import { CLUSTER_GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
-import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { MapComponentInputConfig, MapComponentInputMapLayersConfig } from './models-config';
 import { LayerSourceConfig, getSourceName, ColorConfig } from 'arlas-web-contributors';
 import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
@@ -126,11 +125,19 @@ export class ConfigExportHelper {
             config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal, true));
         }
 
+        const contributorsMap = new Map<string, any>();
         if (!!analyticsConfigList) {
             (analyticsConfigList.value as Array<any>).forEach(tab => {
                 tab.contentFg.groupsFa.forEach(group => {
                     group.content.forEach(widget => {
-                        config.arlas.web.contributors.push(this.getAnalyticsContributor(widget.widgetType, widget.widgetData, group.icon));
+                        const contributorId = this.getContributorId(widget.widgetData, widget.widgetType);
+                        let contributor = contributorsMap.get(contributorId);
+                        // check if the contributor already exists to avoid duplication in the final config json object
+                        if (!contributor) {
+                            contributor = this.getAnalyticsContributor(widget.widgetType, widget.widgetData, group.icon);
+                            contributorsMap.set(contributorId, contributor);
+                            config.arlas.web.contributors.push(contributor);
+                        }
                     });
                 });
             });
@@ -336,7 +343,7 @@ export class ConfigExportHelper {
                     } else {
                         layerSource.metrics.push({
                             field: interpolatedValues.propertyInterpolatedFieldCtrl,
-                            metric: interpolatedValues.propertyInterpolatedMetricCtrl,
+                            metric: (interpolatedValues.propertyInterpolatedMetricCtrl).toString().toLowerCase(),
                             normalize: !!interpolatedValues.propertyInterpolatedNormalizeCtrl
                         });
                     }
@@ -457,7 +464,6 @@ export class ConfigExportHelper {
     }
 
     public static getAnalyticsContributor(widgetType: any, widgetData: any, icon: string): ContributorConfig {
-        // TODO at the end, find same contributors and keep only one instance
         // TODO use customControls from widgets config form groups, like the Search export
         switch (widgetType) {
             case WIDGET_TYPE.histogram: {
@@ -572,7 +578,7 @@ export class ConfigExportHelper {
 
     private static getWidgetContributor(widgetData: any, widgetType: any, icon: string) {
         return {
-            identifier: this.toSnakeCase(widgetData.title + '_' + widgetType),
+            identifier: this.getContributorId(widgetData, widgetType),
             name: widgetData.title,
             title: widgetData.title,
             icon,
@@ -609,17 +615,64 @@ export class ConfigExportHelper {
         }
     }
 
+    /**
+     * generates an identifier based on the definition of the contributor:
+     * - aggregationmodel
+     * - metrics ...
+     */
+    public static getContributorId(widgetData: any, widgetType: any): string {
+        let idString = '';
+        if (widgetType === WIDGET_TYPE.histogram || widgetType === WIDGET_TYPE.swimlane) {
+            const agg = widgetData.dataStep.aggregation;
+            idString = agg.aggregationField + '-' + agg.aggregationFieldType + '-' + agg.aggregationBucketOrInterval;
+            if (!!widgetData.dataStep.metric) {
+                idString +=  '-' + (widgetData.dataStep.metric.metricCollectFunction !== undefined ?
+                    widgetData.dataStep.metric.metricCollectFunction : '')  + '-' + (!!widgetData.dataStep.metric.metricCollectField ?
+                    widgetData.dataStep.metric.metricCollectField : '');
+            }
+            if (agg.aggregationBucketOrInterval === 'bucket') {
+                idString +=  '-' + agg.aggregationBucketsNumber;
+            } else {
+                idString +=  '-' + agg.aggregationIntervalSize + '-' + !!agg.aggregationIntervalUnit ? agg.aggregationIntervalUnit : '';
+            }
+            if (widgetType === WIDGET_TYPE.swimlane) {
+                const termAgg = widgetData.dataStep.termAggregation;
+                idString += !!termAgg.termAggregationField ? termAgg.termAggregationField : '' + '-' + termAgg.termAggregationSize;
+            }
+        } else if (widgetType === WIDGET_TYPE.powerbars) {
+            idString = widgetData.dataStep.aggregationField + '-' + widgetData.dataStep.aggregationSize;
+        } else if (widgetType === WIDGET_TYPE.metric) {
+            idString = widgetData.dataStep.function;
+            widgetData.dataStep.metrics.forEach(m => {
+                idString += m.field + '-' + m.metric;
+            });
+        } else if (widgetType === WIDGET_TYPE.donut) {
+            widgetData.dataStep.aggregationmodels.forEach(am => {
+                idString += am.field + '-' + am.size + '-';
+            });
+        }  else if (widgetType === WIDGET_TYPE.resultlist) {
+            idString += widgetData.dataStep.idFieldName + '-' + widgetData.dataStep.searchSize + '-';
+            if (!!widgetData.dataStep.columns) {
+                widgetData.dataStep.columns.forEach(c => idString += c.columnName + '-');
+            }
+            if (!!widgetData.dataStep.details) {
+                widgetData.dataStep.details.forEach(d => idString += d.name + '-');
+            }
+        }
+        return idString;
+    }
+
     private static getAnalyticsComponent(widgetType: any, widgetData: any, itemPerLine: number): AnalyticComponentConfig {
         const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
         const analyticsBoardWidth = 445;
-
+        const contributorId = this.getContributorId(widgetData, widgetType);
         if ([WIDGET_TYPE.histogram, WIDGET_TYPE.swimlane].indexOf(widgetType) >= 0) {
             const title = widgetData.title;
             const component = {
-                contributorId: this.toSnakeCase(title + '_' + widgetType),
+                contributorId,
                 showExportCsv: unmanagedRenderFields.showExportCsv,
                 input: {
-                    id: this.toSnakeCase(title + '_' + widgetType),
+                    id: contributorId,
                     isHistogramSelectable: unmanagedRenderFields.isHistogramSelectable,
                     multiselectable: !!widgetData.renderStep.multiselectable,
                     topOffsetRemoveInterval: unmanagedRenderFields.topOffsetRemoveInterval,
@@ -687,7 +740,7 @@ export class ConfigExportHelper {
 
         } else if (widgetType === WIDGET_TYPE.metric) {
             const component = {
-                contributorId: this.toSnakeCase(widgetData.title + '_' + widgetType),
+                contributorId,
                 componentType: WIDGET_TYPE.metric,
                 input: {
                     customizedCssClass: unmanagedRenderFields.customizedCssClass,
@@ -707,7 +760,7 @@ export class ConfigExportHelper {
 
         } else if (widgetType === WIDGET_TYPE.powerbars) {
             const component = {
-                contributorId: this.toSnakeCase(widgetData.title + '_' + widgetType),
+                contributorId,
                 componentType: WIDGET_TYPE.powerbars,
                 input: {
                     chartTitle: widgetData.title,
@@ -723,10 +776,10 @@ export class ConfigExportHelper {
 
         } else if (widgetType === WIDGET_TYPE.donut) {
             const component = {
-                contributorId: this.toSnakeCase(widgetData.title + '_' + widgetType),
+                contributorId,
                 componentType: WIDGET_TYPE.donut,
                 input: {
-                    id: this.toSnakeCase(widgetData.title + '_' + widgetType),
+                    id: contributorId,
                     customizedCssClass: unmanagedRenderFields.customizedCssClass,
                     diameter: 175,
                     multiselectable: !!widgetData.renderStep.multiselectable,
@@ -737,10 +790,10 @@ export class ConfigExportHelper {
             return component;
         } else if (widgetType === WIDGET_TYPE.resultlist) {
             const component = {
-                contributorId: this.toSnakeCase(widgetData.title + '_' + widgetType),
+                contributorId,
                 componentType: WIDGET_TYPE.resultlist,
                 input: {
-                    id: this.toSnakeCase(widgetData.title + '_' + widgetType),
+                    id: contributorId,
                     tableWidth: !!itemPerLine ?
                         Math.ceil(analyticsBoardWidth / itemPerLine) - 12 : analyticsBoardWidth, // 12 => margin and padding left/right
                     globalActionsList: unmanagedRenderFields.globalActionsList,
