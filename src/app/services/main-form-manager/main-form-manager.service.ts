@@ -47,6 +47,10 @@ import { importElements } from './tools';
 import { StartupService, ZONE_WUI_BUILDER } from '@services/startup/startup.service';
 import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persistence.service';
 import { Router } from '@angular/router';
+import { ArlasStartupService } from 'arlas-wui-toolkit/services/startup/startup.service';
+import * as draftSchema from 'ajv/lib/refs/json-schema-draft-06.json';
+import * as ajvKeywords from 'ajv-keywords/keywords/uniqueItemProperties';
+
 
 
 @Injectable({
@@ -74,7 +78,8 @@ export class MainFormManagerService {
     private mapImportService: MapImportService,
     private dialog: MatDialog,
     private startupService: StartupService,
-    private router: Router
+    private router: Router,
+    private arlasStartupService: ArlasStartupService
   ) { }
 
   /**
@@ -133,6 +138,11 @@ export class MainFormManagerService {
     );
 
     const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers);
+
+    const confToValidate: any = JSON.parse(JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
+      generatedMapConfig.layers
+    )));
+    this.arlasStartupService.validateConfiguration(confToValidate);
 
     if (this.persistenceService.isAvailable && type === EXPORT_TYPE.persistence) {
 

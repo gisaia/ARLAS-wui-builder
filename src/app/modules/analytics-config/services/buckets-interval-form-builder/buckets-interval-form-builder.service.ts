@@ -117,7 +117,7 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
             Object.keys(Interval.UnitEnum).map(u => u.charAt(0).toUpperCase() + u.slice(1))))
             .sort()
             .map(u => ({
-              value: u, label: u
+              value: u.toLowerCase(), label: u
             })),
           {
             dependsOn: () => [this.customControls.aggregationBucketOrInterval, this.customControls.aggregationField],
