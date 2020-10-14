@@ -18,11 +18,11 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { MapConfig, Layer } from '@services/main-form-manager/models-map-config';
-import { Config, MapglComponentConfig, ContributorConfig } from '@services/main-form-manager/models-config';
+import { Config, MapglComponentConfig, ContributorConfig, NormalizationFieldConfig } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { importElements } from '@services/main-form-manager/tools';
 import { MapLayerFormBuilderService } from '../map-layer-form-builder/map-layer-form-builder.service';
-import { LayerSourceConfig } from 'arlas-web-contributors';
+import { LayerSourceConfig, ColorConfig } from 'arlas-web-contributors';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { VISIBILITY, NORMALIZED } from '@services/main-form-manager/config-map-export-helper';
 import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '../map-layer-form-builder/models';
@@ -334,7 +334,6 @@ export class MapImportService {
     isColor: boolean,
     isAggregated: boolean,
     layerSource: LayerSourceConfig) {
-
     if (typeof inputValues === 'string' || typeof inputValues === 'number') {
       propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.fix;
       propertySelectorValues.propertyFix = inputValues;
@@ -346,39 +345,38 @@ export class MapImportService {
         if (inputValues.length === 3) {
           label = (inputValues as Array<string>)[2];
         }
-
         if (field.endsWith('_color')) {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.generated;
-          propertySelectorValues.propertyGeneratedFieldCtrl = this.replaceUnderscore(this.removeLastcolor(field));
+          const colorField = layerSource.colors_from_fields.find(f => f.replace('.', '_') === this.removeLastcolor(field));
+          propertySelectorValues.propertyGeneratedFieldCtrl = colorField;
         } else {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided;
-          propertySelectorValues.propertyProvidedFieldCtrl = this.replaceUnderscore(field);
+          const colorProvidedField = layerSource.provided_fields.find((pf: ColorConfig) => pf.color.replace('.', '_') === field);
+          propertySelectorValues.propertyProvidedFieldCtrl = colorProvidedField.color;
           if (inputValues.length === 3) {
-            propertySelectorValues.propertyProvidedFieldLabelCtrl = this.replaceUnderscore(label);
+            propertySelectorValues.propertyProvidedFieldLabelCtrl = colorProvidedField.label;
           }
-
         }
       } else if (inputValues[0] === 'match') {
-        this.importPropertySelectorManual(inputValues, propertySelectorValues);
+        this.importPropertySelectorManual(inputValues, propertySelectorValues, layerSource);
       } else if (inputValues[0] === 'interpolate') {
         this.importPropertySelectorInterpolated(inputValues, propertySelectorValues, isColor, isAggregated, layerSource);
       }
     }
   }
 
-  private importPropertySelectorManual(inputValues: any, propertySelectorValues: any) {
+  private importPropertySelectorManual(inputValues: any, propertySelectorValues: any, layerSource: LayerSourceConfig) {
     propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.manual;
 
     const keywordsAndColors = (inputValues.slice(2) as Array<string>);
-
+    const manualFied = layerSource.include_fields.find(f => f.replace('.', '_') === inputValues[1][1]);
     propertySelectorValues.propertyManualFg = {
-      propertyManualFieldCtrl: this.replaceUnderscore(inputValues[1][1]),
+      propertyManualFieldCtrl: manualFied,
       propertyManualValuesCtrl: new Array<KeywordColor>()
     };
-
     for (let i = 0; i < keywordsAndColors.length - 1; i = i + 2) {
       propertySelectorValues.propertyManualFg.propertyManualValuesCtrl.push({
-        keyword: keywordsAndColors[i],
+        keyword: keywordsAndColors[i] + '',
         color: keywordsAndColors[i + 1]
       });
     }
@@ -420,16 +418,18 @@ export class MapImportService {
 
           if (isAggregated) {
             propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl = COUNT_OR_METRIC.METRIC;
-            const getValueParts = getValue.split('_');
             propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMetricCtrl =
               layerSource.metrics[0].metric.toString().toUpperCase();
             propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = layerSource.metrics[0].field;
           } else {
-            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = this.replaceUnderscore(getValue.split(':')[0]);
+            const onField = layerSource.normalization_fields
+              .find((nf: NormalizationFieldConfig) => nf.on.replace('.', '_') === getValue.split(':')[0]).on;
+            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = onField;
 
             if (isNormalize && getValue.split(':').length > 2) {
-              propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl =
-                this.replaceUnderscore(getValue.split(':')[2]);
+              const perField = layerSource.normalization_fields
+              .find((nf: NormalizationFieldConfig) => !!nf.per && nf.per.replace('.', '_') === getValue.split(':')[2]).per;
+              propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl = perField;
             }
           }
 

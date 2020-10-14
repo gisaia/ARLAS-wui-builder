@@ -49,6 +49,7 @@ export class LayersComponent implements OnInit {
 
   public displayedColumns: string[] = ['representation', 'name', 'mode', 'collection', 'zoomMin', 'zoomMax', 'action'];
   public layersFa: FormArray;
+  public visualisationSetFa: FormArray;
 
   public layerLegend: Map<string, { layer: any, colorLegend: any }> = new Map();
 
@@ -61,6 +62,7 @@ export class LayersComponent implements OnInit {
 
   ) {
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
+    this.visualisationSetFa = this.mainFormService.mapConfig.getVisualisationsFa();
   }
 
   public ngOnInit() {
@@ -111,6 +113,14 @@ export class LayersComponent implements OnInit {
       if (result) {
         const formGroupIndex = (this.layersFa.value as any[]).findIndex(el => el.id === layerId);
         this.layersFa.removeAt(formGroupIndex);
+        // remove layer from visualisation set
+        const visualisationSetValue = this.visualisationSetFa.value;
+        visualisationSetValue.forEach(vs => {
+          const layersSet = new Set(vs.layers);
+          layersSet.delete(layerName);
+          vs.layers = Array.from(layersSet);
+        });
+        this.visualisationSetFa.setValue(visualisationSetValue);
       }
     });
   }
