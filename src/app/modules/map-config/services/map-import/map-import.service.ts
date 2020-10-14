@@ -347,11 +347,11 @@ export class MapImportService {
         }
         if (field.endsWith('_color')) {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.generated;
-          const colorField = layerSource.colors_from_fields.find(f => f.replace('.', '_') === this.removeLastcolor(field));
+          const colorField = layerSource.colors_from_fields.find(f => f.replace(/\./g, '_') === this.removeLastcolor(field));
           propertySelectorValues.propertyGeneratedFieldCtrl = colorField;
         } else {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided;
-          const colorProvidedField = layerSource.provided_fields.find((pf: ColorConfig) => pf.color.replace('.', '_') === field);
+          const colorProvidedField = layerSource.provided_fields.find((pf: ColorConfig) => pf.color.replace(/\./g, '_') === field);
           propertySelectorValues.propertyProvidedFieldCtrl = colorProvidedField.color;
           if (inputValues.length === 3) {
             propertySelectorValues.propertyProvidedFieldLabelCtrl = colorProvidedField.label;
@@ -369,7 +369,7 @@ export class MapImportService {
     propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.manual;
 
     const keywordsAndColors = (inputValues.slice(2) as Array<string>);
-    const manualFied = layerSource.include_fields.find(f => f.replace('.', '_') === inputValues[1][1]);
+    const manualFied = layerSource.include_fields.find(f => f.replace(/\./g, '_') === inputValues[1][1]);
     propertySelectorValues.propertyManualFg = {
       propertyManualFieldCtrl: manualFied,
       propertyManualValuesCtrl: new Array<KeywordColor>()
@@ -410,7 +410,6 @@ export class MapImportService {
 
         } else {
           const isNormalize = getValue.split(':')[1] === NORMALIZED;
-
           propertySelectorValues.propertyInterpolatedFg = {
             propertyInterpolatedNormalizeCtrl: isNormalize,
             propertyInterpolatedNormalizeByKeyCtrl: isNormalize ? getValue.split(':').length === 3 : null,
@@ -422,17 +421,21 @@ export class MapImportService {
               layerSource.metrics[0].metric.toString().toUpperCase();
             propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = layerSource.metrics[0].field;
           } else {
-            const onField = layerSource.normalization_fields
-              .find((nf: NormalizationFieldConfig) => nf.on.replace('.', '_') === getValue.split(':')[0]).on;
-            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = onField;
+            let field;
+            if (isNormalize) {
+              field = layerSource.normalization_fields
+                .find((nf: NormalizationFieldConfig) => nf.on.replace(/\./g, '_') === getValue.split(':')[0]).on;
+              if (getValue.split(':').length > 2) {
+                const perfield = layerSource.normalization_fields
+                .find((nf: NormalizationFieldConfig) => !!nf.per && nf.per.replace(/\./g, '_') === getValue.split(':')[2]).per;
+                propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl = perfield;
 
-            if (isNormalize && getValue.split(':').length > 2) {
-              const perField = layerSource.normalization_fields
-              .find((nf: NormalizationFieldConfig) => !!nf.per && nf.per.replace('.', '_') === getValue.split(':')[2]).per;
-              propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl = perField;
+              }
+            } else {
+              field = layerSource.include_fields.find(f => f.replace(/\./g, '_') === getValue);
             }
+            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = field;
           }
-
           if (!propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl) {
             propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl = inputValues[3];
             propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl = inputValues[inputValues.length - 2];
