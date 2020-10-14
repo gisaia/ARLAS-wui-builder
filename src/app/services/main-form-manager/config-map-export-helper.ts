@@ -109,12 +109,17 @@ export class ConfigMapExportHelper {
             case PROPERTY_SELECTOR_SOURCE.generated:
                 return this.getArray(fgValues.propertyGeneratedFieldCtrl + '_color');
             case PROPERTY_SELECTOR_SOURCE.manual:
+                const otherKC = (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>)
+                    .find(kc => kc.keyword === OTHER_KEYWORD);
+                // always keep OTHER_KEYWORD at the end of the list
+                const manualValues = !otherKC ? (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>) :
+                    (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>)
+                    .filter(kc => kc.keyword !== OTHER_KEYWORD).concat(otherKC) ;
                 return [
                     'match',
                     this.getArray(fgValues.propertyManualFg.propertyManualFieldCtrl)
                 ].concat(
-                    (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>)
-                        .flatMap(kc => kc.keyword !== OTHER_KEYWORD ? [kc.keyword, kc.color] : [kc.color])
+                        manualValues.flatMap(kc => kc.keyword !== OTHER_KEYWORD ? [kc.keyword, kc.color] : [kc.color])
                 );
             case PROPERTY_SELECTOR_SOURCE.interpolated: {
 

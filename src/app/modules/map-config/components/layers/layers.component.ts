@@ -30,9 +30,8 @@ import { ConfigExportHelper } from '@services/main-form-manager/config-export-he
 import { ConfigMapExportHelper, VISIBILITY } from '@services/main-form-manager/config-map-export-helper';
 import { camelize } from '@utils/tools';
 import { MapglLegendComponent } from 'arlas-web-components';
-import { Paint, Layer as LayerMap } from '@services/main-form-manager/models-map-config';
+import { Layer as LayerMap } from '@services/main-form-manager/models-map-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
-import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
 
 export interface Layer {
   id: string;
