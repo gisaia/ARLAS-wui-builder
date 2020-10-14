@@ -20,7 +20,8 @@ describe('LayersComponent', () => {
       { provide: CONFIG_UPDATER, useValue: {} },
       mockProvider(MainFormService, {
         mapConfig: {
-          getLayersFa: () => new FormArray([])
+          getLayersFa: () => new FormArray([]),
+          getVisualisationsFa: () => new FormArray([])
         }
       })
     ],
