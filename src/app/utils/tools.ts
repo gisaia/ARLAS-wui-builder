@@ -63,11 +63,10 @@ export function updateValueAndValidity(control: AbstractControl, onlySelf: boole
  * so it can be detected to detect an export and display remaining errors.
  */
 export function isFullyTouched(control: AbstractControl): boolean {
-
     if (control instanceof FormControl) {
         return control.touched;
     } else if (control.touched && (control instanceof FormGroup || control instanceof FormArray)) {
-        if (control.controls.length === 0) {
+        if (control.controls.length === 0 || Object.values(control.controls).length === 0) {
             return control.touched;
         } else if (control.controls.length === 1) {
             return Object.values(control.controls)[0].touched;
