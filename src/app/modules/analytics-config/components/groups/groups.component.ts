@@ -97,6 +97,7 @@ export class GroupsComponent implements OnInit {
           currentConfig.arlas.web.contributors = currentContributors;
         }
         this.groupsFa.removeAt(gi);
+        this.updateAnalytics();
       }
     });
   }

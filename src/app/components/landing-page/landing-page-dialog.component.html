@@ -39,9 +39,9 @@
     </mat-dialog-content>
     <mat-dialog-actions class="actions">
         <div class="buttons" style="width: 100%;">
-            <button mat-raised-button color="primary" (click)="configChoice = InitialChoice.setup">{{'New configuration' | translate}}</button>
-            <button mat-raised-button color="primary" (click)="configChoice = InitialChoice.load">{{'Import from file' | translate}}</button>
-            <button class="right" mat-raised-button color="primary" *ngIf="showLogOutButton" (click)="logout()">{{'Log Out' | translate}}</button>
+            <button mat-stroked-button color="primary" (click)="configChoice = InitialChoice.setup">{{'New configuration' | translate}}</button>
+            <button mat-stroked-button color="primary" (click)="configChoice = InitialChoice.load">{{'Import from file' | translate}}</button>
+            <button class="right" mat-stroked-button *ngIf="showLogOutButton" (click)="logout()">{{'Log Out' | translate}}</button>
             <button class="right" style="margin-left:40px" mat-button *ngIf="showLogOutButton" matTooltip="{{'User info' | translate}}" (click)="getUserInfos()">
                 <img src="{{avatar}}" class="user_info_img">
                 {{name}}
