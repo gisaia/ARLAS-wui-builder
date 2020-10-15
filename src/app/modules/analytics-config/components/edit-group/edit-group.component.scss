@@ -62,8 +62,16 @@ $primary-color: mat-color($primary-palette);
             }
 
             ::ng-deep .mat-button-toggle-label-content{
-                line-height: 36px !important;
-                padding: 0 8px !important;
+                line-height: 30px !important;
+                padding: 0 4px !important;
+
+                mat-icon{
+                    padding-bottom: 1px;
+                }
+            }
+
+            ::ng-deep .mat-button-toggle-group{
+                border-radius: 0px;
             }
         }
 

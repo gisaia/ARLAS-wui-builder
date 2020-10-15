@@ -84,7 +84,7 @@ export class LeftMenuComponent {
       name: marker('Map'),
       link: '/map-config',
       icon: 'map',
-      tooltip: marker('Map configuration'),
+      tooltip: marker('Map'),
       enabled: true,
       control: this.mainFormService.mapConfig.control
     },
@@ -92,7 +92,7 @@ export class LeftMenuComponent {
       name: marker('Timeline'),
       link: '/timeline-config',
       icon: 'timeline',
-      tooltip: marker('Timeline configuration'),
+      tooltip: marker('Timeline'),
       enabled: true,
       control: this.mainFormService.timelineConfig.control
     },
@@ -100,7 +100,7 @@ export class LeftMenuComponent {
       name: marker('Search'),
       link: '/search-config',
       icon: 'search',
-      tooltip: marker('Search configuration'),
+      tooltip: marker('Search'),
       enabled: true,
       control: this.mainFormService.searchConfig.control
     },
@@ -108,7 +108,7 @@ export class LeftMenuComponent {
       name: marker('Analytics'),
       link: '/analytics-config',
       icon: 'bar_chart',
-      tooltip: marker('Analytics configuration'),
+      tooltip: marker('Analytics'),
       enabled: true,
       control: this.mainFormService.analyticsConfig.control
     },
@@ -116,7 +116,7 @@ export class LeftMenuComponent {
       name: marker('Side Modules'),
       link: '/side-modules',
       icon: 'view_column',
-      tooltip: marker('Side modules configuration'),
+      tooltip: marker('Side modules'),
       enabled: true,
       control: this.mainFormService.sideModulesConfig.control
     },
@@ -124,7 +124,7 @@ export class LeftMenuComponent {
       name: marker('Look \'n feel'),
       link: '/look-and-feel',
       icon: 'opacity',
-      tooltip: marker('Look \'n fell configuration'),
+      tooltip: marker('Look \'n fell'),
       enabled: true,
       control: this.mainFormService.lookAndFeelConfig.control
     },

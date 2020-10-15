@@ -30,6 +30,8 @@ $error-color: mat-color($warn-palette);
 $primaryColor: mat-color($primary-palette);
 $accentColor: mat-color($accent-palette);
 
+$arlasColor: #f63366;
+
 @mixin group-title() {
    font-weight: 300;
    font-size: 24px;

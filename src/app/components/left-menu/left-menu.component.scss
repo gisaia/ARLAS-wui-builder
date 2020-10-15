@@ -26,13 +26,16 @@ under the License.
   justify-content: space-between;
 
   .logo {
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    
-    span{
-      font-size: 1.3em;
+    text-align: center;
+    padding-top: 5px;
+
+    .icon{
+      color: $arlasColor;
+      height: 50px;
+      width: 50px;
+      font-size: 50px;
     }
+    
   }
 
   .active-menu{
@@ -62,13 +65,5 @@ under the License.
     .user_name {
       margin-left: 5px;
     }
-  }
-
-  mat-icon {
-    padding-right: 5px;
-  }
-
-  &.hide-label span {
-    display: none;
   }
 }
