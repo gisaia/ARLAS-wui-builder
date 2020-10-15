@@ -115,6 +115,7 @@
         "global": {
             "searchField": "internal.fulltext",
             "autocompleteField": "internal.fulltext",
+            "autocompleteSize": 10,
             "unmanagedFields": {
                 "icon": "search"
             }
@@ -122,7 +123,9 @@
     },
     "lookAndFeel": {
         "global": {
-            "dragAndDrop": true
+            "dragAndDrop": true,
+            "spinnerColor": "accent",
+            "spinnerDiameter": 50
         }
     },
     "timeline": {
@@ -324,6 +327,11 @@
                       "diameter": 150
                     }
                   }
+            },
+            "powerbar": {
+                "dataStep": {
+                    "aggregationSize": 10
+                }
             },
             "resultlist"   : {
                 "unmanagedFields": {
