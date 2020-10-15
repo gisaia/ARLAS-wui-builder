@@ -42,7 +42,7 @@ export class AddWidgetDialogComponent {
 
   public contentTypes: { label: WIDGET_TYPE, icon: string }[] = [
     { label: WIDGET_TYPE.histogram, icon: 'bar_chart' },
-    { label: WIDGET_TYPE.donut, icon: 'pie_chart' },
+    { label: WIDGET_TYPE.donut, icon: 'donut_small' },
     { label: WIDGET_TYPE.powerbars, icon: 'sort' },
     { label: WIDGET_TYPE.resultlist, icon: 'table_chart' },
     { label: WIDGET_TYPE.metric, icon: 'functions' },

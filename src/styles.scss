@@ -117,7 +117,7 @@ body {
 
 #mapgl {
   width: 100% !important;
-  top: 100px !important;
+  top: 102px !important;
   height: unset !important;
   position: absolute !important;
   bottom: 0px !important;
@@ -144,4 +144,17 @@ body {
     background-color: rgb(224, 224, 224) !important;
     color: rgb(0, 0, 0, 0.25) !important;
   }
+}
+
+.mat-slider-thumb-label{
+  background-color: white !important;
+  border: 1px solid rgba(0, 0, 0, 0.87) !important;
+}
+
+.mat-slider-thumb-label-text{
+  color: black !important;
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb{
+  background-color: white !important;
 }

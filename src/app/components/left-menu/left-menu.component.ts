@@ -46,7 +46,7 @@ interface Page {
 })
 export class LeftMenuComponent {
 
-  public isLabelDisplayed = true;
+  public isLabelDisplayed = false;
   public nbErrorsByPage: Map<string, number> = new Map();
   public showLogOutButton: boolean;
   public name: string;
