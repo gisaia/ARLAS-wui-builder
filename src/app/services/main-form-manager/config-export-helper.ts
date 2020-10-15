@@ -684,8 +684,6 @@ export class ConfigExportHelper {
                     chartHeight: !!unmanagedRenderFields.chartHeight ? unmanagedRenderFields.chartHeight : 100,
                     chartWidth: !!itemPerLine && itemPerLine !== 1 ?
                         Math.ceil(analyticsBoardWidth / itemPerLine) - 12 : analyticsBoardWidth, // 12 => margin and padding left/right
-                    customizedCssClass: widgetData.dataStep.aggregation.aggregationFieldType === 'numeric' ? 'arlas-histogram-analytics' :
-                        'arlas-timeline-analytics',
                     xAxisPosition: unmanagedRenderFields.xAxisPosition,
                     descriptionPosition: unmanagedRenderFields.descriptionPosition,
                     xTicks: unmanagedRenderFields.xTicks,
@@ -710,6 +708,8 @@ export class ConfigExportHelper {
                 case WIDGET_TYPE.histogram: {
                     component.componentType = WIDGET_TYPE.histogram;
                     component.input.ticksDateFormat = widgetData.renderStep.ticksDateFormat;
+                    component.input.customizedCssClass = widgetData.dataStep.aggregation.aggregationFieldType === 'numeric' ?
+                        'arlas-histogram-analytics' : 'arlas-timeline-analytics';
                     (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve = unmanagedRenderFields.isSmoothedCurve;
                     break;
                 }
@@ -722,19 +722,15 @@ export class ConfigExportHelper {
                     swimlaneInput.swimlaneBorderRadius = unmanagedRenderFields.swimlaneBorderRadius;
                     swimlaneInput.paletteColors = widgetData.renderStep.paletteColors;
                     swimlaneInput.swimlane_representation = widgetData.renderStep.swimlaneRepresentation;
-
+                    swimlaneInput.customizedCssClass = 'arlas-swimlane';
                     const swimlaneOptions = {} as AnalyticComponentSwimlaneInputOptionsConfig;
                     swimlaneOptions.nan_color = widgetData.renderStep.NaNColor;
-
                     if (!!widgetData.renderStep.zerosColors) {
                         swimlaneOptions.zeros_color = widgetData.renderStep.zerosColors;
                     }
-
                     swimlaneInput.swimlane_options = swimlaneOptions;
-
                     break;
                 }
-
             }
             return component;
 
