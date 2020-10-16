@@ -1,5 +1,30 @@
 # Change Log
 
+## [v14.0.0-rc.6](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.0.0-rc.6) (2020-10-16)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.0.0-rc.5...v14.0.0-rc.6)
+
+**New stuff:**
+
+- Add some default value [\#285](https://github.com/gisaia/ARLAS-wui-builder/issues/285)
+- Add possibility to regroup linked fields in block [\#223](https://github.com/gisaia/ARLAS-wui-builder/issues/223)
+- Do not restrict the number of widgets per group [\#184](https://github.com/gisaia/ARLAS-wui-builder/issues/184)
+
+## [v14.0.0-rc.5](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.0.0-rc.5) (2020-10-14)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.0.0-rc.1...v14.0.0-rc.5)
+
+**New stuff:**
+
+- Add configuration object validation with the schema [\#293](https://github.com/gisaia/ARLAS-wui-builder/issues/293)
+
+**Fixed bugs:**
+
+- Deleted layers are kept in visaulisationsSets [\#296](https://github.com/gisaia/ARLAS-wui-builder/issues/296)
+- Fix duplicated ids of contributors [\#294](https://github.com/gisaia/ARLAS-wui-builder/issues/294)
+- The saved configuration does not appears on the main list. [\#284](https://github.com/gisaia/ARLAS-wui-builder/issues/284)
+- Error message in console on the start of the app [\#283](https://github.com/gisaia/ARLAS-wui-builder/issues/283)
+
 ## [v14.0.0-rc.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.0.0-rc.1) (2020-09-29)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v0.0.6-beta.1...v14.0.0-rc.1)
