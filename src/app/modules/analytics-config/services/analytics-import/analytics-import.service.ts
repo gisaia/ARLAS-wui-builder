@@ -206,7 +206,7 @@ export class AnalyticsImportService {
         control: renderStep.swimlaneMode
       },
       {
-        value: !!swimlaneInput.swimlane_representation ? swimlaneInput.swimlane_representation : 
+        value: !!swimlaneInput.swimlane_representation ? swimlaneInput.swimlane_representation :
           this.defaultValuesService.getDefaultConfig().swimlaneRepresentation,
         control: renderStep.swimlaneRepresentation
       },
