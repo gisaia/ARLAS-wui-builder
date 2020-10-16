@@ -41,6 +41,7 @@ export interface DefaultConfig {
   huePalettes: Array<[number, number] | string>;
   swimlaneZeroColor: string;
   swimlaneNanColor: string;
+  swimlaneRepresentation: string;
 }
 @Injectable({
   providedIn: 'root'

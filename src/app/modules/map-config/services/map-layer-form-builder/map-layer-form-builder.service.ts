@@ -405,7 +405,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
           false,
           toGeoPointOptionsObs(collectionFields),
           {
-            title: marker('Requested geometry')
+            title: marker('Aggregate data to a geographic grid')
           }
         ),
         granularity: new SelectFormControl(
@@ -453,7 +453,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
         rawGeometry: new SelectFormControl(
           '',
           marker('geometry field'),
-          '',
+          marker('geometry field description'),
           false,
           toGeoOptionsObs(collectionFields),
           {
@@ -466,7 +466,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
         clusterSort: new OrderedSelectFormControl(
           '',
           marker('Order field'),
-          '',
+          marker('Order field description'),
           false,
           toAllButGeoOptionsObs(collectionFields),
           {

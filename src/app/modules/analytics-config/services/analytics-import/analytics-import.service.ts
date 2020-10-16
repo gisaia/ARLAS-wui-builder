@@ -202,15 +202,19 @@ export class AnalyticsImportService {
         control: termeAggregationFg.termAggregationSize
       },
       {
-        value: swimlaneInput.swimlaneMode,
+        value: !!swimlaneInput.swimlaneMode ? swimlaneInput.swimlaneMode : 'fixedHeight',
         control: renderStep.swimlaneMode
       },
       {
-        value: swimlaneInput.swimlane_representation,
+        value: !!swimlaneInput.swimlane_representation ? swimlaneInput.swimlane_representation :
+          this.defaultValuesService.getDefaultConfig().swimlaneRepresentation,
         control: renderStep.swimlaneRepresentation
       },
       {
-        value: swimlaneInput.paletteColors,
+        value: !!swimlaneInput.paletteColors ? swimlaneInput.paletteColors : [
+          330,
+          170
+      ],
         control: renderStep.paletteColors
       },
       {
