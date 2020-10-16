@@ -7,7 +7,7 @@
     },
     "map": {
         "global": {
-            "geographicalOperator": "within",
+            "geographicalOperator": "intersects",
             "margePanForLoad": 5,
             "margePanForTest": 5,
             "initZoom": 2,
@@ -285,7 +285,11 @@
                     }
                 },
                 "renderStep": {
-                    "swimlaneMode": "fixedHeight"
+                    "swimlaneMode": "fixedHeight",
+                    "paletteColors": [
+                        330,
+                        170
+                    ]
                 },
                 "unmanagedFields": {
                     "renderStep": {
