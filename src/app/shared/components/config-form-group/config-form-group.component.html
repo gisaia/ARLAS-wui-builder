@@ -46,11 +46,11 @@
         </mat-tab-group>
     </div>
 
-    <div *ngIf="!hasChildSteps() && !hasChildTabs()">
+    <div *ngIf="!hasChildSteps() && !hasChildTabs()" style="padding-bottom: 1px;">
         <div *ngFor="let control of configFormGroup.controls | objectvalues">
-            <div *ngIf="control.enabled">
+            <ng-container *ngIf="control.enabled">
                 <div *ngIf="isFormControl(control); let formControl">
-                    <div *ngIf="!formControl.isChild">
+                    <ng-container *ngIf="!formControl.isChild">
                         <h3 *ngIf="formControl.title" class="form-control-title">{{formControl.title | translate}}</h3>
                         <app-config-element [fullSize]="!control.description">
                             <div form-fields>
@@ -77,7 +77,7 @@
                                 </div>
                             </div>
                         </app-config-element>
-                    </div>
+                    </ng-container>
                 </div>
                 <div *ngIf="isFormGroup(control); let formGroup">
                     <app-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey" isSubGroup="true">
@@ -88,6 +88,6 @@
                         isSubGroup="true">
                     </app-config-form-group-array>
                 </div>
-            </div>
+            </ng-container>
         </div>
     </div>
