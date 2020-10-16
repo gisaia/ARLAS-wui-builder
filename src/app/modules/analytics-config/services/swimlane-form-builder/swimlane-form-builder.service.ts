@@ -37,7 +37,7 @@ import { Observable } from 'rxjs';
 import { toKeywordOptionsObs, toDateFieldsObs } from '@services/collection-service/tools';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
-enum SWIMLANE_REPRESENTATION {
+export enum SWIMLANE_REPRESENTATION {
   GLOBALLY = 'global',
   BY_COLUMN = 'column'
 }

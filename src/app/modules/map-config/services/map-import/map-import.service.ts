@@ -77,7 +77,7 @@ export class MapImportService {
     collection: string) {
 
     const mapGlobalForm = this.mainFormService.mapConfig.getGlobalFg();
-
+      console.log('importing')
     mapGlobalForm.customControls.requestGeometries.push(
       this.mapGlobalFormBuilder.buildRequestGeometry(
         collection,
@@ -401,7 +401,7 @@ export class MapImportService {
       } else {
         propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.interpolated;
         const getValue = (inputValues[2] as Array<string>)[1];
-
+        console.log(inputValues)
         if (getValue.startsWith('count')) {
           propertySelectorValues.propertyInterpolatedFg = {
             propertyInterpolatedCountOrMetricCtrl: COUNT_OR_METRIC.COUNT,

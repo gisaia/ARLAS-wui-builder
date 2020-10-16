@@ -271,7 +271,7 @@
 	"Finest": "Finest",
 	"geo aggregation field": "geo aggregation field",
 	"Choose the geo aggregation field": "Choose the geo aggregation field",
-	"Requested geometry": "Requested geometry",
+	"Aggregate data to a geographic grid": "Aggregate data to a geographic gridy",
 	"cluster geometry type": "cluster geometry type",
 	"cluster geometry type description": "cluster geometry type description",
 	"Aggregated geometry": "Aggregated geometry",
