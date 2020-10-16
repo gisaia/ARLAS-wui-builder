@@ -79,13 +79,13 @@ export class MapLayerFormGroup extends ConfigFormGroup {
           validators: [requireCheckboxesToBeCheckedValidator()],
           dependsOn: () => [this.customControls.name],
           onDependencyChange: (control: VisualisationCheckboxFormControl) => {
-            // updates the selected layers en each visualisation set
+            // updates the selected layers in each visualisation set
             const controlsValues = [];
             vFa.value.forEach(vf => {
               controlsValues.push({
                 name: vf.name,
                 layers: vf.layers,
-                include: false
+                include: !!control.value ? control.value.find(v => v.name === vf.name).include : false
               });
             });
             control.setValue(controlsValues);
@@ -94,8 +94,14 @@ export class MapLayerFormGroup extends ConfigFormGroup {
             // check if the edited layer is already asigned to some visualisation sets
             // in order to check the checkbox
             visualisationControl.forEach(v => {
-              v.include = ((new Set(v.layers)).has(layerName));
+              const hasLayer = ((new Set(v.layers)).has(layerName));
+              const visuAlreadyChecked = !!control.value ? control.value.find(visu => visu.name === v.name).include : false;
+              v.include = hasLayer || visuAlreadyChecked;
             });
+            // check at least one visualisation set
+            if (visualisationControl.length >= 1 && !visualisationControl.find(vs => vs.include === true)) {
+              visualisationControl[0].include = true;
+            }
             control.setSyncOptions(visualisationControl);
           },
           optional: true
