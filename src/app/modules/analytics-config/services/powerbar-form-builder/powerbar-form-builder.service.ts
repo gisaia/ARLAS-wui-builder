@@ -63,8 +63,8 @@ export class PowerbarConfigForm extends ConfigFormGroup {
           '',
           marker('Powerbar size'),
           marker('powerbar size description'),
-          0,
-          100,
+          1,
+          30,
           1
         )
       }).withTabName(marker('Data')),

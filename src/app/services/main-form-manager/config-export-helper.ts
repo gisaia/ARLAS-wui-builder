@@ -633,7 +633,7 @@ export class ConfigExportHelper {
             if (agg.aggregationBucketOrInterval === 'bucket') {
                 idString +=  '-' + agg.aggregationBucketsNumber;
             } else {
-                idString +=  '-' + agg.aggregationIntervalSize + '-' + !!agg.aggregationIntervalUnit ? agg.aggregationIntervalUnit : '';
+                idString +=  '-' + agg.aggregationIntervalSize + '-' + (!!agg.aggregationIntervalUnit ? agg.aggregationIntervalUnit : '');
             }
             if (widgetType === WIDGET_TYPE.swimlane) {
                 const termAgg = widgetData.dataStep.termAggregation;
@@ -650,7 +650,7 @@ export class ConfigExportHelper {
             widgetData.dataStep.aggregationmodels.forEach(am => {
                 idString += am.field + '-' + am.size + '-';
             });
-        }  else if (widgetType === WIDGET_TYPE.resultlist) {
+        } else if (widgetType === WIDGET_TYPE.resultlist) {
             idString += widgetData.dataStep.idFieldName + '-' + widgetData.dataStep.searchSize + '-';
             if (!!widgetData.dataStep.columns) {
                 widgetData.dataStep.columns.forEach(c => idString += c.columnName + '-');

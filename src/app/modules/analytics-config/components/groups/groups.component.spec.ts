@@ -9,6 +9,9 @@ import {
 } from 'arlas-wui-toolkit/services/startup/startup.service';
 import { ArlasConfigurationUpdaterService } from 'arlas-wui-toolkit/services/configuration-updater/configurationUpdater.service';
 import { AnalyticsBoardComponent } from 'arlas-wui-toolkit/components/analytics-board/analytics-board.component';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { ArlasColorService } from 'arlas-web-components/services/color.generator.service';
 
 describe('GroupsComponent', () => {
   let spectator: Spectator<GroupsComponent>;
@@ -21,6 +24,9 @@ describe('GroupsComponent', () => {
     ],
     providers: [
       mockProvider(ArlasConfigService),
+      mockProvider(MainFormService),
+      mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(ArlasColorService),
       mockProvider(ArlasStartupService),
       mockProvider(ArlasCollaborativesearchService),
       mockProvider(ArlasConfigurationUpdaterService),

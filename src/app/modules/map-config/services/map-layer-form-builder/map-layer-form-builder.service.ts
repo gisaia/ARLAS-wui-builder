@@ -88,6 +88,14 @@ export class MapLayerFormGroup extends ConfigFormGroup {
                 include: !!control.value ? control.value.find(v => v.name === vf.name).include : false
               });
             });
+            // this block if necessary when creating a new layer and no visualisation set is created yet
+            if (controlsValues.length === 0) {
+              controlsValues.push({
+                name: 'All layers',
+                layers: [],
+                include: true
+              });
+            }
             control.setValue(controlsValues);
             const visualisationControl = control.value as Array<VisualisationCheckboxOption>;
             const layerName = this.customControls.name.value;
@@ -178,7 +186,8 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           0,
           22,
           1,
-          () => this.zoomMax
+          () => this.zoomMax,
+          undefined
         ),
         zoomMax: new SliderFormControl(
           '',

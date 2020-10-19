@@ -3,7 +3,7 @@
         "serverUrl": "${ARLAS_SERVER_URL}",
         "unmanagedFields": {
             "maxAgeCache": 120
-        }        
+        }
     },
     "map": {
         "global": {
@@ -29,13 +29,13 @@
                     }
                 ],
                 "mapLayers": {
-                  "events": {
-                    "zoomOnClick": [],
-                    "emitOnClick": [],
-                    "onHover": []
-                  }
+                    "events": {
+                        "zoomOnClick": [],
+                        "emitOnClick": [],
+                        "onHover": []
+                    }
                 }
-              }
+            }
         },
         "layer": {
             "featuresFg": {
@@ -45,9 +45,10 @@
                 },
                 "visibilityStep": {
                     "visible": true,
-                    "zoomMin": 0,
+                    "zoomMin": 1,
                     "zoomMax": 22,
-                    "featuresMax": 5000
+                    "featuresMax": 5000,
+                    "featuresMin": 5000
                 },
                 "styleStep": {
                     "geometryType": "fill",
@@ -160,70 +161,70 @@
             "unmanagedFields": {
                 "dataStep": {
                     "timeline": {
-                      "name": "Timeline",
-                      "icon": "watch_later",
-                      "isOneDimension": false
+                        "name": "Timeline",
+                        "icon": "watch_later",
+                        "isOneDimension": false
                     },
                     "detailedTimeline": {
-                      "name": "Timeline",
-                      "icon": "watch_later",
-                      "isOneDimension": false
+                        "name": "Timeline",
+                        "icon": "watch_later",
+                        "isOneDimension": false
                     }
-                  },
-                  "renderStep": {
+                },
+                "renderStep": {
                     "timeline": {
-                      "xTicks": 9,
-                      "yTicks": 2,
-                      "xLabels": 9,
-                      "yLabels": 2,
-                      "xUnit": "",
-                      "yUnit": "",
-                      "chartXLabel": "",
-                      "shortYLabels": false,
-                      "customizedCssClass": "arlas-timeline",
-                      "chartHeight": 128,
-                      "brushHandlesHeightWeight": 0.8,
-                      "isHistogramSelectable": true,
-                      "chartWidth": null,
-                      "xAxisPosition": "bottom",
-                      "yAxisStartsFromZero": true,
-                      "descriptionPosition": "top",
-                      "showXTicks": true,
-                      "showYTicks": true,
-                      "showXLabels": true,
-                      "showYLabels": true,
-                      "showHorizontalLines": false,
-                      "isSmoothedCurve": true,
-                      "barWeight": 0.8,
-                      "topOffsetRemoveInterval": 10
+                        "xTicks": 9,
+                        "yTicks": 2,
+                        "xLabels": 9,
+                        "yLabels": 2,
+                        "xUnit": "",
+                        "yUnit": "",
+                        "chartXLabel": "",
+                        "shortYLabels": false,
+                        "customizedCssClass": "arlas-timeline",
+                        "chartHeight": 128,
+                        "brushHandlesHeightWeight": 0.8,
+                        "isHistogramSelectable": true,
+                        "chartWidth": null,
+                        "xAxisPosition": "bottom",
+                        "yAxisStartsFromZero": true,
+                        "descriptionPosition": "top",
+                        "showXTicks": true,
+                        "showYTicks": true,
+                        "showXLabels": true,
+                        "showYLabels": true,
+                        "showHorizontalLines": false,
+                        "isSmoothedCurve": true,
+                        "barWeight": 0.8,
+                        "topOffsetRemoveInterval": 10
                     },
                     "detailedTimeline": {
-                      "xTicks": 5,
-                      "yTicks": 2,
-                      "xLabels": 5,
-                      "yLabels": 2,
-                      "xUnit": "",
-                      "yUnit": "",
-                      "chartXLabel": "",
-                      "shortYLabels": false,
-                      "customizedCssClass": "arlas-detailed-timeline",
-                      "chartHeight": 60,
-                      "multiselectable": false,
-                      "brushHandlesHeightWeight": 0.8,
-                      "isHistogramSelectable": true,
-                      "chartWidth": null,
-                      "xAxisPosition": "top",
-                      "yAxisStartsFromZero": true,
-                      "descriptionPosition": "bottom",
-                      "showXTicks": true,
-                      "showYTicks": true,
-                      "showXLabels": true,
-                      "showYLabels": true,
-                      "showHorizontalLines": false,
-                      "isSmoothedCurve": true,
-                      "barWeight": 0.8
+                        "xTicks": 5,
+                        "yTicks": 2,
+                        "xLabels": 5,
+                        "yLabels": 2,
+                        "xUnit": "",
+                        "yUnit": "",
+                        "chartXLabel": "",
+                        "shortYLabels": false,
+                        "customizedCssClass": "arlas-detailed-timeline",
+                        "chartHeight": 60,
+                        "multiselectable": false,
+                        "brushHandlesHeightWeight": 0.8,
+                        "isHistogramSelectable": true,
+                        "chartWidth": null,
+                        "xAxisPosition": "top",
+                        "yAxisStartsFromZero": true,
+                        "descriptionPosition": "bottom",
+                        "showXTicks": true,
+                        "showYTicks": true,
+                        "showXLabels": true,
+                        "showYLabels": true,
+                        "showHorizontalLines": false,
+                        "isSmoothedCurve": true,
+                        "barWeight": 0.8
                     }
-                  }
+                }
             }
         }
     },
@@ -250,33 +251,33 @@
                 },
                 "unmanagedFields": {
                     "dataStep": {
-                      "isOneDimension": false
+                        "isOneDimension": false
                     },
                     "renderStep": {
-                      "showExportCsv": true,
-                      "isHistogramSelectable": true,
-                      "topOffsetRemoveInterval": 40,
-                      "leftOffsetRemoveInterval": 18,
-                      "brushHandlesHeightWeight": 0.8,
-                      "yAxisStartsFromZero": true,
-                      "xAxisPosition": "bottom",
-                      "descriptionPosition": "bottom",
-                      "xTicks": 4,
-                      "yTicks": 1,
-                      "xLabels": 4,
-                      "yLabels": 4,
-                      "showXTicks": true,
-                      "showYTicks": true,
-                      "showXLabels": true,
-                      "showYLabels": true,
-                      "xUnit": "",
-                      "yUnit": "",
-                      "chartXLabel": "",
-                      "shortYLabels": false,
-                      "barWeight": 0.8,
-                      "isSmoothedCurve": false
+                        "showExportCsv": true,
+                        "isHistogramSelectable": true,
+                        "topOffsetRemoveInterval": 40,
+                        "leftOffsetRemoveInterval": 18,
+                        "brushHandlesHeightWeight": 0.8,
+                        "yAxisStartsFromZero": true,
+                        "xAxisPosition": "bottom",
+                        "descriptionPosition": "bottom",
+                        "xTicks": 4,
+                        "yTicks": 1,
+                        "xLabels": 4,
+                        "yLabels": 4,
+                        "showXTicks": true,
+                        "showYTicks": true,
+                        "showXLabels": true,
+                        "showYLabels": true,
+                        "xUnit": "",
+                        "yUnit": "",
+                        "chartXLabel": "",
+                        "shortYLabels": false,
+                        "barWeight": 0.8,
+                        "isSmoothedCurve": false
                     }
-                  }
+                }
             },
             "swimlane": {
                 "dataStep": {
@@ -293,30 +294,30 @@
                 },
                 "unmanagedFields": {
                     "renderStep": {
-                      "showExportCsv": true,
-                      "isHistogramSelectable": true,
-                      "topOffsetRemoveInterval": 40,
-                      "leftOffsetRemoveInterval": 18,
-                      "brushHandlesHeightWeight": 0.8,
-                      "yAxisStartsFromZero": true,
-                      "xAxisPosition": "bottom",
-                      "descriptionPosition": "bottom",
-                      "xTicks": 4,
-                      "yTicks": 1,
-                      "xLabels": 4,
-                      "yLabels": 4,
-                      "showXTicks": true,
-                      "showYTicks": true,
-                      "showXLabels": true,
-                      "showYLabels": true,
-                      "xUnit": "",
-                      "yUnit": "",
-                      "chartXLabel": "",
-                      "shortYLabels": false,
-                      "barWeight": 0.8,
-                      "swimLaneLabelsWidth": 100,
-                      "swimlaneHeight": 20,
-                      "swimlaneBorderRadius": 3
+                        "showExportCsv": true,
+                        "isHistogramSelectable": true,
+                        "topOffsetRemoveInterval": 40,
+                        "leftOffsetRemoveInterval": 18,
+                        "brushHandlesHeightWeight": 0.8,
+                        "yAxisStartsFromZero": true,
+                        "xAxisPosition": "bottom",
+                        "descriptionPosition": "bottom",
+                        "xTicks": 4,
+                        "yTicks": 1,
+                        "xLabels": 4,
+                        "yLabels": 4,
+                        "showXTicks": true,
+                        "showYTicks": true,
+                        "showXLabels": true,
+                        "showYLabels": true,
+                        "xUnit": "",
+                        "yUnit": "",
+                        "chartXLabel": "",
+                        "shortYLabels": false,
+                        "barWeight": 0.8,
+                        "swimLaneLabelsWidth": 100,
+                        "swimlaneHeight": 20,
+                        "swimlaneBorderRadius": 3
                     }
                 }
             },
@@ -330,33 +331,37 @@
             "donut": {
                 "unmanagedFields": {
                     "renderStep": {
-                      "customizedCssClass": "arlas-donuts-analytics",
-                      "diameter": 150
+                        "customizedCssClass": "arlas-donuts-analytics",
+                        "diameter": 150
                     }
-                  }
+                },
+                "renderStep": {
+                    "opacity": 20,
+                    "multiselectable": true
+                }
             },
             "powerbar": {
                 "dataStep": {
                     "aggregationSize": 10
                 }
             },
-            "resultlist"   : {
+            "resultlist": {
                 "unmanagedFields": {
                     "dataStep": {},
                     "renderStep": {
-                      "tableWidth": 455,
-                      "globalActionsList": [],
-                      "nLastLines": 3,
-                      "detailedGridHeight": 25,
-                      "nbGridColumns": 3,
-                      "defautMode": "list",
-                      "isBodyHidden": false,
-                      "isGeoSortActived": false,
-                      "isAutoGeoSortActived": true,
-                      "selectedItemsEvent": null,
-                      "consultedItemEvent": null,
-                      "actionOnItemEvent": null,
-                      "globalActionEvent": null
+                        "tableWidth": 455,
+                        "globalActionsList": [],
+                        "nLastLines": 3,
+                        "detailedGridHeight": 25,
+                        "nbGridColumns": 3,
+                        "defautMode": "list",
+                        "isBodyHidden": false,
+                        "isGeoSortActived": false,
+                        "isAutoGeoSortActived": true,
+                        "selectedItemsEvent": null,
+                        "consultedItemEvent": null,
+                        "actionOnItemEvent": null,
+                        "globalActionEvent": null
                     }
                 }
             }
@@ -368,8 +373,8 @@
             "useDownload": true,
             "useTagger": true,
             "share": {
-                "maxForFeature": 1234,
-                "maxForTopology": 5678
+                "maxForFeature": 5000,
+                "maxForTopology": 5000
             },
             "tagger": {
                 "serverUrl": "http://tagger.com",
@@ -378,11 +383,11 @@
             "unmanagedFields": {
                 "sortExcludedTypes": [
                     "TEXT",
-                     "GEO_POINT"
-                 ],
-                 "download": {
+                    "GEO_POINT"
+                ],
+                "download": {
                     "authType": "basic"
-                 }
+                }
             }
         }
     },
