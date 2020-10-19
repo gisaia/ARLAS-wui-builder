@@ -19,12 +19,13 @@ under the License.
 @import "variables.scss";
 
 .module {
-   margin: 15px 0px;
+   margin-bottom: 15px;
 
    ::ng-deep .mat-slide-toggle {
       line-height: 30px;
    }
    .title {
       @include group-title();
+      line-height: 0;
    }
 }

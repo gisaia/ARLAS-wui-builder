@@ -32,7 +32,7 @@
                 <app-config-form-control [control]="field.controls.process"></app-config-form-control>
             </div>
             <div class="add-field">
-                <button mat-raised-button (click)="addField(di)" type="button"
+                <button mat-stroked-button (click)="addField(di)" color="primary" type="button"
                     [matTooltip]="'Add a field' | translate">
                     <mat-icon>add</mat-icon>
                     {{'Add a field' | translate}}
@@ -43,7 +43,7 @@
 </div>
 
 <div class="add-detail">
-    <button mat-raised-button (click)="addDetail()" [matTooltip]="'Add a detail' | translate">
+    <button mat-stroked-button (click)="addDetail()" color="primary" [matTooltip]="'Add a detail' | translate">
         <mat-icon>add</mat-icon>
         {{'Add a detail' | translate}}
     </button>

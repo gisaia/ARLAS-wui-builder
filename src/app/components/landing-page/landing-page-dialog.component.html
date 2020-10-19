@@ -61,7 +61,7 @@
                             formControlName="serverUrl" type="url">
                     </mat-form-field>
                     <button (click)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false" [disabled]="this.mainFormService.startingConfig.getFg().get('serverUrl').invalid"
-                        mat-raised-button color="accent">{{'Show collections' | translate}}</button>
+                        mat-stroked-button color="accent">{{'Show collections' | translate}}</button>
                 </div>
             </app-config-element>
             <app-config-element *ngIf="isServerReady">
@@ -94,7 +94,7 @@
         <div class="upload-files">
             <div class="upload-single-files">
                 <!-- No material file input exists, so we hide the basic input behind a material button -->
-                <button type="button" mat-raised-button color="accent" (click)="confFileInput.click()">
+                <button type="button" mat-stroked-button color="accent" (click)="confFileInput.click()">
                     {{ 'Select a config.json file' | translate }}
                     <span *ngIf="confFileInput.files.length" class="upload-check">
                         <mat-icon>check</mat-icon>
@@ -105,7 +105,7 @@
             </div>
             <div class="upload-single-files">
                 <!-- No material file input exists, so we hide the basic input behind a material button -->
-                <button type="button" mat-raised-button color="accent" (click)="mapFileInput.click()">
+                <button type="button" mat-stroked-button color="accent" (click)="mapFileInput.click()">
                     {{ 'Select a config.map.json file' | translate }}
                     <span *ngIf="mapFileInput.files.length" class="upload-check">
                         <mat-icon>check</mat-icon>
