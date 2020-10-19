@@ -257,7 +257,7 @@
 </div>
 
 <div *ngIf="isButton(); let typedControl" class="button-form-control">
-    <button type="button" mat-raised-button color="primary" (click)="typedControl.callback(typedControl)"
+    <button type="button" mat-stroked-button color="primary" (click)="typedControl.callback(typedControl)"
         [disabled]="typedControl.disabledButton">
         {{typedControl.label | translate}}
     </button>

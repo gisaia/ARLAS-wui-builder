@@ -15,7 +15,7 @@
                                 </mat-option>
                             </mat-autocomplete>
                         </mat-form-field>
-                        <button class="add-button" mat-button mat-raised-button (click)="addKeyword()"
+                        <button class="add-button" mat-button mat-stroked-button color="primary" (click)="addKeyword()"
                             [disabled]="!newKeywordCtrl.value || alreadyHasNewKeyword()">{{ 'Add' | translate}}</button>
                     </div>
                     <mat-divider></mat-divider>
