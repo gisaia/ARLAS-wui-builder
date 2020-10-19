@@ -18,7 +18,7 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import {
-  ConfigFormGroup, InputFormControl, SlideToggleFormControl, SelectFormControl, SliderFormControl, ButtonFormControl, TitleInputFormControl
+  ConfigFormGroup, SlideToggleFormControl, SelectFormControl, SliderFormControl, ButtonFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -186,12 +186,11 @@ export class PowerbarFormBuilderService extends WidgetFormBuilder {
       this.mainFormService.getCollections()[0],
       this.collectionService.getCollectionFields(
         this.mainFormService.getCollections()[0]),
-      this.mainFormService.commonConfig.getKeysToColorFa(),
-      this.defaultValuesService.getDefaultConfig(),
-      this.dialog,
-      this.collectionService,
-      this.colorService
-    );
+        this.mainFormService.commonConfig.getKeysToColorFa(),
+        this.defaultValuesService.getDefaultConfig(),
+        this.dialog,
+        this.collectionService,
+        this.colorService);
     this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
 
     return formGroup;

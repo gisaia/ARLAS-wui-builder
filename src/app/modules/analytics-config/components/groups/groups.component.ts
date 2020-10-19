@@ -34,6 +34,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { Subject } from 'rxjs/internal/Subject';
 import { debounceTime } from 'rxjs/operators';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { ArlasColorService } from 'arlas-web-components/services/color.generator.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
@@ -55,6 +59,10 @@ export class GroupsComponent implements OnInit {
     private analyticsInitService: AnalyticsInitService,
     private translate: TranslateService,
     private cdr: ChangeDetectorRef,
+    private colorService: ArlasColorGeneratorLoader,
+    private cs: ArlasColorService,
+    protected mainFormService: MainFormService,
+
   ) {
   }
 
@@ -107,8 +115,11 @@ export class GroupsComponent implements OnInit {
   }
 
   public updateAnalytics() {
+    // get the keyToColors list to inject it in the ColorService used by the arlas-web-components
+    this.colorService.keysToColors = (this.mainFormService.commonConfig.getKeysToColorFa()
+    .value as Array<{ color: string, keyword: string }>).map(ck => [ck.keyword, ck.color]);
 
-
+    this.cs.colorGenerator = this.colorService;
     const analytics = [];
     this.groupsPreview = [];
     this.cdr.detectChanges();
