@@ -1,11 +1,20 @@
 # Change Log
 
+## [v14.0.0-rc.7](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.0.0-rc.7) (2020-10-19)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.0.0-rc.6...v14.0.0-rc.7)
+
 ## [v14.0.0-rc.6](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.0.0-rc.6) (2020-10-16)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.0.0-rc.5...v14.0.0-rc.6)
 
 **New stuff:**
 
+- Use basic button style in analytics section [\#305](https://github.com/gisaia/ARLAS-wui-builder/issues/305)
+- Remove the possibility to open the left menu [\#304](https://github.com/gisaia/ARLAS-wui-builder/issues/304)
+- Remove or lighten the background-color of description section [\#303](https://github.com/gisaia/ARLAS-wui-builder/issues/303)
+- Define a primary version of Button [\#301](https://github.com/gisaia/ARLAS-wui-builder/issues/301)
+- Homogenise color from sliders and slide toggles [\#300](https://github.com/gisaia/ARLAS-wui-builder/issues/300)
 - Add some default value [\#285](https://github.com/gisaia/ARLAS-wui-builder/issues/285)
 - Add possibility to regroup linked fields in block [\#223](https://github.com/gisaia/ARLAS-wui-builder/issues/223)
 - Do not restrict the number of widgets per group [\#184](https://github.com/gisaia/ARLAS-wui-builder/issues/184)
