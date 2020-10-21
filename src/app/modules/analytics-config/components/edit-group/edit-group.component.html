@@ -42,7 +42,7 @@
             </div>
             <div class="edit-widgets">
                 <div *ngFor="let comp of contentTypeValue; index as ci;" mat-raised-button>
-                    <div class="invalid-widget-edition" *ngIf="!content.controls[ci].valid"
+                    <div class="invalid-widget-edition" *ngIf="!content.controls[ci].valid && !!content.controls[ci].value.widgetData?.title"
                         [matTooltip]="'The widget has invalid inputs. Edit to fix them.' | translate">!</div>
                     <span
                         [matTooltip]="content.controls[ci].value.widgetData?.title">{{content.controls[ci].value.widgetData?.title}}</span>
