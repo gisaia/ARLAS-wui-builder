@@ -42,6 +42,7 @@ mat-cell.column-keyword {
 
 div.add-header {
   display: flex;
+  align-items: baseline;
   width: 100%;
 
   mat-form-field.add-input {
