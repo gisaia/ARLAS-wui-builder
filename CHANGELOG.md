@@ -1,6 +1,14 @@
 # Change Log
 
-## [v14.0.0-rc.7](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.0.0-rc.7) (2020-10-19)
+## [v14.0.0-rc.8](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.0.0-rc.8) (2020-10-22)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.0.0-rc.7...v14.0.0-rc.8)
+
+**Fixed bugs:**
+
+- No error message should be displayed by default [\#302](https://github.com/gisaia/ARLAS-wui-builder/issues/302)
+
+## [v14.0.0-rc.7](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.0.0-rc.7) (2020-10-20)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.0.0-rc.6...v14.0.0-rc.7)
 
