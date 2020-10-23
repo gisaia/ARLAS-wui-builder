@@ -39,6 +39,8 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   @Input() public defaultKey: string;
   @ViewChild('component', { read: ViewContainerRef, static: false }) private componentContainer: ViewContainerRef;
 
+  public colorPreviewControl: ColorPreviewFormControl;
+
   constructor(
     private resolver: ComponentFactoryResolver,
     private changeDetector: ChangeDetectorRef
@@ -46,6 +48,7 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
 
   public ngOnInit(
   ) {
+    this.colorPreviewControl = this.isColorPreview();
   }
 
   public ngAfterViewInit() {

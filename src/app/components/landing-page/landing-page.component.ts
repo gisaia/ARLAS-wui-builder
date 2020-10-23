@@ -229,12 +229,6 @@ export class LandingPageDialogComponent implements OnInit {
     ]).then(values => {
       const configJson = values[0] as Config;
       const configMapJson = values[1] as MapConfig;
-      // I think we need to think about two options for this part
-      // A config file store in a database with arlas-persistence
-      // A config file store on the file system of the user computer
-      // TODO In all cases we need to validate the folder with this code
-      // const newUrl = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('serverUrl').value;
-      // this.startupService.validLoadedConfig(newUrl)
 
       this.initWithConfig(configJson, configMapJson);
 

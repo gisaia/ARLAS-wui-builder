@@ -384,11 +384,11 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                   control.setValue(+allValuesCtr.value[0].proportion);
                 } else if (!control.value) {
                   collectionService.getComputationMetric(
-                  collection,
-                  this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value,
-                  METRIC_TYPES.MIN)
-                  .then(min =>
-                    control.setValue(min));
+                    collection,
+                    this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value,
+                    METRIC_TYPES.MIN)
+                    .then(min =>
+                      control.setValue(min));
                 }
               }
             }
@@ -476,14 +476,14 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                 // the custom interpolation
                 if (!control.value || +control.value[0].proportion !== minValue ||
                   +control.value[control.value.length - 1].proportion !== maxValue) {
-                 control.setValue(
-                   [...Array(6).keys()].map(k =>
-                     ({
-                       proportion: minValue + (maxValue - minValue) * k / 5,
-                       value: minInterpolatedValue + (maxInterpolatedValue - minInterpolatedValue) * k / 5
-                     })
-                   )
-                 );
+                  control.setValue(
+                    [...Array(6).keys()].map(k =>
+                      ({
+                        proportion: minValue + (maxValue - minValue) * k / 5,
+                        value: minInterpolatedValue + (maxInterpolatedValue - minInterpolatedValue) * k / 5
+                      })
+                    )
+                  );
                 }
                 // enable if a color or a number can be interpolated
                 this.enableControlIfColorInterpolable(control as ConfigFormControl, isAggregated, false);
@@ -550,7 +550,9 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
             ],
             onDependencyChange: (control) => {
               const interpolatedValuesCtrl = this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesCtrl;
-              const hasInterpolatedValues = interpolatedValuesCtrl.enabled && !!interpolatedValuesCtrl.value;
+              const hasInterpolatedValues = interpolatedValuesCtrl.enabled
+                && !!interpolatedValuesCtrl.value
+                && propertyType === PROPERTY_TYPE.color;
               control.enableIf(hasInterpolatedValues);
               control.setValue(interpolatedValuesCtrl.value);
             }
@@ -668,7 +670,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
     } else if (!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
       && !Number.isNaN(parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl.value, 10))
       && !Number.isNaN(parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value, 10))) {
-        doEnable = true;
+      doEnable = true;
     } else if (!!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
       && !this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeByKeyCtrl.value) {
       doEnable = true;
