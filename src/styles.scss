@@ -65,6 +65,8 @@ body {
 }
 
 .stepper-for-config-element {
+  margin-top: 7px;
+
   &.mat-stepper-horizontal,
   &.mat-stepper-vertical {
     background-color: #fafafa;

@@ -293,8 +293,6 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   public get weightFg() { return this.styleStep.get('weightFg') as PropertySelectorFormGroup; }
   public get intensityFg() { return this.styleStep.get('intensityFg') as PropertySelectorFormGroup; }
   public get filter() { return this.styleStep.get('filter') as FormGroup; }
-
-
 }
 
 export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
@@ -573,8 +571,6 @@ export class MapLayerFormBuilderService {
     this.defaultValuesService.setDefaultValueRecursively('map.layer', clusterFormGroup);
     return clusterFormGroup;
   }
-
-
 }
 
 export function requireCheckboxesToBeCheckedValidator(minRequired = 1): ValidatorFn {
