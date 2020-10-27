@@ -27,6 +27,7 @@ import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-ex
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { StartupService } from '@services/startup/startup.service';
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 export interface MapglComponentInput {
   mapglContributor: MapContributor;
@@ -50,6 +51,7 @@ export class PreviewComponent implements AfterViewInit {
     private collaborativeService: ArlasCollaborativesearchService,
     private configService: ArlasConfigService,
     private startupService: StartupService,
+    private collectionService: CollectionService,
     @Inject(MAT_DIALOG_DATA) public dataMap: MapglComponentInput
   ) {
     if (this.dataMap.mapglContributor !== undefined || this.dataMap.mapComponentConfig !== undefined) {
@@ -62,7 +64,7 @@ export class PreviewComponent implements AfterViewInit {
       const mapConfigVisualisations = this.mainFormService.mapConfig.getVisualisationsFa();
       // Get contributor config for this layer
       // Get config.map part for this layer
-      const configMap = ConfigMapExportHelper.process(mapConfigLayers);
+      const configMap = ConfigMapExportHelper.process(mapConfigLayers, this.collectionService.taggableFields);
       const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers);
       // Add contributor part in arlasConfigService
       // Add web contributors in config if not exist

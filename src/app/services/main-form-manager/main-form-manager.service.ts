@@ -48,10 +48,7 @@ import { StartupService, ZONE_WUI_BUILDER } from '@services/startup/startup.serv
 import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persistence.service';
 import { Router } from '@angular/router';
 import { ArlasStartupService } from 'arlas-wui-toolkit/services/startup/startup.service';
-import * as draftSchema from 'ajv/lib/refs/json-schema-draft-06.json';
-import * as ajvKeywords from 'ajv-keywords/keywords/uniqueItemProperties';
-
-
+import { CollectionService } from '@services/collection-service/collection.service';
 
 @Injectable({
   providedIn: 'root'
@@ -78,6 +75,7 @@ export class MainFormManagerService {
     private mapImportService: MapImportService,
     private dialog: MatDialog,
     private startupService: StartupService,
+    private collectionService: CollectionService,
     private router: Router,
     private arlasStartupService: ArlasStartupService
   ) { }
@@ -137,7 +135,7 @@ export class MainFormManagerService {
       keysToColorList,
     );
 
-    const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers);
+    const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers, this.collectionService.taggableFields);
 
     const confToValidate: any = JSON.parse(JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
       generatedMapConfig.layers

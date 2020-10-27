@@ -8,6 +8,7 @@ import {
   ArlasCollaborativesearchService, ArlasStartupService,
   ArlasConfigService, CONFIG_UPDATER
 } from 'arlas-wui-toolkit/services/startup/startup.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 describe('LayersComponent', () => {
   let spectator: Spectator<LayersComponent>;
@@ -17,6 +18,7 @@ describe('LayersComponent', () => {
       mockProvider(ArlasStartupService),
       mockProvider(ArlasCollaborativesearchService),
       mockProvider(ArlasConfigurationUpdaterService),
+      mockProvider(CollectionService),
       { provide: CONFIG_UPDATER, useValue: {} },
       mockProvider(MainFormService, {
         mapConfig: {

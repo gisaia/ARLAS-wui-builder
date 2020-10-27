@@ -32,6 +32,7 @@ import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-glob
 import { COUNT_OR_METRIC } from '@shared-services/property-selector-form-builder/models';
 import { VisualisationSetConfig } from 'arlas-web-components';
 import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,7 @@ export class MapImportService {
 
   constructor(
     private mainFormService: MainFormService,
+    private collectionService: CollectionService,
     private mapGlobalFormBuilder: MapGlobalFormBuilderService,
     private mapLayerFormBuilder: MapLayerFormBuilderService,
     private mapVisualisationFormBuilder: MapVisualisationFormBuilderService
@@ -366,11 +368,10 @@ export class MapImportService {
 
   private importPropertySelectorManual(inputValues: any, propertySelectorValues: any, layerSource: LayerSourceConfig) {
     propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.manual;
-
     const keywordsAndColors = (inputValues.slice(2) as Array<string>);
-    const manualFied = layerSource.include_fields.find(f => f.replace(/\./g, '_') === inputValues[1][1]);
     propertySelectorValues.propertyManualFg = {
-      propertyManualFieldCtrl: manualFied,
+      // 'taggable_field_0' includes 'taggable.field'.replace(/\./g, '_')
+      propertyManualFieldCtrl: layerSource.include_fields.find(f => inputValues[1][1].includes(f.replace(/\./g, '_'))),
       propertyManualValuesCtrl: new Array<KeywordColor>()
     };
     for (let i = 0; i < keywordsAndColors.length - 1; i = i + 2) {

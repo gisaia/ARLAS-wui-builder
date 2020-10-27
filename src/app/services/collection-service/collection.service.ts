@@ -39,6 +39,7 @@ import { Hits } from 'arlas-api';
 export class CollectionService {
 
   private collectionsDescriptions = new Map<string, Observable<CollectionReferenceDescription>>();
+  public taggableFields = new Set<string>();
 
   constructor(
     private collabSearchService: ArlasCollaborativesearchService,
@@ -75,8 +76,14 @@ export class CollectionService {
                 return getSubFields(property.properties, path);
 
               } else if (!exclude && (!types || types.includes(property.type))) {
+                if (property && property.taggable) {
+                  this.taggableFields.add(path);
+                }
                 return { name: path, type: property.type };
               } else if (exclude && (!types || !types.includes(property.type))) {
+                if (property && property.taggable) {
+                  this.taggableFields.add(path);
+                }
                 return { name: path, type: property.type };
               } else {
                 return null;

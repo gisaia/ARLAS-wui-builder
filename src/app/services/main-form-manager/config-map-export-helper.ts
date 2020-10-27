@@ -32,14 +32,14 @@ export enum VISIBILITY {
 export const NORMALIZED = 'normalized';
 export class ConfigMapExportHelper {
 
-    public static process(mapConfigLayers: FormArray) {
+    public static process(mapConfigLayers: FormArray, taggableFields?: Set<string>) {
 
         const layers: Array<Layer> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
             const mode = layerFg.value.mode as LAYER_MODE;
             const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
                 (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
 
-            const paint = this.getLayerPaint(modeValues, mode);
+            const paint = this.getLayerPaint(modeValues, mode, taggableFields);
 
             const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
             const layer: Layer = {
@@ -68,10 +68,10 @@ export class ConfigMapExportHelper {
         return mapConfig;
     }
 
-    public static getLayerPaint(modeValues, mode) {
+    public static getLayerPaint(modeValues, mode, taggableFields?: Set<string>) {
         const paint: Paint = {};
         const colorOpacity = modeValues.styleStep.opacity;
-        const color = this.getMapProperty(modeValues.styleStep.colorFg, mode);
+        const color = this.getMapProperty(modeValues.styleStep.colorFg, mode, taggableFields);
         switch (modeValues.styleStep.geometryType) {
             case GEOMETRY_TYPE.fill: {
                 paint['fill-opacity'] = colorOpacity;
@@ -81,26 +81,26 @@ export class ConfigMapExportHelper {
             case GEOMETRY_TYPE.line: {
                 paint['line-opacity'] = colorOpacity;
                 paint['line-color'] = color;
-                paint['line-width'] = this.getMapProperty(modeValues.styleStep.widthFg, mode);
+                paint['line-width'] = this.getMapProperty(modeValues.styleStep.widthFg, mode, taggableFields);
                 break;
             }
             case GEOMETRY_TYPE.circle: {
                 paint['circle-opacity'] = colorOpacity;
                 paint['circle-color'] = color;
-                paint['circle-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
+                paint['circle-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, taggableFields);
                 break;
             }
             case GEOMETRY_TYPE.heatmap: {
                 paint['heatmap-color'] = color;
-                paint['heatmap-intensity'] = this.getMapProperty(modeValues.styleStep.intensityFg, mode);
-                paint['heatmap-weight'] = this.getMapProperty(modeValues.styleStep.weightFg, mode);
-                paint['heatmap-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode);
+                paint['heatmap-intensity'] = this.getMapProperty(modeValues.styleStep.intensityFg, mode, taggableFields);
+                paint['heatmap-weight'] = this.getMapProperty(modeValues.styleStep.weightFg, mode, taggableFields);
+                paint['heatmap-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, taggableFields);
             }
         }
         return paint;
     }
 
-    public static getMapProperty(fgValues: any, mode: LAYER_MODE) {
+    public static getMapProperty(fgValues: any, mode: LAYER_MODE, taggableFields?: Set<string>) {
         switch (fgValues.propertySource) {
             case PROPERTY_SELECTOR_SOURCE.fix:
                 return fgValues.propertyFix;
@@ -115,9 +115,11 @@ export class ConfigMapExportHelper {
                 const manualValues = !otherKC ? (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>) :
                     (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>)
                     .filter(kc => kc.keyword !== OTHER_KEYWORD).concat(otherKC) ;
+                const manualField = (taggableFields && taggableFields.has(fgValues.propertyManualFg.propertyManualFieldCtrl)) ?
+                fgValues.propertyManualFg.propertyManualFieldCtrl + '.0' : fgValues.propertyManualFg.propertyManualFieldCtrl;
                 return [
                     'match',
-                    this.getArray(fgValues.propertyManualFg.propertyManualFieldCtrl)
+                    this.getArray(manualField)
                 ].concat(
                         manualValues.flatMap(kc => kc.keyword !== OTHER_KEYWORD ? [kc.keyword, kc.color] : [kc.color])
                 );

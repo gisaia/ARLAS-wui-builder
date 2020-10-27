@@ -8,6 +8,7 @@ import { ArlasCollaborativesearchService, ArlasStartupService } from 'arlas-wui-
 import { mockProvider } from '@ngneat/spectator';
 import { HttpClient } from '@angular/common/http';
 import { ArlasConfigurationUpdaterService } from 'arlas-wui-toolkit/services/configuration-updater/configurationUpdater.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 describe('PreviewComponent', () => {
   let component: PreviewComponent;
@@ -26,6 +27,7 @@ describe('PreviewComponent', () => {
         mockProvider(ArlasCollaborativesearchService),
         mockProvider(ArlasConfigurationUpdaterService),
         mockProvider(ArlasStartupService),
+        mockProvider(CollectionService),
         { provide: MatDialogRef, useValue: {} },
         {
           provide: MAT_DIALOG_DATA, useValue: {
