@@ -60,6 +60,10 @@ $primary-color: mat-color($primary-palette);
   }
 }
 
+.new-config-content{
+  overflow: unset;
+}
+
 .actions{
   .buttons{
     width: 100%;

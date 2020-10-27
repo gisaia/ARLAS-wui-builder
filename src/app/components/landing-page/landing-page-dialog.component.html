@@ -51,7 +51,7 @@
 </div>
 <ng-container *ngIf="configChoice === InitialChoice.setup">
     <h2 mat-dialog-title>{{'New configuration' | translate}}</h2>
-    <mat-dialog-content>
+    <mat-dialog-content class="new-config-content">
         <div [formGroup]="this.mainFormService.startingConfig.getFg()">
             <app-config-element [fullSize]="true">
                 <div form-fields class="server-url">
