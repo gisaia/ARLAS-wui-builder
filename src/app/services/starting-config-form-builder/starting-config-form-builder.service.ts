@@ -33,7 +33,10 @@ export class StartingConfigFormGroup extends FormGroup {
 
       collections: new FormControl(null, [Validators.required, Validators.maxLength(1)]),
       unmanagedFields: new FormGroup({
-        maxAgeCache: new FormControl()
+        maxAgeCache: new FormControl(),
+        appName: new FormControl(),
+        appUnit: new FormControl(),
+        appNameBackgroundColor: new FormControl()
       })
     });
   }
@@ -42,7 +45,10 @@ export class StartingConfigFormGroup extends FormGroup {
     serverUrl: this.get('serverUrl'),
     collections: this.get('collections'),
     unmanagedFields: {
-      maxAgeCache: this.get('unmanagedFields.maxAgeCache')
+      maxAgeCache: this.get('unmanagedFields.maxAgeCache'),
+      appName: this.get('unmanagedFields.appName'),
+      appUnit: this.get('unmanagedFields.appUnit'),
+      appNameBackgroundColor: this.get('unmanagedFields.appNameBackgroundColor'),
     },
   };
 

@@ -222,6 +222,18 @@ export class MainFormManagerService {
         value: config.arlas.server.maxAgeCache,
         control: startingConfigControls.unmanagedFields.maxAgeCache
       },
+      {
+        value: config['arlas-wui'].web.app.name,
+        control: startingConfigControls.unmanagedFields.appName
+      },
+      {
+        value: config['arlas-wui'].web.app.unit,
+        control: startingConfigControls.unmanagedFields.appUnit
+      },
+      {
+        value: config['arlas-wui'].web.app.name_background_color,
+        control: startingConfigControls.unmanagedFields.appNameBackgroundColor
+      }
     ]);
 
     this.initMainModulesForms(false);

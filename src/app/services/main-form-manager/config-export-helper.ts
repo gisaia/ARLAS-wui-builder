@@ -102,7 +102,10 @@ export class ConfigExportHelper {
                     app: {
                         components: {
                             chipssearch
-                        }
+                        },
+                        name: startingConfig.customControls.unmanagedFields.appName.value,
+                        unit: startingConfig.customControls.unmanagedFields.appUnit.value,
+                        name_background_color: startingConfig.customControls.unmanagedFields.appNameBackgroundColor.value
                     }
                 }
             },

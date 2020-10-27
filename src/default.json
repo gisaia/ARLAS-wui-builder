@@ -2,7 +2,10 @@
     "global": {
         "serverUrl": "${ARLAS_SERVER_URL}",
         "unmanagedFields": {
-            "maxAgeCache": 120
+            "maxAgeCache": 120,
+            "appName": "ARLAS",
+            "appUnit": "",
+            "appNameBackgroundColor": "#FF4081"
         }
     },
     "map": {
