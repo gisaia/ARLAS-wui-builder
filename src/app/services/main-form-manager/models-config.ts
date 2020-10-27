@@ -34,7 +34,10 @@ export interface Config {
             app: {
                 components: {
                     chipssearch: ChipSearchConfig;
-                }
+                },
+                name: string,
+                unit: string,
+                name_background_color: string
             },
 
         }
