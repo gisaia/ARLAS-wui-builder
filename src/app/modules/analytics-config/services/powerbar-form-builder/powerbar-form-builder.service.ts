@@ -113,7 +113,7 @@ export class PowerbarConfigForm extends ConfigFormGroup {
                   }
                 });
             }),
-          'A field is required to manage colors',
+          marker('A field is required to manage colors'),
           {
             optional: true,
             dependsOn: () => [

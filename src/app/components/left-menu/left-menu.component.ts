@@ -113,7 +113,7 @@ export class LeftMenuComponent {
       control: this.mainFormService.analyticsConfig.control
     },
     {
-      name: marker('Side Modules'),
+      name: marker('Side modules'),
       link: '/side-modules',
       icon: 'view_column',
       tooltip: marker('Side modules'),
@@ -124,7 +124,7 @@ export class LeftMenuComponent {
       name: marker('Look \'n feel'),
       link: '/look-and-feel',
       icon: 'opacity',
-      tooltip: marker('Look \'n fell'),
+      tooltip: marker('Look \'n feel'),
       enabled: true,
       control: this.mainFormService.lookAndFeelConfig.control
     },
