@@ -21,4 +21,5 @@ import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 export interface CollectionField {
     name: string;
     type: CollectionReferenceDescriptionProperty.TypeEnum;
+    indexed: boolean;
 }

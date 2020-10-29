@@ -37,6 +37,7 @@ import { MatCheckboxChange } from '@angular/material';
 export interface SelectOption {
     value: any;
     label: any;
+    enabled?: boolean;
 }
 export interface VisualisationCheckboxOption {
     include: boolean;

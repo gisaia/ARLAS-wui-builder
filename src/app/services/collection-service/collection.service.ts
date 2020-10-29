@@ -21,7 +21,7 @@ import { Observable } from 'rxjs';
 import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { map, finalize } from 'rxjs/operators';
 import {
-  CollectionReferenceDescriptionProperty, Filter, CollectionReferenceDescription, CollectionReferenceParameters,
+  CollectionReferenceDescriptionProperty, Filter, CollectionReferenceDescription,
   ComputationRequest, Aggregation, AggregationsRequest, AggregationResponse
 } from 'arlas-api';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -79,12 +79,12 @@ export class CollectionService {
                 if (property && property.taggable) {
                   this.taggableFields.add(path);
                 }
-                return { name: path, type: property.type };
+                return { name: path, type: property.type, indexed: property.indexed };
               } else if (exclude && (!types || !types.includes(property.type))) {
                 if (property && property.taggable) {
                   this.taggableFields.add(path);
                 }
-                return { name: path, type: property.type };
+                return { name: path, type: property.type, indexed: property.indexed };
               } else {
                 return null;
               }
