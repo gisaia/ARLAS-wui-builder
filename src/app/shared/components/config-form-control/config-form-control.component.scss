@@ -27,15 +27,7 @@ $primary-color-light: mat-color($primary-palette, 300);
 .control-error {
     color: $error-color;
 }
-.auto-width {
-    .mat-form-field {
-        width: auto !important;
-    }
-    .mat-select-value {
-        max-width: 100%;
-        width: auto;
-    } 
-}
+
 mat-option {
     margin: 2px 0px;
 

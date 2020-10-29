@@ -54,10 +54,5 @@ under the License.
 
 ::ng-deep mat-form-field {
     //hard-coded, otherwise with no value the width is 180px, with a value it is 204px
-    width: auto;
-}
-
-::ng-deep mat-autocomplete {
-    //hard-coded, otherwise with no value the width is 180px, with a value it is 204px
-    width: auto;
+    width: 204px;
 }
