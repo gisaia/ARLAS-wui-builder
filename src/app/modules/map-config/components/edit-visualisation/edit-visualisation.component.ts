@@ -96,7 +96,11 @@ export class EditVisualisationComponent implements OnInit, CanComponentExit, Aft
       this.logger.warn('validation failed', this.visualisationFg);
       return;
     }
-
+    const displayed = this.visualisationFg.value.displayed;
+    if (displayed === '') {
+      this.visualisationFg.value.displayed = false;
+      this.visualisationFg.setValue(this.visualisationFg.value);
+    }
     if (!this.isNewVisualisation()) {
       const visualisationIndex = this.getVisualisationIndex(this.visualisationFg.customControls.id.value);
       if (visualisationIndex < 0) {
