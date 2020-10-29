@@ -43,7 +43,7 @@
         "layer": {
             "featuresFg": {
                 "geometryStep": {
-                    "geometry": "position.location",
+                    "geometry": "",
                     "granularity": "Coarse"
                 },
                 "visibilityStep": {
@@ -68,7 +68,7 @@
             },
             "featureMetricFg": {
                 "geometryStep": {
-                    "geometry": "position.location",
+                    "geometry": "",
                     "granularity": "Coarse"
                 },
                 "visibilityStep": {
@@ -92,7 +92,7 @@
             },
             "clusterFg": {
                 "geometryStep": {
-                    "geometry": "position.location",
+                    "geometry": "",
                     "granularity": "Coarse"
                 },
                 "visibilityStep": {

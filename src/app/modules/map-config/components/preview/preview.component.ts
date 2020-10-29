@@ -17,8 +17,8 @@ specific language governing permissions and limitations
 under the License.
 */
 
-import { Component, Inject, OnInit, AfterViewInit, ViewChild, Input, OnDestroy } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Inject, OnInit, AfterViewInit, ViewChild, Input, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MapContributor } from 'arlas-web-contributors';
 import { MapglComponent } from 'arlas-web-components';
 import { ArlasCollaborativesearchService, ArlasConfigService } from 'arlas-wui-toolkit';
@@ -52,6 +52,7 @@ export class PreviewComponent implements AfterViewInit {
     private configService: ArlasConfigService,
     private startupService: StartupService,
     private collectionService: CollectionService,
+    private cdr: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public dataMap: MapglComponentInput
   ) {
     if (this.dataMap.mapglContributor !== undefined || this.dataMap.mapComponentConfig !== undefined) {
@@ -86,7 +87,6 @@ export class PreviewComponent implements AfterViewInit {
 
       this.mapglContributor = contributor;
       this.mapComponentConfig = mapComponentConfig.input;
-
     }
   }
 
@@ -98,5 +98,6 @@ export class PreviewComponent implements AfterViewInit {
         this.mapglContributor.setSelection(null, this.collaborativeService.getCollaboration(this.mapglContributor.identifier));
       }
     });
+    this.cdr.detectChanges();
   }
 }

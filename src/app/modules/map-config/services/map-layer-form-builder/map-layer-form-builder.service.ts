@@ -82,10 +82,11 @@ export class MapLayerFormGroup extends ConfigFormGroup {
             // updates the selected layers in each visualisation set
             const controlsValues = [];
             vFa.value.forEach(vf => {
+              const visualisation = !!control.value ? control.value.find(v => v.name === vf.name) : undefined;
               controlsValues.push({
                 name: vf.name,
                 layers: vf.layers,
-                include: !!control.value ? control.value.find(v => v.name === vf.name).include : false
+                include: !!control.value && !!visualisation ? visualisation.include : false
               });
             });
             // this block if necessary when creating a new layer and no visualisation set is created yet
@@ -325,10 +326,11 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
           '',
           marker('Layer geometry field'),
           marker('Layer geometry field description'),
-          false,
+          true,
           toGeoOptionsObs(collectionFields),
           {
-            title: marker('Layer rendered geometry')
+            optional: false,
+            title: marker('Layer rendered geometry'),
           }
         ),
         ...geometryFormControls
