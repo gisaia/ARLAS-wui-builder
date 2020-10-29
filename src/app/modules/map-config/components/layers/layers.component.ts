@@ -32,6 +32,7 @@ import { camelize } from '@utils/tools';
 import { MapglLegendComponent } from 'arlas-web-components';
 import { Layer as LayerMap } from '@services/main-form-manager/models-map-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 export interface Layer {
   id: string;
@@ -58,6 +59,7 @@ export class LayersComponent implements OnInit {
     private collaborativesearchService: ArlasCollaborativesearchService,
     private configService: ArlasConfigService,
     private startupService: StartupService,
+    private collectionService: CollectionService
 
   ) {
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
@@ -68,7 +70,7 @@ export class LayersComponent implements OnInit {
     this.layersFa.value.map(layer => {
       const modeValues = layer.mode === LAYER_MODE.features ? layer.featuresFg :
       (layer.mode === LAYER_MODE.featureMetric ? layer.featureMetricFg : layer.clusterFg);
-      const paint = ConfigMapExportHelper.getLayerPaint(modeValues, layer.mode);
+      const paint = ConfigMapExportHelper.getLayerPaint(modeValues, layer.mode, this.collectionService.taggableFields);
       this.layerLegend.set(
         layer.name + '#' + layer.mode,
         { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint) }
@@ -132,7 +134,7 @@ export class LayersComponent implements OnInit {
     const mapConfigLayers = new FormArray([this.layersFa.at(formGroupIndex)]);
     const mapConfigVisualisations = this.mainFormService.mapConfig.getVisualisationsFa();
     // Get config.map part for this layer
-    const configMap = ConfigMapExportHelper.process(mapConfigLayers);
+    const configMap = ConfigMapExportHelper.process(mapConfigLayers, this.collectionService.taggableFields);
     // Get contributor config for this layer
     const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers);
     // Add contributor part in arlasConfigService

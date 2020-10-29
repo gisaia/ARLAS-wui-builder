@@ -18,6 +18,7 @@ describe('MainFormManagerService', () => {
       mockProvider(ArlasColorGeneratorLoader),
       mockProvider(ArlasConfigurationDescriptor),
       mockProvider(AuthentificationService),
+      mockProvider(CollectionService),
       {
         provide: GET_OPTIONS,
         useFactory: getOptionsFactory,
