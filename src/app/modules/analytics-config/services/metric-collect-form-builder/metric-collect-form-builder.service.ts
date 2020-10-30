@@ -76,7 +76,7 @@ export class MetricCollectFormGroup extends ConfigFormGroup {
                   fields => control.setSyncOptions(
                     fields
                       .filter(filterCallback)
-                      .map(f => ({ value: f.name, label: f.name }))));
+                      .map(f => ({ value: f.name, label: f.name, enabled: f.indexed }))));
               } else {
                 control.disable();
               }

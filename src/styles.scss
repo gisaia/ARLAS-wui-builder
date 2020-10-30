@@ -160,3 +160,9 @@ body {
 .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb{
   background-color: white !important;
 }
+
+.cdk-overlay-connected-position-bounding-box {
+  .cdk-overlay-pane {
+    width: auto !important;
+  }
+}
