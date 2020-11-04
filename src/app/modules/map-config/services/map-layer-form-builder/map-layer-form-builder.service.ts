@@ -229,7 +229,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           'color',
           colorSources,
           isAggregated,
-          marker('property color description'),
+          marker('property color ' + (type === 'cluster' ? type : '') + ' description'),
           geometryTypes.indexOf(GEOMETRY_TYPE.heatmap) >= 0 ? () => this.geometryType : undefined
         ),
 
@@ -252,7 +252,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
           isAggregated,
-          marker('property radius description')
+          marker('property radius ' + type + ' description')
         )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle
@@ -334,13 +334,13 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
       {
         geometry: new SelectFormControl(
           '',
-          marker('Layer geometry field'),
-          marker('Layer geometry field description'),
+          marker(type + ' geometry field'),
+          marker(type + ' geometry field description'),
           true,
           toGeoOptionsObs(collectionFields),
           {
             optional: false,
-            title: marker('Layer rendered geometry'),
+            title: marker(type + ' rendered geometry'),
           }
         ),
         ...geometryFormControls

@@ -129,7 +129,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
       propertyProvidedFieldCtrl: new SelectFormControl(
         '',
-        marker('Source field'),
+        marker('Provided field'),
         marker('Provided source field description'),
         true,
         toKeywordOptionsObs(collectionFieldsObs),
@@ -154,7 +154,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
       ),
       propertyGeneratedFieldCtrl: new SelectFormControl(
         '',
-        marker('Source field'),
+        marker('Generated color field'),
         marker('Generated source field description'),
         true,
         toKeywordOptionsObs(collectionFieldsObs),
@@ -286,7 +286,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
         propertyInterpolatedFieldCtrl: new SelectFormControl(
           '',
-          marker('Source field'),
+          marker('Interpolation field'),
           marker('Interpolated source field description') + ' ' + propertyName,
           true,
           toNumericOrDateOptionsObs(collectionFieldsObs),
