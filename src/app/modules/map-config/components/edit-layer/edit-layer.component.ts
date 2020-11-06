@@ -145,6 +145,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
         const set = new Set(v.layers);
         visu.include ? set.add(layerName) : set.delete(layerName) ;
         v.layers = Array.from(set);
+        v.displayed  = (v.displayed === undefined) ? true : v.displayed;
       });
       this.visualisationsFa.setValue(visualisationValue);
     }

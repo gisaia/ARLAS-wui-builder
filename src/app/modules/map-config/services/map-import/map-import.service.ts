@@ -218,7 +218,6 @@ export class MapImportService {
     const isAggregated = layerMode !== LAYER_MODE.features;
 
     typeFg.enable();
-
     const minzoom = !!layer.minzoom ? layer.minzoom : (!!layerSource.minzoom ? layerSource.minzoom : 0);
     const maxzoom = !!layer.maxzoom ? layer.maxzoom : (!!layerSource.maxzoom ? layerSource.maxzoom : 22);
     const values: any = {
@@ -260,10 +259,6 @@ export class MapImportService {
     }
 
     const colors = layer.paint[layer.type + '-color'];
-    const providedFields = layerSource.provided_fields;
-    if (!!providedFields && providedFields.length > 0 && providedFields[0].label) {
-      colors.push(providedFields[0].label);
-    }
     values.styleStep.colorFg = {};
     this.importPropertySelector(colors, values.styleStep.colorFg, true, isAggregated, layerSource);
 
@@ -346,15 +341,15 @@ export class MapImportService {
         if (inputValues.length === 3) {
           label = (inputValues as Array<string>)[2];
         }
-        if (field.endsWith('_color')) {
+        if (field.endsWith('_color') && layerSource.colors_from_fields) {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.generated;
-          const colorField = layerSource.colors_from_fields.find(f => f.replace(/\./g, '_') === this.removeLastcolor(field));
-          propertySelectorValues.propertyGeneratedFieldCtrl = colorField;
+          propertySelectorValues.propertyGeneratedFieldCtrl = layerSource.colors_from_fields
+            .find(f => f.replace(/\./g, '_') === this.removeLastcolor(field));
         } else {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided;
           const colorProvidedField = layerSource.provided_fields.find((pf: ColorConfig) => pf.color.replace(/\./g, '_') === field);
           propertySelectorValues.propertyProvidedFieldCtrl = colorProvidedField.color;
-          if (inputValues.length === 3) {
+          if (inputValues.length === 2) {
             propertySelectorValues.propertyProvidedFieldLabelCtrl = colorProvidedField.label;
           }
         }
@@ -369,9 +364,32 @@ export class MapImportService {
   private importPropertySelectorManual(inputValues: any, propertySelectorValues: any, layerSource: LayerSourceConfig) {
     propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.manual;
     const keywordsAndColors = (inputValues.slice(2) as Array<string>);
+    let manualField = '';
+    if (layerSource.include_fields) {
+      manualField = layerSource.include_fields.find(f => inputValues[1][1].includes(f.replace(/\./g, '_')));
+      if (!manualField && layerSource.provided_fields) {
+        const providedField = layerSource.provided_fields
+          .filter(f => f.label).find(f => inputValues[1][1].includes(f.label.replace(/\./g, '_')));
+        if (providedField) {
+          manualField = providedField.label;
+        } else {
+          throw new Error('Cannot fetch ' + inputValues[1][1] + ' from layer_sources');
+        }
+      }
+    } else {
+      if (layerSource.provided_fields) {
+        const providedField = layerSource.provided_fields
+          .filter(f => f.label).find(f => inputValues[1][1].includes(f.label.replace(/\./g, '_')));
+        if (providedField) {
+          manualField = providedField.label;
+        } else {
+          throw new Error('Cannot fetch ' + inputValues[1][1] + ' from layer_sources');
+        }
+      }
+    }
     propertySelectorValues.propertyManualFg = {
       // 'taggable_field_0' includes 'taggable.field'.replace(/\./g, '_')
-      propertyManualFieldCtrl: layerSource.include_fields.find(f => inputValues[1][1].includes(f.replace(/\./g, '_'))),
+      propertyManualFieldCtrl: manualField,
       propertyManualValuesCtrl: new Array<KeywordColor>()
     };
     for (let i = 0; i < keywordsAndColors.length - 1; i = i + 2) {
@@ -394,62 +412,62 @@ export class MapImportService {
     isColor: boolean,
     isAggregated: boolean,
     layerSource: LayerSourceConfig) {
-      if ((inputValues[2] as Array<string>)[0] === 'heatmap-density') {
-        propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.heatmap_density;
-        propertySelectorValues.propertyInterpolatedFg = {};
+    if ((inputValues[2] as Array<string>)[0] === 'heatmap-density') {
+      propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.heatmap_density;
+      propertySelectorValues.propertyInterpolatedFg = {};
+
+    } else {
+      propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.interpolated;
+      const getValue = (inputValues[2] as Array<string>)[1];
+      if (getValue.startsWith('count')) {
+        propertySelectorValues.propertyInterpolatedFg = {
+          propertyInterpolatedCountOrMetricCtrl: COUNT_OR_METRIC.COUNT,
+          propertyInterpolatedCountNormalizeCtrl: getValue.endsWith('_:normalized')
+        };
 
       } else {
-        propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.interpolated;
-        const getValue = (inputValues[2] as Array<string>)[1];
-        if (getValue.startsWith('count')) {
-          propertySelectorValues.propertyInterpolatedFg = {
-            propertyInterpolatedCountOrMetricCtrl: COUNT_OR_METRIC.COUNT,
-            propertyInterpolatedCountNormalizeCtrl: getValue.endsWith('_:normalized')
-          };
+        const isNormalize = getValue.split(':')[1] === NORMALIZED;
+        propertySelectorValues.propertyInterpolatedFg = {
+          propertyInterpolatedNormalizeCtrl: isNormalize,
+          propertyInterpolatedNormalizeByKeyCtrl: isNormalize ? getValue.split(':').length === 3 : null,
+        };
 
+        if (isAggregated) {
+          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl = COUNT_OR_METRIC.METRIC;
+          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMetricCtrl =
+            layerSource.metrics[0].metric.toString().toUpperCase();
+          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = layerSource.metrics[0].field;
         } else {
-          const isNormalize = getValue.split(':')[1] === NORMALIZED;
-          propertySelectorValues.propertyInterpolatedFg = {
-            propertyInterpolatedNormalizeCtrl: isNormalize,
-            propertyInterpolatedNormalizeByKeyCtrl: isNormalize ? getValue.split(':').length === 3 : null,
-          };
-
-          if (isAggregated) {
-            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl = COUNT_OR_METRIC.METRIC;
-            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMetricCtrl =
-              layerSource.metrics[0].metric.toString().toUpperCase();
-            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = layerSource.metrics[0].field;
-          } else {
-            let field;
-            if (isNormalize) {
-              field = layerSource.normalization_fields
-                .find((nf: NormalizationFieldConfig) => nf.on.replace(/\./g, '_') === getValue.split(':')[0]).on;
-              if (getValue.split(':').length > 2) {
-                const perfield = layerSource.normalization_fields
+          let field;
+          if (isNormalize) {
+            field = layerSource.normalization_fields
+              .find((nf: NormalizationFieldConfig) => nf.on.replace(/\./g, '_') === getValue.split(':')[0]).on;
+            if (getValue.split(':').length > 2) {
+              const perfield = layerSource.normalization_fields
                 .find((nf: NormalizationFieldConfig) => !!nf.per && nf.per.replace(/\./g, '_') === getValue.split(':')[2]).per;
-                propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl = perfield;
+              propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl = perfield;
 
-              }
-            } else {
-              field = layerSource.include_fields.find(f => f.replace(/\./g, '_') === getValue);
             }
-            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = field;
+          } else {
+            field = layerSource.include_fields.find(f => f.replace(/\./g, '_') === getValue);
           }
-          if (!propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl) {
-            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl = inputValues[3];
-            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl = inputValues[inputValues.length - 2];
-          }
+          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = field;
+        }
+        if (!propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl) {
+          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl = inputValues[3];
+          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl = inputValues[inputValues.length - 2];
         }
       }
-      propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedValuesCtrl = new Array<ProportionedValues>();
-      for (let i = 3; i < inputValues.length; i = i + 2) {
-        propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedValuesCtrl.push({
-          proportion: inputValues[i],
-          value: inputValues[i + 1]
-        });
-      }
-      propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl = inputValues[4];
-      propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl = inputValues.pop();
+    }
+    propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedValuesCtrl = new Array<ProportionedValues>();
+    for (let i = 3; i < inputValues.length; i = i + 2) {
+      propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedValuesCtrl.push({
+        proportion: inputValues[i],
+        value: inputValues[i + 1]
+      });
+    }
+    propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl = inputValues[4];
+    propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl = inputValues.pop();
   }
 
   private replaceUnderscore = (value) => value.replace(/\_/g, '.');
