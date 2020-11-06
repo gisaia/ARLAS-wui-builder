@@ -56,13 +56,14 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
     propertyName: string,
     sources: Array<PROPERTY_SELECTOR_SOURCE>,
     isAggregated: boolean,
+    description?: string,
     geometryTypeControl?: () => SelectFormControl
   ) {
     super({
       propertySource: new SelectFormControl(
         '',
         propertyName.charAt(0).toUpperCase() + propertyName.slice(1),
-        ' ',
+        description,
         false,
         valuesToOptions(sources),
         {
@@ -94,10 +95,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
           onDependencyChange: (control) => {
             if (!!geometryTypeControl) {
               if (geometryTypeControl().value === GEOMETRY_TYPE.heatmap) {
-                (control as SelectFormControl).setSyncOptions(
-
-                  valuesToOptions([PROPERTY_SELECTOR_SOURCE.heatmap_density]));
-
+                (control as SelectFormControl).setSyncOptions(valuesToOptions([PROPERTY_SELECTOR_SOURCE.heatmap_density]));
               } else {
                 (control as SelectFormControl).setSyncOptions(valuesToOptions(sources));
               }
@@ -118,7 +116,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         new SliderFormControl(
           '',
           marker('Fixed') + ' ' + propertyName,
-          marker('Slider fixed value description'),
+          marker('Slider fixed value description') + ' ' + propertyName,
           defaultConfig[propertyName + 'Min'],
           defaultConfig[propertyName + 'Max'],
           defaultConfig[propertyName + 'Step'],
@@ -131,7 +129,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
       propertyProvidedFieldCtrl: new SelectFormControl(
         '',
-        marker('Source field'),
+        marker('Provided field'),
         marker('Provided source field description'),
         true,
         toKeywordOptionsObs(collectionFieldsObs),
@@ -156,7 +154,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
       ),
       propertyGeneratedFieldCtrl: new SelectFormControl(
         '',
-        marker('Source field'),
+        marker('Generated color field'),
         marker('Generated source field description'),
         true,
         toKeywordOptionsObs(collectionFieldsObs),
@@ -239,7 +237,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
             { label: marker('Count'), value: COUNT_OR_METRIC.COUNT },
             { label: marker('Metric'), value: COUNT_OR_METRIC.METRIC },
           ],
-          '',
+          'Interpolated ' + propertyName + ' description',
           {
             resetDependantsOnChange: true,
             dependsOn: () => [this.customControls.propertySource],
@@ -288,8 +286,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         ),
         propertyInterpolatedFieldCtrl: new SelectFormControl(
           '',
-          marker('Source field'),
-          marker('Interpolated source field description'),
+          marker('Interpolation field'),
+          marker('Interpolated source field description') + ' ' + propertyName,
           true,
           toNumericOrDateOptionsObs(collectionFieldsObs),
           {
@@ -360,7 +358,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         propertyInterpolatedMinFieldValueCtrl: new InputFormControl(
           '',
           marker('Minimum value'),
-          marker('Interpolated min value description'),
+          '',
           'number',
           {
             resetDependantsOnChange: true,
@@ -397,7 +395,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         propertyInterpolatedMaxFieldValueCtrl: new InputFormControl(
           '',
           marker('Maximum value'),
-          marker('Interpolated max value description'),
+          '',
           'number',
           {
             resetDependantsOnChange: true,
@@ -561,7 +559,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         propertyInterpolatedMinValueCtrl: new SliderFormControl(
           '',
           marker('Minimum') + ' ' + propertyName,
-          marker('Min value description'),
+          null,
           defaultConfig[propertyName + 'Min'],
           defaultConfig[propertyName + 'Max'],
           defaultConfig[propertyName + 'Step'],
@@ -581,7 +579,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
         propertyInterpolatedMaxValueCtrl: new SliderFormControl(
           '',
           marker('Maximum') + ' ' + propertyName,
-          marker('Max value description'),
+          null,
           defaultConfig[propertyName + 'Min'],
           defaultConfig[propertyName + 'Max'],
           defaultConfig[propertyName + 'Step'],
@@ -710,6 +708,7 @@ export class PropertySelectorFormBuilderService {
     propertyName: string,
     sources: Array<PROPERTY_SELECTOR_SOURCE>,
     isAggregated: boolean,
+    description?: string,
     geometryTypeControl?: () => SelectFormControl) {
 
     return new PropertySelectorFormGroup(
@@ -723,6 +722,7 @@ export class PropertySelectorFormBuilderService {
       propertyName,
       sources,
       isAggregated,
+      description,
       geometryTypeControl
     );
   }

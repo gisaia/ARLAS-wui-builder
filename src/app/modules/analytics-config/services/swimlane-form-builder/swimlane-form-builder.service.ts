@@ -57,7 +57,6 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
           marker('swimlane title description')
         ),
         dataStep: new ConfigFormGroup({
-          aggregation: dateAggregationFg,
           termAggregation: new ConfigFormGroup({
             termAggregationField: new SelectFormControl(
               '',
@@ -73,6 +72,7 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
               10,
               1)
           }).withTitle(marker('Term aggregation')),
+          aggregation: dateAggregationFg,
           metric: metricFg
         }).withTabName(marker('Data')),
         renderStep: new ConfigFormGroup({
@@ -238,7 +238,7 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
     const formGroup = new SwimlaneFormGroup(
       this.bucketsIntervalBuilderService
         .build(toDateFieldsObs(collectionFieldsObs), 'swimlane')
-        .withTitle(marker('Date aggregation')),
+        .withTitle(marker('swimlane x-axis')),
       this.metricBuilderService
         .build(collectionFieldsObs, 'swimlane')
         .withTitle(marker('swimlane metric')),

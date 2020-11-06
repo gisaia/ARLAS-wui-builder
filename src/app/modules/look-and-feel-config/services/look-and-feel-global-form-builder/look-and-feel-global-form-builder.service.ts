@@ -31,7 +31,7 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
           '',
           marker('Drag and drop'),
           marker('Drag and drop description'),
-          { title: 'Look and feel' }
+          { title: marker('Look and feel') }
         ),
         zoomToData: new SlideToggleFormControl(
           '',
@@ -51,7 +51,7 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
         spinnerColor: new SelectFormControl(
           '',
           marker('Spinners color'),
-          marker('Spinners color description'),
+          null,
           null,
           [
             { label: marker('Primary'), value: 'primary' },
@@ -66,7 +66,7 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
         spinnerDiameter: new SliderFormControl(
           '',
           marker('Spinner diameter'),
-          marker('Spinner diameter description'),
+          null,
           10,
           100,
           10,

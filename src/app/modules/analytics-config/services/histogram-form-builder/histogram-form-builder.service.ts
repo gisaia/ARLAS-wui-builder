@@ -74,7 +74,7 @@ export class HistogramFormGroup extends ConfigFormGroup {
           showHorizontalLines: new SlideToggleFormControl(
             '',
             marker('Show horizontal lines?'),
-            marker('Show horizontal lines description')
+            ''
           ),
           ticksDateFormat: new SelectFormControl(
             '',

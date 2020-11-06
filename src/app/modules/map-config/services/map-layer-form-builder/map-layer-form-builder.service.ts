@@ -229,7 +229,9 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           'color',
           colorSources,
           isAggregated,
-          geometryTypes.indexOf(GEOMETRY_TYPE.heatmap) >= 0 ? () => this.geometryType : undefined),
+          marker('property color ' + (type === 'cluster' ? type : '') + ' description'),
+          geometryTypes.indexOf(GEOMETRY_TYPE.heatmap) >= 0 ? () => this.geometryType : undefined
+        ),
 
         widthFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
@@ -237,7 +239,9 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           [
             PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
-          isAggregated)
+          isAggregated,
+          marker('property width description')
+        )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.line)),
 
@@ -247,7 +251,9 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           [
             PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
-          isAggregated)
+          isAggregated,
+          marker('property radius ' + type + ' description')
+        )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle
             || this.geometryType.value === GEOMETRY_TYPE.heatmap)),
@@ -258,7 +264,9 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           [
             PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
-          isAggregated)
+          isAggregated,
+          marker('property weight description')
+        )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.heatmap)),
 
@@ -268,7 +276,9 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           [
             PROPERTY_SELECTOR_SOURCE.fix
           ],
-          isAggregated)
+          isAggregated,
+          marker('property intensity description')
+        )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.heatmap))
 
@@ -324,13 +334,13 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
       {
         geometry: new SelectFormControl(
           '',
-          marker('Layer geometry field'),
-          marker('Layer geometry field description'),
+          marker(type + ' geometry field'),
+          marker(type + ' geometry field description'),
           true,
           toGeoOptionsObs(collectionFields),
           {
             optional: false,
-            title: marker('Layer rendered geometry'),
+            title: marker(type + ' rendered geometry'),
           }
         ),
         ...geometryFormControls
@@ -581,7 +591,7 @@ export function requireCheckboxesToBeCheckedValidator(minRequired = 1): Validato
     if (formGroup.value) {
       formGroup.value.forEach((key) => {
         if (key.include) {
-          checked ++;
+          checked++;
         }
       });
     }
