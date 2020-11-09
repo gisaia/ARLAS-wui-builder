@@ -139,7 +139,7 @@
 	"chart type description": "Définit le rendu graphique des cases de l'histogramme: \n • Surface \n • Barres",
 	"Show horizontal lines?": "Afficher les lignes horizontales",
 	"Date format": "Format des dates",
-	"Date format description": "Format d'affichage des dates",
+	"Date format description": "Format d'affichage des dates sur l'axe des abscisses",
 	"metric title": "Titre de la métrique",
 	"metric title description": "",
 	"Function": "Fonction",

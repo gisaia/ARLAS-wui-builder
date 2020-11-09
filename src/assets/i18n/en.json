@@ -139,7 +139,7 @@
 	"chart type description": "Choose the graphical rendering of the histogram buckets: \n • Area • Bars",
 	"Show horizontal lines?": "Show horizontal lines",
 	"Date format": "Date format",
-	"Date format description": "Choose the date format: \n • English: Month, dat, year \n • French: day, month, year",
+	"Date format description": "Choose the date format on the x-Axis: \n • English: Month, dat, year \n • French: day, month, year",
 	"metric title": "metric title",
 	"metric title description": "",
 	"Function": "Function",
