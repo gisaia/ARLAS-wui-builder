@@ -1,5 +1,19 @@
 # Change Log
 
+## [v14.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.0.0) (2020-11-09)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.0.0-rc.8...v14.0.0)
+
+**New stuff:**
+
+- Disable fields in dropdown lists when fields are not indexed [\#326](https://github.com/gisaia/ARLAS-wui-builder/issues/326)
+- Manage arlas wui name in builder [\#317](https://github.com/gisaia/ARLAS-wui-builder/issues/317)
+
+**Fixed bugs:**
+
+- Fix width of dropdown list to see the whole field path [\#327](https://github.com/gisaia/ARLAS-wui-builder/issues/327)
+- Deal with arlas taggable field [\#219](https://github.com/gisaia/ARLAS-wui-builder/issues/219)
+
 ## [v14.0.0-rc.8](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.0.0-rc.8) (2020-10-22)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.0.0-rc.7...v14.0.0-rc.8)
