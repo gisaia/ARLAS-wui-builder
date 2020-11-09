@@ -472,9 +472,8 @@ export class ConfigExportHelper {
             case WIDGET_TYPE.histogram: {
                 const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'histogram';
-
                 const aggregationModel = {
-                    type: 'histogram',
+                    type: widgetData.dataStep.aggregation.aggregationFieldType === 'time' ? 'datehistogram' : 'histogram',
                     field: widgetData.dataStep.aggregation.aggregationField
                 } as AggregationModelConfig;
 
@@ -508,7 +507,7 @@ export class ConfigExportHelper {
                 });
 
                 const dateAggregationModel = {
-                    type: 'datehistogram',
+                    type: widgetData.dataStep.aggregation.aggregationFieldType === 'time' ? 'datehistogram' : 'histogram',
                     field: widgetData.dataStep.aggregation.aggregationField
                 } as AggregationModelConfig;
                 this.addNumberOfBucketsOrInterval(contrib, dateAggregationModel, widgetData.dataStep.aggregation);

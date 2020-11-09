@@ -176,7 +176,7 @@ export class AnalyticsImportService {
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
     const termeAggregationFg = dataStep.termAggregation;
-    const dateAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'datehistogram');
+    const dateAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'datehistogram' || m.type === 'histogram');
     const termAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'term');
     const swimlaneInput = component.input as AnalyticComponentSwimlaneInputConfig;
 
@@ -627,7 +627,6 @@ export class AnalyticsImportService {
     aggregationControls: BucketsIntervalControls,
     contribAggregationModel: AggregationModelConfig,
     dataType: string): Array<ImportElement> {
-
     return [{
       value: !contributor.numberOfBuckets ? BY_BUCKET_OR_INTERVAL.INTERVAL : BY_BUCKET_OR_INTERVAL.BUCKET,
       control: aggregationControls.aggregationBucketOrInterval
