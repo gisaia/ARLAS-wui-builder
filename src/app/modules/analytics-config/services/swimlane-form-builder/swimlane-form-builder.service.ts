@@ -34,12 +34,16 @@ import {
   MetricCollectFormBuilderService, MetricCollectFormGroup
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { Observable } from 'rxjs';
-import { toKeywordOptionsObs, toDateFieldsObs } from '@services/collection-service/tools';
+import { toKeywordOptionsObs, toIntegerOrDateFieldsObs } from '@services/collection-service/tools';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 export enum SWIMLANE_REPRESENTATION {
   GLOBALLY = 'global',
   BY_COLUMN = 'column'
+}
+enum DateFormats {
+  English = '%b %d %Y  %H:%M',
+  French = '%d %b %Y  %H:%M'
 }
 export class SwimlaneFormGroup extends ConfigFormGroup {
 
@@ -119,6 +123,19 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
               onDependencyChange: (control: HiddenFormControl) =>
                 control.setValue(!!this.customControls.renderStep.isZeroRepresentative.value ? defaultConfig.swimlaneZeroColor : null)
             }),
+          ticksDateFormat: new SelectFormControl(
+            '',
+            marker('Date format'),
+            marker('Date format description'),
+            false,
+            Object.keys(DateFormats).map(df => ({ value: DateFormats[df], label: df + '  (' + DateFormats[df] + ')' })),
+            {
+              optional: true,
+              dependsOn: () => [this.customControls.dataStep.aggregation],
+              onDependencyChange: (control) =>
+                control.enableIf(this.customControls.dataStep.aggregation.value.aggregationFieldType === 'time')
+            }
+          ),
           NaNColor: new HiddenFormControl(
             defaultConfig.swimlaneNanColor
           )
@@ -237,7 +254,7 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
 
     const formGroup = new SwimlaneFormGroup(
       this.bucketsIntervalBuilderService
-        .build(toDateFieldsObs(collectionFieldsObs), 'swimlane')
+        .build(toIntegerOrDateFieldsObs(collectionFieldsObs), 'swimlane')
         .withTitle(marker('swimlane x-axis')),
       this.metricBuilderService
         .build(collectionFieldsObs, 'swimlane')

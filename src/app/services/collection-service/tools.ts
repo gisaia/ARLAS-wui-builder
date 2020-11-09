@@ -27,12 +27,12 @@ export const DATE_TYPES = [
     TypeEnum.DATE, TypeEnum.LONG
 ];
 
-export const INTEGER_TYPES = [
+export const INTEGER_OR_DATE_TYPES = [
     ...DATE_TYPES, TypeEnum.INTEGER
 ];
 
 export const NUMERIC_OR_DATE_TYPES = [
-    ...INTEGER_TYPES, TypeEnum.DOUBLE, TypeEnum.FLOAT
+    ...INTEGER_OR_DATE_TYPES, TypeEnum.DOUBLE, TypeEnum.FLOAT
 ];
 
 export const NUMERIC_OR_DATE_OR_TEXT_TYPES = [
@@ -56,6 +56,11 @@ export function toDateFieldsObs(collectionFieldsObs: Observable<Array<Collection
         fields => fields.filter(f => DATE_TYPES.indexOf(f.type) >= 0)));
 }
 
+export function toIntegerOrDateFieldsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+    return collectionFieldsObs.pipe(map(
+        fields => fields.filter(f => INTEGER_OR_DATE_TYPES.indexOf(f.type) >= 0)));
+}
+
 export function toNumericOrDateOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
     return toOptionsObs(toNumericOrDateFieldsObs(collectionFieldsObs));
 }
@@ -63,7 +68,7 @@ export function toNumericOrDateOptionsObs(collectionFieldsObs: Observable<Array<
 export function toIntegerOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
     return toOptionsObs(collectionFieldsObs.pipe(map(
         fields => fields
-            .filter(f => INTEGER_TYPES.indexOf(f.type) >= 0))));
+            .filter(f => INTEGER_OR_DATE_TYPES.indexOf(f.type) >= 0))));
 }
 
 export function toKeywordOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
