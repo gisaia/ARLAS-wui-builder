@@ -43,11 +43,11 @@ export class LookAndFeelImportService {
 
       importElements([
         {
-          value: configOptions.dragItems,
+          value: configOptions.drag_items,
           control: globalSearchFg.customControls.dragAndDrop
         },
         {
-          value: configOptions.zoomToData,
+          value: configOptions.zoom_to_data,
           control: globalSearchFg.customControls.zoomToData
         },
         {
