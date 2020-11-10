@@ -89,8 +89,8 @@ export interface WebConfig {
 }
 
 export interface WebConfigOptions {
-    dragItems?: boolean;
-    zoomToData?: boolean;
+    drag_items?: boolean;
+    zoom_to_data?: boolean;
     indicators?: boolean;
     spinner?: SpinnerOptions;
 }

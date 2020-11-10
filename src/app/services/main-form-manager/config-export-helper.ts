@@ -851,8 +851,8 @@ export class ConfigExportHelper {
         const spinnerColor: string = lookAndFeelConfigGlobal.customControls.spinnerColor.value;
         const spinnerDiameter: string = lookAndFeelConfigGlobal.customControls.spinnerDiameter.value;
         const options = {
-            dragItems: !!lookAndFeelConfigGlobal.customControls.dragAndDrop.value,
-            zoomToData: !!lookAndFeelConfigGlobal.customControls.zoomToData.value,
+            drag_items: !!lookAndFeelConfigGlobal.customControls.dragAndDrop.value,
+            zoom_to_data: !!lookAndFeelConfigGlobal.customControls.zoomToData.value,
             indicators: !!lookAndFeelConfigGlobal.customControls.indicators.value,
             spinner: {
                 show: showSpinner,
