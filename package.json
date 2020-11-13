@@ -1,6 +1,6 @@
 {
   "name": "arlas-wui-builder",
-  "version": "14.0.1",
+  "version": "14.0.2-dev",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
