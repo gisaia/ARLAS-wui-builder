@@ -1,5 +1,13 @@
 # Change Log
 
+## [v14.0.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.0.1) (2020-11-13)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.0.0...v14.0.1)
+
+**Fixed bugs:**
+
+- Fix Look and feel attributes format [\#340](https://github.com/gisaia/ARLAS-wui-builder/issues/340)
+
 ## [v14.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.0.0) (2020-11-09)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.0.0-rc.8...v14.0.0)
