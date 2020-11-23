@@ -53,9 +53,10 @@ export class ConfigMapExportHelper {
                 },
                 paint
             };
-
             if (modeValues.styleStep.filter) {
                 layer.filter = modeValues.styleStep.filter;
+            } else {
+                layer.filter = this.getLayerFilters(modeValues, mode, taggableFields);
             }
 
             return layer;
@@ -98,6 +99,46 @@ export class ConfigMapExportHelper {
             }
         }
         return paint;
+    }
+
+    public static getLayerFilters(modeValues, mode, taggableFields?: Set<string>) {
+        const filter: Array<any> = ['all'];
+        const colorFilter = this.getFilter(modeValues.styleStep.colorFg, mode, taggableFields);
+        if (colorFilter) {
+            filter.push(colorFilter);
+        }
+        switch (modeValues.styleStep.geometryType) {
+            case GEOMETRY_TYPE.line: {
+                const lineFilter = this.getFilter(modeValues.styleStep.widthFg, mode, taggableFields);
+                if (lineFilter) {
+                    filter.push(lineFilter);
+                }
+                break;
+            }
+            case GEOMETRY_TYPE.circle: {
+                const circleFilter = this.getFilter(modeValues.styleStep.radiusFg, mode, taggableFields);
+                if (circleFilter) {
+                    filter.push(circleFilter);
+                }
+                break;
+            }
+            case GEOMETRY_TYPE.heatmap: {
+                const intensityFilter = this.getFilter(modeValues.styleStep.intensityFg, mode, taggableFields);
+                if (intensityFilter) {
+                    filter.push(intensityFilter);
+                }
+                const weightFilter = this.getFilter(modeValues.styleStep.weightFg, mode, taggableFields);
+                if (weightFilter) {
+                    filter.push(weightFilter);
+                }
+                const radiusFilter = this.getFilter(modeValues.styleStep.radiusFg, mode, taggableFields);
+                if (radiusFilter) {
+                    filter.push(radiusFilter);
+                }
+                break;
+            }
+        }
+        return filter;
     }
 
     public static getMapProperty(fgValues: any, mode: LAYER_MODE, taggableFields?: Set<string>) {
@@ -159,7 +200,6 @@ export class ConfigMapExportHelper {
                         this.getArray(getField())
                     ];
                 }
-
                 return interpolatedColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
                     .flatMap(pc => [pc.proportion, pc.value]));
             }
@@ -179,6 +219,47 @@ export class ConfigMapExportHelper {
                 return densityColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
                     .filter(pc => hasNearZero ? pc.proportion > 0 : pc.proportion >= 0)
                     .flatMap(pc => [(pc.proportion === 0 ? 0.000000000001 : pc.proportion), pc.value]));
+            }
+        }
+    }
+
+    public static getFilter(fgValues: any, mode: LAYER_MODE, taggableFields?: Set<string>) {
+        switch (fgValues.propertySource) {
+            case PROPERTY_SELECTOR_SOURCE.fix:
+                break;
+            case PROPERTY_SELECTOR_SOURCE.provided:
+                return null;
+            case PROPERTY_SELECTOR_SOURCE.generated:
+                return null;
+            case PROPERTY_SELECTOR_SOURCE.manual:
+                return null;
+            case PROPERTY_SELECTOR_SOURCE.interpolated: {
+
+                const interpolatedValues = fgValues.propertyInterpolatedFg;
+                const getField = () =>
+                    (interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'metric')
+                        ? interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
+                        (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_' :
+                        interpolatedValues.propertyInterpolatedFieldCtrl;
+
+                if (mode !== LAYER_MODE.features && interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'count') {
+                    // for types FEATURE-METRIC and CLUSTER, if we interpolate by count
+                    return null;
+                } else if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
+                    // otherwise if we normalize
+                    return ['!=', getField()
+                    .concat(':' + NORMALIZED)
+                    .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
+                        ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl.replace(/\./g, '_') : ''), 'Infinity'];
+                } else {
+                    // if we don't normalize
+                    return ['!=', getField().replace(/\./g, '_'), 'Infinity'];
+                }
+                return null;
+
+            }
+            case PROPERTY_SELECTOR_SOURCE.heatmap_density: {
+                return null;
             }
         }
     }
