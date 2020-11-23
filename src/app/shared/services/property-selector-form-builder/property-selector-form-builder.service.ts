@@ -473,7 +473,9 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                 // as long as we don't change the dependants values : max, min, normalise. If we change those values, we lose
                 // the custom interpolation
                 if (!control.value || +control.value[0].proportion !== minValue ||
-                  +control.value[control.value.length - 1].proportion !== maxValue) {
+                  +control.value[control.value.length - 1].proportion !== maxValue ||
+                  +control.value[0].value !== minInterpolatedValue ||
+                  +control.value[control.value.length - 1].value !== maxInterpolatedValue) {
                   control.setValue(
                     [...Array(6).keys()].map(k =>
                       ({
