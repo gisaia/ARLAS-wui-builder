@@ -124,31 +124,8 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
       this.logger.warn('validation failed', this.layerFg);
       return;
     }
-    const savedVisualisations = this.layerFg.customControls.visualisation.syncOptions;
-    const visualisationValue = this.visualisationsFa.value;
-    const layerName = this.layerFg.customControls.name.value;
-    if (savedVisualisations.length <= 1 && this.visualisationsFa.length === 0) {
-      // if we create a layer and there is no visualisation set yet, then
-      // we create a visualisation set called 'All layers' and assign the
-      // layer to it
-      const visualisationFg = this.mapVisualisationFormBuilder.buildVisualisation();
-      visualisationFg.customControls.displayed.setValue(true);
-      visualisationFg.customControls.name.setValue('All layers');
-      visualisationFg.customControls.layers.setValue([layerName]);
-      visualisationFg.customControls.id.setValue(0);
-      this.visualisationsFa.insert(0, visualisationFg);
-    } else {
-      // we update the visualisations form array base on the checked visualisations of the
-      // created/edited layer
-      visualisationValue.forEach(v => {
-        const visu = savedVisualisations.find(vs => vs.name === v.name);
-        const set = new Set(v.layers);
-        visu.include ? set.add(layerName) : set.delete(layerName) ;
-        v.layers = Array.from(set);
-        v.displayed  = (v.displayed === undefined) ? true : v.displayed;
-      });
-      this.visualisationsFa.setValue(visualisationValue);
-    }
+
+    /** add the layer to list of layers */
     if (!this.isNewLayer()) {
       const layerIndex = this.getLayerIndex(this.layerFg.customControls.id.value);
       if (layerIndex < 0) {
@@ -159,6 +136,43 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
       const newId = this.layersValues.reduce((acc, val) => acc.id > val.id ? acc.id : val.id, 0) + 1;
       this.layerFg.customControls.id.setValue(newId);
       this.layersFa.insert(newId, this.layerFg);
+    }
+
+    // if we create a layer and there is no visualisation set yet, then
+    // we create a visualisation set called 'All layers' and assign the
+    // layer to it
+    // otherwise, we update the visualisationSet form by adding the created layer to the chosen visualisation
+
+    const savedVisualisations = this.layerFg.customControls.visualisation.syncOptions;
+    const visualisationValue = this.visualisationsFa.value;
+    const layerName = this.layerFg.customControls.name.value;
+
+    if (savedVisualisations.length <= 1 && this.visualisationsFa.length === 0) {
+      const visualisationFg = this.mapVisualisationFormBuilder.buildVisualisation();
+      visualisationFg.customControls.displayed.setValue(true);
+      visualisationFg.customControls.name.setValue('All layers');
+      visualisationFg.customControls.layers.setValue([layerName]);
+      visualisationFg.customControls.id.setValue(0);
+      this.visualisationsFa.insert(0, visualisationFg);
+    } else {
+      // we update the visualisations form array based on the checked visualisations of the
+      // created/edited layer
+      const savedLayers = new Set<string>(this.layersFa.value.map(l => l.name));
+      visualisationValue.forEach(v => {
+        const visu = savedVisualisations.find(vs => vs.name === v.name);
+        // in case of renaming a layer, we should remove the old name from the visualisation sets
+        const layersSet = new Set<string>();
+        v.layers.forEach(l => {
+          if (savedLayers.has(l)) {
+            layersSet.add(l);
+          }
+        });
+        visu.include ? layersSet.add(layerName) : layersSet.delete(layerName);
+        v.layers = Array.from(layersSet);
+        v.displayed  = (v.displayed === undefined) ? true : v.displayed;
+      });
+
+      this.visualisationsFa.setValue(visualisationValue);
     }
 
     this.layerFg.markAsPristine();
