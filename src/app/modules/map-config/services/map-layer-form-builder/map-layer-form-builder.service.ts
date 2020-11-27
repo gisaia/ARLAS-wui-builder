@@ -170,7 +170,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           false,
           collections.map(c => ({ label: c, value: c }))
         )
-      }).withStepName(marker('Collection')),
+      }).withStepName(marker('Collection')).hideStep(true),
       geometryStep: new ConfigFormGroup({
         ...geometryFormControls
       }).withStepName(marker('Geometry')),

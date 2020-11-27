@@ -161,6 +161,8 @@ export class ConfigFormGroup extends FormGroup {
     public stepName: string;
     public tabName: string;
 
+    public hide = false;
+
     constructor(
         controls: {
             [key: string]: AbstractControl;
@@ -194,6 +196,11 @@ export class ConfigFormGroup extends FormGroup {
 
     public get configFormControls(): Array<ConfigFormControl> {
         return Object.values(this.controls).filter(c => c instanceof ConfigFormControl) as Array<ConfigFormControl>;
+    }
+
+    public hideStep(hide: boolean) {
+        this.hide = hide;
+        return this;
     }
 
     public withTitle(title: string) {

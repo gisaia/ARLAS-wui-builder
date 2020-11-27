@@ -3,7 +3,7 @@
 <app-config-form-group [configFormGroup]="layerFg" defaultKey="map.layer"></app-config-form-group>
 
 <div class="action-buttons">
-    <button mat-raised-button color="primary" type="submit" (click)="submit()">{{ 'Save' | translate}} </button>
+    <button mat-raised-button color="primary" type="submit" (click)="submit()">{{ 'Validate' | translate}} </button>
     <button class="cancel-button" mat-raised-button (click)="forceCanExit = true"
         [routerLink]="['', 'map-config', 'layers']" queryParamsHandling="preserve">{{ 'Cancel' | translate}} </button>
 </div>
