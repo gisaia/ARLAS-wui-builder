@@ -7,6 +7,7 @@ authentication:
   use_discovery: true
   issuer: https://arlas-cloud-dev.eu.auth0.com/
   client_id: TrAfmjESYNWrikvK1d7RPnc5Uve7WJqs
+  redirect_uri: http://localhost:4200/callback
   scope: "openid profile"
   silent_refresh_redirect_uri: http://localhost:4200/silent-refresh.html
   require_https: true

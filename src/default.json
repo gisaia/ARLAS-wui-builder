@@ -73,7 +73,7 @@
                 },
                 "visibilityStep": {
                     "visible": true,
-                    "zoomMin": 0,
+                    "zoomMin": 1,
                     "zoomMax": 22,
                     "featuresMax": 5000
                 },
@@ -97,7 +97,7 @@
                 },
                 "visibilityStep": {
                     "visible": true,
-                    "zoomMin": 0,
+                    "zoomMin": 1,
                     "zoomMax": 22,
                     "featuresMin": 5000
                 },
@@ -117,6 +117,7 @@
     },
     "search": {
         "global": {
+            "name": "Search...",
             "searchField": "internal.fulltext",
             "autocompleteField": "internal.fulltext",
             "autocompleteSize": 10,
@@ -128,13 +129,15 @@
     "lookAndFeel": {
         "global": {
             "dragAndDrop": true,
+            "indicators": true,
+            "spinner": true,
             "spinnerColor": "accent",
             "spinnerDiameter": 50
         }
     },
     "timeline": {
         "global": {
-            "useDetailedTimeline": false,
+            "useDetailedTimeline": true,
             "tabsContainer": {
                 "dataStep": {
                     "timeline": {
@@ -149,13 +152,13 @@
                 },
                 "renderStep": {
                     "timeline": {
-                        "chartTitle": "title",
-                        "chartType": "area",
+                        "chartTitle": "Timeline",
+                        "chartType": "bars",
                         "dateFormat": "%b %d %Y  %H:%M"
                     },
                     "detailedTimeline": {
-                        "chartTitle": "detailed title",
-                        "chartType": "area",
+                        "chartTitle": "Detailed timeline",
+                        "chartType": "bars",
                         "dateFormat": "%b %d %Y  %H:%M",
                         "selectionExtentPercent": 2
                     }
@@ -242,8 +245,10 @@
         "widgets": {
             "histogram": {
                 "dataStep": {
-                    "bucketOrInterval": true,
-                    "bucketsNumber": 5,
+                    "aggregation": {
+                        "aggregationBucketOrInterval": "bucket",
+                        "aggregationBucketsNumber": 50
+                    },
                     "aggregationValue": "COUNT"
                 },
                 "renderStep": {

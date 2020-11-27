@@ -174,34 +174,6 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
       geometryStep: new ConfigFormGroup({
         ...geometryFormControls
       }).withStepName(marker('Geometry')),
-      visibilityStep: new ConfigFormGroup({
-        visible: new SlideToggleFormControl(
-          '',
-          marker('Visible'),
-          marker('Whether the layer is visible or not')
-        ),
-        zoomMin: new SliderFormControl(
-          '',
-          marker('Zoom min'),
-          marker('zoom min description'),
-          0,
-          22,
-          1,
-          () => this.zoomMax,
-          undefined
-        ),
-        zoomMax: new SliderFormControl(
-          '',
-          marker('Zoom max'),
-          marker('zoom max description'),
-          0,
-          22,
-          1,
-          undefined,
-          () => this.zoomMin
-        ),
-        ...visibilityFormControls
-      }).withStepName(marker('Visibility')),
       styleStep: new ConfigFormGroup({
         ...styleFormControls,
         geometryType: new SelectFormControl(
@@ -282,7 +254,35 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.heatmap))
 
-      }).withStepName(marker('Style'))
+      }).withStepName(marker('Style')),
+      visibilityStep: new ConfigFormGroup({
+        visible: new SlideToggleFormControl(
+          '',
+          marker('Visible'),
+          marker('Whether the layer is visible or not')
+        ),
+        zoomMin: new SliderFormControl(
+          '',
+          marker('Zoom min'),
+          marker('zoom min description'),
+          0,
+          22,
+          1,
+          () => this.zoomMax,
+          undefined
+        ),
+        zoomMax: new SliderFormControl(
+          '',
+          marker('Zoom max'),
+          marker('zoom max description'),
+          0,
+          22,
+          1,
+          undefined,
+          () => this.zoomMin
+        ),
+        ...visibilityFormControls
+      }).withStepName(marker('Visibility'))
     });
 
   }
