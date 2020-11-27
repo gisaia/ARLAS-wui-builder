@@ -335,7 +335,7 @@ export class TimelineGlobalFormBuilderService {
         return a.name.localeCompare(b.name);
       })));
 
-      // TODO 
+    // TODO
     const timePath = this.collectionService.getDescribe(this.mainFormService.getCollections()[0]).pipe(
       map(collectionDescription => collectionDescription.params.timestamp_path)
     );
