@@ -157,17 +157,22 @@ export class LandingPageDialogComponent implements OnInit {
   }
 
   public checkUrl() {
+    this.spinner.show('connectServer');
     const url = this.mainFormService.startingConfig.getFg().get('serverUrl').value;
     this.http.get(url + '/swagger.json').subscribe(
       () => {
         this.getServerCollections(url).then(() => {
-          this.configDescritor.getAllCollections().subscribe(collections => this.availablesCollections = collections);
+          this.configDescritor.getAllCollections().subscribe(collections => {
+            this.availablesCollections = collections;
+          }, error => this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'))
+          , () => this.spinner.hide('connectServer'));
           this.isServerReady = true;
         });
       },
       () => {
         this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
         this.isServerReady = false;
+        this.spinner.hide('connectServer');
       }
     );
   }
