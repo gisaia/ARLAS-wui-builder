@@ -472,7 +472,7 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
 export class FieldWithSizeListFormControl extends ConfigFormControl {
 
     // TODO do not use validators, the fields look like in error
-    public sizeCtrl = new FormControl('', Validators.required);
+    public sizeCtrl = new FormControl(10, Validators.required);
     public fieldCtrl = new FormControl('', [
         Validators.required,
         (c) => !!this.autocompleteFilteredFields && this.autocompleteFilteredFields.map(f => f.value).indexOf(c.value) >= 0 ?

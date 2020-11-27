@@ -335,6 +335,11 @@ export class TimelineGlobalFormBuilderService {
         return a.name.localeCompare(b.name);
       })));
 
+      // TODO 
+    const timePath = this.collectionService.getDescribe(this.mainFormService.getCollections()[0]).pipe(
+      map(collectionDescription => collectionDescription.params.timestamp_path)
+    );
+
     const timelineBucketIntervalFg = this.bucketsIntervalBuilderService.build(longDateFields, 'temporal');
 
     const timelineFormGroup = new TimelineGlobalFormGroup(
