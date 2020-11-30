@@ -362,6 +362,11 @@ export class AnalyticsImportService {
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
+
+    // create a set to initialize metrics properly
+    const metrics: Set<{ field: string, metric: string }> = new Set<{ field: string, metric: string }>();
+    contributor.metrics.forEach(metric => metrics.add(metric));
+
     importElements([
       {
         value: contributor.title,
@@ -372,7 +377,7 @@ export class AnalyticsImportService {
         control: dataStep.function
       },
       {
-        value: contributor.metrics,
+        value: metrics,
         control: dataStep.metrics
       },
       {
@@ -437,13 +442,17 @@ export class AnalyticsImportService {
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
 
+    // create a set to initialize aggregationmodels properly
+    const aggregationsModels: Set<{ field: string, size: number }> = new Set<{ field: string, size: number }>();
+    contributor.aggregationmodels.forEach(aggModel => aggregationsModels.add({ field: aggModel.field, size: aggModel.size}));
+
     importElements([
       {
         value: contributor.title,
         control: title
       },
       {
-        value: contributor.aggregationmodels,
+        value: aggregationsModels,
         control: dataStep.aggregationmodels
       },
       {
