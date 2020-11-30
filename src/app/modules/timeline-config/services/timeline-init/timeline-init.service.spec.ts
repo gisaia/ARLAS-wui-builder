@@ -1,6 +1,7 @@
 import { TimelineInitService } from './timeline-init.service';
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { TimelineGlobalFormBuilderService } from '../timeline-global-form-builder/timeline-global-form-builder.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 describe('TimelineInitService', () => {
   let spectator: SpectatorService<TimelineInitService>;
@@ -8,7 +9,8 @@ describe('TimelineInitService', () => {
   const createService = createServiceFactory({
     service: TimelineInitService,
     providers: [
-      mockProvider(TimelineGlobalFormBuilderService)
+      mockProvider(TimelineGlobalFormBuilderService),
+      mockProvider(CollectionService)
     ]
   });
 

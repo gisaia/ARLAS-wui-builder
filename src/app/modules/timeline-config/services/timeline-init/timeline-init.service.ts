@@ -17,7 +17,9 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
+import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { map } from 'rxjs/internal/operators/map';
 import { TimelineGlobalFormBuilderService } from '../timeline-global-form-builder/timeline-global-form-builder.service';
 
 @Injectable({
@@ -27,12 +29,34 @@ export class TimelineInitService {
 
   constructor(
     private mainFormService: MainFormService,
-    private timelineGlobalFormBuilder: TimelineGlobalFormBuilderService
+    private timelineGlobalFormBuilder: TimelineGlobalFormBuilderService,
+    private collectionService: CollectionService
   ) { }
 
-  public initModule() {
+  public initModule(initCollectionTimepath: boolean) {
+
+
     this.mainFormService.timelineConfig.initGlobalFg(
-      this.timelineGlobalFormBuilder.build());
+      this.timelineGlobalFormBuilder.build()
+    );
+
+    if (initCollectionTimepath) {
+      this.initCollectionFields();
+    }
+
+  }
+
+  // init the aggregation field, only when creating a new configuration
+  private initCollectionFields() {
+
+    this.collectionService.getDescribe(this.mainFormService.getCollections()[0])
+      .subscribe(collection => {
+        if (!!collection.params.timestamp_path) {
+          this.mainFormService.timelineConfig.getGlobalFg()
+            .customControls.tabsContainer.dataStep.timeline.aggregation.get('aggregationField').setValue(collection.params.timestamp_path);
+        }
+      });
+
   }
 
 }
