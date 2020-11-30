@@ -49,6 +49,7 @@ import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import { VisualisationSetConfig } from 'arlas-web-components';
 import { titleCase } from '@services/collection-service/tools';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 export enum EXPORT_TYPE {
     json = 'json',
@@ -68,13 +69,13 @@ export class ConfigExportHelper {
         sideModulesGlobal: SideModulesGlobalFormGroup,
         lookAndFeelConfigGlobal: LookAndFeelGlobalFormGroup,
         analyticsConfigList: FormArray,
-        keysToColorList: FormArray,
+        colorService: ArlasColorGeneratorLoader,
     ): any {
         const chipssearch: ChipSearchConfig = {
             name: searchConfigGlobal.customControls.name.value,
             icon: searchConfigGlobal.customControls.unmanagedFields.icon.value
         };
-
+        console.log(colorService.keysToColors)
         const config: Config = {
             arlas: {
                 web: {
@@ -85,7 +86,7 @@ export class ConfigExportHelper {
                     },
                     analytics: [],
                     colorGenerator: {
-                        keysToColors: (keysToColorList.value as Array<{ color: string, keyword: string }>).map(ck => [ck.keyword, ck.color])
+                        keysToColors: colorService.keysToColors
                     },
                     options: this.getOptions(lookAndFeelConfigGlobal)
                 },

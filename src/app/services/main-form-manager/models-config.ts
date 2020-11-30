@@ -84,7 +84,7 @@ export interface WebConfig {
         }
     };
     analytics: Array<AnalyticConfig>;
-    colorGenerator: { keysToColors: Array<Array<string>> };
+    colorGenerator: { keysToColors: Array<[string, string]> };
     options?: WebConfigOptions;
 }
 

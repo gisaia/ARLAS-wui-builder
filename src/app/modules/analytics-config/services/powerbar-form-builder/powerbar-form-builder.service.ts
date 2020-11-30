@@ -85,6 +85,8 @@ export class PowerbarConfigForm extends ConfigFormGroup {
           marker('Powerbar manage colors description'),
           () => collectionService.getTermAggregation(collection, this.customControls.dataStep.aggregationField.value)
             .then((keywords: Array<string>) => {
+              console.log(colorService)
+              globalKeysToColortrl.clear();
               keywords.forEach((k: string, index: number) => {
                 this.addToColorManualValuesCtrl({
                   keyword: k,
@@ -106,9 +108,10 @@ export class PowerbarConfigForm extends ConfigFormGroup {
               })
                 .afterClosed().subscribe((result: Array<KeywordColor>) => {
                   if (result !== undefined) {
-                    globalKeysToColortrl.clear();
-                    result.forEach((k: KeywordColor) => {
-                      this.addToColorManualValuesCtrl(k);
+                    result.forEach((kc: KeywordColor) => {
+                      /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
+                      colorService.updateKeywordColor(kc.keyword, kc.color);
+                      this.addToColorManualValuesCtrl(kc);
                     });
                   }
                 });

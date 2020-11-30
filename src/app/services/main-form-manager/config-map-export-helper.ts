@@ -24,6 +24,7 @@ import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/p
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 import { ConfigExportHelper } from './config-export-helper';
 import { LayerSourceConfig } from 'arlas-web-contributors';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 export enum VISIBILITY {
     visible = 'visible',
@@ -32,14 +33,14 @@ export enum VISIBILITY {
 export const NORMALIZED = 'normalized';
 export class ConfigMapExportHelper {
 
-    public static process(mapConfigLayers: FormArray, taggableFields?: Set<string>) {
+    public static process(mapConfigLayers: FormArray, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>) {
 
         const layers: Array<Layer> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
             const mode = layerFg.value.mode as LAYER_MODE;
             const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
                 (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
 
-            const paint = this.getLayerPaint(modeValues, mode, taggableFields);
+            const paint = this.getLayerPaint(modeValues, mode, colorService, taggableFields);
 
             const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
             const layer: Layer = {
@@ -69,10 +70,10 @@ export class ConfigMapExportHelper {
         return mapConfig;
     }
 
-    public static getLayerPaint(modeValues, mode, taggableFields?: Set<string>) {
+    public static getLayerPaint(modeValues, mode, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>) {
         const paint: Paint = {};
         const opacity = modeValues.styleStep.opacity;
-        const color = this.getMapProperty(modeValues.styleStep.colorFg, mode, taggableFields);
+        const color = this.getMapProperty(modeValues.styleStep.colorFg, mode, colorService, taggableFields);
         switch (modeValues.styleStep.geometryType) {
             case GEOMETRY_TYPE.fill: {
                 paint['fill-opacity'] = opacity;
@@ -82,21 +83,21 @@ export class ConfigMapExportHelper {
             case GEOMETRY_TYPE.line: {
                 paint['line-opacity'] = opacity;
                 paint['line-color'] = color;
-                paint['line-width'] = this.getMapProperty(modeValues.styleStep.widthFg, mode, taggableFields);
+                paint['line-width'] = this.getMapProperty(modeValues.styleStep.widthFg, mode, colorService, taggableFields);
                 break;
             }
             case GEOMETRY_TYPE.circle: {
                 paint['circle-opacity'] = opacity;
                 paint['circle-color'] = color;
-                paint['circle-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, taggableFields);
+                paint['circle-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, colorService, taggableFields);
                 break;
             }
             case GEOMETRY_TYPE.heatmap: {
                 paint['heatmap-color'] = color;
                 paint['heatmap-opacity'] = opacity;
-                paint['heatmap-intensity'] = this.getMapProperty(modeValues.styleStep.intensityFg, mode, taggableFields);
-                paint['heatmap-weight'] = this.getMapProperty(modeValues.styleStep.weightFg, mode, taggableFields);
-                paint['heatmap-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, taggableFields);
+                paint['heatmap-intensity'] = this.getMapProperty(modeValues.styleStep.intensityFg, mode, colorService, taggableFields);
+                paint['heatmap-weight'] = this.getMapProperty(modeValues.styleStep.weightFg, mode, colorService, taggableFields);
+                paint['heatmap-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, colorService, taggableFields);
             }
         }
         return paint;
@@ -142,7 +143,7 @@ export class ConfigMapExportHelper {
         return filter;
     }
 
-    public static getMapProperty(fgValues: any, mode: LAYER_MODE, taggableFields?: Set<string>) {
+    public static getMapProperty(fgValues: any, mode: LAYER_MODE, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>) {
         switch (fgValues.propertySource) {
             case PROPERTY_SELECTOR_SOURCE.fix:
                 return fgValues.propertyFix;
@@ -163,7 +164,8 @@ export class ConfigMapExportHelper {
                     'match',
                     this.getArray(manualField)
                 ].concat(
-                        manualValues.flatMap(kc => kc.keyword !== OTHER_KEYWORD ? [kc.keyword, kc.color] : [kc.color])
+                        manualValues.flatMap(kc => kc.keyword !== OTHER_KEYWORD ?
+                            [kc.keyword, colorService.getColor(kc.keyword)] : [kc.color])
                 );
             case PROPERTY_SELECTOR_SOURCE.interpolated: {
 

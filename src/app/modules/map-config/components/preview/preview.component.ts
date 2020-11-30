@@ -21,7 +21,7 @@ import { Component, Inject, OnInit, AfterViewInit, ViewChild, Input, OnDestroy, 
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MapContributor } from 'arlas-web-contributors';
 import { MapglComponent } from 'arlas-web-components';
-import { ArlasCollaborativesearchService, ArlasConfigService } from 'arlas-wui-toolkit';
+import { ArlasCollaborativesearchService, ArlasConfigService, ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
@@ -52,6 +52,7 @@ export class PreviewComponent implements AfterViewInit {
     private configService: ArlasConfigService,
     private startupService: StartupService,
     private collectionService: CollectionService,
+    private colorService: ArlasColorGeneratorLoader,
     private cdr: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public dataMap: MapglComponentInput
   ) {
@@ -65,7 +66,7 @@ export class PreviewComponent implements AfterViewInit {
       const mapConfigVisualisations = this.mainFormService.mapConfig.getVisualisationsFa();
       // Get contributor config for this layer
       // Get config.map part for this layer
-      const configMap = ConfigMapExportHelper.process(mapConfigLayers, this.collectionService.taggableFields);
+      const configMap = ConfigMapExportHelper.process(mapConfigLayers, colorService, this.collectionService.taggableFields);
       const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers);
       // Add contributor part in arlasConfigService
       // Add web contributors in config if not exist
@@ -81,7 +82,8 @@ export class PreviewComponent implements AfterViewInit {
       const contributor = ContributorBuilder.buildContributor('map',
         'mapbox',
         this.configService,
-        this.collaborativeService);
+        this.collaborativeService,
+        this.colorService);
       const mapComponentConfig = ConfigExportHelper.getMapComponent(mapConfigGlobal, mapConfigLayers, mapConfigVisualisations);
       mapComponentConfig.input.mapLayers.layers = configMap.layers;
 

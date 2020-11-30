@@ -49,6 +49,7 @@ import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persi
 import { Router } from '@angular/router';
 import { ArlasStartupService } from 'arlas-wui-toolkit/services/startup/startup.service';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 @Injectable({
   providedIn: 'root'
@@ -76,6 +77,7 @@ export class MainFormManagerService {
     private dialog: MatDialog,
     private startupService: StartupService,
     private collectionService: CollectionService,
+    private colorService: ArlasColorGeneratorLoader,
     private router: Router,
     private arlasStartupService: ArlasStartupService
   ) { }
@@ -132,10 +134,10 @@ export class MainFormManagerService {
       sideModulesConfigGlobal,
       lookAndFeelConfigGlobal,
       analyticsConfigList,
-      keysToColorList,
+      this.colorService,
     );
 
-    const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers, this.collectionService.taggableFields);
+    const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFields);
 
     const confToValidate: any = JSON.parse(JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
       generatedMapConfig.layers
@@ -207,6 +209,7 @@ export class MainFormManagerService {
   public doImport(config: Config, mapConfig: MapConfig) {
 
     const startingConfigControls = this.mainFormService.startingConfig.getFg().customControls;
+    console.log(config.arlas.web.colorGenerator)
     importElements([
       {
         value: config.arlas.server.url,
@@ -215,6 +218,10 @@ export class MainFormManagerService {
       {
         value: [config.arlas.server.collection.name],
         control: startingConfigControls.collections
+      },
+      {
+        value: config.arlas.web.colorGenerator,
+        control: startingConfigControls.colorGenerator
       },
       {
         value: config.arlas.server.maxAgeCache,
@@ -246,7 +253,7 @@ export class MainFormManagerService {
 
     // load keys to colors
     if (!!config.arlas.web.colorGenerator && !!config.arlas.web.colorGenerator.keysToColors) {
-
+      this.colorService.setKeysToColors(config.arlas.web.colorGenerator.keysToColors);
       const keysToColor = new FormArray([]);
       config.arlas.web.colorGenerator.keysToColors.forEach(kc =>
         keysToColor.push(new FormGroup({
