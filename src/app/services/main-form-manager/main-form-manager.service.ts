@@ -86,7 +86,7 @@ export class MainFormManagerService {
   public initMainModulesForms(initCollectionFields: boolean) {
     // load the modules required forms
     this.mapInitService.initModule(initCollectionFields);
-    this.timelineInitService.initModule();
+    this.timelineInitService.initModule(initCollectionFields);
     this.searchInitService.initModule();
     this.analyticsInitService.initModule();
     this.sideModulesInitService.initModule();
