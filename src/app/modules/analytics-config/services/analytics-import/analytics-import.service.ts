@@ -365,7 +365,7 @@ export class AnalyticsImportService {
 
     // create a set to initialize metrics properly
     const metrics: Set<{ field: string, metric: string }> = new Set<{ field: string, metric: string }>();
-    contributor.metrics.forEach(metric => metrics.add({ field: metric.field, metric: metric.metric}));
+    contributor.metrics.forEach(metric => metrics.add(metric));
 
     importElements([
       {
