@@ -97,10 +97,14 @@ export class EditVisualisationComponent implements OnInit, CanComponentExit, Aft
       return;
     }
     const displayed = this.visualisationFg.value.displayed;
+    const layers = this.visualisationFg.value.layers;
     if (displayed === '') {
       this.visualisationFg.value.displayed = false;
-      this.visualisationFg.setValue(this.visualisationFg.value);
     }
+    if (!layers || !Array.isArray(layers)) {
+      this.visualisationFg.value.layers = [];
+    }
+    this.visualisationFg.setValue(this.visualisationFg.value);
     if (!this.isNewVisualisation()) {
       const visualisationIndex = this.getVisualisationIndex(this.visualisationFg.customControls.id.value);
       if (visualisationIndex < 0) {

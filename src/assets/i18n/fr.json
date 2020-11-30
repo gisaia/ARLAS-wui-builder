@@ -86,7 +86,7 @@
 	"At least one visualisation set is required": "Il faut choisir un Espace de visualisation au moins",
 	"The field is mandatory.": "Le champ est obligatoire",
 	"All layers": "Toutes les couches cartographiques",
-	"At least one visualisation set should be assigned to this layer": "La couche cartographique doit être placée dans, au moins, un Espace de visualisation",
+	"This layer is not assigned to a visualisation set, it will not be visible on the map": "* La couche cartographique n'appartient à aucun Espace de visualisation. Elle ne sera pas visible sur la carte",
 	"ASC": "MIN",
 	"DESC": "MAX",
 	"At least one ": "Au moins un?",

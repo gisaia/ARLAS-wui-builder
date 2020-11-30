@@ -86,7 +86,7 @@
 	"At least one visualisation set is required": "At least one visualisation set is required",
 	"The field is mandatory.": "The field is mandatory.",
 	"All layers": "All layers",
-	"At least one visualisation set should be assigned to this layer": "At least one visualisation set should be assigned to this layer",
+	"This layer is not assigned to a visualisation set, it will not be visible on the map": "* This layer is not assigned to a visualisation set, it will not be visible on the map",
 	"ASC": "ASC",
 	"DESC": "DESC",
 	"At least one ": "At least one ",

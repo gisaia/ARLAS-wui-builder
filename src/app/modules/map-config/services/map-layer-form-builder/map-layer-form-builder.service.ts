@@ -45,7 +45,8 @@ export class MapLayerFormGroup extends ConfigFormGroup {
     featuresFg: MapLayerTypeFeaturesFormGroup,
     featureMetricFg: MapLayerTypeFeatureMetricFormGroup,
     clusterFg: MapLayerTypeClusterFormGroup,
-    vFa: FormArray
+    vFa: FormArray,
+    edit: boolean
   ) {
     super({
       name: new InputFormControl(
@@ -76,7 +77,6 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         marker('The layer can be put in one or several visualisation sets'),
         vFa.value,
         {
-          validators: [requireCheckboxesToBeCheckedValidator()],
           dependsOn: () => [this.customControls.name],
           onDependencyChange: (control: VisualisationCheckboxFormControl) => {
             // updates the selected layers in each visualisation set
@@ -90,11 +90,13 @@ export class MapLayerFormGroup extends ConfigFormGroup {
               });
             });
             // this block if necessary when creating a new layer and no visualisation set is created yet
+            // if we edit a layer we don't force checking the 'all layers' visualisation set
+            // if we create a new layer we pre-check the 'all layers' visualisation set'
             if (controlsValues.length === 0) {
               controlsValues.push({
                 name: 'All layers',
                 layers: [],
-                include: true
+                include: !edit
               });
             }
             control.setValue(controlsValues);
@@ -107,8 +109,9 @@ export class MapLayerFormGroup extends ConfigFormGroup {
               const visuAlreadyChecked = !!control.value ? control.value.find(visu => visu.name === v.name).include : false;
               v.include = hasLayer || visuAlreadyChecked;
             });
-            // check at least one visualisation set
-            if (visualisationControl.length >= 1 && !visualisationControl.find(vs => vs.include === true)) {
+            // check at least one visualisation set when we create a new layer
+            // if we edit an existing layer, we don't check visualisation sets
+            if (!edit && visualisationControl.length >= 1 && !visualisationControl.find(vs => vs.include === true)) {
               visualisationControl[0].include = true;
             }
             control.setSyncOptions(visualisationControl);
@@ -539,7 +542,7 @@ export class MapLayerFormBuilderService {
     private collectionService: CollectionService
   ) { }
 
-  public buildLayer() {
+  public buildLayer(edit?: boolean) {
     const collectionFields = this.collectionService.getCollectionFields(
       this.mainFormService.getCollections()[0]
     );
@@ -547,7 +550,8 @@ export class MapLayerFormBuilderService {
       this.buildFeatures(collectionFields),
       this.buildFeatureMetric(collectionFields),
       this.buildCluster(collectionFields),
-      this.mainFormService.mapConfig.getVisualisationsFa()
+      this.mainFormService.mapConfig.getVisualisationsFa(),
+      edit
     );
     this.defaultValuesService.setDefaultValueRecursively('map.layer', mapLayerFormGroup);
     return mapLayerFormGroup;

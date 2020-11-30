@@ -49,9 +49,9 @@
         <div *ngFor="let opt of typedControl.syncOptions">
             <mat-checkbox class="checkbox" [checked]="opt.include" (change)="typedControl.addLayer($event, opt.name)">{{opt.name}}</mat-checkbox>
         </div>
-        <mat-error *ngIf="!typedControl.hasLayer">
-            {{ 'At least one visualisation set should be assigned to this layer' | translate}}
-        </mat-error>
+        <mat-card *ngIf="!typedControl.hasLayer" class="empty_visulisation">
+            {{ 'This layer is not assigned to a visualisation set, it will not be visible on the map' | translate}}
+        </mat-card>
 </div>
 
 <div *ngIf="isHuePalette(); let typedControl" class="control-hue-palette">

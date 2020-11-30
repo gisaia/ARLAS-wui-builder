@@ -54,8 +54,6 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
     private cdref: ChangeDetectorRef,
     private router: Router,
     private logger: NGXLogger) {
-
-    this.layerFg = mapLayerFormBuilder.buildLayer();
   }
 
   public ngOnInit() {
@@ -67,10 +65,10 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
       this.logger.error('Error initializing the page, layers form group is missing');
       this.navigateToParentPage();
     } else {
-
       this.layersValues = this.layersFa.value as any[];
       this.route.paramMap.subscribe(params => {
         const layerId = params.get('id');
+        this.layerFg = this.mapLayerFormBuilder.buildLayer(!!layerId);
         if (layerId != null) {
           // there we are editing an existing layer
           const layerIndex = this.getLayerIndex(Number(layerId));
@@ -80,8 +78,6 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
             const existingLayerFg = this.getLayerAt(layerIndex) as MapLayerFormGroup;
             this.layerFg.patchValue(existingLayerFg.value);
             this.populateManualValuesFormArray(existingLayerFg);
-
-
           } else {
             this.navigateToParentPage();
             this.logger.error('Unknown layer ID');
@@ -139,21 +135,26 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
     }
 
     // if we create a layer and there is no visualisation set yet, then
-    // we create a visualisation set called 'All layers' and assign the
-    // layer to it
-    // otherwise, we update the visualisationSet form by adding the created layer to the chosen visualisation
+    // we propose a visualisation set called 'All layers'
+    // if the user check it, the visualisation set 'All layers' is created, if the user doesn't check it, 'All layers' is not created
 
     const savedVisualisations = this.layerFg.customControls.visualisation.syncOptions;
     const visualisationValue = this.visualisationsFa.value;
     const layerName = this.layerFg.customControls.name.value;
 
     if (savedVisualisations.length <= 1 && this.visualisationsFa.length === 0) {
-      const visualisationFg = this.mapVisualisationFormBuilder.buildVisualisation();
-      visualisationFg.customControls.displayed.setValue(true);
-      visualisationFg.customControls.name.setValue('All layers');
-      visualisationFg.customControls.layers.setValue([layerName]);
-      visualisationFg.customControls.id.setValue(0);
-      this.visualisationsFa.insert(0, visualisationFg);
+      const allLayers = [];
+      if (this.layerFg.customControls.visualisation.value && this.layerFg.customControls.visualisation.value.length > 0) {
+        if (this.layerFg.customControls.visualisation.value[0].include) {
+          allLayers.push(layerName);
+          const visualisationFg = this.mapVisualisationFormBuilder.buildVisualisation();
+          visualisationFg.customControls.displayed.setValue(true);
+          visualisationFg.customControls.name.setValue('All layers');
+          visualisationFg.customControls.layers.setValue(allLayers);
+          visualisationFg.customControls.id.setValue(0);
+          this.visualisationsFa.insert(0, visualisationFg);
+        }
+      }
     } else {
       // we update the visualisations form array based on the checked visualisations of the
       // created/edited layer

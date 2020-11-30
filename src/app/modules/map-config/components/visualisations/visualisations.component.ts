@@ -67,4 +67,18 @@ export class VisualisationsComponent implements OnInit {
   public camelize(text: string): string {
     return camelize(text);
   }
+
+  public confirmDelete(visualisationId: number, visualisationName: string): void {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '400px',
+      data: { message: 'delete the visualisation set' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const formGroupIndex = (this.visualisationsFa.value as any[]).findIndex(el => el.id === visualisationId);
+        this.visualisationsFa.removeAt(formGroupIndex);
+      }
+    });
+  }
 }
