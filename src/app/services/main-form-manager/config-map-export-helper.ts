@@ -71,28 +71,29 @@ export class ConfigMapExportHelper {
 
     public static getLayerPaint(modeValues, mode, taggableFields?: Set<string>) {
         const paint: Paint = {};
-        const colorOpacity = modeValues.styleStep.opacity;
+        const opacity = modeValues.styleStep.opacity;
         const color = this.getMapProperty(modeValues.styleStep.colorFg, mode, taggableFields);
         switch (modeValues.styleStep.geometryType) {
             case GEOMETRY_TYPE.fill: {
-                paint['fill-opacity'] = colorOpacity;
+                paint['fill-opacity'] = opacity;
                 paint['fill-color'] = color;
                 break;
             }
             case GEOMETRY_TYPE.line: {
-                paint['line-opacity'] = colorOpacity;
+                paint['line-opacity'] = opacity;
                 paint['line-color'] = color;
                 paint['line-width'] = this.getMapProperty(modeValues.styleStep.widthFg, mode, taggableFields);
                 break;
             }
             case GEOMETRY_TYPE.circle: {
-                paint['circle-opacity'] = colorOpacity;
+                paint['circle-opacity'] = opacity;
                 paint['circle-color'] = color;
                 paint['circle-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, taggableFields);
                 break;
             }
             case GEOMETRY_TYPE.heatmap: {
                 paint['heatmap-color'] = color;
+                paint['heatmap-opacity'] = opacity;
                 paint['heatmap-intensity'] = this.getMapProperty(modeValues.styleStep.intensityFg, mode, taggableFields);
                 paint['heatmap-weight'] = this.getMapProperty(modeValues.styleStep.weightFg, mode, taggableFields);
                 paint['heatmap-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, taggableFields);

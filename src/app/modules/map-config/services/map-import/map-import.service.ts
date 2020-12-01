@@ -237,9 +237,7 @@ export class MapImportService {
       }
     };
 
-    if ([GEOMETRY_TYPE.circle.toString(), GEOMETRY_TYPE.fill.toString(), GEOMETRY_TYPE.line.toString()].indexOf(layer.type) >= 0) {
-      values.styleStep.opacity = layer.paint[layer.type + '-opacity'];
-    }
+    values.styleStep.opacity = layer.paint[layer.type + '-opacity'];
 
     if (layer.type === GEOMETRY_TYPE.line.toString()) {
       values.styleStep.widthFg = {};
