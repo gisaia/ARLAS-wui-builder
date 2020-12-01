@@ -52,6 +52,7 @@ export interface Paint {
     'heatmap-radius'?: PaintValue;
     'heatmap-weight'?: PaintValue;
     'heatmap-intensity'?: number;
+    'heatmap-opacity'?: number;
 }
 
 export interface PaintColor {

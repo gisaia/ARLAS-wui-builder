@@ -36,18 +36,14 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <!-- <button mat-menu-item (click)="preview(element.id, element.name)">
-                    <mat-icon>visibility</mat-icon>
-                    <span>{{'Preview' | translate}}</span>
-                </button> -->
                 <button mat-menu-item [routerLink]="['edit', element.id]" queryParamsHandling="preserve">
                     <mat-icon>edit</mat-icon>
                     <span>{{'Edit' | translate}}</span>
                 </button>
-                <!-- <button mat-menu-item (click)="confirmDelete(element.id, element.name)">
+                <button mat-menu-item (click)="confirmDelete(element.id, element.name)">
                     <mat-icon>delete</mat-icon>
                     <span>{{'Delete' | translate}}</span>
-                </button> -->
+                </button>
             </mat-menu>
         </td>
     </ng-container>
