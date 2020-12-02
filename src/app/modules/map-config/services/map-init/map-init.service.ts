@@ -40,11 +40,11 @@ export class MapInitService {
     );
 
     this.mainFormService.mapConfig.initLayersFa(
-      new FormArray([], [Validators.required])
+      new FormArray([], [])
     );
 
     this.mainFormService.mapConfig.initVisualisationsFa(
-      new FormArray([], [Validators.required])
+      new FormArray([], [])
     );
 
     if (initCollectionFields) {

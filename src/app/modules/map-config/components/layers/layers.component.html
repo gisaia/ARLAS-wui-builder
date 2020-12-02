@@ -69,6 +69,3 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 
-<mat-error *ngIf="layersFa.touched && layersFa.errors?.required">
-    {{'At least one layer is required' | translate}}
-</mat-error>
