@@ -5,21 +5,18 @@
                 <div [id]="'tab-' + index" cdkDropList cdkDropListOrientation="horizontal"
                     (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="getOtherTabsIds(index)">
                     <div cdkDrag>
-                        <span *ngIf="editingTabIndex !== index" class="tab-name"
+                        <span *ngIf="editingTabIndex !== index" class="tab-name" tabindex="-1" (focus)="startEditTabName(index)"
                             [class.tab-error]="!matTab.isActive && tabHasError(index)">
                             {{tab}}
                         </span>
-                        <span *ngIf="editingTabIndex === index" class="edit-tab-name">
+                        <span *ngIf="editingTabIndex === index" class="edit-tab-name"  >
                             <!-- keydown stopPropagation needed to allow spaces -->
-                            <input matInput [(ngModel)]="editingTabName" appAutoFocus autocomplete="off"
+                            <input  matInput [(ngModel)]="editingTabName" appAutoFocus autocomplete="off"
+                                
                                 (focusout)="finishEditTabName(index)" (keydown)="$event.stopPropagation();"
                                 (keydown.enter)="finishEditTabName(index);">
 
                         </span>
-                        <button mat-icon-button (click)="startEditTabName(index)"
-                            [matTooltip]="'Edit tab name' | translate">
-                            <mat-icon>create</mat-icon>
-                        </button>
                         <button mat-icon-button (click)="$event.stopPropagation(); removeTab(index)"
                             [matTooltip]="'Delete tab' | translate">
                             <mat-icon>delete</mat-icon>
