@@ -51,7 +51,3 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
-
-<mat-error *ngIf="visualisationsFa.touched && visualisationsFa.errors?.required">
-    {{'At least one visualisation set is required' | translate}}
-</mat-error>
