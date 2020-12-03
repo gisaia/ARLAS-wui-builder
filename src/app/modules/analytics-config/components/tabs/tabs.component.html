@@ -5,14 +5,14 @@
                 <div [id]="'tab-' + index" cdkDropList cdkDropListOrientation="horizontal"
                     (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="getOtherTabsIds(index)">
                     <div cdkDrag>
-                        <span *ngIf="editingTabIndex !== index" class="tab-name" tabindex="-1" (focus)="startEditTabName(index)"
+                        <span *ngIf="editingTabIndex !== index" class="tab-name" tabindex="-1"
+                            (focus)="startEditTabName(index)"
                             [class.tab-error]="!matTab.isActive && tabHasError(index)">
                             {{tab}}
                         </span>
-                        <span *ngIf="editingTabIndex === index" class="edit-tab-name"  >
+                        <span *ngIf="editingTabIndex === index" class="edit-tab-name">
                             <!-- keydown stopPropagation needed to allow spaces -->
-                            <input  matInput [(ngModel)]="editingTabName" appAutoFocus autocomplete="off"
-                                
+                            <input matInput [(ngModel)]="editingTabName" appAutoFocus autocomplete="off"
                                 (focusout)="finishEditTabName(index)" (keydown)="$event.stopPropagation();"
                                 (keydown.enter)="finishEditTabName(index);">
 
@@ -35,7 +35,8 @@
             </ng-template>
             <div class="no-tabs" *ngIf="this.tabs.length === 0">
                 {{ 'Analytics board is empty.' | translate}}
-                <button mat-stroked-button color="primary" (click)="newTab()"> {{ 'Create a new tab.' | translate}}</button>
+                <button mat-stroked-button color="primary" (click)="newTab()">
+                    {{ 'Create a new tab.' | translate}}</button>
             </div>
         </mat-tab>
     </mat-tab-group>

@@ -39,12 +39,16 @@ under the License.
 
           .edit-tab-name {
             display: flex;
+            box-shadow: inset black 0px 0px 2px 0px;
+            background-color: white;
+            font-weight: bold;
           }
-
+        
           .tab-name {
             min-width: 165px;
             align-self: center;
             cursor: text;
+            min-height: 15px;
           }
         }
       }
