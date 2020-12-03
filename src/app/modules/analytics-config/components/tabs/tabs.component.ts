@@ -40,6 +40,7 @@ export class TabsComponent {
   public tabsFa: FormArray;
   public editingTabIndex = -1;
   public editingTabName = '';
+  public isEditingTab = false;
   @ViewChild('matTabGroup', { static: false }) private matTabGroup: MatTabGroup;
 
   constructor(
@@ -113,8 +114,11 @@ export class TabsComponent {
   }
 
   public startEditTabName(index: number) {
-    this.editingTabIndex = index;
-    this.editingTabName = this.getTab(index).get('tabName').value;
+    if (!this.isEditingTab) {
+      this.editingTabIndex = index;
+      this.editingTabName = this.getTab(index).get('tabName').value;
+      this.isEditingTab = true;
+    }
   }
 
   public finishEditTabName(tabIndex: number) {
@@ -143,7 +147,10 @@ export class TabsComponent {
     // wait until editingTabIndex update removes the related input
     // otherwise, opening the dialog throws an additional focusout event
     // and opens another dialog
-    setTimeout(() => updateByCheckingDuplicates(this.editingTabName), 0);
+    setTimeout(() => {
+      updateByCheckingDuplicates(this.editingTabName);
+      this.isEditingTab = false;
+    }, 0);
   }
 
   public getOtherTabsIds(tabIndex: number) {

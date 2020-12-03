@@ -5,7 +5,8 @@
                 <div [id]="'tab-' + index" cdkDropList cdkDropListOrientation="horizontal"
                     (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="getOtherTabsIds(index)">
                     <div cdkDrag>
-                        <span *ngIf="editingTabIndex !== index" class="tab-name"
+                        <span *ngIf="editingTabIndex !== index" class="tab-name" tabindex="-1"
+                            (focus)="startEditTabName(index)"
                             [class.tab-error]="!matTab.isActive && tabHasError(index)">
                             {{tab}}
                         </span>
@@ -16,10 +17,6 @@
                                 (keydown.enter)="finishEditTabName(index);">
 
                         </span>
-                        <button mat-icon-button (click)="startEditTabName(index)"
-                            [matTooltip]="'Edit tab name' | translate">
-                            <mat-icon>create</mat-icon>
-                        </button>
                         <button mat-icon-button (click)="$event.stopPropagation(); removeTab(index)"
                             [matTooltip]="'Delete tab' | translate">
                             <mat-icon>delete</mat-icon>
@@ -38,7 +35,8 @@
             </ng-template>
             <div class="no-tabs" *ngIf="this.tabs.length === 0">
                 {{ 'Analytics board is empty.' | translate}}
-                <button mat-stroked-button color="primary" (click)="newTab()"> {{ 'Create a new tab.' | translate}}</button>
+                <button mat-stroked-button color="primary" (click)="newTab()">
+                    {{ 'Create a new tab.' | translate}}</button>
             </div>
         </mat-tab>
     </mat-tab-group>
