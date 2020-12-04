@@ -155,11 +155,10 @@ export class MainFormManagerService {
       if (this.mainFormService.configurationId) {
         // Update existing
         this.persistenceService.get(this.mainFormService.configurationId).subscribe(data => {
-
           this.persistenceService.update(
             this.mainFormService.configurationId,
             conf,
-            new Date(data.last_update_date).getTime()
+            new Date(data.last_update_date).getTime(), data.doc_key, data.doc_readers, data.doc_writers
           ).subscribe(
             () => {
               this.snackbar.open(
