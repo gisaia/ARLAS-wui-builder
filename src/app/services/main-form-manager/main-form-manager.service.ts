@@ -162,11 +162,11 @@ export class MainFormManagerService {
           ).subscribe(
             () => {
               this.snackbar.open(
-                this.translate.instant('Configuration updated !') + ' (' + data.doc_key + ')'
+                this.translate.instant('Dashboard updated !') + ' (' + data.doc_key + ')'
               );
             },
             () => {
-              this.snackbar.open(this.translate.instant('Error : Configuration not updated'));
+              this.snackbar.open(this.translate.instant('Error : Dashboard not updated'));
             }
           );
         });
@@ -181,7 +181,7 @@ export class MainFormManagerService {
           ).subscribe(
             (data) => {
               this.snackbar.open(
-                this.translate.instant('Configuration saved !') + ' (' + configName + ')'
+                this.translate.instant('Dashboard saved !') + ' (' + configName + ')'
               );
               this.doImport(generatedConfig, generatedMapConfig);
               this.mainFormService.configurationId = data.id;
@@ -189,7 +189,7 @@ export class MainFormManagerService {
               this.router.navigate(['map-config'], { queryParamsHandling: 'preserve' });
             },
             () => {
-              this.snackbar.open(this.translate.instant('Error : Configuration not saved'));
+              this.snackbar.open(this.translate.instant('Error : Dashboard not saved'));
             }
           );
         });
