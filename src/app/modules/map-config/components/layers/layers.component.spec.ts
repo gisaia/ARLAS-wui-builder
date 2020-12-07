@@ -9,6 +9,7 @@ import {
   ArlasConfigService, CONFIG_UPDATER
 } from 'arlas-wui-toolkit/services/startup/startup.service';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 describe('LayersComponent', () => {
   let spectator: Spectator<LayersComponent>;
@@ -17,6 +18,7 @@ describe('LayersComponent', () => {
       mockProvider(ArlasConfigService),
       mockProvider(ArlasStartupService),
       mockProvider(ArlasCollaborativesearchService),
+      mockProvider(ArlasColorGeneratorLoader),
       mockProvider(ArlasConfigurationUpdaterService),
       mockProvider(CollectionService),
       { provide: CONFIG_UPDATER, useValue: {} },

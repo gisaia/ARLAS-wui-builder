@@ -18,12 +18,11 @@ under the License.
 */
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { PreviewComponent } from '../preview/preview.component';
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
-import { ArlasCollaborativesearchService, ArlasConfigService } from 'arlas-wui-toolkit';
+import { ArlasCollaborativesearchService, ArlasConfigService, ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { FormArray } from '@angular/forms';
 import { StartupService } from '@services/startup/startup.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
@@ -59,7 +58,8 @@ export class LayersComponent implements OnInit {
     private collaborativesearchService: ArlasCollaborativesearchService,
     private configService: ArlasConfigService,
     private startupService: StartupService,
-    private collectionService: CollectionService
+    private collectionService: CollectionService,
+    private colorService: ArlasColorGeneratorLoader
 
   ) {
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
@@ -70,7 +70,7 @@ export class LayersComponent implements OnInit {
     this.layersFa.value.map(layer => {
       const modeValues = layer.mode === LAYER_MODE.features ? layer.featuresFg :
       (layer.mode === LAYER_MODE.featureMetric ? layer.featureMetricFg : layer.clusterFg);
-      const paint = ConfigMapExportHelper.getLayerPaint(modeValues, layer.mode, this.collectionService.taggableFields);
+      const paint = ConfigMapExportHelper.getLayerPaint(modeValues, layer.mode, this.colorService, this.collectionService.taggableFields);
       this.layerLegend.set(
         layer.name + '#' + layer.mode,
         { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint) }
@@ -127,14 +127,13 @@ export class LayersComponent implements OnInit {
   }
 
   public preview(layerId: number, layerName: string): void {
-
     // Get contributor conf part for this layer
     const formGroupIndex = (this.layersFa.value as any[]).findIndex(el => el.id === layerId);
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
     const mapConfigLayers = new FormArray([this.layersFa.at(formGroupIndex)]);
     const mapConfigVisualisations = this.mainFormService.mapConfig.getVisualisationsFa();
     // Get config.map part for this layer
-    const configMap = ConfigMapExportHelper.process(mapConfigLayers, this.collectionService.taggableFields);
+    const configMap = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFields);
     // Get contributor config for this layer
     const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers);
     // Add contributor part in arlasConfigService
@@ -151,7 +150,8 @@ export class LayersComponent implements OnInit {
     const contributor = ContributorBuilder.buildContributor('map',
       'mapbox',
       this.configService,
-      this.collaborativesearchService);
+      this.collaborativesearchService,
+      this.colorService);
     const mapComponentConfigValue = ConfigExportHelper.getMapComponent(mapConfigGlobal, mapConfigLayers,
       mapConfigVisualisations, layerName);
     mapComponentConfigValue.input.mapLayers.layers = configMap.layers;

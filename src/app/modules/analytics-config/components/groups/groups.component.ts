@@ -116,9 +116,6 @@ export class GroupsComponent implements OnInit {
 
   public updateAnalytics() {
     // get the keyToColors list to inject it in the ColorService used by the arlas-web-components
-    this.colorService.keysToColors = (this.mainFormService.commonConfig.getKeysToColorFa()
-    .value as Array<{ color: string, keyword: string }>).map(ck => [ck.keyword, ck.color]);
-
     this.cs.colorGenerator = this.colorService;
     const analytics = [];
     this.groupsPreview = [];

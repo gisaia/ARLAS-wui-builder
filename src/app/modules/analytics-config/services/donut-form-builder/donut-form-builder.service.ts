@@ -103,8 +103,10 @@ export class DonutConfigForm extends ConfigFormGroup {
                 .afterClosed().subscribe((result: Array<KeywordColor>) => {
                   if (result !== undefined) {
                     globalKeysToColortrl.clear();
-                    result.forEach((k: KeywordColor) => {
-                      this.addToColorManualValuesCtrl(k);
+                    result.forEach((kc: KeywordColor) => {
+                      /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
+                      colorService.updateKeywordColor(kc.keyword, kc.color);
+                      this.addToColorManualValuesCtrl(kc);
                     });
                   }
                 });

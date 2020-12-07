@@ -191,6 +191,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
               if (result !== undefined) {
                 this.customControls.propertyManualFg.propertyManualValuesCtrl.clear();
                 result.forEach((kc: KeywordColor) => {
+                  /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
+                  colorService.updateKeywordColor(kc.keyword, kc.color);
                   this.addToColorManualValuesCtrl(kc);
                 });
               }
@@ -200,14 +202,15 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
             optional: true,
             dependsOn: () => [this.customControls.propertyManualFg.propertyManualFieldCtrl],
             onDependencyChange: (control) => {
+              /** this code block, is triggered when we change the Manual field control  */
               const field = this.customControls.propertyManualFg.propertyManualFieldCtrl.value;
               control.enableIf(!!field);
-
-              // an possible issue is that deleted keyword may be added automatically:
-              // as this `onDependencyChange` method is also executed on loading, the code below
-              // will automatically get the main terms and add them to the manual values,
-              // with their default value
-              // With the global color map (not implemented yet), this shouldn't be a problem anymore
+              /** the keywords are added to keysToColors list of ArlasColorGeneratorLoader
+               *  service, so there is no need to keep them in `propertyManualValuesCtrl`  ==>
+               *  clear old keywords from `propertyManualValuesCtrl` list in order and keep only keywords
+               *  obtained from the chosen `propertyManualFieldCtrl`
+               */
+              this.customControls.propertyManualFg.propertyManualValuesCtrl.clear();
               if (!!field) {
                 collectionService.getTermAggregation(collection, field).then((keywords: Array<string>) => {
                   const existingKeywords =
@@ -682,6 +685,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
     control.enableIf(doEnable);
   }
 
+  /** Adds the [keyword, color] pair to `propertyManualValuesCtrl` */
   public addToColorManualValuesCtrl(kc: KeywordColor) {
     const keywordColorGrp = new FormGroup({
       keyword: new FormControl(kc.keyword),

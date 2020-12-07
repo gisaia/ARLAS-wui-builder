@@ -4,7 +4,7 @@ import { MapglComponent, MapglModule } from 'arlas-web-components';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { MockComponent } from 'ng-mocks';
-import { ArlasCollaborativesearchService, ArlasStartupService } from 'arlas-wui-toolkit';
+import { ArlasCollaborativesearchService, ArlasStartupService, ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { mockProvider } from '@ngneat/spectator';
 import { HttpClient } from '@angular/common/http';
 import { ArlasConfigurationUpdaterService } from 'arlas-wui-toolkit/services/configuration-updater/configurationUpdater.service';
@@ -26,6 +26,7 @@ describe('PreviewComponent', () => {
         mockProvider(TranslateService),
         mockProvider(ArlasCollaborativesearchService),
         mockProvider(ArlasConfigurationUpdaterService),
+        mockProvider(ArlasColorGeneratorLoader),
         mockProvider(ArlasStartupService),
         mockProvider(CollectionService),
         { provide: MatDialogRef, useValue: {} },
