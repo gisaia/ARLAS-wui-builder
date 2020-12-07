@@ -691,7 +691,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
       keyword: new FormControl(kc.keyword),
       color: new FormControl(kc.color)
     });
-    this.customControls.propertyManualFg.propertyManualValuesCtrl.push(keywordColorGrp)
+    this.customControls.propertyManualFg.propertyManualValuesCtrl.push(keywordColorGrp);
   }
 
 }
