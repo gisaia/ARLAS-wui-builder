@@ -147,7 +147,6 @@ export class LayersComponent implements OnInit {
     }
     currentConfig.arlas.web.contributors.push(contribConfig);
     this.configService.setConfig(currentConfig);
-    console.log(this.colorService)
     const contributor = ContributorBuilder.buildContributor('map',
       'mapbox',
       this.configService,

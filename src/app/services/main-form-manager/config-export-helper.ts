@@ -75,7 +75,6 @@ export class ConfigExportHelper {
             name: searchConfigGlobal.customControls.name.value,
             icon: searchConfigGlobal.customControls.unmanagedFields.icon.value
         };
-        console.log(colorService.keysToColors)
         const config: Config = {
             arlas: {
                 web: {

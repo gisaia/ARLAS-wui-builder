@@ -85,7 +85,6 @@ export class PowerbarConfigForm extends ConfigFormGroup {
           marker('Powerbar manage colors description'),
           () => collectionService.getTermAggregation(collection, this.customControls.dataStep.aggregationField.value)
             .then((keywords: Array<string>) => {
-              console.log(colorService)
               globalKeysToColortrl.clear();
               keywords.forEach((k: string, index: number) => {
                 this.addToColorManualValuesCtrl({

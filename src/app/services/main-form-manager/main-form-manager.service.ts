@@ -209,7 +209,6 @@ export class MainFormManagerService {
   public doImport(config: Config, mapConfig: MapConfig) {
 
     const startingConfigControls = this.mainFormService.startingConfig.getFg().customControls;
-    console.log(config.arlas.web.colorGenerator)
     importElements([
       {
         value: config.arlas.server.url,

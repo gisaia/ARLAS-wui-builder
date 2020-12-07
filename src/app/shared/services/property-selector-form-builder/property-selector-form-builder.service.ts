@@ -191,14 +191,10 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
               if (result !== undefined) {
                 this.customControls.propertyManualFg.propertyManualValuesCtrl.clear();
                 result.forEach((kc: KeywordColor) => {
-                  // TODO: release new toolkit
                   /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
-                  console.log(kc)
                   colorService.updateKeywordColor(kc.keyword, kc.color);
                   this.addToColorManualValuesCtrl(kc);
-                  console.log(colorService.keysToColors)
                 });
-                console.log(this.customControls.propertyManualFg.propertyManualValuesCtrl)
               }
             }),
           undefined,
