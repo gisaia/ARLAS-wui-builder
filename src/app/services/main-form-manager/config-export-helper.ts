@@ -244,9 +244,9 @@ export class ConfigExportHelper {
         mapConfigVisualisations: FormArray, layerName?): MapglComponentConfig {
 
         const customControls = mapConfigGlobal.customControls;
-        const layers: Set<string> = new Set<string>();
+        const layers: Array<string> = new Array<string>();
         mapConfigLayers.controls.forEach(layer => {
-            layers.add(layer.value.name);
+            layers.push(layer.value.name);
         });
 
         const visualisationsSets: Array<VisualisationSetConfig> = [
@@ -264,7 +264,7 @@ export class ConfigExportHelper {
                 if (hasLayer) {
                     visualisationsSets.push({
                         name: visu.value.name,
-                        layers: new Set([layerName]),
+                        layers: [layerName],
                         enabled: visu.value.displayed
                     });
                 }

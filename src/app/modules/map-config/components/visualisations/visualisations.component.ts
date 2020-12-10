@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
@@ -33,6 +33,7 @@ import { MapglLegendComponent } from 'arlas-web-components';
 import { Paint, Layer as LayerMap } from '@services/main-form-manager/models-map-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 export interface Layer {
   id: string;
@@ -45,7 +46,7 @@ export interface Layer {
   templateUrl: './visualisations.component.html',
   styleUrls: ['./visualisations.component.scss']
 })
-export class VisualisationsComponent implements OnInit {
+export class VisualisationsComponent implements OnInit, AfterViewChecked {
 
   public displayedColumns: string[] = ['name', 'layers', 'displayed', 'action'];
   public layersFa: FormArray;
@@ -53,7 +54,8 @@ export class VisualisationsComponent implements OnInit {
 
   constructor(
     protected mainFormService: MainFormService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private cdRef: ChangeDetectorRef
 
   ) {
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
@@ -63,6 +65,10 @@ export class VisualisationsComponent implements OnInit {
   public ngOnInit() {
 
   }
+
+  public ngAfterViewChecked() {
+    this.cdRef.detectChanges();
+ }
 
   public camelize(text: string): string {
     return camelize(text);
@@ -80,5 +86,11 @@ export class VisualisationsComponent implements OnInit {
         this.visualisationsFa.removeAt(formGroupIndex);
       }
     });
+  }
+
+  /** puts the visualisation set list in the new order after dropping */
+  public drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.visualisationsFa.value, event.previousIndex, event.currentIndex);
+    this.visualisationsFa.setValue(this.visualisationsFa.value);
   }
 }

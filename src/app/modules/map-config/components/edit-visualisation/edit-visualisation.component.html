@@ -1,8 +1,18 @@
 <h3 style="font-weight: 500;">{{'Edit a visualisation set' | translate}}</h3>
 <app-config-form-group [configFormGroup]="visualisationFg" defaultKey="map.visualisation"></app-config-form-group>
-
+<div *ngIf="!!layers && layers.length > 0">
+    <h3 style="font-weight: 500;">{{'Reorder layers display' | translate}}</h3>
+    <div class="layers-container" cdkDropList
+      (cdkDropListDropped)="drop($event)">
+      <div cdkDrag class="layer" *ngFor="let l of layers">
+        <mat-icon cdkDragHandle class="draghandle" >drag_indicator</mat-icon>
+        {{l}}
+      </div>
+    </div>
+</div>
 <div class="action-buttons">
     <button mat-raised-button color="primary" type="submit" (click)="submit()">{{ 'Save' | translate}} </button>
     <button class="cancel-button" mat-raised-button (click)="forceCanExit = true"
-        [routerLink]="['', 'map-config', 'visualisations']" queryParamsHandling="preserve">{{ 'Cancel' | translate}} </button>
+        [routerLink]="['', 'map-config', 'visualisations']" queryParamsHandling="preserve">{{ 'Cancel' | translate}}
+    </button>
 </div>

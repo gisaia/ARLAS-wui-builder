@@ -19,40 +19,134 @@ under the License.
 @import "variables.scss";
 
 .description {
-    align-self: center;
-    width: fit-content;
-    font-size: 14px;
-    color: $config-element-description-text-color;
-    line-height: 1.6;
-    border-left: 0.2rem solid $config-element-description-border-color;
-    background-color: white;
-    border-radius: 4px;
-    display: inline-block;
-  }
+  align-self: center;
+  width: fit-content;
+  font-size: 14px;
+  color: $config-element-description-text-color;
+  line-height: 1.6;
+  border-left: 0.2rem solid $config-element-description-border-color;
+  background-color: white;
+  border-radius: 4px;
+  display: inline-block;
+}
 
 .description:not(:empty) {
-    margin-left: 36px;
-    padding: 10px;
+  margin-left: 36px;
+  padding: 10px;
 }
 table {
-    width: 100%;
+  width: 100%;
+}
+
+button.add-visu {
+  margin: 16px 8px;
+  display: inline-block;
+  min-width: auto;
+}
+
+mat-error {
+  margin-top: 20px;
+}
+
+.mat-column-action {
+  width: 50px;
+}
+
+.mat-column-representation {
+  width: 50px;
+}
+.cdk-drag-preview {
+  box-sizing: border-box;
+  font-size: 0.75em;
+  border-radius: 3px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  cursor: grabbing;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.tr-visualisation {
+  background-color: white;
+  .th-layers {
+    width: 60%;
+  }
+  .th-name {
+    width: 24%;
+  }
+  .th-display {
+    width: 8%;
+    text-align: center;
+  }
+  .th-action {
+    width: 8%;
+    text-align: center;
+  }
+  td {
+    position: relative;
+    .td-draghandle {
+      position: absolute;
+      top: 14px;
+      left: 4px;
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: #555;
+      visibility: hidden;
+    }
+  }
+
+  &:hover {
+    td {
+      position: relative;
+      .td-draghandle {
+        visibility: visible;
+        cursor: grab;
+      }
+    }
   }
   
-  button.add-visu {
-    margin: 16px 8px;
-    display: inline-block;
-    min-width: auto;
+}
+
+.tr-visualisation.cdk-drag-preview {
+  background-color: white;
+  .th-layers {
+    min-width: 60%;
+    width: inherit;
   }
-  
-  mat-error {
-    margin-top: 20px;
+  .th-name {
+    min-width: 24%;
   }
-  
-  .mat-column-action {
-    width: 50px;
+  .th-display {
+    min-width: 8%;
+    text-align: center;
   }
-  
-  .mat-column-representation {
-    width: 50px;
+  .th-action {
+    min-width: 8%;
+    text-align: center;
   }
-  
+  td.mat-cell {
+    border-bottom-width: 0px;
+  }
+
+  td {
+    position: relative;
+    .td-draghandle {
+      position: absolute;
+      top: 14px;
+      left: 4px;
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: #555;
+      visibility: visible;
+      cursor: grabbing;
+    }
+  }
+}
