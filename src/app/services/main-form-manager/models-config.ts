@@ -257,6 +257,7 @@ export interface MapComponentInputConfig {
     initZoom: number;
     initCenter: [number, number];
     displayScale: boolean;
+    displayCurrentCoordinates: boolean;
     idFeatureField: string;
     mapLayers: MapComponentInputMapLayersConfig;
     visualisations_sets: Array<VisualisationSetConfig>;

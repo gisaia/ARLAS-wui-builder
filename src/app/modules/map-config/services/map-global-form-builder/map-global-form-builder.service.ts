@@ -71,6 +71,11 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
         marker('Display scale'),
         marker('Display scale description'),
       ),
+      displayCurrentCoordinates: new SlideToggleFormControl(
+        '',
+        marker('Display coordinates'),
+        marker('Display coordinates description'),
+      ),
       geographicalOperator: new SelectFormControl(
         null,
         marker('Geographical operator'),
@@ -129,6 +134,7 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
     initCenterLon: this.get('initCenterLon') as InputFormControl,
     allowMapExtend: this.get('allowMapExtend') as SlideToggleFormControl,
     displayScale: this.get('displayScale') as SlideToggleFormControl,
+    displayCurrentCoordinates: this.get('displayCurrentCoordinates') as SlideToggleFormControl,
     margePanForLoad: this.get('margePanForLoad') as InputFormControl,
     margePanForTest: this.get('margePanForTest') as InputFormControl,
     unmanagedFields: {
