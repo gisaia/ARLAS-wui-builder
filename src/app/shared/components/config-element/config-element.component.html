@@ -3,7 +3,7 @@
         <div class="form-fields" [class.full-size]="fullSize">
             <ng-content select="[form-fields]"></ng-content>
         </div>
-        <div class="description">
+        <div class="description" *ngIf="!fullSize">
             <ng-content select="[description]"></ng-content>
         </div>
     </div>

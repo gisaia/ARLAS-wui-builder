@@ -134,9 +134,7 @@ body {
   bottom: unset !important;
   right: unset !important;
   top: unset !important;
-
 }
-
 
 .mat-button-toggle-group {
   mat-button-toggle.mat-button-toggle-checked {
@@ -148,21 +146,29 @@ body {
   }
 }
 
-.mat-slider-thumb-label{
+.mat-slider-thumb-label {
   background-color: white !important;
   border: 1px solid rgba(0, 0, 0, 0.87) !important;
 }
 
-.mat-slider-thumb-label-text{
+.mat-slider-thumb-label-text {
   color: black !important;
 }
 
-.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb{
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
   background-color: white !important;
 }
 
 .cdk-overlay-connected-position-bounding-box {
   .cdk-overlay-pane {
     width: auto !important;
+  }
+}
+
+.resultlist {
+  width: 455px !important;
+
+  .resultlist__tbody{
+    height: 400px !important;
   }
 }
