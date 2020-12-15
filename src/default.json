@@ -63,6 +63,10 @@
                     "radiusFg": {
                         "propertySource": "Fix",
                         "propertyFix": 1.5
+                    },
+                    "widthFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 2
                     }
                 }
             },
@@ -87,6 +91,10 @@
                     "radiusFg": {
                         "propertySource": "Fix",
                         "propertyFix": 1.5
+                    },
+                    "widthFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 2
                     }
                 }
             },
@@ -110,6 +118,14 @@
                     "radiusFg": {
                         "propertySource": "Fix",
                         "propertyFix": 1.5
+                    },
+                    "weightFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1
+                    },
+                    "intensityFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1
                     }
                 }
             }
@@ -132,7 +148,8 @@
             "indicators": true,
             "spinner": true,
             "spinnerColor": "accent",
-            "spinnerDiameter": 50
+            "spinnerDiameter": 50,
+            "zoomToData": true
         }
     },
     "timeline": {
@@ -379,7 +396,7 @@
         "global": {
             "useShare": true,
             "useDownload": true,
-            "useTagger": true,
+            "useTagger": false,
             "share": {
                 "maxForFeature": 5000,
                 "maxForTopology": 5000
@@ -454,7 +471,7 @@
         "widthMin": 0,
         "widthMax": 15,
         "widthStep": 0.5,
-        "radiusMin": 5,
+        "radiusMin": 0,
         "radiusMax": 20,
         "radiusStep": 0.5,
         "intensityMin": 0,
