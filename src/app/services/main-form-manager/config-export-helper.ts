@@ -284,6 +284,7 @@ export class ConfigExportHelper {
                     +customControls.initCenterLat.value
                 ],
                 displayScale: customControls.displayScale.value,
+                displayCurrentCoordinates: customControls.displayCurrentCoordinates.value,
                 idFeatureField: customControls.requestGeometries.value[0].idPath,
                 mapLayers: {
                     layers: [],

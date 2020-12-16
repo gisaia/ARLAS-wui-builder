@@ -225,6 +225,8 @@
 	"Allow map extend description": "Allow map extend description",
 	"Display scale": "Display scale",
 	"Display scale description": "Display scale description",
+	"Display coordinates": "Display coordinates",
+	"Display coordinates description": "Display coordinates description",
 	"Geographical operator": "Geographical operator",
 	"Geographical operator description": "Geographical operator description",
 	"Querying data on the map": "Querying data on the map",

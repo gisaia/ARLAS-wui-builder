@@ -225,6 +225,8 @@
 	"Allow map extend description": "Permet de revenir au niveau de zoom de la fenêtre courante lors du rechargement de l'URL",
 	"Display scale": "Afficher l'échelle",
 	"Display scale description": "Permet de représenter l'échelle des distances sur la carte",
+	"Display coordinates": "Afficher les coordonées",
+	"Display coordinates description": "Afficher les coordonées du pointeur de la souris.",
 	"Geographical operator": "Type de sélection géographique",
 	"Geographical operator description": "Définit la règle de filtrage à appliquer aux données lors d'une sélection géographique",
 	"Querying data on the map": "Requêter les données sur la carte",

@@ -225,6 +225,8 @@
 	"Allow map extend description": "If allowed, the map extent is updated in the URL after each map move-end",
 	"Display scale": "Display scale",
 	"Display scale description": "Display a dynamic scale on the map",
+	"Display coordinates": "Display coordinates",
+	"Display coordinates description": "Display the current coordinates of the pointer.",
 	"Geographical operator": "Geographical operator",
 	"Geographical operator description": "The default geographical operator when drawing a bbox or a polygon.",
 	"Querying data on the map": "Querying data on the map",

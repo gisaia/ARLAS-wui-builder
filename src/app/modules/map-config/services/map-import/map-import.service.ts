@@ -118,6 +118,10 @@ export class MapImportService {
       {
         value: mapgl.input.displayScale,
         control: mapGlobalForm.customControls.displayScale
+      },
+      {
+        value: mapgl.input.displayCurrentCoordinates,
+        control: mapGlobalForm.customControls.displayCurrentCoordinates
       }
     ]);
 
