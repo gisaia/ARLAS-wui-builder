@@ -385,22 +385,22 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
           marker('Geometry ID description'),
           true,
           toKeywordOptionsObs(collectionFields)
-        ),
-        granularity: new SelectFormControl(
-          '',
-          marker('Granularity'),
-          marker('Granularity description'),
-          false,
-          [
-            { label: marker('Coarse'), value: Granularity.coarse },
-            { label: marker('Medium'), value: Granularity.medium },
-            { label: marker('Fine'), value: Granularity.fine },
-            { label: marker('Finest'), value: Granularity.finest }
-          ],
-          {
-            title: marker('Granularity')
-          }
         )
+        // granularity: new SelectFormControl(
+        //   '',
+        //   marker('Granularity'),
+        //   marker('Granularity description'),
+        //   false,
+        //   [
+        //     { label: marker('Coarse'), value: Granularity.coarse },
+        //     { label: marker('Medium'), value: Granularity.medium },
+        //     { label: marker('Fine'), value: Granularity.fine },
+        //     { label: marker('Finest'), value: Granularity.finest }
+        //   ],
+        //   {
+        //     title: marker('Granularity')
+        //   }
+        // )
       });
   }
 }
