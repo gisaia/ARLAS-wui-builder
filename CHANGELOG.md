@@ -1,5 +1,26 @@
 # Change Log
 
+## [v14.1.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.1.1) (2020-12-18)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.1.0...v14.1.1)
+
+**New stuff:**
+
+- \[MAP\]\[Network Analytics\] disable the grid aspect [\#395](https://github.com/gisaia/ARLAS-wui-builder/issues/395)
+- Adapt default values of look & feel [\#393](https://github.com/gisaia/ARLAS-wui-builder/issues/393)
+- \[MAP\] Lines : make default Width to fix with a given value [\#392](https://github.com/gisaia/ARLAS-wui-builder/issues/392)
+- Add the possibility to activate coordinates on the map [\#390](https://github.com/gisaia/ARLAS-wui-builder/issues/390)
+- Change the order of layers inside visualisation sets [\#361](https://github.com/gisaia/ARLAS-wui-builder/issues/361)
+- Change the order of visualisation sets [\#360](https://github.com/gisaia/ARLAS-wui-builder/issues/360)
+- Choose circle size smaller than 5 [\#349](https://github.com/gisaia/ARLAS-wui-builder/issues/349)
+- Traduction / Description [\#318](https://github.com/gisaia/ARLAS-wui-builder/issues/318)
+- Show error message in popup when something went wrong [\#288](https://github.com/gisaia/ARLAS-wui-builder/issues/288)
+
+**Fixed bugs:**
+
+- \[MAP\] fix the minimum radius value [\#397](https://github.com/gisaia/ARLAS-wui-builder/issues/397)
+- DATA TABLE : Width of the tabs Data/render is not adapted \(too small\) \(resultlist\) [\#334](https://github.com/gisaia/ARLAS-wui-builder/issues/334)
+
 ## [v14.1.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.1.0) (2020-12-07)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.0.1...v14.1.0)
