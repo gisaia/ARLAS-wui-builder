@@ -24,8 +24,9 @@ authentication:
 ############   Persistence SETTINGS   ##################
 ########################################################
 persistence:
-  url: 'http://localhost:19997/arlas_persistence_server'
+  url: 'http://localhost:19997/arlas-persistence-server'
 ########################################################
 ############   URLs to WUI app   #######################
 ########################################################
 arlas_wui_url: "http://localhost:4200"
+links: [ { "icon": "lock", "name": "Google", "url": "http://www.google.com" }, { "icon": "public", "name": "Yahoo", "url": "http://www.yahoo.com" } ]

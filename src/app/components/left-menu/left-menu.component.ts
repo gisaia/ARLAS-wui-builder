@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
@@ -29,6 +29,8 @@ import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persi
 import { MatDialog } from '@angular/material/dialog';
 import { UserInfosComponent } from 'arlas-wui-toolkit/components/user-infos/user-infos.component';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { LinkSettings } from 'arlas-wui-toolkit/services/startup/startup.service';
+import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
 
 interface Page {
   link: string;
@@ -44,13 +46,15 @@ interface Page {
   templateUrl: './left-menu.component.html',
   styleUrls: ['./left-menu.component.scss']
 })
-export class LeftMenuComponent {
+export class LeftMenuComponent implements OnInit {
 
   public isLabelDisplayed = false;
   public nbErrorsByPage: Map<string, number> = new Map();
   public showLogOutButton: boolean;
   public name: string;
   public avatar: string;
+
+  public links: LinkSettings[] = [];
 
   constructor(
     private mainFormService: MainFormService,
@@ -59,7 +63,8 @@ export class LeftMenuComponent {
     public persistenceService: PersistenceService,
     private authService: AuthentificationService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private settings: ArlasSettingsService
   ) {
     // recompute nberrors of each page anytime the mainform validity changes
     this.mainFormService.mainForm.statusChanges.subscribe(st => this.updateNbErrors());
@@ -129,6 +134,14 @@ export class LeftMenuComponent {
       control: this.mainFormService.lookAndFeelConfig.control
     },
   ];
+
+  public ngOnInit() {
+    this.links = this.settings.getLinksSettings();
+  }
+
+  public navigateTo(url: string) {
+    window.open(url);
+  }
 
   private updateNbErrors() {
     this.nbErrorsByPage.clear();
