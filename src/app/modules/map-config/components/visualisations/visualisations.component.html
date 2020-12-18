@@ -12,14 +12,14 @@
 
     <ng-container matColumnDef="name">
         <th class="th-name" mat-header-cell *matHeaderCellDef>{{'Name' | translate}}</th>
-        <td class="th-name" mat-cell *matCellDef="let element"> {{element.name}} 
+        <td class="td-name" mat-cell *matCellDef="let element"> {{element.name}} 
             <mat-icon cdkDragHandle class="td-draghandle" >drag_indicator</mat-icon>
         </td>
     </ng-container>
 
     <ng-container matColumnDef="layers">
         <th class="th-layers" mat-header-cell *matHeaderCellDef>{{'Layers' | translate}}</th>
-        <td class="th-layers" mat-cell *matCellDef="let element">
+        <td class="td-layers" mat-cell *matCellDef="let element">
             <div style="display: flex;">
                 <span style="display: inline-block; margin-right: 5px;" *ngFor="let l of element.layers"> • {{l}}</span>
             </div>
@@ -28,13 +28,13 @@
 
     <ng-container matColumnDef="displayed">
         <th class="th-display" mat-header-cell *matHeaderCellDef>{{'Displayed by default' | translate}}</th>
-        <td class="th-display" mat-cell *matCellDef="let element"> 
+        <td class="td-display" mat-cell *matCellDef="let element"> 
             <mat-checkbox [checked]="element.displayed" [disabled]="true"></mat-checkbox>
         </td>
     </ng-container>
     <ng-container matColumnDef="action">
         <th class="th-action" mat-header-cell *matHeaderCellDef>{{'Actions' | translate}}</th>
-        <td class="th-action" mat-cell *matCellDef="let element">
+        <td class="td-action" mat-cell *matCellDef="let element">
             <button mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>more_vert</mat-icon>
             </button>

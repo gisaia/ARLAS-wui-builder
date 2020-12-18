@@ -74,17 +74,17 @@ mat-error {
 
 .tr-visualisation {
   background-color: white;
-  .th-layers {
+  .th-layers, .td-layers {
     width: 60%;
   }
-  .th-name {
+  .th-name, .td-name {
     width: 24%;
   }
-  .th-display {
+  .th-display, .td-display {
     width: 8%;
     text-align: center;
   }
-  .th-action {
+  .th-action, .td-action {
     width: 8%;
     text-align: center;
   }
@@ -116,18 +116,18 @@ mat-error {
 
 .tr-visualisation.cdk-drag-preview {
   background-color: white;
-  .th-layers {
+  .th-layers, .td-layers {
     min-width: 60%;
     width: inherit;
   }
-  .th-name {
+  .th-name, .td-name {
     min-width: 24%;
   }
-  .th-display {
+  .th-display, .td-display {
     min-width: 8%;
     text-align: center;
   }
-  .th-action {
+  .th-action, .td-action {
     min-width: 8%;
     text-align: center;
   }
