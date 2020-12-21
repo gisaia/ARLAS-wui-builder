@@ -1,5 +1,9 @@
 # Change Log
 
+## [v14.1.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.1.2) (2020-12-21)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.1.1...v14.1.2)
+
 ## [v14.1.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.1.1) (2020-12-18)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.1.0...v14.1.1)
