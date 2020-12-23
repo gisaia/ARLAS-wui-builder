@@ -41,6 +41,7 @@ import { map } from 'rxjs/internal/operators/map';
 import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
 import { UserInfosComponent } from 'arlas-wui-toolkit//components/user-infos/user-infos.component';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MenuService } from '@services/menu/menu.service';
 
 enum InitialChoice {
   none = 0,
@@ -97,7 +98,8 @@ export class LandingPageDialogComponent implements OnInit {
     private errorService: ErrorService,
     private arlasSettingsService: ArlasSettingsService,
     private spinner: NgxSpinnerService,
-
+    private router: Router,
+    private menu: MenuService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
     this.showLoginButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
@@ -165,7 +167,7 @@ export class LandingPageDialogComponent implements OnInit {
           this.configDescritor.getAllCollections().subscribe(collections => {
             this.availablesCollections = collections;
           }, error => this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'))
-          , () => this.spinner.hide('connectServer'));
+            , () => this.spinner.hide('connectServer'));
           this.isServerReady = true;
         });
       },
@@ -238,6 +240,12 @@ export class LandingPageDialogComponent implements OnInit {
       this.initWithConfig(configJson, configMapJson);
 
     }).catch(err => this.logger.error(this.translate.instant('Could not load config files ') + err));
+  }
+
+  public navigateToCollection(): void {
+    this.dialogRef.close();
+    this.menu.updatePagesStatus(false);
+    this.router.navigate(['/collection']);
   }
 
   public afterAction(event: ConfigAction) {
@@ -403,7 +411,8 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
     private logger: NGXLogger,
     private router: Router,
     private translate: TranslateService,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute,
+    private menu: MenuService) {
   }
 
   public ngOnInit(): void {
@@ -423,6 +432,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
     setTimeout(() => this.openChoice(), 0);
     this.startEvent.subscribe(state => {
       this.dialogRef.close();
+      this.menu.updatePagesStatus(true);
       this.router.navigate(['map-config'], { queryParamsHandling: 'preserve' });
       this.logger.info(this.translate.instant('Ready to access server'));
     });

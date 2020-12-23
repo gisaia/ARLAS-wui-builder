@@ -21,6 +21,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LandingPageComponent } from '@components/landing-page/landing-page.component';
 import { MainFormInitializedGuard } from '@guards/main-form-initialized/main-form-initialized.guard';
 import { PageNotFoundComponent } from '@components/page-not-found/page-not-found.component';
+import { CollectionComponent } from '@components/collection/collection.component';
 
 
 const routes: Routes = [
@@ -32,6 +33,9 @@ const routes: Routes = [
     ]
   },
   { path: 'callback', redirectTo: '' },
+  {
+    path: 'collection', component: CollectionComponent
+  },
   {
     path: 'map-config',
     loadChildren: () => import('./modules/map-config/map-config.module').then(m => m.MapConfigModule),

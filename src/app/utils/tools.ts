@@ -23,6 +23,15 @@ interface OPTIONAL {
     isPresent: boolean;
     value?: any;
 }
+
+export interface Page {
+    link: string;
+    name: string;
+    icon: string;
+    tooltip: string;
+    enabled: boolean;
+    control?: AbstractControl;
+}
 /**
  * Get object or String value of an object from key
  */

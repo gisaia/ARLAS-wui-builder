@@ -1,11 +1,11 @@
-import { StatusComponent } from './status.component';
+import { CollectionComponent } from './collection.component';
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 
 describe('StatusComponent', () => {
-  let spectator: Spectator<StatusComponent>;
+  let spectator: Spectator<CollectionComponent>;
 
   const createComponent = createComponentFactory({
-    component: StatusComponent
+    component: CollectionComponent
   });
 
   beforeEach(() => {

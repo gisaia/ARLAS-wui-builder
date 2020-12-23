@@ -14,6 +14,7 @@ import { GET_OPTIONS } from 'arlas-wui-toolkit/services/persistence/persistence.
 import { ErrorModalModule } from 'arlas-wui-toolkit/components/errormodal/errormodal.module';
 import { getOptionsFactory } from 'arlas-wui-toolkit/app.module';
 import { ConfigMenuModule } from 'arlas-wui-toolkit/components/config-manager/config-menu/config-menu.module';
+import { MenuService } from '@services/menu/menu.service';
 
 describe('LandingPageComponent', () => {
   let spectator: Spectator<LandingPageComponent>;
@@ -38,6 +39,7 @@ describe('LandingPageComponent', () => {
       mockProvider(ArlasColorGeneratorLoader),
       mockProvider(StartingConfigFormBuilderService),
       mockProvider(AuthentificationService),
+      mockProvider(MenuService),
       {
         provide: GET_OPTIONS,
         useFactory: getOptionsFactory,

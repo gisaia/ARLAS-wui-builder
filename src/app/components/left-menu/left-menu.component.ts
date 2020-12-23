@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { getNbErrorsInControl, isFullyTouched } from '@utils/tools';
+import { getNbErrorsInControl, isFullyTouched, Page } from '@utils/tools';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { EXPORT_TYPE } from '@services/main-form-manager/config-export-helper';
 import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
@@ -31,15 +31,7 @@ import { UserInfosComponent } from 'arlas-wui-toolkit/components/user-infos/user
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { LinkSettings } from 'arlas-wui-toolkit/services/startup/startup.service';
 import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
-
-interface Page {
-  link: string;
-  name: string;
-  icon: string;
-  tooltip: string;
-  enabled: boolean;
-  control?: AbstractControl;
-}
+import { MenuService } from '../../services/menu/menu.service';
 
 @Component({
   selector: 'app-left-menu',
@@ -54,6 +46,7 @@ export class LeftMenuComponent implements OnInit {
   public name: string;
   public avatar: string;
 
+  public pages: Page[] = [];
   public links: LinkSettings[] = [];
 
   constructor(
@@ -64,7 +57,8 @@ export class LeftMenuComponent implements OnInit {
     private authService: AuthentificationService,
     private router: Router,
     private dialog: MatDialog,
-    private settings: ArlasSettingsService
+    private settings: ArlasSettingsService,
+    private menu: MenuService
   ) {
     // recompute nberrors of each page anytime the mainform validity changes
     this.mainFormService.mainForm.statusChanges.subscribe(st => this.updateNbErrors());
@@ -84,59 +78,9 @@ export class LeftMenuComponent implements OnInit {
     });
   }
 
-  public pages: Page[] = [
-    {
-      name: marker('Map'),
-      link: '/map-config',
-      icon: 'map',
-      tooltip: marker('Map'),
-      enabled: true,
-      control: this.mainFormService.mapConfig.control
-    },
-    {
-      name: marker('Timeline'),
-      link: '/timeline-config',
-      icon: 'timeline',
-      tooltip: marker('Timeline'),
-      enabled: true,
-      control: this.mainFormService.timelineConfig.control
-    },
-    {
-      name: marker('Search'),
-      link: '/search-config',
-      icon: 'search',
-      tooltip: marker('Search'),
-      enabled: true,
-      control: this.mainFormService.searchConfig.control
-    },
-    {
-      name: marker('Analytics'),
-      link: '/analytics-config',
-      icon: 'bar_chart',
-      tooltip: marker('Analytics'),
-      enabled: true,
-      control: this.mainFormService.analyticsConfig.control
-    },
-    {
-      name: marker('Side modules'),
-      link: '/side-modules',
-      icon: 'view_column',
-      tooltip: marker('Side modules'),
-      enabled: true,
-      control: this.mainFormService.sideModulesConfig.control
-    },
-    {
-      name: marker('Look \'n feel'),
-      link: '/look-and-feel',
-      icon: 'opacity',
-      tooltip: marker('Look \'n feel'),
-      enabled: true,
-      control: this.mainFormService.lookAndFeelConfig.control
-    },
-  ];
-
   public ngOnInit() {
     this.links = this.settings.getLinksSettings();
+    this.pages = this.menu.pages;
   }
 
   public navigateTo(url: string) {

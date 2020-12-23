@@ -39,6 +39,7 @@
     </mat-dialog-content>
     <mat-dialog-actions class="actions">
         <div class="buttons" style="width: 100%;">
+            <button mat-stroked-button color="primary" (click)="navigateToCollection()">{{'Explore collections' | translate}}</button>
             <button mat-stroked-button color="primary" (click)="configChoice = InitialChoice.setup">{{'New dashboard' | translate}}</button>
             <button mat-stroked-button color="primary" (click)="configChoice = InitialChoice.load">{{'Import from file' | translate}}</button>
             <button class="right" mat-stroked-button *ngIf="showLogOutButton" (click)="logout()">{{'Log Out' | translate}}</button>
