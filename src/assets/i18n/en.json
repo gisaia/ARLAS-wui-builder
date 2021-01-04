@@ -465,6 +465,7 @@
 	"Slider fixed value description intensity": "",
 	"Slider fixed value description weight": "",
 	"Slider fixed value description radius": "",
+	"Slider fixed value description opacity": "",
 	"Width": "Width",
 	"Slider fixed value description width": "",
 	"Interpolated source field description color": " • The geometries colors are interpolated with the chosen interpolation field values",

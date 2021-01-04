@@ -190,15 +190,15 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           }
         ),
         filter: new FormControl(),
-        opacity: new SliderFormControl(
-          '',
-          marker('Opacity'),
-          marker('opacity description'),
-          0,
-          1,
-          0.1
+        opacity: propertySelectorFormBuilder.build(
+          PROPERTY_TYPE.number,
+          'opacity',
+          [
+            PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
+          ],
+          isAggregated,
+          marker('opacity description')
         ),
-
         colorFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.color,
           'color',

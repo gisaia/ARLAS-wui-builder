@@ -205,6 +205,10 @@ export class ConfigExportHelper {
 
         this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.colorFg, layerValues.mode);
 
+        if (!!modeValues.styleStep.opacity) {
+            this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.opacity, layerValues.mode);
+        }
+
         if (!!modeValues.styleStep.widthFg) {
             this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.widthFg, layerValues.mode);
         }

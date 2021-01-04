@@ -71,25 +71,25 @@ export class ConfigMapExportHelper {
         const color = this.getMapProperty(modeValues.styleStep.colorFg, mode, colorService, taggableFields);
         switch (modeValues.styleStep.geometryType) {
             case GEOMETRY_TYPE.fill: {
-                paint['fill-opacity'] = opacity;
+                paint['fill-opacity'] = this.getMapProperty(modeValues.styleStep.opacity, mode, colorService, taggableFields);
                 paint['fill-color'] = color;
                 break;
             }
             case GEOMETRY_TYPE.line: {
-                paint['line-opacity'] = opacity;
+                paint['line-opacity'] = this.getMapProperty(modeValues.styleStep.opacity, mode, colorService, taggableFields);
                 paint['line-color'] = color;
                 paint['line-width'] = this.getMapProperty(modeValues.styleStep.widthFg, mode, colorService, taggableFields);
                 break;
             }
             case GEOMETRY_TYPE.circle: {
-                paint['circle-opacity'] = opacity;
+                paint['circle-opacity'] = this.getMapProperty(modeValues.styleStep.opacity, mode, colorService, taggableFields);
                 paint['circle-color'] = color;
                 paint['circle-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, colorService, taggableFields);
                 break;
             }
             case GEOMETRY_TYPE.heatmap: {
                 paint['heatmap-color'] = color;
-                paint['heatmap-opacity'] = opacity;
+                paint['heatmap-opacity'] = this.getMapProperty(modeValues.styleStep.opacity, mode, colorService, taggableFields);
                 paint['heatmap-intensity'] = this.getMapProperty(modeValues.styleStep.intensityFg, mode, colorService, taggableFields);
                 paint['heatmap-weight'] = this.getMapProperty(modeValues.styleStep.weightFg, mode, colorService, taggableFields);
                 paint['heatmap-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, colorService, taggableFields);

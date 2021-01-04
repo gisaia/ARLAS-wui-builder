@@ -56,7 +56,10 @@
                 },
                 "styleStep": {
                     "geometryType": "fill",
-                    "opacity": 1,
+                    "opacity": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1
+                    },
                     "colorFg": {
                         "propertySource": "Fix",
                         "propertyFix": "#abcdef"
@@ -84,7 +87,10 @@
                 },
                 "styleStep": {
                     "geometryType": "fill",
-                    "opacity": 1,
+                    "opacity": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1
+                    },
                     "colorFg": {
                         "propertySource": "Fix",
                         "propertyFix": "#abcdef"
@@ -112,7 +118,10 @@
                 },
                 "styleStep": {
                     "geometryType": "fill",
-                    "opacity": 0.7,
+                    "opacity": {
+                        "propertySource": "Fix",
+                        "propertyFix": 0.7
+                    },
                     "colorFg": {
                         "propertyFix": "#abcdef"
                     },
@@ -469,6 +478,9 @@
             "black"
         ],
         "otherColor": "#9d9ca9",
+        "opacityMin": 0,
+        "opacityMax": 1,
+        "opacityStep": 0.1,
         "widthMin": 0,
         "widthMax": 15,
         "widthStep": 0.5,
