@@ -241,7 +241,8 @@ export class MapImportService {
       }
     };
 
-    values.styleStep.opacity = layer.paint[layer.type + '-opacity'];
+    values.styleStep.opacity = {};
+    this.importPropertySelector(layer.paint[layer.type + '-opacity'], values.styleStep.opacity, false, isAggregated, layerSource);
 
     if (layer.type === GEOMETRY_TYPE.line.toString()) {
       values.styleStep.widthFg = {};
