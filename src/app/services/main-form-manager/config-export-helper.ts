@@ -217,6 +217,18 @@ export class ConfigExportHelper {
             this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.radiusFg, layerValues.mode);
         }
 
+        if (!!modeValues.styleStep.strokeColorFg) {
+            this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.strokeColorFg, layerValues.mode);
+        }
+
+        if (!!modeValues.styleStep.strokeWidthFg) {
+            this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.strokeWidthFg, layerValues.mode);
+        }
+
+        if (!!modeValues.styleStep.strokeOpacityFg) {
+            this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.strokeOpacityFg, layerValues.mode);
+        }
+
         if (!!modeValues.styleStep.weightFg) {
             this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.weightFg, layerValues.mode);
         }

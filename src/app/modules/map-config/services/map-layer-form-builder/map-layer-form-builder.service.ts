@@ -39,6 +39,7 @@ import { valuesToOptions } from '@utils/tools';
 import { Observable } from 'rxjs';
 import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE } from './models';
 import { Granularity } from 'arlas-web-contributors/models/models';
+import { style } from '@angular/animations';
 export class MapLayerFormGroup extends ConfigFormGroup {
 
   constructor(
@@ -233,6 +234,38 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle
             || this.geometryType.value === GEOMETRY_TYPE.heatmap)),
 
+        strokeColorFg: propertySelectorFormBuilder.build(
+          PROPERTY_TYPE.color,
+          'strokeColor',
+          colorSources,
+          isAggregated,
+          marker('property stroke color description')
+        ).withDependsOn(() => [this.geometryType])
+          .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle))
+          .withTitle(marker('circle stroke')),
+        
+        strokeWidthFg: propertySelectorFormBuilder.build(
+          PROPERTY_TYPE.number,
+          'strokeWidth',
+          [
+            PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
+          ],
+          isAggregated,
+          marker('property stroke width description')
+        ).withDependsOn(() => [this.geometryType])
+          .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle)),
+
+        strokeOpacityFg: propertySelectorFormBuilder.build(
+          PROPERTY_TYPE.number,
+          'strokeOpacity',
+          [
+            PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
+          ],
+          isAggregated,
+          marker('property stroke opacity description')
+        ).withDependsOn(() => [this.geometryType])
+          .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle)),
+
         weightFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
           'weight',
@@ -304,6 +337,9 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   public get colorFg() { return this.styleStep.get('colorFg') as PropertySelectorFormGroup; }
   public get widthFg() { return this.styleStep.get('widthFg') as PropertySelectorFormGroup; }
   public get radiusFg() { return this.styleStep.get('radiusFg') as PropertySelectorFormGroup; }
+  public get strokeWidthFg() { return this.styleStep.get('strokeWidthFg') as PropertySelectorFormGroup; }
+  public get strokeColorFg() { return this.styleStep.get('strokeColorFg') as PropertySelectorFormGroup; }
+  public get strokeOpacityFg() { return this.styleStep.get('strokeOpacityFg') as PropertySelectorFormGroup; }
   public get weightFg() { return this.styleStep.get('weightFg') as PropertySelectorFormGroup; }
   public get intensityFg() { return this.styleStep.get('intensityFg') as PropertySelectorFormGroup; }
   public get filter() { return this.styleStep.get('filter') as FormGroup; }
