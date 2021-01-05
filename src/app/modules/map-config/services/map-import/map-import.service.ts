@@ -252,6 +252,17 @@ export class MapImportService {
       values.styleStep.radiusFg = {};
       this.importPropertySelector(layer.paint[layer.type + '-radius'], values.styleStep.radiusFg, false, isAggregated, layerSource);
 
+      values.styleStep.strokeWidthFg = {};
+      this.importPropertySelector(layer.paint[layer.type + '-stroke-width'], values.styleStep.strokeWidthFg,
+        false, isAggregated, layerSource);
+
+      values.styleStep.strokeColorFg = {};
+      this.importPropertySelector(layer.paint[layer.type + '-stroke-color'], values.styleStep.strokeColorFg,
+        false, isAggregated, layerSource);
+
+      values.styleStep.strokeOpacityFg = {};
+      this.importPropertySelector(layer.paint[layer.type + '-stroke-opacity'], values.styleStep.strokeOpacityFg,
+        false, isAggregated, layerSource);
     } else if (layer.type === GEOMETRY_TYPE.heatmap.toString()) {
       values.styleStep.intensityFg = {};
       this.importPropertySelector(layer.paint[layer.type + '-intensity'], values.styleStep.intensityFg, false, isAggregated, layerSource);

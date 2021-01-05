@@ -68,6 +68,18 @@
                         "propertySource": "Fix",
                         "propertyFix": 1.5
                     },
+                    "strokeColorFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": "#abcdef"
+                    },
+                    "strokeWidthFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1
+                    },
+                    "strokeOpacityFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1
+                    },
                     "widthFg": {
                         "propertySource": "Fix",
                         "propertyFix": 2
@@ -99,6 +111,18 @@
                         "propertySource": "Fix",
                         "propertyFix": 1.5
                     },
+                    "strokeColorFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": "#abcdef"
+                    },
+                    "strokeWidthFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1
+                    },
+                    "strokeOpacityFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1
+                    },
                     "widthFg": {
                         "propertySource": "Fix",
                         "propertyFix": 2
@@ -128,6 +152,18 @@
                     "radiusFg": {
                         "propertySource": "Fix",
                         "propertyFix": 1.5
+                    },
+                    "strokeColorFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": "#abcdef"
+                    },
+                    "strokeWidthFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1
+                    },
+                    "strokeOpacityFg": {
+                        "propertySource": "Fix",
+                        "propertyFix": 1
                     },
                     "weightFg": {
                         "propertySource": "Fix",
@@ -481,6 +517,12 @@
         "opacityMin": 0,
         "opacityMax": 1,
         "opacityStep": 0.1,
+        "strokeOpacityMin": 0,
+        "strokeOpacityMax": 1,
+        "strokeOpacityStep": 0.1,
+        "strokeWidthMin": 0,
+        "strokeWidthMax": 10,
+        "strokeWidthStep": 0.5,
         "widthMin": 0,
         "widthMax": 15,
         "widthStep": 0.5,
