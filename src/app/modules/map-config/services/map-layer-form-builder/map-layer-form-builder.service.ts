@@ -39,7 +39,7 @@ import { valuesToOptions } from '@utils/tools';
 import { Observable } from 'rxjs';
 import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE } from './models';
 import { Granularity } from 'arlas-web-contributors/models/models';
-import { style } from '@angular/animations';
+
 export class MapLayerFormGroup extends ConfigFormGroup {
 
   constructor(
@@ -243,7 +243,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         ).withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle))
           .withTitle(marker('circle stroke')),
-        
+
         strokeWidthFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
           'strokeWidth',

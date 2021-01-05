@@ -87,7 +87,8 @@ export class ConfigMapExportHelper {
                 paint['circle-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, colorService, taggableFields);
                 paint['circle-stroke-width'] = this.getMapProperty(modeValues.styleStep.strokeWidthFg, mode, colorService, taggableFields);
                 paint['circle-stroke-color'] = this.getMapProperty(modeValues.styleStep.strokeColorFg, mode, colorService, taggableFields);
-                paint['circle-stroke-opacity'] = this.getMapProperty(modeValues.styleStep.strokeOpacityFg, mode, colorService, taggableFields);
+                paint['circle-stroke-opacity'] = this.getMapProperty(modeValues.styleStep.strokeOpacityFg,
+                    mode, colorService, taggableFields);
                 break;
             }
             case GEOMETRY_TYPE.heatmap: {
