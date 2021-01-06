@@ -78,6 +78,7 @@ export abstract class ConfigFormControl extends FormControl {
     }
 
     get optional() { return this.optionalParams.optional; }
+    get sourceData() { return this.optionalParams.sourceData; }
     get dependsOn() { return this.optionalParams.dependsOn; }
     get onDependencyChange() { return this.optionalParams.onDependencyChange; }
     get childs() { return this.optionalParams.childs; }
@@ -134,6 +135,8 @@ interface ControlOptionalParams {
     // a title that is displayed before the field.
     // TODO remove the title from ConfigFormGroup and move it to fields
     title?: string;
+
+    sourceData?: Observable<any>;
 }
 
 interface GroupOptionalParams {

@@ -39,6 +39,9 @@ import { valuesToOptions } from '@utils/tools';
 import { Observable } from 'rxjs';
 import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE } from './models';
 import { Granularity } from 'arlas-web-contributors/models/models';
+import { CollectionReferenceDescriptionProperty } from 'arlas-api';
+import { map } from 'rxjs/internal/operators/map';
+
 
 export class MapLayerFormGroup extends ConfigFormGroup {
 
@@ -187,7 +190,32 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           false,
           valuesToOptions(geometryTypes),
           {
-            resetDependantsOnChange: true
+            resetDependantsOnChange: true,
+            dependsOn: () => [this.geometryStep],
+            onDependencyChange: (control) => {
+              // Feature Mode and Feature Metric
+              if (!!this.geometryStep.get('geometry')) {
+                if (!!this.geometryStep.get('geometry').value) {
+                  (this.geometryStep.get('geometry') as SelectFormControl).sourceData.subscribe((fields: CollectionField[]) => {
+                    fields.forEach(f => {
+                      if (f.name === this.geometryStep.get('geometry').value) {
+                        f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT ?
+                          control.setValue(GEOMETRY_TYPE.circle) : control.setValue(GEOMETRY_TYPE.line);
+                      }
+                    });
+                  });
+                }
+              }
+              // Cluster Mode
+              if (!!this.geometryStep.get('aggregatedGeometry')) {
+                if (!!this.geometryStep.get('aggregatedGeometry').value) {
+                  (this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.geohash_center ||
+                    this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.centroid ?
+                    control.setValue(GEOMETRY_TYPE.circle) : control.setValue(GEOMETRY_TYPE.fill));
+                }
+
+              }
+            }
           }
         ),
         filter: new FormControl(),
@@ -380,7 +408,11 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
           {
             optional: false,
             title: marker(type + ' rendered geometry'),
-          }
+            sourceData: collectionFields.pipe(map(
+              fields => fields
+                .filter(f => f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT
+                  || f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOSHAPE)))
+          },
         ),
         ...geometryFormControls
       }, {
