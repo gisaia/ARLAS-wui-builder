@@ -36,6 +36,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatMenuModule } from '@angular/material/menu';
 import { IconPickerModule } from 'ngx-icon-picker';
+import { MatTreeModule } from '@angular/material';
 
 // define modules to be injected in every test
 defineGlobalsInjections({
@@ -72,7 +73,8 @@ defineGlobalsInjections({
     DragDropModule,
     MatButtonToggleModule,
     MatMenuModule,
-    IconPickerModule
+    IconPickerModule,
+    MatTreeModule
   ],
   providers: [
     mockProvider(NGXLogger),

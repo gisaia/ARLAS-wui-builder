@@ -34,7 +34,7 @@ const routes: Routes = [
   },
   { path: 'callback', redirectTo: '' },
   {
-    path: 'collection', component: CollectionComponent
+    path: 'collection', component: CollectionComponent, canActivate: [MainFormInitializedGuard]
   },
   {
     path: 'map-config',

@@ -69,6 +69,7 @@ import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-transla
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { StartupService } from '@services/startup/startup.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTreeModule } from '@angular/material';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -172,6 +173,7 @@ export function createTranslateLoader(http: HttpClient) {
     MatPaginatorModule,
     MatMenuModule,
     MatCheckboxModule,
+    MatTreeModule,
     TranslateModule
   ]
 })

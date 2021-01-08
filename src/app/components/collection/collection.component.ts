@@ -17,7 +17,29 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit } from '@angular/core';
-import { MenuService } from '../../services/menu/menu.service';
+import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
+import { getFieldProperties } from 'arlas-wui-toolkit/tools/utils';
+import { CollectionReferenceDescriptionProperty, CollectionReferenceDescription } from 'arlas-api';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { FlatTreeControl } from '@angular/cdk/tree';
+import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+
+interface FlatDescription {
+  expandable: boolean;
+  name: string;
+  level: number;
+}
+
+interface CollectionReferencePropertyExtended {
+  name: string;
+  type?: CollectionReferenceDescriptionProperty.TypeEnum;
+  format?: string;
+  properties?: CollectionReferencePropertyExtended[];
+  taggable?: boolean;
+  indexed?: boolean;
+}
+
+const TypeEnum = CollectionReferenceDescriptionProperty.TypeEnum;
 
 @Component({
   selector: 'app-collection',
@@ -26,9 +48,58 @@ import { MenuService } from '../../services/menu/menu.service';
 })
 export class CollectionComponent implements OnInit {
 
-  constructor() { }
+  public getFieldProperties = getFieldProperties;
 
-  public ngOnInit() {
+  public collectionsDef: {
+    collection: CollectionReferenceDescription,
+    fields: any,
+    treeControl: FlatTreeControl<FlatDescription>;
+  }[] = [];
+
+  public dataSource;
+  public treeFlattener;
+
+  public hasChild = (_: number, node: FlatDescription) => node.expandable;
+
+  private transformer = (node: CollectionReferencePropertyExtended, level: number) => {
+    return {
+      expandable: !!node.type && node.type === TypeEnum.OBJECT,
+      name: node.name,
+      level
+    };
   }
 
+  constructor(
+    private arlasCss: ArlasCollaborativesearchService,
+    private mainService: MainFormService
+  ) {
+    this.treeFlattener = new MatTreeFlattener(this.transformer, node => node.level, node => node.expandable, node => node.properties);
+  }
+
+  public ngOnInit() {
+    this.mainService.getCollections().forEach(collection => {
+      this.arlasCss.describe(collection)
+        .subscribe(collectionRef => {
+          const treeControl = new FlatTreeControl<FlatDescription>(node => node.level, node => node.expandable);
+          const dataSource = new MatTreeFlatDataSource(treeControl, this.treeFlattener);
+
+          dataSource.data = this.transform(collectionRef.properties);
+          this.collectionsDef.push({ collection: collectionRef, fields: dataSource, treeControl });
+        });
+    });
+  }
+
+  public transform(objects: {
+    [key: string]: CollectionReferenceDescriptionProperty;
+  }): CollectionReferencePropertyExtended[] {
+    return Object.keys(objects).map(key => {
+      const object: any = objects[key];
+
+      if (!!object.properties) {
+        object.properties = this.transform(objects[key].properties);
+      }
+      object.name = key + (object.type !== TypeEnum.OBJECT ? ' - ' + object.type : '');
+      return object;
+    });
+  }
 }

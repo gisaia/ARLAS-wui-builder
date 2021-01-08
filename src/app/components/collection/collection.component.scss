@@ -16,3 +16,58 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+.content {
+   display: flex;
+   flex-wrap: wrap;
+   .collection {
+      width: 400px;
+      margin: 5px;
+
+      .section {
+         padding: 5px 0px;
+
+         .title {
+            font-variant: small-caps;
+            font-size: 1.1rem;
+         }
+
+         .button {
+            font-size: 0.7rem;
+            color: rgba(0, 0, 0, 0.38);
+            margin: 0 0px 0 10px;
+            cursor: pointer;
+
+            &:hover {
+               text-decoration: underline;
+            }
+         }
+      }
+      .params {
+         display: flex;
+         flex-direction: column;
+         padding-bottom: 10px;
+
+         .value {
+            font-size: 1em;
+         }
+
+         .label {
+            color: rgba(0, 0, 0, 0.54);
+            font-variant: small-caps;
+         }
+      }
+
+      .fields {
+         max-height: 350px;
+         overflow: auto;
+         .mat-tree-node {
+            min-height: unset;
+            .mat-icon-button {
+               width: 30px;
+               height: 30px;
+               line-height: 30px;
+            }
+         }
+      }
+   }
+}
