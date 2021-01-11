@@ -1,5 +1,3 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { StatusComponent } from './status.component';
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 

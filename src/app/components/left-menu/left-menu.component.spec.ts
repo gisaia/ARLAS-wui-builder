@@ -7,6 +7,7 @@ import { AuthentificationService } from 'arlas-wui-toolkit/services/authentifica
 import { GET_OPTIONS } from 'arlas-wui-toolkit/services/persistence/persistence.service';
 import { getOptionsFactory } from 'arlas-wui-toolkit/app.module';
 import { Subject } from 'rxjs/internal/Subject';
+import { MenuService } from '@services/menu/menu.service';
 
 describe('LeftMenuComponent', () => {
   let spectator: Spectator<LeftMenuComponent>;
@@ -37,6 +38,7 @@ describe('LeftMenuComponent', () => {
           mainForm: new FormGroup({})
         }),
       mockProvider(MainFormManagerService),
+      mockProvider(MenuService),
       mockProvider(AuthentificationService, {
         canActivateProtectedRoutes: new Subject()
       }),

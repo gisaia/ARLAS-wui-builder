@@ -60,6 +60,7 @@ import { ConfigMenuModule } from 'arlas-wui-toolkit/components/config-manager/co
 import { PaginatorI18n } from 'arlas-wui-toolkit/tools/paginatori18n';
 import { UserInfosComponent } from 'arlas-wui-toolkit/components/user-infos/user-infos.component';
 import { StatusComponent } from './components/status/status.component';
+import { CollectionComponent } from './components/collection/collection.component';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -85,7 +86,8 @@ export function createTranslateLoader(http: HttpClient) {
     PageNotFoundComponent,
     LandingPageComponent,
     LandingPageDialogComponent,
-    StatusComponent
+    StatusComponent,
+    CollectionComponent
   ],
   imports: [
     BrowserModule,
