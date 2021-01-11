@@ -14,10 +14,13 @@
                     {{def.collection.params.centroid_path }}</div>
                 <div class="value"><span class="label">{{'Geometry path' | translate}} :
                     </span>{{def.collection.params.geometry_path}}</div>
-                <div class="value"><span class="label">{{'Index name' | translate}} :
-                    </span>{{def.collection.params.index_name}}</div>
                 <div class="value"><span class="label">{{'Timestamp path' | translate}} :
                     </span>{{def.collection.params.timestamp_path}}</div>
+                <div class="value"><span class="label">{{'Index name' | translate}} :
+                    </span>{{def.collection.params.index_name}}</div>
+                <div class="value" *ngIf="def.collection.params.taggable_fields"><span class="label">{{'Taggable fields' | translate}} :
+                    </span>{{def.collection.params.taggable_fields}}</div>
+
             </div>
             <mat-divider></mat-divider>
             <div class="section">
@@ -30,7 +33,9 @@
                     <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePaddingIndent="10"> 
                         <!-- use a disabled button to provide padding for tree leaf -->
                         <button mat-icon-button disabled></button>
-                        {{node.name}}
+                        {{node.name}} -&nbsp;<span class="type">{{node.type}}</span>
+                        &nbsp;-&nbsp;
+                        <span *ngIf="node.type !== TypeEnum.OBJECT && node.indexed" class="indexed">{{'indexed' | translate}}</span>
                     </mat-tree-node>
                     <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="10">
                         <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">

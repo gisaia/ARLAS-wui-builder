@@ -49,6 +49,7 @@ const TypeEnum = CollectionReferenceDescriptionProperty.TypeEnum;
 export class CollectionComponent implements OnInit {
 
   public getFieldProperties = getFieldProperties;
+  public TypeEnum = TypeEnum;
 
   public collectionsDef: {
     collection: CollectionReferenceDescription,
@@ -65,6 +66,8 @@ export class CollectionComponent implements OnInit {
     return {
       expandable: !!node.type && node.type === TypeEnum.OBJECT,
       name: node.name,
+      type: node.type,
+      indexed: node.indexed,
       level
     };
   }
@@ -98,7 +101,7 @@ export class CollectionComponent implements OnInit {
       if (!!object.properties) {
         object.properties = this.transform(objects[key].properties);
       }
-      object.name = key + (object.type !== TypeEnum.OBJECT ? ' - ' + object.type : '');
+      object.name = key;
       return object;
     });
   }

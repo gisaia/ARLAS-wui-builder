@@ -5,24 +5,24 @@ import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 
 describe('CollectionComponent', () => {
-  // let spectator: Spectator<CollectionComponent>;
+  let spectator: Spectator<CollectionComponent>;
 
   const createComponent = createComponentFactory({
     component: CollectionComponent,
     providers: [
       mockProvider(MainFormManagerService),
       mockProvider(MainFormService, {
-        getCollections: () => ['collection']
+        getCollections: () => []
       }),
       mockProvider(ArlasCollaborativesearchService)
     ]
   });
 
   beforeEach(() => {
-    // spectator = createComponent();
+    spectator = createComponent();
   });
 
   it('should create', () => {
-    // expect(spectator.component).toBeTruthy();
+    expect(spectator.component).toBeTruthy();
   });
 });

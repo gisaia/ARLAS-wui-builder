@@ -67,6 +67,16 @@ under the License.
                height: 30px;
                line-height: 30px;
             }
+
+            .indexed {
+               font-size: 0.7rem;
+               color: rgba(0, 0, 0, 0.38);
+            }
+
+            .type {
+               font-size: 0.7rem;
+               font-style: italic;
+            }
          }
       }
    }
