@@ -64,6 +64,7 @@ export class PreviewComponent implements AfterViewInit {
       const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
       const mapConfigLayers = this.mainFormService.mapConfig.getLayersFa();
       const mapConfigVisualisations = this.mainFormService.mapConfig.getVisualisationsFa();
+      const mapConfigBasemaps = this.mainFormService.mapConfig.getBasemapsFg();
       // Get contributor config for this layer
       // Get config.map part for this layer
       const configMap = ConfigMapExportHelper.process(mapConfigLayers, colorService, this.collectionService.taggableFields);
@@ -84,7 +85,12 @@ export class PreviewComponent implements AfterViewInit {
         this.configService,
         this.collaborativeService,
         this.colorService);
-      const mapComponentConfig = ConfigExportHelper.getMapComponent(mapConfigGlobal, mapConfigLayers, mapConfigVisualisations);
+      const mapComponentConfig = ConfigExportHelper.getMapComponent(
+        mapConfigGlobal,
+        mapConfigLayers,
+        mapConfigVisualisations,
+        mapConfigBasemaps
+      );
       mapComponentConfig.input.mapLayers.layers = configMap.layers;
 
       this.mapglContributor = contributor;

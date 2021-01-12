@@ -14,7 +14,9 @@ describe('MapConfigComponent', () => {
       mockProvider(MainFormService, {
         mapConfig: {
           getGlobalFg: () => new FormGroup({}),
-          getLayersFa: () => new FormArray([])
+          getLayersFa: () => new FormArray([]),
+          getVisualisationsFa: () => new FormArray([]),
+          getBasemapsFg: () => new FormGroup({})
         }
       })
     ]

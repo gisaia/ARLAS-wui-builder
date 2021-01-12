@@ -29,6 +29,7 @@ import {
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import { Subject } from 'rxjs/internal/Subject';
+import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 
 
 enum MAIN_FORM_KEYS {
@@ -36,6 +37,7 @@ enum MAIN_FORM_KEYS {
   MAP_CONFIG = 'MapConfig',
   MAP_CONFIG_LAYERS = 'MapConfigLayers',
   MAP_CONFIG_VISUALISATIONS = 'MapConfigVisualisations',
+  MAP_CONFIG_BASAMAPS = 'MapConfigBasemaps',
   MAP_CONFIG_GLOBAL = 'MapConfigGlobal',
   SEARCH_CONFIG = 'SearchConfig',
   SEARCH_CONFIG_GLOBAL = 'SearchConfigGlobal',
@@ -58,7 +60,7 @@ export class MainFormService {
 
   public configurationId: string;
 
-  public configChange: Subject<{id: string, name: string}> = new Subject<{id: string, name: string}>();
+  public configChange: Subject<{ id: string, name: string }> = new Subject<{ id: string, name: string }>();
 
   public mainForm = new FormGroup({
     [MAIN_FORM_KEYS.STARTING_CONFIG]: new FormGroup({}),
@@ -92,12 +94,16 @@ export class MainFormService {
     public initGlobalFg = (fg: MapGlobalFormGroup) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL, fg);
     public initLayersFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS, fa);
     public initVisualisationsFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_VISUALISATIONS, fa);
+    public initBasemapsFg = (fg: MapBasemapFormGroup) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_BASAMAPS, fg);
     public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL) as MapGlobalFormGroup;
     public getLayersFa = () => {
       return this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS) as FormArray;
     }
     public getVisualisationsFa = () => {
       return this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_VISUALISATIONS) as FormArray;
+    }
+    public getBasemapsFg = () => {
+      return this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_BASAMAPS) as MapBasemapFormGroup;
     }
 
   }(this.mainForm.get(MAIN_FORM_KEYS.MAP_CONFIG) as FormGroup);

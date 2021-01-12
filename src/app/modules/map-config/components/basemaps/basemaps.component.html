@@ -1,0 +1,12 @@
+<div class="content">
+    <div class="basemaps">
+        <div *ngFor="let basemap of basemaps" class="container">
+            <mat-checkbox [checked]="basemap.checked" (change)="toggleBasemap($event)" [value]="basemap.name"
+                class="basemap mat-elevation-z1">
+                <span class="name">{{basemap.name}}</span>
+                <img src="{{basemap.image}}" class="image" draggable="false" />
+            </mat-checkbox>
+            <mat-radio-button [disabled]="!basemap.checked" [value]="basemap.name" (change)="setDefault($event)" [checked]="basemap.default">{{'default' | translate}}</mat-radio-button>
+        </div>
+    </div>
+</div>

@@ -59,17 +59,22 @@ export class MapConfigComponent implements OnInit {
     },
     {
       routeurLink: 'visualisations', label: 'Visualisation sets',
-      hasError: () => !!this.mainFormService.mapConfig.getGlobalFg()
-        && this.mainFormService.mapConfig.getGlobalFg().invalid
-        && isFullyTouched(this.mainFormService.mapConfig.getGlobalFg())
+      hasError: () => !!this.mainFormService.mapConfig.getVisualisationsFa()
+        && this.mainFormService.mapConfig.getVisualisationsFa().invalid
+        && isFullyTouched(this.mainFormService.mapConfig.getVisualisationsFa())
     },
     {
       routeurLink: 'layers', label: 'Layers',
       hasError: () => !!this.mainFormService.mapConfig.getLayersFa()
         && this.mainFormService.mapConfig.getLayersFa().invalid
         && isFullyTouched(this.mainFormService.mapConfig.getLayersFa())
-    }
-    ,
+    },
+    {
+      routeurLink: 'basemaps', label: 'Basemaps',
+      hasError: () => !!this.mainFormService.mapConfig.getBasemapsFg()
+        && this.mainFormService.mapConfig.getBasemapsFg().invalid
+        && isFullyTouched(this.mainFormService.mapConfig.getBasemapsFg())
+    },
     {
       routeurLink: 'preview', label: 'Preview',
       hasError: () => !!this.mainFormService.mapConfig.getLayersFa()

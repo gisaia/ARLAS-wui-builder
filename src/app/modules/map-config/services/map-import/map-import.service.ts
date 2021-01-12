@@ -30,9 +30,11 @@ import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/p
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
 import { COUNT_OR_METRIC } from '@shared-services/property-selector-form-builder/models';
-import { VisualisationSetConfig } from 'arlas-web-components';
+import { VisualisationSetConfig, BasemapStyle } from 'arlas-web-components';
 import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MapBasemapFormBuilderService } from '../map-basemap-form-builder/map-basemap-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +43,6 @@ export class MapImportService {
 
   constructor(
     private mainFormService: MainFormService,
-    private collectionService: CollectionService,
     private mapGlobalFormBuilder: MapGlobalFormBuilderService,
     private mapLayerFormBuilder: MapLayerFormBuilderService,
     private mapVisualisationFormBuilder: MapVisualisationFormBuilderService
@@ -54,6 +55,9 @@ export class MapImportService {
     const layers = mapConfig.layers;
 
     const visualisationSets: Array<VisualisationSetConfig> = config.arlas.web.components.mapgl.input.visualisations_sets;
+
+    const basemaps: BasemapStyle[] = config.arlas.web.components.mapgl.input.basemapStyles;
+    const defaultBasemap: BasemapStyle = config.arlas.web.components.mapgl.input.defaultBasemapStyle;
 
     const collectionName = config.arlas.server.collection.name;
     let layerId = 0;
@@ -71,7 +75,18 @@ export class MapImportService {
       const visualisationFg = this.importVisualisations(vs, visuId++);
       this.mainFormService.mapConfig.getVisualisationsFa().push(visualisationFg);
     });
+
+    basemaps.forEach(basemap => {
+      this.mainFormService.mapConfig.getBasemapsFg().customControls.basemaps.push(new FormGroup({
+        name: new FormControl(basemap.name),
+        url: new FormControl(basemap.styleFile)
+      }));
+    });
+
+    this.importBasemap(defaultBasemap);
   }
+
+
 
   private importMapGlobal(
     mapgl: MapglComponentConfig,
@@ -137,14 +152,6 @@ export class MapImportService {
         control: unmanagedControls.nbVerticesLimit
       },
       {
-        value: mapgl.input.defaultBasemapStyle,
-        control: unmanagedControls.defaultBasemapStyle
-      },
-      {
-        value: mapgl.input.basemapStyles,
-        control: unmanagedControls.basemapStyles
-      },
-      {
         value: mapgl.input.mapLayers.events.zoomOnClick,
         control: unmanagedControls.mapLayers.events.zoomOnClick
       },
@@ -158,6 +165,17 @@ export class MapImportService {
       },
     ]);
 
+  }
+
+  private importBasemap(defaultBasemap: BasemapStyle) {
+    const basemapFg = this.mainFormService.mapConfig.getBasemapsFg();
+    importElements([
+      {
+        value: defaultBasemap.name,
+        control: basemapFg.customControls.default
+      }
+    ]);
+    return basemapFg;
   }
 
   private importVisualisations(visualisationSet: VisualisationSetConfig, visuId: number) {

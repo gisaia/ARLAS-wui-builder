@@ -22,6 +22,7 @@ import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-glob
 import { FormArray, Validators } from '@angular/forms';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ConfigFormGroup, SelectFormControl, InputFormControl } from '@shared-models/config-form';
+import { MapBasemapFormBuilderService } from '../map-basemap-form-builder/map-basemap-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,7 @@ export class MapInitService {
   constructor(
     private mainFormService: MainFormService,
     private mapGlobalFormBuilder: MapGlobalFormBuilderService,
+    private mapBasemapFormBuilder: MapBasemapFormBuilderService,
     private collectionService: CollectionService
   ) { }
 
@@ -45,6 +47,10 @@ export class MapInitService {
 
     this.mainFormService.mapConfig.initVisualisationsFa(
       new FormArray([], [])
+    );
+
+    this.mainFormService.mapConfig.initBasemapsFg(
+      this.mapBasemapFormBuilder.build()
     );
 
     if (initCollectionFields) {

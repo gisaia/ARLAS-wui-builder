@@ -117,6 +117,7 @@ export class MainFormManagerService {
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
     const mapConfigLayers = this.mainFormService.mapConfig.getLayersFa();
     const mapConfigVisualisations = this.mainFormService.mapConfig.getVisualisationsFa();
+    const mapConfigBasemaps = this.mainFormService.mapConfig.getBasemapsFg();
     const timelineConfigGlobal = this.mainFormService.timelineConfig.getGlobalFg();
     const searchConfigGlobal = this.mainFormService.searchConfig.getGlobalFg();
     const analyticsConfigList = this.mainFormService.analyticsConfig.getListFa();
@@ -129,6 +130,7 @@ export class MainFormManagerService {
       mapConfigGlobal,
       mapConfigLayers,
       mapConfigVisualisations,
+      mapConfigBasemaps,
       searchConfigGlobal,
       timelineConfigGlobal,
       sideModulesConfigGlobal,

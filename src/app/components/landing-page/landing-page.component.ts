@@ -115,7 +115,7 @@ export class LandingPageDialogComponent implements OnInit {
 
     // Reset current config id
     this.mainFormService.configurationId = undefined;
-    this.mainFormService.configChange.next({ id: undefined, name: undefined });
+    if (this.mainFormService.configChange) { this.mainFormService.configChange.next({ id: undefined, name: undefined }); }
 
     this.mainFormService.startingConfig.init(
       this.startingConfigFormBuilder.build()

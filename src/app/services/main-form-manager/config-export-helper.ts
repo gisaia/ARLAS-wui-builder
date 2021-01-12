@@ -47,9 +47,10 @@ import {
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
-import { VisualisationSetConfig } from 'arlas-web-components';
+import { VisualisationSetConfig, BasemapStyle } from 'arlas-web-components';
 import { titleCase } from '@services/collection-service/tools';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 
 export enum EXPORT_TYPE {
     json = 'json',
@@ -64,6 +65,7 @@ export class ConfigExportHelper {
         mapConfigGlobal: MapGlobalFormGroup,
         mapConfigLayers: FormArray,
         mapConfigVisualisations: FormArray,
+        mapConfigBasemaps: MapBasemapFormGroup,
         searchConfigGlobal: SearchGlobalFormGroup,
         timelineConfigGlobal: TimelineGlobalFormGroup,
         sideModulesGlobal: SideModulesGlobalFormGroup,
@@ -81,7 +83,7 @@ export class ConfigExportHelper {
                     contributors: [],
                     components: {
                         timeline: this.getTimelineComponent(timelineConfigGlobal, false),
-                        mapgl: this.getMapComponent(mapConfigGlobal, mapConfigLayers, mapConfigVisualisations)
+                        mapgl: this.getMapComponent(mapConfigGlobal, mapConfigLayers, mapConfigVisualisations, mapConfigBasemaps)
                     },
                     analytics: [],
                     colorGenerator: {
@@ -257,10 +259,14 @@ export class ConfigExportHelper {
     }
 
     public static getMapComponent(
-        mapConfigGlobal: MapGlobalFormGroup, mapConfigLayers: FormArray,
-        mapConfigVisualisations: FormArray, layerName?): MapglComponentConfig {
+        mapConfigGlobal: MapGlobalFormGroup,
+        mapConfigLayers: FormArray,
+        mapConfigVisualisations: FormArray,
+        mapConfigBasemaps: MapBasemapFormGroup,
+        layerName?): MapglComponentConfig {
 
         const customControls = mapConfigGlobal.customControls;
+
         const layers: Array<string> = new Array<string>();
         mapConfigLayers.controls.forEach(layer => {
             layers.push(layer.value.name);
@@ -287,12 +293,31 @@ export class ConfigExportHelper {
                 }
             });
         }
+        const basemaps: BasemapStyle[] = [];
+        let defaultStyle: BasemapStyle;
+        mapConfigBasemaps.customControls.basemaps.controls.forEach(basemap => {
+            basemaps.push({
+                name: basemap.value.name,
+                styleFile: basemap.value.url
+            });
+            if (mapConfigBasemaps.customControls.default.value === basemap.value.name) {
+                defaultStyle = {
+                    name: basemap.value.name,
+                    styleFile: basemap.value.url
+                };
+            }
+        });
+        if (!defaultStyle) {
+            defaultStyle = basemaps[0];
+        }
+
+
         const mapComponent: MapglComponentConfig = {
             allowMapExtend: customControls.allowMapExtend.value,
             nbVerticesLimit: customControls.unmanagedFields.nbVerticesLimit.value,
             input: {
-                defaultBasemapStyle: customControls.unmanagedFields.defaultBasemapStyle.value,
-                basemapStyles: customControls.unmanagedFields.basemapStyles.value,
+                defaultBasemapStyle: defaultStyle,
+                basemapStyles: basemaps,
                 margePanForLoad: customControls.margePanForLoad.value,
                 margePanForTest: customControls.margePanForTest.value,
                 initZoom: customControls.initZoom.value,
@@ -646,14 +671,14 @@ export class ConfigExportHelper {
             const agg = widgetData.dataStep.aggregation;
             idString = agg.aggregationField + '-' + agg.aggregationFieldType + '-' + agg.aggregationBucketOrInterval;
             if (!!widgetData.dataStep.metric) {
-                idString +=  '-' + (widgetData.dataStep.metric.metricCollectFunction !== undefined ?
-                    widgetData.dataStep.metric.metricCollectFunction : '')  + '-' + (!!widgetData.dataStep.metric.metricCollectField ?
-                    widgetData.dataStep.metric.metricCollectField : '');
+                idString += '-' + (widgetData.dataStep.metric.metricCollectFunction !== undefined ?
+                    widgetData.dataStep.metric.metricCollectFunction : '') + '-' + (!!widgetData.dataStep.metric.metricCollectField ?
+                        widgetData.dataStep.metric.metricCollectField : '');
             }
             if (agg.aggregationBucketOrInterval === 'bucket') {
-                idString +=  '-' + agg.aggregationBucketsNumber;
+                idString += '-' + agg.aggregationBucketsNumber;
             } else {
-                idString +=  '-' + agg.aggregationIntervalSize + '-' + (!!agg.aggregationIntervalUnit ? agg.aggregationIntervalUnit : '');
+                idString += '-' + agg.aggregationIntervalSize + '-' + (!!agg.aggregationIntervalUnit ? agg.aggregationIntervalUnit : '');
             }
             if (widgetType === WIDGET_TYPE.swimlane) {
                 const termAgg = widgetData.dataStep.termAggregation;
