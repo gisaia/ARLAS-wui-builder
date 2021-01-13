@@ -113,8 +113,6 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
       unmanagedFields: new FormGroup({
         icon: new FormControl(),
         nbVerticesLimit: new FormControl(),
-        defaultBasemapStyle: new FormControl(),
-        basemapStyles: new FormControl(),
         mapLayers: new FormGroup({
           events: new FormGroup({
             zoomOnClick: new FormControl(),
@@ -140,8 +138,6 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
     unmanagedFields: {
       icon: this.get('unmanagedFields.icon'),
       nbVerticesLimit: this.get('unmanagedFields.nbVerticesLimit'),
-      defaultBasemapStyle: this.get('unmanagedFields.defaultBasemapStyle'),
-      basemapStyles: this.get('unmanagedFields.basemapStyles'),
       mapLayers: {
         events: {
           zoomOnClick: this.get('unmanagedFields.mapLayers.events.zoomOnClick'),

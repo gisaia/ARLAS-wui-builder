@@ -26,6 +26,7 @@ import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
 import { PreviewComponent } from './components/preview/preview.component';
 import { VisualisationsComponent } from './components/visualisations/visualisations.component';
 import { EditVisualisationComponent } from './components/edit-visualisation/edit-visualisation.component';
+import { BasemapsComponent } from './components/basemaps/basemaps.component';
 
 
 const routes: Routes = [
@@ -34,6 +35,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'global', pathMatch: 'full' },
       { path: 'global', component: GlobalMapComponent },
       { path: 'preview', component: PreviewComponent },
+      { path: 'basemaps', component: BasemapsComponent },
       {
         path: 'layers', children: [
           { path: '', component: LayersComponent, pathMatch: 'full' },

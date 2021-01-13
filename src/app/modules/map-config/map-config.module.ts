@@ -32,6 +32,7 @@ import { MapglComponent, MapglModule, MapglLayerIconModule, MapglLegendModule } 
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { VisualisationsComponent } from './components/visualisations/visualisations.component';
 import { EditVisualisationComponent } from './components/edit-visualisation/edit-visualisation.component';
+import { BasemapsComponent } from './components/basemaps/basemaps.component';
 
 @NgModule({
   entryComponents: [
@@ -50,7 +51,8 @@ import { EditVisualisationComponent } from './components/edit-visualisation/edit
     DialogColorTableComponent,
     DialogPaletteSelectorComponent,
     PreviewComponent,
-    VisualisationsComponent
+    VisualisationsComponent,
+    BasemapsComponent
   ],
   imports: [
     MapConfigRoutingModule,
