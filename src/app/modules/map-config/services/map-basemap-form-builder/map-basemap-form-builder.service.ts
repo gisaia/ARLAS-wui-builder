@@ -17,14 +17,15 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { ConfigFormGroup, HiddenFormControl } from '@shared-models/config-form';
-import { FormArray } from '@angular/forms';
+import { ConfigFormGroup, HiddenFormControl, ConfigFormGroupArray } from '@shared-models/config-form';
+import { FormArray, FormGroup, FormControl } from '@angular/forms';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 export class MapBasemapFormGroup extends ConfigFormGroup {
   constructor() {
     super({
       basemaps: new FormArray([]),
-      default: new HiddenFormControl('', undefined)
+      default: new HiddenFormControl('', null)
     });
   }
 
@@ -34,15 +35,26 @@ export class MapBasemapFormGroup extends ConfigFormGroup {
   };
 }
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class MapBasemapFormBuilderService {
 
-  constructor() { }
+  constructor(
+    private defaultValuesService: DefaultValuesService
+  ) { }
 
   public build() {
     const mapBasemapFormGroup = new MapBasemapFormGroup();
+    this.defaultValuesService.setDefaultValueRecursively('map.basemap', mapBasemapFormGroup);
     return mapBasemapFormGroup;
+  }
+
+  public buildBasemapFormArray(name: string, url: string): FormGroup {
+    return new FormGroup({
+      name: new FormControl(name),
+      url: new FormControl(url)
+    });
   }
 }

@@ -17,12 +17,13 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
-import { FormArray, Validators } from '@angular/forms';
+import { FormArray } from '@angular/forms';
+import { Basemap } from '@map-config/components/basemaps/basemaps.component';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { ConfigFormGroup, SelectFormControl, InputFormControl } from '@shared-models/config-form';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
 import { MapBasemapFormBuilderService } from '../map-basemap-form-builder/map-basemap-form-builder.service';
+import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,8 @@ export class MapInitService {
     private mainFormService: MainFormService,
     private mapGlobalFormBuilder: MapGlobalFormBuilderService,
     private mapBasemapFormBuilder: MapBasemapFormBuilderService,
-    private collectionService: CollectionService
+    private collectionService: CollectionService,
+    private settingsService: ArlasSettingsService
   ) { }
 
   public initModule(initCollectionFields: boolean) {
@@ -55,6 +57,7 @@ export class MapInitService {
 
     if (initCollectionFields) {
       this.initCollectionFields();
+      this.initBasemap();
     }
   }
 
@@ -72,6 +75,15 @@ export class MapInitService {
         );
       });
     });
+  }
+
+  // init the basemap array, only when creating a new configuration
+  private initBasemap() {
+    const basemaps: Basemap[] = (this.settingsService.settings as any).basemaps;
+    this.mainFormService.mapConfig.getBasemapsFg().customControls.basemaps.push(
+      this.mapBasemapFormBuilder.buildBasemapFormArray(basemaps[0].name, basemaps[0].url)
+    );
+
   }
 
 }

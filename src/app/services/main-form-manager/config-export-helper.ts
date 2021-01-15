@@ -294,21 +294,21 @@ export class ConfigExportHelper {
             });
         }
         const basemaps: BasemapStyle[] = [];
-        let defaultStyle: BasemapStyle;
+        let defaultBasemap: BasemapStyle;
         mapConfigBasemaps.customControls.basemaps.controls.forEach(basemap => {
             basemaps.push({
                 name: basemap.value.name,
                 styleFile: basemap.value.url
             });
             if (mapConfigBasemaps.customControls.default.value === basemap.value.name) {
-                defaultStyle = {
+                defaultBasemap = {
                     name: basemap.value.name,
                     styleFile: basemap.value.url
                 };
             }
         });
-        if (!defaultStyle) {
-            defaultStyle = basemaps[0];
+        if (!defaultBasemap) {
+            defaultBasemap = basemaps[0];
         }
 
 
@@ -316,7 +316,7 @@ export class ConfigExportHelper {
             allowMapExtend: customControls.allowMapExtend.value,
             nbVerticesLimit: customControls.unmanagedFields.nbVerticesLimit.value,
             input: {
-                defaultBasemapStyle: defaultStyle,
+                defaultBasemapStyle: defaultBasemap,
                 basemapStyles: basemaps,
                 margePanForLoad: customControls.margePanForLoad.value,
                 margePanForTest: customControls.margePanForTest.value,
