@@ -1,11 +1,15 @@
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
+import { createServiceFactory, SpectatorService, mockProvider } from '@ngneat/spectator';
 import { MapBasemapFormBuilderService } from './map-basemap-form-builder.service';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 describe('MapBasemapFormBuilderService', () => {
   let spectator: SpectatorService<MapBasemapFormBuilderService>;
 
   const createService = createServiceFactory({
-    service: MapBasemapFormBuilderService
+    service: MapBasemapFormBuilderService,
+    providers: [
+      mockProvider(DefaultValuesService)
+    ]
   });
 
   beforeEach(() => {

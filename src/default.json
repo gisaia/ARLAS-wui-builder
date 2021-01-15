@@ -18,7 +18,7 @@
             "initCenterLat": 0,
             "initCenterLon": 0,
             "displayScale": true,
-            "displayCurrentCoordinates":false,
+            "displayCurrentCoordinates": false,
             "unmanagedFields": {
                 "icon": "check_box_outline_blank",
                 "nbVerticesLimit": 100,
@@ -30,6 +30,9 @@
                     }
                 }
             }
+        },
+        "basemap": {
+            "default": "Positron"
         },
         "layer": {
             "featuresFg": {
