@@ -360,6 +360,17 @@ fi
 envsubst '$ARLAS_STATIC_LINKS' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
 mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
 
+### Array of basemaps
+if [ -z "${ARLAS_BASEMAPS}" ]; then
+  ARLAS_BASEMAPS="[]"
+  export ARLAS_BASEMAPS
+  echo "None basemap is defined"
+else
+  echo ${ARLAS_BASEMAPS} "is used for 'basemaps' in settings.yaml file"
+fi
+envsubst '$ARLAS_BASEMAPS' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
+mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
+
 # Set App base path
 if [ -z "${ARLAS_BUILDER_APP_PATH}" ]; then
   ARLAS_BUILDER_APP_PATH=""
