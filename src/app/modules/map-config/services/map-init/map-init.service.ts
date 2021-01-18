@@ -79,7 +79,19 @@ export class MapInitService {
 
   // init the basemap array, only when creating a new configuration
   private initBasemap() {
-    const basemaps: Basemap[] = (this.settingsService.settings as any).basemaps;
+    let basemaps: Basemap[] = [];
+    if (!!(this.settingsService.settings as any).basemaps) {
+      basemaps = (this.settingsService.settings as any).basemaps;
+    } else {
+      basemaps.push({
+        name: 'Positron',
+        url: 'https://api.maptiler.com/maps/positron/style.json?key=xIhbu1RwgdbxfZNmoXn4',
+        image: 'https://api.maptiler.com/maps/8bb9093c-9865-452b-8be4-7a397f552b49/0/0/0.png?key=kO3nZIVLnPvIVn8AEnuk',
+        checked: true,
+        default: true
+      });
+    }
+
     this.mainFormService.mapConfig.getBasemapsFg().customControls.basemaps.push(
       this.mapBasemapFormBuilder.buildBasemapFormArray(basemaps[0].name, basemaps[0].url)
     );
