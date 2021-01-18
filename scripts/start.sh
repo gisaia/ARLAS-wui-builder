@@ -84,6 +84,17 @@ fi
 envsubst '$ARLAS_PERSISTENCE_URL' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
 mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
 
+### URL to ARLAS-permissions
+if [ -z "${ARLAS_PERMISSIONS_URL}" ]; then
+  ARLAS_PERMISSIONS_URL="'http://localhost:19998/arlas_permissions_server'"
+  export ARLAS_PERMISSIONS_URL
+  echo "The default ARLAS-permissions url '${ARLAS_PERMISSIONS_URL}' is used"
+else
+  echo ${ARLAS_PERMISSIONS_URL} "is used for 'permission.url' in settings.yaml file"
+fi
+envsubst '$ARLAS_PERMISSIONS_URL' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
+mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
+
 ### URL to ARLAS-server
 if [ -z "${ARLAS_SERVER_URL}" ]; then
   ARLAS_SERVER_URL="http://demo.arlas.io/arlas"
