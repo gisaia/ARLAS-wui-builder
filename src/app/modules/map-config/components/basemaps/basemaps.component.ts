@@ -46,12 +46,28 @@ export class BasemapsComponent implements OnInit {
     this.defaultBasemap = mapBasemapFg.customControls.default;
 
     const existingBasemap = this.basemapFa.controls.map((fg: FormGroup) => fg.value.name);
-    (this.settingsService.settings as any).basemaps.forEach((basemap: Basemap) => {
+
+    // Init list of basemap with a default if not defined
+    let basemaps: Basemap[] = [];
+    if (!!(this.settingsService.settings as any).basemaps) {
+      basemaps = (this.settingsService.settings as any).basemaps;
+    } else {
+      basemaps.push({
+        name: 'Positron',
+        url: 'https://api.maptiler.com/maps/positron/style.json?key=xIhbu1RwgdbxfZNmoXn4',
+        image: 'https://api.maptiler.com/maps/8bb9093c-9865-452b-8be4-7a397f552b49/0/0/0.png?key=kO3nZIVLnPvIVn8AEnuk',
+        checked: true,
+        default: true
+      });
+    }
+
+    basemaps.forEach((basemap: Basemap) => {
       // check if selected in editing config and checked it
       basemap.checked = existingBasemap.indexOf(basemap.name) >= 0;
       basemap.default = this.defaultBasemap.value === basemap.name;
       this.basemaps.push(basemap);
     });
+
     // If no basemap selected, select the first one
     const activeBasemaps = this.basemaps.filter(b => b.checked === true);
     if (activeBasemaps.length === 0) {
