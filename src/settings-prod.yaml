@@ -35,3 +35,4 @@ persistence:
 ########################################################
 arlas_wui_url: ${ARLAS_WUI_URL}
 links: ${ARLAS_STATIC_LINKS}
+basemaps: ${ARLAS_BASEMAPS}
