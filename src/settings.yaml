@@ -26,6 +26,11 @@ authentication:
 persistence:
   url: 'http://localhost:19997/arlas-persistence-server'
 ########################################################
+############   Permissions SETTINGS   ##################
+########################################################
+permission:
+  url: 'http://localhost:19996/arlas-permissions-server'
+########################################################
 ############   URLs to WUI app   #######################
 ########################################################
 arlas_wui_url: "http://localhost:4200"
