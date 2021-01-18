@@ -1,8 +1,27 @@
 # Change Log
 
+## [v14.2.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.2.0) (2021-01-18)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.1.2...v14.2.0)
+
+**New stuff:**
+
+- Add the possibility to interpolate the opacity to the value of a given field [\#398](https://github.com/gisaia/ARLAS-wui-builder/issues/398) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Enhance Geomtery type according to the chosen geometry [\#396](https://github.com/gisaia/ARLAS-wui-builder/issues/396) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Add a dedicated page for collection description [\#329](https://github.com/gisaia/ARLAS-wui-builder/issues/329)
+- Manage basemap url in map configuration [\#308](https://github.com/gisaia/ARLAS-wui-builder/issues/308) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
+**Miscellaneous:**
+
+- Add the possibility to configure the circle stroke [\#343](https://github.com/gisaia/ARLAS-wui-builder/issues/343) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
 ## [v14.1.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.1.2) (2020-12-21)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.1.1...v14.1.2)
+
+**Fixed bugs:**
+
+- Static links environment variable not declared in start.sh [\#411](https://github.com/gisaia/ARLAS-wui-builder/issues/411)
 
 ## [v14.1.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.1.1) (2020-12-18)
 
@@ -10,19 +29,19 @@
 
 **New stuff:**
 
-- \[MAP\]\[Network Analytics\] disable the grid aspect [\#395](https://github.com/gisaia/ARLAS-wui-builder/issues/395)
-- Adapt default values of look & feel [\#393](https://github.com/gisaia/ARLAS-wui-builder/issues/393)
-- \[MAP\] Lines : make default Width to fix with a given value [\#392](https://github.com/gisaia/ARLAS-wui-builder/issues/392)
-- Add the possibility to activate coordinates on the map [\#390](https://github.com/gisaia/ARLAS-wui-builder/issues/390)
-- Change the order of layers inside visualisation sets [\#361](https://github.com/gisaia/ARLAS-wui-builder/issues/361)
-- Change the order of visualisation sets [\#360](https://github.com/gisaia/ARLAS-wui-builder/issues/360)
+- Disable the grid aspect [\#395](https://github.com/gisaia/ARLAS-wui-builder/issues/395) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Adapt default values of look & feel [\#393](https://github.com/gisaia/ARLAS-wui-builder/issues/393) [[LOOK AND FEEL](https://github.com/gisaia/ARLAS-wui-builder/labels/LOOK%20AND%20FEEL)]
+- Lines : make default Width to fix with a given value [\#392](https://github.com/gisaia/ARLAS-wui-builder/issues/392) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Add the possibility to activate coordinates on the map [\#390](https://github.com/gisaia/ARLAS-wui-builder/issues/390) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Change the order of layers inside visualisation sets [\#361](https://github.com/gisaia/ARLAS-wui-builder/issues/361) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Change the order of visualisation sets [\#360](https://github.com/gisaia/ARLAS-wui-builder/issues/360) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 - Choose circle size smaller than 5 [\#349](https://github.com/gisaia/ARLAS-wui-builder/issues/349)
 - Traduction / Description [\#318](https://github.com/gisaia/ARLAS-wui-builder/issues/318)
 - Show error message in popup when something went wrong [\#288](https://github.com/gisaia/ARLAS-wui-builder/issues/288)
 
 **Fixed bugs:**
 
-- \[MAP\] fix the minimum radius value [\#397](https://github.com/gisaia/ARLAS-wui-builder/issues/397)
+- Fix the minimum radius value [\#397](https://github.com/gisaia/ARLAS-wui-builder/issues/397) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 - DATA TABLE : Width of the tabs Data/render is not adapted \(too small\) \(resultlist\) [\#334](https://github.com/gisaia/ARLAS-wui-builder/issues/334)
 
 ## [v14.1.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.1.0) (2020-12-07)
@@ -31,15 +50,15 @@
 
 **New stuff:**
 
-- \[ANALYTIC BOARD\] Edit tab's title directly [\#381](https://github.com/gisaia/ARLAS-wui-builder/issues/381)
-- Make layers and visualisation sets lists optional [\#379](https://github.com/gisaia/ARLAS-wui-builder/issues/379)
-- \[HISTOGRAM\] Set number of buckets at 50 [\#369](https://github.com/gisaia/ARLAS-wui-builder/issues/369)
-- \[DONUT\] set donut size to 10 by default [\#366](https://github.com/gisaia/ARLAS-wui-builder/issues/366)
-- \[LAYER\]: switch "visibility" and "style" steps order [\#364](https://github.com/gisaia/ARLAS-wui-builder/issues/364)
-- \[LAYER\]: Hide collection step as we have always one [\#363](https://github.com/gisaia/ARLAS-wui-builder/issues/363)
-- Enhance the default 'look and feel' elements [\#359](https://github.com/gisaia/ARLAS-wui-builder/issues/359)
-- Set default search placeholder [\#358](https://github.com/gisaia/ARLAS-wui-builder/issues/358)
-- Enhance default configuration of the timeline [\#356](https://github.com/gisaia/ARLAS-wui-builder/issues/356)
+- Edit tab's title directly [\#381](https://github.com/gisaia/ARLAS-wui-builder/issues/381) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Make layers and visualisation sets lists optional [\#379](https://github.com/gisaia/ARLAS-wui-builder/issues/379) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- \[HISTOGRAM\] Set number of buckets at 50 [\#369](https://github.com/gisaia/ARLAS-wui-builder/issues/369) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- \[DONUT\] set donut size to 10 by default [\#366](https://github.com/gisaia/ARLAS-wui-builder/issues/366) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- \[LAYER\]: switch "visibility" and "style" steps order [\#364](https://github.com/gisaia/ARLAS-wui-builder/issues/364) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- \[LAYER\]: Hide collection step as we have always one [\#363](https://github.com/gisaia/ARLAS-wui-builder/issues/363) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Enhance the default 'look and feel' elements [\#359](https://github.com/gisaia/ARLAS-wui-builder/issues/359) [[LOOK AND FEEL](https://github.com/gisaia/ARLAS-wui-builder/labels/LOOK%20AND%20FEEL)]
+- Set default search placeholder [\#358](https://github.com/gisaia/ARLAS-wui-builder/issues/358) [[SEARCH](https://github.com/gisaia/ARLAS-wui-builder/labels/SEARCH)]
+- Enhance default configuration of the timeline [\#356](https://github.com/gisaia/ARLAS-wui-builder/issues/356) [[TIMELINE](https://github.com/gisaia/ARLAS-wui-builder/labels/TIMELINE)]
 - Add a spinner after loading the collections list [\#355](https://github.com/gisaia/ARLAS-wui-builder/issues/355)
 - Add missing english description [\#335](https://github.com/gisaia/ARLAS-wui-builder/issues/335)
 - Manage colors globally [\#213](https://github.com/gisaia/ARLAS-wui-builder/issues/213)
@@ -47,10 +66,10 @@
 **Fixed bugs:**
 
 - Don't reset writers/readers access on dashboard update [\#385](https://github.com/gisaia/ARLAS-wui-builder/issues/385)
-- \[DONUT\] removing a field doesn't work [\#368](https://github.com/gisaia/ARLAS-wui-builder/issues/368)
-- \[HEATMAP\] the opacity of heatmap layers doesn't work [\#365](https://github.com/gisaia/ARLAS-wui-builder/issues/365)
+- \[DONUT\] removing a field doesn't work [\#368](https://github.com/gisaia/ARLAS-wui-builder/issues/368) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- \[HEATMAP\] the opacity of heatmap layers doesn't work [\#365](https://github.com/gisaia/ARLAS-wui-builder/issues/365) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 - "Ajouter une couche de données" and "Ajouter un espace de visualisation" text is not wrapped inside the button [\#362](https://github.com/gisaia/ARLAS-wui-builder/issues/362)
-- Minimal zoom for cluster & Network analytics  [\#357](https://github.com/gisaia/ARLAS-wui-builder/issues/357)
+- Minimal zoom for cluster & Network analytics  [\#357](https://github.com/gisaia/ARLAS-wui-builder/issues/357) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 - Interpolation of width & radius to a field doesn't work [\#354](https://github.com/gisaia/ARLAS-wui-builder/issues/354)
 - Renaming a map layer causes crash [\#350](https://github.com/gisaia/ARLAS-wui-builder/issues/350)
 - MAP : add filter to a map layer [\#347](https://github.com/gisaia/ARLAS-wui-builder/issues/347)
