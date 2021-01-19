@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+if  [ -z "$GITHUB_CHANGELOG_TOKEN"  ] ; then echo "Please set GITHUB_CHANGELOG_TOKEN environment variable"; exit -1; fi
 
 function clean {
     ARG=$?
@@ -73,7 +74,7 @@ git push origin v${VERSION}
 
 echo "==> Generate CHANGELOG"
 docker run -it --rm -v "$(pwd)":/usr/local/src/your-app gisaia/github-changelog-generator:latest github_changelog_generator \
-  -u gisaia -p ARLAS-wui-builder --token 479b4f9b9390acca5c931dd34e3b7efb21cbf6d0 --no-pr-wo-labels --no-issues-wo-labels --no-unreleased \
+  -u gisaia -p ARLAS-wui-builder --token ${GITHUB_CHANGELOG_TOKEN} --no-pr-wo-labels --no-issues-wo-labels --no-unreleased \
   --issue-line-labels conf,documentation,ANALYTICS,"LOOK AND FEEL",MAP,SEARCH,SIDE,TIMELINE,WIDGET \
   --exclude-labels type:duplicate,type:question,type:wontfix,type:invalid \
   --bug-labels type:bug --enhancement-labels type:enhancement --breaking-labels type:breaking \
