@@ -80,7 +80,7 @@ export class MapInitService {
   // init the basemap array, only when creating a new configuration
   private initBasemap() {
     let basemaps: Basemap[] = [];
-    if (!!(this.settingsService.settings as any).basemaps) {
+    if (!!(this.settingsService.settings as any).basemaps && (this.settingsService.settings as any).basemaps.length > 0) {
       basemaps = (this.settingsService.settings as any).basemaps;
     } else {
       basemaps.push({
