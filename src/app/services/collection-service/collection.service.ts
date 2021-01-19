@@ -110,11 +110,12 @@ export class CollectionService {
       metric
     };
     this.spinner.show();
-
     return this.collabSearchService.getExploreApi().computePost(collection, computation, false, 120,
       this.collabSearchService.getFetchOptions()).then(ag => {
       this.spinner.hide();
-      return ag.value;
+
+      // Round the value returned by ARLAS SERVER to improve the lisibility
+      return Math.round(ag.value * 100) / 100;
     })
       .finally(() => this.spinner.hide());
   }

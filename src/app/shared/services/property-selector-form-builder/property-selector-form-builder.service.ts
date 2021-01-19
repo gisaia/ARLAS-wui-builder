@@ -381,9 +381,10 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                 const allValuesCtr = this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesCtrl;
                 // if we import a config we take the min value already in the config, else we calculate the min of the field
                 if (!!allValuesCtr.value && allValuesCtr.value.length > 2 &&
-                  allValuesCtr.value[0].proportion + '' !== NaN.toString()) {
+                  allValuesCtr.value[0].proportion + '' !== NaN.toString() &&
+                  !this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.touched) {
                   control.setValue(+allValuesCtr.value[0].proportion);
-                } else if (!control.value) {
+                } else {
                   collectionService.getComputationMetric(
                     collection,
                     this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value,
@@ -420,7 +421,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                 const allValuesCtr = this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesCtrl;
                 // if we import a config we take the max value already in the config, else we calculate the max of the field
                 if (!!allValuesCtr.value && allValuesCtr.value.length > 2 &&
-                  allValuesCtr.value[allValuesCtr.value.length - 1].proportion + '' !== NaN.toString()) {
+                  allValuesCtr.value[allValuesCtr.value.length - 1].proportion + '' !== NaN.toString()
+                  && !this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.touched) {
                   control.setValue(+allValuesCtr.value[allValuesCtr.value.length - 1].proportion);
                 } else {
                   collectionService.getComputationMetric(
@@ -466,10 +468,10 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                   || isAggregatedCount && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl.value;
 
                 const minValue = doNormalize || isAggregatedCount ?
-                  0.0 : parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl.value, 10);
+                  0.0 : parseFloat(this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl.value);
                 const maxValue = doNormalize ? 1.0 : isAggregatedCount ?
-                  parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedCountValueCtrl.value, 10) :
-                  parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value, 10);
+                  parseFloat(this.customControls.propertyInterpolatedFg.propertyInterpolatedCountValueCtrl.value) :
+                  parseFloat(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value);
                 const minInterpolatedValue = this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl.value;
                 const maxInterpolatedValue = this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl.value;
                 // if we import a config where we don't interpolate linearly, we will maintain this custom interpolation
@@ -481,10 +483,10 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                   +control.value[control.value.length - 1].value !== maxInterpolatedValue) {
                   control.setValue(
                     [...Array(6).keys()].map(k =>
-                      ({
-                        proportion: minValue + (maxValue - minValue) * k / 5,
-                        value: minInterpolatedValue + (maxInterpolatedValue - minInterpolatedValue) * k / 5
-                      })
+                    ({
+                      proportion: minValue + (maxValue - minValue) * k / 5,
+                      value: minInterpolatedValue + (maxInterpolatedValue - minInterpolatedValue) * k / 5
+                    })
                     )
                   );
                 }
@@ -506,12 +508,11 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
               !isAggregatedCount && this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
               || isAggregatedCount && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl.value;
             const isDensity = this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.heatmap_density;
-
             const min = doNormalize || isAggregatedCount || isDensity ?
-              0 : parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl.value, 10);
+              0 : parseFloat(this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl.value);
             const max = doNormalize || isDensity ? 1 : isAggregatedCount ?
               this.customControls.propertyInterpolatedFg.propertyInterpolatedCountValueCtrl.value :
-              parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value, 10);
+              parseFloat(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value);
 
             const paletteData: DialogPaletteSelectorData = {
               min,
@@ -671,8 +672,8 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
       this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT) {
       doEnable = true;
     } else if (!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
-      && !Number.isNaN(parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl.value, 10))
-      && !Number.isNaN(parseInt(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value, 10))) {
+      && !Number.isNaN(parseFloat(this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl.value))
+      && !Number.isNaN(parseFloat(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value))) {
       doEnable = true;
     } else if (!!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value
       && !this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeByKeyCtrl.value) {
