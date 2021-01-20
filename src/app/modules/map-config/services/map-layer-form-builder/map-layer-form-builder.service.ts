@@ -193,8 +193,12 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             resetDependantsOnChange: true,
             dependsOn: () => [this.geometryStep],
             onDependencyChange: (control) => {
+
               // Feature Mode and Feature Metric Mode
-              if (!!this.geometryStep.get('geometry') && !!this.geometryStep.get('geometry').value) {
+              if (
+                !!this.geometryStep.get('geometry') && !!this.geometryStep.get('geometry').value
+                && this.geometryStep.get('geometry').touched
+              ) {
                 (this.geometryStep.get('geometry') as SelectFormControl).sourceData.subscribe((fields: CollectionField[]) => {
                   fields.forEach(f => {
                     if (f.name === this.geometryStep.get('geometry').value) {
@@ -206,12 +210,18 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
               }
 
               // Cluster Mode
-              if (!!this.geometryStep.get('aggregatedGeometry') && !!this.geometryStep.get('aggregatedGeometry').value) {
+              if (
+                !!this.geometryStep.get('aggregatedGeometry') && !!this.geometryStep.get('aggregatedGeometry').value
+                && this.geometryStep.get('aggregatedGeometry').touched
+              ) {
                 (this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.geohash_center ||
                   this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.centroid ?
                   control.setValue(GEOMETRY_TYPE.circle) : control.setValue(GEOMETRY_TYPE.fill));
               }
-              if (!!this.geometryStep.get('rawGeometry') && !!this.geometryStep.get('rawGeometry').value) {
+              if (
+                !!this.geometryStep.get('rawGeometry') && !!this.geometryStep.get('rawGeometry').value
+                && this.geometryStep.get('rawGeometry').touched
+              ) {
                 (this.geometryStep.get('rawGeometry') as SelectFormControl).sourceData.subscribe((fields: CollectionField[]) => {
                   fields.forEach(f => {
                     if (f.name === this.geometryStep.get('rawGeometry').value) {
@@ -221,6 +231,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
                   });
                 });
               }
+
 
             }
           }
