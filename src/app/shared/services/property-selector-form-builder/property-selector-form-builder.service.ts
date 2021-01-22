@@ -444,6 +444,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
             resetDependantsOnChange: true,
             dependsOn: () => [
               this.customControls.propertySource,
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
               this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl,
               this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeByKeyCtrl,
               this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl,
@@ -514,6 +515,11 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
               this.customControls.propertyInterpolatedFg.propertyInterpolatedCountValueCtrl.value :
               parseFloat(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value);
 
+            // reset palette values if min or max not match the current min or max values
+            const allValuesCtr = this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesCtrl.value;
+            if (!!allValuesCtr && (allValuesCtr[0].proportion !== min || allValuesCtr[allValuesCtr.length - 1].proportion !== max)) {
+              this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesCtrl.setValue(null);
+            }
             const paletteData: DialogPaletteSelectorData = {
               min,
               max,
