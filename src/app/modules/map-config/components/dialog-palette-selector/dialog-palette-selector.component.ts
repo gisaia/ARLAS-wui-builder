@@ -83,7 +83,7 @@ export class DialogPaletteSelectorComponent implements OnInit {
   }
 
   private interpolateColor(color1: string, color2: string, step: number) {
-    return d3c.color(d3i.interpolateRgb(color1, color2)(step)).hex();
+    return d3c.color(d3i.interpolateRgb(color1, color2)(step)).formatHex();
   }
 
   public selectPalette(index: number) {

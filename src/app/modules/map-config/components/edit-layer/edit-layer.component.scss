@@ -20,12 +20,9 @@ under the License.
 @import "variables.scss";
 
 .action-buttons {
-    margin: 10px 0px 5px 0px;
-
     button {
-        margin-right: 5px;
+        margin: 0 5px 10px 0;
     }
-
 }
 
 .description {
@@ -37,7 +34,7 @@ under the License.
     border-left: 0.2rem solid $config-element-description-border-color;
     background-color: $config-element-description-background;
     border-radius: 4px;
-  }
+}
 
 .description:not(:empty) {
     margin-left: 36px;
