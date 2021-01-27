@@ -22,7 +22,7 @@ under the License.
     .basemaps {
         display: flex;
         flex-direction: row;
-        justify-content: center;
+        flex-wrap: wrap;
         .container {
             display: flex;
             flex-direction: column;
