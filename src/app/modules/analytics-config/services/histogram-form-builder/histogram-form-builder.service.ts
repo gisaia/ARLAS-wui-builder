@@ -88,14 +88,18 @@ export class HistogramFormGroup extends ConfigFormGroup {
               onDependencyChange: (control) =>
                 control.enableIf(this.customControls.dataStep.aggregation.value.aggregationFieldType === 'time')
             }
-          )
+          ),
+          showExportCsv: new SlideToggleFormControl(
+            '',
+            marker('export csv histogram'),
+            marker('export csv histogram description')
+          ),
         }).withTabName(marker('Render')),
         unmanagedFields: new FormGroup({
           dataStep: new FormGroup({
             isOneDimension: new FormControl(),
           }),
           renderStep: new FormGroup({
-            showExportCsv: new FormControl(),
             isHistogramSelectable: new FormControl(),
             topOffsetRemoveInterval: new FormControl(),
             leftOffsetRemoveInterval: new FormControl(),
@@ -135,14 +139,14 @@ export class HistogramFormGroup extends ConfigFormGroup {
       multiselectable: this.get('renderStep').get('multiselectable') as SlideToggleFormControl,
       chartType: this.get('renderStep').get('chartType') as SelectFormControl,
       showHorizontalLines: this.get('renderStep').get('showHorizontalLines') as SlideToggleFormControl,
-      ticksDateFormat: this.get('renderStep').get('ticksDateFormat') as SelectFormControl
+      ticksDateFormat: this.get('renderStep').get('ticksDateFormat') as SelectFormControl,
+      showExportCsv: this.get('renderStep').get('showExportCsv') as SlideToggleFormControl
     },
     unmanagedFields: {
       dataStep: {
         isOneDimension: this.get('unmanagedFields.dataStep.isOneDimension'),
       },
       renderStep: {
-        showExportCsv: this.get('unmanagedFields.renderStep.showExportCsv'),
         isHistogramSelectable: this.get('unmanagedFields.renderStep.isHistogramSelectable'),
         topOffsetRemoveInterval: this.get('unmanagedFields.renderStep.topOffsetRemoveInterval'),
         leftOffsetRemoveInterval: this.get('unmanagedFields.renderStep.leftOffsetRemoveInterval'),

@@ -145,7 +145,6 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
             isOneDimension: new FormControl(),
           }),
           renderStep: new FormGroup({
-            showExportCsv: new FormControl(),
             isHistogramSelectable: new FormControl(),
             topOffsetRemoveInterval: new FormControl(),
             leftOffsetRemoveInterval: new FormControl(),
@@ -197,7 +196,6 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
     },
     unmanagedFields: {
       renderStep: {
-        showExportCsv: this.get('unmanagedFields.renderStep.showExportCsv'),
         isHistogramSelectable: this.get('unmanagedFields.renderStep.isHistogramSelectable'),
         topOffsetRemoveInterval: this.get('unmanagedFields.renderStep.topOffsetRemoveInterval'),
         leftOffsetRemoveInterval: this.get('unmanagedFields.renderStep.leftOffsetRemoveInterval'),
