@@ -520,5 +520,11 @@
 	"StrokeWidth": "Epaisseur contour",
 	"StrokeColor": "Couleur contour",
 	"Fixed strokeWidth": "Epaisseur contour (px)",
-	"Fixed strokeOpacity": "Opacité contour"
+	"Fixed strokeOpacity": "Opacité contour",
+	"export csv histogram": "Export CSV",
+	"export csv histogram description": "Une fois activé, un bouton apparaîtra à côté de l'histogramme qui permet d'exporter son contenu en tant que fichier CSV",
+	"export csv donut": "Export CSV",
+	"export csv donut description": "Une fois activé, un bouton apparaîtra à côté du diagramme en anneau qui permet d'exporter son contenu en tant que fichier CSV",
+	"export csv powerbars": "Export CSV",
+	"export csv powerbars description": "Une fois activé, un bouton apparaîtra à côté des Powerbars qui permet d'exporter leurs contenus en tant que fichier CSV"
 }

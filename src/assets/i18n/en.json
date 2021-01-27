@@ -502,5 +502,11 @@
 	"StrokeWidth": "Stroke width",
 	"StrokeColor": "Stroke colour",
 	"Fixed strokeWidth": "Stroke width (px)",
-	"Fixed strokeOpacity": "Stroke opacity"
+	"Fixed strokeOpacity": "Stroke opacity",
+	"export csv histogram": "Export CSV",
+	"export csv histogram description": "If activated, a button will be displayed near the histogram to export its content as CSV file",
+	"export csv donut": "Export CSV",
+	"export csv donut description": "If activated, a button will be displayed near the donut to export its content as CSV file",
+	"export csv powerbars": "Export CSV",
+	"export csv powerbars description": "If activated, a button will be displayed near the powerbars to export its content as CSV file"
 }

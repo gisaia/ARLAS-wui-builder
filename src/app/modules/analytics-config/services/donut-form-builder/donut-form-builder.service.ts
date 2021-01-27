@@ -121,7 +121,12 @@ export class DonutConfigForm extends ConfigFormGroup {
               control.disabledButton = !this.customControls.dataStep.aggregationmodels.value
                 || Array.from(this.customControls.dataStep.aggregationmodels.value).length === 0;
             }
-          })
+        }),
+        showExportCsv: new SlideToggleFormControl(
+          '',
+          marker('export csv donut'),
+          marker('export csv donut description')
+        ),
       }).withTabName(marker('Render')),
       unmanagedFields: new FormGroup({
         renderStep: new FormGroup({
@@ -141,6 +146,7 @@ export class DonutConfigForm extends ConfigFormGroup {
       opacity: this.get('renderStep').get('opacity') as SliderFormControl,
       multiselectable: this.get('renderStep').get('multiselectable') as SlideToggleFormControl,
       keysToColorsButton: this.get('renderStep').get('keysToColorsButton') as ButtonFormControl,
+      showExportCsv: this.get('renderStep').get('showExportCsv') as SlideToggleFormControl
     },
     unmanagedFields: {
       renderStep: {

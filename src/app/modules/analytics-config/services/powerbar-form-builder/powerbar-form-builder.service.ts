@@ -131,6 +131,11 @@ export class PowerbarConfigForm extends ConfigFormGroup {
           '',
           marker('Display the filter'),
           marker('powerbar display filter description')
+        ),
+        showExportCsv: new SlideToggleFormControl(
+          '',
+          marker('export csv powerbars'),
+          marker('export csv powerbars description')
         )
       }).withTabName(marker('Render')),
       unmanagedFields: new FormGroup({}) // for consistency with other widgets form builders
@@ -147,6 +152,7 @@ export class PowerbarConfigForm extends ConfigFormGroup {
       useColorService: this.get('renderStep').get('useColorService') as SlideToggleFormControl,
       keysToColorsButton: this.get('renderStep').get('keysToColorsButton') as ButtonFormControl,
       displayFilter: this.get('renderStep').get('displayFilter') as SlideToggleFormControl,
+      showExportCsv: this.get('renderStep').get('showExportCsv') as SlideToggleFormControl,
     },
     unmanagedFields: {}
   };

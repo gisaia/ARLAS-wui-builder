@@ -715,7 +715,6 @@ export class ConfigExportHelper {
             const title = widgetData.title;
             const component = {
                 contributorId,
-                showExportCsv: unmanagedRenderFields.showExportCsv,
                 input: {
                     id: contributorId,
                     isHistogramSelectable: unmanagedRenderFields.isHistogramSelectable,
@@ -752,6 +751,7 @@ export class ConfigExportHelper {
             switch (widgetType) {
                 case WIDGET_TYPE.histogram: {
                     component.componentType = WIDGET_TYPE.histogram;
+                    component.showExportCsv = widgetData.renderStep.showExportCsv;
                     component.input.ticksDateFormat = widgetData.renderStep.ticksDateFormat;
                     component.input.customizedCssClass = widgetData.dataStep.aggregation.aggregationFieldType === 'numeric' ?
                         'arlas-histogram-analytics' : 'arlas-timeline-analytics';
@@ -760,6 +760,7 @@ export class ConfigExportHelper {
                 }
                 case WIDGET_TYPE.swimlane: {
                     component.componentType = WIDGET_TYPE.swimlane;
+                    component.showExportCsv = false;
                     const swimlaneInput = (component.input as AnalyticComponentSwimlaneInputConfig);
                     swimlaneInput.swimLaneLabelsWidth = unmanagedRenderFields.swimLaneLabelsWidth;
                     swimlaneInput.swimlaneHeight = unmanagedRenderFields.swimlaneHeight;
@@ -802,6 +803,7 @@ export class ConfigExportHelper {
         } else if (widgetType === WIDGET_TYPE.powerbars) {
             const component = {
                 contributorId,
+                showExportCsv: widgetData.renderStep.showExportCsv,
                 componentType: WIDGET_TYPE.powerbars,
                 input: {
                     chartTitle: widgetData.title,
@@ -819,6 +821,7 @@ export class ConfigExportHelper {
             const component = {
                 contributorId,
                 componentType: WIDGET_TYPE.donut,
+                showExportCsv: widgetData.renderStep.showExportCsv,
                 input: {
                     id: contributorId,
                     customizedCssClass: unmanagedRenderFields.customizedCssClass,

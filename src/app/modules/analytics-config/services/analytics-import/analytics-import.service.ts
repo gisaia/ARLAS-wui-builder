@@ -149,6 +149,10 @@ export class AnalyticsImportService {
       {
         value: component.input.ticksDateFormat,
         control: renderStep.ticksDateFormat
+      },
+      {
+        value: component.showExportCsv,
+        control: renderStep.showExportCsv
       }
     ]);
 
@@ -262,10 +266,6 @@ export class AnalyticsImportService {
 
     const unmanagedFields = histogramFg.customControls.unmanagedFields;
     return [
-      {
-        value: component.showExportCsv,
-        control: unmanagedFields.renderStep.showExportCsv
-      },
       {
         value: component.input.isHistogramSelectable,
         control: unmanagedFields.renderStep.isHistogramSelectable
@@ -431,6 +431,10 @@ export class AnalyticsImportService {
       {
         value: component.input.useColorService,
         control: renderStep.useColorService
+      },
+      {
+        value: component.showExportCsv,
+        control: renderStep.showExportCsv
       }
     ]);
     return widgetData;
@@ -462,6 +466,10 @@ export class AnalyticsImportService {
       {
         value: component.input.multiselectable,
         control: renderStep.multiselectable
+      },
+      {
+        value: component.showExportCsv,
+        control: renderStep.showExportCsv
       }
     ]);
 
