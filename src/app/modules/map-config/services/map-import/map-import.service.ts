@@ -32,9 +32,7 @@ import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-glob
 import { COUNT_OR_METRIC } from '@shared-services/property-selector-form-builder/models';
 import { VisualisationSetConfig, BasemapStyle } from 'arlas-web-components';
 import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
-import { CollectionService } from '@services/collection-service/collection.service';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MapBasemapFormBuilderService } from '../map-basemap-form-builder/map-basemap-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -362,17 +360,14 @@ export class MapImportService {
     isColor: boolean,
     isAggregated: boolean,
     layerSource: LayerSourceConfig) {
+
     if (typeof inputValues === 'string' || typeof inputValues === 'number') {
       propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.fix;
       propertySelectorValues.propertyFix = inputValues;
 
     } else if (inputValues instanceof Array) {
-      if (inputValues.length === 2 || inputValues.length === 3) {
+      if (inputValues.length === 2) {
         const field = (inputValues as Array<string>)[1];
-        let label = '';
-        if (inputValues.length === 3) {
-          label = (inputValues as Array<string>)[2];
-        }
         if (field.endsWith('_color') && layerSource.colors_from_fields) {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.generated;
           propertySelectorValues.propertyGeneratedFieldCtrl = layerSource.colors_from_fields
