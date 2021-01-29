@@ -44,10 +44,307 @@ under the License.
       }
     }
 
-    .preview-group{
+    .preview-group {
       width: 500px;
+      ::ng-deep .analytics-board-panel-title {
+        font-size: 16px;
+        font-weight: 300;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+      }
 
-      .title{
+      ::ng-deep .histogram__description {
+        display: none;
+      }
+
+      ::ng-deep .arlas-metric-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+
+        .arlas-metric-title {
+          text-align: center;
+          white-space: nowrap;
+        }
+
+        .arlas-metric-content {
+          .arlas-metric-value {
+            font-weight: 400;
+            font-size: 1.8em;
+            padding: 5px 0;
+            white-space: nowrap;
+          }
+        }
+
+        .arlas-metric-description {
+          font-size: 1.3rem;
+          font-weight: 100;
+        }
+      }
+
+      ::ng-deep .arlas-histogram-analytics {
+        .histogram__description {
+          display: none;
+        }
+        
+        .histogram__chart--current-selected--area {
+          fill: #80cbc4;
+          fill-opacity: 1;
+          stroke: #80cbc4;
+          stroke-width: 1px;
+          stroke-opacity: 1;
+        }
+        
+        .histogram__chart--fixed-selected--area {
+          fill: #80cbc4;
+          fill-opacity: 1;
+          stroke: none;
+        }
+        
+        .histogram__chart--unselected--area {
+          fill: #eeeeee;
+          fill-opacity: 1;
+          stroke: none;
+        }
+        
+        .histogram__chart .context .brush .selection {
+          fill: #bdbdbd;
+          fill-opacity: 0.2;
+          stroke: none;
+        }
+        
+        .histogram__chart--bar__currentselection{
+          fill: #FFF !important;
+          stroke: #a5a5a5 !important;
+          stroke-width: 0.4px;
+        }
+        .histogram__chart--bar__partlyselected
+        {
+          fill: #FFF !important;
+          stroke: #a5a5a5 !important;
+          stroke-width: 0.4px;
+        }
+        .histogram__chart--bar__fullyselected
+        {
+          fill: #FFF !important;
+          stroke: #a5a5a5 !important;
+          stroke-width: 0.4px;
+        }
+        .histogram__chart--bar
+        {
+          fill: #FFF !important;
+          stroke: #b7b7b7 !important;
+          stroke-width: 0.4px;
+          stroke-opacity: 1;
+        }
+        
+        .headband_currentselection
+        {
+          fill: #4ECDC4 !important;
+          stroke: #4ECDC4 !important;
+          stroke-width: 0.4px !important;;
+          height: 1.5px !important;
+        }
+        
+        .headband_currentselection_max
+        {
+          fill: rgb(238, 35, 69) !important;
+          stroke: rgb(238, 35, 69) !important;
+          stroke-width: 0.4px !important;;
+          height: 1.5px !important;
+        }
+        .headband_partlyselected
+        {
+          fill: #4ECDC4 !important;
+          stroke: #4ECDC4 !important;
+          stroke-width: 0.4px !important;
+          height: 1.5px !important;
+        }
+        .headband_fullyselected{
+          fill: #4ECDC4 !important;
+          stroke: #4ECDC4 !important;
+          stroke-width: 0.4px !important;
+          height: 1.5px !important;
+        }
+        .headband_notselected
+        {
+          fill: #FFF !important;
+          stroke: #b7b7b7 !important;
+          stroke-width: 0 !important;
+          height: 0 !important;
+        }
+        
+        
+        .histogram__brush--handles {
+          stroke: #78909c;
+          stroke-width: 1px;
+          fill: white;
+        }
+        
+        .tick text {
+          fill: #bdbdbd;
+          font-size: 0.9em;
+        }
+        
+        .histogram__ticks {
+          stroke: #bdbdbd;
+          stroke-width: 0.8px;
+        }
+        .histogram__axis {
+          stroke: #bdbdbd;
+          stroke-width: 0.8px;
+        }
+        
+        .histogram__only-axis .domain {
+          stroke: #bdbdbd;
+          stroke-width: 0.8px;
+        }
+      }
+
+      ::ng-deep .arlas-timeline-analytics{
+        .histogram__description {
+          display: none;
+        }
+        
+        .histogram__chart--current-selected--area {
+          fill: #4ecdc4;
+          fill-opacity: 1;
+          stroke: #4ecdc4;
+          stroke-width: 1px;
+          stroke-opacity: 1;
+        }
+        
+        .histogram__chart--fixed-selected--area {
+          fill: #4ecdc4;
+          fill-opacity: 1;
+          stroke: none;
+        }
+        
+        .histogram__chart--unselected--area {
+          fill: #eeeeee;
+          fill-opacity: 1;
+          stroke: none;
+        }
+        
+        .histogram__chart .context .brush .selection {
+          fill: #4ecdc4;
+          fill-opacity: 0;
+          stroke: none;
+        }
+        
+        .histogram__chart--bar__partlyselected {
+          fill: #4ecdc4;
+          fill-opacity: 1;
+          stroke: none;
+        }
+        
+        .histogram__chart--bar__currentselection {
+          fill: #4ecdc4;
+          fill-opacity: 1;
+          stroke: none;
+        }
+        
+        .histogram__chart--bar__fullyselected {
+          fill: #4ecdc4;
+          fill-opacity: 1;
+          stroke: none;
+        }
+        
+        .histogram__chart--bar {
+          fill: #eeeeee;
+          fill-opacity: 1;
+          stroke: none;
+        }
+        
+        .histogram__brush--handles {
+          stroke: #78909c;
+          stroke-width: 1px;
+          fill: white;
+        }
+        
+        .tick text {
+          fill: #bdbdbd;
+          font-size: 0.9em;
+        }
+        
+        .histogram__ticks {
+          stroke: #bdbdbd;
+          stroke-width: 0.8px;
+        }
+        .histogram__axis {
+          stroke: #bdbdbd;
+          stroke-width: 0.8px;
+        }
+        
+        .histogram__only-axis .domain {
+          stroke: #bdbdbd;
+          stroke-width: 0.8px;
+        }
+        
+        
+        /** TIMELINE BARS**/
+        .histogram__chart--bar__currentselection{
+          fill: #FFF !important;
+          stroke: #a5a5a5 !important;
+          stroke-width: 0.4px;
+        }
+        .histogram__chart--bar__partlyselected
+        {
+          fill: #FFF !important;
+          stroke: #a5a5a5 !important;
+          stroke-width: 0.4px;
+        }
+        .histogram__chart--bar__fullyselected
+        {
+          fill: #FFF !important;
+          stroke: #a5a5a5 !important;
+          stroke-width: 0.4px;
+        }
+        .histogram__chart--bar
+        {
+          fill: #FFF !important;
+          stroke: #b7b7b7 !important;
+          stroke-width: 0.4px;
+          stroke-opacity: 1;
+        }
+        /** TIMELINE HEADBANDS**/
+        .headband_currentselection
+        {
+          fill: #2196F3 !important;
+          stroke: #2196F3 !important;
+          stroke-width: 0.4px !important;;
+          height: 1.5px !important;
+        }
+        .headband_currentselection_max
+        {
+          fill: rgb(201, 0, 100) !important;
+          stroke: rgb(201, 0, 100) !important;
+          stroke-width: 0.4px !important;;
+          height: 1.5px !important;
+        }
+        .headband_partlyselected
+        {
+          fill: #2196F3 !important;
+          stroke: #2196F3 !important;
+          stroke-width: 0.4px !important;
+          height: 1.5px !important;
+        }
+        .headband_fullyselected{
+          fill: #2196F3 !important;
+          stroke: #2196F3 !important;
+          stroke-width: 0.4px !important;
+          height: 1.5px !important;
+        }
+        .headband_notselected
+        {
+          fill: #FFF !important;
+          stroke: #b7b7b7 !important;
+          stroke-width: 0 !important;
+          height: 0 !important;
+        }
+      }
+
+      .title {
         font-weight: bold;
       }
     }
