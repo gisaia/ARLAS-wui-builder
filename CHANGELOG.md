@@ -1,8 +1,27 @@
 # Change Log
 
-## [v14.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.2.3) (2021-01-22)
+## [v14.3.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.3.0) (2021-02-01)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.2.3...v14.3.0)
+
+**New stuff:**
+
+- Activate CSV export for widgets [\#428](https://github.com/gisaia/ARLAS-wui-builder/issues/428) [[WIDGET](https://github.com/gisaia/ARLAS-wui-builder/labels/WIDGET)]
+
+**Fixed bugs:**
+
+- Allow 'localhost' in Tagger urls [\#439](https://github.com/gisaia/ARLAS-wui-builder/issues/439)
+- Columns & Details layouts don't have the same size [\#435](https://github.com/gisaia/ARLAS-wui-builder/issues/435) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Editing a dashboard get stuck in "Landing page" [\#432](https://github.com/gisaia/ARLAS-wui-builder/issues/432)
+
+## [v14.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.2.3) (2021-01-25)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.2.2...v14.2.3)
+
+**Fixed bugs:**
+
+- Interpolation of negative values to color palette is not working [\#425](https://github.com/gisaia/ARLAS-wui-builder/issues/425) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Interpolation of color to values between 0 - 1 is not working [\#407](https://github.com/gisaia/ARLAS-wui-builder/issues/407)
 
 ## [v14.2.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.2.2) (2021-01-19)
 
