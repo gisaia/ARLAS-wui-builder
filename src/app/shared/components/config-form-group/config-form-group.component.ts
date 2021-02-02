@@ -76,6 +76,11 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.toUnsubscribe.forEach(u => u.unsubscribe());
+    this.stepper = null;
+    this.subConfigFormGroups = null;
+    this.configFormGroup = null;
+    this.isSubGroup = null;
+    this.defaultKey = null;
   }
 
 

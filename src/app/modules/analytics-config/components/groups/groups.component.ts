@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
@@ -35,21 +35,27 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 import { Subject } from 'rxjs/internal/Subject';
 import { debounceTime } from 'rxjs/operators';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { AnalyticsBoardComponent } from 'arlas-wui-toolkit/components/analytics-board/analytics-board.component';
 import { ArlasColorService } from 'arlas-web-components/services/color.generator.service';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.scss']
 })
-export class GroupsComponent implements OnInit {
+export class GroupsComponent implements OnInit, OnDestroy {
 
   @Input() public contentFg: FormGroup;
+  @ViewChild('analyticsBoard', { static: false }) public analyticsBoard: AnalyticsBoardComponent;
 
   public updateDisplay: Subject<any> = new Subject<any>();
 
   public groupsPreview = [];
+
+  private afterClosedSub: Subscription;
+
 
   constructor(
     private defaultValuesService: DefaultValuesService,
@@ -87,7 +93,7 @@ export class GroupsComponent implements OnInit {
       data: { message: 'delete this group' }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    this.afterClosedSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
         let currentContributors = this.configService.getValue('arlas.web.contributors') as Array<ContributorConfig>;
         if (currentContributors !== undefined) {
@@ -129,5 +135,15 @@ export class GroupsComponent implements OnInit {
   public drop(event: CdkDragDrop<string[]>) {
     moveItemInFormArray(event.previousIndex, event.currentIndex, this.groupsFa);
     this.updateAnalytics();
+  }
+
+  public ngOnDestroy() {
+    if (this.afterClosedSub) { this.afterClosedSub.unsubscribe(); }
+    if (this.updateDisplay) { this.updateDisplay.unsubscribe(); }
+    // TODO: activate when toolkit updated
+    // this.analyticsBoard.ngOnDestroy();
+    this.analyticsBoard = null;
+    this.groupsPreview = null;
+    this.contentFg = null;
   }
 }

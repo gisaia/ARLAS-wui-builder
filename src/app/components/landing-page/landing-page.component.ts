@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, Output, Inject } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Output, Inject, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -25,7 +25,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { ArlasConfigService, ConfigAction, ConfigActionEnum } from 'arlas-wui-toolkit';
 import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 import { NGXLogger } from 'ngx-logger';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { StartupService, ZONE_WUI_BUILDER } from '../../services/startup/startup.service';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MapConfig } from '@services/main-form-manager/models-map-config';
@@ -59,7 +59,7 @@ export interface Configuration {
   templateUrl: './landing-page-dialog.component.html',
   styleUrls: ['./landing-page-dialog.component.scss']
 })
-export class LandingPageDialogComponent implements OnInit {
+export class LandingPageDialogComponent implements OnInit, OnDestroy {
   @Output() public startEvent: Subject<boolean> = new Subject<boolean>();
 
   public configChoice = InitialChoice.none;
@@ -80,6 +80,11 @@ export class LandingPageDialogComponent implements OnInit {
   private errorAlreadyThrown = false;
   public name: string;
   public avatar: string;
+
+  private subscription: Subscription;
+  private urlSubscription: Subscription;
+  private urlCollectionsSubscription: Subscription;
+  private collectionsSubscription: Subscription;
 
   constructor(
     public dialogRef: MatDialogRef<LandingPageDialogComponent>,
@@ -121,7 +126,7 @@ export class LandingPageDialogComponent implements OnInit {
       this.startingConfigFormBuilder.build()
     );
     const claims = this.authService.identityClaims as any;
-    this.authService.canActivateProtectedRoutes.subscribe(isAuthenticated => {
+    this.subscription = this.authService.canActivateProtectedRoutes.subscribe(isAuthenticated => {
       // show login button when authentication is enabled in settings.yaml file && the app is not authenticated
       this.showLoginButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent && !isAuthenticated;
       this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent && isAuthenticated;
@@ -144,6 +149,13 @@ export class LandingPageDialogComponent implements OnInit {
     }
   }
 
+  public ngOnDestroy() {
+    if (this.subscription) { this.subscription.unsubscribe(); }
+    if (this.urlSubscription) { this.urlSubscription.unsubscribe(); }
+    if (this.urlCollectionsSubscription) { this.urlCollectionsSubscription.unsubscribe(); }
+    if (this.collectionsSubscription) { this.collectionsSubscription.unsubscribe(); }
+  }
+
   public logout() {
     this.authService.logout();
   }
@@ -161,10 +173,10 @@ export class LandingPageDialogComponent implements OnInit {
   public checkUrl() {
     this.spinner.show('connectServer');
     const url = this.mainFormService.startingConfig.getFg().get('serverUrl').value;
-    this.http.get(url + '/swagger.json').subscribe(
+    this.urlSubscription = this.http.get(url + '/swagger.json').subscribe(
       () => {
         this.getServerCollections(url).then(() => {
-          this.configDescritor.getAllCollections().subscribe(collections => {
+          this.urlCollectionsSubscription = this.configDescritor.getAllCollections().subscribe(collections => {
             this.availablesCollections = collections;
           }, error => this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'))
             , () => this.spinner.hide('connectServer'));
@@ -188,7 +200,7 @@ export class LandingPageDialogComponent implements OnInit {
 
   public initWithConfig(configJson: Config, configMapJson: MapConfig, configId?: string, configName?: string) {
     this.getServerCollections(configJson.arlas.server.url).then(() => {
-      this.configDescritor.getAllCollections().subscribe(collections => {
+      this.collectionsSubscription = this.configDescritor.getAllCollections().subscribe(collections => {
         const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
 
         if (!collection) {
@@ -399,7 +411,7 @@ export class LandingPageDialogComponent implements OnInit {
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.scss']
 })
-export class LandingPageComponent implements OnInit, AfterViewInit {
+export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Output() public startEvent: Subject<boolean> = new Subject<boolean>();
   public dialogRef: MatDialogRef<LandingPageDialogComponent>;
@@ -436,6 +448,10 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
       this.router.navigate(['map-config'], { queryParamsHandling: 'preserve' });
       this.logger.info(this.translate.instant('Ready to access server'));
     });
+  }
+
+  public ngOnDestroy() {
+    this.startEvent.unsubscribe();
   }
 }
 

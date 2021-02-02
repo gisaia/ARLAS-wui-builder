@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Directive, ElementRef, Input, AfterContentInit } from '@angular/core';
+import { Directive, ElementRef, Input, AfterContentInit, OnDestroy } from '@angular/core';
 
 /**
  * Autofocus on a field once it is inserted into the DOM (it can be from a "*ngIf")
@@ -24,16 +24,22 @@ import { Directive, ElementRef, Input, AfterContentInit } from '@angular/core';
 @Directive({
   selector: '[appAutoFocus]'
 })
-export class AutoFocusDirective implements AfterContentInit {
+export class AutoFocusDirective implements AfterContentInit, OnDestroy {
 
   @Input() public appAutoFocus: boolean;
   constructor(private el: ElementRef) {
   }
 
   public ngAfterContentInit() {
+    let elem = this.el;
     setTimeout(() => {
-      this.el.nativeElement.focus();
+      elem.nativeElement.focus();
+      elem = null;
     }, 500);
 
+  }
+
+  public ngOnDestroy() {
+    this.appAutoFocus = null;
   }
 }

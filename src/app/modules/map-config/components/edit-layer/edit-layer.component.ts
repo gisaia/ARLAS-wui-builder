@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, AfterContentChecked, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterContentChecked, ChangeDetectorRef, ViewChild, OnDestroy } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
@@ -26,6 +26,7 @@ import { LAYER_MODE } from './models';
 import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { KeywordColor } from '../dialog-color-table/models';
+import { Subscription } from 'rxjs';
 import {
   MapVisualisationFormBuilderService
 } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
@@ -35,7 +36,7 @@ import {
   templateUrl: './edit-layer.component.html',
   styleUrls: ['./edit-layer.component.scss']
 })
-export class EditLayerComponent implements OnInit, CanComponentExit, AfterContentChecked {
+export class EditLayerComponent implements OnInit, CanComponentExit, AfterContentChecked, OnDestroy {
 
   private layersFa: FormArray;
   private visualisationsFa: FormArray;
@@ -43,6 +44,8 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
   public forceCanExit: boolean;
   public LAYER_MODE = LAYER_MODE;
   public layerFg: MapLayerFormGroup;
+
+  private routerSub: Subscription;
 
   @ViewChild(ConfigFormGroupComponent, { static: false }) private configFormGroupComponent: ConfigFormGroupComponent;
 
@@ -66,7 +69,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
       this.navigateToParentPage();
     } else {
       this.layersValues = this.layersFa.value as any[];
-      this.route.paramMap.subscribe(params => {
+      this.routerSub = this.route.paramMap.subscribe(params => {
         const layerId = params.get('id');
         this.layerFg = this.mapLayerFormBuilder.buildLayer(!!layerId);
         if (layerId != null) {
@@ -170,7 +173,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
         });
         visu.include ? layersSet.add(layerName) : layersSet.delete(layerName);
         v.layers = Array.from(layersSet);
-        v.displayed  = (v.displayed === undefined) ? true : v.displayed;
+        v.displayed = (v.displayed === undefined) ? true : v.displayed;
       });
 
       this.visualisationsFa.setValue(visualisationValue);
@@ -200,5 +203,16 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
     // fix ExpressionChangedAfterItHasBeenCheckedError
     this.cdref.detectChanges();
   }
+
+  public ngOnDestroy() {
+    if (this.routerSub) { this.routerSub.unsubscribe(); }
+    this.configFormGroupComponent = null;
+    this.layersFa = null;
+    this.visualisationsFa = null;
+    this.layersValues = null;
+    this.forceCanExit = null;
+    this.LAYER_MODE = null;
+    this.layerFg = null;
+}
 
 }

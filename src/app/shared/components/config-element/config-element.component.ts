@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, ContentChild, Input, OnInit } from '@angular/core';
+import { Component, ContentChild, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormControlName, FormGroupDirective } from '@angular/forms';
 
 @Component({
@@ -24,7 +24,7 @@ import { FormControlName, FormGroupDirective } from '@angular/forms';
   templateUrl: './config-element.component.html',
   styleUrls: ['./config-element.component.scss']
 })
-export class ConfigElementComponent implements OnInit {
+export class ConfigElementComponent implements OnInit, OnDestroy {
 
   @ContentChild(FormControlName, { static: true }) public formControl: FormControlName;
   @Input() public fullSize = false;
@@ -32,5 +32,10 @@ export class ConfigElementComponent implements OnInit {
   constructor(public formGroupDirective: FormGroupDirective) { }
 
   public ngOnInit() { }
+
+  public ngOnDestroy() {
+    this.formControl = null;
+    this.fullSize = null;
+  }
 
 }

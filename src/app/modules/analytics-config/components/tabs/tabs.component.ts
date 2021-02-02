@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
@@ -29,19 +29,24 @@ import { MatDialog } from '@angular/material/dialog';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { MatTabGroup } from '@angular/material/tabs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.scss']
 })
-export class TabsComponent {
+export class TabsComponent implements OnDestroy {
 
   public tabsFa: FormArray;
   public editingTabIndex = -1;
   public editingTabName = '';
   public isEditingTab = false;
   @ViewChild('matTabGroup', { static: false }) private matTabGroup: MatTabGroup;
+
+  private newAfterClosedSub: Subscription;
+  private removeAfterClosedSub: Subscription;
+  private finishAfterClosedSub: Subscription;
 
   constructor(
     private defaultValuesService: DefaultValuesService,
@@ -64,7 +69,7 @@ export class TabsComponent {
 
   public newTab() {
     const dialogRef = this.dialog.open(InputModalComponent);
-    dialogRef.afterClosed().subscribe(tabName => {
+    this.newAfterClosedSub = dialogRef.afterClosed().subscribe(tabName => {
       if (tabName) {
         this._addTab(tabName);
       }
@@ -105,7 +110,7 @@ export class TabsComponent {
       data: { message: 'delete this tab' }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    this.removeAfterClosedSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.tabsFa.removeAt(tabIndex);
         this.matTabGroup.selectedIndex = Math.min(tabIndex, this.tabsFa.controls.length - 1);
@@ -135,7 +140,7 @@ export class TabsComponent {
             noCancel: true
           }
         });
-        dialogRef.afterClosed().subscribe(tabName => {
+        this.finishAfterClosedSub = dialogRef.afterClosed().subscribe(tabName => {
           updateByCheckingDuplicates(tabName);
         });
       } else {
@@ -169,6 +174,17 @@ export class TabsComponent {
 
   public tabHasError(index: number) {
     return this.tabsFa.at(index).invalid && isFullyTouched(this.tabsFa.at(index));
+  }
+
+  public ngOnDestroy() {
+    this.matTabGroup = null;
+    this.tabsFa = null;
+    this.editingTabIndex = null;
+    this.editingTabName = null;
+    this.isEditingTab = null;
+    if (this.newAfterClosedSub) { this.newAfterClosedSub.unsubscribe(); }
+    if (this.removeAfterClosedSub) { this.removeAfterClosedSub.unsubscribe(); }
+    if (this.finishAfterClosedSub) { this.finishAfterClosedSub.unsubscribe(); }
   }
 
 }

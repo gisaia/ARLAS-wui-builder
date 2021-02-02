@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 @Component({
@@ -24,7 +24,7 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
   templateUrl: './color-picker-wrapper.component.html',
   styleUrls: ['./color-picker-wrapper.component.scss']
 })
-export class ColorPickerWrapperComponent implements OnInit {
+export class ColorPickerWrapperComponent implements OnInit, OnDestroy {
 
   @Input() public value: string;
   @Output() private setValue = new EventEmitter<string>();
@@ -34,6 +34,11 @@ export class ColorPickerWrapperComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
+  }
+
+  public ngOnDestroy() {
+    this.value = null;
+    this.setValue = null;
   }
 
   public setColor(color: string) {

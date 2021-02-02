@@ -16,13 +16,14 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { getFieldProperties } from 'arlas-wui-toolkit/tools/utils';
 import { CollectionReferenceDescriptionProperty, CollectionReferenceDescription } from 'arlas-api';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { Subscription } from 'rxjs';
 
 interface FlatDescription {
   expandable: boolean;
@@ -46,7 +47,7 @@ const TypeEnum = CollectionReferenceDescriptionProperty.TypeEnum;
   templateUrl: './collection.component.html',
   styleUrls: ['./collection.component.scss']
 })
-export class CollectionComponent implements OnInit {
+export class CollectionComponent implements OnInit, OnDestroy {
 
   public getFieldProperties = getFieldProperties;
   public TypeEnum = TypeEnum;
@@ -59,6 +60,7 @@ export class CollectionComponent implements OnInit {
 
   public dataSource;
   public treeFlattener;
+  private collectionSubscription: Subscription;
 
   public hasChild = (_: number, node: FlatDescription) => node.expandable;
 
@@ -81,7 +83,7 @@ export class CollectionComponent implements OnInit {
 
   public ngOnInit() {
     this.mainService.getCollections().forEach(collection => {
-      this.arlasCss.describe(collection)
+      this.collectionSubscription = this.arlasCss.describe(collection)
         .subscribe(collectionRef => {
           const treeControl = new FlatTreeControl<FlatDescription>(node => node.level, node => node.expandable);
           const dataSource = new MatTreeFlatDataSource(treeControl, this.treeFlattener);
@@ -104,5 +106,10 @@ export class CollectionComponent implements OnInit {
       object.name = key;
       return object;
     });
+  }
+
+  public ngOnDestroy() {
+    if (this.collectionSubscription) { this.collectionSubscription.unsubscribe(); }
+    this.collectionsDef = [];
   }
 }

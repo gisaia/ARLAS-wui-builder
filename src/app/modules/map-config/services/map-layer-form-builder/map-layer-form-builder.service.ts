@@ -199,13 +199,14 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
                 !!this.geometryStep.get('geometry') && !!this.geometryStep.get('geometry').value
                 && this.geometryStep.get('geometry').touched
               ) {
-                (this.geometryStep.get('geometry') as SelectFormControl).sourceData.subscribe((fields: CollectionField[]) => {
+                const sub = (this.geometryStep.get('geometry') as SelectFormControl).sourceData.subscribe((fields: CollectionField[]) => {
                   fields.forEach(f => {
                     if (f.name === this.geometryStep.get('geometry').value) {
                       f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT ?
                         control.setValue(GEOMETRY_TYPE.circle) : control.setValue(GEOMETRY_TYPE.line);
                     }
                   });
+                  sub.unsubscribe();
                 });
               }
 
@@ -222,14 +223,16 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
                 !!this.geometryStep.get('rawGeometry') && !!this.geometryStep.get('rawGeometry').value
                 && this.geometryStep.get('rawGeometry').touched
               ) {
-                (this.geometryStep.get('rawGeometry') as SelectFormControl).sourceData.subscribe((fields: CollectionField[]) => {
-                  fields.forEach(f => {
-                    if (f.name === this.geometryStep.get('rawGeometry').value) {
-                      f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT ?
-                        control.setValue(GEOMETRY_TYPE.circle) : control.setValue(GEOMETRY_TYPE.fill);
-                    }
+                const sub = (this.geometryStep.get('rawGeometry') as SelectFormControl).sourceData.subscribe(
+                  (fields: CollectionField[]) => {
+                    fields.forEach(f => {
+                      if (f.name === this.geometryStep.get('rawGeometry').value) {
+                        f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT ?
+                          control.setValue(GEOMETRY_TYPE.circle) : control.setValue(GEOMETRY_TYPE.fill);
+                      }
+                    });
+                    sub.unsubscribe();
                   });
-                });
               }
 
 

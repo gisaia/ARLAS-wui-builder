@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Directive, ElementRef, Input, OnInit, Optional } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit, Optional, OnDestroy } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { MatSelect } from '@angular/material/select';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
@@ -24,6 +24,7 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 import { NGXLogger } from 'ngx-logger';
 import { ConfigFormControl } from '@shared-models/config-form';
 import { MatButtonToggleGroup } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 /**
  * Reset the dependants fields when the directive component value changes
@@ -32,10 +33,14 @@ import { MatButtonToggleGroup } from '@angular/material';
 @Directive({
   selector: '[appResetOnChange]'
 })
-export class ResetOnChangeDirective implements OnInit {
+export class ResetOnChangeDirective implements OnInit, OnDestroy {
 
   @Input() private dependants: AbstractControl[];
   @Input('appResetOnChange') private defaultValuePrefix: string;
+
+  private matSelectChangeSub: Subscription;
+  private matSlideChangeSub: Subscription;
+  private matButtonChangeSub: Subscription;
 
   constructor(
     private elementRef: ElementRef<HTMLInputElement>,
@@ -49,12 +54,12 @@ export class ResetOnChangeDirective implements OnInit {
     if (!this.defaultValuePrefix) {
       return;
     } else if (this.matSelect) {
-      this.matSelect.valueChange.subscribe((value: any) => this.resetDependants());
+      this.matSelectChangeSub = this.matSelect.valueChange.subscribe((value: any) => this.resetDependants());
     } else if (this.matSlideToggle) {
-      this.matSlideToggle.change.subscribe(
+      this.matSlideChangeSub = this.matSlideToggle.change.subscribe(
         (event: MatSlideToggleChange) => this.resetDependants());
     } else if (this.matButtonToggle) {
-      this.matButtonToggle.change.subscribe(
+      this.matButtonChangeSub = this.matButtonToggle.change.subscribe(
         event => this.resetDependants());
     } else {
       // at least we guess this is a regulr html input
@@ -62,6 +67,14 @@ export class ResetOnChangeDirective implements OnInit {
         this.resetDependants();
       };
     }
+  }
+
+  public ngOnDestroy() {
+    this.defaultValuePrefix = null;
+    this.dependants = null;
+    if (this.matSelectChangeSub) { this.matSelectChangeSub.unsubscribe(); }
+    if (this.matSlideChangeSub) { this.matSlideChangeSub.unsubscribe(); }
+    if (this.matSlideChangeSub) { this.matSlideChangeSub.unsubscribe(); }
   }
 
   private resetDependants() {

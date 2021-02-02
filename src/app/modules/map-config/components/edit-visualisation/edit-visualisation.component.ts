@@ -16,47 +16,44 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, AfterContentChecked, ChangeDetectorRef, ViewChild, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { NGXLogger } from 'ngx-logger';
-import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import {
   MapVisualisationFormGroup,
   MapVisualisationFormBuilderService
 } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-edit-visualisation',
   templateUrl: './edit-visualisation.component.html',
   styleUrls: ['./edit-visualisation.component.scss']
 })
-export class EditVisualisationComponent implements OnInit, CanComponentExit {
+export class EditVisualisationComponent implements OnInit, CanComponentExit, OnDestroy {
 
-  private layersFa: FormArray;
   private visualisationsFa: FormArray;
   private visualisationsValues: any[] = [];
   public forceCanExit: boolean;
   public visualisationFg: MapVisualisationFormGroup;
   public layers = new Array<string>();
 
-  @ViewChild(ConfigFormGroupComponent, { static: false }) private configFormGroupComponent: ConfigFormGroupComponent;
+  public routerSub: Subscription;
 
   constructor(
     protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
     private mainFormService: MainFormService,
     private route: ActivatedRoute,
     private router: Router,
-    private cdref: ChangeDetectorRef,
     private logger: NGXLogger) {
     this.visualisationFg = mapVisualisationFormBuilder.buildVisualisation();
   }
 
   public ngOnInit() {
-    this.layersFa = this.mainFormService.mapConfig.getLayersFa();
     this.visualisationsFa = this.mainFormService.mapConfig.getVisualisationsFa();
 
     if (this.visualisationsFa == null) {
@@ -65,7 +62,7 @@ export class EditVisualisationComponent implements OnInit, CanComponentExit {
     } else {
 
       this.visualisationsValues = this.visualisationsFa.value as any[];
-      this.route.paramMap.subscribe(params => {
+      this.routerSub = this.route.paramMap.subscribe(params => {
         const visualisationId = params.get('id');
         if (visualisationId != null) {
           // there we are editing an existing visualisation
@@ -85,7 +82,9 @@ export class EditVisualisationComponent implements OnInit, CanComponentExit {
     }
   }
 
-
+  public ngOnDestroy() {
+    if (this.routerSub) { this.routerSub.unsubscribe(); }
+  }
 
   private navigateToParentPage() {
     this.router.navigate(['', 'map-config', 'visualisations'], { queryParamsHandling: 'preserve' });

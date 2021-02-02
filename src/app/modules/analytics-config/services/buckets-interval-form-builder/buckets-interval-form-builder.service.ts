@@ -24,7 +24,7 @@ import {
   ButtonToggleFormControl
 } from '@shared-models/config-form';
 import { Interval, CollectionReferenceDescriptionProperty } from 'arlas-api';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { CollectionField } from '@services/collection-service/models';
 import { toOptionsObs } from '@services/collection-service/tools';
 import { integerValidator } from '@utils/validators';
@@ -67,11 +67,12 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           {
             dependsOn: () => [this.customControls.aggregationField],
             onDependencyChange: (control) => {
-              fieldsObs.subscribe(fields => {
+              const sub: Subscription = fieldsObs.subscribe(fields => {
                 const aggregationField = fields.find(f => f.name === this.customControls.aggregationField.value);
                 if (!!aggregationField) {
                   control.setValue(aggregationField.type === CollectionReferenceDescriptionProperty.TypeEnum.DATE ? 'time' : 'numeric');
                 }
+                sub.unsubscribe();
               });
             },
             optional: true
@@ -122,7 +123,7 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           {
             dependsOn: () => [this.customControls.aggregationBucketOrInterval, this.customControls.aggregationField],
             onDependencyChange: (control) => {
-              fieldsObs.subscribe(fields => {
+              const sub: Subscription = fieldsObs.subscribe(fields => {
                 if (this.customControls.aggregationBucketOrInterval.value === BY_BUCKET_OR_INTERVAL.INTERVAL &&
                   !!fields.find(f => f.name === this.customControls.aggregationField.value) &&
                   fields.find(f => f.name === this.customControls.aggregationField.value).type
@@ -131,6 +132,7 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
                 } else {
                   control.disable();
                 }
+                sub.unsubscribe();
               });
 
             }
