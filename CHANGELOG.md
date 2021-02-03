@@ -1,5 +1,13 @@
 # Change Log
 
+## [v14.3.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.3.1) (2021-02-03)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.3.0...v14.3.1)
+
+**Fixed bugs:**
+
+- Color picker is badly positioned if the page is scrolled [\#444](https://github.com/gisaia/ARLAS-wui-builder/issues/444) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
 ## [v14.3.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.3.0) (2021-02-01)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.2.3...v14.3.0)
