@@ -21,3 +21,7 @@ input.ngx-color-picker {
     height: 30px;
     margin: 10px 0px;
 }
+
+::ng-deep .color-picker {
+    position: fixed !important;
+}
