@@ -311,7 +311,6 @@ export class ConfigExportHelper {
             defaultBasemap = basemaps[0];
         }
 
-
         const mapComponent: MapglComponentConfig = {
             allowMapExtend: customControls.allowMapExtend.value,
             nbVerticesLimit: customControls.unmanagedFields.nbVerticesLimit.value,
@@ -711,6 +710,7 @@ export class ConfigExportHelper {
         const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
         const analyticsBoardWidth = 445;
         const contributorId = this.getContributorId(widgetData, widgetType);
+
         if ([WIDGET_TYPE.histogram, WIDGET_TYPE.swimlane].indexOf(widgetType) >= 0) {
             const title = widgetData.title;
             const component = {
@@ -726,7 +726,7 @@ export class ConfigExportHelper {
                     chartType: widgetData.renderStep.chartType,
                     chartTitle: title,
                     chartHeight: !!unmanagedRenderFields.chartHeight ? unmanagedRenderFields.chartHeight : 100,
-                    chartWidth: !!itemPerLine && itemPerLine !== 1 ?
+                    chartWidth: !!itemPerLine ?
                         Math.ceil(analyticsBoardWidth / itemPerLine) - 12 : analyticsBoardWidth, // 12 => margin and padding left/right
                     xAxisPosition: unmanagedRenderFields.xAxisPosition,
                     descriptionPosition: unmanagedRenderFields.descriptionPosition,
@@ -818,6 +818,11 @@ export class ConfigExportHelper {
             return component;
 
         } else if (widgetType === WIDGET_TYPE.donut) {
+
+            let donutDiameter = 175;
+            if (!!itemPerLine && +itemPerLine === 3) {
+                donutDiameter = 125;
+            }
             const component = {
                 contributorId,
                 componentType: WIDGET_TYPE.donut,
@@ -825,7 +830,7 @@ export class ConfigExportHelper {
                 input: {
                     id: contributorId,
                     customizedCssClass: unmanagedRenderFields.customizedCssClass,
-                    diameter: 175,
+                    diameter: donutDiameter,
                     multiselectable: !!widgetData.renderStep.multiselectable,
                     opacity: widgetData.renderStep.opacity
                 }

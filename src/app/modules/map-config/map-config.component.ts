@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router, NavigationEnd } from '@angular/router';
@@ -24,6 +24,7 @@ import { filter } from 'rxjs/internal/operators/filter';
 import { map } from 'rxjs/operators';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { isFullyTouched } from '@utils/tools';
+import { Subscription } from 'rxjs';
 
 interface Tab {
   routeurLink: string;
@@ -36,18 +37,14 @@ interface Tab {
   templateUrl: './map-config.component.html',
   styleUrls: ['./map-config.component.scss']
 })
-export class MapConfigComponent implements OnInit {
+export class MapConfigComponent implements OnInit, OnDestroy {
+
+  private routerSub: Subscription;
 
   constructor(
     private mainFormService: MainFormService,
     private translate: TranslateService,
-    private router: Router) {
-
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd),
-        map(navEnd => (navEnd as NavigationEnd).urlAfterRedirects))
-      .subscribe(url => this.activeTab = this.tabs.find(tabs => url.indexOf(tabs.routeurLink) > 0));
-    }
+    private router: Router) { }
 
 
   public tabs: Tab[] = [
@@ -85,6 +82,15 @@ export class MapConfigComponent implements OnInit {
 
   public activeTab = this.tabs[0];
 
-  public ngOnInit() {}
+  public ngOnInit() {
+    this.routerSub = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd),
+        map(navEnd => (navEnd as NavigationEnd).urlAfterRedirects))
+      .subscribe(url => this.activeTab = this.tabs.find(tabs => url.indexOf(tabs.routeurLink) > 0));
+  }
+
+  public ngOnDestroy() {
+    this.routerSub.unsubscribe();
+  }
 
 }

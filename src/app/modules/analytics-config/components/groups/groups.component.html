@@ -31,7 +31,7 @@
         </div>
 
         <div class="preview-group" *ngIf="groupsPreview.length > 0">
-            <arlas-analytics-board [groups]="groupsPreview" [showSpinner]="true"></arlas-analytics-board>
+            <arlas-analytics-board #analyticsBoard [groups]="groupsPreview" [showSpinner]="true"></arlas-analytics-board>
         </div>
     </div>
 

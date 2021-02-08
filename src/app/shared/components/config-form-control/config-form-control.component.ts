@@ -1,3 +1,4 @@
+import { OnDestroy } from '@angular/core';
 /*
 Licensed to Gisaïa under one or more contributor
 license agreements. See the NOTICE.txt file distributed with
@@ -33,7 +34,7 @@ import {
   templateUrl: './config-form-control.component.html',
   styleUrls: ['./config-form-control.component.scss']
 })
-export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
 
   @Input() public control: ConfigFormControl;
   @Input() public defaultKey: string;
@@ -70,6 +71,12 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
     if (this.isComponent()) {
       this.changeDetector.detectChanges();
     }
+  }
+
+  public ngOnDestroy() {
+    this.control = null;
+    this.defaultKey = null;
+    this.componentContainer = null;
   }
 
   public isSlideToggle(): SlideToggleFormControl | null {

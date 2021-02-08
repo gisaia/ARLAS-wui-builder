@@ -97,7 +97,7 @@ export class PowerbarConfigForm extends ConfigFormGroup {
                 color: defaultConfig.otherColor
               });
 
-              dialog.open(DialogColorTableComponent, {
+              const sub = dialog.open(DialogColorTableComponent, {
                 data: {
                   collection,
                   sourceField: this.customControls.dataStep.aggregationField.value,
@@ -113,6 +113,7 @@ export class PowerbarConfigForm extends ConfigFormGroup {
                       this.addToColorManualValuesCtrl(kc);
                     });
                   }
+                  sub.unsubscribe();
                 });
             }),
           marker('A field is required to manage colors'),

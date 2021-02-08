@@ -64,7 +64,12 @@ export class ResultlistConfigForm extends ConfigFormGroup {
           '',
           undefined,
           {
-            onDependencyChange: (control) => describe.subscribe(d => control.setValue(d.params.id_path))
+            onDependencyChange: (control) => {
+              const sub = describe.subscribe(d => {
+                control.setValue(d.params.id_path);
+                sub.unsubscribe();
+              });
+            }
           }
         ),
         customComponent: new ComponentFormControl(

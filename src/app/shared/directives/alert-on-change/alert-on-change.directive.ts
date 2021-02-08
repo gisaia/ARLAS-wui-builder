@@ -16,12 +16,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Directive, ElementRef, HostListener, Input, OnInit, Optional } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, OnInit, Optional, OnDestroy } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { MatSelect } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
-import { NGXLogger } from 'ngx-logger';
 
 /**
  * Shows a toast of the value of mat-select changes (and was previously set).
@@ -29,10 +28,9 @@ import { NGXLogger } from 'ngx-logger';
 @Directive({
   selector: '[appAlertOnChange]'
 })
-export class AlertOnChangeDirective implements OnInit {
+export class AlertOnChangeDirective implements OnInit, OnDestroy {
 
   constructor(
-    private logger: NGXLogger,
     @Optional() private select: MatSelect,
     private elementRef: ElementRef<HTMLInputElement>,
     private snackBar: MatSnackBar,
@@ -51,15 +49,21 @@ export class AlertOnChangeDirective implements OnInit {
     if (!this.alertMessage) {
       return;
     }
-    const nativeElement = this.elementRef.nativeElement;
+    let elem = this.elementRef;
     if (!this.select) {
-      nativeElement.onfocus = (e: Event) => {
+      elem.nativeElement.onfocus = (e: Event) => {
         const anyDependantDirty = this.dependants == null || this.dependants.filter(d => d.dirty).length > 0;
-        if (anyDependantDirty && !!nativeElement.value) {
+        if (anyDependantDirty && !!elem.nativeElement.value) {
           this.snackBar.open(this.translate.instant('Careful!') + ' ' + this.translate.instant(this.alertMessage));
         }
       };
     }
+    elem = null;
+  }
+
+  public ngOnDestroy() {
+    this.alertMessage = null;
+    this.dependants = null;
   }
 
   @HostListener('openedChange', ['$event']) public openedChange(selectedHasBeenOpen: boolean) {

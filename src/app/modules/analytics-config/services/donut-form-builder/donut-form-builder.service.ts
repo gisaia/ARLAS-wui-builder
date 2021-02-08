@@ -23,7 +23,7 @@ import {
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { CollectionField } from '@services/collection-service/models';
 import { KeywordColor, DialogColorTableData } from '@map-config/components/dialog-color-table/models';
 import { FormControl, FormArray, FormGroup } from '@angular/forms';
@@ -92,7 +92,7 @@ export class DonutConfigForm extends ConfigFormGroup {
                 color: defaultConfig.otherColor
               });
 
-              dialog.open(DialogColorTableComponent, {
+              const sub: Subscription = dialog.open(DialogColorTableComponent, {
                 data: {
                   collection,
                   sourceField: (Array.from(this.customControls.dataStep.aggregationmodels.value)[0] as any).field,
@@ -109,6 +109,7 @@ export class DonutConfigForm extends ConfigFormGroup {
                       this.addToColorManualValuesCtrl(kc);
                     });
                   }
+                  sub.unsubscribe();
                 });
             }),
           'A field is required to manage colors',

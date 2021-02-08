@@ -31,6 +31,8 @@ import { ConfigExportHelper } from '@services/main-form-manager/config-export-he
 import { MatDialogRef } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { Subject } from 'rxjs/internal/Subject';
+import { Subscription } from 'rxjs';
+import { OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-add-widget-dialog',
@@ -68,13 +70,18 @@ export class AddWidgetDialogComponent {
   templateUrl: './edit-group.component.html',
   styleUrls: ['./edit-group.component.scss']
 })
-export class EditGroupComponent implements OnInit {
+export class EditGroupComponent implements OnInit, OnDestroy {
 
   @Input() public formGroup: FormGroup;
   @Input() public updateDisplay: Subject<any>;
   @Output() public remove = new EventEmitter();
 
   public content: FormArray;
+
+  private valuesChangesSub: Subscription;
+  private afterClosedAddSub: Subscription;
+  private afterClosedEditSub: Subscription;
+  private afterClosedconfirmSub: Subscription;
 
   constructor(
     private dialog: MatDialog,
@@ -90,7 +97,7 @@ export class EditGroupComponent implements OnInit {
    * on content type change, re-create the formgroup for each widget to define
    */
   private resetWidgetsOnTypeChange() {
-    this.contentType.valueChanges.subscribe(values => {
+    this.valuesChangesSub = this.contentType.valueChanges.subscribe(values => {
       // if a widget is removed
       if (this.contentTypeValue.length < this.content.length) {
         this.content.removeAt(this.content.length - 1);
@@ -106,7 +113,7 @@ export class EditGroupComponent implements OnInit {
   }
 
   public addWidget() {
-    this.dialog.open(AddWidgetDialogComponent, { width: '350px' })
+    this.afterClosedAddSub = this.dialog.open(AddWidgetDialogComponent, { width: '350px' })
       .afterClosed().subscribe(result => {
         if (result) {
           // add the new widget to the previous ones if they exist
@@ -122,7 +129,7 @@ export class EditGroupComponent implements OnInit {
 
   public editWidget(widgetIndex: number, newWidget?: boolean) {
     const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup;
-    this.dialog.open(EditWidgetDialogComponent, {
+    this.afterClosedEditSub = this.dialog.open(EditWidgetDialogComponent, {
       data: {
         widgetType: widgetFg.value.widgetType,
         formData: widgetFg.value.widgetData
@@ -160,7 +167,7 @@ export class EditGroupComponent implements OnInit {
       data: { message: 'delete the widget' }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    this.afterClosedconfirmSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.content.removeAt(widgetIndex);
         this.contentTypeValue.splice(widgetIndex, 1);
@@ -177,13 +184,19 @@ export class EditGroupComponent implements OnInit {
 
   public updatePreview() {
     this.formGroup.controls.preview.setValue(null);
-
     this.formGroup.controls.preview.setValue(
       ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, this.analyticsInitService.groupIndex++)
     );
     this.updateDisplay.next();
 
 
+  }
+
+  public ngOnDestroy() {
+    if (this.afterClosedAddSub) { this.afterClosedAddSub.unsubscribe(); }
+    if (this.afterClosedEditSub) { this.afterClosedEditSub.unsubscribe(); }
+    if (this.afterClosedconfirmSub) { this.afterClosedconfirmSub.unsubscribe(); }
+    if (this.valuesChangesSub) { this.valuesChangesSub.unsubscribe(); }
   }
 
   get contentType() {

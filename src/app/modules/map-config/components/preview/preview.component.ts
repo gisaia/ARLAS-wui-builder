@@ -28,6 +28,7 @@ import { ConfigExportHelper } from '@services/main-form-manager/config-export-he
 import { StartupService } from '@services/startup/startup.service';
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { Subscription } from 'rxjs';
 
 export interface MapglComponentInput {
   mapglContributor: MapContributor;
@@ -39,12 +40,13 @@ export interface MapglComponentInput {
   templateUrl: './preview.component.html',
   styleUrls: ['./preview.component.scss']
 })
-export class PreviewComponent implements AfterViewInit {
-
+export class PreviewComponent implements AfterViewInit, OnDestroy {
 
   @Input() public mapComponentConfig: any;
   @Input() public mapglContributor: MapContributor;
   @ViewChild('map', { static: false }) public mapglComponent: MapglComponent;
+
+  private onMapLoadSub: Subscription;
 
   constructor(
     protected mainFormService: MainFormService,
@@ -99,7 +101,7 @@ export class PreviewComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit() {
-    this.mapglComponent.onMapLoaded.subscribe(isLoaded => {
+    this.onMapLoadSub = this.mapglComponent.onMapLoaded.subscribe(isLoaded => {
       if (isLoaded && !!this.mapglContributor) {
         this.mapglContributor.updateData = true;
         this.mapglContributor.fetchData(null);
@@ -107,5 +109,10 @@ export class PreviewComponent implements AfterViewInit {
       }
     });
     this.cdr.detectChanges();
+  }
+
+  public ngOnDestroy() {
+    this.mapglComponent = null;
+    this.onMapLoadSub.unsubscribe();
   }
 }

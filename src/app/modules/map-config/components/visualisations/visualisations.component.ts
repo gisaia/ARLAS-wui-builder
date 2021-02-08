@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
@@ -34,6 +34,7 @@ import { Paint, Layer as LayerMap } from '@services/main-form-manager/models-map
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Subscription } from 'rxjs';
 
 export interface Layer {
   id: string;
@@ -46,11 +47,13 @@ export interface Layer {
   templateUrl: './visualisations.component.html',
   styleUrls: ['./visualisations.component.scss']
 })
-export class VisualisationsComponent implements OnInit, AfterViewChecked {
+export class VisualisationsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   public displayedColumns: string[] = ['name', 'layers', 'displayed', 'action'];
   public layersFa: FormArray;
   public visualisationsFa: FormArray;
+
+  private confirmDeleteSub: Subscription;
 
   constructor(
     protected mainFormService: MainFormService,
@@ -62,13 +65,15 @@ export class VisualisationsComponent implements OnInit, AfterViewChecked {
     this.visualisationsFa = this.mainFormService.mapConfig.getVisualisationsFa();
   }
 
-  public ngOnInit() {
+  public ngOnInit() { }
 
+  public ngOnDestroy() {
+    if (this.confirmDeleteSub) { this.confirmDeleteSub.unsubscribe(); }
   }
 
   public ngAfterViewChecked() {
     this.cdRef.detectChanges();
- }
+  }
 
   public camelize(text: string): string {
     return camelize(text);
@@ -80,7 +85,7 @@ export class VisualisationsComponent implements OnInit, AfterViewChecked {
       data: { message: 'delete the visualisation set' }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    this.confirmDeleteSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
         const formGroupIndex = (this.visualisationsFa.value as any[]).findIndex(el => el.id === visualisationId);
         this.visualisationsFa.removeAt(formGroupIndex);

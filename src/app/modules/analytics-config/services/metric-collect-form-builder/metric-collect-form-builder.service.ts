@@ -46,8 +46,8 @@ export class MetricCollectFormGroup extends ConfigFormGroup {
           marker(type + ' metric collect function Description'),
           false,
           ['Count', Metric.CollectFctEnum.AVG.toString(), Metric.CollectFctEnum.CARDINALITY.toString(),
-          Metric.CollectFctEnum.MAX.toString(), Metric.CollectFctEnum.MIN.toString(),
-          Metric.CollectFctEnum.SUM.toString()].map(value => ({ value, label: titleCase(value) })),
+            Metric.CollectFctEnum.MAX.toString(), Metric.CollectFctEnum.MIN.toString(),
+            Metric.CollectFctEnum.SUM.toString()].map(value => ({ value, label: titleCase(value) })),
           {
             optional: false,
             childs: () => [
@@ -72,11 +72,14 @@ export class MetricCollectFormGroup extends ConfigFormGroup {
                   this.metricCollectFunction.value === Metric.CollectFctEnum.CARDINALITY ?
                     field : NUMERIC_OR_DATE_TYPES.indexOf(field.type) >= 0;
 
-                collectionFieldsObs.subscribe(
-                  fields => control.setSyncOptions(
-                    fields
-                      .filter(filterCallback)
-                      .map(f => ({ value: f.name, label: f.name, enabled: f.indexed }))));
+                const sub = collectionFieldsObs.subscribe(
+                  fields => {
+                    control.setSyncOptions(
+                      fields
+                        .filter(filterCallback)
+                        .map(f => ({ value: f.name, label: f.name, enabled: f.indexed })));
+                    sub.unsubscribe();
+                  });
               } else {
                 control.disable();
               }
