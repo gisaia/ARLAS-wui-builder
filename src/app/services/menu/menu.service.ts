@@ -40,7 +40,7 @@ export class MenuService {
     {
       name: marker('Timeline'),
       link: '/timeline-config',
-      icon: 'timeline',
+      icon: 'history_toggle_off',
       tooltip: marker('Timeline'),
       enabled: false,
       control: this.mainFormService.timelineConfig.control
