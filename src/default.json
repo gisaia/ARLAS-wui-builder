@@ -410,10 +410,13 @@
                 }
             },
             "resultlist": {
+                "dataStep": {
+                    "searchSize": 100
+                },
                 "unmanagedFields": {
                     "dataStep": {},
                     "renderStep": {
-                        "tableWidth": 455,
+                        "tableWidth": 445,
                         "globalActionsList": [],
                         "nLastLines": 3,
                         "detailedGridHeight": 25,
