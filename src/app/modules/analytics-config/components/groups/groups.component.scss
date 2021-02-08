@@ -45,11 +45,23 @@ under the License.
     }
 
     .preview-group {
-      width: 500px;
+      width: 466px;
       ::ng-deep .analytics-board-panel-title {
         font-size: 16px;
         font-weight: 300;
         font-family: Roboto, "Helvetica Neue", sans-serif;
+      }
+
+      ::ng-deep .analytics-board-card {
+        box-shadow: none !important;
+        padding: 1px !important;
+        margin: 3px 0 3px 0 !important;
+      }
+      
+      ::ng-deep .analytics-board-panel .mat-expansion-panel-body {
+        margin: 0 1px 0px;
+        padding: 0 5px 0 0 !important;
+        font-weight: 300;
       }
 
       ::ng-deep .histogram__description {
