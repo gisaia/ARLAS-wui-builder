@@ -24,8 +24,16 @@ under the License.
    ::ng-deep .mat-slide-toggle {
       line-height: 30px;
    }
-   .title {
-      @include group-title();
-      line-height: 0;
+   .title-container {
+      .title {
+         @include group-title();
+         line-height: 0;
+      }
+      display: flex;
+      align-items: center;
+      .icon {
+         cursor: pointer;
+         color: #777;
+      }
    }
 }
