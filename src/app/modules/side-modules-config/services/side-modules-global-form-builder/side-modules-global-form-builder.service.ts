@@ -39,7 +39,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
       useShare: new SlideToggleFormControl(
         '',
         marker('Share module'),
-        '',
+        marker('Share module description'),
         {
           resetDependantsOnChange: true
         }
@@ -47,7 +47,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
       useDownload: new SlideToggleFormControl(
         '',
         marker('Download module'),
-        '',
+        marker('Download module description'),
         {
           resetDependantsOnChange: true
         }
@@ -55,7 +55,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
       useTagger: new SlideToggleFormControl(
         '',
         marker('Tagger module'),
-        '',
+        marker('Tagger module description'),
         {
           resetDependantsOnChange: true
         }
@@ -85,8 +85,8 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
       download: new ConfigFormGroup({
         basicAuthent: new SlideToggleFormControl(
           '',
-          marker('With basic authentification'),
-          ''
+          marker('With basic authentication'),
+          marker('basic authentication description'),
         )
       },
         {
