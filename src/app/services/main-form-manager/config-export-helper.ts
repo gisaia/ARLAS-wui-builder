@@ -689,9 +689,9 @@ export class ConfigExportHelper {
         } else if (widgetType === WIDGET_TYPE.powerbars) {
             idString = widgetData.dataStep.aggregationField + '-' + widgetData.dataStep.aggregationSize;
             if (!!widgetData.dataStep.metric) {
-                idString += (widgetData.dataStep.metric.metricCollectFunction !== undefined ?
-                    ('-' + widgetData.dataStep.metric.metricCollectFunction) : '') + (!!widgetData.dataStep.metric.metricCollectField ?
-                        ('-' + widgetData.dataStep.metric.metricCollectField) : '');
+                idString += widgetData.dataStep.metric.metricCollectFunction !== undefined ?
+                    ('-' + widgetData.dataStep.metric.metricCollectFunction) : '';
+                idString += !!widgetData.dataStep.metric.metricCollectField ? ('-' + widgetData.dataStep.metric.metricCollectField) : '';
             }
         } else if (widgetType === WIDGET_TYPE.metric) {
             idString = widgetData.dataStep.function;
