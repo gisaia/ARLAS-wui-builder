@@ -305,7 +305,9 @@
                         "aggregationBucketOrInterval": "bucket",
                         "aggregationBucketsNumber": 50
                     },
-                    "aggregationValue": "COUNT"
+                    "metric" : {
+                        "metricCollectFunction": "Count"
+                    }
                 },
                 "renderStep": {
                     "multiselectable": true,
@@ -406,7 +408,10 @@
             },
             "powerbar": {
                 "dataStep": {
-                    "aggregationSize": 10
+                    "aggregationSize": 10,
+                    "metric" : {
+                        "metricCollectFunction": "Count"
+                    }
                 }
             },
             "resultlist": {
