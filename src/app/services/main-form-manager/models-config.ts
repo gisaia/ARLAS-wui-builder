@@ -190,6 +190,7 @@ export interface AnalyticComponentInputConfig {
     yLabels: number;
     xUnit: string;
     yUnit: string;
+    unit?: string;
     chartXLabel: string;
     showXTicks: boolean;
     showYTicks: boolean;

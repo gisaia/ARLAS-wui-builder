@@ -573,13 +573,16 @@ export class ConfigExportHelper {
             case WIDGET_TYPE.powerbars: {
                 const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'tree';
-                contrib.aggregationmodels = [
-                    {
-                        type: 'term',
-                        field: widgetData.dataStep.aggregationField,
-                        size: widgetData.dataStep.aggregationSize
-                    }
-                ];
+                const aggregationModel =  {
+                    type: 'term',
+                    field: widgetData.dataStep.aggregationField,
+                    size: widgetData.dataStep.aggregationSize
+                };
+                this.addMetricToAggregationModel(aggregationModel, widgetData.dataStep.metric);
+                contrib.jsonpath = widgetData.dataStep.metric.metricCollectFunction === DEFAULT_METRIC_VALUE ?
+                JSONPATH_COUNT : JSONPATH_METRIC;
+                contrib.aggregationmodels = [aggregationModel];
+
                 return contrib;
             }
             case WIDGET_TYPE.donut: {
@@ -685,6 +688,11 @@ export class ConfigExportHelper {
             }
         } else if (widgetType === WIDGET_TYPE.powerbars) {
             idString = widgetData.dataStep.aggregationField + '-' + widgetData.dataStep.aggregationSize;
+            if (!!widgetData.dataStep.metric) {
+                idString += widgetData.dataStep.metric.metricCollectFunction !== undefined ?
+                    ('-' + widgetData.dataStep.metric.metricCollectFunction) : '';
+                idString += !!widgetData.dataStep.metric.metricCollectField ? ('-' + widgetData.dataStep.metric.metricCollectField) : '';
+            }
         } else if (widgetType === WIDGET_TYPE.metric) {
             idString = widgetData.dataStep.function;
             widgetData.dataStep.metrics.forEach(m => {
@@ -810,6 +818,7 @@ export class ConfigExportHelper {
                     powerbarTitle: widgetData.title,
                     displayFilter: !!widgetData.renderStep.displayFilter,
                     useColorService: !!widgetData.renderStep.useColorService,
+                    unit: widgetData.dataStep.unit,
                     chartWidth: !!itemPerLine ?
                         Math.ceil(analyticsBoardWidth / itemPerLine) - 12 : null // 12 => margin and padding left/right
                 }

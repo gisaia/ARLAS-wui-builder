@@ -33,6 +33,8 @@ import { FormArray, FormGroup, FormControl } from '@angular/forms';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { MetricCollectFormGroup,
+  MetricCollectFormBuilderService } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 
 export class PowerbarConfigForm extends ConfigFormGroup {
 
@@ -44,6 +46,7 @@ export class PowerbarConfigForm extends ConfigFormGroup {
     dialog: MatDialog,
     collectionService: CollectionService,
     private colorService: ArlasColorGeneratorLoader,
+    metricFg: MetricCollectFormGroup
   ) {
     super({
       title: new TitleInputFormControl(
@@ -66,6 +69,16 @@ export class PowerbarConfigForm extends ConfigFormGroup {
           1,
           30,
           1
+        ),
+        metric: metricFg.withTitle(marker('Metric')),
+        unit: new TitleInputFormControl(
+          '',
+          marker('powerbar unit'),
+          marker('powerbar unit description'),
+          'text',
+          {
+            optional: true
+          }
         )
       }).withTabName(marker('Data')),
       renderStep: new ConfigFormGroup({
@@ -148,6 +161,8 @@ export class PowerbarConfigForm extends ConfigFormGroup {
     dataStep: {
       aggregationField: this.get('dataStep').get('aggregationField') as SelectFormControl,
       aggregationSize: this.get('dataStep').get('aggregationSize') as SliderFormControl,
+      metric: this.get('dataStep').get('metric') as MetricCollectFormGroup,
+      unit: this.get('dataStep').get('unit') as TitleInputFormControl,
     },
     renderStep: {
       useColorService: this.get('renderStep').get('useColorService') as SlideToggleFormControl,
@@ -186,11 +201,15 @@ export class PowerbarFormBuilderService extends WidgetFormBuilder {
     private dialog: MatDialog,
     private colorService: ArlasColorGeneratorLoader,
     private defaultValuesService: DefaultValuesService,
+    private metricBuilderService: MetricCollectFormBuilderService
+
   ) {
     super(collectionService, mainFormService);
   }
 
   public build(): PowerbarConfigForm {
+    const collectionFieldsObs = this.collectionService.getCollectionFields(
+      this.mainFormService.getCollections()[0]);
     const formGroup = new PowerbarConfigForm(
       this.mainFormService.getCollections()[0],
       this.collectionService.getCollectionFields(
@@ -199,7 +218,8 @@ export class PowerbarFormBuilderService extends WidgetFormBuilder {
         this.defaultValuesService.getDefaultConfig(),
         this.dialog,
         this.collectionService,
-        this.colorService);
+        this.colorService,
+        this.metricBuilderService.build(collectionFieldsObs, 'powerbars'));
     this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
 
     return formGroup;

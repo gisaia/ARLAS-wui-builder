@@ -410,6 +410,7 @@ export class AnalyticsImportService {
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
+    const contribAggregationModel = contributor.aggregationmodels[0];
 
     importElements([
       {
@@ -423,6 +424,14 @@ export class AnalyticsImportService {
       {
         value: contributor.aggregationmodels[0].size,
         control: dataStep.aggregationSize
+      },
+      ...this.getMetricImportElements(
+        contribAggregationModel,
+        dataStep.metric.customControls),
+      ,
+      {
+        value: component.input.unit,
+        control: dataStep.unit
       },
       {
         value: component.input.displayFilter,
