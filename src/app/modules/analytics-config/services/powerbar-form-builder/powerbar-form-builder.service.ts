@@ -33,7 +33,8 @@ import { FormArray, FormGroup, FormControl } from '@angular/forms';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
-import { MetricCollectFormGroup, MetricCollectFormBuilderService } from '../metric-collect-form-builder/metric-collect-form-builder.service';
+import { MetricCollectFormGroup,
+  MetricCollectFormBuilderService } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 
 export class PowerbarConfigForm extends ConfigFormGroup {
 
