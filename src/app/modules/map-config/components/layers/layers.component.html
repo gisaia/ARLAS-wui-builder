@@ -31,14 +31,24 @@
         </td>
     </ng-container>
 
-    <ng-container matColumnDef="zoomMin">
-        <th mat-header-cell *matHeaderCellDef>{{'Zoom min' | translate}}</th>
-        <td mat-cell *matCellDef="let element"> {{element[camelize(element.mode) + 'Fg'].visibilityStep.zoomMin}} </td>
+    <ng-container matColumnDef="zoom">
+        <th mat-header-cell *matHeaderCellDef>{{'Zoom' | translate}}</th>
+        <td mat-cell *matCellDef="let element">[ {{element[camelize(element.mode) + 'Fg'].visibilityStep.zoomMin}} - {{element[camelize(element.mode) + 'Fg'].visibilityStep.zoomMax}} ]</td>
     </ng-container>
 
-    <ng-container matColumnDef="zoomMax">
-        <th mat-header-cell *matHeaderCellDef>{{'Zoom max' | translate}}</th>
-        <td mat-cell *matCellDef="let element"> {{element[camelize(element.mode) + 'Fg'].visibilityStep.zoomMax}} </td>
+    <ng-container matColumnDef="nbFeature">
+        <th mat-header-cell *matHeaderCellDef>{{'Nb features' | translate}}</th>
+        <td mat-cell *matCellDef="let element">
+            <ng-container *ngIf="element.mode === 'Features'">
+                [ 0 - {{element[camelize(element.mode) + 'Fg'].visibilityStep.featuresMax}} [
+            </ng-container>
+            <ng-container *ngIf="element.mode === 'Cluster'">
+                >= {{element[camelize(element.mode) + 'Fg'].visibilityStep.featuresMin}}
+            </ng-container>
+            <ng-container *ngIf="element.mode === 'Feature Metric'">
+                [ 0 - {{element[camelize(element.mode) + 'Fg'].visibilityStep.featuresMax}} [ 
+            </ng-container>
+        </td>
     </ng-container>
 
 

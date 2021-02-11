@@ -47,7 +47,7 @@ export interface Layer {
 })
 export class LayersComponent implements OnInit, OnDestroy {
 
-  public displayedColumns: string[] = ['representation', 'name', 'mode', 'collection', 'zoomMin', 'zoomMax', 'action'];
+  public displayedColumns: string[] = ['representation', 'name', 'mode', 'collection', 'zoom', 'nbFeature', 'action'];
   public layersFa: FormArray;
   public visualisationSetFa: FormArray;
 
