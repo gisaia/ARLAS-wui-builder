@@ -224,7 +224,7 @@ export class MainFormManagerService {
         control: startingConfigControls.colorGenerator
       },
       {
-        value: config.arlas.server.maxAgeCache,
+        value: config.arlas.server.max_age_cache,
         control: startingConfigControls.unmanagedFields.maxAgeCache
       },
       {
