@@ -107,7 +107,7 @@ export interface ServerConfig {
     collection: {
         name: string;
     };
-    maxAgeCache: number;
+    max_age_cache: number;
 }
 
 export interface ContributorConfig {
