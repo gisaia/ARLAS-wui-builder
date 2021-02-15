@@ -53,7 +53,8 @@ import { LayerIdToName } from 'arlas-web-components';
     DialogPaletteSelectorComponent,
     PreviewComponent,
     VisualisationsComponent,
-    BasemapsComponent
+    BasemapsComponent,
+    
   ],
   imports: [
     MapConfigRoutingModule,
