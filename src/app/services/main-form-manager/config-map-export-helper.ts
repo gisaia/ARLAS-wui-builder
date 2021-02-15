@@ -44,7 +44,7 @@ export class ConfigMapExportHelper {
 
             const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
             const layer: Layer = {
-                id: layerFg.value.name,
+                id: layerFg.value.arlasId,
                 type: modeValues.styleStep.geometryType,
                 source: layerSource.source,
                 minzoom: modeValues.visibilityStep.zoomMin,

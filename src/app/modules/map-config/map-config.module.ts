@@ -33,6 +33,7 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 import { VisualisationsComponent } from './components/visualisations/visualisations.component';
 import { EditVisualisationComponent } from './components/edit-visualisation/edit-visualisation.component';
 import { BasemapsComponent } from './components/basemaps/basemaps.component';
+import { LayerIdToName } from 'arlas-web-components';
 
 @NgModule({
   entryComponents: [
@@ -52,7 +53,8 @@ import { BasemapsComponent } from './components/basemaps/basemaps.component';
     DialogPaletteSelectorComponent,
     PreviewComponent,
     VisualisationsComponent,
-    BasemapsComponent
+    BasemapsComponent,
+    
   ],
   imports: [
     MapConfigRoutingModule,

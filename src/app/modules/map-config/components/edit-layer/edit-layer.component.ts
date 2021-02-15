@@ -20,7 +20,7 @@ import { Component, OnInit, AfterContentChecked, ChangeDetectorRef, ViewChild, O
 import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
-import { MainFormService } from '@services/main-form/main-form.service';
+import { MainFormService, ARLAS_ID } from '@services/main-form/main-form.service';
 import { NGXLogger } from 'ngx-logger';
 import { LAYER_MODE } from './models';
 import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
@@ -123,7 +123,8 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
       this.logger.warn('validation failed', this.layerFg);
       return;
     }
-
+    // sets the layer id : 'arlas_id:NAME:creationDate
+    this.layerFg.customControls.arlasId.setValue(ARLAS_ID + this.layerFg.customControls.name.value + ':' + Date.now());
     /** add the layer to list of layers */
     if (!this.isNewLayer()) {
       const layerIndex = this.getLayerIndex(this.layerFg.customControls.id.value);
@@ -143,13 +144,13 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
 
     const savedVisualisations = this.layerFg.customControls.visualisation.syncOptions;
     const visualisationValue = this.visualisationsFa.value;
-    const layerName = this.layerFg.customControls.name.value;
+    const layerId = this.layerFg.customControls.arlasId.value;
 
     if (savedVisualisations.length <= 1 && this.visualisationsFa.length === 0) {
       const allLayers = [];
       if (this.layerFg.customControls.visualisation.value && this.layerFg.customControls.visualisation.value.length > 0) {
         if (this.layerFg.customControls.visualisation.value[0].include) {
-          allLayers.push(layerName);
+          allLayers.push(layerId);
           const visualisationFg = this.mapVisualisationFormBuilder.buildVisualisation();
           visualisationFg.customControls.displayed.setValue(true);
           visualisationFg.customControls.name.setValue('All layers');
@@ -161,7 +162,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
     } else {
       // we update the visualisations form array based on the checked visualisations of the
       // created/edited layer
-      const savedLayers = new Set<string>(this.layersFa.value.map(l => l.name));
+      const savedLayers = new Set<string>(this.layersFa.value.map(l => l.arlasId));
       visualisationValue.forEach(v => {
         const visu = savedVisualisations.find(vs => vs.name === v.name);
         // in case of renaming a layer, we should remove the old name from the visualisation sets
@@ -171,7 +172,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
             layersSet.add(l);
           }
         });
-        visu.include ? layersSet.add(layerName) : layersSet.delete(layerName);
+        visu.include ? layersSet.add(layerId) : layersSet.delete(layerId);
         v.layers = Array.from(layersSet);
         v.displayed = (v.displayed === undefined) ? true : v.displayed;
       });

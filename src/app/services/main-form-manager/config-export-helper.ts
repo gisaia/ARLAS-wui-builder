@@ -164,7 +164,8 @@ export class ConfigExportHelper {
         const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
             (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
         const layerSource: LayerSourceConfig = {
-            id: layerValues.name,
+            id: layerValues.arlasId,
+            name: layerValues.name,
             source: '',
             minzoom: modeValues.visibilityStep.zoomMin,
             maxzoom: modeValues.visibilityStep.zoomMax,
@@ -263,7 +264,7 @@ export class ConfigExportHelper {
         mapConfigLayers: FormArray,
         mapConfigVisualisations: FormArray,
         mapConfigBasemaps: MapBasemapFormGroup,
-        layerName?): MapglComponentConfig {
+        arlasId?): MapglComponentConfig {
 
         const customControls = mapConfigGlobal.customControls;
 
@@ -274,7 +275,7 @@ export class ConfigExportHelper {
 
         const visualisationsSets: Array<VisualisationSetConfig> = [
         ];
-        if (!layerName) {
+        if (!arlasId) {
             mapConfigVisualisations.controls.forEach(visu => visualisationsSets.push({
                 name: visu.value.name,
                 layers: visu.value.layers,
@@ -283,11 +284,11 @@ export class ConfigExportHelper {
         } else {
             // to preview one layer
             mapConfigVisualisations.controls.forEach(visu => {
-                const hasLayer = (new Set(visu.value.layers).has(layerName));
+                const hasLayer = (new Set(visu.value.layers).has(arlasId));
                 if (hasLayer) {
                     visualisationsSets.push({
                         name: visu.value.name,
-                        layers: [layerName],
+                        layers: [arlasId],
                         enabled: visu.value.displayed
                     });
                 }

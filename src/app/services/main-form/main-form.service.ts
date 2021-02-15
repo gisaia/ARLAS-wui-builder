@@ -53,6 +53,8 @@ enum MAIN_FORM_KEYS {
   LOOK_AND_FEEL_CONFIG_GLOBAL = 'LookAndFeelConfigGlobal'
 }
 
+export const ARLAS_ID = 'arlas_id:';
+
 @Injectable({
   providedIn: 'root'
 })

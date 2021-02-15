@@ -53,6 +53,12 @@ export class MapLayerFormGroup extends ConfigFormGroup {
     edit: boolean
   ) {
     super({
+      arlasId: new HiddenFormControl(
+        '',
+        null,
+        {
+          optional: true
+        }),
       name: new InputFormControl(
         '',
         marker('Name'),
@@ -105,11 +111,11 @@ export class MapLayerFormGroup extends ConfigFormGroup {
             }
             control.setValue(controlsValues);
             const visualisationControl = control.value as Array<VisualisationCheckboxOption>;
-            const layerName = this.customControls.name.value;
+            const layerId = this.customControls.arlasId.value;
             // check if the edited layer is already asigned to some visualisation sets
             // in order to check the checkbox
             visualisationControl.forEach(v => {
-              const hasLayer = ((new Set(v.layers)).has(layerName));
+              const hasLayer = ((new Set(v.layers)).has(layerId));
               const visuAlreadyChecked = !!control.value ? control.value.find(visu => visu.name === v.name).include : false;
               v.include = hasLayer || visuAlreadyChecked;
             });
@@ -149,6 +155,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
     mode: this.get('mode') as SelectFormControl,
     visualisation: this.get('visualisation') as VisualisationCheckboxFormControl,
     id: this.get('id') as HiddenFormControl,
+    arlasId: this.get('arlasId') as HiddenFormControl,
     featuresFg: this.get('featuresFg') as MapLayerTypeFeaturesFormGroup,
     featureMetricFg: this.get('featureMetricFg') as MapLayerTypeFeatureMetricFormGroup,
     clusterFg: this.get('clusterFg') as MapLayerTypeClusterFormGroup
