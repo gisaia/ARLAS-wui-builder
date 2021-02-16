@@ -207,6 +207,7 @@ export interface AnalyticComponentInputConfig {
     opacity?: number;
     powerbarTitle?: string;
     diameter?: number;
+    containerWidth?: number;
     tableWidth?: number;
     globalActionsList?: Array<any>;
     searchSize?: number;
