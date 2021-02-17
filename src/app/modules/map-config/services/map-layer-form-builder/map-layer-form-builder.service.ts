@@ -475,21 +475,6 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
           true,
           toKeywordOptionsObs(collectionFields)
         )
-        // granularity: new SelectFormControl(
-        //   '',
-        //   marker('Granularity'),
-        //   marker('Granularity description'),
-        //   false,
-        //   [
-        //     { label: marker('Coarse'), value: Granularity.coarse },
-        //     { label: marker('Medium'), value: Granularity.medium },
-        //     { label: marker('Fine'), value: Granularity.fine },
-        //     { label: marker('Finest'), value: Granularity.finest }
-        //   ],
-        //   {
-        //     title: marker('Granularity')
-        //   }
-        // )
       });
   }
 }
@@ -501,6 +486,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
     collectionFields: Observable<Array<CollectionField>>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService
   ) {
+
     super(
       collections,
       'cluster',
@@ -530,12 +516,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
           marker('Granularity'),
           marker('Granularity description'),
           false,
-          [
-            { label: marker('Coarse'), value: Granularity.coarse },
-            { label: marker('Medium'), value: Granularity.medium },
-            { label: marker('Fine'), value: Granularity.fine },
-            { label: marker('Finest'), value: Granularity.finest }
-          ]
+          Object.keys(Granularity).map(key => ({ label: Granularity[key].toString(), value: Granularity[key] }))
         ),
         clusterGeometryType: new SelectFormControl(
           '',

@@ -288,6 +288,7 @@
 	"Medium": "Medium",
 	"Fine": "Fine",
 	"Finest": "Finest",
+	"SuperFinest": "Extremely Fine",
 	"cluster geometry type": "Displayed geometry",
 	"cluster geometry type description": "You can display on the cell one of these geometries: \n • Aggregated geometry: a geometry representing all the data in the cell (data's centroid, data's extent, ...) \n • Raw geometry: the geometry of one raw element in the cell.",
 	"Aggregated geometry": "Aggregated geometry",
