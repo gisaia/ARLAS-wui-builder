@@ -288,6 +288,7 @@
 	"Medium": "Moyenne",
 	"Fine": "Fine",
 	"Finest": "Très fine",
+	"SuperFinest": "Extrèmement fine",
 	"cluster geometry type": "Géométrie retournée",
 	"cluster geometry type description": "Géométrie à afficher pour chaque cellule:\n• Géométrie agrégée: une géométrie construite à partir des données des éléments associés à la cellule (étendue des données, centroïde des données, ...)\n• Géométrie brute: une géométrie représentative choisie parmi les données des éléments associés à la cellule",
 	"Aggregated geometry": "Géométrie agrégée",
