@@ -76,7 +76,7 @@ export class LayersComponent implements OnInit, OnDestroy {
         (layer.mode === LAYER_MODE.featureMetric ? layer.featureMetricFg : layer.clusterFg);
       const paint = ConfigMapExportHelper.getLayerPaint(modeValues, layer.mode, this.colorService, this.collectionService.taggableFields);
       this.layerLegend.set(
-        layer.name + '#' + layer.mode,
+        layer.arlasId + '#' + layer.mode,
         { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint) }
       );
     });
@@ -91,9 +91,8 @@ export class LayersComponent implements OnInit, OnDestroy {
 
     const sourceName = layerFg.mode === LAYER_MODE.features ? 'feature' :
       (layerFg.mode === LAYER_MODE.featureMetric ? 'feature-metric' : 'cluster');
-
     const layer: LayerMap = {
-      id: layerFg.name,
+      id: layerFg.arlasId,
       type: modeValues.styleStep.geometryType,
       source: sourceName,
       minzoom: modeValues.visibilityStep.zoomMin,
@@ -113,7 +112,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     return colorLegend[0];
   }
 
-  public confirmDelete(layerId: number, layerName: string): void {
+  public confirmDelete(layerId: number, arlasId: string): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
       data: { message: 'delete the layer' }
@@ -127,7 +126,7 @@ export class LayersComponent implements OnInit, OnDestroy {
         const visualisationSetValue = this.visualisationSetFa.value;
         visualisationSetValue.forEach(vs => {
           const layersSet = new Set(vs.layers);
-          layersSet.delete(layerName);
+          layersSet.delete(arlasId);
           vs.layers = Array.from(layersSet);
         });
         this.visualisationSetFa.setValue(visualisationSetValue);
@@ -135,7 +134,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     });
   }
 
-  public preview(layerId: number, layerName: string): void {
+  public preview(layerId: number, arlasId: string): void {
     // Get contributor conf part for this layer
     const formGroupIndex = (this.layersFa.value as any[]).findIndex(el => el.id === layerId);
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
@@ -163,7 +162,7 @@ export class LayersComponent implements OnInit, OnDestroy {
       this.collaborativesearchService,
       this.colorService);
     const mapComponentConfigValue = ConfigExportHelper.getMapComponent(mapConfigGlobal, mapConfigLayers,
-      mapConfigVisualisations, mapConfigBasemaps, layerName);
+      mapConfigVisualisations, mapConfigBasemaps, arlasId);
     mapComponentConfigValue.input.mapLayers.layers = configMap.layers;
     const dialogRef = this.dialog.open(PreviewComponent, {
       panelClass: 'map-preview',

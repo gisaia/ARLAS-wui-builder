@@ -19,7 +19,7 @@ under the License.
 import { Injectable } from '@angular/core';
 import { MapConfig, Layer } from '@services/main-form-manager/models-map-config';
 import { Config, MapglComponentConfig, ContributorConfig, NormalizationFieldConfig } from '@services/main-form-manager/models-config';
-import { MainFormService } from '@services/main-form/main-form.service';
+import { MainFormService, ARLAS_ID } from '@services/main-form/main-form.service';
 import { importElements } from '@services/main-form-manager/tools';
 import { MapLayerFormBuilderService } from '../map-layer-form-builder/map-layer-form-builder.service';
 import { LayerSourceConfig, ColorConfig } from 'arlas-web-contributors';
@@ -212,9 +212,35 @@ export class MapImportService {
         type === 'cluster' ? LAYER_MODE.cluster :
           null;
     const layerFg = this.mapLayerFormBuilder.buildLayer();
+    if (layerSource.id.startsWith(ARLAS_ID)) {
+      if (!layerSource.name) {
+        layerSource.name = layerSource.id.split(ARLAS_ID)[1].split(':')[0];
+      }
+    } else {
+      // before 15.0.0 configs
+      /** If we import a dashboard previous to 15.0.0
+       * - the id was the name before so the layerSource.name takes the layerSource.id value
+       * - the real id is prefixed with 'arlas_id:'+NAME+creationTimestamp
+       * - apply this id changes to the layers list in visualisation set configuration
+       */
+      layerSource.name = layerSource.id;
+      layerSource.id = ARLAS_ID +  layerSource.name +  ':' + Date.now();
+      visualisationSets.forEach(vs => {
+        vs.layers = vs.layers.map(l => {
+          if (l === layerSource.name) {
+            return layerSource.id;
+          }
+          return l;
+        });
+      });
+    }
     importElements([
       {
-        value: layer.id,
+        value: layerSource.id,
+        control: layerFg.customControls.arlasId
+      },
+      {
+        value: layerSource.name,
         control: layerFg.customControls.name
       },
       {

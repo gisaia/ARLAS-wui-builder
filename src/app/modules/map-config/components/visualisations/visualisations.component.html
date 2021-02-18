@@ -21,7 +21,7 @@
         <th class="th-layers" mat-header-cell *matHeaderCellDef>{{'Layers' | translate}}</th>
         <td class="td-layers" mat-cell *matCellDef="let element">
             <div style="display: flex;">
-                <span style="display: inline-block; margin-right: 5px;" *ngFor="let l of element.layers"> • {{l}}</span>
+                <span style="display: inline-block; margin-right: 5px;" *ngFor="let l of element.layers"> • {{l | layerIdToName}}</span>
             </div>
         </td>
     </ng-container>

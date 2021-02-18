@@ -6,7 +6,7 @@
       (cdkDropListDropped)="drop($event)">
       <div cdkDrag class="layer" *ngFor="let l of layers">
         <mat-icon cdkDragHandle class="draghandle" >drag_indicator</mat-icon>
-        {{l}}
+        {{l | layerIdToName}}
       </div>
     </div>
 </div>
