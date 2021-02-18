@@ -68,6 +68,7 @@
     "ng-mocks": "~9.0.0",
     "node": "^11.0.0",
     "protractor": "~5.4.0",
+    "run-parallel": "1.1.10",
     "ts-node": "~7.0.0",
     "tslint": "~5.16.0",
     "typescript": "3.5.3",
