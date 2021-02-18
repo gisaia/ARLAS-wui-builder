@@ -1,5 +1,28 @@
 # Change Log
 
+## [v15.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v15.0.0) (2021-02-18)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v15.0.0-beta.0...v15.0.0)
+
+**New stuff:**
+
+- Change 'Timeline' icon in the left menu, using a time notion [\#452](https://github.com/gisaia/ARLAS-wui-builder/issues/452)
+- Set Data table size to 100 instead of 0 currently [\#433](https://github.com/gisaia/ARLAS-wui-builder/issues/433) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Add description about authentication to download data [\#429](https://github.com/gisaia/ARLAS-wui-builder/issues/429) [[SIDE](https://github.com/gisaia/ARLAS-wui-builder/labels/SIDE)]
+- Add min/max features columns in Layers table [\#408](https://github.com/gisaia/ARLAS-wui-builder/issues/408) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Add the possibility to define a metric in Powerbars [\#406](https://github.com/gisaia/ARLAS-wui-builder/issues/406) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+
+**Fixed bugs:**
+
+- Enhance display of layers list in Visualisation set form [\#451](https://github.com/gisaia/ARLAS-wui-builder/issues/451)
+- Fix translation for stoke color, opacity, width [\#450](https://github.com/gisaia/ARLAS-wui-builder/issues/450)
+- Data table previsualisation doesn't have a fixed size \(no scrolling for large tables\) [\#434](https://github.com/gisaia/ARLAS-wui-builder/issues/434) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- widgets layouts is not applied when view it in ARLAS-wui [\#367](https://github.com/gisaia/ARLAS-wui-builder/issues/367) [[WIDGET](https://github.com/gisaia/ARLAS-wui-builder/labels/WIDGET)]
+
+## [v15.0.0-beta.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v15.0.0-beta.0) (2021-02-04)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.3.1...v15.0.0-beta.0)
+
 ## [v14.3.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v14.3.1) (2021-02-03)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v14.3.0...v14.3.1)
