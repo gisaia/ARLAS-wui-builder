@@ -481,7 +481,6 @@ export class AnalyticsImportService {
         control: renderStep.showExportCsv
       }
     ]);
-
     // unmanaged fields
     importElements([
       {
@@ -489,8 +488,12 @@ export class AnalyticsImportService {
         control: widgetData.customControls.unmanagedFields.renderStep.customizedCssClass
       },
       {
-        value: component.input.diameter,
+        value: component.input.diameter !== undefined ? component.input.diameter : 175,
         control: widgetData.customControls.unmanagedFields.renderStep.diameter
+      },
+      {
+        value: component.input.containerWidth !== undefined ? component.input.containerWidth : 445,
+        control: widgetData.customControls.unmanagedFields.renderStep.containerWidth
       }
     ]);
 
