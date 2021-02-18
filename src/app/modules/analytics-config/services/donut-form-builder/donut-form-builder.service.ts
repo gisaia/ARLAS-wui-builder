@@ -133,6 +133,7 @@ export class DonutConfigForm extends ConfigFormGroup {
         renderStep: new FormGroup({
           customizedCssClass: new FormControl(),
           diameter: new FormControl(),
+          containerWidth: new FormControl(),
         })
       })
     });
@@ -153,6 +154,7 @@ export class DonutConfigForm extends ConfigFormGroup {
       renderStep: {
         customizedCssClass: this.get('unmanagedFields.renderStep.customizedCssClass'),
         diameter: this.get('unmanagedFields.renderStep.diameter'),
+        containerWidth: this.get('unmanagedFields.renderStep.containerWidth'),
       }
     }
   };

@@ -828,7 +828,10 @@ export class ConfigExportHelper {
             return component;
 
         } else if (widgetType === WIDGET_TYPE.donut) {
-
+            if (!itemPerLine) {
+                itemPerLine = 1;
+            }
+            const containerWidth = Math.ceil(analyticsBoardWidth / +itemPerLine);
             let donutDiameter = 175;
             if (!!itemPerLine && +itemPerLine === 3) {
                 donutDiameter = 125;
@@ -841,6 +844,7 @@ export class ConfigExportHelper {
                     id: contributorId,
                     customizedCssClass: unmanagedRenderFields.customizedCssClass,
                     diameter: donutDiameter,
+                    containerWidth,
                     multiselectable: !!widgetData.renderStep.multiselectable,
                     opacity: widgetData.renderStep.opacity
                 }
