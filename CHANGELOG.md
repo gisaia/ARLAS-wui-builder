@@ -1,5 +1,13 @@
 # Change Log
 
+## [v15.0.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v15.0.1) (2021-02-23)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v15.0.0...v15.0.1)
+
+**New stuff:**
+
+- Add a new Granularity for cluster mode [\#333](https://github.com/gisaia/ARLAS-wui-builder/issues/333) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
 ## [v15.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v15.0.0) (2021-02-18)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v15.0.0-beta.0...v15.0.0)
