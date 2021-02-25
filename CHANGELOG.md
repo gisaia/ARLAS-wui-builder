@@ -1,5 +1,13 @@
 # Change Log
 
+## [v15.0.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v15.0.2) (2021-02-25)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v15.0.1...v15.0.2)
+
+**Fixed bugs:**
+
+- Resultlist details of an item are displayed in red in preview [\#466](https://github.com/gisaia/ARLAS-wui-builder/issues/466) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+
 ## [v15.0.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v15.0.1) (2021-02-23)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v15.0.0...v15.0.1)
