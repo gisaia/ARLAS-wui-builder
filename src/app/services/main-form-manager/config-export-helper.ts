@@ -780,8 +780,8 @@ export class ConfigExportHelper {
                     chartType: widgetData.renderStep.chartType,
                     chartTitle: title,
                     chartHeight: !!unmanagedRenderFields.chartHeight ? unmanagedRenderFields.chartHeight : 100,
-                    chartWidth: !!itemPerLine ?
-                        Math.ceil(analyticsBoardWidth / itemPerLine) - 12 : analyticsBoardWidth, // 12 => margin and padding left/right
+                    chartWidth: !!itemPerLine && +itemPerLine !== 1 ?
+                        Math.ceil(analyticsBoardWidth / itemPerLine) - 6 : analyticsBoardWidth, // 6 => margin and padding left/right
                     xAxisPosition: unmanagedRenderFields.xAxisPosition,
                     descriptionPosition: unmanagedRenderFields.descriptionPosition,
                     xTicks: unmanagedRenderFields.xTicks,
@@ -841,8 +841,8 @@ export class ConfigExportHelper {
                 input: {
                     customizedCssClass: unmanagedRenderFields.customizedCssClass,
                     shortValue: !!widgetData.renderStep.shortValue,
-                    chartWidth: !!itemPerLine ?
-                        Math.ceil(analyticsBoardWidth / itemPerLine) - 12 : null // 12 => margin and padding left/right
+                    chartWidth: !!itemPerLine && +itemPerLine !== 1 ?
+                        Math.ceil(analyticsBoardWidth / itemPerLine) - 6 : analyticsBoardWidth // 6 => margin and padding left/right
                 }
             } as AnalyticComponentConfig;
             if (widgetData.renderStep.beforeValue) {
@@ -866,8 +866,8 @@ export class ConfigExportHelper {
                     useColorService: !!widgetData.renderStep.useColorService,
                     useColorFromData: !!widgetData.renderStep.useColorFromData,
                     unit: widgetData.dataStep.unit,
-                    chartWidth: !!itemPerLine ?
-                        Math.ceil(analyticsBoardWidth / itemPerLine) - 12 : null // 12 => margin and padding left/right
+                    chartWidth: !!itemPerLine && +itemPerLine !== 1 ?
+                        Math.ceil(analyticsBoardWidth / itemPerLine) - 6 : analyticsBoardWidth // 6 => margin and padding left/right
                 }
             } as AnalyticComponentConfig;
 
@@ -903,8 +903,8 @@ export class ConfigExportHelper {
                 componentType: WIDGET_TYPE.resultlist,
                 input: {
                     id: contributorId,
-                    tableWidth: !!itemPerLine ?
-                        Math.ceil(analyticsBoardWidth / itemPerLine) - 12 : analyticsBoardWidth, // 12 => margin and padding left/right
+                    tableWidth: !!itemPerLine && +itemPerLine !== 1 ?
+                        Math.ceil(analyticsBoardWidth / itemPerLine) - 6 : analyticsBoardWidth, // 6 => margin and padding left/right
                     globalActionsList: unmanagedRenderFields.globalActionsList,
                     searchSize: widgetData.dataStep.searchSize,
                     nLastLines: unmanagedRenderFields.nLastLines,
