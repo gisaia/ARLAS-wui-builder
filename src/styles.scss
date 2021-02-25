@@ -177,4 +177,24 @@ body {
   .resultlist__tbody {
     height: 400px !important;
   }
+
+  .group-item-title {
+    color: #656565 !important;
+  }
+
+  .detail-item {
+    color: #ff4081 !important;
+    display: inline-block;
+  }
+
+  .resultdetaileditem-key {
+    color: #656565;
+  }
+
+  .resultdetaileditem-value {
+    font-family: "Roboto", "Helvetica Neue", sans-serif;
+    font-size: 0.9em;
+    font-weight: normal;
+    color: #656565;
+  }
 }
