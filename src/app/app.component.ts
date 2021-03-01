@@ -21,6 +21,7 @@ import { LandingPageComponent } from '@components/landing-page/landing-page.comp
 import { NGXLogInterface, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IconService } from '@services/icon-service/icon.service';
+import { MainFormService } from './services/main-form/main-form.service';
 
 @Component({
   selector: 'app-root',
@@ -30,10 +31,10 @@ import { IconService } from '@services/icon-service/icon.service';
 export class AppComponent implements OnInit {
 
   public title = 'ARLAS-wui-builder';
-
   @ViewChild('landing', { static: false }) public landing: LandingPageComponent;
 
   constructor(
+    private mainFormService: MainFormService,
     private logger: NGXLogger,
     private snackbar: MatSnackBar,
     private iconService: IconService) {

@@ -62,6 +62,8 @@ export class MainFormService {
 
   public configurationId: string;
 
+  public configurationName: string;
+
   public configChange: Subject<{ id: string, name: string }> = new Subject<{ id: string, name: string }>();
 
   public mainForm = new FormGroup({

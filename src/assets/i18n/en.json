@@ -523,5 +523,7 @@
 	"StrokeColor": "Stroke colour",
 	"Fixed strokeWidth": "Stroke width (px)",
 	"Fixed strokeOpacity": "Stroke opacity",
-	"Fixed strokeColor": "Stroke color"
+	"Fixed strokeColor": "Stroke color",
+	"Invalid dashboard name":"Invalid dashboard name",
+	"Another dashboad already exists with the same name, please choose another one":"Another dashboad already exists with the same name, please choose another one"
 }

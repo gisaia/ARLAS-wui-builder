@@ -162,15 +162,16 @@ export class MainFormManagerService {
           this.persistenceService.update(
             this.mainFormService.configurationId,
             conf,
-            new Date(data.last_update_date).getTime(), data.doc_key, data.doc_readers, data.doc_writers
+            new Date(data.last_update_date).getTime(), this.mainFormService.configurationName, data.doc_readers, data.doc_writers
           ).subscribe(
             () => {
               this.snackbar.open(
-                this.translate.instant('Dashboard updated !') + ' (' + data.doc_key + ')'
+                this.translate.instant('Dashboard updated !') + ' (' + this.mainFormService.configurationName + ')'
               );
             },
-            () => {
+            (error) => {
               this.snackbar.open(this.translate.instant('Error : Dashboard not updated'));
+              this.raiseError(error);
             }
           );
         });
@@ -192,8 +193,9 @@ export class MainFormManagerService {
               this.mainFormService.configChange.next({ id: data.id, name: data.doc_key });
               this.router.navigate(['map-config'], { queryParamsHandling: 'preserve' });
             },
-            () => {
+            (error) => {
               this.snackbar.open(this.translate.instant('Error : Dashboard not saved'));
+              this.raiseError(error);
             }
           );
         });
@@ -312,4 +314,25 @@ export class MainFormManagerService {
     }
   }
 
+  private raiseError(error: any) {
+    if (error.status === 500) {
+      error.json().then(err => {
+        if ((err.message as string).indexOf('already exists')) {
+          // Open a modal to explain that a dashboard with this name already exists
+          const dialogRef = this.dialog.open(InputModalComponent, {
+            data: {
+              title: 'Invalid dashboard name',
+              message: 'Another dashboad already exists with the same name, please choose another one',
+              initialValue: this.mainFormService.configurationName,
+              noCancel: true
+            }
+          });
+          dialogRef.afterClosed().subscribe(name => {
+            this.mainFormService.configurationName = name;
+            this.attemptExport(EXPORT_TYPE.persistence);
+          });
+        }
+      });
+    }
+  }
 }

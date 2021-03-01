@@ -16,8 +16,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef, Output } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { Subject } from 'rxjs/internal/Subject';
 
 @Component({
   selector: 'app-status',
@@ -26,20 +27,30 @@ import { MainFormService } from '@services/main-form/main-form.service';
 })
 export class StatusComponent implements OnInit {
 
-  public configName = undefined;
   public displayCurrentConfig = false;
-
+  public editingConfigName = false;
+  public editingName: string;
   constructor(
-    private mainService: MainFormService,
+    public mainService: MainFormService,
     private cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit() {
     this.mainService.configChange.subscribe(config => {
-      this.configName = config.name;
+      this.mainService.configurationName = config.name;
       this.displayCurrentConfig = true;
       this.cdr.detectChanges();
     });
+  }
+
+  public finishEditConfigName() {
+    this.mainService.configurationName = this.editingName;
+    this.editingConfigName = false;
+  }
+
+  public startEditConfigName(event) {
+    this.editingConfigName = true;
+    this.editingName = this.mainService.configurationName;
   }
 
 }
