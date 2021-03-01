@@ -67,6 +67,10 @@
                     <mat-icon>edit</mat-icon>
                     <span>{{'Edit' | translate}}</span>
                 </button>
+                <button mat-menu-item (click)="duplicate(element.id, element.arlasId)">
+                    <mat-icon>content_copy</mat-icon>
+                    <span>{{'Duplicate' | translate}}</span>
+                </button>
                 <button mat-menu-item (click)="confirmDelete(element.id, element.arlasId)">
                     <mat-icon>delete</mat-icon>
                     <span>{{'Delete' | translate}}</span>
