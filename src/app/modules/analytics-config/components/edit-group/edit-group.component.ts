@@ -33,6 +33,8 @@ import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-
 import { Subject } from 'rxjs/internal/Subject';
 import { Subscription } from 'rxjs';
 import { OnDestroy } from '@angular/core';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { moveInFormArray } from '@utils/tools';
 
 @Component({
   selector: 'app-add-widget-dialog',
@@ -199,6 +201,20 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     if (this.valuesChangesSub) { this.valuesChangesSub.unsubscribe(); }
   }
 
+  public getOtherWidgetIds(widgetIndex) {
+    return this.contentTypeValue
+    .map((tab, i) => i)
+    .filter(i => i !== widgetIndex)
+    .map(i => 'widget-' + i);
+
+  }
+  public drop(event: CdkDragDrop<string[]>) {
+    const previousIndex = parseInt(event.previousContainer.id.replace('widget-', ''), 10);
+    const newIndex = parseInt(event.container.id.replace('widget-', ''), 10);
+    moveInFormArray(previousIndex, newIndex, this.content);
+    this.updatePreview();
+
+  }
   get contentType() {
     return this.formGroup.controls.contentType;
   }
