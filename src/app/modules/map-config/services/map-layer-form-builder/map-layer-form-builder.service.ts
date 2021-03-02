@@ -597,7 +597,6 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
       {
       }
     );
-
   }
 
   public get aggGeometry() { return this.geometryStep.get('aggGeometry') as SelectFormControl; }

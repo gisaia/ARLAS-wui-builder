@@ -18,7 +18,7 @@ under the License.
 */
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MainFormService } from '@services/main-form/main-form.service';
+import { MainFormService, ARLAS_ID } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { PreviewComponent } from '../preview/preview.component';
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
@@ -33,6 +33,12 @@ import { Layer as LayerMap } from '@services/main-form-manager/models-map-config
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { Subscription } from 'rxjs';
+import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { importElements } from '@services/main-form-manager/tools';
+import { MapImportService } from '@map-config/services/map-import/map-import.service';
+import { Router } from '@angular/router';
+import { ConfigFormGroup, ConfigFormControl } from '@shared-models/config-form';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 
 export interface Layer {
   id: string;
@@ -55,6 +61,7 @@ export class LayersComponent implements OnInit, OnDestroy {
 
   private previewSub: Subscription;
   private confirmDeleteSub: Subscription;
+  public toUnsubscribe: Array<Subscription> = [];
 
   constructor(
     protected mainFormService: MainFormService,
@@ -63,7 +70,10 @@ export class LayersComponent implements OnInit, OnDestroy {
     private configService: ArlasConfigService,
     private startupService: StartupService,
     private collectionService: CollectionService,
-    private colorService: ArlasColorGeneratorLoader
+    private router: Router,
+
+    private colorService: ArlasColorGeneratorLoader,
+    private mapLayerFormBuilder: MapLayerFormBuilderService
 
   ) {
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
@@ -85,6 +95,7 @@ export class LayersComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     if (this.confirmDeleteSub) { this.confirmDeleteSub.unsubscribe(); }
     if (this.previewSub) { this.previewSub.unsubscribe(); }
+    this.toUnsubscribe.forEach(u => u.unsubscribe());
   }
 
   public getLayer(layerFg, modeValues, paint) {
@@ -132,6 +143,55 @@ export class LayersComponent implements OnInit, OnDestroy {
         this.visualisationSetFa.setValue(visualisationSetValue);
       }
     });
+  }
+
+  public duplicate(layerId: number, arlasId: string): void {
+    /** Get the layerFg to duplicatte */
+    const formGroupIndex = (this.layersFa.value as any[]).findIndex(el => el.id === layerId);
+    const layerFg = this.layersFa.at(formGroupIndex) as MapLayerFormGroup;
+    const newId = ARLAS_ID + layerFg.customControls.name.value + ' copy' + ':' + Date.now();
+    /** Add the new layer to the same visualisation sets of the original one */
+    const visualisationSetValue = this.visualisationSetFa.value;
+    visualisationSetValue.forEach(vs => {
+      const layersSet = new Set(vs.layers);
+      if (layersSet.has(arlasId)) {
+        layersSet.add(newId);
+      }
+      vs.layers = Array.from(layersSet);
+    });
+    /** we now should build a new layer form group for the new one  */
+    const newLayerFg = this.mapLayerFormBuilder.buildLayer();
+    /** the easiest way I found is to export the original layer and then re-import it in order to initialize correctly
+     * all the subcontrols of the layer fg
+     */
+    const layerSource = ConfigExportHelper.getLayerSourceConfig(layerFg);
+    layerSource.id = newId;
+    layerSource.name = layerFg.customControls.name.value + ' copy';
+    const layer = ConfigMapExportHelper.getLayer(layerFg, this.colorService, this.collectionService.taggableFields);
+    layer.id = newId;
+    MapImportService.importLayerFg(layer, layerSource,
+      this.mainFormService.getCollections()[0], layerId + 1, visualisationSetValue, newLayerFg);
+    const modeValues = newLayerFg.customControls.mode.value === LAYER_MODE.features ? newLayerFg.customControls.featuresFg.value :
+      ( newLayerFg.customControls.mode.value === LAYER_MODE.featureMetric ?
+        newLayerFg.customControls.featureMetricFg.value : newLayerFg.customControls.clusterFg.value);
+    const paint = ConfigMapExportHelper.getLayerPaint(modeValues,
+      newLayerFg.customControls.mode.value, this.colorService, this.collectionService.taggableFields);
+    /** Add the duplicated layer to legend set in order to have the icon */
+    this.layerLegend.set(
+      newId + '#' +  newLayerFg.customControls.mode.value,
+      { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint) }
+    );
+    newLayerFg.markAsPristine();
+    /** listen to all the ondepencychnage to correctly initiate the controls */
+    ConfigFormGroupComponent.listenToAllControlsOnDependencyChange(newLayerFg, this.toUnsubscribe);
+    this.layersFa.insert(formGroupIndex + 1, newLayerFg);
+    this.layersFa.markAllAsTouched();
+    /** reattribute ids to all layers to have id unicity */
+    let id = 0;
+    const layers = this.layersFa.value;
+    layers.forEach(l => l.id = id++);
+    this.layersFa.setValue(layers);
+    this.visualisationSetFa.setValue(visualisationSetValue);
   }
 
   public preview(layerId: number, arlasId: string): void {

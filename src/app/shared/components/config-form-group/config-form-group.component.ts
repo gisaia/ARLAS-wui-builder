@@ -57,6 +57,32 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
   ) { }
 
+  public static listenToAllControlsOnDependencyChange(configFormGroup: ConfigFormGroup, toUnsubscribe: Array<Subscription>) {
+    [
+      ...configFormGroup.controlsRecursively,
+      configFormGroup
+    ]
+      .filter(c => c instanceof ConfigFormGroup || c instanceof ConfigFormControl)
+      .forEach((c: ConfigFormGroup | ConfigFormControl) => {
+        ConfigFormGroupComponent.listenToOnDependencysChange(c, toUnsubscribe);
+      });
+  }
+
+  /**
+   * Watch all other controls that input control depends on to update itself
+   */
+  public static listenToOnDependencysChange(control: ConfigFormControl | ConfigFormGroup, toUnsubscribe: Array<Subscription>) {
+    if (!!control.dependsOn) {
+      control.dependsOn().forEach(dep => {
+        toUnsubscribe.push(dep.valueChanges.subscribe(v => {
+          control.onDependencyChange(control);
+        }));
+      });
+      // trigger on initial load for each control to be on its expected state against other controls
+      control.onDependencyChange(control, true);
+    }
+  }
+
   public ngOnInit() {
 
     /**
@@ -68,7 +94,7 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
      * depend on a displayed field, this was not managed.
      */
     if (!this.isSubGroup) {
-      this.listenToAllControlsOnDependencyChange();
+      ConfigFormGroupComponent.listenToAllControlsOnDependencyChange(this.configFormGroup, this.toUnsubscribe);
       this.initDependentControls();
       this.markChildControls();
     }
@@ -81,34 +107,6 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
     this.configFormGroup = null;
     this.isSubGroup = null;
     this.defaultKey = null;
-  }
-
-
-
-  private listenToAllControlsOnDependencyChange() {
-    [
-      ...this.configFormGroup.controlsRecursively,
-      this.configFormGroup
-    ]
-      .filter(c => c instanceof ConfigFormGroup || c instanceof ConfigFormControl)
-      .forEach((c: ConfigFormGroup | ConfigFormControl) => {
-        this.listenToOnDependencysChange(c);
-      });
-  }
-
-  /**
-   * Watch all other controls that input control depends on to update itself
-   */
-  private listenToOnDependencysChange(control: ConfigFormControl | ConfigFormGroup) {
-    if (!!control.dependsOn) {
-      control.dependsOn().forEach(dep => {
-        this.toUnsubscribe.push(dep.valueChanges.subscribe(v => {
-          control.onDependencyChange(control);
-        }));
-      });
-      // trigger on initial load for each control to be on its expected state against other controls
-      control.onDependencyChange(control, true);
-    }
   }
 
   /**

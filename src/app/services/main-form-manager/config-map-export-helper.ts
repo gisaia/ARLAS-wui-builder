@@ -36,26 +36,7 @@ export class ConfigMapExportHelper {
     public static process(mapConfigLayers: FormArray, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>) {
 
         const layers: Array<Layer> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
-            const mode = layerFg.value.mode as LAYER_MODE;
-            const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
-                (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
-
-            const paint = this.getLayerPaint(modeValues, mode, colorService, taggableFields);
-
-            const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
-            const layer: Layer = {
-                id: layerFg.value.arlasId,
-                type: modeValues.styleStep.geometryType,
-                source: layerSource.source,
-                minzoom: modeValues.visibilityStep.zoomMin,
-                maxzoom: modeValues.visibilityStep.zoomMax,
-                layout: {
-                    visibility: modeValues.visibilityStep.visible ? VISIBILITY.visible : VISIBILITY.none
-                },
-                paint
-            };
-            layer.filter = this.getLayerFilters(modeValues, mode, taggableFields);
-            return layer;
+            return this.getLayer(layerFg, colorService, taggableFields);
         });
 
         const mapConfig: MapConfig = {
@@ -63,6 +44,30 @@ export class ConfigMapExportHelper {
         };
 
         return mapConfig;
+    }
+
+
+    public static getLayer(layerFg: FormGroup, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string> ): Layer {
+        const mode = layerFg.value.mode as LAYER_MODE;
+        const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
+            (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
+
+        const paint = this.getLayerPaint(modeValues, mode, colorService, taggableFields);
+
+        const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
+        const layer: Layer = {
+            id: layerFg.value.arlasId,
+            type: modeValues.styleStep.geometryType,
+            source: layerSource.source,
+            minzoom: modeValues.visibilityStep.zoomMin,
+            maxzoom: modeValues.visibilityStep.zoomMax,
+            layout: {
+                visibility: modeValues.visibilityStep.visible ? VISIBILITY.visible : VISIBILITY.none
+            },
+            paint
+        };
+        layer.filter = this.getLayerFilters(modeValues, mode, taggableFields);
+        return layer;
     }
 
     public static getLayerPaint(modeValues, mode, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>) {
@@ -156,15 +161,15 @@ export class ConfigMapExportHelper {
                 // always keep OTHER_KEYWORD at the end of the list
                 const manualValues = !otherKC ? (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>) :
                     (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>)
-                    .filter(kc => kc.keyword !== OTHER_KEYWORD).concat(otherKC) ;
+                        .filter(kc => kc.keyword !== OTHER_KEYWORD).concat(otherKC);
                 const manualField = (taggableFields && taggableFields.has(fgValues.propertyManualFg.propertyManualFieldCtrl)) ?
-                fgValues.propertyManualFg.propertyManualFieldCtrl + '.0' : fgValues.propertyManualFg.propertyManualFieldCtrl;
+                    fgValues.propertyManualFg.propertyManualFieldCtrl + '.0' : fgValues.propertyManualFg.propertyManualFieldCtrl;
                 return [
                     'match',
                     this.getArray(manualField)
                 ].concat(
-                        manualValues.flatMap(kc => kc.keyword !== OTHER_KEYWORD ?
-                            [kc.keyword, colorService.getColor(kc.keyword)] : [kc.color])
+                    manualValues.flatMap(kc => kc.keyword !== OTHER_KEYWORD ?
+                        [kc.keyword, colorService.getColor(kc.keyword)] : [kc.color])
                 );
             case PROPERTY_SELECTOR_SOURCE.interpolated: {
 
@@ -250,13 +255,13 @@ export class ConfigMapExportHelper {
                 } else if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
                     // otherwise if we normalize
                     return [['!=', getField()
-                    .concat(':' + NORMALIZED)
-                    .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
-                        ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl.replace(/\./g, '_') : ''), 'Infinity'],
-                        ['!=', getField()
-                    .concat(':' + NORMALIZED)
-                    .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
-                        ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl.replace(/\./g, '_') : ''), '-Infinity']]
+                        .concat(':' + NORMALIZED)
+                        .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
+                            ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl.replace(/\./g, '_') : ''), 'Infinity'],
+                    ['!=', getField()
+                        .concat(':' + NORMALIZED)
+                        .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
+                            ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl.replace(/\./g, '_') : ''), '-Infinity']]
                         ;
                 } else {
                     // if we don't normalize
