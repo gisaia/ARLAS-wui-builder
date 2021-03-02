@@ -177,32 +177,17 @@ export class MainFormManagerService {
         });
       } else {
         // Create new config
-        const dialogRef = this.dialog.open(InputModalComponent);
-        dialogRef.afterClosed().subscribe(configName => {
-          this.persistenceService.create(
-            ZONE_WUI_BUILDER,
-            configName,
-            conf
-          ).subscribe(
-            (data) => {
-              this.snackbar.open(
-                this.translate.instant('Dashboard saved !') + ' (' + configName + ')'
-              );
-              this.doImport(generatedConfig, generatedMapConfig);
-              this.mainFormService.configurationId = data.id;
-              this.mainFormService.configChange.next({ id: data.id, name: data.doc_key });
-              this.router.navigate(['map-config'], { queryParamsHandling: 'preserve' });
-            },
-            (error) => {
-              this.snackbar.open(this.translate.instant('Error : Dashboard not saved'));
-              this.raiseError(error);
+        if (!!this.mainFormService.configurationName) {
+            this.createDashboard(this.mainFormService.configurationName, conf, generatedConfig, generatedMapConfig);
+        } else {
+          const dialogRef = this.dialog.open(InputModalComponent);
+          dialogRef.afterClosed().subscribe(configName => {
+            if (!!configName) {
+              this.createDashboard(configName, conf, generatedConfig, generatedMapConfig);
             }
-          );
-        });
-
+          });
+        }
       }
-
-
     } else {
       this.saveJson(generatedConfig, 'config.json');
       this.saveJson(generatedMapConfig, 'config.map.json', '-');
@@ -334,5 +319,26 @@ export class MainFormManagerService {
         }
       });
     }
+  }
+  private createDashboard(configName, conf, generatedConfig, generatedMapConfig) {
+    this.persistenceService.create(
+      ZONE_WUI_BUILDER,
+      configName,
+      conf
+    ).subscribe(
+      (data) => {
+        this.snackbar.open(
+          this.translate.instant('Dashboard saved !') + ' (' + configName + ')'
+        );
+        this.doImport(generatedConfig, generatedMapConfig);
+        this.mainFormService.configurationId = data.id;
+        this.mainFormService.configChange.next({ id: data.id, name: data.doc_key });
+        this.router.navigate(['map-config'], { queryParamsHandling: 'preserve' });
+      },
+      (error) => {
+        this.snackbar.open(this.translate.instant('Error : Dashboard not saved'));
+        this.raiseError(error);
+      }
+    );
   }
 }
