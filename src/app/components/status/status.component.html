@@ -1,9 +1,20 @@
-<div class="status-container" *ngIf="configName && displayCurrentConfig">
-    <div class="inner">
-        {{ 'Editing dashboard' | translate}} : {{configName}}
+<div class="status-container" *ngIf="mainService.configurationName && displayCurrentConfig">
+
+    <div class="inner" >
+        {{ 'Editing dashboard' | translate}} :
+        <span *ngIf="!editingConfigName" class="inner" tabindex="-1"
+            (focus)="startEditConfigName($event)">
+            {{mainService.configurationName}}
+        </span>
+        <span *ngIf="editingConfigName" class="edit-name">
+            <!-- keydown stopPropagation needed to allow spaces -->
+            <input matInput [(ngModel)]="editingName"  appAutoFocus autocomplete="off"
+                (focusout)="finishEditConfigName()" (keydown)="$event.stopPropagation();"
+                (keydown.enter)="finishEditConfigName()">
+        </span>
     </div>
 </div>
-<div class="status-container" *ngIf="!configName && displayCurrentConfig">
+<div class="status-container" *ngIf="!mainService.configurationName && displayCurrentConfig">
     <div class="inner">
         {{ 'Create dashboard' | translate}}
     </div>
