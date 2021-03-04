@@ -187,10 +187,12 @@ export class LayersComponent implements OnInit, OnDestroy {
     this.layersFa.insert(formGroupIndex + 1, newLayerFg);
     this.layersFa.markAllAsTouched();
     /** reattribute ids to all layers to have id unicity */
-    let id = 0;
     const layers = this.layersFa.value;
-    layers.forEach(l => l.id = id++);
-    this.layersFa.setValue(layers);
+    for (let i = 0; i < layers.length; i++) {
+      const lfg = this.layersFa.at(i) as MapLayerFormGroup;
+      lfg.customControls.id.setValue(i);
+      this.layersFa.setControl(i, lfg);
+    }
     this.visualisationSetFa.setValue(visualisationSetValue);
   }
 
