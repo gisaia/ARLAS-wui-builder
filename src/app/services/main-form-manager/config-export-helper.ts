@@ -576,11 +576,18 @@ export class ConfigExportHelper {
             case WIDGET_TYPE.powerbars: {
                 const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'tree';
-                const aggregationModel = {
+                const aggregationModel: AggregationModelConfig = {
                     type: 'term',
                     field: widgetData.dataStep.aggregationField,
                     size: widgetData.dataStep.aggregationSize
                 };
+                if (!!widgetData.renderStep.propertyProvidedFieldCtrl) {
+                    contrib.colorField = widgetData.renderStep.propertyProvidedFieldCtrl;
+                    aggregationModel.fetch_hits = {
+                        size: 1,
+                        include: [contrib.colorField]
+                    };
+                }
                 this.addMetricToAggregationModel(aggregationModel, widgetData.dataStep.metric);
                 contrib.jsonpath = widgetData.dataStep.metric.metricCollectFunction === DEFAULT_METRIC_VALUE ?
                     JSONPATH_COUNT : JSONPATH_METRIC;
@@ -825,6 +832,7 @@ export class ConfigExportHelper {
                     powerbarTitle: widgetData.title,
                     displayFilter: !!widgetData.renderStep.displayFilter,
                     useColorService: !!widgetData.renderStep.useColorService,
+                    useColorFromData: !!widgetData.renderStep.useColorFromData,
                     unit: widgetData.dataStep.unit,
                     chartWidth: !!itemPerLine ?
                         Math.ceil(analyticsBoardWidth / itemPerLine) - 12 : null // 12 => margin and padding left/right

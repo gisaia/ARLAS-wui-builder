@@ -178,8 +178,10 @@
 	"Metric": "Metric",
 	"powerbar unit": "Metric unit",
 	"powerbar unit description": "Unit of the calculated metric. It will be displayed on the tooltip when hovering a bar.",
-	"Manually associate colors": "Manually associate colours",
-	"Powerbar manually associate colors description": "Allows you to manually define the colours associated with each value represented in the Powerbar",
+	"Method to retrive powerbar color": "Method to retrive powerbar color",
+	"Method to retrive powerbar color description": "Choice of the method of associating the color of the powerbar: \n • Manual: Manually adjust the color of each value of the chosen field. Unconfigured values ​​will have an automatically generated color \n • Provided: The color of the powerbar is provided by a field ",
+	"Provided field": "Colour field",
+	"Provided source powerbar field description": "• The chosen field values should be hexadecimal colours (e.g #000000) that will be attributed to the powerbar",
 	"Powerbar manage colors description": "",
 	"A field is required to manage colors": "A field must be filled in to adjust the associated colours",
 	"Display the filter": "Allow search",
@@ -353,7 +355,6 @@
 	"Fixed": "Fixed",
 	"Color fixed description": " • Choose a unique colour applied to all geometries",
 	"Slider fixed value description": "",
-	"Provided field": "Colour field",
 	"Provided source field description": " • The chosen field values should be hexadecimal colours (e.g #000000) that will be attributed to the geometries",
 	"Label field": "Label field",
 	"label field description": " • (Optional) Associate a label to the colour (legend)",
@@ -379,6 +380,8 @@
 	"Maximum": "Maximum",
 	"Use color service": "Use colour service",
 	"Use color service description": "Allows you to colour certain columns of the table. The cell is coloured according to the value of the field.",
+	"Manually associate colors": "Manually associate colours",
+	"Powerbar manually associate colors description": "Allows you to manually define the colours associated with each value represented in the Powerbar",
 	"Coarse": "Coarse",
 	"Medium": "Medium",
 	"Fine": "Fine",
@@ -536,5 +539,4 @@
 	"Another dashboad already exists with the same name, please choose another one":"Another dashboad already exists with the same name, please choose another one",
 	"Rename":"Rename",
 	"Order field feature metric description":"(Optional) Sort data of aggregation by one or many fields. The first element of the resulted sort is the one rendered in the geometry.\n If empty, we order by descending collection date."
-
 }

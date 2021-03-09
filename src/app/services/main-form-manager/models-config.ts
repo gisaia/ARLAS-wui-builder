@@ -141,6 +141,7 @@ export interface ContributorConfig {
         order: number,
         fields: Array<{ path: string, label: string, process: string }>
     }>;
+    colorField?: string;
 }
 
 export interface SwimlaneConfig {
@@ -204,6 +205,7 @@ export interface AnalyticComponentInputConfig {
     shortValue?: boolean;
     displayFilter?: boolean;
     useColorService?: boolean;
+    useColorFromData?: boolean;
     opacity?: number;
     powerbarTitle?: string;
     diameter?: number;
@@ -284,6 +286,10 @@ export interface AggregationModelConfig {
     interval?: {
         value: number;
         unit?: string;
+    };
+    fetch_hits?: {
+        size: number;
+        include: Array<string>;
     };
     metrics?: Array<AggregationModelMetricConfig>;
 }
