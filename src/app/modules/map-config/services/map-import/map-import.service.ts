@@ -46,7 +46,7 @@ export class MapImportService {
     private mapVisualisationFormBuilder: MapVisualisationFormBuilderService
   ) { }
 
-  public static removeLastcolor = (value) => value.substring(0, value.lastIndexOf('_color'));
+  public static removeLastcolor = (value) => value.substring(0, value.lastIndexOf('_arlas__color'));
 
   public static importPropertySelector(
     inputValues: any,
@@ -62,7 +62,7 @@ export class MapImportService {
     } else if (inputValues instanceof Array) {
       if (inputValues.length === 2) {
         const field = (inputValues as Array<string>)[1];
-        if (field.endsWith('_color') && layerSource.colors_from_fields) {
+        if (field.endsWith('_arlas__color') && layerSource.colors_from_fields) {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.generated;
           propertySelectorValues.propertyGeneratedFieldCtrl = layerSource.colors_from_fields
             .find(f => f.replace(/\./g, '_') === this.removeLastcolor(field));
