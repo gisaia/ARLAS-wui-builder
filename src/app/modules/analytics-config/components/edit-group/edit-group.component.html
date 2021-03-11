@@ -41,7 +41,8 @@
                 </div>
             </div>
             <div class="edit-widgets">
-                <div *ngFor="let comp of contentTypeValue; index as ci;" mat-raised-button>
+                <div cdkDrag *ngFor="let comp of contentTypeValue; index as ci;" mat-raised-button [id]="'widget-' + ci" cdkDropList cdkDropListOrientation="horizontal"
+                (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="getOtherWidgetIds(ci)" >
                     <div class="invalid-widget-edition" *ngIf="!content.controls[ci].valid && !!content.controls[ci].value.widgetData?.title"
                         [matTooltip]="'The widget has invalid inputs. Edit to fix them.' | translate">!</div>
                     <span
@@ -59,6 +60,7 @@
                                 <span>{{'Delete' | translate}}</span>
                             </button>
                         </mat-menu>
+                        <div class="placeholder" *cdkDragPlaceholder></div>
                 </div>
                 <button class="add" mat-stroked-button color="primary" [matTooltip]="'Add a widget' | translate" (click)="addWidget()">
                     <mat-icon>add</mat-icon>
