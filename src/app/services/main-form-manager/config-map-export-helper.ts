@@ -154,7 +154,7 @@ export class ConfigMapExportHelper {
             case PROPERTY_SELECTOR_SOURCE.provided:
                 return this.getArray(fgValues.propertyProvidedFieldCtrl);
             case PROPERTY_SELECTOR_SOURCE.generated:
-                return this.getArray(fgValues.propertyGeneratedFieldCtrl + '_color');
+                return this.getArray(fgValues.propertyGeneratedFieldCtrl + '_arlas__color');
             case PROPERTY_SELECTOR_SOURCE.manual:
                 const otherKC = (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>)
                     .find(kc => kc.keyword === OTHER_KEYWORD);
