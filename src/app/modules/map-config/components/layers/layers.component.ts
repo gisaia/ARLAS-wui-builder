@@ -33,6 +33,7 @@ import { Config } from '@services/main-form-manager/models-config';
 import { Layer as LayerMap } from '@services/main-form-manager/models-map-config';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
 import { StartupService } from '@services/startup/startup.service';
+import { Router } from '@angular/router';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { camelize } from '@utils/tools';
@@ -72,6 +73,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     private configService: ArlasConfigService,
     private startupService: StartupService,
     private collectionService: CollectionService,
+    private mapImportService: MapImportService,
     private colorService: ArlasColorGeneratorLoader,
     private mapLayerFormBuilder: MapLayerFormBuilderService,
     protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
@@ -169,8 +171,10 @@ export class LayersComponent implements OnInit, OnDestroy {
     layerSource.name = layerFg.customControls.name.value + ' copy';
     const layer = ConfigMapExportHelper.getLayer(layerFg, this.colorService, this.collectionService.taggableFields);
     layer.id = newId;
+    const filtersFa: FormArray = new FormArray([], []);
+    this.mapImportService.importMapFilters(layerSource, filtersFa);
     MapImportService.importLayerFg(layer, layerSource,
-      this.mainFormService.getCollections()[0], layerId + 1, visualisationSetValue, newLayerFg);
+      this.mainFormService.getCollections()[0], layerId + 1, visualisationSetValue, newLayerFg, filtersFa);
     const modeValues = newLayerFg.customControls.mode.value === LAYER_MODE.features ? newLayerFg.customControls.featuresFg.value :
       (newLayerFg.customControls.mode.value === LAYER_MODE.featureMetric ?
         newLayerFg.customControls.featureMetricFg.value : newLayerFg.customControls.clusterFg.value);
@@ -271,15 +275,17 @@ export class LayersComponent implements OnInit, OnDestroy {
         let layerFg = this.mapLayerFormBuilder.buildLayer();
         const layerSource = layersSources.find(s => s.id === layer.id);
         layerSource.id = newId;
+        const filtersFa: FormArray = new FormArray([], []);
+        this.mapImportService.importMapFilters(layerSource, filtersFa);
         layerFg = MapImportService.importLayerFg(
           layer,
           layerSource,
           this.mainFormService.getCollections()[0],
           this.mainFormService.mapConfig.getLayersFa().length + 1,
           visualisationSets,
-          layerFg
+          layerFg,
+          filtersFa
         );
-
         const modeValues = layerFg.customControls.mode.value === LAYER_MODE.features ? layerFg.customControls.featuresFg.value :
           (layerFg.customControls.mode.value === LAYER_MODE.featureMetric ?
             layerFg.customControls.featureMetricFg.value : layerFg.customControls.clusterFg.value);

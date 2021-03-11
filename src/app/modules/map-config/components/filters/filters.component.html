@@ -1,0 +1,49 @@
+<table mat-table [dataSource]="filtersFa?.value" class="mat-elevation-z1">
+
+    <ng-container matColumnDef="field">
+        <th mat-header-cell style="width: 40%;" *matHeaderCellDef>{{'Filter Field' | translate}}</th>
+        <td mat-cell style="width: 40%;" *matCellDef="let element"> {{element.filterField.value}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="operation">
+        <th mat-header-cell style="width: 15%;" *matHeaderCellDef>{{'Operation' | translate}}</th>
+        <td mat-cell style="width: 15%;" *matCellDef="let element"> {{element.filterOperation | translate}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="value">
+        <th mat-header-cell style="width: 45%;" *matHeaderCellDef>{{'Value' | translate}}</th>
+        <td mat-cell style="width: 45%;" *matCellDef="let element">
+            <ul *ngIf="element.filterOperation === 'IN' || element.filterOperation === 'NOT_IN'" style="padding-left: 15px;">
+                <li *ngFor="let value of element.filterInValues"> {{value}}</li>
+            </ul>
+            <span *ngIf="element.filterOperation === 'EQUAL' || element.filterOperation === 'NOT_EQUAL'">{{element.filterEqualValues}}</span>
+            <span *ngIf="element.filterOperation === 'RANGE' || element.filterOperation === 'OUT_RANGE'">[{{element.filterMinRangeValues}}, {{element.filterMaxRangeValues}}] </span>
+        
+        </td>
+
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+        <th mat-header-cell style="width: 5%;" *matHeaderCellDef>{{'Actions' | translate}}</th>
+        <td mat-cell style="width: 5%;" *matCellDef="let element">
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <!-- TODO : Edit a filter -->
+                <button mat-menu-item (click)="confirmDelete(element.id)">
+                    <mat-icon>delete</mat-icon>
+                    <span>{{'Delete' | translate}}</span>
+                </button>
+            </mat-menu>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<button type="button" mat-stroked-button color="primary" (click)="open()" class="add-filter">
+    {{'Add filterField' | translate}}
+</button>
+

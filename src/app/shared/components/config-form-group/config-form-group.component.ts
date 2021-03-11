@@ -17,14 +17,14 @@ specific language governing permissions and limitations
 under the License.
 */
 import {
-  Component, OnInit, Input, OnDestroy, ViewChild, ViewChildren, ViewEncapsulation, QueryList, ChangeDetectorRef
+  Component, OnInit, Input, OnDestroy, ViewChild, ViewChildren, ViewEncapsulation, QueryList, ChangeDetectorRef, Output
 } from '@angular/core';
 import { ConfigFormGroup, ConfigFormControl, ConfigFormGroupArray } from '@shared-models/config-form';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatStepper } from '@angular/material';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, FormControl } from '@angular/forms';
 
 /**
  * TODO this class can probably be optimized.
@@ -46,10 +46,13 @@ import { AbstractControl } from '@angular/forms';
 export class ConfigFormGroupComponent implements OnInit, OnDestroy {
 
   @Input() public configFormGroup: ConfigFormGroup;
+  @Input() public parentConfigFormGroup: ConfigFormGroup;
   @Input() public isSubGroup: boolean;
   @Input() public defaultKey: string;
   @ViewChild(MatStepper, { static: false }) private stepper: MatStepper;
   @ViewChildren(ConfigFormGroupComponent) private subConfigFormGroups: QueryList<ConfigFormGroupComponent>;
+  @Output() public updateSyncOptions: Subject<{prefix: string, control: FormControl}> = new Subject();
+
 
   public toUnsubscribe: Array<Subscription> = [];
 

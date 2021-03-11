@@ -25,14 +25,15 @@ import { MapLayerFormBuilderService, MapLayerFormGroup } from '../map-layer-form
 import { LayerSourceConfig, ColorConfig } from 'arlas-web-contributors';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { VISIBILITY, NORMALIZED } from '@services/main-form-manager/config-map-export-helper';
-import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE } from '../map-layer-form-builder/models';
+import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION } from '../map-layer-form-builder/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
 import { COUNT_OR_METRIC } from '@shared-services/property-selector-form-builder/models';
 import { VisualisationSetConfig, BasemapStyle } from 'arlas-web-components';
 import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, FormArray, Form } from '@angular/forms';
+import { MapFiltersControl } from '@shared-models/config-form';
 
 @Injectable({
   providedIn: 'root'
@@ -198,8 +199,13 @@ export class MapImportService {
     propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl = inputValues.pop();
   }
 
-  public static importLayerFg(layer: Layer, layerSource: LayerSourceConfig, collectionName: string,
-                              layerId: number, visualisationSets: Array<VisualisationSetConfig>, layerFg: MapLayerFormGroup) {
+  public static importLayerFg(layer: Layer,
+                              layerSource: LayerSourceConfig,
+                              collectionName: string,
+                              layerId: number,
+                              visualisationSets: Array<VisualisationSetConfig>,
+                              layerFg: MapLayerFormGroup,
+                              filtersFa: FormArray) {
     const type = layer.source.split('-')[0];
     // TODO extract type with toolkit, once it is available (contrary of `getSourceName`)
     const layerMode = layer.source.startsWith('feature-metric') ? LAYER_MODE.featureMetric :
@@ -270,6 +276,7 @@ export class MapImportService {
         visible: (!!layer.layout && !!layer.layout.visibility) ? layer.layout.visibility === VISIBILITY.visible : true,
         zoomMin: minzoom,
         zoomMax: maxzoom,
+        filters: new FormArray([])
       },
       styleStep: {
         colorFg: {
@@ -307,7 +314,7 @@ export class MapImportService {
       values.styleStep.radiusFg = {};
       this.importPropertySelector(layer.paint[layer.type + '-radius'], values.styleStep.radiusFg, false, isAggregated, layerSource);
     }
-
+    values.visibilityStep.filters = filtersFa;
     const colors = layer.paint[layer.type + '-color'];
     values.styleStep.colorFg = {};
     this.importPropertySelector(colors, values.styleStep.colorFg, true, isAggregated, layerSource);
@@ -532,6 +539,56 @@ export class MapImportService {
     ]);
     return visualisationFg;
   }
+
+  public importMapFilters(layerSource: LayerSourceConfig, filtersFa: FormArray) {
+    let i = 0;
+    if (!!layerSource.filters) {
+      layerSource.filters.forEach(f => {
+        const mapFilterFg = this.mapLayerFormBuilder.buildMapFilter();
+        importElements([
+          {
+            value: {value: f.field},
+            control: mapFilterFg.customControls.filterField
+          },
+          {
+            value: f.op,
+            control: mapFilterFg.customControls.filterOperation
+          }
+        ]);
+        if (f.op === FILTER_OPERATION.IN || f.op === FILTER_OPERATION.NOT_IN) {
+          importElements([
+            {
+              value: f.value,
+              control: mapFilterFg.customControls.filterInValues
+            }
+          ]);
+        } else if (f.op === FILTER_OPERATION.EQUAL || f.op === FILTER_OPERATION.NOT_EQUAL) {
+          importElements([
+            {
+              value: f.value,
+              control: mapFilterFg.customControls.filterEqualValues
+            }
+          ]);
+        } else if (f.op === FILTER_OPERATION.RANGE || f.op === FILTER_OPERATION.OUT_RANGE) {
+          const min = +(f.value as string).split(';')[0];
+          const max = +(f.value as string).split(';')[1];
+          importElements([
+            {
+              value: min,
+              control: mapFilterFg.customControls.filterMinRangeValues
+            },
+            {
+              value: max,
+              control: mapFilterFg.customControls.filterMaxRangeValues
+            }
+          ]);
+        }
+        filtersFa.insert(i, mapFilterFg);
+        i++;
+      });
+    }
+  }
+
   private importLayer(
     layer: Layer,
     layerSource: LayerSourceConfig,
@@ -539,16 +596,9 @@ export class MapImportService {
     layerId: number,
     visualisationSets: Array<VisualisationSetConfig>) {
     const layerFg = this.mapLayerFormBuilder.buildLayer();
-    return MapImportService.importLayerFg(layer, layerSource, collectionName, layerId, visualisationSets, layerFg);
+    const filtersFa: FormArray = new FormArray([]);
+    this.importMapFilters(layerSource, filtersFa);
+    return MapImportService.importLayerFg(layer, layerSource, collectionName, layerId, visualisationSets, layerFg, filtersFa);
   }
-
-
-
-
-
-
-
-
-  private replaceUnderscore = (value) => value.replace(/\_/g, '.');
 
 }

@@ -1,4 +1,4 @@
-import { OnDestroy } from '@angular/core';
+import { OnDestroy, Output } from '@angular/core';
 /*
 Licensed to Gisaïa under one or more contributor
 license agreements. See the NOTICE.txt file distributed with
@@ -26,8 +26,13 @@ import {
   ColorFormControl, HuePaletteFormControl, HiddenFormControl, IconFormControl, ButtonFormControl,
   OrderedSelectFormControl, MetricWithFieldListFormControl as MetricFieldListFormControl, TextareaFormControl,
   MetricWithFieldListFormControl, FieldWithSizeListFormControl, ButtonToggleFormControl, ColorPreviewFormControl,
-  ComponentFormControl, VisualisationCheckboxFormControl, TitleInputFormControl
+  ComponentFormControl, VisualisationCheckboxFormControl, TitleInputFormControl, MapFiltersControl,
+  TypedSelectFormControl, MultipleSelectFormControl
 } from '@shared-models/config-form';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { MatOptionSelectionChange } from '@angular/material';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-config-form-control',
@@ -37,19 +42,47 @@ import {
 export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
 
   @Input() public control: ConfigFormControl;
+  @Input() public parentFormGroup: FormGroup;
   @Input() public defaultKey: string;
   @ViewChild('component', { read: ViewContainerRef, static: false }) private componentContainer: ViewContainerRef;
-
+  @Output() public updateSyncOptions: Subject<string> = new Subject();
   public colorPreviewControl: ColorPreviewFormControl;
 
+
+  public debouncer: Subject<string> = new Subject();
   constructor(
     private resolver: ComponentFactoryResolver,
     private changeDetector: ChangeDetectorRef
   ) { }
 
-  public ngOnInit(
-  ) {
+
+
+  public onchangeMulitpleSelection(event, clear?: boolean) {
+    if (event.checked) {
+      (this.control as MultipleSelectFormControl).savedItems.add(event.source.value);
+    } else {
+      (this.control as MultipleSelectFormControl).savedItems.delete(event.source.value);
+    }
+
+    (this.control as MultipleSelectFormControl).selectedMultipleItems =
+      Array.from((this.control as MultipleSelectFormControl).savedItems);
+    this.changeDetector.detectChanges();
+    if (clear) {
+      this.debouncer.next('');
+    }
+  }
+
+  public ngOnInit() {
     this.colorPreviewControl = this.isColorPreview();
+    this.debouncer.pipe(debounceTime(500)).subscribe(t => {
+      if (!!(this.control as MultipleSelectFormControl).selectedMultipleItems) {
+        (this.control as MultipleSelectFormControl).selectedMultipleItems
+          .forEach(i => (this.control as MultipleSelectFormControl).savedItems.add(i));
+      }
+      (this.control as MultipleSelectFormControl).selectedMultipleItems =
+        Array.from((this.control as MultipleSelectFormControl).savedItems);
+      this.updateSyncOptions.next(t);
+    });
   }
 
   public ngAfterViewInit() {
@@ -64,6 +97,10 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
         componentRef.instance[c] = componentFormControl.inputs[c]();
       });
     }
+  }
+
+  public trackByFn(index, item) {
+    return item.value;
   }
 
   public ngAfterViewChecked(): void {
@@ -102,10 +139,29 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
       this.control as SelectFormControl : null;
   }
 
+  public isMultipleSelect(): MultipleSelectFormControl | null {
+    return Object.getPrototypeOf(this.control) === MultipleSelectFormControl.prototype &&
+      !(this.control as MultipleSelectFormControl).isAutocomplete ?
+      this.control as MultipleSelectFormControl : null;
+  }
+
+  public isTypedSelect(): TypedSelectFormControl | null {
+    return Object.getPrototypeOf(this.control) === TypedSelectFormControl.prototype &&
+      !(this.control as TypedSelectFormControl).isAutocomplete ?
+      this.control as TypedSelectFormControl : null;
+  }
+
+
   public isAutocomplete(): SelectFormControl | null {
     return Object.getPrototypeOf(this.control) === SelectFormControl.prototype &&
       (this.control as SelectFormControl).isAutocomplete ?
       this.control as SelectFormControl : null;
+  }
+
+  public isTypedAutocomplete(): TypedSelectFormControl | null {
+    return Object.getPrototypeOf(this.control) === TypedSelectFormControl.prototype &&
+      (this.control as TypedSelectFormControl).isAutocomplete ?
+      this.control as TypedSelectFormControl : null;
   }
 
   public isOrderedSelect(): OrderedSelectFormControl | null {
@@ -143,6 +199,10 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
 
   public isButton(): ButtonFormControl | null {
     return Object.getPrototypeOf(this.control) === ButtonFormControl.prototype ? this.control as ButtonFormControl : null;
+  }
+
+  public isMapFilters(): MapFiltersControl | null {
+    return Object.getPrototypeOf(this.control) === MapFiltersControl.prototype ? this.control as MapFiltersControl : null;
   }
 
   public isMetricWithFieldList(): MetricWithFieldListFormControl | null {

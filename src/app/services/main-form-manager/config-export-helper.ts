@@ -31,7 +31,7 @@ import {
 } from './models-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
-import { CLUSTER_GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
+import { CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
 import { MapComponentInputConfig, MapComponentInputMapLayersConfig } from './models-config';
@@ -168,6 +168,8 @@ export class ConfigExportHelper {
         const layerValues = layerFg.value;
         const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
             (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
+        const filters = !!modeValues.visibilityStep.filters ? modeValues.visibilityStep.filters.value : undefined;
+
         const layerSource: LayerSourceConfig = {
             id: layerValues.arlasId,
             name: layerValues.name,
@@ -180,6 +182,31 @@ export class ConfigExportHelper {
             normalization_fields: [],
             metrics: []
         };
+
+        if (!!filters) {
+            filters.forEach((f) => {
+                if (!layerSource.filters) {
+                    layerSource.filters = [];
+                }
+                if (f.filterOperation === FILTER_OPERATION.IN || f.filterOperation === FILTER_OPERATION.NOT_IN) {
+                    layerSource.filters.push({ field: f.filterField.value, op: f.filterOperation, value: f.filterInValues });
+                } else if (f.filterOperation === FILTER_OPERATION.EQUAL || f.filterOperation === FILTER_OPERATION.NOT_EQUAL) {
+                    layerSource.filters.push({ field: f.filterField.value, op: f.filterOperation, value: f.filterEqualValues });
+                } else if (f.filterOperation === FILTER_OPERATION.RANGE || f.filterOperation === FILTER_OPERATION.OUT_RANGE) {
+                    layerSource.filters.push({
+                        field: f.filterField.value, op: f.filterOperation,
+                        value: f.filterMinRangeValues + ';' + f.filterMaxRangeValues
+                    });
+                }
+                if (!layerSource.include_fields) {
+                    layerSource.include_fields = [];
+                }
+                const includeFieldsSet = new Set(layerSource.include_fields);
+                includeFieldsSet.add(f.filterField.value);
+                layerSource.include_fields = Array.from(includeFieldsSet);
+            });
+
+        }
 
         switch (layerValues.mode) {
             case LAYER_MODE.features: {

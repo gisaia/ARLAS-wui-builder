@@ -70,6 +70,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { StartupService } from '@services/startup/startup.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTreeModule } from '@angular/material';
+import { FiltersComponent } from '@map-config/components/filters/filters.component';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -88,7 +89,8 @@ export function createTranslateLoader(http: HttpClient) {
     ConfigFormGroupComponent,
     ConfigFormControlComponent,
     InputModalComponent,
-    ConfigFormGroupArrayComponent
+    ConfigFormGroupArrayComponent,
+    FiltersComponent
   ],
   imports: [
     ArlasToolkitSharedModule,

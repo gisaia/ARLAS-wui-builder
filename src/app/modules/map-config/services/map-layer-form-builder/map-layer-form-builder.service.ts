@@ -20,16 +20,18 @@ import { Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormGroup, ValidatorFn, FormControl } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
-import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
-import { toAllButGeoOptionsObs, toGeoOptionsObs, toGeoPointOptionsObs, toKeywordOptionsObs } from '@services/collection-service/tools';
+import { toAllButGeoOptionsObs, toGeoOptionsObs, toGeoPointOptionsObs, toKeywordOptionsObs,
+  toNumericOrDateOrKeywordObs } from '@services/collection-service/tools';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
   ConfigFormGroup, HiddenFormControl,
   InputFormControl,
   OrderedSelectFormControl, SelectFormControl,
-  SliderFormControl, SlideToggleFormControl, VisualisationCheckboxFormControl, VisualisationCheckboxOption
+  SliderFormControl, SlideToggleFormControl, VisualisationCheckboxFormControl, VisualisationCheckboxOption,
+  MapFiltersControl, TypedSelectFormControl, MultipleSelectFormControl, ConfigFormControl
 } from '@shared-models/config-form';
 import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
 import {
@@ -37,7 +39,7 @@ import {
 } from '@shared/services/property-selector-form-builder/property-selector-form-builder.service';
 import { valuesToOptions } from '@utils/tools';
 import { Observable } from 'rxjs';
-import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE } from './models';
+import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE, FILTER_OPERATION } from './models';
 import { Granularity } from 'arlas-web-contributors/models/models';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { map } from 'rxjs/internal/operators/map';
@@ -162,6 +164,180 @@ export class MapLayerFormGroup extends ConfigFormGroup {
   };
 }
 
+
+export class MapFilterFormGroup extends ConfigFormGroup {
+
+  constructor(collectionFields: Observable<Array<CollectionField>>, filterOperations: Array<FILTER_OPERATION>,
+              collectionService: CollectionService, collection: string
+  ) {
+
+    super({
+      filterField: new TypedSelectFormControl(
+        '',
+        marker('Filter Field'),
+        marker('Filter field description'),
+        true,
+        toNumericOrDateOrKeywordObs(collectionFields),
+        {
+        }
+      ),
+      filterOperation: new SelectFormControl(
+        '',
+        marker('operation'),
+        marker('filter operation description'),
+        false,
+        valuesToOptions(filterOperations),
+        {
+          resetDependantsOnChange: true,
+          dependsOn: () => [this.customControls.filterField],
+          onDependencyChange: (control: SelectFormControl) => {
+
+            /** update list of available ops according to field type */
+            if (this.customControls.filterField.value.type === 'KEYWORD') {
+              control.setSyncOptions([
+                { value: FILTER_OPERATION.IN, label: FILTER_OPERATION.IN },
+                { value: FILTER_OPERATION.NOT_IN, label: FILTER_OPERATION.NOT_IN }
+              ]);
+            } else {
+              control.setSyncOptions([
+                { value: FILTER_OPERATION.EQUAL, label: FILTER_OPERATION.EQUAL },
+                { value: FILTER_OPERATION.NOT_EQUAL, label: FILTER_OPERATION.NOT_EQUAL },
+                { value: FILTER_OPERATION.RANGE, label: FILTER_OPERATION.RANGE },
+                { value: FILTER_OPERATION.OUT_RANGE, label: FILTER_OPERATION.OUT_RANGE },
+              ]);
+            }
+            control.setValue(control.syncOptions[0].value);
+          }
+          // control.enableIf(this.customControls.dataStep.aggregation.value.aggregationFieldType === 'time')
+        }
+      ),
+      filterInValues: new MultipleSelectFormControl(
+        '',
+        marker('values'),
+        marker('filter in-values description'),
+        false,
+        [],
+        {
+          resetDependantsOnChange: true,
+          dependsOn: () => [this.customControls.filterOperation, this.customControls.filterField],
+          onDependencyChange: (control: MultipleSelectFormControl) => {
+            if (!!this.customControls.filterField.value && !!this.customControls.filterField.value.value &&
+              this.customControls.filterField.value.value !== '') {
+              if (this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
+                this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN) {
+                control.setSyncOptions([]);
+                collectionService.getTermAggregation(
+                  collection,
+                  this.customControls.filterField.value.value).then(keywords => {
+                    control.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
+                    if (keywords.length > 0) {
+
+                      // control.setValue(keywords[0])
+                    }
+                  });
+              } else {
+                control.setSyncOptions([]);
+              }
+            } else {
+              control.setSyncOptions([]);
+            }
+            control.markAsUntouched();
+            control.savedItems = new Set();
+            control.selectedMultipleItems = [];
+            control.enableIf(this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
+              this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN);
+          }
+        }
+      ),
+      filterEqualValues: new InputFormControl(
+        '',
+        marker('values'),
+        marker('filter equal description'),
+        'number',
+        {
+          resetDependantsOnChange: true,
+          dependsOn: () => [this.customControls.filterOperation, this.customControls.filterField],
+          onDependencyChange: (control: InputFormControl) => {
+            control.enableIf(this.customControls.filterOperation.value === FILTER_OPERATION.EQUAL ||
+              this.customControls.filterOperation.value === FILTER_OPERATION.NOT_EQUAL);
+          }
+        }
+      ),
+      filterMinRangeValues: new InputFormControl(
+        '',
+        marker('Minimum range filter'),
+        marker('Minimum range filter description'),
+        'number',
+        {
+          resetDependantsOnChange: true,
+          dependsOn: () => [
+            this.customControls.filterOperation, this.customControls.filterField
+          ],
+          onDependencyChange: (control, isLoading) => {
+            const doRangeEnable = this.customControls.filterOperation.value === FILTER_OPERATION.RANGE ||
+              this.customControls.filterOperation.value === FILTER_OPERATION.OUT_RANGE;
+            control.enableIf(doRangeEnable);
+            if (doRangeEnable && !isLoading) {
+              collectionService.getComputationMetric(
+                collection,
+                this.customControls.filterField.value.value,
+                METRIC_TYPES.MIN)
+                .then(min =>
+                  control.setValue(min));
+            }
+          }
+        },
+        () => this.customControls.filterMaxRangeValues,
+        undefined
+      ),
+      filterMaxRangeValues: new InputFormControl(
+        '',
+        marker('Maximum range filter'),
+        marker('Minimum range filter description'),
+        'number',
+        {
+          resetDependantsOnChange: true,
+          dependsOn: () => [
+            this.customControls.filterOperation, this.customControls.filterField
+          ],
+          onDependencyChange: (control, isLoading) => {
+            const doRangeEnable = this.customControls.filterOperation.value === FILTER_OPERATION.RANGE ||
+              this.customControls.filterOperation.value === FILTER_OPERATION.OUT_RANGE;
+            control.enableIf(doRangeEnable);
+            if (doRangeEnable && !isLoading) {
+              collectionService.getComputationMetric(
+                collection,
+                this.customControls.filterField.value.value,
+                METRIC_TYPES.MAX)
+                .then(max =>
+                  control.setValue(max));
+            }
+          }
+        },
+        undefined,
+        () => this.customControls.filterMinRangeValues
+      ),
+      id: new HiddenFormControl(
+        '',
+        null,
+        {
+          optional: true
+        }
+      ),
+    });
+  }
+
+  public customControls = {
+    filterField: this.get('filterField') as TypedSelectFormControl,
+    filterOperation: this.get('filterOperation') as SelectFormControl,
+    filterInValues: this.get('filterInValues') as MultipleSelectFormControl,
+    filterEqualValues: this.get('filterEqualValues') as InputFormControl,
+    filterMinRangeValues: this.get('filterMinRangeValues') as InputFormControl,
+    filterMaxRangeValues: this.get('filterMaxRangeValues') as InputFormControl,
+    id: this.get('id') as HiddenFormControl
+  };
+
+}
 export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
   constructor(
@@ -373,7 +549,21 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           undefined,
           () => this.zoomMin
         ),
-        ...visibilityFormControls
+        ...visibilityFormControls,
+        filters: new MapFiltersControl(
+          new FormArray([], []),
+          marker('Add filter'),
+          marker('Map filters description'),
+
+          {
+            title: marker('Filter elements to display'),
+            optional: true,
+            onDependencyChange: (control) => {
+
+              control.enableIf(type !== 'cluster');
+            }
+          }
+        )
       }).withStepName(marker('Visibility'))
     });
 
@@ -399,6 +589,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   public get weightFg() { return this.styleStep.get('weightFg') as PropertySelectorFormGroup; }
   public get intensityFg() { return this.styleStep.get('intensityFg') as PropertySelectorFormGroup; }
   public get filter() { return this.styleStep.get('filter') as FormGroup; }
+  public get filters() { return this.visibilityStep.get('filters') as MapFiltersControl; }
 }
 
 export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
@@ -656,6 +847,16 @@ export class MapLayerFormBuilderService {
     );
     this.defaultValuesService.setDefaultValueRecursively('map.layer', mapLayerFormGroup);
     return mapLayerFormGroup;
+  }
+
+  public buildMapFilter() {
+    const collectionFields = this.collectionService.getCollectionFields(
+      this.mainFormService.getCollections()[0]
+    );
+    const mapFilterFormGroup = new MapFilterFormGroup(collectionFields,
+      [FILTER_OPERATION.IN, FILTER_OPERATION.RANGE, FILTER_OPERATION.EQUAL, FILTER_OPERATION.NOT_IN],
+      this.collectionService, this.mainFormService.getCollections()[0]);
+    return mapFilterFormGroup;
   }
 
   private buildFeatures(collectionFields: Observable<Array<CollectionField>>) {

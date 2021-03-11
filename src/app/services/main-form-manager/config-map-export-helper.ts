@@ -16,15 +16,17 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup, Form } from '@angular/forms';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { Paint, Layer, MapConfig, ExternalEvent } from './models-map-config';
-import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
+import { GEOMETRY_TYPE, FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 import { ConfigExportHelper } from './config-export-helper';
 import { LayerSourceConfig } from 'arlas-web-contributors';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { MapFilterFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { equal } from 'assert';
 
 export enum VISIBILITY {
     visible = 'visible',
@@ -109,7 +111,42 @@ export class ConfigMapExportHelper {
             layer.layout['line-cap'] = 'round';
             layer.layout['line-join'] = 'round';
         }
-        layer.filter = this.getLayerFilters(modeValues, mode, taggableFields);
+        const filters = !!modeValues.visibilityStep.filters ? modeValues.visibilityStep.filters.value : undefined;
+        if (!!filters) {
+            filters.forEach((f) => {
+                if (!layer.filter) {
+                    layer.filter = ['all'];
+                }
+                if (f.filterOperation === FILTER_OPERATION.IN) {
+                    layer.filter.push([f.filterOperation.toLowerCase(),
+                        this.getArray(this.getFieldPath(f.filterField.value, taggableFields)),
+                        ['literal', f.filterInValues]]);
+                } else if (f.filterOperation === FILTER_OPERATION.NOT_IN) {
+                    layer.filter.push(['!', ['in',
+                        this.getArray(this.getFieldPath(f.filterField.value, taggableFields)),
+                        ['literal', f.filterInValues]]]);
+                } else if (f.filterOperation === FILTER_OPERATION.EQUAL) {
+                    layer.filter.push(['==', this.getArray(this.getFieldPath(f.filterField.value, taggableFields)), f.filterEqualValues]);
+                } else if (f.filterOperation === FILTER_OPERATION.NOT_EQUAL) {
+                    layer.filter.push(['!=', this.getArray(this.getFieldPath(f.filterField.value, taggableFields)), f.filterEqualValues]);
+                } else if (f.filterOperation === FILTER_OPERATION.RANGE) {
+                    layer.filter.push(['>=', this.getArray(this.getFieldPath(f.filterField.value, taggableFields)),
+                        f.filterMinRangeValues]);
+                    layer.filter.push(['<=', this.getArray(this.getFieldPath(f.filterField.value, taggableFields)),
+                        f.filterMaxRangeValues]);
+                } else if (f.filterOperation === FILTER_OPERATION.OUT_RANGE) {
+                    const outRangeExpression: Array<any> = ['any'];
+                    outRangeExpression.push(['<', this.getArray(this.getFieldPath(f.filterField.value, taggableFields)),
+                        f.filterMinRangeValues]);
+                    outRangeExpression.push(['>', this.getArray(this.getFieldPath(f.filterField.value, taggableFields)),
+                        f.filterMaxRangeValues]);
+                    layer.filter.push(outRangeExpression);
+                }
+
+            });
+        }
+        // todo: add 'Infinity' & '-Infinity'
+        // layer.filter = this.getLayerFilters(modeValues, mode, taggableFields);
         return layer;
     }
 
@@ -205,8 +242,7 @@ export class ConfigMapExportHelper {
                 const manualValues = !otherKC ? (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>) :
                     (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>)
                         .filter(kc => kc.keyword !== OTHER_KEYWORD).concat(otherKC);
-                const manualField = (taggableFields && taggableFields.has(fgValues.propertyManualFg.propertyManualFieldCtrl)) ?
-                    fgValues.propertyManualFg.propertyManualFieldCtrl + '.0' : fgValues.propertyManualFg.propertyManualFieldCtrl;
+                const manualField = this.getFieldPath(fgValues.propertyManualFg.propertyManualFieldCtrl, taggableFields);
                 return [
                     'match',
                     this.getArray(manualField)
@@ -271,6 +307,10 @@ export class ConfigMapExportHelper {
                     .flatMap(pc => [(pc.proportion === 0 ? 0.000000000001 : pc.proportion), pc.value]));
             }
         }
+    }
+
+    public static getFieldPath(field: string, taggableFields: Set<string>): string {
+        return (taggableFields && taggableFields.has(field)) ? field + '.0' : field;
     }
 
     public static getFilter(fgValues: any, mode: LAYER_MODE, taggableFields?: Set<string>) {
