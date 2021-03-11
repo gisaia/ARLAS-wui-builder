@@ -524,10 +524,6 @@ export class AnalyticsImportService {
         control: renderStep.displayFilters
       },
       {
-        value: component.input.useColorService,
-        control: renderStep.useColorService
-      },
-      {
         value: component.input.cellBackgroundStyle,
         control: renderStep.cellBackgroundStyle
       },
@@ -552,6 +548,10 @@ export class AnalyticsImportService {
           value: c.process,
           control: column.customControls.process
         },
+        {
+          value: c.useColorService,
+          control: column.customControls.useColorService
+        }
       ]);
       widgetData.customControls.dataStep.columns.push(column);
     });

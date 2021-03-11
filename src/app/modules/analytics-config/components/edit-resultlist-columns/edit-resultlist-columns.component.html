@@ -7,6 +7,9 @@
         <app-config-form-control [control]="column.controls.fieldName"></app-config-form-control>
         <app-config-form-control [control]="column.controls.dataType"></app-config-form-control>
         <app-config-form-control [control]="column.controls.process"></app-config-form-control>
+        <app-config-form-control [control]="column.controls.useColorService"></app-config-form-control>
+        <app-config-form-control  *ngIf="column.controls.useColorService.value" [control]="column.controls.keysToColorsButton"></app-config-form-control>
+
     </div>
 </div>
 

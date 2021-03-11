@@ -2,6 +2,7 @@ import { ResultlistFormBuilderService } from './resultlist-form-builder.service'
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { of } from 'rxjs';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 describe('ResultlistFormBuilderService', () => {
   let spectator: SpectatorService<ResultlistFormBuilderService>;
@@ -11,7 +12,9 @@ describe('ResultlistFormBuilderService', () => {
     providers: [
       mockProvider(CollectionService, {
         getCollectionFields: () => of([])
-      })
+      }),
+      mockProvider(CollectionService),
+      mockProvider(ArlasColorGeneratorLoader),
     ]
   });
 
