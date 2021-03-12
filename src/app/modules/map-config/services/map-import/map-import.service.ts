@@ -54,14 +54,21 @@ export class MapImportService {
     isColor: boolean,
     isAggregated: boolean,
     layerSource: LayerSourceConfig) {
-
     if (typeof inputValues === 'string' || typeof inputValues === 'number') {
       propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.fix;
       propertySelectorValues.propertyFix = inputValues;
 
     } else if (inputValues instanceof Array) {
       if (inputValues.length === 2) {
-        const field = (inputValues as Array<string>)[1];
+        let field = (inputValues as Array<string>)[1];
+        // To deal with old arlas15 config
+        if (!field.endsWith('_arlas__color') && field.endsWith('_color')) {
+          if (layerSource.provided_fields.filter((pf: ColorConfig) => pf.color.replace(/\./g, '_') === field).length === 1) {
+
+          } else {
+            field = field.replace('_color', '_arlas__color');
+          }
+        }
         if (field.endsWith('_arlas__color') && layerSource.colors_from_fields) {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.generated;
           propertySelectorValues.propertyGeneratedFieldCtrl = layerSource.colors_from_fields
