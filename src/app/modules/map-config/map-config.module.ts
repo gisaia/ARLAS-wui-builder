@@ -34,12 +34,14 @@ import { VisualisationsComponent } from './components/visualisations/visualisati
 import { EditVisualisationComponent } from './components/edit-visualisation/edit-visualisation.component';
 import { BasemapsComponent } from './components/basemaps/basemaps.component';
 import { LayerIdToName } from 'arlas-web-components';
+import { ImportLayerDialogComponent } from './components/import-layer-dialog/import-layer-dialog.component';
 
 @NgModule({
   entryComponents: [
     ConfirmModalComponent,
     DialogColorTableComponent,
     DialogPaletteSelectorComponent,
+    ImportLayerDialogComponent,
     MapglComponent,
     PreviewComponent
   ],
@@ -53,7 +55,8 @@ import { LayerIdToName } from 'arlas-web-components';
     DialogPaletteSelectorComponent,
     PreviewComponent,
     VisualisationsComponent,
-    BasemapsComponent
+    BasemapsComponent,
+    ImportLayerDialogComponent
   ],
   imports: [
     MapConfigRoutingModule,

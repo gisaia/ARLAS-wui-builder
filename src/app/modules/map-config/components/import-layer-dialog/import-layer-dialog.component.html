@@ -1,0 +1,22 @@
+<div mat-dialog-title>
+    {{'Import a layer' | translate}}
+</div>
+<div mat-dialog-content [formGroup]="importLayerFormGroup" class="import">
+    <mat-form-field>
+        <mat-label>{{'Dashboard' | translate}}</mat-label>
+        <mat-select formControlName="dashboard" (selectionChange)="getLayers($event)">
+            <mat-option *ngFor="let conf of configs" [value]="conf">{{conf.doc_key}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="this.importLayerFormGroup.get('dashboard').valid">
+        <mat-label>{{'Layer' | translate}}</mat-label>
+        <mat-select formControlName="layer">
+            <mat-option *ngFor="let layer of layers" [value]="layer">{{layer.id | layerIdToName}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+    <button mat-button mat-dialog-close>{{ 'Cancel' | translate}}</button>
+    <button mat-button [mat-dialog-close]="[this.importLayerFormGroup.get('layer').value, this.dashboardConfigJson]" [disabled]="!this.importLayerFormGroup.valid" mat-raised-button color="primary">{{ 'Import' | translate}}</button>
+</div>

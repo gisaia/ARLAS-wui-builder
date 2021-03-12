@@ -16,29 +16,31 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MainFormService, ARLAS_ID } from '@services/main-form/main-form.service';
-import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
-import { PreviewComponent } from '../preview/preview.component';
-import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
-import { ArlasCollaborativesearchService, ArlasConfigService, ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
-import { StartupService } from '@services/startup/startup.service';
+import { MatDialog } from '@angular/material/dialog';
+import { LAYER_MODE } from '@map-config/components/edit-layer/models';
+import { ImportLayerDialogComponent } from '@map-config/components/import-layer-dialog/import-layer-dialog.component';
+import { MapImportService } from '@map-config/services/map-import/map-import.service';
+import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import {
+  MapVisualisationFormBuilderService
+} from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { ConfigMapExportHelper, VISIBILITY } from '@services/main-form-manager/config-map-export-helper';
-import { camelize } from '@utils/tools';
-import { MapglLegendComponent } from 'arlas-web-components';
+import { Config } from '@services/main-form-manager/models-config';
 import { Layer as LayerMap } from '@services/main-form-manager/models-map-config';
-import { LAYER_MODE } from '@map-config/components/edit-layer/models';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { Subscription } from 'rxjs';
-import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
-import { importElements } from '@services/main-form-manager/tools';
-import { MapImportService } from '@map-config/services/map-import/map-import.service';
-import { Router } from '@angular/router';
-import { ConfigFormGroup, ConfigFormControl } from '@shared-models/config-form';
+import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
+import { StartupService } from '@services/startup/startup.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { camelize } from '@utils/tools';
+import { MapglLegendComponent, VisualisationSetConfig } from 'arlas-web-components';
+import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService } from 'arlas-wui-toolkit';
+import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
+import { Subscription } from 'rxjs';
+import { PreviewComponent } from '../preview/preview.component';
 
 export interface Layer {
   id: string;
@@ -70,11 +72,9 @@ export class LayersComponent implements OnInit, OnDestroy {
     private configService: ArlasConfigService,
     private startupService: StartupService,
     private collectionService: CollectionService,
-    private router: Router,
-
     private colorService: ArlasColorGeneratorLoader,
-    private mapLayerFormBuilder: MapLayerFormBuilderService
-
+    private mapLayerFormBuilder: MapLayerFormBuilderService,
+    protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
   ) {
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
     this.visualisationSetFa = this.mainFormService.mapConfig.getVisualisationsFa();
@@ -172,13 +172,13 @@ export class LayersComponent implements OnInit, OnDestroy {
     MapImportService.importLayerFg(layer, layerSource,
       this.mainFormService.getCollections()[0], layerId + 1, visualisationSetValue, newLayerFg);
     const modeValues = newLayerFg.customControls.mode.value === LAYER_MODE.features ? newLayerFg.customControls.featuresFg.value :
-      ( newLayerFg.customControls.mode.value === LAYER_MODE.featureMetric ?
+      (newLayerFg.customControls.mode.value === LAYER_MODE.featureMetric ?
         newLayerFg.customControls.featureMetricFg.value : newLayerFg.customControls.clusterFg.value);
     const paint = ConfigMapExportHelper.getLayerPaint(modeValues,
       newLayerFg.customControls.mode.value, this.colorService, this.collectionService.taggableFields);
     /** Add the duplicated layer to legend set in order to have the icon */
     this.layerLegend.set(
-      newId + '#' +  newLayerFg.customControls.mode.value,
+      newId + '#' + newLayerFg.customControls.mode.value,
       { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint) }
     );
     newLayerFg.markAsPristine();
@@ -238,6 +238,67 @@ export class LayersComponent implements OnInit, OnDestroy {
     this.previewSub = dialogRef.afterClosed().subscribe(() => {
       // TODO Clean ArlasConfigService
       this.collaborativesearchService.registry.clear();
+    });
+  }
+
+  public importLayer() {
+    const dialogRef = this.dialog.open(ImportLayerDialogComponent);
+    dialogRef.afterClosed().subscribe((data: [LayerMap, Config]) => {
+      const layer = data[0];
+      const config = data[1];
+      if (!!layer) {
+        const items = layer.id.split(':');
+        const newItems = items.slice(0, items.length - 1);
+        newItems.push(Date.now().toString());
+        const newId = newItems.join(':');
+        const visualisationSetValue = this.visualisationSetFa.value;
+
+        if (this.visualisationSetFa.length === 0) {
+          const visualisationFg = this.mapVisualisationFormBuilder.buildVisualisation();
+          visualisationFg.customControls.displayed.setValue(true);
+          visualisationFg.customControls.name.setValue('All layers');
+          visualisationFg.customControls.layers.setValue([newId]);
+          visualisationFg.customControls.id.setValue(0);
+          this.visualisationSetFa.insert(0, visualisationFg);
+        } else {
+          visualisationSetValue[0].layers.push(newId);
+        }
+
+        const mapContrib = config.arlas.web.contributors.find(c => c.identifier === 'mapbox');
+        const layersSources = mapContrib.layers_sources;
+        const visualisationSets: Array<VisualisationSetConfig> = config.arlas.web.components.mapgl.input.visualisations_sets;
+
+        let layerFg = this.mapLayerFormBuilder.buildLayer();
+        const layerSource = layersSources.find(s => s.id === layer.id);
+        layerSource.id = newId;
+        layerFg = MapImportService.importLayerFg(
+          layer,
+          layerSource,
+          this.mainFormService.getCollections()[0],
+          this.mainFormService.mapConfig.getLayersFa().length + 1,
+          visualisationSets,
+          layerFg
+        );
+
+        const modeValues = layerFg.customControls.mode.value === LAYER_MODE.features ? layerFg.customControls.featuresFg.value :
+          (layerFg.customControls.mode.value === LAYER_MODE.featureMetric ?
+            layerFg.customControls.featureMetricFg.value : layerFg.customControls.clusterFg.value);
+        const paint = ConfigMapExportHelper.getLayerPaint(modeValues,
+          layerFg.customControls.mode.value, this.colorService, this.collectionService.taggableFields);
+
+        /** Add the duplicated layer to legend set in order to have the icon */
+        this.layerLegend.set(
+          newId + '#' + layerFg.customControls.mode.value,
+          { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint) }
+        );
+        layerFg.markAsPristine();
+
+        /** listen to all the ondepencychnage to correctly initiate the controls */
+        ConfigFormGroupComponent.listenToAllControlsOnDependencyChange(layerFg, this.toUnsubscribe);
+
+        // Add the layer to the list
+        this.mainFormService.mapConfig.getLayersFa().push(layerFg);
+      }
     });
   }
 
