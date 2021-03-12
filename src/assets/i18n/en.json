@@ -526,5 +526,6 @@
 	"Fixed strokeColor": "Stroke color",
 	"Invalid dashboard name":"Invalid dashboard name",
 	"Another dashboad already exists with the same name, please choose another one":"Another dashboad already exists with the same name, please choose another one",
-	"Colorize":"Colorize"
+	"Colorize":"Colorize",
+	"Rename":"Rename"
 }

@@ -12,6 +12,12 @@
                 (focusout)="finishEditConfigName()" (keydown)="$event.stopPropagation();"
                 (keydown.enter)="finishEditConfigName()">
         </span>
+        <span class="edit-name-button">        
+            <button mat-icon-button (click)="$event.stopPropagation(); startEditConfigName($event)"
+            [matTooltip]="'Rename' | translate">
+            <mat-icon>edit</mat-icon>
+        </button></span>
+
     </div>
 </div>
 <div class="status-container" *ngIf="!mainService.configurationName && displayCurrentConfig">
