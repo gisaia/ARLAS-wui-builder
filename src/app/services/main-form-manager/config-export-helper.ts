@@ -603,7 +603,11 @@ export class ConfigExportHelper {
                 contrib.columns = [];
                 (widgetData.dataStep.columns as Array<any>).forEach(c =>
                     contrib.columns.push({
-                        columnName: c.columnName, fieldName: c.fieldName, dataType: c.dataType, process: c.process
+                        columnName: c.columnName,
+                        fieldName: c.fieldName,
+                        dataType: c.dataType,
+                        process: c.process,
+                        useColorService: c.useColorService
                     }));
 
                 contrib.details = [];
@@ -873,7 +877,7 @@ export class ConfigExportHelper {
                     consultedItemEvent: unmanagedRenderFields.consultedItemEvent,
                     actionOnItemEvent: unmanagedRenderFields.actionOnItemEvent,
                     globalActionEvent: unmanagedRenderFields.globalActionEvent,
-                    useColorService: !!widgetData.renderStep.useColorService,
+                    useColorService: true,
                     cellBackgroundStyle: widgetData.renderStep.cellBackgroundStyle
                 }
             } as AnalyticComponentConfig;

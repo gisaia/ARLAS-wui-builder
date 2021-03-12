@@ -135,7 +135,7 @@ export interface ContributorConfig {
     metrics?: Array<{ field: string, metric: string }>;
     search_size?: number;
     fieldsConfiguration?: { idFieldName: string };
-    columns?: Array<{ columnName: string, fieldName: string, dataType: string, process: string }>;
+    columns?: Array<{ columnName: string, fieldName: string, dataType: string, process: string, useColorService: boolean }>;
     details?: Array<{
         name: string,
         order: number,
