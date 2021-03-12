@@ -544,5 +544,6 @@
 	"Fixed strokeColor": "Couleur du contour",
 	"Invalid dashboard name":"Nom de dashboard invalide",
 	"Another dashboad already exists with the same name, please choose another one":"Un autre dashboad existe déjà avec ce même nom, veuillez en choisir un autre.",
-	"Colorize":"Colorer"
+	"Colorize":"Colorer",
+	"Rename":"Renommer"
 }
