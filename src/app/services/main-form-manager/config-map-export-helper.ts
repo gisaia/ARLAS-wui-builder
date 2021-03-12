@@ -66,6 +66,10 @@ export class ConfigMapExportHelper {
             },
             paint
         };
+        if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.line) {
+            layer.layout['line-cap'] = 'round';
+            layer.layout['line-join'] = 'round';
+        }
         layer.filter = this.getLayerFilters(modeValues, mode, taggableFields);
         return layer;
     }
