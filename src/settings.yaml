@@ -66,5 +66,6 @@ basemaps:
   - name: "Voyager"
     url: "https://api.maptiler.com/maps/voyager/style.json?key=YOUR_KEY"
     image: "https://cloud.maptiler.com/static/img/maps/voyager.png"
+tab_name: "ARLAS Wui builder Dev"
 
 

@@ -22,6 +22,8 @@ import { NGXLogInterface, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IconService } from '@services/icon-service/icon.service';
 import { MainFormService } from './services/main-form/main-form.service';
+import { Title } from '@angular/platform-browser';
+import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +39,9 @@ export class AppComponent implements OnInit {
     private mainFormService: MainFormService,
     private logger: NGXLogger,
     private snackbar: MatSnackBar,
-    private iconService: IconService) {
+    private iconService: IconService,
+    private titleService: Title,
+    private arlasSettingsService: ArlasSettingsService) {
 
     this.logger.registerMonitor({
       onLog(logObject: NGXLogInterface): void {
@@ -49,6 +53,11 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    // tslint:disable-next-line:no-string-literal
+    this.title = this.arlasSettingsService.settings['tab_name'] ?
+      // tslint:disable-next-line:no-string-literal
+      this.arlasSettingsService.settings['tab_name'] : 'ARLAS-wui-builder';
+    this.titleService.setTitle(this.title);
     this.iconService.registerIcons();
   }
 }
