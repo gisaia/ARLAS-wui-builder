@@ -16,43 +16,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-@import "variables.scss";
-
-.description {
-    align-self: center;
-    width: fit-content;
-    font-size: 14px;
-    color: $config-element-description-text-color;
-    line-height: 1.6;
-    border-left: 0.2rem solid $config-element-description-border-color;
-    background-color: white;
-    border-radius: 4px;
-    display: inline-block;
-  }
-
-.description:not(:empty) {
-    margin-left: 36px;
-    padding: 10px;
-}
-
-table {
-  width: 100%;
-}
-
-button.add-layer, button.import-layer {
-  margin: 16px 8px;
-  display: inline-block;
-  min-width: auto;
-}
-
-mat-error {
-  margin-top: 20px;
-}
-
-.mat-column-action {
-  width: 50px;
-}
-
-.mat-column-representation {
-  width: 50px;
+.import{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
