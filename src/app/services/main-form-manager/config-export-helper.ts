@@ -186,12 +186,14 @@ export class ConfigExportHelper {
                 layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
                 // layerSource.granularity = modeValues.geometryStep.granularity;
                 layerSource.granularity = 'Medium';
-                layerSource.geometry_support = modeValues.geometryStep.geometry;
+                layerSource.raw_geometry = {
+                    geometry: modeValues.geometryStep.geometry,
+                    sort: !!modeValues.geometryStep.featureMetricSort ? modeValues.geometryStep.featureMetricSort : ''
+                };
                 layerSource.geometry_id = modeValues.geometryStep.geometryId;
                 break;
             }
             case LAYER_MODE.cluster: {
-
                 layerSource.agg_geo_field = modeValues.geometryStep.aggGeometry;
                 layerSource.granularity = modeValues.geometryStep.granularity;
                 layerSource.minfeatures = modeValues.visibilityStep.featuresMin;
@@ -574,14 +576,14 @@ export class ConfigExportHelper {
             case WIDGET_TYPE.powerbars: {
                 const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'tree';
-                const aggregationModel =  {
+                const aggregationModel = {
                     type: 'term',
                     field: widgetData.dataStep.aggregationField,
                     size: widgetData.dataStep.aggregationSize
                 };
                 this.addMetricToAggregationModel(aggregationModel, widgetData.dataStep.metric);
                 contrib.jsonpath = widgetData.dataStep.metric.metricCollectFunction === DEFAULT_METRIC_VALUE ?
-                JSONPATH_COUNT : JSONPATH_METRIC;
+                    JSONPATH_COUNT : JSONPATH_METRIC;
                 contrib.aggregationmodels = [aggregationModel];
 
                 return contrib;

@@ -389,7 +389,6 @@ export class SelectFormControl extends ConfigFormControl {
 export class OrderedSelectFormControl extends SelectFormControl {
     public sortDirection: string;
     public sorts: Set<string> = new Set();
-
     public addSort(sort: string, event) {
         event.stopPropagation();
         this.sorts.add(sort);
@@ -402,10 +401,13 @@ export class OrderedSelectFormControl extends SelectFormControl {
     }
 
     private setSortValue() {
-        const sortValue = Array.from(this.sorts).reduce((a, b) => a + ',' + b);
-        this.setValue(sortValue);
+       if (this.sorts.size > 0) {
+            const sortValue = Array.from(this.sorts).reduce((a, b) => a + ',' + b);
+            this.setValue(sortValue);
+       } else {
+        this.setValue(null);
+       }
     }
-
 }
 
 export class MetricWithFieldListFormControl extends ConfigFormControl {

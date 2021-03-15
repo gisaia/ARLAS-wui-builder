@@ -475,6 +475,22 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
       propertySelectorFormBuilder,
       true,
       {
+        featureMetricSort: new OrderedSelectFormControl(
+          '',
+          marker('Order field'),
+          marker('Order field feature metric description'),
+          false,
+          toAllButGeoOptionsObs(collectionFields),
+          {
+            optional: true,
+            onDependencyChange: (control) => {
+              if (!!this.featureMetricSort.value) {
+                this.featureMetricSort.sorts = new Set(this.featureMetricSort.value.split(','));
+              }
+            }
+          }
+        ),
+
         geometryId: new SelectFormControl(
           '',
           marker('Geometry ID'),
@@ -484,6 +500,8 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
         )
       });
   }
+  public get featureMetricSort() { return this.geometryStep.get('featureMetricSort') as OrderedSelectFormControl; }
+
 }
 
 export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
@@ -579,8 +597,12 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
           toAllButGeoOptionsObs(collectionFields),
           {
             dependsOn: () => [this.clusterGeometryType, this.rawGeometry],
-            onDependencyChange: (control) =>
-              control.enableIf(this.clusterGeometryType.value === CLUSTER_GEOMETRY_TYPE.raw_geometry && !!this.rawGeometry.value)
+            onDependencyChange: (control) => {
+              control.enableIf(this.clusterGeometryType.value === CLUSTER_GEOMETRY_TYPE.raw_geometry && !!this.rawGeometry.value);
+              if (!!this.clusterSort.value) {
+                this.clusterSort.sorts = new Set(this.clusterSort.value.split(','));
+              }
+            }
           }
         ),
       },
@@ -604,7 +626,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
   public get clusterGeometryType() { return this.geometryStep.get('clusterGeometryType') as SelectFormControl; }
   public get aggregatedGeometry() { return this.geometryStep.get('aggregatedGeometry') as SelectFormControl; }
   public get rawGeometry() { return this.geometryStep.get('rawGeometry') as SelectFormControl; }
-  public get clusterSort() { return this.geometryStep.get('clusterSort') as SelectFormControl; }
+  public get clusterSort() { return this.geometryStep.get('clusterSort') as OrderedSelectFormControl; }
   public get featuresMin() { return this.visibilityStep.get('featuresMin') as SliderFormControl; }
   public get geometryType() { return this.styleStep.get('geometryType') as SelectFormControl; }
 }
