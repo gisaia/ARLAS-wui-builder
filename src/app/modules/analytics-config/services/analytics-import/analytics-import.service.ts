@@ -37,6 +37,7 @@ import { MetricFormBuilderService } from '../metric-form-builder/metric-form-bui
 import { PowerbarFormBuilderService } from '../powerbar-form-builder/powerbar-form-builder.service';
 import { DonutFormBuilderService } from '../donut-form-builder/donut-form-builder.service';
 import { ResultlistFormBuilderService } from '../resultlist-form-builder/resultlist-form-builder.service';
+import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
 
 @Injectable({
   providedIn: 'root'
@@ -438,8 +439,21 @@ export class AnalyticsImportService {
         control: renderStep.displayFilter
       },
       {
+        value: component.input.useColorService === true ? PROPERTY_SELECTOR_SOURCE.manual :  component.input.useColorFromData === true ?
+        PROPERTY_SELECTOR_SOURCE.provided : undefined    ,
+        control: renderStep.modeColor
+      },
+      {
         value: component.input.useColorService,
         control: renderStep.useColorService
+      },
+      {
+        value: component.input.useColorFromData,
+        control: renderStep.useColorFromData
+      },
+      {
+        value: contributor.colorField,
+        control: renderStep.propertyProvidedFieldCtrl
       },
       {
         value: component.showExportCsv,
