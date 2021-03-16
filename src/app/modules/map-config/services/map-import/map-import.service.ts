@@ -198,12 +198,8 @@ export class MapImportService {
     propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl = inputValues.pop();
   }
 
-  public static importLayerFg(layer: Layer,
-                              layerSource: LayerSourceConfig,
-                              collectionName: string,
-                              layerId: number,
-                              visualisationSets: Array<VisualisationSetConfig>,
-                              layerFg: MapLayerFormGroup) {
+  public static importLayerFg(layer: Layer, layerSource: LayerSourceConfig, collectionName: string,
+                              layerId: number, visualisationSets: Array<VisualisationSetConfig>, layerFg: MapLayerFormGroup) {
     const type = layer.source.split('-')[0];
     // TODO extract type with toolkit, once it is available (contrary of `getSourceName`)
     const layerMode = layer.source.startsWith('feature-metric') ? LAYER_MODE.featureMetric :
@@ -351,10 +347,15 @@ export class MapImportService {
     layerSource: LayerSourceConfig
   ) {
     this.importLayerFeatures(values, layer, layerSource);
-    values.geometryStep.geometry = layerSource.geometry_support;
+    if (!!layerSource.geometry_support) {
+      values.geometryStep.geometry = layerSource.geometry_support;
+      values.geometryStep.featureMetricSort = null;
+    } else {
+      values.geometryStep.geometry = layerSource.raw_geometry.geometry;
+      values.geometryStep.featureMetricSort = !!layerSource.raw_geometry.sort ? layerSource.raw_geometry.sort : null;
+    }
     values.geometryStep.geometryId = layerSource.geometry_id;
     values.geometryStep.granularity = layerSource.granularity;
-
   }
 
   public static importLayerCluster(

@@ -552,5 +552,6 @@
 	"Fixed strokeColor": "Couleur du contour",
 	"Invalid dashboard name":"Nom de dashboard invalide",
 	"Another dashboad already exists with the same name, please choose another one":"Un autre dashboad existe déjà avec ce même nom, veuillez en choisir un autre.",
-	"Rename":"Renommer"
+	"Rename":"Renommer",
+	"Order field feature metric description":"(Optionnel) Trier les données de l'aggregation selon un ou plusieurs champs. Le premier élément résultant de ce tri est celui rendu dans la géométrie.\n Si laisser vide, le tri se fait selon la date de la collection en ordre descendant."
 }
