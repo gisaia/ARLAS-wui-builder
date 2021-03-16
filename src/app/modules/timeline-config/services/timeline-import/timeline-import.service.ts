@@ -54,6 +54,10 @@ export class TimelineImportService {
         control: timelineFg.customControls.useDetailedTimeline
       },
       {
+        value: timelineContributor.useUtc !== undefined ? timelineContributor.useUtc : true,
+        control: timelineFg.customControls.useUtc
+      },
+      {
         value: timelineComponent.input.multiselectable,
         control: timelineFg.customControls.tabsContainer.renderStep.timeline.isMultiselectable
       },

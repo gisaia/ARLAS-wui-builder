@@ -556,5 +556,7 @@
 	"Invalid dashboard name":"Nom de dashboard invalide",
 	"Another dashboad already exists with the same name, please choose another one":"Un autre dashboad existe déjà avec ce même nom, veuillez en choisir un autre.",
 	"Rename":"Renommer",
-	"Order field feature metric description":"(Optionnel) Trier les données de l'aggregation selon un ou plusieurs champs. Le premier élément résultant de ce tri est celui rendu dans la géométrie.\n Si laisser vide, le tri se fait selon la date de la collection en ordre descendant."
+	"Order field feature metric description":"(Optionnel) Trier les données de l'aggregation selon un ou plusieurs champs. Le premier élément résultant de ce tri est celui rendu dans la géométrie.\n Si laisser vide, le tri se fait selon la date de la collection en ordre descendant.",
+	"Use UTC time Zone to display date?":"Afficher les dates dans le fuseau horaire UTC",
+	"Use UTC time Zone to display date description":"Que la date soit affichée dans le fuseau horaire UTC ou dans le fuseau horaire local du navigateur."
 }

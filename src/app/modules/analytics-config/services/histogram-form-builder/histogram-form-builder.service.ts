@@ -56,6 +56,17 @@ export class HistogramFormGroup extends ConfigFormGroup {
         ),
         dataStep: new ConfigFormGroup({
           aggregation: bucketsIntervalFg.withTitle(marker('histogram x-Axis')),
+          useUtc: new SlideToggleFormControl(
+            '',
+            marker('Use UTC time Zone to display date?'),
+            marker('Use UTC time Zone to display date description'),
+            {
+              optional: true,
+              dependsOn: () => [this.customControls.dataStep.aggregation],
+              onDependencyChange: (control) =>
+                control.enableIf(this.customControls.dataStep.aggregation.value.aggregationFieldType === 'time')
+            }
+          ),
           metric: metricFg.withTitle(marker('histogram y-Axis'))
         }).withTabName(marker('Data')),
         renderStep: new ConfigFormGroup({
@@ -133,6 +144,7 @@ export class HistogramFormGroup extends ConfigFormGroup {
     title: this.get('title') as TitleInputFormControl,
     dataStep: {
       aggregation: this.get('dataStep').get('aggregation') as BucketsIntervalFormGroup,
+      useUtc: this.get('dataStep').get('useUtc') as SlideToggleFormControl,
       metric: this.get('dataStep').get('metric') as MetricCollectFormGroup
     },
     renderStep: {

@@ -142,6 +142,7 @@ export interface ContributorConfig {
         fields: Array<{ path: string, label: string, process: string }>
     }>;
     colorField?: string;
+    useUtc?: boolean;
 }
 
 export interface SwimlaneConfig {
@@ -151,6 +152,7 @@ export interface SwimlaneConfig {
     termField: string;
     aggregationmodels?: Array<AggregationModelConfig>;
     jsonpath: string;
+    useUtc: boolean;
 }
 
 export interface AnalyticConfig {
