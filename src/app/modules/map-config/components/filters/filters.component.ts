@@ -24,7 +24,7 @@ import { camelize } from '@utils/tools';
 import { MapglLegendComponent } from 'arlas-web-components';
 import { Subscription } from 'rxjs';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { MapLayerFormGroup, MapFilterFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { ConfigFormGroup } from '@shared-models/config-form';
 import { LAYER_MODE } from '../edit-layer/models';
 import { MapLayerFormBuilderService } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
@@ -54,7 +54,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private mainFormService: MainFormService,
     private mapLayerFormBuilder: MapLayerFormBuilderService
-  ) {}
+  ) { }
 
   public ngOnInit() {
     const layerFg = this.layerFg as MapLayerFormGroup;
@@ -66,7 +66,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
       this.filtersFa = (layerFg.customControls.featuresFg.controls.visibilityStep as ConfigFormGroup)
         .controls.filters.value;
     }
-    for (let i = 0; i <  this.filtersFa.length; i++) {
+    for (let i = 0; i < this.filtersFa.length; i++) {
       const ffg = this.filtersFa.at(i) as MapLayerFormGroup;
       ffg.customControls.id.setValue(i);
       this.filtersFa.setControl(i, ffg);
@@ -77,8 +77,29 @@ export class FiltersComponent implements OnInit, OnDestroy {
     if (this.confirmDeleteSub) { this.confirmDeleteSub.unsubscribe(); }
   }
 
-  public open() {
-    const mapFormGroup = this.mapLayerFormBuilder.buildMapFilter();
+  public open(filterId?: number) {
+    let mapFormGroup: MapFilterFormGroup;
+    mapFormGroup = this.mapLayerFormBuilder.buildMapFilter();
+    /** if we edit an existing filter */
+    if (filterId !== undefined) {
+      const formGroupIndex = (this.filtersFa.value as any[]).findIndex(el => el.id === filterId);
+      const oldmapFormGroup = this.filtersFa.at(formGroupIndex) as MapFilterFormGroup;
+      mapFormGroup.customControls.id.setValue(filterId);
+      mapFormGroup.customControls.filterField.setValue(oldmapFormGroup.customControls.filterField.value);
+      mapFormGroup.customControls.filterOperation.setValue(oldmapFormGroup.customControls.filterOperation.value);
+      mapFormGroup.customControls.filterInValues.setValue(oldmapFormGroup.customControls.filterInValues.value);
+      mapFormGroup.customControls.filterEqualValues.setValue(oldmapFormGroup.customControls.filterEqualValues.value);
+      mapFormGroup.customControls.filterMinRangeValues.setValue(oldmapFormGroup.customControls.filterMinRangeValues.value);
+      mapFormGroup.customControls.filterMaxRangeValues.setValue(oldmapFormGroup.customControls.filterMaxRangeValues.value);
+      if (mapFormGroup.customControls.filterInValues.enabled) {
+        mapFormGroup.customControls.filterInValues.selectedMultipleItems = oldmapFormGroup.customControls.filterInValues.value;
+        mapFormGroup.customControls.filterInValues.savedItems = new Set(mapFormGroup.customControls.filterInValues.selectedMultipleItems);
+      }
+      /** editing attribute allows to avoid reseting the form value due to ondependencyChange */
+      mapFormGroup.editing = true;
+      mapFormGroup.editionInfo = {field: oldmapFormGroup.customControls.filterField.value.value,
+         op: oldmapFormGroup.customControls.filterOperation.value };
+    }
     this.dialog.open(DialogFilterComponent, {
       data: {
         mapForm: mapFormGroup,
@@ -86,9 +107,14 @@ export class FiltersComponent implements OnInit, OnDestroy {
       }
     }).afterClosed().subscribe(result => {
       if (result) {
-        const index = this.filtersFa.length;
-        mapFormGroup.customControls.id.setValue(index);
-        this.filtersFa.insert(index, mapFormGroup);
+        if (filterId !== undefined) {
+          const formGroupIndex = (this.filtersFa.value as any[]).findIndex(el => el.id === filterId);
+          this.filtersFa.setControl(formGroupIndex, mapFormGroup);
+        } else {
+          const index = this.filtersFa.length;
+          mapFormGroup.customControls.id.setValue(index);
+          this.filtersFa.insert(index, mapFormGroup);
+        }
       }
     });
   }

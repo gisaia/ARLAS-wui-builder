@@ -129,16 +129,15 @@
     <mat-form-field>
         <mat-label>{{ typedControl.label | translate}}</mat-label>
         <input type="text" matInput [formControl]="typedControl" [matAutocomplete]="autotyped" #autocompleteInput
-            [value]="(!typedControl?.value?.value ? '' : typedControl?.value?.value )"
             [required]="!typedControl.optional"
             [appAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? 'Warning, changing this field\'s value will reset some other fields' : null"
             [appResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
-        <button mat-button *ngIf="typedControl.value" matSuffix mat-icon-button
+               <button mat-button *ngIf="typedControl.value" matSuffix mat-icon-button
             (click)="autocompleteInput.focus();typedControl.filteredOptions=typedControl.syncOptions;autocompleteInput.value = '';typedControl.setValue('');">
             <mat-icon>close</mat-icon>
         </button>
-        <mat-autocomplete autoActiveFirstOption #autotyped="matAutocomplete">
+        <mat-autocomplete autoActiveFirstOption #autotyped="matAutocomplete" [displayWith]="displayWith">
             <mat-option *ngIf="typedControl.optional"></mat-option>
             <mat-option *ngFor="let opt of typedControl.filteredOptions" [value]="{value: opt.value,  type: opt.type}"
                 [matTooltip]="opt.label | translate" [disabled]="opt.enabled === false">

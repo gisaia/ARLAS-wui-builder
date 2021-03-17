@@ -30,7 +30,10 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <!-- TODO : Edit a filter -->
+                <button mat-menu-item (click)="open(element.id)">
+                    <mat-icon>edit</mat-icon>
+                    <span>{{'Edit' | translate}}</span>
+                </button>
                 <button mat-menu-item (click)="confirmDelete(element.id)">
                     <mat-icon>delete</mat-icon>
                     <span>{{'Delete' | translate}}</span>

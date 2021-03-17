@@ -6,6 +6,7 @@ import { MockComponent } from 'ng-mocks';
 import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FiltersComponent } from '@map-config/components/filters/filters.component';
 
 describe('ConfigFormControlComponent', () => {
   let spectator: Spectator<ConfigFormControlComponent>;
@@ -18,7 +19,8 @@ describe('ConfigFormControlComponent', () => {
     declarations: [
       ResetOnChangeDirective,
       AlertOnChangeDirective,
-      MockComponent(ColorPickerWrapperComponent)
+      MockComponent(ColorPickerWrapperComponent),
+      MockComponent(FiltersComponent)
     ]
   });
 

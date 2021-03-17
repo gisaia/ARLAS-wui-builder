@@ -477,7 +477,6 @@ export class TypedSelectFormControl extends ConfigFormControl {
             }
             );
         }
-
     }
 
     public setSyncOptions(newOptions: Array<SelectOption>) {

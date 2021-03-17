@@ -22,8 +22,10 @@ import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
-import { toAllButGeoOptionsObs, toGeoOptionsObs, toGeoPointOptionsObs, toKeywordOptionsObs,
-  toNumericOrDateOrKeywordObs } from '@services/collection-service/tools';
+import {
+  toAllButGeoOptionsObs, toGeoOptionsObs, toGeoPointOptionsObs, toKeywordOptionsObs,
+  toNumericOrDateOrKeywordObs
+} from '@services/collection-service/tools';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
@@ -166,11 +168,11 @@ export class MapLayerFormGroup extends ConfigFormGroup {
 
 
 export class MapFilterFormGroup extends ConfigFormGroup {
-
+  public editing = false;
+  public editionInfo: { field: string, op: FILTER_OPERATION };
   constructor(collectionFields: Observable<Array<CollectionField>>, filterOperations: Array<FILTER_OPERATION>,
               collectionService: CollectionService, collection: string
   ) {
-
     super({
       filterField: new TypedSelectFormControl(
         '',
@@ -191,22 +193,51 @@ export class MapFilterFormGroup extends ConfigFormGroup {
           resetDependantsOnChange: true,
           dependsOn: () => [this.customControls.filterField],
           onDependencyChange: (control: SelectFormControl) => {
+            if (this.editionInfo) {
+              // if we change the field/or operation, we are no longer in editing an existing filter but creating a new one
+              // we quit edition mode
+              if (this.customControls.filterField.value.value !== this.editionInfo.field ||
+                this.customControls.filterOperation.value !== this.editionInfo.op
+              ) {
+                this.editing = false;
+              }
 
-            /** update list of available ops according to field type */
-            if (this.customControls.filterField.value.type === 'KEYWORD') {
-              control.setSyncOptions([
-                { value: FILTER_OPERATION.IN, label: FILTER_OPERATION.IN },
-                { value: FILTER_OPERATION.NOT_IN, label: FILTER_OPERATION.NOT_IN }
-              ]);
-            } else {
-              control.setSyncOptions([
-                { value: FILTER_OPERATION.EQUAL, label: FILTER_OPERATION.EQUAL },
-                { value: FILTER_OPERATION.NOT_EQUAL, label: FILTER_OPERATION.NOT_EQUAL },
-                { value: FILTER_OPERATION.RANGE, label: FILTER_OPERATION.RANGE },
-                { value: FILTER_OPERATION.OUT_RANGE, label: FILTER_OPERATION.OUT_RANGE },
-              ]);
             }
-            control.setValue(control.syncOptions[0].value);
+            if (!this.editing) {
+              /** update list of available ops according to field type */
+              if (this.customControls.filterField.value.type === 'KEYWORD') {
+                control.setSyncOptions([
+                  { value: FILTER_OPERATION.IN, label: FILTER_OPERATION.IN },
+                  { value: FILTER_OPERATION.NOT_IN, label: FILTER_OPERATION.NOT_IN }
+                ]);
+              } else {
+                control.setSyncOptions([
+                  { value: FILTER_OPERATION.EQUAL, label: FILTER_OPERATION.EQUAL },
+                  { value: FILTER_OPERATION.NOT_EQUAL, label: FILTER_OPERATION.NOT_EQUAL },
+                  { value: FILTER_OPERATION.RANGE, label: FILTER_OPERATION.RANGE },
+                  { value: FILTER_OPERATION.OUT_RANGE, label: FILTER_OPERATION.OUT_RANGE },
+                ]);
+              }
+              control.setValue(control.syncOptions[0].value);
+            } else {
+             // if we are editing an existing filter, keep the selected operation.
+              // otherwise there os no way to remember it
+              if ((this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
+                this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN)) {
+                control.setSyncOptions([
+                  { value: FILTER_OPERATION.IN, label: FILTER_OPERATION.IN },
+                  { value: FILTER_OPERATION.NOT_IN, label: FILTER_OPERATION.NOT_IN }
+                ]);
+              } else {
+                control.setSyncOptions([
+                  { value: FILTER_OPERATION.EQUAL, label: FILTER_OPERATION.EQUAL },
+                  { value: FILTER_OPERATION.NOT_EQUAL, label: FILTER_OPERATION.NOT_EQUAL },
+                  { value: FILTER_OPERATION.RANGE, label: FILTER_OPERATION.RANGE },
+                  { value: FILTER_OPERATION.OUT_RANGE, label: FILTER_OPERATION.OUT_RANGE },
+                ]);
+              }
+              control.setValue(this.customControls.filterOperation.value);
+            }
           }
         }
       ),
@@ -237,8 +268,21 @@ export class MapFilterFormGroup extends ConfigFormGroup {
               control.setSyncOptions([]);
             }
             control.markAsUntouched();
-            control.savedItems = new Set();
-            control.selectedMultipleItems = [];
+            if (this.editionInfo) {
+              // if we change the field/or operation, we are no longer in editing an existing filter but creating a new one
+              // we quit edition mode
+              if (this.customControls.filterField.value.value !== this.editionInfo.field ||
+                this.customControls.filterOperation.value !== this.editionInfo.op
+              ) {
+                this.editing = false;
+              }
+            }
+            // if we are editing an existing filter, keep the selected items.
+            // otherwise there is no way to remember them
+            if (!this.editing) {
+              control.savedItems = new Set();
+              control.selectedMultipleItems = [];
+            }
             control.enableIf(this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
               this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN);
           }
