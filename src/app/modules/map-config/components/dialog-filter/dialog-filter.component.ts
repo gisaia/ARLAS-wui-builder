@@ -47,6 +47,7 @@ export class DialogFilterComponent implements OnInit {
     }
   }
 
+  /** fetches list of keywords to select given the prefix */
   public updateList(event: {prefix: string, control: FormControl}) {
     if (this.data.mapForm.customControls.filterOperation.value === 'IN') {
       this.data.mapForm.customControls.filterInValues.setSyncOptions([]);
@@ -54,13 +55,8 @@ export class DialogFilterComponent implements OnInit {
         this.data.collection,
         this.data.mapForm.customControls.filterField.value.value, true, undefined, event.prefix).then(keywords => {
           this.data.mapForm.customControls.filterInValues.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
-          if (keywords.length > 0) {
-
-            // control.setValue(keywords[0])
-          }
         });
     }
-
   }
 
 }

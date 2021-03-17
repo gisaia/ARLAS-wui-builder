@@ -94,7 +94,6 @@ export class ConfigMapExportHelper {
             (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
 
         const paint = this.getLayerPaint(modeValues, mode, colorService, taggableFields);
-
         const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
         const layer: Layer = {
             id: layerFg.value.arlasId,
@@ -111,42 +110,34 @@ export class ConfigMapExportHelper {
             layer.layout['line-cap'] = 'round';
             layer.layout['line-join'] = 'round';
         }
+        /** 'all' is the operator that allows to apply an "AND" operator in mapbox */
+        layer.filter = ['all'];
         const filters = !!modeValues.visibilityStep.filters ? modeValues.visibilityStep.filters.value : undefined;
         if (!!filters) {
             filters.forEach((f) => {
-                if (!layer.filter) {
-                    layer.filter = ['all'];
-                }
+                const fieldPath = this.getArray(this.getFieldPath(f.filterField.value, taggableFields));
                 if (f.filterOperation === FILTER_OPERATION.IN) {
-                    layer.filter.push([f.filterOperation.toLowerCase(),
-                        this.getArray(this.getFieldPath(f.filterField.value, taggableFields)),
-                        ['literal', f.filterInValues]]);
+                    layer.filter.push([f.filterOperation.toLowerCase(), fieldPath, ['literal', f.filterInValues]]);
                 } else if (f.filterOperation === FILTER_OPERATION.NOT_IN) {
-                    layer.filter.push(['!', ['in',
-                        this.getArray(this.getFieldPath(f.filterField.value, taggableFields)),
-                        ['literal', f.filterInValues]]]);
+                    layer.filter.push(['!', ['in', fieldPath, ['literal', f.filterInValues]]]);
                 } else if (f.filterOperation === FILTER_OPERATION.EQUAL) {
-                    layer.filter.push(['==', this.getArray(this.getFieldPath(f.filterField.value, taggableFields)), f.filterEqualValues]);
+                    layer.filter.push(['==', fieldPath, f.filterEqualValues]);
                 } else if (f.filterOperation === FILTER_OPERATION.NOT_EQUAL) {
-                    layer.filter.push(['!=', this.getArray(this.getFieldPath(f.filterField.value, taggableFields)), f.filterEqualValues]);
+                    layer.filter.push(['!=', fieldPath, f.filterEqualValues]);
                 } else if (f.filterOperation === FILTER_OPERATION.RANGE) {
-                    layer.filter.push(['>=', this.getArray(this.getFieldPath(f.filterField.value, taggableFields)),
-                        f.filterMinRangeValues]);
-                    layer.filter.push(['<=', this.getArray(this.getFieldPath(f.filterField.value, taggableFields)),
-                        f.filterMaxRangeValues]);
+                    layer.filter.push(['>=', fieldPath, f.filterMinRangeValues]);
+                    layer.filter.push(['<=', fieldPath, f.filterMaxRangeValues]);
                 } else if (f.filterOperation === FILTER_OPERATION.OUT_RANGE) {
+                    /** 'any' is the operator that allows to apply a "OR" filter in mapbox  */
                     const outRangeExpression: Array<any> = ['any'];
-                    outRangeExpression.push(['<', this.getArray(this.getFieldPath(f.filterField.value, taggableFields)),
-                        f.filterMinRangeValues]);
-                    outRangeExpression.push(['>', this.getArray(this.getFieldPath(f.filterField.value, taggableFields)),
-                        f.filterMaxRangeValues]);
+                    outRangeExpression.push(['<', fieldPath, f.filterMinRangeValues]);
+                    outRangeExpression.push(['>', fieldPath, f.filterMaxRangeValues]);
                     layer.filter.push(outRangeExpression);
                 }
-
             });
         }
-        // todo: add 'Infinity' & '-Infinity'
-        // layer.filter = this.getLayerFilters(modeValues, mode, taggableFields);
+        /** This filter is added to layers to avoid metrics having 'Infinity' as a value */
+        layer.filter = layer.filter.concat([this.getLayerFilters(modeValues, mode, taggableFields)]);
         return layer;
     }
 
@@ -337,18 +328,16 @@ export class ConfigMapExportHelper {
                     return null;
                 } else if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
                     // otherwise if we normalize
-                    return [['!=', getField()
-                        .concat(':' + NORMALIZED)
-                        .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
-                            ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl.replace(/\./g, '_') : ''), 'Infinity'],
-                    ['!=', getField()
-                        .concat(':' + NORMALIZED)
-                        .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
-                            ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl.replace(/\./g, '_') : ''), '-Infinity']]
+                    const normalizedFlatField = getField()
+                    .concat(':' + NORMALIZED)
+                    .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
+                        ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl.replace(/\./g, '_') : '');
+                    return [['<', [ "get", normalizedFlatField], Infinity],
+                    ['>', [ "get", normalizedFlatField], -Infinity]]
                         ;
                 } else {
                     // if we don't normalize
-                    return [['!=', getField().replace(/\./g, '_'), 'Infinity'], ['!=', getField().replace(/\./g, '_'), '-Infinity']];
+                    return [['<', ["get", getField().replace(/\./g, '_')], Infinity], ['>', ["get", getField().replace(/\./g, '_')], -Infinity]];
                 }
             }
             case PROPERTY_SELECTOR_SOURCE.heatmap_density: {

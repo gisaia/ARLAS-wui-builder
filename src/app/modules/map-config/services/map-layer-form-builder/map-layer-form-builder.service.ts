@@ -208,7 +208,6 @@ export class MapFilterFormGroup extends ConfigFormGroup {
             }
             control.setValue(control.syncOptions[0].value);
           }
-          // control.enableIf(this.customControls.dataStep.aggregation.value.aggregationFieldType === 'time')
         }
       ),
       filterInValues: new MultipleSelectFormControl(
@@ -219,7 +218,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
         [],
         {
           resetDependantsOnChange: true,
-          dependsOn: () => [this.customControls.filterOperation, this.customControls.filterField],
+          dependsOn: () => [this.customControls.filterField],
           onDependencyChange: (control: MultipleSelectFormControl) => {
             if (!!this.customControls.filterField.value && !!this.customControls.filterField.value.value &&
               this.customControls.filterField.value.value !== '') {
@@ -230,10 +229,6 @@ export class MapFilterFormGroup extends ConfigFormGroup {
                   collection,
                   this.customControls.filterField.value.value).then(keywords => {
                     control.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
-                    if (keywords.length > 0) {
-
-                      // control.setValue(keywords[0])
-                    }
                   });
               } else {
                 control.setSyncOptions([]);
