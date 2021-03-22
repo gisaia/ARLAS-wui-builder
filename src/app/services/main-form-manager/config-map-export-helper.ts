@@ -18,7 +18,7 @@ under the License.
 */
 import { FormArray, FormGroup } from '@angular/forms';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
-import { Paint, Layer, MapConfig } from './models-map-config';
+import { Paint, Layer, MapConfig, ExternalEvent } from './models-map-config';
 import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
@@ -35,19 +35,58 @@ export class ConfigMapExportHelper {
 
     public static process(mapConfigLayers: FormArray, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>) {
 
-        const layers: Array<Layer> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
-            return this.getLayer(layerFg, colorService, taggableFields);
+        const layers: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
+            return [this.getLayer(layerFg, colorService, taggableFields), layerFg.value.mode as LAYER_MODE];
+        });
+        let layersHover: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
+            return [this.getLayer(layerFg, colorService, taggableFields), layerFg.value.mode as LAYER_MODE];
+        });
+        let layersSelect: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
+            return [this.getLayer(layerFg, colorService, taggableFields), layerFg.value.mode as LAYER_MODE];
         });
 
-        const mapConfig: MapConfig = {
-            layers
-        };
+        layersHover = layersHover
+            .filter(l => l[1] === LAYER_MODE.features)
+            .filter(l => l[0].type === GEOMETRY_TYPE.line || l[0].type === GEOMETRY_TYPE.circle)
+            .map(l => {
+                const id = l[0].id;
+                l[0].id = 'arlas-hover-'.concat(id);
+                l[0].layout.visibility = VISIBILITY.none;
+                l[0].type === GEOMETRY_TYPE.line ? l[0].paint['line-width'] = this.addPixelToWidth(12, l[0].paint['line-width'])
+                    : l[0].paint['circle-stroke-width'] = this.addPixelToWidth(12, l[0].paint['circle-stroke-widthh']);
+                return [l[0], l[1]];
+            });
 
+        layersSelect = layersSelect
+            .filter(l => l[1] === LAYER_MODE.features)
+            .filter(l => l[0].type === GEOMETRY_TYPE.line || l[0].type === GEOMETRY_TYPE.circle)
+            .map(l => {
+                const id = l[0].id;
+                l[0].id = 'arlas-select-'.concat(id);
+                l[0].layout.visibility = VISIBILITY.none;
+                l[0].type === GEOMETRY_TYPE.line ? l[0].paint['line-width'] = this.addPixelToWidth(12, l[0].paint['line-width'])
+                    : l[0].paint['circle-stroke-width'] = this.addPixelToWidth(12, l[0].paint['circle-stroke-widthh']);
+                return [l[0], l[1]];
+            });
+        const mapConfig: MapConfig = {
+            layers: Array.from(new Set(layers.map(l => l[0]).concat(layersSelect.map(l => l[0])).concat(layersHover.map(l => l[0])))),
+            externalEventLayers: Array.from(new Set(layersHover.map(lh => {
+                return {
+                    id: lh[0].id,
+                    on: ExternalEvent.hover
+                };
+            }).concat(layersSelect.map(lh => {
+                return {
+                    id: lh[0].id,
+                    on: ExternalEvent.select
+                };
+            }))))
+        };
         return mapConfig;
     }
 
 
-    public static getLayer(layerFg: FormGroup, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string> ): Layer {
+    public static getLayer(layerFg: FormGroup, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>): Layer {
         const mode = layerFg.value.mode as LAYER_MODE;
         const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
             (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
@@ -112,43 +151,43 @@ export class ConfigMapExportHelper {
     }
 
     public static getLayerFilters(modeValues, mode, taggableFields?: Set<string>) {
-        let filter: Array<any> = ['all'];
+        let filterLayer: Array<any> = ['all'];
         const colorFilter = this.getFilter(modeValues.styleStep.colorFg, mode, taggableFields);
         if (colorFilter) {
-            filter = filter.concat(colorFilter);
+            filterLayer = filterLayer.concat(colorFilter);
         }
         switch (modeValues.styleStep.geometryType) {
             case GEOMETRY_TYPE.line: {
                 const lineFilter = this.getFilter(modeValues.styleStep.widthFg, mode, taggableFields);
                 if (lineFilter) {
-                    filter = filter.concat(lineFilter);
+                    filterLayer = filterLayer.concat(lineFilter);
                 }
                 break;
             }
             case GEOMETRY_TYPE.circle: {
                 const circleFilter = this.getFilter(modeValues.styleStep.radiusFg, mode, taggableFields);
                 if (circleFilter) {
-                    filter = filter.concat(circleFilter);
+                    filterLayer = filterLayer.concat(circleFilter);
                 }
                 break;
             }
             case GEOMETRY_TYPE.heatmap: {
                 const intensityFilter = this.getFilter(modeValues.styleStep.intensityFg, mode, taggableFields);
                 if (intensityFilter) {
-                    filter = filter.concat(intensityFilter);
+                    filterLayer = filterLayer.concat(intensityFilter);
                 }
                 const weightFilter = this.getFilter(modeValues.styleStep.weightFg, mode, taggableFields);
                 if (weightFilter) {
-                    filter = filter.concat(weightFilter);
+                    filterLayer = filterLayer.concat(weightFilter);
                 }
                 const radiusFilter = this.getFilter(modeValues.styleStep.radiusFg, mode, taggableFields);
                 if (radiusFilter) {
-                    filter = filter.concat(radiusFilter);
+                    filterLayer = filterLayer.concat(radiusFilter);
                 }
                 break;
             }
         }
-        return filter;
+        return filterLayer;
     }
 
     public static getMapProperty(fgValues: any, mode: LAYER_MODE, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>) {
@@ -285,5 +324,11 @@ export class ConfigMapExportHelper {
             value.replace(/\./g, '_')
         ];
     }
-
+    private static addPixelToWidth(nbPixel: number, value: any): Array<string | Array<string> | number> | number {
+        if (value instanceof Array) {
+            return value.map((v, i) =>  (i > 2 && i % 2 === 0) ? v as number + nbPixel : v );
+        } else {
+            return value as number + nbPixel;
+        }
+    }
 }

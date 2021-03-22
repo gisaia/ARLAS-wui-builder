@@ -17,8 +17,19 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+
+export enum ExternalEvent {
+    hover = 'hover',
+    select = 'select'
+}
+export interface ExternalEventLayers {
+    id: string;
+    on: ExternalEvent;
+}
+
 export interface MapConfig {
     layers: Array<Layer>;
+    externalEventLayers?: Array<ExternalEventLayers>;
 }
 
 export interface Layer {
@@ -48,6 +59,7 @@ export interface Paint {
     'line-opacity'?: number;
     'line-width'?: PaintValue;
     'circle-radius'?: PaintValue;
+    'circle-stroke-width'?: PaintValue;
     'heatmap-color'?: PaintValue;
     'heatmap-radius'?: PaintValue;
     'heatmap-weight'?: PaintValue;

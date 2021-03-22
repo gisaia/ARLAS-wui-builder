@@ -379,11 +379,12 @@ export class MapImportService {
   }
 
   public doImport(config: Config, mapConfig: MapConfig) {
-
     const mapgl = config.arlas.web.components.mapgl;
     const mapContrib = config.arlas.web.contributors.find(c => c.identifier === 'mapbox');
     const layersSources = mapContrib.layers_sources;
-    const layers = mapConfig.layers;
+    const layers = mapConfig.layers
+      .filter(ls => !ls.id.startsWith('arlas-hover-'))
+      .filter(ls => !ls.id.startsWith('arlas-select-'));
 
     const visualisationSets: Array<VisualisationSetConfig> = config.arlas.web.components.mapgl.input.visualisations_sets;
 

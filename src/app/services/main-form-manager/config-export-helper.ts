@@ -116,6 +116,11 @@ export class ConfigExportHelper {
                     configPath: 'config.map.json',
                     replacedAttribute: 'arlas.web.components.mapgl.input.mapLayers.layers',
                     replacer: 'layers'
+                },
+                {
+                    configPath: 'config.map.json',
+                    replacedAttribute: 'arlas.web.components.mapgl.input.mapLayers.externalEventLayers',
+                    replacer: 'external-event-layers'
                 }
             ]
         };
