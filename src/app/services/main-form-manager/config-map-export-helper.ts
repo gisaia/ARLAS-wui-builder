@@ -53,7 +53,7 @@ export class ConfigMapExportHelper {
                 l[0].id = 'arlas-hover-'.concat(id);
                 l[0].layout.visibility = VISIBILITY.none;
                 l[0].type === GEOMETRY_TYPE.line ? l[0].paint['line-width'] = this.addPixelToWidth(12, l[0].paint['line-width'])
-                    : l[0].paint['circle-stroke-width'] = this.addPixelToWidth(12, l[0].paint['circle-stroke-widthh']);
+                    : l[0].paint['circle-stroke-width'] = this.addPixelToWidth(12, l[0].paint['circle-stroke-width']);
                 return [l[0], l[1]];
             });
 
@@ -65,7 +65,7 @@ export class ConfigMapExportHelper {
                 l[0].id = 'arlas-select-'.concat(id);
                 l[0].layout.visibility = VISIBILITY.none;
                 l[0].type === GEOMETRY_TYPE.line ? l[0].paint['line-width'] = this.addPixelToWidth(12, l[0].paint['line-width'])
-                    : l[0].paint['circle-stroke-width'] = this.addPixelToWidth(12, l[0].paint['circle-stroke-widthh']);
+                    : l[0].paint['circle-stroke-width'] = this.addPixelToWidth(12, l[0].paint['circle-stroke-width']);
                 return [l[0], l[1]];
             });
         const mapConfig: MapConfig = {

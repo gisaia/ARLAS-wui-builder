@@ -29,6 +29,7 @@ const routes: Routes = [
   {
     path: 'load', children: [
       { path: '', component: LandingPageComponent, pathMatch: 'full' },
+      { path: 'import', component: LandingPageComponent },
       { path: ':id', component: LandingPageComponent}
     ]
   },
