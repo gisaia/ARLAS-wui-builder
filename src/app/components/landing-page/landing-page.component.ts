@@ -291,6 +291,12 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     });
     actions.push({
       config,
+      type: ConfigActionEnum.RENAME,
+      name: data.doc_key,
+      enabled: data.updatable
+    });
+    actions.push({
+      config,
       type: ConfigActionEnum.DUPLICATE,
       name: data.doc_key
     });
