@@ -538,5 +538,7 @@
 	"Invalid dashboard name":"Invalid dashboard name",
 	"Another dashboad already exists with the same name, please choose another one":"Another dashboad already exists with the same name, please choose another one",
 	"Rename":"Rename",
-	"Order field feature metric description":"(Optional) Sort data of aggregation by one or many fields. The first element of the resulted sort is the one rendered in the geometry.\n If empty, we order by descending collection date."
+	"Order field feature metric description":"(Optional) Sort data of aggregation by one or many fields. The first element of the resulted sort is the one rendered in the geometry.\n If empty, we order by descending collection date.",
+	"Use UTC time Zone to display date?":"Displaying date in UTC time Zone",
+	"Use UTC time Zone to display date description":"Whether displaying date in UTC time Zone or in the local time zone of the browser."
 }

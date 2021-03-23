@@ -77,6 +77,17 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
               1)
           }).withTitle(marker('Term aggregation')),
           aggregation: dateAggregationFg,
+          useUtc: new SlideToggleFormControl(
+            '',
+            marker('Use UTC time Zone to display date?'),
+            marker('Use UTC time Zone to display date description'),
+            {
+              optional: true,
+              dependsOn: () => [this.customControls.dataStep.aggregation],
+              onDependencyChange: (control) =>
+                control.enableIf(this.customControls.dataStep.aggregation.value.aggregationFieldType === 'time')
+            }
+          ),
           metric: metricFg
         }).withTabName(marker('Data')),
         renderStep: new ConfigFormGroup({
@@ -180,6 +191,7 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
     title: this.get('title') as TitleInputFormControl,
     dataStep: {
       aggregation: this.get('dataStep').get('aggregation') as BucketsIntervalFormGroup,
+      useUtc: this.get('dataStep').get('useUtc') as SliderFormControl,
       termAggregation: {
         termAggregationField: this.get('dataStep').get('termAggregation').get('termAggregationField') as SelectFormControl,
         termAggregationSize: this.get('dataStep').get('termAggregation').get('termAggregationSize') as SliderFormControl

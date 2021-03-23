@@ -52,6 +52,14 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
             resetDependantsOnChange: true
           }
         ),
+        useUtc: new SlideToggleFormControl(
+          '',
+          marker('Use UTC time Zone to display date?'),
+          marker('Use UTC time Zone to display date description'),
+          {
+            resetDependantsOnChange: true
+          }
+        ),
         // using container because form groups with tabs cannot be at same level as form control
         tabsContainer: new ConfigFormGroup({
           dataStep: new ConfigFormGroup({
@@ -178,6 +186,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
 
   public customControls = {
     useDetailedTimeline: this.get('useDetailedTimeline') as SlideToggleFormControl,
+    useUtc: this.get('useUtc') as SlideToggleFormControl,
     tabsContainer: {
       dataStep: {
         timeline: {

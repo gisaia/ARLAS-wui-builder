@@ -421,13 +421,13 @@ export class ConfigExportHelper {
         const unmanagedDataFields = isDetailed ?
             timelineConfigGlobal.customControls.unmanagedFields.dataStep.detailedTimeline :
             timelineConfigGlobal.customControls.unmanagedFields.dataStep.timeline;
-
         const contributor: ContributorConfig = {
             type: isDetailed ? 'detailedhistogram' : 'histogram',
             identifier: isDetailed ? 'detailedTimeline' : 'timeline',
             name: unmanagedDataFields.name.value,
             icon: unmanagedDataFields.icon.value,
-            isOneDimension: unmanagedDataFields.isOneDimension.value
+            isOneDimension: unmanagedDataFields.isOneDimension.value,
+            useUtc: timelineConfigGlobal.value.useUtc
         };
 
         const aggregationModel: AggregationModelConfig = {
@@ -528,7 +528,7 @@ export class ConfigExportHelper {
 
                 contrib.jsonpath = widgetData.dataStep.metric.metricCollectFunction === DEFAULT_METRIC_VALUE ?
                     JSONPATH_COUNT : JSONPATH_METRIC;
-
+                contrib.useUtc = widgetData.dataStep.useUtc;
                 contrib.aggregationmodels = [aggregationModel];
 
                 return contrib;
@@ -544,7 +544,7 @@ export class ConfigExportHelper {
                 } as SwimlaneConfig;
 
                 swimlane.aggregationmodels = [];
-
+                swimlane.useUtc = widgetData.dataStep.useUtc;
                 swimlane.aggregationmodels.push({
                     type: 'term',
                     field: widgetData.dataStep.termAggregation.termAggregationField,

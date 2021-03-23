@@ -194,6 +194,7 @@
     "timeline": {
         "global": {
             "useDetailedTimeline": true,
+            "useUtc": true,
             "tabsContainer": {
                 "dataStep": {
                     "timeline": {
@@ -305,6 +306,7 @@
                         "aggregationBucketOrInterval": "bucket",
                         "aggregationBucketsNumber": 50
                     },
+                    "useUtc":true,
                     "metric" : {
                         "metricCollectFunction": "Count"
                     }
@@ -349,7 +351,8 @@
                 "dataStep": {
                     "termAggregation": {
                         "termAggregationSize": 5
-                    }
+                    },
+                    "useUtc":true
                 },
                 "renderStep": {
                     "swimlaneMode": "fixedHeight",

@@ -154,6 +154,10 @@ export class AnalyticsImportService {
       {
         value: component.showExportCsv,
         control: renderStep.showExportCsv
+      },
+      {
+        value: contributor.useUtc !== undefined ? contributor.useUtc : true ,
+        control: dataStep.useUtc
       }
     ]);
 
@@ -236,6 +240,10 @@ export class AnalyticsImportService {
         value: !!swimlaneInput && !!swimlaneInput.swimlane_options &&
           swimlaneInput.swimlane_options.nan_color ? swimlaneInput.swimlane_options.nan_color : '#333',
         control: renderStep.NaNColor
+      },
+      {
+        value: contributor.useUtc !== undefined ? contributor.useUtc : true ,
+        control: dataStep.useUtc
       }
     ]);
 
