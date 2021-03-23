@@ -24,7 +24,6 @@ import { ArlasStartupService, ArlasCollaborativesearchService, ArlasConfigServic
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { OperationEnum } from 'arlas-web-core';
-import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +37,7 @@ export class AnalyticsInitService {
     private mainFormService: MainFormService,
     private arlasStartupService: ArlasStartupService,
     private collaborativesearchService: ArlasCollaborativesearchService,
-    private configService: ArlasConfigService,
-    private translate: TranslateService
+    private configService: ArlasConfigService
   ) { }
 
   public initModule() {

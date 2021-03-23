@@ -21,6 +21,7 @@ import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { SharedModule } from '@shared/shared.module';
 import { DialogColorTableComponent } from './components/dialog-color-table/dialog-color-table.component';
+import { DialogFilterComponent } from './components/dialog-filter/dialog-filter.component';
 import { DialogPaletteSelectorComponent } from './components/dialog-palette-selector/dialog-palette-selector.component';
 import { EditLayerComponent } from './components/edit-layer/edit-layer.component';
 import { GlobalMapComponent } from './components/global-map/global-map.component';
@@ -33,7 +34,6 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 import { VisualisationsComponent } from './components/visualisations/visualisations.component';
 import { EditVisualisationComponent } from './components/edit-visualisation/edit-visualisation.component';
 import { BasemapsComponent } from './components/basemaps/basemaps.component';
-import { LayerIdToName } from 'arlas-web-components';
 import { ImportLayerDialogComponent } from './components/import-layer-dialog/import-layer-dialog.component';
 
 @NgModule({
@@ -42,6 +42,7 @@ import { ImportLayerDialogComponent } from './components/import-layer-dialog/imp
     DialogColorTableComponent,
     DialogPaletteSelectorComponent,
     ImportLayerDialogComponent,
+    DialogFilterComponent,
     MapglComponent,
     PreviewComponent
   ],
@@ -52,6 +53,7 @@ import { ImportLayerDialogComponent } from './components/import-layer-dialog/imp
     EditLayerComponent,
     EditVisualisationComponent,
     DialogColorTableComponent,
+    DialogFilterComponent,
     DialogPaletteSelectorComponent,
     PreviewComponent,
     VisualisationsComponent,

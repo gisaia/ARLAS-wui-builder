@@ -22,7 +22,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/internal/operators/filter';
 import { map } from 'rxjs/operators';
-import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { isFullyTouched } from '@utils/tools';
 import { Subscription } from 'rxjs';
 

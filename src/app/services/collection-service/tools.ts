@@ -41,7 +41,7 @@ export const NUMERIC_OR_DATE_OR_TEXT_TYPES = [
 
 export function toOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
     return collectionFieldsObs.pipe(map(
-        fields => fields.map(f => ({ value: f.name, label: f.name, enabled: f.indexed }))
+        fields => fields.map(f => ({ value: f.name, label: f.name, enabled: f.indexed, type: f.type }))
     ));
 }
 
@@ -59,6 +59,13 @@ export function toDateFieldsObs(collectionFieldsObs: Observable<Array<Collection
 export function toIntegerOrDateFieldsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
     return collectionFieldsObs.pipe(map(
         fields => fields.filter(f => INTEGER_OR_DATE_TYPES.indexOf(f.type) >= 0)));
+}
+
+
+export function toNumericOrDateOrKeywordObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+    return toOptionsObs(collectionFieldsObs.pipe(map(
+        fields => fields
+            .filter(f => f.type === TypeEnum.KEYWORD || NUMERIC_OR_DATE_TYPES.indexOf(f.type) >= 0))));
 }
 
 export function toNumericOrDateOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {

@@ -125,7 +125,8 @@ export class CollectionService {
       this.collabSearchService.collaborations, null, null, false, 120);
   }
 
-  public getTermAggregation(collection: string, field: string, showSpinner: boolean = true, filter?: Filter): Promise<Array<string>> {
+  public getTermAggregation(collection: string, field: string, showSpinner: boolean = true,
+                            filter?: Filter, prefix?: string): Promise<Array<string>> {
 
     if (showSpinner) {
       this.spinner.show();
@@ -135,6 +136,9 @@ export class CollectionService {
       field,
       size: this.defaultValueService.getDefaultConfig().aggregationTermSize.toString()
     };
+    if (prefix) {
+      aggregation.include = prefix + '.*';
+    }
     const aggreationRequest: AggregationsRequest = {
       aggregations: [aggregation],
       filter

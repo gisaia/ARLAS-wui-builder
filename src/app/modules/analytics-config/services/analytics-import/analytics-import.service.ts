@@ -20,7 +20,6 @@ import { Injectable } from '@angular/core';
 import {
   Config, AnalyticComponentConfig, ContributorConfig, AggregationModelConfig,
   AnalyticComponentSwimlaneInputConfig,
-  JSONPATH_COUNT,
   AnalyticComponentHistogramInputConfig
 } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';

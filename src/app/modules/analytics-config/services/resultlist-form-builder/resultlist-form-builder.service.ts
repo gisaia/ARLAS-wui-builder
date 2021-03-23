@@ -34,12 +34,10 @@ import { CollectionReferenceDescription } from 'arlas-api';
 import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
-import { CollectionField } from '@services/collection-service/models';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
-import { getFieldProperties } from 'arlas-wui-toolkit/tools/utils';
 
 export class ResultlistConfigForm extends ConfigFormGroup {
 

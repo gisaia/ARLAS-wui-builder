@@ -56,7 +56,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   private afterClosedSub: Subscription;
 
-
   constructor(
     private defaultValuesService: DefaultValuesService,
     public dialog: MatDialog,
@@ -69,8 +68,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     private cs: ArlasColorService,
     protected mainFormService: MainFormService,
 
-  ) {
-  }
+  ) {}
 
   public ngOnInit() {
     this.analyticsInitService.initTabContent(this.contentFg);

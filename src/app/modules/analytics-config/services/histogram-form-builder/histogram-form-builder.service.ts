@@ -20,7 +20,7 @@ import { Injectable } from '@angular/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
-  ConfigFormGroup, SlideToggleFormControl, SelectFormControl, InputFormControl, TitleInputFormControl
+  ConfigFormGroup, SlideToggleFormControl, SelectFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { ChartType } from 'arlas-web-components';
 import { FormGroup, FormControl } from '@angular/forms';

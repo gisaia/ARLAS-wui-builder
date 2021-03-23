@@ -20,7 +20,7 @@ import { Injectable } from '@angular/core';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { FormGroup, FormControl } from '@angular/forms';
 import {
-  ConfigFormGroup, InputFormControl, SelectFormControl, SliderFormControl,
+  ConfigFormGroup, SelectFormControl, SliderFormControl,
   SlideToggleFormControl, HuePaletteFormControl, HiddenFormControl, SelectOption, ButtonToggleFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { CollectionService } from '@services/collection-service/collection.service';

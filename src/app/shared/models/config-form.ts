@@ -26,6 +26,8 @@ import { METRIC_TYPES } from '@services/collection-service/collection.service';
 import { toKeywordOptionsObs, toNumericOrDateOptionsObs } from '@services/collection-service/tools';
 import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { MatCheckboxChange } from '@angular/material';
+import { CollectionReferenceDescriptionProperty } from 'arlas-api';
+
 
 /**
  * These are wrappers above existing FormGroup and FormControl in order to add a custom behavior.
@@ -38,7 +40,9 @@ export interface SelectOption {
     value: any;
     label: any;
     enabled?: boolean;
+    type?: CollectionReferenceDescriptionProperty.TypeEnum;
 }
+
 export interface VisualisationCheckboxOption {
     include: boolean;
     name: any;
@@ -386,6 +390,101 @@ export class SelectFormControl extends ConfigFormControl {
     }
 }
 
+
+export class MultipleSelectFormControl extends ConfigFormControl {
+
+    // used only for autocomplete: list of filtered options
+    public filteredOptions: Array<SelectOption>;
+    public syncOptions: Array<SelectOption> = [];
+    public selectedMultipleItems = [];
+    public savedItems = new Set<string>();
+    constructor(
+        formState: any,
+        label: string,
+        description: string,
+        public isAutocomplete: boolean,
+        options: Array<SelectOption> | Observable<Array<SelectOption>>,
+        optionalParams?: ControlOptionalParams) {
+
+        super(
+            formState,
+            label,
+            description,
+            optionalParams);
+
+        if (options instanceof Observable) {
+            options.subscribe(opts => this.setSyncOptions(opts));
+        } else if (options instanceof Array) {
+            this.setSyncOptions(options);
+        }
+
+        if (isAutocomplete) {
+            // TODO should we unsubscribe later?
+            this.valueChanges.subscribe(v => {
+                if (!!v) {
+                    this.filteredOptions = this.syncOptions.filter(o => o.label.indexOf(v) >= 0);
+                } else {
+                    this.filteredOptions = this.syncOptions;
+                }
+
+            }
+            );
+        }
+
+    }
+
+    public setSyncOptions(newOptions: Array<SelectOption>) {
+        this.syncOptions = newOptions;
+        this.filteredOptions = newOptions;
+    }
+}
+
+export class TypedSelectFormControl extends ConfigFormControl {
+
+    // used only for autocomplete: list of filtered options
+    public filteredOptions: Array<SelectOption>;
+    public syncOptions: Array<SelectOption> = [];
+
+    constructor(
+        formState: any,
+        label: string,
+        description: string,
+        public isAutocomplete: boolean,
+        options: Array<SelectOption> | Observable<Array<SelectOption>>,
+        optionalParams?: ControlOptionalParams) {
+
+        super(
+            formState,
+            label,
+            description,
+            optionalParams);
+
+        if (options instanceof Observable) {
+            options.subscribe(opts => this.setSyncOptions(opts));
+        } else if (options instanceof Array) {
+            this.setSyncOptions(options);
+        }
+
+        if (isAutocomplete) {
+            // TODO should we unsubscribe later?
+            this.valueChanges.subscribe(v => {
+                if (!!v) {
+                    this.filteredOptions = this.syncOptions.filter(o => o.label.indexOf(v) >= 0);
+                } else {
+                    this.filteredOptions = this.syncOptions;
+                }
+
+            }
+            );
+        }
+    }
+
+    public setSyncOptions(newOptions: Array<SelectOption>) {
+        this.syncOptions = newOptions;
+        this.filteredOptions = newOptions;
+    }
+}
+
 export class OrderedSelectFormControl extends SelectFormControl {
     public sortDirection: string;
     public sorts: Set<string> = new Set();
@@ -613,14 +712,40 @@ export class SliderFormControl extends ConfigFormControl {
     }
 }
 
+export class MapFiltersControl extends ConfigFormControl {
+    constructor(
+        public formState: any,
+        label: string,
+        description: string,
+        optionalParams?: ControlOptionalParams) {
+        super(formState, label, description, optionalParams || { optional: true });
+    }
+}
+
 export class InputFormControl extends ConfigFormControl {
     constructor(
         formState: any,
         label: string,
         description: string,
         public inputType: string = 'text',
-        optionalParams?: ControlOptionalParams) {
+        optionalParams?: ControlOptionalParams,
+        public ensureLessThan?: () => ConfigFormControl,
+        public ensureGeaterThan?: () => ConfigFormControl) {
         super(formState, label, description, optionalParams);
+    }
+
+    public checkLessThan(newValue: number) {
+        const other = this.ensureLessThan();
+        if (newValue > other.value) {
+            other.setValue(newValue);
+        }
+    }
+
+    public checkGreaterThan(newValue: number) {
+        const other = this.ensureGeaterThan();
+        if (newValue < other.value) {
+            other.setValue(newValue);
+        }
     }
 }
 

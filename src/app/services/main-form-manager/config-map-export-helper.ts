@@ -19,7 +19,7 @@ under the License.
 import { FormArray, FormGroup } from '@angular/forms';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { Paint, Layer, MapConfig, ExternalEvent } from './models-map-config';
-import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
+import { GEOMETRY_TYPE, FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 import { ConfigExportHelper } from './config-export-helper';
@@ -92,7 +92,6 @@ export class ConfigMapExportHelper {
             (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
 
         const paint = this.getLayerPaint(modeValues, mode, colorService, taggableFields);
-
         const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
         const layer: Layer = {
             id: layerFg.value.arlasId,
@@ -109,7 +108,34 @@ export class ConfigMapExportHelper {
             layer.layout['line-cap'] = 'round';
             layer.layout['line-join'] = 'round';
         }
-        layer.filter = this.getLayerFilters(modeValues, mode, taggableFields);
+        /** 'all' is the operator that allows to apply an "AND" operator in mapbox */
+        layer.filter = ['all'];
+        const filters = !!modeValues.visibilityStep.filters ? modeValues.visibilityStep.filters.value : undefined;
+        if (!!filters) {
+            filters.forEach((f) => {
+                const fieldPath = this.getArray(this.getFieldPath(f.filterField.value, taggableFields));
+                if (f.filterOperation === FILTER_OPERATION.IN) {
+                    layer.filter.push([f.filterOperation.toLowerCase(), fieldPath, ['literal', f.filterInValues]]);
+                } else if (f.filterOperation === FILTER_OPERATION.NOT_IN) {
+                    layer.filter.push(['!', ['in', fieldPath, ['literal', f.filterInValues]]]);
+                } else if (f.filterOperation === FILTER_OPERATION.EQUAL) {
+                    layer.filter.push(['==', fieldPath, f.filterEqualValues]);
+                } else if (f.filterOperation === FILTER_OPERATION.NOT_EQUAL) {
+                    layer.filter.push(['!=', fieldPath, f.filterEqualValues]);
+                } else if (f.filterOperation === FILTER_OPERATION.RANGE) {
+                    layer.filter.push(['>=', fieldPath, f.filterMinRangeValues]);
+                    layer.filter.push(['<=', fieldPath, f.filterMaxRangeValues]);
+                } else if (f.filterOperation === FILTER_OPERATION.OUT_RANGE) {
+                    /** 'any' is the operator that allows to apply a "OR" filter in mapbox  */
+                    const outRangeExpression: Array<any> = ['any'];
+                    outRangeExpression.push(['<', fieldPath, f.filterMinRangeValues]);
+                    outRangeExpression.push(['>', fieldPath, f.filterMaxRangeValues]);
+                    layer.filter.push(outRangeExpression);
+                }
+            });
+        }
+        /** This filter is added to layers to avoid metrics having 'Infinity' as a value */
+        layer.filter = layer.filter.concat([this.getLayerFilters(modeValues, mode, taggableFields)]);
         return layer;
     }
 
@@ -205,8 +231,7 @@ export class ConfigMapExportHelper {
                 const manualValues = !otherKC ? (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>) :
                     (fgValues.propertyManualFg.propertyManualValuesCtrl as Array<KeywordColor>)
                         .filter(kc => kc.keyword !== OTHER_KEYWORD).concat(otherKC);
-                const manualField = (taggableFields && taggableFields.has(fgValues.propertyManualFg.propertyManualFieldCtrl)) ?
-                    fgValues.propertyManualFg.propertyManualFieldCtrl + '.0' : fgValues.propertyManualFg.propertyManualFieldCtrl;
+                const manualField = this.getFieldPath(fgValues.propertyManualFg.propertyManualFieldCtrl, taggableFields);
                 return [
                     'match',
                     this.getArray(manualField)
@@ -273,6 +298,10 @@ export class ConfigMapExportHelper {
         }
     }
 
+    public static getFieldPath(field: string, taggableFields: Set<string>): string {
+        return (taggableFields && taggableFields.has(field)) ? field + '.0' : field;
+    }
+
     public static getFilter(fgValues: any, mode: LAYER_MODE, taggableFields?: Set<string>) {
         switch (fgValues.propertySource) {
             case PROPERTY_SELECTOR_SOURCE.fix:
@@ -297,18 +326,17 @@ export class ConfigMapExportHelper {
                     return null;
                 } else if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
                     // otherwise if we normalize
-                    return [['!=', getField()
-                        .concat(':' + NORMALIZED)
-                        .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
-                            ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl.replace(/\./g, '_') : ''), 'Infinity'],
-                    ['!=', getField()
-                        .concat(':' + NORMALIZED)
-                        .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
-                            ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl.replace(/\./g, '_') : ''), '-Infinity']]
+                    const normalizedFlatField = getField()
+                    .concat(':' + NORMALIZED)
+                    .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
+                        ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl.replace(/\./g, '_') : '');
+                    return [['<', [ 'get', normalizedFlatField], Infinity],
+                    ['>', [ 'get', normalizedFlatField], -Infinity]]
                         ;
                 } else {
                     // if we don't normalize
-                    return [['!=', getField().replace(/\./g, '_'), 'Infinity'], ['!=', getField().replace(/\./g, '_'), '-Infinity']];
+                    return [['<', ['get', getField().replace(/\./g, '_')], Infinity],
+                         ['>', ['get', getField().replace(/\./g, '_')], -Infinity]];
                 }
             }
             case PROPERTY_SELECTOR_SOURCE.heatmap_density: {

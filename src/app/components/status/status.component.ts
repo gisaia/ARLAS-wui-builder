@@ -16,9 +16,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef, Output } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { Subject } from 'rxjs/internal/Subject';
 
 @Component({
   selector: 'app-status',

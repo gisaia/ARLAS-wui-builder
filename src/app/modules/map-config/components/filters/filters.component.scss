@@ -16,31 +16,47 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-export enum GEOMETRY_TYPE {
-    fill = 'fill',
-    line = 'line',
-    circle = 'circle',
-    heatmap = 'heatmap'
+@import "variables.scss";
+
+.description {
+    align-self: center;
+    width: fit-content;
+    font-size: 14px;
+    color: $config-element-description-text-color;
+    line-height: 1.6;
+    border-left: 0.2rem solid $config-element-description-border-color;
+    background-color: white;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+.description:not(:empty) {
+    margin-left: 36px;
+    padding: 10px;
 }
 
-
-export enum FILTER_OPERATION {
-    IN = 'IN',
-    NOT_IN = 'NOT_IN',
-    RANGE = 'RANGE',
-    EQUAL = 'EQUAL',
-    NOT_EQUAL = 'NOT_EQUAL',
-    OUT_RANGE = 'OUT_RANGE'
+table {
+  width: 100%;
 }
 
-export enum AGGREGATE_GEOMETRY_TYPE {
-    geohash_center = 'geohash_center',
-    geohash = 'geohash',
-    bbox = 'bbox',
-    centroid = 'centroid'
+button.add-layer {
+  margin: 16px 8px;
+  display: inline-block;
+  min-width: auto;
 }
 
-export enum CLUSTER_GEOMETRY_TYPE {
-    aggregated_geometry = 'aggregated_geometry',
-    raw_geometry = 'raw_geometry'
+mat-error {
+  margin-top: 20px;
+}
+
+.mat-column-action {
+  width: 50px;
+}
+
+.mat-column-representation {
+  width: 50px;
+}
+
+.add-filter {
+  margin-top: 10px;
 }

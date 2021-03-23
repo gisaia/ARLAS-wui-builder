@@ -16,31 +16,3 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-export enum GEOMETRY_TYPE {
-    fill = 'fill',
-    line = 'line',
-    circle = 'circle',
-    heatmap = 'heatmap'
-}
-
-
-export enum FILTER_OPERATION {
-    IN = 'IN',
-    NOT_IN = 'NOT_IN',
-    RANGE = 'RANGE',
-    EQUAL = 'EQUAL',
-    NOT_EQUAL = 'NOT_EQUAL',
-    OUT_RANGE = 'OUT_RANGE'
-}
-
-export enum AGGREGATE_GEOMETRY_TYPE {
-    geohash_center = 'geohash_center',
-    geohash = 'geohash',
-    bbox = 'bbox',
-    centroid = 'centroid'
-}
-
-export enum CLUSTER_GEOMETRY_TYPE {
-    aggregated_geometry = 'aggregated_geometry',
-    raw_geometry = 'raw_geometry'
-}
