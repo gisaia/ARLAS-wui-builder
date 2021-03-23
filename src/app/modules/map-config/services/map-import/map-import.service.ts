@@ -33,7 +33,6 @@ import { COUNT_OR_METRIC } from '@shared-services/property-selector-form-builder
 import { VisualisationSetConfig, BasemapStyle } from 'arlas-web-components';
 import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { FormControl, FormGroup, FormArray, Form } from '@angular/forms';
-import { MapFiltersControl } from '@shared-models/config-form';
 
 @Injectable({
   providedIn: 'root'

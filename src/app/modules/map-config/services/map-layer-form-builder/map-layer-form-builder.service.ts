@@ -33,7 +33,7 @@ import {
   InputFormControl,
   OrderedSelectFormControl, SelectFormControl,
   SliderFormControl, SlideToggleFormControl, VisualisationCheckboxFormControl, VisualisationCheckboxOption,
-  MapFiltersControl, TypedSelectFormControl, MultipleSelectFormControl, ConfigFormControl
+  MapFiltersControl, TypedSelectFormControl, MultipleSelectFormControl
 } from '@shared-models/config-form';
 import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
 import {

@@ -33,7 +33,6 @@ import { Config } from '@services/main-form-manager/models-config';
 import { Layer as LayerMap } from '@services/main-form-manager/models-map-config';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
 import { StartupService } from '@services/startup/startup.service';
-import { Router } from '@angular/router';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { camelize } from '@utils/tools';

@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormArray, FormGroup, Form } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { Paint, Layer, MapConfig, ExternalEvent } from './models-map-config';
 import { GEOMETRY_TYPE, FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
@@ -25,8 +25,6 @@ import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color
 import { ConfigExportHelper } from './config-export-helper';
 import { LayerSourceConfig } from 'arlas-web-contributors';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-import { MapFilterFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
-import { equal } from 'assert';
 
 export enum VISIBILITY {
     visible = 'visible',
