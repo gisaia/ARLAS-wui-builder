@@ -35,6 +35,10 @@ import { Subscription } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { moveInFormArray } from '@utils/tools';
+import { AnalyticsImportService } from '@analytics-config/services/analytics-import/analytics-import.service';
+import { ImportWidgetDialogComponent } from '../import-widget-dialog/import-widget-dialog.component';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { ConfigFormGroup } from '@shared-models/config-form';
 
 @Component({
   selector: 'app-add-widget-dialog',
@@ -79,6 +83,8 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   @Output() public remove = new EventEmitter();
 
   public content: FormArray;
+  public toUnsubscribe: Array<Subscription> = [];
+
 
   private valuesChangesSub: Subscription;
   private afterClosedAddSub: Subscription;
@@ -88,6 +94,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
+    private analyticsImportService: AnalyticsImportService,
     private analyticsInitService: AnalyticsInitService
   ) { }
 
@@ -125,6 +132,42 @@ export class EditGroupComponent implements OnInit, OnDestroy {
           const finalResult = this.contentTypeValue ? this.contentTypeValue : [result];
           this.formGroup.controls.contentType.setValue(finalResult);
           this.editWidget(this.contentTypeValue.length - 1, true);
+        }
+      });
+  }
+
+  public importWidget() {
+    this.dialog.open(ImportWidgetDialogComponent, { width: '800px' })
+      .afterClosed().subscribe(result => {
+        if (!!result) {
+          result[0].forEach(r => {
+            const type = r.componentType;
+            if (!!this.contentTypeValue) {
+              this.contentTypeValue.push(type);
+            }
+            const finalResult = this.contentTypeValue ? this.contentTypeValue : [type];
+            this.formGroup.controls.contentType.setValue(finalResult);
+            const widgetFg = this.analyticsImportService.importWidget(r, result[1]);
+            widgetFg.patchValue(widgetFg.value);
+            widgetFg.markAsPristine();
+            widgetFg.markAllAsTouched();
+            ConfigFormGroupComponent.listenToAllControlsOnDependencyChange(widgetFg.controls.widgetData as ConfigFormGroup,
+              this.toUnsubscribe);
+            this.content.setControl(this.contentTypeValue.length - 1, widgetFg);
+            const contrib = this.analyticsInitService.createContributor(
+              widgetFg.value.widgetType,
+              widgetFg.value.widgetData,
+              this.formGroup.controls.icon.value
+            );
+
+            contrib.updateFromCollaboration({
+              id: '',
+              operation: OperationEnum.add,
+              all: false
+            });
+          });
+          this.updatePreview();
+          this.cdr.detectChanges();
         }
       });
   }

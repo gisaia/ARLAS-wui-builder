@@ -1,0 +1,54 @@
+<div mat-dialog-title>
+    {{'Import a widget' | translate}}
+</div>
+<div mat-dialog-content [formGroup]="importWidgetFormGroup" class="import">
+    <mat-form-field>
+        <mat-label>{{'Dashboard' | translate}}</mat-label>
+        <mat-select formControlName="dashboard" (selectionChange)="getWidgets($event)">
+            <mat-option *ngFor="let conf of configs" [value]="conf">{{conf.doc_key}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <div *ngIf="this.importWidgetFormGroup.get('dashboard').valid">
+        <div mat-dialog-title> {{'Choose of the following widgets' | translate}}</div>
+            <div *ngFor="let tab of analytics | keyvalue">
+                <div style="display: flex; font-size: 0.9em;">
+                    <div style="font-weight: bold; padding-left: 5px;"> {{tab.key}}</div>
+                </div>
+                <mat-card style="margin: 0 0 10px 10px" *ngFor="let analytic of tab.value">
+                    <div style="display: flex; font-size: 0.85em; color:#555;">
+                        <div style="font-weight: bold;"><mat-icon style="font-size: 18px;">{{analytic.icon}}</mat-icon></div>
+                        <div style="font-weight: bold; padding-left: 10px;"> {{analytic.title}}</div>
+                    </div>
+                    <div *ngFor="let comp of analytic.components" style="display: flex;" [matTooltip]="comp.componentType | translate" [matTooltipPosition]="'after'">
+                        <mat-checkbox (change)="onChange($event)" style="display: flex; align-items: center; margin-left: 10px;font-size: 0.8em; color:#333;" [value]="comp">
+                            <div style="display: flex;">
+                                <span>{{contributors.get(comp.contributorId)}}</span>
+                                <div style="display: flex; padding-left: 5px; align-items: center;" >
+                                    <div style="display: flex; font-size: 0.85em; color:#555; font-style: italic;     align-items: center;">(</div>
+                                    <div style="color:#555;display: flex;"><mat-icon style="font-size: 15px; width: 15px; height: 15px;" [color]="'primary'">{{comp.componentType === 'histogram' ? 'bar_chart': 
+                                        (comp.componentType === 'donut' ? 'donut_small' : 
+                                        (comp.componentType === 'powerbars' ? 'sort' :
+                                        (comp.componentType === 'metric' ? 'functions' : 
+                                        (comp.componentType === 'resultlist' ? 'table_chart' :'waves'))))}}</mat-icon></div>
+                                    <div style="display: flex; font-size: 0.85em; color:#555; font-style: italic;     align-items: center;">{{comp.componentType | translate}})</div>
+                                </div>
+                            </div>
+                        </mat-checkbox>
+                    </div>
+    
+                </mat-card>
+            </div>
+
+    </div>
+    <mat-form-field style="display: none;" *ngIf="this.importWidgetFormGroup.get('dashboard').valid">
+        <mat-select formControlName="componentConfig" style="display: none;"  [required]="true"
+            [(ngModel)]="selectedWidgets" >
+        </mat-select>
+    </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+    <button mat-button mat-dialog-close>{{ 'Cancel' | translate}}</button>
+    <button mat-button [mat-dialog-close]="[this.importWidgetFormGroup.get('componentConfig').value, this.dashboardConfigJson]" [disabled]="!this.importWidgetFormGroup.valid" mat-raised-button color="primary">{{ 'Import' | translate}}</button>
+</div>

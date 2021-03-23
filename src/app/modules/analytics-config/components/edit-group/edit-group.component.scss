@@ -114,6 +114,11 @@ $primary-color: mat-color($primary-palette);
 
             .add {
                 float: left;
+                border: unset;
+                padding-left: 0;
+                .import {
+                    margin-left: 5px;
+                }
             }
         }
     }

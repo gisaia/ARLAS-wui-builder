@@ -72,31 +72,7 @@ export class AnalyticsImportService {
         // manage list of widgets
         const contentTypes = new Array();
         analyticGroup.components.forEach(c => {
-          const widget = this.analyticsInitService.initNewWidget(c.componentType);
-          const contributorId = c.contributorId;
-          const contributor = config.arlas.web.contributors.find(contrib => contrib.identifier === contributorId);
-          let widgetData;
-          if (c.componentType === WIDGET_TYPE.histogram) {
-            contentTypes.push(WIDGET_TYPE.histogram);
-            widgetData = this.getHistogramWidgetData(c, contributor);
-          } else if (c.componentType === WIDGET_TYPE.swimlane) {
-            contentTypes.push(WIDGET_TYPE.swimlane);
-            widgetData = this.getSwimlaneWidgetData(c, contributor);
-          } else if (c.componentType === WIDGET_TYPE.metric) {
-            contentTypes.push(WIDGET_TYPE.metric);
-            widgetData = this.getMetricWidgetData(c, contributor);
-          } else if (c.componentType === WIDGET_TYPE.powerbars) {
-            contentTypes.push(WIDGET_TYPE.powerbars);
-            widgetData = this.getPowerbarWidgetData(c, contributor);
-          } else if (c.componentType === WIDGET_TYPE.donut) {
-            contentTypes.push(WIDGET_TYPE.donut);
-            widgetData = this.getDonutWidgetData(c, contributor);
-          } else if (c.componentType === WIDGET_TYPE.resultlist) {
-            contentTypes.push(WIDGET_TYPE.resultlist);
-            widgetData = this.getResultlistWidgetData(c, contributor);
-          }
-          widget.setControl('widgetData', widgetData);
-
+          const widget = this.importWidget(c, config, contentTypes);
           (newGroup.controls.content as FormArray).push(widget);
           this.analyticsInitService.createPreviewContributor(newGroup, widget);
         });
@@ -110,6 +86,34 @@ export class AnalyticsImportService {
     }
 
     tabs.forEach(tab => this.mainFormService.analyticsConfig.getListFa().push(tab));
+  }
+
+  public importWidget(c: AnalyticComponentConfig, config: Config, contentTypes = new Array()): FormGroup {
+    const widget = this.analyticsInitService.initNewWidget(c.componentType);
+    const contributorId = c.contributorId;
+    const contributor = config.arlas.web.contributors.find(contrib => contrib.identifier === contributorId);
+    let widgetData;
+    if (c.componentType === WIDGET_TYPE.histogram) {
+      contentTypes.push(WIDGET_TYPE.histogram);
+      widgetData = this.getHistogramWidgetData(c, contributor);
+    } else if (c.componentType === WIDGET_TYPE.swimlane) {
+      contentTypes.push(WIDGET_TYPE.swimlane);
+      widgetData = this.getSwimlaneWidgetData(c, contributor);
+    } else if (c.componentType === WIDGET_TYPE.metric) {
+      contentTypes.push(WIDGET_TYPE.metric);
+      widgetData = this.getMetricWidgetData(c, contributor);
+    } else if (c.componentType === WIDGET_TYPE.powerbars) {
+      contentTypes.push(WIDGET_TYPE.powerbars);
+      widgetData = this.getPowerbarWidgetData(c, contributor);
+    } else if (c.componentType === WIDGET_TYPE.donut) {
+      contentTypes.push(WIDGET_TYPE.donut);
+      widgetData = this.getDonutWidgetData(c, contributor);
+    } else if (c.componentType === WIDGET_TYPE.resultlist) {
+      contentTypes.push(WIDGET_TYPE.resultlist);
+      widgetData = this.getResultlistWidgetData(c, contributor);
+    }
+    widget.setControl('widgetData', widgetData);
+    return widget;
   }
 
   private getHistogramWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
