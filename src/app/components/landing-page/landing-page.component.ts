@@ -115,6 +115,14 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     if (this.data.message !== '-1') {
       this.loadConfig(this.data.message);
     }
+    if (!!this.data.configChoice) {
+      if (this.data.configChoice === '2') {
+        this.configChoice = InitialChoice.load;
+      } else {
+        this.configChoice = InitialChoice.none;
+      }
+    }
+
     // Reset and clean the content of all forms
     this.mainFormService.resetMainForm();
 
@@ -423,6 +431,8 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   public dialogRef: MatDialogRef<LandingPageDialogComponent>;
 
   private confId = '-1';
+  private configChoice;
+
 
   constructor(
     private dialog: MatDialog,
@@ -436,11 +446,16 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngOnInit(): void {
     if (this.activatedRoute.snapshot.paramMap.has('id')) {
       this.confId = this.activatedRoute.snapshot.paramMap.get('id');
+    } else if (!!this.activatedRoute.snapshot.routeConfig && this.activatedRoute.snapshot.routeConfig.path === 'import') {
+        this.configChoice = '2';
     }
   }
 
   public openChoice() {
-    this.dialogRef = this.dialog.open(LandingPageDialogComponent, { disableClose: true, data: { message: this.confId } });
+    this.dialogRef = this.dialog.open(LandingPageDialogComponent, {
+      disableClose: true, data:
+        { message: this.confId, configChoice: this.configChoice }
+    });
     this.dialogRef.componentInstance.startEvent.subscribe(mode => this.startEvent.next(mode));
   }
 

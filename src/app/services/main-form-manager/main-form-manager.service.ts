@@ -155,6 +155,8 @@ export class MainFormManagerService {
       generatedConfig.arlas.web.components.mapgl.input.visualisations_sets.forEach(vs => vs.layers = Array.from(vs.layers));
       const conf: any = JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
         generatedMapConfig.layers
+      )).replace('"externalEventLayers":[]', '"externalEventLayers":' + JSON.stringify(
+        generatedMapConfig.externalEventLayers
       ));
       if (this.mainFormService.configurationId) {
         // Update existing
