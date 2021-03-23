@@ -16,8 +16,61 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-.import{
-    display: block;
-    flex-direction: column;
-    flex-wrap: wrap;
+.import {
+  display: block;
+
+  .tab {
+    display: flex;
+    font-size: 0.9em;
+    font-weight: bold;
+    padding-left: 5px;
+  }
+
+  .group {
+    margin: 0 0 10px 10px;
+
+    .title-container {
+      display: flex;
+      font-size: 0.85em;
+      color: #555;
+      mat-icon {
+        font-size: 18px;
+      }
+      .title {
+        font-weight: bold;
+        padding-left: 10px;
+      }
+    }
+
+    .component {
+      display: flex;
+      mat-checkbox {
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+        font-size: 0.8em;
+        color: #333;
+        .container {
+          display: flex;
+          .type {
+            display: flex;
+            padding-left: 5px;
+            align-items: center;
+            font-size: 0.85em;
+            color: #555;
+            font-style: italic;
+            align-items: center;
+            div{
+                display: flex;
+            }
+            mat-icon {
+              font-size: 15px;
+              width: 15px;
+              height: 15px;
+            }
+          }
+        }
+      }
+    }
+  }
 }

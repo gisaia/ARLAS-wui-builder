@@ -36,8 +36,8 @@ export class ImportWidgetDialogComponent implements OnInit {
   public configs: DataWithLinks[];
   public dashboardConfigJson: Config;
   public importWidgetFormGroup: FormGroup;
-  public analytics =  new Map<string, Array<AnalyticConfig>>();
-  public contributors =  new Map<string, string>();
+  public analytics = new Map<string, Array<AnalyticConfig>>();
+  public contributors = new Map<string, string>();
 
   public selectedWidgets: Array<AnalyticComponentConfig> = new Array();
   public selectedWidgetsSet: Set<AnalyticComponentConfig> = new Set();
@@ -79,11 +79,9 @@ export class ImportWidgetDialogComponent implements OnInit {
   }
 
   public getWidgets(event: MatSelectChange) {
-    this.cdr.detectChanges();
     this.dashboardConfigJson = JSON.parse(event.value.doc_value) as Config;
     const analytics: Array<AnalyticConfig> = this.dashboardConfigJson.arlas.web.analytics;
     const contributors: Array<ContributorConfig> = this.dashboardConfigJson.arlas.web.contributors;
-
     analytics.forEach(a => {
       let tabAnalytics = this.analytics.get(a.tab);
       if (!tabAnalytics) {
@@ -94,6 +92,7 @@ export class ImportWidgetDialogComponent implements OnInit {
       tabAnalytics.push(a);
       this.analytics.set(a.tab, tabAnalytics);
     });
+    this.cdr.detectChanges();
 
   }
 
