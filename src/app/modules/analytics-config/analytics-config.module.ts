@@ -28,12 +28,14 @@ import { IconPickerModule } from 'ngx-icon-picker';
 import { EditResultlistColumnsComponent } from './components/edit-resultlist-columns/edit-resultlist-columns.component';
 import { EditResultlistDetailsComponent } from './components/edit-resultlist-details/edit-resultlist-details.component';
 import { ResultlistDataComponent } from './components/resultlist-data/resultlist-data.component';
+import { ImportWidgetDialogComponent } from './components/import-widget-dialog/import-widget-dialog.component';
 
 @NgModule({
   entryComponents: [
     EditWidgetDialogComponent,
     AddWidgetDialogComponent,
-    ResultlistDataComponent
+    ResultlistDataComponent,
+    ImportWidgetDialogComponent
   ],
   declarations: [
     TabsComponent,
@@ -43,7 +45,8 @@ import { ResultlistDataComponent } from './components/resultlist-data/resultlist
     AddWidgetDialogComponent,
     EditResultlistColumnsComponent,
     EditResultlistDetailsComponent,
-    ResultlistDataComponent
+    ResultlistDataComponent,
+    ImportWidgetDialogComponent
   ],
   imports: [
     ArlasToolkitSharedModule,

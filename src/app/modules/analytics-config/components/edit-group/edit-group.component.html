@@ -62,9 +62,14 @@
                         </mat-menu>
                         <div class="placeholder" *cdkDragPlaceholder></div>
                 </div>
-                <button class="add" mat-stroked-button color="primary" [matTooltip]="'Add a widget' | translate" (click)="addWidget()">
-                    <mat-icon>add</mat-icon>
-                </button>
+                <div class="add">
+                    <button  mat-stroked-button color="primary" [matTooltip]="'Add a widget' | translate" (click)="addWidget()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <button class="import" mat-stroked-button color="primary" [matTooltip]="'Import a widget' | translate" (click)="importWidget()">
+                        <mat-icon>file_upload</mat-icon>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
