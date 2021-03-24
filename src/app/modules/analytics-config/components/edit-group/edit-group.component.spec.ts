@@ -11,6 +11,7 @@ import {
 } from 'arlas-wui-toolkit/services/startup/startup.service';
 import { IconPickerComponent } from 'ngx-icon-picker';
 import { ArlasConfigurationUpdaterService } from 'arlas-wui-toolkit/services/configuration-updater/configurationUpdater.service';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 describe('EditGroupComponent', () => {
   let spectator: Spectator<EditGroupComponent>;
@@ -27,6 +28,7 @@ describe('EditGroupComponent', () => {
       mockProvider(ArlasConfigService),
       mockProvider(ArlasStartupService),
       mockProvider(ArlasCollaborativesearchService),
+      mockProvider(ArlasColorGeneratorLoader),
       mockProvider(ArlasConfigurationUpdaterService),
       { provide: CONFIG_UPDATER, useValue: {} }
     ],
