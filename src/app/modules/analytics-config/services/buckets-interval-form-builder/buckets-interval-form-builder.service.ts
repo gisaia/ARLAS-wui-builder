@@ -98,9 +98,9 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           '',
           marker('Number of buckets'),
           marker(''),
-          10,
-          200,
-          5,
+          2,
+          150,
+          1,
           undefined,
           undefined,
           {
