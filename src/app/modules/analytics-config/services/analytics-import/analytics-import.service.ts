@@ -71,15 +71,15 @@ export class AnalyticsImportService {
         this.analyticsInitService.initTabContent(tab.controls.contentFg as FormGroup);
         const newGroup = this.analyticsInitService.initNewGroup('');
         let itemPerLine = 1;
-
         // manage list of widgets
         const contentTypes = new Array();
         analyticGroup.components.forEach(c => {
-          const widget = this.importWidget(c, config, contentTypes, itemPerLine);
+          const importedWidget = this.importWidget(c, config, contentTypes);
+          const widget = importedWidget[0];
+          itemPerLine = importedWidget[1];
           (newGroup.controls.content as FormArray).push(widget);
           this.analyticsInitService.createPreviewContributor(newGroup, widget);
         });
-        console.log(itemPerLine)
         newGroup.patchValue({
           icon: analyticGroup.icon,
           title: analyticGroup.title,
@@ -93,7 +93,7 @@ export class AnalyticsImportService {
     tabs.forEach(tab => this.mainFormService.analyticsConfig.getListFa().push(tab));
   }
 
-  public importWidget(c: AnalyticComponentConfig, config: Config, contentTypes = new Array(), itemPerLine?: number): FormGroup {
+  public importWidget(c: AnalyticComponentConfig, config: Config, contentTypes = new Array()): [FormGroup, number] {
     const widget = this.analyticsInitService.initNewWidget(c.componentType);
     const contributorId = c.contributorId;
     const contributor = config.arlas.web.contributors.find(contrib => contrib.identifier === contributorId);
@@ -118,6 +118,7 @@ export class AnalyticsImportService {
       widgetData = this.getResultlistWidgetData(c, contributor);
     }
     const chartWidth = c.input.chartWidth;
+    let itemPerLine = 1;
     if (!!chartWidth) {
       // Each case has 2 values to maintain compatibility
       // with the previous version
@@ -133,7 +134,7 @@ export class AnalyticsImportService {
       }
     }
     widget.setControl('widgetData', widgetData);
-    return widget;
+    return [widget, itemPerLine];
   }
 
   private getHistogramWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
