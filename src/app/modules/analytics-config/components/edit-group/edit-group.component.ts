@@ -79,6 +79,7 @@ export class AddWidgetDialogComponent {
 export class EditGroupComponent implements OnInit, OnDestroy {
 
   @Input() public formGroup: FormGroup;
+  @Input() public groupIndex: number;
   @Input() public updateDisplay: Subject<any>;
   @Output() public remove = new EventEmitter();
 
@@ -248,12 +249,12 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     return this.contentTypeValue
     .map((tab, i) => i)
     .filter(i => i !== widgetIndex)
-    .map(i => 'widget-' + i);
+    .map(i => 'widget-'  + this.groupIndex + '-' + i);
 
   }
   public drop(event: CdkDragDrop<string[]>) {
-    const previousIndex = parseInt(event.previousContainer.id.replace('widget-', ''), 10);
-    const newIndex = parseInt(event.container.id.replace('widget-', ''), 10);
+    const previousIndex = parseInt(event.previousContainer.id.replace('widget-' + this.groupIndex + '-', ''), 10);
+    const newIndex = parseInt(event.container.id.replace('widget-' + this.groupIndex + '-', ''), 10);
     moveInFormArray(previousIndex, newIndex, this.content);
     this.updatePreview();
 

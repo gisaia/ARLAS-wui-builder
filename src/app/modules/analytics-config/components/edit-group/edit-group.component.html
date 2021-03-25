@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="edit-widgets">
-                <div cdkDrag *ngFor="let comp of contentTypeValue; index as ci;" mat-raised-button [id]="'widget-' + ci" cdkDropList cdkDropListOrientation="horizontal"
+                <div cdkDrag *ngFor="let comp of contentTypeValue; index as ci;" mat-raised-button [id]="'widget-' + groupIndex + '-' + ci" cdkDropList cdkDropListOrientation="horizontal"
                 (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="getOtherWidgetIds(ci)" >
                     <div class="invalid-widget-edition" *ngIf="!content.controls[ci].valid && !!content.controls[ci].value.widgetData?.title"
                         [matTooltip]="'The widget has invalid inputs. Edit to fix them.' | translate">!</div>
