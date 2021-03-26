@@ -72,9 +72,9 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                 '',
                 marker('Number of buckets'),
                 marker(''),
-                10,
-                200,
-                5
+                2,
+                150,
+                1
               )
             },
               {
