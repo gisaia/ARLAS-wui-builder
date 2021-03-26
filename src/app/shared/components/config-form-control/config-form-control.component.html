@@ -147,16 +147,6 @@
     </mat-form-field>
 </div>
 
-<div *ngIf="isOrderedSelect(); let typedControl">
-    <mat-chip-list #chipSortList>
-        <mat-chip *ngFor="let sort of typedControl.sorts" [selectable]="false" [removable]="true"
-            (removed)="typedControl.removeSort(sort)">
-            {{sort}}
-            <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-    </mat-chip-list>
-</div>
-
 <div *ngIf="isOrderedSelect(); let typedControl" class="order-select-form-control">
     <div>
         <input matInput [formControl]="typedControl" [hidden]="true" [required]="!typedControl.optional">
