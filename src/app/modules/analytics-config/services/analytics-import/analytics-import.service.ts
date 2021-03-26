@@ -43,6 +43,8 @@ import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-for
 })
 export class AnalyticsImportService {
 
+  private analyticsBoardWidth = 445;
+
   constructor(
     private mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,
@@ -68,17 +70,20 @@ export class AnalyticsImportService {
 
         this.analyticsInitService.initTabContent(tab.controls.contentFg as FormGroup);
         const newGroup = this.analyticsInitService.initNewGroup('');
-
+        let itemPerLine = 1;
         // manage list of widgets
         const contentTypes = new Array();
         analyticGroup.components.forEach(c => {
-          const widget = this.importWidget(c, config, contentTypes);
+          const importedWidget = this.importWidget(c, config, contentTypes);
+          const widget = importedWidget[0];
+          itemPerLine = importedWidget[1];
           (newGroup.controls.content as FormArray).push(widget);
           this.analyticsInitService.createPreviewContributor(newGroup, widget);
         });
         newGroup.patchValue({
           icon: analyticGroup.icon,
           title: analyticGroup.title,
+          itemPerLine,
           contentType: contentTypes
         });
         ((tab.controls.contentFg as FormGroup).controls.groupsFa as FormArray).push(newGroup);
@@ -88,7 +93,7 @@ export class AnalyticsImportService {
     tabs.forEach(tab => this.mainFormService.analyticsConfig.getListFa().push(tab));
   }
 
-  public importWidget(c: AnalyticComponentConfig, config: Config, contentTypes = new Array()): FormGroup {
+  public importWidget(c: AnalyticComponentConfig, config: Config, contentTypes = new Array()): [FormGroup, number] {
     const widget = this.analyticsInitService.initNewWidget(c.componentType);
     const contributorId = c.contributorId;
     const contributor = config.arlas.web.contributors.find(contrib => contrib.identifier === contributorId);
@@ -112,8 +117,24 @@ export class AnalyticsImportService {
       contentTypes.push(WIDGET_TYPE.resultlist);
       widgetData = this.getResultlistWidgetData(c, contributor);
     }
+    const chartWidth = c.input.chartWidth;
+    let itemPerLine = 1;
+    if (!!chartWidth) {
+      // Each case has 2 values to maintain compatibility
+      // with the previous version
+      if (
+        chartWidth === Math.ceil(this.analyticsBoardWidth / 2) - 6 // new version
+        || chartWidth === Math.ceil(this.analyticsBoardWidth / 2) - 12 // old version
+      ) {
+        itemPerLine = 2;
+      } else if (chartWidth === this.analyticsBoardWidth || chartWidth === this.analyticsBoardWidth - 12) {
+        itemPerLine = 1;
+      } else {
+        itemPerLine = 3;
+      }
+    }
     widget.setControl('widgetData', widgetData);
-    return widget;
+    return [widget, itemPerLine];
   }
 
   private getHistogramWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
@@ -122,7 +143,6 @@ export class AnalyticsImportService {
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
     const contribAggregationModel = contributor.aggregationmodels[0];
-
     importElements([
       {
         value: component.input.chartTitle,
@@ -176,7 +196,7 @@ export class AnalyticsImportService {
       {
         value: (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve,
         control: unmanagedFields.renderStep.isSmoothedCurve
-      },
+      }
     ]);
 
     return widgetData;
@@ -226,7 +246,7 @@ export class AnalyticsImportService {
         value: !!swimlaneInput.paletteColors ? swimlaneInput.paletteColors : [
           330,
           170
-      ],
+        ],
         control: renderStep.paletteColors
       },
       {
@@ -275,7 +295,6 @@ export class AnalyticsImportService {
   private getHistogramSwimlaneUnmanagedFields(
     component: AnalyticComponentConfig,
     histogramFg: HistogramFormGroup | SwimlaneFormGroup) {
-
     const unmanagedFields = histogramFg.customControls.unmanagedFields;
     return [
       {
@@ -363,7 +382,7 @@ export class AnalyticsImportService {
         control: unmanagedFields.renderStep.chartHeight
       },
       {
-        value: !!component.input.chartWidth ? component.input.chartWidth : 445,
+        value: !!component.input.chartWidth ? component.input.chartWidth : this.analyticsBoardWidth,
         control: unmanagedFields.renderStep.chartWidth
       }
     ];
@@ -482,7 +501,7 @@ export class AnalyticsImportService {
 
     // create a set to initialize aggregationmodels properly
     const aggregationsModels: Set<{ field: string, size: number }> = new Set<{ field: string, size: number }>();
-    contributor.aggregationmodels.forEach(aggModel => aggregationsModels.add({ field: aggModel.field, size: aggModel.size}));
+    contributor.aggregationmodels.forEach(aggModel => aggregationsModels.add({ field: aggModel.field, size: aggModel.size }));
 
     importElements([
       {
@@ -517,7 +536,7 @@ export class AnalyticsImportService {
         control: widgetData.customControls.unmanagedFields.renderStep.diameter
       },
       {
-        value: component.input.containerWidth !== undefined ? component.input.containerWidth : 445,
+        value: component.input.containerWidth !== undefined ? component.input.containerWidth : this.analyticsBoardWidth,
         control: widgetData.customControls.unmanagedFields.renderStep.containerWidth
       }
     ]);

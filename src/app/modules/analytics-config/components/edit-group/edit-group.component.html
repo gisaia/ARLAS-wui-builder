@@ -19,14 +19,14 @@
                     </mat-form-field>
                 </div>
                 <div>
-                    <mat-button-toggle-group (change)="updatePreview()" formControlName="itemPerLine">
-                        <mat-button-toggle value="1" matTooltip="{{'One per line' | translate}}">
+                    <mat-button-toggle-group (change)="updatePreview()" #group="matButtonToggleGroup" formControlName="itemPerLine">
+                        <mat-button-toggle value="1" matTooltip="{{'One per line' | translate}}" [checked]="itemPerLine + '' === '1'">
                             <mat-icon>view_agenda</mat-icon>
                         </mat-button-toggle>
-                        <mat-button-toggle value="2" matTooltip="{{'Two columns' | translate}}">
+                        <mat-button-toggle value="2" matTooltip="{{'Two columns' | translate}}" [checked]="itemPerLine + '' === '2'">
                             <mat-icon style="transform: rotate(90deg);">view_agenda</mat-icon>
                         </mat-button-toggle>
-                        <mat-button-toggle value="3" matTooltip="{{'Three columns' | translate}}">
+                        <mat-button-toggle value="3" matTooltip="{{'Three columns' | translate}}" [checked]="itemPerLine + '' === '3'">
                             <mat-icon>view_week</mat-icon>
                         </mat-button-toggle>
                     </mat-button-toggle-group>

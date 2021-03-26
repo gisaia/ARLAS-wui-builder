@@ -84,6 +84,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   @Output() public remove = new EventEmitter();
 
   public content: FormArray;
+  public itemPerLine;
   public toUnsubscribe: Array<Subscription> = [];
 
 
@@ -101,6 +102,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.content = this.formGroup.controls.content as FormArray;
+    this.itemPerLine = this.formGroup.value.itemPerLine;
     this.resetWidgetsOnTypeChange();
   }
   /**
@@ -148,7 +150,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
             }
             const finalResult = this.contentTypeValue ? this.contentTypeValue : [type];
             this.formGroup.controls.contentType.setValue(finalResult);
-            const widgetFg = this.analyticsImportService.importWidget(r, result[1]);
+            const widgetFg = this.analyticsImportService.importWidget(r, result[1])[0];
             widgetFg.patchValue(widgetFg.value);
             widgetFg.markAsPristine();
             widgetFg.markAllAsTouched();
