@@ -1,5 +1,31 @@
 # Change Log
 
+## [v16.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v16.0.0) (2021-03-29)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v15.0.2...v16.0.0)
+
+**New stuff:**
+
+- Allow min 2 buckets instead of 10 in histograms [\#494](https://github.com/gisaia/ARLAS-wui-builder/issues/494)
+- Add the possibility to change widgets order inside a group [\#459](https://github.com/gisaia/ARLAS-wui-builder/issues/459) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Make lines caps rounded so that connections between linestrings are smooth [\#458](https://github.com/gisaia/ARLAS-wui-builder/issues/458)
+- Make Tab title configurable [\#441](https://github.com/gisaia/ARLAS-wui-builder/issues/441)
+- Rename a dashboard [\#430](https://github.com/gisaia/ARLAS-wui-builder/issues/430)
+- Activate color service by column [\#409](https://github.com/gisaia/ARLAS-wui-builder/issues/409) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Add the possibility to apply a filter on a configured layer [\#400](https://github.com/gisaia/ARLAS-wui-builder/issues/400) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- add the possiblity to sort the chosen network field [\#394](https://github.com/gisaia/ARLAS-wui-builder/issues/394) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Add external layers: interactions with layers on the map or elements in the data table [\#388](https://github.com/gisaia/ARLAS-wui-builder/issues/388) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Import an existing widget from a different dashboard [\#331](https://github.com/gisaia/ARLAS-wui-builder/issues/331) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Import an existing layer from a different dashboard [\#330](https://github.com/gisaia/ARLAS-wui-builder/issues/330) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
+**Fixed bugs:**
+
+- The Analytics Board initialisation doesn't set the layout properly [\#464](https://github.com/gisaia/ARLAS-wui-builder/issues/464) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+
+**Miscellaneous:**
+
+- Duplicate a layer [\#344](https://github.com/gisaia/ARLAS-wui-builder/issues/344) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
 ## [v15.0.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v15.0.2) (2021-02-25)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v15.0.1...v15.0.2)
