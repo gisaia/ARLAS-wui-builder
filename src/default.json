@@ -421,6 +421,9 @@
                 "dataStep": {
                     "searchSize": 100
                 },
+                "renderStep": {
+                    "cellBackgroundStyle": "filled"
+                },
                 "unmanagedFields": {
                     "dataStep": {},
                     "renderStep": {
