@@ -19,7 +19,11 @@
 
     <ng-container matColumnDef="mode">
         <th mat-header-cell *matHeaderCellDef>{{'Mode' | translate}}</th>
-        <td mat-cell *matCellDef="let element"> {{element.mode}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.mode | translate }} 
+            <ng-container *ngIf="element.mode === 'Cluster'">
+                ( {{element[camelize(element.mode) + 'Fg'].geometryStep.granularity | translate }} )
+            </ng-container> 
+        </td>
     </ng-container>
 
     <ng-container matColumnDef="collection">

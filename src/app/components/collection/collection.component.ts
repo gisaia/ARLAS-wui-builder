@@ -68,7 +68,7 @@ export class CollectionComponent implements OnInit, OnDestroy {
     return {
       expandable: !!node.type && node.type === TypeEnum.OBJECT,
       name: node.name,
-      type: node.type,
+      type: this.typeToText(node.type),
       indexed: node.indexed,
       level
     };
@@ -106,6 +106,27 @@ export class CollectionComponent implements OnInit, OnDestroy {
       object.name = key;
       return object;
     });
+  }
+
+  public typeToText(type: CollectionReferenceDescriptionProperty.TypeEnum): string {
+    let newType;
+    switch (type) {
+      case TypeEnum.DOUBLE:
+      case TypeEnum.FLOAT:
+      case TypeEnum.INTEGER:
+      case TypeEnum.LONG:
+        newType = 'NUMBER';
+        break;
+      case TypeEnum.GEOSHAPE:
+        newType = 'GEOMETRY (LINES & POLYGONS)';
+        break;
+      case TypeEnum.GEOPOINT:
+        newType = 'GEOMETRY (POINTS)';
+        break;
+      default:
+        newType = type;
+    }
+    return newType;
   }
 
   public ngOnDestroy() {

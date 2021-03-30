@@ -29,7 +29,7 @@
     <ng-container matColumnDef="displayed">
         <th class="th-display" mat-header-cell *matHeaderCellDef>{{'Displayed by default' | translate}}</th>
         <td class="td-display" mat-cell *matCellDef="let element"> 
-            <mat-checkbox [checked]="element.displayed" [disabled]="true"></mat-checkbox>
+            <mat-icon *ngIf="element.displayed">done</mat-icon>
         </td>
     </ng-container>
     <ng-container matColumnDef="action">
