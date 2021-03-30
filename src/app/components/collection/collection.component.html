@@ -34,8 +34,7 @@
                         <!-- use a disabled button to provide padding for tree leaf -->
                         <button mat-icon-button disabled></button>
                         {{node.name}} -&nbsp;<span class="type">{{node.type}}</span>
-                        &nbsp;-&nbsp;
-                        <span *ngIf="node.type !== TypeEnum.OBJECT && node.indexed" class="indexed">{{'indexed' | translate}}</span>
+                        <span *ngIf="node.type !== TypeEnum.OBJECT && node.indexed" class="indexed">&nbsp;-&nbsp;{{'indexed' | translate}}</span>
                     </mat-tree-node>
                     <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="10">
                         <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">

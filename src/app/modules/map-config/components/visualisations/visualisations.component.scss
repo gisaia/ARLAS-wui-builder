@@ -59,8 +59,7 @@ mat-error {
   box-sizing: border-box;
   font-size: 0.75em;
   border-radius: 3px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-    0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
   cursor: grabbing;
 }
 
@@ -72,19 +71,38 @@ mat-error {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
+.th-layers {
+  width: 60%;
+}
+.th-name {
+  width: 24%;
+}
+.th-display {
+  width: 8%;
+  text-align: center;
+}
+.th-action {
+  width: 8%;
+  text-align: center;
+}
+
 .tr-visualisation {
   background-color: white;
-  .th-layers, .td-layers {
+  .th-layers,
+  .td-layers {
     width: 60%;
   }
-  .th-name, .td-name {
+  .th-name,
+  .td-name {
     width: 24%;
   }
-  .th-display, .td-display {
+  .th-display,
+  .td-display {
     width: 8%;
     text-align: center;
   }
-  .th-action, .td-action {
+  .th-action,
+  .td-action {
     width: 8%;
     text-align: center;
   }
@@ -111,23 +129,26 @@ mat-error {
       }
     }
   }
-  
 }
 
 .tr-visualisation.cdk-drag-preview {
   background-color: white;
-  .th-layers, .td-layers {
+  .th-layers,
+  .td-layers {
     min-width: 60%;
     width: inherit;
   }
-  .th-name, .td-name {
+  .th-name,
+  .td-name {
     min-width: 24%;
   }
-  .th-display, .td-display {
+  .th-display,
+  .td-display {
     min-width: 8%;
     text-align: center;
   }
-  .th-action, .td-action {
+  .th-action,
+  .td-action {
     min-width: 8%;
     text-align: center;
   }
