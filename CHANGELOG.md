@@ -1,5 +1,19 @@
 # Change Log
 
+## [v16.0.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v16.0.1) (2021-03-31)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v16.0.0...v16.0.1)
+
+**New stuff:**
+
+- Visualisation set status should be expressed by an informative icon rather than a checkbox [\#493](https://github.com/gisaia/ARLAS-wui-builder/issues/493) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Add the granularity of cluster mode in the layers list, 'Visualisation type' column [\#492](https://github.com/gisaia/ARLAS-wui-builder/issues/492) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Give simpler terms for fields types in 'Collection' view [\#488](https://github.com/gisaia/ARLAS-wui-builder/issues/488)
+
+**Fixed bugs:**
+
+- 'Taggable fields' missing translation in 'Collection' view [\#490](https://github.com/gisaia/ARLAS-wui-builder/issues/490)
+
 ## [v16.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v16.0.0) (2021-03-29)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v15.0.2...v16.0.0)
