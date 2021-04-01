@@ -582,10 +582,16 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
               this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
               this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
             ],
-            onDependencyChange: (control) => control.enableIf(
-              propertyType === PROPERTY_TYPE.number && (
-                !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value ||
-                this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT))
+            onDependencyChange: (control) => {
+              control.enableIf(
+                propertyType === PROPERTY_TYPE.number && (
+                  !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value ||
+                  this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT));
+              if (!control.value && !control.touched && defaultConfig[propertyName + 'Min'] !== undefined) {
+                control.setValue(defaultConfig[propertyName + 'Min']);
+              }
+            }
+
           }
         ),
         propertyInterpolatedMaxValueCtrl: new SliderFormControl(
@@ -602,10 +608,15 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
               this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
               this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
             ],
-            onDependencyChange: (control) => control.enableIf(
-              propertyType === PROPERTY_TYPE.number && (
-                !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value ||
-                this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT))
+            onDependencyChange: (control) => {
+              control.enableIf(
+                propertyType === PROPERTY_TYPE.number && (
+                  !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value ||
+                  this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT));
+              if (!control.value && !control.touched && defaultConfig[propertyName + 'Max'] !== undefined) {
+                control.setValue(defaultConfig[propertyName + 'Max']);
+              }
+            }
           }
         ),
       },
