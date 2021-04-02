@@ -41,7 +41,9 @@ export const NUMERIC_OR_DATE_OR_TEXT_TYPES = [
 
 export function toOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
     return collectionFieldsObs.pipe(map(
-        fields => fields.map(f => ({ value: f.name, label: f.name, enabled: f.indexed, type: f.type }))
+        fields => fields
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(f => ({ value: f.name, label: f.name, enabled: f.indexed, type: f.type }))
     ));
 }
 
