@@ -77,6 +77,7 @@ export class MetricCollectFormGroup extends ConfigFormGroup {
                     control.setSyncOptions(
                       fields
                         .filter(filterCallback)
+                        .sort((a, b) => a.name.localeCompare(b.name))
                         .map(f => ({ value: f.name, label: f.name, enabled: f.indexed })));
                     sub.unsubscribe();
                   });
