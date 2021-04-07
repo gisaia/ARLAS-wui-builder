@@ -352,8 +352,8 @@ export class ConfigExportHelper {
             input: {
                 defaultBasemapStyle: defaultBasemap,
                 basemapStyles: basemaps,
-                margePanForLoad: customControls.margePanForLoad.value,
-                margePanForTest: customControls.margePanForTest.value,
+                margePanForLoad: +customControls.margePanForLoad.value,
+                margePanForTest: +customControls.margePanForTest.value,
                 initZoom: customControls.initZoom.value,
                 initCenter: [
                     +customControls.initCenterLon.value,
