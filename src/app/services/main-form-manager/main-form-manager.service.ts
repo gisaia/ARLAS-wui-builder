@@ -221,10 +221,6 @@ export class MainFormManagerService {
         control: startingConfigControls.unmanagedFields.appName
       },
       {
-        value: config['arlas-wui'].web.app.unit,
-        control: startingConfigControls.unmanagedFields.appUnit
-      },
-      {
         value: config['arlas-wui'].web.app.name_background_color,
         control: startingConfigControls.unmanagedFields.appNameBackgroundColor
       }

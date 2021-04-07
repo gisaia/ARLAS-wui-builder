@@ -19,7 +19,13 @@ under the License.
 import { Injectable } from '@angular/core';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { ConfigFormGroup, SelectFormControl, SliderFormControl, SlideToggleFormControl } from '@shared-models/config-form';
+import {
+  ConfigFormGroup,
+  SelectFormControl,
+  SliderFormControl,
+  SlideToggleFormControl,
+  InputFormControl
+} from '@shared-models/config-form';
 
 export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
 
@@ -77,7 +83,16 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
             onDependencyChange: (control) =>
               this.customControls.spinner.value ? control.enable() : control.disable()
           }
-        )
+        ),
+        appUnit: new InputFormControl(
+          '',
+          marker('App unit'),
+          marker('App unit description'),
+          'text',
+          {
+            optional: true
+          }
+        ),
       }
     );
   }
@@ -88,7 +103,8 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
     indicators: this.get('indicators') as SlideToggleFormControl,
     spinner: this.get('spinner') as SlideToggleFormControl,
     spinnerColor: this.get('spinnerColor') as SelectFormControl,
-    spinnerDiameter: this.get('spinnerDiameter') as SliderFormControl
+    spinnerDiameter: this.get('spinnerDiameter') as SliderFormControl,
+    appUnit: this.get('appUnit') as InputFormControl
   };
 }
 
