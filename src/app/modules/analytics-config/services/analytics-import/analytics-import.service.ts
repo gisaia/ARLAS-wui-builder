@@ -118,8 +118,10 @@ export class AnalyticsImportService {
       widgetData = this.getResultlistWidgetData(c, contributor);
     }
     const chartWidth = c.input.chartWidth;
+    const donutDiameter = c.input.diameter;
+    const tableWidth = c.input.tableWidth;
     let itemPerLine = 1;
-    if (!!chartWidth) {
+    if (!!chartWidth && c.componentType !== WIDGET_TYPE.donut) {
       // Each case has 2 values to maintain compatibility
       // with the previous version
       if (
@@ -130,6 +132,24 @@ export class AnalyticsImportService {
       } else if (chartWidth === this.analyticsBoardWidth || chartWidth === this.analyticsBoardWidth - 12) {
         itemPerLine = 1;
       } else {
+        itemPerLine = 3;
+      }
+    } else if (!!donutDiameter && c.componentType === WIDGET_TYPE.donut) {
+      if (donutDiameter === 125) {
+        itemPerLine = 3;
+      } else if (donutDiameter === 170) {
+        itemPerLine = 2;
+      }
+    } else if (!!tableWidth && c.componentType === WIDGET_TYPE.resultlist) {
+      if (
+        tableWidth === Math.ceil(this.analyticsBoardWidth / 2) - 6 // new version
+        || tableWidth === Math.ceil(this.analyticsBoardWidth / 2) - 12 // old version
+      ) {
+        itemPerLine = 2;
+      } else if (
+        tableWidth === Math.ceil(this.analyticsBoardWidth / 3) - 6 // new version
+        || tableWidth === Math.ceil(this.analyticsBoardWidth / 3) - 12 // old version
+      ) {
         itemPerLine = 3;
       }
     }
@@ -179,7 +199,7 @@ export class AnalyticsImportService {
         control: renderStep.showExportCsv
       },
       {
-        value: contributor.useUtc !== undefined ? contributor.useUtc : true ,
+        value: contributor.useUtc !== undefined ? contributor.useUtc : true,
         control: dataStep.useUtc
       }
     ]);
@@ -265,7 +285,7 @@ export class AnalyticsImportService {
         control: renderStep.NaNColor
       },
       {
-        value: contributor.useUtc !== undefined ? contributor.useUtc : true ,
+        value: contributor.useUtc !== undefined ? contributor.useUtc : true,
         control: dataStep.useUtc
       }
     ]);
@@ -469,8 +489,8 @@ export class AnalyticsImportService {
         control: renderStep.displayFilter
       },
       {
-        value: component.input.useColorService === true ? PROPERTY_SELECTOR_SOURCE.manual :  component.input.useColorFromData === true ?
-        PROPERTY_SELECTOR_SOURCE.provided : undefined    ,
+        value: component.input.useColorService === true ? PROPERTY_SELECTOR_SOURCE.manual : component.input.useColorFromData === true ?
+          PROPERTY_SELECTOR_SOURCE.provided : undefined,
         control: renderStep.modeColor
       },
       {
