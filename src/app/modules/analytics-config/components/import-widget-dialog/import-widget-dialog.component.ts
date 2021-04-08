@@ -61,7 +61,18 @@ export class ImportWidgetDialogComponent implements OnInit {
       this.persistenceService.list(ZONE_WUI_BUILDER, null, null, 'desc').subscribe({
         next: (data: DataResource) => {
           this.configs = data.data.filter(
-            dash => (JSON.parse(dash.doc_value) as Config).arlas.server.collection.name === this.mainformService.getCollections()[0]
+            dash => {
+              if (!!dash.doc_value) {
+                const config = JSON.parse(dash.doc_value) as Config;
+                if (!!config && !!config.arlas && !!config.arlas.server && !!config.arlas.server.collection) {
+                  return config.arlas.server.collection.name === this.mainformService.getCollections()[0];
+                } else {
+                  return false;
+                }
+              } else {
+                return false;
+              }
+            }
           );
         }
       });
@@ -79,6 +90,7 @@ export class ImportWidgetDialogComponent implements OnInit {
   }
 
   public getWidgets(event: MatSelectChange) {
+    this.analytics = new Map<string, Array<AnalyticConfig>>();
     this.dashboardConfigJson = JSON.parse(event.value.doc_value) as Config;
     const analytics: Array<AnalyticConfig> = this.dashboardConfigJson.arlas.web.analytics;
     const contributors: Array<ContributorConfig> = this.dashboardConfigJson.arlas.web.contributors;
