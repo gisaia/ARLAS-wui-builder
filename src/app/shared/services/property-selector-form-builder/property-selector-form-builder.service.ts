@@ -335,9 +335,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl
               ],
             onDependencyChange: (control) => control.enableIf(
-              (!isAggregated ||
-                this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.METRIC)
-              && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value)
+              !isAggregated && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl.value)
           }
         ),
         propertyInterpolatedNormalizeLocalFieldCtrl: new SelectFormControl(
