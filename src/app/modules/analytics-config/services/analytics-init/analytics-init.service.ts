@@ -118,7 +118,7 @@ export class AnalyticsInitService {
 
     // add web contributors in config if not exist
     currentConfig.arlas.web = currentConfig.arlas.web || {};
-    currentConfig.arlas.web.contributors = currentConfig.arlas.contributors || [];
+    currentConfig.arlas.web.contributors = currentConfig.arlas.web.contributors || [];
 
     if (!this.arlasStartupService.contributorRegistry.has(contribConfig.identifier)) {
       currentConfig.arlas.web.contributors.push(contribConfig);
