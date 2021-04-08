@@ -97,7 +97,7 @@ export class CollectionComponent implements OnInit, OnDestroy {
   public transform(objects: {
     [key: string]: CollectionReferenceDescriptionProperty;
   }): CollectionReferencePropertyExtended[] {
-    return Object.keys(objects).map(key => {
+    return Object.keys(objects).sort((a, b) => a.localeCompare(b)).map(key => {
       const object: any = objects[key];
 
       if (!!object.properties) {
