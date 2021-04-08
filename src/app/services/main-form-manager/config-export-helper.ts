@@ -879,6 +879,9 @@ export class ConfigExportHelper {
             }
             const containerWidth = Math.ceil(analyticsBoardWidth / +itemPerLine);
             let donutDiameter = 175;
+            if (!!itemPerLine && +itemPerLine === 2) {
+                donutDiameter = 170;
+            }
             if (!!itemPerLine && +itemPerLine === 3) {
                 donutDiameter = 125;
             }
