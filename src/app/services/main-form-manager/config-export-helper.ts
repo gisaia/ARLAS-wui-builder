@@ -545,9 +545,9 @@ export class ConfigExportHelper {
 
     public static getAnalyticsContributor(widgetType: any, widgetData: any, icon: string): ContributorConfig {
         // TODO use customControls from widgets config form groups, like the Search export
+        const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
         switch (widgetType) {
             case WIDGET_TYPE.histogram: {
-                const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'histogram';
                 const aggregationModel = {
                     type: widgetData.dataStep.aggregation.aggregationFieldType === 'time' ? 'datehistogram' : 'histogram',
@@ -563,10 +563,9 @@ export class ConfigExportHelper {
                 contrib.useUtc = widgetData.dataStep.useUtc;
                 contrib.aggregationmodels = [aggregationModel];
 
-                return contrib;
+                break;
             }
             case WIDGET_TYPE.swimlane: {
-                const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'swimlane';
                 const swimlane = {
                     id: 1,
@@ -595,18 +594,16 @@ export class ConfigExportHelper {
                 swimlane.jsonpath = widgetData.dataStep.metric.metricCollectFunction === DEFAULT_METRIC_VALUE ?
                     '$.count' : '$.metrics[0].value';
                 contrib.swimlanes = [swimlane];
-                return contrib;
+                break;
             }
             case WIDGET_TYPE.metric: {
-                const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'metric';
                 contrib.function = !!widgetData.dataStep.function ? widgetData.dataStep.function : 'm[0]';
                 contrib.metrics = Array.from(widgetData.dataStep.metrics);
 
-                return contrib;
+                break;
             }
             case WIDGET_TYPE.powerbars: {
-                const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'tree';
                 const aggregationModel: AggregationModelConfig = {
                     type: 'term',
@@ -625,19 +622,17 @@ export class ConfigExportHelper {
                     JSONPATH_COUNT : JSONPATH_METRIC;
                 contrib.aggregationmodels = [aggregationModel];
 
-                return contrib;
+                break;
             }
             case WIDGET_TYPE.donut: {
-                const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'tree';
                 contrib.aggregationmodels = Array.from(widgetData.dataStep.aggregationmodels).map((agg: any) => {
                     agg.type = 'term';
                     return agg;
                 });
-                return contrib;
+                break;
             }
             case WIDGET_TYPE.resultlist: {
-                const contrib = this.getWidgetContributor(widgetData, widgetType, icon);
                 contrib.type = 'resultlist';
                 contrib.search_size = widgetData.dataStep.searchSize;
                 contrib.fieldsConfiguration = { idFieldName: widgetData.dataStep.idFieldName };
@@ -652,7 +647,7 @@ export class ConfigExportHelper {
                     }));
 
                 contrib.details = [];
-                (widgetData.dataStep.details || [] as Array<any>).forEach((d, index) => {
+                (widgetData.dataStep.details).forEach((d, index) => {
                     const fields = d.fields.map(f => ({
                         path: f.path,
                         label: f.label,
@@ -664,9 +659,10 @@ export class ConfigExportHelper {
                         fields
                     });
                 });
-                return contrib;
+                break;
             }
         }
+        return contrib;
     }
 
     private static getWidgetContributor(widgetData: any, widgetType: any, icon: string) {
@@ -694,6 +690,7 @@ export class ConfigExportHelper {
         group.content.forEach(widget => {
             groupAnalytic.components.push(this.getAnalyticsComponent(widget.widgetType, widget.widgetData, group.itemPerLine));
         });
+
         return groupAnalytic;
     }
 

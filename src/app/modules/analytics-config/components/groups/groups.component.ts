@@ -74,7 +74,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.analyticsInitService.initTabContent(this.contentFg);
     this.updateDisplay.pipe(
       debounceTime(200)
-    ).subscribe(() => this.updateAnalytics());
+      ).subscribe(() => this.updateAnalytics());
   }
 
   public addGroup() {
