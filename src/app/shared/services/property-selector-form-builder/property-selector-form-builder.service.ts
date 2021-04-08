@@ -445,9 +445,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
             dependsOn: () => [
               this.customControls.propertySource,
               this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
-              this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl,
-              this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeByKeyCtrl,
-              this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl,
+
               this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl,
               this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl,
               this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl,
