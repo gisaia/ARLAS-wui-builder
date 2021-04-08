@@ -648,7 +648,7 @@ export class ConfigExportHelper {
                         fieldName: c.fieldName,
                         dataType: c.dataType,
                         process: c.process,
-                        useColorService: c.useColorService
+                        useColorService: !!c.useColorService
                     }));
 
                 contrib.details = [];
