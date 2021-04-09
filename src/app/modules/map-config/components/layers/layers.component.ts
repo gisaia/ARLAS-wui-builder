@@ -139,7 +139,14 @@ export class LayersComponent implements OnInit, OnDestroy {
         visualisationSetValue.forEach(vs => {
           const layersSet = new Set(vs.layers);
           layersSet.delete(arlasId);
-          vs.layers = Array.from(layersSet);
+          /** to preserve layers order */
+          const layers = [];
+          vs.layers.forEach(l => {
+            if (layersSet.has(l)) {
+              layers.push(l);
+            }
+          });
+          vs.layers = layers;
         });
         this.visualisationSetFa.setValue(visualisationSetValue);
       }
@@ -155,10 +162,18 @@ export class LayersComponent implements OnInit, OnDestroy {
     const visualisationSetValue = this.visualisationSetFa.value;
     visualisationSetValue.forEach(vs => {
       const layersSet = new Set(vs.layers);
+      const ls = [];
+      /** to preserve layers order */
+      vs.layers.forEach(l => {
+        if (layersSet.has(l)) {
+          ls.push(l);
+        }
+      });
+      /** adds the new duplicated layer add the end of list of layers of the visualisation set */
       if (layersSet.has(arlasId)) {
-        layersSet.add(newId);
+        ls.push(newId);
       }
-      vs.layers = Array.from(layersSet);
+      vs.layers = ls;
     });
     /** we now should build a new layer form group for the new one  */
     const newLayerFg = this.mapLayerFormBuilder.buildLayer();

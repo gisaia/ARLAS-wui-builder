@@ -114,7 +114,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
   }
 
   public submit() {
-
+    const oldLayerId = this.layerFg.customControls.arlasId.value;
     this.configFormGroupComponent.submit();
     this.layerFg.markAllAsTouched();
 
@@ -144,13 +144,13 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
 
     const savedVisualisations = this.layerFg.customControls.visualisation.syncOptions;
     const visualisationValue = this.visualisationsFa.value;
-    const layerId = this.layerFg.customControls.arlasId.value;
+    const newLayerId = this.layerFg.customControls.arlasId.value;
 
     if (savedVisualisations.length <= 1 && this.visualisationsFa.length === 0) {
       const allLayers = [];
       if (this.layerFg.customControls.visualisation.value && this.layerFg.customControls.visualisation.value.length > 0) {
         if (this.layerFg.customControls.visualisation.value[0].include) {
-          allLayers.push(layerId);
+          allLayers.push(newLayerId);
           const visualisationFg = this.mapVisualisationFormBuilder.buildVisualisation();
           visualisationFg.customControls.displayed.setValue(true);
           visualisationFg.customControls.name.setValue('All layers');
@@ -167,13 +167,35 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
         const visu = savedVisualisations.find(vs => vs.name === v.name);
         // in case of renaming a layer, we should remove the old name from the visualisation sets
         const layersSet = new Set<string>();
+        const oldLayers = new Set<string>(v.layers);
         v.layers.forEach(l => {
           if (savedLayers.has(l)) {
             layersSet.add(l);
           }
         });
-        visu.include ? layersSet.add(layerId) : layersSet.delete(layerId);
-        v.layers = Array.from(layersSet);
+        visu.include ? layersSet.add(newLayerId) : layersSet.delete(newLayerId);
+        /** to preserve layers order */
+        const layers = [];
+        /** take all the already existing layers and add them in the correct order */
+        v.layers.forEach(l => {
+          /** if the oldlayer is edited and still affected to visualisation set
+           * we should replace it with new layer id in the correct position
+           */
+          if (l === oldLayerId && layersSet.has(newLayerId)) {
+            layers.push(newLayerId);
+            oldLayers.delete(oldLayerId);
+            oldLayers.add(newLayerId);
+          } else if (layersSet.has(l) ) {
+            layers.push(l);
+          }
+        });
+
+        /** if the new (edited) layer was not in the visualisation set already, we should add it */
+        if (!oldLayers.has(newLayerId) && layersSet.has(newLayerId) ) {
+          layers.push(newLayerId);
+        }
+
+        v.layers = layers;
         v.displayed = (v.displayed === undefined) ? true : v.displayed;
       });
 
@@ -214,6 +236,6 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
     this.forceCanExit = null;
     this.LAYER_MODE = null;
     this.layerFg = null;
-}
+  }
 
 }
