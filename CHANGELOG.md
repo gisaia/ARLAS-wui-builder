@@ -1,8 +1,33 @@
 # Change Log
 
+## [v16.0.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v16.0.3) (2021-04-09)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v16.0.2...v16.0.3)
+
+**New stuff:**
+
+- Sort the fields list \(in collection view\) alphabetically [\#520](https://github.com/gisaia/ARLAS-wui-builder/issues/520)
+- Sort the fields list \(in dropdown lists\) alphabetically [\#507](https://github.com/gisaia/ARLAS-wui-builder/issues/507)
+
+**Fixed bugs:**
+
+- Layers order inside a visualisation set is lost if one of the layers is edited [\#527](https://github.com/gisaia/ARLAS-wui-builder/issues/527)
+- Details of resultlist are not visible in the preview [\#525](https://github.com/gisaia/ARLAS-wui-builder/issues/525)
+- Remove normamisation by key for clusters [\#523](https://github.com/gisaia/ARLAS-wui-builder/issues/523)
+- Normalizing a field in map invalidates the form [\#522](https://github.com/gisaia/ARLAS-wui-builder/issues/522)
+- Property useColorService should be export as boolean in resultList [\#516](https://github.com/gisaia/ARLAS-wui-builder/issues/516) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Properties MargePanForLoad and MargePanForCount should be exported as number not string [\#514](https://github.com/gisaia/ARLAS-wui-builder/issues/514) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Widget layouts is lost after 2 editions of a dashboard [\#511](https://github.com/gisaia/ARLAS-wui-builder/issues/511) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Importing a layer or a widget crashes when 'dash.doc\_value.arlas' is undefined [\#510](https://github.com/gisaia/ARLAS-wui-builder/issues/510)
+- Sliders positioned to 0 make the forms invalid [\#489](https://github.com/gisaia/ARLAS-wui-builder/issues/489) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
 ## [v16.0.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v16.0.2) (2021-03-31)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v16.0.1...v16.0.2)
+
+**Fixed bugs:**
+
+- Layer filter doesn't export good values  [\#504](https://github.com/gisaia/ARLAS-wui-builder/issues/504) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 
 ## [v16.0.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v16.0.1) (2021-03-31)
 
