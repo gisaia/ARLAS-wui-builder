@@ -76,7 +76,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       const currentConfig = this.startupService.getConfigWithInitContrib();
       // update arlasConfigService with layer info
       // Create mapcontributor
-      const mapContributor = currentConfig.arlas.web.contributors.find(c => c.type = 'map');
+      const mapContributor = currentConfig.arlas.web.contributors.find(c => c.type === 'map');
       if (mapContributor) {
         currentConfig.arlas.web.contributors.splice(currentConfig.arlas.web.contributors.indexOf(mapContributor), 1);
       }
