@@ -144,7 +144,7 @@
 	"donut field description": "• Nombre de noeuds à afficher sur l'anneau. Le reste des noeuds est agrégé sous un noeud 'Autre' \n • Champ utilisé pour construire un anneau du diagramme. En choisissant plusieurs champs, plusieurs niveaux d'anneaux sont crées",
 	"Data": "Données",
 	"Opacity": "Opacité",
-	"donut opacity description": "Règle l'opacité des autres cases du diagramme en anneau lors du survol d'une case",
+	"donut opacity description": "Règle l'opacité des autres cases du diagramme en anneau lors du survol ou la sélection d'une case",
 	"Multiselectable": "Sélection multiple",
 	"Donut multiselectable description": "Permet d'appliquer un filtre sur plusieurs cases du diagramme en anneau simultanément",
 	"Manage colors": "Réglage des couleurs",

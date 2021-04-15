@@ -64,8 +64,8 @@ export class DonutConfigForm extends ConfigFormGroup {
           marker('Opacity'),
           marker('donut opacity description'),
           0,
-          100,
-          1
+          1,
+          0.1
         ),
         multiselectable: new SlideToggleFormControl(
           '',

@@ -144,7 +144,7 @@
 	"donut field description": "• Number of nodes to display on the ring. The rest of the nodes are aggregated under a node 'Other'. \n • Field used to build the donut. By choosing several fields, several levels of rings are created.",
 	"Data": "Data",
 	"Opacity": "Opacity",
-	"donut opacity description": "Sets the opacity of the other nodes in the donut when hovering over a node",
+	"donut opacity description": "Sets the opacity of the other nodes in the donut when hovering over or selecting a node",
 	"Multiselectable": "Multiselectable",
 	"Donut multiselectable description": "Allows you to apply a filter by selecting several nodes in the donut",
 	"Manage colors": "Manage colours",

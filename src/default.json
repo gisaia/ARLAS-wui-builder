@@ -405,7 +405,7 @@
                     }
                 },
                 "renderStep": {
-                    "opacity": 20,
+                    "opacity": 0.4,
                     "multiselectable": true
                 }
             },

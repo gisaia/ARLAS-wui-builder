@@ -522,7 +522,14 @@ export class AnalyticsImportService {
     // create a set to initialize aggregationmodels properly
     const aggregationsModels: Set<{ field: string, size: number }> = new Set<{ field: string, size: number }>();
     contributor.aggregationmodels.forEach(aggModel => aggregationsModels.add({ field: aggModel.field, size: aggModel.size }));
-
+    let donutOpacity = 0.5;
+    if (component.input.opacity !== undefined && component.input.opacity !== null) {
+      donutOpacity = component.input.opacity;
+      /** transform all opacities between [0 and 100] to [0 and 1] */
+      if (donutOpacity > 1) {
+        donutOpacity = donutOpacity / 100;
+      }
+    }
     importElements([
       {
         value: contributor.title,
@@ -533,7 +540,7 @@ export class AnalyticsImportService {
         control: dataStep.aggregationmodels
       },
       {
-        value: component.input.opacity,
+        value: donutOpacity,
         control: renderStep.opacity
       },
       {
