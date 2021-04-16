@@ -41,7 +41,6 @@
 	"Save": "Sauvegarder",
 	"Download configuration files": "Télécharger les fichiers de configuration",
 	"Editing dashboard": "Edition du dashboard",
-	"Rename": "Renommer",
 	"Create dashboard": "Création d'un dashboard",
 	"Choose widget type": "Choix du type de widget",
 	"Add": "Ajouter",
@@ -157,8 +156,6 @@
 	"histogram title": "Choisir un titre pour l'histogramme",
 	"histogram title description": "",
 	"histogram x-Axis": "Les abscisses",
-	"Use UTC time Zone to display date?": "Afficher les dates dans le fuseau horaire UTC",
-	"Use UTC time Zone to display date description": "Que la date soit affichée dans le fuseau horaire UTC ou dans le fuseau horaire local du navigateur.",
 	"histogram y-Axis": "Les ordonnées",
 	"Is multiselectable?": "Activer la sélection multiple",
 	"histogram multiselectable description": "Autorise la sélection (filtres) de plusieurs intervalles sur l'histogramme",
@@ -592,6 +589,14 @@
 	"Fixed strokeWidth": "Epaisseur du contour (px)",
 	"Fixed strokeOpacity": "Opacité du contour",
 	"Fixed strokeColor": "Couleur du contour",
-	"Invalid dashboard name": "Nom de dashboard invalide",
-	"Another dashboad already exists with the same name, please choose another one": "Un autre dashboad existe déjà avec ce même nom, veuillez en choisir un autre."
+	"Invalid dashboard name":"Nom de dashboard invalide",
+	"Another dashboad already exists with the same name, please choose another one":"Un autre dashboad existe déjà avec ce même nom, veuillez en choisir un autre.",
+	"Rename":"Renommer",
+	"Use UTC time Zone to display date?":"Afficher les dates dans le fuseau horaire UTC",
+	"Use UTC time Zone to display date description":"Que la date soit affichée dans le fuseau horaire UTC ou dans le fuseau horaire local du navigateur.",
+	"Geographic type grid":"Type de grille géographique",
+	"Geographic type grid description":"Il éxiste deux types de grille géographique sur lesquelles on aggréger les données. \n • Grille de tuile: grille constituée de carrés de 256 pixel dans la projection EPSG 3857. \n • Grille de geohash: grille constituée de rectangle respectant les spécifications du système de geohash.",
+	"Tile Grid":"Grille de tuiles",
+	"GeohashGrid":"Grille de geohash"
+
 }

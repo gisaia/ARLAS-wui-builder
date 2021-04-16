@@ -575,5 +575,9 @@
 	"Fixed strokeOpacity": "Stroke opacity",
 	"Fixed strokeColor": "Stroke color",
 	"Invalid dashboard name": "Invalid dashboard name",
-	"Another dashboad already exists with the same name, please choose another one": "Another dashboad already exists with the same name, please choose another one"
+	"Another dashboad already exists with the same name, please choose another one": "Another dashboad already exists with the same name, please choose another one",
+	"Geographic type grid":"Geographic type grid",
+	"Geographic type grid description":"There are two kind of grid to aggregate data. \n • Tile Grid: grid made up of squares of 256 pixels on a side conforming to the EPSG 3857 projection. \n • Geohash grid: grid made up of rectangle according to the geohash system specification .",
+	"Tile Grid":"Tile grid",
+	"GeohashGrid":"Geohash grid"
 }

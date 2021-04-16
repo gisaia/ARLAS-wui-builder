@@ -33,6 +33,7 @@ import { COUNT_OR_METRIC } from '@shared-services/property-selector-form-builder
 import { VisualisationSetConfig, BasemapStyle } from 'arlas-web-components';
 import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { FormControl, FormGroup, FormArray, Form } from '@angular/forms';
+import { ClusterAggType } from 'arlas-web-contributors/models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -391,10 +392,20 @@ export class MapImportService {
   ) {
     values.geometryStep.aggGeometry = layerSource.agg_geo_field;
     values.geometryStep.granularity = layerSource.granularity;
+    values.geometryStep.aggType = layerSource.aggType ? layerSource.aggType : ClusterAggType.geohash;
 
     const isGeometryTypeRaw = !!layerSource.raw_geometry && Object.keys(layerSource.raw_geometry).length > 0;
     values.geometryStep.clusterGeometryType =
       isGeometryTypeRaw ? CLUSTER_GEOMETRY_TYPE.raw_geometry : CLUSTER_GEOMETRY_TYPE.aggregated_geometry;
+    // To Import old dashboard before ARLAS 17
+    if (!!layerSource.aggregated_geometry) {
+        if (layerSource.aggregated_geometry === 'geohash') {
+          layerSource.aggregated_geometry = 'cell';
+        }
+        if (layerSource.aggregated_geometry === 'geohash_center') {
+          layerSource.aggregated_geometry = 'cell_center';
+        }
+    }
     values.geometryStep.aggregatedGeometry = !isGeometryTypeRaw ? layerSource.aggregated_geometry : null;
     values.geometryStep.rawGeometry = isGeometryTypeRaw ? layerSource.raw_geometry.geometry : null;
     values.geometryStep.clusterSort = isGeometryTypeRaw ? layerSource.raw_geometry.sort : null;
