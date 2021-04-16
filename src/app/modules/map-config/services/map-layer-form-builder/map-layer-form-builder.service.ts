@@ -41,7 +41,7 @@ import {
 } from '@shared/services/property-selector-form-builder/property-selector-form-builder.service';
 import { valuesToOptions } from '@utils/tools';
 import { Observable } from 'rxjs';
-import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE, FILTER_OPERATION } from './models';
+import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE, FILTER_OPERATION, LINE_TYPE } from './models';
 import { Granularity } from 'arlas-web-contributors/models/models';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { map } from 'rxjs/internal/operators/map';
@@ -170,8 +170,11 @@ export class MapLayerFormGroup extends ConfigFormGroup {
 export class MapFilterFormGroup extends ConfigFormGroup {
   public editing = false;
   public editionInfo: { field: string, op: FILTER_OPERATION };
-  constructor(collectionFields: Observable<Array<CollectionField>>, filterOperations: Array<FILTER_OPERATION>,
-              collectionService: CollectionService, collection: string
+  constructor(
+    collectionFields: Observable<Array<CollectionField>>,
+    filterOperations: Array<FILTER_OPERATION>,
+    collectionService: CollectionService,
+    collection: string
   ) {
     super({
       filterField: new TypedSelectFormControl(
@@ -220,7 +223,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
               }
               control.setValue(control.syncOptions[0].value);
             } else {
-             // if we are editing an existing filter, keep the selected operation.
+              // if we are editing an existing filter, keep the selected operation.
               // otherwise there os no way to remember it
               if ((this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
                 this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN)) {
@@ -459,6 +462,22 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
 
             }
+          }
+        ),
+        lineType: new SelectFormControl(
+          '',
+          marker('line type'),
+          marker('line type description'),
+          false,
+          [
+            { value: LINE_TYPE.solid, label: marker('Solid') + ' ( ━ ) ' },
+            { value: LINE_TYPE.dashed, label: marker('Dashed') + ' ( - - - )' },
+            { value: LINE_TYPE.dotted, label: marker('Dotted') + ' ( • • • )' },
+            { value: LINE_TYPE.mixed, label: marker('Mixed') + ' ( - • - )' }
+          ],
+          {
+            dependsOn: () => [this.geometryType],
+            onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.line)
           }
         ),
         filter: new FormControl(),

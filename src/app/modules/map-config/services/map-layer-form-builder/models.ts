@@ -23,6 +23,19 @@ export enum GEOMETRY_TYPE {
     heatmap = 'heatmap'
 }
 
+export enum LINE_TYPE {
+    solid = 'solid',
+    dashed = 'dashed',
+    dotted = 'dotted',
+    mixed = 'mixed'
+}
+
+export const LINE_TYPE_VALUES: Map<string, Array<number>> = new Map([
+    ['dashed', [2, 5]],
+    ['dotted', [0.1, 5]],
+    ['mixed', [5, 5, 0.1, 5]]
+]);
+
 
 export enum FILTER_OPERATION {
     IN = 'IN',

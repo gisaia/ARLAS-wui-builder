@@ -58,6 +58,7 @@ export interface Paint {
     'line-color'?: PaintValue;
     'line-opacity'?: number;
     'line-width'?: PaintValue;
+    'line-dasharray'?: PaintValue;
     'circle-radius'?: PaintValue;
     'circle-stroke-width'?: PaintValue;
     'heatmap-color'?: PaintValue;

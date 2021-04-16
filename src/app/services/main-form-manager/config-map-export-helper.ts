@@ -19,12 +19,13 @@ under the License.
 import { FormArray, FormGroup } from '@angular/forms';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { Paint, Layer, MapConfig, ExternalEvent } from './models-map-config';
-import { GEOMETRY_TYPE, FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
+import { GEOMETRY_TYPE, FILTER_OPERATION, LINE_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 import { ConfigExportHelper } from './config-export-helper';
 import { LayerSourceConfig } from 'arlas-web-contributors';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
 
 export enum VISIBILITY {
     visible = 'visible',
@@ -153,6 +154,12 @@ export class ConfigMapExportHelper {
                 paint['line-opacity'] = this.getMapProperty(modeValues.styleStep.opacity, mode, colorService, taggableFields);
                 paint['line-color'] = color;
                 paint['line-width'] = this.getMapProperty(modeValues.styleStep.widthFg, mode, colorService, taggableFields);
+                const lineType = modeValues.styleStep.lineType;
+                if (lineType !== LINE_TYPE.solid) {
+                    paint['line-dasharray'] = LINE_TYPE_VALUES.get(lineType);
+                } else {
+                    delete paint['line-dasharray'];
+                }
                 break;
             }
             case GEOMETRY_TYPE.circle: {
@@ -327,16 +334,16 @@ export class ConfigMapExportHelper {
                 } else if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
                     // otherwise if we normalize
                     const normalizedFlatField = getField()
-                    .concat(':' + NORMALIZED)
-                    .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
-                        ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl.replace(/\./g, '_') : '');
-                    return [['<', [ 'get', normalizedFlatField.replace(/\./g, '_')], Number.MAX_VALUE ],
-                    ['>', [ 'get', normalizedFlatField.replace(/\./g, '_')], Number.MIN_VALUE]]
+                        .concat(':' + NORMALIZED)
+                        .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
+                            ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl.replace(/\./g, '_') : '');
+                    return [['<', ['get', normalizedFlatField.replace(/\./g, '_')], Number.MAX_VALUE],
+                    ['>', ['get', normalizedFlatField.replace(/\./g, '_')], Number.MIN_VALUE]]
                         ;
                 } else {
                     // if we don't normalize
-                    return [['<', ['get', getField().replace(/\./g, '_')],  Number.MAX_VALUE],
-                         ['>', ['get', getField().replace(/\./g, '_')], Number.MIN_VALUE]];
+                    return [['<', ['get', getField().replace(/\./g, '_')], Number.MAX_VALUE],
+                    ['>', ['get', getField().replace(/\./g, '_')], Number.MIN_VALUE]];
                 }
             }
             case PROPERTY_SELECTOR_SOURCE.heatmap_density: {
@@ -354,7 +361,7 @@ export class ConfigMapExportHelper {
     }
     private static addPixelToWidth(nbPixel: number, value: any): Array<string | Array<string> | number> | number {
         if (value instanceof Array) {
-            return value.map((v, i) =>  (i > 2 && i % 2 === 0) ? v as number + nbPixel : v );
+            return value.map((v, i) => (i > 2 && i % 2 === 0) ? v as number + nbPixel : v);
         } else {
             return value as number + nbPixel;
         }
