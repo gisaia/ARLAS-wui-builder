@@ -298,7 +298,8 @@ export class ConfigExportHelper {
         mapConfigLayers: FormArray,
         mapConfigVisualisations: FormArray,
         mapConfigBasemaps: MapBasemapFormGroup,
-        arlasId?): MapglComponentConfig {
+        arlasId?,
+        enableByDefault?: boolean): MapglComponentConfig {
 
         const customControls = mapConfigGlobal.customControls;
 
@@ -313,7 +314,7 @@ export class ConfigExportHelper {
             mapConfigVisualisations.controls.forEach(visu => visualisationsSets.push({
                 name: visu.value.name,
                 layers: visu.value.layers,
-                enabled: visu.value.displayed
+                enabled: (enableByDefault === true) ? true : visu.value.displayed
             }));
         } else {
             // to preview one layer
@@ -323,7 +324,8 @@ export class ConfigExportHelper {
                     visualisationsSets.push({
                         name: visu.value.name,
                         layers: [arlasId],
-                        enabled: visu.value.displayed
+                        // this will activate the visualisation set and display its layers for preview purposes
+                        enabled: (enableByDefault === true) ? true : visu.value.displayed
                     });
                 }
             });
