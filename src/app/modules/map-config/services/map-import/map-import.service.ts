@@ -25,7 +25,7 @@ import { MapLayerFormBuilderService, MapLayerFormGroup } from '../map-layer-form
 import { LayerSourceConfig, ColorConfig } from 'arlas-web-contributors';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { VISIBILITY, NORMALIZED } from '@services/main-form-manager/config-map-export-helper';
-import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION } from '../map-layer-form-builder/models';
+import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, LINE_TYPE_VALUES, LINE_TYPE } from '../map-layer-form-builder/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
@@ -198,13 +198,15 @@ export class MapImportService {
     propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl = inputValues.pop();
   }
 
-  public static importLayerFg(layer: Layer,
-                              layerSource: LayerSourceConfig,
-                              collectionName: string,
-                              layerId: number,
-                              visualisationSets: Array<VisualisationSetConfig>,
-                              layerFg: MapLayerFormGroup,
-                              filtersFa: FormArray) {
+  public static importLayerFg(
+    layer: Layer,
+    layerSource: LayerSourceConfig,
+    collectionName: string,
+    layerId: number,
+    visualisationSets: Array<VisualisationSetConfig>,
+    layerFg: MapLayerFormGroup,
+    filtersFa: FormArray
+  ) {
     const type = layer.source.split('-')[0];
     // TODO extract type with toolkit, once it is available (contrary of `getSourceName`)
     const layerMode = layer.source.startsWith('feature-metric') ? LAYER_MODE.featureMetric :
@@ -289,6 +291,24 @@ export class MapImportService {
     if (layer.type === GEOMETRY_TYPE.line.toString()) {
       values.styleStep.widthFg = {};
       this.importPropertySelector(layer.paint[layer.type + '-width'], values.styleStep.widthFg, false, isAggregated, layerSource);
+
+      if (!!layer.paint['line-dasharray']) {
+        switch (layer.paint['line-dasharray'].toString()) {
+          case LINE_TYPE_VALUES.get(LINE_TYPE.dashed).toString():
+            values.styleStep.lineType = LINE_TYPE.dashed;
+            break;
+          case LINE_TYPE_VALUES.get(LINE_TYPE.dotted).toString():
+            values.styleStep.lineType = LINE_TYPE.dotted;
+            break;
+          case LINE_TYPE_VALUES.get(LINE_TYPE.mixed).toString():
+            values.styleStep.lineType = LINE_TYPE.mixed;
+            break;
+          default:
+            values.styleStep.lineType = LINE_TYPE.solid;
+        }
+      } else {
+        values.styleStep.lineType = LINE_TYPE.solid;
+      }
 
     } else if (layer.type === GEOMETRY_TYPE.circle.toString()) {
       values.styleStep.radiusFg = {};
@@ -546,7 +566,7 @@ export class MapImportService {
         const mapFilterFg = this.mapLayerFormBuilder.buildMapFilter();
         importElements([
           {
-            value: {value: f.field},
+            value: { value: f.field },
             control: mapFilterFg.customControls.filterField
           },
           {
