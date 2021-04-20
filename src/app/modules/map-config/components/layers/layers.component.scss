@@ -56,3 +56,11 @@ mat-error {
 .mat-column-representation {
   width: 50px;
 }
+
+.mat-column-visualisationSet {
+  width: 355px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 355px;
+}

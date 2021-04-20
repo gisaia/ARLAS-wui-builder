@@ -55,11 +55,13 @@ export interface Layer {
 })
 export class LayersComponent implements OnInit, OnDestroy {
 
-  public displayedColumns: string[] = ['representation', 'name', 'mode', 'collection', 'zoom', 'nbFeature', 'action'];
+  public displayedColumns: string[] = ['representation', 'name', 'mode', 'visualisationSet', 'collection', 'zoom', 'nbFeature', 'action'];
   public layersFa: FormArray;
   public visualisationSetFa: FormArray;
 
   public layerLegend: Map<string, { layer: any, colorLegend: any }> = new Map();
+
+  public layerVs: Map<string, string[]> = new Map();
 
   private previewSub: Subscription;
   private confirmDeleteSub: Subscription;
@@ -90,6 +92,15 @@ export class LayersComponent implements OnInit, OnDestroy {
         layer.arlasId + '#' + layer.mode,
         { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint) }
       );
+
+      const includeIn = [];
+      this.visualisationSetFa.value.forEach(vs => {
+        if (!!(vs.layers as string[]).find(l => l === layer.arlasId)) {
+          includeIn.push(vs.name);
+        }
+      });
+
+      this.layerVs.set(layer.arlasId, includeIn);
     });
   }
 
@@ -103,6 +114,7 @@ export class LayersComponent implements OnInit, OnDestroy {
 
     const sourceName = layerFg.mode === LAYER_MODE.features ? 'feature' :
       (layerFg.mode === LAYER_MODE.featureMetric ? 'feature-metric' : 'cluster');
+
     const layer: LayerMap = {
       id: layerFg.arlasId,
       type: modeValues.styleStep.geometryType,
