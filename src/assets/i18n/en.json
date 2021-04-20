@@ -250,6 +250,8 @@
 	"Primary": "Primary",
 	"Accent": "Accent",
 	"Spinner diameter": "Spinner diameter",
+	"App unit": "Explored elements",
+	"App unit description": "Unit displayed after the global count of explored elements",
 	"Initial zoom": "Initial zoom",
 	"Initial zoom description": "Zoom level of the map when the app is first loaded",
 	"Map initialisation": "Map initialisation",

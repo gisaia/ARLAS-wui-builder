@@ -250,6 +250,8 @@
 	"Primary": "Primaire",
 	"Accent": "Secondaire",
 	"Spinner diameter": "Diamètre du cercle de chargement",
+	"App unit": "Eléments explorés",
+	"App unit description": "Unité affichée après le nombre total d'éléments explorés",
 	"Initial zoom": "Zoom initial",
 	"Initial zoom description": "Niveau de zoom à l'ouverture de l'application",
 	"Map initialisation": "Initialiser la carte",

@@ -37,22 +37,26 @@ export class LookAndFeelImportService {
 
     const configOptions = config.arlas.web.options ? config.arlas.web.options : null;
 
-    const globalSearchFg = this.mainFormService.lookAndFeelConfig.getGlobalFg() as LookAndFeelGlobalFormGroup;
+    const globalLookAndFeelFg = this.mainFormService.lookAndFeelConfig.getGlobalFg() as LookAndFeelGlobalFormGroup;
 
     if (configOptions) {
 
       importElements([
         {
           value: configOptions.drag_items,
-          control: globalSearchFg.customControls.dragAndDrop
+          control: globalLookAndFeelFg.customControls.dragAndDrop
         },
         {
           value: configOptions.zoom_to_data,
-          control: globalSearchFg.customControls.zoomToData
+          control: globalLookAndFeelFg.customControls.zoomToData
         },
         {
           value: configOptions.indicators,
-          control: globalSearchFg.customControls.indicators
+          control: globalLookAndFeelFg.customControls.indicators
+        },
+        {
+          value: config['arlas-wui'].web.app.unit,
+          control: globalLookAndFeelFg.customControls.appUnit
         }
       ]);
 
@@ -60,15 +64,15 @@ export class LookAndFeelImportService {
         importElements([
           {
             value: configOptions.spinner.show,
-            control: globalSearchFg.customControls.spinner
+            control: globalLookAndFeelFg.customControls.spinner
           },
           {
             value: configOptions.spinner.color,
-            control: globalSearchFg.customControls.spinnerColor
+            control: globalLookAndFeelFg.customControls.spinnerColor
           },
           {
             value: configOptions.spinner.diameter,
-            control: globalSearchFg.customControls.spinnerDiameter
+            control: globalLookAndFeelFg.customControls.spinnerDiameter
           }
         ]);
       }
