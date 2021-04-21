@@ -1,5 +1,20 @@
 # Change Log
 
+## [v16.1.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v16.1.0) (2021-04-21)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v16.0.4...v16.1.0)
+
+**New stuff:**
+
+- Add visualisation set column in the list of layers [\#536](https://github.com/gisaia/ARLAS-wui-builder/issues/536)
+- Add the possibility to "qualify" the global count unit  [\#506](https://github.com/gisaia/ARLAS-wui-builder/issues/506) [[LOOK AND FEEL](https://github.com/gisaia/ARLAS-wui-builder/labels/LOOK%20AND%20FEEL)]
+- Support dasharrays in line layers [\#431](https://github.com/gisaia/ARLAS-wui-builder/issues/431) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
+**Fixed bugs:**
+
+- When hovering/selecting a donut node, the other nodes should be transparent [\#533](https://github.com/gisaia/ARLAS-wui-builder/issues/533)
+- Enable the previewed layer [\#491](https://github.com/gisaia/ARLAS-wui-builder/issues/491) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
 ## [v16.0.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v16.0.4) (2021-04-12)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v16.0.3...v16.0.4)
