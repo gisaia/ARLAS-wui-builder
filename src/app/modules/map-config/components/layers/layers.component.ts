@@ -242,7 +242,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     const currentConfig = this.startupService.getConfigWithInitContrib();
     // update arlasConfigService with layer info
     // Create mapcontributor
-    const mapContributor = currentConfig.arlas.web.contributors.find(c => c.type = 'map');
+    const mapContributor = currentConfig.arlas.web.contributors.find(c => c.type === 'map');
     if (mapContributor) {
       currentConfig.arlas.web.contributors.splice(currentConfig.arlas.web.contributors.indexOf(mapContributor), 1);
     }
@@ -254,7 +254,7 @@ export class LayersComponent implements OnInit, OnDestroy {
       this.collaborativesearchService,
       this.colorService);
     const mapComponentConfigValue = ConfigExportHelper.getMapComponent(mapConfigGlobal, mapConfigLayers,
-      mapConfigVisualisations, mapConfigBasemaps, arlasId);
+      mapConfigVisualisations, mapConfigBasemaps, arlasId, true);
     mapComponentConfigValue.input.mapLayers.layers = configMap.layers;
     const dialogRef = this.dialog.open(PreviewComponent, {
       panelClass: 'map-preview',
