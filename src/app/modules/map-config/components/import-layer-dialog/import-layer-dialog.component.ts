@@ -23,7 +23,7 @@ import { DataResource, DataWithLinks } from 'arlas-persistence-api';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material';
 import { Config } from '@services/main-form-manager/models-config';
-import { Layer, MapConfig } from '@services/main-form-manager/models-map-config';
+import { Layer, MapConfig, HOVER_LAYER_PREFIX, SELECT_LAYER_PREFIX } from '@services/main-form-manager/models-map-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 
 @Component({
@@ -75,7 +75,11 @@ export class ImportLayerDialogComponent implements OnInit {
 
   public getLayers(event: MatSelectChange) {
     this.dashboardConfigJson = JSON.parse(event.value.doc_value) as Config;
-    this.layers = (this.dashboardConfigJson.arlas.web.components.mapgl.input.mapLayers as MapConfig).layers;
+    let configLayers = (this.dashboardConfigJson.arlas.web.components.mapgl.input.mapLayers as MapConfig).layers;
+    if (!!configLayers) {
+      configLayers = configLayers.filter(l => !!l && !l.id.startsWith(HOVER_LAYER_PREFIX) && !l.id.startsWith(SELECT_LAYER_PREFIX));
+    }
+    this.layers = configLayers;
   }
 
 }

@@ -18,7 +18,7 @@ under the License.
 */
 import { FormArray, FormGroup } from '@angular/forms';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
-import { Paint, Layer, MapConfig, ExternalEvent } from './models-map-config';
+import { Paint, Layer, MapConfig, ExternalEvent, HOVER_LAYER_PREFIX, SELECT_LAYER_PREFIX } from './models-map-config';
 import { GEOMETRY_TYPE, FILTER_OPERATION, LINE_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
@@ -51,7 +51,7 @@ export class ConfigMapExportHelper {
             .filter(l => l[0].type === GEOMETRY_TYPE.line || l[0].type === GEOMETRY_TYPE.circle)
             .map(l => {
                 const id = l[0].id;
-                l[0].id = 'arlas-hover-'.concat(id);
+                l[0].id = HOVER_LAYER_PREFIX.concat(id);
                 l[0].layout.visibility = VISIBILITY.none;
                 l[0].type === GEOMETRY_TYPE.line ? l[0].paint['line-width'] = this.addPixelToWidth(12, l[0].paint['line-width'])
                     : l[0].paint['circle-stroke-width'] = this.addPixelToWidth(12, l[0].paint['circle-stroke-width']);
@@ -63,7 +63,7 @@ export class ConfigMapExportHelper {
             .filter(l => l[0].type === GEOMETRY_TYPE.line || l[0].type === GEOMETRY_TYPE.circle)
             .map(l => {
                 const id = l[0].id;
-                l[0].id = 'arlas-select-'.concat(id);
+                l[0].id = SELECT_LAYER_PREFIX.concat(id);
                 l[0].layout.visibility = VISIBILITY.none;
                 l[0].type === GEOMETRY_TYPE.line ? l[0].paint['line-width'] = this.addPixelToWidth(12, l[0].paint['line-width'])
                     : l[0].paint['circle-stroke-width'] = this.addPixelToWidth(12, l[0].paint['circle-stroke-width']);
