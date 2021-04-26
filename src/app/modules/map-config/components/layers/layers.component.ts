@@ -224,6 +224,8 @@ export class LayersComponent implements OnInit, OnDestroy {
       this.layersFa.setControl(i, lfg);
     }
     this.visualisationSetFa.setValue(visualisationSetValue);
+    /** redraw the list of layers */
+    this.ngOnInit();
   }
 
   public preview(layerId: number, arlasId: string): void {
