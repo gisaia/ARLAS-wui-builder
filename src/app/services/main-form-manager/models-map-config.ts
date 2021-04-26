@@ -74,3 +74,6 @@ export interface PaintColor {
     stops: Array<Array<string>>;
 }
 
+
+export const HOVER_LAYER_PREFIX = 'arlas-hover-';
+export const SELECT_LAYER_PREFIX = 'arlas-select-';

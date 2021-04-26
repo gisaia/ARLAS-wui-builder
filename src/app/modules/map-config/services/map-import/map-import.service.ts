@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { MapConfig, Layer } from '@services/main-form-manager/models-map-config';
+import { MapConfig, Layer, HOVER_LAYER_PREFIX, SELECT_LAYER_PREFIX } from '@services/main-form-manager/models-map-config';
 import { Config, MapglComponentConfig, ContributorConfig, NormalizationFieldConfig } from '@services/main-form-manager/models-config';
 import { MainFormService, ARLAS_ID } from '@services/main-form/main-form.service';
 import { importElements } from '@services/main-form-manager/tools';
@@ -409,8 +409,8 @@ export class MapImportService {
     const mapContrib = config.arlas.web.contributors.find(c => c.identifier === 'mapbox');
     const layersSources = mapContrib.layers_sources;
     const layers = mapConfig.layers
-      .filter(ls => !ls.id.startsWith('arlas-hover-'))
-      .filter(ls => !ls.id.startsWith('arlas-select-'));
+      .filter(ls => !ls.id.startsWith(HOVER_LAYER_PREFIX))
+      .filter(ls => !ls.id.startsWith(SELECT_LAYER_PREFIX));
 
     const visualisationSets: Array<VisualisationSetConfig> = config.arlas.web.components.mapgl.input.visualisations_sets;
 
