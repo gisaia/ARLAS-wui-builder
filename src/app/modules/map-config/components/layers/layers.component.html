@@ -30,7 +30,7 @@
     <ng-container matColumnDef="visualisationSet">
         <th mat-header-cell *matHeaderCellDef>{{'Visualisation sets' | translate}}</th>
         <td mat-cell *matCellDef="let element">
-            <span [matTooltip]="layerVs.get(element.arlasId).join(', ')" [matTooltipPosition]="'before'">
+            <span [matTooltip]="layerVs.get(element.arlasId)?.join(', ')" [matTooltipPosition]="'before'">
                 <ng-container *ngFor="let vs of layerVs.get(element.arlasId)">&nbsp;•&nbsp;{{vs}}</ng-container>
             </span>
         </td>
