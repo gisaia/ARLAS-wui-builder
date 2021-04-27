@@ -205,8 +205,8 @@ export class MainFormManagerService {
         control: startingConfigControls.serverUrl
       },
       {
-        value: [config.arlas.server.collection.name],
-        control: startingConfigControls.collections
+        value: config.arlas.server.collection.name,
+        control: startingConfigControls.collection
       },
       {
         value: config.arlas.web.colorGenerator,

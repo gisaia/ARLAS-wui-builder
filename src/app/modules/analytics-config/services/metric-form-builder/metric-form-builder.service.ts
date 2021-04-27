@@ -131,7 +131,7 @@ export class MetricFormBuilderService extends WidgetFormBuilder {
   public build() {
 
     const formGroup = new MetricFormGroup(
-      this.collectionService.getCollectionFields(this.mainFormService.getCollections()[0])
+      this.collectionService.getCollectionFields(this.mainFormService.getMainCollection())
     );
     this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
 

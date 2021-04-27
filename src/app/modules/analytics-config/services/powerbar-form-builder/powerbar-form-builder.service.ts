@@ -273,11 +273,11 @@ export class PowerbarFormBuilderService extends WidgetFormBuilder {
 
   public build(): PowerbarConfigForm {
     const collectionFieldsObs = this.collectionService.getCollectionFields(
-      this.mainFormService.getCollections()[0]);
+      this.mainFormService.getMainCollection());
     const formGroup = new PowerbarConfigForm(
-      this.mainFormService.getCollections()[0],
+      this.mainFormService.getMainCollection(),
       this.collectionService.getCollectionFields(
-        this.mainFormService.getCollections()[0]),
+        this.mainFormService.getMainCollection()),
       this.mainFormService.commonConfig.getKeysToColorFa(),
       this.defaultValuesService.getDefaultConfig(),
       this.dialog,

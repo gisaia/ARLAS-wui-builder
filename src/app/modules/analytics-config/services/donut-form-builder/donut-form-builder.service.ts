@@ -195,9 +195,9 @@ export class DonutFormBuilderService extends WidgetFormBuilder {
 
   public build() {
     const formGroup = new DonutConfigForm(
-      this.mainFormService.getCollections()[0],
+      this.mainFormService.getMainCollection(),
       this.collectionService.getCollectionFields(
-        this.mainFormService.getCollections()[0]),
+        this.mainFormService.getMainCollection()),
       this.mainFormService.commonConfig.getKeysToColorFa(),
       this.defaultValuesService.getDefaultConfig(),
       this.dialog,

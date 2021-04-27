@@ -370,7 +370,7 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
   public build() {
     const formGroup = new ResultlistConfigForm(
       this.collectionService.getDescribe(
-        this.mainFormService.getCollections()[0]
+        this.mainFormService.getMainCollection()
       ));
     this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
     return formGroup;
@@ -397,7 +397,7 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
 
   // TODO Optimize by not requesting the collection fields (also for other build methods)
   public buildColumn() {
-    const collection = this.mainFormService.getCollections()[0];
+    const collection = this.mainFormService.getMainCollection();
     const fieldObs = toOptionsObs(this.collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES));
     return new ResultlistColumnFormGroup(
           fieldObs,
@@ -417,7 +417,7 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
     return new ResultlistDetailFieldFormGroup(
       toOptionsObs(
         this.collectionService.getCollectionFields(
-          this.mainFormService.getCollections()[0],
+          this.mainFormService.getMainCollection(),
           NUMERIC_OR_DATE_OR_TEXT_TYPES))
     );
   }

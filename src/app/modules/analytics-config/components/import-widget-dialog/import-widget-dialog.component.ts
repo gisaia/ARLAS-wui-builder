@@ -65,7 +65,7 @@ export class ImportWidgetDialogComponent implements OnInit {
               if (!!dash.doc_value) {
                 const config = JSON.parse(dash.doc_value) as Config;
                 if (!!config && !!config.arlas && !!config.arlas.server && !!config.arlas.server.collection) {
-                  return config.arlas.server.collection.name === this.mainformService.getCollections()[0];
+                  return config.arlas.server.collection.name === this.mainformService.getMainCollection();
                 } else {
                   return false;
                 }

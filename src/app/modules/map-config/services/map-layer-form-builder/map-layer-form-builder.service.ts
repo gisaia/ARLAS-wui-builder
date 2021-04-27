@@ -383,7 +383,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
 export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
   constructor(
-    collections: Array<string>,
+    collection: string,
     type: string,
     geometryTypes: Array<GEOMETRY_TYPE>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService,
@@ -396,11 +396,11 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
     super({
       collectionStep: new ConfigFormGroup({
         collection: new SelectFormControl(
-          collections.length === 1 ? collections[0] : '',
+          collection,
           marker('Collection'),
           '',
           false,
-          collections.map(c => ({ label: c, value: c }))
+          [].map(c => ({ label: c, value: c }))
         )
       }).withStepName(marker('Collection')).hideStep(true),
       geometryStep: new ConfigFormGroup({
@@ -653,7 +653,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
 
   constructor(
-    collections: Array<string>,
+    collection: string,
     type: string,
     collectionFields: Observable<Array<CollectionField>>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService,
@@ -662,7 +662,7 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
   ) {
 
     super(
-      collections,
+      collection,
       type,
       [
         GEOMETRY_TYPE.fill,
@@ -713,12 +713,12 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
 export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesFormGroup {
 
   constructor(
-    collections: Array<string>,
+    collection: string,
     collectionFields: Observable<Array<CollectionField>>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService
   ) {
     super(
-      collections,
+      collection,
       'feature-metric',
       collectionFields,
       propertySelectorFormBuilder,
@@ -756,13 +756,13 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
 export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
 
   constructor(
-    collections: Array<string>,
+    collection: string,
     collectionFields: Observable<Array<CollectionField>>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService
   ) {
 
     super(
-      collections,
+      collection,
       'cluster',
       [
         GEOMETRY_TYPE.fill,
@@ -894,7 +894,7 @@ export class MapLayerFormBuilderService {
 
   public buildLayer(edit?: boolean) {
     const collectionFields = this.collectionService.getCollectionFields(
-      this.mainFormService.getCollections()[0]
+      this.mainFormService.getMainCollection()
     );
     const mapLayerFormGroup = new MapLayerFormGroup(
       this.buildFeatures(collectionFields),
@@ -909,17 +909,17 @@ export class MapLayerFormBuilderService {
 
   public buildMapFilter() {
     const collectionFields = this.collectionService.getCollectionFields(
-      this.mainFormService.getCollections()[0]
+      this.mainFormService.getMainCollection()
     );
     const mapFilterFormGroup = new MapFilterFormGroup(collectionFields,
       [FILTER_OPERATION.IN, FILTER_OPERATION.RANGE, FILTER_OPERATION.EQUAL, FILTER_OPERATION.NOT_IN],
-      this.collectionService, this.mainFormService.getCollections()[0]);
+      this.collectionService, this.mainFormService.getMainCollection());
     return mapFilterFormGroup;
   }
 
   private buildFeatures(collectionFields: Observable<Array<CollectionField>>) {
     const featureFormGroup = new MapLayerTypeFeaturesFormGroup(
-      this.mainFormService.getCollections(),
+      this.mainFormService.getMainCollection(),
       'feature',
       collectionFields,
       this.propertySelectorFormBuilder);
@@ -930,7 +930,7 @@ export class MapLayerFormBuilderService {
 
   private buildFeatureMetric(collectionFields: Observable<Array<CollectionField>>) {
     const featureMetricFormGroup = new MapLayerTypeFeatureMetricFormGroup(
-      this.mainFormService.getCollections(),
+      this.mainFormService.getMainCollection(),
       collectionFields,
       this.propertySelectorFormBuilder);
 
@@ -940,7 +940,7 @@ export class MapLayerFormBuilderService {
 
   private buildCluster(collectionFields: Observable<Array<CollectionField>>) {
     const clusterFormGroup = new MapLayerTypeClusterFormGroup(
-      this.mainFormService.getCollections(),
+      this.mainFormService.getMainCollection(),
       collectionFields,
       this.propertySelectorFormBuilder);
 

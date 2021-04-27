@@ -260,7 +260,7 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
   public build() {
 
     const collectionFieldsObs = this.collectionService.getCollectionFields(
-      this.mainFormService.getCollections()[0]);
+      this.mainFormService.getMainCollection());
 
     const formGroup = new SwimlaneFormGroup(
       this.bucketsIntervalBuilderService

@@ -27,7 +27,7 @@ describe('GlobalTimelineComponent', () => {
             new BucketsIntervalFormGroup(of([]))
           )
         },
-        getCollections: () => ['collection']
+        getMainCollection: () => ''
       })
     ]
   });

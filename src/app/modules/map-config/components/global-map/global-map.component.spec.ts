@@ -18,7 +18,7 @@ describe('GlobalMapComponent', () => {
         mapConfig: {
           getGlobalFg: () => new MapGlobalFormGroup()
         },
-        getCollections: () => ['collection']
+        getMainCollection: () => ''
       }),
     ]
   });

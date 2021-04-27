@@ -82,16 +82,16 @@ export class CollectionComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.mainService.getCollections().forEach(collection => {
+    const collection = this.mainService.getMainCollection();
+    if (!!collection && collection !== '') {
       this.collectionSubscription = this.arlasCss.describe(collection)
-        .subscribe(collectionRef => {
-          const treeControl = new FlatTreeControl<FlatDescription>(node => node.level, node => node.expandable);
-          const dataSource = new MatTreeFlatDataSource(treeControl, this.treeFlattener);
-
-          dataSource.data = this.transform(collectionRef.properties);
-          this.collectionsDef.push({ collection: collectionRef, fields: dataSource, treeControl });
-        });
-    });
+          .subscribe(collectionRef => {
+            const treeControl = new FlatTreeControl<FlatDescription>(node => node.level, node => node.expandable);
+            const dataSource = new MatTreeFlatDataSource(treeControl, this.treeFlattener);
+            dataSource.data = this.transform(collectionRef.properties);
+            this.collectionsDef.push({ collection: collectionRef, fields: dataSource, treeControl });
+          });
+    }
   }
 
   public transform(objects: {

@@ -209,7 +209,7 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
   public build(): HistogramFormGroup {
 
     const collectionFieldsObs = this.collectionService.getCollectionFields(
-      this.mainFormService.getCollections()[0]);
+      this.mainFormService.getMainCollection());
 
     const formGroup = new HistogramFormGroup(
       this.bucketsIntervalBuilderService.build(toNumericOrDateFieldsObs(collectionFieldsObs), 'histogram'),
