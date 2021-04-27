@@ -103,7 +103,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.dialog.open(DialogFilterComponent, {
       data: {
         mapForm: mapFormGroup,
-        collection: this.mainFormService.getCollections()[0]
+        collection: this.mainFormService.getMainCollection()
       }
     }).afterClosed().subscribe(result => {
       if (result) {

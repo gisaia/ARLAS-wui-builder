@@ -204,7 +204,7 @@ export class MapGlobalFormBuilderService {
 
   public buildRequestGeometry(collection: string, geometryPath: string, idPath: string) {
     const collectionFields = this.collectionService.getCollectionFields(
-      this.mainFormService.getCollections()[0]
+      this.mainFormService.getMainCollection()
     );
     return new MapGlobalRequestGeometryFormGroup(collection, geometryPath, idPath, collectionFields);
   }

@@ -335,7 +335,7 @@ export class TimelineGlobalFormBuilderService {
   public build() {
 
     const longDateFields = toDateFieldsObs(this.collectionService.getCollectionFields(
-      this.mainFormService.getCollections()[0]))
+      this.mainFormService.getMainCollection()))
       .pipe(map(fields => fields.sort((a, b) => {
         // sort by DATE first, then by name
         if (a.type !== b.type) {

@@ -64,16 +64,15 @@ export class MapInitService {
   // init the collection fields, to be done by creating a new configuration only
   private initCollectionFields() {
     // init global -> request geometries, by collection
-    this.mainFormService.getCollections().forEach(collection => {
-      this.collectionService.getDescribe(collection).subscribe(params => {
-        this.mainFormService.mapConfig.getGlobalFg().customControls.requestGeometries.push(
-          this.mapGlobalFormBuilder.buildRequestGeometry(
-            collection,
-            params.params.geometry_path,
-            params.params.id_path
-          )
-        );
-      });
+    const collection = this.mainFormService.getMainCollection();
+    this.collectionService.getDescribe(collection).subscribe(params => {
+      this.mainFormService.mapConfig.getGlobalFg().customControls.requestGeometries.push(
+        this.mapGlobalFormBuilder.buildRequestGeometry(
+          collection,
+          params.params.geometry_path,
+          params.params.id_path
+        )
+      );
     });
   }
 

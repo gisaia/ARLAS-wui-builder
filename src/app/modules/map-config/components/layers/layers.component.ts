@@ -200,7 +200,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     const filtersFa: FormArray = new FormArray([], []);
     this.mapImportService.importMapFilters(layerSource, filtersFa);
     MapImportService.importLayerFg(layer, layerSource,
-      this.mainFormService.getCollections()[0], layerId + 1, visualisationSetValue, newLayerFg, filtersFa);
+      this.mainFormService.getMainCollection(), layerId + 1, visualisationSetValue, newLayerFg, filtersFa);
     const modeValues = newLayerFg.customControls.mode.value === LAYER_MODE.features ? newLayerFg.customControls.featuresFg.value :
       (newLayerFg.customControls.mode.value === LAYER_MODE.featureMetric ?
         newLayerFg.customControls.featureMetricFg.value : newLayerFg.customControls.clusterFg.value);
@@ -308,7 +308,7 @@ export class LayersComponent implements OnInit, OnDestroy {
         layerFg = MapImportService.importLayerFg(
           layer,
           layerSource,
-          this.mainFormService.getCollections()[0],
+          this.mainFormService.getMainCollection(),
           this.mainFormService.mapConfig.getLayersFa().length + 1,
           visualisationSets,
           layerFg,
