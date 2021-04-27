@@ -120,17 +120,17 @@ export class ConfigMapExportHelper {
                 } else if (f.filterOperation === FILTER_OPERATION.NOT_IN) {
                     layer.filter.push(['!', ['in', fieldPath, ['literal', f.filterInValues]]]);
                 } else if (f.filterOperation === FILTER_OPERATION.EQUAL) {
-                    layer.filter.push(['==', fieldPath, f.filterEqualValues]);
+                    layer.filter.push(['==', fieldPath, +f.filterEqualValues]);
                 } else if (f.filterOperation === FILTER_OPERATION.NOT_EQUAL) {
-                    layer.filter.push(['!=', fieldPath, f.filterEqualValues]);
+                    layer.filter.push(['!=', fieldPath, +f.filterEqualValues]);
                 } else if (f.filterOperation === FILTER_OPERATION.RANGE) {
-                    layer.filter.push(['>=', fieldPath, f.filterMinRangeValues]);
-                    layer.filter.push(['<=', fieldPath, f.filterMaxRangeValues]);
+                    layer.filter.push(['>=', fieldPath, +f.filterMinRangeValues]);
+                    layer.filter.push(['<=', fieldPath, +f.filterMaxRangeValues]);
                 } else if (f.filterOperation === FILTER_OPERATION.OUT_RANGE) {
                     /** 'any' is the operator that allows to apply a "OR" filter in mapbox  */
                     const outRangeExpression: Array<any> = ['any'];
-                    outRangeExpression.push(['<', fieldPath, f.filterMinRangeValues]);
-                    outRangeExpression.push(['>', fieldPath, f.filterMaxRangeValues]);
+                    outRangeExpression.push(['<', fieldPath, +f.filterMinRangeValues]);
+                    outRangeExpression.push(['>', fieldPath, +f.filterMaxRangeValues]);
                     layer.filter.push(outRangeExpression);
                 }
             });
