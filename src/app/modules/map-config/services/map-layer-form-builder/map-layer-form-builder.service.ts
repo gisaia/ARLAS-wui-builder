@@ -335,7 +335,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
       filterMaxRangeValues: new InputFormControl(
         '',
         marker('Maximum range filter'),
-        marker('Minimum range filter description'),
+        marker('Maximum range filter description'),
         'number',
         {
           resetDependantsOnChange: true,
