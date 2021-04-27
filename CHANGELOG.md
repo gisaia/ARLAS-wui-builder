@@ -1,5 +1,9 @@
 # Change Log
 
+## [v16.1.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v16.1.2) (2021-04-27)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v16.1.1...v16.1.2)
+
 ## [v16.1.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v16.1.1) (2021-04-26)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v16.1.0...v16.1.1)
@@ -7,6 +11,7 @@
 **Fixed bugs:**
 
 - Duplicating a layer crashes all the layers list [\#547](https://github.com/gisaia/ARLAS-wui-builder/issues/547) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Icon of a duplicated layer is wrong [\#546](https://github.com/gisaia/ARLAS-wui-builder/issues/546) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 - hover and select layers should not be available for Layer Importation [\#544](https://github.com/gisaia/ARLAS-wui-builder/issues/544) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 
 ## [v16.1.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v16.1.0) (2021-04-21)
