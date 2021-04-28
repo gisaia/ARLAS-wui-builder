@@ -97,6 +97,10 @@ export class AnalyticsImportService {
     const widget = this.analyticsInitService.initNewWidget(c.componentType);
     const contributorId = c.contributorId;
     const contributor = config.arlas.web.contributors.find(contrib => contrib.identifier === contributorId);
+    /** retro-combatibility with mono-collection dashboards */
+    if (!contributor.collection) {
+      contributor.collection = config.arlas.server.collection.name;
+    }
     let widgetData;
     if (c.componentType === WIDGET_TYPE.histogram) {
       contentTypes.push(WIDGET_TYPE.histogram);

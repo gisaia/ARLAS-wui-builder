@@ -417,28 +417,36 @@ export class MapImportService {
 
   public doImport(config: Config, mapConfig: MapConfig) {
     const mapgl = config.arlas.web.components.mapgl;
-    const mapContrib = config.arlas.web.contributors.find(c => c.identifier === 'mapbox');
-    const layersSources = mapContrib.layers_sources;
+    const visualisationSets: Array<VisualisationSetConfig> = mapgl.input.visualisations_sets;
+    const basemaps: BasemapStyle[] = mapgl.input.basemapStyles;
+    const defaultBasemap: BasemapStyle = mapgl.input.defaultBasemapStyle;
+    const defaultCollection = config.arlas.server.collection.name;
+
+    let defaultMapContributor = config.arlas.web.contributors.find(c => c.type === 'map' &&
+      (c.collection === defaultCollection || !c.collection));
+    if (!defaultMapContributor) {
+      /** if there is no map contributor that has the default collection, we take the first map contributor
+       * this is unlikely to happen as with the builder we will always create a map contributor that has the default collection
+       * it's just precaution in case we load a config file that doesn't respect this condition
+       */
+      defaultMapContributor = config.arlas.web.contributors.find(c => c.type === 'map');
+    }
+    this.importMapGlobal(mapgl, defaultMapContributor, defaultCollection);
+
+    const mapContributors = config.arlas.web.contributors.filter(c => c.type === 'map');
     const layers = mapConfig.layers
-      .filter(ls => !ls.id.startsWith(HOVER_LAYER_PREFIX))
-      .filter(ls => !ls.id.startsWith(SELECT_LAYER_PREFIX));
-
-    const visualisationSets: Array<VisualisationSetConfig> = config.arlas.web.components.mapgl.input.visualisations_sets;
-
-    const basemaps: BasemapStyle[] = config.arlas.web.components.mapgl.input.basemapStyles;
-    const defaultBasemap: BasemapStyle = config.arlas.web.components.mapgl.input.defaultBasemapStyle;
-
-    const collectionName = config.arlas.server.collection.name;
+      .filter(ls => !ls.id.startsWith(HOVER_LAYER_PREFIX) && !ls.id.startsWith(SELECT_LAYER_PREFIX));
     let layerId = 0;
-
-    this.importMapGlobal(mapgl, mapContrib, collectionName);
-
-    layers.forEach(layer => {
-      const layerSource = layersSources.find(s => s.id === layer.id);
-      const layerFg = this.importLayer(layer, layerSource, collectionName, layerId++, visualisationSets);
-      this.mainFormService.mapConfig.getLayersFa().push(layerFg);
+    mapContributors.forEach(mapCont => {
+      if (!mapCont.collection) {
+        mapCont.collection = defaultCollection;
+      }
+      mapCont.layers_sources.forEach(ls => {
+        const layer = layers.find(l => l.id === ls.id);
+        const layerFg = this.importLayer(layer, ls, mapCont.collection, layerId++, visualisationSets);
+        this.mainFormService.mapConfig.getLayersFa().push(layerFg);
+      });
     });
-
     let visuId = 0;
     visualisationSets.forEach(vs => {
       const visualisationFg = this.importVisualisations(vs, visuId++);

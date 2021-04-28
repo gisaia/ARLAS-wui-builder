@@ -155,7 +155,7 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
     super({
       collection: new InputFormControl(
         { value: collection, disabled: true },
-        marker('Collection'),
+        marker('Main collection'),
         ''
       ),
       requestGeom: new SelectFormControl(
