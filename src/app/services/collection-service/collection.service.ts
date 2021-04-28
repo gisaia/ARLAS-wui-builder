@@ -120,9 +120,9 @@ export class CollectionService {
       .finally(() => this.spinner.hide());
   }
 
-  public countNbDocuments(): Observable<Hits> {
+  public countNbDocuments(collection: string): Observable<Hits> {
     return this.collabSearchService.resolveButNotHits([projType.count, {}],
-      this.collabSearchService.collaborations, null, null, false, 120);
+      this.collabSearchService.collaborations, collection, null, null, false, 120);
   }
 
   public getTermAggregation(collection: string, field: string, showSpinner: boolean = true,

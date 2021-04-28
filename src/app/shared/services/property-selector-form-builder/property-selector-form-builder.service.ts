@@ -269,8 +269,14 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
           {
             dependsOn: () => [this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl],
             onDependencyChange: (control) =>
-              collectionService.countNbDocuments().subscribe(
-                count => control.setValue(count.totalnb))
+              {
+                console.log(collection)
+                if (!!collection) {
+                  collectionService.countNbDocuments(collection).subscribe(
+                    count => control.setValue(count.totalnb)
+                  )
+                }
+              }
           }
         ),
         propertyInterpolatedMetricCtrl: new SelectFormControl(
@@ -480,10 +486,10 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                   +control.value[control.value.length - 1].value !== maxInterpolatedValue) {
                   control.setValue(
                     [...Array(6).keys()].map(k =>
-                    ({
-                      proportion: minValue + (maxValue - minValue) * k / 5,
-                      value: minInterpolatedValue + (maxInterpolatedValue - minInterpolatedValue) * k / 5
-                    })
+                      ({
+                        proportion: minValue + (maxValue - minValue) * k / 5,
+                        value: minInterpolatedValue + (maxInterpolatedValue - minInterpolatedValue) * k / 5
+                      })
                     )
                   );
                 }

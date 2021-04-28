@@ -201,7 +201,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
 
   public saveConfig() {
     const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().customControls.collection.value;
-    this.startupService.setCollection(collection);
+    this.startupService.setDefaultCollection(collection);
     this.mainFormManager.initMainModulesForms(true);
     this.startEvent.next();
   }

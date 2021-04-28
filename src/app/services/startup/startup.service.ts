@@ -95,8 +95,8 @@ export class StartupService {
     });
   }
 
-  public setCollection(collection: string) {
-    this.arlasCss.collection = collection;
+  public setDefaultCollection(collection: string) {
+    this.arlasCss.defaultCollection = collection;
   }
 
   public getConfigWithInitContrib(): any {
