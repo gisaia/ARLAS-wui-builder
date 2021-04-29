@@ -26,6 +26,7 @@ import { ConfigExportHelper } from './config-export-helper';
 import { LayerSourceConfig } from 'arlas-web-contributors';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
+import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 
 export enum VISIBILITY {
     visible = 'visible',
@@ -34,15 +35,19 @@ export enum VISIBILITY {
 export const NORMALIZED = 'normalized';
 export class ConfigMapExportHelper {
 
-    public static process(mapConfigLayers: FormArray, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>) {
-
-        const layers: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
+    public static process(mapConfigLayers: FormArray, colorService: ArlasColorGeneratorLoader,
+                          taggableFieldsMap?: Map<string, Set<string>>) {
+        const layers: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: MapLayerFormGroup) => {
+            console.log(layerFg.customControls.collection.value);
+            const taggableFields = taggableFieldsMap.get(layerFg.customControls.collection.value);
             return [this.getLayer(layerFg, colorService, taggableFields), layerFg.value.mode as LAYER_MODE];
         });
-        let layersHover: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
+        let layersHover: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: MapLayerFormGroup) => {
+            const taggableFields = taggableFieldsMap.get(layerFg.customControls.collection.value);
             return [this.getLayer(layerFg, colorService, taggableFields), layerFg.value.mode as LAYER_MODE];
         });
-        let layersSelect: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
+        let layersSelect: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: MapLayerFormGroup) => {
+            const taggableFields = taggableFieldsMap.get(layerFg.customControls.collection.value);
             return [this.getLayer(layerFg, colorService, taggableFields), layerFg.value.mode as LAYER_MODE];
         });
 

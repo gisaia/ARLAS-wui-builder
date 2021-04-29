@@ -54,6 +54,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
     featureMetricFg: MapLayerTypeFeatureMetricFormGroup,
     clusterFg: MapLayerTypeClusterFormGroup,
     vFa: FormArray,
+    collection: string,
     edit: boolean
   ) {
     super({
@@ -83,6 +84,16 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         ],
         {
           resetDependantsOnChange: true
+        }
+      ),
+      collection: new SelectFormControl(
+        collection,
+        marker('Collection'),
+        marker('Layer collection description'),
+        false,
+        ['demo_birdtracking-movebank', 'titi'].map(c => ({ label: c, value: c })),
+        {
+          optional: false
         }
       ),
       visualisation: new VisualisationCheckboxFormControl(
@@ -160,6 +171,8 @@ export class MapLayerFormGroup extends ConfigFormGroup {
     visualisation: this.get('visualisation') as VisualisationCheckboxFormControl,
     id: this.get('id') as HiddenFormControl,
     arlasId: this.get('arlasId') as HiddenFormControl,
+    /** need to make the collection availbale at this level to ease the export */
+    collection: this.get('collection') as HiddenFormControl,
     featuresFg: this.get('featuresFg') as MapLayerTypeFeaturesFormGroup,
     featureMetricFg: this.get('featureMetricFg') as MapLayerTypeFeatureMetricFormGroup,
     clusterFg: this.get('clusterFg') as MapLayerTypeClusterFormGroup
@@ -394,15 +407,6 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
     styleFormControls: { [key: string]: AbstractControl }
   ) {
     super({
-      collectionStep: new ConfigFormGroup({
-        collection: new SelectFormControl(
-          collection,
-          marker('Collection'),
-          '',
-          false,
-          [].map(c => ({ label: c, value: c }))
-        )
-      }).withStepName(marker('Collection')).hideStep(true),
       geometryStep: new ConfigFormGroup({
         ...geometryFormControls
       }).withStepName(marker('Geometry')),
@@ -628,11 +632,9 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   }
 
   // TODO use customControls like other form builders
-  public get collectionStep() { return this.get('collectionStep') as ConfigFormGroup; }
   public get geometryStep() { return this.get('geometryStep') as ConfigFormGroup; }
   public get visibilityStep() { return this.get('visibilityStep') as ConfigFormGroup; }
   public get styleStep() { return this.get('styleStep') as ConfigFormGroup; }
-  public get collection() { return this.collectionStep.get('collection') as SelectFormControl; }
   public get visible() { return this.visibilityStep.get('visible') as SlideToggleFormControl; }
   public get zoomMin() { return this.visibilityStep.get('zoomMin') as SliderFormControl; }
   public get zoomMax() { return this.visibilityStep.get('zoomMax') as SliderFormControl; }
@@ -903,14 +905,16 @@ export class MapLayerFormBuilderService {
   ) { }
 
   public buildLayer(edit?: boolean) {
+    const mainCollection = this.mainFormService.getMainCollection();
     const collectionFields = this.collectionService.getCollectionFields(
-      this.mainFormService.getMainCollection()
+      mainCollection
     );
     const mapLayerFormGroup = new MapLayerFormGroup(
       this.buildFeatures(collectionFields),
       this.buildFeatureMetric(collectionFields),
       this.buildCluster(collectionFields),
       this.mainFormService.mapConfig.getVisualisationsFa(),
+      mainCollection,
       edit
     );
     this.defaultValuesService.setDefaultValueRecursively('map.layer', mapLayerFormGroup);

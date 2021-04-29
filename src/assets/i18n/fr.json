@@ -37,6 +37,7 @@
 	"Select a config.map.json file": "Charger config.map.json",
 	"Importing dashboard...": "Import du dashboard...",
 	"Collection": "Collection",
+	"Layer collection description": "Choisir la collection de données pour cette couche",
 	"Save": "Sauvegarder",
 	"Download configuration files": "Télécharger les fichiers de configuration",
 	"Editing dashboard": "Edition du dashboard",

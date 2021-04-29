@@ -87,7 +87,8 @@ export class LayersComponent implements OnInit, OnDestroy {
     this.layersFa.value.map(layer => {
       const modeValues = layer.mode === LAYER_MODE.features ? layer.featuresFg :
         (layer.mode === LAYER_MODE.featureMetric ? layer.featureMetricFg : layer.clusterFg);
-      const paint = ConfigMapExportHelper.getLayerPaint(modeValues, layer.mode, this.colorService, this.collectionService.taggableFields);
+      const taggableFields = this.collectionService.taggableFieldsMap.get(layer.collection);
+      const paint = ConfigMapExportHelper.getLayerPaint(modeValues, layer.mode, this.colorService, taggableFields);
       this.layerLegend.set(
         layer.arlasId + '#' + layer.mode,
         { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint) }
@@ -195,7 +196,8 @@ export class LayersComponent implements OnInit, OnDestroy {
     const layerSource = ConfigExportHelper.getLayerSourceConfig(layerFg);
     layerSource.id = newId;
     layerSource.name = layerFg.customControls.name.value + ' copy';
-    const layer = ConfigMapExportHelper.getLayer(layerFg, this.colorService, this.collectionService.taggableFields);
+    const taggableFields = this.collectionService.taggableFieldsMap.get(layerFg.customControls.collection.value);
+    const layer = ConfigMapExportHelper.getLayer(layerFg, this.colorService, taggableFields);
     layer.id = newId;
     const filtersFa: FormArray = new FormArray([], []);
     this.mapImportService.importMapFilters(layerSource, filtersFa);
@@ -205,7 +207,7 @@ export class LayersComponent implements OnInit, OnDestroy {
       (newLayerFg.customControls.mode.value === LAYER_MODE.featureMetric ?
         newLayerFg.customControls.featureMetricFg.value : newLayerFg.customControls.clusterFg.value);
     const paint = ConfigMapExportHelper.getLayerPaint(modeValues,
-      newLayerFg.customControls.mode.value, this.colorService, this.collectionService.taggableFields);
+      newLayerFg.customControls.mode.value, this.colorService, taggableFields);
     /** Add the duplicated layer to legend set in order to have the icon */
     this.layerLegend.set(
       newId + '#' + newLayerFg.customControls.mode.value,
@@ -236,7 +238,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     const mapConfigVisualisations = this.mainFormService.mapConfig.getVisualisationsFa();
     const mapConfigBasemaps = this.mainFormService.mapConfig.getBasemapsFg();
     // Get config.map part for this layer
-    const configMap = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFields);
+    const configMap = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFieldsMap);
     // Get contributor config for this layer
     const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers);
     // Add contributor part in arlasConfigService
@@ -317,8 +319,9 @@ export class LayersComponent implements OnInit, OnDestroy {
         const modeValues = layerFg.customControls.mode.value === LAYER_MODE.features ? layerFg.customControls.featuresFg.value :
           (layerFg.customControls.mode.value === LAYER_MODE.featureMetric ?
             layerFg.customControls.featureMetricFg.value : layerFg.customControls.clusterFg.value);
+        const taggableFields = this.collectionService.taggableFieldsMap.get(layerFg.customControls.collection.value);
         const paint = ConfigMapExportHelper.getLayerPaint(modeValues,
-          layerFg.customControls.mode.value, this.colorService, this.collectionService.taggableFields);
+          layerFg.customControls.mode.value, this.colorService, taggableFields);
 
         /** Add the duplicated layer to legend set in order to have the icon */
         this.layerLegend.set(

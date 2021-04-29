@@ -139,7 +139,7 @@ export class MainFormManagerService {
       this.colorService,
     );
 
-    const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFields);
+    const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFieldsMap);
 
     const confToValidate: any = JSON.parse(JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
       generatedMapConfig.layers
@@ -197,7 +197,7 @@ export class MainFormManagerService {
   }
 
   public doImport(config: Config, mapConfig: MapConfig) {
-
+    console.log('import')
     const startingConfigControls = this.mainFormService.startingConfig.getFg().customControls;
     importElements([
       {

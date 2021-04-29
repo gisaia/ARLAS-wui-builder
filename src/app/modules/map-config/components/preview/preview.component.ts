@@ -69,7 +69,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       const mapConfigBasemaps = this.mainFormService.mapConfig.getBasemapsFg();
       // Get contributor config for this layer
       // Get config.map part for this layer
-      const configMap = ConfigMapExportHelper.process(mapConfigLayers, colorService, this.collectionService.taggableFields);
+      const configMap = ConfigMapExportHelper.process(mapConfigLayers, colorService, this.collectionService.taggableFieldsMap);
       const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers);
       // Add contributor part in arlasConfigService
       // Add web contributors in config if not exist

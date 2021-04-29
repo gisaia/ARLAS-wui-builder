@@ -242,6 +242,10 @@ export class MapImportService {
         control: layerFg.customControls.arlasId
       },
       {
+        value: collectionName,
+        control: layerFg.customControls.collection
+      },
+      {
         value: layerSource.name,
         control: layerFg.customControls.name
       },
@@ -269,9 +273,6 @@ export class MapImportService {
     const minzoom = !!layer.minzoom ? layer.minzoom : (!!layerSource.minzoom ? layerSource.minzoom : 0);
     const maxzoom = !!layer.maxzoom ? layer.maxzoom : (!!layerSource.maxzoom ? layerSource.maxzoom : 22);
     const values: any = {
-      collectionStep: {
-        collection: collectionName
-      },
       geometryStep: {
       },
       visibilityStep: {

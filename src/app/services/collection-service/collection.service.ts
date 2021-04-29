@@ -39,7 +39,7 @@ import { Hits } from 'arlas-api';
 export class CollectionService {
 
   private collectionsDescriptions = new Map<string, Observable<CollectionReferenceDescription>>();
-  public taggableFields = new Set<string>();
+  public taggableFieldsMap = new Map<string, Set<string>>();
 
   constructor(
     private collabSearchService: ArlasCollaborativesearchService,
@@ -77,13 +77,22 @@ export class CollectionService {
 
               } else if (!exclude && (!types || types.includes(property.type))) {
                 if (property && property.taggable) {
-                  this.taggableFields.add(path);
+                  let taggableFields = this.taggableFieldsMap.get(collection);
+                  if (!taggableFields) {
+                    taggableFields = new Set<string>();
+                  }
+                  taggableFields.add(path);
+                  this.taggableFieldsMap.set(collection, taggableFields);
                 }
                 return { name: path, type: property.type, indexed: property.indexed };
               } else if (exclude && (!types || !types.includes(property.type))) {
                 if (property && property.taggable) {
-                  this.taggableFields.add(path);
-                }
+                  let taggableFields = this.taggableFieldsMap.get(collection);
+                  if (!taggableFields) {
+                    taggableFields = new Set<string>();
+                  }
+                  taggableFields.add(path);
+                  this.taggableFieldsMap.set(collection, taggableFields);                }
                 return { name: path, type: property.type, indexed: property.indexed };
               } else {
                 return null;
