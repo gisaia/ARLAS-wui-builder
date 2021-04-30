@@ -338,12 +338,12 @@ export class ConfigMapExportHelper {
                         .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
                             ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl.replace(/\./g, '_') : '');
                     return [['<', ['get', normalizedFlatField.replace(/\./g, '_')], Number.MAX_VALUE],
-                    ['>', ['get', normalizedFlatField.replace(/\./g, '_')], Number.MIN_VALUE]]
+                    ['>', ['get', normalizedFlatField.replace(/\./g, '_')], -Number.MAX_VALUE]]
                         ;
                 } else {
                     // if we don't normalize
                     return [['<', ['get', getField().replace(/\./g, '_')], Number.MAX_VALUE],
-                    ['>', ['get', getField().replace(/\./g, '_')], Number.MIN_VALUE]];
+                    ['>', ['get', getField().replace(/\./g, '_')], -Number.MAX_VALUE]];
                 }
             }
             case PROPERTY_SELECTOR_SOURCE.heatmap_density: {
