@@ -52,6 +52,7 @@ import { VisualisationSetConfig, BasemapStyle } from 'arlas-web-components';
 import { titleCase } from '@services/collection-service/tools';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
+import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 
 export enum EXPORT_TYPE {
     json = 'json',
@@ -126,14 +127,18 @@ export class ConfigExportHelper {
             ]
         };
 
-        config.arlas.web.contributors.push(this.getMapContributor(mapConfigGlobal, mapConfigLayers));
-        config.arlas.web.contributors.push(this.getChipsearchContributor(searchConfigGlobal));
+        config.arlas.web.contributors = config.arlas.web.contributors.concat(this.getMapContributors(mapConfigGlobal, mapConfigLayers,
+            startingConfig.customControls.collection.value));
+        config.arlas.web.contributors.push(this.getChipsearchContributor(searchConfigGlobal,
+            startingConfig.customControls.collection.value));
 
-        config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal, false));
+        config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal, startingConfig.customControls.collection.value,
+            false));
 
         if (timelineConfigGlobal.value.useDetailedTimeline) {
             config.arlas.web.components.detailedTimeline = this.getTimelineComponent(timelineConfigGlobal, true);
-            config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal, true));
+            config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal,
+                startingConfig.customControls.collection.value, true));
         }
 
         const contributorsMap = new Map<string, any>();
@@ -274,25 +279,33 @@ export class ConfigExportHelper {
         layerSource.source = getSourceName(layerSource);
         return layerSource;
     }
-    public static getMapContributor(
+    public static getMapContributors(
         mapConfigGlobal: MapGlobalFormGroup,
-        mapConfigLayers: FormArray): ContributorConfig {
-
-        const mapContributor: ContributorConfig = {
-            type: 'map',
-            identifier: 'mapbox',
-            name: 'map',
-            geo_query_op: titleCase(mapConfigGlobal.value.geographicalOperator),
-            geo_query_field: mapConfigGlobal.value.requestGeometries[0].requestGeom,
-            icon: mapConfigGlobal.customControls.unmanagedFields.icon.value,
-            layers_sources: []
-        };
-        const layersSources: Array<LayerSourceConfig> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
-            return this.getLayerSourceConfig(layerFg);
+        mapConfigLayers: FormArray,
+        mainCollection: string): ContributorConfig[] {
+        const contributorsCollectionsMap = new Map<string, ContributorConfig>();
+        mapConfigLayers.controls.forEach((layerFg: MapLayerFormGroup) => {
+            const collection = layerFg.customControls.collection.value;
+            let mapContributor = contributorsCollectionsMap.get(collection);
+            if (!mapContributor) {
+                // todo : apply the correct geo_query_op and field
+                const qeoQueryOp = (collection === mainCollection) ? titleCase(mapConfigGlobal.value.geographicalOperator) : 'Within';
+                // const qeoQueryField = (collection === mainCollection) ? mapConfigGlobal.value.requestGeometries[0].requestGeom : ;
+                mapContributor = {
+                    type: 'map',
+                    identifier: collection,
+                    name: 'map',
+                    collection,
+                    geo_query_op: titleCase(mapConfigGlobal.value.geographicalOperator),
+                    geo_query_field: mapConfigGlobal.value.requestGeometries[0].requestGeom,
+                    icon: mapConfigGlobal.customControls.unmanagedFields.icon.value,
+                    layers_sources: []
+                };
+            }
+            mapContributor.layers_sources.push(this.getLayerSourceConfig(layerFg));
+            contributorsCollectionsMap.set(collection, mapContributor);
         });
-
-        mapContributor.layers_sources = layersSources;
-        return mapContributor;
+        return Array.from(contributorsCollectionsMap.values());
     }
 
     public static getMapComponent(
@@ -437,10 +450,11 @@ export class ConfigExportHelper {
         }
     }
 
-    private static getChipsearchContributor(searchConfigGlobal: SearchGlobalFormGroup): ContributorConfig {
+    private static getChipsearchContributor(searchConfigGlobal: SearchGlobalFormGroup, collection: string): ContributorConfig {
         return {
             type: CHIPSEARCH_TYPE,
             identifier: CHIPSEARCH_IDENTIFIER,
+            collection,
             search_field: searchConfigGlobal.customControls.searchField.value,
             name: searchConfigGlobal.customControls.name.value,
             icon: searchConfigGlobal.customControls.unmanagedFields.icon.value,
@@ -450,7 +464,8 @@ export class ConfigExportHelper {
     }
 
     // TODO put in common with getAnalyticsContributor ?
-    private static getTimelineContributor(timelineConfigGlobal: TimelineGlobalFormGroup, isDetailed: boolean): ContributorConfig {
+    private static getTimelineContributor(timelineConfigGlobal: TimelineGlobalFormGroup, collection: string, 
+                                          isDetailed: boolean): ContributorConfig {
 
         const timelineAggregation = timelineConfigGlobal.customControls.tabsContainer.dataStep.timeline.aggregation.customControls;
         const detailedTimelineDataStep = timelineConfigGlobal.customControls.tabsContainer.dataStep.detailedTimeline;
@@ -460,6 +475,7 @@ export class ConfigExportHelper {
         const contributor: ContributorConfig = {
             type: isDetailed ? 'detailedhistogram' : 'histogram',
             identifier: isDetailed ? 'detailedTimeline' : 'timeline',
+            collection,
             name: unmanagedDataFields.name.value,
             icon: unmanagedDataFields.icon.value,
             isOneDimension: unmanagedDataFields.isOneDimension.value,

@@ -40,6 +40,7 @@ export class CollectionService {
 
   private collectionsDescriptions = new Map<string, Observable<CollectionReferenceDescription>>();
   public taggableFieldsMap = new Map<string, Set<string>>();
+  public collectionParamsMap = new Map<string, CollectionReferenceDescription>();
 
   constructor(
     private collabSearchService: ArlasCollaborativesearchService,
@@ -53,6 +54,7 @@ export class CollectionService {
     if (!describtionObs) {
       const describe = this.collabSearchService.describe(collection);
       this.collectionsDescriptions.set(collection, describe);
+      describe.subscribe(cd => this.collectionParamsMap.set(collection, cd));
       return describe;
     } else {
       return describtionObs;

@@ -41,6 +41,7 @@ import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfig
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
 import { Subscription } from 'rxjs';
 import { PreviewComponent } from '../preview/preview.component';
+import { MapContributor } from 'arlas-web-contributors';
 
 export interface Layer {
   id: string;
@@ -230,7 +231,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     this.ngOnInit();
   }
 
-  public preview(layerId: number, arlasId: string): void {
+  public preview(layerId: number, arlasId: string, collection: string): void {
     // Get contributor conf part for this layer
     const formGroupIndex = (this.layersFa.value as any[]).findIndex(el => el.id === layerId);
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
@@ -240,23 +241,26 @@ export class LayersComponent implements OnInit, OnDestroy {
     // Get config.map part for this layer
     const configMap = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFieldsMap);
     // Get contributor config for this layer
-    const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers);
+    const mapContribConfigs = ConfigExportHelper.getMapContributors(mapConfigGlobal, mapConfigLayers,
+      this.mainFormService.getMainCollection());
     // Add contributor part in arlasConfigService
     // Add web contributors in config if not exist
     const currentConfig = this.startupService.getConfigWithInitContrib();
-    // update arlasConfigService with layer info
-    // Create mapcontributor
-    const mapContributor = currentConfig.arlas.web.contributors.find(c => c.type === 'map');
-    if (mapContributor) {
-      currentConfig.arlas.web.contributors.splice(currentConfig.arlas.web.contributors.indexOf(mapContributor), 1);
-    }
-    currentConfig.arlas.web.contributors.push(contribConfig);
+    // clear mapcontributors configs
+    currentConfig.arlas.web.contributors = currentConfig.arlas.web.contributors.filter(c => c.type !== 'map');
+    // add mapcontributors configs
+    currentConfig.arlas.web.contributors = currentConfig.arlas.web.contributors.concat(mapContribConfigs);
     this.configService.setConfig(currentConfig);
-    const contributor = ContributorBuilder.buildContributor('map',
-      'mapbox',
-      this.configService,
-      this.collaborativesearchService,
-      this.colorService);
+    const contributors: MapContributor[] = [];
+
+    mapContribConfigs.forEach(mapConfig => {
+      const mapContributor = ContributorBuilder.buildContributor('map',
+        mapConfig.identifier,
+        this.configService,
+        this.collaborativesearchService,
+        this.colorService);
+      contributors.push(mapContributor);
+    });
     const mapComponentConfigValue = ConfigExportHelper.getMapComponent(mapConfigGlobal, mapConfigLayers,
       mapConfigVisualisations, mapConfigBasemaps, arlasId, true);
     mapComponentConfigValue.input.mapLayers.layers = configMap.layers;
@@ -265,10 +269,11 @@ export class LayersComponent implements OnInit, OnDestroy {
       width: '80%',
       height: '80%',
       data: {
-        mapglContributor: contributor,
+        mapglContributors: contributors,
         mapComponentConfig: mapComponentConfigValue
       }
     });
+
     this.previewSub = dialogRef.afterClosed().subscribe(() => {
       // TODO Clean ArlasConfigService
       this.collaborativesearchService.registry.clear();
@@ -298,8 +303,11 @@ export class LayersComponent implements OnInit, OnDestroy {
           visualisationSetValue[0].layers.push(newId);
         }
 
-        const mapContrib = config.arlas.web.contributors.find(c => c.identifier === 'mapbox');
-        const layersSources = mapContrib.layers_sources;
+        const mapContribs = config.arlas.web.contributors.filter(c => c.type === 'map');
+        let layersSources = [];
+        mapContribs.forEach(mapContrib => {
+          layersSources = layersSources.concat(mapContrib.layers_sources);
+        });
         const visualisationSets: Array<VisualisationSetConfig> = config.arlas.web.components.mapgl.input.visualisations_sets;
 
         let layerFg = this.mapLayerFormBuilder.buildLayer();

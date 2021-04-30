@@ -80,7 +80,7 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="preview(element.id, element.arlasId)">
+                <button mat-menu-item (click)="preview(element.id, element.arlasId, element.collection)">
                     <mat-icon>visibility</mat-icon>
                     <span>{{'Preview' | translate}}</span>
                 </button>
