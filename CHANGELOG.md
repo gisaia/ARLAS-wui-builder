@@ -1,8 +1,16 @@
 # Change Log
 
+## [v16.1.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v16.1.3) (2021-04-30)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v16.1.2...v16.1.3)
+
 ## [v16.1.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v16.1.2) (2021-04-27)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v16.1.1...v16.1.2)
+
+**Fixed bugs:**
+
+- Range and Equal fitlers in Map are not correct [\#551](https://github.com/gisaia/ARLAS-wui-builder/issues/551)
 
 ## [v16.1.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v16.1.1) (2021-04-26)
 
