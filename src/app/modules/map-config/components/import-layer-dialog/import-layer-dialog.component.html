@@ -8,12 +8,15 @@
             <mat-option *ngFor="let conf of configs" [value]="conf">{{conf.doc_key}}</mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field *ngIf="this.importLayerFormGroup.get('dashboard').valid">
+    <mat-form-field *ngIf="this.importLayerFormGroup.get('dashboard').valid && layers?.length > 0">
         <mat-label>{{'Layer' | translate}}</mat-label>
         <mat-select formControlName="layer">
             <mat-option *ngFor="let layer of layers" [value]="layer">{{layer.id | layerIdToName}}</mat-option>
         </mat-select>
     </mat-form-field>
+    <div *ngIf="layers?.length === 0" class="not-importable">
+        {{'This dashboard doesn\'t contain an importable layer' | translate}}
+    </div>
 </div>
 
 <div mat-dialog-actions>

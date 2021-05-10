@@ -22,7 +22,7 @@ describe('GlobalSideModulesComponent', () => {
         sideModulesConfig: {
           getGlobalFg: () => new SideModulesGlobalFormGroup(of([]))
         },
-        getCollections: () => ['collection']
+        getMainCollection: () => ''
       })
     ]
   });

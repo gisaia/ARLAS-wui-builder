@@ -25,7 +25,7 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { MainFormService } from '@services/main-form/main-form.service';
 import { Observable } from 'rxjs';
 import { CollectionField } from '@services/collection-service/models';
-import { toKeywordOptionsObs } from '@services/collection-service/tools';
+import { toKeywordOptionsObs, NUMERIC_OR_DATE_TYPES } from '@services/collection-service/tools';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
 import { MatDialog } from '@angular/material';
@@ -39,8 +39,10 @@ import {
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
 import { HiddenFormControl } from '../../../../shared/models/config-form';
+import { Metric } from 'arlas-api';
+import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 
-export class PowerbarConfigForm extends ConfigFormGroup {
+export class PowerbarConfigForm extends CollectionConfigFormGroup {
 
   constructor(
     collection: string,
@@ -52,174 +54,222 @@ export class PowerbarConfigForm extends ConfigFormGroup {
     private colorService: ArlasColorGeneratorLoader,
     metricFg: MetricCollectFormGroup
   ) {
-    super({
-      title: new TitleInputFormControl(
-        '',
-        marker('powerbar title'),
-        marker('powerbar title description')
-      ),
-      dataStep: new ConfigFormGroup({
-        aggregationField: new SelectFormControl(
+    super(
+      collection,
+      {
+        title: new TitleInputFormControl(
           '',
-          marker('Powerbar field'),
-          marker('Powerbar field description'),
-          true,
-          toKeywordOptionsObs(collectionFields)
+          marker('powerbar title'),
+          marker('powerbar title description')
         ),
-        aggregationSize: new SliderFormControl(
-          '',
-          marker('Powerbar size'),
-          marker('powerbar size description'),
-          1,
-          30,
-          1
-        ),
-        metric: metricFg.withTitle(marker('Metric')),
-        unit: new TitleInputFormControl(
-          '',
-          marker('powerbar unit'),
-          marker('powerbar unit description'),
-          'text',
-          {
-            optional: true
-          }
-        )
-      }).withTabName(marker('Data')),
-      renderStep: new ConfigFormGroup({
-        modeColor: new SelectFormControl(
-          '',
-          marker('Method to retrive powerbar color'),
-          marker('Method to retrive powerbar color description'),
-          false,
-          [
-            PROPERTY_SELECTOR_SOURCE.manual, PROPERTY_SELECTOR_SOURCE.provided
-          ].map(d => {
-            return {
-              value: d,
-              enabled: true,
-              label: d.toString()
-            };
-          }), {
-          optional: true,
-          childs: () => [
-            this.customControls.renderStep.useColorService,
-            this.customControls.renderStep.useColorFromData
-          ],
-        }),
-        useColorService: new HiddenFormControl(
-          '',
-          undefined,
-          {
-            optional: true,
-            dependsOn: () => [
-              this.customControls.renderStep.modeColor
-            ],
-            onDependencyChange: (control: ButtonFormControl) => {
-              if (this.customControls.renderStep.modeColor.value === PROPERTY_SELECTOR_SOURCE.manual) {
-                  control.setValue(true);
-              } else {
-                  control.setValue(false);
+        dataStep: new ConfigFormGroup({
+          collection: new SelectFormControl(
+            collection,
+            marker('Collection'),
+            marker('Powerbar collection description'),
+            false,
+            collectionService.getCollections().map(c => ({ label: c, value: c })),
+            {
+              optional: false,
+              resetDependantsOnChange: true
+            }
+          ),
+          aggregationField: new SelectFormControl(
+            '',
+            marker('Powerbar field'),
+            marker('Powerbar field description'),
+            true,
+            toKeywordOptionsObs(collectionFields),
+            {
+              dependsOn: () => [this.customControls.dataStep.collection],
+              onDependencyChange: (control: SelectFormControl) => {
+                toKeywordOptionsObs(collectionService
+                  .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
+                    control.setSyncOptions(collectionFs);
+                  });
               }
             }
-          }
-        ),
-        useColorFromData: new HiddenFormControl(
-          '',
-          undefined,
-          {
-            optional: true,
-            dependsOn: () => [
-              this.customControls.renderStep.modeColor
-            ],
-            onDependencyChange: (control: ButtonFormControl) => {
-              if (this.customControls.renderStep.modeColor.value === PROPERTY_SELECTOR_SOURCE.provided) {
-                  control.setValue(true);
-              } else {
-                  control.setValue(false);
-              }
+          ),
+          aggregationSize: new SliderFormControl(
+            '',
+            marker('Powerbar size'),
+            marker('powerbar size description'),
+            1,
+            30,
+            1
+          ),
+          metric: metricFg.withTitle(marker('Metric')).withDependsOn(() => [this.customControls.dataStep.collection])
+            .withOnDependencyChange((control) => {
+              metricFg.setCollection(this.customControls.dataStep.collection.value);
+              const filterCallback = (field: CollectionField) =>
+                metricFg.customControls.metricCollectFunction.value === Metric.CollectFctEnum.CARDINALITY ?
+                  field : NUMERIC_OR_DATE_TYPES.indexOf(field.type) >= 0;
+              collectionService.getCollectionFields(this.customControls.dataStep.collection.value).subscribe(
+                fields => {
+                  metricFg.customControls.metricCollectField.setSyncOptions(
+                    fields
+                      .filter(filterCallback)
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map(f => ({ value: f.name, label: f.name, enabled: f.indexed })));
+                }
+              );
             }
-          }
-        ),
-        propertyProvidedFieldCtrl: new SelectFormControl(
-          '',
-          marker('Provided field'),
-          marker('Provided source powerbar field description'),
-          true,
-          toKeywordOptionsObs(collectionFields),
-          {
-            dependsOn: () => [this.customControls.renderStep.modeColor],
-            onDependencyChange: (control) =>
-            control.enableIf(this.customControls.renderStep.modeColor.value === PROPERTY_SELECTOR_SOURCE.provided)
-          }
-        ),
-        keysToColorsButton: new ButtonFormControl(
-          '',
-          marker('Manage colors'),
-          marker('Powerbar manually associate colors description'),
-          () => collectionService.getTermAggregation(collection, this.customControls.dataStep.aggregationField.value)
-            .then((keywords: Array<string>) => {
-              globalKeysToColortrl.clear();
-              keywords.forEach((k: string, index: number) => {
-                this.addToColorManualValuesCtrl({
-                  keyword: k,
-                  color: colorService.getColor(k)
-                }, index);
-              });
-              this.addToColorManualValuesCtrl({
-                keyword: 'OTHER',
-                color: defaultConfig.otherColor
-              });
-
-              const sub = dialog.open(DialogColorTableComponent, {
-                data: {
-                  collection,
-                  sourceField: this.customControls.dataStep.aggregationField.value,
-                  keywordColors: globalKeysToColortrl.value
-                } as DialogColorTableData,
-                autoFocus: false,
-              })
-                .afterClosed().subscribe((result: Array<KeywordColor>) => {
-                  if (result !== undefined) {
-                    result.forEach((kc: KeywordColor) => {
-                      /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
-                      colorService.updateKeywordColor(kc.keyword, kc.color);
-                      this.addToColorManualValuesCtrl(kc);
-                    });
-                  }
-                  sub.unsubscribe();
-                });
-            }),
-          marker('A field is required to manage colors'),
-          {
-            optional: true,
-            dependsOn: () => [
-              this.customControls.renderStep.modeColor,
-              this.customControls.dataStep.aggregationField,
-            ],
-            onDependencyChange: (control: ButtonFormControl) => {
-              control.enableIf(this.customControls.renderStep.modeColor.value === PROPERTY_SELECTOR_SOURCE.manual);
-              control.disabledButton = !this.customControls.renderStep.modeColor.value &&
-                !this.customControls.dataStep.aggregationField.value;
+            ),
+          unit: new TitleInputFormControl(
+            '',
+            marker('powerbar unit'),
+            marker('powerbar unit description'),
+            'text',
+            {
+              optional: true
             }
+          )
+        }).withTabName(marker('Data')),
+        renderStep: new ConfigFormGroup({
+          modeColor: new SelectFormControl(
+            '',
+            marker('Method to retrive powerbar color'),
+            marker('Method to retrive powerbar color description'),
+            false,
+            [
+              PROPERTY_SELECTOR_SOURCE.manual, PROPERTY_SELECTOR_SOURCE.provided
+            ].map(d => {
+              return {
+                value: d,
+                enabled: true,
+                label: d.toString()
+              };
+            }), {
+            optional: true,
+            childs: () => [
+              this.customControls.renderStep.useColorService,
+              this.customControls.renderStep.useColorFromData
+            ],
           }),
-        displayFilter: new SlideToggleFormControl(
-          '',
-          marker('Display the filter'),
-          marker('powerbar display filter description')
-        ),
-        showExportCsv: new SlideToggleFormControl(
-          '',
-          marker('export csv powerbars'),
-          marker('export csv powerbars description')
-        )
-      }).withTabName(marker('Render')),
-      unmanagedFields: new FormGroup({}) // for consistency with other widgets form builders
-    });
+          useColorService: new HiddenFormControl(
+            '',
+            undefined,
+            {
+              optional: true,
+              dependsOn: () => [
+                this.customControls.renderStep.modeColor
+              ],
+              onDependencyChange: (control: ButtonFormControl) => {
+                if (this.customControls.renderStep.modeColor.value === PROPERTY_SELECTOR_SOURCE.manual) {
+                  control.setValue(true);
+                } else {
+                  control.setValue(false);
+                }
+              }
+            }
+          ),
+          useColorFromData: new HiddenFormControl(
+            '',
+            undefined,
+            {
+              optional: true,
+              dependsOn: () => [
+                this.customControls.renderStep.modeColor
+              ],
+              onDependencyChange: (control: ButtonFormControl) => {
+                if (this.customControls.renderStep.modeColor.value === PROPERTY_SELECTOR_SOURCE.provided) {
+                  control.setValue(true);
+                } else {
+                  control.setValue(false);
+                }
+              }
+            }
+          ),
+          propertyProvidedFieldCtrl: new SelectFormControl(
+            '',
+            marker('Provided field'),
+            marker('Provided source powerbar field description'),
+            true,
+            toKeywordOptionsObs(collectionFields),
+            {
+              dependsOn: () => [this.customControls.renderStep.modeColor, this.customControls.dataStep.collection],
+              onDependencyChange: (control: SelectFormControl) => {
+                control.enableIf(this.customControls.renderStep.modeColor.value === PROPERTY_SELECTOR_SOURCE.provided);
+                if (control.enabled && (!this.collection || this.customControls.dataStep.collection.value !== this.collection)) {
+                  this.setCollection(this.customControls.dataStep.collection.value);
+                  toKeywordOptionsObs(collectionService.getCollectionFields(this.collection)).subscribe(collectionFds => {
+                    control.setSyncOptions(collectionFds);
+                  });
+                }
+              }
+            }
+          ),
+          keysToColorsButton: new ButtonFormControl(
+            '',
+            marker('Manage colors'),
+            marker('Powerbar manually associate colors description'),
+            () => collectionService.getTermAggregation(this.collection, this.customControls.dataStep.aggregationField.value)
+              .then((keywords: Array<string>) => {
+                globalKeysToColortrl.clear();
+                keywords.forEach((k: string, index: number) => {
+                  this.addToColorManualValuesCtrl({
+                    keyword: k,
+                    color: colorService.getColor(k)
+                  }, index);
+                });
+                this.addToColorManualValuesCtrl({
+                  keyword: 'OTHER',
+                  color: defaultConfig.otherColor
+                });
+
+                const sub = dialog.open(DialogColorTableComponent, {
+                  data: {
+                    collection: this.collection,
+                    sourceField: this.customControls.dataStep.aggregationField.value,
+                    keywordColors: globalKeysToColortrl.value
+                  } as DialogColorTableData,
+                  autoFocus: false,
+                })
+                  .afterClosed().subscribe((result: Array<KeywordColor>) => {
+                    if (result !== undefined) {
+                      result.forEach((kc: KeywordColor) => {
+                        /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
+                        colorService.updateKeywordColor(kc.keyword, kc.color);
+                        this.addToColorManualValuesCtrl(kc);
+                      });
+                    }
+                    sub.unsubscribe();
+                  });
+              }),
+            marker('A field is required to manage colors'),
+            {
+              optional: true,
+              dependsOn: () => [
+                this.customControls.renderStep.modeColor,
+                this.customControls.dataStep.aggregationField,
+                this.customControls.dataStep.collection,
+              ],
+              onDependencyChange: (control: ButtonFormControl) => {
+                control.enableIf(this.customControls.renderStep.modeColor.value === PROPERTY_SELECTOR_SOURCE.manual &&
+                  !!this.customControls.dataStep.aggregationField.value);
+                control.disabledButton = !this.customControls.renderStep.modeColor.value &&
+                  !this.customControls.dataStep.aggregationField.value;
+              }
+            }),
+          displayFilter: new SlideToggleFormControl(
+            '',
+            marker('Display the filter'),
+            marker('powerbar display filter description')
+          ),
+          showExportCsv: new SlideToggleFormControl(
+            '',
+            marker('export csv powerbars'),
+            marker('export csv powerbars description')
+          )
+        }).withTabName(marker('Render')),
+        unmanagedFields: new FormGroup({}) // for consistency with other widgets form builders
+      });
   }
 
   public customControls = {
     title: this.get('title') as TitleInputFormControl,
     dataStep: {
+      collection: this.get('dataStep').get('collection') as SelectFormControl,
       aggregationField: this.get('dataStep').get('aggregationField') as SelectFormControl,
       aggregationSize: this.get('dataStep').get('aggregationSize') as SliderFormControl,
       metric: this.get('dataStep').get('metric') as MetricCollectFormGroup,
@@ -271,19 +321,16 @@ export class PowerbarFormBuilderService extends WidgetFormBuilder {
     super(collectionService, mainFormService);
   }
 
-  public build(): PowerbarConfigForm {
-    const collectionFieldsObs = this.collectionService.getCollectionFields(
-      this.mainFormService.getCollections()[0]);
+  public build(collection: string): PowerbarConfigForm {
     const formGroup = new PowerbarConfigForm(
-      this.mainFormService.getCollections()[0],
-      this.collectionService.getCollectionFields(
-        this.mainFormService.getCollections()[0]),
+      collection,
+      this.collectionService.getCollectionFields(collection),
       this.mainFormService.commonConfig.getKeysToColorFa(),
       this.defaultValuesService.getDefaultConfig(),
       this.dialog,
       this.collectionService,
       this.colorService,
-      this.metricBuilderService.build(collectionFieldsObs, 'powerbars'));
+      this.metricBuilderService.build(collection, 'powerbars'));
     this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
 
     return formGroup;

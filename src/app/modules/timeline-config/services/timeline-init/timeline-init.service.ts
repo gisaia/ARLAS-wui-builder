@@ -37,7 +37,7 @@ export class TimelineInitService {
 
 
     this.mainFormService.timelineConfig.initGlobalFg(
-      this.timelineGlobalFormBuilder.build()
+      this.timelineGlobalFormBuilder.build(this.mainFormService.getMainCollection())
     );
 
     if (initCollectionTimepath) {
@@ -49,7 +49,7 @@ export class TimelineInitService {
   // init the aggregation field, only when creating a new configuration
   private initCollectionFields() {
 
-    this.collectionService.getDescribe(this.mainFormService.getCollections()[0])
+    this.collectionService.getDescribe(this.mainFormService.getMainCollection())
       .subscribe(collection => {
         if (!!collection.params.timestamp_path) {
           this.mainFormService.timelineConfig.getGlobalFg()

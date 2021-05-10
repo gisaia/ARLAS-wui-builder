@@ -18,7 +18,8 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import {
-  ConfigFormGroup, FieldWithSizeListFormControl, SliderFormControl, SlideToggleFormControl, ButtonFormControl, TitleInputFormControl
+  ConfigFormGroup, FieldWithSizeListFormControl, SliderFormControl, SlideToggleFormControl,
+  ButtonFormControl, TitleInputFormControl, SelectFormControl
 } from '@shared-models/config-form';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { MainFormService } from '@services/main-form/main-form.service';
@@ -32,8 +33,10 @@ import { DefaultConfig, DefaultValuesService } from '@services/default-values/de
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { toKeywordOptionsObs } from '@services/collection-service/tools';
+import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 
-export class DonutConfigForm extends ConfigFormGroup {
+export class DonutConfigForm extends CollectionConfigFormGroup {
 
   constructor(
     collection: string,
@@ -44,105 +47,134 @@ export class DonutConfigForm extends ConfigFormGroup {
     collectionService: CollectionService,
     private colorService: ArlasColorGeneratorLoader
   ) {
-    super({
-      title: new TitleInputFormControl(
-        '',
-        marker('donut title'),
-        marker('donut title description')
-      ),
-      dataStep: new ConfigFormGroup({
-        aggregationmodels: new FieldWithSizeListFormControl(
+    super(
+      collection,
+      {
+        title: new TitleInputFormControl(
           '',
-          '',
-          marker('donut field description'),
-          collectionFields
-        )
-      }).withTabName(marker('Data')),
-      renderStep: new ConfigFormGroup({
-        opacity: new SliderFormControl(
-          '',
-          marker('Opacity'),
-          marker('donut opacity description'),
-          0,
-          1,
-          0.1
+          marker('donut title'),
+          marker('donut title description')
         ),
-        multiselectable: new SlideToggleFormControl(
-          '',
-          marker('Multiselectable'),
-          marker('Donut multiselectable description')
-        ),
-        keysToColorsButton: new ButtonFormControl(
-          '',
-          marker('Manage colors'),
-          marker('Donut manage colors description'),
-          // TODO put in common with powerbar
-          () => collectionService.getTermAggregation(
+        dataStep: new ConfigFormGroup({
+          collection: new SelectFormControl(
             collection,
-            (Array.from(this.customControls.dataStep.aggregationmodels.value)[0] as any).field)
-            .then((keywords: Array<string>) => {
-              keywords.forEach((k: string, index: number) => {
-                this.addToColorManualValuesCtrl({
-                  keyword: k,
-                  color: colorService.getColor(k)
-                }, index);
-              });
-              this.addToColorManualValuesCtrl({
-                keyword: 'OTHER',
-                color: defaultConfig.otherColor
-              });
-
-              const sub: Subscription = dialog.open(DialogColorTableComponent, {
-                data: {
-                  collection,
-                  sourceField: (Array.from(this.customControls.dataStep.aggregationmodels.value)[0] as any).field,
-                  keywordColors: globalKeysToColortrl.value
-                } as DialogColorTableData,
-                autoFocus: false,
-              })
-                .afterClosed().subscribe((result: Array<KeywordColor>) => {
-                  if (result !== undefined) {
-                    globalKeysToColortrl.clear();
-                    result.forEach((kc: KeywordColor) => {
-                      /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
-                      colorService.updateKeywordColor(kc.keyword, kc.color);
-                      this.addToColorManualValuesCtrl(kc);
-                    });
-                  }
-                  sub.unsubscribe();
-                });
-            }),
-          'A field is required to manage colors',
-          {
-            optional: true,
-            dependsOn: () => [
-              this.customControls.dataStep.aggregationmodels,
-            ],
-            onDependencyChange: (control: ButtonFormControl) => {
-              control.disabledButton = !this.customControls.dataStep.aggregationmodels.value
-                || Array.from(this.customControls.dataStep.aggregationmodels.value).length === 0;
+            marker('Collection'),
+            marker('Donut collection description'),
+            false,
+            collectionService.getCollections().map(c => ({ label: c, value: c })),
+            {
+              optional: false,
+              resetDependantsOnChange: true
             }
-        }),
-        showExportCsv: new SlideToggleFormControl(
-          '',
-          marker('export csv donut'),
-          marker('export csv donut description')
-        ),
-      }).withTabName(marker('Render')),
-      unmanagedFields: new FormGroup({
-        renderStep: new FormGroup({
-          customizedCssClass: new FormControl(),
-          diameter: new FormControl(),
-          containerWidth: new FormControl(),
+          ),
+          aggregationmodels: new FieldWithSizeListFormControl(
+            '',
+            '',
+            marker('donut field description'),
+            collectionFields,
+            {
+              dependsOn: () => [
+                this.customControls.dataStep.collection,
+              ],
+              onDependencyChange: (control: FieldWithSizeListFormControl) => {
+                this.setCollection(this.customControls.dataStep.collection.value);
+                toKeywordOptionsObs(collectionService.getCollectionFields(this.collection)).subscribe(fields => {
+                  control.fields = fields;
+                  control.filterAutocomplete();
+                  if (!control.getValueAsSet()) {
+                    control.setValue(new Set());
+                  }
+                });
+              }
+            }
+          )
+        }).withTabName(marker('Data')),
+        renderStep: new ConfigFormGroup({
+          opacity: new SliderFormControl(
+            '',
+            marker('Opacity'),
+            marker('donut opacity description'),
+            0,
+            1,
+            0.1
+          ),
+          multiselectable: new SlideToggleFormControl(
+            '',
+            marker('Multiselectable'),
+            marker('Donut multiselectable description')
+          ),
+          keysToColorsButton: new ButtonFormControl(
+            '',
+            marker('Manage colors'),
+            marker('Donut manage colors description'),
+            // TODO put in common with powerbar
+            () => collectionService.getTermAggregation(
+              this.collection,
+              (Array.from(this.customControls.dataStep.aggregationmodels.value)[0] as any).field)
+              .then((keywords: Array<string>) => {
+                keywords.forEach((k: string, index: number) => {
+                  this.addToColorManualValuesCtrl({
+                    keyword: k,
+                    color: colorService.getColor(k)
+                  }, index);
+                });
+                this.addToColorManualValuesCtrl({
+                  keyword: 'OTHER',
+                  color: defaultConfig.otherColor
+                });
+
+                const sub: Subscription = dialog.open(DialogColorTableComponent, {
+                  data: {
+                    collection: this.collection,
+                    sourceField: (Array.from(this.customControls.dataStep.aggregationmodels.value)[0] as any).field,
+                    keywordColors: globalKeysToColortrl.value
+                  } as DialogColorTableData,
+                  autoFocus: false,
+                })
+                  .afterClosed().subscribe((result: Array<KeywordColor>) => {
+                    if (result !== undefined) {
+                      globalKeysToColortrl.clear();
+                      result.forEach((kc: KeywordColor) => {
+                        /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
+                        colorService.updateKeywordColor(kc.keyword, kc.color);
+                        this.addToColorManualValuesCtrl(kc);
+                      });
+                    }
+                    sub.unsubscribe();
+                  });
+              }),
+            'A field is required to manage colors',
+            {
+              optional: true,
+              dependsOn: () => [
+                this.customControls.dataStep.aggregationmodels,
+              ],
+              onDependencyChange: (control: ButtonFormControl) => {
+                control.disabledButton = !this.customControls.dataStep.aggregationmodels.value
+                  || Array.from(this.customControls.dataStep.aggregationmodels.value).length === 0;
+              }
+            }),
+          showExportCsv: new SlideToggleFormControl(
+            '',
+            marker('export csv donut'),
+            marker('export csv donut description')
+          ),
+        }).withTabName(marker('Render')),
+        unmanagedFields: new FormGroup({
+          renderStep: new FormGroup({
+            customizedCssClass: new FormControl(),
+            diameter: new FormControl(),
+            containerWidth: new FormControl(),
+          })
         })
-      })
-    });
+      });
   }
 
   public customControls = {
     title: this.get('title') as TitleInputFormControl,
     dataStep: {
-      aggregationmodels: this.get('dataStep').get('aggregationmodels') as FieldWithSizeListFormControl,
+      collection: this.get('dataStep').get('collection') as SelectFormControl,
+      aggregationmodels: this.get('dataStep').get('aggregationmodels') as FieldWithSizeListFormControl
     },
     renderStep: {
       opacity: this.get('renderStep').get('opacity') as SliderFormControl,
@@ -193,11 +225,10 @@ export class DonutFormBuilderService extends WidgetFormBuilder {
     super(collectionService, mainFormService);
   }
 
-  public build() {
+  public build(collection: string) {
     const formGroup = new DonutConfigForm(
-      this.mainFormService.getCollections()[0],
-      this.collectionService.getCollectionFields(
-        this.mainFormService.getCollections()[0]),
+      collection,
+      this.collectionService.getCollectionFields(collection),
       this.mainFormService.commonConfig.getKeysToColorFa(),
       this.defaultValuesService.getDefaultConfig(),
       this.dialog,

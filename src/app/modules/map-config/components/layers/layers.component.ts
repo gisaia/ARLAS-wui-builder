@@ -41,6 +41,7 @@ import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfig
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
 import { Subscription } from 'rxjs';
 import { PreviewComponent } from '../preview/preview.component';
+import { MapContributor } from 'arlas-web-contributors';
 
 export interface Layer {
   id: string;
@@ -87,7 +88,8 @@ export class LayersComponent implements OnInit, OnDestroy {
     this.layersFa.value.map(layer => {
       const modeValues = layer.mode === LAYER_MODE.features ? layer.featuresFg :
         (layer.mode === LAYER_MODE.featureMetric ? layer.featureMetricFg : layer.clusterFg);
-      const paint = ConfigMapExportHelper.getLayerPaint(modeValues, layer.mode, this.colorService, this.collectionService.taggableFields);
+      const taggableFields = this.collectionService.taggableFieldsMap.get(layer.collection);
+      const paint = ConfigMapExportHelper.getLayerPaint(modeValues, layer.mode, this.colorService, taggableFields);
       this.layerLegend.set(
         layer.arlasId + '#' + layer.mode,
         { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint) }
@@ -188,24 +190,25 @@ export class LayersComponent implements OnInit, OnDestroy {
       vs.layers = ls;
     });
     /** we now should build a new layer form group for the new one  */
-    const newLayerFg = this.mapLayerFormBuilder.buildLayer();
+    const newLayerFg = this.mapLayerFormBuilder.buildLayer(layerFg.customControls.collection.value);
     /** the easiest way I found is to export the original layer and then re-import it in order to initialize correctly
      * all the subcontrols of the layer fg
      */
     const layerSource = ConfigExportHelper.getLayerSourceConfig(layerFg);
     layerSource.id = newId;
     layerSource.name = layerFg.customControls.name.value + ' copy';
-    const layer = ConfigMapExportHelper.getLayer(layerFg, this.colorService, this.collectionService.taggableFields);
+    const taggableFields = this.collectionService.taggableFieldsMap.get(layerFg.customControls.collection.value);
+    const layer = ConfigMapExportHelper.getLayer(layerFg, this.colorService, taggableFields);
     layer.id = newId;
     const filtersFa: FormArray = new FormArray([], []);
-    this.mapImportService.importMapFilters(layerSource, filtersFa);
+    this.mapImportService.importMapFilters(layerSource, filtersFa, layerFg.customControls.collection.value);
     MapImportService.importLayerFg(layer, layerSource,
-      this.mainFormService.getCollections()[0], layerId + 1, visualisationSetValue, newLayerFg, filtersFa);
+      this.mainFormService.getMainCollection(), layerId + 1, visualisationSetValue, newLayerFg, filtersFa);
     const modeValues = newLayerFg.customControls.mode.value === LAYER_MODE.features ? newLayerFg.customControls.featuresFg.value :
       (newLayerFg.customControls.mode.value === LAYER_MODE.featureMetric ?
         newLayerFg.customControls.featureMetricFg.value : newLayerFg.customControls.clusterFg.value);
     const paint = ConfigMapExportHelper.getLayerPaint(modeValues,
-      newLayerFg.customControls.mode.value, this.colorService, this.collectionService.taggableFields);
+      newLayerFg.customControls.mode.value, this.colorService, taggableFields);
     /** Add the duplicated layer to legend set in order to have the icon */
     this.layerLegend.set(
       newId + '#' + newLayerFg.customControls.mode.value,
@@ -228,7 +231,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     this.ngOnInit();
   }
 
-  public preview(layerId: number, arlasId: string): void {
+  public preview(layerId: number, arlasId: string, collection: string): void {
     // Get contributor conf part for this layer
     const formGroupIndex = (this.layersFa.value as any[]).findIndex(el => el.id === layerId);
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
@@ -236,25 +239,28 @@ export class LayersComponent implements OnInit, OnDestroy {
     const mapConfigVisualisations = this.mainFormService.mapConfig.getVisualisationsFa();
     const mapConfigBasemaps = this.mainFormService.mapConfig.getBasemapsFg();
     // Get config.map part for this layer
-    const configMap = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFields);
+    const configMap = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFieldsMap);
     // Get contributor config for this layer
-    const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers);
+    const mapContribConfigs = ConfigExportHelper.getMapContributors(mapConfigGlobal, mapConfigLayers,
+      this.mainFormService.getMainCollection(), this.collectionService);
     // Add contributor part in arlasConfigService
     // Add web contributors in config if not exist
     const currentConfig = this.startupService.getConfigWithInitContrib();
-    // update arlasConfigService with layer info
-    // Create mapcontributor
-    const mapContributor = currentConfig.arlas.web.contributors.find(c => c.type === 'map');
-    if (mapContributor) {
-      currentConfig.arlas.web.contributors.splice(currentConfig.arlas.web.contributors.indexOf(mapContributor), 1);
-    }
-    currentConfig.arlas.web.contributors.push(contribConfig);
+    // clear mapcontributors configs
+    currentConfig.arlas.web.contributors = currentConfig.arlas.web.contributors.filter(c => c.type !== 'map');
+    // add mapcontributors configs
+    currentConfig.arlas.web.contributors = currentConfig.arlas.web.contributors.concat(mapContribConfigs);
     this.configService.setConfig(currentConfig);
-    const contributor = ContributorBuilder.buildContributor('map',
-      'mapbox',
-      this.configService,
-      this.collaborativesearchService,
-      this.colorService);
+    const contributors: MapContributor[] = [];
+
+    mapContribConfigs.forEach(mapConfig => {
+      const mapContributor = ContributorBuilder.buildContributor('map',
+        mapConfig.identifier,
+        this.configService,
+        this.collaborativesearchService,
+        this.colorService);
+      contributors.push(mapContributor);
+    });
     const mapComponentConfigValue = ConfigExportHelper.getMapComponent(mapConfigGlobal, mapConfigLayers,
       mapConfigVisualisations, mapConfigBasemaps, arlasId, true);
     mapComponentConfigValue.input.mapLayers.layers = configMap.layers;
@@ -263,10 +269,11 @@ export class LayersComponent implements OnInit, OnDestroy {
       width: '80%',
       height: '80%',
       data: {
-        mapglContributor: contributor,
+        mapglContributors: contributors,
         mapComponentConfig: mapComponentConfigValue
       }
     });
+
     this.previewSub = dialogRef.afterClosed().subscribe(() => {
       // TODO Clean ArlasConfigService
       this.collaborativesearchService.registry.clear();
@@ -296,19 +303,28 @@ export class LayersComponent implements OnInit, OnDestroy {
           visualisationSetValue[0].layers.push(newId);
         }
 
-        const mapContrib = config.arlas.web.contributors.find(c => c.identifier === 'mapbox');
-        const layersSources = mapContrib.layers_sources;
+        const mapContribs = config.arlas.web.contributors.filter(c => c.type === 'map');
+        let layersSources = [];
+        let collection;
+        mapContribs.forEach(mapContrib => {
+          layersSources = layersSources.concat(mapContrib.layers_sources);
+          if (!collection) {
+            const layerContributor = mapContrib.layers_sources.find(ls => ls.id === layer.id);
+            if (!!layerContributor) {
+              collection = mapContrib.collection;
+            }
+          }
+        });
         const visualisationSets: Array<VisualisationSetConfig> = config.arlas.web.components.mapgl.input.visualisations_sets;
-
-        let layerFg = this.mapLayerFormBuilder.buildLayer();
-        const layerSource = layersSources.find(s => s.id === layer.id);
+        let layerFg = this.mapLayerFormBuilder.buildLayer(collection);
+        const layerSource = Object.assign({}, layersSources.find(s => s.id === layer.id));
         layerSource.id = newId;
         const filtersFa: FormArray = new FormArray([], []);
-        this.mapImportService.importMapFilters(layerSource, filtersFa);
+        this.mapImportService.importMapFilters(layerSource, filtersFa, collection);
         layerFg = MapImportService.importLayerFg(
           layer,
           layerSource,
-          this.mainFormService.getCollections()[0],
+          collection,
           this.mainFormService.mapConfig.getLayersFa().length + 1,
           visualisationSets,
           layerFg,
@@ -317,8 +333,9 @@ export class LayersComponent implements OnInit, OnDestroy {
         const modeValues = layerFg.customControls.mode.value === LAYER_MODE.features ? layerFg.customControls.featuresFg.value :
           (layerFg.customControls.mode.value === LAYER_MODE.featureMetric ?
             layerFg.customControls.featureMetricFg.value : layerFg.customControls.clusterFg.value);
+        const taggableFields = this.collectionService.taggableFieldsMap.get(layerFg.customControls.collection.value);
         const paint = ConfigMapExportHelper.getLayerPaint(modeValues,
-          layerFg.customControls.mode.value, this.colorService, this.collectionService.taggableFields);
+          layerFg.customControls.mode.value, this.colorService, taggableFields);
 
         /** Add the duplicated layer to legend set in order to have the icon */
         this.layerLegend.set(
@@ -332,6 +349,7 @@ export class LayersComponent implements OnInit, OnDestroy {
 
         // Add the layer to the list
         this.mainFormService.mapConfig.getLayersFa().push(layerFg);
+        this.ngOnInit();
       }
     });
   }

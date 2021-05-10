@@ -70,17 +70,16 @@
             <app-config-element *ngIf="isServerReady">
                 <div form-fields class="collection">
                     <mat-form-field>
-                        <mat-label>{{'Collections' | translate}}</mat-label>
-                        <mat-select formControlName="collections" multiple>
+                        <mat-label>{{'Main collection' | translate}}</mat-label>
+                        <mat-select formControlName="collection">
                             <mat-option *ngFor="let collection of availablesCollections" value="{{collection}}">
-                                {{ collection}}
+                                {{collection}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div description>
-                    {{'Choose collections available in dashboard.' | translate}}
-                    {{'Only one for now' | translate}}.
+                    {{'Choose main collection' | translate}}
                 </div>
             </app-config-element>
         </div>

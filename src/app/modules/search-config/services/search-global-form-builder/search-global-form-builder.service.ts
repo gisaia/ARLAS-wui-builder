@@ -93,7 +93,7 @@ export class SearchGlobalFormBuilderService {
 
   public build() {
     const collectionFields = this.collectionService
-      .getCollectionFields(this.mainFormService.getCollections()[0]);
+      .getCollectionFields(this.mainFormService.getMainCollection());
 
     const globalFg = new SearchGlobalFormGroup(
       toTextOptionsObs(collectionFields),

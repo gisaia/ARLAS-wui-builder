@@ -1,14 +1,14 @@
-<arlas-mapgl #map [dataSources]="mapglContributor?.dataSources" [redrawSource]="mapglContributor?.redrawSource"
+<arlas-mapgl #map [dataSources]="mapDataSources" [redrawSource]="mapRedrawSources"
   [defaultBasemapStyle]="mapComponentConfig?.defaultBasemapStyle" [basemapStyles]="mapComponentConfig?.basemapStyles"
   [margePanForLoad]="mapComponentConfig?.margePanForLoad" [margePanForTest]="mapComponentConfig?.margePanForTest"
-  [initCenter]="mapComponentConfig?.initCenter" [drawData]="mapglContributor?.geojsondraw"
+  [initCenter]="mapComponentConfig?.initCenter" [drawData]="mainMapContributor?.geojsondraw"
   [initCenter]="mapComponentConfig?.initCenter" [initZoom]="mapComponentConfig?.initZoom"
   [minZoom]="mapComponentConfig?.minZoom" [maxZoom]="mapComponentConfig?.maxZoom" [displayScale]="true"
   [maxWidthScale]="mapComponentConfig?.maxWidthScale" [idFeatureField]="mapComponentConfig?.idFieldName"
   [mapLayers]="mapComponentConfig?.mapLayers" [mapSources]="mapComponentConfig?.mapSources"
   [displayLayerSwitcher]="false" [drawButtonEnabled]="false"
-  [visualisationSetsConfig]="mapComponentConfig?.visualisations_sets" [legendUpdater]="mapglContributor?.legendUpdater"
-  [visibilityUpdater]="mapglContributor?.visibilityUpdater"
-  (visualisations)="mapglContributor.changeVisualisation($event)" (onAoiChanged)="mapglContributor?.onChangeAoi($event)"
-  (onMove)="mapglContributor?.onMove($event)">
+  [visualisationSetsConfig]="mapComponentConfig?.visualisations_sets" [legendUpdater]="mapLegendUpdater"
+  [visibilityUpdater]="mapVisibilityUpdater"
+  (visualisations)="changeVisualisation($event)" (onAoiChanged)="onChangeAoi($event)"
+  (onMove)="onMove($event)">
 </arlas-mapgl>

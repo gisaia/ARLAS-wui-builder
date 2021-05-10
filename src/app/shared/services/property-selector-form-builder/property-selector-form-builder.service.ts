@@ -43,8 +43,9 @@ import { DialogPaletteSelectorComponent } from '@map-config/components/dialog-pa
 import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { valuesToOptions } from '@utils/tools';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 
-export class PropertySelectorFormGroup extends ConfigFormGroup {
+export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
   constructor(
     defaultConfig: DefaultConfig,
     dialog: MatDialog,
@@ -59,7 +60,9 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
     description?: string,
     geometryTypeControl?: () => SelectFormControl
   ) {
-    super({
+    super(
+      collection,
+      {
       propertySource: new SelectFormControl(
         '',
         propertyName.charAt(0).toUpperCase() + propertyName.slice(1),
@@ -181,7 +184,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
           marker('Manage colors description'),
           () => dialog.open(DialogColorTableComponent, {
             data: {
-              collection,
+              collection: this.collection,
               sourceField: this.customControls.propertyManualFg.propertyManualFieldCtrl.value,
               keywordColors: this.customControls.propertyManualFg.propertyManualValuesCtrl.value
             } as DialogColorTableData,
@@ -212,7 +215,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                */
               this.customControls.propertyManualFg.propertyManualValuesCtrl.clear();
               if (!!field) {
-                collectionService.getTermAggregation(collection, field).then((keywords: Array<string>) => {
+                collectionService.getTermAggregation(this.collection, field).then((keywords: Array<string>) => {
                   const existingKeywords =
                     (this.customControls.propertyManualFg.propertyManualValuesCtrl.value as Array<KeywordColor>)
                       .map(v => v.keyword);
@@ -268,9 +271,13 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
           'undefined',
           {
             dependsOn: () => [this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl],
-            onDependencyChange: (control) =>
-              collectionService.countNbDocuments().subscribe(
-                count => control.setValue(count.totalnb))
+            onDependencyChange: (control) => {
+                if (!!this.collection) {
+                  collectionService.countNbDocuments(this.collection).subscribe(
+                    count => control.setValue(count.totalnb)
+                  );
+                }
+              }
           }
         ),
         propertyInterpolatedMetricCtrl: new SelectFormControl(
@@ -384,7 +391,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                   control.setValue(+allValuesCtr.value[0].proportion);
                 } else {
                   collectionService.getComputationMetric(
-                    collection,
+                    this.collection,
                     this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value,
                     METRIC_TYPES.MIN)
                     .then(min =>
@@ -424,7 +431,7 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                   control.setValue(+allValuesCtr.value[allValuesCtr.value.length - 1].proportion);
                 } else {
                   collectionService.getComputationMetric(
-                    collection,
+                    this.collection,
                     this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value,
                     metric)
                     .then(sum =>
@@ -480,10 +487,10 @@ export class PropertySelectorFormGroup extends ConfigFormGroup {
                   +control.value[control.value.length - 1].value !== maxInterpolatedValue) {
                   control.setValue(
                     [...Array(6).keys()].map(k =>
-                    ({
-                      proportion: minValue + (maxValue - minValue) * k / 5,
-                      value: minInterpolatedValue + (maxInterpolatedValue - minInterpolatedValue) * k / 5
-                    })
+                      ({
+                        proportion: minValue + (maxValue - minValue) * k / 5,
+                        value: minInterpolatedValue + (maxInterpolatedValue - minInterpolatedValue) * k / 5
+                      })
                     )
                   );
                 }
@@ -719,8 +726,7 @@ export class PropertySelectorFormBuilderService {
     private defaultValuesService: DefaultValuesService,
     private dialog: MatDialog,
     private collectionService: CollectionService,
-    private colorService: ArlasColorGeneratorLoader,
-    private mainFormService: MainFormService
+    private colorService: ArlasColorGeneratorLoader
   ) { }
 
   public build(
@@ -728,6 +734,7 @@ export class PropertySelectorFormBuilderService {
     propertyName: string,
     sources: Array<PROPERTY_SELECTOR_SOURCE>,
     isAggregated: boolean,
+    collection: string,
     description?: string,
     geometryTypeControl?: () => SelectFormControl) {
 
@@ -736,8 +743,8 @@ export class PropertySelectorFormBuilderService {
       this.dialog,
       this.collectionService,
       this.colorService,
-      this.mainFormService.getCollections()[0],
-      this.collectionService.getCollectionFields(this.mainFormService.getCollections()[0]),
+      collection,
+      this.collectionService.getCollectionFields(collection),
       propertyType,
       propertyName,
       sources,

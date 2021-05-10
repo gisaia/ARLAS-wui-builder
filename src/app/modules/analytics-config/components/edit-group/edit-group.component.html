@@ -51,7 +51,7 @@
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #menuEditWidget="matMenu">
-                            <button mat-menu-item (click)="editWidget(ci)">
+                            <button mat-menu-item (click)="editWidget(ci, content.controls[ci].value.widgetData?.dataStep?.collection)">
                                 <mat-icon>edit</mat-icon>
                                 <span>{{'Edit' | translate}}</span>
                             </button>

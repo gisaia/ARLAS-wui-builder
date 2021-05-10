@@ -125,7 +125,9 @@
             "clusterFg": {
                 "geometryStep": {
                     "geometry": "",
-                    "granularity": "Coarse"
+                    "granularity": "Medium",
+                    "clusterGeometryType": "aggregated_geometry",
+                    "aggregatedGeometry": "geohash"
                 },
                 "visibilityStep": {
                     "visible": true,
@@ -140,6 +142,7 @@
                         "propertyFix": 0.7
                     },
                     "colorFg": {
+                        "propertySource": "Fix",
                         "propertyFix": "#abcdef"
                     },
                     "radiusFg": {
@@ -351,6 +354,12 @@
                 "dataStep": {
                     "termAggregation": {
                         "termAggregationSize": 5
+                    },
+                    "aggregation": {
+                        "aggregationBucketsNumber": 50
+                    },
+                    "metric": {
+                        "metricCollectFunction": "Count"
                     },
                     "useUtc":true
                 },

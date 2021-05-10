@@ -113,6 +113,7 @@ export interface ServerConfig {
 export interface ContributorConfig {
     type: string;
     identifier: string;
+    collection: string;
     geo_query_op?: string;
     geo_query_field?: string;
     layers_sources?: Array<LayerSourceConfig>;

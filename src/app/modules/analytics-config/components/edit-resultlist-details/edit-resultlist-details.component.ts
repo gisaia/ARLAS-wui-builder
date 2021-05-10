@@ -23,6 +23,7 @@ import {
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
+import { SelectFormControl } from '@shared-models/config-form';
 
 @Component({
   selector: 'app-edit-resultlist-details',
@@ -32,12 +33,18 @@ import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 export class EditResultlistDetailsComponent implements OnInit {
 
   @Input() public control: FormArray;
+  @Input() public collection: SelectFormControl;
 
   constructor(
     private resultlistFormBuilder: ResultlistFormBuilderService
   ) { }
 
   public ngOnInit() {
+    if (!!this.collection) {
+      this.collection.valueChanges.subscribe(c => {
+        (this.control as FormArray).clear();
+      });
+    }
   }
 
   public addDetail() {
@@ -54,7 +61,7 @@ export class EditResultlistDetailsComponent implements OnInit {
 
   public addField(detailIndex: number) {
     this.getDetail(detailIndex).customControls.fields.push(
-      this.resultlistFormBuilder.buildDetailField());
+      this.resultlistFormBuilder.buildDetailField(this.collection.value));
   }
 
   public get details() {

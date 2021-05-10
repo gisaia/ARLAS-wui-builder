@@ -137,9 +137,10 @@ export class MainFormManagerService {
       lookAndFeelConfigGlobal,
       analyticsConfigList,
       this.colorService,
+      this.collectionService
     );
 
-    const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFields);
+    const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFieldsMap);
 
     const confToValidate: any = JSON.parse(JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
       generatedMapConfig.layers
@@ -197,7 +198,6 @@ export class MainFormManagerService {
   }
 
   public doImport(config: Config, mapConfig: MapConfig) {
-
     const startingConfigControls = this.mainFormService.startingConfig.getFg().customControls;
     importElements([
       {
@@ -205,8 +205,8 @@ export class MainFormManagerService {
         control: startingConfigControls.serverUrl
       },
       {
-        value: [config.arlas.server.collection.name],
-        control: startingConfigControls.collections
+        value: config.arlas.server.collection.name,
+        control: startingConfigControls.collection
       },
       {
         value: config.arlas.web.colorGenerator,
@@ -227,7 +227,7 @@ export class MainFormManagerService {
     ]);
 
     this.initMainModulesForms(false);
-    this.startupService.setCollection(config.arlas.server.collection.name);
+    this.startupService.setDefaultCollection(config.arlas.server.collection.name);
 
     this.mapImportService.doImport(config, mapConfig);
     this.timelineImportService.doImport(config);

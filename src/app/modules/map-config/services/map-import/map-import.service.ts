@@ -242,6 +242,10 @@ export class MapImportService {
         control: layerFg.customControls.arlasId
       },
       {
+        value: collectionName,
+        control: layerFg.customControls.collection
+      },
+      {
         value: layerSource.name,
         control: layerFg.customControls.name
       },
@@ -269,9 +273,6 @@ export class MapImportService {
     const minzoom = !!layer.minzoom ? layer.minzoom : (!!layerSource.minzoom ? layerSource.minzoom : 0);
     const maxzoom = !!layer.maxzoom ? layer.maxzoom : (!!layerSource.maxzoom ? layerSource.maxzoom : 22);
     const values: any = {
-      collectionStep: {
-        collection: collectionName
-      },
       geometryStep: {
       },
       visibilityStep: {
@@ -417,28 +418,36 @@ export class MapImportService {
 
   public doImport(config: Config, mapConfig: MapConfig) {
     const mapgl = config.arlas.web.components.mapgl;
-    const mapContrib = config.arlas.web.contributors.find(c => c.identifier === 'mapbox');
-    const layersSources = mapContrib.layers_sources;
+    const visualisationSets: Array<VisualisationSetConfig> = mapgl.input.visualisations_sets;
+    const basemaps: BasemapStyle[] = mapgl.input.basemapStyles;
+    const defaultBasemap: BasemapStyle = mapgl.input.defaultBasemapStyle;
+    const defaultCollection = config.arlas.server.collection.name;
+
+    let defaultMapContributor = config.arlas.web.contributors.find(c => c.type === 'map' &&
+      (c.collection === defaultCollection || !c.collection));
+    if (!defaultMapContributor) {
+      /** if there is no map contributor that has the default collection, we take the first map contributor
+       * this is unlikely to happen as with the builder we will always create a map contributor that has the default collection
+       * it's just precaution in case we load a config file that doesn't respect this condition
+       */
+      defaultMapContributor = config.arlas.web.contributors.find(c => c.type === 'map');
+    }
+    this.importMapGlobal(mapgl, defaultMapContributor, defaultCollection);
+
+    const mapContributors = config.arlas.web.contributors.filter(c => c.type === 'map');
     const layers = mapConfig.layers
-      .filter(ls => !ls.id.startsWith(HOVER_LAYER_PREFIX))
-      .filter(ls => !ls.id.startsWith(SELECT_LAYER_PREFIX));
-
-    const visualisationSets: Array<VisualisationSetConfig> = config.arlas.web.components.mapgl.input.visualisations_sets;
-
-    const basemaps: BasemapStyle[] = config.arlas.web.components.mapgl.input.basemapStyles;
-    const defaultBasemap: BasemapStyle = config.arlas.web.components.mapgl.input.defaultBasemapStyle;
-
-    const collectionName = config.arlas.server.collection.name;
+      .filter(ls => !ls.id.startsWith(HOVER_LAYER_PREFIX) && !ls.id.startsWith(SELECT_LAYER_PREFIX));
     let layerId = 0;
-
-    this.importMapGlobal(mapgl, mapContrib, collectionName);
-
-    layers.forEach(layer => {
-      const layerSource = layersSources.find(s => s.id === layer.id);
-      const layerFg = this.importLayer(layer, layerSource, collectionName, layerId++, visualisationSets);
-      this.mainFormService.mapConfig.getLayersFa().push(layerFg);
+    mapContributors.forEach(mapCont => {
+      if (!mapCont.collection) {
+        mapCont.collection = defaultCollection;
+      }
+      mapCont.layers_sources.forEach(ls => {
+        const layer = layers.find(l => l.id === ls.id);
+        const layerFg = this.importLayer(layer, ls, mapCont.collection, layerId++, visualisationSets);
+        this.mainFormService.mapConfig.getLayersFa().push(layerFg);
+      });
     });
-
     let visuId = 0;
     visualisationSets.forEach(vs => {
       const visualisationFg = this.importVisualisations(vs, visuId++);
@@ -570,11 +579,11 @@ export class MapImportService {
     return visualisationFg;
   }
 
-  public importMapFilters(layerSource: LayerSourceConfig, filtersFa: FormArray) {
+  public importMapFilters(layerSource: LayerSourceConfig, filtersFa: FormArray, collection: string) {
     let i = 0;
     if (!!layerSource.filters) {
       layerSource.filters.forEach(f => {
-        const mapFilterFg = this.mapLayerFormBuilder.buildMapFilter();
+        const mapFilterFg = this.mapLayerFormBuilder.buildMapFilter(collection);
         importElements([
           {
             value: { value: f.field },
@@ -628,9 +637,9 @@ export class MapImportService {
     collectionName: string,
     layerId: number,
     visualisationSets: Array<VisualisationSetConfig>) {
-    const layerFg = this.mapLayerFormBuilder.buildLayer();
+    const layerFg = this.mapLayerFormBuilder.buildLayer(collectionName);
     const filtersFa: FormArray = new FormArray([]);
-    this.importMapFilters(layerSource, filtersFa);
+    this.importMapFilters(layerSource, filtersFa, collectionName);
     return MapImportService.importLayerFg(layer, layerSource, collectionName, layerId, visualisationSets, layerFg, filtersFa);
   }
 

@@ -34,8 +34,10 @@ import {
   MetricCollectFormBuilderService, MetricCollectFormGroup
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { Observable } from 'rxjs';
-import { toKeywordOptionsObs, toIntegerOrDateFieldsObs } from '@services/collection-service/tools';
+import { toKeywordOptionsObs, toIntegerOrDateFieldsObs, toOptionsObs, NUMERIC_OR_DATE_TYPES } from '@services/collection-service/tools';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { CollectionField } from '@services/collection-service/models';
+import { Metric } from 'arlas-api';
 
 export enum SWIMLANE_REPRESENTATION {
   GLOBALLY = 'global',
@@ -48,6 +50,8 @@ enum DateFormats {
 export class SwimlaneFormGroup extends ConfigFormGroup {
 
   constructor(
+    collection: string,
+    collectionService: CollectionService,
     dateAggregationFg: BucketsIntervalFormGroup,
     metricFg: MetricCollectFormGroup,
     defaultConfig: DefaultConfig,
@@ -61,13 +65,34 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
           marker('swimlane title description')
         ),
         dataStep: new ConfigFormGroup({
+          collection: new SelectFormControl(
+            collection,
+            marker('Collection'),
+            marker('Swimlane collection description'),
+            false,
+            collectionService.getCollections().map(c => ({ label: c, value: c })),
+            {
+              optional: false,
+              resetDependantsOnChange: true
+            }
+          ),
           termAggregation: new ConfigFormGroup({
             termAggregationField: new SelectFormControl(
               '',
               marker('Term field'),
               marker('Term field description'),
               true,
-              keywordsFieldsObs),
+              keywordsFieldsObs,
+              {
+                dependsOn: () => [
+                  this.customControls.dataStep.collection,
+                ],
+                onDependencyChange: (control: SelectFormControl) => {
+                  toKeywordOptionsObs(collectionService.getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(f => {
+                    control.setSyncOptions(f);
+                  });
+                }
+              }),
             termAggregationSize: new SliderFormControl(
               '',
               marker('Term size'),
@@ -76,7 +101,15 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
               10,
               1)
           }).withTitle(marker('Term aggregation')),
-          aggregation: dateAggregationFg,
+          aggregation: dateAggregationFg.withDependsOn(() => [this.customControls.dataStep.collection]).withOnDependencyChange(
+            (control) => {
+              dateAggregationFg.setCollection(this.customControls.dataStep.collection.value);
+              toOptionsObs(toIntegerOrDateFieldsObs(collectionService
+                .getCollectionFields(this.customControls.dataStep.collection.value))).subscribe(collectionFields => {
+                  dateAggregationFg.customControls.aggregationField.setSyncOptions(collectionFields);
+                });
+            }
+          ),
           useUtc: new SlideToggleFormControl(
             '',
             marker('Use UTC time Zone to display date?'),
@@ -88,7 +121,23 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
                 control.enableIf(this.customControls.dataStep.aggregation.value.aggregationFieldType === 'time')
             }
           ),
-          metric: metricFg
+          metric: metricFg.withDependsOn(() => [this.customControls.dataStep.collection]).withOnDependencyChange(
+            (control) => {
+              metricFg.setCollection(this.customControls.dataStep.collection.value);
+              const filterCallback = (field: CollectionField) =>
+              metricFg.customControls.metricCollectFunction.value === Metric.CollectFctEnum.CARDINALITY ?
+                field : NUMERIC_OR_DATE_TYPES.indexOf(field.type) >= 0;
+              collectionService.getCollectionFields(this.customControls.dataStep.collection.value).subscribe(
+                fields => {
+                  metricFg.customControls.metricCollectField.setSyncOptions(
+                    fields
+                      .filter(filterCallback)
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map(f => ({ value: f.name, label: f.name, enabled: f.indexed })));
+                }
+              );
+              // metricFg.customControls.metricCollectField.setSyncOptions()
+            })
         }).withTabName(marker('Data')),
         renderStep: new ConfigFormGroup({
           swimlaneMode: new SelectFormControl(
@@ -190,6 +239,7 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
   public customControls = {
     title: this.get('title') as TitleInputFormControl,
     dataStep: {
+      collection: this.get('dataStep').get('collection') as SelectFormControl,
       aggregation: this.get('dataStep').get('aggregation') as BucketsIntervalFormGroup,
       useUtc: this.get('dataStep').get('useUtc') as SliderFormControl,
       termAggregation: {
@@ -257,23 +307,20 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
     super(collectionService, mainFormService);
   }
 
-  public build() {
-
-    const collectionFieldsObs = this.collectionService.getCollectionFields(
-      this.mainFormService.getCollections()[0]);
-
+  public build(collection: string) {
+    const collectionFieldsObs = this.collectionService.getCollectionFields(collection);
     const formGroup = new SwimlaneFormGroup(
+      collection,
+      this.collectionService,
       this.bucketsIntervalBuilderService
-        .build(toIntegerOrDateFieldsObs(collectionFieldsObs), 'swimlane')
+        .build(collection, 'swimlane')
         .withTitle(marker('swimlane x-axis')),
       this.metricBuilderService
-        .build(collectionFieldsObs, 'swimlane')
+        .build(collection, 'swimlane')
         .withTitle(marker('swimlane metric')),
       this.defaultValuesService.getDefaultConfig(),
       toKeywordOptionsObs(collectionFieldsObs));
-
     this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
-
     return formGroup;
   }
 

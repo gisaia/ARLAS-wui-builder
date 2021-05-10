@@ -28,10 +28,10 @@ import { ConfigExportHelper } from '@services/main-form-manager/config-export-he
 import { StartupService } from '@services/startup/startup.service';
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { Subscription } from 'rxjs';
+import { Subscription, merge } from 'rxjs';
 
 export interface MapglComponentInput {
-  mapglContributor: MapContributor;
+  mapglContributors: MapContributor[];
   mapComponentConfig: any;
 }
 
@@ -43,10 +43,15 @@ export interface MapglComponentInput {
 export class PreviewComponent implements AfterViewInit, OnDestroy {
 
   @Input() public mapComponentConfig: any;
-  @Input() public mapglContributor: MapContributor;
+  @Input() public mapglContributors: MapContributor[] = [];
   @ViewChild('map', { static: false }) public mapglComponent: MapglComponent;
 
   private onMapLoadSub: Subscription;
+  public mapDataSources;
+  public mapRedrawSources;
+  public mapLegendUpdater;
+  public mapVisibilityUpdater;
+  public mainMapContributor;
 
   constructor(
     protected mainFormService: MainFormService,
@@ -58,8 +63,8 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public dataMap: MapglComponentInput
   ) {
-    if (this.dataMap.mapglContributor !== undefined || this.dataMap.mapComponentConfig !== undefined) {
-      this.mapglContributor = dataMap.mapglContributor;
+    if (this.dataMap.mapglContributors !== undefined || this.dataMap.mapComponentConfig !== undefined) {
+      this.mapglContributors = dataMap.mapglContributors;
       this.mapComponentConfig = dataMap.mapComponentConfig.input;
     } else {
       // Get contributor conf part for this layer
@@ -69,24 +74,27 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       const mapConfigBasemaps = this.mainFormService.mapConfig.getBasemapsFg();
       // Get contributor config for this layer
       // Get config.map part for this layer
-      const configMap = ConfigMapExportHelper.process(mapConfigLayers, colorService, this.collectionService.taggableFields);
-      const contribConfig = ConfigExportHelper.getMapContributor(mapConfigGlobal, mapConfigLayers);
+      const configMap = ConfigMapExportHelper.process(mapConfigLayers, colorService, this.collectionService.taggableFieldsMap);
+      const mapContribConfigs = ConfigExportHelper.getMapContributors(mapConfigGlobal, mapConfigLayers,
+        this.mainFormService.getMainCollection(), collectionService);
       // Add contributor part in arlasConfigService
       // Add web contributors in config if not exist
       const currentConfig = this.startupService.getConfigWithInitContrib();
-      // update arlasConfigService with layer info
-      // Create mapcontributor
-      const mapContributor = currentConfig.arlas.web.contributors.find(c => c.type === 'map');
-      if (mapContributor) {
-        currentConfig.arlas.web.contributors.splice(currentConfig.arlas.web.contributors.indexOf(mapContributor), 1);
-      }
-      currentConfig.arlas.web.contributors.push(contribConfig);
+      // clear mapcontributors configs
+      currentConfig.arlas.web.contributors = currentConfig.arlas.web.contributors.filter(c => c.type !== 'map');
+      // add mapcontributors configs
+      currentConfig.arlas.web.contributors = currentConfig.arlas.web.contributors.concat(mapContribConfigs);
       this.configService.setConfig(currentConfig);
-      const contributor = ContributorBuilder.buildContributor('map',
-        'mapbox',
-        this.configService,
-        this.collaborativeService,
-        this.colorService);
+      const contributors: MapContributor[] = [];
+
+      mapContribConfigs.forEach(mapConfig => {
+        const mapContributor = ContributorBuilder.buildContributor('map',
+          mapConfig.identifier,
+          this.configService,
+          this.collaborativeService,
+          this.colorService);
+        contributors.push(mapContributor);
+      });
       const mapComponentConfig = ConfigExportHelper.getMapComponent(
         mapConfigGlobal,
         mapConfigLayers,
@@ -95,17 +103,30 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       );
       mapComponentConfig.input.mapLayers.layers = configMap.layers;
 
-      this.mapglContributor = contributor;
+      this.mapglContributors = contributors;
       this.mapComponentConfig = mapComponentConfig.input;
+    }
+    if (!!this.mapglContributors) {
+      this.mapDataSources = this.mapglContributors.map(c => c.dataSources).reduce((set1, set2) => new Set([...set1, ...set2]));
+      this.mapRedrawSources = merge(...this.mapglContributors.map(c => c.redrawSource));
+      this.mapLegendUpdater = merge(...this.mapglContributors.map(c => c.legendUpdater));
+      this.mapVisibilityUpdater = merge(...this.mapglContributors.map(c => c.visibilityUpdater));
+      let mainMapContributor = this.mapglContributors.find(c => c.collection === this.mainFormService.getMainCollection());
+      if (!mainMapContributor) {
+        mainMapContributor = this.mapglContributors[0];
+      }
+      this.mainMapContributor = mainMapContributor;
     }
   }
 
   public ngAfterViewInit() {
     this.onMapLoadSub = this.mapglComponent.onMapLoaded.subscribe(isLoaded => {
-      if (isLoaded && !!this.mapglContributor) {
-        this.mapglContributor.updateData = true;
-        this.mapglContributor.fetchData(null);
-        this.mapglContributor.setSelection(null, this.collaborativeService.getCollaboration(this.mapglContributor.identifier));
+      if (isLoaded && !!this.mapglContributors) {
+        this.mapglContributors.forEach(mapglContributor => {
+          mapglContributor.updateData = true;
+          mapglContributor.fetchData(null);
+          mapglContributor.setSelection(null, this.collaborativeService.getCollaboration(mapglContributor.identifier));
+        });
       }
     });
     this.cdr.detectChanges();
@@ -114,5 +135,23 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   public ngOnDestroy() {
     this.mapglComponent = null;
     this.onMapLoadSub.unsubscribe();
+  }
+
+  public changeVisualisation(event) {
+    this.mapglContributors.forEach(contrib => contrib.changeVisualisation(event));
+  }
+
+  public onChangeAoi(event) {
+    const configDebounceTime = this.configService.getValue('arlas.server.debounceCollaborationTime');
+    const debounceDuration = configDebounceTime !== undefined ? configDebounceTime : 750;
+    this.mapglContributors.forEach((contrib, i) => {
+      setTimeout(() => {
+        contrib.onChangeAoi(event);
+      }, i * (debounceDuration + 100));
+    });
+  }
+
+  public onMove(event) {
+    this.mapglContributors.forEach(contrib => contrib.onMove(event));
   }
 }

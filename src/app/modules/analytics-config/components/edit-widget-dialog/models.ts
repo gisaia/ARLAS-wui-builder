@@ -21,4 +21,5 @@ import { WIDGET_TYPE } from '../edit-group/models';
 export interface EditWidgetDialogData {
     widgetType: WIDGET_TYPE;
     formData: any;
+    collection: string;
 }
