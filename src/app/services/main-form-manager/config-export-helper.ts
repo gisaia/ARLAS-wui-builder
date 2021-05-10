@@ -36,6 +36,7 @@ import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
 import { MapComponentInputConfig, MapComponentInputMapLayersConfig } from './models-config';
 import { LayerSourceConfig, getSourceName, ColorConfig } from 'arlas-web-contributors';
+import { ClusterAggType } from 'arlas-web-contributors/models/models';
 import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 import {
@@ -227,6 +228,7 @@ export class ConfigExportHelper {
             }
             case LAYER_MODE.cluster: {
                 layerSource.agg_geo_field = modeValues.geometryStep.aggGeometry;
+                layerSource.aggType = modeValues.geometryStep.aggType;
                 layerSource.granularity = modeValues.geometryStep.granularity;
                 layerSource.minfeatures = modeValues.visibilityStep.featuresMin;
                 if (modeValues.geometryStep.clusterGeometryType === CLUSTER_GEOMETRY_TYPE.aggregated_geometry) {

@@ -47,8 +47,8 @@ export enum FILTER_OPERATION {
 }
 
 export enum AGGREGATE_GEOMETRY_TYPE {
-    geohash_center = 'geohash_center',
-    geohash = 'geohash',
+    cell_center = 'cell_center',
+    cell = 'cell',
     bbox = 'bbox',
     centroid = 'centroid'
 }

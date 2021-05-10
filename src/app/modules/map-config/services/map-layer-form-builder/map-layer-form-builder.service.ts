@@ -42,7 +42,7 @@ import {
 import { valuesToOptions } from '@utils/tools';
 import { Observable } from 'rxjs';
 import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE, FILTER_OPERATION, LINE_TYPE } from './models';
-import { Granularity } from 'arlas-web-contributors/models/models';
+import { Granularity, ClusterAggType } from 'arlas-web-contributors/models/models';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { map } from 'rxjs/internal/operators/map';
 
@@ -440,7 +440,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
                 !!this.geometryStep.get('aggregatedGeometry') && !!this.geometryStep.get('aggregatedGeometry').value
                 && this.geometryStep.get('aggregatedGeometry').touched
               ) {
-                (this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.geohash_center ||
+                (this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.cell_center ||
                   this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.centroid ?
                   control.setValue(GEOMETRY_TYPE.circle) : control.setValue(GEOMETRY_TYPE.fill));
               }
@@ -785,6 +785,15 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
             title: marker('Aggregate data to a geographic grid')
           }
         ),
+        aggType: new SelectFormControl(
+          '',
+          marker('Geographic type grid'),
+          marker('Geographic type grid description'),
+          false,
+          [
+            { label: marker('Tile Grid'), value: ClusterAggType.tile },
+            { label: marker('GeohashGrid'), value: ClusterAggType.geohash }
+          ],        ),
         granularity: new SelectFormControl(
           '',
           marker('Granularity'),
@@ -812,8 +821,8 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
           marker('Aggregated geometry type description'),
           false,
           [
-            { label: marker('Cell center'), value: AGGREGATE_GEOMETRY_TYPE.geohash_center },
-            { label: marker('Cell'), value: AGGREGATE_GEOMETRY_TYPE.geohash },
+            { label: marker('Cell center'), value: AGGREGATE_GEOMETRY_TYPE.cell_center },
+            { label: marker('Cell'), value: AGGREGATE_GEOMETRY_TYPE.cell },
             { label: marker('Data cell bbox'), value: AGGREGATE_GEOMETRY_TYPE.bbox },
             { label: marker('Data cell centroid'), value: AGGREGATE_GEOMETRY_TYPE.centroid }
           ],
@@ -872,6 +881,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
 
   public get aggGeometry() { return this.geometryStep.get('aggGeometry') as SelectFormControl; }
   public get granularity() { return this.geometryStep.get('granularity') as SelectFormControl; }
+  public get aggType() {return this.geometryStep.get('aggType') as SelectFormControl; }
   public get clusterGeometryType() { return this.geometryStep.get('clusterGeometryType') as SelectFormControl; }
   public get aggregatedGeometry() { return this.geometryStep.get('aggregatedGeometry') as SelectFormControl; }
   public get rawGeometry() { return this.geometryStep.get('rawGeometry') as SelectFormControl; }
