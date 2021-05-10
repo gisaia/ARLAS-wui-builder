@@ -37,7 +37,7 @@ export class TimelineInitService {
 
 
     this.mainFormService.timelineConfig.initGlobalFg(
-      this.timelineGlobalFormBuilder.build()
+      this.timelineGlobalFormBuilder.build(this.mainFormService.getMainCollection())
     );
 
     if (initCollectionTimepath) {

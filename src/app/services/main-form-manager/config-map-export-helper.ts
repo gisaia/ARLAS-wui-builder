@@ -38,7 +38,6 @@ export class ConfigMapExportHelper {
     public static process(mapConfigLayers: FormArray, colorService: ArlasColorGeneratorLoader,
                           taggableFieldsMap?: Map<string, Set<string>>) {
         const layers: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: MapLayerFormGroup) => {
-            console.log(layerFg.customControls.collection.value);
             const taggableFields = taggableFieldsMap.get(layerFg.customControls.collection.value);
             return [this.getLayer(layerFg, colorService, taggableFields), layerFg.value.mode as LAYER_MODE];
         });
@@ -92,7 +91,7 @@ export class ConfigMapExportHelper {
     }
 
 
-    public static getLayer(layerFg: FormGroup, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>): Layer {
+    public static getLayer(layerFg: MapLayerFormGroup, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>): Layer {
         const mode = layerFg.value.mode as LAYER_MODE;
         const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
             (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
@@ -108,7 +107,10 @@ export class ConfigMapExportHelper {
             layout: {
                 visibility: modeValues.visibilityStep.visible ? VISIBILITY.visible : VISIBILITY.none
             },
-            paint
+            paint,
+            metadata: {
+                collection: layerFg.customControls.collection.value
+            }
         };
         if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.line) {
             layer.layout['line-cap'] = 'round';

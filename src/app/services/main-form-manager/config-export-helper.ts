@@ -53,6 +53,7 @@ import { titleCase } from '@services/collection-service/tools';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 export enum EXPORT_TYPE {
     json = 'json',
@@ -74,6 +75,7 @@ export class ConfigExportHelper {
         lookAndFeelConfigGlobal: LookAndFeelGlobalFormGroup,
         analyticsConfigList: FormArray,
         colorService: ArlasColorGeneratorLoader,
+        collectionService: CollectionService
     ): any {
         const chipssearch: ChipSearchConfig = {
             name: searchConfigGlobal.customControls.name.value,
@@ -128,7 +130,7 @@ export class ConfigExportHelper {
         };
 
         config.arlas.web.contributors = config.arlas.web.contributors.concat(this.getMapContributors(mapConfigGlobal, mapConfigLayers,
-            startingConfig.customControls.collection.value));
+            startingConfig.customControls.collection.value, collectionService));
         config.arlas.web.contributors.push(this.getChipsearchContributor(searchConfigGlobal,
             startingConfig.customControls.collection.value));
 
@@ -282,22 +284,24 @@ export class ConfigExportHelper {
     public static getMapContributors(
         mapConfigGlobal: MapGlobalFormGroup,
         mapConfigLayers: FormArray,
-        mainCollection: string): ContributorConfig[] {
+        mainCollection: string,
+        collectionService: CollectionService): ContributorConfig[] {
         const contributorsCollectionsMap = new Map<string, ContributorConfig>();
         mapConfigLayers.controls.forEach((layerFg: MapLayerFormGroup) => {
             const collection = layerFg.customControls.collection.value;
             let mapContributor = contributorsCollectionsMap.get(collection);
             if (!mapContributor) {
-                // todo : apply the correct geo_query_op and field
-                const qeoQueryOp = (collection === mainCollection) ? titleCase(mapConfigGlobal.value.geographicalOperator) : 'Within';
-                // const qeoQueryField = (collection === mainCollection) ? mapConfigGlobal.value.requestGeometries[0].requestGeom : ;
+                let geoQueryField = mapConfigGlobal.value.requestGeometries[0].requestGeom;
+                if (collection !== mainCollection) {
+                    geoQueryField = collectionService.collectionParamsMap.get(collection).params.centroid_path;
+                }
                 mapContributor = {
                     type: 'map',
                     identifier: collection,
-                    name: 'map',
+                    name: 'Map ' + collection,
                     collection,
                     geo_query_op: titleCase(mapConfigGlobal.value.geographicalOperator),
-                    geo_query_field: mapConfigGlobal.value.requestGeometries[0].requestGeom,
+                    geo_query_field: geoQueryField,
                     icon: mapConfigGlobal.customControls.unmanagedFields.icon.value,
                     layers_sources: []
                 };
@@ -464,7 +468,7 @@ export class ConfigExportHelper {
     }
 
     // TODO put in common with getAnalyticsContributor ?
-    private static getTimelineContributor(timelineConfigGlobal: TimelineGlobalFormGroup, collection: string, 
+    private static getTimelineContributor(timelineConfigGlobal: TimelineGlobalFormGroup, collection: string,
                                           isDetailed: boolean): ContributorConfig {
 
         const timelineAggregation = timelineConfigGlobal.customControls.tabsContainer.dataStep.timeline.aggregation.customControls;
@@ -690,6 +694,7 @@ export class ConfigExportHelper {
             identifier: this.getContributorId(widgetData, widgetType),
             name: widgetData.title,
             title: widgetData.title,
+            collection: widgetData.dataStep.collection,
             icon,
             ... !!widgetData.renderStep.chartType ?
                 {

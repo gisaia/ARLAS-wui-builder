@@ -579,11 +579,11 @@ export class MapImportService {
     return visualisationFg;
   }
 
-  public importMapFilters(layerSource: LayerSourceConfig, filtersFa: FormArray) {
+  public importMapFilters(layerSource: LayerSourceConfig, filtersFa: FormArray, collection: string) {
     let i = 0;
     if (!!layerSource.filters) {
       layerSource.filters.forEach(f => {
-        const mapFilterFg = this.mapLayerFormBuilder.buildMapFilter();
+        const mapFilterFg = this.mapLayerFormBuilder.buildMapFilter(collection);
         importElements([
           {
             value: { value: f.field },
@@ -637,9 +637,9 @@ export class MapImportService {
     collectionName: string,
     layerId: number,
     visualisationSets: Array<VisualisationSetConfig>) {
-    const layerFg = this.mapLayerFormBuilder.buildLayer();
+    const layerFg = this.mapLayerFormBuilder.buildLayer(collectionName);
     const filtersFa: FormArray = new FormArray([]);
-    this.importMapFilters(layerSource, filtersFa);
+    this.importMapFilters(layerSource, filtersFa, collectionName);
     return MapImportService.importLayerFg(layer, layerSource, collectionName, layerId, visualisationSets, layerFg, filtersFa);
   }
 

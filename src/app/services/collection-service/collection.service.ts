@@ -41,13 +41,21 @@ export class CollectionService {
   private collectionsDescriptions = new Map<string, Observable<CollectionReferenceDescription>>();
   public taggableFieldsMap = new Map<string, Set<string>>();
   public collectionParamsMap = new Map<string, CollectionReferenceDescription>();
-
+  public collections: string[] = [];
   constructor(
     private collabSearchService: ArlasCollaborativesearchService,
     private spinner: NgxSpinnerService,
     private defaultValueService: DefaultValuesService,
     private logger: NGXLogger
-  ) { }
+    ) { }
+
+  public getCollections(): string[] {
+    return this.collections;
+  }
+
+  public setCollections(collections: string[]): void {
+    this.collections = collections;
+  }
 
   public getDescribe(collection: string): Observable<CollectionReferenceDescription> {
     const describtionObs = this.collectionsDescriptions.get(collection);

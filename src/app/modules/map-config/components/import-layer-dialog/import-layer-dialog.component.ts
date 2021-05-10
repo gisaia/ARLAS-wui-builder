@@ -25,6 +25,7 @@ import { MatSelectChange } from '@angular/material';
 import { Config } from '@services/main-form-manager/models-config';
 import { Layer, MapConfig, HOVER_LAYER_PREFIX, SELECT_LAYER_PREFIX } from '@services/main-form-manager/models-map-config';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 @Component({
   selector: 'app-import-layer-dialog',
@@ -40,7 +41,7 @@ export class ImportLayerDialogComponent implements OnInit {
 
   constructor(
     private persistenceService: PersistenceService,
-    private mainformService: MainFormService
+    private collectionService: CollectionService
   ) { }
 
   public ngOnInit() {
@@ -58,11 +59,7 @@ export class ImportLayerDialogComponent implements OnInit {
             dash => {
               if (!!dash.doc_value) {
                 const config = JSON.parse(dash.doc_value) as Config;
-                if (!!config && !!config.arlas && !!config.arlas.server && !!config.arlas.server.collection) {
-                  return config.arlas.server.collection.name === this.mainformService.getMainCollection();
-                } else {
-                  return false;
-                }
+                return (!!config && !!config.arlas && !!config.arlas.server && !!config.arlas.server.collection);
               } else {
                 return false;
               }
@@ -75,9 +72,21 @@ export class ImportLayerDialogComponent implements OnInit {
 
   public getLayers(event: MatSelectChange) {
     this.dashboardConfigJson = JSON.parse(event.value.doc_value) as Config;
+    const importableLayers = new Set<string>();
+    const availableCollections = new Set(this.collectionService.getCollections());
+    this.dashboardConfigJson.arlas.web.contributors.forEach(cont => {
+      if (!cont.collection) {
+        cont.collection = this.dashboardConfigJson.arlas.server.collection.name;
+      }
+    });
+    this.dashboardConfigJson.arlas.web.contributors.filter(c => c.type === 'map' && availableCollections.has(c.collection))
+      .forEach(cont => {
+        cont.layers_sources.forEach(ls => importableLayers.add(ls.id));
+      });
     let configLayers = (this.dashboardConfigJson.arlas.web.components.mapgl.input.mapLayers as MapConfig).layers;
     if (!!configLayers) {
-      configLayers = configLayers.filter(l => !!l && !l.id.startsWith(HOVER_LAYER_PREFIX) && !l.id.startsWith(SELECT_LAYER_PREFIX));
+      configLayers = configLayers.filter(l => !!l && !l.id.startsWith(HOVER_LAYER_PREFIX) && !l.id.startsWith(SELECT_LAYER_PREFIX)
+        && importableLayers.has(l.id));
     }
     this.layers = configLayers;
   }

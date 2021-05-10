@@ -39,6 +39,8 @@ import { AnalyticsImportService } from '@analytics-config/services/analytics-imp
 import { ImportWidgetDialogComponent } from '../import-widget-dialog/import-widget-dialog.component';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfigFormGroup } from '@shared-models/config-form';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { MainFormService } from '@services/main-form/main-form.service';
 
 @Component({
   selector: 'app-add-widget-dialog',
@@ -97,7 +99,8 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
     private analyticsImportService: AnalyticsImportService,
-    private analyticsInitService: AnalyticsInitService
+    private analyticsInitService: AnalyticsInitService,
+    private main: MainFormService
   ) { }
 
   public ngOnInit() {
@@ -134,7 +137,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
           }
           const finalResult = this.contentTypeValue ? this.contentTypeValue : [result];
           this.formGroup.controls.contentType.setValue(finalResult);
-          this.editWidget(this.contentTypeValue.length - 1, true);
+          this.editWidget(this.contentTypeValue.length - 1, this.main.getMainCollection(), true);
         }
       });
   }
@@ -175,12 +178,13 @@ export class EditGroupComponent implements OnInit, OnDestroy {
       });
   }
 
-  public editWidget(widgetIndex: number, newWidget?: boolean) {
+  public editWidget(widgetIndex: number, collection: string, newWidget?: boolean) {
     const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup;
     this.afterClosedEditSub = this.dialog.open(EditWidgetDialogComponent, {
       data: {
         widgetType: widgetFg.value.widgetType,
-        formData: widgetFg.value.widgetData
+        formData: widgetFg.value.widgetData,
+        collection
       } as EditWidgetDialogData
     })
       .afterClosed().subscribe(result => {

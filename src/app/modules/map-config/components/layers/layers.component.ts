@@ -190,7 +190,7 @@ export class LayersComponent implements OnInit, OnDestroy {
       vs.layers = ls;
     });
     /** we now should build a new layer form group for the new one  */
-    const newLayerFg = this.mapLayerFormBuilder.buildLayer();
+    const newLayerFg = this.mapLayerFormBuilder.buildLayer(layerFg.customControls.collection.value);
     /** the easiest way I found is to export the original layer and then re-import it in order to initialize correctly
      * all the subcontrols of the layer fg
      */
@@ -201,7 +201,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     const layer = ConfigMapExportHelper.getLayer(layerFg, this.colorService, taggableFields);
     layer.id = newId;
     const filtersFa: FormArray = new FormArray([], []);
-    this.mapImportService.importMapFilters(layerSource, filtersFa);
+    this.mapImportService.importMapFilters(layerSource, filtersFa, layerFg.customControls.collection.value);
     MapImportService.importLayerFg(layer, layerSource,
       this.mainFormService.getMainCollection(), layerId + 1, visualisationSetValue, newLayerFg, filtersFa);
     const modeValues = newLayerFg.customControls.mode.value === LAYER_MODE.features ? newLayerFg.customControls.featuresFg.value :
@@ -242,7 +242,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     const configMap = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFieldsMap);
     // Get contributor config for this layer
     const mapContribConfigs = ConfigExportHelper.getMapContributors(mapConfigGlobal, mapConfigLayers,
-      this.mainFormService.getMainCollection());
+      this.mainFormService.getMainCollection(), this.collectionService);
     // Add contributor part in arlasConfigService
     // Add web contributors in config if not exist
     const currentConfig = this.startupService.getConfigWithInitContrib();
@@ -305,20 +305,26 @@ export class LayersComponent implements OnInit, OnDestroy {
 
         const mapContribs = config.arlas.web.contributors.filter(c => c.type === 'map');
         let layersSources = [];
+        let collection;
         mapContribs.forEach(mapContrib => {
           layersSources = layersSources.concat(mapContrib.layers_sources);
+          if (!collection) {
+            const layerContributor = mapContrib.layers_sources.find(ls => ls.id === layer.id);
+            if (!!layerContributor) {
+              collection = mapContrib.collection;
+            }
+          }
         });
         const visualisationSets: Array<VisualisationSetConfig> = config.arlas.web.components.mapgl.input.visualisations_sets;
-
-        let layerFg = this.mapLayerFormBuilder.buildLayer();
-        const layerSource = layersSources.find(s => s.id === layer.id);
+        let layerFg = this.mapLayerFormBuilder.buildLayer(collection);
+        const layerSource = Object.assign({}, layersSources.find(s => s.id === layer.id));
         layerSource.id = newId;
         const filtersFa: FormArray = new FormArray([], []);
-        this.mapImportService.importMapFilters(layerSource, filtersFa);
+        this.mapImportService.importMapFilters(layerSource, filtersFa, collection);
         layerFg = MapImportService.importLayerFg(
           layer,
           layerSource,
-          this.mainFormService.getMainCollection(),
+          collection,
           this.mainFormService.mapConfig.getLayersFa().length + 1,
           visualisationSets,
           layerFg,
@@ -343,6 +349,7 @@ export class LayersComponent implements OnInit, OnDestroy {
 
         // Add the layer to the list
         this.mainFormService.mapConfig.getLayersFa().push(layerFg);
+        this.ngOnInit();
       }
     });
   }

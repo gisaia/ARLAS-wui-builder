@@ -77,7 +77,7 @@ export class EditWidgetDialogComponent implements OnInit {
         break;
     }
 
-    this.formGroup = formBuilder.buildWithValues(this.dialogData.formData);
+    this.formGroup = formBuilder.buildWithValues(this.dialogData.formData, this.dialogData.collection);
     this.defaultKey = formBuilder.defaultKey;
   }
 

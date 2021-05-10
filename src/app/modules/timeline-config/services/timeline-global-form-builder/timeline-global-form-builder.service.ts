@@ -40,7 +40,7 @@ enum DateFormats {
 export class TimelineGlobalFormGroup extends ConfigFormGroup {
 
   constructor(
-    timelineBucketsIntervalFg: BucketsIntervalFormGroup
+    timelineBucketsIntervalFg?: BucketsIntervalFormGroup
   ) {
     super(
       {
@@ -326,29 +326,14 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
 export class TimelineGlobalFormBuilderService {
 
   constructor(
-    private collectionService: CollectionService,
-    private mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
   ) { }
 
-  public build() {
-
-    const longDateFields = toDateFieldsObs(this.collectionService.getCollectionFields(
-      this.mainFormService.getMainCollection()))
-      .pipe(map(fields => fields.sort((a, b) => {
-        // sort by DATE first, then by name
-        if (a.type !== b.type) {
-          return a.type === FIELD_TYPES.DATE ? -1 : 1;
-        }
-        return a.name.localeCompare(b.name);
-      })));
-
-    const timelineBucketIntervalFg = this.bucketsIntervalBuilderService.build(longDateFields, 'temporal');
-
+  public build(collection: string) {
+    const timelineBucketIntervalFg = this.bucketsIntervalBuilderService.build(collection, 'temporal');
     const timelineFormGroup = new TimelineGlobalFormGroup(
       timelineBucketIntervalFg);
-
     this.defaultValuesService.setDefaultValueRecursively(
       'timeline.global',
       timelineFormGroup);

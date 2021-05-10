@@ -107,7 +107,7 @@ export abstract class ConfigFormControl extends FormControl {
 
 }
 
-interface ControlOptionalParams {
+export interface ControlOptionalParams {
 
     // if false, it is a required control
     optional?: boolean;
@@ -143,7 +143,7 @@ interface ControlOptionalParams {
     sourceData?: Observable<any>;
 }
 
-interface GroupOptionalParams {
+export interface GroupOptionalParams {
     // getter the other controls that it depends on
     dependsOn?: () => Array<ConfigFormControl>;
 
@@ -528,7 +528,7 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
         formState: any,
         label: string,
         description: string,
-        private collectionFields: Observable<Array<CollectionField>>,
+        public collectionFields: Observable<Array<CollectionField>>,
         optionalParams?: ControlOptionalParams
     ) {
         super(formState, label, description, optionalParams);
@@ -539,16 +539,16 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
             ]);
         }
         this.metricCtrl.valueChanges.subscribe(v => {
-            this.updateFieldsByMetric();
+            this.updateFieldsByMetric(this.metricCtrl.value);
             this.fieldCtrl.reset();
         });
         this.fieldCtrl.valueChanges.subscribe(v => this.filterAutocomplete(v));
         this.filterAutocomplete();
-        this.updateFieldsByMetric();
+        this.updateFieldsByMetric(this.metricCtrl.value);
         this.setValue(new Set());
     }
 
-    public updateFieldsByMetric() {
+    public updateFieldsByMetric(metric: METRIC_TYPES) {
         const fieldObs = this.metricCtrl.value === METRIC_TYPES.CARDINALITY ?
             toKeywordOptionsObs(this.collectionFields) : toNumericOrDateOptionsObs(this.collectionFields);
         fieldObs.subscribe(f => {
@@ -577,6 +577,10 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
     }
 
     public getValueAsSet = () => (this.value as Set<{ metric: string, field: string }>);
+
+    public setCollectionFieldsObs(collectionFieldsObs: Observable<Array<CollectionField>>): void {
+        this.collectionFields = collectionFieldsObs;
+    }
 }
 
 // try to put in common with MetricWithFieldListFormControl

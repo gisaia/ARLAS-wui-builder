@@ -24,11 +24,14 @@ import {
   ButtonToggleFormControl
 } from '@shared-models/config-form';
 import { Interval, CollectionReferenceDescriptionProperty } from 'arlas-api';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, of } from 'rxjs';
 import { CollectionField } from '@services/collection-service/models';
-import { toOptionsObs } from '@services/collection-service/tools';
+import { toOptionsObs, toNumericOrDateFieldsObs, toDateFieldsObs, toIntegerOrDateFieldsObs } from '@services/collection-service/tools';
 import { integerValidator } from '@utils/validators';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
+import { CollectionService, FIELD_TYPES } from '@services/collection-service/collection.service';
+import { map } from 'rxjs/operators';
 
 export interface BucketsIntervalControls {
   aggregationField: SelectFormControl;
@@ -43,19 +46,21 @@ export enum BY_BUCKET_OR_INTERVAL {
   BUCKET = 'bucket',
   INTERVAL = 'interval'
 }
-export class BucketsIntervalFormGroup extends ConfigFormGroup {
+export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
 
   constructor(
-    fieldsObs: Observable<Array<CollectionField>>, bucketType?: string) {
+    collection: string,
+    collectionService: CollectionService, bucketType?: string) {
 
     super(
+      collection,
       {
         aggregationField: new SelectFormControl(
           '',
           marker(bucketType + ' aggregation field'),
           marker(bucketType + ' aggregation field description'),
           true,
-          toOptionsObs(fieldsObs),
+          BucketsIntervalFormGroup.getCollectionFields(collection, collectionService),
           {
             childs: () => [
               this.customControls.aggregationFieldType
@@ -67,7 +72,8 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           {
             dependsOn: () => [this.customControls.aggregationField],
             onDependencyChange: (control) => {
-              const sub: Subscription = fieldsObs.subscribe(fields => {
+              const bucketsFieldsObs = this.getBucketsFieldsObs(this.collection, collectionService, bucketType);
+              const sub: Subscription = bucketsFieldsObs.subscribe(fields => {
                 const aggregationField = fields.find(f => f.name === this.customControls.aggregationField.value);
                 if (!!aggregationField) {
                   control.setValue(aggregationField.type === CollectionReferenceDescriptionProperty.TypeEnum.DATE ? 'time' : 'numeric');
@@ -123,7 +129,8 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
           {
             dependsOn: () => [this.customControls.aggregationBucketOrInterval, this.customControls.aggregationField],
             onDependencyChange: (control) => {
-              const sub: Subscription = fieldsObs.subscribe(fields => {
+              const bucketsFieldsObs = this.getBucketsFieldsObs(this.collection, collectionService, bucketType);
+              const sub: Subscription = bucketsFieldsObs.subscribe(fields => {
                 if (this.customControls.aggregationBucketOrInterval.value === BY_BUCKET_OR_INTERVAL.INTERVAL &&
                   !!fields.find(f => f.name === this.customControls.aggregationField.value) &&
                   fields.find(f => f.name === this.customControls.aggregationField.value).type
@@ -163,6 +170,34 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
     aggregationIntervalSize: this.get('aggregationIntervalSize') as InputFormControl
   } as BucketsIntervalControls;
 
+  private static getCollectionFields(collection: string, collectionService: CollectionService): Observable<any[]> {
+    if (!!collection && !!collectionService) {
+      return toOptionsObs(toNumericOrDateFieldsObs(collectionService.getCollectionFields(collection)));
+    } else {
+      return of([]);
+    }
+  }
+
+  public getBucketsFieldsObs(collection: string, collectionService: CollectionService, bucketType: string) {
+    if (!!collectionService && !!collection) {
+      const collectionFieldsObs = collectionService.getCollectionFields(collection);
+      if (bucketType === 'temporal') {
+        return toDateFieldsObs(collectionFieldsObs).pipe(map(fields => fields.sort((a, b) => {
+          // sort by DATE first, then by name
+          if (a.type !== b.type) {
+            return a.type === FIELD_TYPES.DATE ? -1 : 1;
+          }
+          return a.name.localeCompare(b.name);
+        })));
+      } else if (bucketType === 'swimlane') {
+        return toIntegerOrDateFieldsObs(collectionFieldsObs);
+      }
+      return toNumericOrDateFieldsObs(collectionFieldsObs);
+    }
+    return of([]);
+  }
+
+
 }
 
 @Injectable({
@@ -170,13 +205,10 @@ export class BucketsIntervalFormGroup extends ConfigFormGroup {
 })
 export class BucketsIntervalFormBuilderService {
 
-  constructor(
-  ) {
-  }
+  constructor(private collectionService: CollectionService) { }
 
-  public build(fieldsObs: Observable<Array<CollectionField>>, bucketType: string) {
-
-    return new BucketsIntervalFormGroup(fieldsObs, bucketType);
+  public build(collection: string, bucketType: string) {
+    return new BucketsIntervalFormGroup(collection, this.collectionService, bucketType);
   }
 
 }

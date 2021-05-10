@@ -71,14 +71,16 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
       this.layersValues = this.layersFa.value as any[];
       this.routerSub = this.route.paramMap.subscribe(params => {
         const layerId = params.get('id');
-        this.layerFg = this.mapLayerFormBuilder.buildLayer(!!layerId);
-        if (layerId != null) {
+        if (!layerId) {
+          this.layerFg = this.mapLayerFormBuilder.buildLayer(this.mainFormService.getMainCollection(), false);
+        } else {
           // there we are editing an existing layer
           const layerIndex = this.getLayerIndex(Number(layerId));
           if (layerIndex >= 0) {
             // cannot simply update the existing form instance because we want to allow cancellation
             // so we rather propagate the existing form properties
             const existingLayerFg = this.getLayerAt(layerIndex) as MapLayerFormGroup;
+            this.layerFg = this.mapLayerFormBuilder.buildLayer(existingLayerFg.customControls.collection.value, true);
             this.layerFg.patchValue(existingLayerFg.value);
             this.populateManualValuesFormArray(existingLayerFg);
           } else {
@@ -185,13 +187,13 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
             layers.push(newLayerId);
             oldLayers.delete(oldLayerId);
             oldLayers.add(newLayerId);
-          } else if (layersSet.has(l) ) {
+          } else if (layersSet.has(l)) {
             layers.push(l);
           }
         });
 
         /** if the new (edited) layer was not in the visualisation set already, we should add it */
-        if (!oldLayers.has(newLayerId) && layersSet.has(newLayerId) ) {
+        if (!oldLayers.has(newLayerId) && layersSet.has(newLayerId)) {
           layers.push(newLayerId);
         }
 

@@ -41,6 +41,7 @@ export interface Layer {
     maxzoom: number;
     paint: Paint;
     filter?: Array<any>;
+    metadata?: any;
 }
 
 export interface Layout {

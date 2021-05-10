@@ -137,6 +137,7 @@ export class MainFormManagerService {
       lookAndFeelConfigGlobal,
       analyticsConfigList,
       this.colorService,
+      this.collectionService
     );
 
     const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFieldsMap);
@@ -197,7 +198,6 @@ export class MainFormManagerService {
   }
 
   public doImport(config: Config, mapConfig: MapConfig) {
-    console.log('import')
     const startingConfigControls = this.mainFormService.startingConfig.getFg().customControls;
     importElements([
       {

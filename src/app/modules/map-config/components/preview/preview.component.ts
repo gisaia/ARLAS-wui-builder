@@ -28,7 +28,7 @@ import { ConfigExportHelper } from '@services/main-form-manager/config-export-he
 import { StartupService } from '@services/startup/startup.service';
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { Subscription } from 'rxjs';
+import { Subscription, merge } from 'rxjs';
 
 export interface MapglComponentInput {
   mapglContributors: MapContributor[];
@@ -47,6 +47,11 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   @ViewChild('map', { static: false }) public mapglComponent: MapglComponent;
 
   private onMapLoadSub: Subscription;
+  public mapDataSources;
+  public mapRedrawSources;
+  public mapLegendUpdater;
+  public mapVisibilityUpdater;
+  public mainMapContributor;
 
   constructor(
     protected mainFormService: MainFormService,
@@ -71,7 +76,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       // Get config.map part for this layer
       const configMap = ConfigMapExportHelper.process(mapConfigLayers, colorService, this.collectionService.taggableFieldsMap);
       const mapContribConfigs = ConfigExportHelper.getMapContributors(mapConfigGlobal, mapConfigLayers,
-        this.mainFormService.getMainCollection());
+        this.mainFormService.getMainCollection(), collectionService);
       // Add contributor part in arlasConfigService
       // Add web contributors in config if not exist
       const currentConfig = this.startupService.getConfigWithInitContrib();
@@ -101,6 +106,17 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       this.mapglContributors = contributors;
       this.mapComponentConfig = mapComponentConfig.input;
     }
+    if (!!this.mapglContributors) {
+      this.mapDataSources = this.mapglContributors.map(c => c.dataSources).reduce((set1, set2) => new Set([...set1, ...set2]));
+      this.mapRedrawSources = merge(...this.mapglContributors.map(c => c.redrawSource));
+      this.mapLegendUpdater = merge(...this.mapglContributors.map(c => c.legendUpdater));
+      this.mapVisibilityUpdater = merge(...this.mapglContributors.map(c => c.visibilityUpdater));
+      let mainMapContributor = this.mapglContributors.find(c => c.collection === this.mainFormService.getMainCollection());
+      if (!mainMapContributor) {
+        mainMapContributor = this.mapglContributors[0];
+      }
+      this.mainMapContributor = mainMapContributor;
+    }
   }
 
   public ngAfterViewInit() {
@@ -119,5 +135,23 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   public ngOnDestroy() {
     this.mapglComponent = null;
     this.onMapLoadSub.unsubscribe();
+  }
+
+  public changeVisualisation(event) {
+    this.mapglContributors.forEach(contrib => contrib.changeVisualisation(event));
+  }
+
+  public onChangeAoi(event) {
+    const configDebounceTime = this.configService.getValue('arlas.server.debounceCollaborationTime');
+    const debounceDuration = configDebounceTime !== undefined ? configDebounceTime : 750;
+    this.mapglContributors.forEach((contrib, i) => {
+      setTimeout(() => {
+        contrib.onChangeAoi(event);
+      }, i * (debounceDuration + 100));
+    });
+  }
+
+  public onMove(event) {
+    this.mapglContributors.forEach(contrib => contrib.onMove(event));
   }
 }
