@@ -168,6 +168,9 @@ export class MainFormManagerService {
             new Date(data.last_update_date).getTime(), this.mainFormService.configurationName, data.doc_readers, data.doc_writers
           ).subscribe(
             () => {
+              ['i18n', 'tour']
+                .forEach(zone => ['fr', 'en']
+                  .forEach(lg => this.renameLinkedData(zone, data.doc_key, this.mainFormService.configurationName, lg)));
               this.snackbar.open(
                 this.translate.instant('Dashboard updated !') + ' (' + this.mainFormService.configurationName + ')'
               );
@@ -181,7 +184,7 @@ export class MainFormManagerService {
       } else {
         // Create new config
         if (!!this.mainFormService.configurationName) {
-            this.createDashboard(this.mainFormService.configurationName, conf, generatedConfig, generatedMapConfig);
+          this.createDashboard(this.mainFormService.configurationName, conf, generatedConfig, generatedMapConfig);
         } else {
           const dialogRef = this.dialog.open(InputModalComponent);
           dialogRef.afterClosed().subscribe(configName => {
@@ -336,6 +339,17 @@ export class MainFormManagerService {
       (error) => {
         this.snackbar.open(this.translate.instant('Error : Dashboard not saved'));
         this.raiseError(error);
+      }
+    );
+  }
+
+  private renameLinkedData(zone: string, key: string, newName: string, lg: string) {
+    this.persistenceService.existByZoneKey(zone, key.concat('_').concat(lg)).subscribe(
+      exist => {
+        if (exist.exists) {
+          this.persistenceService.getByZoneKey(zone, key.concat('_').concat(lg))
+            .subscribe(i => this.persistenceService.rename(i.id, newName.concat('_').concat(lg)).subscribe(d => { }));
+        }
       }
     );
   }
