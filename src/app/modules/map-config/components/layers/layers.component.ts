@@ -60,7 +60,7 @@ export class LayersComponent implements OnInit, OnDestroy {
   public layersFa: FormArray;
   public visualisationSetFa: FormArray;
 
-  public layerLegend: Map<string, { layer: any, colorLegend: any }> = new Map();
+  public layerLegend: Map<string, { layer: any, colorLegend: any, strokeColorLegend: any, lineDashArray: any}> = new Map();
 
   public layerVs: Map<string, string[]> = new Map();
 
@@ -92,7 +92,8 @@ export class LayersComponent implements OnInit, OnDestroy {
       const paint = ConfigMapExportHelper.getLayerPaint(modeValues, layer.mode, this.colorService, taggableFields);
       this.layerLegend.set(
         layer.arlasId + '#' + layer.mode,
-        { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint) }
+        { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint),
+          strokeColorLegend: this.getStrokeColorLegend(paint), lineDashArray: this.getLineDashArray(paint) }
       );
 
       const includeIn = [];
@@ -136,6 +137,16 @@ export class LayersComponent implements OnInit, OnDestroy {
     const styleColor = paint['circle-color'] || paint['heatmap-color'] || paint['fill-color'] || paint['line-color'];
     const colorLegend = MapglLegendComponent.buildColorLegend(styleColor as any, true, null);
     return colorLegend[0];
+  }
+
+  public getStrokeColorLegend(paint) {
+    const styleColor = paint['circle-stroke-color'];
+    const colorLegend = MapglLegendComponent.buildColorLegend(styleColor as any, true, null);
+    return colorLegend[0];
+  }
+
+  public getLineDashArray(paint) {
+    return paint['line-dasharray'];
   }
 
   public confirmDelete(layerId: number, arlasId: string): void {
@@ -203,7 +214,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     const filtersFa: FormArray = new FormArray([], []);
     this.mapImportService.importMapFilters(layerSource, filtersFa, layerFg.customControls.collection.value);
     MapImportService.importLayerFg(layer, layerSource,
-      this.mainFormService.getMainCollection(), layerId + 1, visualisationSetValue, newLayerFg, filtersFa);
+      layerFg.customControls.collection.value, layerId + 1, visualisationSetValue, newLayerFg, filtersFa);
     const modeValues = newLayerFg.customControls.mode.value === LAYER_MODE.features ? newLayerFg.customControls.featuresFg.value :
       (newLayerFg.customControls.mode.value === LAYER_MODE.featureMetric ?
         newLayerFg.customControls.featureMetricFg.value : newLayerFg.customControls.clusterFg.value);
@@ -212,7 +223,8 @@ export class LayersComponent implements OnInit, OnDestroy {
     /** Add the duplicated layer to legend set in order to have the icon */
     this.layerLegend.set(
       newId + '#' + newLayerFg.customControls.mode.value,
-      { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint) }
+      { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint),
+        strokeColorLegend: this.getStrokeColorLegend(paint), lineDashArray: this.getLineDashArray(paint)}
     );
     newLayerFg.markAsPristine();
     /** listen to all the ondepencychnage to correctly initiate the controls */
@@ -340,7 +352,8 @@ export class LayersComponent implements OnInit, OnDestroy {
         /** Add the duplicated layer to legend set in order to have the icon */
         this.layerLegend.set(
           newId + '#' + layerFg.customControls.mode.value,
-          { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint) }
+          { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint),
+            strokeColorLegend: this.getStrokeColorLegend(paint), lineDashArray: this.getLineDashArray(paint)}
         );
         layerFg.markAsPristine();
 

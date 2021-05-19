@@ -46,7 +46,7 @@
         <th mat-header-cell *matHeaderCellDef>{{'#' | translate}}</th>
         <td mat-cell *matCellDef="let element">
             <arlas-mapgl-layer-icon [layer]="layerLegend.get(element.arlasId + '#' + element.mode)?.layer"
-                [colorLegend]="layerLegend.get(element.arlasId + '#' + element.mode)?.colorLegend">
+                [colorLegend]="layerLegend.get(element.arlasId + '#' + element.mode)?.colorLegend" [strokeColorLegend]="layerLegend.get(element.arlasId + '#' + element.mode)?.strokeColorLegend" [lineDasharray]="layerLegend.get(element.arlasId + '#' + element.mode)?.lineDashArray">
             </arlas-mapgl-layer-icon>
         </td>
     </ng-container>

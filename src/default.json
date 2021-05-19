@@ -49,6 +49,7 @@
                 },
                 "styleStep": {
                     "geometryType": "fill",
+                    "lineType": "solid",
                     "opacity": {
                         "propertySource": "Fix",
                         "propertyFix": 1
@@ -92,6 +93,7 @@
                 },
                 "styleStep": {
                     "geometryType": "fill",
+                    "lineType": "solid",
                     "opacity": {
                         "propertySource": "Fix",
                         "propertyFix": 1
@@ -127,7 +129,8 @@
                     "geometry": "",
                     "granularity": "Medium",
                     "clusterGeometryType": "aggregated_geometry",
-                    "aggregatedGeometry": "geohash"
+                    "aggregatedGeometry": "cell",
+                    "aggType": "tile"
                 },
                 "visibilityStep": {
                     "visible": true,
@@ -137,6 +140,7 @@
                 },
                 "styleStep": {
                     "geometryType": "fill",
+                    "lineType": "solid",
                     "opacity": {
                         "propertySource": "Fix",
                         "propertyFix": 0.7
@@ -214,7 +218,8 @@
                     "timeline": {
                         "chartTitle": "Timeline",
                         "chartType": "bars",
-                        "dateFormat": "%b %d %Y  %H:%M"
+                        "dateFormat": "%b %d %Y  %H:%M",
+                        "isMultiselectable": true
                     },
                     "detailedTimeline": {
                         "chartTitle": "Detailed timeline",
