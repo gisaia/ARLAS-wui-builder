@@ -1,5 +1,13 @@
 # Change Log
 
+## [v17.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.0.0) (2021-05-19)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.0.0-beta.0...v17.0.0)
+
+## [v17.0.0-beta.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.0.0-beta.0) (2021-05-10)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v16.1.3...v17.0.0-beta.0)
+
 ## [v16.1.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v16.1.3) (2021-04-30)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v16.1.2...v16.1.3)
