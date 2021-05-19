@@ -1,11 +1,15 @@
 import { BucketsIntervalFormBuilderService } from './buckets-interval-form-builder.service';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
+import { createServiceFactory, SpectatorService, mockProvider } from '@ngneat/spectator';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 describe('BucketsIntervalFormBuilderService', () => {
   let spectator: SpectatorService<BucketsIntervalFormBuilderService>;
 
   const createService = createServiceFactory({
-    service: BucketsIntervalFormBuilderService
+    service: BucketsIntervalFormBuilderService,
+    providers: [
+      mockProvider(CollectionService),
+    ]
   });
 
   beforeEach(() => {

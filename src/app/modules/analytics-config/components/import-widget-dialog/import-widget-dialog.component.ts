@@ -25,6 +25,7 @@ import { MatSelectChange, MatCheckboxChange } from '@angular/material';
 import { Config, AnalyticConfig, ContributorConfig, AnalyticComponentConfig } from '@services/main-form-manager/models-config';
 import { Layer, MapConfig } from '@services/main-form-manager/models-map-config';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 @Component({
   selector: 'app-import-widget-dialog',
@@ -44,6 +45,7 @@ export class ImportWidgetDialogComponent implements OnInit {
 
   constructor(
     private persistenceService: PersistenceService,
+    private collectionService: CollectionService,
     private mainformService: MainFormService,
     private cdr: ChangeDetectorRef
   ) { }
@@ -64,11 +66,7 @@ export class ImportWidgetDialogComponent implements OnInit {
             dash => {
               if (!!dash.doc_value) {
                 const config = JSON.parse(dash.doc_value) as Config;
-                if (!!config && !!config.arlas && !!config.arlas.server && !!config.arlas.server.collection) {
-                  return config.arlas.server.collection.name === this.mainformService.getCollections()[0];
-                } else {
-                  return false;
-                }
+                return (!!config && !!config.arlas && !!config.arlas.server && !!config.arlas.server.collection);
               } else {
                 return false;
               }
@@ -90,6 +88,18 @@ export class ImportWidgetDialogComponent implements OnInit {
   }
 
   public getWidgets(event: MatSelectChange) {
+    this.dashboardConfigJson = JSON.parse(event.value.doc_value) as Config;
+    const importableWidgets = new Set<string>();
+    const availableCollections = new Set(this.collectionService.getCollections());
+    this.dashboardConfigJson.arlas.web.contributors.forEach(cont => {
+      if (!cont.collection) {
+        cont.collection = this.dashboardConfigJson.arlas.server.collection.name;
+      }
+    });
+    this.dashboardConfigJson.arlas.web.contributors.filter(c => availableCollections.has(c.collection))
+      .forEach(cont => { importableWidgets.add(cont.identifier); });
+
+
     this.analytics = new Map<string, Array<AnalyticConfig>>();
     this.dashboardConfigJson = JSON.parse(event.value.doc_value) as Config;
     const analytics: Array<AnalyticConfig> = this.dashboardConfigJson.arlas.web.analytics;
@@ -99,6 +109,7 @@ export class ImportWidgetDialogComponent implements OnInit {
       if (!tabAnalytics) {
         tabAnalytics = new Array();
       }
+      a.components = a.components.filter(c => importableWidgets.has(c.contributorId));
       a.components.forEach(c => this.contributors.set(c.contributorId,
         contributors.find(cont => cont.identifier === c.contributorId).name));
       tabAnalytics.push(a);

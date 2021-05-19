@@ -28,7 +28,7 @@ describe('GlobalSearchComponent', () => {
             autocompleteSize: new FormControl(null)
           })
         },
-        getCollections: () => ['collection']
+        getMainCollection: () => ''
       })
     ]
   });

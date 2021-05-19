@@ -17,10 +17,11 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit, Input, } from '@angular/core';
-import { FormArray } from '@angular/forms';
+import { FormArray, Validators } from '@angular/forms';
 import {
   ResultlistFormBuilderService, ResultlistColumnFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
+import { SelectFormControl } from '@shared-models/config-form';
 
 @Component({
   selector: 'app-edit-resultlist-columns',
@@ -30,6 +31,7 @@ import {
 export class EditResultlistColumnsComponent implements OnInit {
 
   @Input() public control: FormArray;
+  @Input() public collection: SelectFormControl;
 
   constructor(
     private resultlistFormBuilder: ResultlistFormBuilderService
@@ -37,10 +39,15 @@ export class EditResultlistColumnsComponent implements OnInit {
   }
 
   public ngOnInit() {
+    if (!!this.collection) {
+      this.collection.valueChanges.subscribe(c => {
+        (this.control as FormArray).clear();
+      });
+    }
   }
 
-  public addColumn() {
-    this.control.push(this.resultlistFormBuilder.buildColumn());
+  public addColumn(collection: string) {
+    this.control.push(this.resultlistFormBuilder.buildColumn(collection));
   }
 
   public deleteColumn(colIndex: number) {

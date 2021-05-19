@@ -34,6 +34,10 @@
                             </div>
                         </mat-checkbox>
                     </div>
+
+                    <div *ngIf="analytic.components?.length === 0" class="not-importable">
+                        {{'This Tab doesn\'t contain an importable widget' | translate}}
+                    </div>
     
                 </mat-card>
             </div>

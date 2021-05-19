@@ -36,6 +36,7 @@ import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
 import { MapComponentInputConfig, MapComponentInputMapLayersConfig } from './models-config';
 import { LayerSourceConfig, getSourceName, ColorConfig } from 'arlas-web-contributors';
+import { ClusterAggType } from 'arlas-web-contributors/models/models';
 import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 import {
@@ -51,6 +52,8 @@ import { VisualisationSetConfig, BasemapStyle } from 'arlas-web-components';
 import { titleCase } from '@services/collection-service/tools';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
+import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 export enum EXPORT_TYPE {
     json = 'json',
@@ -72,6 +75,7 @@ export class ConfigExportHelper {
         lookAndFeelConfigGlobal: LookAndFeelGlobalFormGroup,
         analyticsConfigList: FormArray,
         colorService: ArlasColorGeneratorLoader,
+        collectionService: CollectionService
     ): any {
         const chipssearch: ChipSearchConfig = {
             name: searchConfigGlobal.customControls.name.value,
@@ -95,7 +99,7 @@ export class ConfigExportHelper {
                     url: startingConfig.customControls.serverUrl.value,
                     max_age_cache: startingConfig.customControls.unmanagedFields.maxAgeCache.value,
                     collection: {
-                        name: startingConfig.customControls.collections.value[0],
+                        name: startingConfig.customControls.collection.value,
                     }
                 }
             },
@@ -125,14 +129,18 @@ export class ConfigExportHelper {
             ]
         };
 
-        config.arlas.web.contributors.push(this.getMapContributor(mapConfigGlobal, mapConfigLayers));
-        config.arlas.web.contributors.push(this.getChipsearchContributor(searchConfigGlobal));
+        config.arlas.web.contributors = config.arlas.web.contributors.concat(this.getMapContributors(mapConfigGlobal, mapConfigLayers,
+            startingConfig.customControls.collection.value, collectionService));
+        config.arlas.web.contributors.push(this.getChipsearchContributor(searchConfigGlobal,
+            startingConfig.customControls.collection.value));
 
-        config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal, false));
+        config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal, startingConfig.customControls.collection.value,
+            false));
 
         if (timelineConfigGlobal.value.useDetailedTimeline) {
             config.arlas.web.components.detailedTimeline = this.getTimelineComponent(timelineConfigGlobal, true);
-            config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal, true));
+            config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal,
+                startingConfig.customControls.collection.value, true));
         }
 
         const contributorsMap = new Map<string, any>();
@@ -227,6 +235,7 @@ export class ConfigExportHelper {
             }
             case LAYER_MODE.cluster: {
                 layerSource.agg_geo_field = modeValues.geometryStep.aggGeometry;
+                layerSource.aggType = modeValues.geometryStep.aggType;
                 layerSource.granularity = modeValues.geometryStep.granularity;
                 layerSource.minfeatures = modeValues.visibilityStep.featuresMin;
                 if (modeValues.geometryStep.clusterGeometryType === CLUSTER_GEOMETRY_TYPE.aggregated_geometry) {
@@ -272,25 +281,35 @@ export class ConfigExportHelper {
         layerSource.source = getSourceName(layerSource);
         return layerSource;
     }
-    public static getMapContributor(
+    public static getMapContributors(
         mapConfigGlobal: MapGlobalFormGroup,
-        mapConfigLayers: FormArray): ContributorConfig {
-
-        const mapContributor: ContributorConfig = {
-            type: 'map',
-            identifier: 'mapbox',
-            name: 'map',
-            geo_query_op: titleCase(mapConfigGlobal.value.geographicalOperator),
-            geo_query_field: mapConfigGlobal.value.requestGeometries[0].requestGeom,
-            icon: mapConfigGlobal.customControls.unmanagedFields.icon.value,
-            layers_sources: []
-        };
-        const layersSources: Array<LayerSourceConfig> = mapConfigLayers.controls.map((layerFg: FormGroup) => {
-            return this.getLayerSourceConfig(layerFg);
+        mapConfigLayers: FormArray,
+        mainCollection: string,
+        collectionService: CollectionService): ContributorConfig[] {
+        const contributorsCollectionsMap = new Map<string, ContributorConfig>();
+        mapConfigLayers.controls.forEach((layerFg: MapLayerFormGroup) => {
+            const collection = layerFg.customControls.collection.value;
+            let mapContributor = contributorsCollectionsMap.get(collection);
+            if (!mapContributor) {
+                let geoQueryField = mapConfigGlobal.value.requestGeometries[0].requestGeom;
+                if (collection !== mainCollection) {
+                    geoQueryField = collectionService.collectionParamsMap.get(collection).params.centroid_path;
+                }
+                mapContributor = {
+                    type: 'map',
+                    identifier: collection,
+                    name: 'Map ' + collection,
+                    collection,
+                    geo_query_op: titleCase(mapConfigGlobal.value.geographicalOperator),
+                    geo_query_field: geoQueryField,
+                    icon: mapConfigGlobal.customControls.unmanagedFields.icon.value,
+                    layers_sources: []
+                };
+            }
+            mapContributor.layers_sources.push(this.getLayerSourceConfig(layerFg));
+            contributorsCollectionsMap.set(collection, mapContributor);
         });
-
-        mapContributor.layers_sources = layersSources;
-        return mapContributor;
+        return Array.from(contributorsCollectionsMap.values());
     }
 
     public static getMapComponent(
@@ -435,10 +454,11 @@ export class ConfigExportHelper {
         }
     }
 
-    private static getChipsearchContributor(searchConfigGlobal: SearchGlobalFormGroup): ContributorConfig {
+    private static getChipsearchContributor(searchConfigGlobal: SearchGlobalFormGroup, collection: string): ContributorConfig {
         return {
             type: CHIPSEARCH_TYPE,
             identifier: CHIPSEARCH_IDENTIFIER,
+            collection,
             search_field: searchConfigGlobal.customControls.searchField.value,
             name: searchConfigGlobal.customControls.name.value,
             icon: searchConfigGlobal.customControls.unmanagedFields.icon.value,
@@ -448,7 +468,8 @@ export class ConfigExportHelper {
     }
 
     // TODO put in common with getAnalyticsContributor ?
-    private static getTimelineContributor(timelineConfigGlobal: TimelineGlobalFormGroup, isDetailed: boolean): ContributorConfig {
+    private static getTimelineContributor(timelineConfigGlobal: TimelineGlobalFormGroup, collection: string,
+                                          isDetailed: boolean): ContributorConfig {
 
         const timelineAggregation = timelineConfigGlobal.customControls.tabsContainer.dataStep.timeline.aggregation.customControls;
         const detailedTimelineDataStep = timelineConfigGlobal.customControls.tabsContainer.dataStep.detailedTimeline;
@@ -458,6 +479,7 @@ export class ConfigExportHelper {
         const contributor: ContributorConfig = {
             type: isDetailed ? 'detailedhistogram' : 'histogram',
             identifier: isDetailed ? 'detailedTimeline' : 'timeline',
+            collection,
             name: unmanagedDataFields.name.value,
             icon: unmanagedDataFields.icon.value,
             isOneDimension: unmanagedDataFields.isOneDimension.value,
@@ -672,6 +694,7 @@ export class ConfigExportHelper {
             identifier: this.getContributorId(widgetData, widgetType),
             name: widgetData.title,
             title: widgetData.title,
+            collection: widgetData.dataStep.collection,
             icon,
             ... !!widgetData.renderStep.chartType ?
                 {

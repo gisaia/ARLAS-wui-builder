@@ -42,6 +42,7 @@ import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.
 import { UserInfosComponent } from 'arlas-wui-toolkit//components/user-infos/user-infos.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MenuService } from '@services/menu/menu.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 enum InitialChoice {
   none = 0,
@@ -97,6 +98,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     private startingConfigFormBuilder: StartingConfigFormBuilderService,
     private translate: TranslateService,
     private mainFormManager: MainFormManagerService,
+    private collectionService: CollectionService,
     public persistenceService: PersistenceService,
     private dialog: MatDialog,
     private authService: AuthentificationService,
@@ -186,6 +188,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
         this.getServerCollections(url).then(() => {
           this.urlCollectionsSubscription = this.configDescritor.getAllCollections().subscribe(collections => {
             this.availablesCollections = collections;
+            this.collectionService.setCollections(collections);
           }, error => this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'))
             , () => this.spinner.hide('connectServer'));
           this.isServerReady = true;
@@ -200,8 +203,8 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   }
 
   public saveConfig() {
-    const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().get('collections').value;
-    this.startupService.setCollection(collection);
+    const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().customControls.collection.value;
+    this.startupService.setDefaultCollection(collection);
     this.mainFormManager.initMainModulesForms(true);
     this.startEvent.next();
   }
@@ -209,6 +212,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   public initWithConfig(configJson: Config, configMapJson: MapConfig, configId?: string, configName?: string) {
     this.getServerCollections(configJson.arlas.server.url).then(() => {
       this.collectionsSubscription = this.configDescritor.getAllCollections().subscribe(collections => {
+        this.collectionService.setCollections(collections);
         const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
 
         if (!collection) {

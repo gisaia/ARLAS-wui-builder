@@ -182,11 +182,12 @@ export class MainFormService {
     });
   }
 
-  public getCollections(): string[] {
-    if (!!this.startingConfig.getFg() && !!this.startingConfig.getFg().get('collections')) {
-      return this.startingConfig.getFg().get('collections').value;
+  public getMainCollection(): string {
+    const collectionFormControl = this.startingConfig.getFg().customControls.collection;
+    if (!!this.startingConfig.getFg() && !!collectionFormControl) {
+      return collectionFormControl.value;
     }
-    return [];
+    return '';
   }
 
 }

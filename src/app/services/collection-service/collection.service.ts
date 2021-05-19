@@ -39,20 +39,30 @@ import { Hits } from 'arlas-api';
 export class CollectionService {
 
   private collectionsDescriptions = new Map<string, Observable<CollectionReferenceDescription>>();
-  public taggableFields = new Set<string>();
-
+  public taggableFieldsMap = new Map<string, Set<string>>();
+  public collectionParamsMap = new Map<string, CollectionReferenceDescription>();
+  public collections: string[] = [];
   constructor(
     private collabSearchService: ArlasCollaborativesearchService,
     private spinner: NgxSpinnerService,
     private defaultValueService: DefaultValuesService,
     private logger: NGXLogger
-  ) { }
+    ) { }
+
+  public getCollections(): string[] {
+    return this.collections;
+  }
+
+  public setCollections(collections: string[]): void {
+    this.collections = collections;
+  }
 
   public getDescribe(collection: string): Observable<CollectionReferenceDescription> {
     const describtionObs = this.collectionsDescriptions.get(collection);
     if (!describtionObs) {
       const describe = this.collabSearchService.describe(collection);
       this.collectionsDescriptions.set(collection, describe);
+      describe.subscribe(cd => this.collectionParamsMap.set(collection, cd));
       return describe;
     } else {
       return describtionObs;
@@ -77,13 +87,22 @@ export class CollectionService {
 
               } else if (!exclude && (!types || types.includes(property.type))) {
                 if (property && property.taggable) {
-                  this.taggableFields.add(path);
+                  let taggableFields = this.taggableFieldsMap.get(collection);
+                  if (!taggableFields) {
+                    taggableFields = new Set<string>();
+                  }
+                  taggableFields.add(path);
+                  this.taggableFieldsMap.set(collection, taggableFields);
                 }
                 return { name: path, type: property.type, indexed: property.indexed };
               } else if (exclude && (!types || !types.includes(property.type))) {
                 if (property && property.taggable) {
-                  this.taggableFields.add(path);
-                }
+                  let taggableFields = this.taggableFieldsMap.get(collection);
+                  if (!taggableFields) {
+                    taggableFields = new Set<string>();
+                  }
+                  taggableFields.add(path);
+                  this.taggableFieldsMap.set(collection, taggableFields);                }
                 return { name: path, type: property.type, indexed: property.indexed };
               } else {
                 return null;
@@ -120,9 +139,9 @@ export class CollectionService {
       .finally(() => this.spinner.hide());
   }
 
-  public countNbDocuments(): Observable<Hits> {
+  public countNbDocuments(collection: string): Observable<Hits> {
     return this.collabSearchService.resolveButNotHits([projType.count, {}],
-      this.collabSearchService.collaborations, null, null, false, 120);
+      this.collabSearchService.collaborations, collection, null, null, false, 120);
   }
 
   public getTermAggregation(collection: string, field: string, showSpinner: boolean = true,

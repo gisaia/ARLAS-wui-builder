@@ -12,7 +12,7 @@ describe('CollectionComponent', () => {
     providers: [
       mockProvider(MainFormManagerService),
       mockProvider(MainFormService, {
-        getCollections: () => []
+        getMainCollection: () => ''
       }),
       mockProvider(ArlasCollaborativesearchService)
     ]

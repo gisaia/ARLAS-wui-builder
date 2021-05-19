@@ -32,15 +32,15 @@ export abstract class WidgetFormBuilder {
     /**
      * Must return a FormGroup with controls "dataStep" and "renderStep"
      */
-    protected abstract build(): ConfigFormGroup;
+    protected abstract build(collection: string): ConfigFormGroup;
 
     /**
      * Build the FormGroup and set the value to it
      * It may be overriden to create inner controls (like in FormArray)
      * before setting the value.
      */
-    public buildWithValues(value: any) {
-        const formGroup = this.build();
+    public buildWithValues(value: any, collection) {
+        const formGroup = this.build(collection);
         formGroup.patchValue(value);
         return formGroup;
     }

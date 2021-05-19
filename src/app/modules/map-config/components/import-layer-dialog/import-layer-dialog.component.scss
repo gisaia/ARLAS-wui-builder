@@ -20,4 +20,9 @@ under the License.
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+
+    .not-importable {
+        font-size: 0.9em;
+        color: #555;
+    }
 }

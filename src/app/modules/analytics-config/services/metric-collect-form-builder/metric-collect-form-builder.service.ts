@@ -23,6 +23,8 @@ import { CollectionField } from '@services/collection-service/models';
 import { Observable } from 'rxjs';
 import { NUMERIC_OR_DATE_TYPES, titleCase } from '@services/collection-service/tools';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 export const DEFAULT_METRIC_VALUE = 'Count';
 
@@ -31,14 +33,15 @@ export interface MetricCollectControls {
   metricCollectField: SelectFormControl;
 }
 
-export class MetricCollectFormGroup extends ConfigFormGroup {
+export class MetricCollectFormGroup extends CollectionConfigFormGroup {
 
   public get metricCollectFunction() {
     return this.get('metricCollectFunction') as InputFormControl;
   }
 
-  constructor(collectionFieldsObs: Observable<Array<CollectionField>>, type: string) {
+  constructor(collection: string, collectionService: CollectionService, type: string) {
     super(
+      collection,
       {
         metricCollectFunction: new SelectFormControl(
           '',
@@ -71,8 +74,7 @@ export class MetricCollectFormGroup extends ConfigFormGroup {
                 const filterCallback = (field: CollectionField) =>
                   this.metricCollectFunction.value === Metric.CollectFctEnum.CARDINALITY ?
                     field : NUMERIC_OR_DATE_TYPES.indexOf(field.type) >= 0;
-
-                const sub = collectionFieldsObs.subscribe(
+                const sub = collectionService.getCollectionFields(this.collection).subscribe(
                   fields => {
                     control.setSyncOptions(
                       fields
@@ -105,10 +107,10 @@ export class MetricCollectFormBuilderService {
 
   public formGroup: ConfigFormGroup;
 
-  constructor() { }
+  constructor(private collectionService: CollectionService) { }
 
-  public build(collectionFieldsObs: Observable<Array<CollectionField>>, type: string) {
-    return new MetricCollectFormGroup(collectionFieldsObs, type);
+  public build(collection: string, type: string) {
+    return new MetricCollectFormGroup(collection, this.collectionService, type);
   }
 
 }

@@ -30,7 +30,6 @@ import {
 import { FormArray, Validators, FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { toOptionsObs, NUMERIC_OR_DATE_OR_TEXT_TYPES } from '@services/collection-service/tools';
-import { CollectionReferenceDescription } from 'arlas-api';
 import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
@@ -38,99 +37,115 @@ import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
+import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 
-export class ResultlistConfigForm extends ConfigFormGroup {
+export class ResultlistConfigForm extends CollectionConfigFormGroup {
 
   constructor(
-    describe: Observable<CollectionReferenceDescription>,
+    collection: string,
+    collectionService: CollectionService,
   ) {
-    super({
-      title: new InputFormControl(
-        '',
-        marker('resultlist title'),
-        marker('resultlist title description'),
-        undefined,
-        {
-          childs: () => [this.customControls.dataStep.idFieldName]
-        }
-      ),
-      dataStep: new ConfigFormGroup({
-        searchSize: new SliderFormControl(
+    super(
+      collection,
+      {
+        title: new InputFormControl(
           '',
-          marker('Search size'),
-          marker('Search size description'),
-          10,
-          500,
-          10
-        ),
-        columns: new FormArray([], Validators.required),
-        details: new FormArray([]),
-        idFieldName: new HiddenFormControl(
-          '',
+          marker('resultlist title'),
+          marker('resultlist title description'),
           undefined,
           {
-            onDependencyChange: (control) => {
-              const sub = describe.subscribe(d => {
-                control.setValue(d.params.id_path);
-                sub.unsubscribe();
-              });
+            childs: () => [this.customControls.dataStep.idFieldName]
+          }
+        ),
+        dataStep: new ConfigFormGroup({
+          collection: new SelectFormControl(
+            collection,
+            marker('Collection'),
+            marker('Resultlist collection description'),
+            false,
+            collectionService.getCollections().map(c => ({ label: c, value: c })),
+            {
+              optional: false,
+              resetDependantsOnChange: true
             }
-          }
-        ),
-        customComponent: new ComponentFormControl(
-          ResultlistDataComponent,
-          {
-            control: () => this.customGroups.dataStep
-          }
-        )
-      }).withTabName(marker('Data')),
-      renderStep: new ConfigFormGroup({
-        displayFilters: new SlideToggleFormControl(
-          '',
-          marker('Display filters'),
-          marker('Display filters description')
-        ),
-        cellBackgroundStyle: new SelectFormControl(
-          '',
-          marker('Background style of cells'),
-          marker('Background style of cells Description'),
-          false,
-          [
-            { label: marker('Filled'), value: 'filled' },
-            { label: marker('Outlined'), value: 'outlined' },
-          ],
-          {
-            optional: true,
-            dependsOn: () => [
-              this.customControls.dataStep.columns as any
+          ),
+          searchSize: new SliderFormControl(
+            '',
+            marker('Search size'),
+            marker('Search size description'),
+            10,
+            500,
+            10
+          ),
+          columns: (new FormArray([], {
+            validators: Validators.required,
+          })),
+          details: new FormArray([]),
+          idFieldName: new HiddenFormControl(
+            '',
+            undefined,
+            {
+              onDependencyChange: (control) => {
+                collectionService.getDescribe(this.collection).subscribe(d => {
+                  control.setValue(d.params.id_path);
+                });
+              }
+            }
+          ),
+          customComponent: new ComponentFormControl(
+            ResultlistDataComponent,
+            {
+              control: () => this.customGroups.dataStep
+            }
+          )
+        }).withTabName(marker('Data')),
+        renderStep: new ConfigFormGroup({
+          displayFilters: new SlideToggleFormControl(
+            '',
+            marker('Display filters'),
+            marker('Display filters description')
+          ),
+          cellBackgroundStyle: new SelectFormControl(
+            '',
+            marker('Background style of cells'),
+            marker('Background style of cells Description'),
+            false,
+            [
+              { label: marker('Filled'), value: 'filled' },
+              { label: marker('Outlined'), value: 'outlined' },
             ],
-            onDependencyChange: (control: ButtonFormControl) => {
-              const useColorService = this.customControls.dataStep.columns.controls
-              .filter(c => c.get('useColorService').value === true).length > 0;
-              control.enableIf(useColorService);
+            {
+              optional: true,
+              dependsOn: () => [
+                this.customControls.dataStep.columns as any
+              ],
+              onDependencyChange: (control: ButtonFormControl) => {
+                const useColorService = this.customControls.dataStep.columns.controls
+                  .filter(c => c.get('useColorService').value === true).length > 0;
+                control.enableIf(useColorService);
+              }
             }
-          }
-        )
-      }).withTabName(marker('Render')),
-      unmanagedFields: new FormGroup({
-        dataStep: new FormGroup({}),
-        renderStep: new FormGroup({
-          tableWidth: new FormControl(),
-          globalActionsList: new FormControl(),
-          nLastLines: new FormControl(),
-          detailedGridHeight: new FormControl(),
-          nbGridColumns: new FormControl(),
-          defautMode: new FormControl(),
-          isBodyHidden: new FormControl(),
-          isGeoSortActived: new FormControl(),
-          isAutoGeoSortActived: new FormControl(),
-          selectedItemsEvent: new FormControl(),
-          consultedItemEvent: new FormControl(),
-          actionOnItemEvent: new FormControl(),
-          globalActionEvent: new FormControl(),
-        }),
-      })
-    });
+          )
+        }).withTabName(marker('Render')),
+        unmanagedFields: new FormGroup({
+          dataStep: new FormGroup({}),
+          renderStep: new FormGroup({
+            tableWidth: new FormControl(),
+            globalActionsList: new FormControl(),
+            nLastLines: new FormControl(),
+            detailedGridHeight: new FormControl(),
+            nbGridColumns: new FormControl(),
+            defautMode: new FormControl(),
+            isBodyHidden: new FormControl(),
+            isGeoSortActived: new FormControl(),
+            isAutoGeoSortActived: new FormControl(),
+            selectedItemsEvent: new FormControl(),
+            consultedItemEvent: new FormControl(),
+            actionOnItemEvent: new FormControl(),
+            globalActionEvent: new FormControl(),
+          }),
+        })
+      });
   }
 
   public customGroups = {
@@ -141,6 +156,7 @@ export class ResultlistConfigForm extends ConfigFormGroup {
   public customControls = {
     title: this.get('title') as TitleInputFormControl,
     dataStep: {
+      collection: this.get('dataStep.collection') as SelectFormControl,
       searchSize: this.get('dataStep.searchSize') as SliderFormControl,
       columns: this.get('dataStep.columns') as FormArray,
       details: this.get('dataStep.details') as FormArray,
@@ -171,7 +187,7 @@ export class ResultlistConfigForm extends ConfigFormGroup {
   };
 }
 
-export class ResultlistColumnFormGroup extends ConfigFormGroup {
+export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
 
   constructor(fieldsObs: Observable<Array<SelectOption>>,
               collection: string,
@@ -180,96 +196,97 @@ export class ResultlistColumnFormGroup extends ConfigFormGroup {
               dialog: MatDialog,
               collectionService: CollectionService,
               private colorService: ArlasColorGeneratorLoader) {
-    super({
-      columnName: new InputFormControl(
-        '',
-        marker('Column name'),
-        ''
-      ),
-      fieldName: new SelectFormControl(
-        '',
-        marker('Column field'),
-        '',
-        true,
-        fieldsObs
-      ),
-      dataType: new InputFormControl(
-        '',
-        marker('Unit of the column'),
-        '',
-        undefined,
-        {
-          optional: true
-        }
-      ),
-      process: new TextareaFormControl(
-        '',
-        marker('Transformation'),
-        '',
-        1,
-        {
-          optional: true
-        }
-      ),
-      useColorService: new SlideToggleFormControl(
-        '',
-        marker('Colorize'),
-        '',
-        {
-          optional: true
-
-        }
-      ),
-      keysToColorsButton: new ButtonFormControl(
-        '',
-        marker('Manage colors'),
-        '',
-        () => collectionService.getTermAggregation(collection, this.customControls.fieldName.value)
-          .then((keywords: Array<string>) => {
-            globalKeysToColortrl.clear();
-            keywords.forEach((k: string, index: number) => {
-              this.addToColorManualValuesCtrl({
-                keyword: k.toString(),
-                color: colorService.getColor(k)
-              }, index);
-            });
-            this.addToColorManualValuesCtrl({
-              keyword: 'OTHER',
-              color: defaultConfig.otherColor
-            });
-
-            const sub = dialog.open(DialogColorTableComponent, {
-              data: {
-                collection,
-                sourceField: this.customControls.fieldName.value,
-                keywordColors: globalKeysToColortrl.value
-              } as DialogColorTableData,
-              autoFocus: false,
-            })
-              .afterClosed().subscribe((result: Array<KeywordColor>) => {
-                if (result !== undefined) {
-                  result.forEach((kc: KeywordColor) => {
-                    /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
-                    colorService.updateKeywordColor(kc.keyword, kc.color);
-                    this.addToColorManualValuesCtrl(kc);
-                  });
-                }
-                sub.unsubscribe();
-              });
-          }),
-        marker('A field is required to manage colors'),
-        {
-          optional: true,
-          dependsOn: () => [
-            this.customControls.useColorService,
-            this.customControls.fieldName,
-          ],
-          onDependencyChange: (control: ButtonFormControl) => {
-            control.enableIf(this.customControls.useColorService.value);
-            control.disabledButton = !this.customControls.fieldName.value;
+    super(collection,
+      {
+        columnName: new InputFormControl(
+          '',
+          marker('Column name'),
+          ''
+        ),
+        fieldName: new SelectFormControl(
+          '',
+          marker('Column field'),
+          '',
+          true,
+          fieldsObs
+        ),
+        dataType: new InputFormControl(
+          '',
+          marker('Unit of the column'),
+          '',
+          undefined,
+          {
+            optional: true
           }
-        }),
-    });
+        ),
+        process: new TextareaFormControl(
+          '',
+          marker('Transformation'),
+          '',
+          1,
+          {
+            optional: true
+          }
+        ),
+        useColorService: new SlideToggleFormControl(
+          '',
+          marker('Colorize'),
+          '',
+          {
+            optional: true
+
+          }
+        ),
+        keysToColorsButton: new ButtonFormControl(
+          '',
+          marker('Manage colors'),
+          '',
+          () => collectionService.getTermAggregation(this.collection, this.customControls.fieldName.value)
+            .then((keywords: Array<string>) => {
+              globalKeysToColortrl.clear();
+              keywords.forEach((k: string, index: number) => {
+                this.addToColorManualValuesCtrl({
+                  keyword: k.toString(),
+                  color: colorService.getColor(k)
+                }, index);
+              });
+              this.addToColorManualValuesCtrl({
+                keyword: 'OTHER',
+                color: defaultConfig.otherColor
+              });
+
+              const sub = dialog.open(DialogColorTableComponent, {
+                data: {
+                  collection: this.collection,
+                  sourceField: this.customControls.fieldName.value,
+                  keywordColors: globalKeysToColortrl.value
+                } as DialogColorTableData,
+                autoFocus: false,
+              })
+                .afterClosed().subscribe((result: Array<KeywordColor>) => {
+                  if (result !== undefined) {
+                    result.forEach((kc: KeywordColor) => {
+                      /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
+                      colorService.updateKeywordColor(kc.keyword, kc.color);
+                      this.addToColorManualValuesCtrl(kc);
+                    });
+                  }
+                  sub.unsubscribe();
+                });
+            }),
+          marker('A field is required to manage colors'),
+          {
+            optional: true,
+            dependsOn: () => [
+              this.customControls.useColorService,
+              this.customControls.fieldName,
+            ],
+            onDependencyChange: (control: ButtonFormControl) => {
+              control.enableIf(this.customControls.useColorService.value);
+              control.disabledButton = !this.customControls.fieldName.value;
+            }
+          }),
+      });
   }
 
   public customControls = {
@@ -367,27 +384,24 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
     super(collectionService, mainFormService);
   }
 
-  public build() {
-    const formGroup = new ResultlistConfigForm(
-      this.collectionService.getDescribe(
-        this.mainFormService.getCollections()[0]
-      ));
+  public build(collection: string) {
+    const formGroup = new ResultlistConfigForm(collection, this.collectionService);
     this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
     return formGroup;
   }
 
-  public buildWithValues(value: any) {
-    const formGroup = this.build();
+  public buildWithValues(value: any, collection: string) {
+    const formGroup = this.build(collection);
     // for each column, the related FormGroup must be created before setting its values
     const columns = (value.dataStep || {}).columns || [];
     columns.forEach(c => formGroup.customControls.dataStep.columns
-      .push(this.buildColumn()));
+      .push(this.buildColumn(collection)));
 
     // same for the details, and the fields within
     const details = (value.dataStep || {}).details || [];
     details.forEach(d => {
       const detail = this.buildDetail();
-      d.fields.forEach(f => detail.customControls.fields.push(this.buildDetailField()));
+      d.fields.forEach(f => detail.customControls.fields.push(this.buildDetailField(collection)));
       formGroup.customControls.dataStep.details.push(detail);
     });
 
@@ -396,29 +410,26 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
   }
 
   // TODO Optimize by not requesting the collection fields (also for other build methods)
-  public buildColumn() {
-    const collection = this.mainFormService.getCollections()[0];
+  public buildColumn(collection: string) {
     const fieldObs = toOptionsObs(this.collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES));
     return new ResultlistColumnFormGroup(
-          fieldObs,
-          collection,
-          this.mainFormService.commonConfig.getKeysToColorFa(),
-          this.defaultValuesService.getDefaultConfig(),
-          this.dialog,
-          this.collectionService,
-          this.colorService);
+      fieldObs,
+      collection,
+      this.mainFormService.commonConfig.getKeysToColorFa(),
+      this.defaultValuesService.getDefaultConfig(),
+      this.dialog,
+      this.collectionService,
+      this.colorService);
   }
 
   public buildDetail() {
     return new ResultlistDetailFormGroup();
   }
 
-  public buildDetailField() {
+  public buildDetailField(collection: string) {
     return new ResultlistDetailFieldFormGroup(
       toOptionsObs(
-        this.collectionService.getCollectionFields(
-          this.mainFormService.getCollections()[0],
-          NUMERIC_OR_DATE_OR_TEXT_TYPES))
+        this.collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES))
     );
   }
 

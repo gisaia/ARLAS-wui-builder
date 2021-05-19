@@ -2,12 +2,12 @@
 
     <ng-container matColumnDef="field">
         <th mat-header-cell style="width: 40%;" *matHeaderCellDef>{{'Filter Field' | translate}}</th>
-        <td mat-cell style="width: 40%;" *matCellDef="let element"> {{element.filterField.value}} </td>
+        <td mat-cell style="width: 40%;" *matCellDef="let element"> {{element?.filterField?.value}} </td>
     </ng-container>
 
     <ng-container matColumnDef="operation">
         <th mat-header-cell style="width: 15%;" *matHeaderCellDef>{{'Operation' | translate}}</th>
-        <td mat-cell style="width: 15%;" *matCellDef="let element"> {{element.filterOperation | translate}} </td>
+        <td mat-cell style="width: 15%;" *matCellDef="let element"> {{element?.filterOperation | translate}} </td>
     </ng-container>
 
     <ng-container matColumnDef="value">
@@ -16,8 +16,8 @@
             <ul *ngIf="element.filterOperation === 'IN' || element.filterOperation === 'NOT_IN'" style="padding-left: 15px;">
                 <li *ngFor="let value of element.filterInValues"> {{value}}</li>
             </ul>
-            <span *ngIf="element.filterOperation === 'EQUAL' || element.filterOperation === 'NOT_EQUAL'">{{element.filterEqualValues}}</span>
-            <span *ngIf="element.filterOperation === 'RANGE' || element.filterOperation === 'OUT_RANGE'">[{{element.filterMinRangeValues}}, {{element.filterMaxRangeValues}}] </span>
+            <span *ngIf="element.filterOperation === 'EQUAL' || element.filterOperation === 'NOT_EQUAL'">{{element?.filterEqualValues}}</span>
+            <span *ngIf="element.filterOperation === 'RANGE' || element.filterOperation === 'OUT_RANGE'">[{{element?.filterMinRangeValues}}, {{element?.filterMaxRangeValues}}] </span>
         
         </td>
 

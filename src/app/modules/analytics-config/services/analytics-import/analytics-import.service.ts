@@ -97,6 +97,11 @@ export class AnalyticsImportService {
     const widget = this.analyticsInitService.initNewWidget(c.componentType);
     const contributorId = c.contributorId;
     const contributor = config.arlas.web.contributors.find(contrib => contrib.identifier === contributorId);
+    const defaultCollection = config.arlas.server.collection.name;
+    /** retro-combatibility with mono-collection dashboards */
+    if (!contributor.collection) {
+      contributor.collection = config.arlas.server.collection.name;
+    }
     let widgetData;
     if (c.componentType === WIDGET_TYPE.histogram) {
       contentTypes.push(WIDGET_TYPE.histogram);
@@ -158,7 +163,7 @@ export class AnalyticsImportService {
   }
 
   private getHistogramWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
-    const widgetData = this.histogramFormBuilder.build();
+    const widgetData = this.histogramFormBuilder.build(contributor.collection);
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
@@ -167,6 +172,10 @@ export class AnalyticsImportService {
       {
         value: component.input.chartTitle,
         control: title
+      },
+      {
+        value: contributor.collection,
+        control: dataStep.collection
       },
       ...this.getAggregationImportElements(
         contributor,
@@ -223,7 +232,7 @@ export class AnalyticsImportService {
   }
 
   private getSwimlaneWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
-    const widgetData = this.swimlaneFormBuilder.build();
+    const widgetData = this.swimlaneFormBuilder.build(contributor.collection);
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
@@ -236,6 +245,10 @@ export class AnalyticsImportService {
       {
         value: component.input.chartTitle,
         control: title
+      },
+      {
+        value: contributor.collection,
+        control: dataStep.collection
       },
       ...this.getAggregationImportElements(
         contributor,
@@ -409,7 +422,7 @@ export class AnalyticsImportService {
   }
 
   private getMetricWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
-    const widgetData = this.metricFormBuilder.build();
+    const widgetData = this.metricFormBuilder.build(contributor.collection);
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
@@ -422,6 +435,10 @@ export class AnalyticsImportService {
       {
         value: contributor.title,
         control: title
+      },
+      {
+        value: contributor.collection,
+        control: dataStep.collection
       },
       {
         value: !!contributor.function && contributor.function === 'm[0]' ? '' : contributor.function,
@@ -457,7 +474,7 @@ export class AnalyticsImportService {
   }
 
   private getPowerbarWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
-    const widgetData = this.powerbarFormBuilder.build();
+    const widgetData = this.powerbarFormBuilder.build(contributor.collection);
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
@@ -467,6 +484,10 @@ export class AnalyticsImportService {
       {
         value: contributor.title,
         control: title
+      },
+      {
+        value: contributor.collection,
+        control: dataStep.collection
       },
       {
         value: contributor.aggregationmodels[0].field,
@@ -514,7 +535,7 @@ export class AnalyticsImportService {
   }
 
   private getDonutWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
-    const widgetData = this.donutFormBuilder.build();
+    const widgetData = this.donutFormBuilder.build(contributor.collection);
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
@@ -534,6 +555,10 @@ export class AnalyticsImportService {
       {
         value: contributor.title,
         control: title
+      },
+      {
+        value: contributor.collection,
+        control: dataStep.collection
       },
       {
         value: aggregationsModels,
@@ -572,7 +597,7 @@ export class AnalyticsImportService {
   }
 
   private getResultlistWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
-    const widgetData = this.resultlistFormBuilder.build();
+    const widgetData = this.resultlistFormBuilder.build(contributor.collection);
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
@@ -581,6 +606,10 @@ export class AnalyticsImportService {
       {
         value: contributor.name,
         control: title
+      },
+      {
+        value: contributor.collection,
+        control: dataStep.collection
       },
       {
         value: contributor.search_size,
@@ -601,7 +630,7 @@ export class AnalyticsImportService {
     ]);
 
     contributor.columns.forEach(c => {
-      const column = this.resultlistFormBuilder.buildColumn();
+      const column = this.resultlistFormBuilder.buildColumn(contributor.collection);
       importElements([
         {
           value: c.columnName,
@@ -640,7 +669,7 @@ export class AnalyticsImportService {
         ]);
 
         d.fields.forEach(f => {
-          const field = this.resultlistFormBuilder.buildDetailField();
+          const field = this.resultlistFormBuilder.buildDetailField(contributor.collection);
           importElements([
             {
               value: f.label,

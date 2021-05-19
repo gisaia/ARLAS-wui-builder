@@ -71,6 +71,8 @@ export class FiltersComponent implements OnInit, OnDestroy {
       ffg.customControls.id.setValue(i);
       this.filtersFa.setControl(i, ffg);
     }
+    layerFg.clearFilters.subscribe(f => this.filtersFa = (layerFg.customControls.featuresFg.controls.visibilityStep as ConfigFormGroup)
+    .controls.filters.value);
   }
 
   public ngOnDestroy() {
@@ -79,7 +81,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   public open(filterId?: number) {
     let mapFormGroup: MapFilterFormGroup;
-    mapFormGroup = this.mapLayerFormBuilder.buildMapFilter();
+    mapFormGroup = this.mapLayerFormBuilder.buildMapFilter(this.layerFg.customControls.collection.value);
     /** if we edit an existing filter */
     if (filterId !== undefined) {
       const formGroupIndex = (this.filtersFa.value as any[]).findIndex(el => el.id === filterId);
@@ -103,7 +105,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.dialog.open(DialogFilterComponent, {
       data: {
         mapForm: mapFormGroup,
-        collection: this.mainFormService.getCollections()[0]
+        collection: this.mainFormService.getMainCollection()
       }
     }).afterClosed().subscribe(result => {
       if (result) {
@@ -135,6 +137,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
         const formGroupIndex = (this.filtersFa.value as any[]).findIndex(el => el.id === filterId);
         this.filtersFa.removeAt(formGroupIndex);
       }
+      this.ngOnInit();
     });
   }
 
