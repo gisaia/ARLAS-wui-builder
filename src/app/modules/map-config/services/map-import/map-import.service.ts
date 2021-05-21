@@ -400,12 +400,12 @@ export class MapImportService {
       isGeometryTypeRaw ? CLUSTER_GEOMETRY_TYPE.raw_geometry : CLUSTER_GEOMETRY_TYPE.aggregated_geometry;
     // To Import old dashboard before ARLAS 17
     if (!!layerSource.aggregated_geometry) {
-        if (layerSource.aggregated_geometry === 'geohash') {
-          layerSource.aggregated_geometry = 'cell';
-        }
-        if (layerSource.aggregated_geometry === 'geohash_center') {
-          layerSource.aggregated_geometry = 'cell_center';
-        }
+      if (layerSource.aggregated_geometry === 'geohash') {
+        layerSource.aggregated_geometry = 'cell';
+      }
+      if (layerSource.aggregated_geometry === 'geohash_center') {
+        layerSource.aggregated_geometry = 'cell_center';
+      }
     }
     values.geometryStep.aggregatedGeometry = !isGeometryTypeRaw ? layerSource.aggregated_geometry : null;
     values.geometryStep.rawGeometry = isGeometryTypeRaw ? layerSource.raw_geometry.geometry : null;
@@ -431,6 +431,18 @@ export class MapImportService {
        * it's just precaution in case we load a config file that doesn't respect this condition
        */
       defaultMapContributor = config.arlas.web.contributors.find(c => c.type === 'map');
+    }
+    if (!defaultMapContributor) {
+      defaultMapContributor = {
+        type: 'map',
+        identifier: defaultCollection,
+        name: 'Map ' + defaultCollection,
+        collection: defaultCollection,
+        geo_query_op: 'Intersects',
+        geo_query_field: '',
+        icon: 'check_box_outline_blank',
+        layers_sources: []
+      };
     }
     this.importMapGlobal(mapgl, defaultMapContributor, defaultCollection);
 

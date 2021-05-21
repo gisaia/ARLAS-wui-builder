@@ -309,6 +309,20 @@ export class ConfigExportHelper {
             mapContributor.layers_sources.push(this.getLayerSourceConfig(layerFg));
             contributorsCollectionsMap.set(collection, mapContributor);
         });
+        /** if no layer has been defined, create the default mapcontributor wihtout any layers */
+        if (mapConfigLayers.controls.length === 0) {
+            const mapContributor: ContributorConfig = {
+                type: 'map',
+                identifier: mainCollection,
+                name: 'Map ' + mainCollection,
+                collection: mainCollection,
+                geo_query_op: titleCase(mapConfigGlobal.value.geographicalOperator),
+                geo_query_field: mapConfigGlobal.value.requestGeometries[0].requestGeom,
+                icon: mapConfigGlobal.customControls.unmanagedFields.icon.value,
+                layers_sources: []
+            };
+            contributorsCollectionsMap.set(mainCollection, mapContributor);
+        }
         return Array.from(contributorsCollectionsMap.values());
     }
 
