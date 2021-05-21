@@ -1,8 +1,22 @@
 # Change Log
 
+## [v17.0.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.0.1) (2021-05-21)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.0.0...v17.0.1)
+
+**New stuff:**
+
+- Add the possibility to choose which collection to explore [\#399](https://github.com/gisaia/ARLAS-wui-builder/issues/399) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
 ## [v17.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.0.0) (2021-05-19)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.0.0-beta.0...v17.0.0)
+
+**New stuff:**
+
+- Add a required step of choosing the collection from which data is fetched for layers [\#543](https://github.com/gisaia/ARLAS-wui-builder/issues/543) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Add a required step of choosing the collection from which data is fetched for widgets [\#542](https://github.com/gisaia/ARLAS-wui-builder/issues/542) [[WIDGET](https://github.com/gisaia/ARLAS-wui-builder/labels/WIDGET)]
+- Remove filtering dashboards by collection when importing widgets or layers [\#541](https://github.com/gisaia/ARLAS-wui-builder/issues/541)
 
 ## [v17.0.0-beta.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.0.0-beta.0) (2021-05-10)
 
