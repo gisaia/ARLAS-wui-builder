@@ -405,6 +405,9 @@
                 }
             },
             "metric": {
+                "renderStep": {
+                    "valuePrecision": 1
+                },
                 "unmanagedFields": {
                     "renderStep": {
                         "customizedCssClass": "power"

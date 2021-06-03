@@ -206,6 +206,7 @@ export interface AnalyticComponentInputConfig {
     beforeValue?: string;
     afterValue?: string;
     shortValue?: boolean;
+    valuePrecision?: number;
     displayFilter?: boolean;
     useColorService?: boolean;
     useColorFromData?: boolean;
