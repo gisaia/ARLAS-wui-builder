@@ -278,7 +278,7 @@ export class ConfigExportHelper {
         if (!!modeValues.styleStep.weightFg) {
             this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.weightFg, layerValues.mode);
         }
-        layerSource.source = getSourceName(layerSource);
+        layerSource.source = getSourceName(layerSource) + '-' + layerFg.value.collection;
         return layerSource;
     }
     public static getMapContributors(
