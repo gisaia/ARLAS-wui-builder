@@ -1,5 +1,18 @@
 # Change Log
 
+## [v17.1.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.1.0) (2021-06-04)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.0.1...v17.1.0)
+
+**New stuff:**
+
+- Metric value  precision is missing [\#561](https://github.com/gisaia/ARLAS-wui-builder/issues/561) [[WIDGET](https://github.com/gisaia/ARLAS-wui-builder/labels/WIDGET)]
+
+**Fixed bugs:**
+
+- Source names should include collection names [\#563](https://github.com/gisaia/ARLAS-wui-builder/issues/563)
+- Missing collection information in contributor ID [\#559](https://github.com/gisaia/ARLAS-wui-builder/issues/559) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+
 ## [v17.0.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.0.1) (2021-05-21)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.0.0...v17.0.1)
