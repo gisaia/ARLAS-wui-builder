@@ -453,6 +453,10 @@ export class AnalyticsImportService {
         control: renderStep.shortValue
       },
       {
+        value: component.input.valuePrecision !== undefined ? component.input.valuePrecision : 0,
+        control: renderStep.valuePrecision
+      },
+      {
         value: component.input.beforeValue,
         control: renderStep.beforeValue
       },

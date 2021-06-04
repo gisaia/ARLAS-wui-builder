@@ -877,6 +877,7 @@ export class ConfigExportHelper {
                 input: {
                     customizedCssClass: unmanagedRenderFields.customizedCssClass,
                     shortValue: !!widgetData.renderStep.shortValue,
+                    valuePrecision: +widgetData.renderStep.valuePrecision,
                     chartWidth: !!itemPerLine && +itemPerLine !== 1 ?
                         Math.ceil(analyticsBoardWidth / itemPerLine) - 6 : analyticsBoardWidth // 6 => margin and padding left/right
                 }

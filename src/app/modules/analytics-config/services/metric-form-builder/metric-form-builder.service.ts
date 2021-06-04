@@ -93,6 +93,15 @@ export class MetricFormGroup extends CollectionConfigFormGroup {
               optional: true
             }
           ),
+          valuePrecision:  new InputFormControl(
+            '',
+            marker('Metric value precision'),
+            marker('Metric value precision description'),
+            'number',
+            {
+              optional: true
+            }
+          ),
           beforeValue: new InputFormControl(
             '',
             marker('Before value'),
@@ -129,6 +138,7 @@ export class MetricFormGroup extends CollectionConfigFormGroup {
     },
     renderStep: {
       shortValue: this.get('renderStep').get('shortValue') as SlideToggleFormControl,
+      valuePrecision: this.get('renderStep').get('valuePrecision') as InputFormControl,
       beforeValue: this.get('renderStep').get('beforeValue') as InputFormControl,
       afterValue: this.get('renderStep').get('afterValue') as InputFormControl,
     },
