@@ -750,7 +750,7 @@ export class ConfigExportHelper {
      * - metrics ...
      */
     public static getContributorId(widgetData: any, widgetType: any): string {
-        let idString = '';
+        let idString = widgetData.dataStep.collection + '-';
         if (widgetType === WIDGET_TYPE.histogram || widgetType === WIDGET_TYPE.swimlane) {
             const agg = widgetData.dataStep.aggregation;
             idString = agg.aggregationField + '-' + agg.aggregationFieldType + '-' + agg.aggregationBucketOrInterval;
