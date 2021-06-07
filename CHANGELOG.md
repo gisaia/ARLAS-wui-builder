@@ -1,5 +1,13 @@
 # Change Log
 
+## [v17.1.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.1.1) (2021-06-07)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.1.0...v17.1.1)
+
+**Fixed bugs:**
+
+- concatenate collection name to ids of all widgets [\#567](https://github.com/gisaia/ARLAS-wui-builder/issues/567)
+
 ## [v17.1.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.1.0) (2021-06-04)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.0.1...v17.1.0)
