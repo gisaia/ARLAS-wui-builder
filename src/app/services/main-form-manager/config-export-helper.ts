@@ -753,7 +753,7 @@ export class ConfigExportHelper {
         let idString = widgetData.dataStep.collection + '-';
         if (widgetType === WIDGET_TYPE.histogram || widgetType === WIDGET_TYPE.swimlane) {
             const agg = widgetData.dataStep.aggregation;
-            idString = agg.aggregationField + '-' + agg.aggregationFieldType + '-' + agg.aggregationBucketOrInterval;
+            idString += agg.aggregationField + '-' + agg.aggregationFieldType + '-' + agg.aggregationBucketOrInterval;
             if (!!widgetData.dataStep.metric) {
                 idString += '-' + (widgetData.dataStep.metric.metricCollectFunction !== undefined ?
                     widgetData.dataStep.metric.metricCollectFunction : '') + '-' + (!!widgetData.dataStep.metric.metricCollectField ?
@@ -769,14 +769,14 @@ export class ConfigExportHelper {
                 idString += !!termAgg.termAggregationField ? termAgg.termAggregationField : '' + '-' + termAgg.termAggregationSize;
             }
         } else if (widgetType === WIDGET_TYPE.powerbars) {
-            idString = widgetData.dataStep.aggregationField + '-' + widgetData.dataStep.aggregationSize;
+            idString += widgetData.dataStep.aggregationField + '-' + widgetData.dataStep.aggregationSize;
             if (!!widgetData.dataStep.metric) {
                 idString += widgetData.dataStep.metric.metricCollectFunction !== undefined ?
                     ('-' + widgetData.dataStep.metric.metricCollectFunction) : '';
                 idString += !!widgetData.dataStep.metric.metricCollectField ? ('-' + widgetData.dataStep.metric.metricCollectField) : '';
             }
         } else if (widgetType === WIDGET_TYPE.metric) {
-            idString = widgetData.dataStep.function;
+            idString += widgetData.dataStep.function;
             widgetData.dataStep.metrics.forEach(m => {
                 idString += m.field + '-' + m.metric;
             });
