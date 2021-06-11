@@ -194,6 +194,14 @@ mat-option {
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
+    ::ng-deep .mat-checkbox-layout {
+      width: 100%;
+    }
+
+    ::ng-deep .mat-checkbox-label {
+      width: 100%;
+    }
 }
 
 .multiply-to-select {
@@ -215,6 +223,14 @@ mat-option {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    ::ng-deep .mat-checkbox-layout {
+      width: 100%;
+    }
+
+    ::ng-deep .mat-checkbox-label {
+      width: 100%;
     }
 }
 

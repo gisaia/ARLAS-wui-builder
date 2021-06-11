@@ -54,6 +54,7 @@ import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionReferenceDescription } from 'arlas-api';
 
 export enum EXPORT_TYPE {
     json = 'json',
@@ -135,7 +136,7 @@ export class ConfigExportHelper {
             startingConfig.customControls.collection.value));
 
         config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal, startingConfig.customControls.collection.value,
-            false));
+            false, collectionService.collectionParamsMap));
 
         if (timelineConfigGlobal.value.useDetailedTimeline) {
             config.arlas.web.components.detailedTimeline = this.getTimelineComponent(timelineConfigGlobal, true);
@@ -482,8 +483,12 @@ export class ConfigExportHelper {
     }
 
     // TODO put in common with getAnalyticsContributor ?
-    private static getTimelineContributor(timelineConfigGlobal: TimelineGlobalFormGroup, collection: string,
-                                          isDetailed: boolean): ContributorConfig {
+    private static getTimelineContributor(
+        timelineConfigGlobal: TimelineGlobalFormGroup,
+        collection: string,
+        isDetailed: boolean,
+        collectionParamsMap?: Map<string, CollectionReferenceDescription>
+    ): ContributorConfig {
 
         const timelineAggregation = timelineConfigGlobal.customControls.tabsContainer.dataStep.timeline.aggregation.customControls;
         const detailedTimelineDataStep = timelineConfigGlobal.customControls.tabsContainer.dataStep.detailedTimeline;
@@ -491,8 +496,8 @@ export class ConfigExportHelper {
             timelineConfigGlobal.customControls.unmanagedFields.dataStep.detailedTimeline :
             timelineConfigGlobal.customControls.unmanagedFields.dataStep.timeline;
         const contributor: ContributorConfig = {
-            type: isDetailed ? 'detailedhistogram' : 'histogram',
-            identifier: isDetailed ? 'detailedTimeline' : 'timeline',
+            type: (isDetailed ? 'detailedhistogram' : 'histogram'),
+            identifier: (isDetailed ? 'detailedTimeline' : 'timeline'),
             collection,
             name: unmanagedDataFields.name.value,
             icon: unmanagedDataFields.icon.value,
@@ -522,6 +527,15 @@ export class ConfigExportHelper {
             contributor.annexedContributorId = 'timeline';
             contributor.selectionExtentPercentage =
                 timelineConfigGlobal.customControls.tabsContainer.renderStep.detailedTimeline.selectionExtentPercent.value / 100;
+        } else {
+            if (!!timelineConfigGlobal.value.tabsContainer.dataStep.additionalCollections.collections && !!collectionParamsMap) {
+                contributor.additionalCollections = timelineConfigGlobal.value.tabsContainer.dataStep.additionalCollections.collections.map(
+                    c => ({
+                        collectionName: c,
+                        timestampPath: collectionParamsMap.get(c).params.timestamp_path
+                    })
+                );
+            }
         }
 
         return contributor;
@@ -532,12 +546,14 @@ export class ConfigExportHelper {
         const renderStep = isDetailed ? timelineConfigGlobal.customControls.tabsContainer.renderStep.detailedTimeline :
             timelineConfigGlobal.customControls.tabsContainer.renderStep.timeline;
 
+        const collection = timelineConfigGlobal.customControls.tabsContainer.dataStep.timeline.collection.value;
+
         const unmanagedTimelineFields = timelineConfigGlobal.customControls.unmanagedFields.renderStep.timeline;
         const unmanagedDetailedTimelineFields = timelineConfigGlobal.customControls.unmanagedFields.renderStep.detailedTimeline;
         const unmanagedFields = isDetailed ? unmanagedDetailedTimelineFields : unmanagedTimelineFields;
 
         const timelineComponent: AnalyticComponentConfig = {
-            contributorId: isDetailed ? 'detailedTimeline' : 'timeline',
+            contributorId: (isDetailed ? 'detailedTimeline' : 'timeline'),
             componentType: 'histogram',
             input: {
                 id: isDetailed ? 'histogram-detailed-timeline' : 'histogram-timeline',

@@ -42,7 +42,7 @@
 </div>
 
 <div *ngIf="isMultipleSelect(); let typedControl">
-    <div class="box-search">
+    <div class="box-search" *ngIf="typedControl.searchable">
         <input #searchInput type="text" [ngClass]="'pl-1'" (input)="debouncer.next(searchInput.value)"
             placeholder="{{'Search...' | translate}}" />
         <div class="box-search-icon" (click)="searchInput.value = ''; debouncer.next('')">

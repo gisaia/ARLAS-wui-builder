@@ -144,6 +144,7 @@ export interface ContributorConfig {
     }>;
     colorField?: string;
     useUtc?: boolean;
+    additionalCollections?: Array<{ collectionName: string, timestampPath: string }>;
 }
 
 export interface SwimlaneConfig {

@@ -27,6 +27,8 @@ describe('GlobalTimelineComponent', () => {
       mockProvider(MainFormService, {
         timelineConfig: {
           getGlobalFg: () => new TimelineGlobalFormGroup(
+            'collection',
+            new CollectionService(null, null, null, null),
             new BucketsIntervalFormGroup(undefined, undefined)
           )
         },

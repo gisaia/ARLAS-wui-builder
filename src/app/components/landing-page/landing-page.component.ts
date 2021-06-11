@@ -189,6 +189,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
           this.urlCollectionsSubscription = this.configDescritor.getAllCollections().subscribe(collections => {
             this.availablesCollections = collections;
             this.collectionService.setCollections(collections);
+            this.collectionService.getCollectionsReferenceDescription().subscribe( cdrs => this.collectionService.setCollectionsRef(cdrs));
           }, error => this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'))
             , () => this.spinner.hide('connectServer'));
           this.isServerReady = true;
@@ -213,6 +214,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     this.getServerCollections(configJson.arlas.server.url).then(() => {
       this.collectionsSubscription = this.configDescritor.getAllCollections().subscribe(collections => {
         this.collectionService.setCollections(collections);
+        this.collectionService.getCollectionsReferenceDescription().subscribe( cdrs => this.collectionService.setCollectionsRef(cdrs));
         const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
 
         if (!collection) {
