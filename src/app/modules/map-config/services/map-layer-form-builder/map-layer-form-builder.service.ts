@@ -202,10 +202,9 @@ export class MapLayerFormGroup extends ConfigFormGroup {
                 });
               this.updateCollectionInForms(featureMetricFg, collectionService);
               if (this.currentCollection !== undefined) {
-                featuresFg.filters.setValue(new FormArray([], []));
+                featureMetricFg.filters.setValue(new FormArray([], []));
                 this.clearFilters.next(true);
               }
-              featureMetricFg.filters.setValue(new FormArray([], []));
               this.currentCollection = this.customControls.collection.value;
             }
           }),
@@ -232,11 +231,6 @@ export class MapLayerFormGroup extends ConfigFormGroup {
                   clusterFg.clusterSort.setSyncOptions(collectionFs);
                 });
               this.updateCollectionInForms(clusterFg, collectionService);
-              if (this.currentCollection !== undefined) {
-                featuresFg.filters.setValue(new FormArray([], []));
-                this.clearFilters.next(true);
-              }
-              clusterFg.filters.setValue(new FormArray([], []));
               this.currentCollection = this.customControls.collection.value;
             }
           }),
