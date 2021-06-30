@@ -60,15 +60,7 @@ export class SideModulesImportService {
       {
         value: !!downloadComponent,
         control: sideModulesGlobal.useDownload
-      },
-      {
-        value: !!downloadComponent ? !!downloadComponent.auth_type : null,
-        control: sideModulesGlobal.download.basicAuthent
-      },
-      {
-        value: !!downloadComponent ? downloadComponent.auth_type : null,
-        control: sideModulesGlobal.unmanagedFields.download.authType
-      },
+      }
     ]);
 
     importElements([

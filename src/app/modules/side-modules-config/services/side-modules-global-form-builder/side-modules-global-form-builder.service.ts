@@ -82,17 +82,6 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
           dependsOn: () => [this.customControls.useShare],
           onDependencyChange: (control) => control.enableIf(this.customControls.useShare.value)
         }),
-      download: new ConfigFormGroup({
-        basicAuthent: new SlideToggleFormControl(
-          '',
-          marker('With basic authentication'),
-          marker('basic authentication description'),
-        )
-      },
-        {
-          dependsOn: () => [this.customControls.useDownload],
-          onDependencyChange: (control) => control.enableIf(this.customControls.useDownload.value)
-        }),
       tagger: new ConfigFormGroup(
         {
           serverUrl: new InputFormControl(
@@ -120,10 +109,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
         }
       ),
       unmanagedFields: new FormGroup({
-        sortExcludedTypes: new FormControl(),
-        download: new FormGroup({
-          authType: new FormControl()
-        })
+        sortExcludedTypes: new FormControl()
       })
     });
   }
@@ -136,24 +122,17 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
       maxForFeature: this.get('share.maxForFeature') as SliderFormControl,
       maxForTopology: this.get('share.maxForTopology') as SliderFormControl,
     },
-    download: {
-      basicAuthent: this.get('download.basicAuthent') as SlideToggleFormControl
-    },
     tagger: {
       serverUrl: this.get('tagger.serverUrl') as InputFormControl,
       collection: this.get('tagger.collection') as SelectFormControl,
     },
     unmanagedFields: {
-      sortExcludedTypes: this.get('unmanagedFields.sortExcludedTypes'),
-      download: {
-        authType: this.get('unmanagedFields.download.authType')
-      }
+      sortExcludedTypes: this.get('unmanagedFields.sortExcludedTypes')
     }
   };
 
   public customGroups = {
     share: this.get('share') as ConfigFormGroup,
-    download: this.get('download') as ConfigFormGroup,
     tagger: this.get('tagger') as ConfigFormGroup,
   };
 
