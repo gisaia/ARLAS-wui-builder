@@ -375,8 +375,6 @@
 	"Tagger module description": "If activated, a 'Tag' button will be displayed on the left menu of ARLAS Exploration. \n • This button allows you to give selected data in ARLAS Exploration a tag. It uses ARLAS-tagger.",
 	"Max for feature": "Max for feature",
 	"Feature metrics": "Feature metrics",
-	"With basic authentication": "With basic authentication",
-	"basic authentication description": "• If activated, you'll be invited to set a user:password after executing the docker command to authenticate to the data provider. \n • You can ignore it if no authentication is needed.",
 	"Tagger server URL": "Tagger server URL",
 	"Use detailed timeline?": "Use detailed timeline",
 	"Timeline": "Timeline",

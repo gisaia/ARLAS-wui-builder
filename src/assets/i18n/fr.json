@@ -375,8 +375,6 @@
 	"Tagger module description": "Une fois activé, un bouton 'Tag' sera affiché sur le menu gauche d'ARLAS Exploration. \n • Ce bouton vous permet de tagguer vos données sélectionnées dans ARLAS Exploration. Ce module utilise ARLAS-tagger.",
 	"Max for feature": "Nombre maximum d'éléments téléchargeables",
 	"Feature metrics": "Nombre maximum d'agrégats téléchargeables",
-	"With basic authentication": "Activer l'authentification Basique",
-	"basic authentication description": "• Une fois activé, vous serez invité à renseigner un utilisateur:mot_de_passe après exécution de la commande docker, pour se connecter au fournisseur de données. \n • A ignorer si l'authentification n'est pas nécessaire",
 	"Tagger server URL": "Url du serveur",
 	"Use detailed timeline?": "Utiliser la frise temporelle détaillée",
 	"Timeline": "Frise temporelle",
