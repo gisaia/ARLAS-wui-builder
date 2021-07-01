@@ -41,6 +41,8 @@ export interface SelectOption {
     label: any;
     enabled?: boolean;
     type?: CollectionReferenceDescriptionProperty.TypeEnum;
+    color?: string;
+    detail?: string;
 }
 
 export interface VisualisationCheckboxOption {
@@ -396,7 +398,7 @@ export class MultipleSelectFormControl extends ConfigFormControl {
     // used only for autocomplete: list of filtered options
     public filteredOptions: Array<SelectOption>;
     public syncOptions: Array<SelectOption> = [];
-    public selectedMultipleItems = [];
+    public selectedMultipleItems: Array<{value: any, color?: string, detail?: string}> = [];
     public savedItems = new Set<string>();
     public searchable = true;
     constructor(
@@ -406,7 +408,8 @@ export class MultipleSelectFormControl extends ConfigFormControl {
         public isAutocomplete: boolean,
         options: Array<SelectOption> | Observable<Array<SelectOption>>,
         optionalParams?: ControlOptionalParams,
-        searchable?: boolean) {
+        searchable?: boolean,
+        ) {
 
         super(
             formState,

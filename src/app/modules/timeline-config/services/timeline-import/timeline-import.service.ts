@@ -24,6 +24,8 @@ import {
 import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timeline-global-form-builder.service';
 import { importElements } from '@services/main-form-manager/tools';
 import { BY_BUCKET_OR_INTERVAL } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +33,9 @@ import { BY_BUCKET_OR_INTERVAL } from '@analytics-config/services/buckets-interv
 export class TimelineImportService {
 
   constructor(
-    private mainFormService: MainFormService
+    private mainFormService: MainFormService,
+    private colorService: ArlasColorGeneratorLoader,
+    private collectionService: CollectionService
   ) { }
 
   public doImport(config: Config) {
@@ -282,7 +286,8 @@ export class TimelineImportService {
         control: additionalCollectionDataStep.collections
       }
     ]);
-    additionalCollectionDataStep.collections.selectedMultipleItems = additionalCollections;
+    additionalCollectionDataStep.collections.selectedMultipleItems = additionalCollections
+      .map(c => ({ value: c, color: this.colorService.getColor(c), detail: this.collectionService.getCollectionInterval(c) }));
     additionalCollectionDataStep.collections.savedItems = new Set(additionalCollections);
   }
 

@@ -531,8 +531,8 @@ export class ConfigExportHelper {
             if (!!timelineConfigGlobal.value.tabsContainer.dataStep.additionalCollections.collections && !!collectionParamsMap) {
                 contributor.additionalCollections = timelineConfigGlobal.value.tabsContainer.dataStep.additionalCollections.collections.map(
                     c => ({
-                        collectionName: c,
-                        timestampPath: collectionParamsMap.get(c).params.timestamp_path
+                        collectionName: c.value,
+                        timestampPath: collectionParamsMap.get(c.value).params.timestamp_path
                     })
                 );
             }

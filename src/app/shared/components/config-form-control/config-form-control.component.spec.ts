@@ -1,5 +1,5 @@
 import { ConfigFormControlComponent } from './config-form-control.component';
-import { Spectator, createComponentFactory } from '@ngneat/spectator';
+import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
 import { SlideToggleFormControl } from '@shared-models/config-form';
 import { MockComponent } from 'ng-mocks';
@@ -7,6 +7,8 @@ import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wra
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FiltersComponent } from '@map-config/components/filters/filters.component';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 describe('ConfigFormControlComponent', () => {
   let spectator: Spectator<ConfigFormControlComponent>;
@@ -21,6 +23,10 @@ describe('ConfigFormControlComponent', () => {
       AlertOnChangeDirective,
       MockComponent(ColorPickerWrapperComponent),
       MockComponent(FiltersComponent)
+    ],
+    providers: [
+      mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(CollectionService)
     ]
   });
 

@@ -28,9 +28,11 @@ import { toNumericOrDateFieldsObs, toOptionsObs } from '@services/collection-ser
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
-  ConfigFormGroup, InputFormControl, MultipleSelectFormControl, SelectFormControl, SliderFormControl, SlideToggleFormControl
+  ConfigFormGroup, InputFormControl, MultipleSelectFormControl, SelectFormControl,
+  SliderFormControl, SlideToggleFormControl, SelectOption
 } from '@shared-models/config-form';
 import { ChartType } from 'arlas-web-components';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 enum DateFormats {
   English = '%b %d %Y  %H:%M',
@@ -43,6 +45,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
     collection: string,
     collectionService: CollectionService,
     timelineBucketsIntervalFg?: BucketsIntervalFormGroup,
+    colorService?: ArlasColorGeneratorLoader
   ) {
     super(
       {
@@ -115,7 +118,16 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                 marker('Additional collections'),
                 marker('Additional collections description'),
                 false,
-                collectionService.getCollections().filter(c => c !== collection).map(c => ({ label: c, value: c })),
+                collectionService.getCollections()
+                  .filter(c => c !== collection)
+                  .map(c => {
+                    return {
+                      label: c,
+                      value: c,
+                      color: colorService.getColor(c),
+                      detail: '' // Fill in onDependencyChange on form load
+                    };
+                  }),
                 {
                   optional: true,
                 },
@@ -130,7 +142,12 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                 }
                 this.customControls.tabsContainer.dataStep.additionalCollections.collections.setSyncOptions(
                   collectionService.getCollections().filter(c => c !== this.customControls.tabsContainer.dataStep.timeline.collection.value)
-                    .map(c => ({ label: c, value: c }))
+                    .map(c => ({
+                      label: c,
+                      value: c,
+                      color: colorService.getColor(c),
+                      detail: collectionService.getCollectionInterval(c)
+                    }))
                 );
               }
             }).withTitle(marker('Additional collections'))
@@ -385,13 +402,14 @@ export class TimelineGlobalFormBuilderService {
     private defaultValuesService: DefaultValuesService,
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
     private collectionService: CollectionService,
-    private mainFormService: MainFormService
+    private mainFormService: MainFormService,
+    private colorService: ArlasColorGeneratorLoader
   ) { }
 
   public build(collection: string) {
     const timelineBucketIntervalFg = this.bucketsIntervalBuilderService.build(collection, 'temporal');
     const timelineFormGroup = new TimelineGlobalFormGroup(
-      collection, this.collectionService, timelineBucketIntervalFg
+      collection, this.collectionService, timelineBucketIntervalFg, this.colorService
     );
     this.defaultValuesService.setDefaultValueRecursively(
       'timeline.global',

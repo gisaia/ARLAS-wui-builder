@@ -41,6 +41,8 @@ export class CollectionService {
   private collectionsDescriptions = new Map<string, Observable<CollectionReferenceDescription>>();
   public taggableFieldsMap = new Map<string, Set<string>>();
   public collectionParamsMap = new Map<string, CollectionReferenceDescription>();
+  public collectionMinIntervalMap = new Map<string, number>();
+  public collectionMaxIntervalMap = new Map<string, number>();
   public collections: string[] = [];
   constructor(
     private collabSearchService: ArlasCollaborativesearchService,
@@ -58,7 +60,31 @@ export class CollectionService {
   }
 
   public setCollectionsRef(crds: CollectionReferenceDescription[]): void {
-    crds.forEach(c => this.collectionParamsMap.set(c.collection_name, c));
+    crds.forEach(c => {
+      const collectionName = c.collection_name;
+      this.collectionParamsMap.set(collectionName, c);
+      this.collabSearchService.resolveButNotComputation(
+        [projType.compute,
+        {
+          filter: null,
+          field: this.collectionParamsMap.get(collectionName).params.timestamp_path,
+          metric: ComputationRequest.MetricEnum.MAX
+        } as ComputationRequest],
+        new Map(), collectionName).subscribe(
+          response => !!response.value ? this.collectionMaxIntervalMap.set(collectionName, response.value) : ''
+        );
+
+      this.collabSearchService.resolveButNotComputation(
+        [projType.compute,
+        {
+          filter: null,
+          field: this.collectionParamsMap.get(collectionName).params.timestamp_path,
+          metric: ComputationRequest.MetricEnum.MIN
+        } as ComputationRequest],
+        new Map(), collectionName).subscribe(
+          response => !!response.value ? this.collectionMinIntervalMap.set(collectionName, response.value) : ''
+        );
+    });
   }
 
   public getCollectionsReferenceDescription(): Observable<CollectionReferenceDescription[]> {
@@ -71,7 +97,11 @@ export class CollectionService {
     if (!describtionObs) {
       const describe = this.collabSearchService.describe(collection);
       this.collectionsDescriptions.set(collection, describe);
-      describe.subscribe(cd => this.collectionParamsMap.set(collection, cd));
+      describe.subscribe(cd => {
+        this.collectionParamsMap.set(collection, cd);
+
+      });
+
       return describe;
     } else {
       return describtionObs;
@@ -201,4 +231,15 @@ export class CollectionService {
       });
   }
 
+  public getCollectionInterval(collection): string {
+    if (this.collectionMinIntervalMap.has(collection) && this.collectionMaxIntervalMap.has(collection)) {
+      const minDate = new Date(this.collectionMinIntervalMap.get(collection));
+      const maxDate = new Date(this.collectionMaxIntervalMap.get(collection));
+      return (minDate.getMonth() + 1) + '/' + minDate.getFullYear()
+        + ' - ' + (maxDate.getMonth() + 1) + '/' + maxDate.getFullYear();
+    } else {
+      return '';
+    }
+
+  }
 }
