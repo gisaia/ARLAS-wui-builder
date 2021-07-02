@@ -121,7 +121,7 @@ export class HistogramFormGroup extends ConfigFormGroup {
             marker('Chart type'),
             marker('chart type description'),
             false,
-            [ChartType[ChartType.area], ChartType[ChartType.bars]].map(value => ({ value, label: value }))
+            [ChartType[ChartType.area], ChartType[ChartType.bars], ChartType[ChartType.curve]].map(value => ({ value, label: value }))
           ),
           showHorizontalLines: new SlideToggleFormControl(
             '',

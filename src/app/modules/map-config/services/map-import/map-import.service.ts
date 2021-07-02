@@ -609,7 +609,7 @@ export class MapImportService {
         if (f.op === FILTER_OPERATION.IN || f.op === FILTER_OPERATION.NOT_IN) {
           importElements([
             {
-              value: f.value,
+              value: (f.value as string[]).map(v => ({ value: v })),
               control: mapFilterFg.customControls.filterInValues
             }
           ]);

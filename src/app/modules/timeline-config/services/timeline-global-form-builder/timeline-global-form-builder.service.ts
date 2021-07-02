@@ -139,6 +139,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                 if (this.customControls.tabsContainer.dataStep.timeline.collection.dirty) {
                   this.customControls.tabsContainer.dataStep.additionalCollections.collections.savedItems = new Set<string>();
                   this.customControls.tabsContainer.dataStep.additionalCollections.collections.selectedMultipleItems = [];
+                  this.customControls.tabsContainer.dataStep.timeline.collection.markAsPristine();
                 }
                 this.customControls.tabsContainer.dataStep.additionalCollections.collections.setSyncOptions(
                   collectionService.getCollections().filter(c => c !== this.customControls.tabsContainer.dataStep.timeline.collection.value)
@@ -155,7 +156,38 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
           }).withTabName(marker('Data')),
           renderStep: new ConfigFormGroup({
             timeline: new ConfigFormGroup({
-              ...TimelineGlobalFormGroup.getCommonsControls(),
+              chartTitle: new InputFormControl(
+                '',
+                marker('Chart title'),
+                marker('Chart title description')
+              ),
+              chartType: new SelectFormControl(
+                '',
+                marker('Chart type'),
+                marker('Chart type description'),
+                false,
+                [ChartType[ChartType.area], ChartType[ChartType.bars], ChartType[ChartType.curve]].map(s =>
+                  ({ label: s, value: s })),
+                {
+                  dependsOn: () => [this.customControls.tabsContainer.dataStep.additionalCollections.collections],
+                  onDependencyChange: (control) => {
+                    if (
+                      !! this.customControls.tabsContainer.dataStep.additionalCollections.collections.value &&
+                      this.customControls.tabsContainer.dataStep.additionalCollections.collections.value.length > 0) {
+                      control.setValue(ChartType[ChartType.curve]);
+                    }
+                  }
+                }
+              ),
+              dateFormat: new SelectFormControl(
+                '',
+                marker('Date format'),
+                marker('Date format description'),
+                false,
+                Object.keys(DateFormats).map(df => ({
+                  label: df + ' (' + DateFormats[df] + ')', value: DateFormats[df]
+                }))
+              ),
               isMultiselectable: new SlideToggleFormControl(
                 false,
                 marker('Is multi-selectable'),
@@ -163,7 +195,38 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
               )
             }).withTitle('Timeline'),
             detailedTimeline: new ConfigFormGroup({
-              ...TimelineGlobalFormGroup.getCommonsControls(),
+              chartTitle: new InputFormControl(
+                '',
+                marker('Chart title'),
+                marker('Chart title description')
+              ),
+              chartType: new SelectFormControl(
+                '',
+                marker('Chart type'),
+                marker('Chart type description'),
+                false,
+                [ChartType[ChartType.area], ChartType[ChartType.bars], ChartType[ChartType.curve]].map(s =>
+                  ({ label: s, value: s })),
+                {
+                  dependsOn: () => [this.customControls.tabsContainer.dataStep.additionalCollections.collections],
+                  onDependencyChange: (control) => {
+                    if (
+                      !! this.customControls.tabsContainer.dataStep.additionalCollections.collections.value &&
+                      this.customControls.tabsContainer.dataStep.additionalCollections.collections.value.length > 0) {
+                      control.setValue(ChartType[ChartType.curve]);
+                    }
+                  }
+                }
+              ),
+              dateFormat: new SelectFormControl(
+                '',
+                marker('Date format'),
+                marker('Date format description'),
+                false,
+                Object.keys(DateFormats).map(df => ({
+                  label: df + ' (' + DateFormats[df] + ')', value: DateFormats[df]
+                }))
+              ),
               selectionExtentPercent: new SliderFormControl(
                 '',
                 marker('Percent of selection extent'),
@@ -363,34 +426,6 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
     renderStepTimeline: this.get('tabsContainer.renderStep.timeline') as ConfigFormGroup,
     renderStepDetailedTimeline: this.get('tabsContainer.renderStep.detailedTimeline') as ConfigFormGroup,
   };
-
-  private static getCommonsControls() {
-    return {
-      chartTitle: new InputFormControl(
-        '',
-        marker('Chart title'),
-        marker('Chart title description')
-      ),
-      chartType: new SelectFormControl(
-        '',
-        marker('Chart type'),
-        marker('Chart type description'),
-        false,
-        [ChartType[ChartType.area], ChartType[ChartType.bars]].map(s =>
-          ({ label: s, value: s }))
-      ),
-      dateFormat: new SelectFormControl(
-        '',
-        marker('Date format'),
-        marker('Date format description'),
-        false,
-        Object.keys(DateFormats).map(df => ({
-          label: df + ' (' + DateFormats[df] + ')', value: DateFormats[df]
-        }))
-      )
-    };
-  }
-
 }
 
 @Injectable({

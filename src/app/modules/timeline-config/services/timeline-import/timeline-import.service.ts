@@ -282,7 +282,8 @@ export class TimelineImportService {
     const additionalCollections = contributorConfig.additionalCollections.map(conf => conf.collectionName);
     importElements([
       {
-        value: additionalCollections,
+        value: additionalCollections
+          .map(c => ({ value: c, color: this.colorService.getColor(c), detail: this.collectionService.getCollectionInterval(c) })),
         control: additionalCollectionDataStep.collections
       }
     ]);

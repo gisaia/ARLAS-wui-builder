@@ -134,14 +134,13 @@ export class ConfigExportHelper {
             startingConfig.customControls.collection.value, collectionService));
         config.arlas.web.contributors.push(this.getChipsearchContributor(searchConfigGlobal,
             startingConfig.customControls.collection.value));
-
         config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal, startingConfig.customControls.collection.value,
             false, collectionService.collectionParamsMap));
 
         if (timelineConfigGlobal.value.useDetailedTimeline) {
             config.arlas.web.components.detailedTimeline = this.getTimelineComponent(timelineConfigGlobal, true);
             config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal,
-                startingConfig.customControls.collection.value, true));
+                startingConfig.customControls.collection.value, true, collectionService.collectionParamsMap));
         }
 
         const contributorsMap = new Map<string, any>();
@@ -198,9 +197,17 @@ export class ConfigExportHelper {
                     layerSource.filters = [];
                 }
                 if (f.filterOperation === FILTER_OPERATION.IN || f.filterOperation === FILTER_OPERATION.NOT_IN) {
-                    layerSource.filters.push({ field: f.filterField.value, op: f.filterOperation, value: f.filterInValues });
+                    layerSource.filters.push({
+                        field: f.filterField.value,
+                        op: f.filterOperation,
+                        value: f.filterInValues.map(v => v.value)
+                    });
                 } else if (f.filterOperation === FILTER_OPERATION.EQUAL || f.filterOperation === FILTER_OPERATION.NOT_EQUAL) {
-                    layerSource.filters.push({ field: f.filterField.value, op: f.filterOperation, value: f.filterEqualValues });
+                    layerSource.filters.push({
+                        field: f.filterField.value,
+                        op: f.filterOperation,
+                        value: f.filterEqualValues
+                    });
                 } else if (f.filterOperation === FILTER_OPERATION.RANGE || f.filterOperation === FILTER_OPERATION.OUT_RANGE) {
                     layerSource.filters.push({
                         field: f.filterField.value, op: f.filterOperation,
@@ -527,16 +534,18 @@ export class ConfigExportHelper {
             contributor.annexedContributorId = 'timeline';
             contributor.selectionExtentPercentage =
                 timelineConfigGlobal.customControls.tabsContainer.renderStep.detailedTimeline.selectionExtentPercent.value / 100;
-        } else {
-            if (!!timelineConfigGlobal.value.tabsContainer.dataStep.additionalCollections.collections && !!collectionParamsMap) {
-                contributor.additionalCollections = timelineConfigGlobal.value.tabsContainer.dataStep.additionalCollections.collections.map(
+        }
+        if (!!timelineConfigGlobal.value.tabsContainer.dataStep.additionalCollections.collections && !!collectionParamsMap) {
+            contributor.additionalCollections = timelineConfigGlobal.value.tabsContainer.dataStep.additionalCollections.collections
+                .filter(c => collectionParamsMap.has(c.value))
+                .map(
                     c => ({
                         collectionName: c.value,
-                        timestampPath: collectionParamsMap.get(c.value).params.timestamp_path
+                        field: collectionParamsMap.get(c.value).params.timestamp_path
                     })
                 );
-            }
         }
+
 
         return contributor;
     }

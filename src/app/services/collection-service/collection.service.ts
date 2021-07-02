@@ -30,8 +30,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { CollectionField } from './models';
+import { TranslateService } from '@ngx-translate/core';
+import * as moment from 'moment';
 export import FIELD_TYPES = CollectionReferenceDescriptionProperty.TypeEnum;
 export import METRIC_TYPES = ComputationRequest.MetricEnum;
+
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +51,8 @@ export class CollectionService {
     private collabSearchService: ArlasCollaborativesearchService,
     private spinner: NgxSpinnerService,
     private defaultValueService: DefaultValuesService,
-    private logger: NGXLogger
+    private logger: NGXLogger,
+    private translate: TranslateService
   ) { }
 
   public getCollections(): string[] {
@@ -232,11 +236,14 @@ export class CollectionService {
   }
 
   public getCollectionInterval(collection): string {
+    let dateFormat = 'M/D/YYYY';
+    if (this.translate.currentLang === 'fr') {
+      dateFormat = 'DD/MM/YYYY';
+    }
     if (this.collectionMinIntervalMap.has(collection) && this.collectionMaxIntervalMap.has(collection)) {
-      const minDate = new Date(this.collectionMinIntervalMap.get(collection));
-      const maxDate = new Date(this.collectionMaxIntervalMap.get(collection));
-      return (minDate.getMonth() + 1) + '/' + minDate.getFullYear()
-        + ' - ' + (maxDate.getMonth() + 1) + '/' + maxDate.getFullYear();
+      const minDate = moment(this.collectionMinIntervalMap.get(collection)).format(dateFormat);
+      const maxDate = moment(this.collectionMaxIntervalMap.get(collection)).format(dateFormat);
+      return minDate + ' - ' + maxDate;
     } else {
       return '';
     }
