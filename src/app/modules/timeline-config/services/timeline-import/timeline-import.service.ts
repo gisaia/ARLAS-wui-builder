@@ -40,7 +40,6 @@ export class TimelineImportService {
 
   public doImport(config: Config) {
 
-    const collection = config.arlas.server.collection.name;
     const timelineContributor = config.arlas.web.contributors.find(c => c.identifier === 'timeline');
     const detailedTimelineContributor = config.arlas.web.contributors.find(c => c.identifier === 'detailedTimeline');
 
@@ -66,6 +65,10 @@ export class TimelineImportService {
       {
         value: timelineComponent.input.multiselectable,
         control: timelineFg.customControls.tabsContainer.renderStep.timeline.isMultiselectable
+      },
+      {
+        value: timelineContributor.collection,
+        control: timelineDataStep.collection
       },
       {
         value: timelineContributor.aggregationmodels[0].field,

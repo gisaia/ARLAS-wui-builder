@@ -134,13 +134,13 @@ export class ConfigExportHelper {
             startingConfig.customControls.collection.value, collectionService));
         config.arlas.web.contributors.push(this.getChipsearchContributor(searchConfigGlobal,
             startingConfig.customControls.collection.value));
-        config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal, startingConfig.customControls.collection.value,
+        config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal,
             false, collectionService.collectionParamsMap));
 
         if (timelineConfigGlobal.value.useDetailedTimeline) {
             config.arlas.web.components.detailedTimeline = this.getTimelineComponent(timelineConfigGlobal, true);
             config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal,
-                startingConfig.customControls.collection.value, true, collectionService.collectionParamsMap));
+                true, collectionService.collectionParamsMap));
         }
 
         const contributorsMap = new Map<string, any>();
@@ -492,13 +492,13 @@ export class ConfigExportHelper {
     // TODO put in common with getAnalyticsContributor ?
     private static getTimelineContributor(
         timelineConfigGlobal: TimelineGlobalFormGroup,
-        collection: string,
         isDetailed: boolean,
         collectionParamsMap?: Map<string, CollectionReferenceDescription>
     ): ContributorConfig {
 
         const timelineAggregation = timelineConfigGlobal.customControls.tabsContainer.dataStep.timeline.aggregation.customControls;
         const detailedTimelineDataStep = timelineConfigGlobal.customControls.tabsContainer.dataStep.detailedTimeline;
+        const collection = timelineConfigGlobal.customControls.tabsContainer.dataStep.timeline.collection.value;
         const unmanagedDataFields = isDetailed ?
             timelineConfigGlobal.customControls.unmanagedFields.dataStep.detailedTimeline :
             timelineConfigGlobal.customControls.unmanagedFields.dataStep.timeline;
