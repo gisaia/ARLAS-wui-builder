@@ -136,7 +136,7 @@ export interface ContributorConfig {
     function?: string;
     metrics?: Array<{ field: string, metric: string }>;
     search_size?: number;
-    fieldsConfiguration?: { idFieldName: string };
+    fieldsConfiguration?: FieldsConfiguration;
     columns?: Array<{ columnName: string, fieldName: string, dataType: string, process: string, useColorService: boolean }>;
     details?: Array<{
         name: string,
@@ -146,6 +146,19 @@ export interface ContributorConfig {
     colorField?: string;
     useUtc?: boolean;
     additionalCollections?: Array<{ collectionName: string, field: string }>;
+    includeMetadata?: Array<string>;
+}
+
+export interface FieldsConfiguration {
+    idFieldName: string;
+    thumbnailFieldName?: string;
+    imageFieldName?: string;
+    urlImageTemplate?: string;
+    urlThumbnailTemplate?: string;
+    titleFieldNames?: Array<{ fieldPath: string, process: string }>;
+    tooltipFieldNames?: Array<{ fieldPath: string, process: string }>;
+    iconColorFieldName?: string;
+    icon?: string;
 }
 
 export interface SwimlaneConfig {
@@ -175,36 +188,36 @@ export interface AnalyticComponentConfig {
 
 export interface AnalyticComponentInputConfig {
     id: string;
-    dataType: string;
-    isHistogramSelectable: boolean;
+    dataType?: string;
+    isHistogramSelectable?: boolean;
     ticksDateFormat?: string;
-    multiselectable: boolean;
+    multiselectable?: boolean;
     topOffsetRemoveInterval?: number;
     leftOffsetRemoveInterval?: number;
-    brushHandlesHeightWeight: number;
-    yAxisStartsFromZero: boolean;
-    chartType: string;
-    chartTitle: string;
-    chartWidth: number;
-    chartHeight: number;
+    brushHandlesHeightWeight?: number;
+    yAxisStartsFromZero?: boolean;
+    chartType?: string;
+    chartTitle?: string;
+    chartWidth?: number;
+    chartHeight?: number;
     customizedCssClass?: string;
-    xAxisPosition: string;
-    descriptionPosition: string;
-    xTicks: number;
-    yTicks: number;
-    xLabels: number;
-    yLabels: number;
-    xUnit: string;
-    yUnit: string;
+    xAxisPosition?: string;
+    descriptionPosition?: string;
+    xTicks?: number;
+    yTicks?: number;
+    xLabels?: number;
+    yLabels?: number;
+    xUnit?: string;
+    yUnit?: string;
     unit?: string;
-    chartXLabel: string;
-    showXTicks: boolean;
-    showYTicks: boolean;
-    showXLabels: boolean;
-    showYLabels: boolean;
-    shortYLabels: boolean;
-    showHorizontalLines: boolean;
-    barWeight: number;
+    chartXLabel?: string;
+    showXTicks?: boolean;
+    showYTicks?: boolean;
+    showXLabels?: boolean;
+    showYLabels?: boolean;
+    shortYLabels?: boolean;
+    showHorizontalLines?: boolean;
+    barWeight?: number;
     beforeValue?: string;
     afterValue?: string;
     shortValue?: boolean;
@@ -232,6 +245,17 @@ export interface AnalyticComponentInputConfig {
     actionOnItemEvent?: any;
     globalActionEvent?: any;
     cellBackgroundStyle?: string;
+}
+
+export interface AnalyticComponentResultListInputConfig extends AnalyticComponentInputConfig {
+    options?: AnalyticComponentResultListInputOptions;
+    detailWidth?: number;
+}
+
+export interface AnalyticComponentResultListInputOptions {
+    showActionsOnhover?: string;
+    showDetailIconName?: string;
+    hideDetailIconName?: string;
 }
 
 export interface AnalyticComponentHistogramInputConfig extends AnalyticComponentInputConfig {

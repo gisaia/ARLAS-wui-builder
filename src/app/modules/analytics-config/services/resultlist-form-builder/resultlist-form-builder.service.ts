@@ -29,7 +29,7 @@ import {
 } from '@shared-models/config-form';
 import { FormArray, Validators, FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { toOptionsObs, NUMERIC_OR_DATE_OR_TEXT_TYPES } from '@services/collection-service/tools';
+import { toOptionsObs, NUMERIC_OR_DATE_OR_TEXT_TYPES, TEXT_OR_KEYWORD } from '@services/collection-service/tools';
 import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
@@ -105,6 +105,11 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
             marker('Display filters'),
             marker('Display filters description')
           ),
+          isGeoSortActived: new SlideToggleFormControl(
+            '',
+            marker('Activate geosort'),
+            marker('Activate geosort')
+          ),
           cellBackgroundStyle: new SelectFormControl(
             '',
             marker('Background style of cells'),
@@ -125,7 +130,60 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                 control.enableIf(useColorService);
               }
             }
-          )
+          ),
+          gridStep: new ConfigFormGroup({
+            tileLabelField: new SelectFormControl(
+              '',
+              marker('Tile label'),
+              marker('Tile label description'),
+              true,
+              toOptionsObs(collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES)),
+              {
+                optional: true
+              }
+            ),
+            tooltipField: new SelectFormControl(
+              '',
+              marker('Tooltip field'),
+              marker('Tooltip field description'),
+              true,
+              toOptionsObs(collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES)),
+              {
+                optional: true
+              }
+            ),
+            thumbnailUrl: new SelectFormControl(
+              '',
+              marker('Thumbnail url'),
+              marker('Thumbnail url description'),
+              true,
+              toOptionsObs(collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD)),
+              {
+                optional: true
+              }
+            ),
+            imageUrl: new SelectFormControl(
+              '',
+              marker('Image url'),
+              marker('Image url description'),
+              true,
+              toOptionsObs(collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD)),
+              {
+                optional: true
+              }
+            ),
+            colorIdentifier: new SelectFormControl(
+              '',
+              marker('Color identifier'),
+              marker('Color identifier description'),
+              true,
+              toOptionsObs(collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD)),
+              {
+                optional: true
+              }
+            ),
+
+          }).withTitle('Grid view')
         }).withTabName(marker('Render')),
         unmanagedFields: new FormGroup({
           dataStep: new FormGroup({}),
@@ -137,12 +195,11 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
             nbGridColumns: new FormControl(),
             defautMode: new FormControl(),
             isBodyHidden: new FormControl(),
-            isGeoSortActived: new FormControl(),
             isAutoGeoSortActived: new FormControl(),
             selectedItemsEvent: new FormControl(),
             consultedItemEvent: new FormControl(),
             actionOnItemEvent: new FormControl(),
-            globalActionEvent: new FormControl(),
+            globalActionEvent: new FormControl()
           }),
         })
       });
@@ -164,7 +221,15 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
     },
     renderStep: {
       displayFilters: this.get('renderStep.displayFilters') as SlideToggleFormControl,
+      isGeoSortActived: this.get('renderStep.isGeoSortActived') as SlideToggleFormControl,
       cellBackgroundStyle: this.get('renderStep.cellBackgroundStyle') as SelectFormControl,
+      gridStep: {
+        tileLabelField: this.get('renderStep.gridStep.tileLabelField') as SelectFormControl,
+        tooltipField: this.get('renderStep.gridStep.tooltipField') as SelectFormControl,
+        thumbnailUrl: this.get('renderStep.gridStep.thumbnailUrl') as SelectFormControl,
+        imageUrl: this.get('renderStep.gridStep.imageUrl') as SelectFormControl,
+        colorIdentifier: this.get('renderStep.gridStep.colorIdentifier') as SelectFormControl
+      }
     },
     unmanagedFields: {
       dataStep: {},
@@ -176,12 +241,11 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
         nbGridColumns: this.get('unmanagedFields.renderStep.nbGridColumns'),
         defautMode: this.get('unmanagedFields.renderStep.defautMode'),
         isBodyHidden: this.get('unmanagedFields.renderStep.isBodyHidden'),
-        isGeoSortActived: this.get('unmanagedFields.renderStep.isGeoSortActived'),
         isAutoGeoSortActived: this.get('unmanagedFields.renderStep.isAutoGeoSortActived'),
         selectedItemsEvent: this.get('unmanagedFields.renderStep.selectedItemsEvent'),
         consultedItemEvent: this.get('unmanagedFields.renderStep.consultedItemEvent'),
         actionOnItemEvent: this.get('unmanagedFields.renderStep.actionOnItemEvent'),
-        globalActionEvent: this.get('unmanagedFields.renderStep.globalActionEvent'),
+        globalActionEvent: this.get('unmanagedFields.renderStep.globalActionEvent')
       }
     }
   };
@@ -189,13 +253,15 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
 
 export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
 
-  constructor(fieldsObs: Observable<Array<SelectOption>>,
-              collection: string,
-              private globalKeysToColortrl: FormArray,
-              defaultConfig: DefaultConfig,
-              dialog: MatDialog,
-              collectionService: CollectionService,
-              private colorService: ArlasColorGeneratorLoader) {
+  constructor(
+    fieldsObs: Observable<Array<SelectOption>>,
+    collection: string,
+    private globalKeysToColortrl: FormArray,
+    defaultConfig: DefaultConfig,
+    dialog: MatDialog,
+    collectionService: CollectionService,
+    private colorService: ArlasColorGeneratorLoader
+  ) {
     super(collection,
       {
         columnName: new InputFormControl(
