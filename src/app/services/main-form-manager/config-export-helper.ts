@@ -27,16 +27,16 @@ import {
     JSONPATH_COUNT,
     CHIPSEARCH_TYPE,
     CHIPSEARCH_IDENTIFIER,
-    WebConfigOptions
+    WebConfigOptions,
+    FieldsConfiguration
 } from './models-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
 import { CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
-import { MapComponentInputConfig, MapComponentInputMapLayersConfig } from './models-config';
-import { LayerSourceConfig, getSourceName, ColorConfig } from 'arlas-web-contributors';
-import { ClusterAggType } from 'arlas-web-contributors/models/models';
+import { MapComponentInputConfig, MapComponentInputMapLayersConfig, AnalyticComponentResultListInputConfig } from './models-config';
+import { getSourceName, ColorConfig, LayerSourceConfig } from 'arlas-web-contributors';
 import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 import {
@@ -188,7 +188,8 @@ export class ConfigExportHelper {
             colors_from_fields: [],
             provided_fields: [],
             normalization_fields: [],
-            metrics: []
+            metrics: [],
+            windowed: true
         };
 
         if (!!filters) {
@@ -345,8 +346,12 @@ export class ConfigExportHelper {
         const customControls = mapConfigGlobal.customControls;
 
         const layers: Array<string> = new Array<string>();
-        mapConfigLayers.controls.forEach(layer => {
-            layers.push(layer.value.name);
+        const layersHoverId: Array<string> = new Array<string>();
+        mapConfigLayers.controls.forEach((layerFg: MapLayerFormGroup) => {
+            layers.push(layerFg.value.name);
+            if (this.getLayerSourceConfig(layerFg).windowed) {
+                layersHoverId.push(layerFg.value.arlasId);
+            }
         });
 
         const visualisationsSets: Array<VisualisationSetConfig> = [
@@ -410,7 +415,7 @@ export class ConfigExportHelper {
                     events: {
                         zoomOnClick: customControls.unmanagedFields.mapLayers.events.zoomOnClick.value,
                         emitOnClick: customControls.unmanagedFields.mapLayers.events.emitOnClick.value,
-                        onHover: customControls.unmanagedFields.mapLayers.events.onHover.value,
+                        onHover: layersHoverId,
                     },
                     externalEventLayers: new Array<{ id: string, on: string }>()
                 } as MapComponentInputMapLayersConfig,
@@ -494,6 +499,8 @@ export class ConfigExportHelper {
         timelineConfigGlobal: TimelineGlobalFormGroup,
         isDetailed: boolean,
         collectionParamsMap?: Map<string, CollectionReferenceDescription>
+        collection: string,
+        isDetailed: boolean
     ): ContributorConfig {
 
         const timelineAggregation = timelineConfigGlobal.customControls.tabsContainer.dataStep.timeline.aggregation.customControls;
@@ -698,7 +705,23 @@ export class ConfigExportHelper {
             case WIDGET_TYPE.resultlist: {
                 contrib.type = 'resultlist';
                 contrib.search_size = widgetData.dataStep.searchSize;
-                contrib.fieldsConfiguration = { idFieldName: widgetData.dataStep.idFieldName };
+                const fieldsConfig: FieldsConfiguration = {
+                    idFieldName: widgetData.dataStep.idFieldName,
+                    thumbnailFieldName: widgetData.renderStep.gridStep.thumbnailUrl,
+                    imageFieldName: widgetData.renderStep.gridStep.imageUrl,
+                    titleFieldNames: [{ fieldPath: widgetData.renderStep.gridStep.tileLabelField, process: '' }],
+                    tooltipFieldNames: [{ fieldPath: widgetData.renderStep.gridStep.tooltipField, process: '' }],
+                    icon: 'fiber_manual_record',
+                    iconColorFieldName: widgetData.renderStep.gridStep.colorIdentifier
+                };
+                if (widgetData.renderStep.gridStep.thumbnailUrl) {
+                    fieldsConfig.urlThumbnailTemplate = '{' + widgetData.renderStep.gridStep.thumbnailUrl + '}';
+                }
+                if (widgetData.renderStep.gridStep.imageUrl) {
+                    fieldsConfig.urlImageTemplate = '{' + widgetData.renderStep.gridStep.imageUrl + '}';
+                }
+
+                contrib.fieldsConfiguration = fieldsConfig;
                 contrib.columns = [];
                 (widgetData.dataStep.columns as Array<any>).forEach(c =>
                     contrib.columns.push({
@@ -722,6 +745,14 @@ export class ConfigExportHelper {
                         fields
                     });
                 });
+                contrib.includeMetadata = [];
+                const metadatas = new Set<string>();
+                Object.keys(widgetData.renderStep.gridStep).forEach(v => {
+                    if (!!widgetData.renderStep.gridStep[v]) {
+                        metadatas.add(widgetData.renderStep.gridStep[v]);
+                    }
+                });
+                contrib.includeMetadata = Array.from(metadatas);
                 break;
             }
         }
@@ -978,15 +1009,20 @@ export class ConfigExportHelper {
                     defautMode: unmanagedRenderFields.defautMode,
                     displayFilters: !!widgetData.renderStep.displayFilters,
                     isBodyHidden: unmanagedRenderFields.isBodyHidden,
-                    isGeoSortActived: unmanagedRenderFields.isGeoSortActived,
+                    isGeoSortActived: !!widgetData.renderStep.isGeoSortActived,
                     isAutoGeoSortActived: unmanagedRenderFields.isAutoGeoSortActived,
                     selectedItemsEvent: unmanagedRenderFields.selectedItemsEvent,
                     consultedItemEvent: unmanagedRenderFields.consultedItemEvent,
                     actionOnItemEvent: unmanagedRenderFields.actionOnItemEvent,
                     globalActionEvent: unmanagedRenderFields.globalActionEvent,
                     useColorService: true,
-                    cellBackgroundStyle: widgetData.renderStep.cellBackgroundStyle
-                }
+                    cellBackgroundStyle: widgetData.renderStep.cellBackgroundStyle,
+                    options: {
+                        showActionsOnhover: 'true',
+                        showDetailIconName: 'keyboard_arrow_down',
+                        hideDetailIconName: 'keyboard_arrow_up'
+                    }
+                } as AnalyticComponentResultListInputConfig
             } as AnalyticComponentConfig;
 
             return component;
