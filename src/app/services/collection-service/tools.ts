@@ -39,6 +39,10 @@ export const NUMERIC_OR_DATE_OR_TEXT_TYPES = [
     ...NUMERIC_OR_DATE_TYPES, TypeEnum.TEXT, TypeEnum.KEYWORD
 ];
 
+export const TEXT_OR_KEYWORD = [
+    TypeEnum.TEXT, TypeEnum.KEYWORD
+];
+
 export function toOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
     return collectionFieldsObs.pipe(map(
         fields => fields

@@ -447,7 +447,7 @@
                         "tableWidth": 445,
                         "globalActionsList": [],
                         "nLastLines": 3,
-                        "detailedGridHeight": 25,
+                        "detailedGridHeight": 300,
                         "nbGridColumns": 3,
                         "defautMode": "list",
                         "isBodyHidden": false,
