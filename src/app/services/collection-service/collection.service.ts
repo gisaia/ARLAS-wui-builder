@@ -17,21 +17,24 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
-import { map, finalize } from 'rxjs/operators';
-import {
-  CollectionReferenceDescriptionProperty, Filter, CollectionReferenceDescription,
-  ComputationRequest, Aggregation, AggregationsRequest, AggregationResponse
-} from 'arlas-api';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NGXLogger } from 'ngx-logger';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import {
+  Aggregation, AggregationResponse, AggregationsRequest, CollectionReferenceDescription, CollectionReferenceDescriptionProperty,
+  ComputationRequest, Filter,
+  Hits
+} from 'arlas-api';
+import { projType } from 'arlas-web-core';
+import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
+import { NGXLogger } from 'ngx-logger';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
+import { CollectionField } from './models';
+import { TranslateService } from '@ngx-translate/core';
+import * as moment from 'moment';
 export import FIELD_TYPES = CollectionReferenceDescriptionProperty.TypeEnum;
 export import METRIC_TYPES = ComputationRequest.MetricEnum;
-import { CollectionField } from './models';
-import { projType } from 'arlas-web-core';
-import { Hits } from 'arlas-api';
+
 
 @Injectable({
   providedIn: 'root'
@@ -41,13 +44,16 @@ export class CollectionService {
   private collectionsDescriptions = new Map<string, Observable<CollectionReferenceDescription>>();
   public taggableFieldsMap = new Map<string, Set<string>>();
   public collectionParamsMap = new Map<string, CollectionReferenceDescription>();
+  public collectionMinIntervalMap = new Map<string, number>();
+  public collectionMaxIntervalMap = new Map<string, number>();
   public collections: string[] = [];
   constructor(
     private collabSearchService: ArlasCollaborativesearchService,
     private spinner: NgxSpinnerService,
     private defaultValueService: DefaultValuesService,
-    private logger: NGXLogger
-    ) { }
+    private logger: NGXLogger,
+    private translate: TranslateService
+  ) { }
 
   public getCollections(): string[] {
     return this.collections;
@@ -57,12 +63,49 @@ export class CollectionService {
     this.collections = collections;
   }
 
+  public setCollectionsRef(crds: CollectionReferenceDescription[]): void {
+    crds.forEach(c => {
+      const collectionName = c.collection_name;
+      this.collectionParamsMap.set(collectionName, c);
+      this.collabSearchService.resolveButNotComputation(
+        [projType.compute,
+        {
+          filter: null,
+          field: this.collectionParamsMap.get(collectionName).params.timestamp_path,
+          metric: ComputationRequest.MetricEnum.MAX
+        } as ComputationRequest],
+        new Map(), collectionName).subscribe(
+          response => !!response.value ? this.collectionMaxIntervalMap.set(collectionName, response.value) : ''
+        );
+
+      this.collabSearchService.resolveButNotComputation(
+        [projType.compute,
+        {
+          filter: null,
+          field: this.collectionParamsMap.get(collectionName).params.timestamp_path,
+          metric: ComputationRequest.MetricEnum.MIN
+        } as ComputationRequest],
+        new Map(), collectionName).subscribe(
+          response => !!response.value ? this.collectionMinIntervalMap.set(collectionName, response.value) : ''
+        );
+    });
+  }
+
+  public getCollectionsReferenceDescription(): Observable<CollectionReferenceDescription[]> {
+    return this.collabSearchService.list().pipe(map((collections) => collections
+      .filter(collection => collection.collection_name !== 'metacollection')));
+  }
+
   public getDescribe(collection: string): Observable<CollectionReferenceDescription> {
     const describtionObs = this.collectionsDescriptions.get(collection);
     if (!describtionObs) {
       const describe = this.collabSearchService.describe(collection);
       this.collectionsDescriptions.set(collection, describe);
-      describe.subscribe(cd => this.collectionParamsMap.set(collection, cd));
+      describe.subscribe(cd => {
+        this.collectionParamsMap.set(collection, cd);
+
+      });
+
       return describe;
     } else {
       return describtionObs;
@@ -102,7 +145,8 @@ export class CollectionService {
                     taggableFields = new Set<string>();
                   }
                   taggableFields.add(path);
-                  this.taggableFieldsMap.set(collection, taggableFields);                }
+                  this.taggableFieldsMap.set(collection, taggableFields);
+                }
                 return { name: path, type: property.type, indexed: property.indexed };
               } else {
                 return null;
@@ -131,11 +175,11 @@ export class CollectionService {
     this.spinner.show();
     return this.collabSearchService.getExploreApi().computePost(collection, computation, false, 120,
       this.collabSearchService.getFetchOptions()).then(ag => {
-      this.spinner.hide();
+        this.spinner.hide();
 
-      // Round the value returned by ARLAS SERVER to improve the lisibility
-      return Math.round(ag.value * 100) / 100;
-    })
+        // Round the value returned by ARLAS SERVER to improve the lisibility
+        return Math.round(ag.value * 100) / 100;
+      })
       .finally(() => this.spinner.hide());
   }
 
@@ -144,8 +188,13 @@ export class CollectionService {
       this.collabSearchService.collaborations, collection, null, null, false, 120);
   }
 
-  public getTermAggregation(collection: string, field: string, showSpinner: boolean = true,
-                            filter?: Filter, prefix?: string): Promise<Array<string>> {
+  public getTermAggregation(
+    collection: string,
+    field: string,
+    showSpinner: boolean = true,
+    filter?: Filter,
+    prefix?: string
+  ): Promise<Array<string>> {
 
     if (showSpinner) {
       this.spinner.show();
@@ -165,8 +214,8 @@ export class CollectionService {
 
     return this.collabSearchService.getExploreApi().aggregatePost(collection, aggreationRequest, false, 120,
       this.collabSearchService.getFetchOptions()).then((a: AggregationResponse) => {
-      return a.elements ? a.elements.map(e => e.key) : [];
-    })
+        return a.elements ? a.elements.map(e => e.key) : [];
+      })
       .finally(() => {
         if (showSpinner) {
           this.spinner.hide();
@@ -186,4 +235,18 @@ export class CollectionService {
       });
   }
 
+  public getCollectionInterval(collection): string {
+    let dateFormat = 'M/D/YYYY';
+    if (this.translate.currentLang === 'fr') {
+      dateFormat = 'DD/MM/YYYY';
+    }
+    if (this.collectionMinIntervalMap.has(collection) && this.collectionMaxIntervalMap.has(collection)) {
+      const minDate = moment(this.collectionMinIntervalMap.get(collection)).format(dateFormat);
+      const maxDate = moment(this.collectionMaxIntervalMap.get(collection)).format(dateFormat);
+      return minDate + ' - ' + maxDate;
+    } else {
+      return '';
+    }
+
+  }
 }

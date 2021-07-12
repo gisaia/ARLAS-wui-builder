@@ -72,7 +72,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
       this.filtersFa.setControl(i, ffg);
     }
     layerFg.clearFilters.subscribe(f => this.filtersFa = (layerFg.customControls.featuresFg.controls.visibilityStep as ConfigFormGroup)
-    .controls.filters.value);
+      .controls.filters.value);
   }
 
   public ngOnDestroy() {
@@ -95,12 +95,18 @@ export class FiltersComponent implements OnInit, OnDestroy {
       mapFormGroup.customControls.filterMaxRangeValues.setValue(oldmapFormGroup.customControls.filterMaxRangeValues.value);
       if (mapFormGroup.customControls.filterInValues.enabled) {
         mapFormGroup.customControls.filterInValues.selectedMultipleItems = oldmapFormGroup.customControls.filterInValues.value;
-        mapFormGroup.customControls.filterInValues.savedItems = new Set(mapFormGroup.customControls.filterInValues.selectedMultipleItems);
+        if (mapFormGroup.customControls.filterOperation.value === 'IN' || mapFormGroup.customControls.filterOperation.value === 'NOT_IN') {
+          mapFormGroup.customControls.filterInValues.savedItems = new Set(
+            mapFormGroup.customControls.filterInValues.selectedMultipleItems.map(i => i.value)
+          );
+        }
       }
       /** editing attribute allows to avoid reseting the form value due to ondependencyChange */
       mapFormGroup.editing = true;
-      mapFormGroup.editionInfo = {field: oldmapFormGroup.customControls.filterField.value.value,
-         op: oldmapFormGroup.customControls.filterOperation.value };
+      mapFormGroup.editionInfo = {
+        field: oldmapFormGroup.customControls.filterField.value.value,
+        op: oldmapFormGroup.customControls.filterOperation.value
+      };
     }
     this.dialog.open(DialogFilterComponent, {
       data: {

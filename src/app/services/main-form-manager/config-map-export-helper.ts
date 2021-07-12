@@ -123,9 +123,9 @@ export class ConfigMapExportHelper {
             filters.forEach((f) => {
                 const fieldPath = this.getArray(this.getFieldPath(f.filterField.value, taggableFields));
                 if (f.filterOperation === FILTER_OPERATION.IN) {
-                    layer.filter.push([f.filterOperation.toLowerCase(), fieldPath, ['literal', f.filterInValues]]);
+                    layer.filter.push([f.filterOperation.toLowerCase(), fieldPath, ['literal', f.filterInValues.map(v => v.value)]]);
                 } else if (f.filterOperation === FILTER_OPERATION.NOT_IN) {
-                    layer.filter.push(['!', ['in', fieldPath, ['literal', f.filterInValues]]]);
+                    layer.filter.push(['!', ['in', fieldPath, ['literal', f.filterInValues.map(v => v.value)]]]);
                 } else if (f.filterOperation === FILTER_OPERATION.EQUAL) {
                     layer.filter.push(['==', fieldPath, +f.filterEqualValues]);
                 } else if (f.filterOperation === FILTER_OPERATION.NOT_EQUAL) {

@@ -189,6 +189,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
           this.urlCollectionsSubscription = this.configDescritor.getAllCollections().subscribe(collections => {
             this.availablesCollections = collections;
             this.collectionService.setCollections(collections);
+            this.collectionService.getCollectionsReferenceDescription().subscribe(cdrs => this.collectionService.setCollectionsRef(cdrs));
           }, error => this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'))
             , () => this.spinner.hide('connectServer'));
           this.isServerReady = true;
@@ -213,29 +214,33 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     this.getServerCollections(configJson.arlas.server.url).then(() => {
       this.collectionsSubscription = this.configDescritor.getAllCollections().subscribe(collections => {
         this.collectionService.setCollections(collections);
-        const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
+        this.collectionService.getCollectionsReferenceDescription().subscribe(cdrs => {
+          this.collectionService.setCollectionsRef(cdrs);
+          const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
 
-        if (!collection) {
-          this.logger.error(
-            this.translate.instant('Collection ')
-            + configJson.arlas.server.collection.name
-            + this.translate.instant(' unknown. Available collections: ')
-            + collections.join(', '));
+          if (!collection) {
+            this.logger.error(
+              this.translate.instant('Collection ')
+              + configJson.arlas.server.collection.name
+              + this.translate.instant(' unknown. Available collections: ')
+              + collections.join(', '));
 
-        } else {
-          this.spinner.show('importconfig');
-          /** hack in order to trigger the spinner 'importconfig'
-           * otherwise, we will think the application is not loading
-           */
-          setTimeout(() => {
-            this.mainFormManager.doImport(configJson, configMapJson);
-            this.startEvent.next();
-            this.spinner.hide('importconfig');
-          }, 100);
-        }
-        if (!!configId && !!configName) {
-          this.mainFormService.configChange.next({ id: configId, name: configName });
-        }
+          } else {
+            this.spinner.show('importconfig');
+            /** hack in order to trigger the spinner 'importconfig'
+             * otherwise, we will think the application is not loading
+             */
+            setTimeout(() => {
+              this.mainFormManager.doImport(configJson, configMapJson);
+              this.startEvent.next();
+              this.spinner.hide('importconfig');
+            }, 100);
+          }
+          if (!!configId && !!configName) {
+            this.mainFormService.configChange.next({ id: configId, name: configName });
+          }
+        });
+
       });
     });
   }
@@ -451,7 +456,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.activatedRoute.snapshot.paramMap.has('id')) {
       this.confId = this.activatedRoute.snapshot.paramMap.get('id');
     } else if (!!this.activatedRoute.snapshot.routeConfig && this.activatedRoute.snapshot.routeConfig.path === 'import') {
-        this.configChoice = '2';
+      this.configChoice = '2';
     }
   }
 

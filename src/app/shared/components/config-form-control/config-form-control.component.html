@@ -42,7 +42,7 @@
 </div>
 
 <div *ngIf="isMultipleSelect(); let typedControl">
-    <div class="box-search">
+    <div class="box-search" *ngIf="typedControl.searchable">
         <input #searchInput type="text" [ngClass]="'pl-1'" (input)="debouncer.next(searchInput.value)"
             placeholder="{{'Search...' | translate}}" />
         <div class="box-search-icon" (click)="searchInput.value = ''; debouncer.next('')">
@@ -52,15 +52,20 @@
         </div>
     </div>
     <div style="max-height: 250px; overflow-y: auto;">
-        <mat-checkbox class="multiply-selected" [matTooltip]="opt" (change)="onchangeMulitpleSelection($event)"
-            [checked]="true" *ngFor="let opt of typedControl.selectedMultipleItems;" [value]="opt">
-            {{opt | translate}}
+        <mat-checkbox class="multiply-selected" [matTooltip]="opt.value" (change)="onchangeMulitpleSelection($event)"
+            [checked]="true" *ngFor="let opt of typedControl.selectedMultipleItems;" [value]="opt"
+            [style.borderLeftColor]="opt.color">
+            <span class="label">{{opt.value | translate}}</span>
+            <span class="detail">{{opt.detail | translate }}</span>
         </mat-checkbox>
         <ng-container *ngFor="let opt of typedControl.syncOptions; trackBy: trackByFn">
             <mat-checkbox [matTooltip]="opt.label | translate" class="multiply-to-select" [checked]="false"
                 *ngIf="!typedControl.savedItems.has(opt.value)" (change)="onchangeMulitpleSelection($event)"
-                [value]="opt.value">
-                {{opt.label | translate}}
+                [value]="opt" [style.borderLeftColor]="opt.color">
+                
+                <span class="label">{{opt.label | translate}}</span>
+                <span class="detail">{{opt.detail | translate }}</span>
+            
             </mat-checkbox>
         </ng-container>
         <mat-select style="display: none;" [formControl]="typedControl" [required]="!typedControl.optional"
@@ -133,7 +138,7 @@
             [appAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? 'Warning, changing this field\'s value will reset some other fields' : null"
             [appResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
-               <button mat-button *ngIf="typedControl.value" matSuffix mat-icon-button
+        <button mat-button *ngIf="typedControl.value" matSuffix mat-icon-button
             (click)="autocompleteInput.focus();typedControl.filteredOptions=typedControl.syncOptions;autocompleteInput.value = '';typedControl.setValue('');">
             <mat-icon>close</mat-icon>
         </button>
@@ -165,7 +170,8 @@
             <mat-radio-button value="-">{{ 'DESC' | translate}}</mat-radio-button>
         </mat-radio-group>
         <button type="button" mat-stroked-button [disabled]="!typedControl.sortDirection || !selectSort.value"
-            (click)="typedControl.addSort(typedControl.sortDirection + selectSort.value, $event)">{{ 'Add' | translate}}</button>
+            (click)="typedControl.addSort(typedControl.sortDirection + selectSort.value, $event)">{{ 'Add' |
+            translate}}</button>
         <mat-chip-list #chipSortList>
             <mat-chip *ngFor="let sort of typedControl.sorts" [selectable]="false" [removable]="true"
                 (removed)="typedControl.removeSort(sort)">
@@ -278,8 +284,7 @@
             [appResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null"
             (change)="typedControl.ensureLessThan ? typedControl.checkLessThan(+$event.target.value) : null;
-        typedControl.ensureGeaterThan ? typedControl.checkGreaterThan(+$event.target.value) : null"
-            >
+        typedControl.ensureGeaterThan ? typedControl.checkGreaterThan(+$event.target.value) : null">
     </mat-form-field>
 </div>
 

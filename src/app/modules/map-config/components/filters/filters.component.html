@@ -14,7 +14,7 @@
         <th mat-header-cell style="width: 45%;" *matHeaderCellDef>{{'Value' | translate}}</th>
         <td mat-cell style="width: 45%;" *matCellDef="let element">
             <ul *ngIf="element.filterOperation === 'IN' || element.filterOperation === 'NOT_IN'" style="padding-left: 15px;">
-                <li *ngFor="let value of element.filterInValues"> {{value}}</li>
+                <li *ngFor="let value of element.filterInValues"> {{value.value}}</li>
             </ul>
             <span *ngIf="element.filterOperation === 'EQUAL' || element.filterOperation === 'NOT_EQUAL'">{{element?.filterEqualValues}}</span>
             <span *ngIf="element.filterOperation === 'RANGE' || element.filterOperation === 'OUT_RANGE'">[{{element?.filterMinRangeValues}}, {{element?.filterMaxRangeValues}}] </span>

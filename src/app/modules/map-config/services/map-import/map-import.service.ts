@@ -609,12 +609,12 @@ export class MapImportService {
         if (f.op === FILTER_OPERATION.IN || f.op === FILTER_OPERATION.NOT_IN) {
           importElements([
             {
-              value: f.value,
+              value: (f.value as string[]).map(v => ({ value: v })),
               control: mapFilterFg.customControls.filterInValues
             }
           ]);
-          mapFilterFg.customControls.filterInValues.selectedMultipleItems = f.value as string[];
-          mapFilterFg.customControls.filterInValues.savedItems = new Set(f.value as string[]);
+          mapFilterFg.customControls.filterInValues.selectedMultipleItems = (f.value as string[]).map(v => ({ value: v }));
+          mapFilterFg.customControls.filterInValues.savedItems = new Set((f.value as string[]));
           mapFilterFg.customControls.filterEqualValues.disable();
         } else if (f.op === FILTER_OPERATION.EQUAL || f.op === FILTER_OPERATION.NOT_EQUAL) {
           importElements([

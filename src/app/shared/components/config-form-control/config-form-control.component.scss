@@ -178,44 +178,72 @@ mat-option {
 }
 
 .multiply-selected {
-    border-bottom: 1px solid #d8e0e9;
-    padding: 2px 5px;
-    background-color: #f4f5f7;
-    display: flex;
-    font-size: 0.85em;
-    height: 25px;
-    align-items: center;
-    background-color: #fff;
+  border-bottom: 1px solid #d8e0e9;
+  border-left: 3px solid;
+  padding: 2px 5px;
+  background-color: #f4f5f7;
+  display: flex;
+  font-size: 0.85em;
+  height: 25px;
+  align-items: center;
+  background-color: #fff;
 
-    ::ng-deep label {
-      align-items: baseline;
-      display: block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  .detail {
+    float: right;
+    font-style: italic;
+  }
+
+  ::ng-deep label {
+    align-items: baseline;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  ::ng-deep .mat-checkbox-layout {
+    width: 100%;
+  }
+
+  ::ng-deep .mat-checkbox-label {
+    width: 100%;
+  }
 }
 
 .multiply-to-select {
-    border-bottom: 1px solid #d8e0e9;
-    padding: 2px 5px;
-    background-color: #f4f5f7;
-    display: flex;
-    font-size: 0.85em;
-    height: 25px;
-    align-items: center;
-    background-color: #f4f5f7;
-    &:hover {
-        background-color: #eee;
-    }
+  border-bottom: 1px solid #d8e0e9;
+  border-left: 3px solid;
+  padding: 2px 5px;
+  background-color: #f4f5f7;
+  display: flex;
+  font-size: 0.85em;
+  height: 25px;
+  align-items: center;
+  background-color: #f4f5f7;
+  &:hover {
+    background-color: #eee;
+  }
 
-    ::ng-deep label {
-      align-items: baseline;
-      display: block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  .detail {
+    float: right;
+    font-style: italic;
+  }
+
+  ::ng-deep label {
+    align-items: baseline;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  ::ng-deep .mat-checkbox-layout {
+    width: 100%;
+  }
+
+  ::ng-deep .mat-checkbox-label {
+    width: 100%;
+  }
 }
 
 ::-webkit-scrollbar {
@@ -232,4 +260,3 @@ mat-option {
 ::-webkit-scrollbar-thumb {
   background-color: #555;
 }
-

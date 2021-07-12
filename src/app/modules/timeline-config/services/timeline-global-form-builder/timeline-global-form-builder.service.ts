@@ -16,21 +16,23 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Injectable } from '@angular/core';
 import {
-  ConfigFormGroup, SlideToggleFormControl, InputFormControl, SelectFormControl, SliderFormControl, ConfigFormControl, HiddenFormControl
-} from '@shared-models/config-form';
-import {
-  BucketsIntervalFormGroup, BucketsIntervalFormBuilderService
+  BucketsIntervalFormBuilderService,
+  BucketsIntervalFormGroup
 } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
-import { CollectionService, FIELD_TYPES } from '@services/collection-service/collection.service';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { ChartType } from 'arlas-web-components';
-import { map } from 'rxjs/operators';
-import { toDateFieldsObs } from '@services/collection-service/tools';
-import { FormGroup, FormControl } from '@angular/forms';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { Injectable } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { toNumericOrDateFieldsObs, toOptionsObs } from '@services/collection-service/tools';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import {
+  ConfigFormGroup, InputFormControl, MultipleSelectFormControl, SelectFormControl,
+  SliderFormControl, SlideToggleFormControl, SelectOption
+} from '@shared-models/config-form';
+import { ChartType } from 'arlas-web-components';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 enum DateFormats {
   English = '%b %d %Y  %H:%M',
@@ -40,7 +42,10 @@ enum DateFormats {
 export class TimelineGlobalFormGroup extends ConfigFormGroup {
 
   constructor(
-    timelineBucketsIntervalFg?: BucketsIntervalFormGroup
+    collection: string,
+    collectionService: CollectionService,
+    timelineBucketsIntervalFg?: BucketsIntervalFormGroup,
+    colorService?: ArlasColorGeneratorLoader
   ) {
     super(
       {
@@ -64,7 +69,32 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
         tabsContainer: new ConfigFormGroup({
           dataStep: new ConfigFormGroup({
             timeline: new ConfigFormGroup({
-              aggregation: timelineBucketsIntervalFg,
+              collection: new SelectFormControl(
+                collection,
+                marker('Collection'),
+                marker('Timeline collection description'),
+                false,
+                collectionService.getCollections().map(c => ({ label: c, value: c })),
+                {
+                  optional: false,
+                  resetDependantsOnChange: true
+                }
+              ),
+              aggregation: timelineBucketsIntervalFg
+                .withDependsOn(() => [this.customControls.tabsContainer.dataStep.timeline.collection])
+                .withOnDependencyChange(
+                  () => {
+                    const selectedCollection = this.customControls.tabsContainer.dataStep.timeline.collection.value;
+                    timelineBucketsIntervalFg.setCollection(selectedCollection);
+                    toOptionsObs(toNumericOrDateFieldsObs(collectionService
+                      .getCollectionFields(selectedCollection))).subscribe(collectionFields => {
+                        timelineBucketsIntervalFg.customControls.aggregationField.setSyncOptions(collectionFields);
+                        collectionService.getDescribe(selectedCollection).subscribe(collectionRef => {
+                          timelineBucketsIntervalFg.customControls.aggregationField.setValue(collectionRef.params.timestamp_path);
+                        });
+                      });
+                  }
+                )
             }
             ).withTitle(marker('Timeline')),
             detailedTimeline: new ConfigFormGroup({
@@ -76,17 +106,88 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                 150,
                 1
               )
-            },
-              {
-                dependsOn: () => [this.customControls.useDetailedTimeline],
-                onDependencyChange: (control) =>
-                  control.enableIf(this.customControls.useDetailedTimeline.value)
+            }, {
+              dependsOn: () => [this.customControls.useDetailedTimeline],
+              onDependencyChange: (control) =>
+                control.enableIf(this.customControls.useDetailedTimeline.value)
+            }
+            ).withTitle(marker('Detailed timeline')),
+            additionalCollections: new ConfigFormGroup({
+              collections: new MultipleSelectFormControl(
+                '',
+                marker('Additional collections'),
+                marker('Additional collections description'),
+                false,
+                collectionService.getCollections()
+                  .filter(c => c !== collection)
+                  .map(c => {
+                    return {
+                      label: c,
+                      value: c,
+                      color: colorService.getColor(c),
+                      detail: '' // Fill in onDependencyChange on form load
+                    };
+                  }),
+                {
+                  optional: true,
+                },
+                false
+              )
+            }, {
+              dependsOn: () => [this.customControls.tabsContainer.dataStep.timeline.collection],
+              onDependencyChange: () => {
+                if (this.customControls.tabsContainer.dataStep.timeline.collection.dirty) {
+                  this.customControls.tabsContainer.dataStep.additionalCollections.collections.savedItems = new Set<string>();
+                  this.customControls.tabsContainer.dataStep.additionalCollections.collections.selectedMultipleItems = [];
+                  this.customControls.tabsContainer.dataStep.timeline.collection.markAsPristine();
+                }
+                this.customControls.tabsContainer.dataStep.additionalCollections.collections.setSyncOptions(
+                  collectionService.getCollections().filter(c => c !== this.customControls.tabsContainer.dataStep.timeline.collection.value)
+                    .map(c => ({
+                      label: c,
+                      value: c,
+                      color: colorService.getColor(c),
+                      detail: collectionService.getCollectionInterval(c)
+                    }))
+                );
               }
-            ).withTitle(marker('Detailed timeline'))
+            }).withTitle(marker('Additional collections'))
+
           }).withTabName(marker('Data')),
           renderStep: new ConfigFormGroup({
             timeline: new ConfigFormGroup({
-              ...TimelineGlobalFormGroup.getCommonsControls(),
+              chartTitle: new InputFormControl(
+                '',
+                marker('Chart title'),
+                marker('Chart title description')
+              ),
+              chartType: new SelectFormControl(
+                '',
+                marker('Chart type'),
+                marker('Chart type description'),
+                false,
+                [ChartType[ChartType.area], ChartType[ChartType.bars], ChartType[ChartType.curve]].map(s =>
+                  ({ label: s, value: s })),
+                {
+                  dependsOn: () => [this.customControls.tabsContainer.dataStep.additionalCollections.collections],
+                  onDependencyChange: (control) => {
+                    if (
+                      !! this.customControls.tabsContainer.dataStep.additionalCollections.collections.value &&
+                      this.customControls.tabsContainer.dataStep.additionalCollections.collections.value.length > 0) {
+                      control.setValue(ChartType[ChartType.curve]);
+                    }
+                  }
+                }
+              ),
+              dateFormat: new SelectFormControl(
+                '',
+                marker('Date format'),
+                marker('Date format description'),
+                false,
+                Object.keys(DateFormats).map(df => ({
+                  label: df + ' (' + DateFormats[df] + ')', value: DateFormats[df]
+                }))
+              ),
               isMultiselectable: new SlideToggleFormControl(
                 false,
                 marker('Is multi-selectable'),
@@ -94,7 +195,38 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
               )
             }).withTitle('Timeline'),
             detailedTimeline: new ConfigFormGroup({
-              ...TimelineGlobalFormGroup.getCommonsControls(),
+              chartTitle: new InputFormControl(
+                '',
+                marker('Chart title'),
+                marker('Chart title description')
+              ),
+              chartType: new SelectFormControl(
+                '',
+                marker('Chart type'),
+                marker('Chart type description'),
+                false,
+                [ChartType[ChartType.area], ChartType[ChartType.bars], ChartType[ChartType.curve]].map(s =>
+                  ({ label: s, value: s })),
+                {
+                  dependsOn: () => [this.customControls.tabsContainer.dataStep.additionalCollections.collections],
+                  onDependencyChange: (control) => {
+                    if (
+                      !! this.customControls.tabsContainer.dataStep.additionalCollections.collections.value &&
+                      this.customControls.tabsContainer.dataStep.additionalCollections.collections.value.length > 0) {
+                      control.setValue(ChartType[ChartType.curve]);
+                    }
+                  }
+                }
+              ),
+              dateFormat: new SelectFormControl(
+                '',
+                marker('Date format'),
+                marker('Date format description'),
+                false,
+                Object.keys(DateFormats).map(df => ({
+                  label: df + ' (' + DateFormats[df] + ')', value: DateFormats[df]
+                }))
+              ),
               selectionExtentPercent: new SliderFormControl(
                 '',
                 marker('Percent of selection extent'),
@@ -190,10 +322,14 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
     tabsContainer: {
       dataStep: {
         timeline: {
+          collection: this.get('tabsContainer.dataStep.timeline.collection') as SelectFormControl,
           aggregation: this.get('tabsContainer.dataStep.timeline.aggregation') as BucketsIntervalFormGroup
         },
         detailedTimeline: {
           bucketsNumber: this.get('tabsContainer.dataStep.detailedTimeline.bucketsNumber') as SliderFormControl
+        },
+        additionalCollections: {
+          collections: this.get('tabsContainer.dataStep.additionalCollections.collections') as MultipleSelectFormControl
         }
       },
       renderStep: {
@@ -290,34 +426,6 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
     renderStepTimeline: this.get('tabsContainer.renderStep.timeline') as ConfigFormGroup,
     renderStepDetailedTimeline: this.get('tabsContainer.renderStep.detailedTimeline') as ConfigFormGroup,
   };
-
-  private static getCommonsControls() {
-    return {
-      chartTitle: new InputFormControl(
-        '',
-        marker('Chart title'),
-        marker('Chart title description')
-      ),
-      chartType: new SelectFormControl(
-        '',
-        marker('Chart type'),
-        marker('Chart type description'),
-        false,
-        [ChartType[ChartType.area], ChartType[ChartType.bars]].map(s =>
-          ({ label: s, value: s }))
-      ),
-      dateFormat: new SelectFormControl(
-        '',
-        marker('Date format'),
-        marker('Date format description'),
-        false,
-        Object.keys(DateFormats).map(df => ({
-          label: df + ' (' + DateFormats[df] + ')', value: DateFormats[df]
-        }))
-      )
-    };
-  }
-
 }
 
 @Injectable({
@@ -328,12 +436,16 @@ export class TimelineGlobalFormBuilderService {
   constructor(
     private defaultValuesService: DefaultValuesService,
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
+    private collectionService: CollectionService,
+    private mainFormService: MainFormService,
+    private colorService: ArlasColorGeneratorLoader
   ) { }
 
   public build(collection: string) {
     const timelineBucketIntervalFg = this.bucketsIntervalBuilderService.build(collection, 'temporal');
     const timelineFormGroup = new TimelineGlobalFormGroup(
-      timelineBucketIntervalFg);
+      collection, this.collectionService, timelineBucketIntervalFg, this.colorService
+    );
     this.defaultValuesService.setDefaultValueRecursively(
       'timeline.global',
       timelineFormGroup);

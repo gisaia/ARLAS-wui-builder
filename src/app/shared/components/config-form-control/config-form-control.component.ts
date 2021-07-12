@@ -1,4 +1,3 @@
-import { OnDestroy, Output } from '@angular/core';
 /*
 Licensed to Gisaïa under one or more contributor
 license agreements. See the NOTICE.txt file distributed with
@@ -18,21 +17,21 @@ specific language governing permissions and limitations
 under the License.
 */
 import {
-  Component, OnInit, Input, ViewChild, ViewContainerRef, ComponentFactoryResolver, ComponentFactory, AfterViewInit,
-  ChangeDetectorRef, AfterViewChecked
+  AfterViewChecked, AfterViewInit,
+  ChangeDetectorRef, Component, ComponentFactory, ComponentFactoryResolver, Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef
 } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import {
-  ConfigFormControl, SlideToggleFormControl, SliderFormControl, SelectFormControl, InputFormControl,
-  ColorFormControl, HuePaletteFormControl, HiddenFormControl, IconFormControl, ButtonFormControl,
-  OrderedSelectFormControl, MetricWithFieldListFormControl as MetricFieldListFormControl, TextareaFormControl,
-  MetricWithFieldListFormControl, FieldWithSizeListFormControl, ButtonToggleFormControl, ColorPreviewFormControl,
-  ComponentFormControl, VisualisationCheckboxFormControl, TitleInputFormControl, MapFiltersControl,
-  TypedSelectFormControl, MultipleSelectFormControl
+  ButtonFormControl, ButtonToggleFormControl, ColorFormControl, ColorPreviewFormControl,
+  ComponentFormControl, ConfigFormControl, FieldWithSizeListFormControl, HiddenFormControl,
+  HuePaletteFormControl, IconFormControl, InputFormControl, MapFiltersControl, MetricWithFieldListFormControl,
+  MultipleSelectFormControl, OrderedSelectFormControl, SelectFormControl, SliderFormControl, SlideToggleFormControl,
+  TextareaFormControl, TitleInputFormControl, TypedSelectFormControl, VisualisationCheckboxFormControl
 } from '@shared-models/config-form';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { MatOptionSelectionChange } from '@angular/material';
-import { FormGroup } from '@angular/forms';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 @Component({
   selector: 'app-config-form-control',
@@ -46,26 +45,28 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   @Input() public defaultKey: string;
   @ViewChild('component', { read: ViewContainerRef, static: false }) private componentContainer: ViewContainerRef;
   @Output() public updateSyncOptions: Subject<string> = new Subject();
+
   public colorPreviewControl: ColorPreviewFormControl;
-
-
   public debouncer: Subject<string> = new Subject();
+
   constructor(
     private resolver: ComponentFactoryResolver,
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    private colorService: ArlasColorGeneratorLoader,
+    private collectionService: CollectionService
   ) { }
 
-
-
   public onchangeMulitpleSelection(event, clear?: boolean) {
+
     if (event.checked) {
-      (this.control as MultipleSelectFormControl).savedItems.add(event.source.value);
+      (this.control as MultipleSelectFormControl).savedItems.add(event.source.value.value);
     } else {
-      (this.control as MultipleSelectFormControl).savedItems.delete(event.source.value);
+      (this.control as MultipleSelectFormControl).savedItems.delete(event.source.value.value);
     }
 
     (this.control as MultipleSelectFormControl).selectedMultipleItems =
-      Array.from((this.control as MultipleSelectFormControl).savedItems);
+      Array.from((this.control as MultipleSelectFormControl).savedItems)
+        .map(i => ({ value: i, color: this.colorService.getColor(i), detail: this.collectionService.getCollectionInterval(i) }));
     this.changeDetector.detectChanges();
     if (clear) {
       this.debouncer.next('');
@@ -77,10 +78,11 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
     this.debouncer.pipe(debounceTime(500)).subscribe(t => {
       if (!!(this.control as MultipleSelectFormControl).selectedMultipleItems) {
         (this.control as MultipleSelectFormControl).selectedMultipleItems
-          .forEach(i => (this.control as MultipleSelectFormControl).savedItems.add(i));
+          .forEach(i => (this.control as MultipleSelectFormControl).savedItems.add(i.value));
       }
       (this.control as MultipleSelectFormControl).selectedMultipleItems =
-        Array.from((this.control as MultipleSelectFormControl).savedItems);
+        Array.from((this.control as MultipleSelectFormControl).savedItems)
+          .map(i => ({ value: i, color: this.colorService.getColor(i), detail: this.collectionService.getCollectionInterval(i) }));
       this.updateSyncOptions.next(t);
     });
   }

@@ -2,6 +2,7 @@ import { CollectionService } from './collection.service';
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { TranslateService } from '@ngx-translate/core';
 
 describe('CollectionService', () => {
   let spectator: SpectatorService<CollectionService>;
@@ -9,7 +10,8 @@ describe('CollectionService', () => {
     service: CollectionService,
     mocks: [
       ArlasCollaborativesearchService,
-      DefaultValuesService
+      DefaultValuesService,
+      TranslateService
     ]
   });
 
