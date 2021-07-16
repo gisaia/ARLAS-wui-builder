@@ -37,6 +37,7 @@ import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
 import { MapComponentInputConfig, MapComponentInputMapLayersConfig, AnalyticComponentResultListInputConfig } from './models-config';
 import { getSourceName, ColorConfig, LayerSourceConfig } from 'arlas-web-contributors';
+import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 import {
@@ -189,7 +190,7 @@ export class ConfigExportHelper {
             provided_fields: [],
             normalization_fields: [],
             metrics: [],
-            windowed: true
+            render_mode: FeatureRenderMode.window
         };
 
         if (!!filters) {
@@ -349,7 +350,7 @@ export class ConfigExportHelper {
         const layersHoverId: Array<string> = new Array<string>();
         mapConfigLayers.controls.forEach((layerFg: MapLayerFormGroup) => {
             layers.push(layerFg.value.name);
-            if (this.getLayerSourceConfig(layerFg).windowed) {
+            if (this.getLayerSourceConfig(layerFg).render_mode === FeatureRenderMode.window) {
                 layersHoverId.push(layerFg.value.arlasId);
             }
         });

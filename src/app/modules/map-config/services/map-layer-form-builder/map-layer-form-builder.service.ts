@@ -42,7 +42,7 @@ import {
 import { valuesToOptions } from '@utils/tools';
 import { Observable, Subject } from 'rxjs';
 import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE, FILTER_OPERATION, LINE_TYPE } from './models';
-import { Granularity, ClusterAggType } from 'arlas-web-contributors/models/models';
+import { Granularity, ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { map } from 'rxjs/internal/operators/map';
 import { filter } from 'rxjs/operators';
@@ -829,17 +829,38 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
           },
         ),
         ...geometryFormControls
-      }, {
-      featuresMax: new SliderFormControl(
-        '',
-        marker('Features max'),
-        marker('Maximum number of features to display this layer'),
-        0,
-        10000,
-        100
-      )
-    }, {
-    });
+      },
+      {
+        renderMode: new SelectFormControl(
+          '',
+          'Render mode',
+          'Render mode description',
+          false,
+          [
+            { label: marker('Wide'), value: FeatureRenderMode.wide },
+            { label: marker('Window'), value: FeatureRenderMode.window }
+          ],
+        ),
+        featuresMax: new SliderFormControl(
+          '',
+          marker('Features max'),
+          marker('Maximum number of features to display this layer'),
+          0,
+          10000,
+          100,
+          undefined,
+          undefined,
+          {
+            dependsOn: () => [this.renderMode],
+            onDependencyChange: (control) => {
+              control.enableIf(this.renderMode.value === FeatureRenderMode.wide);
+            }
+          }
+        )
+      },
+      {
+      }
+    );
   }
 
   public customControls = {
@@ -847,6 +868,7 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
   };
   public get geometry() { return this.geometryStep.get('geometry') as SelectFormControl; }
   public get featuresMax() { return this.visibilityStep.get('featuresMax') as SliderFormControl; }
+  public get renderMode() { return this.visibilityStep.get('renderMode') as SelectFormControl; }
   public get geometryType() { return this.styleStep.get('geometryType') as SelectFormControl; }
 }
 
@@ -934,7 +956,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
           [
             { label: marker('Tile Grid'), value: ClusterAggType.tile },
             { label: marker('GeohashGrid'), value: ClusterAggType.geohash }
-          ],        ),
+          ]),
         granularity: new SelectFormControl(
           '',
           marker('Granularity'),
@@ -1022,7 +1044,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
 
   public get aggGeometry() { return this.geometryStep.get('aggGeometry') as SelectFormControl; }
   public get granularity() { return this.geometryStep.get('granularity') as SelectFormControl; }
-  public get aggType() {return this.geometryStep.get('aggType') as SelectFormControl; }
+  public get aggType() { return this.geometryStep.get('aggType') as SelectFormControl; }
   public get clusterGeometryType() { return this.geometryStep.get('clusterGeometryType') as SelectFormControl; }
   public get aggregatedGeometry() { return this.geometryStep.get('aggregatedGeometry') as SelectFormControl; }
   public get rawGeometry() { return this.geometryStep.get('rawGeometry') as SelectFormControl; }
