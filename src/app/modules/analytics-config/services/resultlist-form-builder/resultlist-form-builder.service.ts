@@ -44,12 +44,13 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
   constructor(
     collection: string,
     collectionService: CollectionService,
+    title?: string
   ) {
     super(
       collection,
       {
         title: new InputFormControl(
-          '',
+          !!title ? title : '',
           marker('resultlist title'),
           marker('resultlist title description'),
           undefined,
