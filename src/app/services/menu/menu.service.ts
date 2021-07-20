@@ -62,6 +62,14 @@ export class MenuService {
       control: this.mainFormService.analyticsConfig.control
     },
     {
+      name: marker('Data table'),
+      link: '/data-table-config',
+      icon: 'table_chart',
+      tooltip: marker('Data table'),
+      enabled: false,
+      control: this.mainFormService.resultListConfig.control
+    },
+    {
       name: marker('Side modules'),
       link: '/side-modules',
       icon: 'view_column',

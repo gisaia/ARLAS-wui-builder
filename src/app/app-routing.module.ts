@@ -58,6 +58,11 @@ const routes: Routes = [
     canActivate: [MainFormInitializedGuard]
   },
   {
+    path: 'data-table-config',
+    loadChildren: () => import('./modules/result-list-config/result-list-config.module').then(m => m.ResultListConfigModule),
+    canActivate: [MainFormInitializedGuard]
+  },
+  {
     path: 'side-modules',
     loadChildren: () => import('./modules/side-modules-config/side-modules-config.module').then(m => m.SideModulesConfigModule),
     canActivate: [MainFormInitializedGuard]

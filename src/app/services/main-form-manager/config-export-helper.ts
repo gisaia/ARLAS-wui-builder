@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormGroup, FormArray, Form } from '@angular/forms';
 import {
     Config, ChipSearchConfig, ContributorConfig, AggregationModelConfig,
     AnalyticComponentConfig, AnalyticComponentHistogramInputConfig, SwimlaneConfig,
@@ -76,6 +76,7 @@ export class ConfigExportHelper {
         sideModulesGlobal: SideModulesGlobalFormGroup,
         lookAndFeelConfigGlobal: LookAndFeelGlobalFormGroup,
         analyticsConfigList: FormArray,
+        resultLists: FormArray,
         colorService: ArlasColorGeneratorLoader,
         collectionService: CollectionService
     ): any {
@@ -89,7 +90,8 @@ export class ConfigExportHelper {
                     contributors: [],
                     components: {
                         timeline: this.getTimelineComponent(timelineConfigGlobal, false),
-                        mapgl: this.getMapComponent(mapConfigGlobal, mapConfigLayers, mapConfigVisualisations, mapConfigBasemaps)
+                        mapgl: this.getMapComponent(mapConfigGlobal, mapConfigLayers, mapConfigVisualisations, mapConfigBasemaps),
+                        resultlists: this.getResultListComponent(resultLists)
                     },
                     analytics: [],
                     colorGenerator: {
@@ -138,13 +140,17 @@ export class ConfigExportHelper {
         config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal,
             false, collectionService.collectionParamsMap));
 
+        const contributorsMap = new Map<string, any>();
+        const resultListContributors = this.getResultListContributors(resultLists);
+        resultListContributors.map(c => contributorsMap.set(c.identifier, c));
+        config.arlas.web.contributors = config.arlas.web.contributors.concat(resultListContributors);
+
         if (timelineConfigGlobal.value.useDetailedTimeline) {
             config.arlas.web.components.detailedTimeline = this.getTimelineComponent(timelineConfigGlobal, true);
             config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal,
                 true, collectionService.collectionParamsMap));
         }
 
-        const contributorsMap = new Map<string, any>();
         if (!!analyticsConfigList) {
             (analyticsConfigList.value as Array<any>).forEach(tab => {
                 tab.contentFg.groupsFa.forEach(group => {
@@ -760,6 +766,74 @@ export class ConfigExportHelper {
         return contrib;
     }
 
+    private static getResultListContributors(resultLists: FormArray): ContributorConfig[] {
+        const contribs = [];
+        resultLists.value.forEach(list => {
+            const contrib = this.getWidgetContributor(list, WIDGET_TYPE.resultlist, 'table_chart');
+            contrib.type = 'resultlist';
+            contrib.search_size = list.dataStep.searchSize;
+            const fieldsConfig: FieldsConfiguration = {
+                idFieldName: list.dataStep.idFieldName,
+                thumbnailFieldName: list.renderStep.gridStep.thumbnailUrl,
+                imageFieldName: list.renderStep.gridStep.imageUrl,
+                titleFieldNames: [{ fieldPath: list.renderStep.gridStep.tileLabelField, process: '' }],
+                tooltipFieldNames: [{ fieldPath: list.renderStep.gridStep.tooltipField, process: '' }],
+                icon: 'fiber_manual_record',
+                iconColorFieldName: list.renderStep.gridStep.colorIdentifier
+            };
+            if (list.renderStep.gridStep.thumbnailUrl) {
+                fieldsConfig.urlThumbnailTemplate = '{' + list.renderStep.gridStep.thumbnailUrl + '}';
+            }
+            if (list.renderStep.gridStep.imageUrl) {
+                fieldsConfig.urlImageTemplate = '{' + list.renderStep.gridStep.imageUrl + '}';
+            }
+
+            contrib.fieldsConfiguration = fieldsConfig;
+            contrib.columns = [];
+            (list.dataStep.columns as Array<any>).forEach(c =>
+                contrib.columns.push({
+                    columnName: c.columnName,
+                    fieldName: c.fieldName,
+                    dataType: c.dataType,
+                    process: c.process,
+                    useColorService: !!c.useColorService
+                }));
+
+            contrib.details = [];
+            (list.dataStep.details).forEach((d, index) => {
+                const fields = d.fields.map(f => ({
+                    path: f.path,
+                    label: f.label,
+                    process: f.process
+                }));
+                contrib.details.push({
+                    name: d.name,
+                    order: index + 1,
+                    fields
+                });
+            });
+            contrib.includeMetadata = [];
+            const metadatas = new Set<string>();
+            Object.keys(list.renderStep.gridStep).forEach(v => {
+                if (!!list.renderStep.gridStep[v]) {
+                    metadatas.add(list.renderStep.gridStep[v]);
+                }
+            });
+            contrib.includeMetadata = Array.from(metadatas);
+            contribs.push(contrib);
+        });
+        return contribs;
+    }
+
+    public static getResultListComponent(resultLists: FormArray) {
+        const lists = [];
+        resultLists.value.forEach(list => {
+            lists.push(this.getAnalyticsComponent(WIDGET_TYPE.resultlist, list, null));
+        });
+
+        return lists;
+    }
+
     private static getWidgetContributor(widgetData: any, widgetType: any, icon: string) {
         return {
             identifier: this.getContributorId(widgetData, widgetType),
@@ -891,7 +965,8 @@ export class ConfigExportHelper {
                     showYLabels: unmanagedRenderFields.showYLabels,
                     showHorizontalLines: widgetData.renderStep.showHorizontalLines,
                     barWeight: unmanagedRenderFields.barWeight,
-                    dataType: widgetData.dataStep.aggregation.aggregationFieldType
+                    dataType: widgetData.dataStep.aggregation.aggregationFieldType,
+                    highighlightItems: undefined
                 } as AnalyticComponentInputConfig
             } as AnalyticComponentConfig;
 

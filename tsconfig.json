@@ -35,6 +35,7 @@
       "@search-config/*": ["app/modules/search-config/*"],
       "@timeline-config/*": ["app/modules/timeline-config/*"],
       "@analytics-config/*": ["app/modules/analytics-config/*"],
+      "@result-list-config/*": ["app/modules/result-list-config/*"],
       "@side-modules-config/*": ["app/modules/side-modules-config/*"],
       "@look-and-feel-config/*": ["app/modules/look-and-feel-config/*"],
       "@assets/*": ["assets/*"],

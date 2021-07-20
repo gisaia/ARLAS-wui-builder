@@ -72,6 +72,7 @@ export interface WebConfig {
         timeline: AnalyticComponentConfig,
         detailedTimeline?: AnalyticComponentConfig,
         mapgl: MapglComponentConfig,
+        resultlists: Array<AnalyticComponentConfig>,
         share?: {
             geojson: {
                 max_for_feature: number;
