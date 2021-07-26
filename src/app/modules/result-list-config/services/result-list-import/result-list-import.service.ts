@@ -20,7 +20,7 @@ export class ResultListImportService {
   ) { }
 
   public doImport(config: Config) {
-    if (!!config.arlas.web.analytics) {
+    if (!!config.arlas.web.components && !!config.arlas.web.components.resultlists) {
       config.arlas.web.components.resultlists.forEach(c => {
         const contributorId = c.contributorId;
         const contributor = config.arlas.web.contributors.find(contrib => contrib.identifier === contributorId);
