@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { MapConfig, Layer, HOVER_LAYER_PREFIX, SELECT_LAYER_PREFIX } from '@services/main-form-manager/models-map-config';
+import { MapConfig, Layer, LayerMetadata, isTechnicalArlasLayer } from '@services/main-form-manager/models-map-config';
 import { Config, MapglComponentConfig, ContributorConfig, NormalizationFieldConfig } from '@services/main-form-manager/models-config';
 import { MainFormService, ARLAS_ID } from '@services/main-form/main-form.service';
 import { importElements } from '@services/main-form-manager/tools';
@@ -337,6 +337,21 @@ export class MapImportService {
       this.importPropertySelector(layer.paint[layer.type + '-weight'], values.styleStep.weightFg, false, isAggregated, layerSource);
       values.styleStep.radiusFg = {};
       this.importPropertySelector(layer.paint[layer.type + '-radius'], values.styleStep.radiusFg, false, isAggregated, layerSource);
+    } else if (layer.type === GEOMETRY_TYPE.fill.toString()) {
+      if (!!layer.metadata && !!(layer.metadata as LayerMetadata).stroke) {
+        values.styleStep.strokeWidthFg = {};
+        this.importPropertySelector((layer.metadata as LayerMetadata).stroke.width, values.styleStep.strokeWidthFg,
+          false, isAggregated, layerSource);
+
+        values.styleStep.strokeColorFg = {};
+        this.importPropertySelector((layer.metadata as LayerMetadata).stroke.color, values.styleStep.strokeColorFg,
+          false, isAggregated, layerSource);
+
+        values.styleStep.strokeOpacityFg = {};
+        this.importPropertySelector((layer.metadata as LayerMetadata).stroke.opacity, values.styleStep.strokeOpacityFg,
+          false, isAggregated, layerSource);
+
+      }
     }
     values.visibilityStep.filters = filtersFa;
     const colors = layer.paint[layer.type + '-color'];
@@ -455,7 +470,7 @@ export class MapImportService {
 
     const mapContributors = config.arlas.web.contributors.filter(c => c.type === 'map');
     const layers = mapConfig.layers
-      .filter(ls => !ls.id.startsWith(HOVER_LAYER_PREFIX) && !ls.id.startsWith(SELECT_LAYER_PREFIX));
+      .filter(ls => !isTechnicalArlasLayer(ls.id));
     let layerId = 0;
     mapContributors.forEach(mapCont => {
       if (!mapCont.collection) {
