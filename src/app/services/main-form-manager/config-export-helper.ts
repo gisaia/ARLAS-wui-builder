@@ -505,8 +505,6 @@ export class ConfigExportHelper {
         timelineConfigGlobal: TimelineGlobalFormGroup,
         isDetailed: boolean,
         collectionParamsMap?: Map<string, CollectionReferenceDescription>
-        collection: string,
-        isDetailed: boolean
     ): ContributorConfig {
 
         const timelineAggregation = timelineConfigGlobal.customControls.tabsContainer.dataStep.timeline.aggregation.customControls;
