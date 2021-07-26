@@ -1,12 +1,27 @@
-import { TestBed } from '@angular/core/testing';
+import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/spectator';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasStartupService } from 'arlas-wui-toolkit';
 
 import { ResultListImportService } from './result-list-import.service';
 
 describe('ResultListImportService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let spectator: SpectatorService<ResultListImportService>;
 
-  it('should be created', () => {
-    const service: ResultListImportService = TestBed.get(ResultListImportService);
-    expect(service).toBeTruthy();
+  const createService = createServiceFactory({
+    service: ResultListImportService,
+    providers: [
+      mockProvider(CollectionService),
+      mockProvider(ArlasStartupService),
+      mockProvider(ArlasCollaborativesearchService),
+      mockProvider(ArlasColorGeneratorLoader),
+    ]
+  });
+
+  beforeEach(() => {
+    spectator = createService();
+  });
+
+  it('should create', () => {
+    expect(spectator.service).toBeTruthy();
   });
 });
