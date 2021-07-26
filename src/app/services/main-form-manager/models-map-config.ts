@@ -50,6 +50,16 @@ export interface Layout {
     'line-join'?: string;
 }
 
+export interface FillStroke {
+    width?: PaintValue;
+    opacity?: number;
+    color?: PaintValue;
+}
+export interface LayerMetadata {
+    collection?: string;
+    stroke?: FillStroke;
+}
+
 type PaintValue = Array<string | Array<string> | number> | PaintColor | string | number;
 export interface Paint {
     'fill-color'?: PaintValue;
@@ -78,3 +88,10 @@ export interface PaintColor {
 
 export const HOVER_LAYER_PREFIX = 'arlas-hover-';
 export const SELECT_LAYER_PREFIX = 'arlas-select-';
+export const FILLSTROKE_LAYER_PREFIX = 'arlas-fill_stroke-';
+export const ARLAS_ID = 'arlas_id:';
+
+
+export function isTechnicalArlasLayer(id: string) {
+    return id.startsWith(HOVER_LAYER_PREFIX) || id.startsWith(SELECT_LAYER_PREFIX) || id.startsWith(FILLSTROKE_LAYER_PREFIX);
+}
