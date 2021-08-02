@@ -33,7 +33,7 @@ import { COUNT_OR_METRIC } from '@shared-services/property-selector-form-builder
 import { VisualisationSetConfig, BasemapStyle } from 'arlas-web-components';
 import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { FormControl, FormGroup, FormArray, Form } from '@angular/forms';
-import { ClusterAggType } from 'arlas-web-contributors/models/models';
+import { ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -272,11 +272,13 @@ export class MapImportService {
     typeFg.enable();
     const minzoom = !!layer.minzoom ? layer.minzoom : (!!layerSource.minzoom ? layerSource.minzoom : 0);
     const maxzoom = !!layer.maxzoom ? layer.maxzoom : (!!layerSource.maxzoom ? layerSource.maxzoom : 22);
+    const renderMode = !!layerSource.render_mode ? layerSource.render_mode : FeatureRenderMode.wide;
     const values: any = {
       geometryStep: {
       },
       visibilityStep: {
         visible: (!!layer.layout && !!layer.layout.visibility) ? layer.layout.visibility === VISIBILITY.visible : true,
+        renderMode,
         zoomMin: minzoom,
         zoomMax: maxzoom,
         filters: new FormArray([])

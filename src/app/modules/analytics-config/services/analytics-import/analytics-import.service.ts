@@ -20,7 +20,8 @@ import { Injectable } from '@angular/core';
 import {
   Config, AnalyticComponentConfig, ContributorConfig, AggregationModelConfig,
   AnalyticComponentSwimlaneInputConfig,
-  AnalyticComponentHistogramInputConfig
+  AnalyticComponentHistogramInputConfig,
+  AnalyticComponentResultListInputConfig
 } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormArray, FormGroup } from '@angular/forms';
@@ -605,6 +606,9 @@ export class AnalyticsImportService {
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
+    const inputs = component.input as AnalyticComponentResultListInputConfig;
+    const titleFieldNames = contributor.fieldsConfiguration.titleFieldNames;
+    const tooltipFieldNames = contributor.fieldsConfiguration.tooltipFieldNames;
 
     importElements([
       {
@@ -624,13 +628,37 @@ export class AnalyticsImportService {
         control: dataStep.idFieldName
       },
       {
-        value: component.input.displayFilters,
+        value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].fieldPath : '',
+        control: renderStep.gridStep.tileLabelField
+      },
+      {
+        value: !!tooltipFieldNames && tooltipFieldNames.length > 0 ? tooltipFieldNames[0].fieldPath : '',
+        control: renderStep.gridStep.tooltipField
+      },
+      {
+        value: contributor.fieldsConfiguration.thumbnailFieldName,
+        control: renderStep.gridStep.thumbnailUrl
+      },
+      {
+        value: contributor.fieldsConfiguration.imageFieldName,
+        control: renderStep.gridStep.imageUrl
+      },
+      {
+        value: contributor.fieldsConfiguration.iconColorFieldName,
+        control: renderStep.gridStep.colorIdentifier
+      },
+      {
+        value: inputs.displayFilters,
         control: renderStep.displayFilters
       },
       {
-        value: component.input.cellBackgroundStyle,
-        control: renderStep.cellBackgroundStyle
+        value: inputs.isGeoSortActived,
+        control: renderStep.isGeoSortActived
       },
+      {
+        value: inputs.cellBackgroundStyle,
+        control: renderStep.cellBackgroundStyle
+      }
     ]);
 
     contributor.columns.forEach(c => {
@@ -727,10 +755,6 @@ export class AnalyticsImportService {
         control: unmanagedRenderFields.isBodyHidden
       },
       {
-        value: component.input.isGeoSortActived,
-        control: unmanagedRenderFields.isGeoSortActived
-      },
-      {
         value: component.input.isAutoGeoSortActived,
         control: unmanagedRenderFields.isAutoGeoSortActived
       },
@@ -750,6 +774,10 @@ export class AnalyticsImportService {
         value: component.input.globalActionEvent,
         control: unmanagedRenderFields.globalActionEvent
       },
+      {
+        value: component.input.detailedGridHeight,
+        control: unmanagedRenderFields.globalActionEvent
+      }
     ]);
 
     return widgetData;
