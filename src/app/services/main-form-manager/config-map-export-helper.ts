@@ -16,9 +16,10 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray } from '@angular/forms';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
-import { Paint, Layer, MapConfig, ExternalEvent, HOVER_LAYER_PREFIX, SELECT_LAYER_PREFIX } from './models-map-config';
+import { Paint, Layer, MapConfig, ExternalEvent, HOVER_LAYER_PREFIX, SELECT_LAYER_PREFIX, LayerMetadata,
+    FillStroke, FILLSTROKE_LAYER_PREFIX } from './models-map-config';
 import { GEOMETRY_TYPE, FILTER_OPERATION, LINE_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
@@ -27,6 +28,7 @@ import { LayerSourceConfig } from 'arlas-web-contributors';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { ARLAS_ID } from '@services/main-form/main-form.service';
 
 export enum VISIBILITY {
     visible = 'visible',
@@ -37,9 +39,29 @@ export class ConfigMapExportHelper {
 
     public static process(mapConfigLayers: FormArray, colorService: ArlasColorGeneratorLoader,
                           taggableFieldsMap?: Map<string, Set<string>>) {
+        const fillStrokeLayers = [];
         const layers: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: MapLayerFormGroup) => {
             const taggableFields = taggableFieldsMap.get(layerFg.customControls.collection.value);
-            return [this.getLayer(layerFg, colorService, taggableFields), layerFg.value.mode as LAYER_MODE];
+            const layer = this.getLayer(layerFg, colorService, taggableFields);
+            if (layer.type === GEOMETRY_TYPE.fill.toString() && !!layer.metadata && !!(layer.metadata as LayerMetadata).stroke) {
+                const fillStrokeLayer: Layer = {
+                    source: layer.source,
+                    id: layer.id.replace(ARLAS_ID, FILLSTROKE_LAYER_PREFIX),
+                    type: GEOMETRY_TYPE.line.toString(),
+                    maxzoom: layer.maxzoom,
+                    minzoom: layer.minzoom,
+                    layout: {
+                        visibility: layer.layout.visibility
+                    },
+                    paint: {
+                        'line-color': (layer.metadata.stroke as FillStroke).color,
+                        'line-opacity': (layer.metadata.stroke as FillStroke).opacity,
+                        'line-width': (layer.metadata.stroke as FillStroke).width
+                    }
+                };
+                fillStrokeLayers.push([fillStrokeLayer, layerFg.value.mode as LAYER_MODE]);
+            }
+            return [layer, layerFg.value.mode as LAYER_MODE];
         });
         let layersHover: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: MapLayerFormGroup) => {
             const taggableFields = taggableFieldsMap.get(layerFg.customControls.collection.value);
@@ -50,31 +72,36 @@ export class ConfigMapExportHelper {
             return [this.getLayer(layerFg, colorService, taggableFields), layerFg.value.mode as LAYER_MODE];
         });
 
-        layersHover = layersHover
+        layersHover = layersHover.concat(fillStrokeLayers)
             .filter(l => l[1] === LAYER_MODE.features)
             .filter(l => l[0].type === GEOMETRY_TYPE.line || l[0].type === GEOMETRY_TYPE.circle)
             .map(l => {
-                const id = l[0].id;
-                l[0].id = HOVER_LAYER_PREFIX.concat(id);
-                l[0].layout.visibility = VISIBILITY.none;
-                l[0].type === GEOMETRY_TYPE.line ? l[0].paint['line-width'] = this.addPixelToWidth(12, l[0].paint['line-width'])
-                    : l[0].paint['circle-stroke-width'] = this.addPixelToWidth(12, l[0].paint['circle-stroke-width']);
-                return [l[0], l[1]];
+                const layer = Object.assign({}, l[0]);
+                const id = layer.id;
+                layer.id = HOVER_LAYER_PREFIX.concat(id);
+                layer.layout = { visibility: VISIBILITY.none};
+                layer.paint = Object.assign({}, l[0].paint);
+                layer.type === GEOMETRY_TYPE.line ? layer.paint['line-width'] = this.addPixelToWidth(12, l[0].paint['line-width'])
+                    : layer.paint['circle-stroke-width'] = this.addPixelToWidth(12, l[0].paint['circle-stroke-width']);
+                return [layer, l[1]];
             });
 
-        layersSelect = layersSelect
+        layersSelect = layersSelect.concat(fillStrokeLayers)
             .filter(l => l[1] === LAYER_MODE.features)
             .filter(l => l[0].type === GEOMETRY_TYPE.line || l[0].type === GEOMETRY_TYPE.circle)
             .map(l => {
-                const id = l[0].id;
-                l[0].id = SELECT_LAYER_PREFIX.concat(id);
-                l[0].layout.visibility = VISIBILITY.none;
-                l[0].type === GEOMETRY_TYPE.line ? l[0].paint['line-width'] = this.addPixelToWidth(12, l[0].paint['line-width'])
-                    : l[0].paint['circle-stroke-width'] = this.addPixelToWidth(12, l[0].paint['circle-stroke-width']);
-                return [l[0], l[1]];
+                const layer = Object.assign({}, l[0]);
+                const id = layer.id;
+                layer.id = SELECT_LAYER_PREFIX.concat(id);
+                layer.layout = { visibility: VISIBILITY.none};
+                layer.paint = Object.assign({}, l[0].paint);
+                layer.type === GEOMETRY_TYPE.line ? layer.paint['line-width'] = this.addPixelToWidth(12, l[0].paint['line-width'])
+                    : layer.paint['circle-stroke-width'] = this.addPixelToWidth(12, l[0].paint['circle-stroke-width']);
+                return [layer, l[1]];
             });
         const mapConfig: MapConfig = {
-            layers: Array.from(new Set(layers.map(l => l[0]).concat(layersSelect.map(l => l[0])).concat(layersHover.map(l => l[0])))),
+            layers: Array.from(new Set(layers.map(l => l[0]).concat(layersSelect.map(l => l[0])).concat(layersHover.map(l => l[0]))
+                .concat(fillStrokeLayers.map(l => l[0])))),
             externalEventLayers: Array.from(new Set(layersHover.map(lh => {
                 return {
                     id: lh[0].id,
@@ -90,7 +117,21 @@ export class ConfigMapExportHelper {
         return mapConfig;
     }
 
-
+    public static getLayerMetadata(collection: string, mode: LAYER_MODE, modeValues,
+                                   colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>): LayerMetadata {
+        const metadata: LayerMetadata = {
+            collection
+        };
+        if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.fill.toString()) {
+            const fillStroke: FillStroke = {
+                color: this.getMapProperty(modeValues.styleStep.strokeColorFg, mode, colorService, taggableFields),
+                width: this.getMapProperty(modeValues.styleStep.strokeWidthFg, mode, colorService, taggableFields),
+                opacity: this.getMapProperty(modeValues.styleStep.strokeOpacityFg, mode, colorService, taggableFields)
+            };
+            metadata.stroke = fillStroke;
+        }
+        return metadata;
+    }
     public static getLayer(layerFg: MapLayerFormGroup, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>): Layer {
         const mode = layerFg.value.mode as LAYER_MODE;
         const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
@@ -108,9 +149,7 @@ export class ConfigMapExportHelper {
                 visibility: modeValues.visibilityStep.visible ? VISIBILITY.visible : VISIBILITY.none
             },
             paint,
-            metadata: {
-                collection: layerFg.customControls.collection.value
-            }
+            metadata: this.getLayerMetadata(layerFg.customControls.collection.value, mode, modeValues, colorService, taggableFields)
         };
         if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.line) {
             layer.layout['line-cap'] = 'round';
@@ -368,7 +407,9 @@ export class ConfigMapExportHelper {
     }
     private static addPixelToWidth(nbPixel: number, value: any): Array<string | Array<string> | number> | number {
         if (value instanceof Array) {
-            return value.map((v, i) => (i > 2 && i % 2 === 0) ? v as number + nbPixel : v);
+            const newValues = [];
+            value.forEach((v, i) => (i > 2 && i % 2 === 0) ? newValues.push(v as number + nbPixel) : newValues.push(v));
+            return newValues;
         } else {
             return value as number + nbPixel;
         }

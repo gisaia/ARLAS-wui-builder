@@ -164,7 +164,6 @@ export class MapLayerFormGroup extends ConfigFormGroup {
             control.enableIf(this.customControls.mode.value === LAYER_MODE.features);
             /** when the collection changes we need to update all the fields lists used the different mat-select */
             if (control.enabled && (!this.currentCollection || this.customControls.collection.value !== this.currentCollection)) {
-              control.enableIf(this.customControls.mode.value === LAYER_MODE.features);
               toGeoOptionsObs(collectionService
                 .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
                   featuresFg.geometry.setSyncOptions(collectionFs);
@@ -666,8 +665,8 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           collection,
           marker('property stroke color description')
         ).withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle))
-          .withTitle(marker('circle stroke')),
+          .withOnDependencyChange((control) => control.enableIf(this.isCircleOrFill() && this.enabled))
+          .withTitle(marker('stroke')),
 
         strokeWidthFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
@@ -679,7 +678,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           collection,
           marker('property stroke width description')
         ).withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle)),
+          .withOnDependencyChange((control) => control.enableIf(this.isCircleOrFill() && this.enabled)),
 
         strokeOpacityFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
@@ -691,7 +690,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           collection,
           marker('property stroke opacity description')
         ).withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle)),
+          .withOnDependencyChange((control) => control.enableIf(this.isCircleOrFill() && this.enabled)),
 
         weightFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
@@ -785,6 +784,18 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   public get intensityFg() { return this.styleStep.get('intensityFg') as PropertySelectorFormGroup; }
   public get filter() { return this.styleStep.get('filter') as FormGroup; }
   public get filters() { return this.visibilityStep.get('filters') as MapFiltersControl; }
+
+  private isCircleOrFill(): boolean {
+    return this.isCircle() || this.isFill();
+  }
+
+  private isCircle(): boolean {
+    return this.geometryType.value === GEOMETRY_TYPE.circle;
+  }
+
+  private isFill(): boolean {
+    return this.geometryType.value === GEOMETRY_TYPE.fill;
+  }
 }
 
 export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
@@ -923,7 +934,6 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
     collectionFields: Observable<Array<CollectionField>>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService
   ) {
-
     super(
       collection,
       'cluster',
