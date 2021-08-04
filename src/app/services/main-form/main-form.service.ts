@@ -53,7 +53,9 @@ enum MAIN_FORM_KEYS {
   LOOK_AND_FEEL_CONFIG_GLOBAL = 'LookAndFeelConfigGlobal',
   RESULT_LIST_CONFIG = 'ResultListConfig',
   RESULT_LIST_CONFIG_GLOBAL = 'ResultListConfig',
-  RESULT_LIST_CONFIG_LISTS = 'ResultListConfigLists'
+  RESULT_LIST_CONFIG_LISTS = 'ResultListConfigLists',
+  EXTERNAL_NODE_CONFIG = 'ExternalNodeConfig',
+  EXTERNAL_NODE_CONFIG_GLOBAL = 'ExternalNodeGlobal'
 }
 
 export const ARLAS_ID = 'arlas_id:';
@@ -78,7 +80,9 @@ export class MainFormService {
     [MAIN_FORM_KEYS.SIDE_MODULES_CONFIG]: new FormGroup({}),
     [MAIN_FORM_KEYS.ANALYTICS_CONFIG]: new FormGroup({}),
     [MAIN_FORM_KEYS.LOOK_AND_FEEL_CONFIG]: new FormGroup({}),
-    [MAIN_FORM_KEYS.RESULT_LIST_CONFIG]: new FormGroup({})
+    [MAIN_FORM_KEYS.RESULT_LIST_CONFIG]: new FormGroup({}),
+    [MAIN_FORM_KEYS.EXTERNAL_NODE_CONFIG]: new FormGroup({})
+
   });
 
   constructor() {
@@ -169,6 +173,16 @@ export class MainFormService {
     }
   }(this.mainForm.get(MAIN_FORM_KEYS.RESULT_LIST_CONFIG) as FormGroup);
 
+  // EXTERNAL NODE CONFIG
+  public externalNodeConfig = new class {
+    constructor(public control: FormGroup) { }
+
+    public initExternalNodeFg = (fg: FormGroup) => this.control.setControl(MAIN_FORM_KEYS.EXTERNAL_NODE_CONFIG_GLOBAL, fg);
+    public getExternalNodeFg = () => {
+      return this.control.get(MAIN_FORM_KEYS.EXTERNAL_NODE_CONFIG_GLOBAL) as FormGroup;
+    }
+  }(this.mainForm.get(MAIN_FORM_KEYS.EXTERNAL_NODE_CONFIG) as FormGroup);
+
   // COMMON CONFIG
   public commonConfig = new class {
     constructor(public control: FormGroup) { }
@@ -191,6 +205,7 @@ export class MainFormService {
       this.mainForm.get(MAIN_FORM_KEYS.SIDE_MODULES_CONFIG),
       this.mainForm.get(MAIN_FORM_KEYS.LOOK_AND_FEEL_CONFIG),
       this.mainForm.get(MAIN_FORM_KEYS.COMMON_CONFIG),
+      this.mainForm.get(MAIN_FORM_KEYS.EXTERNAL_NODE_CONFIG),
       this.mainForm.get(MAIN_FORM_KEYS.RESULT_LIST_CONFIG)
     ].forEach((sf: FormGroup) => {
       Object.keys(sf.controls).forEach(c => sf.removeControl(c));

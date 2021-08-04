@@ -33,7 +33,8 @@
             ],
             "styles": [
               "src/styles.scss",
-              "node_modules/mapbox-gl/dist/mapbox-gl.css"
+              "node_modules/mapbox-gl/dist/mapbox-gl.css",
+              "node_modules/jsoneditor/dist/jsoneditor.min.css"
             ],
             "scripts": [
               "node_modules/hammerjs/hammer.min.js"
