@@ -382,6 +382,29 @@ fi
 envsubst '$ARLAS_BASEMAPS' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
 mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
 
+
+### Array of schemas json
+if [ -z "${ARLAS_EXTERNAL_NODE_PAGE}" ]; then
+  ARLAS_EXTERNAL_NODE_PAGE=false
+  export ARLAS_EXTERNAL_NODE_PAGE
+  echo "None external node page are defined"
+else
+  echo ${ARLAS_EXTERNAL_NODE_PAGE} "is used for 'external_node_page' in settings.yaml file"
+fi
+envsubst '$ARLAS_EXTERNAL_NODE_PAGE' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
+mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
+
+### Array of schemas json
+if [ -z "${ARLAS_EXTERNAL_NODE_SCHEMAS}" ]; then
+  ARLAS_EXTERNAL_NODE_SCHEMAS="[]"
+  export ARLAS_EXTERNAL_NODE_SCHEMAS
+  echo "None external node schemas are defined"
+else
+  echo ${ARLAS_EXTERNAL_NODE_SCHEMAS} "is used for 'external_node_schemas' in settings.yaml file"
+fi
+envsubst '$ARLAS_EXTERNAL_NODE_SCHEMAS' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
+mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
+
 # Set App base path
 if [ -z "${ARLAS_BUILDER_APP_PATH}" ]; then
   ARLAS_BUILDER_APP_PATH=""

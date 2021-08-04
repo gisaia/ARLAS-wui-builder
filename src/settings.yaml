@@ -67,5 +67,10 @@ basemaps:
     url: "https://api.maptiler.com/maps/voyager/style.json?key=xIhbu1RwgdbxfZNmoXn4"
     image: "https://cloud.maptiler.com/static/img/maps/voyager.png"
 tab_name: "ARLAS Wui builder Dev"
-
+external_node_page: true
+external_node_schemas:
+  - name: Schema 1
+    url: /assets/schema1.json
+  - name: Schema 2
+    url: /assets/schema2.json
 

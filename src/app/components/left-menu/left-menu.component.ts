@@ -17,7 +17,6 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { getNbErrorsInControl, isFullyTouched, Page } from '@utils/tools';
@@ -28,7 +27,6 @@ import { Router } from '@angular/router';
 import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persistence.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UserInfosComponent } from 'arlas-wui-toolkit/components/user-infos/user-infos.component';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { LinkSettings } from 'arlas-wui-toolkit/services/startup/startup.service';
 import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
 import { MenuService } from '../../services/menu/menu.service';

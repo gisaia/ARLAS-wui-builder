@@ -1,12 +1,23 @@
 import { TestBed } from '@angular/core/testing';
+import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/spectator';
+import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
 
 import { MenuService } from './menu.service';
 
 describe('MenuService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let spectator: SpectatorService<MenuService>;
+  const createService = createServiceFactory({
+    service: MenuService,
+    providers: [
+        mockProvider(ArlasSettingsService, {
+          settings: {}
+        })
+    ]
+  });
 
-  it('should be created', () => {
-    const service: MenuService = TestBed.get(MenuService);
-    expect(service).toBeTruthy();
+  beforeEach(() => spectator = createService());
+
+  it('should be defined', () => {
+    expect(spectator.service).toBeDefined();
   });
 });
