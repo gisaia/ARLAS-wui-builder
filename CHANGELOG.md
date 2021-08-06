@@ -1,8 +1,24 @@
 # Change Log
 
+## [v18.0.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v18.0.1) (2021-08-06)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v18.0.0...v18.0.1)
+
+**New stuff:**
+
+- Add the possibility to apply a timeline filter to widgets and layers of other collections  [\#557](https://github.com/gisaia/ARLAS-wui-builder/issues/557) [[TIMELINE](https://github.com/gisaia/ARLAS-wui-builder/labels/TIMELINE)]
+
 ## [v18.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v18.0.0) (2021-07-12)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.2...v18.0.0)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.3...v18.0.0)
+
+**New stuff:**
+
+- Add the possibility to display a timeline for each collection on the same graph [\#568](https://github.com/gisaia/ARLAS-wui-builder/issues/568)
+
+## [v17.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.3) (2021-06-30)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.2...v17.2.3)
 
 ## [v17.2.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.2) (2021-06-30)
 
