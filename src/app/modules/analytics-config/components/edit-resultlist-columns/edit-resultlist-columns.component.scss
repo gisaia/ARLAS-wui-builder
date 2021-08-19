@@ -26,6 +26,10 @@ under the License.
         justify-content: space-evenly;
         align-items: center;
 
+        .flex1{
+            flex: 1;
+        }
+
         ::ng-deep mat-form-field {
             //hard-coded, otherwise with no value the width is 180px, with a value it is 204px
             width: 180px;

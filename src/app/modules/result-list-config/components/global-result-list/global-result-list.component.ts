@@ -27,6 +27,7 @@ import { InputModalComponent } from '@shared-components/input-modal/input-modal.
 import { Subscription } from 'rxjs';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
+import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-global-result-list',
@@ -39,6 +40,7 @@ export class GlobalResultListComponent implements OnDestroy {
   private newAfterClosedSub: Subscription;
   public selected = new FormControl(0);
 
+  private removeAfterClosedSub: Subscription;
   public preview = [];
 
   constructor(
@@ -69,6 +71,23 @@ export class GlobalResultListComponent implements OnDestroy {
 
   public ngOnDestroy() {
     if (this.newAfterClosedSub) { this.newAfterClosedSub.unsubscribe(); }
+    if (this.removeAfterClosedSub) { this.removeAfterClosedSub.unsubscribe(); }
+  }
+
+  public removeTab(tabIndex: number) {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '400px',
+      data: { message: 'delete this list' }
+    });
+
+    this.removeAfterClosedSub = dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.listsFa.removeAt(tabIndex);
+        if (this.selected.value !== 0) {
+          this.selected.setValue(this.selected.value - 1);
+        }
+      }
+    });
   }
 
 }
