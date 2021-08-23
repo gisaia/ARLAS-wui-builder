@@ -172,7 +172,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                   dependsOn: () => [this.customControls.tabsContainer.dataStep.additionalCollections.collections],
                   onDependencyChange: (control) => {
                     if (
-                      !! this.customControls.tabsContainer.dataStep.additionalCollections.collections.value &&
+                      !!this.customControls.tabsContainer.dataStep.additionalCollections.collections.value &&
                       this.customControls.tabsContainer.dataStep.additionalCollections.collections.value.length > 0) {
                       control.setValue(ChartType[ChartType.curve]);
                     }
@@ -211,7 +211,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                   dependsOn: () => [this.customControls.tabsContainer.dataStep.additionalCollections.collections],
                   onDependencyChange: (control) => {
                     if (
-                      !! this.customControls.tabsContainer.dataStep.additionalCollections.collections.value &&
+                      !!this.customControls.tabsContainer.dataStep.additionalCollections.collections.value &&
                       this.customControls.tabsContainer.dataStep.additionalCollections.collections.value.length > 0) {
                       control.setValue(ChartType[ChartType.curve]);
                     }

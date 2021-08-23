@@ -53,6 +53,11 @@ export class TimelineImportService {
     const timelineDataStep = timelineFg.customControls.tabsContainer.dataStep.timeline;
     const detailedTimelineDataStep = timelineFg.customControls.tabsContainer.dataStep.detailedTimeline;
 
+    /** retro-combatibility with mono-collection dashboards */
+    if (!timelineContributor.collection) {
+      timelineContributor.collection = config.arlas.server.collection.name;
+    }
+
     importElements([
       {
         value: hasDetailedTimeline,
