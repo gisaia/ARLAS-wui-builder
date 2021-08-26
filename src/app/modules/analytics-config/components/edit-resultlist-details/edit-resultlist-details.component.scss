@@ -44,6 +44,15 @@ under the License.
                 align-items: center;
                 justify-content: center;
             }
+
+            ::ng-deep mat-form-field {
+                //hard-coded, otherwise with no value the width is 180px, with a value it is 204px
+                width: 350px;
+            }
+
+            ::ng-deep.textarea-form-control mat-form-field{
+                width: 350px !important;
+            }
         }
     }
 }
@@ -52,7 +61,3 @@ under the License.
     margin: 20px;
 }
 
-::ng-deep mat-form-field {
-    //hard-coded, otherwise with no value the width is 180px, with a value it is 204px
-    width: 204px;
-}

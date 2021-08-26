@@ -36,6 +36,10 @@ under the License.
             margin-right: 4px;
             margin-left: 4px;
         }
+
+        ::ng-deep.textarea-form-control mat-form-field{
+            width: 180px !important;
+        }
     }
 }
 
