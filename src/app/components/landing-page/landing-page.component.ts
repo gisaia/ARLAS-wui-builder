@@ -211,36 +211,48 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   }
 
   public initWithConfig(configJson: Config, configMapJson: MapConfig, configId?: string, configName?: string) {
+    this.spinner.show('importconfig');
     this.getServerCollections(configJson.arlas.server.url).then(() => {
-      this.collectionsSubscription = this.configDescritor.getAllCollections().subscribe(collections => {
-        this.collectionService.setCollections(collections);
-        this.collectionService.getCollectionsReferenceDescription().subscribe(cdrs => {
-          this.collectionService.setCollectionsRef(cdrs);
-          const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
+      this.collectionsSubscription = this.configDescritor.getAllCollections().subscribe({
+        next: collections => {
+          this.collectionService.setCollections(collections);
+          this.collectionService.getCollectionsReferenceDescription().subscribe(cdrs => {
+            this.collectionService.setCollectionsRef(cdrs);
+            const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
 
-          if (!collection) {
-            this.logger.error(
-              this.translate.instant('Collection ')
-              + configJson.arlas.server.collection.name
-              + this.translate.instant(' unknown. Available collections: ')
-              + collections.join(', '));
-
-          } else {
-            this.spinner.show('importconfig');
-            /** hack in order to trigger the spinner 'importconfig'
-             * otherwise, we will think the application is not loading
-             */
-            setTimeout(() => {
-              this.mainFormManager.doImport(configJson, configMapJson);
-              this.startEvent.next();
+            if (!collection) {
               this.spinner.hide('importconfig');
-            }, 100);
-          }
-          if (!!configId && !!configName) {
-            this.mainFormService.configChange.next({ id: configId, name: configName });
-          }
-        });
+              this.logger.error(
+                this.translate.instant('Collection ')
+                + configJson.arlas.server.collection.name
+                + this.translate.instant(' unknown. Available collections: ')
+                + collections.join(', '));
 
+
+            } else {
+
+              /** hack in order to trigger the spinner 'importconfig'
+               * otherwise, we will think the application is not loading
+               */
+              setTimeout(() => {
+                this.mainFormManager.doImport(configJson, configMapJson);
+                this.startEvent.next();
+                this.spinner.hide('importconfig');
+              }, 100);
+            }
+            if (!!configId && !!configName) {
+              this.mainFormService.configChange.next({ id: configId, name: configName });
+            }
+          });
+
+        },
+        error: () => {
+          this.spinner.hide('importconfig');
+          this.logger.error(
+          this.translate.instant('Server "')
+          + configJson.arlas.server.url
+          + this.translate.instant('" unreachable'));
+        }
       });
     });
   }
