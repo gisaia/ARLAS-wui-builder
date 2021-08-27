@@ -133,7 +133,7 @@
 	"Yes": "Yes",
 	"OK": "OK",
 	"Unable to access the server. Please, verify the url.": "Unable to access the server. Please, verify the url.",
-	"Collection ": "Collection",
+	"Collection ": "Collection ",
 	" unknown. Available collections: ": " unknown. Available collections: ",
 	"Could not load config files ": "Could not load config files ",
 	"Ready to access server": "Ready to access server",
