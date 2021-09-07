@@ -239,6 +239,7 @@ export class ConfigExportHelper {
                     sort: !!modeValues.geometryStep.featureMetricSort ? modeValues.geometryStep.featureMetricSort : ''
                 };
                 layerSource.geometry_id = modeValues.geometryStep.geometryId;
+                layerSource.network_precision = +modeValues.visibilityStep.networkFetchingPrecision;
                 break;
             }
             case LAYER_MODE.cluster: {

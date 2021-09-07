@@ -121,6 +121,7 @@ export interface ContributorConfig {
     title?: string;
     charttype?: string;
     search_field?: string;
+    network_precision?: any;
     icon?: string;
     autocomplete_field?: string;
     autocomplete_size?: number;

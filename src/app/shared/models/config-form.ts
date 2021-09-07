@@ -693,6 +693,8 @@ export class HiddenFormControl extends ConfigFormControl {
 }
 
 export class SliderFormControl extends ConfigFormControl {
+    public hasWarning = false;
+    public warningMessage = '';
     constructor(
         formState: any,
         label: string,

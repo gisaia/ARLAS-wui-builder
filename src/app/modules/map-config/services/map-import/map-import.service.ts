@@ -34,6 +34,7 @@ import { VisualisationSetConfig, BasemapStyle } from 'arlas-web-components';
 import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { FormControl, FormGroup, FormArray, Form } from '@angular/forms';
 import { ClusterAggType } from 'arlas-web-contributors/models/models';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 @Injectable({
   providedIn: 'root'
@@ -375,6 +376,7 @@ export class MapImportService {
     layerSource: LayerSourceConfig
   ) {
     this.importLayerFeatures(values, layer, layerSource);
+    /** retro compatibility code : migrate from [geometry_support] to [raw_geometry] */
     if (!!layerSource.geometry_support) {
       values.geometryStep.geometry = layerSource.geometry_support;
       values.geometryStep.featureMetricSort = null;
@@ -383,7 +385,7 @@ export class MapImportService {
       values.geometryStep.featureMetricSort = !!layerSource.raw_geometry.sort ? layerSource.raw_geometry.sort : null;
     }
     values.geometryStep.geometryId = layerSource.geometry_id;
-    values.geometryStep.granularity = layerSource.granularity;
+    values.visibilityStep.networkFetchingPrecision = layerSource.network_precision !== undefined ? layerSource.network_precision : 3;
   }
 
   public static importLayerCluster(

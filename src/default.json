@@ -1,6 +1,6 @@
 {
     "global": {
-        "serverUrl": "${ARLAS_SERVER_URL}",
+        "serverUrl": "http://localhost:19999/arlas",
         "unmanagedFields": {
             "maxAgeCache": 120,
             "appName": "ARLAS",
