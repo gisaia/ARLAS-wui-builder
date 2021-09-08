@@ -232,8 +232,6 @@ export class ConfigExportHelper {
             }
             case LAYER_MODE.featureMetric: {
                 layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
-                // layerSource.granularity = modeValues.geometryStep.granularity;
-                layerSource.granularity = 'Medium';
                 layerSource.raw_geometry = {
                     geometry: modeValues.geometryStep.geometry,
                     sort: !!modeValues.geometryStep.featureMetricSort ? modeValues.geometryStep.featureMetricSort : ''
