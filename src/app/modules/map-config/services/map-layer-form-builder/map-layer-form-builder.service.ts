@@ -186,8 +186,8 @@ export class MapLayerFormGroup extends ConfigFormGroup {
             if (!control.enabled && this.customControls.mode.value === LAYER_MODE.featureMetric) {
               this.currentCollection = undefined;
               /** Calculate the network precision */
-              this.calculateNetworkFetchingPrecision(this.customControls.collection.value, collectionService,
-                featureMetricFg.networkFetchingPrecision, featureMetricFg.zoomMin, featureMetricFg.zoomMax);
+              this.calculatenetworkFetchingLevel(this.customControls.collection.value, collectionService,
+                featureMetricFg.networkFetchingLevel, featureMetricFg.zoomMin, featureMetricFg.zoomMax);
             }
             control.enableIf(this.customControls.mode.value === LAYER_MODE.featureMetric);
             /** when the collection changes we need to update all the fields lists used the different mat-select */
@@ -211,8 +211,8 @@ export class MapLayerFormGroup extends ConfigFormGroup {
               }
               // calculate bbox of the collection in order and deduce the bes grid precision
               if (this.currentCollection !== undefined && this.customControls.collection.value !== this.currentCollection) {
-                this.calculateNetworkFetchingPrecision(this.customControls.collection.value, collectionService,
-                  featureMetricFg.networkFetchingPrecision, featureMetricFg.zoomMin, featureMetricFg.zoomMax);
+                this.calculatenetworkFetchingLevel(this.customControls.collection.value, collectionService,
+                  featureMetricFg.networkFetchingLevel, featureMetricFg.zoomMin, featureMetricFg.zoomMax);
               }
               this.currentCollection = this.customControls.collection.value;
             }
@@ -258,15 +258,15 @@ export class MapLayerFormGroup extends ConfigFormGroup {
     featureMetricFg: this.get('featureMetricFg') as MapLayerTypeFeatureMetricFormGroup,
     clusterFg: this.get('clusterFg') as MapLayerTypeClusterFormGroup
   };
-  public static adjustZoomVisibilityTonetworkFetchingPrecision(networkFetchingPrecisionControl: SliderFormControl,
-                                                               zoomMinControl: SliderFormControl, zoomMaxControl: SliderFormControl): void {
-    zoomMinControl.min = Math.max(networkFetchingPrecisionControl.value - PRECISION_TOLERATED_DIFFERENCE);
-    zoomMaxControl.min = Math.min(22, Math.max(networkFetchingPrecisionControl.value - PRECISION_TOLERATED_DIFFERENCE) + 1);
+  public static adjustZoomVisibilityTonetworkFetchingLevel(networkFetchingLevelControl: SliderFormControl,
+                                                           zoomMinControl: SliderFormControl, zoomMaxControl: SliderFormControl): void {
+    zoomMinControl.min = Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE);
+    zoomMaxControl.min = Math.min(22, Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE) + 1);
 
-    if (zoomMinControl.value < Math.max(networkFetchingPrecisionControl.value - PRECISION_TOLERATED_DIFFERENCE, 0)) {
-      zoomMinControl.setValue(Math.max(networkFetchingPrecisionControl.value - PRECISION_TOLERATED_DIFFERENCE, 0));
+    if (zoomMinControl.value < Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0)) {
+      zoomMinControl.setValue(Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0));
       zoomMinControl.hasWarning = true;
-      zoomMinControl.warningMessage = marker('Network Analytics Fetching Precision is') + ' ' + networkFetchingPrecisionControl.value +
+      zoomMinControl.warningMessage = marker('Network Analytics Fetching Precision is') + ' ' + networkFetchingLevelControl.value +
       '. ' +  marker('Therefore; minimum zoom level of the layer should be greater than or equal to') + ' ' + zoomMinControl.value + '.';
       if (zoomMaxControl.value <= zoomMinControl.value) {
         zoomMaxControl.setValue(Math.min(22, zoomMinControl.value + 1));
@@ -335,9 +335,9 @@ export class MapLayerFormGroup extends ConfigFormGroup {
       });
   }
 
-  private calculateNetworkFetchingPrecision(collection: string, collectionService: CollectionService,
-                                            networkFetchingPrecisionControl: SliderFormControl,
-                                            zoomMinControl: SliderFormControl, zoomMaxControl: SliderFormControl) {
+  private calculatenetworkFetchingLevel(collection: string, collectionService: CollectionService,
+                                        networkFetchingLevelControl: SliderFormControl,
+                                        zoomMinControl: SliderFormControl, zoomMaxControl: SliderFormControl) {
     collectionService.computeBbox(collection).subscribe({
       next: (cr) => {
         const coordinates = (cr.geometry as any).coordinates[0];
@@ -351,10 +351,10 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         const height = Math.abs(north - south);
         const bbox = [west, south, west + width / 10 * 0.8 , south + height / 10 * 0.8 ];
         const tile = tilebelt.bboxToTile(bbox);
-        networkFetchingPrecisionControl.markAsUntouched();
-        networkFetchingPrecisionControl.markAsPristine();
-        networkFetchingPrecisionControl.setValue(tile[2] + '');
-        MapLayerFormGroup.adjustZoomVisibilityTonetworkFetchingPrecision(networkFetchingPrecisionControl, zoomMinControl, zoomMaxControl);
+        networkFetchingLevelControl.markAsUntouched();
+        networkFetchingLevelControl.markAsPristine();
+        networkFetchingLevelControl.setValue(tile[2] + '');
+        MapLayerFormGroup.adjustZoomVisibilityTonetworkFetchingLevel(networkFetchingLevelControl, zoomMinControl, zoomMaxControl);
       }
     });
   }
@@ -781,10 +781,10 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           marker('Visible'),
           marker('Whether the layer is visible or not')
         ),
-        networkFetchingPrecision: new SliderFormControl(
+        networkFetchingLevel: new SliderFormControl(
           '',
-          marker('Network Fetching Precision'),
-          marker('Network Fetching Precision description'),
+          marker('Network Fetching Level'),
+          marker('Network Fetching Level description'),
           0,
           22,
           1,
@@ -809,12 +809,12 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           undefined,
           {
             optional: false,
-            dependsOn: () => [this.networkFetchingPrecision],
+            dependsOn: () => [this.networkFetchingLevel],
             onDependencyChange: () => {
-              this.zoomMin.min = Math.max(this.networkFetchingPrecision.value - PRECISION_TOLERATED_DIFFERENCE);
-              this.zoomMax.min = Math.min(22, Math.max(this.networkFetchingPrecision.value - PRECISION_TOLERATED_DIFFERENCE) + 1);
-              if (this.networkFetchingPrecision.dirty) {
-                MapLayerFormGroup.adjustZoomVisibilityTonetworkFetchingPrecision(this.networkFetchingPrecision, this.zoomMin, this.zoomMax);
+              this.zoomMin.min = Math.max(this.networkFetchingLevel.value - PRECISION_TOLERATED_DIFFERENCE);
+              this.zoomMax.min = Math.min(22, Math.max(this.networkFetchingLevel.value - PRECISION_TOLERATED_DIFFERENCE) + 1);
+              if (this.networkFetchingLevel.dirty) {
+                MapLayerFormGroup.adjustZoomVisibilityTonetworkFetchingLevel(this.networkFetchingLevel, this.zoomMin, this.zoomMax);
               }
             }
           }
@@ -830,7 +830,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           () => this.zoomMin,
           {
             optional: false,
-            dependsOn: () => [this.networkFetchingPrecision],
+            dependsOn: () => [this.networkFetchingLevel],
             onDependencyChange: () => {
             }
           }
@@ -857,7 +857,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   // TODO use customControls like other form builders
   public get geometryStep() { return this.get('geometryStep') as ConfigFormGroup; }
   public get visibilityStep() { return this.get('visibilityStep') as ConfigFormGroup; }
-  public get networkFetchingPrecision() { return this.get('visibilityStep').get('networkFetchingPrecision') as SliderFormControl; }
+  public get networkFetchingLevel() { return this.get('visibilityStep').get('networkFetchingLevel') as SliderFormControl; }
   public get styleStep() { return this.get('styleStep') as ConfigFormGroup; }
   public get visible() { return this.visibilityStep.get('visible') as SlideToggleFormControl; }
   public get zoomMin() { return this.visibilityStep.get('zoomMin') as SliderFormControl; }
@@ -980,7 +980,7 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
   }
   public get featureMetricSort() { return this.geometryStep.get('featureMetricSort') as OrderedSelectFormControl; }
   public get geometryId() { return this.geometryStep.get('geometryId') as OrderedSelectFormControl; }
-  public get networkFetchingPrecision() { return this.visibilityStep.get('networkFetchingPrecision') as SliderFormControl; }
+  public get networkFetchingLevel() { return this.visibilityStep.get('networkFetchingLevel') as SliderFormControl; }
 
 }
 

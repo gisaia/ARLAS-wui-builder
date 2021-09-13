@@ -34,7 +34,7 @@ import { VisualisationSetConfig, BasemapStyle } from 'arlas-web-components';
 import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { FormControl, FormGroup, FormArray, Form } from '@angular/forms';
 import { ClusterAggType } from 'arlas-web-contributors/models/models';
-import { CollectionService } from '@services/collection-service/collection.service';
+import { DEFAULT_FETCH_NETWORK_LEVEL } from 'arlas-web-contributors';
 
 @Injectable({
   providedIn: 'root'
@@ -377,7 +377,9 @@ export class MapImportService {
   ) {
     this.importLayerFeatures(values, layer, layerSource);
     /** retro compatibility code : migrate from [geometry_support] to [raw_geometry] */
+    // tslint:disable-next-line: deprecation
     if (!!layerSource.geometry_support) {
+      // tslint:disable-next-line: deprecation
       values.geometryStep.geometry = layerSource.geometry_support;
       values.geometryStep.featureMetricSort = null;
     } else {
@@ -385,7 +387,8 @@ export class MapImportService {
       values.geometryStep.featureMetricSort = !!layerSource.raw_geometry.sort ? layerSource.raw_geometry.sort : null;
     }
     values.geometryStep.geometryId = layerSource.geometry_id;
-    values.visibilityStep.networkFetchingPrecision = layerSource.network_precision !== undefined ? layerSource.network_precision : 3;
+    values.visibilityStep.networkFetchingLevel = layerSource.network_fetching_level !== undefined ?
+      layerSource.network_fetching_level : DEFAULT_FETCH_NETWORK_LEVEL;
   }
 
   public static importLayerCluster(
