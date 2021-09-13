@@ -22,6 +22,9 @@
         [step]="typedControl.step" (input)="typedControl.ensureLessThan ? typedControl.checkLessThan($event.value) : null;
         typedControl.ensureGeaterThan ? typedControl.checkGreaterThan($event.value) : null">
     </mat-slider>
+    <mat-card *ngIf="typedControl.hasWarning" class="empty_visulisation">
+        {{ typedControl.warningMessage | translate}}
+    </mat-card>
 </div>
 
 <div *ngIf="isSelect(); let typedControl">

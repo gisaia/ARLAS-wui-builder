@@ -20,14 +20,13 @@ import { Injectable } from '@angular/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import {
   Aggregation, AggregationResponse, AggregationsRequest, CollectionReferenceDescription, CollectionReferenceDescriptionProperty,
-  ComputationRequest, Filter,
-  Hits
+  ComputationRequest, ComputationResponse, Filter, Hits
 } from 'arlas-api';
 import { projType } from 'arlas-web-core';
 import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { CollectionField } from './models';
 import { TranslateService } from '@ngx-translate/core';
@@ -249,4 +248,12 @@ export class CollectionService {
     }
 
   }
+
+  public computeBbox(collection): Observable<ComputationResponse> {
+    this.spinner.show();
+    return from(this.collabSearchService.getExploreApi().compute(collection, this.collectionParamsMap.get(collection).params.centroid_path,
+      ComputationRequest.MetricEnum.GEOBBOX.toString()).finally(() => this.spinner.hide()));
+  }
+
+
 }
