@@ -77,6 +77,7 @@ export class ConfigExportHelper {
         lookAndFeelConfigGlobal: LookAndFeelGlobalFormGroup,
         analyticsConfigList: FormArray,
         resultLists: FormArray,
+        externalNode: FormGroup,
         colorService: ArlasColorGeneratorLoader,
         collectionService: CollectionService
     ): any {
@@ -97,7 +98,8 @@ export class ConfigExportHelper {
                     colorGenerator: {
                         keysToColors: colorService.keysToColors
                     },
-                    options: this.getOptions(lookAndFeelConfigGlobal)
+                    options: this.getOptions(lookAndFeelConfigGlobal),
+                    externalNode: externalNode.controls.externalNode.value
                 },
                 server: {
                     url: startingConfig.customControls.serverUrl.value,
