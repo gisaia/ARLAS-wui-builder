@@ -422,7 +422,7 @@ export class ConfigExportHelper {
                     layers: [],
                     events: {
                         zoomOnClick: customControls.unmanagedFields.mapLayers.events.zoomOnClick.value,
-                        emitOnClick: customControls.unmanagedFields.mapLayers.events.emitOnClick.value,
+                        emitOnClick: layersHoverId,
                         onHover: layersHoverId,
                     },
                     externalEventLayers: new Array<{ id: string, on: string }>()
