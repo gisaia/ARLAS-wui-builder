@@ -42,5 +42,5 @@ arlas_wui_url: ${ARLAS_WUI_URL}
 links: ${ARLAS_STATIC_LINKS}
 basemaps: ${ARLAS_BASEMAPS}
 tab_name:  ${ARLAS_TAB_NAME}
-external_node_page: ${ARLAS_EXTERNAL_NODE_PAGE}
+external_node_page: true
 external_node_schemas: ${ARLAS_EXTERNAL_NODE_SCHEMAS}
