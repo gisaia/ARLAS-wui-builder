@@ -1,4 +1,4 @@
-import { AnalyticComponentInputConfig } from './models-config';
+import { LayerMetadata } from 'arlas-web-components';
 /*
 Licensed to Gisaïa under one or more contributor
 license agreements. See the NOTICE.txt file distributed with
@@ -41,23 +41,13 @@ export interface Layer {
     maxzoom: number;
     paint: Paint;
     filter?: Array<any>;
-    metadata?: any;
+    metadata?: LayerMetadata;
 }
 
 export interface Layout {
     visibility?: string;
     'line-cap'?: string;
     'line-join'?: string;
-}
-
-export interface FillStroke {
-    width?: PaintValue;
-    opacity?: number;
-    color?: PaintValue;
-}
-export interface LayerMetadata {
-    collection?: string;
-    stroke?: FillStroke;
 }
 
 type PaintValue = Array<string | Array<string> | number> | PaintColor | string | number;

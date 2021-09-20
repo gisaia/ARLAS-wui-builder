@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { MapConfig, Layer, LayerMetadata, isTechnicalArlasLayer } from '@services/main-form-manager/models-map-config';
+import { MapConfig, Layer, isTechnicalArlasLayer } from '@services/main-form-manager/models-map-config';
 import { Config, MapglComponentConfig, ContributorConfig, NormalizationFieldConfig } from '@services/main-form-manager/models-config';
 import { MainFormService, ARLAS_ID } from '@services/main-form/main-form.service';
 import { importElements } from '@services/main-form-manager/tools';
@@ -35,6 +35,7 @@ import { MapVisualisationFormBuilderService } from '../map-visualisation-form-bu
 import { FormControl, FormGroup, FormArray, Form } from '@angular/forms';
 import { DEFAULT_FETCH_NETWORK_LEVEL } from 'arlas-web-contributors';
 import { ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
+import { LayerMetadata } from 'arlas-web-components';
 
 @Injectable({
   providedIn: 'root'

@@ -30,7 +30,7 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { ConfigMapExportHelper, VISIBILITY } from '@services/main-form-manager/config-map-export-helper';
 import { Config } from '@services/main-form-manager/models-config';
-import { Layer as LayerMap } from '@services/main-form-manager/models-map-config';
+import { Layer as LayerMap} from '@services/main-form-manager/models-map-config';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
 import { StartupService } from '@services/startup/startup.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
@@ -42,6 +42,7 @@ import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contribut
 import { Subscription } from 'rxjs';
 import { PreviewComponent } from '../preview/preview.component';
 import { MapContributor } from 'arlas-web-contributors';
+import { FillStroke, LayerMetadata } from 'arlas-web-components';
 
 export interface Layer {
   id: string;
@@ -90,10 +91,12 @@ export class LayersComponent implements OnInit, OnDestroy {
         (layer.mode === LAYER_MODE.featureMetric ? layer.featureMetricFg : layer.clusterFg);
       const taggableFields = this.collectionService.taggableFieldsMap.get(layer.collection);
       const paint = ConfigMapExportHelper.getLayerPaint(modeValues, layer.mode, this.colorService, taggableFields);
+      const exportedLayer = this.getLayer(layer, modeValues, paint, layer.collection, this.colorService, taggableFields);
       this.layerLegend.set(
         layer.arlasId + '#' + layer.mode,
-        { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint),
-          strokeColorLegend: this.getStrokeColorLegend(paint), lineDashArray: this.getLineDashArray(paint) }
+        { layer: exportedLayer,
+          colorLegend: this.getColorLegend(paint),
+          strokeColorLegend: this.getStrokeColorLegend(paint, exportedLayer.metadata), lineDashArray: this.getLineDashArray(paint) }
       );
 
       const includeIn = [];
@@ -113,8 +116,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     this.toUnsubscribe.forEach(u => u.unsubscribe());
   }
 
-  public getLayer(layerFg, modeValues, paint) {
-
+  public getLayer(layerFg, modeValues, paint, collection: string, colorService, taggableFields) {
     const sourceName = layerFg.mode === LAYER_MODE.features ? 'feature' :
       (layerFg.mode === LAYER_MODE.featureMetric ? 'feature-metric' : 'cluster');
 
@@ -128,7 +130,8 @@ export class LayersComponent implements OnInit, OnDestroy {
         visibility: modeValues.visibilityStep.visible ? VISIBILITY.visible : VISIBILITY.none
       },
       paint,
-      filter: modeValues.styleStep.filter
+      filter: modeValues.styleStep.filter,
+      metadata: ConfigMapExportHelper.getLayerMetadata(collection, layerFg.mode, modeValues, colorService, taggableFields)
     };
     return layer;
   }
@@ -139,10 +142,15 @@ export class LayersComponent implements OnInit, OnDestroy {
     return colorLegend[0];
   }
 
-  public getStrokeColorLegend(paint) {
-    const styleColor = paint['circle-stroke-color'];
-    const colorLegend = MapglLegendComponent.buildColorLegend(styleColor as any, true, null);
-    return colorLegend[0];
+  public getStrokeColorLegend(paint, metadata: LayerMetadata) {
+    const circleStyleColor = paint['circle-stroke-color'];
+    if (!!circleStyleColor) {
+      const colorLegend = MapglLegendComponent.buildColorLegend(circleStyleColor as any, true, null);
+      return colorLegend[0];
+    } else if (!!metadata && !!metadata.stroke) {
+      const colorLegend = MapglLegendComponent.buildColorLegend(metadata.stroke.color as any, true, null);
+      return colorLegend[0];
+    }
   }
 
   public getLineDashArray(paint) {
@@ -221,10 +229,12 @@ export class LayersComponent implements OnInit, OnDestroy {
     const paint = ConfigMapExportHelper.getLayerPaint(modeValues,
       newLayerFg.customControls.mode.value, this.colorService, taggableFields);
     /** Add the duplicated layer to legend set in order to have the icon */
+    const exportedLayer = this.getLayer(layer, modeValues, paint, layerFg.customControls.collection.value,
+      this.colorService, taggableFields);
     this.layerLegend.set(
       newId + '#' + newLayerFg.customControls.mode.value,
-      { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint),
-        strokeColorLegend: this.getStrokeColorLegend(paint), lineDashArray: this.getLineDashArray(paint)}
+      { layer: exportedLayer, colorLegend: this.getColorLegend(paint),
+        strokeColorLegend: this.getStrokeColorLegend(paint, exportedLayer.metadata), lineDashArray: this.getLineDashArray(paint)}
     );
     newLayerFg.markAsPristine();
     /** listen to all the ondepencychnage to correctly initiate the controls */
@@ -350,10 +360,12 @@ export class LayersComponent implements OnInit, OnDestroy {
           layerFg.customControls.mode.value, this.colorService, taggableFields);
 
         /** Add the duplicated layer to legend set in order to have the icon */
+        const exportedLayer = this.getLayer(layer, modeValues, paint,
+          collection, this.colorService, taggableFields);
         this.layerLegend.set(
           newId + '#' + layerFg.customControls.mode.value,
-          { layer: this.getLayer(layer, modeValues, paint), colorLegend: this.getColorLegend(paint),
-            strokeColorLegend: this.getStrokeColorLegend(paint), lineDashArray: this.getLineDashArray(paint)}
+          { layer: exportedLayer, colorLegend: this.getColorLegend(paint),
+            strokeColorLegend: this.getStrokeColorLegend(paint, exportedLayer.metadata), lineDashArray: this.getLineDashArray(paint)}
         );
         layerFg.markAsPristine();
 
