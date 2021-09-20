@@ -1083,6 +1083,7 @@ export class ConfigExportHelper {
                     nbGridColumns: unmanagedRenderFields.nbGridColumns,
                     defautMode: unmanagedRenderFields.defautMode,
                     displayFilters: !!widgetData.renderStep.displayFilters,
+                    hasGridMode: !!widgetData.renderStep.gridStep.thumbnailUrl,
                     isBodyHidden: unmanagedRenderFields.isBodyHidden,
                     isGeoSortActived: !!widgetData.renderStep.isGeoSortActived,
                     isAutoGeoSortActived: unmanagedRenderFields.isAutoGeoSortActived,
