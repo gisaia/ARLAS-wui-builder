@@ -18,8 +18,8 @@ under the License.
 */
 import { FormArray } from '@angular/forms';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
-import { Paint, Layer, MapConfig, ExternalEvent, HOVER_LAYER_PREFIX, SELECT_LAYER_PREFIX, LayerMetadata,
-    FillStroke, FILLSTROKE_LAYER_PREFIX } from './models-map-config';
+import { Paint, Layer, MapConfig, ExternalEvent, HOVER_LAYER_PREFIX,
+    SELECT_LAYER_PREFIX, FILLSTROKE_LAYER_PREFIX } from './models-map-config';
 import { GEOMETRY_TYPE, FILTER_OPERATION, LINE_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
@@ -29,6 +29,7 @@ import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
+import { FillStroke, LayerMetadata } from 'arlas-web-components';
 
 export enum VISIBILITY {
     visible = 'visible',
