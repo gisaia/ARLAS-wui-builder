@@ -53,6 +53,7 @@ export class ResultListImportService {
     const widgetData = this.resultlistFormBuilder.build(contributor.collection);
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
+    const actionStep = widgetData.customControls.zactionStep;
     const title = widgetData.customControls.title;
     const inputs = component.input as AnalyticComponentResultListInputConfig;
     const titleFieldNames = contributor.fieldsConfiguration.titleFieldNames;
@@ -70,6 +71,14 @@ export class ResultListImportService {
       {
         value: contributor.search_size,
         control: dataStep.searchSize
+      },
+      {
+        value: inputs.visualisationLink,
+        control: actionStep.visualisationLink
+      },
+      {
+        value: inputs.downloadLink,
+        control: actionStep.downloadLink
       },
       {
         value: contributor.fieldsConfiguration.idFieldName,

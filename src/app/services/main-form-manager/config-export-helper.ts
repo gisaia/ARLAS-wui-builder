@@ -1086,6 +1086,8 @@ export class ConfigExportHelper {
                     defautMode: unmanagedRenderFields.defautMode,
                     displayFilters: !!widgetData.renderStep.displayFilters,
                     hasGridMode: !!widgetData.renderStep.gridStep.thumbnailUrl,
+                    visualisationLink: widgetData.zactionStep.visualisationLink,
+                    downloadLink: widgetData.zactionStep.downloadLink,
                     isBodyHidden: unmanagedRenderFields.isBodyHidden,
                     isGeoSortActived: !!widgetData.renderStep.isGeoSortActived,
                     isAutoGeoSortActived: unmanagedRenderFields.isAutoGeoSortActived,

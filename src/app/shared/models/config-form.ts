@@ -84,6 +84,7 @@ export abstract class ConfigFormControl extends FormControl {
     }
 
     get optional() { return this.optionalParams.optional; }
+    get width() { return this.optionalParams.width; }
     get sourceData() { return this.optionalParams.sourceData; }
     get dependsOn() { return this.optionalParams.dependsOn; }
     get onDependencyChange() { return this.optionalParams.onDependencyChange; }
@@ -143,6 +144,8 @@ export interface ControlOptionalParams {
     title?: string;
 
     sourceData?: Observable<any>;
+
+    width?: string;
 }
 
 export interface GroupOptionalParams {
