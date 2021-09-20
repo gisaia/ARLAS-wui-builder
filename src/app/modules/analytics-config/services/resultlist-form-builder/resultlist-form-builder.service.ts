@@ -186,6 +186,28 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
 
           }).withTitle('Grid view')
         }).withTabName(marker('Render')),
+        zactionStep: new ConfigFormGroup({
+          visualisationLink : new InputFormControl(
+            'Visualisation url service',
+            marker('Visualisation url service title'),
+            marker('Visualisation url service description'),
+            'text',
+            {
+              optional: true,
+              width: '100%'
+            }
+          ),
+          downloadLink : new InputFormControl(
+            'Download url service',
+            marker('Download url service title'),
+            marker('Download url service description'),
+            'text',
+            {
+              optional: true,
+              width: '100%'
+            }
+          ),
+        }).withTabName(marker('Actions')),
         unmanagedFields: new FormGroup({
           dataStep: new FormGroup({}),
           renderStep: new FormGroup({
@@ -202,6 +224,7 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
             actionOnItemEvent: new FormControl(),
             globalActionEvent: new FormControl()
           }),
+          zactionStep: new FormGroup({}),
         })
       });
   }
@@ -209,6 +232,7 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
   public customGroups = {
     dataStep: this.get('dataStep') as ConfigFormGroup,
     renderStep: this.get('renderStep') as ConfigFormGroup,
+    zactionStep: this.get('zactionStep') as ConfigFormGroup
   };
 
   public customControls = {
@@ -216,6 +240,8 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
     dataStep: {
       collection: this.get('dataStep.collection') as SelectFormControl,
       searchSize: this.get('dataStep.searchSize') as SliderFormControl,
+      visualisationLink: this.get('dataStep.visualisationLink') as InputFormControl,
+      downloadLink: this.get('dataStep.downloadLink') as InputFormControl,
       columns: this.get('dataStep.columns') as FormArray,
       details: this.get('dataStep.details') as FormArray,
       idFieldName: this.get('dataStep.idFieldName') as HiddenFormControl,
@@ -232,6 +258,10 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
         colorIdentifier: this.get('renderStep.gridStep.colorIdentifier') as SelectFormControl
       }
     },
+    zactionStep: {
+      visualisationLink: this.get('zactionStep.visualisationLink') as InputFormControl,
+      downloadLink: this.get('zactionStep.downloadLink') as InputFormControl
+    },
     unmanagedFields: {
       dataStep: {},
       renderStep: {
@@ -247,7 +277,9 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
         consultedItemEvent: this.get('unmanagedFields.renderStep.consultedItemEvent'),
         actionOnItemEvent: this.get('unmanagedFields.renderStep.actionOnItemEvent'),
         globalActionEvent: this.get('unmanagedFields.renderStep.globalActionEvent')
-      }
+      },
+      zactionStep: {}
+
     }
   };
 }
