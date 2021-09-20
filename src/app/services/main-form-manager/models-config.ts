@@ -251,6 +251,9 @@ export interface AnalyticComponentInputConfig {
 export interface AnalyticComponentResultListInputConfig extends AnalyticComponentInputConfig {
     options?: AnalyticComponentResultListInputOptions;
     detailWidth?: number;
+    visualisationLink?: string;
+    downloadLink?: string;
+
 }
 
 export interface AnalyticComponentResultListInputOptions {
