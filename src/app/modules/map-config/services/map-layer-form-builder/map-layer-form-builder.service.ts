@@ -844,8 +844,8 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
       {
         renderMode: new SelectFormControl(
           '',
-          'Render mode',
-          'Render mode description',
+          marker('Render mode'),
+          marker('Render mode description'),
           false,
           [
             { label: marker('Wide'), value: FeatureRenderMode.wide },
