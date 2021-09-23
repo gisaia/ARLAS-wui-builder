@@ -143,12 +143,30 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                 optional: true
               }
             ),
+            tileLabelFieldProcess: new TextareaFormControl(
+              '',
+              marker('Transformation title'),
+              marker('Transformation title description'),
+              1,
+              {
+                optional: true
+              }
+            ),
             tooltipField: new SelectFormControl(
               '',
               marker('Tooltip field'),
               marker('Tooltip field description'),
               true,
               toOptionsObs(collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES)),
+              {
+                optional: true
+              }
+            ),
+            tooltipFieldProcess: new TextareaFormControl(
+              '',
+              marker('Transformation tooltip'),
+              marker('Transformation tooltip description'),
+              1,
               {
                 optional: true
               }
@@ -252,7 +270,9 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
       cellBackgroundStyle: this.get('renderStep.cellBackgroundStyle') as SelectFormControl,
       gridStep: {
         tileLabelField: this.get('renderStep.gridStep.tileLabelField') as SelectFormControl,
+        tileLabelFieldProcess: this.get('renderStep.gridStep.tileLabelFieldProcess') as TextareaFormControl,
         tooltipField: this.get('renderStep.gridStep.tooltipField') as SelectFormControl,
+        tooltipFieldProcess: this.get('renderStep.gridStep.tooltipFieldProcess') as TextareaFormControl,
         thumbnailUrl: this.get('renderStep.gridStep.thumbnailUrl') as SelectFormControl,
         imageUrl: this.get('renderStep.gridStep.imageUrl') as SelectFormControl,
         colorIdentifier: this.get('renderStep.gridStep.colorIdentifier') as SelectFormControl

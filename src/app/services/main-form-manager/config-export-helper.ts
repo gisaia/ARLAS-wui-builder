@@ -776,8 +776,10 @@ export class ConfigExportHelper {
                 idFieldName: list.dataStep.idFieldName,
                 thumbnailFieldName: list.renderStep.gridStep.thumbnailUrl,
                 imageFieldName: list.renderStep.gridStep.imageUrl,
-                titleFieldNames: [{ fieldPath: list.renderStep.gridStep.tileLabelField, process: '' }],
-                tooltipFieldNames: [{ fieldPath: list.renderStep.gridStep.tooltipField, process: '' }],
+                titleFieldNames: [{ fieldPath: list.renderStep.gridStep.tileLabelField,
+                    process: list.renderStep.gridStep.tileLabelFieldProcess }],
+                tooltipFieldNames: [{ fieldPath: list.renderStep.gridStep.tooltipField,
+                    process: list.renderStep.gridStep.tooltipFieldProcess }],
                 icon: 'fiber_manual_record',
                 iconColorFieldName: list.renderStep.gridStep.colorIdentifier
             };

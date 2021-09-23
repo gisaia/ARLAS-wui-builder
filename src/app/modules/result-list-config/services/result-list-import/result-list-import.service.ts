@@ -89,8 +89,16 @@ export class ResultListImportService {
         control: renderStep.gridStep.tileLabelField
       },
       {
+        value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].process : '',
+        control: renderStep.gridStep.tileLabelFieldProcess
+      },
+      {
         value: !!tooltipFieldNames && tooltipFieldNames.length > 0 ? tooltipFieldNames[0].fieldPath : '',
         control: renderStep.gridStep.tooltipField
+      },
+      {
+        value: !!tooltipFieldNames && tooltipFieldNames.length > 0 ? tooltipFieldNames[0].process : '',
+        control: renderStep.gridStep.tooltipFieldProcess
       },
       {
         value: contributor.fieldsConfiguration.thumbnailFieldName,
