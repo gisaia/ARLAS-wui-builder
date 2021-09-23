@@ -609,7 +609,6 @@ export class AnalyticsImportService {
     const inputs = component.input as AnalyticComponentResultListInputConfig;
     const titleFieldNames = contributor.fieldsConfiguration.titleFieldNames;
     const tooltipFieldNames = contributor.fieldsConfiguration.tooltipFieldNames;
-
     importElements([
       {
         value: contributor.name,
@@ -632,8 +631,16 @@ export class AnalyticsImportService {
         control: renderStep.gridStep.tileLabelField
       },
       {
+        value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].process : '',
+        control: renderStep.gridStep.tileLabelFieldProcess
+      },
+      {
         value: !!tooltipFieldNames && tooltipFieldNames.length > 0 ? tooltipFieldNames[0].fieldPath : '',
         control: renderStep.gridStep.tooltipField
+      },
+      {
+        value: !!tooltipFieldNames && tooltipFieldNames.length > 0 ? tooltipFieldNames[0].process : '',
+        control: renderStep.gridStep.tooltipFieldProcess
       },
       {
         value: contributor.fieldsConfiguration.thumbnailFieldName,
