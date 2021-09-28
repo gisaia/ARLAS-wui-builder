@@ -1,5 +1,32 @@
 # Change Log
 
+## [v19.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v19.0.0) (2021-09-28)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v19.0.0-beta.7...v19.0.0)
+
+**New stuff:**
+
+- Support interaction between list elements and "scrollable top hits" layers [\#577](https://github.com/gisaia/ARLAS-wui-builder/issues/577)
+- Configure grid view in resultlist with a thumbnail [\#576](https://github.com/gisaia/ARLAS-wui-builder/issues/576)
+
+**Fixed bugs:**
+
+- Stroke of polygon map style does not appear in previsualisation [\#590](https://github.com/gisaia/ARLAS-wui-builder/issues/590)
+
+**Miscellaneous:**
+
+- Add external json nodes to the arlas configuration [\#575](https://github.com/gisaia/ARLAS-wui-builder/issues/575)
+- Apply same pagination between map and result list [\#574](https://github.com/gisaia/ARLAS-wui-builder/issues/574)
+- Synchronise data displayed on the map and the result list [\#573](https://github.com/gisaia/ARLAS-wui-builder/issues/573)
+
+## [v19.0.0-beta.7](https://github.com/gisaia/ARLAS-wui-builder/tree/v19.0.0-beta.7) (2021-09-22)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v19.0.0-beta.6...v19.0.0-beta.7)
+
+## [v19.0.0-beta.6](https://github.com/gisaia/ARLAS-wui-builder/tree/v19.0.0-beta.6) (2021-09-20)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v18.1.1...v19.0.0-beta.6)
+
 ## [v18.1.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v18.1.1) (2021-09-14)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v18.1.0...v18.1.1)
