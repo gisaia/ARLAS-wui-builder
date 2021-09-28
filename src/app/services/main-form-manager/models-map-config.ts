@@ -1,4 +1,4 @@
-import { AnalyticComponentInputConfig } from './models-config';
+import { LayerMetadata } from 'arlas-web-components';
 /*
 Licensed to Gisaïa under one or more contributor
 license agreements. See the NOTICE.txt file distributed with
@@ -41,7 +41,7 @@ export interface Layer {
     maxzoom: number;
     paint: Paint;
     filter?: Array<any>;
-    metadata?: any;
+    metadata?: LayerMetadata;
 }
 
 export interface Layout {
@@ -78,3 +78,10 @@ export interface PaintColor {
 
 export const HOVER_LAYER_PREFIX = 'arlas-hover-';
 export const SELECT_LAYER_PREFIX = 'arlas-select-';
+export const FILLSTROKE_LAYER_PREFIX = 'arlas-fill_stroke-';
+export const ARLAS_ID = 'arlas_id:';
+
+
+export function isTechnicalArlasLayer(id: string) {
+    return id.startsWith(HOVER_LAYER_PREFIX) || id.startsWith(SELECT_LAYER_PREFIX) || id.startsWith(FILLSTROKE_LAYER_PREFIX);
+}

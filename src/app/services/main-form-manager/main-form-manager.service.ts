@@ -50,7 +50,10 @@ import { Router } from '@angular/router';
 import { ArlasStartupService } from 'arlas-wui-toolkit/services/startup/startup.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-
+import { ResultListImportService } from '@app/modules/result-list-config/services/result-list-import/result-list-import.service';
+import { ResultListInitService } from '@app/modules/result-list-config/services/result-list-init/result-list-init.service';
+import { ExternalNodeInitService } from '@app/modules/external-node-config/services/external-node-init/external-node-init.service';
+import { ExternalNodeImportService } from '@app/modules/external-node-config/services/external-node-import/external-node-import.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -69,6 +72,10 @@ export class MainFormManagerService {
     private lookAndFeelImportService: LookAndFeelImportService,
     private timelineInitService: TimelineInitService,
     private timelineImportService: TimelineImportService,
+    private resultListImportService: ResultListImportService,
+    private resultListInitService: ResultListInitService,
+    private externalNodeInitService: ExternalNodeInitService,
+    private externalNodeImportService: ExternalNodeImportService,
     private persistenceService: PersistenceService,
     private snackbar: MatSnackBar,
     private translate: TranslateService,
@@ -93,6 +100,8 @@ export class MainFormManagerService {
     this.analyticsInitService.initModule();
     this.sideModulesInitService.initModule();
     this.lookAndFeelInitService.initModule();
+    this.resultListInitService.initModule();
+    this.externalNodeInitService.initModule();
 
     this.mainFormService.commonConfig.initKeysToColorFa(new FormArray([]));
 
@@ -123,8 +132,9 @@ export class MainFormManagerService {
     const analyticsConfigList = this.mainFormService.analyticsConfig.getListFa();
     const sideModulesConfigGlobal = this.mainFormService.sideModulesConfig.getGlobalFg();
     const lookAndFeelConfigGlobal = this.mainFormService.lookAndFeelConfig.getGlobalFg();
+    const resultLists = this.mainFormService.resultListConfig.getResultListsFa();
     const keysToColorList = this.mainFormService.commonConfig.getKeysToColorFa();
-
+    const externalNodeGlobal = this.mainFormService.externalNodeConfig.getExternalNodeFg();
     const generatedConfig = ConfigExportHelper.process(
       startingConfig,
       mapConfigGlobal,
@@ -136,6 +146,8 @@ export class MainFormManagerService {
       sideModulesConfigGlobal,
       lookAndFeelConfigGlobal,
       analyticsConfigList,
+      resultLists,
+      externalNodeGlobal,
       this.colorService,
       this.collectionService
     );
@@ -238,6 +250,8 @@ export class MainFormManagerService {
     this.analyticsImportService.doImport(config);
     this.sideModulesImportService.doImport(config);
     this.lookAndFeelImportService.doImport(config);
+    this.resultListImportService.doImport(config);
+    this.externalNodeImportService.doImport(config);
 
     // load keys to colors
     if (!!config.arlas.web.colorGenerator && !!config.arlas.web.colorGenerator.keysToColors) {

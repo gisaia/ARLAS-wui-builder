@@ -42,7 +42,7 @@ import {
 import { valuesToOptions } from '@utils/tools';
 import { Observable, Subject } from 'rxjs';
 import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE, FILTER_OPERATION, LINE_TYPE } from './models';
-import { Granularity, ClusterAggType } from 'arlas-web-contributors/models/models';
+import { Granularity, ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { map } from 'rxjs/internal/operators/map';
 import tilebelt from '@mapbox/tilebelt';
@@ -166,7 +166,6 @@ export class MapLayerFormGroup extends ConfigFormGroup {
             control.enableIf(this.customControls.mode.value === LAYER_MODE.features);
             /** when the collection changes we need to update all the fields lists used the different mat-select */
             if (control.enabled && (!this.currentCollection || this.customControls.collection.value !== this.currentCollection)) {
-              control.enableIf(this.customControls.mode.value === LAYER_MODE.features);
               toGeoOptionsObs(collectionService
                 .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
                   featuresFg.geometry.setSyncOptions(collectionFs);
@@ -721,8 +720,8 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           collection,
           marker('property stroke color description')
         ).withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle))
-          .withTitle(marker('circle stroke')),
+          .withOnDependencyChange((control) => control.enableIf(this.isCircleOrFill() && this.enabled))
+          .withTitle(marker('stroke')),
 
         strokeWidthFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
@@ -734,7 +733,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           collection,
           marker('property stroke width description')
         ).withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle)),
+          .withOnDependencyChange((control) => control.enableIf(this.isCircleOrFill() && this.enabled)),
 
         strokeOpacityFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
@@ -746,7 +745,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           collection,
           marker('property stroke opacity description')
         ).withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle)),
+          .withOnDependencyChange((control) => control.enableIf(this.isCircleOrFill() && this.enabled)),
 
         weightFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
@@ -874,6 +873,18 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   public get intensityFg() { return this.styleStep.get('intensityFg') as PropertySelectorFormGroup; }
   public get filter() { return this.styleStep.get('filter') as FormGroup; }
   public get filters() { return this.visibilityStep.get('filters') as MapFiltersControl; }
+
+  private isCircleOrFill(): boolean {
+    return this.isCircle() || this.isFill();
+  }
+
+  private isCircle(): boolean {
+    return this.geometryType.value === GEOMETRY_TYPE.circle;
+  }
+
+  private isFill(): boolean {
+    return this.geometryType.value === GEOMETRY_TYPE.fill;
+  }
 }
 
 export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
@@ -918,17 +929,38 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
           },
         ),
         ...geometryFormControls
-      }, {
-      featuresMax: new SliderFormControl(
-        '',
-        marker('Features max'),
-        marker('Maximum number of features to display this layer'),
-        0,
-        10000,
-        100
-      )
-    }, {
-    });
+      },
+      {
+        renderMode: new SelectFormControl(
+          '',
+          marker('Render mode'),
+          marker('Render mode description'),
+          false,
+          [
+            { label: marker('Wide'), value: FeatureRenderMode.wide },
+            { label: marker('Window'), value: FeatureRenderMode.window }
+          ],
+        ),
+        featuresMax: new SliderFormControl(
+          '',
+          marker('Features max'),
+          marker('Maximum number of features to display this layer'),
+          0,
+          10000,
+          100,
+          undefined,
+          undefined,
+          {
+            dependsOn: () => [this.renderMode],
+            onDependencyChange: (control) => {
+              control.enableIf(this.renderMode.value === FeatureRenderMode.wide);
+            }
+          }
+        )
+      },
+      {
+      }
+    );
   }
 
   public customControls = {
@@ -936,6 +968,7 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
   };
   public get geometry() { return this.geometryStep.get('geometry') as SelectFormControl; }
   public get featuresMax() { return this.visibilityStep.get('featuresMax') as SliderFormControl; }
+  public get renderMode() { return this.visibilityStep.get('renderMode') as SelectFormControl; }
   public get geometryType() { return this.styleStep.get('geometryType') as SelectFormControl; }
 }
 
@@ -991,7 +1024,6 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
     collectionFields: Observable<Array<CollectionField>>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService
   ) {
-
     super(
       collection,
       'cluster',
@@ -1024,7 +1056,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
           [
             { label: marker('Tile Grid'), value: ClusterAggType.tile },
             { label: marker('GeohashGrid'), value: ClusterAggType.geohash }
-          ],        ),
+          ]),
         granularity: new SelectFormControl(
           '',
           marker('Granularity'),
@@ -1112,7 +1144,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
 
   public get aggGeometry() { return this.geometryStep.get('aggGeometry') as SelectFormControl; }
   public get granularity() { return this.geometryStep.get('granularity') as SelectFormControl; }
-  public get aggType() {return this.geometryStep.get('aggType') as SelectFormControl; }
+  public get aggType() { return this.geometryStep.get('aggType') as SelectFormControl; }
   public get clusterGeometryType() { return this.geometryStep.get('clusterGeometryType') as SelectFormControl; }
   public get aggregatedGeometry() { return this.geometryStep.get('aggregatedGeometry') as SelectFormControl; }
   public get rawGeometry() { return this.geometryStep.get('rawGeometry') as SelectFormControl; }

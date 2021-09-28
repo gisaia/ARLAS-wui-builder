@@ -281,7 +281,7 @@
 </div>
 
 <div *ngIf="isInput(); let typedControl">
-    <mat-form-field>
+    <mat-form-field [style.width]="typedControl.width ? typedControl.width : 'unset' ">
         <mat-label>{{ typedControl.label | translate}}</mat-label>
         <input matInput [formControl]="typedControl" [type]="typedControl.inputType" [required]="!typedControl.optional"
             [appResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"

@@ -29,7 +29,7 @@ import {
 } from '@shared-models/config-form';
 import { FormArray, Validators, FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { toOptionsObs, NUMERIC_OR_DATE_OR_TEXT_TYPES } from '@services/collection-service/tools';
+import { toOptionsObs, NUMERIC_OR_DATE_OR_TEXT_TYPES, TEXT_OR_KEYWORD } from '@services/collection-service/tools';
 import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
@@ -44,12 +44,13 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
   constructor(
     collection: string,
     collectionService: CollectionService,
+    title?: string
   ) {
     super(
       collection,
       {
         title: new InputFormControl(
-          '',
+          !!title ? title : '',
           marker('resultlist title'),
           marker('resultlist title description'),
           undefined,
@@ -105,6 +106,11 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
             marker('Display filters'),
             marker('Display filters description')
           ),
+          isGeoSortActived: new SlideToggleFormControl(
+            '',
+            marker('Activate geosort'),
+            marker('Activate geosort')
+          ),
           cellBackgroundStyle: new SelectFormControl(
             '',
             marker('Background style of cells'),
@@ -125,8 +131,101 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                 control.enableIf(useColorService);
               }
             }
-          )
+          ),
+          gridStep: new ConfigFormGroup({
+            tileLabelField: new SelectFormControl(
+              '',
+              marker('Tile label'),
+              marker('Tile label description'),
+              true,
+              toOptionsObs(collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES)),
+              {
+                optional: true
+              }
+            ),
+            tileLabelFieldProcess: new TextareaFormControl(
+              '',
+              marker('Transformation title'),
+              marker('Transformation title description'),
+              1,
+              {
+                optional: true
+              }
+            ),
+            tooltipField: new SelectFormControl(
+              '',
+              marker('Tooltip field'),
+              marker('Tooltip field description'),
+              true,
+              toOptionsObs(collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES)),
+              {
+                optional: true
+              }
+            ),
+            tooltipFieldProcess: new TextareaFormControl(
+              '',
+              marker('Transformation tooltip'),
+              marker('Transformation tooltip description'),
+              1,
+              {
+                optional: true
+              }
+            ),
+            thumbnailUrl: new SelectFormControl(
+              '',
+              marker('Thumbnail url'),
+              marker('Thumbnail url description'),
+              true,
+              toOptionsObs(collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD)),
+              {
+                optional: true
+              }
+            ),
+            imageUrl: new SelectFormControl(
+              '',
+              marker('Image url'),
+              marker('Image url description'),
+              true,
+              toOptionsObs(collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD)),
+              {
+                optional: true
+              }
+            ),
+            colorIdentifier: new SelectFormControl(
+              '',
+              marker('Color identifier'),
+              marker('Color identifier description'),
+              true,
+              toOptionsObs(collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD)),
+              {
+                optional: true
+              }
+            ),
+
+          }).withTitle('Grid view')
         }).withTabName(marker('Render')),
+        zactionStep: new ConfigFormGroup({
+          visualisationLink : new InputFormControl(
+            'Visualisation url service',
+            marker('Visualisation url service title'),
+            marker('Visualisation url service description'),
+            'text',
+            {
+              optional: true,
+              width: '100%'
+            }
+          ),
+          downloadLink : new InputFormControl(
+            'Download url service',
+            marker('Download url service title'),
+            marker('Download url service description'),
+            'text',
+            {
+              optional: true,
+              width: '100%'
+            }
+          ),
+        }).withTabName(marker('Actions')),
         unmanagedFields: new FormGroup({
           dataStep: new FormGroup({}),
           renderStep: new FormGroup({
@@ -137,13 +236,13 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
             nbGridColumns: new FormControl(),
             defautMode: new FormControl(),
             isBodyHidden: new FormControl(),
-            isGeoSortActived: new FormControl(),
             isAutoGeoSortActived: new FormControl(),
             selectedItemsEvent: new FormControl(),
             consultedItemEvent: new FormControl(),
             actionOnItemEvent: new FormControl(),
-            globalActionEvent: new FormControl(),
+            globalActionEvent: new FormControl()
           }),
+          zactionStep: new FormGroup({}),
         })
       });
   }
@@ -151,6 +250,7 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
   public customGroups = {
     dataStep: this.get('dataStep') as ConfigFormGroup,
     renderStep: this.get('renderStep') as ConfigFormGroup,
+    zactionStep: this.get('zactionStep') as ConfigFormGroup
   };
 
   public customControls = {
@@ -158,13 +258,29 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
     dataStep: {
       collection: this.get('dataStep.collection') as SelectFormControl,
       searchSize: this.get('dataStep.searchSize') as SliderFormControl,
+      visualisationLink: this.get('dataStep.visualisationLink') as InputFormControl,
+      downloadLink: this.get('dataStep.downloadLink') as InputFormControl,
       columns: this.get('dataStep.columns') as FormArray,
       details: this.get('dataStep.details') as FormArray,
       idFieldName: this.get('dataStep.idFieldName') as HiddenFormControl,
     },
     renderStep: {
       displayFilters: this.get('renderStep.displayFilters') as SlideToggleFormControl,
+      isGeoSortActived: this.get('renderStep.isGeoSortActived') as SlideToggleFormControl,
       cellBackgroundStyle: this.get('renderStep.cellBackgroundStyle') as SelectFormControl,
+      gridStep: {
+        tileLabelField: this.get('renderStep.gridStep.tileLabelField') as SelectFormControl,
+        tileLabelFieldProcess: this.get('renderStep.gridStep.tileLabelFieldProcess') as TextareaFormControl,
+        tooltipField: this.get('renderStep.gridStep.tooltipField') as SelectFormControl,
+        tooltipFieldProcess: this.get('renderStep.gridStep.tooltipFieldProcess') as TextareaFormControl,
+        thumbnailUrl: this.get('renderStep.gridStep.thumbnailUrl') as SelectFormControl,
+        imageUrl: this.get('renderStep.gridStep.imageUrl') as SelectFormControl,
+        colorIdentifier: this.get('renderStep.gridStep.colorIdentifier') as SelectFormControl
+      }
+    },
+    zactionStep: {
+      visualisationLink: this.get('zactionStep.visualisationLink') as InputFormControl,
+      downloadLink: this.get('zactionStep.downloadLink') as InputFormControl
     },
     unmanagedFields: {
       dataStep: {},
@@ -176,26 +292,29 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
         nbGridColumns: this.get('unmanagedFields.renderStep.nbGridColumns'),
         defautMode: this.get('unmanagedFields.renderStep.defautMode'),
         isBodyHidden: this.get('unmanagedFields.renderStep.isBodyHidden'),
-        isGeoSortActived: this.get('unmanagedFields.renderStep.isGeoSortActived'),
         isAutoGeoSortActived: this.get('unmanagedFields.renderStep.isAutoGeoSortActived'),
         selectedItemsEvent: this.get('unmanagedFields.renderStep.selectedItemsEvent'),
         consultedItemEvent: this.get('unmanagedFields.renderStep.consultedItemEvent'),
         actionOnItemEvent: this.get('unmanagedFields.renderStep.actionOnItemEvent'),
-        globalActionEvent: this.get('unmanagedFields.renderStep.globalActionEvent'),
-      }
+        globalActionEvent: this.get('unmanagedFields.renderStep.globalActionEvent')
+      },
+      zactionStep: {}
+
     }
   };
 }
 
 export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
 
-  constructor(fieldsObs: Observable<Array<SelectOption>>,
-              collection: string,
-              private globalKeysToColortrl: FormArray,
-              defaultConfig: DefaultConfig,
-              dialog: MatDialog,
-              collectionService: CollectionService,
-              private colorService: ArlasColorGeneratorLoader) {
+  constructor(
+    fieldsObs: Observable<Array<SelectOption>>,
+    collection: string,
+    private globalKeysToColortrl: FormArray,
+    defaultConfig: DefaultConfig,
+    dialog: MatDialog,
+    collectionService: CollectionService,
+    private colorService: ArlasColorGeneratorLoader
+  ) {
     super(collection,
       {
         columnName: new InputFormControl(

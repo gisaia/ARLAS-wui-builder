@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormGroup, FormArray, Form } from '@angular/forms';
 import {
     Config, ChipSearchConfig, ContributorConfig, AggregationModelConfig,
     AnalyticComponentConfig, AnalyticComponentHistogramInputConfig, SwimlaneConfig,
@@ -27,16 +27,17 @@ import {
     JSONPATH_COUNT,
     CHIPSEARCH_TYPE,
     CHIPSEARCH_IDENTIFIER,
-    WebConfigOptions
+    WebConfigOptions,
+    FieldsConfiguration
 } from './models-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
 import { CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
-import { MapComponentInputConfig, MapComponentInputMapLayersConfig } from './models-config';
-import { LayerSourceConfig, getSourceName, ColorConfig } from 'arlas-web-contributors';
-import { ClusterAggType } from 'arlas-web-contributors/models/models';
+import { MapComponentInputConfig, MapComponentInputMapLayersConfig, AnalyticComponentResultListInputConfig } from './models-config';
+import { getSourceName, ColorConfig, LayerSourceConfig } from 'arlas-web-contributors';
+import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 import {
@@ -75,6 +76,8 @@ export class ConfigExportHelper {
         sideModulesGlobal: SideModulesGlobalFormGroup,
         lookAndFeelConfigGlobal: LookAndFeelGlobalFormGroup,
         analyticsConfigList: FormArray,
+        resultLists: FormArray,
+        externalNode: FormGroup,
         colorService: ArlasColorGeneratorLoader,
         collectionService: CollectionService
     ): any {
@@ -88,13 +91,15 @@ export class ConfigExportHelper {
                     contributors: [],
                     components: {
                         timeline: this.getTimelineComponent(timelineConfigGlobal, false),
-                        mapgl: this.getMapComponent(mapConfigGlobal, mapConfigLayers, mapConfigVisualisations, mapConfigBasemaps)
+                        mapgl: this.getMapComponent(mapConfigGlobal, mapConfigLayers, mapConfigVisualisations, mapConfigBasemaps),
+                        resultlists: this.getResultListComponent(resultLists)
                     },
                     analytics: [],
                     colorGenerator: {
                         keysToColors: colorService.keysToColors
                     },
-                    options: this.getOptions(lookAndFeelConfigGlobal)
+                    options: this.getOptions(lookAndFeelConfigGlobal),
+                    externalNode: externalNode.controls.externalNode.value
                 },
                 server: {
                     url: startingConfig.customControls.serverUrl.value,
@@ -137,13 +142,17 @@ export class ConfigExportHelper {
         config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal,
             false, collectionService.collectionParamsMap));
 
+        const contributorsMap = new Map<string, any>();
+        const resultListContributors = this.getResultListContributors(resultLists);
+        resultListContributors.map(c => contributorsMap.set(c.identifier, c));
+        config.arlas.web.contributors = config.arlas.web.contributors.concat(resultListContributors);
+
         if (timelineConfigGlobal.value.useDetailedTimeline) {
             config.arlas.web.components.detailedTimeline = this.getTimelineComponent(timelineConfigGlobal, true);
             config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal,
                 true, collectionService.collectionParamsMap));
         }
 
-        const contributorsMap = new Map<string, any>();
         if (!!analyticsConfigList) {
             (analyticsConfigList.value as Array<any>).forEach(tab => {
                 tab.contentFg.groupsFa.forEach(group => {
@@ -188,7 +197,8 @@ export class ConfigExportHelper {
             colors_from_fields: [],
             provided_fields: [],
             normalization_fields: [],
-            metrics: []
+            metrics: [],
+            render_mode: FeatureRenderMode.window
         };
 
         if (!!filters) {
@@ -228,6 +238,7 @@ export class ConfigExportHelper {
             case LAYER_MODE.features: {
                 layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
                 layerSource.returned_geometry = modeValues.geometryStep.geometry;
+                layerSource.render_mode = modeValues.visibilityStep.renderMode;
                 break;
             }
             case LAYER_MODE.featureMetric: {
@@ -344,8 +355,12 @@ export class ConfigExportHelper {
         const customControls = mapConfigGlobal.customControls;
 
         const layers: Array<string> = new Array<string>();
-        mapConfigLayers.controls.forEach(layer => {
-            layers.push(layer.value.name);
+        const layersHoverId: Array<string> = new Array<string>();
+        mapConfigLayers.controls.forEach((layerFg: MapLayerFormGroup) => {
+            layers.push(layerFg.value.name);
+            if (this.getLayerSourceConfig(layerFg).render_mode === FeatureRenderMode.window) {
+                layersHoverId.push(layerFg.value.arlasId);
+            }
         });
 
         const visualisationsSets: Array<VisualisationSetConfig> = [
@@ -408,8 +423,8 @@ export class ConfigExportHelper {
                     layers: [],
                     events: {
                         zoomOnClick: customControls.unmanagedFields.mapLayers.events.zoomOnClick.value,
-                        emitOnClick: customControls.unmanagedFields.mapLayers.events.emitOnClick.value,
-                        onHover: customControls.unmanagedFields.mapLayers.events.onHover.value,
+                        emitOnClick: layersHoverId,
+                        onHover: layersHoverId,
                     },
                     externalEventLayers: new Array<{ id: string, on: string }>()
                 } as MapComponentInputMapLayersConfig,
@@ -697,7 +712,23 @@ export class ConfigExportHelper {
             case WIDGET_TYPE.resultlist: {
                 contrib.type = 'resultlist';
                 contrib.search_size = widgetData.dataStep.searchSize;
-                contrib.fieldsConfiguration = { idFieldName: widgetData.dataStep.idFieldName };
+                const fieldsConfig: FieldsConfiguration = {
+                    idFieldName: widgetData.dataStep.idFieldName,
+                    thumbnailFieldName: widgetData.renderStep.gridStep.thumbnailUrl,
+                    imageFieldName: widgetData.renderStep.gridStep.imageUrl,
+                    titleFieldNames: [{ fieldPath: widgetData.renderStep.gridStep.tileLabelField, process: '' }],
+                    tooltipFieldNames: [{ fieldPath: widgetData.renderStep.gridStep.tooltipField, process: '' }],
+                    icon: 'fiber_manual_record',
+                    iconColorFieldName: widgetData.renderStep.gridStep.colorIdentifier
+                };
+                if (widgetData.renderStep.gridStep.thumbnailUrl) {
+                    fieldsConfig.urlThumbnailTemplate = '{' + widgetData.renderStep.gridStep.thumbnailUrl + '}';
+                }
+                if (widgetData.renderStep.gridStep.imageUrl) {
+                    fieldsConfig.urlImageTemplate = '{' + widgetData.renderStep.gridStep.imageUrl + '}';
+                }
+
+                contrib.fieldsConfiguration = fieldsConfig;
                 contrib.columns = [];
                 (widgetData.dataStep.columns as Array<any>).forEach(c =>
                     contrib.columns.push({
@@ -721,10 +752,88 @@ export class ConfigExportHelper {
                         fields
                     });
                 });
+                contrib.includeMetadata = [];
+                const metadatas = new Set<string>();
+                Object.keys(widgetData.renderStep.gridStep).forEach(v => {
+                    if (!!widgetData.renderStep.gridStep[v]) {
+                        metadatas.add(widgetData.renderStep.gridStep[v]);
+                    }
+                });
+                contrib.includeMetadata = Array.from(metadatas);
                 break;
             }
         }
         return contrib;
+    }
+
+    private static getResultListContributors(resultLists: FormArray): ContributorConfig[] {
+        const contribs = [];
+        resultLists.value.forEach(list => {
+            const contrib = this.getWidgetContributor(list, WIDGET_TYPE.resultlist, 'table_chart');
+            contrib.type = 'resultlist';
+            contrib.search_size = list.dataStep.searchSize;
+            const fieldsConfig: FieldsConfiguration = {
+                idFieldName: list.dataStep.idFieldName,
+                thumbnailFieldName: list.renderStep.gridStep.thumbnailUrl,
+                imageFieldName: list.renderStep.gridStep.imageUrl,
+                titleFieldNames: [{ fieldPath: list.renderStep.gridStep.tileLabelField,
+                    process: list.renderStep.gridStep.tileLabelFieldProcess }],
+                tooltipFieldNames: [{ fieldPath: list.renderStep.gridStep.tooltipField,
+                    process: list.renderStep.gridStep.tooltipFieldProcess }],
+                icon: 'fiber_manual_record',
+                iconColorFieldName: list.renderStep.gridStep.colorIdentifier
+            };
+            if (list.renderStep.gridStep.thumbnailUrl) {
+                fieldsConfig.urlThumbnailTemplate = '{' + list.renderStep.gridStep.thumbnailUrl + '}';
+            }
+            if (list.renderStep.gridStep.imageUrl) {
+                fieldsConfig.urlImageTemplate = '{' + list.renderStep.gridStep.imageUrl + '}';
+            }
+
+            contrib.fieldsConfiguration = fieldsConfig;
+            contrib.columns = [];
+            (list.dataStep.columns as Array<any>).forEach(c =>
+                contrib.columns.push({
+                    columnName: c.columnName,
+                    fieldName: c.fieldName,
+                    dataType: c.dataType,
+                    process: c.process,
+                    useColorService: !!c.useColorService
+                }));
+
+            contrib.details = [];
+            (list.dataStep.details).forEach((d, index) => {
+                const fields = d.fields.map(f => ({
+                    path: f.path,
+                    label: f.label,
+                    process: f.process
+                }));
+                contrib.details.push({
+                    name: d.name,
+                    order: index + 1,
+                    fields
+                });
+            });
+            contrib.includeMetadata = [];
+            const metadatas = new Set<string>();
+            Object.keys(list.renderStep.gridStep).forEach(v => {
+                if (!!list.renderStep.gridStep[v]) {
+                    metadatas.add(list.renderStep.gridStep[v]);
+                }
+            });
+            contrib.includeMetadata = Array.from(metadatas);
+            contribs.push(contrib);
+        });
+        return contribs;
+    }
+
+    public static getResultListComponent(resultLists: FormArray) {
+        const lists = [];
+        resultLists.value.forEach(list => {
+            lists.push(this.getAnalyticsComponent(WIDGET_TYPE.resultlist, list, null));
+        });
+
+        return lists;
     }
 
     private static getWidgetContributor(widgetData: any, widgetType: any, icon: string) {
@@ -858,7 +967,8 @@ export class ConfigExportHelper {
                     showYLabels: unmanagedRenderFields.showYLabels,
                     showHorizontalLines: widgetData.renderStep.showHorizontalLines,
                     barWeight: unmanagedRenderFields.barWeight,
-                    dataType: widgetData.dataStep.aggregation.aggregationFieldType
+                    dataType: widgetData.dataStep.aggregation.aggregationFieldType,
+                    highighlightItems: undefined
                 } as AnalyticComponentInputConfig
             } as AnalyticComponentConfig;
 
@@ -976,16 +1086,24 @@ export class ConfigExportHelper {
                     nbGridColumns: unmanagedRenderFields.nbGridColumns,
                     defautMode: unmanagedRenderFields.defautMode,
                     displayFilters: !!widgetData.renderStep.displayFilters,
+                    hasGridMode: !!widgetData.renderStep.gridStep.thumbnailUrl,
+                    visualisationLink: widgetData.zactionStep.visualisationLink,
+                    downloadLink: widgetData.zactionStep.downloadLink,
                     isBodyHidden: unmanagedRenderFields.isBodyHidden,
-                    isGeoSortActived: unmanagedRenderFields.isGeoSortActived,
+                    isGeoSortActived: !!widgetData.renderStep.isGeoSortActived,
                     isAutoGeoSortActived: unmanagedRenderFields.isAutoGeoSortActived,
                     selectedItemsEvent: unmanagedRenderFields.selectedItemsEvent,
                     consultedItemEvent: unmanagedRenderFields.consultedItemEvent,
                     actionOnItemEvent: unmanagedRenderFields.actionOnItemEvent,
                     globalActionEvent: unmanagedRenderFields.globalActionEvent,
                     useColorService: true,
-                    cellBackgroundStyle: widgetData.renderStep.cellBackgroundStyle
-                }
+                    cellBackgroundStyle: widgetData.renderStep.cellBackgroundStyle,
+                    options: {
+                        showActionsOnhover: 'true',
+                        showDetailIconName: 'keyboard_arrow_down',
+                        hideDetailIconName: 'keyboard_arrow_up'
+                    }
+                } as AnalyticComponentResultListInputConfig
             } as AnalyticComponentConfig;
 
             return component;
