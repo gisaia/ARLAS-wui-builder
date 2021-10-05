@@ -940,6 +940,13 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
             { label: marker('Wide'), value: FeatureRenderMode.wide },
             { label: marker('Window'), value: FeatureRenderMode.window }
           ],
+          {
+            optional: false,
+            dependsOn: () => [],
+            onDependencyChange: (control) => {
+              control.enableIf(type === 'feature');
+            }
+          }
         ),
         featuresMax: new SliderFormControl(
           '',
@@ -953,7 +960,7 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
           {
             dependsOn: () => [this.renderMode],
             onDependencyChange: (control) => {
-              control.enableIf(this.renderMode.value === FeatureRenderMode.wide);
+              control.enableIf(!this.renderMode.enabled || this.renderMode.value === FeatureRenderMode.wide);
             }
           }
         )
