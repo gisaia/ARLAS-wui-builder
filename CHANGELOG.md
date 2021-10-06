@@ -1,13 +1,25 @@
 # Change Log
 
+## [v19.0.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v19.0.1) (2021-10-06)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v19.0.0...v19.0.1)
+
+**Fixed bugs:**
+
+- Render mode should be activated for 'Geometric features' only [\#604](https://github.com/gisaia/ARLAS-wui-builder/issues/604)
+- zoomMin slider can reach -3 which [\#601](https://github.com/gisaia/ARLAS-wui-builder/issues/601) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
 ## [v19.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v19.0.0) (2021-09-28)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v19.0.0-beta.7...v19.0.0)
 
 **New stuff:**
 
+- Configurate the 'Scrollable top hits' size at 'Global configuration' section [\#580](https://github.com/gisaia/ARLAS-wui-builder/issues/580) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Add the possibility to configure the stroke of fill layer [\#579](https://github.com/gisaia/ARLAS-wui-builder/issues/579) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 - Support interaction between list elements and "scrollable top hits" layers [\#577](https://github.com/gisaia/ARLAS-wui-builder/issues/577)
 - Configure grid view in resultlist with a thumbnail [\#576](https://github.com/gisaia/ARLAS-wui-builder/issues/576)
+- Change the server url when importing a configuration file when it's not accessible [\#512](https://github.com/gisaia/ARLAS-wui-builder/issues/512)
 
 **Fixed bugs:**
 
