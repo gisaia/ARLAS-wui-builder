@@ -152,6 +152,6 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   }
 
   public onMove(event) {
-    this.mapglContributors.forEach(contrib => contrib.onMove(event));
+    this.mapglContributors.forEach(contrib => contrib.onMove(event, true));
   }
 }

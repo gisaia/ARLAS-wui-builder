@@ -45,7 +45,8 @@
                     "zoomMin": 1,
                     "zoomMax": 22,
                     "featuresMax": 5000,
-                    "featuresMin": 5000
+                    "featuresMin": 5000,
+                    "renderMode": "wide"
                 },
                 "styleStep": {
                     "geometryType": "fill",
