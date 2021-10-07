@@ -11,7 +11,7 @@ on:
 
 jobs:
 
-  push-changelog:
+  print-variables:
     runs-on: ubuntu-latest
     steps:
     - run: |
@@ -28,8 +28,9 @@ jobs:
         uses: srepollock/changelog-generator-action@0.1.1
         with:
           REPO_NAME: 'gisaia/ARLAS-wui-builder'
-          ACCESS_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          ACCESS_TOKEN: ${{secrets.TOKEN_GITHUB}}
           PATH: '/CHANGELOG.md'
           COMMIT_MESSAGE: 'docs(CHANGELOG): update release notes'
+      
   
   
