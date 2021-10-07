@@ -30,8 +30,8 @@ COPY nginx/default.conf /etc/nginx/conf.d/
 RUN rm -rf /usr/share/nginx/html/*
 
 ## From 'builder' stage copy over the artifacts in dist folder to default nginx public folder
-COPY --from=builder /ng-app/dist/ARLAS-wui-builder /usr/share/nginx/html
-COPY --from=builder /ng-app/start.sh /usr/share/nginx/
+COPY ./dist/ARLAS-wui-builder /usr/share/nginx/html
+COPY ./scripts/start.sh /usr/share/nginx/
 
 HEALTHCHECK CMD curl --fail http://localhost:80/ || exit 1
 

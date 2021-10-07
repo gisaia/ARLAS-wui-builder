@@ -24,7 +24,7 @@ jobs:
           token: ${{ secrets.TOKEN_GITHUB }}
           branch: $CI_ACTION_REF_NAME_SLUG
           exclude_labels: "type:duplicate,type:question,type:wontfix,type:invalid"
-          issue_line_labels: "ALL"
+          issue_line_labels: "conf,documentation,ANALYTICS,'LOOK AND FEEL',MAP,SEARCH,SIDE,TIMELINE,WIDGET"
 
       - name: Commit files
         env:
