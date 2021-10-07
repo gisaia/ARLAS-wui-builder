@@ -2,13 +2,8 @@ name: Changelog
 
 on:
   push:
-    branches: [feature/githubActions]
-
-  workflow_dispatch:
-    inputs:
-      tags:
-        description: "Test scenario tags"
-        required: true
+    branches:
+      - feature/githubActions
 
 jobs:
   print-variables:
@@ -27,6 +22,9 @@ jobs:
         uses: charmixer/auto-changelog-action@v1
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
+          branch: $CI_ACTION_REF_NAME_SLUG
+          exclude_labels: "type:duplicate,type:question,type:wontfix,type:invalid"
+          issue_line_labels: "ALL"
 
       - name: Commit files
         env:
