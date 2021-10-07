@@ -1,0 +1,35 @@
+name: Changelog
+
+on:
+  push:
+    branches: [ feature/githubActions ]
+
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Test scenario tags'  
+
+jobs:
+
+  push-changelog:
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        echo "Tags: ${{ github.event.inputs.tags }}"
+
+  changelog-generator:
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Changelog Generator
+        uses: srepollock/changelog-generator-action@0.1.1
+        with:
+          REPO_NAME: 'gisaia/ARLAS-wui-builder'
+          ACCESS_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          PATH: '/CHANGELOG.md'
+          COMMIT_MESSAGE: 'docs(CHANGELOG): update release notes'
+  
+  
