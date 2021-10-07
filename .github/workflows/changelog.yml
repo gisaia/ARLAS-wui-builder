@@ -2,35 +2,46 @@ name: Changelog
 
 on:
   push:
-    branches: [ feature/githubActions ]
+    branches: [feature/githubActions]
 
   workflow_dispatch:
     inputs:
       tags:
-        description: 'Test scenario tags'  
+        description: "Test scenario tags"
+        required: true
 
 jobs:
-
   print-variables:
     runs-on: ubuntu-latest
     steps:
-    - run: |
-        echo "Tags: ${{ github.event.inputs.tags }}"
+      - run: |
+          echo "Tags: ${{ github.event.inputs.tags }}"
 
   changelog-generator:
-    
     runs-on: ubuntu-latest
-
+    name: Generate changelog for master branch
     steps:
       - uses: actions/checkout@v2
 
-      - name: Changelog Generator
-        uses: srepollock/changelog-generator-action@0.1.1
+      - name: Generate changelog
+        uses: charmixer/auto-changelog-action@v1
         with:
-          REPO_NAME: 'gisaia/ARLAS-wui-builder'
-          ACCESS_TOKEN: ${{secrets.TOKEN_GITHUB}}
-          PATH: '/CHANGELOG.md'
-          COMMIT_MESSAGE: 'docs(CHANGELOG): update release notes'
-      
-  
-  
+          token: ${{ secrets.TOKEN_GITHUB }}
+
+      - name: Commit files
+        env:
+          CI_USER: ${{ secrets.USER_GITHUB }}
+          CI_EMAIL: ${{ secrets.USER_MAIL }}
+        run: |
+          git config --local user.email "$CI_EMAIL"
+          git config --local user.name "$CI_USER"
+          git add CHANGELOG.md && git commit -m 'Updated CHANGELOG.md' && echo "push=true" >> $GITHUB_ENV || echo "No changes to CHANGELOG.md"
+          cat CHANGELOG.md
+
+      - name: Push changes
+        if: env.push == 'true'
+        env:
+          CI_USER: ${{ secrets.USER_GITHUB }}
+          CI_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+        run: |
+          git push "https://$CI_USER:$CI_TOKEN@github.com/$GITHUB_REPOSITORY.git" $CI_ACTION_REF_NAME_SLUG
