@@ -6,9 +6,9 @@
 
 **Closed issues:**
 
-- Render mode should be activated for 'Geometric features' only [\#604](https://github.com/gisaia/ARLAS-wui-builder/issues/604)
-- Set render mode to all elements by default [\#603](https://github.com/gisaia/ARLAS-wui-builder/issues/603)
-- zoomMin slider can reach -3 which [\#601](https://github.com/gisaia/ARLAS-wui-builder/issues/601)
+- Render mode should be activated for 'Geometric features' only [\#604](https://github.com/gisaia/ARLAS-wui-builder/issues/604) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Set render mode to all elements by default [\#603](https://github.com/gisaia/ARLAS-wui-builder/issues/603) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- zoomMin slider can reach -3 which [\#601](https://github.com/gisaia/ARLAS-wui-builder/issues/601) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 
 **Merged pull requests:**
 
@@ -21,15 +21,15 @@
 
 **Closed issues:**
 
-- Stroke of polygon map style does not appear in previsualisation [\#590](https://github.com/gisaia/ARLAS-wui-builder/issues/590)
-- Configurate the 'Scrollable top hits' size at 'Global configuration' section [\#580](https://github.com/gisaia/ARLAS-wui-builder/issues/580)
-- Add the possibility to configure the stroke of fill layer [\#579](https://github.com/gisaia/ARLAS-wui-builder/issues/579)
+- Stroke of polygon map style does not appear in previsualisation [\#590](https://github.com/gisaia/ARLAS-wui-builder/issues/590) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[ADS](https://github.com/gisaia/ARLAS-wui-builder/labels/ADS)]
+- Configurate the 'Scrollable top hits' size at 'Global configuration' section [\#580](https://github.com/gisaia/ARLAS-wui-builder/issues/580) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Add the possibility to configure the stroke of fill layer [\#579](https://github.com/gisaia/ARLAS-wui-builder/issues/579) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 - Configurate EO related actions to the resultlist [\#578](https://github.com/gisaia/ARLAS-wui-builder/issues/578)
-- Support interaction between list elements and "scrollable top hits" layers [\#577](https://github.com/gisaia/ARLAS-wui-builder/issues/577)
-- Configure grid view in resultlist with a thumbnail [\#576](https://github.com/gisaia/ARLAS-wui-builder/issues/576)
-- Add external json nodes to the arlas configuration [\#575](https://github.com/gisaia/ARLAS-wui-builder/issues/575)
-- Apply same pagination between map and result list [\#574](https://github.com/gisaia/ARLAS-wui-builder/issues/574)
-- Synchronise data displayed on the map and the result list [\#573](https://github.com/gisaia/ARLAS-wui-builder/issues/573)
+- Support interaction between list elements and "scrollable top hits" layers [\#577](https://github.com/gisaia/ARLAS-wui-builder/issues/577) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Configure grid view in resultlist with a thumbnail [\#576](https://github.com/gisaia/ARLAS-wui-builder/issues/576) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Add external json nodes to the arlas configuration [\#575](https://github.com/gisaia/ARLAS-wui-builder/issues/575) [[ADS](https://github.com/gisaia/ARLAS-wui-builder/labels/ADS)]
+- Apply same pagination between map and result list [\#574](https://github.com/gisaia/ARLAS-wui-builder/issues/574) [[ADS](https://github.com/gisaia/ARLAS-wui-builder/labels/ADS)]
+- Synchronise data displayed on the map and the result list [\#573](https://github.com/gisaia/ARLAS-wui-builder/issues/573) [[ADS](https://github.com/gisaia/ARLAS-wui-builder/labels/ADS)]
 
 **Merged pull requests:**
 
@@ -57,8 +57,8 @@
 
 **Closed issues:**
 
-- Loading a configuration with a mono-collection timeline does not work on version 18 [\#586](https://github.com/gisaia/ARLAS-wui-builder/issues/586)
-- Change the server url when importing a configuration file when it's not accessible [\#512](https://github.com/gisaia/ARLAS-wui-builder/issues/512)
+- Loading a configuration with a mono-collection timeline does not work on version 18 [\#586](https://github.com/gisaia/ARLAS-wui-builder/issues/586) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[TIMELINE](https://github.com/gisaia/ARLAS-wui-builder/labels/TIMELINE)]
+- Change the server url when importing a configuration file when it's not accessible [\#512](https://github.com/gisaia/ARLAS-wui-builder/issues/512) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
 
 **Merged pull requests:**
 
@@ -86,7 +86,7 @@
 
 **Closed issues:**
 
-- Add the possibility to apply a timeline filter to widgets and layers of other collections  [\#557](https://github.com/gisaia/ARLAS-wui-builder/issues/557)
+- Add the possibility to apply a timeline filter to widgets and layers of other collections  [\#557](https://github.com/gisaia/ARLAS-wui-builder/issues/557) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[TIMELINE](https://github.com/gisaia/ARLAS-wui-builder/labels/TIMELINE)] [[MULTI-COLLECTION](https://github.com/gisaia/ARLAS-wui-builder/labels/MULTI-COLLECTION)]
 
 ## [v18.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v18.0.0) (2021-07-12)
 
@@ -94,7 +94,7 @@
 
 **Closed issues:**
 
-- Add the possibility to display a timeline for each collection on the same graph [\#568](https://github.com/gisaia/ARLAS-wui-builder/issues/568)
+- Add the possibility to display a timeline for each collection on the same graph [\#568](https://github.com/gisaia/ARLAS-wui-builder/issues/568) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MULTI-COLLECTION](https://github.com/gisaia/ARLAS-wui-builder/labels/MULTI-COLLECTION)]
 
 **Merged pull requests:**
 
@@ -138,7 +138,7 @@
 
 **Closed issues:**
 
-- concatenate collection name to ids of all widgets [\#567](https://github.com/gisaia/ARLAS-wui-builder/issues/567)
+- concatenate collection name to ids of all widgets [\#567](https://github.com/gisaia/ARLAS-wui-builder/issues/567) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
 
 **Merged pull requests:**
 
@@ -150,9 +150,9 @@
 
 **Closed issues:**
 
-- Source names should include collection names [\#563](https://github.com/gisaia/ARLAS-wui-builder/issues/563)
-- Metric value  precision is missing [\#561](https://github.com/gisaia/ARLAS-wui-builder/issues/561)
-- Missing collection information in contributor ID [\#559](https://github.com/gisaia/ARLAS-wui-builder/issues/559)
+- Source names should include collection names [\#563](https://github.com/gisaia/ARLAS-wui-builder/issues/563) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[MULTI-COLLECTION](https://github.com/gisaia/ARLAS-wui-builder/labels/MULTI-COLLECTION)]
+- Metric value  precision is missing [\#561](https://github.com/gisaia/ARLAS-wui-builder/issues/561) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[WIDGET](https://github.com/gisaia/ARLAS-wui-builder/labels/WIDGET)]
+- Missing collection information in contributor ID [\#559](https://github.com/gisaia/ARLAS-wui-builder/issues/559) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)] [[MULTI-COLLECTION](https://github.com/gisaia/ARLAS-wui-builder/labels/MULTI-COLLECTION)]
 
 **Merged pull requests:**
 
@@ -167,7 +167,7 @@
 
 **Closed issues:**
 
-- Add the possibility to choose which collection to explore [\#399](https://github.com/gisaia/ARLAS-wui-builder/issues/399)
+- Add the possibility to choose which collection to explore [\#399](https://github.com/gisaia/ARLAS-wui-builder/issues/399) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 
 **Merged pull requests:**
 
@@ -179,9 +179,9 @@
 
 **Closed issues:**
 
-- Add a required step of choosing the collection from which data is fetched for layers [\#543](https://github.com/gisaia/ARLAS-wui-builder/issues/543)
-- Add a required step of choosing the collection from which data is fetched for widgets [\#542](https://github.com/gisaia/ARLAS-wui-builder/issues/542)
-- Remove filtering dashboards by collection when importing widgets or layers [\#541](https://github.com/gisaia/ARLAS-wui-builder/issues/541)
+- Add a required step of choosing the collection from which data is fetched for layers [\#543](https://github.com/gisaia/ARLAS-wui-builder/issues/543) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)] [[MULTI-COLLECTION](https://github.com/gisaia/ARLAS-wui-builder/labels/MULTI-COLLECTION)]
+- Add a required step of choosing the collection from which data is fetched for widgets [\#542](https://github.com/gisaia/ARLAS-wui-builder/issues/542) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[WIDGET](https://github.com/gisaia/ARLAS-wui-builder/labels/WIDGET)] [[MULTI-COLLECTION](https://github.com/gisaia/ARLAS-wui-builder/labels/MULTI-COLLECTION)]
+- Remove filtering dashboards by collection when importing widgets or layers [\#541](https://github.com/gisaia/ARLAS-wui-builder/issues/541) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MULTI-COLLECTION](https://github.com/gisaia/ARLAS-wui-builder/labels/MULTI-COLLECTION)]
 
 **Merged pull requests:**
 
@@ -212,7 +212,7 @@
 
 **Closed issues:**
 
-- Range and Equal fitlers in Map are not correct [\#551](https://github.com/gisaia/ARLAS-wui-builder/issues/551)
+- Range and Equal fitlers in Map are not correct [\#551](https://github.com/gisaia/ARLAS-wui-builder/issues/551) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
 
 **Merged pull requests:**
 
@@ -224,9 +224,9 @@
 
 **Closed issues:**
 
-- Duplicating a layer crashes all the layers list [\#547](https://github.com/gisaia/ARLAS-wui-builder/issues/547)
-- Icon of a duplicated layer is wrong [\#546](https://github.com/gisaia/ARLAS-wui-builder/issues/546)
-- hover and select layers should not be available for Layer Importation [\#544](https://github.com/gisaia/ARLAS-wui-builder/issues/544)
+- Duplicating a layer crashes all the layers list [\#547](https://github.com/gisaia/ARLAS-wui-builder/issues/547) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Icon of a duplicated layer is wrong [\#546](https://github.com/gisaia/ARLAS-wui-builder/issues/546) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- hover and select layers should not be available for Layer Importation [\#544](https://github.com/gisaia/ARLAS-wui-builder/issues/544) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 
 **Merged pull requests:**
 
@@ -239,11 +239,11 @@
 
 **Closed issues:**
 
-- Add visualisation set column in the list of layers [\#536](https://github.com/gisaia/ARLAS-wui-builder/issues/536)
-- When hovering/selecting a donut node, the other nodes should be transparent [\#533](https://github.com/gisaia/ARLAS-wui-builder/issues/533)
-- Add the possibility to "qualify" the global count unit  [\#506](https://github.com/gisaia/ARLAS-wui-builder/issues/506)
-- Enable the previewed layer [\#491](https://github.com/gisaia/ARLAS-wui-builder/issues/491)
-- Support dasharrays in line layers [\#431](https://github.com/gisaia/ARLAS-wui-builder/issues/431)
+- Add visualisation set column in the list of layers [\#536](https://github.com/gisaia/ARLAS-wui-builder/issues/536) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- When hovering/selecting a donut node, the other nodes should be transparent [\#533](https://github.com/gisaia/ARLAS-wui-builder/issues/533) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Add the possibility to "qualify" the global count unit  [\#506](https://github.com/gisaia/ARLAS-wui-builder/issues/506) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[LOOK AND FEEL](https://github.com/gisaia/ARLAS-wui-builder/labels/LOOK%20AND%20FEEL)]
+- Enable the previewed layer [\#491](https://github.com/gisaia/ARLAS-wui-builder/issues/491) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Support dasharrays in line layers [\#431](https://github.com/gisaia/ARLAS-wui-builder/issues/431) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 
 **Merged pull requests:**
 
@@ -269,17 +269,17 @@
 
 **Closed issues:**
 
-- Layers order inside a visualisation set is lost if one of the layers is edited [\#527](https://github.com/gisaia/ARLAS-wui-builder/issues/527)
-- Details of resultlist are not visible in the preview [\#525](https://github.com/gisaia/ARLAS-wui-builder/issues/525)
-- Remove normamisation by key for clusters [\#523](https://github.com/gisaia/ARLAS-wui-builder/issues/523)
-- Normalizing a field in map invalidates the form [\#522](https://github.com/gisaia/ARLAS-wui-builder/issues/522)
-- Sort the fields list \(in collection view\) alphabetically [\#520](https://github.com/gisaia/ARLAS-wui-builder/issues/520)
-- Property useColorService should be export as boolean in resultList [\#516](https://github.com/gisaia/ARLAS-wui-builder/issues/516)
-- Properties MargePanForLoad and MargePanForCount should be exported as number not string [\#514](https://github.com/gisaia/ARLAS-wui-builder/issues/514)
-- Widget layouts is lost after 2 editions of a dashboard [\#511](https://github.com/gisaia/ARLAS-wui-builder/issues/511)
-- Importing a layer or a widget crashes when 'dash.doc\_value.arlas' is undefined [\#510](https://github.com/gisaia/ARLAS-wui-builder/issues/510)
-- Sort the fields list \(in dropdown lists\) alphabetically [\#507](https://github.com/gisaia/ARLAS-wui-builder/issues/507)
-- Sliders positioned to 0 make the forms invalid [\#489](https://github.com/gisaia/ARLAS-wui-builder/issues/489)
+- Layers order inside a visualisation set is lost if one of the layers is edited [\#527](https://github.com/gisaia/ARLAS-wui-builder/issues/527) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Details of resultlist are not visible in the preview [\#525](https://github.com/gisaia/ARLAS-wui-builder/issues/525) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Remove normamisation by key for clusters [\#523](https://github.com/gisaia/ARLAS-wui-builder/issues/523) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Normalizing a field in map invalidates the form [\#522](https://github.com/gisaia/ARLAS-wui-builder/issues/522) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Sort the fields list \(in collection view\) alphabetically [\#520](https://github.com/gisaia/ARLAS-wui-builder/issues/520) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Property useColorService should be export as boolean in resultList [\#516](https://github.com/gisaia/ARLAS-wui-builder/issues/516) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Properties MargePanForLoad and MargePanForCount should be exported as number not string [\#514](https://github.com/gisaia/ARLAS-wui-builder/issues/514) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Widget layouts is lost after 2 editions of a dashboard [\#511](https://github.com/gisaia/ARLAS-wui-builder/issues/511) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Importing a layer or a widget crashes when 'dash.doc\_value.arlas' is undefined [\#510](https://github.com/gisaia/ARLAS-wui-builder/issues/510) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Sort the fields list \(in dropdown lists\) alphabetically [\#507](https://github.com/gisaia/ARLAS-wui-builder/issues/507) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Sliders positioned to 0 make the forms invalid [\#489](https://github.com/gisaia/ARLAS-wui-builder/issues/489) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)] [[layer:cluster](https://github.com/gisaia/ARLAS-wui-builder/labels/layer:cluster)]
 
 **Merged pull requests:**
 
@@ -301,7 +301,7 @@
 
 **Closed issues:**
 
-- Layer filter doesn't export good values  [\#504](https://github.com/gisaia/ARLAS-wui-builder/issues/504)
+- Layer filter doesn't export good values  [\#504](https://github.com/gisaia/ARLAS-wui-builder/issues/504) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 
 **Merged pull requests:**
 
@@ -313,10 +313,10 @@
 
 **Closed issues:**
 
-- Visualisation set status should be expressed by an informative icon rather than a checkbox [\#493](https://github.com/gisaia/ARLAS-wui-builder/issues/493)
-- Add the granularity of cluster mode in the layers list, 'Visualisation type' column [\#492](https://github.com/gisaia/ARLAS-wui-builder/issues/492)
-- 'Taggable fields' missing translation in 'Collection' view [\#490](https://github.com/gisaia/ARLAS-wui-builder/issues/490)
-- Give simpler terms for fields types in 'Collection' view [\#488](https://github.com/gisaia/ARLAS-wui-builder/issues/488)
+- Visualisation set status should be expressed by an informative icon rather than a checkbox [\#493](https://github.com/gisaia/ARLAS-wui-builder/issues/493) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Add the granularity of cluster mode in the layers list, 'Visualisation type' column [\#492](https://github.com/gisaia/ARLAS-wui-builder/issues/492) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)] [[layer:cluster](https://github.com/gisaia/ARLAS-wui-builder/labels/layer:cluster)]
+- 'Taggable fields' missing translation in 'Collection' view [\#490](https://github.com/gisaia/ARLAS-wui-builder/issues/490) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Give simpler terms for fields types in 'Collection' view [\#488](https://github.com/gisaia/ARLAS-wui-builder/issues/488) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
 
 **Merged pull requests:**
 
@@ -329,19 +329,19 @@
 
 **Closed issues:**
 
-- Allow min 2 buckets instead of 10 in histograms [\#494](https://github.com/gisaia/ARLAS-wui-builder/issues/494)
-- The Analytics Board initialisation doesn't set the layout properly [\#464](https://github.com/gisaia/ARLAS-wui-builder/issues/464)
-- Add the possibility to change widgets order inside a group [\#459](https://github.com/gisaia/ARLAS-wui-builder/issues/459)
-- Make lines caps rounded so that connections between linestrings are smooth [\#458](https://github.com/gisaia/ARLAS-wui-builder/issues/458)
-- Make Tab title configurable [\#441](https://github.com/gisaia/ARLAS-wui-builder/issues/441)
-- Rename a dashboard [\#430](https://github.com/gisaia/ARLAS-wui-builder/issues/430)
-- Activate color service by column [\#409](https://github.com/gisaia/ARLAS-wui-builder/issues/409)
-- Add the possibility to apply a filter on a configured layer [\#400](https://github.com/gisaia/ARLAS-wui-builder/issues/400)
-- add the possiblity to sort the chosen network field [\#394](https://github.com/gisaia/ARLAS-wui-builder/issues/394)
-- Add external layers: interactions with layers on the map or elements in the data table [\#388](https://github.com/gisaia/ARLAS-wui-builder/issues/388)
-- Duplicate a layer [\#344](https://github.com/gisaia/ARLAS-wui-builder/issues/344)
-- Import an existing widget from a different dashboard [\#331](https://github.com/gisaia/ARLAS-wui-builder/issues/331)
-- Import an existing layer from a different dashboard [\#330](https://github.com/gisaia/ARLAS-wui-builder/issues/330)
+- Allow min 2 buckets instead of 10 in histograms [\#494](https://github.com/gisaia/ARLAS-wui-builder/issues/494) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- The Analytics Board initialisation doesn't set the layout properly [\#464](https://github.com/gisaia/ARLAS-wui-builder/issues/464) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Add the possibility to change widgets order inside a group [\#459](https://github.com/gisaia/ARLAS-wui-builder/issues/459) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Make lines caps rounded so that connections between linestrings are smooth [\#458](https://github.com/gisaia/ARLAS-wui-builder/issues/458) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Make Tab title configurable [\#441](https://github.com/gisaia/ARLAS-wui-builder/issues/441) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Rename a dashboard [\#430](https://github.com/gisaia/ARLAS-wui-builder/issues/430) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Activate color service by column [\#409](https://github.com/gisaia/ARLAS-wui-builder/issues/409) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Add the possibility to apply a filter on a configured layer [\#400](https://github.com/gisaia/ARLAS-wui-builder/issues/400) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- add the possiblity to sort the chosen network field [\#394](https://github.com/gisaia/ARLAS-wui-builder/issues/394) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)] [[layer:network-analytics](https://github.com/gisaia/ARLAS-wui-builder/labels/layer:network-analytics)]
+- Add external layers: interactions with layers on the map or elements in the data table [\#388](https://github.com/gisaia/ARLAS-wui-builder/issues/388) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Duplicate a layer [\#344](https://github.com/gisaia/ARLAS-wui-builder/issues/344) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Import an existing widget from a different dashboard [\#331](https://github.com/gisaia/ARLAS-wui-builder/issues/331) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Import an existing layer from a different dashboard [\#330](https://github.com/gisaia/ARLAS-wui-builder/issues/330) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 
 **Merged pull requests:**
 
@@ -375,7 +375,7 @@
 
 **Closed issues:**
 
-- Resultlist details of an item are displayed in red in preview [\#466](https://github.com/gisaia/ARLAS-wui-builder/issues/466)
+- Resultlist details of an item are displayed in red in preview [\#466](https://github.com/gisaia/ARLAS-wui-builder/issues/466) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
 
 **Merged pull requests:**
 
@@ -388,7 +388,7 @@
 
 **Closed issues:**
 
-- Add a new Granularity for cluster mode [\#333](https://github.com/gisaia/ARLAS-wui-builder/issues/333)
+- Add a new Granularity for cluster mode [\#333](https://github.com/gisaia/ARLAS-wui-builder/issues/333) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 
 **Merged pull requests:**
 
@@ -401,15 +401,15 @@
 **Closed issues:**
 
 - Creating 2 layers with the same name creates display issues on the visualisation sets [\#460](https://github.com/gisaia/ARLAS-wui-builder/issues/460)
-- Change 'Timeline' icon in the left menu, using a time notion [\#452](https://github.com/gisaia/ARLAS-wui-builder/issues/452)
-- Enhance display of layers list in Visualisation set form [\#451](https://github.com/gisaia/ARLAS-wui-builder/issues/451)
-- Fix translation for stoke color, opacity, width [\#450](https://github.com/gisaia/ARLAS-wui-builder/issues/450)
-- Data table previsualisation doesn't have a fixed size \(no scrolling for large tables\) [\#434](https://github.com/gisaia/ARLAS-wui-builder/issues/434)
-- Set Data table size to 100 instead of 0 currently [\#433](https://github.com/gisaia/ARLAS-wui-builder/issues/433)
-- Add description about authentication to download data [\#429](https://github.com/gisaia/ARLAS-wui-builder/issues/429)
-- Add min/max features columns in Layers table [\#408](https://github.com/gisaia/ARLAS-wui-builder/issues/408)
-- Add the possibility to define a metric in Powerbars [\#406](https://github.com/gisaia/ARLAS-wui-builder/issues/406)
-- widgets layouts is not applied when view it in ARLAS-wui [\#367](https://github.com/gisaia/ARLAS-wui-builder/issues/367)
+- Change 'Timeline' icon in the left menu, using a time notion [\#452](https://github.com/gisaia/ARLAS-wui-builder/issues/452) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Enhance display of layers list in Visualisation set form [\#451](https://github.com/gisaia/ARLAS-wui-builder/issues/451) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Fix translation for stoke color, opacity, width [\#450](https://github.com/gisaia/ARLAS-wui-builder/issues/450) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Data table previsualisation doesn't have a fixed size \(no scrolling for large tables\) [\#434](https://github.com/gisaia/ARLAS-wui-builder/issues/434) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Set Data table size to 100 instead of 0 currently [\#433](https://github.com/gisaia/ARLAS-wui-builder/issues/433) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Add description about authentication to download data [\#429](https://github.com/gisaia/ARLAS-wui-builder/issues/429) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[SIDE](https://github.com/gisaia/ARLAS-wui-builder/labels/SIDE)]
+- Add min/max features columns in Layers table [\#408](https://github.com/gisaia/ARLAS-wui-builder/issues/408) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Add the possibility to define a metric in Powerbars [\#406](https://github.com/gisaia/ARLAS-wui-builder/issues/406) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- widgets layouts is not applied when view it in ARLAS-wui [\#367](https://github.com/gisaia/ARLAS-wui-builder/issues/367) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[WIDGET](https://github.com/gisaia/ARLAS-wui-builder/labels/WIDGET)]
 
 **Merged pull requests:**
 
@@ -434,7 +434,7 @@
 
 **Closed issues:**
 
-- Color picker is badly positioned if the page is scrolled [\#444](https://github.com/gisaia/ARLAS-wui-builder/issues/444)
+- Color picker is badly positioned if the page is scrolled [\#444](https://github.com/gisaia/ARLAS-wui-builder/issues/444) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 
 **Merged pull requests:**
 
@@ -447,10 +447,10 @@
 
 **Closed issues:**
 
-- Allow 'localhost' in Tagger urls [\#439](https://github.com/gisaia/ARLAS-wui-builder/issues/439)
-- Columns & Details layouts don't have the same size [\#435](https://github.com/gisaia/ARLAS-wui-builder/issues/435)
-- Editing a dashboard get stuck in "Landing page" [\#432](https://github.com/gisaia/ARLAS-wui-builder/issues/432)
-- Activate CSV export for widgets [\#428](https://github.com/gisaia/ARLAS-wui-builder/issues/428)
+- Allow 'localhost' in Tagger urls [\#439](https://github.com/gisaia/ARLAS-wui-builder/issues/439) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Columns & Details layouts don't have the same size [\#435](https://github.com/gisaia/ARLAS-wui-builder/issues/435) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Editing a dashboard get stuck in "Landing page" [\#432](https://github.com/gisaia/ARLAS-wui-builder/issues/432) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Activate CSV export for widgets [\#428](https://github.com/gisaia/ARLAS-wui-builder/issues/428) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[WIDGET](https://github.com/gisaia/ARLAS-wui-builder/labels/WIDGET)]
 
 **Merged pull requests:**
 
@@ -466,8 +466,8 @@
 
 **Closed issues:**
 
-- Interpolation of negative values to color palette is not working [\#425](https://github.com/gisaia/ARLAS-wui-builder/issues/425)
-- Interpolation of color to values between 0 - 1 is not working [\#407](https://github.com/gisaia/ARLAS-wui-builder/issues/407)
+- Interpolation of negative values to color palette is not working [\#425](https://github.com/gisaia/ARLAS-wui-builder/issues/425) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Interpolation of color to values between 0 - 1 is not working [\#407](https://github.com/gisaia/ARLAS-wui-builder/issues/407) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
 
 **Merged pull requests:**
 
@@ -496,11 +496,11 @@
 
 **Closed issues:**
 
-- Add the possibility to interpolate the opacity to the value of a given field [\#398](https://github.com/gisaia/ARLAS-wui-builder/issues/398)
-- Enhance Geomtery type according to the chosen geometry [\#396](https://github.com/gisaia/ARLAS-wui-builder/issues/396)
-- Add the possibility to configure the circle stroke [\#343](https://github.com/gisaia/ARLAS-wui-builder/issues/343)
-- Add a dedicated page for collection description [\#329](https://github.com/gisaia/ARLAS-wui-builder/issues/329)
-- Manage basemap url in map configuration [\#308](https://github.com/gisaia/ARLAS-wui-builder/issues/308)
+- Add the possibility to interpolate the opacity to the value of a given field [\#398](https://github.com/gisaia/ARLAS-wui-builder/issues/398) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Enhance Geomtery type according to the chosen geometry [\#396](https://github.com/gisaia/ARLAS-wui-builder/issues/396) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Add the possibility to configure the circle stroke [\#343](https://github.com/gisaia/ARLAS-wui-builder/issues/343) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Add a dedicated page for collection description [\#329](https://github.com/gisaia/ARLAS-wui-builder/issues/329) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Manage basemap url in map configuration [\#308](https://github.com/gisaia/ARLAS-wui-builder/issues/308) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 
 **Merged pull requests:**
 
@@ -521,7 +521,7 @@
 
 **Closed issues:**
 
-- Static links environment variable not declared in start.sh [\#411](https://github.com/gisaia/ARLAS-wui-builder/issues/411)
+- Static links environment variable not declared in start.sh [\#411](https://github.com/gisaia/ARLAS-wui-builder/issues/411) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
 
 **Merged pull requests:**
 
@@ -533,17 +533,17 @@
 
 **Closed issues:**
 
-- Fix the minimum radius value [\#397](https://github.com/gisaia/ARLAS-wui-builder/issues/397)
-- Disable the grid aspect [\#395](https://github.com/gisaia/ARLAS-wui-builder/issues/395)
-- Adapt default values of look & feel [\#393](https://github.com/gisaia/ARLAS-wui-builder/issues/393)
-- Lines : make default Width to fix with a given value [\#392](https://github.com/gisaia/ARLAS-wui-builder/issues/392)
-- Add the possibility to activate coordinates on the map [\#390](https://github.com/gisaia/ARLAS-wui-builder/issues/390)
-- Change the order of layers inside visualisation sets [\#361](https://github.com/gisaia/ARLAS-wui-builder/issues/361)
-- Change the order of visualisation sets [\#360](https://github.com/gisaia/ARLAS-wui-builder/issues/360)
-- Choose circle size smaller than 5 [\#349](https://github.com/gisaia/ARLAS-wui-builder/issues/349)
-- DATA TABLE : Width of the tabs Data/render is not adapted \(too small\) \(resultlist\) [\#334](https://github.com/gisaia/ARLAS-wui-builder/issues/334)
-- Traduction / Description [\#318](https://github.com/gisaia/ARLAS-wui-builder/issues/318)
-- Show error message in popup when something went wrong [\#288](https://github.com/gisaia/ARLAS-wui-builder/issues/288)
+- Fix the minimum radius value [\#397](https://github.com/gisaia/ARLAS-wui-builder/issues/397) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Disable the grid aspect [\#395](https://github.com/gisaia/ARLAS-wui-builder/issues/395) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)] [[layer:network-analytics](https://github.com/gisaia/ARLAS-wui-builder/labels/layer:network-analytics)]
+- Adapt default values of look & feel [\#393](https://github.com/gisaia/ARLAS-wui-builder/issues/393) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[LOOK AND FEEL](https://github.com/gisaia/ARLAS-wui-builder/labels/LOOK%20AND%20FEEL)]
+- Lines : make default Width to fix with a given value [\#392](https://github.com/gisaia/ARLAS-wui-builder/issues/392) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Add the possibility to activate coordinates on the map [\#390](https://github.com/gisaia/ARLAS-wui-builder/issues/390) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Change the order of layers inside visualisation sets [\#361](https://github.com/gisaia/ARLAS-wui-builder/issues/361) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Change the order of visualisation sets [\#360](https://github.com/gisaia/ARLAS-wui-builder/issues/360) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Choose circle size smaller than 5 [\#349](https://github.com/gisaia/ARLAS-wui-builder/issues/349) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- DATA TABLE : Width of the tabs Data/render is not adapted \(too small\) \(resultlist\) [\#334](https://github.com/gisaia/ARLAS-wui-builder/issues/334) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Traduction / Description [\#318](https://github.com/gisaia/ARLAS-wui-builder/issues/318) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Show error message in popup when something went wrong [\#288](https://github.com/gisaia/ARLAS-wui-builder/issues/288) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
 
 **Merged pull requests:**
 
@@ -561,30 +561,28 @@
 
 **Closed issues:**
 
-- Don't reset writers/readers access on dashboard update [\#385](https://github.com/gisaia/ARLAS-wui-builder/issues/385)
+- Don't reset writers/readers access on dashboard update [\#385](https://github.com/gisaia/ARLAS-wui-builder/issues/385) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
 - Replace Configuration occurences by Dashboard [\#384](https://github.com/gisaia/ARLAS-wui-builder/issues/384)
-- Edit tab's title directly [\#381](https://github.com/gisaia/ARLAS-wui-builder/issues/381)
-- Make layers and visualisation sets lists optional [\#379](https://github.com/gisaia/ARLAS-wui-builder/issues/379)
-- Add an import button besides the export button [\#370](https://github.com/gisaia/ARLAS-wui-builder/issues/370)
-- \[HISTOGRAM\] Set number of buckets at 50 [\#369](https://github.com/gisaia/ARLAS-wui-builder/issues/369)
-- \[DONUT\] removing a field doesn't work [\#368](https://github.com/gisaia/ARLAS-wui-builder/issues/368)
-- \[DONUT\] set donut size to 10 by default [\#366](https://github.com/gisaia/ARLAS-wui-builder/issues/366)
-- \[HEATMAP\] the opacity of heatmap layers doesn't work [\#365](https://github.com/gisaia/ARLAS-wui-builder/issues/365)
-- \[LAYER\]: switch "visibility" and "style" steps order [\#364](https://github.com/gisaia/ARLAS-wui-builder/issues/364)
-- \[LAYER\]: Hide collection step as we have always one [\#363](https://github.com/gisaia/ARLAS-wui-builder/issues/363)
-- "Ajouter une couche de données" and "Ajouter un espace de visualisation" text is not wrapped inside the button [\#362](https://github.com/gisaia/ARLAS-wui-builder/issues/362)
-- Enhance the default 'look and feel' elements [\#359](https://github.com/gisaia/ARLAS-wui-builder/issues/359)
-- Set default search placeholder [\#358](https://github.com/gisaia/ARLAS-wui-builder/issues/358)
-- Minimal zoom for cluster & Network analytics  [\#357](https://github.com/gisaia/ARLAS-wui-builder/issues/357)
-- Enhance default configuration of the timeline [\#356](https://github.com/gisaia/ARLAS-wui-builder/issues/356)
-- Add a spinner after loading the collections list [\#355](https://github.com/gisaia/ARLAS-wui-builder/issues/355)
-- Interpolation of width & radius to a field doesn't work [\#354](https://github.com/gisaia/ARLAS-wui-builder/issues/354)
-- Choosing data's extent doesn't work after in arlas-wui [\#351](https://github.com/gisaia/ARLAS-wui-builder/issues/351)
-- Renaming a map layer causes crash [\#350](https://github.com/gisaia/ARLAS-wui-builder/issues/350)
-- MAP : add filter to a map layer [\#347](https://github.com/gisaia/ARLAS-wui-builder/issues/347)
+- Edit tab's title directly [\#381](https://github.com/gisaia/ARLAS-wui-builder/issues/381) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Make layers and visualisation sets lists optional [\#379](https://github.com/gisaia/ARLAS-wui-builder/issues/379) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- \[HISTOGRAM\] Set number of buckets at 50 [\#369](https://github.com/gisaia/ARLAS-wui-builder/issues/369) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- \[DONUT\] removing a field doesn't work [\#368](https://github.com/gisaia/ARLAS-wui-builder/issues/368) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- \[DONUT\] set donut size to 10 by default [\#366](https://github.com/gisaia/ARLAS-wui-builder/issues/366) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- \[HEATMAP\] the opacity of heatmap layers doesn't work [\#365](https://github.com/gisaia/ARLAS-wui-builder/issues/365) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- \[LAYER\]: switch "visibility" and "style" steps order [\#364](https://github.com/gisaia/ARLAS-wui-builder/issues/364) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- \[LAYER\]: Hide collection step as we have always one [\#363](https://github.com/gisaia/ARLAS-wui-builder/issues/363) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- "Ajouter une couche de données" and "Ajouter un espace de visualisation" text is not wrapped inside the button [\#362](https://github.com/gisaia/ARLAS-wui-builder/issues/362) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Enhance the default 'look and feel' elements [\#359](https://github.com/gisaia/ARLAS-wui-builder/issues/359) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[LOOK AND FEEL](https://github.com/gisaia/ARLAS-wui-builder/labels/LOOK%20AND%20FEEL)]
+- Set default search placeholder [\#358](https://github.com/gisaia/ARLAS-wui-builder/issues/358) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[SEARCH](https://github.com/gisaia/ARLAS-wui-builder/labels/SEARCH)]
+- Minimal zoom for cluster & Network analytics  [\#357](https://github.com/gisaia/ARLAS-wui-builder/issues/357) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)] [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)] [[layer:network-analytics](https://github.com/gisaia/ARLAS-wui-builder/labels/layer:network-analytics)] [[layer:cluster](https://github.com/gisaia/ARLAS-wui-builder/labels/layer:cluster)]
+- Enhance default configuration of the timeline [\#356](https://github.com/gisaia/ARLAS-wui-builder/issues/356) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] [[TIMELINE](https://github.com/gisaia/ARLAS-wui-builder/labels/TIMELINE)]
+- Add a spinner after loading the collections list [\#355](https://github.com/gisaia/ARLAS-wui-builder/issues/355) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Interpolation of width & radius to a field doesn't work [\#354](https://github.com/gisaia/ARLAS-wui-builder/issues/354) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Renaming a map layer causes crash [\#350](https://github.com/gisaia/ARLAS-wui-builder/issues/350) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- MAP : add filter to a map layer [\#347](https://github.com/gisaia/ARLAS-wui-builder/issues/347) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
 - MAP: delete a visualisation set [\#345](https://github.com/gisaia/ARLAS-wui-builder/issues/345)
-- Add missing english description [\#335](https://github.com/gisaia/ARLAS-wui-builder/issues/335)
-- Manage colors globally [\#213](https://github.com/gisaia/ARLAS-wui-builder/issues/213)
+- Add missing english description [\#335](https://github.com/gisaia/ARLAS-wui-builder/issues/335) [[type:documentation](https://github.com/gisaia/ARLAS-wui-builder/labels/type:documentation)] [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Manage colors globally [\#213](https://github.com/gisaia/ARLAS-wui-builder/issues/213) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
 
 **Merged pull requests:**
 
@@ -611,7 +609,7 @@
 
 **Closed issues:**
 
-- Fix Look and feel attributes format [\#340](https://github.com/gisaia/ARLAS-wui-builder/issues/340)
+- Fix Look and feel attributes format [\#340](https://github.com/gisaia/ARLAS-wui-builder/issues/340) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
 
 **Merged pull requests:**
 
@@ -624,12 +622,10 @@
 
 **Closed issues:**
 
-- Fix width of dropdown list to see the whole field path [\#327](https://github.com/gisaia/ARLAS-wui-builder/issues/327)
-- Disable fields in dropdown lists when fields are not indexed [\#326](https://github.com/gisaia/ARLAS-wui-builder/issues/326)
-- Fix flattening taggable fields [\#323](https://github.com/gisaia/ARLAS-wui-builder/issues/323)
-- Support app name and unit as unmanaged fields [\#321](https://github.com/gisaia/ARLAS-wui-builder/issues/321)
-- Manage arlas wui name in builder [\#317](https://github.com/gisaia/ARLAS-wui-builder/issues/317)
-- Deal with arlas taggable field [\#219](https://github.com/gisaia/ARLAS-wui-builder/issues/219)
+- Fix width of dropdown list to see the whole field path [\#327](https://github.com/gisaia/ARLAS-wui-builder/issues/327) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Disable fields in dropdown lists when fields are not indexed [\#326](https://github.com/gisaia/ARLAS-wui-builder/issues/326) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Manage arlas wui name in builder [\#317](https://github.com/gisaia/ARLAS-wui-builder/issues/317) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Deal with arlas taggable field [\#219](https://github.com/gisaia/ARLAS-wui-builder/issues/219) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
 
 **Merged pull requests:**
 
@@ -650,7 +646,7 @@
 
 **Closed issues:**
 
-- No error message should be displayed by default [\#302](https://github.com/gisaia/ARLAS-wui-builder/issues/302)
+- No error message should be displayed by default [\#302](https://github.com/gisaia/ARLAS-wui-builder/issues/302) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
 
 **Merged pull requests:**
 
@@ -672,14 +668,14 @@
 
 **Closed issues:**
 
-- Use basic button style in analytics section [\#305](https://github.com/gisaia/ARLAS-wui-builder/issues/305)
-- Remove the possibility to open the left menu [\#304](https://github.com/gisaia/ARLAS-wui-builder/issues/304)
-- Remove or lighten the background-color of description section [\#303](https://github.com/gisaia/ARLAS-wui-builder/issues/303)
-- Define a primary version of Button [\#301](https://github.com/gisaia/ARLAS-wui-builder/issues/301)
-- Homogenise color from sliders and slide toggles [\#300](https://github.com/gisaia/ARLAS-wui-builder/issues/300)
-- Add some default value [\#285](https://github.com/gisaia/ARLAS-wui-builder/issues/285)
-- Add possibility to regroup linked fields in block [\#223](https://github.com/gisaia/ARLAS-wui-builder/issues/223)
-- Do not restrict the number of widgets per group [\#184](https://github.com/gisaia/ARLAS-wui-builder/issues/184)
+- Use basic button style in analytics section [\#305](https://github.com/gisaia/ARLAS-wui-builder/issues/305) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Remove the possibility to open the left menu [\#304](https://github.com/gisaia/ARLAS-wui-builder/issues/304) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Remove or lighten the background-color of description section [\#303](https://github.com/gisaia/ARLAS-wui-builder/issues/303) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Define a primary version of Button [\#301](https://github.com/gisaia/ARLAS-wui-builder/issues/301) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Homogenise color from sliders and slide toggles [\#300](https://github.com/gisaia/ARLAS-wui-builder/issues/300) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Add some default value [\#285](https://github.com/gisaia/ARLAS-wui-builder/issues/285) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Add possibility to regroup linked fields in block [\#223](https://github.com/gisaia/ARLAS-wui-builder/issues/223) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Do not restrict the number of widgets per group [\#184](https://github.com/gisaia/ARLAS-wui-builder/issues/184) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
 
 **Merged pull requests:**
 
@@ -696,12 +692,12 @@
 
 **Closed issues:**
 
-- Deleted layers are kept in visaulisationsSets [\#296](https://github.com/gisaia/ARLAS-wui-builder/issues/296)
-- Fix duplicated ids of contributors [\#294](https://github.com/gisaia/ARLAS-wui-builder/issues/294)
-- Add configuration object validation with the schema [\#293](https://github.com/gisaia/ARLAS-wui-builder/issues/293)
+- Deleted layers are kept in visaulisationsSets [\#296](https://github.com/gisaia/ARLAS-wui-builder/issues/296) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Fix duplicated ids of contributors [\#294](https://github.com/gisaia/ARLAS-wui-builder/issues/294) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Add configuration object validation with the schema [\#293](https://github.com/gisaia/ARLAS-wui-builder/issues/293) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
 - InitCentre form stores values as string instead of number [\#289](https://github.com/gisaia/ARLAS-wui-builder/issues/289)
-- The saved configuration does not appears on the main list. [\#284](https://github.com/gisaia/ARLAS-wui-builder/issues/284)
-- Error message in console on the start of the app [\#283](https://github.com/gisaia/ARLAS-wui-builder/issues/283)
+- The saved configuration does not appears on the main list. [\#284](https://github.com/gisaia/ARLAS-wui-builder/issues/284) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Error message in console on the start of the app [\#283](https://github.com/gisaia/ARLAS-wui-builder/issues/283) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
 - App review [\#244](https://github.com/gisaia/ARLAS-wui-builder/issues/244)
 
 **Merged pull requests:**
@@ -722,16 +718,16 @@
 
 **Closed issues:**
 
-- Histogram / Timeline configuration : interval value is a string instead of a number [\#276](https://github.com/gisaia/ARLAS-wui-builder/issues/276)
-- After saving a new configuration, user cannot update it until the app was reloaded [\#275](https://github.com/gisaia/ARLAS-wui-builder/issues/275)
-- Deal with 401/403 errors when we save a config with persistence [\#248](https://github.com/gisaia/ARLAS-wui-builder/issues/248)
-- Open modal with login again message after 403 or silent-refresh error [\#247](https://github.com/gisaia/ARLAS-wui-builder/issues/247)
-- App crash in analytics group creation when a widget is defined [\#246](https://github.com/gisaia/ARLAS-wui-builder/issues/246)
-- TranslateHttpLoader use hardcoding /assets/i18n and doest not work with custum app base href [\#241](https://github.com/gisaia/ARLAS-wui-builder/issues/241)
-- Enrich header to access a protected ARLAS-server [\#237](https://github.com/gisaia/ARLAS-wui-builder/issues/237)
-- Manage Visualisation sets [\#230](https://github.com/gisaia/ARLAS-wui-builder/issues/230)
-- Add 'Medium' granularity for cluster and feature-metric layers [\#224](https://github.com/gisaia/ARLAS-wui-builder/issues/224)
-- Fix generation of contributor names  [\#174](https://github.com/gisaia/ARLAS-wui-builder/issues/174)
+- Histogram / Timeline configuration : interval value is a string instead of a number [\#276](https://github.com/gisaia/ARLAS-wui-builder/issues/276) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- After saving a new configuration, user cannot update it until the app was reloaded [\#275](https://github.com/gisaia/ARLAS-wui-builder/issues/275) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Deal with 401/403 errors when we save a config with persistence [\#248](https://github.com/gisaia/ARLAS-wui-builder/issues/248) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Open modal with login again message after 403 or silent-refresh error [\#247](https://github.com/gisaia/ARLAS-wui-builder/issues/247) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- App crash in analytics group creation when a widget is defined [\#246](https://github.com/gisaia/ARLAS-wui-builder/issues/246) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- TranslateHttpLoader use hardcoding /assets/i18n and doest not work with custum app base href [\#241](https://github.com/gisaia/ARLAS-wui-builder/issues/241) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Enrich header to access a protected ARLAS-server [\#237](https://github.com/gisaia/ARLAS-wui-builder/issues/237) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Manage Visualisation sets [\#230](https://github.com/gisaia/ARLAS-wui-builder/issues/230) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Add 'Medium' granularity for cluster and feature-metric layers [\#224](https://github.com/gisaia/ARLAS-wui-builder/issues/224) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Fix generation of contributor names  [\#174](https://github.com/gisaia/ARLAS-wui-builder/issues/174) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
 
 **Merged pull requests:**
 
@@ -768,10 +764,10 @@
 
 **Closed issues:**
 
-- Store conf id to update with unique key LOCALSTORAGE\_CONFIG\_ID\_KEY in localstorage   [\#240](https://github.com/gisaia/ARLAS-wui-builder/issues/240)
-- Bug after Log out then log in [\#239](https://github.com/gisaia/ARLAS-wui-builder/issues/239)
-- Persisted configuration doesn't set the visualisation set layers correctly [\#228](https://github.com/gisaia/ARLAS-wui-builder/issues/228)
-- Add docker env variable to set a default server URL [\#132](https://github.com/gisaia/ARLAS-wui-builder/issues/132)
+- Store conf id to update with unique key LOCALSTORAGE\_CONFIG\_ID\_KEY in localstorage   [\#240](https://github.com/gisaia/ARLAS-wui-builder/issues/240) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Bug after Log out then log in [\#239](https://github.com/gisaia/ARLAS-wui-builder/issues/239) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Persisted configuration doesn't set the visualisation set layers correctly [\#228](https://github.com/gisaia/ARLAS-wui-builder/issues/228) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Add docker env variable to set a default server URL [\#132](https://github.com/gisaia/ARLAS-wui-builder/issues/132) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
 
 **Merged pull requests:**
 
@@ -794,10 +790,10 @@
 
 **Closed issues:**
 
-- Add a route to load a configuration from persistence [\#233](https://github.com/gisaia/ARLAS-wui-builder/issues/233)
+- Add a route to load a configuration from persistence [\#233](https://github.com/gisaia/ARLAS-wui-builder/issues/233) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
 - Use new version of persistence-server [\#231](https://github.com/gisaia/ARLAS-wui-builder/issues/231)
-- Persisted configuration has 'arlasWui' attribute instead of 'arlas-wui' [\#227](https://github.com/gisaia/ARLAS-wui-builder/issues/227)
-- Configuration stored in persistence should not contain 'extraConfigs' attribute [\#226](https://github.com/gisaia/ARLAS-wui-builder/issues/226)
+- Persisted configuration has 'arlasWui' attribute instead of 'arlas-wui' [\#227](https://github.com/gisaia/ARLAS-wui-builder/issues/227) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Configuration stored in persistence should not contain 'extraConfigs' attribute [\#226](https://github.com/gisaia/ARLAS-wui-builder/issues/226) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
 
 **Merged pull requests:**
 
@@ -812,16 +808,16 @@
 
 **Closed issues:**
 
-- Translation are not take into account in sub modules [\#222](https://github.com/gisaia/ARLAS-wui-builder/issues/222)
-- Extra config part is missing in config.json [\#218](https://github.com/gisaia/ARLAS-wui-builder/issues/218)
-- Map contributor name is missing in configuration [\#217](https://github.com/gisaia/ARLAS-wui-builder/issues/217)
-- Add layer preview in map config [\#79](https://github.com/gisaia/ARLAS-wui-builder/issues/79)
+- Translation are not take into account in sub modules [\#222](https://github.com/gisaia/ARLAS-wui-builder/issues/222) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Extra config part is missing in config.json [\#218](https://github.com/gisaia/ARLAS-wui-builder/issues/218) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Map contributor name is missing in configuration [\#217](https://github.com/gisaia/ARLAS-wui-builder/issues/217) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Add layer preview in map config [\#79](https://github.com/gisaia/ARLAS-wui-builder/issues/79) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
 
 **Merged pull requests:**
 
 - Feature/translate extractor [\#221](https://github.com/gisaia/ARLAS-wui-builder/pull/221) ([sebbousquet](https://github.com/sebbousquet))
 - Add extraconfig and map contributor name [\#220](https://github.com/gisaia/ARLAS-wui-builder/pull/220) ([mbarbet](https://github.com/mbarbet))
-- Add global map preview [\#215](https://github.com/gisaia/ARLAS-wui-builder/pull/215) ([mbarbet](https://github.com/mbarbet))
+- Add global map preview [\#215](https://github.com/gisaia/ARLAS-wui-builder/pull/215) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)] ([mbarbet](https://github.com/mbarbet))
 
 ## [v0.0.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v0.0.3) (2020-06-19)
 
@@ -829,32 +825,32 @@
 
 **Closed issues:**
 
-- After a loading a config with a layer / manual color, elements are repeated in the colors list [\#211](https://github.com/gisaia/ARLAS-wui-builder/issues/211)
-- Some issues [\#204](https://github.com/gisaia/ARLAS-wui-builder/issues/204)
-- Default values reset doesn't work as expected on Timeline [\#189](https://github.com/gisaia/ARLAS-wui-builder/issues/189)
-- Make button toggler choice more intuive [\#187](https://github.com/gisaia/ARLAS-wui-builder/issues/187)
-- Layers list with arlas-wui legend [\#186](https://github.com/gisaia/ARLAS-wui-builder/issues/186)
-- LOAD and SAVE unmanaged fields, keeping original values [\#160](https://github.com/gisaia/ARLAS-wui-builder/issues/160)
-- Create interface to import configuration from persistence  [\#151](https://github.com/gisaia/ARLAS-wui-builder/issues/151)
-- Edit tab name reload content and reset AB tab display [\#150](https://github.com/gisaia/ARLAS-wui-builder/issues/150)
-- Save imported files [\#147](https://github.com/gisaia/ARLAS-wui-builder/issues/147)
-- SEARCH: search field should be `text` and autocomplete\_field should be `keyword` [\#146](https://github.com/gisaia/ARLAS-wui-builder/issues/146)
-- SEARCH : the steps of autcomplete\_size slider should be of size 1 [\#145](https://github.com/gisaia/ARLAS-wui-builder/issues/145)
-- Weight of heatmap / normalized count [\#144](https://github.com/gisaia/ARLAS-wui-builder/issues/144)
-- Choosing collection when configuring a map layer [\#143](https://github.com/gisaia/ARLAS-wui-builder/issues/143)
-- Timeline config bugs [\#142](https://github.com/gisaia/ARLAS-wui-builder/issues/142)
-- Wrong field name given to PROPERTY\_SELECTOR\_SOURCE.manual [\#140](https://github.com/gisaia/ARLAS-wui-builder/issues/140)
-- LOAD and SAVE using persistence [\#138](https://github.com/gisaia/ARLAS-wui-builder/issues/138)
+- After a loading a config with a layer / manual color, elements are repeated in the colors list [\#211](https://github.com/gisaia/ARLAS-wui-builder/issues/211) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Some issues [\#204](https://github.com/gisaia/ARLAS-wui-builder/issues/204) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Default values reset doesn't work as expected on Timeline [\#189](https://github.com/gisaia/ARLAS-wui-builder/issues/189) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Make button toggler choice more intuive [\#187](https://github.com/gisaia/ARLAS-wui-builder/issues/187) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Layers list with arlas-wui legend [\#186](https://github.com/gisaia/ARLAS-wui-builder/issues/186) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- LOAD and SAVE unmanaged fields, keeping original values [\#160](https://github.com/gisaia/ARLAS-wui-builder/issues/160) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Create interface to import configuration from persistence  [\#151](https://github.com/gisaia/ARLAS-wui-builder/issues/151) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Edit tab name reload content and reset AB tab display [\#150](https://github.com/gisaia/ARLAS-wui-builder/issues/150) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Save imported files [\#147](https://github.com/gisaia/ARLAS-wui-builder/issues/147) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- SEARCH: search field should be `text` and autocomplete\_field should be `keyword` [\#146](https://github.com/gisaia/ARLAS-wui-builder/issues/146) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- SEARCH : the steps of autcomplete\_size slider should be of size 1 [\#145](https://github.com/gisaia/ARLAS-wui-builder/issues/145) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Weight of heatmap / normalized count [\#144](https://github.com/gisaia/ARLAS-wui-builder/issues/144) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Choosing collection when configuring a map layer [\#143](https://github.com/gisaia/ARLAS-wui-builder/issues/143) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Timeline config bugs [\#142](https://github.com/gisaia/ARLAS-wui-builder/issues/142) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Wrong field name given to PROPERTY\_SELECTOR\_SOURCE.manual [\#140](https://github.com/gisaia/ARLAS-wui-builder/issues/140) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- LOAD and SAVE using persistence [\#138](https://github.com/gisaia/ARLAS-wui-builder/issues/138) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
 - Refacto forms with config-form-controls [\#137](https://github.com/gisaia/ARLAS-wui-builder/issues/137)
-- Avoid 2 widgets to have the same name [\#128](https://github.com/gisaia/ARLAS-wui-builder/issues/128)
-- After a reset, some errors are still displayed if an export was attempted [\#119](https://github.com/gisaia/ARLAS-wui-builder/issues/119)
-- Display  analytics preview : update problem [\#111](https://github.com/gisaia/ARLAS-wui-builder/issues/111)
-- Create Side module config page [\#109](https://github.com/gisaia/ARLAS-wui-builder/issues/109)
-- Add preview for each analytics components [\#108](https://github.com/gisaia/ARLAS-wui-builder/issues/108)
-- Created a dialog for setting up each ANALYTICS WIDGET [\#90](https://github.com/gisaia/ARLAS-wui-builder/issues/90)
-- Fix of map layer edition [\#87](https://github.com/gisaia/ARLAS-wui-builder/issues/87)
-- Some visual improvments [\#86](https://github.com/gisaia/ARLAS-wui-builder/issues/86)
-- Create LOOK'N FEEL config page [\#71](https://github.com/gisaia/ARLAS-wui-builder/issues/71)
+- Avoid 2 widgets to have the same name [\#128](https://github.com/gisaia/ARLAS-wui-builder/issues/128) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- After a reset, some errors are still displayed if an export was attempted [\#119](https://github.com/gisaia/ARLAS-wui-builder/issues/119) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Display  analytics preview : update problem [\#111](https://github.com/gisaia/ARLAS-wui-builder/issues/111) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Create Side module config page [\#109](https://github.com/gisaia/ARLAS-wui-builder/issues/109) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Add preview for each analytics components [\#108](https://github.com/gisaia/ARLAS-wui-builder/issues/108) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Created a dialog for setting up each ANALYTICS WIDGET [\#90](https://github.com/gisaia/ARLAS-wui-builder/issues/90) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Fix of map layer edition [\#87](https://github.com/gisaia/ARLAS-wui-builder/issues/87) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Some visual improvments [\#86](https://github.com/gisaia/ARLAS-wui-builder/issues/86) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Create LOOK'N FEEL config page [\#71](https://github.com/gisaia/ARLAS-wui-builder/issues/71) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
 
 **Merged pull requests:**
 
@@ -924,22 +920,22 @@
 
 **Closed issues:**
 
-- Define interpolated style in cluster mode  [\#116](https://github.com/gisaia/ARLAS-wui-builder/issues/116)
-- After cancelling a new map layer edit, user is back to the global tab but it's not selected [\#107](https://github.com/gisaia/ARLAS-wui-builder/issues/107)
-- Use content of formGroup to display preview [\#106](https://github.com/gisaia/ARLAS-wui-builder/issues/106)
-- Add a hardcoded preview in analytics group  config [\#100](https://github.com/gisaia/ARLAS-wui-builder/issues/100)
-- Bug : checkUrl in landing page fonction not work if a default value is used for url [\#99](https://github.com/gisaia/ARLAS-wui-builder/issues/99)
+- Define interpolated style in cluster mode  [\#116](https://github.com/gisaia/ARLAS-wui-builder/issues/116) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- After cancelling a new map layer edit, user is back to the global tab but it's not selected [\#107](https://github.com/gisaia/ARLAS-wui-builder/issues/107) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Use content of formGroup to display preview [\#106](https://github.com/gisaia/ARLAS-wui-builder/issues/106) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Add a hardcoded preview in analytics group  config [\#100](https://github.com/gisaia/ARLAS-wui-builder/issues/100) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Bug : checkUrl in landing page fonction not work if a default value is used for url [\#99](https://github.com/gisaia/ARLAS-wui-builder/issues/99) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
 - Add creation of collaboration search Service and update config service [\#98](https://github.com/gisaia/ARLAS-wui-builder/issues/98)
 - Remove useless  config.json file [\#97](https://github.com/gisaia/ARLAS-wui-builder/issues/97)
 - Init an empty json for arlas configuration service in startup service [\#96](https://github.com/gisaia/ARLAS-wui-builder/issues/96)
-- Remove init of arlas collaborative search service from startupService [\#95](https://github.com/gisaia/ARLAS-wui-builder/issues/95)
-- Put all material dependencies into the shared project [\#84](https://github.com/gisaia/ARLAS-wui-builder/issues/84)
--  After resetting by clicking the banner, the collection doesn't appear anymore [\#77](https://github.com/gisaia/ARLAS-wui-builder/issues/77)
-- In layer edition, normalization can be applied also to float and doubles [\#129](https://github.com/gisaia/ARLAS-wui-builder/issues/129)
-- The URL pattern validator does not accept all urls [\#124](https://github.com/gisaia/ARLAS-wui-builder/issues/124)
-- Add LOAD of existing config file [\#104](https://github.com/gisaia/ARLAS-wui-builder/issues/104)
-- Plug arlas-persistance [\#78](https://github.com/gisaia/ARLAS-wui-builder/issues/78)
-- Create ANALYTICS config page [\#70](https://github.com/gisaia/ARLAS-wui-builder/issues/70)
+- Remove init of arlas collaborative search service from startupService [\#95](https://github.com/gisaia/ARLAS-wui-builder/issues/95) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Put all material dependencies into the shared project [\#84](https://github.com/gisaia/ARLAS-wui-builder/issues/84) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+-  After resetting by clicking the banner, the collection doesn't appear anymore [\#77](https://github.com/gisaia/ARLAS-wui-builder/issues/77) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- In layer edition, normalization can be applied also to float and doubles [\#129](https://github.com/gisaia/ARLAS-wui-builder/issues/129) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- The URL pattern validator does not accept all urls [\#124](https://github.com/gisaia/ARLAS-wui-builder/issues/124) [[type:bug](https://github.com/gisaia/ARLAS-wui-builder/labels/type:bug)]
+- Add LOAD of existing config file [\#104](https://github.com/gisaia/ARLAS-wui-builder/issues/104) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Plug arlas-persistance [\#78](https://github.com/gisaia/ARLAS-wui-builder/issues/78) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Create ANALYTICS config page [\#70](https://github.com/gisaia/ARLAS-wui-builder/issues/70) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
 
 **Merged pull requests:**
 
@@ -974,8 +970,8 @@
 
 **Closed issues:**
 
-- Create TIMELINE config page [\#6](https://github.com/gisaia/ARLAS-wui-builder/issues/6)
-- Create SEARCH config page [\#5](https://github.com/gisaia/ARLAS-wui-builder/issues/5)
+- Create TIMELINE config page [\#6](https://github.com/gisaia/ARLAS-wui-builder/issues/6) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Create SEARCH config page [\#5](https://github.com/gisaia/ARLAS-wui-builder/issues/5) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
 
 **Merged pull requests:**
 
@@ -1000,12 +996,12 @@
 
 **Closed issues:**
 
-- Add translation  [\#29](https://github.com/gisaia/ARLAS-wui-builder/issues/29)
-- Theme application [\#7](https://github.com/gisaia/ARLAS-wui-builder/issues/7)
-- Create MAP config page [\#4](https://github.com/gisaia/ARLAS-wui-builder/issues/4)
-- Landing page [\#3](https://github.com/gisaia/ARLAS-wui-builder/issues/3)
-- Manage default values  [\#2](https://github.com/gisaia/ARLAS-wui-builder/issues/2)
-- Create navigation menu [\#1](https://github.com/gisaia/ARLAS-wui-builder/issues/1)
+- Add translation  [\#29](https://github.com/gisaia/ARLAS-wui-builder/issues/29) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Theme application [\#7](https://github.com/gisaia/ARLAS-wui-builder/issues/7) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Create MAP config page [\#4](https://github.com/gisaia/ARLAS-wui-builder/issues/4) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Landing page [\#3](https://github.com/gisaia/ARLAS-wui-builder/issues/3) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Manage default values  [\#2](https://github.com/gisaia/ARLAS-wui-builder/issues/2) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
+- Create navigation menu [\#1](https://github.com/gisaia/ARLAS-wui-builder/issues/1) [[type:enhancement](https://github.com/gisaia/ARLAS-wui-builder/labels/type:enhancement)]
 
 **Merged pull requests:**
 
