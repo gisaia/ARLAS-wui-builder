@@ -197,8 +197,7 @@ export class ConfigExportHelper {
             colors_from_fields: [],
             provided_fields: [],
             normalization_fields: [],
-            metrics: [],
-            render_mode: FeatureRenderMode.window
+            metrics: []
         };
 
         if (!!filters) {
