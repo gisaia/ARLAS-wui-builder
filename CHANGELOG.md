@@ -1,5 +1,13 @@
 # Change Log
 
+## [v19.0.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v19.0.3) (2021-10-21)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v19.0.2...v19.0.3)
+
+**Fixed bugs:**
+
+- Existing Polygon layers have a stroke added when saving dashboard [\#608](https://github.com/gisaia/ARLAS-wui-builder/issues/608)
+
 ## [v19.0.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v19.0.2) (2021-10-11)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v19.0.1...v19.0.2)
