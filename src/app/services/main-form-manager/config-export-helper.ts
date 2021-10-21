@@ -56,6 +56,7 @@ import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-build
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionReferenceDescription } from 'arlas-api';
+import { ARLAS_ID } from '@services/main-form/main-form.service';
 
 export enum EXPORT_TYPE {
     json = 'json',
@@ -354,11 +355,12 @@ export class ConfigExportHelper {
         const customControls = mapConfigGlobal.customControls;
 
         const layers: Array<string> = new Array<string>();
-        const layersHoverId: Array<string> = new Array<string>();
+        const layersHoverIds: Array<string> = new Array<string>();
         mapConfigLayers.controls.forEach((layerFg: MapLayerFormGroup) => {
             layers.push(layerFg.value.name);
             if (this.getLayerSourceConfig(layerFg).render_mode === FeatureRenderMode.window) {
-                layersHoverId.push(layerFg.value.arlasId);
+                layersHoverIds.push(layerFg.value.arlasId);
+                layersHoverIds.push(layerFg.value.arlasId.replace(ARLAS_ID, 'scrollable_arlas_id:'));
             }
         });
 
@@ -422,8 +424,8 @@ export class ConfigExportHelper {
                     layers: [],
                     events: {
                         zoomOnClick: customControls.unmanagedFields.mapLayers.events.zoomOnClick.value,
-                        emitOnClick: layersHoverId,
-                        onHover: layersHoverId,
+                        emitOnClick: layersHoverIds,
+                        onHover: layersHoverIds,
                     },
                     externalEventLayers: new Array<{ id: string, on: string }>()
                 } as MapComponentInputMapLayersConfig,
