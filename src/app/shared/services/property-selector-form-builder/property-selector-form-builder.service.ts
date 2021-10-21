@@ -128,10 +128,10 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           {
             dependsOn: () => [this.customControls.propertySource],
             onDependencyChange: (control) => {
-              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix)
               if (!control.value && !control.touched && defaultConfig[propertyName + 'Min'] !== undefined) {
                 control.setValue(defaultConfig[propertyName + 'Min']);
               }
+              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix);
             }
           }
         ),
