@@ -65,15 +65,15 @@
                     },
                     "strokeColorFg": {
                         "propertySource": "Fix",
-                        "propertyFix": "#abcdef"
+                        "propertyFix": "#fff"
                     },
                     "strokeWidthFg": {
                         "propertySource": "Fix",
-                        "propertyFix": 1
+                        "propertyFix": 0
                     },
                     "strokeOpacityFg": {
                         "propertySource": "Fix",
-                        "propertyFix": 1
+                        "propertyFix": 0
                     },
                     "widthFg": {
                         "propertySource": "Fix",
@@ -109,15 +109,15 @@
                     },
                     "strokeColorFg": {
                         "propertySource": "Fix",
-                        "propertyFix": "#abcdef"
+                        "propertyFix": "#fff"
                     },
                     "strokeWidthFg": {
                         "propertySource": "Fix",
-                        "propertyFix": 1
+                        "propertyFix": 0
                     },
                     "strokeOpacityFg": {
                         "propertySource": "Fix",
-                        "propertyFix": 1
+                        "propertyFix": 0
                     },
                     "widthFg": {
                         "propertySource": "Fix",
@@ -156,15 +156,15 @@
                     },
                     "strokeColorFg": {
                         "propertySource": "Fix",
-                        "propertyFix": "#abcdef"
+                        "propertyFix": "#fff"
                     },
                     "strokeWidthFg": {
                         "propertySource": "Fix",
-                        "propertyFix": 1
+                        "propertyFix": 0
                     },
                     "strokeOpacityFg": {
                         "propertySource": "Fix",
-                        "propertyFix": 1
+                        "propertyFix": 0
                     },
                     "weightFg": {
                         "propertySource": "Fix",
