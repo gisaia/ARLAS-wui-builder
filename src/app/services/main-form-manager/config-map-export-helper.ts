@@ -30,7 +30,7 @@ import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-fo
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
 import { FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID } from 'arlas-web-components';
-import { FeatureRenderMode } from 'arlas-web-contributors/models/models'
+import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 export enum VISIBILITY {
     visible = 'visible',
     none = 'none'
@@ -81,14 +81,14 @@ export class ConfigMapExportHelper {
                         visibility: layer.layout.visibility
                     },
                     paint: Object.assign({}, layer.paint)
-                }
+                };
                 if (layer.type === GEOMETRY_TYPE.fill.toString()) {
                 } else if (layer.type === GEOMETRY_TYPE.circle.toString()) {
                     scrollableLayer.paint['circle-stroke-width'] = 0;
                 } else if (layer.type === GEOMETRY_TYPE.line.toString()) {
                     scrollableLayer.paint['line-opacity'] = 0.1;
                 }
-                scrollableLayers.push([scrollableLayer, layerFg.value.mode as LAYER_MODE])
+                scrollableLayers.push([scrollableLayer, layerFg.value.mode as LAYER_MODE]);
             }
             return [layer, layerFg.value.mode as LAYER_MODE];
 
