@@ -29,7 +29,7 @@ import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
-import { FillStroke, LayerMetadata } from 'arlas-web-components';
+import { FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID } from 'arlas-web-components';
 import { FeatureRenderMode } from 'arlas-web-contributors/models/models'
 export enum VISIBILITY {
     visible = 'visible',
@@ -51,6 +51,7 @@ export class ConfigMapExportHelper {
                     id: layer.id.replace(ARLAS_ID, FILLSTROKE_LAYER_PREFIX),
                     type: GEOMETRY_TYPE.line.toString(),
                     maxzoom: layer.maxzoom,
+                    filter: layer.filter,
                     minzoom: layer.minzoom,
                     layout: {
                         visibility: layer.layout.visibility
@@ -67,7 +68,7 @@ export class ConfigMapExportHelper {
             if (!!layer.metadata && !!layer.metadata.isScrollableLayer) {
                 const scrollableLayer: Layer = {
                     source: layer.source,
-                    id: layer.id.replace(ARLAS_ID, 'scrollable_arlas_id:'),
+                    id: layer.id.replace(ARLAS_ID, SCROLLABLE_ARLAS_ID),
                     type: layer.type,
                     maxzoom: layer.maxzoom,
                     minzoom: layer.minzoom,
@@ -75,6 +76,7 @@ export class ConfigMapExportHelper {
                         collection: layer.metadata.collection,
                         isScrollableLayer: false
                     },
+                    filter: layer.filter,
                     layout: {
                         visibility: layer.layout.visibility
                     },

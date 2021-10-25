@@ -49,7 +49,7 @@ import {
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
-import { VisualisationSetConfig, BasemapStyle } from 'arlas-web-components';
+import { VisualisationSetConfig, BasemapStyle, SCROLLABLE_ARLAS_ID } from 'arlas-web-components';
 import { titleCase } from '@services/collection-service/tools';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
@@ -360,7 +360,7 @@ export class ConfigExportHelper {
             layers.push(layerFg.value.name);
             if (this.getLayerSourceConfig(layerFg).render_mode === FeatureRenderMode.window) {
                 layersHoverIds.push(layerFg.value.arlasId);
-                layersHoverIds.push(layerFg.value.arlasId.replace(ARLAS_ID, 'scrollable_arlas_id:'));
+                layersHoverIds.push(layerFg.value.arlasId.replace(ARLAS_ID, SCROLLABLE_ARLAS_ID));
             }
         });
 
