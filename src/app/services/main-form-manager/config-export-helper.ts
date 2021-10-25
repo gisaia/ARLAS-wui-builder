@@ -49,13 +49,14 @@ import {
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
-import { VisualisationSetConfig, BasemapStyle } from 'arlas-web-components';
+import { VisualisationSetConfig, BasemapStyle, SCROLLABLE_ARLAS_ID } from 'arlas-web-components';
 import { titleCase } from '@services/collection-service/tools';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionReferenceDescription } from 'arlas-api';
+import { ARLAS_ID } from '@services/main-form/main-form.service';
 
 export enum EXPORT_TYPE {
     json = 'json',
@@ -354,11 +355,12 @@ export class ConfigExportHelper {
         const customControls = mapConfigGlobal.customControls;
 
         const layers: Array<string> = new Array<string>();
-        const layersHoverId: Array<string> = new Array<string>();
+        const layersHoverIds: Array<string> = new Array<string>();
         mapConfigLayers.controls.forEach((layerFg: MapLayerFormGroup) => {
             layers.push(layerFg.value.name);
             if (this.getLayerSourceConfig(layerFg).render_mode === FeatureRenderMode.window) {
-                layersHoverId.push(layerFg.value.arlasId);
+                layersHoverIds.push(layerFg.value.arlasId);
+                layersHoverIds.push(layerFg.value.arlasId.replace(ARLAS_ID, SCROLLABLE_ARLAS_ID));
             }
         });
 
@@ -422,8 +424,8 @@ export class ConfigExportHelper {
                     layers: [],
                     events: {
                         zoomOnClick: customControls.unmanagedFields.mapLayers.events.zoomOnClick.value,
-                        emitOnClick: layersHoverId,
-                        onHover: layersHoverId,
+                        emitOnClick: layersHoverIds,
+                        onHover: layersHoverIds,
                     },
                     externalEventLayers: new Array<{ id: string, on: string }>()
                 } as MapComponentInputMapLayersConfig,

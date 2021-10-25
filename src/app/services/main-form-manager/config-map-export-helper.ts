@@ -29,8 +29,8 @@ import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
-import { FillStroke, LayerMetadata } from 'arlas-web-components';
-
+import { FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID } from 'arlas-web-components';
+import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 export enum VISIBILITY {
     visible = 'visible',
     none = 'none'
@@ -41,6 +41,7 @@ export class ConfigMapExportHelper {
     public static process(mapConfigLayers: FormArray, colorService: ArlasColorGeneratorLoader,
                           taggableFieldsMap?: Map<string, Set<string>>) {
         const fillStrokeLayers = [];
+        const scrollableLayers = [];
         const layers: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: MapLayerFormGroup) => {
             const taggableFields = taggableFieldsMap.get(layerFg.customControls.collection.value);
             const layer = this.getLayer(layerFg, colorService, taggableFields);
@@ -50,6 +51,7 @@ export class ConfigMapExportHelper {
                     id: layer.id.replace(ARLAS_ID, FILLSTROKE_LAYER_PREFIX),
                     type: GEOMETRY_TYPE.line.toString(),
                     maxzoom: layer.maxzoom,
+                    filter: layer.filter,
                     minzoom: layer.minzoom,
                     layout: {
                         visibility: layer.layout.visibility
@@ -62,7 +64,34 @@ export class ConfigMapExportHelper {
                 };
                 fillStrokeLayers.push([fillStrokeLayer, layerFg.value.mode as LAYER_MODE]);
             }
+
+            if (!!layer.metadata && !!layer.metadata.isScrollableLayer) {
+                const scrollableLayer: Layer = {
+                    source: layer.source,
+                    id: layer.id.replace(ARLAS_ID, SCROLLABLE_ARLAS_ID),
+                    type: layer.type,
+                    maxzoom: layer.maxzoom,
+                    minzoom: layer.minzoom,
+                    metadata: {
+                        collection: layer.metadata.collection,
+                        isScrollableLayer: false
+                    },
+                    filter: layer.filter,
+                    layout: {
+                        visibility: layer.layout.visibility
+                    },
+                    paint: Object.assign({}, layer.paint)
+                };
+                if (layer.type === GEOMETRY_TYPE.fill.toString()) {
+                } else if (layer.type === GEOMETRY_TYPE.circle.toString()) {
+                    scrollableLayer.paint['circle-stroke-width'] = 0;
+                } else if (layer.type === GEOMETRY_TYPE.line.toString()) {
+                    scrollableLayer.paint['line-opacity'] = 0.1;
+                }
+                scrollableLayers.push([scrollableLayer, layerFg.value.mode as LAYER_MODE]);
+            }
             return [layer, layerFg.value.mode as LAYER_MODE];
+
         });
         let layersHover: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: MapLayerFormGroup) => {
             const taggableFields = taggableFieldsMap.get(layerFg.customControls.collection.value);
@@ -102,7 +131,7 @@ export class ConfigMapExportHelper {
             });
         const mapConfig: MapConfig = {
             layers: Array.from(new Set(layers.map(l => l[0]).concat(layersSelect.map(l => l[0])).concat(layersHover.map(l => l[0]))
-                .concat(fillStrokeLayers.map(l => l[0])))),
+                .concat(fillStrokeLayers.map(l => l[0])).concat(scrollableLayers.map(l => l[0])))),
             externalEventLayers: Array.from(new Set(layersHover.map(lh => {
                 return {
                     id: lh[0].id,
@@ -130,6 +159,9 @@ export class ConfigMapExportHelper {
                 opacity: this.getMapProperty(modeValues.styleStep.strokeOpacityFg, mode, colorService, taggableFields)
             };
             metadata.stroke = fillStroke;
+        }
+        if (mode === LAYER_MODE.features) {
+            metadata.isScrollableLayer = modeValues.visibilityStep.renderMode === FeatureRenderMode.window;
         }
         return metadata;
     }
