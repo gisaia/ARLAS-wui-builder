@@ -117,6 +117,10 @@ export class ResultListImportService {
         control: renderStep.displayFilters
       },
       {
+        value: inputs.fitThumbnail,
+        control: renderStep.gridStep.fitThumbnail
+      },
+      {
         value: inputs.isGeoSortActived,
         control: renderStep.isGeoSortActived
       },

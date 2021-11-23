@@ -634,5 +634,7 @@
 	"Insert": "Insert",
 	"Ignored collections": "Hidden collections",
 	"Hide collection": "Hide collection",
-	"Display collection": "Display collection"
+	"Display collection": "Display collection",
+	"fit thumbnail description": "Fit the thumbnail extent to the tile",
+	"fit thumbnail": "Fit thumbnail"
 }
