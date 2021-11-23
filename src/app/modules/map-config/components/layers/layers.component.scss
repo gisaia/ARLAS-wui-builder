@@ -19,27 +19,28 @@ under the License.
 @import "variables.scss";
 
 .description {
-    align-self: center;
-    width: fit-content;
-    font-size: 14px;
-    color: $config-element-description-text-color;
-    line-height: 1.6;
-    border-left: 0.2rem solid $config-element-description-border-color;
-    background-color: white;
-    border-radius: 4px;
-    display: inline-block;
-  }
+  align-self: center;
+  width: fit-content;
+  font-size: 14px;
+  color: $config-element-description-text-color;
+  line-height: 1.6;
+  border-left: 0.2rem solid $config-element-description-border-color;
+  background-color: white;
+  border-radius: 4px;
+  display: inline-block;
+}
 
 .description:not(:empty) {
-    margin-left: 36px;
-    padding: 10px;
+  margin-left: 36px;
+  padding: 10px;
 }
 
 table {
   width: 100%;
 }
 
-button.add-layer, button.import-layer {
+button.add-layer,
+button.import-layer {
   margin: 16px 8px;
   display: inline-block;
   min-width: auto;
@@ -63,4 +64,9 @@ mat-error {
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 355px;
+}
+
+.filter-icon {
+  vertical-align: bottom;
+  color: #999999;
 }
