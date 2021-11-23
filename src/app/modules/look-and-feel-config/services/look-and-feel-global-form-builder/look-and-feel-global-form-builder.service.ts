@@ -42,13 +42,17 @@ export class CollectionUnitFormGroup extends ConfigFormGroup {
         '',
         'collection',
         'collection desc'
-      )
+      ),
+      ignored: new SlideToggleFormControl(false,
+        '',
+        '')
     });
   }
 
   public customControls = {
     unit: this.get('unit') as InputFormControl,
-    collection: this.get('collection') as InputFormControl
+    collection: this.get('collection') as InputFormControl,
+    ignored: this.get('ignored') as SlideToggleFormControl
   };
 }
 export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
@@ -135,6 +139,8 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
   };
 
   public collectionUnitMap = new Map();
+  public collectionIgnoredMap = new Map();
+  public ignoredCollections = new Map();
 
   public buildUnits(collections): FormArray {
     const collectionsUnits = new FormArray([]);
@@ -143,6 +149,7 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
       values.controls.forEach((cu: CollectionUnitFormGroup) => {
         if (cu.customControls.unit.value) {
           this.collectionUnitMap.set(cu.customControls.collection.value, cu.customControls.unit.value);
+          this.collectionIgnoredMap.set(cu.customControls.collection.value, cu.customControls.ignored.value);
         }
       });
     }
@@ -154,9 +161,10 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
         collectionUnitForm.customControls.collection.setValue(collection);
         if (this.collectionUnitMap.get(collection)) {
           collectionUnitForm.customControls.unit.setValue(this.collectionUnitMap.get(collection));
+          collectionUnitForm.customControls.ignored.setValue(this.collectionIgnoredMap.get(collection));
         } else {
           collectionUnitForm.customControls.unit.setValue(collection);
-
+          collectionUnitForm.customControls.ignored.setValue(false);
         }
       }
       collectionsUnits.insert(i, collectionUnitForm);
@@ -164,10 +172,11 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
     return collectionsUnits;
   }
 
-  public buildCollectioUnitForm(collection: string, unit: string): CollectionUnitFormGroup {
+  public buildCollectioUnitForm(collection: string, unit: string, ignored: boolean): CollectionUnitFormGroup {
     const collectionUnitForm = new CollectionUnitFormGroup();
     collectionUnitForm.customControls.unit.setValue(unit);
     collectionUnitForm.customControls.collection.setValue(collection);
+    collectionUnitForm.customControls.ignored.setValue(ignored);
     return collectionUnitForm;
   }
 }

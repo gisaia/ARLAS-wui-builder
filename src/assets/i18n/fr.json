@@ -214,7 +214,7 @@
 	"export csv powerbars description": "Une fois activé, un bouton apparaîtra à côté des Powerbars qui permet d'exporter leurs contenus en tant que fichier CSV",
 	"resultlist title": "Titre du tableau de données",
 	"resultlist title description": "",
-	"Resultlist collection description": "ChoiDonnez une unité à chaque collection configurée. Chaque unité apparaîtra à côté du comte correspondant dans l'application d'exploration.ir la collection de données pour cette liste de données",
+	"Resultlist collection description": "Choisir la collection de données pour cette liste de données",
 	"Search size": "Taille du tableau",
 	"Search size description": "Nombre de résultats disponibles par défaut dans le tableau de données (possibilité de faire défiler les résultats pour en voir davantage)",
 	"Display filters": "Autoriser recherche",
@@ -644,10 +644,13 @@
 	"Fixed strokeColor": "Couleur du contour",
 	"Invalid dashboard name": "Nom de dashboard invalide",
 	"Another dashboad already exists with the same name, please choose another one": "Un autre dashboad existe déjà avec ce même nom, veuillez en choisir un autre.",
-	"collection unit description" : "Donnez une unité à chaque collection configurée. Chaque unité apparaîtra à côté du Compte correspondant dans l'application d'exploration.",
+	"collection unit description" : "Donnez une unité à chaque collection configurée. Elle apparaîtra à côté du total d'éléments dans l'application d'exploration. \n \n Les 'collections cachées' sont des collections configurés (frise temporelle | analytiques | couches cartographiques) mais dont le total d'éléments n'apparaîtra pas sur l'application d'exploration.",
 	"collection unit": "unité",	
 	"Units": "Unités",
 	"Insert field to URL": "Insérer un champ à l'Url",
 	"url field": "Champ à insérer",
-	"Insert": "Insérer"
+	"Insert": "Insérer",
+	"Ignored collections": "Collections cachées",
+	"Hide collection": "Cacher la collection",
+	"Display collection": "Afficher la collection"
 }

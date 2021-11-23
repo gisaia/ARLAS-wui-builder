@@ -178,7 +178,8 @@ export class ConfigExportHelper {
                             .controls.map((c: CollectionUnitFormGroup) => {
                                 return {
                                     collection: c.customControls.collection.value,
-                                    unit: c.customControls.unit.value
+                                    unit: c.customControls.unit.value,
+                                    ignored: c.customControls.ignored.value
                                 };
                             }),
                         name_background_color: startingConfig.customControls.unmanagedFields.appNameBackgroundColor.value

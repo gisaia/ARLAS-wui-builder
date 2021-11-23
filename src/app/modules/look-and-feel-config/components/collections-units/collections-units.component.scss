@@ -1,6 +1,11 @@
 .collections-list {
     margin-bottom: 10px;
     .collections-container {
+      .title {
+        margin-top: 15px;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
       box-sizing: border-box;
       font-size: 0.8em;
       margin-left: 10px;
@@ -27,6 +32,10 @@
         .unit {
           height: 30px;
           margin-left: 25px;
+          .mat-icon-button .mat-icon {
+            line-height: 14px;
+            font-size: 20px;
+          }
         }
         .draghandle {
           display: flex;
