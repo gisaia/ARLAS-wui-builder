@@ -51,13 +51,14 @@ export class LookAndFeelImportService {
         }
         appConfig.units.push({
           unit: appConfig.unit,
-          collection: config.arlas.server.collection.name
+          collection: config.arlas.server.collection.name,
+          ignored: false
         });
       }
       if (appConfig.units) {
         const units = new FormArray([]);
         appConfig.units.forEach((u, i) => {
-          units.insert(i, globalLookAndFeelFg.buildCollectioUnitForm(u.collection, u.unit));
+          units.insert(i, globalLookAndFeelFg.buildCollectioUnitForm(u.collection, u.unit, u.ignored));
         });
         globalLookAndFeelFg.customControls.units.setValue(units);
       }

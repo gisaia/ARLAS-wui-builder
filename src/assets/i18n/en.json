@@ -626,11 +626,13 @@
 	"Fixed strokeColor": "Stroke color",
 	"Invalid dashboard name": "Invalid dashboard name",
 	"Another dashboad already exists with the same name, please choose another one": "Another dashboad already exists with the same name, please choose another one",
-	"collection unit description": "Give a unit to each configured collection. Each unit will appear next to the corresponding Count in the exploration app.",
+	"collection unit description": "Give a unit to each configured collection. Each unit will appear next to the corresponding Count in the exploration app. \n \n 'Hidden collections' are configured collections (timeline | analytics | map layers) but whose count will not appear on the exploration application",
 	"collection unit": "unit",
 	"Units": "Units",
 	"Insert field to URL": "Insert field to Url",
 	"url field": "Field to insert",
-	"Insert": "Insert"
-
+	"Insert": "Insert",
+	"Ignored collections": "Hidden collections",
+	"Hide collection": "Hide collection",
+	"Display collection": "Display collection"
 }
