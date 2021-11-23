@@ -2,15 +2,13 @@
     <div class="edit-group">
         <div class="edit-group-form">
             <div class="fields">
-                <div>
-                    <mat-form-field class="icon">
-                        <mat-icon matPrefix style="cursor: pointer;" (click)="iconInput.click()">
-                            {{this.formGroup.controls.icon.value}}</mat-icon>
-                        <input #iconInput matInput formControlName="icon"
-                            [iconPicker]="this.formGroup.controls.icon.value" [ipIconPack]="['mat']"
-                            [ipFallbackIcon]="'poll'" [ipPosition]="'right'" [ipButtonStyleClass]="'mat-raised-button'"
-                            [ipMaxHeight]="'160px'" (iconPickerSelect)="onIconPickerSelect($event)" />
-                    </mat-form-field>
+                <div class="icon">
+                    <mat-icon matPrefix style="cursor: pointer;" (click)="iconInput.click()">
+                        {{this.formGroup.controls.icon.value}}</mat-icon>
+                    <input #iconInput matInput formControlName="icon" [iconPicker]="this.formGroup.controls.icon.value"
+                        [ipIconPack]="['mat']" [ipFallbackIcon]="'poll'" [ipPosition]="'right'"
+                        [ipButtonStyleClass]="'mat-raised-button'" [ipMaxHeight]="'160px'" [ipWidth]="'307px'"
+                        (iconPickerSelect)="onIconPickerSelect($event)" />
                 </div>
                 <div>
                     <mat-form-field>
@@ -19,14 +17,18 @@
                     </mat-form-field>
                 </div>
                 <div>
-                    <mat-button-toggle-group (change)="updatePreview()" #group="matButtonToggleGroup" formControlName="itemPerLine">
-                        <mat-button-toggle value="1" matTooltip="{{'One per line' | translate}}" [checked]="itemPerLine + '' === '1'">
+                    <mat-button-toggle-group (change)="updatePreview()" #group="matButtonToggleGroup"
+                        formControlName="itemPerLine">
+                        <mat-button-toggle value="1" matTooltip="{{'One per line' | translate}}"
+                            [checked]="itemPerLine + '' === '1'">
                             <mat-icon>view_agenda</mat-icon>
                         </mat-button-toggle>
-                        <mat-button-toggle value="2" matTooltip="{{'Two columns' | translate}}" [checked]="itemPerLine + '' === '2'">
+                        <mat-button-toggle value="2" matTooltip="{{'Two columns' | translate}}"
+                            [checked]="itemPerLine + '' === '2'">
                             <mat-icon style="transform: rotate(90deg);">view_agenda</mat-icon>
                         </mat-button-toggle>
-                        <mat-button-toggle value="3" matTooltip="{{'Three columns' | translate}}" [checked]="itemPerLine + '' === '3'">
+                        <mat-button-toggle value="3" matTooltip="{{'Three columns' | translate}}"
+                            [checked]="itemPerLine + '' === '3'">
                             <mat-icon>view_week</mat-icon>
                         </mat-button-toggle>
                     </mat-button-toggle-group>
@@ -34,44 +36,49 @@
                 <div *ngIf="formGroup.controls.content.touched && formGroup.controls.content.invalid">
                     <mat-error>
                         {{ contentTypeValue.length | i18nPlural:{
-                            '=1': 'The widget within isn\'t valid' | translate, 
-                            'other': 'The widgets within aren\'t valid' | translate
+                        '=1': 'The widget within isn\'t valid' | translate,
+                        'other': 'The widgets within aren\'t valid' | translate
                         } }}
                     </mat-error>
                 </div>
             </div>
             <div class="edit-widgets">
-                <div cdkDrag *ngFor="let comp of contentTypeValue; index as ci;" mat-raised-button [id]="'widget-' + groupIndex + '-' + ci" cdkDropList cdkDropListOrientation="horizontal"
-                (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="getOtherWidgetIds(ci)" >
-                    <div class="invalid-widget-edition" *ngIf="!content.controls[ci].valid && !!content.controls[ci].value.widgetData?.title"
+                <div cdkDrag *ngFor="let comp of contentTypeValue; index as ci;" mat-raised-button
+                    [id]="'widget-' + groupIndex + '-' + ci" cdkDropList cdkDropListOrientation="horizontal"
+                    (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="getOtherWidgetIds(ci)">
+                    <div class="invalid-widget-edition"
+                        *ngIf="!content.controls[ci].valid && !!content.controls[ci].value.widgetData?.title"
                         [matTooltip]="'The widget has invalid inputs. Edit to fix them.' | translate">!</div>
                     <span
                         [matTooltip]="content.controls[ci].value.widgetData?.title">{{content.controls[ci].value.widgetData?.title}}</span>
-                        <button mat-icon-button [matMenuTriggerFor]="menuEditWidget">
-                            <mat-icon>more_vert</mat-icon>
+                    <button mat-icon-button [matMenuTriggerFor]="menuEditWidget">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menuEditWidget="matMenu">
+                        <button mat-menu-item
+                            (click)="editWidget(ci, content.controls[ci].value.widgetData?.dataStep?.collection)">
+                            <mat-icon>edit</mat-icon>
+                            <span>{{'Edit' | translate}}</span>
                         </button>
-                        <mat-menu #menuEditWidget="matMenu">
-                            <button mat-menu-item (click)="editWidget(ci, content.controls[ci].value.widgetData?.dataStep?.collection)">
-                                <mat-icon>edit</mat-icon>
-                                <span>{{'Edit' | translate}}</span>
-                            </button>
-                            <button mat-menu-item (click)="deleteWidget(ci)">
-                                <mat-icon>delete</mat-icon>
-                                <span>{{'Delete' | translate}}</span>
-                            </button>
-                        </mat-menu>
-                        <div class="placeholder" *cdkDragPlaceholder></div>
+                        <button mat-menu-item (click)="deleteWidget(ci)">
+                            <mat-icon>delete</mat-icon>
+                            <span>{{'Delete' | translate}}</span>
+                        </button>
+                    </mat-menu>
+                    <div class="placeholder" *cdkDragPlaceholder></div>
                 </div>
                 <div class="add">
-                    <button  mat-stroked-button color="primary" [matTooltip]="'Add a widget' | translate" (click)="addWidget()">
+                    <button mat-stroked-button color="primary" [matTooltip]="'Add a widget' | translate"
+                        (click)="addWidget()">
                         <mat-icon>add</mat-icon>
                     </button>
-                    <button class="import" mat-stroked-button color="primary" [matTooltip]="'Import a widget' | translate" (click)="importWidget()">
+                    <button class="import" mat-stroked-button color="primary"
+                        [matTooltip]="'Import a widget' | translate" (click)="importWidget()">
                         <mat-icon>file_upload</mat-icon>
                     </button>
                 </div>
             </div>
         </div>
     </div>
-    
+
 </div>
