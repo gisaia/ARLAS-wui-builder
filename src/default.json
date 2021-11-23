@@ -300,6 +300,14 @@
             }
         }
     },
+    "resultlists": {
+        "dataStep": {
+            "searchSize": 100
+        },
+        "renderStep": {
+            "cellBackgroundStyle": "filled"
+        }
+    },
     "analytics": {
         "tabs": {
             "default": "Default",

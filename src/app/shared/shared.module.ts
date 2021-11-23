@@ -71,6 +71,7 @@ import { StartupService } from '@services/startup/startup.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTreeModule } from '@angular/material';
 import { FiltersComponent } from '@map-config/components/filters/filters.component';
+import { CollectionsUnitsComponent } from '@look-and-feel-config/components/collections-units/collections-units.component';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -90,7 +91,8 @@ export function createTranslateLoader(http: HttpClient) {
     ConfigFormControlComponent,
     InputModalComponent,
     ConfigFormGroupArrayComponent,
-    FiltersComponent
+    FiltersComponent,
+    CollectionsUnitsComponent
   ],
   imports: [
     ArlasToolkitSharedModule,

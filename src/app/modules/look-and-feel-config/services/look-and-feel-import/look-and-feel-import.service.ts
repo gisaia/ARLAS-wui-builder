@@ -23,6 +23,7 @@ import {
 } from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
 import { importElements } from '@services/main-form-manager/tools';
 import { Config } from '@services/main-form-manager/models-config';
+import { FormArray } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +42,25 @@ export class LookAndFeelImportService {
 
     if (configOptions) {
 
+      /** retrocompatibility code */
+
+      const appConfig = config['arlas-wui'].web.app;
+      if (appConfig.unit) {
+        if (!appConfig.units) {
+          appConfig.units = [];
+        }
+        appConfig.units.push({
+          unit: appConfig.unit,
+          collection: config.arlas.server.collection.name
+        });
+      }
+      if (appConfig.units) {
+        const units = new FormArray([]);
+        appConfig.units.forEach((u, i) => {
+          units.insert(i, globalLookAndFeelFg.buildCollectioUnitForm(u.collection, u.unit));
+        });
+        globalLookAndFeelFg.customControls.units.setValue(units);
+      }
       importElements([
         {
           value: configOptions.drag_items,
@@ -53,10 +73,6 @@ export class LookAndFeelImportService {
         {
           value: configOptions.indicators,
           control: globalLookAndFeelFg.customControls.indicators
-        },
-        {
-          value: config['arlas-wui'].web.app.unit,
-          control: globalLookAndFeelFg.customControls.appUnit
         }
       ]);
 

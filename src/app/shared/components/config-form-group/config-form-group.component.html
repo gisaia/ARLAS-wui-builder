@@ -84,6 +84,7 @@
                     </app-config-form-group>
                 </div>
                 <div *ngIf="isFormGroupArray(control); let formGroupArray">
+                    form array
                     <app-config-form-group-array [configFormGroupArray]="formGroupArray"  [defaultKey]="defaultKey"
                         isSubGroup="true">
                     </app-config-form-group-array>
