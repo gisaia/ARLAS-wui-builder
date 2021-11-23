@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
@@ -30,19 +30,20 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { ConfigMapExportHelper, VISIBILITY } from '@services/main-form-manager/config-map-export-helper';
 import { Config } from '@services/main-form-manager/models-config';
-import { Layer as LayerMap} from '@services/main-form-manager/models-map-config';
+import { Layer as LayerMap } from '@services/main-form-manager/models-map-config';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
 import { StartupService } from '@services/startup/startup.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { camelize } from '@utils/tools';
-import { MapglLegendComponent, VisualisationSetConfig } from 'arlas-web-components';
+import { MapglLegendComponent, VisualisationSetConfig, LayerMetadata } from 'arlas-web-components';
 import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService } from 'arlas-wui-toolkit';
 import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
 import { Subscription } from 'rxjs';
 import { PreviewComponent } from '../preview/preview.component';
 import { MapContributor } from 'arlas-web-contributors';
-import { FillStroke, LayerMetadata } from 'arlas-web-components';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 
 export interface Layer {
   id: string;
@@ -61,13 +62,17 @@ export class LayersComponent implements OnInit, OnDestroy {
   public layersFa: FormArray;
   public visualisationSetFa: FormArray;
 
-  public layerLegend: Map<string, { layer: any, colorLegend: any, strokeColorLegend: any, lineDashArray: any}> = new Map();
+  public layerLegend: Map<string, { layer: any, colorLegend: any, strokeColorLegend: any, lineDashArray: any }> = new Map();
 
   public layerVs: Map<string, string[]> = new Map();
 
   private previewSub: Subscription;
   private confirmDeleteSub: Subscription;
   public toUnsubscribe: Array<Subscription> = [];
+
+  public dataSource: MatTableDataSource<any>;
+
+  @ViewChild(MatSort, { static: true }) public sort: MatSort;
 
   constructor(
     protected mainFormService: MainFormService,
@@ -94,9 +99,11 @@ export class LayersComponent implements OnInit, OnDestroy {
       const exportedLayer = this.getLayer(layer, modeValues, paint, layer.collection, this.colorService, taggableFields);
       this.layerLegend.set(
         layer.arlasId + '#' + layer.mode,
-        { layer: exportedLayer,
+        {
+          layer: exportedLayer,
           colorLegend: this.getColorLegend(paint),
-          strokeColorLegend: this.getStrokeColorLegend(paint, exportedLayer.metadata), lineDashArray: this.getLineDashArray(paint) }
+          strokeColorLegend: this.getStrokeColorLegend(paint, exportedLayer.metadata), lineDashArray: this.getLineDashArray(paint)
+        }
       );
 
       const includeIn = [];
@@ -108,12 +115,42 @@ export class LayersComponent implements OnInit, OnDestroy {
 
       this.layerVs.set(layer.arlasId, includeIn);
     });
+    this.dataSource = new MatTableDataSource(this.layersFa.value);
+    this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = (data, filter: string) => {
+      const dataStr = Object.keys(data)
+        .reduce(
+          (currentTerm: string, key: string) => {
+            let value = (data as { [key: string]: any })[key];
+            if (key === 'visualisation') {
+              value = (data as { [key: string]: any })[key].filter(vs => vs.include).map(vs => vs.name).join(' ');
+            }
+            // Use an obscure Unicode character to delimit the words in the concatenated string.
+            // This avoids matches where the values of two columns combined will match the user's query
+            // (e.g. `Flute` and `Stop` will match `Test`). The character is intended to be something
+            // that has a very low chance of being typed in by somebody in a text field. This one in
+            // particular is "White up-pointing triangle with dot" from
+            // https://en.wikipedia.org/wiki/List_of_Unicode_characters
+            return currentTerm + value + '◬';
+          },
+          ''
+        )
+        .toLowerCase();
+
+      // Transform the filter by converting it to lowercase and removing whitespace.
+      const transformedFilter = filter.trim().toLowerCase();
+      return dataStr.indexOf(transformedFilter) !== -1;
+    };
   }
 
   public ngOnDestroy() {
     if (this.confirmDeleteSub) { this.confirmDeleteSub.unsubscribe(); }
     if (this.previewSub) { this.previewSub.unsubscribe(); }
     this.toUnsubscribe.forEach(u => u.unsubscribe());
+  }
+
+  public applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   public getLayer(layerFg, modeValues, paint, collection: string, colorService, taggableFields) {
@@ -233,8 +270,10 @@ export class LayersComponent implements OnInit, OnDestroy {
       this.colorService, taggableFields);
     this.layerLegend.set(
       newId + '#' + newLayerFg.customControls.mode.value,
-      { layer: exportedLayer, colorLegend: this.getColorLegend(paint),
-        strokeColorLegend: this.getStrokeColorLegend(paint, exportedLayer.metadata), lineDashArray: this.getLineDashArray(paint)}
+      {
+        layer: exportedLayer, colorLegend: this.getColorLegend(paint),
+        strokeColorLegend: this.getStrokeColorLegend(paint, exportedLayer.metadata), lineDashArray: this.getLineDashArray(paint)
+      }
     );
     newLayerFg.markAsPristine();
     /** listen to all the ondepencychnage to correctly initiate the controls */
@@ -364,8 +403,10 @@ export class LayersComponent implements OnInit, OnDestroy {
           collection, this.colorService, taggableFields);
         this.layerLegend.set(
           newId + '#' + layerFg.customControls.mode.value,
-          { layer: exportedLayer, colorLegend: this.getColorLegend(paint),
-            strokeColorLegend: this.getStrokeColorLegend(paint, exportedLayer.metadata), lineDashArray: this.getLineDashArray(paint)}
+          {
+            layer: exportedLayer, colorLegend: this.getColorLegend(paint),
+            strokeColorLegend: this.getStrokeColorLegend(paint, exportedLayer.metadata), lineDashArray: this.getLineDashArray(paint)
+          }
         );
         layerFg.markAsPristine();
 

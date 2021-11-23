@@ -48,6 +48,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSortModule } from '@angular/material/sort';
 
 // other libs imports
 import { ColorPickerModule } from 'ngx-color-picker';
@@ -176,7 +177,8 @@ export function createTranslateLoader(http: HttpClient) {
     MatMenuModule,
     MatCheckboxModule,
     MatTreeModule,
-    TranslateModule
+    TranslateModule,
+    MatSortModule
   ]
 })
 export class SharedModule {
