@@ -17,9 +17,13 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit } from '@angular/core';
+import { FormArray } from '@angular/forms';
 import {
+  CollectionUnitFormGroup,
   LookAndFeelGlobalFormGroup
 } from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { MainFormService } from '@services/main-form/main-form.service';
 
 @Component({
@@ -29,15 +33,57 @@ import { MainFormService } from '@services/main-form/main-form.service';
 })
 export class GlobalLookAndFeelComponent implements OnInit {
 
-  public globalFg: LookAndFeelGlobalFormGroup;
-
+  public lookAndFeelFg: LookAndFeelGlobalFormGroup;
+  public unitsFg: FormArray;
+  public collections: string [];
+  public collectionUnitMap = new Map<string, string>();
   constructor(
-    private mainFormService: MainFormService
+    private mainFormService: MainFormService,
+    private collectionService: CollectionService
   ) {
-    this.globalFg = this.mainFormService.lookAndFeelConfig.getGlobalFg();
+    this.lookAndFeelFg = this.mainFormService.lookAndFeelConfig.getGlobalFg();
   }
 
   public ngOnInit() {
+    const startingConfig = this.mainFormService.startingConfig.getFg();
+    const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
+    const mapConfigLayers = this.mainFormService.mapConfig.getLayersFa();
+    const timelineConfigGlobal = this.mainFormService.timelineConfig.getGlobalFg();
+    const searchConfigGlobal = this.mainFormService.searchConfig.getGlobalFg();
+    const analyticsConfigList = this.mainFormService.analyticsConfig.getListFa();
+    const resultLists = this.mainFormService.resultListConfig.getResultListsFa();
+    const configuredCollections = ConfigExportHelper.getConfiguredCollections(
+      startingConfig,
+      mapConfigGlobal,
+      mapConfigLayers,
+      searchConfigGlobal,
+      timelineConfigGlobal,
+      analyticsConfigList,
+      resultLists,
+      this.collectionService
+
+    );
+    /** keeping formarray order */
+    const formArrayCollections = (this.lookAndFeelFg.customControls.units.value as FormArray).controls.map(control =>
+      (control as CollectionUnitFormGroup).customControls.collection.value
+    );
+    const collectionsSet = new Set(configuredCollections);
+    const formSetCollections = new Set(formArrayCollections);
+    const orderedCollections = [];
+    formArrayCollections.forEach(fc => {
+      if (collectionsSet.has(fc)) {
+        orderedCollections.push(fc);
+      }
+    });
+    /** add newly confiured collections at the end */
+    configuredCollections.forEach(c => {
+      if (!formSetCollections.has(c)) {
+        orderedCollections.push(c);
+      }
+    });
+    this.unitsFg = this.lookAndFeelFg.buildUnits(orderedCollections);
+    this.lookAndFeelFg.customControls.units.setValue(this.unitsFg);
+    this.collections = configuredCollections;
   }
 
 }

@@ -23,8 +23,7 @@ import { GlobalLookAndFeelComponent } from './components/global-look-and-feel/gl
 
 @NgModule({
   declarations: [
-    GlobalLookAndFeelComponent
-  ],
+    GlobalLookAndFeelComponent  ],
   imports: [
     LookAndFeelConfigRoutingModule,
     SharedModule

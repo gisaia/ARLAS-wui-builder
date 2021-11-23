@@ -232,10 +232,10 @@
 	"Tooltip field description": "Field used as tooltip for a tile",
 	"Transformation tooltip": "Transform the tooltip",
 	"Transformation tooltip description": "Apply a transformation to the tooltip in javascript. e.g : (result  + '').toLowerCase(). 'result' being the javascript variable to transform",
-	"Thumbnail url": "Thumbnail field",
-	"Thumbnail url description": "Field which value indicates whether there is a thumbnail image for a row (tile) or not",
-	"Image url": "Image field",
-	"Image url description": "Field which value indicates whether there is a image for a row (tile) or not",
+	"Thumbnail url": "Thumbnail url",
+	"Thumbnail url description": "Url of the thumbnail. \n You can use templating with the '{}' characters, by putting a field name in it. \n Press the 'Insert field to Url' button and find all the fields in the data collection that you can insert into the Url. \n For example: http://my_thumbnail_service/{id} .",
+	"Image url": "Image url",
+	"Image url description": "Url of the image. \n You can use templating with the '{}' characters, by putting a field name in it. \n Press the 'Insert field to Url' button and find all the fields in the data collection that you can insert into the Url. \n For example: http://my_image_service/{id} .",
 	"Color identifier": "Color identifier",
 	"Color identifier description": "Field which value is transformed to a color and used as color for the icon",
 	"Visualisation url service title": "Visualisation url service",
@@ -625,5 +625,12 @@
 	"Fixed strokeOpacity": "Stroke opacity",
 	"Fixed strokeColor": "Stroke color",
 	"Invalid dashboard name": "Invalid dashboard name",
-	"Another dashboad already exists with the same name, please choose another one": "Another dashboad already exists with the same name, please choose another one"
+	"Another dashboad already exists with the same name, please choose another one": "Another dashboad already exists with the same name, please choose another one",
+	"collection unit description": "Give a unit to each configured collection. Each unit will appear next to the corresponding Count in the exploration app.",
+	"collection unit": "unit",
+	"Units": "Units",
+	"Insert field to URL": "Insert field to Url",
+	"url field": "Field to insert",
+	"Insert": "Insert"
+
 }

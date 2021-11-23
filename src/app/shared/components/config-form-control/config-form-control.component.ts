@@ -22,11 +22,11 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import {
-  ButtonFormControl, ButtonToggleFormControl, ColorFormControl, ColorPreviewFormControl,
+  ButtonFormControl, ButtonToggleFormControl, CollectionsUnitsControl, ColorFormControl, ColorPreviewFormControl,
   ComponentFormControl, ConfigFormControl, FieldWithSizeListFormControl, HiddenFormControl,
   HuePaletteFormControl, IconFormControl, InputFormControl, MapFiltersControl, MetricWithFieldListFormControl,
   MultipleSelectFormControl, OrderedSelectFormControl, SelectFormControl, SliderFormControl, SlideToggleFormControl,
-  TextareaFormControl, TitleInputFormControl, TypedSelectFormControl, VisualisationCheckboxFormControl
+  TextareaFormControl, TitleInputFormControl, TypedSelectFormControl, UrlTemplateControl, VisualisationCheckboxFormControl
 } from '@shared-models/config-form';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Subject } from 'rxjs';
@@ -211,6 +211,10 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
     return Object.getPrototypeOf(this.control) === MapFiltersControl.prototype ? this.control as MapFiltersControl : null;
   }
 
+  public isCollectionsUnits(): CollectionsUnitsControl | null {
+    return Object.getPrototypeOf(this.control) === CollectionsUnitsControl.prototype ? this.control as CollectionsUnitsControl : null;
+  }
+
   public isMetricWithFieldList(): MetricWithFieldListFormControl | null {
     return Object.getPrototypeOf(this.control) === MetricWithFieldListFormControl.prototype ?
       this.control as MetricWithFieldListFormControl : null;
@@ -219,6 +223,11 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   public isFieldWithSizeList(): FieldWithSizeListFormControl | null {
     return Object.getPrototypeOf(this.control) === FieldWithSizeListFormControl.prototype ?
       this.control as FieldWithSizeListFormControl : null;
+  }
+
+  public isUrlTemplate(): UrlTemplateControl | null {
+    return Object.getPrototypeOf(this.control) === UrlTemplateControl.prototype ?
+    this.control as UrlTemplateControl : null;
   }
 
   public isTextarea(): TextareaFormControl | null {

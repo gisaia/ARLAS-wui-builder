@@ -25,7 +25,8 @@ import {
   HiddenFormControl,
   ComponentFormControl,
   TitleInputFormControl,
-  ButtonFormControl
+  ButtonFormControl,
+  UrlTemplateControl
 } from '@shared-models/config-form';
 import { FormArray, Validators, FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -86,7 +87,9 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
             '',
             undefined,
             {
+              dependsOn: () => [this.customControls.dataStep.collection],
               onDependencyChange: (control) => {
+                this.setCollection(this.customControls.dataStep.collection.value);
                 collectionService.getDescribe(this.collection).subscribe(d => {
                   control.setValue(d.params.id_path);
                 });
@@ -171,22 +174,22 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                 optional: true
               }
             ),
-            thumbnailUrl: new SelectFormControl(
+            thumbnailUrl: new UrlTemplateControl(
               '',
               marker('Thumbnail url'),
               marker('Thumbnail url description'),
-              true,
-              toOptionsObs(collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD)),
+              collectionService.getCollectionFields(collection),
+              false,
               {
                 optional: true
               }
             ),
-            imageUrl: new SelectFormControl(
+            imageUrl: new UrlTemplateControl(
               '',
               marker('Image url'),
               marker('Image url description'),
+              collectionService.getCollectionFields(collection),
               true,
-              toOptionsObs(collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD)),
               {
                 optional: true
               }
@@ -206,7 +209,7 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
         }).withTabName(marker('Render')),
         zactionStep: new ConfigFormGroup({
           visualisationLink : new InputFormControl(
-            'Visualisation url service',
+            '',
             marker('Visualisation url service title'),
             marker('Visualisation url service description'),
             'text',
@@ -216,7 +219,7 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
             }
           ),
           downloadLink : new InputFormControl(
-            'Download url service',
+            '',
             marker('Download url service title'),
             marker('Download url service description'),
             'text',
@@ -273,8 +276,8 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
         tileLabelFieldProcess: this.get('renderStep.gridStep.tileLabelFieldProcess') as TextareaFormControl,
         tooltipField: this.get('renderStep.gridStep.tooltipField') as SelectFormControl,
         tooltipFieldProcess: this.get('renderStep.gridStep.tooltipFieldProcess') as TextareaFormControl,
-        thumbnailUrl: this.get('renderStep.gridStep.thumbnailUrl') as SelectFormControl,
-        imageUrl: this.get('renderStep.gridStep.imageUrl') as SelectFormControl,
+        thumbnailUrl: this.get('renderStep.gridStep.thumbnailUrl') as UrlTemplateControl,
+        imageUrl: this.get('renderStep.gridStep.imageUrl') as UrlTemplateControl,
         colorIdentifier: this.get('renderStep.gridStep.colorIdentifier') as SelectFormControl
       }
     },

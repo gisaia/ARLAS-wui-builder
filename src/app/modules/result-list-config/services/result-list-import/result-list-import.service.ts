@@ -101,11 +101,11 @@ export class ResultListImportService {
         control: renderStep.gridStep.tooltipFieldProcess
       },
       {
-        value: contributor.fieldsConfiguration.thumbnailFieldName,
+        value: contributor.fieldsConfiguration.urlThumbnailTemplate,
         control: renderStep.gridStep.thumbnailUrl
       },
       {
-        value: contributor.fieldsConfiguration.imageFieldName,
+        value: contributor.fieldsConfiguration.urlImageTemplate,
         control: renderStep.gridStep.imageUrl
       },
       {

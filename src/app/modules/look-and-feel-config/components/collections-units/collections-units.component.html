@@ -1,0 +1,22 @@
+<div class="collections-list" *ngIf="!!unitsArray">
+    <div class="collections-container" cdkDropList (cdkDropListDropped)="drop($event)">
+      <div cdkDrag  *ngFor="let c of unitsArray.controls">
+        <div class="collection-line" cdkDragHandle>
+
+          <div class="draghandle">
+            <mat-icon>drag_indicator</mat-icon>
+            <div class="collection">
+              {{c.controls.collection.value}}
+            </div>
+          </div>
+          <div class="unit">
+            <mat-form-field>
+              <input matInput [formControl]="c.controls.unit" [placeholder]="c.controls.unit.label | translate"
+                  [type]="c.controls.unit.inputType" [required]="!c.controls.unit.optional">
+          </mat-form-field>
+          </div>
+        </div>
+
+    </div>
+    </div>
+</div>

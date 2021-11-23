@@ -280,6 +280,48 @@
     </mat-error>
 </div>
 
+
+<div *ngIf="isUrlTemplate(); let typedControl" class="url-field-form-control">
+    <div>
+        <div class="action-container">
+            <mat-form-field [style.width]="typedControl.width ? typedControl.width : 'unset' ">
+                <mat-label>{{ typedControl.label | translate}}</mat-label>
+                <input matInput [formControl]="typedControl" [type]="'text'" [required]="!typedControl.optional"
+                    [appResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
+                    [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
+            </mat-form-field>
+            <div class="field-insert-container">
+                <div class="field-container" *ngIf="!typedControl?.showInsertButton">
+                    <mat-form-field>
+                        <mat-label>{{'url field' | translate}}</mat-label>
+                        <input type="text" matInput [matAutocomplete]="auto" #autocompleteInput
+                            [formControl]="typedControl.fieldCtrl">
+
+                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                            <mat-option *ngFor="let opt of typedControl.autocompleteFilteredFields" [value]="opt.value"
+                                [matTooltip]="opt.label | translate" [disabled]="opt.enabled === false">
+                                {{opt.label | translate}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="insert-container">
+                    <button type="button" mat-stroked-button *ngIf="typedControl?.showInsertButton"
+                        (click)="typedControl.showInsertButton = false">{{ 'Insert field to URL' | translate}}</button>
+                    <button type="button" mat-stroked-button *ngIf="!typedControl?.showInsertButton" class="insert"
+                    [disabled]="typedControl.fieldCtrl.invalid"
+                    (click)="typedControl.add()">{{ 'Insert' | translate}}</button>
+                    <button type="button" mat-stroked-button *ngIf="!typedControl?.showInsertButton"
+                    (click)="typedControl.showInsertButton = true">{{ 'Cancel' | translate}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <mat-error *ngIf="typedControl.touched && typedControl.invalid && typedControl?.errors?.required">
+        {{ 'At least one ' | translate}} {{typedControl.label | lowercase | translate}} {{ 'is required' | translate}}
+    </mat-error>
+</div>
+
 <div *ngIf="isInput(); let typedControl">
     <mat-form-field [style.width]="typedControl.width ? typedControl.width : 'unset' ">
         <mat-label>{{ typedControl.label | translate}}</mat-label>
@@ -340,6 +382,10 @@
 
 <div *ngIf="isMapFilters(); let typedControl" class="mapfilter-form-control">
     <app-layer-filters [layerFg]="parentFormGroup"></app-layer-filters>
+</div>
+
+<div *ngIf="isCollectionsUnits(); let typedControl" class="mapfilter-form-control">
+    <app-collections-units [unitsArray]="parentFormGroup"></app-collections-units>
 </div>
 
 <div *ngIf="isTextarea(); let typedControl" class="textarea-form-control">

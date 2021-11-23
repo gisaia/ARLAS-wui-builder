@@ -36,7 +36,8 @@ export interface Config {
                     chipssearch: ChipSearchConfig;
                 },
                 name: string,
-                unit: string,
+                unit?: string,
+                units?: {unit?: string, collection?: string}[],
                 name_background_color: string
             },
 
