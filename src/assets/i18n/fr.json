@@ -652,5 +652,7 @@
 	"Insert": "Insérer",
 	"Ignored collections": "Collections cachées",
 	"Hide collection": "Cacher la collection",
-	"Display collection": "Afficher la collection"
+	"Display collection": "Afficher la collection",
+	"fit thumbnail description": "Adapter l'étendue de l'aperçu à la tuile",
+	"fit thumbnail": "Adapter l'aperçu à la tuile"
 }

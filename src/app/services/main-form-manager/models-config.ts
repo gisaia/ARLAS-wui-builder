@@ -255,6 +255,7 @@ export interface AnalyticComponentResultListInputConfig extends AnalyticComponen
     detailWidth?: number;
     visualisationLink?: string;
     downloadLink?: string;
+    fitThumbnail?: boolean;
 
 }
 

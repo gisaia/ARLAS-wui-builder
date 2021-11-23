@@ -818,7 +818,7 @@ export class ConfigExportHelper {
                 contrib.includeMetadata = [];
                 const metadatas = new Set<string>();
                 Object.keys(widgetData.renderStep.gridStep).forEach(v => {
-                    if (!!widgetData.renderStep.gridStep[v]) {
+                    if (!!widgetData.renderStep.gridStep[v] && v !== 'fitThumbnail') {
                         metadatas.add(widgetData.renderStep.gridStep[v]);
                     }
                 });
@@ -878,7 +878,7 @@ export class ConfigExportHelper {
             contrib.includeMetadata = [];
             const metadatas = new Set<string>();
             Object.keys(list.renderStep.gridStep).forEach(v => {
-                if (!!list.renderStep.gridStep[v]) {
+                if (!!list.renderStep.gridStep[v] && v !== 'fitThumbnail') {
                     metadatas.add(list.renderStep.gridStep[v]);
                 }
             });
@@ -1147,6 +1147,7 @@ export class ConfigExportHelper {
                     nbGridColumns: unmanagedRenderFields.nbGridColumns,
                     defautMode: unmanagedRenderFields.defautMode,
                     displayFilters: !!widgetData.renderStep.displayFilters,
+                    fitThumbnail: !!widgetData.renderStep.gridStep.fitThumbnail,
                     hasGridMode: !!widgetData.renderStep.gridStep.thumbnailUrl,
                     visualisationLink: widgetData.zactionStep.visualisationLink,
                     downloadLink: widgetData.zactionStep.downloadLink,
