@@ -53,7 +53,11 @@ export class SideModulesImportService {
       {
         value: !!shareComponent ? shareComponent.geojson.sort_excluded_type : null,
         control: sideModulesGlobal.unmanagedFields.sortExcludedTypes
-      }
+      },
+      {
+        value: config.arlas.server.max_age_cache,
+        control: sideModulesGlobal.cache.maxAgeCache
+      },
     ]);
 
     importElements([

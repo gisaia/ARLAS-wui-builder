@@ -654,5 +654,8 @@
 	"Hide collection": "Cacher la collection",
 	"Display collection": "Afficher la collection",
 	"fit thumbnail description": "Adapter l'étendue de l'aperçu à la tuile",
-	"fit thumbnail": "Adapter l'aperçu à la tuile"
+	"fit thumbnail": "Adapter l'aperçu à la tuile",
+	"maxAgeCache": "Durée de cache ARLAS server",
+	"maxAgeCache description": "Durée de cache (secondes) des requêtes GET effectuées par ARLAS server"
+
 }
