@@ -51,15 +51,8 @@ $primary-color: mat-color($primary-palette);
 
             .icon {
                 width: 24px !important;
-
-                ::ng-deep .mat-form-field-flex {
-                    align-items: flex-end;
-                    width: 24px !important;
-
-                    .mat-form-field-prefix {
-                        margin-right: 5px;
-                    }
-                }
+                height: 24px;
+                display: flex;
             }
 
             ::ng-deep .mat-button-toggle-label-content {
@@ -121,13 +114,6 @@ $primary-color: mat-color($primary-palette);
                 }
             }
         }
-    }
-}
-
-::ng-deep .icon-picker {
-    top: 0 !important;
-    .icon-search {
-        display: none !important;
     }
 }
 
