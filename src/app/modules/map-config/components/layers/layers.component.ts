@@ -219,6 +219,7 @@ export class LayersComponent implements OnInit, OnDestroy {
           vs.layers = layers;
         });
         this.visualisationSetFa.setValue(visualisationSetValue);
+        this.dataSource = new MatTableDataSource(this.layersFa.value);
       }
     });
   }
