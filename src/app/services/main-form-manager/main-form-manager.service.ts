@@ -228,10 +228,6 @@ export class MainFormManagerService {
         control: startingConfigControls.colorGenerator
       },
       {
-        value: config.arlas.server.max_age_cache,
-        control: startingConfigControls.unmanagedFields.maxAgeCache
-      },
-      {
         value: config['arlas-wui'].web.app.name,
         control: startingConfigControls.unmanagedFields.appName
       },

@@ -2,7 +2,6 @@
     "global": {
         "serverUrl": "${ARLAS_SERVER_URL}",
         "unmanagedFields": {
-            "maxAgeCache": 120,
             "appName": "ARLAS",
             "appUnit": "",
             "appNameBackgroundColor": "#FF4081"
@@ -475,6 +474,7 @@
             "useShare": true,
             "useDownload": true,
             "useTagger": false,
+            "maxAgeCache": 120,
             "share": {
                 "maxForFeature": 5000,
                 "maxForTopology": 5000
