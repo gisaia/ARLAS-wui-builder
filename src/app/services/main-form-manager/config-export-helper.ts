@@ -161,7 +161,7 @@ export class ConfigExportHelper {
                 },
                 server: {
                     url: startingConfig.customControls.serverUrl.value,
-                    max_age_cache: startingConfig.customControls.unmanagedFields.maxAgeCache.value,
+                    max_age_cache: +sideModulesGlobal.customControls.cache.maxAgeCache.value,
                     collection: {
                         name: startingConfig.customControls.collection.value,
                     }
