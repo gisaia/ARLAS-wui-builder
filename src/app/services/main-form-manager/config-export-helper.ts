@@ -784,7 +784,6 @@ export class ConfigExportHelper {
                     iconColorFieldName: widgetData.renderStep.gridStep.colorIdentifier
                 };
                 if (widgetData.renderStep.gridStep.thumbnailUrl) {
-                    console.log(widgetData.renderStep.gridStep.thumbnailUrl)
                     fieldsConfig.urlThumbnailTemplate = widgetData.renderStep.gridStep.thumbnailUrl;
                 }
                 if (widgetData.renderStep.gridStep.imageUrl) {
