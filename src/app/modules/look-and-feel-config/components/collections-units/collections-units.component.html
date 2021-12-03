@@ -15,7 +15,7 @@
             </mat-form-field>
             <button mat-icon-button (click)="hide(c.controls.ignored)" [matTooltip]="'Hide collection' | translate">
               <mat-icon class="mat-icon-rtl-mirror">
-                visibility
+                south
               </mat-icon>
             </button>
           </div>
@@ -24,7 +24,7 @@
     </div>
 
     <div class="collections-container" cdkDropList (cdkDropListDropped)="drop($event)">
-      <div class="title" *ngIf="showTitle">{{'Ignored collections' | translate}}</div>
+      <div class="title">{{'Ignored collections' | translate}}</div>
       <div cdkDrag  *ngFor="let c of unitsArray.controls">
         <div class="collection-line" cdkDragHandle *ngIf="c.controls.ignored.value">
           <div class="draghandle">
@@ -36,7 +36,7 @@
           <div class="unit">
             <button mat-icon-button (click)="display(c.controls.ignored)" [matTooltip]="'Display collection' | translate">
               <mat-icon class="mat-icon-rtl-mirror">
-                upgrade
+                north
               </mat-icon>
             </button>
           </div>

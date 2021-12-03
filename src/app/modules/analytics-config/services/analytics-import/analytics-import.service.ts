@@ -647,10 +647,6 @@ export class AnalyticsImportService {
         control: renderStep.gridStep.thumbnailUrl
       },
       {
-        value: inputs.fitThumbnail,
-        control: renderStep.gridStep.fitThumbnail
-      },
-      {
         value: contributor.fieldsConfiguration.urlImageTemplate,
         control: renderStep.gridStep.imageUrl
       },
