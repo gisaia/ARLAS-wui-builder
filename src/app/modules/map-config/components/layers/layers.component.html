@@ -58,9 +58,8 @@
     </ng-container>
 
     <ng-container matColumnDef="zoom">
-        <th mat-header-cell *matHeaderCellDef>{{'Zoom' | translate}}</th>
-        <td mat-cell *matCellDef="let element">[ {{element[camelize(element.mode) + 'Fg'].visibilityStep.zoomMin}} -
-            {{element[camelize(element.mode) + 'Fg'].visibilityStep.zoomMax}} ]</td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Zoom' | translate}}</th>
+        <td mat-cell *matCellDef="let element">{{element.zoom}}</td>
     </ng-container>
 
     <ng-container matColumnDef="nbFeature">

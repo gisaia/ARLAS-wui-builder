@@ -114,7 +114,12 @@ export class LayersComponent implements OnInit, OnDestroy {
       });
 
       this.layerVs.set(layer.arlasId, includeIn);
+      layer.zoom = '[ ' + modeValues.visibilityStep.zoomMin + ' - ' + modeValues.visibilityStep.zoomMax + ' ]';
     });
+    this.initDataSource();
+  }
+
+  public initDataSource() {
     this.dataSource = new MatTableDataSource(this.layersFa.value);
     this.dataSource.sort = this.sort;
     this.dataSource.filterPredicate = (data, filter: string) => {
@@ -219,7 +224,7 @@ export class LayersComponent implements OnInit, OnDestroy {
           vs.layers = layers;
         });
         this.visualisationSetFa.setValue(visualisationSetValue);
-        this.dataSource = new MatTableDataSource(this.layersFa.value);
+        this.dataSource.data = this.layersFa.value;
       }
     });
   }

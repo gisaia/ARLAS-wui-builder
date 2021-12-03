@@ -34,7 +34,7 @@ export class MenuService {
       link: '/map-config',
       icon: 'map',
       tooltip: marker('Map'),
-      enabled: false,
+      enabled: true,
       control: this.mainFormService.mapConfig.control
     },
     {
