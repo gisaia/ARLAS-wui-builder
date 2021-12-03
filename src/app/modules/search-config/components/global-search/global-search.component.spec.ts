@@ -21,8 +21,6 @@ describe('GlobalSearchComponent', () => {
       mockProvider(CollectionService, {
         getCollectionFieldsNames: () => of([])
       }),
-      mockProvider(ArlasCollaborativesearchService),
-      mockProvider(AnalyticsInitService),
       mockProvider(MainFormService, {
         searchConfig: {
           getGlobalFg: () => new FormGroup({

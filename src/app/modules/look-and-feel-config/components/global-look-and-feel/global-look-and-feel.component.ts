@@ -52,38 +52,41 @@ export class GlobalLookAndFeelComponent implements OnInit {
     const searchConfigGlobal = this.mainFormService.searchConfig.getGlobalFg();
     const analyticsConfigList = this.mainFormService.analyticsConfig.getListFa();
     const resultLists = this.mainFormService.resultListConfig.getResultListsFa();
-    const configuredCollections = ConfigExportHelper.getConfiguredCollections(
-      startingConfig,
-      mapConfigGlobal,
-      mapConfigLayers,
-      searchConfigGlobal,
-      timelineConfigGlobal,
-      analyticsConfigList,
-      resultLists,
-      this.collectionService
+    if (startingConfig.customControls && mapConfigGlobal.customControls && timelineConfigGlobal.customControls
+        && searchConfigGlobal.customControls) {
+      const configuredCollections = ConfigExportHelper.getConfiguredCollections(
+        startingConfig,
+        mapConfigGlobal,
+        mapConfigLayers,
+        searchConfigGlobal,
+        timelineConfigGlobal,
+        analyticsConfigList,
+        resultLists,
+        this.collectionService
+      );
+      /** keeping formarray order */
+      const formArrayCollections = (this.lookAndFeelFg.customControls.units.value as FormArray).controls.map(control =>
+        (control as CollectionUnitFormGroup).customControls.collection.value
+      );
+      const collectionsSet = new Set(configuredCollections);
+      const formSetCollections = new Set(formArrayCollections);
+      const orderedCollections = [];
+      formArrayCollections.forEach(fc => {
+        if (collectionsSet.has(fc)) {
+          orderedCollections.push(fc);
+        }
+      });
+      /** add newly confiured collections at the end */
+      configuredCollections.forEach(c => {
+        if (!formSetCollections.has(c)) {
+          orderedCollections.push(c);
+        }
+      });
+      this.unitsFg = this.lookAndFeelFg.buildUnits(orderedCollections);
+      this.lookAndFeelFg.customControls.units.setValue(this.unitsFg);
+      this.collections = configuredCollections;
 
-    );
-    /** keeping formarray order */
-    const formArrayCollections = (this.lookAndFeelFg.customControls.units.value as FormArray).controls.map(control =>
-      (control as CollectionUnitFormGroup).customControls.collection.value
-    );
-    const collectionsSet = new Set(configuredCollections);
-    const formSetCollections = new Set(formArrayCollections);
-    const orderedCollections = [];
-    formArrayCollections.forEach(fc => {
-      if (collectionsSet.has(fc)) {
-        orderedCollections.push(fc);
-      }
-    });
-    /** add newly confiured collections at the end */
-    configuredCollections.forEach(c => {
-      if (!formSetCollections.has(c)) {
-        orderedCollections.push(c);
-      }
-    });
-    this.unitsFg = this.lookAndFeelFg.buildUnits(orderedCollections);
-    this.lookAndFeelFg.customControls.units.setValue(this.unitsFg);
-    this.collections = configuredCollections;
+    }
   }
 
 }

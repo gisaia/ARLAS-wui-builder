@@ -76,7 +76,6 @@ export class ConfigExportHelper {
         analyticsConfigList: FormArray,
         resultLists: FormArray,
         collectionService: CollectionService
-
         ): string[] {
         let contributors = this.getMapContributors(mapConfigGlobal, mapConfigLayers,
             startingConfig.customControls.collection.value, collectionService);
