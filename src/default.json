@@ -457,7 +457,6 @@
                         "nLastLines": 3,
                         "detailedGridHeight": 300,
                         "nbGridColumns": 3,
-                        "defautMode": "list",
                         "isBodyHidden": false,
                         "isGeoSortEnabled": true,
                         "selectedItemsEvent": null,

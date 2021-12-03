@@ -136,6 +136,11 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
             }
           ),
           gridStep: new ConfigFormGroup({
+            isDefaultMode: new SlideToggleFormControl(
+              false,
+              marker('List default mode'),
+              marker('List default mode description')
+            ),
             tileLabelField: new SelectFormControl(
               '',
               marker('Tile label'),
@@ -237,7 +242,6 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
             nLastLines: new FormControl(),
             detailedGridHeight: new FormControl(),
             nbGridColumns: new FormControl(),
-            defautMode: new FormControl(),
             isBodyHidden: new FormControl(),
             isAutoGeoSortActived: new FormControl(),
             selectedItemsEvent: new FormControl(),
@@ -272,6 +276,7 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
       isGeoSortActived: this.get('renderStep.isGeoSortActived') as SlideToggleFormControl,
       cellBackgroundStyle: this.get('renderStep.cellBackgroundStyle') as SelectFormControl,
       gridStep: {
+        isDefaultMode: this.get('renderStep.gridStep.isDefaultMode') as SlideToggleFormControl,
         tileLabelField: this.get('renderStep.gridStep.tileLabelField') as SelectFormControl,
         tileLabelFieldProcess: this.get('renderStep.gridStep.tileLabelFieldProcess') as TextareaFormControl,
         tooltipField: this.get('renderStep.gridStep.tooltipField') as SelectFormControl,
@@ -293,7 +298,6 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
         nLastLines: this.get('unmanagedFields.renderStep.nLastLines'),
         detailedGridHeight: this.get('unmanagedFields.renderStep.detailedGridHeight'),
         nbGridColumns: this.get('unmanagedFields.renderStep.nbGridColumns'),
-        defautMode: this.get('unmanagedFields.renderStep.defautMode'),
         isBodyHidden: this.get('unmanagedFields.renderStep.isBodyHidden'),
         isAutoGeoSortActived: this.get('unmanagedFields.renderStep.isAutoGeoSortActived'),
         selectedItemsEvent: this.get('unmanagedFields.renderStep.selectedItemsEvent'),
