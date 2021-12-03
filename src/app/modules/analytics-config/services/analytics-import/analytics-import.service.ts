@@ -627,6 +627,10 @@ export class AnalyticsImportService {
         control: dataStep.idFieldName
       },
       {
+        value: component.input.defautMode === 'grid',
+        control: renderStep.gridStep.isDefaultMode
+      },
+      {
         value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].fieldPath : '',
         control: renderStep.gridStep.tileLabelField
       },
@@ -752,10 +756,6 @@ export class AnalyticsImportService {
       {
         value: component.input.nbGridColumns,
         control: unmanagedRenderFields.nbGridColumns
-      },
-      {
-        value: component.input.defautMode,
-        control: unmanagedRenderFields.defautMode
       },
       {
         value: component.input.isBodyHidden,

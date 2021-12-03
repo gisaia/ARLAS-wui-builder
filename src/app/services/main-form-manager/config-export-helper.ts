@@ -818,7 +818,7 @@ export class ConfigExportHelper {
                 contrib.includeMetadata = [];
                 const metadatas = new Set<string>();
                 Object.keys(widgetData.renderStep.gridStep).forEach(v => {
-                    if (!!widgetData.renderStep.gridStep[v]) {
+                    if (!!widgetData.renderStep.gridStep[v] && v !== 'isDefaultMode') {
                         metadatas.add(widgetData.renderStep.gridStep[v]);
                     }
                 });
@@ -878,7 +878,7 @@ export class ConfigExportHelper {
             contrib.includeMetadata = [];
             const metadatas = new Set<string>();
             Object.keys(list.renderStep.gridStep).forEach(v => {
-                if (!!list.renderStep.gridStep[v]) {
+                if (!!list.renderStep.gridStep[v] && v !== 'isDefaultMode') {
                     metadatas.add(list.renderStep.gridStep[v]);
                 }
             });
@@ -1145,9 +1145,10 @@ export class ConfigExportHelper {
                     nLastLines: unmanagedRenderFields.nLastLines,
                     detailedGridHeight: unmanagedRenderFields.detailedGridHeight,
                     nbGridColumns: unmanagedRenderFields.nbGridColumns,
-                    defautMode: unmanagedRenderFields.defautMode,
                     displayFilters: !!widgetData.renderStep.displayFilters,
                     hasGridMode: !!widgetData.renderStep.gridStep.thumbnailUrl,
+                    defautMode: (!!widgetData.renderStep.gridStep.thumbnailUrl && !!widgetData.renderStep.gridStep.isDefaultMode) ?
+                        'grid' : 'list',
                     visualisationLink: widgetData.zactionStep.visualisationLink,
                     downloadLink: widgetData.zactionStep.downloadLink,
                     isBodyHidden: unmanagedRenderFields.isBodyHidden,
