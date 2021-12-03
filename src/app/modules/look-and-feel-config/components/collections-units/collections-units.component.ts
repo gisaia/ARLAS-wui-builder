@@ -33,11 +33,9 @@ export class CollectionsUnitsComponent implements OnInit {
   @Input() public collections: string[];
   @Input() public unitsArray: FormArray;
 
-  public showTitle = false;
   constructor() { }
 
   public ngOnInit() {
-    this.showTitle = this.unitsArray.controls.filter((c: CollectionUnitFormGroup) => c.customControls.ignored.value).length > 0;
 
   }
 
@@ -49,12 +47,10 @@ export class CollectionsUnitsComponent implements OnInit {
 
   public hide(c: SlideToggleFormControl): void {
     c.setValue(true);
-    this.showTitle = this.unitsArray.controls.filter((cu: CollectionUnitFormGroup) => cu.customControls.ignored.value).length > 0;
   }
 
   public display(c: SlideToggleFormControl): void {
     c.setValue(false);
-    this.showTitle = this.unitsArray.controls.filter((cu: CollectionUnitFormGroup) => cu.customControls.ignored.value).length > 0;
   }
 
 

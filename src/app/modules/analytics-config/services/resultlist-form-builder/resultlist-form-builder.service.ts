@@ -184,11 +184,6 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                 optional: true
               }
             ),
-            fitThumbnail: new SlideToggleFormControl(
-              true,
-              marker('fit thumbnail'),
-              marker('fit thumbnail description'),
-            ),
             imageUrl: new UrlTemplateControl(
               '',
               marker('Image url'),
@@ -282,7 +277,6 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
         tooltipField: this.get('renderStep.gridStep.tooltipField') as SelectFormControl,
         tooltipFieldProcess: this.get('renderStep.gridStep.tooltipFieldProcess') as TextareaFormControl,
         thumbnailUrl: this.get('renderStep.gridStep.thumbnailUrl') as UrlTemplateControl,
-        fitThumbnail: this.get('renderStep.gridStep.fitThumbnail') as SlideToggleFormControl,
         imageUrl: this.get('renderStep.gridStep.imageUrl') as UrlTemplateControl,
         colorIdentifier: this.get('renderStep.gridStep.colorIdentifier') as SelectFormControl
       }
