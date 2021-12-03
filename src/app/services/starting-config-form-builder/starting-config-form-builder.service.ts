@@ -34,7 +34,6 @@ export class StartingConfigFormGroup extends FormGroup {
       collection: new FormControl(null, [Validators.required]),
       colorGenerator: new FormControl(),
       unmanagedFields: new FormGroup({
-        maxAgeCache: new FormControl(),
         appName: new FormControl(),
         appNameBackgroundColor: new FormControl()
       })
@@ -46,7 +45,6 @@ export class StartingConfigFormGroup extends FormGroup {
     collection: this.get('collection'),
     colorGenerator: this.get('colorGenerator'),
     unmanagedFields: {
-      maxAgeCache: this.get('unmanagedFields.maxAgeCache'),
       appName: this.get('unmanagedFields.appName'),
       appNameBackgroundColor: this.get('unmanagedFields.appNameBackgroundColor'),
     },

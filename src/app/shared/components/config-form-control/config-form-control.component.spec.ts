@@ -9,6 +9,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FiltersComponent } from '@map-config/components/filters/filters.component';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionsUnitsComponent } from '@look-and-feel-config/components/collections-units/collections-units.component';
 
 describe('ConfigFormControlComponent', () => {
   let spectator: Spectator<ConfigFormControlComponent>;
@@ -22,7 +23,8 @@ describe('ConfigFormControlComponent', () => {
       ResetOnChangeDirective,
       AlertOnChangeDirective,
       MockComponent(ColorPickerWrapperComponent),
-      MockComponent(FiltersComponent)
+      MockComponent(FiltersComponent),
+      MockComponent(CollectionsUnitsComponent)
     ],
     providers: [
       mockProvider(ArlasColorGeneratorLoader),

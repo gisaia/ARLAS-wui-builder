@@ -17,6 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
+import { FormArray } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import {
@@ -24,9 +25,36 @@ import {
   SelectFormControl,
   SliderFormControl,
   SlideToggleFormControl,
-  InputFormControl
+  InputFormControl,
+  CollectionsUnitsControl
 } from '@shared-models/config-form';
 
+
+export class CollectionUnitFormGroup extends ConfigFormGroup {
+  constructor() {
+    super({
+      unit: new InputFormControl(
+        '',
+        'collection unit',
+        'Unit desc'
+      ),
+      collection: new InputFormControl(
+        '',
+        'collection',
+        'collection desc'
+      ),
+      ignored: new SlideToggleFormControl(false,
+        '',
+        '')
+    });
+  }
+
+  public customControls = {
+    unit: this.get('unit') as InputFormControl,
+    collection: this.get('collection') as InputFormControl,
+    ignored: this.get('ignored') as SlideToggleFormControl
+  };
+}
 export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
 
   constructor(
@@ -84,18 +112,21 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
               this.customControls.spinner.value ? control.enable() : control.disable()
           }
         ),
-        appUnit: new InputFormControl(
+        units: new CollectionsUnitsControl(
+          new FormArray([], []),
           '',
-          marker('App unit'),
-          marker('App unit description'),
-          'text',
+          marker('collection unit description'),
+
           {
-            optional: true
+            title: marker('Units'),
+            optional: true,
           }
         ),
       }
     );
   }
+
+
 
   public customControls = {
     dragAndDrop: this.get('dragAndDrop') as SlideToggleFormControl,
@@ -104,8 +135,50 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
     spinner: this.get('spinner') as SlideToggleFormControl,
     spinnerColor: this.get('spinnerColor') as SelectFormControl,
     spinnerDiameter: this.get('spinnerDiameter') as SliderFormControl,
-    appUnit: this.get('appUnit') as InputFormControl
+    units: this.get('units') as CollectionsUnitsControl
   };
+
+  public collectionUnitMap = new Map();
+  public collectionIgnoredMap = new Map();
+  public ignoredCollections = new Map();
+
+  public buildUnits(collections): FormArray {
+    const collectionsUnits = new FormArray([]);
+    const values = this.customControls.units.value as FormArray;
+    if (!!values && values.controls) {
+      values.controls.forEach((cu: CollectionUnitFormGroup) => {
+        if (cu.customControls.unit.value) {
+          this.collectionUnitMap.set(cu.customControls.collection.value, cu.customControls.unit.value);
+          this.collectionIgnoredMap.set(cu.customControls.collection.value, cu.customControls.ignored.value);
+        }
+      });
+    }
+    collections.forEach((collection, i) => {
+      let collectionUnitForm = values.controls
+        .find((v: CollectionUnitFormGroup) => v.customControls.collection.value === collection) as CollectionUnitFormGroup;
+      if (!collectionUnitForm) {
+        collectionUnitForm = new CollectionUnitFormGroup();
+        collectionUnitForm.customControls.collection.setValue(collection);
+        if (this.collectionUnitMap.get(collection)) {
+          collectionUnitForm.customControls.unit.setValue(this.collectionUnitMap.get(collection));
+          collectionUnitForm.customControls.ignored.setValue(this.collectionIgnoredMap.get(collection));
+        } else {
+          collectionUnitForm.customControls.unit.setValue(collection);
+          collectionUnitForm.customControls.ignored.setValue(false);
+        }
+      }
+      collectionsUnits.insert(i, collectionUnitForm);
+    });
+    return collectionsUnits;
+  }
+
+  public buildCollectioUnitForm(collection: string, unit: string, ignored: boolean): CollectionUnitFormGroup {
+    const collectionUnitForm = new CollectionUnitFormGroup();
+    collectionUnitForm.customControls.unit.setValue(unit);
+    collectionUnitForm.customControls.collection.setValue(collection);
+    collectionUnitForm.customControls.ignored.setValue(ignored);
+    return collectionUnitForm;
+  }
 }
 
 
