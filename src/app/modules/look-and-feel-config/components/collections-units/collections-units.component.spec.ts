@@ -11,9 +11,7 @@ describe('CollectionsUnitsComponent', () => {
     component: CollectionsUnitsComponent,
     declarations: [
     ],
-    providers: [
-      
-    ]
+    providers: []
   });
 
   beforeEach(() => spectator = createComponent({
