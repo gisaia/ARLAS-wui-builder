@@ -656,6 +656,6 @@
 	"fit thumbnail description": "Adapter l'étendue de l'aperçu à la tuile",
 	"fit thumbnail": "Adapter l'aperçu à la tuile",
 	"maxAgeCache": "Durée de cache ARLAS server",
-	"maxAgeCache description": "Durée de cache (secondes) des requêtes GET effectuées par ARLAS server"
-
+	"maxAgeCache description": "Durée de cache (secondes) des requêtes GET effectuées par ARLAS server",
+	"Data tables are out of analytics": "Les tableaux de données doivent maintenant être déclarés dans le menu dédié (à gauche), en dehors de ce tableau de bord."
 }
