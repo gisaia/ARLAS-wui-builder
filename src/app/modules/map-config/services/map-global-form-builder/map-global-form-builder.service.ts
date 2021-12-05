@@ -25,7 +25,7 @@ import { Expression } from 'arlas-api';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { toGeoOptionsObs } from '@services/collection-service/tools';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { CollectionField } from '@services/collection-service/models';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
@@ -150,13 +150,24 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
 }
 
 export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
-  constructor(collection: string, geometryPath: string, idPath: string, collectionFields: Observable<Array<CollectionField>>,
+  constructor(
+    collection: string,
+    geometryPath: string,
+    idPath: string,
+    collectionFields: Observable<Array<CollectionField>>,
+    collectionService: CollectionService
   ) {
     super({
-      collection: new InputFormControl(
-        { value: collection, disabled: true },
-        marker('Main collection'),
-        ''
+      collection: new SelectFormControl(
+        collection,
+        marker('Collection'),
+        marker('Layer collection description'),
+        false,
+        collectionService.getCollectionsWithCentroid().map(c => ({ label: c, value: c })),
+        {
+          optional: false,
+          resetDependantsOnChange: true
+        }
       ),
       requestGeom: new SelectFormControl(
         geometryPath,
@@ -164,13 +175,27 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
         marker('Geographical field description'),
         true,
         toGeoOptionsObs(collectionFields),
+        {
+          dependsOn:  () => [this.customControls.collection],
+          onDependencyChange: (control: SelectFormControl) => {
+            if (this.customControls.collection.value) {
+              toGeoOptionsObs(collectionService
+                .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
+                  control.setSyncOptions(collectionFs);
+                });
+            }
+          }
+        }
       ),
       idPath: new HiddenFormControl(
         idPath,
         null,
         {
+          dependsOn:  () => [this.customControls.collection],
           onDependencyChange: (control) => {
-            control.setValue(idPath);
+            if (!!this.customControls.collection.value) {
+              control.setValue(collectionService.collectionParamsMap.get(this.customControls.collection.value).params.id_path);
+            }
           },
           optional: false
         }
@@ -179,7 +204,7 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
   }
 
   public customControls = {
-    collection: this.get('collection') as InputFormControl,
+    collection: this.get('collection') as SelectFormControl,
     requestGeom: this.get('requestGeom') as SelectFormControl
   };
 }
@@ -203,10 +228,17 @@ export class MapGlobalFormBuilderService {
   }
 
   public buildRequestGeometry(collection: string, geometryPath: string, idPath: string) {
-    const collectionFields = this.collectionService.getCollectionFields(
-      this.mainFormService.getMainCollection()
-    );
-    return new MapGlobalRequestGeometryFormGroup(collection, geometryPath, idPath, collectionFields);
+    if (!geometryPath) {
+      collection = undefined;
+      idPath = undefined;
+    }
+    let collectionFields = of([]);
+    if (!!collection) {
+      collectionFields = this.collectionService.getCollectionFields(
+        collection
+      );
+    }
+    return new MapGlobalRequestGeometryFormGroup(collection, geometryPath, idPath, collectionFields, this.collectionService);
   }
 
 }

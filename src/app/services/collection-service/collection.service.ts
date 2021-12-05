@@ -58,6 +58,10 @@ export class CollectionService {
     return this.collections;
   }
 
+  public getCollectionsWithCentroid(): string[] {
+    return this.getCollections().filter(c => !!this.collectionParamsMap.get(c) && !!this.collectionParamsMap.get(c).params.centroid_path);
+  }
+
   public setCollections(collections: string[]): void {
     this.collections = collections;
   }
@@ -102,7 +106,6 @@ export class CollectionService {
       this.collectionsDescriptions.set(collection, describe);
       describe.subscribe(cd => {
         this.collectionParamsMap.set(collection, cd);
-
       });
 
       return describe;

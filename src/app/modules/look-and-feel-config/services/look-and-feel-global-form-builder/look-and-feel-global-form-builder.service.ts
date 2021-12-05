@@ -19,7 +19,9 @@ under the License.
 import { Injectable } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { CollectionService } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { MainFormService } from '../../../../services/main-form/main-form.service';
 import {
   ConfigFormGroup,
   SelectFormControl,
@@ -28,6 +30,7 @@ import {
   InputFormControl,
   CollectionsUnitsControl
 } from '@shared-models/config-form';
+import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 
 
 export class CollectionUnitFormGroup extends ConfigFormGroup {
@@ -58,6 +61,8 @@ export class CollectionUnitFormGroup extends ConfigFormGroup {
 export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
 
   constructor(
+    private mainFormService: MainFormService,
+    private collectionService: CollectionService
   ) {
     super(
       {
@@ -179,6 +184,49 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
     collectionUnitForm.customControls.ignored.setValue(ignored);
     return collectionUnitForm;
   }
+
+  public buildAtExport() {
+    const startingConfig = this.mainFormService.startingConfig.getFg();
+    const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
+    const mapConfigLayers = this.mainFormService.mapConfig.getLayersFa();
+    const timelineConfigGlobal = this.mainFormService.timelineConfig.getGlobalFg();
+    const searchConfigGlobal = this.mainFormService.searchConfig.getGlobalFg();
+    const analyticsConfigList = this.mainFormService.analyticsConfig.getListFa();
+    const resultLists = this.mainFormService.resultListConfig.getResultListsFa();
+    if (startingConfig.customControls && mapConfigGlobal.customControls && timelineConfigGlobal.customControls
+        && searchConfigGlobal.customControls) {
+      const configuredCollections = ConfigExportHelper.getConfiguredCollections(
+        startingConfig,
+        mapConfigGlobal,
+        mapConfigLayers,
+        searchConfigGlobal,
+        timelineConfigGlobal,
+        analyticsConfigList,
+        resultLists,
+        this.collectionService
+      );
+      /** keeping formarray order */
+      const formArrayCollections = (this.customControls.units.value as FormArray).controls.map(control =>
+        (control as CollectionUnitFormGroup).customControls.collection.value
+      );
+      const collectionsSet = new Set(configuredCollections);
+      const formSetCollections = new Set(formArrayCollections);
+      const orderedCollections = [];
+      formArrayCollections.forEach(fc => {
+        if (collectionsSet.has(fc)) {
+          orderedCollections.push(fc);
+        }
+      });
+      /** add newly confiured collections at the end */
+      configuredCollections.forEach(c => {
+        if (!formSetCollections.has(c)) {
+          orderedCollections.push(c);
+        }
+      });
+      const unitsFg = this.buildUnits(orderedCollections);
+      this.customControls.units.setValue(unitsFg);
+    }
+  }
 }
 
 
@@ -190,10 +238,12 @@ export class LookAndFeelGlobalFormBuilderService {
 
   constructor(
     private defaultValuesService: DefaultValuesService,
+    private mainFormService: MainFormService,
+    private collectionService: CollectionService
   ) { }
 
   public build() {
-    const globalFg = new LookAndFeelGlobalFormGroup();
+    const globalFg = new LookAndFeelGlobalFormGroup(this.mainFormService, this.collectionService);
 
     this.defaultValuesService.setDefaultValueRecursively('lookAndFeel.global', globalFg);
     return globalFg;

@@ -40,7 +40,7 @@ import {
   PropertySelectorFormBuilderService, PropertySelectorFormGroup
 } from '@shared/services/property-selector-form-builder/property-selector-form-builder.service';
 import { valuesToOptions } from '@utils/tools';
-import { Observable, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE, FILTER_OPERATION, LINE_TYPE } from './models';
 import { Granularity, ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
@@ -96,7 +96,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         marker('Collection'),
         marker('Layer collection description'),
         false,
-        collectionService.getCollections().map(c => ({ label: c, value: c })),
+        collectionService.getCollectionsWithCentroid().map(c => ({ label: c, value: c })),
         {
           optional: false,
           resetDependantsOnChange: true
@@ -185,12 +185,15 @@ export class MapLayerFormGroup extends ConfigFormGroup {
             if (!control.enabled && this.customControls.mode.value === LAYER_MODE.featureMetric) {
               this.currentCollection = undefined;
               /** Calculate the network precision */
-              this.calculatenetworkFetchingLevel(this.customControls.collection.value, collectionService,
-                featureMetricFg.networkFetchingLevel, featureMetricFg.zoomMin, featureMetricFg.zoomMax);
+              if (!!this.customControls.collection.value) {
+                this.calculatenetworkFetchingLevel(this.customControls.collection.value, collectionService,
+                  featureMetricFg.networkFetchingLevel, featureMetricFg.zoomMin, featureMetricFg.zoomMax);
+              }
             }
             control.enableIf(this.customControls.mode.value === LAYER_MODE.featureMetric);
             /** when the collection changes we need to update all the fields lists used the different mat-select */
-            if (control.enabled && (!this.currentCollection || this.customControls.collection.value !== this.currentCollection)) {
+            if (control.enabled && !!this.customControls.collection.value &&
+              (!this.currentCollection || this.customControls.collection.value !== this.currentCollection)) {
               toGeoOptionsObs(collectionService
                 .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
                   featureMetricFg.geometry.setSyncOptions(collectionFs);
@@ -208,7 +211,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
                 featureMetricFg.filters.setValue(new FormArray([], []));
                 this.clearFilters.next(true);
               }
-              // calculate bbox of the collection in order and deduce the bes grid precision
+              // calculate bbox of the collection in order and deduce the best grid precision
               if (this.currentCollection !== undefined && this.customControls.collection.value !== this.currentCollection) {
                 this.calculatenetworkFetchingLevel(this.customControls.collection.value, collectionService,
                   featureMetricFg.networkFetchingLevel, featureMetricFg.zoomMin, featureMetricFg.zoomMax);
@@ -1173,9 +1176,23 @@ export class MapLayerFormBuilderService {
   ) { }
 
   public buildLayer(collection: string, edit?: boolean) {
-    const collectionFields = this.collectionService.getCollectionFields(
-      collection
-    );
+    /** check if collection has geom */
+    const collectionsWithCentroid = this.collectionService.getCollectionsWithCentroid();
+    const isGeoCollection = (new Set(collectionsWithCentroid)).has(collection);
+    let collectionFields = of([]);
+    if (isGeoCollection) {
+      collectionFields = this.collectionService.getCollectionFields(
+        collection
+      );
+    } else {
+      if (collectionsWithCentroid.length > 0) {
+        collection = collectionsWithCentroid[0];
+        collectionFields = this.collectionService.getCollectionFields(
+          collection
+        );
+      }
+    }
+
     const mapLayerFormGroup = new MapLayerFormGroup(
       this.buildFeatures(collection, collectionFields),
       this.buildFeatureMetric(collection, collectionFields),

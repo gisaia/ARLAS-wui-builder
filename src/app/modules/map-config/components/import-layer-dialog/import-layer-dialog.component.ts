@@ -72,7 +72,7 @@ export class ImportLayerDialogComponent implements OnInit {
   public getLayers(event: MatSelectChange) {
     this.dashboardConfigJson = JSON.parse(event.value.doc_value) as Config;
     const importableLayers = new Set<string>();
-    const availableCollections = new Set(this.collectionService.getCollections());
+    const availableCollections = new Set(this.collectionService.getCollectionsWithCentroid());
     this.dashboardConfigJson.arlas.web.contributors.forEach(cont => {
       if (!cont.collection) {
         cont.collection = this.dashboardConfigJson.arlas.server.collection.name;

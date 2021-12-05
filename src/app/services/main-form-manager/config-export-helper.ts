@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormGroup, FormArray, Form } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
 import {
     Config, ChipSearchConfig, ContributorConfig, AggregationModelConfig,
     AnalyticComponentConfig, AnalyticComponentHistogramInputConfig, SwimlaneConfig,
@@ -78,7 +78,7 @@ export class ConfigExportHelper {
         collectionService: CollectionService
         ): string[] {
         let contributors = this.getMapContributors(mapConfigGlobal, mapConfigLayers,
-            startingConfig.customControls.collection.value, collectionService);
+            mapConfigGlobal.customControls.requestGeometries.value[0].collection, collectionService);
         contributors.push(this.getChipsearchContributor(searchConfigGlobal,
             startingConfig.customControls.collection.value));
         contributors.push(this.getTimelineContributor(timelineConfigGlobal,
@@ -142,6 +142,7 @@ export class ConfigExportHelper {
             name: searchConfigGlobal.customControls.name.value,
             icon: searchConfigGlobal.customControls.unmanagedFields.icon.value
         };
+        lookAndFeelConfigGlobal.buildAtExport();
         const config: Config = {
             arlas: {
                 web: {
@@ -200,7 +201,7 @@ export class ConfigExportHelper {
         };
 
         config.arlas.web.contributors = config.arlas.web.contributors.concat(this.getMapContributors(mapConfigGlobal, mapConfigLayers,
-            startingConfig.customControls.collection.value, collectionService));
+            mapConfigGlobal.customControls.requestGeometries.value[0].collection, collectionService));
         config.arlas.web.contributors.push(this.getChipsearchContributor(searchConfigGlobal,
             startingConfig.customControls.collection.value));
         config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal,

@@ -638,5 +638,6 @@
 	"Fixed strokeColor": "Stroke color",
 	"Invalid dashboard name": "Invalid dashboard name",
 	"Another dashboad already exists with the same name, please choose another one": "Another dashboad already exists with the same name, please choose another one",
-	"collection unit": "unit"
+	"collection unit": "unit",
+	"No collection with geometries is available in the server": 	"No collection with geometries is available in the server"
 }
