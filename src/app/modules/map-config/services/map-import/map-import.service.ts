@@ -467,7 +467,7 @@ export class MapImportService {
         layers_sources: []
       };
     }
-    this.importMapGlobal(mapgl, defaultMapContributor, defaultCollection);
+    this.importMapGlobal(mapgl, defaultMapContributor, defaultMapContributor.collection);
 
     const mapContributors = config.arlas.web.contributors.filter(c => c.type === 'map');
     const layers = mapConfig.layers

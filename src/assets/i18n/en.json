@@ -639,5 +639,6 @@
 	"Invalid dashboard name": "Invalid dashboard name",
 	"Another dashboad already exists with the same name, please choose another one": "Another dashboad already exists with the same name, please choose another one",
 	"collection unit": "unit",
-	"Data tables are out of analytics": "Data tables are now to be declared in the dedicated menu (on the left), outside this analytics board"
+	"Data tables are out of analytics": "Data tables are now to be declared in the dedicated menu (on the left), outside this analytics board",
+	"No collection with geometries is available in the server": 	"No collection with geometries is available in the server"
 }

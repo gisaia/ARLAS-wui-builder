@@ -657,5 +657,7 @@
 	"Invalid dashboard name": "Nom de dashboard invalide",
 	"Another dashboad already exists with the same name, please choose another one": "Un autre dashboad existe déjà avec ce même nom, veuillez en choisir un autre.",
 	"collection unit": "unité",
-	"Data tables are out of analytics": "Les tableaux de données doivent maintenant être déclarés dans le menu dédié (à gauche), en dehors de ce tableau de bord."
+	"Data tables are out of analytics": "Les tableaux de données doivent maintenant être déclarés dans le menu dédié (à gauche), en dehors de ce tableau de bord.",
+	"No collection with geometries is available in the server": "Aucune collection avec géométries n'est disponible dans le serveur."
+
 }

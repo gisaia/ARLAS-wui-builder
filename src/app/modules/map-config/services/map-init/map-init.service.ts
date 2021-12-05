@@ -65,12 +65,12 @@ export class MapInitService {
   private initCollectionFields() {
     // init global -> request geometries, by collection
     const collection = this.mainFormService.getMainCollection();
-    this.collectionService.getDescribe(collection).subscribe(params => {
+    this.collectionService.getDescribe(collection).subscribe(c => {
       this.mainFormService.mapConfig.getGlobalFg().customControls.requestGeometries.push(
         this.mapGlobalFormBuilder.buildRequestGeometry(
           collection,
-          params.params.geometry_path,
-          params.params.id_path
+          c.params.geometry_path,
+          c.params.id_path
         )
       );
     });

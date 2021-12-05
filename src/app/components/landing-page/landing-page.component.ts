@@ -209,7 +209,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().customControls.collection.value;
     this.startupService.setDefaultCollection(collection);
     this.mainFormManager.initMainModulesForms(true);
-    this.startEvent.next();
+    setTimeout(() => this.startEvent.next(), 100);
   }
 
   public initWithConfig(configJson: Config, configMapJson: MapConfig, configId?: string, configName?: string, isRetry?: boolean) {
