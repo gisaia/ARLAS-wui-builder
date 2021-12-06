@@ -17,19 +17,52 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
+import { FormArray } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { CollectionService } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { MainFormService } from '../../../../services/main-form/main-form.service';
 import {
   ConfigFormGroup,
   SelectFormControl,
   SliderFormControl,
   SlideToggleFormControl,
-  InputFormControl
+  InputFormControl,
+  CollectionsUnitsControl
 } from '@shared-models/config-form';
+import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 
+
+export class CollectionUnitFormGroup extends ConfigFormGroup {
+  constructor() {
+    super({
+      unit: new InputFormControl(
+        '',
+        'collection unit',
+        'Unit desc'
+      ),
+      collection: new InputFormControl(
+        '',
+        'collection',
+        'collection desc'
+      ),
+      ignored: new SlideToggleFormControl(false,
+        '',
+        '')
+    });
+  }
+
+  public customControls = {
+    unit: this.get('unit') as InputFormControl,
+    collection: this.get('collection') as InputFormControl,
+    ignored: this.get('ignored') as SlideToggleFormControl
+  };
+}
 export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
 
   constructor(
+    private mainFormService: MainFormService,
+    private collectionService: CollectionService
   ) {
     super(
       {
@@ -84,18 +117,21 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
               this.customControls.spinner.value ? control.enable() : control.disable()
           }
         ),
-        appUnit: new InputFormControl(
+        units: new CollectionsUnitsControl(
+          new FormArray([], []),
           '',
-          marker('App unit'),
-          marker('App unit description'),
-          'text',
+          marker('collection unit description'),
+
           {
-            optional: true
+            title: marker('Units'),
+            optional: true,
           }
         ),
       }
     );
   }
+
+
 
   public customControls = {
     dragAndDrop: this.get('dragAndDrop') as SlideToggleFormControl,
@@ -104,8 +140,93 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
     spinner: this.get('spinner') as SlideToggleFormControl,
     spinnerColor: this.get('spinnerColor') as SelectFormControl,
     spinnerDiameter: this.get('spinnerDiameter') as SliderFormControl,
-    appUnit: this.get('appUnit') as InputFormControl
+    units: this.get('units') as CollectionsUnitsControl
   };
+
+  public collectionUnitMap = new Map();
+  public collectionIgnoredMap = new Map();
+  public ignoredCollections = new Map();
+
+  public buildUnits(collections): FormArray {
+    const collectionsUnits = new FormArray([]);
+    const values = this.customControls.units.value as FormArray;
+    if (!!values && values.controls) {
+      values.controls.forEach((cu: CollectionUnitFormGroup) => {
+        if (cu.customControls.unit.value) {
+          this.collectionUnitMap.set(cu.customControls.collection.value, cu.customControls.unit.value);
+          this.collectionIgnoredMap.set(cu.customControls.collection.value, cu.customControls.ignored.value);
+        }
+      });
+    }
+    collections.forEach((collection, i) => {
+      let collectionUnitForm = values.controls
+        .find((v: CollectionUnitFormGroup) => v.customControls.collection.value === collection) as CollectionUnitFormGroup;
+      if (!collectionUnitForm) {
+        collectionUnitForm = new CollectionUnitFormGroup();
+        collectionUnitForm.customControls.collection.setValue(collection);
+        if (this.collectionUnitMap.get(collection)) {
+          collectionUnitForm.customControls.unit.setValue(this.collectionUnitMap.get(collection));
+          collectionUnitForm.customControls.ignored.setValue(this.collectionIgnoredMap.get(collection));
+        } else {
+          collectionUnitForm.customControls.unit.setValue(collection);
+          collectionUnitForm.customControls.ignored.setValue(false);
+        }
+      }
+      collectionsUnits.insert(i, collectionUnitForm);
+    });
+    return collectionsUnits;
+  }
+
+  public buildCollectioUnitForm(collection: string, unit: string, ignored: boolean): CollectionUnitFormGroup {
+    const collectionUnitForm = new CollectionUnitFormGroup();
+    collectionUnitForm.customControls.unit.setValue(unit);
+    collectionUnitForm.customControls.collection.setValue(collection);
+    collectionUnitForm.customControls.ignored.setValue(ignored);
+    return collectionUnitForm;
+  }
+
+  public buildAtExport() {
+    const startingConfig = this.mainFormService.startingConfig.getFg();
+    const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
+    const mapConfigLayers = this.mainFormService.mapConfig.getLayersFa();
+    const timelineConfigGlobal = this.mainFormService.timelineConfig.getGlobalFg();
+    const searchConfigGlobal = this.mainFormService.searchConfig.getGlobalFg();
+    const analyticsConfigList = this.mainFormService.analyticsConfig.getListFa();
+    const resultLists = this.mainFormService.resultListConfig.getResultListsFa();
+    if (startingConfig.customControls && mapConfigGlobal.customControls && timelineConfigGlobal.customControls
+        && searchConfigGlobal.customControls) {
+      const configuredCollections = ConfigExportHelper.getConfiguredCollections(
+        startingConfig,
+        mapConfigGlobal,
+        mapConfigLayers,
+        searchConfigGlobal,
+        timelineConfigGlobal,
+        analyticsConfigList,
+        resultLists,
+        this.collectionService
+      );
+      /** keeping formarray order */
+      const formArrayCollections = (this.customControls.units.value as FormArray).controls.map(control =>
+        (control as CollectionUnitFormGroup).customControls.collection.value
+      );
+      const collectionsSet = new Set(configuredCollections);
+      const formSetCollections = new Set(formArrayCollections);
+      const orderedCollections = [];
+      formArrayCollections.forEach(fc => {
+        if (collectionsSet.has(fc)) {
+          orderedCollections.push(fc);
+        }
+      });
+      /** add newly confiured collections at the end */
+      configuredCollections.forEach(c => {
+        if (!formSetCollections.has(c)) {
+          orderedCollections.push(c);
+        }
+      });
+      const unitsFg = this.buildUnits(orderedCollections);
+      this.customControls.units.setValue(unitsFg);
+    }
+  }
 }
 
 
@@ -117,10 +238,12 @@ export class LookAndFeelGlobalFormBuilderService {
 
   constructor(
     private defaultValuesService: DefaultValuesService,
+    private mainFormService: MainFormService,
+    private collectionService: CollectionService
   ) { }
 
   public build() {
-    const globalFg = new LookAndFeelGlobalFormGroup();
+    const globalFg = new LookAndFeelGlobalFormGroup(this.mainFormService, this.collectionService);
 
     this.defaultValuesService.setDefaultValueRecursively('lookAndFeel.global', globalFg);
     return globalFg;

@@ -2,7 +2,6 @@
     "global": {
         "serverUrl": "${ARLAS_SERVER_URL}",
         "unmanagedFields": {
-            "maxAgeCache": 120,
             "appName": "ARLAS",
             "appUnit": "",
             "appNameBackgroundColor": "#FF4081"
@@ -300,6 +299,14 @@
             }
         }
     },
+    "resultlists": {
+        "dataStep": {
+            "searchSize": 100
+        },
+        "renderStep": {
+            "cellBackgroundStyle": "filled"
+        }
+    },
     "analytics": {
         "tabs": {
             "default": "Default",
@@ -450,7 +457,6 @@
                         "nLastLines": 3,
                         "detailedGridHeight": 300,
                         "nbGridColumns": 3,
-                        "defautMode": "list",
                         "isBodyHidden": false,
                         "isGeoSortEnabled": true,
                         "selectedItemsEvent": null,
@@ -467,6 +473,9 @@
             "useShare": true,
             "useDownload": true,
             "useTagger": false,
+            "cache": {
+                "maxAgeCache": 120
+            },
             "share": {
                 "maxForFeature": 5000,
                 "maxForTopology": 5000

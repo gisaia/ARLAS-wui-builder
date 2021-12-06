@@ -36,7 +36,8 @@ export interface Config {
                     chipssearch: ChipSearchConfig;
                 },
                 name: string,
-                unit: string,
+                unit?: string,
+                units?: {unit?: string, collection?: string, ignored?: boolean}[],
                 name_background_color: string
             },
 
@@ -254,7 +255,6 @@ export interface AnalyticComponentResultListInputConfig extends AnalyticComponen
     detailWidth?: number;
     visualisationLink?: string;
     downloadLink?: string;
-
 }
 
 export interface AnalyticComponentResultListInputOptions {

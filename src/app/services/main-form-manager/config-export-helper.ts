@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { FormGroup, FormArray, Form } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
 import {
     Config, ChipSearchConfig, ContributorConfig, AggregationModelConfig,
     AnalyticComponentConfig, AnalyticComponentHistogramInputConfig, SwimlaneConfig,
@@ -41,6 +41,7 @@ import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 import {
+    CollectionUnitFormGroup,
     LookAndFeelGlobalFormGroup
 } from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
 import { BY_BUCKET_OR_INTERVAL } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
@@ -66,6 +67,61 @@ export enum EXPORT_TYPE {
 // TODO use customControls in the class instead of untyped values
 export class ConfigExportHelper {
 
+    public static getConfiguredCollections(
+        startingConfig: StartingConfigFormGroup,
+        mapConfigGlobal: MapGlobalFormGroup,
+        mapConfigLayers: FormArray,
+        searchConfigGlobal: SearchGlobalFormGroup,
+        timelineConfigGlobal: TimelineGlobalFormGroup,
+        analyticsConfigList: FormArray,
+        resultLists: FormArray,
+        collectionService: CollectionService
+        ): string[] {
+        let contributors = this.getMapContributors(mapConfigGlobal, mapConfigLayers,
+            mapConfigGlobal.customControls.requestGeometries.value[0].collection, collectionService);
+        contributors.push(this.getChipsearchContributor(searchConfigGlobal,
+            startingConfig.customControls.collection.value));
+        contributors.push(this.getTimelineContributor(timelineConfigGlobal,
+            false, collectionService.collectionParamsMap));
+        const contributorsMap = new Map<string, any>();
+        const resultListContributors = this.getResultListContributors(resultLists);
+        resultListContributors.map(c => contributorsMap.set(c.identifier, c));
+        contributors = contributors.concat(resultListContributors);
+
+        if (timelineConfigGlobal.value.useDetailedTimeline) {
+            contributors.push(this.getTimelineContributor(timelineConfigGlobal,
+                true, collectionService.collectionParamsMap));
+        }
+
+        if (!!analyticsConfigList) {
+            (analyticsConfigList.value as Array<any>).forEach(tab => {
+                tab.contentFg.groupsFa.forEach(group => {
+                    group.content.forEach(widget => {
+                        const contributorId = this.getContributorId(widget.widgetData, widget.widgetType);
+                        let contributor = contributorsMap.get(contributorId);
+                        // check if the contributor already exists to avoid duplication in the final config json object
+                        if (!contributor) {
+                            contributor = this.getAnalyticsContributor(widget.widgetType, widget.widgetData, group.icon);
+                            contributorsMap.set(contributorId, contributor);
+                            contributors.push(contributor);
+                        }
+                    });
+                });
+            });
+        }
+        const collections = new Set<string>();
+        contributors.forEach(c => {
+            if (c.collection) {
+                collections.add(c.collection);
+            }
+            if (c.additionalCollections) {
+                c.additionalCollections.forEach(ac => {
+                    collections.add(ac.collectionName);
+                });
+            }
+        });
+        return Array.from(collections);
+    }
     public static process(
         startingConfig: StartingConfigFormGroup,
         mapConfigGlobal: MapGlobalFormGroup,
@@ -86,6 +142,7 @@ export class ConfigExportHelper {
             name: searchConfigGlobal.customControls.name.value,
             icon: searchConfigGlobal.customControls.unmanagedFields.icon.value
         };
+        lookAndFeelConfigGlobal.buildAtExport();
         const config: Config = {
             arlas: {
                 web: {
@@ -104,7 +161,7 @@ export class ConfigExportHelper {
                 },
                 server: {
                     url: startingConfig.customControls.serverUrl.value,
-                    max_age_cache: startingConfig.customControls.unmanagedFields.maxAgeCache.value,
+                    max_age_cache: +sideModulesGlobal.customControls.cache.maxAgeCache.value,
                     collection: {
                         name: startingConfig.customControls.collection.value,
                     }
@@ -117,7 +174,14 @@ export class ConfigExportHelper {
                             chipssearch
                         },
                         name: startingConfig.customControls.unmanagedFields.appName.value,
-                        unit: lookAndFeelConfigGlobal.customControls.appUnit.value,
+                        units: (lookAndFeelConfigGlobal.customControls.units.value as FormArray)
+                            .controls.map((c: CollectionUnitFormGroup) => {
+                                return {
+                                    collection: c.customControls.collection.value,
+                                    unit: c.customControls.unit.value,
+                                    ignored: c.customControls.ignored.value
+                                };
+                            }),
                         name_background_color: startingConfig.customControls.unmanagedFields.appNameBackgroundColor.value
                     }
                 }
@@ -137,7 +201,7 @@ export class ConfigExportHelper {
         };
 
         config.arlas.web.contributors = config.arlas.web.contributors.concat(this.getMapContributors(mapConfigGlobal, mapConfigLayers,
-            startingConfig.customControls.collection.value, collectionService));
+            mapConfigGlobal.customControls.requestGeometries.value[0].collection, collectionService));
         config.arlas.web.contributors.push(this.getChipsearchContributor(searchConfigGlobal,
             startingConfig.customControls.collection.value));
         config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal,
@@ -715,18 +779,16 @@ export class ConfigExportHelper {
                 contrib.search_size = widgetData.dataStep.searchSize;
                 const fieldsConfig: FieldsConfiguration = {
                     idFieldName: widgetData.dataStep.idFieldName,
-                    thumbnailFieldName: widgetData.renderStep.gridStep.thumbnailUrl,
-                    imageFieldName: widgetData.renderStep.gridStep.imageUrl,
                     titleFieldNames: [{ fieldPath: widgetData.renderStep.gridStep.tileLabelField, process: '' }],
                     tooltipFieldNames: [{ fieldPath: widgetData.renderStep.gridStep.tooltipField, process: '' }],
                     icon: 'fiber_manual_record',
                     iconColorFieldName: widgetData.renderStep.gridStep.colorIdentifier
                 };
                 if (widgetData.renderStep.gridStep.thumbnailUrl) {
-                    fieldsConfig.urlThumbnailTemplate = '{' + widgetData.renderStep.gridStep.thumbnailUrl + '}';
+                    fieldsConfig.urlThumbnailTemplate = widgetData.renderStep.gridStep.thumbnailUrl;
                 }
                 if (widgetData.renderStep.gridStep.imageUrl) {
-                    fieldsConfig.urlImageTemplate = '{' + widgetData.renderStep.gridStep.imageUrl + '}';
+                    fieldsConfig.urlImageTemplate = widgetData.renderStep.gridStep.imageUrl;
                 }
 
                 contrib.fieldsConfiguration = fieldsConfig;
@@ -756,7 +818,7 @@ export class ConfigExportHelper {
                 contrib.includeMetadata = [];
                 const metadatas = new Set<string>();
                 Object.keys(widgetData.renderStep.gridStep).forEach(v => {
-                    if (!!widgetData.renderStep.gridStep[v]) {
+                    if (!!widgetData.renderStep.gridStep[v] && v !== 'isDefaultMode') {
                         metadatas.add(widgetData.renderStep.gridStep[v]);
                     }
                 });
@@ -775,8 +837,6 @@ export class ConfigExportHelper {
             contrib.search_size = list.dataStep.searchSize;
             const fieldsConfig: FieldsConfiguration = {
                 idFieldName: list.dataStep.idFieldName,
-                thumbnailFieldName: list.renderStep.gridStep.thumbnailUrl,
-                imageFieldName: list.renderStep.gridStep.imageUrl,
                 titleFieldNames: [{ fieldPath: list.renderStep.gridStep.tileLabelField,
                     process: list.renderStep.gridStep.tileLabelFieldProcess }],
                 tooltipFieldNames: [{ fieldPath: list.renderStep.gridStep.tooltipField,
@@ -785,10 +845,10 @@ export class ConfigExportHelper {
                 iconColorFieldName: list.renderStep.gridStep.colorIdentifier
             };
             if (list.renderStep.gridStep.thumbnailUrl) {
-                fieldsConfig.urlThumbnailTemplate = '{' + list.renderStep.gridStep.thumbnailUrl + '}';
+                fieldsConfig.urlThumbnailTemplate = list.renderStep.gridStep.thumbnailUrl ;
             }
             if (list.renderStep.gridStep.imageUrl) {
-                fieldsConfig.urlImageTemplate = '{' + list.renderStep.gridStep.imageUrl + '}';
+                fieldsConfig.urlImageTemplate = list.renderStep.gridStep.imageUrl ;
             }
 
             contrib.fieldsConfiguration = fieldsConfig;
@@ -818,7 +878,7 @@ export class ConfigExportHelper {
             contrib.includeMetadata = [];
             const metadatas = new Set<string>();
             Object.keys(list.renderStep.gridStep).forEach(v => {
-                if (!!list.renderStep.gridStep[v]) {
+                if (!!list.renderStep.gridStep[v] && v !== 'isDefaultMode') {
                     metadatas.add(list.renderStep.gridStep[v]);
                 }
             });
@@ -1085,9 +1145,10 @@ export class ConfigExportHelper {
                     nLastLines: unmanagedRenderFields.nLastLines,
                     detailedGridHeight: unmanagedRenderFields.detailedGridHeight,
                     nbGridColumns: unmanagedRenderFields.nbGridColumns,
-                    defautMode: unmanagedRenderFields.defautMode,
                     displayFilters: !!widgetData.renderStep.displayFilters,
                     hasGridMode: !!widgetData.renderStep.gridStep.thumbnailUrl,
+                    defautMode: (!!widgetData.renderStep.gridStep.thumbnailUrl && !!widgetData.renderStep.gridStep.isDefaultMode) ?
+                        'grid' : 'list',
                     visualisationLink: widgetData.zactionStep.visualisationLink,
                     downloadLink: widgetData.zactionStep.downloadLink,
                     isBodyHidden: unmanagedRenderFields.isBodyHidden,

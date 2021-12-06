@@ -7,6 +7,8 @@ import { of } from 'rxjs';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
+import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 
 describe('GlobalSearchComponent', () => {
   let spectator: Spectator<GlobalSearchComponent>;

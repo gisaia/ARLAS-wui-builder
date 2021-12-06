@@ -36,6 +36,14 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
 
   constructor(collectionsObs: Observable<Array<string>>) {
     super({
+      cache: new ConfigFormGroup({
+        maxAgeCache: new InputFormControl(
+          '',
+          marker('maxAgeCache'),
+          marker('maxAgeCache description'),
+          'number'
+        ),
+      }).withTitle('ARLAS server'),
       useShare: new SlideToggleFormControl(
         '',
         marker('Share module'),
@@ -115,6 +123,9 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
   }
 
   public customControls = {
+    cache: {
+      maxAgeCache: this.get('cache.maxAgeCache') as InputFormControl
+    },
     useShare: this.get('useShare') as SlideToggleFormControl,
     useDownload: this.get('useDownload') as SlideToggleFormControl,
     useTagger: this.get('useTagger') as SlideToggleFormControl,
@@ -134,6 +145,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
   public customGroups = {
     share: this.get('share') as ConfigFormGroup,
     tagger: this.get('tagger') as ConfigFormGroup,
+    cache: this.get('cache') as ConfigFormGroup
   };
 
 }

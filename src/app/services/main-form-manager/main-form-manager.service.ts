@@ -228,10 +228,6 @@ export class MainFormManagerService {
         control: startingConfigControls.colorGenerator
       },
       {
-        value: config.arlas.server.max_age_cache,
-        control: startingConfigControls.unmanagedFields.maxAgeCache
-      },
-      {
         value: config['arlas-wui'].web.app.name,
         control: startingConfigControls.unmanagedFields.appName
       },
@@ -243,7 +239,6 @@ export class MainFormManagerService {
 
     this.initMainModulesForms(false);
     this.startupService.setDefaultCollection(config.arlas.server.collection.name);
-
     this.mapImportService.doImport(config, mapConfig);
     this.timelineImportService.doImport(config);
     this.searchImportService.doImport(config);

@@ -627,6 +627,10 @@ export class AnalyticsImportService {
         control: dataStep.idFieldName
       },
       {
+        value: component.input.defautMode === 'grid',
+        control: renderStep.gridStep.isDefaultMode
+      },
+      {
         value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].fieldPath : '',
         control: renderStep.gridStep.tileLabelField
       },
@@ -643,11 +647,11 @@ export class AnalyticsImportService {
         control: renderStep.gridStep.tooltipFieldProcess
       },
       {
-        value: contributor.fieldsConfiguration.thumbnailFieldName,
+        value: contributor.fieldsConfiguration.urlThumbnailTemplate,
         control: renderStep.gridStep.thumbnailUrl
       },
       {
-        value: contributor.fieldsConfiguration.imageFieldName,
+        value: contributor.fieldsConfiguration.urlImageTemplate,
         control: renderStep.gridStep.imageUrl
       },
       {
@@ -752,10 +756,6 @@ export class AnalyticsImportService {
       {
         value: component.input.nbGridColumns,
         control: unmanagedRenderFields.nbGridColumns
-      },
-      {
-        value: component.input.defautMode,
-        control: unmanagedRenderFields.defautMode
       },
       {
         value: component.input.isBodyHidden,

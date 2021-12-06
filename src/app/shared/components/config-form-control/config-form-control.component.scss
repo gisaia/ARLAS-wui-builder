@@ -107,6 +107,27 @@ mat-option {
   }
 }
 
+.url-field-form-control {
+  .action-container {
+    .mat-form-field {
+      display: block;
+    }
+    .field-insert-container {
+      display: flex;
+      .field-container {
+        margin-right: 10px;
+      }
+      .insert-container {
+        display: flex;
+        align-items: center;
+        .insert {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+}
+
 .textarea-form-control {
   mat-form-field {
     width: 100%;

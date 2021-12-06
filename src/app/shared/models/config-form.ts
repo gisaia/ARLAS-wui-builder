@@ -23,10 +23,11 @@ import { Observable } from 'rxjs';
 import { HistogramUtils } from 'arlas-d3';
 import { CollectionField } from '@services/collection-service/models';
 import { METRIC_TYPES } from '@services/collection-service/collection.service';
-import { toKeywordOptionsObs, toNumericOrDateOptionsObs } from '@services/collection-service/tools';
+import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toNumericOrDateOrKeywordOrTextObs } from '@services/collection-service/tools';
 import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { MatCheckboxChange } from '@angular/material';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
+import { updateValueAndValidity } from '@utils/tools';
 
 
 /**
@@ -401,7 +402,7 @@ export class MultipleSelectFormControl extends ConfigFormControl {
     // used only for autocomplete: list of filtered options
     public filteredOptions: Array<SelectOption>;
     public syncOptions: Array<SelectOption> = [];
-    public selectedMultipleItems: Array<{value: any, color?: string, detail?: string}> = [];
+    public selectedMultipleItems: Array<{ value: any, color?: string, detail?: string }> = [];
     public savedItems = new Set<string>();
     public searchable = true;
     constructor(
@@ -412,7 +413,7 @@ export class MultipleSelectFormControl extends ConfigFormControl {
         options: Array<SelectOption> | Observable<Array<SelectOption>>,
         optionalParams?: ControlOptionalParams,
         searchable?: boolean,
-        ) {
+    ) {
 
         super(
             formState,
@@ -509,12 +510,12 @@ export class OrderedSelectFormControl extends SelectFormControl {
     }
 
     private setSortValue() {
-       if (this.sorts.size > 0) {
+        if (this.sorts.size > 0) {
             const sortValue = Array.from(this.sorts).reduce((a, b) => a + ',' + b);
             this.setValue(sortValue);
-       } else {
-        this.setValue(null);
-       }
+        } else {
+            this.setValue(null);
+        }
     }
 }
 
@@ -649,6 +650,63 @@ export class FieldWithSizeListFormControl extends ConfigFormControl {
     public getValueAsSet = () => (this.value as Set<{ field: string, size: number }>);
 }
 
+
+export class UrlTemplateControl extends ConfigFormControl {
+    public urlControl = new FormControl('');
+    public fieldCtrl = new FormControl('', [
+        Validators.required,
+        (c) => !!this.autocompleteFilteredFields && this.autocompleteFilteredFields.map(f => f.value).indexOf(c.value) >= 0 ?
+            null : { validateField: { valid: false } }
+    ]);
+    public fields: Array<SelectOption>;
+    public autocompleteFilteredFields: Array<SelectOption>;
+    public isFieldFlat;
+    public showInsertButton = true;
+
+    constructor(
+        formState: any,
+        label: string,
+        description: string,
+        collectionFields: Observable<Array<CollectionField>>,
+        flat: boolean,
+        optionalParams?: ControlOptionalParams
+    ) {
+        super(formState, label, description, optionalParams);
+        toNumericOrDateOrKeywordOrTextObs(collectionFields).subscribe(fields => {
+            this.fields = fields;
+            this.filterAutocomplete();
+        });
+        this.isFieldFlat = flat;
+        this.fieldCtrl.valueChanges.subscribe(v => this.filterAutocomplete(v));
+        this.setValue('');
+        if (!this.optional) {
+            // as the value is a set, if the control is required, an empty set should also be an error
+            this.setValidators([
+                (control) => !!control.value && Array.from(control.value).length > 0 ? null : { required: { valid: false } }
+            ]);
+        }
+    }
+
+    public filterAutocomplete(value?: string) {
+        if (!!value) {
+            this.autocompleteFilteredFields = this.fields.filter(o => o.label.indexOf(value) >= 0);
+        } else {
+            this.autocompleteFilteredFields = this.fields;
+        }
+    }
+
+    public add() {
+        this.setValue(this.getValue().concat('{').concat(this.fieldCtrl.value).concat('}'));
+        this.updateValueAndValidity();
+        this.fieldCtrl.reset();
+        this.showInsertButton = true;
+    }
+
+    public getValue(): string {
+        return this.value as string;
+    }
+}
+
 export class HuePaletteFormControl extends SelectFormControl {
     constructor(
         formState: any,
@@ -734,6 +792,35 @@ export class MapFiltersControl extends ConfigFormControl {
         description: string,
         optionalParams?: ControlOptionalParams) {
         super(formState, label, description, optionalParams || { optional: true });
+    }
+}
+
+export class CollectionsUnitsControl extends ConfigFormControl {
+    constructor(
+        public formState: any,
+        label: string,
+        description: string,
+        optionalParams?: ControlOptionalParams) {
+        super(formState, label, description, optionalParams || { optional: true });
+    }
+
+    public updateValueAndValidity(opts?: {
+        onlySelf?: boolean;
+        emitEvent?: boolean;
+    }): void {
+        if (!!this.value) {
+            this.markAllAsTouched();
+            if (this.statusChanges) {
+                this.setErrors(null);
+            }
+            (this.value as FormArray).controls.forEach(c => {
+                c.markAllAsTouched();
+                updateValueAndValidity(c);
+                if (c.invalid) {
+                    this.setErrors({ empty: true });
+                }
+            });
+        }
     }
 }
 
