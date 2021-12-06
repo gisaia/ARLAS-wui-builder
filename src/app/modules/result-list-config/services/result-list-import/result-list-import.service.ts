@@ -85,6 +85,10 @@ export class ResultListImportService {
         control: dataStep.idFieldName
       },
       {
+        value: component.input.defautMode === 'grid',
+        control: renderStep.gridStep.isDefaultMode
+      },
+      {
         value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].fieldPath : '',
         control: renderStep.gridStep.tileLabelField
       },
@@ -115,10 +119,6 @@ export class ResultListImportService {
       {
         value: inputs.displayFilters,
         control: renderStep.displayFilters
-      },
-      {
-        value: inputs.fitThumbnail,
-        control: renderStep.gridStep.fitThumbnail
       },
       {
         value: inputs.isGeoSortActived,
@@ -214,10 +214,6 @@ export class ResultListImportService {
       {
         value: component.input.nbGridColumns,
         control: unmanagedRenderFields.nbGridColumns
-      },
-      {
-        value: component.input.defautMode,
-        control: unmanagedRenderFields.defautMode
       },
       {
         value: component.input.isBodyHidden,

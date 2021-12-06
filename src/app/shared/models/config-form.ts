@@ -678,7 +678,7 @@ export class UrlTemplateControl extends ConfigFormControl {
         });
         this.isFieldFlat = flat;
         this.fieldCtrl.valueChanges.subscribe(v => this.filterAutocomplete(v));
-        this.setValue(new Set());
+        this.setValue('');
         if (!this.optional) {
             // as the value is a set, if the control is required, an empty set should also be an error
             this.setValidators([

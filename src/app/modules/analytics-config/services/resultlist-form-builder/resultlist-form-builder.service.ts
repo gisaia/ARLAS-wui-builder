@@ -30,7 +30,8 @@ import {
 } from '@shared-models/config-form';
 import { FormArray, Validators, FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { toOptionsObs, NUMERIC_OR_DATE_OR_TEXT_TYPES, TEXT_OR_KEYWORD } from '@services/collection-service/tools';
+import { toOptionsObs, NUMERIC_OR_DATE_OR_TEXT_TYPES, TEXT_OR_KEYWORD,
+  toNumericOrDateOrKeywordOrTextObs } from '@services/collection-service/tools';
 import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
@@ -136,6 +137,11 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
             }
           ),
           gridStep: new ConfigFormGroup({
+            isDefaultMode: new SlideToggleFormControl(
+              false,
+              marker('List default mode'),
+              marker('List default mode description')
+            ),
             tileLabelField: new SelectFormControl(
               '',
               marker('Tile label'),
@@ -143,7 +149,16 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
               true,
               toOptionsObs(collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES)),
               {
-                optional: true
+                optional: true,
+                dependsOn: () => [this.customControls.dataStep.collection],
+                onDependencyChange: (control: SelectFormControl) => {
+                  this.setCollection(this.customControls.dataStep.collection.value);
+                  toOptionsObs(collectionService
+                    .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
+                      control.setSyncOptions(collectionFs);
+                      control.setValue('');
+                    });
+                }
               }
             ),
             tileLabelFieldProcess: new TextareaFormControl(
@@ -162,7 +177,16 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
               true,
               toOptionsObs(collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES)),
               {
-                optional: true
+                optional: true,
+                dependsOn: () => [this.customControls.dataStep.collection],
+                onDependencyChange: (control: SelectFormControl) => {
+                  this.setCollection(this.customControls.dataStep.collection.value);
+                  toOptionsObs(collectionService
+                    .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
+                      control.setSyncOptions(collectionFs);
+                      control.setValue('');
+                    });
+                }
               }
             ),
             tooltipFieldProcess: new TextareaFormControl(
@@ -181,13 +205,18 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
               collectionService.getCollectionFields(collection),
               false,
               {
-                optional: true
+                optional: true,
+                dependsOn: () => [this.customControls.dataStep.collection],
+                onDependencyChange: (control: UrlTemplateControl) => {
+                  this.setCollection(this.customControls.dataStep.collection.value);
+                  toNumericOrDateOrKeywordOrTextObs(collectionService
+                    .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
+                      control.setValue('');
+                      control.fields = collectionFs;
+                      control.filterAutocomplete();
+                    });
+                }
               }
-            ),
-            fitThumbnail: new SlideToggleFormControl(
-              true,
-              marker('fit thumbnail'),
-              marker('fit thumbnail description'),
             ),
             imageUrl: new UrlTemplateControl(
               '',
@@ -196,7 +225,17 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
               collectionService.getCollectionFields(collection),
               true,
               {
-                optional: true
+                optional: true,
+                dependsOn: () => [this.customControls.dataStep.collection],
+                onDependencyChange: (control: UrlTemplateControl) => {
+                  this.setCollection(this.customControls.dataStep.collection.value);
+                  toNumericOrDateOrKeywordOrTextObs(collectionService
+                    .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
+                      control.setValue('');
+                      control.fields = collectionFs;
+                      control.filterAutocomplete();
+                    });
+                }
               }
             ),
             colorIdentifier: new SelectFormControl(
@@ -206,7 +245,16 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
               true,
               toOptionsObs(collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD)),
               {
-                optional: true
+                optional: true,
+                dependsOn: () => [this.customControls.dataStep.collection],
+                onDependencyChange: (control: SelectFormControl) => {
+                  this.setCollection(this.customControls.dataStep.collection.value);
+                  toOptionsObs(collectionService
+                    .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
+                      control.setSyncOptions(collectionFs);
+                      control.setValue('');
+                    });
+                }
               }
             ),
 
@@ -220,7 +268,8 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
             'text',
             {
               optional: true,
-              width: '100%'
+              width: '100%',
+              dependsOn: () => [this.customControls.dataStep.collection]
             }
           ),
           downloadLink : new InputFormControl(
@@ -230,7 +279,8 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
             'text',
             {
               optional: true,
-              width: '100%'
+              width: '100%',
+              dependsOn: () => [this.customControls.dataStep.collection]
             }
           ),
         }).withTabName(marker('Actions')),
@@ -242,7 +292,6 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
             nLastLines: new FormControl(),
             detailedGridHeight: new FormControl(),
             nbGridColumns: new FormControl(),
-            defautMode: new FormControl(),
             isBodyHidden: new FormControl(),
             isAutoGeoSortActived: new FormControl(),
             selectedItemsEvent: new FormControl(),
@@ -277,12 +326,12 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
       isGeoSortActived: this.get('renderStep.isGeoSortActived') as SlideToggleFormControl,
       cellBackgroundStyle: this.get('renderStep.cellBackgroundStyle') as SelectFormControl,
       gridStep: {
+        isDefaultMode: this.get('renderStep.gridStep.isDefaultMode') as SlideToggleFormControl,
         tileLabelField: this.get('renderStep.gridStep.tileLabelField') as SelectFormControl,
         tileLabelFieldProcess: this.get('renderStep.gridStep.tileLabelFieldProcess') as TextareaFormControl,
         tooltipField: this.get('renderStep.gridStep.tooltipField') as SelectFormControl,
         tooltipFieldProcess: this.get('renderStep.gridStep.tooltipFieldProcess') as TextareaFormControl,
         thumbnailUrl: this.get('renderStep.gridStep.thumbnailUrl') as UrlTemplateControl,
-        fitThumbnail: this.get('renderStep.gridStep.fitThumbnail') as SlideToggleFormControl,
         imageUrl: this.get('renderStep.gridStep.imageUrl') as UrlTemplateControl,
         colorIdentifier: this.get('renderStep.gridStep.colorIdentifier') as SelectFormControl
       }
@@ -299,7 +348,6 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
         nLastLines: this.get('unmanagedFields.renderStep.nLastLines'),
         detailedGridHeight: this.get('unmanagedFields.renderStep.detailedGridHeight'),
         nbGridColumns: this.get('unmanagedFields.renderStep.nbGridColumns'),
-        defautMode: this.get('unmanagedFields.renderStep.defautMode'),
         isBodyHidden: this.get('unmanagedFields.renderStep.isBodyHidden'),
         isAutoGeoSortActived: this.get('unmanagedFields.renderStep.isAutoGeoSortActived'),
         selectedItemsEvent: this.get('unmanagedFields.renderStep.selectedItemsEvent'),

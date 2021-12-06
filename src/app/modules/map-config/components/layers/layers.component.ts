@@ -71,7 +71,7 @@ export class LayersComponent implements OnInit, OnDestroy {
   public toUnsubscribe: Array<Subscription> = [];
 
   public dataSource: MatTableDataSource<any>;
-
+  public enableAddLayer = true;
   @ViewChild(MatSort, { static: true }) public sort: MatSort;
 
   constructor(
@@ -88,6 +88,8 @@ export class LayersComponent implements OnInit, OnDestroy {
   ) {
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
     this.visualisationSetFa = this.mainFormService.mapConfig.getVisualisationsFa();
+    const collectionsWithCentroid = this.collectionService.getCollectionsWithCentroid();
+    this.enableAddLayer = (!!collectionsWithCentroid && collectionsWithCentroid.length > 0);
   }
 
   public ngOnInit() {
@@ -309,7 +311,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     const configMap = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFieldsMap);
     // Get contributor config for this layer
     const mapContribConfigs = ConfigExportHelper.getMapContributors(mapConfigGlobal, mapConfigLayers,
-      this.mainFormService.getMainCollection(), this.collectionService);
+      collection, this.collectionService);
     // Add contributor part in arlasConfigService
     // Add web contributors in config if not exist
     const currentConfig = this.startupService.getConfigWithInitContrib();
