@@ -3,7 +3,8 @@
 </div>
 <div mat-dialog-content>
     <mat-radio-group [(ngModel)]="widgetType" class="group">
-            <mat-radio-button *ngFor="let types of this.contentTypes" class="widget-type" [value]="types.label">
+            <mat-radio-button *ngFor="let types of this.contentTypes" class="widget-type" [value]="types.label" [disabled]="types.label === 'resultlist'"
+             [matTooltip]="((types.label === 'resultlist') ?  'Data tables are out of analytics' : types.label) | translate">
                 <mat-icon class="icon">{{types.icon}}</mat-icon>
                 {{types.label | translate}}
             </mat-radio-button>

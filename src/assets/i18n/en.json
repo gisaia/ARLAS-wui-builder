@@ -638,7 +638,6 @@
 	"fit thumbnail description": "Fit the thumbnail extent to the tile",
 	"fit thumbnail": "Fit thumbnail",
 	"maxAgeCache": "ARLAS server cache age",
-	"maxAgeCache description": "Cache duration (seconds) of ARLAS server's GET requests"
-
-
+	"maxAgeCache description": "Cache duration (seconds) of ARLAS server's GET requests",
+	"Data tables are out of analytics": "Data tables are now to be declared in the dedicated menu (on the left), outside this analytics board"
 }
