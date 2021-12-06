@@ -473,7 +473,9 @@
             "useShare": true,
             "useDownload": true,
             "useTagger": false,
-            "maxAgeCache": 120,
+            "cache": {
+                "maxAgeCache": 120
+            },
             "share": {
                 "maxForFeature": 5000,
                 "maxForTopology": 5000
