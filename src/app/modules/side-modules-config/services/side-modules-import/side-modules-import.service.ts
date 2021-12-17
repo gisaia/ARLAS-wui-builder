@@ -55,7 +55,7 @@ export class SideModulesImportService {
         control: sideModulesGlobal.unmanagedFields.sortExcludedTypes
       },
       {
-        value: config.arlas.server.max_age_cache,
+        value: config.arlas.server.max_age_cache !== undefined ? config.arlas.server.max_age_cache : 120,
         control: sideModulesGlobal.cache.maxAgeCache
       },
     ]);
