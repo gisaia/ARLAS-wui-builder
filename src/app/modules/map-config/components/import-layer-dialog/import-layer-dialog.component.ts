@@ -17,14 +17,14 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit } from '@angular/core';
-import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persistence.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSelectChange } from '@angular/material/select';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { Config } from '@services/main-form-manager/models-config';
+import { isTechnicalArlasLayer, Layer, MapConfig } from '@services/main-form-manager/models-map-config';
 import { ZONE_WUI_BUILDER } from '@services/startup/startup.service';
 import { DataResource, DataWithLinks } from 'arlas-persistence-api';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatSelectChange } from '@angular/material';
-import { Config } from '@services/main-form-manager/models-config';
-import { Layer, MapConfig, isTechnicalArlasLayer } from '@services/main-form-manager/models-map-config';
-import { CollectionService } from '@services/collection-service/collection.service';
+import { PersistenceService } from 'arlas-wui-toolkit';
 
 @Component({
   selector: 'app-import-layer-dialog',

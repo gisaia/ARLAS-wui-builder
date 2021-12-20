@@ -23,7 +23,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { IconService } from '@services/icon-service/icon.service';
 import { MainFormService } from './services/main-form/main-form.service';
 import { Title } from '@angular/platform-browser';
-import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 @Component({
   selector: 'app-root',

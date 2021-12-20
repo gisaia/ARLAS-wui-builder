@@ -19,6 +19,8 @@ under the License.
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { ImportLayerDialogComponent } from '@map-config/components/import-layer-dialog/import-layer-dialog.component';
 import { MapImportService } from '@map-config/services/map-import/map-import.service';
@@ -36,14 +38,11 @@ import { StartupService } from '@services/startup/startup.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { camelize } from '@utils/tools';
-import { MapglLegendComponent, VisualisationSetConfig, LayerMetadata } from 'arlas-web-components';
-import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService } from 'arlas-wui-toolkit';
-import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
+import { LayerMetadata, MapglLegendComponent, VisualisationSetConfig } from 'arlas-web-components';
+import { MapContributor } from 'arlas-web-contributors';
+import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService, ContributorBuilder } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { PreviewComponent } from '../preview/preview.component';
-import { MapContributor } from 'arlas-web-contributors';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
 
 export interface Layer {
   id: string;

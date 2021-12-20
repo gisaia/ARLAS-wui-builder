@@ -16,17 +16,16 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
+import {
+  MapVisualisationFormBuilderService, MapVisualisationFormGroup
+} from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { NGXLogger } from 'ngx-logger';
-import {
-  MapVisualisationFormGroup,
-  MapVisualisationFormBuilderService
-} from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Subscription } from 'rxjs';
 
 @Component({

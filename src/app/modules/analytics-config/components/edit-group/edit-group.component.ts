@@ -22,7 +22,7 @@ import {
 } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
 import { WIDGET_TYPE } from './models';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { EditWidgetDialogComponent } from '../edit-widget-dialog/edit-widget-dialog.component';
 import { EditWidgetDialogData } from '../edit-widget-dialog/models';
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
@@ -239,7 +239,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     this.formGroup.controls.preview.setValue(
       ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, this.analyticsInitService.groupIndex++)
     );
-    this.updateDisplay.next();
+    this.updateDisplay.next(null);
 
 
   }

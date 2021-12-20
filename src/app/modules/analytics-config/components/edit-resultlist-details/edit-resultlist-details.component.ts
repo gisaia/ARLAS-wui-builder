@@ -16,14 +16,12 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Input } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
-import {
-  ResultlistFormBuilderService, ResultlistDetailFormGroup
-} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
+import { ResultlistDetailFormGroup, ResultlistFormBuilderService } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormArray, FormGroup } from '@angular/forms';
 import { SelectFormControl } from '@shared-models/config-form';
+import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 
 @Component({
   selector: 'app-edit-resultlist-details',

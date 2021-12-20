@@ -17,12 +17,12 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit } from '@angular/core';
-import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
-import { MainFormService } from '@services/main-form/main-form.service';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { FormControl, FormArray, FormGroup } from '@angular/forms';
-import { MatRadioChange } from '@angular/material';
-import { HiddenFormControl } from '../../../../shared/models/config-form';
+import { MatRadioChange } from '@angular/material/radio';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { HiddenFormControl } from '@shared-models/config-form';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 @Component({
   selector: 'app-basemaps',

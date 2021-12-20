@@ -17,9 +17,9 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { ConfigFormGroup, HiddenFormControl, ConfigFormGroupArray } from '@shared-models/config-form';
-import { FormArray, FormGroup, FormControl } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { ConfigFormGroup, HiddenFormControl } from '@shared-models/config-form';
 
 export class MapBasemapFormGroup extends ConfigFormGroup {
   constructor() {

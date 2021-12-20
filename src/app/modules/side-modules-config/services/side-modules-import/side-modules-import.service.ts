@@ -17,9 +17,9 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { MainFormService } from '@services/main-form/main-form.service';
 import { Config } from '@services/main-form-manager/models-config';
 import { importElements } from '@services/main-form-manager/tools';
+import { MainFormService } from '@services/main-form/main-form.service';
 
 @Injectable({
   providedIn: 'root'

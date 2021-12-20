@@ -22,7 +22,7 @@ import {
 import { ConfigFormGroup, ConfigFormControl, ConfigFormGroupArray } from '@shared-models/config-form';
 import { Subscription, Subject } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MatStepper } from '@angular/material';
+import { MatStepper } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { AbstractControl, FormControl } from '@angular/forms';
 
@@ -51,13 +51,13 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
   @Input() public defaultKey: string;
   @ViewChild(MatStepper, { static: false }) private stepper: MatStepper;
   @ViewChildren(ConfigFormGroupComponent) private subConfigFormGroups: QueryList<ConfigFormGroupComponent>;
-  @Output() public updateSyncOptions: Subject<{prefix: string, control: FormControl}> = new Subject();
+  @Output() public updateSyncOptions: Subject<{ prefix: string, control: FormControl }> = new Subject();
 
 
   public toUnsubscribe: Array<Subscription> = [];
 
   constructor(
-    private sanitizer: DomSanitizer,
+    private sanitizer: DomSanitizer
   ) { }
 
   public static listenToAllControlsOnDependencyChange(configFormGroup: ConfigFormGroup, toUnsubscribe: Array<Subscription>) {

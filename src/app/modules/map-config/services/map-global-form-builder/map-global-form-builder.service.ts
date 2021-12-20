@@ -17,18 +17,18 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { FormArray, FormGroup, FormControl } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionField } from '@services/collection-service/models';
+import { toGeoOptionsObs } from '@services/collection-service/tools';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { MainFormService } from '@services/main-form/main-form.service';
 import {
-  ConfigFormGroup, SelectFormControl, SliderFormControl, InputFormControl, SlideToggleFormControl, ConfigFormGroupArray, HiddenFormControl
+  ConfigFormGroup, ConfigFormGroupArray, HiddenFormControl, InputFormControl, SelectFormControl, SliderFormControl, SlideToggleFormControl
 } from '@shared-models/config-form';
 import { Expression } from 'arlas-api';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
-import { toGeoOptionsObs } from '@services/collection-service/tools';
 import { Observable, of } from 'rxjs';
-import { CollectionField } from '@services/collection-service/models';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { MainFormService } from '@services/main-form/main-form.service';
 
 export class MapGlobalFormGroup extends ConfigFormGroup {
   constructor() {

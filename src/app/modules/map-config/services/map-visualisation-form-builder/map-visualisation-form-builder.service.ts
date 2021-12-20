@@ -21,8 +21,7 @@ import { FormArray } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
-    ConfigFormGroup,
-    InputFormControl, VisualisationCheckboxFormControl, HiddenFormControl, SlideToggleFormControl
+    ConfigFormGroup, HiddenFormControl, InputFormControl, SlideToggleFormControl, VisualisationCheckboxFormControl
 } from '@shared-models/config-form';
 
 export class MapVisualisationFormGroup extends ConfigFormGroup {

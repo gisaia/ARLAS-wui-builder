@@ -17,9 +17,9 @@ specific language governing permissions and limitations
 under the License.
 */
 import { NgModule } from '@angular/core';
-import { SideModulesConfigRoutingModule } from './side-modules-config-routing.module';
-import { GlobalSideModulesComponent } from './components/global-side-modules/global-side-modules.component';
 import { SharedModule } from '@shared/shared.module';
+import { GlobalSideModulesComponent } from './components/global-side-modules/global-side-modules.component';
+import { SideModulesConfigRoutingModule } from './side-modules-config-routing.module';
 
 @NgModule({
   declarations: [GlobalSideModulesComponent],

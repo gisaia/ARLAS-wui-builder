@@ -16,11 +16,10 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { from, Observable, of } from 'rxjs';
-import { CollectionField } from './models';
-import { map } from 'rxjs/operators';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
-import { SelectOption } from '@shared-models/config-form';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { CollectionField } from './models';
 
 const TypeEnum = CollectionReferenceDescriptionProperty.TypeEnum;
 

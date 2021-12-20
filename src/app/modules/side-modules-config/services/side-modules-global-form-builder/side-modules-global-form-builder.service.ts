@@ -28,7 +28,7 @@ import {
   SlideToggleFormControl
 } from '@shared-models/config-form';
 import { urlValidator } from '@utils/validators';
-import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
+import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 

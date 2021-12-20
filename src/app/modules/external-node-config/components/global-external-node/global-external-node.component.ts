@@ -16,14 +16,13 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
-import { TranslateService } from '@ngx-translate/core';
-import { ComputeContributor} from 'arlas-web-contributors';
-import { FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
-import { HttpClient } from '@angular/common/http';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 
 @Component({

@@ -17,20 +17,16 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import {
-  ConfigFormGroup, SelectFormControl, SlideToggleFormControl, SliderFormControl,
-  InputFormControl,
-  HiddenFormControl,
-  ButtonToggleFormControl
-} from '@shared-models/config-form';
-import { Interval, CollectionReferenceDescriptionProperty } from 'arlas-api';
-import { Observable, Subscription, of } from 'rxjs';
-import { CollectionField } from '@services/collection-service/models';
-import { toOptionsObs, toNumericOrDateFieldsObs, toDateFieldsObs, toIntegerOrDateFieldsObs } from '@services/collection-service/tools';
-import { integerValidator } from '@utils/validators';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
-import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import { CollectionService, FIELD_TYPES } from '@services/collection-service/collection.service';
+import { toDateFieldsObs, toIntegerOrDateFieldsObs, toNumericOrDateFieldsObs, toOptionsObs } from '@services/collection-service/tools';
+import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
+import {
+  ButtonToggleFormControl, HiddenFormControl, InputFormControl, SelectFormControl, SliderFormControl, SlideToggleFormControl
+} from '@shared-models/config-form';
+import { integerValidator } from '@utils/validators';
+import { CollectionReferenceDescriptionProperty, Interval } from 'arlas-api';
+import { Observable, of, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export interface BucketsIntervalControls {

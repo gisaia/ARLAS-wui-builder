@@ -19,11 +19,10 @@ under the License.
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import * as d3c from 'd3-color';
 import * as d3i from 'd3-interpolate';
-import { NGXLogger } from 'ngx-logger';
 import { DialogPaletteSelectorData } from './model';
-import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 
 @Component({
   selector: 'app-dialog-palette',
@@ -38,8 +37,8 @@ export class DialogPaletteSelectorComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<DialogPaletteSelectorComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogPaletteSelectorData,
-    private logger: NGXLogger) { }
+    @Inject(MAT_DIALOG_DATA) public data: DialogPaletteSelectorData
+    ) { }
 
   public ngOnInit() {
     this.dialogRef.disableClose = true;

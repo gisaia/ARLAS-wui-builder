@@ -17,30 +17,30 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import {
-  ConfigFormGroup, SlideToggleFormControl, SelectFormControl, SliderFormControl, ButtonFormControl, TitleInputFormControl
-} from '@shared-models/config-form';
-import { WidgetFormBuilder } from '../widget-form-builder';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { Observable } from 'rxjs';
-import { CollectionField } from '@services/collection-service/models';
-import { toKeywordOptionsObs, NUMERIC_OR_DATE_TYPES } from '@services/collection-service/tools';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
-import { MatDialog } from '@angular/material';
-import { FormArray, FormGroup, FormControl } from '@angular/forms';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionField } from '@services/collection-service/models';
+import { NUMERIC_OR_DATE_TYPES, toKeywordOptionsObs } from '@services/collection-service/tools';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
-import {
-  MetricCollectFormGroup,
-  MetricCollectFormBuilderService
-} from '../metric-collect-form-builder/metric-collect-form-builder.service';
-import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
-import { HiddenFormControl } from '../../../../shared/models/config-form';
-import { Metric } from 'arlas-api';
+import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
+import {
+  ButtonFormControl, ConfigFormGroup, SelectFormControl, SliderFormControl,
+  SlideToggleFormControl, TitleInputFormControl
+} from '@shared-models/config-form';
+import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
+import { Metric } from 'arlas-api';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { Observable } from 'rxjs';
+import { HiddenFormControl } from '../../../../shared/models/config-form';
+import {
+  MetricCollectFormBuilderService, MetricCollectFormGroup
+} from '../metric-collect-form-builder/metric-collect-form-builder.service';
+import { WidgetFormBuilder } from '../widget-form-builder';
 
 export class PowerbarConfigForm extends CollectionConfigFormGroup {
 

@@ -1,5 +1,5 @@
 import { Layer } from './models-map-config';
-import { BasemapStyle } from 'arlas-web-components/components/mapgl/model/mapLayers';
+import { BasemapStyle } from 'arlas-web-components';
 import { VisualisationSetConfig } from 'arlas-web-components';
 
 /*

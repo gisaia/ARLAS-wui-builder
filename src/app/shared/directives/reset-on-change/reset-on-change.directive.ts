@@ -23,7 +23,7 @@ import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-to
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { NGXLogger } from 'ngx-logger';
 import { ConfigFormControl } from '@shared-models/config-form';
-import { MatButtonToggleGroup } from '@angular/material';
+import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { Subscription } from 'rxjs';
 
 /**

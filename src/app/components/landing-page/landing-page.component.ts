@@ -17,33 +17,27 @@ specific language governing permissions and limitations
 under the License.
 */
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, Output, Inject, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router, ActivatedRoute } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { ArlasConfigService, ConfigAction, ConfigActionEnum } from 'arlas-wui-toolkit';
-import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
-import { NGXLogger } from 'ngx-logger';
-import { Subject, Subscription } from 'rxjs';
-import { StartupService, ZONE_WUI_BUILDER } from '../../services/startup/startup.service';
-import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
-import { MapConfig } from '@services/main-form-manager/models-map-config';
-import { DataWithLinks } from 'arlas-persistence-api';
 import { PageEvent } from '@angular/material/paginator';
-import { DialogData } from '@shared-components/input-modal/input-modal.component';
-import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
-import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
-import { ErrorService } from 'arlas-wui-toolkit/services/error/error.service';
-import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persistence.service';
-import { Config } from '@services/main-form-manager/models-config';
-import { map } from 'rxjs/internal/operators/map';
-import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
-import { UserInfosComponent } from 'arlas-wui-toolkit//components/user-infos/user-infos.component';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MenuService } from '@services/menu/menu.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+import { Config } from '@services/main-form-manager/models-config';
+import { MapConfig } from '@services/main-form-manager/models-map-config';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { MenuService } from '@services/menu/menu.service';
+import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
+import { DialogData } from '@shared-components/input-modal/input-modal.component';
+import { DataWithLinks } from 'arlas-persistence-api';
+import { ArlasConfigService, ArlasConfigurationDescriptor, ArlasSettingsService, AuthentificationService, ConfigAction, ConfigActionEnum, ErrorService, PersistenceService, UserInfosComponent } from 'arlas-wui-toolkit';
+import { NGXLogger } from 'ngx-logger';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Subject, Subscription } from 'rxjs';
+import { map } from 'rxjs/internal/operators/map';
+import { StartupService, ZONE_WUI_BUILDER } from '../../services/startup/startup.service';
 
 enum InitialChoice {
   none = 0,
@@ -209,7 +203,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().customControls.collection.value;
     this.startupService.setDefaultCollection(collection);
     this.mainFormManager.initMainModulesForms(true);
-    setTimeout(() => this.startEvent.next(), 100);
+    setTimeout(() => this.startEvent.next(null), 100);
   }
 
   public initWithConfig(configJson: Config, configMapJson: MapConfig, configId?: string, configName?: string, isRetry?: boolean) {
@@ -256,7 +250,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
          */
         setTimeout(() => {
           this.mainFormManager.doImport(configJson, configMapJson);
-          this.startEvent.next();
+          this.startEvent.next(null);
           this.spinner.hide('importconfig');
         }, 100);
       }

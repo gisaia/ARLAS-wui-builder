@@ -17,33 +17,28 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE, COUNT_OR_METRIC } from '@shared-services/property-selector-form-builder/models';
-import {
-  ConfigFormGroup, SelectFormControl, ColorFormControl, SliderFormControl, ButtonFormControl,
-  SlideToggleFormControl,
-  InputFormControl,
-  HiddenFormControl,
-  ConfigFormControl,
-  ButtonToggleFormControl,
-  ColorPreviewFormControl
-} from '@shared-models/config-form';
-import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
-import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toTextOrKeywordOptionsObs } from '@services/collection-service/tools';
-import { Observable } from 'rxjs';
-import { CollectionField } from '@services/collection-service/models';
-import { MatDialog } from '@angular/material';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
-import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { DialogPaletteSelectorData } from '@map-config/components/dialog-palette-selector/model';
 import { DialogPaletteSelectorComponent } from '@map-config/components/dialog-palette-selector/dialog-palette-selector.component';
+import { DialogPaletteSelectorData } from '@map-config/components/dialog-palette-selector/model';
 import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
-import { valuesToOptions } from '@utils/tools';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
+import { CollectionField } from '@services/collection-service/models';
+import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toTextOrKeywordOptionsObs } from '@services/collection-service/tools';
+import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
+import { 
+  ButtonFormControl, ButtonToggleFormControl, ColorFormControl, ColorPreviewFormControl, 
+  ConfigFormControl, ConfigFormGroup, HiddenFormControl, InputFormControl, SelectFormControl, 
+  SliderFormControl, SlideToggleFormControl 
+} from '@shared-models/config-form';
+import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
+import { valuesToOptions } from '@utils/tools';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { Observable } from 'rxjs';
 
 export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
   constructor(

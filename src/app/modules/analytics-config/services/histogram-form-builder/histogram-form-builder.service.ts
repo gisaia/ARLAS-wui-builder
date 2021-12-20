@@ -17,25 +17,25 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionField } from '@services/collection-service/models';
+import { NUMERIC_OR_DATE_TYPES, toNumericOrDateFieldsObs, toOptionsObs } from '@services/collection-service/tools';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
-  ConfigFormGroup, SlideToggleFormControl, SelectFormControl, TitleInputFormControl
+  ConfigFormGroup, SelectFormControl, SlideToggleFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
+import { Metric } from 'arlas-api';
 import { ChartType } from 'arlas-web-components';
-import { FormGroup, FormControl } from '@angular/forms';
-import { WidgetFormBuilder } from '../widget-form-builder';
 import {
   BucketsIntervalFormBuilderService, BucketsIntervalFormGroup
 } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
 import {
   MetricCollectFormBuilderService, MetricCollectFormGroup
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
-import { toOptionsObs, NUMERIC_OR_DATE_TYPES, toNumericOrDateFieldsObs } from '@services/collection-service/tools';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
-import { CollectionField } from '@services/collection-service/models';
-import { Metric } from 'arlas-api';
+import { WidgetFormBuilder } from '../widget-form-builder';
 
 // TODO put in common with timeline
 enum DateFormats {

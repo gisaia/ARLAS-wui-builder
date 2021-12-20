@@ -29,7 +29,7 @@ import { CollectionService } from '@services/collection-service/collection.servi
 })
 export class DialogFilterComponent implements OnInit {
 
-  constructor(
+  public constructor(
     public dialogRef: MatDialogRef<DialogFilterComponent>,
     public collectionService: CollectionService,
     @Inject(MAT_DIALOG_DATA) public data: {mapForm: MapFilterFormGroup, collection: string}

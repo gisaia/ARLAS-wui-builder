@@ -17,14 +17,13 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { ConfigFormGroup, SelectFormControl, InputFormControl } from '@shared-models/config-form';
-import { Metric } from 'arlas-api';
-import { CollectionField } from '@services/collection-service/models';
-import { Observable } from 'rxjs';
-import { NUMERIC_OR_DATE_TYPES, titleCase } from '@services/collection-service/tools';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
-import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionField } from '@services/collection-service/models';
+import { NUMERIC_OR_DATE_TYPES, titleCase } from '@services/collection-service/tools';
+import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
+import { ConfigFormGroup, InputFormControl, SelectFormControl } from '@shared-models/config-form';
+import { Metric } from 'arlas-api';
 
 export const DEFAULT_METRIC_VALUE = 'Count';
 

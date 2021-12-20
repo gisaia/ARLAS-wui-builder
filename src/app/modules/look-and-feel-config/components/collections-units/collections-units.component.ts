@@ -19,8 +19,6 @@ under the License.
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
-// tslint:disable-next-line: max-line-length
-import { CollectionUnitFormGroup } from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
 import { SlideToggleFormControl } from '@shared-models/config-form';
 
 @Component({

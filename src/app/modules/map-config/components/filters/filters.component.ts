@@ -16,19 +16,18 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MapFilterFormGroup, MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { ConfigFormGroup } from '@shared-models/config-form';
 import { camelize } from '@utils/tools';
 import { MapglLegendComponent } from 'arlas-web-components';
 import { Subscription } from 'rxjs';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { MapLayerFormGroup, MapFilterFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
-import { ConfigFormGroup } from '@shared-models/config-form';
-import { LAYER_MODE } from '../edit-layer/models';
-import { MapLayerFormBuilderService } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { DialogFilterComponent } from '../dialog-filter/dialog-filter.component';
+import { LAYER_MODE } from '../edit-layer/models';
 
 
 export interface Layer {

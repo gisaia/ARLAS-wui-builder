@@ -21,8 +21,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Configuration } from 'arlas-api';
-import { ArlasCollaborativesearchService, ArlasConfigService, ArlasExploreApi,
-  ArlasStartupService, ArlasSettings } from 'arlas-wui-toolkit';
+import { 
+  ArlasCollaborativesearchService, ArlasConfigService, ArlasExploreApi,
+  ArlasStartupService, ArlasSettings 
+} from 'arlas-wui-toolkit';
 import * as portableFetch from 'portable-fetch';
 
 export const ZONE_WUI_BUILDER = 'config.json';

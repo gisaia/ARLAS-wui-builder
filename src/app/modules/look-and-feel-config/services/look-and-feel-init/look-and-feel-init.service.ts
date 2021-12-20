@@ -20,8 +20,6 @@ import { Injectable } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { LookAndFeelGlobalFormBuilderService } from '../look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
 
-
-
 @Injectable({
   providedIn: 'root'
 })

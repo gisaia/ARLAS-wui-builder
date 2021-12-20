@@ -18,13 +18,13 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { toKeywordOptionsObs, toTextOptionsObs } from '@services/collection-service/tools';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfigFormGroup, InputFormControl, SelectFormControl, SelectOption, SliderFormControl } from '@shared-models/config-form';
 import { Observable } from 'rxjs';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 export class SearchGlobalFormGroup extends ConfigFormGroup {
 

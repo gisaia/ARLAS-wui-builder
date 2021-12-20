@@ -16,30 +16,29 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Injectable } from '@angular/core';
-import { WidgetFormBuilder } from '../widget-form-builder';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { CollectionService } from '@services/collection-service/collection.service';
-import {
-  ConfigFormGroup, InputFormControl, SliderFormControl, SlideToggleFormControl, SelectFormControl, TextareaFormControl, SelectOption,
-  HiddenFormControl,
-  ComponentFormControl,
-  TitleInputFormControl,
-  ButtonFormControl,
-  UrlTemplateControl
-} from '@shared-models/config-form';
-import { FormArray, Validators, FormGroup, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { toOptionsObs, NUMERIC_OR_DATE_OR_TEXT_TYPES, TEXT_OR_KEYWORD,
-  toNumericOrDateOrKeywordOrTextObs } from '@services/collection-service/tools';
 import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
-import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { Injectable } from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
+import { CollectionService } from '@services/collection-service/collection.service';
+import {
+  NUMERIC_OR_DATE_OR_TEXT_TYPES, TEXT_OR_KEYWORD,
+  toNumericOrDateOrKeywordOrTextObs, toOptionsObs
+} from '@services/collection-service/tools';
+import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
+import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
+import {
+  ButtonFormControl, ComponentFormControl, ConfigFormGroup, HiddenFormControl, InputFormControl, 
+  SelectFormControl, SelectOption, SliderFormControl, SlideToggleFormControl, TextareaFormControl, 
+  TitleInputFormControl, UrlTemplateControl
+} from '@shared-models/config-form';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { Observable } from 'rxjs';
+import { WidgetFormBuilder } from '../widget-form-builder';
 
 export class ResultlistConfigForm extends CollectionConfigFormGroup {
 

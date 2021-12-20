@@ -17,13 +17,13 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { MainFormService } from '@services/main-form/main-form.service';
+import { FormArray } from '@angular/forms';
 import {
   LookAndFeelGlobalFormGroup
 } from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
-import { importElements } from '@services/main-form-manager/tools';
 import { Config } from '@services/main-form-manager/models-config';
-import { FormArray } from '@angular/forms';
+import { importElements } from '@services/main-form-manager/tools';
+import { MainFormService } from '@services/main-form/main-form.service';
 
 @Injectable({
   providedIn: 'root'

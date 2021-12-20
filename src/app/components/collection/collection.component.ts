@@ -16,13 +16,12 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
-import { getFieldProperties } from 'arlas-wui-toolkit/tools/utils';
-import { CollectionReferenceDescriptionProperty, CollectionReferenceDescription } from 'arlas-api';
-import { MainFormService } from '@services/main-form/main-form.service';
 import { FlatTreeControl } from '@angular/cdk/tree';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { CollectionReferenceDescription, CollectionReferenceDescriptionProperty } from 'arlas-api';
+import { ArlasCollaborativesearchService, getFieldProperties } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 
 interface FlatDescription {

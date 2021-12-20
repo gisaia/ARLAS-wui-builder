@@ -16,19 +16,19 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, ViewChild, OnDestroy } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { TranslateService } from '@ngx-translate/core';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { moveInFormArray, isFullyTouched } from '@utils/tools';
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
-import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
-import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { MatTabGroup } from '@angular/material/tabs';
+import { TranslateService } from '@ngx-translate/core';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
+import { isFullyTouched, moveInFormArray } from '@utils/tools';
 import { Subscription } from 'rxjs';
 
 @Component({

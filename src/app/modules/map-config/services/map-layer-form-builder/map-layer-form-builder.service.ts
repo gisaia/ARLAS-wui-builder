@@ -17,35 +17,34 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup, ValidatorFn, FormControl } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
+import tilebelt from '@mapbox/tilebelt';
 import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
 import {
-  toAllButGeoOptionsObs, toGeoOptionsObs, toGeoPointOptionsObs, toKeywordOptionsObs,
-  toNumericOrDateOrKeywordObs, toNumericOrDateOptionsObs, toTextOrKeywordOptionsObs
+  toAllButGeoOptionsObs, toGeoOptionsObs, toGeoPointOptionsObs, toKeywordOptionsObs, toNumericOrDateOptionsObs, 
+  toNumericOrDateOrKeywordObs, toTextOrKeywordOptionsObs
 } from '@services/collection-service/tools';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
   ConfigFormGroup, HiddenFormControl,
-  InputFormControl,
-  OrderedSelectFormControl, SelectFormControl,
-  SliderFormControl, SlideToggleFormControl, VisualisationCheckboxFormControl, VisualisationCheckboxOption,
-  MapFiltersControl, TypedSelectFormControl, MultipleSelectFormControl, SelectOption, ConfigFormControl
+  InputFormControl, MapFiltersControl, MultipleSelectFormControl, OrderedSelectFormControl, SelectFormControl, 
+  SelectOption, SliderFormControl, SlideToggleFormControl, TypedSelectFormControl, 
+  VisualisationCheckboxFormControl, VisualisationCheckboxOption
 } from '@shared-models/config-form';
 import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
 import {
   PropertySelectorFormBuilderService, PropertySelectorFormGroup
 } from '@shared/services/property-selector-form-builder/property-selector-form-builder.service';
 import { valuesToOptions } from '@utils/tools';
-import { Observable, of, Subject } from 'rxjs';
-import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE, FILTER_OPERATION, LINE_TYPE } from './models';
-import { Granularity, ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
+import { ClusterAggType, FeatureRenderMode, Granularity } from 'arlas-web-contributors/models/models';
+import { Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
-import tilebelt from '@mapbox/tilebelt';
+import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE } from './models';
 
 
 export const PRECISION_TOLERATED_DIFFERENCE = 3;

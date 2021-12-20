@@ -16,16 +16,16 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Injectable } from '@angular/core';
-import { MainFormService } from '@services/main-form/main-form.service';
-import {
-  Config, AnalyticComponentConfig, AnalyticComponentHistogramInputConfig, ContributorConfig
-} from '@services/main-form-manager/models-config';
-import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timeline-global-form-builder.service';
-import { importElements } from '@services/main-form-manager/tools';
 import { BY_BUCKET_OR_INTERVAL } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { Injectable } from '@angular/core';
 import { CollectionService } from '@services/collection-service/collection.service';
+import {
+  AnalyticComponentConfig, AnalyticComponentHistogramInputConfig, Config, ContributorConfig
+} from '@services/main-form-manager/models-config';
+import { importElements } from '@services/main-form-manager/tools';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timeline-global-form-builder.service';
 
 @Injectable({
   providedIn: 'root'

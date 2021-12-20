@@ -17,18 +17,17 @@ specific language governing permissions and limitations
 under the License.
 */
 
-import { Component, Inject, OnInit, AfterViewInit, ViewChild, Input, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, Input, OnDestroy, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MapContributor } from 'arlas-web-contributors';
-import { MapglComponent } from 'arlas-web-components';
-import { ArlasCollaborativesearchService, ArlasConfigService, ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
-import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
-import { StartupService } from '@services/startup/startup.service';
-import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { Subscription, merge } from 'rxjs';
+import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
+import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { StartupService } from '@services/startup/startup.service';
+import { MapglComponent } from 'arlas-web-components';
+import { MapContributor } from 'arlas-web-contributors';
+import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService, ContributorBuilder } from 'arlas-wui-toolkit';
+import { merge, Subscription } from 'rxjs';
 
 export interface MapglComponentInput {
   mapglContributors: MapContributor[];

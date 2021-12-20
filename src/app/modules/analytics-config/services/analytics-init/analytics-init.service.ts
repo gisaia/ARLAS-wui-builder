@@ -16,14 +16,13 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, AbstractControl, FormGroup } from '@angular/forms';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
-import { ArlasStartupService, ArlasCollaborativesearchService, ArlasConfigService } from 'arlas-wui-toolkit';
-import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
+import { Injectable } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
+import { MainFormService } from '@services/main-form/main-form.service';
 import { OperationEnum } from 'arlas-web-core';
+import { ArlasCollaborativesearchService, ArlasConfigService, ArlasStartupService, ContributorBuilder } from 'arlas-wui-toolkit';
 
 @Injectable({
   providedIn: 'root'

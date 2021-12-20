@@ -16,52 +16,45 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { NgModule, APP_INITIALIZER, forwardRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { HttpClient } from '@angular/common/http';
+import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, forwardRef, NgModule } from '@angular/core';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { LandingPageComponent, LandingPageDialogComponent } from '@components/landing-page/landing-page.component';
 import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
 import { PageNotFoundComponent } from '@components/page-not-found/page-not-found.component';
-import { MapConfigModule } from '@map-config/map-config.module';
-import { SearchConfigModule } from '@search-config/search-config.module';
-import { TimelineConfigModule } from '@timeline-config/timeline-config.module';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'environments/environment';
-import { LoggerModule } from 'ngx-logger';
-import {
-  ArlasCollaborativesearchService, ArlasStartupService,
-  ArlasColorGeneratorLoader
-} from 'arlas-wui-toolkit';
-import { SharedModule } from '@shared/shared.module';
-import { NgxSpinnerModule } from 'ngx-spinner';
-import { StartupService } from '@services/startup/startup.service';
-import { ArlasWalkthroughService } from 'arlas-wui-toolkit/services/walkthrough/walkthrough.service';
-import { WalkthroughService } from '@services/walkthrough/walkthrough.service';
-import { AnalyticsConfigModule } from './modules/analytics-config/analytics-config.module';
-
-
-import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS, GestureConfig, MatPaginatorIntl } from '@angular/material';
-import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
-import { OAuthModule } from 'angular-oauth2-oidc';
-import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { LookAndFeelConfigModule } from '@look-and-feel-config/look-and-feel-config.module';
+import { MapConfigModule } from '@map-config/map-config.module';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { ArlasConfigurationUpdaterService } from 'arlas-wui-toolkit/services/configuration-updater/configurationUpdater.service';
-import { FETCH_OPTIONS, CONFIG_UPDATER } from 'arlas-wui-toolkit/services/startup/startup.service';
-import { ErrorModalModule } from 'arlas-wui-toolkit/components/errormodal/errormodal.module';
-import { configUpdaterFactory, getOptionsFactory } from 'arlas-wui-toolkit/app.module';
-import { GET_OPTIONS } from 'arlas-wui-toolkit/services/persistence/persistence.service';
-import { ConfigMenuModule } from 'arlas-wui-toolkit/components/config-manager/config-menu/config-menu.module';
-import { PaginatorI18n } from 'arlas-wui-toolkit/tools/paginatori18n';
-import { UserInfosComponent } from 'arlas-wui-toolkit/components/user-infos/user-infos.component';
-import { StatusComponent } from './components/status/status.component';
+import { SearchConfigModule } from '@search-config/search-config.module';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { StartupService } from '@services/startup/startup.service';
+import { WalkthroughService } from '@services/walkthrough/walkthrough.service';
+import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
+import { SharedModule } from '@shared/shared.module';
+import { TimelineConfigModule } from '@timeline-config/timeline-config.module';
+import { OAuthModule } from 'angular-oauth2-oidc';
+import {
+  ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigurationDescriptor, ArlasConfigurationUpdaterService, 
+  ArlasStartupService, ArlasWalkthroughService, AuthentificationService, ConfigMenuModule, configUpdaterFactory, 
+  CONFIG_UPDATER, ErrorModalModule, FETCH_OPTIONS, getOptionsFactory, GET_OPTIONS, PaginatorI18n, UserInfosComponent
+} from 'arlas-wui-toolkit';
+import { environment } from 'environments/environment';
+import { LoggerModule } from 'ngx-logger';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 import { CollectionComponent } from './components/collection/collection.component';
+import { StatusComponent } from './components/status/status.component';
+import { AnalyticsConfigModule } from './modules/analytics-config/analytics-config.module';
 import { ResultListConfigModule } from './modules/result-list-config/result-list-config.module';
+
+
+
+
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -161,11 +154,7 @@ export function createTranslateLoader(http: HttpClient) {
     {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
       useValue: { duration: 3000, verticalPosition: 'bottom' }
-    },
-    {
-      provide: HAMMER_GESTURE_CONFIG,
-      useClass: GestureConfig
-    },
+    },  
     {
       provide: GET_OPTIONS,
       useFactory: getOptionsFactory,

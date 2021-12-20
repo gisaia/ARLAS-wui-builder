@@ -20,8 +20,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { GlobalLookAndFeelComponent } from './components/global-look-and-feel/global-look-and-feel.component';
 
-
-
 const routes: Routes = [
   {
     path: '', children: [

@@ -29,7 +29,7 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
   ConfigFormGroup, InputFormControl, MultipleSelectFormControl, SelectFormControl,
-  SliderFormControl, SlideToggleFormControl, SelectOption
+  SliderFormControl, SlideToggleFormControl
 } from '@shared-models/config-form';
 import { ChartType } from 'arlas-web-components';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';

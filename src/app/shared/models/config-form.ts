@@ -25,7 +25,7 @@ import { CollectionField } from '@services/collection-service/models';
 import { METRIC_TYPES } from '@services/collection-service/collection.service';
 import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toNumericOrDateOrKeywordOrTextObs } from '@services/collection-service/tools';
 import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
-import { MatCheckboxChange } from '@angular/material';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { updateValueAndValidity } from '@utils/tools';
 

@@ -16,14 +16,14 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { MainFormService } from '@services/main-form/main-form.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/internal/operators/filter';
-import { map } from 'rxjs/operators';
+import { MainFormService } from '@services/main-form/main-form.service';
 import { isFullyTouched } from '@utils/tools';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/internal/operators/filter';
+import { map } from 'rxjs/operators';
 
 interface Tab {
   routeurLink: string;

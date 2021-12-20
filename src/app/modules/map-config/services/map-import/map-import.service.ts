@@ -17,25 +17,22 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { MapConfig, Layer, isTechnicalArlasLayer } from '@services/main-form-manager/models-map-config';
-import { Config, MapglComponentConfig, ContributorConfig, NormalizationFieldConfig } from '@services/main-form-manager/models-config';
-import { MainFormService, ARLAS_ID } from '@services/main-form/main-form.service';
-import { importElements } from '@services/main-form-manager/tools';
-import { MapLayerFormBuilderService, MapLayerFormGroup } from '../map-layer-form-builder/map-layer-form-builder.service';
-import { LayerSourceConfig, ColorConfig } from 'arlas-web-contributors';
-import { LAYER_MODE } from '@map-config/components/edit-layer/models';
-import { VISIBILITY, NORMALIZED } from '@services/main-form-manager/config-map-export-helper';
-import { GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, LINE_TYPE_VALUES, LINE_TYPE } from '../map-layer-form-builder/models';
-import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
-import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
-import { COUNT_OR_METRIC } from '@shared-services/property-selector-form-builder/models';
-import { VisualisationSetConfig, BasemapStyle } from 'arlas-web-components';
-import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
-import { FormControl, FormGroup, FormArray, Form } from '@angular/forms';
-import { DEFAULT_FETCH_NETWORK_LEVEL } from 'arlas-web-contributors';
+import { LAYER_MODE } from '@map-config/components/edit-layer/models';
+import { NORMALIZED, VISIBILITY } from '@services/main-form-manager/config-map-export-helper';
+import { Config, ContributorConfig, MapglComponentConfig, NormalizationFieldConfig } from '@services/main-form-manager/models-config';
+import { isTechnicalArlasLayer, Layer, MapConfig } from '@services/main-form-manager/models-map-config';
+import { importElements } from '@services/main-form-manager/tools';
+import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
+import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
+import { BasemapStyle, LayerMetadata, VisualisationSetConfig } from 'arlas-web-components';
+import { ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, LayerSourceConfig } from 'arlas-web-contributors';
 import { ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
-import { LayerMetadata } from 'arlas-web-components';
+import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
+import { MapLayerFormBuilderService, MapLayerFormGroup } from '../map-layer-form-builder/map-layer-form-builder.service';
+import { CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE, LINE_TYPE_VALUES } from '../map-layer-form-builder/models';
+import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
