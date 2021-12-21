@@ -36,8 +36,8 @@ import 'zone.js/dist/zone-testing';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatMenuModule } from '@angular/material/menu';
-import { IconPickerModule } from 'ngx-icon-picker';
-import { MatTreeModule } from '@angular/material';
+import { IconPickerModule } from '@gisaia-team/ngx-icon-picker';
+import { MatTreeModule } from '@angular/material/tree';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 // define modules to be injected in every test
