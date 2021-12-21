@@ -3,7 +3,7 @@
   "version": "19.3.0-dev",
   "scripts": {
     "ng": "ng",
-    
+    "postinstall": "patch-package --patch-dir ./node_modules/arlas-web-core/patches",
     "start": "ng serve",
     "build": "node --max_old_space_size=6144 node_modules/@angular/cli/bin/ng build --prod --aot --base-href='$ARLAS_BUILDER_BASE_HREF/'",
     "build:stats": "ng build --stats-json",

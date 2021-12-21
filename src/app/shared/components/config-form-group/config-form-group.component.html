@@ -10,7 +10,7 @@
                         <mat-step *ngIf="!formGroup.hide" label="{{formGroup.stepName | translate}}" [stepControl]="formGroup">
                             <arlas-config-form-group [configFormGroup]="formGroup" [parentConfigFormGroup]="parentConfigFormGroup" [defaultKey]="defaultKey"
                                 isSubGroup="true">
-                            </app-config-form-group>
+                            </arlas-config-form-group>
                             <div>
                                 <button mat-button matStepperPrevious
                                     *ngIf="!isFirstControl(formGroup)">{{ 'Back' | translate}}</button>
@@ -37,7 +37,7 @@
                             </ng-template>
                             <arlas-config-form-group [configFormGroup]="formGroup" [parentConfigFormGroup]="parentConfigFormGroup" [defaultKey]="defaultKey"
                                 isSubGroup="true">
-                            </app-config-form-group>
+                            </arlas-config-form-group>
                             <ng-content select="control.key"></ng-content>
                         </mat-tab>
                     </div>
@@ -55,11 +55,11 @@
                         <arlas-config-element [fullSize]="!control.description">
                             <div form-fields>
                                 <arlas-config-form-control [control]="formControl" [parentFormGroup]="parentConfigFormGroup" [defaultKey]="defaultKey" (updateSyncOptions)="updateSyncOptions.next({prefix: $event, control: formControl})">
-                                </app-config-form-control>
+                                </arlas-config-form-control>
                                 <div *ngFor="let child of formControl.childs()">
                                     <div *ngIf="child.enabled">
                                         <arlas-config-form-control [control]="child" [parentFormGroup]="parentConfigFormGroup" [defaultKey]="defaultKey" (updateSyncOptions)="updateSyncOptions.next({prefix: $event, control: child})">
-                                        </app-config-form-control>
+                                        </arlas-config-form-control>
                                     </div>
                                 </div>
                             </div>
@@ -76,17 +76,17 @@
                                     </div>
                                 </div>
                             </div>
-                        </app-config-element>
+                        </arlas-config-element>
                     </ng-container>
                 </div>
                 <div *ngIf="isFormGroup(control); let formGroup">
                     <arlas-config-form-group [configFormGroup]="formGroup" [parentConfigFormGroup]="parentConfigFormGroup" [defaultKey]="defaultKey" isSubGroup="true">
-                    </app-config-form-group>
+                    </arlas-config-form-group>
                 </div>
                 <div *ngIf="isFormGroupArray(control); let formGroupArray">
                     <arlas-config-form-group-array [configFormGroupArray]="formGroupArray"  [defaultKey]="defaultKey"
                         isSubGroup="true">
-                    </app-config-form-group-array>
+                    </arlas-config-form-group-array>
                 </div>
             </ng-container>
         </div>

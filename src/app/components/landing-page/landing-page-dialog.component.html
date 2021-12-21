@@ -66,7 +66,7 @@
                     <button (click)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false" [disabled]="this.mainFormService.startingConfig.getFg().get('serverUrl').invalid"
                         mat-stroked-button color="accent">{{'Show collections' | translate}}</button>
                 </div>
-            </app-config-element>
+            </arlas-config-element>
             <arlas-config-element *ngIf="isServerReady">
                 <div form-fields class="collection">
                     <mat-form-field>
@@ -81,7 +81,7 @@
                 <div description>
                     {{'Choose main collection' | translate}}
                 </div>
-            </app-config-element>
+            </arlas-config-element>
         </div>
     </mat-dialog-content>
     <mat-dialog-actions>

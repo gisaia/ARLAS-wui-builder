@@ -6,7 +6,7 @@
             </mat-card>
         </div>
         <div class="detail-controls">
-            <arlas-config-form-control [control]="detail.controls.name"></app-config-form-control>
+            <arlas-config-form-control [control]="detail.controls.name"></arlas-config-form-control>
             <div class="detail-buttons">
                 <button mat-icon-button cdkDragHandle>
                     <mat-icon>drag_indicator</mat-icon>
@@ -26,10 +26,10 @@
                     <button mat-icon-button (click)="deleteField(di, fi)">
                         <mat-icon>delete</mat-icon>
                     </button>
-                    <arlas-config-form-control [control]="field.controls.label"></app-config-form-control>
+                    <arlas-config-form-control [control]="field.controls.label"></arlas-config-form-control>
                 </div>
-                <arlas-config-form-control [control]="field.controls.path"></app-config-form-control>
-                <arlas-config-form-control [control]="field.controls.process"></app-config-form-control>
+                <arlas-config-form-control [control]="field.controls.path"></arlas-config-form-control>
+                <arlas-config-form-control [control]="field.controls.process"></arlas-config-form-control>
             </div>
             <div class="add-field">
                 <button mat-stroked-button (click)="addField(di)" color="primary" type="button"
