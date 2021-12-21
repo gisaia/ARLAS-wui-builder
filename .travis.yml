@@ -5,25 +5,32 @@ language: node_js
 node_js:
   - "16"
 
-# keep the npm cache around to speed up installs  
+before_install:
+  # Repo for Yarn
+  - sudo apt-key adv --keyserver pgp.mit.edu --recv D101F7899D41F3C3
+  - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+  - sudo apt-get update -qq
+  - sudo apt-get install -y -qq yarn
+
+# keep the yarn cache around to speed up installs  
 cache:
   directories:
-    - "$HOME/.npm"
+    - $HOME/.yarn-cache
 
 jobs:
   include:
     - env:
         - job=lint
-      script: npm run lint
+      script: yarn run lint
     - env:
         - job=licence
-      script: npm run licence-check
+      script: yarn run licence-check
     - env:
         - job=build
       script:
         - export NODE_OPTIONS=--max_old_space_size=8192;
-        - npm ci
-        - npm run build
+        - yarn ci
+        - yarn run build
     - env:
         - job=test
-      script: npm run test
+      script: yarn run test
