@@ -30,7 +30,7 @@ import { InputModalComponent } from '@shared-components/input-modal/input-modal.
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-global-result-list',
+  selector: 'arlas-global-result-list',
   templateUrl: './global-result-list.component.html',
   styleUrls: ['./global-result-list.component.scss']
 })
@@ -43,7 +43,7 @@ export class GlobalResultListComponent implements OnDestroy {
   private removeAfterClosedSub: Subscription;
   public preview = [];
 
-  constructor(
+  public constructor(
     public mainFormService: MainFormService,
     private collectionService: CollectionService,
     private dialog: MatDialog,
@@ -70,8 +70,12 @@ export class GlobalResultListComponent implements OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.newAfterClosedSub) { this.newAfterClosedSub.unsubscribe(); }
-    if (this.removeAfterClosedSub) { this.removeAfterClosedSub.unsubscribe(); }
+    if (this.newAfterClosedSub) {
+      this.newAfterClosedSub.unsubscribe();
+    }
+    if (this.removeAfterClosedSub) {
+      this.removeAfterClosedSub.unsubscribe();
+    }
   }
 
   public removeTab(tabIndex: number) {

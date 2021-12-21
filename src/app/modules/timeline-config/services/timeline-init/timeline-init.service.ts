@@ -26,7 +26,7 @@ import { TimelineGlobalFormBuilderService } from '../timeline-global-form-builde
 })
 export class TimelineInitService {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private timelineGlobalFormBuilder: TimelineGlobalFormBuilderService,
     private collectionService: CollectionService

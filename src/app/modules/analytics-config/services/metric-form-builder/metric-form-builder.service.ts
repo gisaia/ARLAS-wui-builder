@@ -24,14 +24,14 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
-  ConfigFormGroup, InputFormControl, MetricWithFieldListFormControl, SelectFormControl, 
+  ConfigFormGroup, InputFormControl, MetricWithFieldListFormControl, SelectFormControl,
   SlideToggleFormControl, TextareaFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { WidgetFormBuilder } from '../widget-form-builder';
 
 export class MetricFormGroup extends CollectionConfigFormGroup {
 
-  constructor(
+  public constructor(
     collection: string,
     collectionService: CollectionService
   ) {
@@ -158,7 +158,7 @@ export class MetricFormBuilderService extends WidgetFormBuilder {
 
   public defaultKey = 'analytics.widgets.metric';
 
-  constructor(
+  public constructor(
     protected mainFormService: MainFormService,
     protected collectionService: CollectionService,
     private defaultValuesService: DefaultValuesService,

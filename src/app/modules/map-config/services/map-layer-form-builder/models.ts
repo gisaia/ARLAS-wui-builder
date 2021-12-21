@@ -17,43 +17,43 @@ specific language governing permissions and limitations
 under the License.
 */
 export enum GEOMETRY_TYPE {
-    fill = 'fill',
-    line = 'line',
-    circle = 'circle',
-    heatmap = 'heatmap'
+  fill = 'fill',
+  line = 'line',
+  circle = 'circle',
+  heatmap = 'heatmap'
 }
 
 export enum LINE_TYPE {
-    solid = 'solid',
-    dashed = 'dashed',
-    dotted = 'dotted',
-    mixed = 'mixed'
+  solid = 'solid',
+  dashed = 'dashed',
+  dotted = 'dotted',
+  mixed = 'mixed'
 }
 
 export const LINE_TYPE_VALUES: Map<string, Array<number>> = new Map([
-    ['dashed', [2, 5]],
-    ['dotted', [0.1, 5]],
-    ['mixed', [5, 5, 0.1, 5]]
+  ['dashed', [2, 5]],
+  ['dotted', [0.1, 5]],
+  ['mixed', [5, 5, 0.1, 5]]
 ]);
 
 
 export enum FILTER_OPERATION {
-    IN = 'IN',
-    NOT_IN = 'NOT_IN',
-    RANGE = 'RANGE',
-    EQUAL = 'EQUAL',
-    NOT_EQUAL = 'NOT_EQUAL',
-    OUT_RANGE = 'OUT_RANGE'
+  IN = 'IN',
+  NOT_IN = 'NOT_IN',
+  RANGE = 'RANGE',
+  EQUAL = 'EQUAL',
+  NOT_EQUAL = 'NOT_EQUAL',
+  OUT_RANGE = 'OUT_RANGE'
 }
 
 export enum AGGREGATE_GEOMETRY_TYPE {
-    cell_center = 'cell_center',
-    cell = 'cell',
-    bbox = 'bbox',
-    centroid = 'centroid'
+  cell_center = 'cell_center',
+  cell = 'cell',
+  bbox = 'bbox',
+  centroid = 'centroid'
 }
 
 export enum CLUSTER_GEOMETRY_TYPE {
-    aggregated_geometry = 'aggregated_geometry',
-    raw_geometry = 'raw_geometry'
+  aggregated_geometry = 'aggregated_geometry',
+  raw_geometry = 'raw_geometry'
 }

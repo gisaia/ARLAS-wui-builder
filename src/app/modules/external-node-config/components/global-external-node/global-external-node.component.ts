@@ -26,7 +26,7 @@ import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 
 @Component({
-  selector: 'app-global-external-node',
+  selector: 'arlas-global-external-node',
   templateUrl: './global-external-node.component.html',
   styleUrls: ['./global-external-node.component.scss']
 })
@@ -37,10 +37,10 @@ export class GlobalExternalNodeComponent implements OnInit {
   public editorOptions = new JsonEditorOptions();
   @ViewChild('editor', { static: false }) public editor: JsonEditorComponent;
 
-  constructor(public mainFormService: MainFormService,
-              private translateService: TranslateService,
-              private arlasSettingsService: ArlasSettingsService,
-              private http: HttpClient) {
+  public constructor(public mainFormService: MainFormService,
+    private translateService: TranslateService,
+    private arlasSettingsService: ArlasSettingsService,
+    private http: HttpClient) {
 
     this.externalNodeForm = this.mainFormService.externalNodeConfig.getExternalNodeFg();
     this.externalNodeForm.setValidators(this.jsonValidator());
@@ -59,7 +59,7 @@ export class GlobalExternalNodeComponent implements OnInit {
     return (group: FormGroup): ValidationErrors => {
       if (!!this.editor) {
         const control = group.controls.externalNode;
-        if (!this.editor.isValidJson() || ( !! this.editor.getValidateSchema() && !this.editor.getValidateSchema()(this.editor.get()))) {
+        if (!this.editor.isValidJson() || (!!this.editor.getValidateSchema() && !this.editor.getValidateSchema()(this.editor.get()))) {
           control.setErrors({ jsonNotValid: true });
         } else {
           control.setErrors(null);
@@ -70,15 +70,15 @@ export class GlobalExternalNodeComponent implements OnInit {
   }
 
   public ngOnInit() {
-    // tslint:disable-next-line:no-string-literal
     this.schemas = this.arlasSettingsService.settings['external_node_schemas'] ?
-    // tslint:disable-next-line:no-string-literal
-    this.arlasSettingsService.settings['external_node_schemas'] : [];
+      this.arlasSettingsService.settings['external_node_schemas'] : [];
 
   }
 
   public updateSchema(event) {
-    this.http.get(event.value).subscribe(data => {this.editorOptions.schema = data; this.editor.setOptions(this.editorOptions); });
+    this.http.get(event.value).subscribe(data => {
+      this.editorOptions.schema = data; this.editor.setOptions(this.editorOptions);
+    });
   }
 
 }

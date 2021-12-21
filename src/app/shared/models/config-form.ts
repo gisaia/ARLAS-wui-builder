@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import {
-    FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators, FormArray
+  FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators, FormArray
 } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { HistogramUtils } from 'arlas-d3';
@@ -38,829 +38,849 @@ import { updateValueAndValidity } from '@utils/tools';
  */
 
 export interface SelectOption {
-    value: any;
-    label: any;
-    enabled?: boolean;
-    type?: CollectionReferenceDescriptionProperty.TypeEnum;
-    color?: string;
-    detail?: string;
+  value: any;
+  label: any;
+  enabled?: boolean;
+  type?: CollectionReferenceDescriptionProperty.TypeEnum;
+  color?: string;
+  detail?: string;
 }
 
 export interface VisualisationCheckboxOption {
-    include: boolean;
-    name: any;
-    layers: string[];
+  include: boolean;
+  name: any;
+  layers: string[];
 }
 export abstract class ConfigFormControl extends FormControl {
 
-    // reference to other controls that depends on this one
-    public dependantControls: Array<AbstractControl>;
+  // reference to other controls that depends on this one
+  public dependantControls: Array<AbstractControl>;
 
-    // if it is a child control, it is to be displayed below another controls into a single config element
-    public isChild = false;
-    // an initial value is used by app-reset-on-change, when resetting a form control (instead of a "default.json" value)
-    public initialValue: any;
+  // if it is a child control, it is to be displayed below another controls into a single config element
+  public isChild = false;
+  // an initial value is used by app-reset-on-change, when resetting a form control (instead of a "default.json" value)
+  public initialValue: any;
 
-    constructor(
-        formState: any,
-        public label: string,
-        public description: string,
-        private optionalParams: ControlOptionalParams = {}) {
+  public constructor(
+    formState: any,
+    public label: string,
+    public description: string,
+    private optionalParams: ControlOptionalParams = {}) {
 
-        super(formState);
-        this.initialValue = formState;
-        // add default values to missing attributes
-        this.optionalParams = {
-            ...{
-                optional: false,
-                validators: [],
-                dependsOn: () => [],
-                onDependencyChange: () => null,
-                childs: () => [],
-                isDescriptionHtml: false
-            },
-            ...this.optionalParams
-        };
-        this.initValidators();
+    super(formState);
+    this.initialValue = formState;
+    // add default values to missing attributes
+    this.optionalParams = {
+      ...{
+        optional: false,
+        validators: [],
+        dependsOn: () => [],
+        onDependencyChange: () => null,
+        childs: () => [],
+        isDescriptionHtml: false
+      },
+      ...this.optionalParams
+    };
+    this.initValidators();
+  }
+
+  public get optional() {
+    return this.optionalParams.optional;
+  }
+  public get width() {
+    return this.optionalParams.width;
+  }
+  public get sourceData() {
+    return this.optionalParams.sourceData;
+  }
+  public get dependsOn() {
+    return this.optionalParams.dependsOn;
+  }
+  public get onDependencyChange() {
+    return this.optionalParams.onDependencyChange;
+  }
+  public get childs() {
+    return this.optionalParams.childs;
+  }
+  public get isDescriptionHtml() {
+    return this.optionalParams.isDescriptionHtml;
+  }
+  public get resetDependantsOnChange() {
+    return this.optionalParams.resetDependantsOnChange || false;
+  }
+  public get title() {
+    return this.optionalParams.title;
+  }
+
+  public initValidators() {
+    const optionalValidator = this.optionalParams.optional ? [] : [Validators.required];
+    this.setValidators(optionalValidator.concat(this.optionalParams.validators));
+  }
+
+  public enableIf(condition: boolean) {
+    // prevent a single control to get enabled whereas the parent is disabled
+    // => this would enable the parent again
+    if (condition && this.parent.status !== 'DISABLED') {
+      this.enable();
+    } else {
+      this.disable({ emitEvent: false });
     }
-
-    get optional() { return this.optionalParams.optional; }
-    get width() { return this.optionalParams.width; }
-    get sourceData() { return this.optionalParams.sourceData; }
-    get dependsOn() { return this.optionalParams.dependsOn; }
-    get onDependencyChange() { return this.optionalParams.onDependencyChange; }
-    get childs() { return this.optionalParams.childs; }
-    get isDescriptionHtml() { return this.optionalParams.isDescriptionHtml; }
-    get resetDependantsOnChange() { return this.optionalParams.resetDependantsOnChange || false; }
-    get title() { return this.optionalParams.title; }
-
-    public initValidators() {
-        const optionalValidator = this.optionalParams.optional ? [] : [Validators.required];
-        this.setValidators(optionalValidator.concat(this.optionalParams.validators));
-    }
-
-    public enableIf(condition: boolean) {
-        // prevent a single control to get enabled whereas the parent is disabled
-        // => this would enable the parent again
-        if (condition && this.parent.status !== 'DISABLED') {
-            this.enable();
-        } else {
-            this.disable({ emitEvent: false });
-        }
-    }
+  }
 
 }
 
 export interface ControlOptionalParams {
 
-    // if false, it is a required control
-    optional?: boolean;
+  // if false, it is a required control
+  optional?: boolean;
 
-    // getter the other controls that it depends on
-    dependsOn?: () => Array<ConfigFormControl | ConfigFormGroup>;
+  // getter the other controls that it depends on
+  dependsOn?: () => Array<ConfigFormControl | ConfigFormGroup>;
 
-    /**
-     * Callback to be executed when a dependency changes.
-     * It is also executed during import or by loading the object from a ConfigFormGroupComponent
-     * c : the ConfigForm object
-     * isLoading: indicates if the is exeuted on initial load or import
-     */
-    onDependencyChange?: (c: ConfigFormControl | ConfigFormGroup, isLoading?: boolean) => void;
+  /**
+   * Callback to be executed when a dependency changes.
+   * It is also executed during import or by loading the object from a ConfigFormGroupComponent
+   * c : the ConfigForm object
+   * isLoading: indicates if the is exeuted on initial load or import
+   */
+  onDependencyChange?: (c: ConfigFormControl | ConfigFormGroup, isLoading?: boolean) => void;
 
-    // indicates if other fields that depends on this one, should be reset when this one changes
-    resetDependantsOnChange?: boolean;
+  // indicates if other fields that depends on this one, should be reset when this one changes
+  resetDependantsOnChange?: boolean;
 
-    // usual validators
-    validators?: ValidatorFn[];
+  // usual validators
+  validators?: ValidatorFn[];
 
-    // getter of child components
-    childs?: () => Array<ConfigFormControl>;
+  // getter of child components
+  childs?: () => Array<ConfigFormControl>;
 
-    // is the description in regular HTML. In this case, the caller
-    // is responsable of translating its content
-    isDescriptionHtml?: boolean;
+  // is the description in regular HTML. In this case, the caller
+  // is responsable of translating its content
+  isDescriptionHtml?: boolean;
 
-    // a title that is displayed before the field.
-    // TODO remove the title from ConfigFormGroup and move it to fields
-    title?: string;
+  // a title that is displayed before the field.
+  // TODO remove the title from ConfigFormGroup and move it to fields
+  title?: string;
 
-    sourceData?: Observable<any>;
+  sourceData?: Observable<any>;
 
-    width?: string;
+  width?: string;
 }
 
 export interface GroupOptionalParams {
-    // getter the other controls that it depends on
-    dependsOn?: () => Array<ConfigFormControl>;
+  // getter the other controls that it depends on
+  dependsOn?: () => Array<ConfigFormControl>;
 
-    /**
-     * Callback to be executed when a dependency changes.
-     * It is also executed during import or by loading the object from a ConfigFormGroupComponent
-     * c : the ConfigForm object
-     * isLoading: indicates if the is exeuted on initial load or import
-     */
-    onDependencyChange?: (c: ConfigFormControl | ConfigFormGroup, isLoading?: boolean) => void;
+  /**
+   * Callback to be executed when a dependency changes.
+   * It is also executed during import or by loading the object from a ConfigFormGroupComponent
+   * c : the ConfigForm object
+   * isLoading: indicates if the is exeuted on initial load or import
+   */
+  onDependencyChange?: (c: ConfigFormControl | ConfigFormGroup, isLoading?: boolean) => void;
 
-    validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null;
-    asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null;
+  validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null;
+  asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null;
 }
 
 export class ConfigFormGroup extends FormGroup {
 
-    // reference to other controls that depends on this one
-    public dependantControls: Array<AbstractControl>;
+  // reference to other controls that depends on this one
+  public dependantControls: Array<AbstractControl>;
 
-    public title: string;
-    public stepName: string;
-    public tabName: string;
+  public title: string;
+  public stepName: string;
+  public tabName: string;
 
-    public hide = false;
+  public hide = false;
 
-    constructor(
-        controls: {
-            [key: string]: AbstractControl;
-        },
-        private optionalParams: GroupOptionalParams = {}) {
+  public constructor(
+    controls: {
+      [key: string]: AbstractControl;
+    },
+    private optionalParams: GroupOptionalParams = {}) {
 
-        super(controls, optionalParams.validatorOrOpts, optionalParams.asyncValidator);
+    super(controls, optionalParams.validatorOrOpts, optionalParams.asyncValidator);
+  }
+
+  public get dependsOn() {
+    return this.optionalParams.dependsOn;
+  }
+  public get onDependencyChange() {
+    return this.optionalParams.onDependencyChange;
+  }
+
+  public get controlsRecursively() {
+    return this.getControls(this);
+  }
+
+  private getControls(control: FormGroup | FormArray): Array<AbstractControl> {
+    return Object.values(control.controls).flatMap(c => {
+      if (c instanceof FormControl) {
+        return [c];
+      } else if (c instanceof FormGroup || c instanceof FormArray) {
+        return [
+          c,
+          ...this.getControls(c)
+        ];
+      } else {
+        return [];
+      }
+    });
+  }
+
+  public get configFormControls(): Array<ConfigFormControl> {
+    return Object.values(this.controls).filter(c => c instanceof ConfigFormControl) as Array<ConfigFormControl>;
+  }
+
+  public hideStep(hide: boolean) {
+    this.hide = hide;
+    return this;
+  }
+
+  public withTitle(title: string) {
+    this.title = title;
+    return this;
+  }
+
+  public withStepName(stepName: string) {
+    this.stepName = stepName;
+    return this;
+  }
+
+  public withTabName(tabName: string) {
+    this.tabName = tabName;
+    return this;
+  }
+
+  public withDependsOn(dependsOn: () => Array<ConfigFormControl>) {
+    this.optionalParams.dependsOn = dependsOn;
+    return this;
+  }
+  public withOnDependencyChange(onDependencyChange: (c: ConfigFormControl | ConfigFormGroup) => void) {
+    this.optionalParams.onDependencyChange = onDependencyChange;
+    return this;
+  }
+
+  public enableIf(condition: boolean) {
+    if (condition) {
+      this.enable();
+      // make sure that the state of all sub-controls is up-to-date against other controls
+      this.controlsRecursively
+        .filter(c => c instanceof ConfigFormGroup || c instanceof ConfigFormControl)
+        .filter((c: ConfigFormGroup | ConfigFormControl) => !!c.onDependencyChange)
+        .forEach((c: ConfigFormGroup | ConfigFormControl) => c.onDependencyChange(c));
+    } else {
+      // emitEvent: false avoid the cascading effect. When enabling, it is expected to propagate
+      // the status update so that dependan fields can update themselves. Whereas when disabling
+      // we just want to disable everything. moreover, without it, some sub-fields may still be
+      // enabled, probably because of the cascading update
+      this.disable({ emitEvent: false });
     }
-
-    public get dependsOn() { return this.optionalParams.dependsOn; }
-    public get onDependencyChange() { return this.optionalParams.onDependencyChange; }
-
-    public get controlsRecursively() {
-        return this.getControls(this);
-    }
-
-    private getControls(control: FormGroup | FormArray): Array<AbstractControl> {
-        return Object.values(control.controls).flatMap(c => {
-            if (c instanceof FormControl) {
-                return [c];
-            } else if (c instanceof FormGroup || c instanceof FormArray) {
-                return [
-                    c,
-                    ...this.getControls(c)
-                ];
-            } else {
-                return [];
-            }
-        });
-    }
-
-    public get configFormControls(): Array<ConfigFormControl> {
-        return Object.values(this.controls).filter(c => c instanceof ConfigFormControl) as Array<ConfigFormControl>;
-    }
-
-    public hideStep(hide: boolean) {
-        this.hide = hide;
-        return this;
-    }
-
-    public withTitle(title: string) {
-        this.title = title;
-        return this;
-    }
-
-    public withStepName(stepName: string) {
-        this.stepName = stepName;
-        return this;
-    }
-
-    public withTabName(tabName: string) {
-        this.tabName = tabName;
-        return this;
-    }
-
-    public withDependsOn(dependsOn: () => Array<ConfigFormControl>) {
-        this.optionalParams.dependsOn = dependsOn;
-        return this;
-    }
-    public withOnDependencyChange(onDependencyChange: (c: ConfigFormControl | ConfigFormGroup) => void) {
-        this.optionalParams.onDependencyChange = onDependencyChange;
-        return this;
-    }
-
-    public enableIf(condition: boolean) {
-        if (condition) {
-            this.enable();
-            // make sure that the state of all sub-controls is up-to-date against other controls
-            this.controlsRecursively
-                .filter(c => c instanceof ConfigFormGroup || c instanceof ConfigFormControl)
-                .filter((c: ConfigFormGroup | ConfigFormControl) => !!c.onDependencyChange)
-                .forEach((c: ConfigFormGroup | ConfigFormControl) => c.onDependencyChange(c));
-        } else {
-            // emitEvent: false avoid the cascading effect. When enabling, it is expected to propagate
-            // the status update so that dependan fields can update themselves. Whereas when disabling
-            // we just want to disable everything. moreover, without it, some sub-fields may still be
-            // enabled, probably because of the cascading update
-            this.disable({ emitEvent: false });
-        }
-    }
+  }
 }
 
 // Represent an FormArray of FormGroup, i.a. a repeated FormGroup.
 // Can be used to handle some fields by collection for example.
 export class ConfigFormGroupArray extends FormArray {
 
-    constructor(controls: ConfigFormGroup[]) {
-        super(controls);
-    }
+  public constructor(controls: ConfigFormGroup[]) {
+    super(controls);
+  }
 }
 
 export class SlideToggleFormControl extends ConfigFormControl {
-    constructor(
-        formState: any,
-        label: string,
-        description: string,
-        optionalParams?: ControlOptionalParams
-    ) {
+  public constructor(
+    formState: any,
+    label: string,
+    description: string,
+    optionalParams?: ControlOptionalParams
+  ) {
 
-        super(formState, label, description, { ...optionalParams, ... { optional: true } });
-    }
+    super(formState, label, description, { ...optionalParams, ... { optional: true } });
+  }
 }
 
 export class VisualisationCheckboxFormControl extends ConfigFormControl {
-    public syncOptions: Array<VisualisationCheckboxOption> = [];
-    public hasLayer = false;
+  public syncOptions: Array<VisualisationCheckboxOption> = [];
+  public hasLayer = false;
 
-    constructor(
-        formState: any,
-        label: string,
-        description: string,
-        options: Array<VisualisationCheckboxOption> | Observable<Array<VisualisationCheckboxOption>>,
-        optionalParams?: ControlOptionalParams
-    ) {
+  public constructor(
+    formState: any,
+    label: string,
+    description: string,
+    options: Array<VisualisationCheckboxOption> | Observable<Array<VisualisationCheckboxOption>>,
+    optionalParams?: ControlOptionalParams
+  ) {
 
-        super(formState, label, description, { ...optionalParams, ... { optional: true } });
-        if (options instanceof Observable) {
-            options.subscribe(opts => this.setSyncOptions(opts));
-        } else if (options instanceof Array) {
-            this.setSyncOptions(options);
-        }
+    super(formState, label, description, { ...optionalParams, ... { optional: true } });
+    if (options instanceof Observable) {
+      options.subscribe(opts => this.setSyncOptions(opts));
+    } else if (options instanceof Array) {
+      this.setSyncOptions(options);
     }
-    public setSyncOptions(newOptions: Array<VisualisationCheckboxOption>) {
-        this.syncOptions = newOptions;
-        this.hasLayer = this.syncOptions.filter(s => s.include).length > 0;
-        this.updateValueAndValidity();
-    }
+  }
+  public setSyncOptions(newOptions: Array<VisualisationCheckboxOption>) {
+    this.syncOptions = newOptions;
+    this.hasLayer = this.syncOptions.filter(s => s.include).length > 0;
+    this.updateValueAndValidity();
+  }
 
-    public addLayer(add: MatCheckboxChange, vs: string) {
-        let visu = this.syncOptions.find(s => s.name === vs);
-        if (!visu) {
-            visu = {
-                name: vs,
-                layers: [],
-                include: false
-            };
-            this.syncOptions.push(visu);
-        }
-        const set = new Set(visu.layers);
-        visu.include = add.checked;
-        this.setSyncOptions(this.syncOptions);
+  public addLayer(add: MatCheckboxChange, vs: string) {
+    let visu = this.syncOptions.find(s => s.name === vs);
+    if (!visu) {
+      visu = {
+        name: vs,
+        layers: [],
+        include: false
+      };
+      this.syncOptions.push(visu);
     }
+    const set = new Set(visu.layers);
+    visu.include = add.checked;
+    this.setSyncOptions(this.syncOptions);
+  }
 }
 
 
 export class ButtonToggleFormControl extends ConfigFormControl {
-    constructor(
-        formState: any,
-        public options: Array<{ label: string, value: any }>,
-        description: string,
-        optionalParams?: ControlOptionalParams
-    ) {
+  public constructor(
+    formState: any,
+    public options: Array<{ label: string; value: any; }>,
+    description: string,
+    optionalParams?: ControlOptionalParams
+  ) {
 
-        super(
-            !!formState ? formState : !!options.length ? options[0].value : null,
-            null,
-            description,
-            optionalParams);
-    }
+    super(
+      !!formState ? formState : !!options.length ? options[0].value : null,
+      null,
+      description,
+      optionalParams);
+  }
 }
 
 export class ComponentFormControl extends ConfigFormControl {
-    constructor(
-        public component: any,
-        // inputs of the component, to be returned from the callback
-        public inputs: {
-            [key: string]: () => any;
-        }
-    ) {
-        super(null, null, null, { optional: true });
+  public constructor(
+    public component: any,
+    // inputs of the component, to be returned from the callback
+    public inputs: {
+      [key: string]: () => any;
     }
+  ) {
+    super(null, null, null, { optional: true });
+  }
 }
 
 export class SelectFormControl extends ConfigFormControl {
 
-    // used only for autocomplete: list of filtered options
-    public filteredOptions: Array<SelectOption>;
-    public syncOptions: Array<SelectOption> = [];
+  // used only for autocomplete: list of filtered options
+  public filteredOptions: Array<SelectOption>;
+  public syncOptions: Array<SelectOption> = [];
 
-    constructor(
-        formState: any,
-        label: string,
-        description: string,
-        public isAutocomplete: boolean,
-        options: Array<SelectOption> | Observable<Array<SelectOption>>,
-        optionalParams?: ControlOptionalParams) {
+  public constructor(
+    formState: any,
+    label: string,
+    description: string,
+    public isAutocomplete: boolean,
+    options: Array<SelectOption> | Observable<Array<SelectOption>>,
+    optionalParams?: ControlOptionalParams) {
 
-        super(
-            formState,
-            label,
-            description,
-            optionalParams);
+    super(
+      formState,
+      label,
+      description,
+      optionalParams);
 
-        if (options instanceof Observable) {
-            options.subscribe(opts => this.setSyncOptions(opts));
-        } else if (options instanceof Array) {
-            this.setSyncOptions(options);
-        }
-
-        if (isAutocomplete) {
-            // TODO should we unsubscribe later?
-            this.valueChanges.subscribe(v => {
-                if (!!v) {
-                    this.filteredOptions = this.syncOptions.filter(o => o.label.indexOf(v) >= 0);
-                } else {
-                    this.filteredOptions = this.syncOptions;
-                }
-
-            }
-            );
-        }
-
+    if (options instanceof Observable) {
+      options.subscribe(opts => this.setSyncOptions(opts));
+    } else if (options instanceof Array) {
+      this.setSyncOptions(options);
     }
 
-    public setSyncOptions(newOptions: Array<SelectOption>) {
-        this.syncOptions = newOptions;
-        this.filteredOptions = newOptions;
+    if (isAutocomplete) {
+      // TODO should we unsubscribe later?
+      this.valueChanges.subscribe(v => {
+        if (!!v) {
+          this.filteredOptions = this.syncOptions.filter(o => o.label.indexOf(v) >= 0);
+        } else {
+          this.filteredOptions = this.syncOptions;
+        }
+
+      }
+      );
     }
+
+  }
+
+  public setSyncOptions(newOptions: Array<SelectOption>) {
+    this.syncOptions = newOptions;
+    this.filteredOptions = newOptions;
+  }
 }
 
 
 export class MultipleSelectFormControl extends ConfigFormControl {
 
-    // used only for autocomplete: list of filtered options
-    public filteredOptions: Array<SelectOption>;
-    public syncOptions: Array<SelectOption> = [];
-    public selectedMultipleItems: Array<{ value: any, color?: string, detail?: string }> = [];
-    public savedItems = new Set<string>();
-    public searchable = true;
-    constructor(
-        formState: any,
-        label: string,
-        description: string,
-        public isAutocomplete: boolean,
-        options: Array<SelectOption> | Observable<Array<SelectOption>>,
-        optionalParams?: ControlOptionalParams,
-        searchable?: boolean,
-    ) {
+  // used only for autocomplete: list of filtered options
+  public filteredOptions: Array<SelectOption>;
+  public syncOptions: Array<SelectOption> = [];
+  public selectedMultipleItems: Array<{ value: any; color?: string; detail?: string; }> = [];
+  public savedItems = new Set<string>();
+  public searchable = true;
+  public constructor(
+    formState: any,
+    label: string,
+    description: string,
+    public isAutocomplete: boolean,
+    options: Array<SelectOption> | Observable<Array<SelectOption>>,
+    optionalParams?: ControlOptionalParams,
+    searchable?: boolean,
+  ) {
 
-        super(
-            formState,
-            label,
-            description,
-            optionalParams);
+    super(
+      formState,
+      label,
+      description,
+      optionalParams);
 
-        if (options instanceof Observable) {
-            options.subscribe(opts => this.setSyncOptions(opts));
-        } else if (options instanceof Array) {
-            this.setSyncOptions(options);
-        }
-
-        if (isAutocomplete) {
-            // TODO should we unsubscribe later?
-            this.valueChanges.subscribe(v => {
-                if (!!v) {
-                    this.filteredOptions = this.syncOptions.filter(o => o.label.indexOf(v) >= 0);
-                } else {
-                    this.filteredOptions = this.syncOptions;
-                }
-
-            }
-            );
-        }
-
-        this.searchable = searchable;
+    if (options instanceof Observable) {
+      options.subscribe(opts => this.setSyncOptions(opts));
+    } else if (options instanceof Array) {
+      this.setSyncOptions(options);
     }
 
-    public setSyncOptions(newOptions: Array<SelectOption>) {
-        this.syncOptions = newOptions;
-        this.filteredOptions = newOptions;
+    if (isAutocomplete) {
+      // TODO should we unsubscribe later?
+      this.valueChanges.subscribe(v => {
+        if (!!v) {
+          this.filteredOptions = this.syncOptions.filter(o => o.label.indexOf(v) >= 0);
+        } else {
+          this.filteredOptions = this.syncOptions;
+        }
+
+      }
+      );
     }
+
+    this.searchable = searchable;
+  }
+
+  public setSyncOptions(newOptions: Array<SelectOption>) {
+    this.syncOptions = newOptions;
+    this.filteredOptions = newOptions;
+  }
 }
 
 export class TypedSelectFormControl extends ConfigFormControl {
 
-    // used only for autocomplete: list of filtered options
-    public filteredOptions: Array<SelectOption>;
-    public syncOptions: Array<SelectOption> = [];
+  // used only for autocomplete: list of filtered options
+  public filteredOptions: Array<SelectOption>;
+  public syncOptions: Array<SelectOption> = [];
 
-    constructor(
-        formState: any,
-        label: string,
-        description: string,
-        public isAutocomplete: boolean,
-        options: Array<SelectOption> | Observable<Array<SelectOption>>,
-        optionalParams?: ControlOptionalParams) {
+  public constructor(
+    formState: any,
+    label: string,
+    description: string,
+    public isAutocomplete: boolean,
+    options: Array<SelectOption> | Observable<Array<SelectOption>>,
+    optionalParams?: ControlOptionalParams) {
 
-        super(
-            formState,
-            label,
-            description,
-            optionalParams);
+    super(
+      formState,
+      label,
+      description,
+      optionalParams);
 
-        if (options instanceof Observable) {
-            options.subscribe(opts => this.setSyncOptions(opts));
-        } else if (options instanceof Array) {
-            this.setSyncOptions(options);
-        }
-
-        if (isAutocomplete) {
-            // TODO should we unsubscribe later?
-            this.valueChanges.subscribe(v => {
-                if (!!v) {
-                    this.filteredOptions = this.syncOptions.filter(o => o.label.indexOf(v) >= 0);
-                } else {
-                    this.filteredOptions = this.syncOptions;
-                }
-
-            }
-            );
-        }
+    if (options instanceof Observable) {
+      options.subscribe(opts => this.setSyncOptions(opts));
+    } else if (options instanceof Array) {
+      this.setSyncOptions(options);
     }
 
-    public setSyncOptions(newOptions: Array<SelectOption>) {
-        this.syncOptions = newOptions;
-        this.filteredOptions = newOptions;
+    if (isAutocomplete) {
+      // TODO should we unsubscribe later?
+      this.valueChanges.subscribe(v => {
+        if (!!v) {
+          this.filteredOptions = this.syncOptions.filter(o => o.label.indexOf(v) >= 0);
+        } else {
+          this.filteredOptions = this.syncOptions;
+        }
+
+      }
+      );
     }
+  }
+
+  public setSyncOptions(newOptions: Array<SelectOption>) {
+    this.syncOptions = newOptions;
+    this.filteredOptions = newOptions;
+  }
 }
 
 export class OrderedSelectFormControl extends SelectFormControl {
-    public sortDirection: string;
-    public sorts: Set<string> = new Set();
-    public addSort(sort: string, event) {
-        event.stopPropagation();
-        this.sorts.add(sort);
-        this.setSortValue();
-    }
+  public sortDirection: string;
+  public sorts: Set<string> = new Set();
+  public addSort(sort: string, event) {
+    event.stopPropagation();
+    this.sorts.add(sort);
+    this.setSortValue();
+  }
 
-    public removeSort(sort: string) {
-        this.sorts.delete(sort);
-        this.setSortValue();
-    }
+  public removeSort(sort: string) {
+    this.sorts.delete(sort);
+    this.setSortValue();
+  }
 
-    private setSortValue() {
-        if (this.sorts.size > 0) {
-            const sortValue = Array.from(this.sorts).reduce((a, b) => a + ',' + b);
-            this.setValue(sortValue);
-        } else {
-            this.setValue(null);
-        }
+  private setSortValue() {
+    if (this.sorts.size > 0) {
+      const sortValue = Array.from(this.sorts).reduce((a, b) => a + ',' + b);
+      this.setValue(sortValue);
+    } else {
+      this.setValue(null);
     }
+  }
 }
 
 export class MetricWithFieldListFormControl extends ConfigFormControl {
 
-    public METRICS = [
-        METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX, METRIC_TYPES.CARDINALITY
-    ];
-    // TODO do not use validators, the fields look like in error
-    public metricCtrl = new FormControl('', Validators.required);
-    public fieldCtrl = new FormControl('', [
-        Validators.required,
-        (c) => !!this.autocompleteFilteredFields && this.autocompleteFilteredFields.map(f => f.value).indexOf(c.value) >= 0 ?
-            null : { validateField: { valid: false } }
-    ]);
-    public metricFields: Array<SelectOption>;
-    public autocompleteFilteredFields: Array<SelectOption>;
+  public METRICS = [
+    METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX, METRIC_TYPES.CARDINALITY
+  ];
+  // TODO do not use validators, the fields look like in error
+  public metricCtrl = new FormControl('', Validators.required);
+  public fieldCtrl = new FormControl('', [
+    Validators.required,
+    (c) => !!this.autocompleteFilteredFields && this.autocompleteFilteredFields.map(f => f.value).indexOf(c.value) >= 0 ?
+      null : { validateField: { valid: false } }
+  ]);
+  public metricFields: Array<SelectOption>;
+  public autocompleteFilteredFields: Array<SelectOption>;
 
-    constructor(
-        formState: any,
-        label: string,
-        description: string,
-        public collectionFields: Observable<Array<CollectionField>>,
-        optionalParams?: ControlOptionalParams
-    ) {
-        super(formState, label, description, optionalParams);
-        if (!this.optional) {
-            // as the value is a set, if the control is required, an empty set should also be an error
-            this.setValidators([
-                (control) => !!control.value && Array.from(control.value).length > 0 ? null : { required: { valid: false } }
-            ]);
-        }
-        this.metricCtrl.valueChanges.subscribe(v => {
-            this.updateFieldsByMetric(this.metricCtrl.value);
-            this.fieldCtrl.reset();
-        });
-        this.fieldCtrl.valueChanges.subscribe(v => this.filterAutocomplete(v));
-        this.filterAutocomplete();
-        this.updateFieldsByMetric(this.metricCtrl.value);
-        this.setValue(new Set());
+  public constructor(
+    formState: any,
+    label: string,
+    description: string,
+    public collectionFields: Observable<Array<CollectionField>>,
+    optionalParams?: ControlOptionalParams
+  ) {
+    super(formState, label, description, optionalParams);
+    if (!this.optional) {
+      // as the value is a set, if the control is required, an empty set should also be an error
+      this.setValidators([
+        (control) => !!control.value && Array.from(control.value).length > 0 ? null : { required: { valid: false } }
+      ]);
     }
+    this.metricCtrl.valueChanges.subscribe(v => {
+      this.updateFieldsByMetric(this.metricCtrl.value);
+      this.fieldCtrl.reset();
+    });
+    this.fieldCtrl.valueChanges.subscribe(v => this.filterAutocomplete(v));
+    this.filterAutocomplete();
+    this.updateFieldsByMetric(this.metricCtrl.value);
+    this.setValue(new Set());
+  }
 
-    public updateFieldsByMetric(metric: METRIC_TYPES) {
-        const fieldObs = this.metricCtrl.value === METRIC_TYPES.CARDINALITY ?
-            toKeywordOptionsObs(this.collectionFields) : toNumericOrDateOptionsObs(this.collectionFields);
-        fieldObs.subscribe(f => {
-            this.metricFields = f;
-            this.filterAutocomplete();
-        });
+  public updateFieldsByMetric(metric: METRIC_TYPES) {
+    const fieldObs = this.metricCtrl.value === METRIC_TYPES.CARDINALITY ?
+      toKeywordOptionsObs(this.collectionFields) : toNumericOrDateOptionsObs(this.collectionFields);
+    fieldObs.subscribe(f => {
+      this.metricFields = f;
+      this.filterAutocomplete();
+    });
+  }
+
+  public filterAutocomplete(value?: string) {
+    if (!!value) {
+      this.autocompleteFilteredFields = this.metricFields.filter(o => o.label.indexOf(value) >= 0);
+    } else {
+      this.autocompleteFilteredFields = this.metricFields;
     }
+  }
 
-    public filterAutocomplete(value?: string) {
-        if (!!value) {
-            this.autocompleteFilteredFields = this.metricFields.filter(o => o.label.indexOf(value) >= 0);
-        } else {
-            this.autocompleteFilteredFields = this.metricFields;
-        }
-    }
+  public addMetric() {
+    this.getValueAsSet().add({ field: this.fieldCtrl.value, metric: String(this.metricCtrl.value).toLowerCase() });
+    this.updateValueAndValidity();
+    this.fieldCtrl.reset();
+  }
 
-    public addMetric() {
-        this.getValueAsSet().add({ field: this.fieldCtrl.value, metric: String(this.metricCtrl.value).toLowerCase() });
-        this.updateValueAndValidity();
-        this.fieldCtrl.reset();
-    }
+  public removeMetric(metric: { metric: string; field: string; }) {
+    this.getValueAsSet().delete(metric);
+    this.updateValueAndValidity();
+  }
 
-    public removeMetric(metric: { metric: string, field: string }) {
-        this.getValueAsSet().delete(metric);
-        this.updateValueAndValidity();
-    }
+  public getValueAsSet = () => (this.value as Set<{ metric: string; field: string; }>);
 
-    public getValueAsSet = () => (this.value as Set<{ metric: string, field: string }>);
-
-    public setCollectionFieldsObs(collectionFieldsObs: Observable<Array<CollectionField>>): void {
-        this.collectionFields = collectionFieldsObs;
-    }
+  public setCollectionFieldsObs(collectionFieldsObs: Observable<Array<CollectionField>>): void {
+    this.collectionFields = collectionFieldsObs;
+  }
 }
 
 // try to put in common with MetricWithFieldListFormControl
 export class FieldWithSizeListFormControl extends ConfigFormControl {
 
-    // TODO do not use validators, the fields look like in error
-    public sizeCtrl = new FormControl(10, Validators.required);
-    public fieldCtrl = new FormControl('', [
-        Validators.required,
-        (c) => !!this.autocompleteFilteredFields && this.autocompleteFilteredFields.map(f => f.value).indexOf(c.value) >= 0 ?
-            null : { validateField: { valid: false } }
-    ]);
-    public fields: Array<SelectOption>;
-    public autocompleteFilteredFields: Array<SelectOption>;
+  // TODO do not use validators, the fields look like in error
+  public sizeCtrl = new FormControl(10, Validators.required);
+  public fieldCtrl = new FormControl('', [
+    Validators.required,
+    (c) => !!this.autocompleteFilteredFields && this.autocompleteFilteredFields.map(f => f.value).indexOf(c.value) >= 0 ?
+      null : { validateField: { valid: false } }
+  ]);
+  public fields: Array<SelectOption>;
+  public autocompleteFilteredFields: Array<SelectOption>;
 
-    constructor(
-        formState: any,
-        label: string,
-        description: string,
-        collectionFields: Observable<Array<CollectionField>>,
-        optionalParams?: ControlOptionalParams
-    ) {
-        super(formState, label, description, optionalParams);
-        toKeywordOptionsObs(collectionFields).subscribe(fields => {
-            this.fields = fields;
-            this.filterAutocomplete();
-        });
-        this.fieldCtrl.valueChanges.subscribe(v => this.filterAutocomplete(v));
-        this.setValue(new Set());
-        if (!this.optional) {
-            // as the value is a set, if the control is required, an empty set should also be an error
-            this.setValidators([
-                (control) => !!control.value && Array.from(control.value).length > 0 ? null : { required: { valid: false } }
-            ]);
-        }
+  public constructor(
+    formState: any,
+    label: string,
+    description: string,
+    collectionFields: Observable<Array<CollectionField>>,
+    optionalParams?: ControlOptionalParams
+  ) {
+    super(formState, label, description, optionalParams);
+    toKeywordOptionsObs(collectionFields).subscribe(fields => {
+      this.fields = fields;
+      this.filterAutocomplete();
+    });
+    this.fieldCtrl.valueChanges.subscribe(v => this.filterAutocomplete(v));
+    this.setValue(new Set());
+    if (!this.optional) {
+      // as the value is a set, if the control is required, an empty set should also be an error
+      this.setValidators([
+        (control) => !!control.value && Array.from(control.value).length > 0 ? null : { required: { valid: false } }
+      ]);
     }
+  }
 
-    public filterAutocomplete(value?: string) {
-        if (!!value) {
-            this.autocompleteFilteredFields = this.fields.filter(o => o.label.indexOf(value) >= 0);
-        } else {
-            this.autocompleteFilteredFields = this.fields;
-        }
+  public filterAutocomplete(value?: string) {
+    if (!!value) {
+      this.autocompleteFilteredFields = this.fields.filter(o => o.label.indexOf(value) >= 0);
+    } else {
+      this.autocompleteFilteredFields = this.fields;
     }
+  }
 
-    public add() {
-        this.getValueAsSet().add({ field: this.fieldCtrl.value, size: parseInt(this.sizeCtrl.value, 10) });
-        this.updateValueAndValidity();
-        this.fieldCtrl.reset();
-    }
+  public add() {
+    this.getValueAsSet().add({ field: this.fieldCtrl.value, size: parseInt(this.sizeCtrl.value, 10) });
+    this.updateValueAndValidity();
+    this.fieldCtrl.reset();
+  }
 
-    public remove(opt: { field: string, size: number }) {
-        this.getValueAsSet().delete(opt);
-        this.updateValueAndValidity();
-    }
+  public remove(opt: { field: string; size: number; }) {
+    this.getValueAsSet().delete(opt);
+    this.updateValueAndValidity();
+  }
 
-    public getValueAsSet = () => (this.value as Set<{ field: string, size: number }>);
+  public getValueAsSet = () => (this.value as Set<{ field: string; size: number; }>);
 }
 
 
 export class UrlTemplateControl extends ConfigFormControl {
-    public urlControl = new FormControl('');
-    public fieldCtrl = new FormControl('', [
-        Validators.required,
-        (c) => !!this.autocompleteFilteredFields && this.autocompleteFilteredFields.map(f => f.value).indexOf(c.value) >= 0 ?
-            null : { validateField: { valid: false } }
-    ]);
-    public fields: Array<SelectOption>;
-    public autocompleteFilteredFields: Array<SelectOption>;
-    public isFieldFlat;
-    public showInsertButton = true;
+  public urlControl = new FormControl('');
+  public fieldCtrl = new FormControl('', [
+    Validators.required,
+    (c) => !!this.autocompleteFilteredFields && this.autocompleteFilteredFields.map(f => f.value).indexOf(c.value) >= 0 ?
+      null : { validateField: { valid: false } }
+  ]);
+  public fields: Array<SelectOption>;
+  public autocompleteFilteredFields: Array<SelectOption>;
+  public isFieldFlat;
+  public showInsertButton = true;
 
-    constructor(
-        formState: any,
-        label: string,
-        description: string,
-        collectionFields: Observable<Array<CollectionField>>,
-        flat: boolean,
-        optionalParams?: ControlOptionalParams
-    ) {
-        super(formState, label, description, optionalParams);
-        toNumericOrDateOrKeywordOrTextObs(collectionFields).subscribe(fields => {
-            this.fields = fields;
-            this.filterAutocomplete();
-        });
-        this.isFieldFlat = flat;
-        this.fieldCtrl.valueChanges.subscribe(v => this.filterAutocomplete(v));
-        this.setValue('');
-        if (!this.optional) {
-            // as the value is a set, if the control is required, an empty set should also be an error
-            this.setValidators([
-                (control) => !!control.value && Array.from(control.value).length > 0 ? null : { required: { valid: false } }
-            ]);
-        }
+  public constructor(
+    formState: any,
+    label: string,
+    description: string,
+    collectionFields: Observable<Array<CollectionField>>,
+    flat: boolean,
+    optionalParams?: ControlOptionalParams
+  ) {
+    super(formState, label, description, optionalParams);
+    toNumericOrDateOrKeywordOrTextObs(collectionFields).subscribe(fields => {
+      this.fields = fields;
+      this.filterAutocomplete();
+    });
+    this.isFieldFlat = flat;
+    this.fieldCtrl.valueChanges.subscribe(v => this.filterAutocomplete(v));
+    this.setValue('');
+    if (!this.optional) {
+      // as the value is a set, if the control is required, an empty set should also be an error
+      this.setValidators([
+        (control) => !!control.value && Array.from(control.value).length > 0 ? null : { required: { valid: false } }
+      ]);
     }
+  }
 
-    public filterAutocomplete(value?: string) {
-        if (!!value) {
-            this.autocompleteFilteredFields = this.fields.filter(o => o.label.indexOf(value) >= 0);
-        } else {
-            this.autocompleteFilteredFields = this.fields;
-        }
+  public filterAutocomplete(value?: string) {
+    if (!!value) {
+      this.autocompleteFilteredFields = this.fields.filter(o => o.label.indexOf(value) >= 0);
+    } else {
+      this.autocompleteFilteredFields = this.fields;
     }
+  }
 
-    public add() {
-        this.setValue(this.getValue().concat('{').concat(this.fieldCtrl.value).concat('}'));
-        this.updateValueAndValidity();
-        this.fieldCtrl.reset();
-        this.showInsertButton = true;
-    }
+  public add() {
+    this.setValue(this.getValue().concat('{').concat(this.fieldCtrl.value).concat('}'));
+    this.updateValueAndValidity();
+    this.fieldCtrl.reset();
+    this.showInsertButton = true;
+  }
 
-    public getValue(): string {
-        return this.value as string;
-    }
+  public getValue(): string {
+    return this.value as string;
+  }
 }
 
 export class HuePaletteFormControl extends SelectFormControl {
-    constructor(
-        formState: any,
-        label: string,
-        description: string,
-        private hueOptions: Array<[number, number] | string>,
-        optionalParams?: ControlOptionalParams) {
-        super(
-            formState,
-            label,
-            description,
-            false,
-            HuePaletteFormControl.toHslOptions(hueOptions),
-            optionalParams);
-    }
+  public constructor(
+    formState: any,
+    label: string,
+    description: string,
+    private hueOptions: Array<[number, number] | string>,
+    optionalParams?: ControlOptionalParams) {
+    super(
+      formState,
+      label,
+      description,
+      false,
+      HuePaletteFormControl.toHslOptions(hueOptions),
+      optionalParams);
+  }
 
-    public static toHslOptions(hues: Array<[number, number] | string>): Array<SelectOption> {
-        return hues.map(h => {
-            return {
-                value: h,
-                label: HistogramUtils.getColor(0, h).toHslString() + ', ' + HistogramUtils.getColor(1, h).toHslString()
-            };
-        });
-    }
+  public static toHslOptions(hues: Array<[number, number] | string>): Array<SelectOption> {
+    return hues.map(h => ({
+      value: h,
+      label: HistogramUtils.getColor(0, h).toHslString() + ', ' + HistogramUtils.getColor(1, h).toHslString()
+    }));
+  }
 
-    public getCurrentOption() {
-        // JSON.stringifY to compare also array (as `[] === []` => false)
-        return this.syncOptions.find(o => JSON.stringify(o.value) === JSON.stringify(this.value));
-    }
+  public getCurrentOption() {
+    // JSON.stringifY to compare also array (as `[] === []` => false)
+    return this.syncOptions.find(o => JSON.stringify(o.value) === JSON.stringify(this.value));
+  }
 
 }
 
 export class HiddenFormControl extends ConfigFormControl {
-    public data: Array<any>;
-    constructor(
-        formState: any,
-        // label can be used to display an error with this label, if it is not valid
-        label?: string,
-        optionalParams?: ControlOptionalParams,
-        options?: Array<any>,
-    ) {
-        super(formState, label, null, optionalParams);
-        this.data = options;
-    }
+  public data: Array<any>;
+  public constructor(
+    formState: any,
+    // label can be used to display an error with this label, if it is not valid
+    label?: string,
+    optionalParams?: ControlOptionalParams,
+    options?: Array<any>,
+  ) {
+    super(formState, label, null, optionalParams);
+    this.data = options;
+  }
 }
 
 export class SliderFormControl extends ConfigFormControl {
-    public hasWarning = false;
-    public warningMessage = '';
-    constructor(
-        formState: any,
-        label: string,
-        description: string,
-        public min: number,
-        public max: number,
-        public step: number,
-        public ensureLessThan?: () => ConfigFormControl,
-        public ensureGeaterThan?: () => ConfigFormControl,
-        optionalParams?: ControlOptionalParams) {
+  public hasWarning = false;
+  public warningMessage = '';
+  public constructor(
+    formState: any,
+    label: string,
+    description: string,
+    public min: number,
+    public max: number,
+    public step: number,
+    public ensureLessThan?: () => ConfigFormControl,
+    public ensureGeaterThan?: () => ConfigFormControl,
+    optionalParams?: ControlOptionalParams) {
 
-        super(formState, label, description, optionalParams);
-    }
+    super(formState, label, description, optionalParams);
+  }
 
-    public checkLessThan(newValue: number) {
-        const other = this.ensureLessThan();
-        if (newValue > other.value) {
-            other.setValue(newValue);
-        }
+  public checkLessThan(newValue: number) {
+    const other = this.ensureLessThan();
+    if (newValue > other.value) {
+      other.setValue(newValue);
     }
+  }
 
-    public checkGreaterThan(newValue: number) {
-        const other = this.ensureGeaterThan();
-        if (newValue < other.value) {
-            other.setValue(newValue);
-        }
+  public checkGreaterThan(newValue: number) {
+    const other = this.ensureGeaterThan();
+    if (newValue < other.value) {
+      other.setValue(newValue);
     }
+  }
 }
 
 export class MapFiltersControl extends ConfigFormControl {
-    constructor(
-        public formState: any,
-        label: string,
-        description: string,
-        optionalParams?: ControlOptionalParams) {
-        super(formState, label, description, optionalParams || { optional: true });
-    }
+  public constructor(
+    public formState: any,
+    label: string,
+    description: string,
+    optionalParams?: ControlOptionalParams) {
+    super(formState, label, description, optionalParams || { optional: true });
+  }
 }
 
 export class CollectionsUnitsControl extends ConfigFormControl {
-    constructor(
-        public formState: any,
-        label: string,
-        description: string,
-        optionalParams?: ControlOptionalParams) {
-        super(formState, label, description, optionalParams || { optional: true });
-    }
+  public constructor(
+    public formState: any,
+    label: string,
+    description: string,
+    optionalParams?: ControlOptionalParams) {
+    super(formState, label, description, optionalParams || { optional: true });
+  }
 
-    public updateValueAndValidity(opts?: {
-        onlySelf?: boolean;
-        emitEvent?: boolean;
-    }): void {
-        if (!!this.value) {
-            this.markAllAsTouched();
-            if (this.statusChanges) {
-                this.setErrors(null);
-            }
-            (this.value as FormArray).controls.forEach(c => {
-                c.markAllAsTouched();
-                updateValueAndValidity(c);
-                if (c.invalid) {
-                    this.setErrors({ empty: true });
-                }
-            });
+  public updateValueAndValidity(opts?: {
+    onlySelf?: boolean;
+    emitEvent?: boolean;
+  }): void {
+    if (!!this.value) {
+      this.markAllAsTouched();
+      if (this.statusChanges) {
+        this.setErrors(null);
+      }
+      (this.value as FormArray).controls.forEach(c => {
+        c.markAllAsTouched();
+        updateValueAndValidity(c);
+        if (c.invalid) {
+          this.setErrors({ empty: true });
         }
+      });
     }
+  }
 }
 
 export class InputFormControl extends ConfigFormControl {
-    constructor(
-        formState: any,
-        label: string,
-        description: string,
-        public inputType: string = 'text',
-        optionalParams?: ControlOptionalParams,
-        public ensureLessThan?: () => ConfigFormControl,
-        public ensureGeaterThan?: () => ConfigFormControl) {
-        super(formState, label, description, optionalParams);
-    }
+  public constructor(
+    formState: any,
+    label: string,
+    description: string,
+    public inputType: string = 'text',
+    optionalParams?: ControlOptionalParams,
+    public ensureLessThan?: () => ConfigFormControl,
+    public ensureGeaterThan?: () => ConfigFormControl) {
+    super(formState, label, description, optionalParams);
+  }
 
-    public checkLessThan(newValue: number) {
-        const other = this.ensureLessThan();
-        if (newValue > other.value) {
-            other.setValue(newValue);
-        }
+  public checkLessThan(newValue: number) {
+    const other = this.ensureLessThan();
+    if (newValue > other.value) {
+      other.setValue(newValue);
     }
+  }
 
-    public checkGreaterThan(newValue: number) {
-        const other = this.ensureGeaterThan();
-        if (newValue < other.value) {
-            other.setValue(newValue);
-        }
+  public checkGreaterThan(newValue: number) {
+    const other = this.ensureGeaterThan();
+    if (newValue < other.value) {
+      other.setValue(newValue);
     }
+  }
 }
 
 export class TitleInputFormControl extends InputFormControl {
-    public inputAim = 'title';
-    constructor(
-        formState: any,
-        label: string,
-        description: string,
-        public inputType: string = 'text',
-        optionalParams?: ControlOptionalParams) {
-        super(formState, label, description, 'text', optionalParams);
-    }
+  public inputAim = 'title';
+  public constructor(
+    formState: any,
+    label: string,
+    description: string,
+    public inputType: string = 'text',
+    optionalParams?: ControlOptionalParams) {
+    super(formState, label, description, 'text', optionalParams);
+  }
 }
 
 export class IconFormControl extends ConfigFormControl {
@@ -877,49 +897,49 @@ export class ColorFormControl extends ConfigFormControl {
  */
 export class ColorPreviewFormControl extends ConfigFormControl {
 
-    constructor(label: string, optionalParams?: ControlOptionalParams) {
-        super(null, label, null, optionalParams || { optional: true });
-    }
+  public constructor(label: string, optionalParams?: ControlOptionalParams) {
+    super(null, label, null, optionalParams || { optional: true });
+  }
 
-    public isMultiColors = () => Array.isArray(this.value);
+  public isMultiColors = () => Array.isArray(this.value);
 
-    public getPaletteGradients() {
-        const palette = this.value as Array<ProportionedValues>;
-        const min = Math.min(...palette.map(pv => pv.proportion));
-        const max = Math.max(...palette.map(pv => pv.proportion));
+  public getPaletteGradients() {
+    const palette = this.value as Array<ProportionedValues>;
+    const min = Math.min(...palette.map(pv => pv.proportion));
+    const max = Math.max(...palette.map(pv => pv.proportion));
 
-        return palette.map(
-            c => c.value + ' ' + (100 * (c.proportion - min) / (max - min)) + '%').join(',');
-    }
+    return palette.map(
+      c => c.value + ' ' + (100 * (c.proportion - min) / (max - min)) + '%').join(',');
+  }
 }
 
 export class ButtonFormControl extends ConfigFormControl {
 
-    // disabled state of the button itself, not of the form control
-    // ButtonFormControl disabled <=> not displayed, button disabled <=> displayed but disabled
-    public disabledButton = false;
+  // disabled state of the button itself, not of the form control
+  // ButtonFormControl disabled <=> not displayed, button disabled <=> displayed but disabled
+  public disabledButton = false;
 
-    // TODO remove formstate?
-    constructor(
-        formState: any,
-        label: string,
-        description: string,
-        public callback: () => void,
-        public disabledButtonMessage?: string,
-        optionalParams?: ControlOptionalParams) {
-        super(formState, label, description, optionalParams || { optional: true });
-    }
+  // TODO remove formstate?
+  public constructor(
+    formState: any,
+    label: string,
+    description: string,
+    public callback: () => void,
+    public disabledButtonMessage?: string,
+    optionalParams?: ControlOptionalParams) {
+    super(formState, label, description, optionalParams || { optional: true });
+  }
 }
 
 export class TextareaFormControl extends ConfigFormControl {
 
-    constructor(
-        formState: any,
-        label: string,
-        description: string,
-        public nbRows?: number,
-        optionalParams?: ControlOptionalParams
-    ) {
-        super(formState, label, description, optionalParams);
-    }
+  public constructor(
+    formState: any,
+    label: string,
+    description: string,
+    public nbRows?: number,
+    optionalParams?: ControlOptionalParams
+  ) {
+    super(formState, label, description, optionalParams);
+  }
 }

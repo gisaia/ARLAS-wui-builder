@@ -20,7 +20,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-resultlist-data',
+  selector: 'arlas-resultlist-data',
   templateUrl: './resultlist-data.component.html',
   styleUrls: ['./resultlist-data.component.scss']
 })
@@ -28,7 +28,7 @@ export class ResultlistDataComponent implements OnInit {
 
   @Input() public control: FormGroup;
 
-  constructor(
+  public constructor(
   ) { }
 
   public ngOnInit() {

@@ -25,7 +25,7 @@ import { SideModulesGlobalFormBuilderService } from '../side-modules-global-form
 })
 export class SideModulesInitService {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private sideModulesGlobalFormBuilder: SideModulesGlobalFormBuilderService
   ) {

@@ -22,7 +22,7 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 import { ConfigFormGroup, HiddenFormControl } from '@shared-models/config-form';
 
 export class MapBasemapFormGroup extends ConfigFormGroup {
-  constructor() {
+  public constructor() {
     super({
       basemaps: new FormArray([]),
       default: new HiddenFormControl('', null)
@@ -41,7 +41,7 @@ export class MapBasemapFormGroup extends ConfigFormGroup {
 })
 export class MapBasemapFormBuilderService {
 
-  constructor(
+  public constructor(
     private defaultValuesService: DefaultValuesService
   ) { }
 

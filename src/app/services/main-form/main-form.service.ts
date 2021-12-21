@@ -69,7 +69,7 @@ export class MainFormService {
 
   public configurationName: string;
 
-  public configChange: Subject<{ id: string, name: string }> = new Subject<{ id: string, name: string }>();
+  public configChange: Subject<{ id: string; name: string; }> = new Subject<{ id: string; name: string; }>();
 
   public mainForm = new FormGroup({
     [MAIN_FORM_KEYS.STARTING_CONFIG]: new FormGroup({}),
@@ -85,12 +85,12 @@ export class MainFormService {
 
   });
 
-  constructor() {
+  public constructor() {
   }
 
   // STARTING FORM
   public startingConfig = new class {
-    constructor(public mainForm: FormGroup) { }
+    public constructor(public mainForm: FormGroup) { }
 
     public init(control: StartingConfigFormGroup) {
       this.mainForm.setControl(MAIN_FORM_KEYS.STARTING_CONFIG, control);
@@ -101,28 +101,22 @@ export class MainFormService {
 
   // MAP CONFIG
   public mapConfig = new class {
-    constructor(public control: FormGroup) { }
+    public constructor(public control: FormGroup) { }
 
     public initGlobalFg = (fg: MapGlobalFormGroup) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL, fg);
     public initLayersFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS, fa);
     public initVisualisationsFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_VISUALISATIONS, fa);
     public initBasemapsFg = (fg: MapBasemapFormGroup) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_BASAMAPS, fg);
     public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL) as MapGlobalFormGroup;
-    public getLayersFa = () => {
-      return this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS) as FormArray;
-    }
-    public getVisualisationsFa = () => {
-      return this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_VISUALISATIONS) as FormArray;
-    }
-    public getBasemapsFg = () => {
-      return this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_BASAMAPS) as MapBasemapFormGroup;
-    }
+    public getLayersFa = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS) as FormArray;
+    public getVisualisationsFa = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_VISUALISATIONS) as FormArray;
+    public getBasemapsFg = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_BASAMAPS) as MapBasemapFormGroup;
 
   }(this.mainForm.get(MAIN_FORM_KEYS.MAP_CONFIG) as FormGroup);
 
   // TIMELINE CONFIG
   public timelineConfig = new class {
-    constructor(public control: FormGroup) { }
+    public constructor(public control: FormGroup) { }
 
     public initGlobalFg = (fg: TimelineGlobalFormGroup) => this.control.setControl(MAIN_FORM_KEYS.TIMELINE_CONFIG_GLOBAL, fg);
     public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.TIMELINE_CONFIG_GLOBAL) as TimelineGlobalFormGroup;
@@ -131,7 +125,7 @@ export class MainFormService {
 
   // SEARCH CONFIG
   public searchConfig = new class {
-    constructor(public control: FormGroup) { }
+    public constructor(public control: FormGroup) { }
 
     public initGlobalFg = (fg: SearchGlobalFormGroup) => this.control.setControl(MAIN_FORM_KEYS.SEARCH_CONFIG_GLOBAL, fg);
     public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.SEARCH_CONFIG_GLOBAL) as SearchGlobalFormGroup;
@@ -140,7 +134,7 @@ export class MainFormService {
 
   // ANALYTICS CONFIG
   public analyticsConfig = new class {
-    constructor(public control: FormGroup) { }
+    public constructor(public control: FormGroup) { }
 
     public initListFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.ANALYTICS_CONFIG_LIST, fa);
     public getListFa = () => this.control.get(MAIN_FORM_KEYS.ANALYTICS_CONFIG_LIST) as FormArray;
@@ -149,7 +143,7 @@ export class MainFormService {
 
   // SIDE MODULES CONFIG
   public sideModulesConfig = new class {
-    constructor(public control: FormGroup) { }
+    public constructor(public control: FormGroup) { }
 
     public initGlobalFg = (fg: SideModulesGlobalFormGroup) => this.control.setControl(MAIN_FORM_KEYS.SIDE_MODULES_CONFIG_GLOBAL, fg);
     public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.SIDE_MODULES_CONFIG_GLOBAL) as SideModulesGlobalFormGroup;
@@ -157,7 +151,7 @@ export class MainFormService {
 
   // LOOK AND FEEL CONFIG
   public lookAndFeelConfig = new class {
-    constructor(public control: FormGroup) { }
+    public constructor(public control: FormGroup) { }
 
     public initGlobalFg = (fg: LookAndFeelGlobalFormGroup) => this.control.setControl(MAIN_FORM_KEYS.LOOK_AND_FEEL_CONFIG_GLOBAL, fg);
     public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.LOOK_AND_FEEL_CONFIG_GLOBAL) as LookAndFeelGlobalFormGroup;
@@ -165,27 +159,23 @@ export class MainFormService {
 
   // RESULT LIST CONFIG
   public resultListConfig = new class {
-    constructor(public control: FormGroup) { }
+    public constructor(public control: FormGroup) { }
 
     public initResultListsFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.RESULT_LIST_CONFIG_LISTS, fa);
-    public getResultListsFa = () => {
-      return this.control.get(MAIN_FORM_KEYS.RESULT_LIST_CONFIG_LISTS) as FormArray;
-    }
+    public getResultListsFa = () => this.control.get(MAIN_FORM_KEYS.RESULT_LIST_CONFIG_LISTS) as FormArray;
   }(this.mainForm.get(MAIN_FORM_KEYS.RESULT_LIST_CONFIG) as FormGroup);
 
   // EXTERNAL NODE CONFIG
   public externalNodeConfig = new class {
-    constructor(public control: FormGroup) { }
+    public constructor(public control: FormGroup) { }
 
     public initExternalNodeFg = (fg: FormGroup) => this.control.setControl(MAIN_FORM_KEYS.EXTERNAL_NODE_CONFIG_GLOBAL, fg);
-    public getExternalNodeFg = () => {
-      return this.control.get(MAIN_FORM_KEYS.EXTERNAL_NODE_CONFIG_GLOBAL) as FormGroup;
-    }
+    public getExternalNodeFg = () => this.control.get(MAIN_FORM_KEYS.EXTERNAL_NODE_CONFIG_GLOBAL) as FormGroup;
   }(this.mainForm.get(MAIN_FORM_KEYS.EXTERNAL_NODE_CONFIG) as FormGroup);
 
   // COMMON CONFIG
   public commonConfig = new class {
-    constructor(public control: FormGroup) { }
+    public constructor(public control: FormGroup) { }
 
     public initKeysToColorFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.COMMON_CONFIG_KEYS_TO_COLOR, fa);
     public getKeysToColorFa = () => this.control.get(MAIN_FORM_KEYS.COMMON_CONFIG_KEYS_TO_COLOR) as FormArray;

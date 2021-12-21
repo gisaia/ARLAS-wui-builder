@@ -26,7 +26,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 })
 export class ResultListInitService {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService
   ) { }
 

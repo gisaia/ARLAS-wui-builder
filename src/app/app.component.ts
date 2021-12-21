@@ -26,7 +26,7 @@ import { Title } from '@angular/platform-browser';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 @Component({
-  selector: 'app-root',
+  selector: 'arlas-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
   public title = 'ARLAS-wui-builder';
   @ViewChild('landing', { static: false }) public landing: LandingPageComponent;
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private logger: NGXLogger,
     private snackbar: MatSnackBar,
@@ -53,9 +53,7 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // tslint:disable-next-line:no-string-literal
     this.title = this.arlasSettingsService.settings['tab_name'] ?
-      // tslint:disable-next-line:no-string-literal
       this.arlasSettingsService.settings['tab_name'] : 'ARLAS-wui-builder';
     this.titleService.setTitle(this.title);
     this.iconService.registerIcons();

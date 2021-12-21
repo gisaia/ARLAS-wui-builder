@@ -6,7 +6,7 @@
                 {{'Columns' | translate}}
             </span>
         </ng-template>
-        <app-edit-resultlist-columns [control]="control.get('columns')" [collection]="control.get('collection')">
+        <arlas-edit-resultlist-columns [control]="control.get('columns')" [collection]="control.get('collection')">
         </app-edit-resultlist-columns>
     </mat-tab>
     <mat-tab #details>
@@ -16,7 +16,7 @@
                 {{'Details' | translate}}
             </span>
         </ng-template>
-        <app-edit-resultlist-details [control]="control.get('details')" [collection]="control.get('collection')">
+        <arlas-edit-resultlist-details [control]="control.get('details')" [collection]="control.get('collection')">
         </app-edit-resultlist-details>
     </mat-tab>
 </mat-tab-group>

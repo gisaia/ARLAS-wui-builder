@@ -31,7 +31,7 @@ import { Expression } from 'arlas-api';
 import { Observable, of } from 'rxjs';
 
 export class MapGlobalFormGroup extends ConfigFormGroup {
-  constructor() {
+  public constructor() {
     super({
       initZoom: new SliderFormControl(
         '',
@@ -150,7 +150,7 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
 }
 
 export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
-  constructor(
+  public constructor(
     collection: string,
     geometryPath: string,
     idPath: string,
@@ -176,11 +176,12 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
         true,
         toGeoOptionsObs(collectionFields),
         {
-          dependsOn:  () => [this.customControls.collection],
+          dependsOn: () => [this.customControls.collection],
           onDependencyChange: (control: SelectFormControl) => {
             if (this.customControls.collection.value) {
               toGeoOptionsObs(collectionService
-                .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
+                .getCollectionFields(this.customControls.collection.value))
+                .subscribe(collectionFs => {
                   control.setSyncOptions(collectionFs);
                 });
             }
@@ -191,7 +192,7 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
         idPath,
         null,
         {
-          dependsOn:  () => [this.customControls.collection],
+          dependsOn: () => [this.customControls.collection],
           onDependencyChange: (control) => {
             if (!!this.customControls.collection.value) {
               control.setValue(collectionService.collectionParamsMap.get(this.customControls.collection.value).params.id_path);
@@ -214,7 +215,7 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
 })
 export class MapGlobalFormBuilderService {
 
-  constructor(
+  public constructor(
     private defaultValuesService: DefaultValuesService,
     private mainFormService: MainFormService,
     private collectionService: CollectionService

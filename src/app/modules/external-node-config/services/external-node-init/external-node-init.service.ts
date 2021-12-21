@@ -26,7 +26,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 })
 export class ExternalNodeInitService {
 
-  constructor(
+  public constructor(
     private fb: FormBuilder,
     private mainFormService: MainFormService
   ) { }

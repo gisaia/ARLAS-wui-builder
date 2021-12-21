@@ -87,20 +87,19 @@ export class MenuService {
     }
   ];
 
-  constructor(private mainFormService: MainFormService,
-              private arlasSettingsService: ArlasSettingsService) {
-                // tslint:disable-next-line:no-string-literal
-                if (this.arlasSettingsService.settings['external_node_page']) {
-                  this.pages.push({
-                    name: marker('Custom configuration'),
-                    link: '/extra-node',
-                    icon: 'settings_input_composite',
-                    tooltip: marker('Custom configuration'),
-                    enabled: false,
-                    control: this.mainFormService.externalNodeConfig.control
-                  });
-                }
-              }
+  public constructor(private mainFormService: MainFormService,
+    private arlasSettingsService: ArlasSettingsService) {
+    if (this.arlasSettingsService.settings['external_node_page']) {
+      this.pages.push({
+        name: marker('Custom configuration'),
+        link: '/extra-node',
+        icon: 'settings_input_composite',
+        tooltip: marker('Custom configuration'),
+        enabled: false,
+        control: this.mainFormService.externalNodeConfig.control
+      });
+    }
+  }
 
   public updatePagesStatus(status: boolean) {
     this.pages.forEach(page => page.enabled = status);

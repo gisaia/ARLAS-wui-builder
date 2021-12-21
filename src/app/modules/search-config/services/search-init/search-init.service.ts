@@ -25,7 +25,7 @@ import { SearchGlobalFormBuilderService } from '../search-global-form-builder/se
 })
 export class SearchInitService {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private searchGlobalFormBuilder: SearchGlobalFormBuilderService
   ) { }

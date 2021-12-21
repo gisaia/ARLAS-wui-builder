@@ -2,10 +2,10 @@ import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/sp
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ArlasCollaborativesearchService, ArlasStartupService, ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { MainFormManagerService } from './main-form-manager.service';
-import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
-import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
-import { GET_OPTIONS } from 'arlas-wui-toolkit/services/persistence/persistence.service';
-import { getOptionsFactory } from 'arlas-wui-toolkit/app.module';
+import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit';
+import { AuthentificationService } from 'arlas-wui-toolkit';
+import { GET_OPTIONS } from 'arlas-wui-toolkit';
+import { getOptionsFactory } from 'arlas-wui-toolkit';
 
 describe('MainFormManagerService', () => {
   let spectator: SpectatorService<MainFormManagerService>;

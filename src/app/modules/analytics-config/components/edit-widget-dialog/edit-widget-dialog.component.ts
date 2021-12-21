@@ -30,7 +30,7 @@ import { WIDGET_TYPE } from '../edit-group/models';
 import { EditWidgetDialogData } from './models';
 
 @Component({
-  selector: 'app-edit-widget-dialog',
+  selector: 'arlas-edit-widget-dialog',
   templateUrl: './edit-widget-dialog.component.html',
   styleUrls: ['./edit-widget-dialog.component.scss'],
 })
@@ -40,7 +40,7 @@ export class EditWidgetDialogComponent implements OnInit {
   public defaultKey: string;
   public WIDGET_TYPE = WIDGET_TYPE;
 
-  constructor(
+  public constructor(
     public dialogRef: MatDialogRef<EditWidgetDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: EditWidgetDialogData,
     private histogramBuilder: HistogramFormBuilderService,

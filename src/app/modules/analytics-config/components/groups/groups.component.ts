@@ -36,7 +36,7 @@ import { debounceTime } from 'rxjs/operators';
 
 
 @Component({
-  selector: 'app-groups',
+  selector: 'arlas-groups',
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.scss']
 })
@@ -51,7 +51,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   private afterClosedSub: Subscription;
 
-  constructor(
+  public constructor(
     private defaultValuesService: DefaultValuesService,
     public dialog: MatDialog,
     private arlasStartupService: ArlasStartupService,
@@ -69,7 +69,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.analyticsInitService.initTabContent(this.contentFg);
     this.updateDisplay.pipe(
       debounceTime(200)
-      ).subscribe(() => this.updateAnalytics());
+    ).subscribe(() => this.updateAnalytics());
   }
 
   public addGroup() {
@@ -109,7 +109,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     });
   }
 
-  get groupsFa() {
+  public get groupsFa() {
     return this.contentFg.get('groupsFa') as FormArray;
   }
 
@@ -131,8 +131,12 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.afterClosedSub) { this.afterClosedSub.unsubscribe(); }
-    if (this.updateDisplay) { this.updateDisplay.unsubscribe(); }
+    if (this.afterClosedSub) {
+      this.afterClosedSub.unsubscribe();
+    }
+    if (this.updateDisplay) {
+      this.updateDisplay.unsubscribe();
+    }
     // TODO: activate when toolkit updated
     // this.analyticsBoard.ngOnDestroy();
     this.analyticsBoard = null;

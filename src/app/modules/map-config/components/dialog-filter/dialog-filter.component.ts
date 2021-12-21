@@ -23,7 +23,7 @@ import { FormControl } from '@angular/forms';
 import { CollectionService } from '@services/collection-service/collection.service';
 
 @Component({
-  selector: 'app-filter',
+  selector: 'arlas-filter',
   templateUrl: './dialog-filter.component.html',
   styleUrls: ['./dialog-filter.component.scss']
 })
@@ -32,7 +32,7 @@ export class DialogFilterComponent implements OnInit {
   public constructor(
     public dialogRef: MatDialogRef<DialogFilterComponent>,
     public collectionService: CollectionService,
-    @Inject(MAT_DIALOG_DATA) public data: {mapForm: MapFilterFormGroup, collection: string}
+    @Inject(MAT_DIALOG_DATA) public data: { mapForm: MapFilterFormGroup; collection: string; }
   ) { }
 
   public ngOnInit() {
@@ -48,12 +48,13 @@ export class DialogFilterComponent implements OnInit {
   }
 
   /** fetches list of keywords to select given the prefix */
-  public updateList(event: {prefix: string, control: FormControl}) {
+  public updateList(event: { prefix: string; control: FormControl; }) {
     if (this.data.mapForm.customControls.filterOperation.value === 'IN') {
       this.data.mapForm.customControls.filterInValues.setSyncOptions([]);
       this.collectionService.getTermAggregation(
         this.data.collection,
-        this.data.mapForm.customControls.filterField.value.value, true, undefined, event.prefix).then(keywords => {
+        this.data.mapForm.customControls.filterField.value.value, true, undefined, event.prefix)
+        .then(keywords => {
           this.data.mapForm.customControls.filterInValues.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
         });
     }

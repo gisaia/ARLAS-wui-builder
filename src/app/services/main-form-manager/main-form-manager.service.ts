@@ -57,7 +57,7 @@ import { importElements } from './tools';
 })
 export class MainFormManagerService {
 
-  constructor(
+  public constructor(
     private logger: NGXLogger,
     private mainFormService: MainFormService,
     private analyticsImportService: AnalyticsImportService,

@@ -7,7 +7,7 @@ describe('AlertOnChangeDirective', () => {
   const createDirective = createDirectiveFactory(AlertOnChangeDirective);
 
   beforeEach(() => {
-    spectator = createDirective(`<mat-select appAlertOnChange>AlertOnChangeDirective</mat-select>`);
+    spectator = createDirective(`<mat-select arlasAlertOnChange>AlertOnChangeDirective</mat-select>`);
   });
 
   it('should create an instance', () => {

@@ -51,7 +51,7 @@ export interface Layer {
 }
 
 @Component({
-  selector: 'app-layers',
+  selector: 'arlas-layers',
   templateUrl: './layers.component.html',
   styleUrls: ['./layers.component.scss']
 })
@@ -61,7 +61,7 @@ export class LayersComponent implements OnInit, OnDestroy {
   public layersFa: FormArray;
   public visualisationSetFa: FormArray;
 
-  public layerLegend: Map<string, { layer: any, colorLegend: any, strokeColorLegend: any, lineDashArray: any }> = new Map();
+  public layerLegend: Map<string, { layer: any; colorLegend: any; strokeColorLegend: any; lineDashArray: any; }> = new Map();
 
   public layerVs: Map<string, string[]> = new Map();
 
@@ -73,7 +73,7 @@ export class LayersComponent implements OnInit, OnDestroy {
   public enableAddLayer = true;
   @ViewChild(MatSort, { static: true }) public sort: MatSort;
 
-  constructor(
+  public constructor(
     protected mainFormService: MainFormService,
     public dialog: MatDialog,
     private collaborativesearchService: ArlasCollaborativesearchService,
@@ -127,9 +127,9 @@ export class LayersComponent implements OnInit, OnDestroy {
       const dataStr = Object.keys(data)
         .reduce(
           (currentTerm: string, key: string) => {
-            let value = (data as { [key: string]: any })[key];
+            let value = (data as { [key: string]: any; })[key];
             if (key === 'visualisation') {
-              value = (data as { [key: string]: any })[key].filter(vs => vs.include).map(vs => vs.name).join(' ');
+              value = (data as { [key: string]: any; })[key].filter(vs => vs.include).map(vs => vs.name).join(' ');
             }
             // Use an obscure Unicode character to delimit the words in the concatenated string.
             // This avoids matches where the values of two columns combined will match the user's query
@@ -150,8 +150,12 @@ export class LayersComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.confirmDeleteSub) { this.confirmDeleteSub.unsubscribe(); }
-    if (this.previewSub) { this.previewSub.unsubscribe(); }
+    if (this.confirmDeleteSub) {
+      this.confirmDeleteSub.unsubscribe();
+    }
+    if (this.previewSub) {
+      this.previewSub.unsubscribe();
+    }
     this.toUnsubscribe.forEach(u => u.unsubscribe());
   }
 

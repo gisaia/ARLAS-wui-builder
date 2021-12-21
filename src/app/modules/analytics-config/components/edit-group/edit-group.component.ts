@@ -43,14 +43,14 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { MainFormService } from '@services/main-form/main-form.service';
 
 @Component({
-  selector: 'app-add-widget-dialog',
+  selector: 'arlas-add-widget-dialog',
   templateUrl: './edit-group-add-widget.component.html',
   styleUrls: ['./edit-group-add-widget.component.scss']
 })
 export class AddWidgetDialogComponent {
   public widgetType: Array<string> = [];
 
-  public contentTypes: { label: WIDGET_TYPE, icon: string }[] = [
+  public contentTypes: { label: WIDGET_TYPE; icon: string; }[] = [
     { label: WIDGET_TYPE.histogram, icon: 'bar_chart' },
     { label: WIDGET_TYPE.donut, icon: 'donut_small' },
     { label: WIDGET_TYPE.powerbars, icon: 'sort' },
@@ -58,7 +58,7 @@ export class AddWidgetDialogComponent {
     { label: WIDGET_TYPE.metric, icon: 'functions' },
     { label: WIDGET_TYPE.swimlane, icon: 'waves' }
   ];
-  constructor(
+  public constructor(
     public dialogRef: MatDialogRef<AddWidgetDialogComponent>
   ) { }
 
@@ -74,7 +74,7 @@ export class AddWidgetDialogComponent {
 }
 
 @Component({
-  selector: 'app-edit-group',
+  selector: 'arlas-edit-group',
   templateUrl: './edit-group.component.html',
   styleUrls: ['./edit-group.component.scss']
 })
@@ -95,7 +95,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   private afterClosedEditSub: Subscription;
   private afterClosedconfirmSub: Subscription;
 
-  constructor(
+  public constructor(
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
     private analyticsImportService: AnalyticsImportService,
@@ -245,17 +245,25 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.afterClosedAddSub) { this.afterClosedAddSub.unsubscribe(); }
-    if (this.afterClosedEditSub) { this.afterClosedEditSub.unsubscribe(); }
-    if (this.afterClosedconfirmSub) { this.afterClosedconfirmSub.unsubscribe(); }
-    if (this.valuesChangesSub) { this.valuesChangesSub.unsubscribe(); }
+    if (this.afterClosedAddSub) {
+      this.afterClosedAddSub.unsubscribe();
+    }
+    if (this.afterClosedEditSub) {
+      this.afterClosedEditSub.unsubscribe();
+    }
+    if (this.afterClosedconfirmSub) {
+      this.afterClosedconfirmSub.unsubscribe();
+    }
+    if (this.valuesChangesSub) {
+      this.valuesChangesSub.unsubscribe();
+    }
   }
 
   public getOtherWidgetIds(widgetIndex) {
     return this.contentTypeValue
-    .map((tab, i) => i)
-    .filter(i => i !== widgetIndex)
-    .map(i => 'widget-'  + this.groupIndex + '-' + i);
+      .map((tab, i) => i)
+      .filter(i => i !== widgetIndex)
+      .map(i => 'widget-' + this.groupIndex + '-' + i);
 
   }
   public drop(event: CdkDragDrop<string[]>) {
@@ -265,11 +273,12 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     this.updatePreview();
 
   }
-  get contentType() {
+
+  public get contentType() {
     return this.formGroup.controls.contentType;
   }
 
-  get contentTypeValue() {
+  public get contentTypeValue() {
     return this.formGroup.controls.contentType.value as Array<string>;
   }
 }

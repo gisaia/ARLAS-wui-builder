@@ -21,7 +21,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 export class StartingConfigFormGroup extends FormGroup {
-  constructor() {
+  public constructor() {
     super({
       serverUrl: new FormControl(null,
         [
@@ -57,7 +57,7 @@ export class StartingConfigFormGroup extends FormGroup {
 })
 export class StartingConfigFormBuilderService {
 
-  constructor(
+  public constructor(
     private defaultValuesService: DefaultValuesService,
   ) { }
 

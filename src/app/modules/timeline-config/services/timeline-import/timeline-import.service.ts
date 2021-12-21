@@ -32,7 +32,7 @@ import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timelin
 })
 export class TimelineImportService {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private colorService: ArlasColorGeneratorLoader,
     private collectionService: CollectionService

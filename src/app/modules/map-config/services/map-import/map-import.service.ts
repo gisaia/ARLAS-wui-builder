@@ -39,7 +39,7 @@ import { MapVisualisationFormBuilderService } from '../map-visualisation-form-bu
 })
 export class MapImportService {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private mapGlobalFormBuilder: MapGlobalFormBuilderService,
     private mapLayerFormBuilder: MapLayerFormBuilderService,
@@ -355,11 +355,13 @@ export class MapImportService {
     const colors = layer.paint[layer.type + '-color'];
     values.styleStep.colorFg = {};
     this.importPropertySelector(colors, values.styleStep.colorFg, true, isAggregated, layerSource);
-
-    layerMode === LAYER_MODE.features ? this.importLayerFeatures(values, layer, layerSource) :
-      layerMode === LAYER_MODE.featureMetric ? this.importLayerFeaturesMetric(values, layer, layerSource) :
-        layerMode === LAYER_MODE.cluster ? this.importLayerCluster(values, layer, layerSource) :
-          (() => { })();
+    if (layerMode === LAYER_MODE.features) {
+      this.importLayerFeatures(values, layer, layerSource);
+    } else if (layerMode === LAYER_MODE.featureMetric) {
+      this.importLayerFeaturesMetric(values, layer, layerSource);
+    } else if (layerMode === LAYER_MODE.cluster) {
+      this.importLayerCluster(values, layer, layerSource);
+    }
 
     typeFg.patchValue(values);
 
@@ -392,9 +394,7 @@ export class MapImportService {
   ) {
     this.importLayerFeatures(values, layer, layerSource);
     /** retro compatibility code : migrate from [geometry_support] to [raw_geometry] */
-    // tslint:disable-next-line: deprecation
     if (!!layerSource.geometry_support) {
-      // tslint:disable-next-line: deprecation
       values.geometryStep.geometry = layerSource.geometry_support;
       values.geometryStep.featureMetricSort = null;
     } else {

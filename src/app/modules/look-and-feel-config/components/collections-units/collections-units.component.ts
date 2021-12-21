@@ -22,7 +22,7 @@ import { FormArray } from '@angular/forms';
 import { SlideToggleFormControl } from '@shared-models/config-form';
 
 @Component({
-  selector: 'app-collections-units',
+  selector: 'arlas-collections-units',
   templateUrl: './collections-units.component.html',
   styleUrls: ['./collections-units.component.scss']
 })
@@ -31,7 +31,7 @@ export class CollectionsUnitsComponent implements OnInit {
   @Input() public collections: string[];
   @Input() public unitsArray: FormArray;
 
-  constructor() { }
+  public constructor() { }
 
   public ngOnInit() {
 

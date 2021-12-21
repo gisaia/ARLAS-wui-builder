@@ -38,8 +38,8 @@ import { SharedModule } from '@shared/shared.module';
 import { TimelineConfigModule } from '@timeline-config/timeline-config.module';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import {
-  ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigurationDescriptor, ArlasConfigurationUpdaterService, 
-  ArlasStartupService, ArlasWalkthroughService, AuthentificationService, ConfigMenuModule, configUpdaterFactory, 
+  ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigurationDescriptor, ArlasConfigurationUpdaterService,
+  ArlasStartupService, ArlasWalkthroughService, AuthentificationService, ConfigMenuModule, configUpdaterFactory,
   CONFIG_UPDATER, ErrorModalModule, FETCH_OPTIONS, getOptionsFactory, GET_OPTIONS, PaginatorI18n, UserInfosComponent
 } from 'arlas-wui-toolkit';
 import { environment } from 'environments/environment';
@@ -154,7 +154,7 @@ export function createTranslateLoader(http: HttpClient) {
     {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
       useValue: { duration: 3000, verticalPosition: 'bottom' }
-    },  
+    },
     {
       provide: GET_OPTIONS,
       useFactory: getOptionsFactory,

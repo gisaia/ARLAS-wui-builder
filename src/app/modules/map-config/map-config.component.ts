@@ -32,7 +32,7 @@ interface Tab {
 }
 
 @Component({
-  selector: 'app-map-config',
+  selector: 'arlas-map-config',
   templateUrl: './map-config.component.html',
   styleUrls: ['./map-config.component.scss']
 })
@@ -40,7 +40,7 @@ export class MapConfigComponent implements OnInit, OnDestroy {
 
   private routerSub: Subscription;
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private translate: TranslateService,
     private router: Router) { }

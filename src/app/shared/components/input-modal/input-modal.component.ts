@@ -28,7 +28,7 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-input-modal',
+  selector: 'arlas-input-modal',
   templateUrl: './input-modal.component.html',
   styleUrls: ['./input-modal.component.scss']
 })
@@ -36,7 +36,7 @@ export class InputModalComponent {
 
   public textName: string;
 
-  constructor(
+  public constructor(
     public dialogRef: MatDialogRef<InputModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {

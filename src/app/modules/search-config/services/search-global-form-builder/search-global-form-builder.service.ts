@@ -28,7 +28,7 @@ import { Observable } from 'rxjs';
 
 export class SearchGlobalFormGroup extends ConfigFormGroup {
 
-  constructor(
+  public constructor(
     textFieldsObs: Observable<Array<SelectOption>>,
     keywordFieldsObs: Observable<Array<SelectOption>>
   ) {
@@ -85,7 +85,7 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
 })
 export class SearchGlobalFormBuilderService {
 
-  constructor(
+  public constructor(
     private defaultValuesService: DefaultValuesService,
     private collectionService: CollectionService,
     private mainFormService: MainFormService,

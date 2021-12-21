@@ -25,7 +25,7 @@ import * as d3i from 'd3-interpolate';
 import { DialogPaletteSelectorData } from './model';
 
 @Component({
-  selector: 'app-dialog-palette',
+  selector: 'arlas-dialog-palette',
   templateUrl: './dialog-palette-selector.component.html',
   styleUrls: ['./dialog-palette-selector.component.scss'],
   encapsulation: ViewEncapsulation.None
@@ -35,10 +35,10 @@ export class DialogPaletteSelectorComponent implements OnInit {
   public defaultPalettes: ProportionedValues[][];
   public selectedPalette: ProportionedValues[];
 
-  constructor(
+  public constructor(
     public dialogRef: MatDialogRef<DialogPaletteSelectorComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogPaletteSelectorData
-    ) { }
+  ) { }
 
   public ngOnInit() {
     this.dialogRef.disableClose = true;
@@ -48,20 +48,16 @@ export class DialogPaletteSelectorComponent implements OnInit {
 
   private prepareDefaultPalettes() {
     this.selectedPalette = this.data.selectedPalette;
-    this.defaultPalettes = this.data.defaultPalettes.map((p: Array<string>) => {
-      return p.map((c: string, i: number) => {
-        return { proportion: this.computeProportion(p.length, i), value: c };
-      });
-    });
+    this.defaultPalettes = this.data.defaultPalettes
+      .map((p: Array<string>) => p
+        .map((c: string, i: number) => ({ proportion: this.computeProportion(p.length, i), value: c })));
   }
 
   public resetProportions() {
-    this.selectedPalette = this.selectedPalette.map((c: ProportionedValues, i: number) => {
-      return {
-        proportion: this.computeProportion(this.selectedPalette.length, i),
-        value: c.value
-      };
-    });
+    this.selectedPalette = this.selectedPalette.map((c: ProportionedValues, i: number) => ({
+      proportion: this.computeProportion(this.selectedPalette.length, i),
+      value: c.value
+    }));
   }
 
   private computeProportion(length: number, index: number) {

@@ -25,7 +25,7 @@ import { LookAndFeelGlobalFormBuilderService } from '../look-and-feel-global-for
 })
 export class LookAndFeelInitService {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private lookAndFeelGlobalFormBuilder: LookAndFeelGlobalFormBuilderService
   ) { }

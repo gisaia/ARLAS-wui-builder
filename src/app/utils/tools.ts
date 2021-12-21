@@ -20,50 +20,50 @@ under the License.
 import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/forms';
 
 interface OPTIONAL {
-    isPresent: boolean;
-    value?: any;
+  isPresent: boolean;
+  value?: any;
 }
 
 export interface Page {
-    link: string;
-    name: string;
-    icon: string;
-    tooltip: string;
-    enabled: boolean;
-    control?: AbstractControl;
+  link: string;
+  name: string;
+  icon: string;
+  tooltip: string;
+  enabled: boolean;
+  control?: AbstractControl;
 }
 /**
  * Get object or String value of an object from key
  */
 export function getObject(datalayer: any, objectKey: string): OPTIONAL {
-    // if datalayer doesn't exists, just return
-    if (!datalayer) {
+  // if datalayer doesn't exists, just return
+  if (!datalayer) {
+    return { isPresent: false };
+  }
+  // default return datalayer
+  let current = datalayer;
+  // check every layer
+  if (typeof objectKey === 'string') {
+    const numberOfObjectHierarchy = objectKey.match(/\./g).length;
+    for (let i = 1; i <= numberOfObjectHierarchy; i++) {
+      const currentKey = objectKey.split(/\./)[i];
+      if (typeof current[currentKey] === 'undefined') {
         return { isPresent: false };
+      }
+      current = current[currentKey];
     }
-    // default return datalayer
-    let current = datalayer;
-    // check every layer
-    if (typeof objectKey === 'string') {
-        const numberOfObjectHierarchy = objectKey.match(/\./g).length;
-        for (let i = 1; i <= numberOfObjectHierarchy; i++) {
-            const currentKey = objectKey.split(/\./)[i];
-            if (typeof current[currentKey] === 'undefined') {
-                return { isPresent: false };
-            }
-            current = current[currentKey];
-        }
-    }
-    return { isPresent: true, value: current };
+  }
+  return { isPresent: true, value: current };
 }
 
 // recursively update the value and validity of itself and sub-controls (but not ancestors)
 export function updateValueAndValidity(control: AbstractControl, onlySelf: boolean = true, emitEvent: boolean = true) {
-    control.updateValueAndValidity({ onlySelf, emitEvent });
-    if (control instanceof FormGroup || control instanceof FormArray) {
-        Object.keys(control.controls).forEach(key => {
-            updateValueAndValidity(control.get(key), onlySelf, emitEvent);
-        });
-    }
+  control.updateValueAndValidity({ onlySelf, emitEvent });
+  if (control instanceof FormGroup || control instanceof FormArray) {
+    Object.keys(control.controls).forEach(key => {
+      updateValueAndValidity(control.get(key), onlySelf, emitEvent);
+    });
+  }
 }
 
 /**
@@ -72,90 +72,90 @@ export function updateValueAndValidity(control: AbstractControl, onlySelf: boole
  * so it can be detected to detect an export and display remaining errors.
  */
 export function isFullyTouched(control: AbstractControl): boolean {
-    if (control instanceof FormControl) {
-        return control.touched;
-    } else if (control.touched && (control instanceof FormGroup || control instanceof FormArray)) {
-        if (control.controls.length === 0 || Object.values(control.controls).length === 0) {
-            return control.touched;
-        } else if (control.controls.length === 1) {
-            return Object.values(control.controls)[0].touched;
-        } else {
-            return Object.values(control.controls).map(c => isFullyTouched(c)).reduce((b1, b2) => b1 && b2);
-        }
+  if (control instanceof FormControl) {
+    return control.touched;
+  } else if (control.touched && (control instanceof FormGroup || control instanceof FormArray)) {
+    if (control.controls.length === 0 || Object.values(control.controls).length === 0) {
+      return control.touched;
+    } else if (control.controls.length === 1) {
+      return Object.values(control.controls)[0].touched;
+    } else {
+      return Object.values(control.controls).map(c => isFullyTouched(c)).reduce((b1, b2) => b1 && b2);
     }
-    return false;
+  }
+  return false;
 }
 
 export function getNbErrorsInControl(control: AbstractControl): number {
-    let nbErrors = 0;
-    nbErrors += !!control.errors ? Object.keys(control.errors).length : 0;
-    if (control instanceof FormGroup || control instanceof FormArray) {
-        Object.keys(control.controls).forEach(k => {
-            nbErrors += getNbErrorsInControl(control.controls[k]);
-        });
-    }
-    return nbErrors;
+  let nbErrors = 0;
+  nbErrors += !!control.errors ? Object.keys(control.errors).length : 0;
+  if (control instanceof FormGroup || control instanceof FormArray) {
+    Object.keys(control.controls).forEach(k => {
+      nbErrors += getNbErrorsInControl(control.controls[k]);
+    });
+  }
+  return nbErrors;
 }
 
 export function getAllFormGroupErrors(control: FormGroup | FormArray) {
-    const errors = {};
-    Object.keys(control.controls)
-        .filter(k => !control.get(k).valid)
-        .forEach(k => {
-            const subControl = control.get(k);
-            if (subControl instanceof FormGroup || subControl instanceof FormArray) {
-                errors[k] = getAllFormGroupErrors(subControl);
-            } else {
-                errors[k] = subControl.errors;
-            }
-        });
-    return errors;
+  const errors = {};
+  Object.keys(control.controls)
+    .filter(k => !control.get(k).valid)
+    .forEach(k => {
+      const subControl = control.get(k);
+      if (subControl instanceof FormGroup || subControl instanceof FormArray) {
+        errors[k] = getAllFormGroupErrors(subControl);
+      } else {
+        errors[k] = subControl.errors;
+      }
+    });
+  return errors;
 }
 
 export function ensureMinLessThanMax(
-    newValue: number,
-    minControl: AbstractControl,
-    maxControl: AbstractControl,
-    isMinOrMax: 'min' | 'max') {
+  newValue: number,
+  minControl: AbstractControl,
+  maxControl: AbstractControl,
+  isMinOrMax: 'min' | 'max') {
 
-    if (isMinOrMax === 'min') {
-        if (newValue > maxControl.value) {
-            maxControl.setValue(newValue);
-        }
-    } else if (newValue < minControl.value) {
-        minControl.setValue(newValue);
+  if (isMinOrMax === 'min') {
+    if (newValue > maxControl.value) {
+      maxControl.setValue(newValue);
     }
+  } else if (newValue < minControl.value) {
+    minControl.setValue(newValue);
+  }
 }
 
 export function moveInFormArray(previousIndex: number, newIndex: number, fa: FormArray) {
-    if (previousIndex === newIndex) {
-        return;
-    }
+  if (previousIndex === newIndex) {
+    return;
+  }
 
-    const previousTab = fa.at(previousIndex);
+  const previousTab = fa.at(previousIndex);
 
-    if (previousIndex < newIndex) {
-        fa.insert(newIndex + 1, previousTab);
-        fa.removeAt(previousIndex);
-    } else {
-        fa.insert(newIndex, previousTab);
-        fa.removeAt(previousIndex + 1);
-    }
+  if (previousIndex < newIndex) {
+    fa.insert(newIndex + 1, previousTab);
+    fa.removeAt(previousIndex);
+  } else {
+    fa.insert(newIndex, previousTab);
+    fa.removeAt(previousIndex + 1);
+  }
 }
 
 export function valuesToOptions(values: Array<string>) {
-    return values.map(v => ({
-        label: v.charAt(0).toUpperCase() + v.slice(1),
-        value: v
-    }));
+  return values.map(v => ({
+    label: v.charAt(0).toUpperCase() + v.slice(1),
+    value: v
+  }));
 }
 
 export function camelize(str) {
-    return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
-        if (+match === 0) {
-            return '';
-        }
-        return index === 0 ? match.toLowerCase() : match.toUpperCase();
-    });
+  return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
+    if (+match === 0) {
+      return '';
+    }
+    return index === 0 ? match.toLowerCase() : match.toUpperCase();
+  });
 }
 

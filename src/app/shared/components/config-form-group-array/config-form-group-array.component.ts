@@ -16,12 +16,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { ConfigFormGroupArray, ConfigFormGroup } from '@shared-models/config-form';
-import { FormGroup } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ConfigFormGroup, ConfigFormGroupArray } from '@shared-models/config-form';
 
 @Component({
-  selector: 'app-config-form-group-array',
+  selector: 'arlas-config-form-group-array',
   templateUrl: './config-form-group-array.component.html',
   styleUrls: ['./config-form-group-array.component.scss']
 })
@@ -30,7 +29,7 @@ export class ConfigFormGroupArrayComponent implements OnInit, OnDestroy {
   @Input() public configFormGroupArray: ConfigFormGroupArray;
   @Input() public defaultKey: string;
 
-  constructor() { }
+  public constructor() { }
 
   public ngOnInit() {
   }

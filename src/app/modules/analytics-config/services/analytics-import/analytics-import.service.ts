@@ -44,7 +44,7 @@ export class AnalyticsImportService {
 
   private analyticsBoardWidth = 445;
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,
     private analyticsInitService: AnalyticsInitService,
@@ -427,7 +427,7 @@ export class AnalyticsImportService {
     const title = widgetData.customControls.title;
 
     // create a set to initialize metrics properly
-    const metrics: Set<{ field: string, metric: string }> = new Set<{ field: string, metric: string }>();
+    const metrics: Set<{ field: string; metric: string; }> = new Set<{ field: string; metric: string; }>();
     contributor.metrics.forEach(metric => metrics.add(metric));
 
     importElements([
@@ -544,7 +544,7 @@ export class AnalyticsImportService {
     const title = widgetData.customControls.title;
 
     // create a set to initialize aggregationmodels properly
-    const aggregationsModels: Set<{ field: string, size: number }> = new Set<{ field: string, size: number }>();
+    const aggregationsModels: Set<{ field: string; size: number; }> = new Set<{ field: string; size: number; }>();
     contributor.aggregationmodels.forEach(aggModel => aggregationsModels.add({ field: aggModel.field, size: aggModel.size }));
     let donutOpacity = 0.5;
     if (component.input.opacity !== undefined && component.input.opacity !== null) {

@@ -27,7 +27,7 @@ import { DataResource, DataWithLinks } from 'arlas-persistence-api';
 import { PersistenceService } from 'arlas-wui-toolkit';
 
 @Component({
-  selector: 'app-import-widget-dialog',
+  selector: 'arlas-import-widget-dialog',
   templateUrl: './import-widget-dialog.component.html',
   styleUrls: ['./import-widget-dialog.component.scss']
 })
@@ -42,7 +42,7 @@ export class ImportWidgetDialogComponent implements OnInit {
   public selectedWidgets: Array<AnalyticComponentConfig> = new Array();
   public selectedWidgetsSet: Set<AnalyticComponentConfig> = new Set();
 
-  constructor(
+  public constructor(
     private persistenceService: PersistenceService,
     private collectionService: CollectionService,
     private mainformService: MainFormService,
@@ -96,7 +96,9 @@ export class ImportWidgetDialogComponent implements OnInit {
       }
     });
     this.dashboardConfigJson.arlas.web.contributors.filter(c => availableCollections.has(c.collection))
-      .forEach(cont => { importableWidgets.add(cont.identifier); });
+      .forEach(cont => {
+        importableWidgets.add(cont.identifier);
+      });
 
 
     this.analytics = new Map<string, Array<AnalyticConfig>>();

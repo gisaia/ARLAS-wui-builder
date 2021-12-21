@@ -39,9 +39,9 @@
             <ng-container matColumnDef="color">
                 <mat-header-cell *matHeaderCellDef>{{ 'Color' | translate}} </mat-header-cell>
                 <mat-cell *matCellDef="let element;let i = index;" [formGroup]="element" class="column-color">
-                    <app-color-picker-wrapper [value]="element.get('color').value"
+                    <arlas-color-picker-wrapper [value]="element.get('color').value"
                         (setValue)="element.get('color').patchValue($event)">
-                    </app-color-picker-wrapper>
+                    </arlas-color-picker-wrapper>
                     <button type="button" mat-icon-button (click)="remove(i)" matTooltip="{{ 'Remove row' | translate}}"
                         class="remove-button">
                         <mat-icon>delete</mat-icon>

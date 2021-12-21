@@ -182,7 +182,7 @@ export function createTranslateLoader(http: HttpClient) {
   ]
 })
 export class SharedModule {
-  constructor(translateService: TranslateService, injector: Injector) {
+  public constructor(translateService: TranslateService, injector: Injector) {
     StartupService.translationLoaded(translateService, injector);
   }
 }

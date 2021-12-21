@@ -1,8 +1,8 @@
 <h1 mat-dialog-title>{{dialogData.widgetType | translate | titlecase }}</h1>
-<app-config-form-control *ngIf="formGroup.controls['title']" [control]="formGroup.controls['title']"></app-config-form-control>
+<arlas-config-form-control *ngIf="formGroup.controls['title']" [control]="formGroup.controls['title']"></app-config-form-control>
 <div mat-dialog-content>
 
-    <app-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey">
+    <arlas-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey">
     </app-config-form-group>
 
 </div>

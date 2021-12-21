@@ -32,7 +32,7 @@ import { isFullyTouched, moveInFormArray } from '@utils/tools';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-tabs',
+  selector: 'arlas-tabs',
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.scss']
 })
@@ -48,7 +48,7 @@ export class TabsComponent implements OnDestroy {
   private removeAfterClosedSub: Subscription;
   private finishAfterClosedSub: Subscription;
 
-  constructor(
+  public constructor(
     private defaultValuesService: DefaultValuesService,
     private translateService: TranslateService,
     private mainFormService: MainFormService,
@@ -61,7 +61,7 @@ export class TabsComponent implements OnDestroy {
     this.tabsFa = this.mainFormService.analyticsConfig.getListFa();
   }
 
-  get tabs() {
+  public get tabs() {
     return this.tabsFa.controls.map(fg => fg.value.tabName);
   }
 
@@ -182,9 +182,15 @@ export class TabsComponent implements OnDestroy {
     this.editingTabIndex = null;
     this.editingTabName = null;
     this.isEditingTab = null;
-    if (this.newAfterClosedSub) { this.newAfterClosedSub.unsubscribe(); }
-    if (this.removeAfterClosedSub) { this.removeAfterClosedSub.unsubscribe(); }
-    if (this.finishAfterClosedSub) { this.finishAfterClosedSub.unsubscribe(); }
+    if (this.newAfterClosedSub) {
+      this.newAfterClosedSub.unsubscribe();
+    }
+    if (this.removeAfterClosedSub) {
+      this.removeAfterClosedSub.unsubscribe();
+    }
+    if (this.finishAfterClosedSub) {
+      this.finishAfterClosedSub.unsubscribe();
+    }
   }
 
 }

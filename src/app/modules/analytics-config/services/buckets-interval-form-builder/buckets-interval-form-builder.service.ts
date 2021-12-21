@@ -44,7 +44,7 @@ export enum BY_BUCKET_OR_INTERVAL {
 }
 export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
 
-  constructor(
+  public constructor(
     collection: string,
     collectionService: CollectionService, bucketType?: string) {
 
@@ -201,7 +201,7 @@ export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
 })
 export class BucketsIntervalFormBuilderService {
 
-  constructor(private collectionService: CollectionService) { }
+  public constructor(private collectionService: CollectionService) { }
 
   public build(collection: string, bucketType: string) {
     return new BucketsIntervalFormGroup(collection, this.collectionService, bucketType);

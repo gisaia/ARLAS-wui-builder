@@ -41,7 +41,7 @@ enum DateFormats {
 
 export class TimelineGlobalFormGroup extends ConfigFormGroup {
 
-  constructor(
+  public constructor(
     collection: string,
     collectionService: CollectionService,
     timelineBucketsIntervalFg?: BucketsIntervalFormGroup,
@@ -87,7 +87,8 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                     const selectedCollection = this.customControls.tabsContainer.dataStep.timeline.collection.value;
                     timelineBucketsIntervalFg.setCollection(selectedCollection);
                     toOptionsObs(toNumericOrDateFieldsObs(collectionService
-                      .getCollectionFields(selectedCollection))).subscribe(collectionFields => {
+                      .getCollectionFields(selectedCollection)))
+                      .subscribe(collectionFields => {
                         timelineBucketsIntervalFg.customControls.aggregationField.setSyncOptions(collectionFields);
                         collectionService.getDescribe(selectedCollection).subscribe(collectionRef => {
                           timelineBucketsIntervalFg.customControls.aggregationField.setValue(collectionRef.params.timestamp_path);
@@ -120,14 +121,12 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                 false,
                 collectionService.getCollections()
                   .filter(c => c !== collection)
-                  .map(c => {
-                    return {
-                      label: c,
-                      value: c,
-                      color: colorService.getColor(c),
-                      detail: '' // Fill in onDependencyChange on form load
-                    };
-                  }),
+                  .map(c => ({
+                    label: c,
+                    value: c,
+                    color: colorService.getColor(c),
+                    detail: '' // Fill in onDependencyChange on form load
+                  })),
                 {
                   optional: true,
                 },
@@ -194,48 +193,49 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                 marker('Is timeline multi-selectable description')
               )
             }).withTitle('Timeline'),
-            detailedTimeline: new ConfigFormGroup({
-              chartTitle: new InputFormControl(
-                '',
-                marker('Chart title'),
-                marker('Chart title description')
-              ),
-              chartType: new SelectFormControl(
-                '',
-                marker('Chart type'),
-                marker('Chart type description'),
-                false,
-                [ChartType[ChartType.area], ChartType[ChartType.bars], ChartType[ChartType.curve]].map(s =>
-                  ({ label: s, value: s })),
-                {
-                  dependsOn: () => [this.customControls.tabsContainer.dataStep.additionalCollections.collections],
-                  onDependencyChange: (control) => {
-                    if (
-                      !!this.customControls.tabsContainer.dataStep.additionalCollections.collections.value &&
-                      this.customControls.tabsContainer.dataStep.additionalCollections.collections.value.length > 0) {
-                      control.setValue(ChartType[ChartType.curve]);
+            detailedTimeline: new ConfigFormGroup(
+              {
+                chartTitle: new InputFormControl(
+                  '',
+                  marker('Chart title'),
+                  marker('Chart title description')
+                ),
+                chartType: new SelectFormControl(
+                  '',
+                  marker('Chart type'),
+                  marker('Chart type description'),
+                  false,
+                  [ChartType[ChartType.area], ChartType[ChartType.bars], ChartType[ChartType.curve]].map(s =>
+                    ({ label: s, value: s })),
+                  {
+                    dependsOn: () => [this.customControls.tabsContainer.dataStep.additionalCollections.collections],
+                    onDependencyChange: (control) => {
+                      if (
+                        !!this.customControls.tabsContainer.dataStep.additionalCollections.collections.value &&
+                        this.customControls.tabsContainer.dataStep.additionalCollections.collections.value.length > 0) {
+                        control.setValue(ChartType[ChartType.curve]);
+                      }
                     }
                   }
-                }
-              ),
-              dateFormat: new SelectFormControl(
-                '',
-                marker('Date format'),
-                marker('Date format description'),
-                false,
-                Object.keys(DateFormats).map(df => ({
-                  label: df + ' (' + DateFormats[df] + ')', value: DateFormats[df]
-                }))
-              ),
-              selectionExtentPercent: new SliderFormControl(
-                '',
-                marker('Percent of selection extent'),
-                marker('Timeline percent of selection extent description'),
-                0,
-                100,
-                5
-              )
-            },
+                ),
+                dateFormat: new SelectFormControl(
+                  '',
+                  marker('Date format'),
+                  marker('Date format description'),
+                  false,
+                  Object.keys(DateFormats).map(df => ({
+                    label: df + ' (' + DateFormats[df] + ')', value: DateFormats[df]
+                  }))
+                ),
+                selectionExtentPercent: new SliderFormControl(
+                  '',
+                  marker('Percent of selection extent'),
+                  marker('Timeline percent of selection extent description'),
+                  0,
+                  100,
+                  5
+                )
+              },
               {
                 dependsOn: () => [this.customControls.useDetailedTimeline],
                 onDependencyChange: (control) =>
@@ -433,7 +433,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
 })
 export class TimelineGlobalFormBuilderService {
 
-  constructor(
+  public constructor(
     private defaultValuesService: DefaultValuesService,
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
     private collectionService: CollectionService,

@@ -25,7 +25,7 @@ import { HiddenFormControl } from '@shared-models/config-form';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 @Component({
-  selector: 'app-basemaps',
+  selector: 'arlas-basemaps',
   templateUrl: './basemaps.component.html',
   styleUrls: ['./basemaps.component.scss']
 })
@@ -35,7 +35,7 @@ export class BasemapsComponent implements OnInit {
   public defaultBasemap: HiddenFormControl;
   public basemaps: Basemap[] = [];
 
-  constructor(
+  public constructor(
     private settingsService: ArlasSettingsService,
     private mainformService: MainFormService
   ) { }

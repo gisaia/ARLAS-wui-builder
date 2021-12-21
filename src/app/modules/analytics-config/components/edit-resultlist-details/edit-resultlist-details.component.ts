@@ -16,7 +16,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { ResultlistDetailFormGroup, ResultlistFormBuilderService } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
+import {
+  ResultlistDetailFormGroup, ResultlistFormBuilderService
+} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
@@ -24,7 +26,7 @@ import { SelectFormControl } from '@shared-models/config-form';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 
 @Component({
-  selector: 'app-edit-resultlist-details',
+  selector: 'arlas-edit-resultlist-details',
   templateUrl: './edit-resultlist-details.component.html',
   styleUrls: ['./edit-resultlist-details.component.scss']
 })
@@ -33,7 +35,7 @@ export class EditResultlistDetailsComponent implements OnInit {
   @Input() public control: FormArray;
   @Input() public collection: SelectFormControl;
 
-  constructor(
+  public constructor(
     private resultlistFormBuilder: ResultlistFormBuilderService
   ) { }
 

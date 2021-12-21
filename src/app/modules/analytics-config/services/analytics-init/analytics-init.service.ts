@@ -31,7 +31,7 @@ export class AnalyticsInitService {
 
   public groupIndex = 0;
 
-  constructor(
+  public constructor(
     private formBuilder: FormBuilder,
     private mainFormService: MainFormService,
     private arlasStartupService: ArlasStartupService,

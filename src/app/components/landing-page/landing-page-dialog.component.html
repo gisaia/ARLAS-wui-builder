@@ -56,7 +56,7 @@
     <h2 mat-dialog-title>{{'New dashboard' | translate}}</h2>
     <mat-dialog-content class="new-config-content">
         <div [formGroup]="this.mainFormService.startingConfig.getFg()">
-            <app-config-element [fullSize]="true">
+            <arlas-config-element [fullSize]="true">
                 <div form-fields class="server-url">
                     <mat-form-field>
                         <mat-label>{{'Server URL' | translate}}</mat-label>
@@ -67,7 +67,7 @@
                         mat-stroked-button color="accent">{{'Show collections' | translate}}</button>
                 </div>
             </app-config-element>
-            <app-config-element *ngIf="isServerReady">
+            <arlas-config-element *ngIf="isServerReady">
                 <div form-fields class="collection">
                     <mat-form-field>
                         <mat-label>{{'Main collection' | translate}}</mat-label>

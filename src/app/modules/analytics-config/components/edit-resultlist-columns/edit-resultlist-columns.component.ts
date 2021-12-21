@@ -16,15 +16,15 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { 
-  ResultlistColumnFormGroup, ResultlistFormBuilderService 
+import {
+  ResultlistColumnFormGroup, ResultlistFormBuilderService
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { SelectFormControl } from '@shared-models/config-form';
 
 @Component({
-  selector: 'app-edit-resultlist-columns',
+  selector: 'arlas-edit-resultlist-columns',
   templateUrl: './edit-resultlist-columns.component.html',
   styleUrls: ['./edit-resultlist-columns.component.scss']
 })
@@ -33,7 +33,7 @@ export class EditResultlistColumnsComponent implements OnInit {
   @Input() public control: FormArray;
   @Input() public collection: SelectFormControl;
 
-  constructor(
+  public constructor(
     private resultlistFormBuilder: ResultlistFormBuilderService
   ) {
   }

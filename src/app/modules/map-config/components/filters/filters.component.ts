@@ -19,7 +19,9 @@ under the License.
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MapFilterFormGroup, MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import {
+  MapFilterFormGroup, MapLayerFormBuilderService, MapLayerFormGroup
+} from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { ConfigFormGroup } from '@shared-models/config-form';
@@ -37,7 +39,7 @@ export interface Layer {
 }
 
 @Component({
-  selector: 'app-layer-filters',
+  selector: 'arlas-layer-filters',
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.scss']
 })
@@ -49,7 +51,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   private confirmDeleteSub: Subscription;
 
-  constructor(
+  public constructor(
     public dialog: MatDialog,
     private mainFormService: MainFormService,
     private mapLayerFormBuilder: MapLayerFormBuilderService
@@ -75,12 +77,13 @@ export class FiltersComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.confirmDeleteSub) { this.confirmDeleteSub.unsubscribe(); }
+    if (this.confirmDeleteSub) {
+      this.confirmDeleteSub.unsubscribe();
+    }
   }
 
   public open(filterId?: number) {
-    let mapFormGroup: MapFilterFormGroup;
-    mapFormGroup = this.mapLayerFormBuilder.buildMapFilter(this.layerFg.customControls.collection.value);
+    const mapFormGroup: MapFilterFormGroup = this.mapLayerFormBuilder.buildMapFilter(this.layerFg.customControls.collection.value);
     /** if we edit an existing filter */
     if (filterId !== undefined) {
       const formGroupIndex = (this.filtersFa.value as any[]).findIndex(el => el.id === filterId);

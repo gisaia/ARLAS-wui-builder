@@ -34,7 +34,7 @@ export interface CanComponentExit {
 })
 export class ConfirmExitGuard implements CanDeactivate<CanComponentExit> {
 
-  constructor(
+  public constructor(
     public dialog: MatDialog) {
   }
 

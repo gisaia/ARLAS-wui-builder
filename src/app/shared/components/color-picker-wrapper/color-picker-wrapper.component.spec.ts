@@ -9,9 +9,7 @@ describe('ColorPickerComponent', () => {
     component: ColorPickerWrapperComponent,
     providers: [
       mockProvider(DefaultValuesService, {
-        getDefaultConfig: () => {
-          return { config: { colorPickerPresets: [] } };
-        }
+        getDefaultConfig: () => ({ config: { colorPickerPresets: [] } })
       })
     ]
   });

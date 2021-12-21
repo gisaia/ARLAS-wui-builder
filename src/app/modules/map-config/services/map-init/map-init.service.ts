@@ -30,7 +30,7 @@ import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-glob
 })
 export class MapInitService {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private mapGlobalFormBuilder: MapGlobalFormBuilderService,
     private mapBasemapFormBuilder: MapBasemapFormBuilderService,

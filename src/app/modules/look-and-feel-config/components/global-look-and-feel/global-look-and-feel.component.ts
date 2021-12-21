@@ -27,7 +27,7 @@ import { ConfigExportHelper } from '@services/main-form-manager/config-export-he
 import { MainFormService } from '@services/main-form/main-form.service';
 
 @Component({
-  selector: 'app-global-look-and-feel',
+  selector: 'arlas-global-look-and-feel',
   templateUrl: './global-look-and-feel.component.html',
   styleUrls: ['./global-look-and-feel.component.scss']
 })
@@ -37,7 +37,7 @@ export class GlobalLookAndFeelComponent implements OnInit {
   public unitsFg: FormArray;
   public collections: string [];
   public collectionUnitMap = new Map<string, string>();
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private collectionService: CollectionService
   ) {

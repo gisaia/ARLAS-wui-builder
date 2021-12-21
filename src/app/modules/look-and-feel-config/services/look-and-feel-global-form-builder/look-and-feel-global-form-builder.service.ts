@@ -31,7 +31,7 @@ import { MainFormService } from '../../../../services/main-form/main-form.servic
 
 
 export class CollectionUnitFormGroup extends ConfigFormGroup {
-  constructor() {
+  public constructor() {
     super({
       unit: new InputFormControl(
         '',
@@ -57,7 +57,7 @@ export class CollectionUnitFormGroup extends ConfigFormGroup {
 }
 export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private collectionService: CollectionService
   ) {
@@ -233,7 +233,7 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
 })
 export class LookAndFeelGlobalFormBuilderService {
 
-  constructor(
+  public constructor(
     private defaultValuesService: DefaultValuesService,
     private mainFormService: MainFormService,
     private collectionService: CollectionService

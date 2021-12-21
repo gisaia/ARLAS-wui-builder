@@ -29,7 +29,7 @@ import { DefaultConfig, DefaultValuesService } from '@services/default-values/de
 import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
-  ButtonFormControl, ConfigFormGroup, FieldWithSizeListFormControl, SelectFormControl, 
+  ButtonFormControl, ConfigFormGroup, FieldWithSizeListFormControl, SelectFormControl,
   SliderFormControl, SlideToggleFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
@@ -38,7 +38,7 @@ import { WidgetFormBuilder } from '../widget-form-builder';
 
 export class DonutConfigForm extends CollectionConfigFormGroup {
 
-  constructor(
+  public constructor(
     collection: string,
     collectionFields: Observable<Array<CollectionField>>,
     private globalKeysToColortrl: FormArray,
@@ -215,7 +215,7 @@ export class DonutFormBuilderService extends WidgetFormBuilder {
 
   public defaultKey = 'analytics.widgets.donut';
 
-  constructor(
+  public constructor(
     protected collectionService: CollectionService,
     protected mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,

@@ -28,7 +28,7 @@ import { ArlasSettingsService, AuthentificationService, LinkSettings, Persistenc
 import { MenuService } from '../../services/menu/menu.service';
 
 @Component({
-  selector: 'app-left-menu',
+  selector: 'arlas-left-menu',
   templateUrl: './left-menu.component.html',
   styleUrls: ['./left-menu.component.scss']
 })
@@ -43,7 +43,7 @@ export class LeftMenuComponent implements OnInit {
   public pages: Page[] = [];
   public links: LinkSettings[] = [];
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private mainFormManager: MainFormManagerService,
     private translate: TranslateService,

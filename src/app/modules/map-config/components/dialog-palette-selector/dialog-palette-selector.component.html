@@ -29,11 +29,11 @@
             <div *ngFor="let propColor of selectedPalette; let i = index" cdkDrag>
                 <div class="color-panel">
                     <div class="color">
-                        <app-color-picker-wrapper [value]="propColor.value"
+                        <arlas-color-picker-wrapper [value]="propColor.value"
                             (setValue)="selectedPalette[i].value = $event">
-                        </app-color-picker-wrapper>
-                        <app-color-picker-wrapper *cdkDragPreview [value]="propColor.value">
-                        </app-color-picker-wrapper>
+                        </arlas-color-picker-wrapper>
+                        <arlas-color-picker-wrapper *cdkDragPreview [value]="propColor.value">
+                        </arlas-color-picker-wrapper>
                     </div>
                     <div class="color-buttons">
                         <button mat-mini-fab cdkDragHandle matTooltip="{{ 'Reorder this color' | translate}}">
@@ -53,9 +53,9 @@
                 </div>
                 <div *cdkDragPlaceholder class="color-panel">
                     <div class="color">
-                        <app-color-picker-wrapper [value]="propColor.value"
+                        <arlas-color-picker-wrapper [value]="propColor.value"
                             (setValue)="selectedPalette[i].value = $event">
-                        </app-color-picker-wrapper>
+                        </arlas-color-picker-wrapper>
                     </div>
                 </div>
             </div>

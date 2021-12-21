@@ -44,7 +44,7 @@ import { WidgetFormBuilder } from '../widget-form-builder';
 
 export class PowerbarConfigForm extends CollectionConfigFormGroup {
 
-  constructor(
+  public constructor(
     collection: string,
     collectionFields: Observable<Array<CollectionField>>,
     private globalKeysToColortrl: FormArray,
@@ -85,8 +85,8 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
               onDependencyChange: (control: SelectFormControl) => {
                 toKeywordOptionsObs(collectionService
                   .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
-                    control.setSyncOptions(collectionFs);
-                  });
+                  control.setSyncOptions(collectionFs);
+                });
               }
             }
           ),
@@ -133,19 +133,17 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
             false,
             [
               PROPERTY_SELECTOR_SOURCE.manual, PROPERTY_SELECTOR_SOURCE.provided
-            ].map(d => {
-              return {
-                value: d,
-                enabled: true,
-                label: d.toString()
-              };
-            }), {
-            optional: true,
-            childs: () => [
-              this.customControls.renderStep.useColorService,
-              this.customControls.renderStep.useColorFromData
-            ],
-          }),
+            ].map(d => ({
+              value: d,
+              enabled: true,
+              label: d.toString()
+            })), {
+              optional: true,
+              childs: () => [
+                this.customControls.renderStep.useColorService,
+                this.customControls.renderStep.useColorFromData
+              ],
+            }),
           useColorService: new HiddenFormControl(
             '',
             undefined,
@@ -309,7 +307,7 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
 export class PowerbarFormBuilderService extends WidgetFormBuilder {
   public defaultKey = 'analytics.widgets.powerbar';
 
-  constructor(
+  public constructor(
     protected collectionService: CollectionService,
     protected mainFormService: MainFormService,
     private dialog: MatDialog,

@@ -35,7 +35,7 @@ export interface MapglComponentInput {
 }
 
 @Component({
-  selector: 'app-preview',
+  selector: 'arlas-preview',
   templateUrl: './preview.component.html',
   styleUrls: ['./preview.component.scss']
 })
@@ -52,7 +52,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   public mapVisibilityUpdater;
   public mainMapContributor;
 
-  constructor(
+  public constructor(
     protected mainFormService: MainFormService,
     private collaborativeService: ArlasCollaborativesearchService,
     private configService: ArlasConfigService,

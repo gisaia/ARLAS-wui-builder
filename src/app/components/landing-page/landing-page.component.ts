@@ -32,7 +32,10 @@ import { MenuService } from '@services/menu/menu.service';
 import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import { DialogData } from '@shared-components/input-modal/input-modal.component';
 import { DataWithLinks } from 'arlas-persistence-api';
-import { ArlasConfigService, ArlasConfigurationDescriptor, ArlasSettingsService, AuthentificationService, ConfigAction, ConfigActionEnum, ErrorService, PersistenceService, UserInfosComponent } from 'arlas-wui-toolkit';
+import {
+  ArlasConfigService, ArlasConfigurationDescriptor, ArlasSettingsService, AuthentificationService, ConfigAction,
+  ConfigActionEnum, ErrorService, PersistenceService, UserInfosComponent
+} from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject, Subscription } from 'rxjs';
@@ -82,7 +85,8 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   private urlCollectionsSubscription: Subscription;
   private collectionsSubscription: Subscription;
 
-  constructor(
+  public constructor(
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialogRef: MatDialogRef<LandingPageDialogComponent>,
     public mainFormService: MainFormService,
     private http: HttpClient,
@@ -103,7 +107,6 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     private spinner: NgxSpinnerService,
     private router: Router,
     private menu: MenuService,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
     this.showLoginButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
     this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
@@ -126,7 +129,9 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
 
     // Reset current config id
     this.mainFormService.configurationId = undefined;
-    if (this.mainFormService.configChange) { this.mainFormService.configChange.next({ id: undefined, name: undefined }); }
+    if (this.mainFormService.configChange) {
+      this.mainFormService.configChange.next({ id: undefined, name: undefined });
+    }
 
     this.mainFormService.startingConfig.init(
       this.startingConfigFormBuilder.build()
@@ -156,10 +161,18 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.subscription) { this.subscription.unsubscribe(); }
-    if (this.urlSubscription) { this.urlSubscription.unsubscribe(); }
-    if (this.urlCollectionsSubscription) { this.urlCollectionsSubscription.unsubscribe(); }
-    if (this.collectionsSubscription) { this.collectionsSubscription.unsubscribe(); }
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    if (this.urlSubscription) {
+      this.urlSubscription.unsubscribe();
+    }
+    if (this.urlCollectionsSubscription) {
+      this.urlCollectionsSubscription.unsubscribe();
+    }
+    if (this.collectionsSubscription) {
+      this.collectionsSubscription.unsubscribe();
+    }
   }
 
   public logout() {
@@ -187,7 +200,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
             this.collectionService.setCollections(collections);
             this.collectionService.getCollectionsReferenceDescription().subscribe(cdrs => this.collectionService.setCollectionsRef(cdrs));
           }, error => this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'))
-            , () => this.spinner.hide('connectServer'));
+          , () => this.spinner.hide('connectServer'));
           this.isServerReady = true;
         });
       },
@@ -445,7 +458,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'app-landing-page',
+  selector: 'arlas-landing-page',
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.scss']
 })
@@ -457,8 +470,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   private confId = '-1';
   private configChoice;
 
-
-  constructor(
+  public constructor(
     private dialog: MatDialog,
     private logger: NGXLogger,
     private router: Router,

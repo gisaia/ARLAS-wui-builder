@@ -31,18 +31,18 @@ import { Subscription } from 'rxjs';
  * WARNING: currently only for mat-select and mat-slide-toggle
  */
 @Directive({
-  selector: '[appResetOnChange]'
+  selector: '[arlasResetOnChange]'
 })
 export class ResetOnChangeDirective implements OnInit, OnDestroy {
 
   @Input() private dependants: AbstractControl[];
-  @Input('appResetOnChange') private defaultValuePrefix: string;
+  @Input('arlasResetOnChange') private defaultValuePrefix: string;
 
   private matSelectChangeSub: Subscription;
   private matSlideChangeSub: Subscription;
   private matButtonChangeSub: Subscription;
 
-  constructor(
+  public constructor(
     private elementRef: ElementRef<HTMLInputElement>,
     @Optional() private matSelect: MatSelect,
     @Optional() private matSlideToggle: MatSlideToggle,
@@ -72,9 +72,15 @@ export class ResetOnChangeDirective implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.defaultValuePrefix = null;
     this.dependants = null;
-    if (this.matSelectChangeSub) { this.matSelectChangeSub.unsubscribe(); }
-    if (this.matSlideChangeSub) { this.matSlideChangeSub.unsubscribe(); }
-    if (this.matSlideChangeSub) { this.matSlideChangeSub.unsubscribe(); }
+    if (this.matSelectChangeSub) {
+      this.matSelectChangeSub.unsubscribe();
+    }
+    if (this.matSlideChangeSub) {
+      this.matSlideChangeSub.unsubscribe();
+    }
+    if (this.matSlideChangeSub) {
+      this.matSlideChangeSub.unsubscribe();
+    }
   }
 
   private resetDependants() {

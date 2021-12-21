@@ -12,7 +12,7 @@ describe('ResetOnChangeDirective', () => {
   });
 
   beforeEach(() => {
-    spectator = createDirective(`<mat-select appResetOnChange>ResetOnChangeDirective</mat-select>`);
+    spectator = createDirective(`<mat-select arlasResetOnChange>ResetOnChangeDirective</mat-select>`);
   });
 
   it('should create an instance', () => {

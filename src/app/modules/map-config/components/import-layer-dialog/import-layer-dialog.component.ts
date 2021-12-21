@@ -27,7 +27,7 @@ import { DataResource, DataWithLinks } from 'arlas-persistence-api';
 import { PersistenceService } from 'arlas-wui-toolkit';
 
 @Component({
-  selector: 'app-import-layer-dialog',
+  selector: 'arlas-import-layer-dialog',
   templateUrl: './import-layer-dialog.component.html',
   styleUrls: ['./import-layer-dialog.component.scss']
 })
@@ -38,7 +38,7 @@ export class ImportLayerDialogComponent implements OnInit {
   public dashboardConfigJson: Config;
   public importLayerFormGroup: FormGroup;
 
-  constructor(
+  public constructor(
     private persistenceService: PersistenceService,
     private collectionService: CollectionService
   ) { }

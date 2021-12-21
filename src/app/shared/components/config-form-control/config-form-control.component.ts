@@ -34,7 +34,7 @@ import { debounceTime } from 'rxjs/operators';
 import { CollectionService } from '@services/collection-service/collection.service';
 
 @Component({
-  selector: 'app-config-form-control',
+  selector: 'arlas-config-form-control',
   templateUrl: './config-form-control.component.html',
   styleUrls: ['./config-form-control.component.scss']
 })
@@ -49,7 +49,7 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   public colorPreviewControl: ColorPreviewFormControl;
   public debouncer: Subject<string> = new Subject();
 
-  constructor(
+  public constructor(
     private resolver: ComponentFactoryResolver,
     private changeDetector: ChangeDetectorRef,
     private colorService: ArlasColorGeneratorLoader,

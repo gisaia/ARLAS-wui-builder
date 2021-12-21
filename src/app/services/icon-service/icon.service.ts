@@ -29,7 +29,7 @@ enum CustomIcons {
 })
 export class IconService {
 
-  constructor(
+  public constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer
   ) { }

@@ -35,7 +35,7 @@ describe('GlobalResultListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GlobalResultListComponent ],
+      declarations: [GlobalResultListComponent],
       providers: [
         mockProvider(CollectionService, {
           getCollectionFieldsNames: () => of([])
@@ -45,7 +45,7 @@ describe('GlobalResultListComponent', () => {
         })
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

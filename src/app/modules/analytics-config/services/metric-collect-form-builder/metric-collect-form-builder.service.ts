@@ -38,7 +38,7 @@ export class MetricCollectFormGroup extends CollectionConfigFormGroup {
     return this.get('metricCollectFunction') as InputFormControl;
   }
 
-  constructor(collection: string, collectionService: CollectionService, type: string) {
+  public constructor(collection: string, collectionService: CollectionService, type: string) {
     super(
       collection,
       {
@@ -106,7 +106,7 @@ export class MetricCollectFormBuilderService {
 
   public formGroup: ConfigFormGroup;
 
-  constructor(private collectionService: CollectionService) { }
+  public constructor(private collectionService: CollectionService) { }
 
   public build(collection: string, type: string) {
     return new MetricCollectFormGroup(collection, this.collectionService, type);

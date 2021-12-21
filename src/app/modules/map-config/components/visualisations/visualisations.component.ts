@@ -32,7 +32,7 @@ export interface Layer {
 }
 
 @Component({
-  selector: 'app-visualisations',
+  selector: 'arlas-visualisations',
   templateUrl: './visualisations.component.html',
   styleUrls: ['./visualisations.component.scss']
 })
@@ -44,7 +44,7 @@ export class VisualisationsComponent implements OnInit, AfterViewChecked, OnDest
 
   private confirmDeleteSub: Subscription;
 
-  constructor(
+  public constructor(
     protected mainFormService: MainFormService,
     public dialog: MatDialog,
     private cdRef: ChangeDetectorRef
@@ -57,7 +57,9 @@ export class VisualisationsComponent implements OnInit, AfterViewChecked, OnDest
   public ngOnInit() { }
 
   public ngOnDestroy() {
-    if (this.confirmDeleteSub) { this.confirmDeleteSub.unsubscribe(); }
+    if (this.confirmDeleteSub) {
+      this.confirmDeleteSub.unsubscribe();
+    }
   }
 
   public ngAfterViewChecked() {

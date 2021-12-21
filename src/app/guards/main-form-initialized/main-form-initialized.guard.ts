@@ -30,7 +30,7 @@ import { Observable } from 'rxjs';
 })
 export class MainFormInitializedGuard implements CanActivate {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private router: Router) { }
 

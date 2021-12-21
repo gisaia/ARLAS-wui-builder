@@ -33,7 +33,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 })
 export class ResultListImportService {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private resultlistFormBuilder: ResultlistFormBuilderService
   ) { }

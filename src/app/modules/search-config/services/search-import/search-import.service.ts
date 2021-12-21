@@ -27,7 +27,7 @@ import { SearchGlobalFormGroup } from '../search-global-form-builder/search-glob
 })
 export class SearchImportService {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService
   ) { }
 

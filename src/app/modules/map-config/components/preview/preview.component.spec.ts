@@ -7,7 +7,7 @@ import { MockComponent } from 'ng-mocks';
 import { ArlasCollaborativesearchService, ArlasStartupService, ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { mockProvider } from '@ngneat/spectator';
 import { HttpClient } from '@angular/common/http';
-import { ArlasConfigurationUpdaterService } from 'arlas-wui-toolkit/services/configuration-updater/configurationUpdater.service';
+import { ArlasConfigurationUpdaterService } from 'arlas-wui-toolkit';
 import { CollectionService } from '@services/collection-service/collection.service';
 
 describe('PreviewComponent', () => {

@@ -37,7 +37,7 @@ describe('AppComponent', () => {
   });
 
   it('should contain the left menu and the page content', () => {
-    expect(spectator.query('app-left-menu')).toBeDefined();
+    expect(spectator.query('arlas-left-menu')).toBeDefined();
     expect(spectator.query('outer-outlet')).toBeDefined();
   });
 });

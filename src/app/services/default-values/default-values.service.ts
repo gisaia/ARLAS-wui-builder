@@ -50,7 +50,7 @@ export class DefaultValuesService {
 
   private config: any;
 
-  constructor(
+  public constructor(
     private http: HttpClient,
     private logger: NGXLogger
   ) { }

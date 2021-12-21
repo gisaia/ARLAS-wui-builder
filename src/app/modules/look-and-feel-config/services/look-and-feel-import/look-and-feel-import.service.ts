@@ -30,7 +30,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 })
 export class LookAndFeelImportService {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService
   ) { }
 
