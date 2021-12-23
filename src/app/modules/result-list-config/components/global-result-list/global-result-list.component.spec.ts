@@ -41,7 +41,10 @@ describe('GlobalResultListComponent', () => {
           getCollectionFieldsNames: () => of([])
         }),
         mockProvider(MainFormService, {
-          getMainCollection: () => ''
+          getMainCollection: () => '',
+          resultListConfig: {
+            getResultListsFa: () => new FormArray([])
+          }
         })
       ]
     })
