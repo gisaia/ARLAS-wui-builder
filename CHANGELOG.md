@@ -1,5 +1,17 @@
 # Change Log
 
+## [v20.0.0-rc.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v20.0.0-rc.1) (2022-01-07)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v19.2.0...v20.0.0-rc.1)
+
+**New stuff:**
+
+- Add a  button to screen the map content in preview [\#470](https://github.com/gisaia/ARLAS-wui-builder/issues/470) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
+**Fixed bugs:**
+
+- No default Max age duration is set if it is not defined in an existing dashboard [\#634](https://github.com/gisaia/ARLAS-wui-builder/issues/634)
+
 ## [v19.2.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v19.2.0) (2021-12-06)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v19.1.0...v19.2.0)
