@@ -15,7 +15,7 @@ WORKDIR /ng-app
 COPY . .
 
 ## Build the angular app in production mode and store the artifacts in dist folder
-RUN export NODE_OPTIONS=--max_old_space_size=6144 && $(npm bin)/ng build --prod --aot --base-href='$ARLAS_BUILDER_BASE_HREF/'
+RUN export NODE_OPTIONS=--max_old_space_size=6144 && $(npm bin)/ng build --configuration production --aot --base-href='$ARLAS_BUILDER_BASE_HREF/'
 
 ### STAGE 2: Setup ###
 
