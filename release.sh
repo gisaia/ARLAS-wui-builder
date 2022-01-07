@@ -14,9 +14,14 @@ usage(){
   echo " -rel|--app-release   release arlas-wui-builder X version"
 	echo " -dev|--app-dev   development arlas-wui-builder    (-SNAPSHOT qualifier will be automatically added)"
 	echo " --no-tests           do not run integration tests"
+  echo " -s|--stage    Stage of the release : beta | rc | stable. If --stage is 'rc' or 'beta', there is no merge of develop into master (if -ref_branch=develop)"
+  echo " -i|--stage_iteration=n, the released version will be : [x].[y].[z]-beta.[n] OR  [x].[y].[z]-rc.[n] according to the given --stage"	echo " -ref_branch | --reference_branch  from which branch to start the release."
+ 	echo " -ref_branch | --reference_branch  from which branch to start the release."
+  echo "    Add -ref_branch=develop for a new official release"
+  echo "    Add -ref_branch=x.x.x for a maintenance release"
 	exit 1
 }
-
+STAGE="stable"
 TESTS="YES"
 for i in "$@"
 do
@@ -33,6 +38,18 @@ case $i in
     TESTS="NO"
     shift # past argument with no value
     ;;
+    -ref_branch=*|--reference_branch=*)
+    REF_BRANCH="${i#*=}"
+    shift # past argument=value
+    ;;
+    -s=*|--stage=*)
+    STAGE="${i#*=}"
+    shift # past argument=value
+    ;;
+    -i=*|--stage_iteration=*)
+    STAGE_ITERATION="${i#*=}"
+    shift # past argument=value
+    ;;
     *)
       # unknown option
     ;;
@@ -42,9 +59,58 @@ done
 VERSION="${APP_REL}"
 DEV="${APP_DEV}"
 
-echo "==> Get develop branch"
-git checkout develop
-git pull origin develop
+if [ -z ${REF_BRANCH+x} ];
+    then
+        echo ""
+        echo "###########"
+        echo "-ref_branch is missing."
+        echo "  Add -ref_branch=develop for a new official release"
+        echo "  Add -ref_branch=x.x.x for a maintenance release"
+        echo "###########"
+        echo ""
+        usage;
+fi
+
+if [ -z ${STAGE+x} ];
+    then
+        echo ""
+        echo "###########"
+        echo "-s=*|--stage* is missing."
+        echo "  Add --stage=beta|rc|stable to define the release stage"
+        echo "###########"
+        echo ""
+        usage;
+fi
+
+if [ "${STAGE}" != "beta" ] && [ "${STAGE}" != "rc" ] && [ "${STAGE}" != "stable" ];
+    then
+        echo ""
+        echo "###########"
+        echo "Stage ${STAGE} is invalid."
+        echo "  Add --stage=beta|rc|stable to define the release stage"
+        echo "###########"
+        echo ""
+        usage;
+fi
+
+if [ "${STAGE}" == "beta" ] || [ "${STAGE}" == "rc" ];
+    then
+        if [ -z ${STAGE_ITERATION+x} ];
+            then
+                echo ""
+                echo "###########"
+                echo "You chose to release this version as ${STAGE}."
+                echo "--stage_iteration is missing."
+                echo "  Add -i=n|--stage_iteration=n, the released version will be : [x].[y].[z]-${STAGE}.[n]"
+                echo "###########"
+                echo ""
+                usage;
+        fi
+fi
+
+echo "==> Get ${REF_BRANCH} branch"
+git checkout "${REF_BRANCH}"
+git pull origin "${REF_BRANCH}"
 
 if [ "$TESTS" == "YES" ]; then
   ng lint
@@ -54,10 +120,11 @@ else
   echo "==> Skip tests"
 fi
 
-echo "==> Merge develop into master"
-git checkout master
-git pull origin master
-git merge origin/develop -m "Merge develop into master"
+
+if [ "${STAGE}" == "rc" ] || [ "${STAGE}" == "beta" ];
+    then
+        VERSION="${APP_REL}-${STAGE}.${STAGE_ITERATION}"
+fi
 
 echo "==> Set version"
 npm --no-git-tag-version version ${VERSION}
@@ -88,22 +155,33 @@ echo "  -- Commit release version"
 git commit -a -m "Release prod version ${VERSION}"
 git tag v${VERSION}
 git push origin v${VERSION}
-git push origin master
+git push origin ${REF_BRANCH}
 
 echo "==> Docker"
 docker build --no-cache --build-arg version=${VERSION} --tag gisaia/arlas-wui-builder:${VERSION} --tag gisaia/arlas-wui-builder:latest .
 
 docker push gisaia/arlas-wui-builder:${VERSION}
-docker push gisaia/arlas-wui-builder:latest
+if [ "${STAGE}" == "stable" ];
+    then
+    docker push gisaia/arlas-wui-builder:latest
+fi
 
-echo "==> Go back to develop branch and rebase"
-git checkout develop
-git pull origin develop
-git rebase origin/master
+if [ "${REF_BRANCH}" == "develop" ] && [ "${STAGE}" == "stable" ];
+    then
+    echo "==> Merge develop into master"
+    git checkout master
+    git pull origin master
+    git merge origin/develop
+    git push origin master
+
+    git checkout develop
+    git pull origin develop
+    git rebase origin/master
+fi
 
 npm --no-git-tag-version version "${DEV}-dev"
 
 git commit -a -m "Set development version to ${DEV}-dev"
-git push origin develop
+git push origin ${REF_BRANCH}
 
 echo "==> Well done :)"
