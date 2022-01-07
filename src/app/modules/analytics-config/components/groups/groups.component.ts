@@ -16,32 +16,27 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Input, ChangeDetectorRef, OnDestroy, ViewChild } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
-import { MatDialog } from '@angular/material';
-import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
-import { ContributorConfig } from '@services/main-form-manager/models-config';
-import {
-  ArlasStartupService,
-  ArlasConfigService
-} from 'arlas-wui-toolkit/services/startup/startup.service';
-
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
-import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
+import { ContributorConfig } from '@services/main-form-manager/models-config';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
+import { ArlasColorService } from 'arlas-web-components';
+import { AnalyticsBoardComponent, ArlasColorGeneratorLoader, ArlasConfigService, ArlasStartupService } from 'arlas-wui-toolkit';
+import { Subscription } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
 import { debounceTime } from 'rxjs/operators';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-import { AnalyticsBoardComponent } from 'arlas-wui-toolkit/components/analytics-board/analytics-board.component';
-import { ArlasColorService } from 'arlas-web-components/services/color.generator.service';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { Subscription } from 'rxjs';
+
 
 @Component({
-  selector: 'app-groups',
+  selector: 'arlas-groups',
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.scss']
 })
@@ -56,7 +51,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   private afterClosedSub: Subscription;
 
-  constructor(
+  public constructor(
     private defaultValuesService: DefaultValuesService,
     public dialog: MatDialog,
     private arlasStartupService: ArlasStartupService,
@@ -74,7 +69,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.analyticsInitService.initTabContent(this.contentFg);
     this.updateDisplay.pipe(
       debounceTime(200)
-      ).subscribe(() => this.updateAnalytics());
+    ).subscribe(() => this.updateAnalytics());
   }
 
   public addGroup() {
@@ -114,7 +109,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     });
   }
 
-  get groupsFa() {
+  public get groupsFa() {
     return this.contentFg.get('groupsFa') as FormArray;
   }
 
@@ -136,8 +131,12 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.afterClosedSub) { this.afterClosedSub.unsubscribe(); }
-    if (this.updateDisplay) { this.updateDisplay.unsubscribe(); }
+    if (this.afterClosedSub) {
+      this.afterClosedSub.unsubscribe();
+    }
+    if (this.updateDisplay) {
+      this.updateDisplay.unsubscribe();
+    }
     // TODO: activate when toolkit updated
     // this.analyticsBoard.ngOnDestroy();
     this.analyticsBoard = null;

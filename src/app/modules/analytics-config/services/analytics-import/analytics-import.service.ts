@@ -16,28 +16,26 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Injectable } from '@angular/core';
-import {
-  Config, AnalyticComponentConfig, ContributorConfig, AggregationModelConfig,
-  AnalyticComponentSwimlaneInputConfig,
-  AnalyticComponentHistogramInputConfig,
-  AnalyticComponentResultListInputConfig
-} from '@services/main-form-manager/models-config';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { FormArray, FormGroup } from '@angular/forms';
-import { AnalyticsInitService } from '../analytics-init/analytics-init.service';
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
-import { HistogramFormBuilderService, HistogramFormGroup } from '../histogram-form-builder/histogram-form-builder.service';
-import { SwimlaneFormBuilderService, SwimlaneFormGroup } from '../swimlane-form-builder/swimlane-form-builder.service';
-import { DEFAULT_METRIC_VALUE, MetricCollectControls } from '../metric-collect-form-builder/metric-collect-form-builder.service';
-import { BucketsIntervalControls, BY_BUCKET_OR_INTERVAL } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
+import { Injectable } from '@angular/core';
+import { FormArray, FormGroup } from '@angular/forms';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import {
+  AggregationModelConfig, AnalyticComponentConfig, AnalyticComponentHistogramInputConfig,
+  AnalyticComponentResultListInputConfig, AnalyticComponentSwimlaneInputConfig, Config, ContributorConfig
+} from '@services/main-form-manager/models-config';
 import { ImportElement, importElements } from '@services/main-form-manager/tools';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
+import { AnalyticsInitService } from '../analytics-init/analytics-init.service';
+import { BucketsIntervalControls, BY_BUCKET_OR_INTERVAL } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
+import { DonutFormBuilderService } from '../donut-form-builder/donut-form-builder.service';
+import { HistogramFormBuilderService, HistogramFormGroup } from '../histogram-form-builder/histogram-form-builder.service';
+import { DEFAULT_METRIC_VALUE, MetricCollectControls } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { MetricFormBuilderService } from '../metric-form-builder/metric-form-builder.service';
 import { PowerbarFormBuilderService } from '../powerbar-form-builder/powerbar-form-builder.service';
-import { DonutFormBuilderService } from '../donut-form-builder/donut-form-builder.service';
 import { ResultlistFormBuilderService } from '../resultlist-form-builder/resultlist-form-builder.service';
-import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
+import { SwimlaneFormBuilderService, SwimlaneFormGroup } from '../swimlane-form-builder/swimlane-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +44,7 @@ export class AnalyticsImportService {
 
   private analyticsBoardWidth = 445;
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,
     private analyticsInitService: AnalyticsInitService,
@@ -429,7 +427,7 @@ export class AnalyticsImportService {
     const title = widgetData.customControls.title;
 
     // create a set to initialize metrics properly
-    const metrics: Set<{ field: string, metric: string }> = new Set<{ field: string, metric: string }>();
+    const metrics: Set<{ field: string; metric: string; }> = new Set<{ field: string; metric: string; }>();
     contributor.metrics.forEach(metric => metrics.add(metric));
 
     importElements([
@@ -546,7 +544,7 @@ export class AnalyticsImportService {
     const title = widgetData.customControls.title;
 
     // create a set to initialize aggregationmodels properly
-    const aggregationsModels: Set<{ field: string, size: number }> = new Set<{ field: string, size: number }>();
+    const aggregationsModels: Set<{ field: string; size: number; }> = new Set<{ field: string; size: number; }>();
     contributor.aggregationmodels.forEach(aggModel => aggregationsModels.add({ field: aggModel.field, size: aggModel.size }));
     let donutOpacity = 0.5;
     if (component.input.opacity !== undefined && component.input.opacity !== null) {

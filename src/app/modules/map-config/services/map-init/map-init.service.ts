@@ -21,7 +21,7 @@ import { FormArray } from '@angular/forms';
 import { Basemap } from '@map-config/components/basemaps/basemaps.component';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { MapBasemapFormBuilderService } from '../map-basemap-form-builder/map-basemap-form-builder.service';
 import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
 
@@ -30,7 +30,7 @@ import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-glob
 })
 export class MapInitService {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private mapGlobalFormBuilder: MapGlobalFormBuilderService,
     private mapBasemapFormBuilder: MapBasemapFormBuilderService,

@@ -1,11 +1,11 @@
 <!-- Displaying a control according to its enabled state is not yet supported -->
 <div *ngFor="let formGroup of formGroups">
-    <app-config-element>
+    <arlas-config-element>
         <div form-fields>
             <div class="form-group-form-fields">
                 <div *ngFor="let control of formGroup.configFormControls" class="single-form-field">
                     <!-- Handle only form controls by now, feel free to support other types if necessary -->
-                    <app-config-form-control [control]="control" [defaultKey]="defaultKey"></app-config-form-control>
+                    <arlas-config-form-control [control]="control" [defaultKey]="defaultKey"></arlas-config-form-control>
                 </div>
             </div>
         </div>
@@ -14,5 +14,5 @@
                 {{control.description | translate}}
             </div>
         </div>
-    </app-config-element>
+    </arlas-config-element>
 </div>

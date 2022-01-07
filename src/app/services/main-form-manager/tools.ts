@@ -19,12 +19,12 @@ under the License.
 import { AbstractControl } from '@angular/forms';
 
 export interface ImportElement {
-    value: any;
-    control: AbstractControl;
+  value: any;
+  control: AbstractControl;
 }
 
 export function importElements(elements: Array<ImportElement>) {
-    elements
-        .filter(e => e.value !== null)
-        .forEach(element => element.control.setValue(element.value));
+  elements
+    .filter(e => e.value !== null)
+    .forEach(element => element.control.setValue(element.value));
 }

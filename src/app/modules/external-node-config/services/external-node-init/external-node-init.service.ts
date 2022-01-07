@@ -18,7 +18,7 @@ under the License.
 */
 
 import { Injectable } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { MainFormService } from '@services/main-form/main-form.service';
 
 @Injectable({
@@ -26,7 +26,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 })
 export class ExternalNodeInitService {
 
-  constructor(
+  public constructor(
     private fb: FormBuilder,
     private mainFormService: MainFormService
   ) { }

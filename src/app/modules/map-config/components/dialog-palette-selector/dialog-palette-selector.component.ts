@@ -19,14 +19,13 @@ under the License.
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import * as d3c from 'd3-color';
 import * as d3i from 'd3-interpolate';
-import { NGXLogger } from 'ngx-logger';
 import { DialogPaletteSelectorData } from './model';
-import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 
 @Component({
-  selector: 'app-dialog-palette',
+  selector: 'arlas-dialog-palette',
   templateUrl: './dialog-palette-selector.component.html',
   styleUrls: ['./dialog-palette-selector.component.scss'],
   encapsulation: ViewEncapsulation.None
@@ -36,10 +35,10 @@ export class DialogPaletteSelectorComponent implements OnInit {
   public defaultPalettes: ProportionedValues[][];
   public selectedPalette: ProportionedValues[];
 
-  constructor(
+  public constructor(
     public dialogRef: MatDialogRef<DialogPaletteSelectorComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogPaletteSelectorData,
-    private logger: NGXLogger) { }
+    @Inject(MAT_DIALOG_DATA) public data: DialogPaletteSelectorData
+  ) { }
 
   public ngOnInit() {
     this.dialogRef.disableClose = true;
@@ -49,20 +48,16 @@ export class DialogPaletteSelectorComponent implements OnInit {
 
   private prepareDefaultPalettes() {
     this.selectedPalette = this.data.selectedPalette;
-    this.defaultPalettes = this.data.defaultPalettes.map((p: Array<string>) => {
-      return p.map((c: string, i: number) => {
-        return { proportion: this.computeProportion(p.length, i), value: c };
-      });
-    });
+    this.defaultPalettes = this.data.defaultPalettes
+      .map((p: Array<string>) => p
+        .map((c: string, i: number) => ({ proportion: this.computeProportion(p.length, i), value: c })));
   }
 
   public resetProportions() {
-    this.selectedPalette = this.selectedPalette.map((c: ProportionedValues, i: number) => {
-      return {
-        proportion: this.computeProportion(this.selectedPalette.length, i),
-        value: c.value
-      };
-    });
+    this.selectedPalette = this.selectedPalette.map((c: ProportionedValues, i: number) => ({
+      proportion: this.computeProportion(this.selectedPalette.length, i),
+      value: c.value
+    }));
   }
 
   private computeProportion(length: number, index: number) {

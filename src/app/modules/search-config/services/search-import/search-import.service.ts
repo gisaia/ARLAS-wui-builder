@@ -17,17 +17,17 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { Config, CHIPSEARCH_IDENTIFIER } from '@services/main-form-manager/models-config';
+import { CHIPSEARCH_IDENTIFIER, Config } from '@services/main-form-manager/models-config';
+import { importElements } from '@services/main-form-manager/tools';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { SearchGlobalFormGroup } from '../search-global-form-builder/search-global-form-builder.service';
-import { importElements } from '@services/main-form-manager/tools';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchImportService {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService
   ) { }
 

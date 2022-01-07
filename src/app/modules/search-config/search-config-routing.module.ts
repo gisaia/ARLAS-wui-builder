@@ -17,9 +17,8 @@ specific language governing permissions and limitations
 under the License.
 */
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { GlobalSearchComponent } from './components/global-search/global-search.component';
-
 
 const routes: Routes = [{
   path: '', children: [

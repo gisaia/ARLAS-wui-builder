@@ -8,7 +8,7 @@
         </span>
         <span *ngIf="editingConfigName" class="edit-name">
             <!-- keydown stopPropagation needed to allow spaces -->
-            <input matInput [(ngModel)]="editingName"  appAutoFocus autocomplete="off"
+            <input matInput [(ngModel)]="editingName"  arlasAutoFocus autocomplete="off"
                 (focusout)="finishEditConfigName()" (keydown)="$event.stopPropagation();"
                 (keydown.enter)="finishEditConfigName()">
         </span>

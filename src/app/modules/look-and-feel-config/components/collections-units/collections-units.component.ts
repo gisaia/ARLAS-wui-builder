@@ -19,12 +19,10 @@ under the License.
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
-// tslint:disable-next-line: max-line-length
-import { CollectionUnitFormGroup } from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
 import { SlideToggleFormControl } from '@shared-models/config-form';
 
 @Component({
-  selector: 'app-collections-units',
+  selector: 'arlas-collections-units',
   templateUrl: './collections-units.component.html',
   styleUrls: ['./collections-units.component.scss']
 })
@@ -33,7 +31,7 @@ export class CollectionsUnitsComponent implements OnInit {
   @Input() public collections: string[];
   @Input() public unitsArray: FormArray;
 
-  constructor() { }
+  public constructor() { }
 
   public ngOnInit() {
 

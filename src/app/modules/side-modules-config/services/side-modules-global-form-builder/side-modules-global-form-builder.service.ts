@@ -28,13 +28,13 @@ import {
   SlideToggleFormControl
 } from '@shared-models/config-form';
 import { urlValidator } from '@utils/validators';
-import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
+import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export class SideModulesGlobalFormGroup extends ConfigFormGroup {
 
-  constructor(collectionsObs: Observable<Array<string>>) {
+  public constructor(collectionsObs: Observable<Array<string>>) {
     super({
       cache: new ConfigFormGroup({
         maxAgeCache: new InputFormControl(
@@ -68,24 +68,25 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
           resetDependantsOnChange: true
         }
       ),
-      share: new ConfigFormGroup({
-        maxForFeature: new SliderFormControl(
-          '',
-          marker('Max for feature'),
-          '',
-          100,
-          10000,
-          100
-        ),
-        maxForTopology: new SliderFormControl(
-          '',
-          marker('Feature metrics'),
-          '',
-          100,
-          10000,
-          100
-        ),
-      },
+      share: new ConfigFormGroup(
+        {
+          maxForFeature: new SliderFormControl(
+            '',
+            marker('Max for feature'),
+            '',
+            100,
+            10000,
+            100
+          ),
+          maxForTopology: new SliderFormControl(
+            '',
+            marker('Feature metrics'),
+            '',
+            100,
+            10000,
+            100
+          ),
+        },
         {
           dependsOn: () => [this.customControls.useShare],
           onDependencyChange: (control) => control.enableIf(this.customControls.useShare.value)
@@ -155,7 +156,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
 })
 export class SideModulesGlobalFormBuilderService {
 
-  constructor(
+  public constructor(
     private defaultValuesService: DefaultValuesService,
     private configDescritor: ArlasConfigurationDescriptor,
   ) { }

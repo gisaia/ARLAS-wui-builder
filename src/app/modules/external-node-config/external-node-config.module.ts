@@ -18,11 +18,11 @@ specific language governing permissions and limitations
 under the License.
 */
 import { NgModule } from '@angular/core';
-import { GlobalExternalNodeComponent } from './components/global-external-node/global-external-node.component';
 import { SharedModule } from '@shared/shared.module';
-import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
-import { ExternalNodeConfigRoutingModule } from './external-node-confid-routing.modules';
 import { NgJsonEditorModule } from 'ang-jsoneditor';
+import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
+import { GlobalExternalNodeComponent } from './components/global-external-node/global-external-node.component';
+import { ExternalNodeConfigRoutingModule } from './external-node-confid-routing.modules';
 
 
 @NgModule({

@@ -16,21 +16,21 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { HistogramFormBuilderService } from '../../services/histogram-form-builder/histogram-form-builder.service';
-import { WidgetFormBuilder } from '../../services/widget-form-builder';
-import { SwimlaneFormBuilderService } from '../../services/swimlane-form-builder/swimlane-form-builder.service';
-import { EditWidgetDialogData } from './models';
-import { WIDGET_TYPE } from '../edit-group/models';
-import { FormGroup } from '@angular/forms';
+import { DonutFormBuilderService } from '@analytics-config/services/donut-form-builder/donut-form-builder.service';
 import { MetricFormBuilderService } from '@analytics-config/services/metric-form-builder/metric-form-builder.service';
 import { PowerbarFormBuilderService } from '@analytics-config/services/powerbar-form-builder/powerbar-form-builder.service';
-import { DonutFormBuilderService } from '@analytics-config/services/donut-form-builder/donut-form-builder.service';
 import { ResultlistFormBuilderService } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { HistogramFormBuilderService } from '../../services/histogram-form-builder/histogram-form-builder.service';
+import { SwimlaneFormBuilderService } from '../../services/swimlane-form-builder/swimlane-form-builder.service';
+import { WidgetFormBuilder } from '../../services/widget-form-builder';
+import { WIDGET_TYPE } from '../edit-group/models';
+import { EditWidgetDialogData } from './models';
 
 @Component({
-  selector: 'app-edit-widget-dialog',
+  selector: 'arlas-edit-widget-dialog',
   templateUrl: './edit-widget-dialog.component.html',
   styleUrls: ['./edit-widget-dialog.component.scss'],
 })
@@ -40,7 +40,7 @@ export class EditWidgetDialogComponent implements OnInit {
   public defaultKey: string;
   public WIDGET_TYPE = WIDGET_TYPE;
 
-  constructor(
+  public constructor(
     public dialogRef: MatDialogRef<EditWidgetDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: EditWidgetDialogData,
     private histogramBuilder: HistogramFormBuilderService,

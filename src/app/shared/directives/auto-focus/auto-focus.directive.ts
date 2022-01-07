@@ -22,12 +22,12 @@ import { Directive, ElementRef, Input, AfterContentInit, OnDestroy } from '@angu
  * Autofocus on a field once it is inserted into the DOM (it can be from a "*ngIf")
  */
 @Directive({
-  selector: '[appAutoFocus]'
+  selector: '[arlasAutoFocus]'
 })
 export class AutoFocusDirective implements AfterContentInit, OnDestroy {
 
-  @Input() public appAutoFocus: boolean;
-  constructor(private el: ElementRef) {
+  @Input() public arlasAutoFocus: boolean;
+  public constructor(private el: ElementRef) {
   }
 
   public ngAfterContentInit() {
@@ -40,6 +40,6 @@ export class AutoFocusDirective implements AfterContentInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.appAutoFocus = null;
+    this.arlasAutoFocus = null;
   }
 }

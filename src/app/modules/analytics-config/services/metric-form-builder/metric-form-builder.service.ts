@@ -17,21 +17,21 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import {
-  ConfigFormGroup, InputFormControl, MetricWithFieldListFormControl, TextareaFormControl, SlideToggleFormControl,
-  TitleInputFormControl, SelectFormControl
-} from '@shared-models/config-form';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { WidgetFormBuilder } from '../widget-form-builder';
-import { FormGroup, FormControl } from '@angular/forms';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { FormControl, FormGroup } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
+import {
+  ConfigFormGroup, InputFormControl, MetricWithFieldListFormControl, SelectFormControl,
+  SlideToggleFormControl, TextareaFormControl, TitleInputFormControl
+} from '@shared-models/config-form';
+import { WidgetFormBuilder } from '../widget-form-builder';
 
 export class MetricFormGroup extends CollectionConfigFormGroup {
 
-  constructor(
+  public constructor(
     collection: string,
     collectionService: CollectionService
   ) {
@@ -158,7 +158,7 @@ export class MetricFormBuilderService extends WidgetFormBuilder {
 
   public defaultKey = 'analytics.widgets.metric';
 
-  constructor(
+  public constructor(
     protected mainFormService: MainFormService,
     protected collectionService: CollectionService,
     private defaultValuesService: DefaultValuesService,

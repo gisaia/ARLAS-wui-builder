@@ -17,24 +17,24 @@ specific language governing permissions and limitations
 under the License.
 */
 import { NgModule } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { SharedModule } from '@shared/shared.module';
+import { MapglComponent, MapglLayerIconModule, MapglLegendModule, MapglModule } from 'arlas-web-components';
+import { BasemapsComponent } from './components/basemaps/basemaps.component';
 import { DialogColorTableComponent } from './components/dialog-color-table/dialog-color-table.component';
 import { DialogFilterComponent } from './components/dialog-filter/dialog-filter.component';
 import { DialogPaletteSelectorComponent } from './components/dialog-palette-selector/dialog-palette-selector.component';
 import { EditLayerComponent } from './components/edit-layer/edit-layer.component';
+import { EditVisualisationComponent } from './components/edit-visualisation/edit-visualisation.component';
 import { GlobalMapComponent } from './components/global-map/global-map.component';
+import { ImportLayerDialogComponent } from './components/import-layer-dialog/import-layer-dialog.component';
 import { LayersComponent } from './components/layers/layers.component';
+import { PreviewComponent } from './components/preview/preview.component';
+import { VisualisationsComponent } from './components/visualisations/visualisations.component';
 import { MapConfigRoutingModule } from './map-config-routing.module';
 import { MapConfigComponent } from './map-config.component';
-import { PreviewComponent } from './components/preview/preview.component';
-import { MapglComponent, MapglModule, MapglLayerIconModule, MapglLegendModule } from 'arlas-web-components';
-import { MAT_DIALOG_DATA } from '@angular/material';
-import { VisualisationsComponent } from './components/visualisations/visualisations.component';
-import { EditVisualisationComponent } from './components/edit-visualisation/edit-visualisation.component';
-import { BasemapsComponent } from './components/basemaps/basemaps.component';
-import { ImportLayerDialogComponent } from './components/import-layer-dialog/import-layer-dialog.component';
 
 @NgModule({
   entryComponents: [

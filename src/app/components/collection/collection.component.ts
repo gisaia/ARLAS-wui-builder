@@ -16,13 +16,12 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
-import { getFieldProperties } from 'arlas-wui-toolkit/tools/utils';
-import { CollectionReferenceDescriptionProperty, CollectionReferenceDescription } from 'arlas-api';
-import { MainFormService } from '@services/main-form/main-form.service';
 import { FlatTreeControl } from '@angular/cdk/tree';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { CollectionReferenceDescription, CollectionReferenceDescriptionProperty } from 'arlas-api';
+import { ArlasCollaborativesearchService, getFieldProperties } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 
 interface FlatDescription {
@@ -40,21 +39,21 @@ interface CollectionReferencePropertyExtended {
   indexed?: boolean;
 }
 
-const TypeEnum = CollectionReferenceDescriptionProperty.TypeEnum;
+const typeEnum = CollectionReferenceDescriptionProperty.TypeEnum;
 
 @Component({
-  selector: 'app-collection',
+  selector: 'arlas-collection',
   templateUrl: './collection.component.html',
   styleUrls: ['./collection.component.scss']
 })
 export class CollectionComponent implements OnInit, OnDestroy {
 
   public getFieldProperties = getFieldProperties;
-  public TypeEnum = TypeEnum;
+  public TypeEnum = typeEnum;
 
   public collectionsDef: {
-    collection: CollectionReferenceDescription,
-    fields: any,
+    collection: CollectionReferenceDescription;
+    fields: any;
     treeControl: FlatTreeControl<FlatDescription>;
   }[] = [];
 
@@ -64,17 +63,15 @@ export class CollectionComponent implements OnInit, OnDestroy {
 
   public hasChild = (_: number, node: FlatDescription) => node.expandable;
 
-  private transformer = (node: CollectionReferencePropertyExtended, level: number) => {
-    return {
-      expandable: !!node.type && node.type === TypeEnum.OBJECT,
-      name: node.name,
-      type: this.typeToText(node.type),
-      indexed: node.indexed,
-      level
-    };
-  }
+  private transformer = (node: CollectionReferencePropertyExtended, level: number) => ({
+    expandable: !!node.type && node.type === typeEnum.OBJECT,
+    name: node.name,
+    type: this.typeToText(node.type),
+    indexed: node.indexed,
+    level
+  });
 
-  constructor(
+  public constructor(
     private arlasCss: ArlasCollaborativesearchService,
     private mainService: MainFormService
   ) {
@@ -85,12 +82,12 @@ export class CollectionComponent implements OnInit, OnDestroy {
     const collection = this.mainService.getMainCollection();
     if (!!collection && collection !== '') {
       this.collectionSubscription = this.arlasCss.describe(collection)
-          .subscribe(collectionRef => {
-            const treeControl = new FlatTreeControl<FlatDescription>(node => node.level, node => node.expandable);
-            const dataSource = new MatTreeFlatDataSource(treeControl, this.treeFlattener);
-            dataSource.data = this.transform(collectionRef.properties);
-            this.collectionsDef.push({ collection: collectionRef, fields: dataSource, treeControl });
-          });
+        .subscribe(collectionRef => {
+          const treeControl = new FlatTreeControl<FlatDescription>(node => node.level, node => node.expandable);
+          const dataSource = new MatTreeFlatDataSource(treeControl, this.treeFlattener);
+          dataSource.data = this.transform(collectionRef.properties);
+          this.collectionsDef.push({ collection: collectionRef, fields: dataSource, treeControl });
+        });
     }
   }
 
@@ -111,16 +108,16 @@ export class CollectionComponent implements OnInit, OnDestroy {
   public typeToText(type: CollectionReferenceDescriptionProperty.TypeEnum): string {
     let newType;
     switch (type) {
-      case TypeEnum.DOUBLE:
-      case TypeEnum.FLOAT:
-      case TypeEnum.INTEGER:
-      case TypeEnum.LONG:
+      case typeEnum.DOUBLE:
+      case typeEnum.FLOAT:
+      case typeEnum.INTEGER:
+      case typeEnum.LONG:
         newType = 'NUMBER';
         break;
-      case TypeEnum.GEOSHAPE:
+      case typeEnum.GEOSHAPE:
         newType = 'GEOMETRY (LINES & POLYGONS)';
         break;
-      case TypeEnum.GEOPOINT:
+      case typeEnum.GEOPOINT:
         newType = 'GEOMETRY (POINTS)';
         break;
       default:
@@ -130,7 +127,9 @@ export class CollectionComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.collectionSubscription) { this.collectionSubscription.unsubscribe(); }
+    if (this.collectionSubscription) {
+      this.collectionSubscription.unsubscribe();
+    }
     this.collectionsDef = [];
   }
 }

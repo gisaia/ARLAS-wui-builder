@@ -16,24 +16,13 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, AfterViewChecked, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
-import { PreviewComponent } from '../preview/preview.component';
-import { ContributorBuilder } from 'arlas-wui-toolkit/services/startup/contributorBuilder';
-import { ArlasCollaborativesearchService, ArlasConfigService } from 'arlas-wui-toolkit';
-import { FormArray } from '@angular/forms';
-import { StartupService } from '@services/startup/startup.service';
-import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
-import { ConfigMapExportHelper, VISIBILITY } from '@services/main-form-manager/config-map-export-helper';
 import { camelize } from '@utils/tools';
-import { MapglLegendComponent } from 'arlas-web-components';
-import { Paint, Layer as LayerMap } from '@services/main-form-manager/models-map-config';
-import { LAYER_MODE } from '@map-config/components/edit-layer/models';
-import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Subscription } from 'rxjs';
 
 export interface Layer {
@@ -43,7 +32,7 @@ export interface Layer {
 }
 
 @Component({
-  selector: 'app-visualisations',
+  selector: 'arlas-visualisations',
   templateUrl: './visualisations.component.html',
   styleUrls: ['./visualisations.component.scss']
 })
@@ -55,7 +44,7 @@ export class VisualisationsComponent implements OnInit, AfterViewChecked, OnDest
 
   private confirmDeleteSub: Subscription;
 
-  constructor(
+  public constructor(
     protected mainFormService: MainFormService,
     public dialog: MatDialog,
     private cdRef: ChangeDetectorRef
@@ -68,7 +57,9 @@ export class VisualisationsComponent implements OnInit, AfterViewChecked, OnDest
   public ngOnInit() { }
 
   public ngOnDestroy() {
-    if (this.confirmDeleteSub) { this.confirmDeleteSub.unsubscribe(); }
+    if (this.confirmDeleteSub) {
+      this.confirmDeleteSub.unsubscribe();
+    }
   }
 
   public ngAfterViewChecked() {

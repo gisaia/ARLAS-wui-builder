@@ -16,18 +16,17 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
-import { TranslateService } from '@ngx-translate/core';
-import { ComputeContributor} from 'arlas-web-contributors';
-import { FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
-import { HttpClient } from '@angular/common/http';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 
 @Component({
-  selector: 'app-global-external-node',
+  selector: 'arlas-global-external-node',
   templateUrl: './global-external-node.component.html',
   styleUrls: ['./global-external-node.component.scss']
 })
@@ -38,10 +37,10 @@ export class GlobalExternalNodeComponent implements OnInit {
   public editorOptions = new JsonEditorOptions();
   @ViewChild('editor', { static: false }) public editor: JsonEditorComponent;
 
-  constructor(public mainFormService: MainFormService,
-              private translateService: TranslateService,
-              private arlasSettingsService: ArlasSettingsService,
-              private http: HttpClient) {
+  public constructor(public mainFormService: MainFormService,
+    private translateService: TranslateService,
+    private arlasSettingsService: ArlasSettingsService,
+    private http: HttpClient) {
 
     this.externalNodeForm = this.mainFormService.externalNodeConfig.getExternalNodeFg();
     this.externalNodeForm.setValidators(this.jsonValidator());
@@ -60,7 +59,7 @@ export class GlobalExternalNodeComponent implements OnInit {
     return (group: FormGroup): ValidationErrors => {
       if (!!this.editor) {
         const control = group.controls.externalNode;
-        if (!this.editor.isValidJson() || ( !! this.editor.getValidateSchema() && !this.editor.getValidateSchema()(this.editor.get()))) {
+        if (!this.editor.isValidJson() || (!!this.editor.getValidateSchema() && !this.editor.getValidateSchema()(this.editor.get()))) {
           control.setErrors({ jsonNotValid: true });
         } else {
           control.setErrors(null);
@@ -71,15 +70,15 @@ export class GlobalExternalNodeComponent implements OnInit {
   }
 
   public ngOnInit() {
-    // tslint:disable-next-line:no-string-literal
     this.schemas = this.arlasSettingsService.settings['external_node_schemas'] ?
-    // tslint:disable-next-line:no-string-literal
-    this.arlasSettingsService.settings['external_node_schemas'] : [];
+      this.arlasSettingsService.settings['external_node_schemas'] : [];
 
   }
 
   public updateSchema(event) {
-    this.http.get(event.value).subscribe(data => {this.editorOptions.schema = data; this.editor.setOptions(this.editorOptions); });
+    this.http.get(event.value).subscribe(data => {
+      this.editorOptions.schema = data; this.editor.setOptions(this.editorOptions);
+    });
   }
 
 }

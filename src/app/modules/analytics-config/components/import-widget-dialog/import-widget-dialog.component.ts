@@ -16,19 +16,18 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persistence.service';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSelectChange } from '@angular/material/select';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { AnalyticComponentConfig, AnalyticConfig, Config, ContributorConfig } from '@services/main-form-manager/models-config';
+import { MainFormService } from '@services/main-form/main-form.service';
 import { ZONE_WUI_BUILDER } from '@services/startup/startup.service';
 import { DataResource, DataWithLinks } from 'arlas-persistence-api';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatSelectChange, MatCheckboxChange } from '@angular/material';
-import { Config, AnalyticConfig, ContributorConfig, AnalyticComponentConfig } from '@services/main-form-manager/models-config';
-import { Layer, MapConfig } from '@services/main-form-manager/models-map-config';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { CollectionService } from '@services/collection-service/collection.service';
+import { PersistenceService } from 'arlas-wui-toolkit';
 
 @Component({
-  selector: 'app-import-widget-dialog',
+  selector: 'arlas-import-widget-dialog',
   templateUrl: './import-widget-dialog.component.html',
   styleUrls: ['./import-widget-dialog.component.scss']
 })
@@ -43,7 +42,7 @@ export class ImportWidgetDialogComponent implements OnInit {
   public selectedWidgets: Array<AnalyticComponentConfig> = new Array();
   public selectedWidgetsSet: Set<AnalyticComponentConfig> = new Set();
 
-  constructor(
+  public constructor(
     private persistenceService: PersistenceService,
     private collectionService: CollectionService,
     private mainformService: MainFormService,
@@ -97,7 +96,9 @@ export class ImportWidgetDialogComponent implements OnInit {
       }
     });
     this.dashboardConfigJson.arlas.web.contributors.filter(c => availableCollections.has(c.collection))
-      .forEach(cont => { importableWidgets.add(cont.identifier); });
+      .forEach(cont => {
+        importableWidgets.add(cont.identifier);
+      });
 
 
     this.analytics = new Map<string, Array<AnalyticConfig>>();

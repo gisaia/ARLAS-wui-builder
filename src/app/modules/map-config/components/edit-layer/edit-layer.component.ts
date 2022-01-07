@@ -16,23 +16,23 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, AfterContentChecked, ChangeDetectorRef, ViewChild, OnDestroy } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
-import { MainFormService, ARLAS_ID } from '@services/main-form/main-form.service';
-import { NGXLogger } from 'ngx-logger';
-import { LAYER_MODE } from './models';
 import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
-import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
-import { KeywordColor } from '../dialog-color-table/models';
-import { Subscription } from 'rxjs';
 import {
   MapVisualisationFormBuilderService
 } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
+import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { NGXLogger } from 'ngx-logger';
+import { Subscription } from 'rxjs';
+import { KeywordColor } from '../dialog-color-table/models';
+import { LAYER_MODE } from './models';
 
 @Component({
-  selector: 'app-edit-layer',
+  selector: 'arlas-edit-layer',
   templateUrl: './edit-layer.component.html',
   styleUrls: ['./edit-layer.component.scss']
 })
@@ -49,7 +49,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
 
   @ViewChild(ConfigFormGroupComponent, { static: false }) private configFormGroupComponent: ConfigFormGroupComponent;
 
-  constructor(
+  public constructor(
     protected mapLayerFormBuilder: MapLayerFormBuilderService,
     protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
     private mainFormService: MainFormService,
@@ -98,15 +98,18 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
   // PS: Sebastian, you're a jerk
   private populateManualValuesFormArray(existingLayerFg: MapLayerFormGroup) {
     (existingLayerFg.customControls.featuresFg.colorFg.customControls.propertyManualFg.propertyManualValuesCtrl.value
-      || [] as Array<KeywordColor>).forEach(kc =>
+      || [] as Array<KeywordColor>)
+      .forEach(kc =>
         this.layerFg.customControls.featuresFg.colorFg.addToColorManualValuesCtrl(kc));
 
     (existingLayerFg.customControls.featureMetricFg.colorFg.customControls.propertyManualFg.propertyManualValuesCtrl.value
-      || [] as Array<KeywordColor>).forEach(kc =>
+      || [] as Array<KeywordColor>)
+      .forEach(kc =>
         this.layerFg.customControls.featureMetricFg.colorFg.addToColorManualValuesCtrl(kc));
 
     (existingLayerFg.customControls.clusterFg.colorFg.customControls.propertyManualFg.propertyManualValuesCtrl.value
-      || [] as Array<KeywordColor>).forEach(kc =>
+      || [] as Array<KeywordColor>)
+      .forEach(kc =>
         this.layerFg.customControls.clusterFg.colorFg.addToColorManualValuesCtrl(kc));
 
   }
@@ -175,7 +178,11 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
             layersSet.add(l);
           }
         });
-        visu.include ? layersSet.add(newLayerId) : layersSet.delete(newLayerId);
+        if (visu.include) {
+          layersSet.add(newLayerId);
+        } else {
+          layersSet.delete(newLayerId);
+        }
         /** to preserve layers order */
         const layers = [];
         /** take all the already existing layers and add them in the correct order */
@@ -230,7 +237,9 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
   }
 
   public ngOnDestroy() {
-    if (this.routerSub) { this.routerSub.unsubscribe(); }
+    if (this.routerSub) {
+      this.routerSub.unsubscribe();
+    }
     this.configFormGroupComponent = null;
     this.layersFa = null;
     this.visualisationsFa = null;

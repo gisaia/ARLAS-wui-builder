@@ -21,7 +21,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 
 @Component({
-  selector: 'app-global-timeline',
+  selector: 'arlas-global-timeline',
   templateUrl: './global-timeline.component.html',
   styleUrls: ['./global-timeline.component.scss'],
 })
@@ -29,7 +29,7 @@ export class GlobalTimelineComponent implements OnInit {
 
   public globalFg: TimelineGlobalFormGroup;
 
-  constructor(
+  public constructor(
     protected mainFormService: MainFormService,
   ) {
     this.globalFg = mainFormService.timelineConfig.getGlobalFg();

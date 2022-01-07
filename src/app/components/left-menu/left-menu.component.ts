@@ -16,23 +16,19 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { EXPORT_TYPE } from '@services/main-form-manager/config-export-helper';
+import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { getNbErrorsInControl, isFullyTouched, Page } from '@utils/tools';
-import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
-import { EXPORT_TYPE } from '@services/main-form-manager/config-export-helper';
-import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
-import { Router } from '@angular/router';
-import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persistence.service';
-import { MatDialog } from '@angular/material/dialog';
-import { UserInfosComponent } from 'arlas-wui-toolkit/components/user-infos/user-infos.component';
-import { LinkSettings } from 'arlas-wui-toolkit/services/startup/startup.service';
-import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
+import { ArlasSettingsService, AuthentificationService, LinkSettings, PersistenceService, UserInfosComponent } from 'arlas-wui-toolkit';
 import { MenuService } from '../../services/menu/menu.service';
 
 @Component({
-  selector: 'app-left-menu',
+  selector: 'arlas-left-menu',
   templateUrl: './left-menu.component.html',
   styleUrls: ['./left-menu.component.scss']
 })
@@ -47,7 +43,7 @@ export class LeftMenuComponent implements OnInit {
   public pages: Page[] = [];
   public links: LinkSettings[] = [];
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private mainFormManager: MainFormManagerService,
     private translate: TranslateService,

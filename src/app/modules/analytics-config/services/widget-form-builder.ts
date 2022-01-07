@@ -24,7 +24,7 @@ export abstract class WidgetFormBuilder {
 
     public abstract defaultKey: string;
 
-    constructor(
+    public constructor(
         protected collectionService: CollectionService,
         protected mainFormService: MainFormService
     ) { }
@@ -40,9 +40,9 @@ export abstract class WidgetFormBuilder {
      * before setting the value.
      */
     public buildWithValues(value: any, collection) {
-        const formGroup = this.build(collection);
-        formGroup.patchValue(value);
-        return formGroup;
+      const formGroup = this.build(collection);
+      formGroup.patchValue(value);
+      return formGroup;
     }
 
 }

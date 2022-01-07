@@ -22,7 +22,7 @@ import {
 import { ConfigFormGroup, ConfigFormControl, ConfigFormGroupArray } from '@shared-models/config-form';
 import { Subscription, Subject } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MatStepper } from '@angular/material';
+import { MatStepper } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { AbstractControl, FormControl } from '@angular/forms';
 
@@ -32,7 +32,7 @@ import { AbstractControl, FormControl } from '@angular/forms';
  * this may be grouped into a sigle listener if multiple controls depend on a same one.
  */
 @Component({
-  selector: 'app-config-form-group',
+  selector: 'arlas-config-form-group',
   templateUrl: './config-form-group.component.html',
   styleUrls: ['./config-form-group.component.scss'],
   providers: [
@@ -51,13 +51,13 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
   @Input() public defaultKey: string;
   @ViewChild(MatStepper, { static: false }) private stepper: MatStepper;
   @ViewChildren(ConfigFormGroupComponent) private subConfigFormGroups: QueryList<ConfigFormGroupComponent>;
-  @Output() public updateSyncOptions: Subject<{prefix: string, control: FormControl}> = new Subject();
+  @Output() public updateSyncOptions: Subject<{ prefix: string; control: FormControl; }> = new Subject();
 
 
   public toUnsubscribe: Array<Subscription> = [];
 
-  constructor(
-    private sanitizer: DomSanitizer,
+  public constructor(
+    private sanitizer: DomSanitizer
   ) { }
 
   public static listenToAllControlsOnDependencyChange(configFormGroup: ConfigFormGroup, toUnsubscribe: Array<Subscription>) {
@@ -164,18 +164,18 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
   public hasChildSteps = () =>
     Object.values(this.configFormGroup.controls)
       .filter(c => (c instanceof ConfigFormGroup && !!c.stepName))
-      .length > 0
+      .length > 0;
 
   public hasChildTabs = () =>
     Object.values(this.configFormGroup.controls)
       .filter(c => (c instanceof ConfigFormGroup && !!c.tabName))
-      .length > 0
+      .length > 0;
 
   public isFirstControl = (control: AbstractControl) =>
-    Object.values(this.configFormGroup.controls)[0] === control
+    Object.values(this.configFormGroup.controls)[0] === control;
 
   public isLastControl = (control: AbstractControl) =>
-    Object.values(this.configFormGroup.controls).pop() === control
+    Object.values(this.configFormGroup.controls).pop() === control;
 
   /**
    * Propagate the submission to sub config form groups

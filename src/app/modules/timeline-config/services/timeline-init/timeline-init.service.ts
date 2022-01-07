@@ -19,7 +19,6 @@ under the License.
 import { Injectable } from '@angular/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { map } from 'rxjs/internal/operators/map';
 import { TimelineGlobalFormBuilderService } from '../timeline-global-form-builder/timeline-global-form-builder.service';
 
 @Injectable({
@@ -27,7 +26,7 @@ import { TimelineGlobalFormBuilderService } from '../timeline-global-form-builde
 })
 export class TimelineInitService {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private timelineGlobalFormBuilder: TimelineGlobalFormBuilderService,
     private collectionService: CollectionService

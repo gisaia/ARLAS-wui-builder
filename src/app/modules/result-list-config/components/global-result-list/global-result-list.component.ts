@@ -17,20 +17,20 @@ specific language governing permissions and limitations
 under the License.
 */
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { FormArray, FormControl } from '@angular/forms';
 import { ResultlistConfigForm } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { CollectionService } from '@services/collection-service/collection.service';
+import { Component, OnDestroy } from '@angular/core';
+import { FormArray, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
-import { Subscription } from 'rxjs';
+import { CollectionService } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
+import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-global-result-list',
+  selector: 'arlas-global-result-list',
   templateUrl: './global-result-list.component.html',
   styleUrls: ['./global-result-list.component.scss']
 })
@@ -43,7 +43,7 @@ export class GlobalResultListComponent implements OnDestroy {
   private removeAfterClosedSub: Subscription;
   public preview = [];
 
-  constructor(
+  public constructor(
     public mainFormService: MainFormService,
     private collectionService: CollectionService,
     private dialog: MatDialog,
@@ -70,8 +70,12 @@ export class GlobalResultListComponent implements OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.newAfterClosedSub) { this.newAfterClosedSub.unsubscribe(); }
-    if (this.removeAfterClosedSub) { this.removeAfterClosedSub.unsubscribe(); }
+    if (this.newAfterClosedSub) {
+      this.newAfterClosedSub.unsubscribe();
+    }
+    if (this.removeAfterClosedSub) {
+      this.removeAfterClosedSub.unsubscribe();
+    }
   }
 
   public removeTab(tabIndex: number) {

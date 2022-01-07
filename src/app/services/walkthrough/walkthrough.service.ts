@@ -23,7 +23,7 @@ import { Injectable } from '@angular/core';
 })
 export class WalkthroughService {
 
-  constructor() { }
+  public constructor() { }
 
   public load() {
     // DO NOTHING

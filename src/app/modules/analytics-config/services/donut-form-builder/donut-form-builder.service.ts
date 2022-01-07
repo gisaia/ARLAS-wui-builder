@@ -17,28 +17,28 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import {
-  ConfigFormGroup, FieldWithSizeListFormControl, SliderFormControl, SlideToggleFormControl,
-  ButtonFormControl, TitleInputFormControl, SelectFormControl
-} from '@shared-models/config-form';
-import { WidgetFormBuilder } from '../widget-form-builder';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { Observable, Subscription } from 'rxjs';
-import { CollectionField } from '@services/collection-service/models';
-import { KeywordColor, DialogColorTableData } from '@map-config/components/dialog-color-table/models';
-import { FormControl, FormArray, FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material';
-import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
+import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionField } from '@services/collection-service/models';
 import { toKeywordOptionsObs } from '@services/collection-service/tools';
+import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
+import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
+import {
+  ButtonFormControl, ConfigFormGroup, FieldWithSizeListFormControl, SelectFormControl,
+  SliderFormControl, SlideToggleFormControl, TitleInputFormControl
+} from '@shared-models/config-form';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { Observable, Subscription } from 'rxjs';
+import { WidgetFormBuilder } from '../widget-form-builder';
 
 export class DonutConfigForm extends CollectionConfigFormGroup {
 
-  constructor(
+  public constructor(
     collection: string,
     collectionFields: Observable<Array<CollectionField>>,
     private globalKeysToColortrl: FormArray,
@@ -215,7 +215,7 @@ export class DonutFormBuilderService extends WidgetFormBuilder {
 
   public defaultKey = 'analytics.widgets.donut';
 
-  constructor(
+  public constructor(
     protected collectionService: CollectionService,
     protected mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,

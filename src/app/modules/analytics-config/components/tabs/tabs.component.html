@@ -12,7 +12,7 @@
                         </span>
                         <span *ngIf="editingTabIndex === index" class="edit-tab-name">
                             <!-- keydown stopPropagation needed to allow spaces -->
-                            <input matInput [(ngModel)]="editingTabName" appAutoFocus autocomplete="off"
+                            <input matInput [(ngModel)]="editingTabName" arlasAutoFocus autocomplete="off"
                                 (focusout)="finishEditTabName(index)" (keydown)="$event.stopPropagation();"
                                 (keydown.enter)="finishEditTabName(index);">
 
@@ -24,8 +24,8 @@
                     </div>
                 </div>
             </ng-template>
-            <app-groups [contentFg]="getTab(index).controls.contentFg">
-            </app-groups>
+            <arlas-groups [contentFg]="getTab(index).controls.contentFg">
+            </arlas-groups>
         </mat-tab>
         <mat-tab [disabled]="true">
             <ng-template mat-tab-label>

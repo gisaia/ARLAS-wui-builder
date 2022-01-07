@@ -18,9 +18,9 @@ under the License.
 */
 import { Injectable } from '@angular/core';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
-import { Page } from '@utils/tools';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
+import { Page } from '@utils/tools';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 @Injectable({
   providedIn: 'root'
@@ -87,20 +87,19 @@ export class MenuService {
     }
   ];
 
-  constructor(private mainFormService: MainFormService,
-              private arlasSettingsService: ArlasSettingsService) {
-                // tslint:disable-next-line:no-string-literal
-                if (this.arlasSettingsService.settings['external_node_page']) {
-                  this.pages.push({
-                    name: marker('Custom configuration'),
-                    link: '/extra-node',
-                    icon: 'settings_input_composite',
-                    tooltip: marker('Custom configuration'),
-                    enabled: false,
-                    control: this.mainFormService.externalNodeConfig.control
-                  });
-                }
-              }
+  public constructor(private mainFormService: MainFormService,
+    private arlasSettingsService: ArlasSettingsService) {
+    if (this.arlasSettingsService.settings['external_node_page']) {
+      this.pages.push({
+        name: marker('Custom configuration'),
+        link: '/extra-node',
+        icon: 'settings_input_composite',
+        tooltip: marker('Custom configuration'),
+        enabled: false,
+        control: this.mainFormService.externalNodeConfig.control
+      });
+    }
+  }
 
   public updatePagesStatus(status: boolean) {
     this.pages.forEach(page => page.enabled = status);

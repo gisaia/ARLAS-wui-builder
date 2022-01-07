@@ -17,25 +17,25 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionField } from '@services/collection-service/models';
+import { NUMERIC_OR_DATE_TYPES, toNumericOrDateFieldsObs, toOptionsObs } from '@services/collection-service/tools';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
-  ConfigFormGroup, SlideToggleFormControl, SelectFormControl, TitleInputFormControl
+  ConfigFormGroup, SelectFormControl, SlideToggleFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
+import { Metric } from 'arlas-api';
 import { ChartType } from 'arlas-web-components';
-import { FormGroup, FormControl } from '@angular/forms';
-import { WidgetFormBuilder } from '../widget-form-builder';
 import {
   BucketsIntervalFormBuilderService, BucketsIntervalFormGroup
 } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
 import {
   MetricCollectFormBuilderService, MetricCollectFormGroup
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
-import { toOptionsObs, NUMERIC_OR_DATE_TYPES, toNumericOrDateFieldsObs } from '@services/collection-service/tools';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
-import { CollectionField } from '@services/collection-service/models';
-import { Metric } from 'arlas-api';
+import { WidgetFormBuilder } from '../widget-form-builder';
 
 // TODO put in common with timeline
 enum DateFormats {
@@ -45,7 +45,7 @@ enum DateFormats {
 
 export class HistogramFormGroup extends ConfigFormGroup {
 
-  constructor(
+  public constructor(
     collection: string,
     collectionService: CollectionService,
     bucketsIntervalFg: BucketsIntervalFormGroup,
@@ -71,15 +71,15 @@ export class HistogramFormGroup extends ConfigFormGroup {
             }
           ),
           aggregation: bucketsIntervalFg.withTitle(marker('histogram x-Axis'))
-          .withDependsOn(() => [this.customControls.dataStep.collection]).withOnDependencyChange(
-            (control) => {
-              bucketsIntervalFg.setCollection(this.customControls.dataStep.collection.value);
-              toOptionsObs(toNumericOrDateFieldsObs(collectionService
-                .getCollectionFields(this.customControls.dataStep.collection.value))).subscribe(collectionFields => {
+            .withDependsOn(() => [this.customControls.dataStep.collection]).withOnDependencyChange(
+              (control) => {
+                bucketsIntervalFg.setCollection(this.customControls.dataStep.collection.value);
+                toOptionsObs(toNumericOrDateFieldsObs(collectionService
+                  .getCollectionFields(this.customControls.dataStep.collection.value))).subscribe(collectionFields => {
                   bucketsIntervalFg.customControls.aggregationField.setSyncOptions(collectionFields);
                 });
-            }
-          ),
+              }
+            ),
           useUtc: new SlideToggleFormControl(
             '',
             marker('Use UTC time Zone to display date?'),
@@ -92,23 +92,23 @@ export class HistogramFormGroup extends ConfigFormGroup {
             }
           ),
           metric: metricFg.withTitle(marker('histogram y-Axis'))
-          .withDependsOn(() => [this.customControls.dataStep.collection]).withOnDependencyChange(
-            (control) => {
-              metricFg.setCollection(this.customControls.dataStep.collection.value);
-              const filterCallback = (field: CollectionField) =>
-              metricFg.customControls.metricCollectFunction.value === Metric.CollectFctEnum.CARDINALITY ?
-                field : NUMERIC_OR_DATE_TYPES.indexOf(field.type) >= 0;
-              collectionService.getCollectionFields(this.customControls.dataStep.collection.value).subscribe(
-                fields => {
-                  metricFg.customControls.metricCollectField.setSyncOptions(
-                    fields
-                      .filter(filterCallback)
-                      .sort((a, b) => a.name.localeCompare(b.name))
-                      .map(f => ({ value: f.name, label: f.name, enabled: f.indexed })));
-                }
-              );
-            }
-          )
+            .withDependsOn(() => [this.customControls.dataStep.collection]).withOnDependencyChange(
+              (control) => {
+                metricFg.setCollection(this.customControls.dataStep.collection.value);
+                const filterCallback = (field: CollectionField) =>
+                  metricFg.customControls.metricCollectFunction.value === Metric.CollectFctEnum.CARDINALITY ?
+                    field : NUMERIC_OR_DATE_TYPES.indexOf(field.type) >= 0;
+                collectionService.getCollectionFields(this.customControls.dataStep.collection.value).subscribe(
+                  fields => {
+                    metricFg.customControls.metricCollectField.setSyncOptions(
+                      fields
+                        .filter(filterCallback)
+                        .sort((a, b) => a.name.localeCompare(b.name))
+                        .map(f => ({ value: f.name, label: f.name, enabled: f.indexed })));
+                  }
+                );
+              }
+            )
         }).withTabName(marker('Data')),
         renderStep: new ConfigFormGroup({
           multiselectable: new SlideToggleFormControl(
@@ -238,7 +238,7 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
   public defaultKey = 'analytics.widgets.histogram';
   public widgetFormGroup: FormGroup;
 
-  constructor(
+  public constructor(
     protected collectionService: CollectionService,
     protected mainFormService: MainFormService,
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,

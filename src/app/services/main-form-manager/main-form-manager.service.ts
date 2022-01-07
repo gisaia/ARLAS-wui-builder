@@ -16,50 +16,48 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+import { AnalyticsImportService } from '@analytics-config/services/analytics-import/analytics-import.service';
+import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { Injectable } from '@angular/core';
+import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { ExternalNodeImportService } from '@app/modules/external-node-config/services/external-node-import/external-node-import.service';
+import { ExternalNodeInitService } from '@app/modules/external-node-config/services/external-node-init/external-node-init.service';
+import { LookAndFeelInitService } from '@app/modules/look-and-feel-config/services/look-and-feel-init/look-and-feel-init.service';
+import { ResultListImportService } from '@app/modules/result-list-config/services/result-list-import/result-list-import.service';
+import { ResultListInitService } from '@app/modules/result-list-config/services/result-list-init/result-list-init.service';
+import { SideModulesImportService } from '@app/modules/side-modules-config/services/side-modules-import/side-modules-import.service';
+import { SideModulesInitService } from '@app/modules/side-modules-config/services/side-modules-init/side-modules-init.service';
+import { LookAndFeelImportService } from '@look-and-feel-config/services/look-and-feel-import/look-and-feel-import.service';
+import { MapImportService } from '@map-config/services/map-import/map-import.service';
+import { MapInitService } from '@map-config/services/map-init/map-init.service';
+import { TranslateService } from '@ngx-translate/core';
+import { SearchImportService } from '@search-config/services/search-import/search-import.service';
+import { SearchInitService } from '@search-config/services/search-init/search-init.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { StartupService, ZONE_WUI_BUILDER } from '@services/startup/startup.service';
+import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
+import { ConfigFormControl, ConfigFormGroup } from '@shared-models/config-form';
+import { TimelineImportService } from '@timeline-config/services/timeline-import/timeline-import.service';
+import { TimelineInitService } from '@timeline-config/services/timeline-init/timeline-init.service';
 import { updateValueAndValidity } from '@utils/tools';
+import { ArlasColorGeneratorLoader, ArlasStartupService, PersistenceService } from 'arlas-wui-toolkit';
 import * as FileSaver from 'file-saver';
 import { NGXLogger } from 'ngx-logger';
 import { ConfigExportHelper, EXPORT_TYPE } from './config-export-helper';
 import { ConfigMapExportHelper } from './config-map-export-helper';
-import { AnalyticsImportService } from '@analytics-config/services/analytics-import/analytics-import.service';
 import { Config } from './models-config';
-import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
-import { SearchInitService } from '@search-config/services/search-init/search-init.service';
-import { SearchImportService } from '@search-config/services/search-import/search-import.service';
-import { TimelineInitService } from '@timeline-config/services/timeline-init/timeline-init.service';
-import { TimelineImportService } from '@timeline-config/services/timeline-import/timeline-import.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { TranslateService } from '@ngx-translate/core';
 import { MapConfig } from './models-map-config';
-import { MapInitService } from '@map-config/services/map-init/map-init.service';
-import { MapImportService } from '@map-config/services/map-import/map-import.service';
-import { AbstractControl, FormGroup, FormArray, FormControl } from '@angular/forms';
-import { ConfigFormControl, ConfigFormGroup } from '@shared-models/config-form';
-import { MatDialog } from '@angular/material/dialog';
-import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
-import { LookAndFeelInitService } from '@app/modules/look-and-feel-config/services/look-and-feel-init/look-and-feel-init.service';
-import { LookAndFeelImportService } from '@look-and-feel-config/services/look-and-feel-import/look-and-feel-import.service';
-import { SideModulesInitService } from '@app/modules/side-modules-config/services/side-modules-init/side-modules-init.service';
-import { SideModulesImportService } from '@app/modules/side-modules-config/services/side-modules-import/side-modules-import.service';
 import { importElements } from './tools';
-import { StartupService, ZONE_WUI_BUILDER } from '@services/startup/startup.service';
-import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persistence.service';
-import { Router } from '@angular/router';
-import { ArlasStartupService } from 'arlas-wui-toolkit/services/startup/startup.service';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-import { ResultListImportService } from '@app/modules/result-list-config/services/result-list-import/result-list-import.service';
-import { ResultListInitService } from '@app/modules/result-list-config/services/result-list-init/result-list-init.service';
-import { ExternalNodeInitService } from '@app/modules/external-node-config/services/external-node-init/external-node-init.service';
-import { ExternalNodeImportService } from '@app/modules/external-node-config/services/external-node-import/external-node-import.service';
 @Injectable({
   providedIn: 'root'
 })
 export class MainFormManagerService {
 
-  constructor(
+  public constructor(
     private logger: NGXLogger,
     private mainFormService: MainFormService,
     private analyticsImportService: AnalyticsImportService,

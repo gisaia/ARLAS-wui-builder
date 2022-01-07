@@ -17,11 +17,11 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component } from '@angular/core';
-import { MainFormService } from '@services/main-form/main-form.service';
 import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
+import { MainFormService } from '@services/main-form/main-form.service';
 
 @Component({
-  selector: 'app-global-search',
+  selector: 'arlas-global-search',
   templateUrl: './global-search.component.html',
   styleUrls: ['./global-search.component.scss']
 })
@@ -29,7 +29,7 @@ export class GlobalSearchComponent {
 
   public globalFg: SearchGlobalFormGroup;
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService
   ) {
 

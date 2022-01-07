@@ -46,7 +46,7 @@ export class CollectionService {
   public collectionMinIntervalMap = new Map<string, number>();
   public collectionMaxIntervalMap = new Map<string, number>();
   public collections: string[] = [];
-  constructor(
+  public constructor(
     private collabSearchService: ArlasCollaborativesearchService,
     private spinner: NgxSpinnerService,
     private defaultValueService: DefaultValuesService,
@@ -77,7 +77,8 @@ export class CollectionService {
           field: this.collectionParamsMap.get(collectionName).params.timestamp_path,
           metric: ComputationRequest.MetricEnum.MAX
         } as ComputationRequest],
-        new Map(), collectionName).subscribe(
+        new Map(), collectionName)
+        .subscribe(
           response => !!response.value ? this.collectionMaxIntervalMap.set(collectionName, response.value) : ''
         );
 
@@ -88,7 +89,8 @@ export class CollectionService {
           field: this.collectionParamsMap.get(collectionName).params.timestamp_path,
           metric: ComputationRequest.MetricEnum.MIN
         } as ComputationRequest],
-        new Map(), collectionName).subscribe(
+        new Map(), collectionName)
+        .subscribe(
           response => !!response.value ? this.collectionMinIntervalMap.set(collectionName, response.value) : ''
         );
     });
@@ -114,8 +116,7 @@ export class CollectionService {
     }
   }
 
-  public getCollectionFields(collection: string, types?: Array<FIELD_TYPES>, exclude: boolean = false)
-    : Observable<Array<CollectionField>> {
+  public getCollectionFields(collection: string, types?: Array<FIELD_TYPES>, exclude: boolean = false): Observable<Array<CollectionField>> {
 
     this.spinner.show();
 
@@ -176,7 +177,8 @@ export class CollectionService {
     };
     this.spinner.show();
     return this.collabSearchService.getExploreApi().computePost(collection, computation, false, 120,
-      this.collabSearchService.getFetchOptions()).then(ag => {
+      this.collabSearchService.getFetchOptions())
+      .then(ag => {
         this.spinner.hide();
 
         // Round the value returned by ARLAS SERVER to improve the lisibility
@@ -215,9 +217,7 @@ export class CollectionService {
     };
 
     return this.collabSearchService.getExploreApi().aggregatePost(collection, aggreationRequest, false, 120,
-      this.collabSearchService.getFetchOptions()).then((a: AggregationResponse) => {
-        return a.elements ? a.elements.map(e => e.key) : [];
-      })
+      this.collabSearchService.getFetchOptions()).then((a: AggregationResponse) => a.elements ? a.elements.map(e => e.key) : [])
       .finally(() => {
         if (showSpinner) {
           this.spinner.hide();

@@ -19,60 +19,60 @@ under the License.
 */
 
 export enum ExternalEvent {
-    hover = 'hover',
-    select = 'select'
+  hover = 'hover',
+  select = 'select'
 }
 export interface ExternalEventLayers {
-    id: string;
-    on: ExternalEvent;
+  id: string;
+  on: ExternalEvent;
 }
 
 export interface MapConfig {
-    layers: Array<Layer>;
-    externalEventLayers?: Array<ExternalEventLayers>;
+  layers: Array<Layer>;
+  externalEventLayers?: Array<ExternalEventLayers>;
 }
 
 export interface Layer {
-    id: string;
-    type: string;
-    source: string;
-    layout: Layout;
-    minzoom: number;
-    maxzoom: number;
-    paint: Paint;
-    filter?: Array<any>;
-    metadata?: LayerMetadata;
+  id: string;
+  type: string;
+  source: string;
+  layout: Layout;
+  minzoom: number;
+  maxzoom: number;
+  paint: Paint;
+  filter?: Array<any>;
+  metadata?: LayerMetadata;
 }
 
 export interface Layout {
-    visibility?: string;
-    'line-cap'?: string;
-    'line-join'?: string;
+  visibility?: string;
+  'line-cap'?: string;
+  'line-join'?: string;
 }
 
 type PaintValue = Array<string | Array<string> | number> | PaintColor | string | number;
 export interface Paint {
-    'fill-color'?: PaintValue;
-    'fill-opacity'?: number;
-    'circle-color'?: PaintValue;
-    'circle-opacity'?: number;
-    'line-color'?: PaintValue;
-    'line-opacity'?: number;
-    'line-width'?: PaintValue;
-    'line-dasharray'?: PaintValue;
-    'circle-radius'?: PaintValue;
-    'circle-stroke-width'?: PaintValue;
-    'heatmap-color'?: PaintValue;
-    'heatmap-radius'?: PaintValue;
-    'heatmap-weight'?: PaintValue;
-    'heatmap-intensity'?: number;
-    'heatmap-opacity'?: number;
+  'fill-color'?: PaintValue;
+  'fill-opacity'?: number;
+  'circle-color'?: PaintValue;
+  'circle-opacity'?: number;
+  'line-color'?: PaintValue;
+  'line-opacity'?: number;
+  'line-width'?: PaintValue;
+  'line-dasharray'?: PaintValue;
+  'circle-radius'?: PaintValue;
+  'circle-stroke-width'?: PaintValue;
+  'heatmap-color'?: PaintValue;
+  'heatmap-radius'?: PaintValue;
+  'heatmap-weight'?: PaintValue;
+  'heatmap-intensity'?: number;
+  'heatmap-opacity'?: number;
 }
 
 export interface PaintColor {
-    property: string;
-    type: string;
-    stops: Array<Array<string>>;
+  property: string;
+  type: string;
+  stops: Array<Array<string>>;
 }
 
 
@@ -83,5 +83,5 @@ export const ARLAS_ID = 'arlas_id:';
 
 
 export function isTechnicalArlasLayer(id: string) {
-    return id.startsWith(HOVER_LAYER_PREFIX) || id.startsWith(SELECT_LAYER_PREFIX) || id.startsWith(FILLSTROKE_LAYER_PREFIX);
+  return id.startsWith(HOVER_LAYER_PREFIX) || id.startsWith(SELECT_LAYER_PREFIX) || id.startsWith(FILLSTROKE_LAYER_PREFIX);
 }

@@ -1,5 +1,6 @@
 // This file is required by karma.conf.js and loads recursively all the .spec and framework files
 
+import 'zone.js/dist/zone-testing';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { getTestBed } from '@angular/core/testing';
@@ -32,12 +33,11 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import 'zone.js/dist/zone-testing';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatMenuModule } from '@angular/material/menu';
-import { IconPickerModule } from 'ngx-icon-picker';
-import { MatTreeModule } from '@angular/material';
+import { IconPickerModule } from '@gisaia-team/ngx-icon-picker';
+import { MatTreeModule } from '@angular/material/tree';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 // define modules to be injected in every test

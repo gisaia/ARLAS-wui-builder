@@ -17,35 +17,34 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup, ValidatorFn, FormControl } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
+import tilebelt from '@mapbox/tilebelt';
 import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
 import {
-  toAllButGeoOptionsObs, toGeoOptionsObs, toGeoPointOptionsObs, toKeywordOptionsObs,
-  toNumericOrDateOrKeywordObs, toNumericOrDateOptionsObs, toTextOrKeywordOptionsObs
+  toAllButGeoOptionsObs, toGeoOptionsObs, toGeoPointOptionsObs, toKeywordOptionsObs, toNumericOrDateOptionsObs,
+  toNumericOrDateOrKeywordObs, toTextOrKeywordOptionsObs
 } from '@services/collection-service/tools';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
   ConfigFormGroup, HiddenFormControl,
-  InputFormControl,
-  OrderedSelectFormControl, SelectFormControl,
-  SliderFormControl, SlideToggleFormControl, VisualisationCheckboxFormControl, VisualisationCheckboxOption,
-  MapFiltersControl, TypedSelectFormControl, MultipleSelectFormControl, SelectOption, ConfigFormControl
+  InputFormControl, MapFiltersControl, MultipleSelectFormControl, OrderedSelectFormControl, SelectFormControl,
+  SelectOption, SliderFormControl, SlideToggleFormControl, TypedSelectFormControl,
+  VisualisationCheckboxFormControl, VisualisationCheckboxOption
 } from '@shared-models/config-form';
 import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
 import {
   PropertySelectorFormBuilderService, PropertySelectorFormGroup
 } from '@shared/services/property-selector-form-builder/property-selector-form-builder.service';
 import { valuesToOptions } from '@utils/tools';
-import { Observable, of, Subject } from 'rxjs';
-import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, GEOMETRY_TYPE, FILTER_OPERATION, LINE_TYPE } from './models';
-import { Granularity, ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
+import { ClusterAggType, FeatureRenderMode, Granularity } from 'arlas-web-contributors/models/models';
+import { Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
-import tilebelt from '@mapbox/tilebelt';
+import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE } from './models';
 
 
 export const PRECISION_TOLERATED_DIFFERENCE = 3;
@@ -53,7 +52,7 @@ export const PRECISION_TOLERATED_DIFFERENCE = 3;
 export class MapLayerFormGroup extends ConfigFormGroup {
   private currentCollection;
   public clearFilters = new Subject<boolean>();
-  constructor(
+  public constructor(
     featuresFg: MapLayerTypeFeaturesFormGroup,
     featureMetricFg: MapLayerTypeFeatureMetricFormGroup,
     clusterFg: MapLayerTypeClusterFormGroup,
@@ -167,7 +166,8 @@ export class MapLayerFormGroup extends ConfigFormGroup {
             /** when the collection changes we need to update all the fields lists used the different mat-select */
             if (control.enabled && (!this.currentCollection || this.customControls.collection.value !== this.currentCollection)) {
               toGeoOptionsObs(collectionService
-                .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
+                .getCollectionFields(this.customControls.collection.value))
+                .subscribe(collectionFs => {
                   featuresFg.geometry.setSyncOptions(collectionFs);
                 });
               this.updateCollectionInForms(featuresFg, collectionService);
@@ -195,15 +195,18 @@ export class MapLayerFormGroup extends ConfigFormGroup {
             if (control.enabled && !!this.customControls.collection.value &&
               (!this.currentCollection || this.customControls.collection.value !== this.currentCollection)) {
               toGeoOptionsObs(collectionService
-                .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
+                .getCollectionFields(this.customControls.collection.value))
+                .subscribe(collectionFs => {
                   featureMetricFg.geometry.setSyncOptions(collectionFs);
                 });
               toAllButGeoOptionsObs(collectionService
-                .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
+                .getCollectionFields(this.customControls.collection.value))
+                .subscribe(collectionFs => {
                   featureMetricFg.featureMetricSort.setSyncOptions(collectionFs);
                 });
               toKeywordOptionsObs(collectionService
-                .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
+                .getCollectionFields(this.customControls.collection.value))
+                .subscribe(collectionFs => {
                   featureMetricFg.geometryId.setSyncOptions(collectionFs);
                 });
               this.updateCollectionInForms(featureMetricFg, collectionService);
@@ -230,15 +233,18 @@ export class MapLayerFormGroup extends ConfigFormGroup {
             /** when the collection changes we need to update all the fields lists used the different mat-select */
             if (control.enabled && (!this.currentCollection || this.customControls.collection.value !== this.currentCollection)) {
               toGeoOptionsObs(collectionService
-                .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
+                .getCollectionFields(this.customControls.collection.value))
+                .subscribe(collectionFs => {
                   clusterFg.rawGeometry.setSyncOptions(collectionFs);
                 });
               toGeoPointOptionsObs(collectionService
-                .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
+                .getCollectionFields(this.customControls.collection.value))
+                .subscribe(collectionFs => {
                   clusterFg.aggGeometry.setSyncOptions(collectionFs);
                 });
               toAllButGeoOptionsObs(collectionService
-                .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
+                .getCollectionFields(this.customControls.collection.value))
+                .subscribe(collectionFs => {
                   clusterFg.clusterSort.setSyncOptions(collectionFs);
                 });
               this.updateCollectionInForms(clusterFg, collectionService);
@@ -261,7 +267,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
     clusterFg: this.get('clusterFg') as MapLayerTypeClusterFormGroup
   };
   public static adjustZoomVisibilityTonetworkFetchingLevel(networkFetchingLevelControl: SliderFormControl,
-                                                           zoomMinControl: SliderFormControl, zoomMaxControl: SliderFormControl): void {
+    zoomMinControl: SliderFormControl, zoomMaxControl: SliderFormControl): void {
     zoomMinControl.min = Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0);
     zoomMaxControl.min = Math.min(22, Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE) + 1);
 
@@ -269,7 +275,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
       zoomMinControl.setValue(Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0));
       zoomMinControl.hasWarning = true;
       zoomMinControl.warningMessage = marker('Network Analytics Fetching Precision is') + ' ' + networkFetchingLevelControl.value +
-      '. ' +  marker('Therefore; minimum zoom level of the layer should be greater than or equal to') + ' ' + zoomMinControl.value + '.';
+        '. ' + marker('Therefore; minimum zoom level of the layer should be greater than or equal to') + ' ' + zoomMinControl.value + '.';
       if (zoomMaxControl.value <= zoomMinControl.value) {
         zoomMaxControl.setValue(Math.min(22, zoomMinControl.value + 1));
         zoomMaxControl.hasWarning = true;
@@ -303,7 +309,8 @@ export class MapLayerFormGroup extends ConfigFormGroup {
 
   private updateCollectionInForms(mapFg: MapLayerAllTypesFormGroup, collectionService: CollectionService): void {
     toKeywordOptionsObs(collectionService
-      .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
+      .getCollectionFields(this.customControls.collection.value))
+      .subscribe(collectionFs => {
         this.setKeyrwodFields(mapFg.opacity, this.customControls.collection.value, collectionFs);
         this.setKeyrwodFields(mapFg.colorFg, this.customControls.collection.value, collectionFs);
         this.setKeyrwodFields(mapFg.widthFg, this.customControls.collection.value, collectionFs);
@@ -314,7 +321,8 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         this.setKeyrwodFields(mapFg.weightFg, this.customControls.collection.value, collectionFs);
       });
     toTextOrKeywordOptionsObs(collectionService
-      .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
+      .getCollectionFields(this.customControls.collection.value))
+      .subscribe(collectionFs => {
         this.setTextKeyrwodFields(mapFg.opacity, this.customControls.collection.value, collectionFs);
         this.setTextKeyrwodFields(mapFg.colorFg, this.customControls.collection.value, collectionFs);
         this.setTextKeyrwodFields(mapFg.widthFg, this.customControls.collection.value, collectionFs);
@@ -325,7 +333,8 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         this.setTextKeyrwodFields(mapFg.weightFg, this.customControls.collection.value, collectionFs);
       });
     toNumericOrDateOptionsObs(collectionService
-      .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
+      .getCollectionFields(this.customControls.collection.value))
+      .subscribe(collectionFs => {
         this.setNumericOrDateFields(mapFg.opacity, this.customControls.collection.value, collectionFs);
         this.setNumericOrDateFields(mapFg.colorFg, this.customControls.collection.value, collectionFs);
         this.setNumericOrDateFields(mapFg.widthFg, this.customControls.collection.value, collectionFs);
@@ -338,8 +347,8 @@ export class MapLayerFormGroup extends ConfigFormGroup {
   }
 
   private calculatenetworkFetchingLevel(collection: string, collectionService: CollectionService,
-                                        networkFetchingLevelControl: SliderFormControl,
-                                        zoomMinControl: SliderFormControl, zoomMaxControl: SliderFormControl) {
+    networkFetchingLevelControl: SliderFormControl,
+    zoomMinControl: SliderFormControl, zoomMaxControl: SliderFormControl) {
     collectionService.computeBbox(collection).subscribe({
       next: (cr) => {
         const coordinates = (cr.geometry as any).coordinates[0];
@@ -351,7 +360,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         const west = Math.min(...longitudes);
         const width = Math.abs(west - east);
         const height = Math.abs(north - south);
-        const bbox = [west, south, west + width / 10 * 0.8 , south + height / 10 * 0.8 ];
+        const bbox = [west, south, west + width / 10 * 0.8, south + height / 10 * 0.8];
         const tile = tilebelt.bboxToTile(bbox);
         networkFetchingLevelControl.markAsUntouched();
         networkFetchingLevelControl.markAsPristine();
@@ -365,8 +374,8 @@ export class MapLayerFormGroup extends ConfigFormGroup {
 
 export class MapFilterFormGroup extends ConfigFormGroup {
   public editing = false;
-  public editionInfo: { field: string, op: FILTER_OPERATION };
-  constructor(
+  public editionInfo: { field: string; op: FILTER_OPERATION; };
+  public constructor(
     collectionFields: Observable<Array<CollectionField>>,
     filterOperations: Array<FILTER_OPERATION>,
     collectionService: CollectionService,
@@ -457,7 +466,8 @@ export class MapFilterFormGroup extends ConfigFormGroup {
                 control.setSyncOptions([]);
                 collectionService.getTermAggregation(
                   collection,
-                  this.customControls.filterField.value.value).then(keywords => {
+                  this.customControls.filterField.value.value)
+                  .then(keywords => {
                     control.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
                   });
               } else {
@@ -578,16 +588,16 @@ export class MapFilterFormGroup extends ConfigFormGroup {
 }
 export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
-  constructor(
+  public constructor(
     collection: string,
     type: string,
     geometryTypes: Array<GEOMETRY_TYPE>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService,
     isAggregated: boolean,
     colorSources: Array<PROPERTY_SELECTOR_SOURCE>,
-    geometryFormControls: { [key: string]: AbstractControl },
-    visibilityFormControls: { [key: string]: AbstractControl },
-    styleFormControls: { [key: string]: AbstractControl }
+    geometryFormControls: { [key: string]: AbstractControl; },
+    visibilityFormControls: { [key: string]: AbstractControl; },
+    styleFormControls: { [key: string]: AbstractControl; }
   ) {
     super({
       geometryStep: new ConfigFormGroup({
@@ -614,8 +624,9 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
                 const sub = (this.geometryStep.get('geometry') as SelectFormControl).sourceData.subscribe((fields: CollectionField[]) => {
                   fields.forEach(f => {
                     if (f.name === this.geometryStep.get('geometry').value) {
-                      f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT ?
-                        control.setValue(GEOMETRY_TYPE.circle) : control.setValue(GEOMETRY_TYPE.line);
+                      control.setValue(
+                        f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT ? GEOMETRY_TYPE.circle : GEOMETRY_TYPE.line
+                      );
                     }
                   });
                   sub.unsubscribe();
@@ -627,9 +638,11 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
                 !!this.geometryStep.get('aggregatedGeometry') && !!this.geometryStep.get('aggregatedGeometry').value
                 && this.geometryStep.get('aggregatedGeometry').touched
               ) {
-                (this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.cell_center ||
-                  this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.centroid ?
-                  control.setValue(GEOMETRY_TYPE.circle) : control.setValue(GEOMETRY_TYPE.fill));
+                control.setValue(
+                  this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.cell_center ||
+                    this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.centroid ?
+                    GEOMETRY_TYPE.circle : GEOMETRY_TYPE.fill
+                );
               }
               if (
                 !!this.geometryStep.get('rawGeometry') && !!this.geometryStep.get('rawGeometry').value
@@ -639,8 +652,8 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
                   (fields: CollectionField[]) => {
                     fields.forEach(f => {
                       if (f.name === this.geometryStep.get('rawGeometry').value) {
-                        f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT ?
-                          control.setValue(GEOMETRY_TYPE.circle) : control.setValue(GEOMETRY_TYPE.fill);
+                        control.setValue(
+                          f.type === CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT ? GEOMETRY_TYPE.circle : GEOMETRY_TYPE.fill);
                       }
                     });
                     sub.unsubscribe();
@@ -857,25 +870,63 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   }
 
   // TODO use customControls like other form builders
-  public get geometryStep() { return this.get('geometryStep') as ConfigFormGroup; }
-  public get visibilityStep() { return this.get('visibilityStep') as ConfigFormGroup; }
-  public get networkFetchingLevel() { return this.get('visibilityStep').get('networkFetchingLevel') as SliderFormControl; }
-  public get styleStep() { return this.get('styleStep') as ConfigFormGroup; }
-  public get visible() { return this.visibilityStep.get('visible') as SlideToggleFormControl; }
-  public get zoomMin() { return this.visibilityStep.get('zoomMin') as SliderFormControl; }
-  public get zoomMax() { return this.visibilityStep.get('zoomMax') as SliderFormControl; }
-  public get geometryType() { return this.styleStep.get('geometryType') as SelectFormControl; }
-  public get opacity() { return this.styleStep.get('opacity') as PropertySelectorFormGroup; }
-  public get colorFg() { return this.styleStep.get('colorFg') as PropertySelectorFormGroup; }
-  public get widthFg() { return this.styleStep.get('widthFg') as PropertySelectorFormGroup; }
-  public get radiusFg() { return this.styleStep.get('radiusFg') as PropertySelectorFormGroup; }
-  public get strokeWidthFg() { return this.styleStep.get('strokeWidthFg') as PropertySelectorFormGroup; }
-  public get strokeColorFg() { return this.styleStep.get('strokeColorFg') as PropertySelectorFormGroup; }
-  public get strokeOpacityFg() { return this.styleStep.get('strokeOpacityFg') as PropertySelectorFormGroup; }
-  public get weightFg() { return this.styleStep.get('weightFg') as PropertySelectorFormGroup; }
-  public get intensityFg() { return this.styleStep.get('intensityFg') as PropertySelectorFormGroup; }
-  public get filter() { return this.styleStep.get('filter') as FormGroup; }
-  public get filters() { return this.visibilityStep.get('filters') as MapFiltersControl; }
+  public get geometryStep() {
+    return this.get('geometryStep') as ConfigFormGroup;
+  }
+  public get visibilityStep() {
+    return this.get('visibilityStep') as ConfigFormGroup;
+  }
+  public get networkFetchingLevel() {
+    return this.get('visibilityStep').get('networkFetchingLevel') as SliderFormControl;
+  }
+  public get styleStep() {
+    return this.get('styleStep') as ConfigFormGroup;
+  }
+  public get visible() {
+    return this.visibilityStep.get('visible') as SlideToggleFormControl;
+  }
+  public get zoomMin() {
+    return this.visibilityStep.get('zoomMin') as SliderFormControl;
+  }
+  public get zoomMax() {
+    return this.visibilityStep.get('zoomMax') as SliderFormControl;
+  }
+  public get geometryType() {
+    return this.styleStep.get('geometryType') as SelectFormControl;
+  }
+  public get opacity() {
+    return this.styleStep.get('opacity') as PropertySelectorFormGroup;
+  }
+  public get colorFg() {
+    return this.styleStep.get('colorFg') as PropertySelectorFormGroup;
+  }
+  public get widthFg() {
+    return this.styleStep.get('widthFg') as PropertySelectorFormGroup;
+  }
+  public get radiusFg() {
+    return this.styleStep.get('radiusFg') as PropertySelectorFormGroup;
+  }
+  public get strokeWidthFg() {
+    return this.styleStep.get('strokeWidthFg') as PropertySelectorFormGroup;
+  }
+  public get strokeColorFg() {
+    return this.styleStep.get('strokeColorFg') as PropertySelectorFormGroup;
+  }
+  public get strokeOpacityFg() {
+    return this.styleStep.get('strokeOpacityFg') as PropertySelectorFormGroup;
+  }
+  public get weightFg() {
+    return this.styleStep.get('weightFg') as PropertySelectorFormGroup;
+  }
+  public get intensityFg() {
+    return this.styleStep.get('intensityFg') as PropertySelectorFormGroup;
+  }
+  public get filter() {
+    return this.styleStep.get('filter') as FormGroup;
+  }
+  public get filters() {
+    return this.visibilityStep.get('filters') as MapFiltersControl;
+  }
 
   private isCircleOrFill(): boolean {
     return this.isCircle() || this.isFill();
@@ -892,13 +943,13 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
 export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
 
-  constructor(
+  public constructor(
     collection: string,
     type: string,
     collectionFields: Observable<Array<CollectionField>>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService,
     isAggregated: boolean = false,
-    geometryFormControls: { [key: string]: AbstractControl } = {}
+    geometryFormControls: { [key: string]: AbstractControl; } = {}
   ) {
 
     super(
@@ -976,15 +1027,23 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
   public customControls = {
     geometry: this.geometryStep.get('geometry') as SelectFormControl,
   };
-  public get geometry() { return this.geometryStep.get('geometry') as SelectFormControl; }
-  public get featuresMax() { return this.visibilityStep.get('featuresMax') as SliderFormControl; }
-  public get renderMode() { return this.visibilityStep.get('renderMode') as SelectFormControl; }
-  public get geometryType() { return this.styleStep.get('geometryType') as SelectFormControl; }
+  public get geometry() {
+    return this.geometryStep.get('geometry') as SelectFormControl;
+  }
+  public get featuresMax() {
+    return this.visibilityStep.get('featuresMax') as SliderFormControl;
+  }
+  public get renderMode() {
+    return this.visibilityStep.get('renderMode') as SelectFormControl;
+  }
+  public get geometryType() {
+    return this.styleStep.get('geometryType') as SelectFormControl;
+  }
 }
 
 export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesFormGroup {
 
-  constructor(
+  public constructor(
     collection: string,
     collectionFields: Observable<Array<CollectionField>>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService
@@ -1021,15 +1080,21 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
         )
       });
   }
-  public get featureMetricSort() { return this.geometryStep.get('featureMetricSort') as OrderedSelectFormControl; }
-  public get geometryId() { return this.geometryStep.get('geometryId') as OrderedSelectFormControl; }
-  public get networkFetchingLevel() { return this.visibilityStep.get('networkFetchingLevel') as SliderFormControl; }
+  public get featureMetricSort() {
+    return this.geometryStep.get('featureMetricSort') as OrderedSelectFormControl;
+  }
+  public get geometryId() {
+    return this.geometryStep.get('geometryId') as OrderedSelectFormControl;
+  }
+  public get networkFetchingLevel() {
+    return this.visibilityStep.get('networkFetchingLevel') as SliderFormControl;
+  }
 
 }
 
 export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
 
-  constructor(
+  public constructor(
     collection: string,
     collectionFields: Observable<Array<CollectionField>>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService
@@ -1152,15 +1217,33 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
     );
   }
 
-  public get aggGeometry() { return this.geometryStep.get('aggGeometry') as SelectFormControl; }
-  public get granularity() { return this.geometryStep.get('granularity') as SelectFormControl; }
-  public get aggType() { return this.geometryStep.get('aggType') as SelectFormControl; }
-  public get clusterGeometryType() { return this.geometryStep.get('clusterGeometryType') as SelectFormControl; }
-  public get aggregatedGeometry() { return this.geometryStep.get('aggregatedGeometry') as SelectFormControl; }
-  public get rawGeometry() { return this.geometryStep.get('rawGeometry') as SelectFormControl; }
-  public get clusterSort() { return this.geometryStep.get('clusterSort') as OrderedSelectFormControl; }
-  public get featuresMin() { return this.visibilityStep.get('featuresMin') as SliderFormControl; }
-  public get geometryType() { return this.styleStep.get('geometryType') as SelectFormControl; }
+  public get aggGeometry() {
+    return this.geometryStep.get('aggGeometry') as SelectFormControl;
+  }
+  public get granularity() {
+    return this.geometryStep.get('granularity') as SelectFormControl;
+  }
+  public get aggType() {
+    return this.geometryStep.get('aggType') as SelectFormControl;
+  }
+  public get clusterGeometryType() {
+    return this.geometryStep.get('clusterGeometryType') as SelectFormControl;
+  }
+  public get aggregatedGeometry() {
+    return this.geometryStep.get('aggregatedGeometry') as SelectFormControl;
+  }
+  public get rawGeometry() {
+    return this.geometryStep.get('rawGeometry') as SelectFormControl;
+  }
+  public get clusterSort() {
+    return this.geometryStep.get('clusterSort') as OrderedSelectFormControl;
+  }
+  public get featuresMin() {
+    return this.visibilityStep.get('featuresMin') as SliderFormControl;
+  }
+  public get geometryType() {
+    return this.styleStep.get('geometryType') as SelectFormControl;
+  }
 }
 
 @Injectable({
@@ -1168,7 +1251,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
 })
 export class MapLayerFormBuilderService {
 
-  constructor(
+  public constructor(
     private defaultValuesService: DefaultValuesService,
     private propertySelectorFormBuilder: PropertySelectorFormBuilderService,
     private mainFormService: MainFormService,

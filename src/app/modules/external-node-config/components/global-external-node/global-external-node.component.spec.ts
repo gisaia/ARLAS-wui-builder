@@ -1,9 +1,9 @@
 import { FormControl, FormGroup } from '@angular/forms';
-import { GlobalExternalNodeComponent } from './global-external-node.component';
-import { NgJsonEditorModule } from 'ang-jsoneditor';
 import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
+import { NgJsonEditorModule } from 'ang-jsoneditor';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
+import { GlobalExternalNodeComponent } from './global-external-node.component';
 
 describe('GlobalExternalNodeComponent', () => {
   let spectator: Spectator<GlobalExternalNodeComponent>;
@@ -12,17 +12,17 @@ describe('GlobalExternalNodeComponent', () => {
     component: GlobalExternalNodeComponent,
     imports : [NgJsonEditorModule],
     providers: [
-    mockProvider(ArlasSettingsService, {
-          settings: {}
-        }),
-    mockProvider(MainFormService, {
-      externalNodeConfig: {
-        getExternalNodeFg: () => new FormGroup({
-          externalNode: new FormControl(null),
+      mockProvider(ArlasSettingsService, {
+        settings: {}
+      }),
+      mockProvider(MainFormService, {
+        externalNodeConfig: {
+          getExternalNodeFg: () => new FormGroup({
+            externalNode: new FormControl(null),
 
-        })
-      }
-    }) ]
+          })
+        }
+      }) ]
   });
 
   beforeEach(() => {

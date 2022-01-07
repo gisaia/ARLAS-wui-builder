@@ -17,21 +17,21 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { FormArray, FormGroup, FormControl } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionField } from '@services/collection-service/models';
+import { toGeoOptionsObs } from '@services/collection-service/tools';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { MainFormService } from '@services/main-form/main-form.service';
 import {
-  ConfigFormGroup, SelectFormControl, SliderFormControl, InputFormControl, SlideToggleFormControl, ConfigFormGroupArray, HiddenFormControl
+  ConfigFormGroup, ConfigFormGroupArray, HiddenFormControl, InputFormControl, SelectFormControl, SliderFormControl, SlideToggleFormControl
 } from '@shared-models/config-form';
 import { Expression } from 'arlas-api';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
-import { toGeoOptionsObs } from '@services/collection-service/tools';
 import { Observable, of } from 'rxjs';
-import { CollectionField } from '@services/collection-service/models';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { MainFormService } from '@services/main-form/main-form.service';
 
 export class MapGlobalFormGroup extends ConfigFormGroup {
-  constructor() {
+  public constructor() {
     super({
       initZoom: new SliderFormControl(
         '',
@@ -150,7 +150,7 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
 }
 
 export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
-  constructor(
+  public constructor(
     collection: string,
     geometryPath: string,
     idPath: string,
@@ -176,11 +176,12 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
         true,
         toGeoOptionsObs(collectionFields),
         {
-          dependsOn:  () => [this.customControls.collection],
+          dependsOn: () => [this.customControls.collection],
           onDependencyChange: (control: SelectFormControl) => {
             if (this.customControls.collection.value) {
               toGeoOptionsObs(collectionService
-                .getCollectionFields(this.customControls.collection.value)).subscribe(collectionFs => {
+                .getCollectionFields(this.customControls.collection.value))
+                .subscribe(collectionFs => {
                   control.setSyncOptions(collectionFs);
                 });
             }
@@ -191,7 +192,7 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
         idPath,
         null,
         {
-          dependsOn:  () => [this.customControls.collection],
+          dependsOn: () => [this.customControls.collection],
           onDependencyChange: (control) => {
             if (!!this.customControls.collection.value) {
               control.setValue(collectionService.collectionParamsMap.get(this.customControls.collection.value).params.id_path);
@@ -214,7 +215,7 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
 })
 export class MapGlobalFormBuilderService {
 
-  constructor(
+  public constructor(
     private defaultValuesService: DefaultValuesService,
     private mainFormService: MainFormService,
     private collectionService: CollectionService

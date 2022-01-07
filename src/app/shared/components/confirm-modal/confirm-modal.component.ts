@@ -24,13 +24,13 @@ export interface ModalData {
 }
 
 @Component({
-  selector: 'app-confirm-modal',
+  selector: 'arlas-confirm-modal',
   templateUrl: './confirm-modal.component.html',
   styleUrls: ['./confirm-modal.component.scss']
 })
 export class ConfirmModalComponent implements OnInit {
 
-  constructor(
+  public constructor(
     public dialogRef: MatDialogRef<ConfirmModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ModalData) { }
 

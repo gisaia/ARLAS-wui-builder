@@ -23,30 +23,30 @@ import { Config } from '@services/main-form-manager/models-config';
 import { FormGroup } from '@angular/forms';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class ExternalNodeImportService {
 
-    constructor(
+  public constructor(
         private mainFormService: MainFormService
-    ) { }
+  ) { }
 
-    public doImport(config: Config) {
+  public doImport(config: Config) {
 
-        const configOptions = config.arlas.web.externalNode ? config.arlas.web.externalNode : {};
+    const configOptions = config.arlas.web.externalNode ? config.arlas.web.externalNode : {};
 
-        const globalExternalNodeFg = this.mainFormService.externalNodeConfig.getExternalNodeFg() as FormGroup;
+    const globalExternalNodeFg = this.mainFormService.externalNodeConfig.getExternalNodeFg() as FormGroup;
 
-        if (configOptions) {
+    if (configOptions) {
 
-            importElements([
-                {
-                    value: configOptions,
-                    control: globalExternalNodeFg.controls.externalNode
-                }
-            ]);
-
-
+      importElements([
+        {
+          value: configOptions,
+          control: globalExternalNodeFg.controls.externalNode
         }
+      ]);
+
+
     }
+  }
 }

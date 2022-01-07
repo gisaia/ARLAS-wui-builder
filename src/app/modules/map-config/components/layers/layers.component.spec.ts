@@ -1,15 +1,13 @@
-import { LayersComponent } from './layers.component';
-import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
-import { MainFormService } from '@services/main-form/main-form.service';
 import { FormArray } from '@angular/forms';
-import { MapglLegendModule, MapglLayerIconModule } from 'arlas-web-components';
-import { ArlasConfigurationUpdaterService } from 'arlas-wui-toolkit/services/configuration-updater/configurationUpdater.service';
-import {
-  ArlasCollaborativesearchService, ArlasStartupService,
-  ArlasConfigService, CONFIG_UPDATER
-} from 'arlas-wui-toolkit/services/startup/startup.service';
+import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { MapglLayerIconModule, MapglLegendModule } from 'arlas-web-components';
+import {
+  ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService, ArlasConfigurationUpdaterService,
+  ArlasStartupService, CONFIG_UPDATER
+} from 'arlas-wui-toolkit';
+import { LayersComponent } from './layers.component';
 
 describe('LayersComponent', () => {
   let spectator: Spectator<LayersComponent>;

@@ -17,27 +17,27 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { WidgetFormBuilder } from '../widget-form-builder';
-import { FormGroup, FormControl } from '@angular/forms';
-import {
-  ConfigFormGroup, SelectFormControl, SliderFormControl,
-  SlideToggleFormControl, HuePaletteFormControl, HiddenFormControl, SelectOption, ButtonToggleFormControl, TitleInputFormControl
-} from '@shared-models/config-form';
+import { FormControl, FormGroup } from '@angular/forms';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionField } from '@services/collection-service/models';
+import { NUMERIC_OR_DATE_TYPES, toIntegerOrDateFieldsObs, toKeywordOptionsObs, toOptionsObs } from '@services/collection-service/tools';
+import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
+import {
+  ButtonToggleFormControl, ConfigFormGroup, HiddenFormControl, HuePaletteFormControl, SelectFormControl, SelectOption, SliderFormControl,
+  SlideToggleFormControl, TitleInputFormControl
+} from '@shared-models/config-form';
+import { Metric } from 'arlas-api';
 import { SwimlaneMode } from 'arlas-web-components';
-import { DefaultValuesService, DefaultConfig } from '@services/default-values/default-values.service';
+import { Observable } from 'rxjs';
 import {
   BucketsIntervalFormBuilderService, BucketsIntervalFormGroup
 } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
 import {
   MetricCollectFormBuilderService, MetricCollectFormGroup
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
-import { Observable } from 'rxjs';
-import { toKeywordOptionsObs, toIntegerOrDateFieldsObs, toOptionsObs, NUMERIC_OR_DATE_TYPES } from '@services/collection-service/tools';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
-import { CollectionField } from '@services/collection-service/models';
-import { Metric } from 'arlas-api';
+import { WidgetFormBuilder } from '../widget-form-builder';
 
 export enum SWIMLANE_REPRESENTATION {
   GLOBALLY = 'global',
@@ -49,7 +49,7 @@ enum DateFormats {
 }
 export class SwimlaneFormGroup extends ConfigFormGroup {
 
-  constructor(
+  public constructor(
     collection: string,
     collectionService: CollectionService,
     dateAggregationFg: BucketsIntervalFormGroup,
@@ -106,8 +106,8 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
               dateAggregationFg.setCollection(this.customControls.dataStep.collection.value);
               toOptionsObs(toIntegerOrDateFieldsObs(collectionService
                 .getCollectionFields(this.customControls.dataStep.collection.value))).subscribe(collectionFields => {
-                  dateAggregationFg.customControls.aggregationField.setSyncOptions(collectionFields);
-                });
+                dateAggregationFg.customControls.aggregationField.setSyncOptions(collectionFields);
+              });
             }
           ),
           useUtc: new SlideToggleFormControl(
@@ -125,8 +125,8 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
             (control) => {
               metricFg.setCollection(this.customControls.dataStep.collection.value);
               const filterCallback = (field: CollectionField) =>
-              metricFg.customControls.metricCollectFunction.value === Metric.CollectFctEnum.CARDINALITY ?
-                field : NUMERIC_OR_DATE_TYPES.indexOf(field.type) >= 0;
+                metricFg.customControls.metricCollectFunction.value === Metric.CollectFctEnum.CARDINALITY ?
+                  field : NUMERIC_OR_DATE_TYPES.indexOf(field.type) >= 0;
               collectionService.getCollectionFields(this.customControls.dataStep.collection.value).subscribe(
                 fields => {
                   metricFg.customControls.metricCollectField.setSyncOptions(
@@ -297,7 +297,7 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
   public defaultKey = 'analytics.widgets.swimlane';
   public widgetFormGroup: FormGroup;
 
-  constructor(
+  public constructor(
     protected collectionService: CollectionService,
     protected mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,

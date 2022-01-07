@@ -17,9 +17,9 @@ specific language governing permissions and limitations
 under the License.
 */
 import { NgModule } from '@angular/core';
-import { TimelineConfigRoutingModule } from './timeline-config-routing.module';
-import { GlobalTimelineComponent } from './components/global-timeline/global-timeline.component';
 import { SharedModule } from '@shared/shared.module';
+import { GlobalTimelineComponent } from './components/global-timeline/global-timeline.component';
+import { TimelineConfigRoutingModule } from './timeline-config-routing.module';
 
 @NgModule({
   declarations: [

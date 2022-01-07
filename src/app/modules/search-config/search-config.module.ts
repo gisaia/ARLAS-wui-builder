@@ -17,9 +17,9 @@ specific language governing permissions and limitations
 under the License.
 */
 import { NgModule } from '@angular/core';
-import { SearchConfigRoutingModule } from './search-config-routing.module';
-import { GlobalSearchComponent } from './components/global-search/global-search.component';
 import { SharedModule } from '@shared/shared.module';
+import { GlobalSearchComponent } from './components/global-search/global-search.component';
+import { SearchConfigRoutingModule } from './search-config-routing.module';
 
 @NgModule({
   declarations: [

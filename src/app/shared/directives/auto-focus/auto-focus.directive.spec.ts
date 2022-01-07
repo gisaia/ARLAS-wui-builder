@@ -6,7 +6,7 @@ describe('AutoFocusDirective', () => {
   const createDirective = createDirectiveFactory(AutoFocusDirective);
 
   beforeEach(() => {
-    spectator = createDirective(`<input appAutoFocus>`);
+    spectator = createDirective(`<input arlasAutoFocus>`);
   });
 
   it('should create an instance', () => {

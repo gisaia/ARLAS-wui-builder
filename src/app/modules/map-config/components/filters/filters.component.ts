@@ -16,19 +16,20 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  MapFilterFormGroup, MapLayerFormBuilderService, MapLayerFormGroup
+} from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { ConfigFormGroup } from '@shared-models/config-form';
 import { camelize } from '@utils/tools';
 import { MapglLegendComponent } from 'arlas-web-components';
 import { Subscription } from 'rxjs';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { MapLayerFormGroup, MapFilterFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
-import { ConfigFormGroup } from '@shared-models/config-form';
-import { LAYER_MODE } from '../edit-layer/models';
-import { MapLayerFormBuilderService } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { DialogFilterComponent } from '../dialog-filter/dialog-filter.component';
+import { LAYER_MODE } from '../edit-layer/models';
 
 
 export interface Layer {
@@ -38,7 +39,7 @@ export interface Layer {
 }
 
 @Component({
-  selector: 'app-layer-filters',
+  selector: 'arlas-layer-filters',
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.scss']
 })
@@ -50,7 +51,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   private confirmDeleteSub: Subscription;
 
-  constructor(
+  public constructor(
     public dialog: MatDialog,
     private mainFormService: MainFormService,
     private mapLayerFormBuilder: MapLayerFormBuilderService
@@ -76,12 +77,13 @@ export class FiltersComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.confirmDeleteSub) { this.confirmDeleteSub.unsubscribe(); }
+    if (this.confirmDeleteSub) {
+      this.confirmDeleteSub.unsubscribe();
+    }
   }
 
   public open(filterId?: number) {
-    let mapFormGroup: MapFilterFormGroup;
-    mapFormGroup = this.mapLayerFormBuilder.buildMapFilter(this.layerFg.customControls.collection.value);
+    const mapFormGroup: MapFilterFormGroup = this.mapLayerFormBuilder.buildMapFilter(this.layerFg.customControls.collection.value);
     /** if we edit an existing filter */
     if (filterId !== undefined) {
       const formGroupIndex = (this.filtersFa.value as any[]).findIndex(el => el.id === filterId);

@@ -19,20 +19,20 @@ under the License.
 import { AbstractControl, Validators, ValidatorFn } from '@angular/forms';
 
 export const urlRegexp = '(https?://)?(([0-9.]{1,4}){4}(:[0-9]{2,5})|([a-z0-9-.]+)' +
-    '(\\.[a-z-.]+)(:[0-9]{2,5})?|localhost(:[0-9]{2,5}))+([/?].*)?';
+  '(\\.[a-z-.]+)(:[0-9]{2,5})?|localhost(:[0-9]{2,5}))+([/?].*)?';
 
 /**
  * Check that a control's value is an integer
  */
 export function integerValidator(control: AbstractControl) {
-    const value = control.value;
-    if ((parseFloat(value) === parseInt(value, 10)) && !isNaN(value)) {
-        return null;
-    } else {
-        return {
-            notNumeric: true
-        };
-    }
+  const value = control.value;
+  if ((parseFloat(value) === parseInt(value, 10)) && !isNaN(value)) {
+    return null;
+  } else {
+    return {
+      notNumeric: true
+    };
+  }
 }
 
 export const urlValidator = Validators.pattern(urlRegexp);

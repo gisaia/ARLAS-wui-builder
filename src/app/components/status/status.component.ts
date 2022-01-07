@@ -20,7 +20,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 
 @Component({
-  selector: 'app-status',
+  selector: 'arlas-status',
   templateUrl: './status.component.html',
   styleUrls: ['./status.component.scss']
 })
@@ -29,7 +29,7 @@ export class StatusComponent implements OnInit {
   public displayCurrentConfig = false;
   public editingConfigName = false;
   public editingName: string;
-  constructor(
+  public constructor(
     public mainService: MainFormService,
     private cdr: ChangeDetectorRef
   ) { }

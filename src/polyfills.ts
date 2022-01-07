@@ -32,7 +32,9 @@ under the License.
  * Learn more in https://angular.io/guide/browser-support
  */
 
-/***************************************************************************************************
+(window as any).global = window;
+
+/**
  * BROWSER POLYFILLS
  */
 
@@ -70,12 +72,12 @@ under the License.
  *
  */
 
-/***************************************************************************************************
+/**
  * Zone JS is required by default for Angular itself.
  */
 import 'zone.js/dist/zone';  // Included with Angular CLI.
 
 
-/***************************************************************************************************
+/**
  * APPLICATION IMPORTS
  */

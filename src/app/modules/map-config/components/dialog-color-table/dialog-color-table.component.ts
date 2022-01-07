@@ -28,7 +28,7 @@ import { mergeMap } from 'rxjs/operators';
 import { DialogColorTableData } from './models';
 
 @Component({
-  selector: 'app-dialog-color-table',
+  selector: 'arlas-dialog-color-table',
   templateUrl: './dialog-color-table.component.html',
   styleUrls: ['./dialog-color-table.component.scss']
 })
@@ -41,7 +41,7 @@ export class DialogColorTableComponent implements OnInit {
   public newKeywordValues: Observable<Array<string>>;
   public newKeywordCtrl = new FormControl();
 
-  constructor(
+  public constructor(
     public dialogRef: MatDialogRef<DialogColorTableComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogColorTableData,
     private logger: NGXLogger,

@@ -16,34 +16,33 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Injectable } from '@angular/core';
-import { WidgetFormBuilder } from '../widget-form-builder';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { CollectionService } from '@services/collection-service/collection.service';
-import {
-  ConfigFormGroup, InputFormControl, SliderFormControl, SlideToggleFormControl, SelectFormControl, TextareaFormControl, SelectOption,
-  HiddenFormControl,
-  ComponentFormControl,
-  TitleInputFormControl,
-  ButtonFormControl,
-  UrlTemplateControl
-} from '@shared-models/config-form';
-import { FormArray, Validators, FormGroup, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { toOptionsObs, NUMERIC_OR_DATE_OR_TEXT_TYPES, TEXT_OR_KEYWORD,
-  toNumericOrDateOrKeywordOrTextObs } from '@services/collection-service/tools';
 import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
-import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { Injectable } from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
+import { CollectionService } from '@services/collection-service/collection.service';
+import {
+  NUMERIC_OR_DATE_OR_TEXT_TYPES, TEXT_OR_KEYWORD,
+  toNumericOrDateOrKeywordOrTextObs, toOptionsObs
+} from '@services/collection-service/tools';
+import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
+import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
+import {
+  ButtonFormControl, ComponentFormControl, ConfigFormGroup, HiddenFormControl, InputFormControl,
+  SelectFormControl, SelectOption, SliderFormControl, SlideToggleFormControl, TextareaFormControl,
+  TitleInputFormControl, UrlTemplateControl
+} from '@shared-models/config-form';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { Observable } from 'rxjs';
+import { WidgetFormBuilder } from '../widget-form-builder';
 
 export class ResultlistConfigForm extends CollectionConfigFormGroup {
 
-  constructor(
+  public constructor(
     collection: string,
     collectionService: CollectionService,
     title?: string
@@ -155,9 +154,9 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                   this.setCollection(this.customControls.dataStep.collection.value);
                   toOptionsObs(collectionService
                     .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
-                      control.setSyncOptions(collectionFs);
-                      control.setValue('');
-                    });
+                    control.setSyncOptions(collectionFs);
+                    control.setValue('');
+                  });
                 }
               }
             ),
@@ -183,9 +182,9 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                   this.setCollection(this.customControls.dataStep.collection.value);
                   toOptionsObs(collectionService
                     .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
-                      control.setSyncOptions(collectionFs);
-                      control.setValue('');
-                    });
+                    control.setSyncOptions(collectionFs);
+                    control.setValue('');
+                  });
                 }
               }
             ),
@@ -211,10 +210,10 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                   this.setCollection(this.customControls.dataStep.collection.value);
                   toNumericOrDateOrKeywordOrTextObs(collectionService
                     .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
-                      control.setValue('');
-                      control.fields = collectionFs;
-                      control.filterAutocomplete();
-                    });
+                    control.setValue('');
+                    control.fields = collectionFs;
+                    control.filterAutocomplete();
+                  });
                 }
               }
             ),
@@ -231,10 +230,10 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                   this.setCollection(this.customControls.dataStep.collection.value);
                   toNumericOrDateOrKeywordOrTextObs(collectionService
                     .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
-                      control.setValue('');
-                      control.fields = collectionFs;
-                      control.filterAutocomplete();
-                    });
+                    control.setValue('');
+                    control.fields = collectionFs;
+                    control.filterAutocomplete();
+                  });
                 }
               }
             ),
@@ -251,9 +250,9 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                   this.setCollection(this.customControls.dataStep.collection.value);
                   toOptionsObs(collectionService
                     .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
-                      control.setSyncOptions(collectionFs);
-                      control.setValue('');
-                    });
+                    control.setSyncOptions(collectionFs);
+                    control.setValue('');
+                  });
                 }
               }
             ),
@@ -363,7 +362,7 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
 
 export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
 
-  constructor(
+  public constructor(
     fieldsObs: Observable<Array<SelectOption>>,
     collection: string,
     private globalKeysToColortrl: FormArray,
@@ -491,7 +490,7 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
 
 export class ResultlistDetailFormGroup extends FormGroup {
 
-  constructor() {
+  public constructor() {
     super({
       name: new InputFormControl(
         '',
@@ -510,7 +509,7 @@ export class ResultlistDetailFormGroup extends FormGroup {
 
 export class ResultlistDetailFieldFormGroup extends FormGroup {
 
-  constructor(fieldsObs: Observable<Array<SelectOption>>) {
+  public constructor(fieldsObs: Observable<Array<SelectOption>>) {
     super({
       label: new InputFormControl(
         '',
@@ -550,7 +549,7 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
 
   public defaultKey = 'analytics.widgets.resultlist';
 
-  constructor(
+  public constructor(
     protected collectionService: CollectionService,
     protected mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,

@@ -17,33 +17,30 @@ specific language governing permissions and limitations
 under the License.
 */
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, Output, Inject, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router, ActivatedRoute } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { ArlasConfigService, ConfigAction, ConfigActionEnum } from 'arlas-wui-toolkit';
-import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
-import { NGXLogger } from 'ngx-logger';
-import { Subject, Subscription } from 'rxjs';
-import { StartupService, ZONE_WUI_BUILDER } from '../../services/startup/startup.service';
-import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
-import { MapConfig } from '@services/main-form-manager/models-map-config';
-import { DataWithLinks } from 'arlas-persistence-api';
 import { PageEvent } from '@angular/material/paginator';
-import { DialogData } from '@shared-components/input-modal/input-modal.component';
-import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
-import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
-import { ErrorService } from 'arlas-wui-toolkit/services/error/error.service';
-import { PersistenceService } from 'arlas-wui-toolkit/services/persistence/persistence.service';
-import { Config } from '@services/main-form-manager/models-config';
-import { map } from 'rxjs/internal/operators/map';
-import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
-import { UserInfosComponent } from 'arlas-wui-toolkit//components/user-infos/user-infos.component';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MenuService } from '@services/menu/menu.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+import { Config } from '@services/main-form-manager/models-config';
+import { MapConfig } from '@services/main-form-manager/models-map-config';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { MenuService } from '@services/menu/menu.service';
+import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
+import { DialogData } from '@shared-components/input-modal/input-modal.component';
+import { DataWithLinks } from 'arlas-persistence-api';
+import {
+  ArlasConfigService, ArlasConfigurationDescriptor, ArlasSettingsService, AuthentificationService, ConfigAction,
+  ConfigActionEnum, ErrorService, PersistenceService, UserInfosComponent
+} from 'arlas-wui-toolkit';
+import { NGXLogger } from 'ngx-logger';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Subject, Subscription } from 'rxjs';
+import { map } from 'rxjs/internal/operators/map';
+import { StartupService, ZONE_WUI_BUILDER } from '../../services/startup/startup.service';
 
 enum InitialChoice {
   none = 0,
@@ -88,7 +85,8 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   private urlCollectionsSubscription: Subscription;
   private collectionsSubscription: Subscription;
 
-  constructor(
+  public constructor(
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialogRef: MatDialogRef<LandingPageDialogComponent>,
     public mainFormService: MainFormService,
     private http: HttpClient,
@@ -109,7 +107,6 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     private spinner: NgxSpinnerService,
     private router: Router,
     private menu: MenuService,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
     this.showLoginButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
     this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
@@ -132,7 +129,9 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
 
     // Reset current config id
     this.mainFormService.configurationId = undefined;
-    if (this.mainFormService.configChange) { this.mainFormService.configChange.next({ id: undefined, name: undefined }); }
+    if (this.mainFormService.configChange) {
+      this.mainFormService.configChange.next({ id: undefined, name: undefined });
+    }
 
     this.mainFormService.startingConfig.init(
       this.startingConfigFormBuilder.build()
@@ -162,10 +161,18 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.subscription) { this.subscription.unsubscribe(); }
-    if (this.urlSubscription) { this.urlSubscription.unsubscribe(); }
-    if (this.urlCollectionsSubscription) { this.urlCollectionsSubscription.unsubscribe(); }
-    if (this.collectionsSubscription) { this.collectionsSubscription.unsubscribe(); }
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    if (this.urlSubscription) {
+      this.urlSubscription.unsubscribe();
+    }
+    if (this.urlCollectionsSubscription) {
+      this.urlCollectionsSubscription.unsubscribe();
+    }
+    if (this.collectionsSubscription) {
+      this.collectionsSubscription.unsubscribe();
+    }
   }
 
   public logout() {
@@ -193,7 +200,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
             this.collectionService.setCollections(collections);
             this.collectionService.getCollectionsReferenceDescription().subscribe(cdrs => this.collectionService.setCollectionsRef(cdrs));
           }, error => this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'))
-            , () => this.spinner.hide('connectServer'));
+          , () => this.spinner.hide('connectServer'));
           this.isServerReady = true;
         });
       },
@@ -209,7 +216,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().customControls.collection.value;
     this.startupService.setDefaultCollection(collection);
     this.mainFormManager.initMainModulesForms(true);
-    setTimeout(() => this.startEvent.next(), 100);
+    setTimeout(() => this.startEvent.next(null), 100);
   }
 
   public initWithConfig(configJson: Config, configMapJson: MapConfig, configId?: string, configName?: string, isRetry?: boolean) {
@@ -256,7 +263,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
          */
         setTimeout(() => {
           this.mainFormManager.doImport(configJson, configMapJson);
-          this.startEvent.next();
+          this.startEvent.next(null);
           this.spinner.hide('importconfig');
         }, 100);
       }
@@ -451,7 +458,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'app-landing-page',
+  selector: 'arlas-landing-page',
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.scss']
 })
@@ -463,8 +470,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   private confId = '-1';
   private configChoice;
 
-
-  constructor(
+  public constructor(
     private dialog: MatDialog,
     private logger: NGXLogger,
     private router: Router,

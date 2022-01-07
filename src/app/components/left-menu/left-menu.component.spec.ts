@@ -1,13 +1,11 @@
-import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
-import { LeftMenuComponent } from './left-menu.component';
-import { MainFormService } from '@services/main-form/main-form.service';
 import { FormGroup } from '@angular/forms';
+import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
-import { AuthentificationService } from 'arlas-wui-toolkit/services/authentification/authentification.service';
-import { GET_OPTIONS } from 'arlas-wui-toolkit/services/persistence/persistence.service';
-import { getOptionsFactory } from 'arlas-wui-toolkit/app.module';
-import { Subject } from 'rxjs/internal/Subject';
+import { MainFormService } from '@services/main-form/main-form.service';
 import { MenuService } from '@services/menu/menu.service';
+import { AuthentificationService, getOptionsFactory, GET_OPTIONS } from 'arlas-wui-toolkit';
+import { Subject } from 'rxjs/internal/Subject';
+import { LeftMenuComponent } from './left-menu.component';
 
 describe('LeftMenuComponent', () => {
   let spectator: Spectator<LeftMenuComponent>;

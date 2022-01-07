@@ -17,6 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 
+import { ResultlistFormBuilderService } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { Injectable } from '@angular/core';
 import {
   AnalyticComponentConfig,
@@ -26,14 +27,13 @@ import {
 } from '@services/main-form-manager/models-config';
 import { importElements } from '@services/main-form-manager/tools';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ResultlistFormBuilderService } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ResultListImportService {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private resultlistFormBuilder: ResultlistFormBuilderService
   ) { }

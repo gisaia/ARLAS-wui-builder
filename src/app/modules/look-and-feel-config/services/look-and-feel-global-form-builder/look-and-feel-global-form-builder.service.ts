@@ -21,20 +21,17 @@ import { FormArray } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { MainFormService } from '../../../../services/main-form/main-form.service';
-import {
-  ConfigFormGroup,
-  SelectFormControl,
-  SliderFormControl,
-  SlideToggleFormControl,
-  InputFormControl,
-  CollectionsUnitsControl
-} from '@shared-models/config-form';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
+import {
+  CollectionsUnitsControl, ConfigFormGroup, InputFormControl, SelectFormControl,
+  SliderFormControl,
+  SlideToggleFormControl
+} from '@shared-models/config-form';
+import { MainFormService } from '../../../../services/main-form/main-form.service';
 
 
 export class CollectionUnitFormGroup extends ConfigFormGroup {
-  constructor() {
+  public constructor() {
     super({
       unit: new InputFormControl(
         '',
@@ -60,7 +57,7 @@ export class CollectionUnitFormGroup extends ConfigFormGroup {
 }
 export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
 
-  constructor(
+  public constructor(
     private mainFormService: MainFormService,
     private collectionService: CollectionService
   ) {
@@ -236,7 +233,7 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
 })
 export class LookAndFeelGlobalFormBuilderService {
 
-  constructor(
+  public constructor(
     private defaultValuesService: DefaultValuesService,
     private mainFormService: MainFormService,
     private collectionService: CollectionService

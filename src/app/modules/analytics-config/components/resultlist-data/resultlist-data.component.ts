@@ -16,11 +16,11 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-resultlist-data',
+  selector: 'arlas-resultlist-data',
   templateUrl: './resultlist-data.component.html',
   styleUrls: ['./resultlist-data.component.scss']
 })
@@ -28,7 +28,7 @@ export class ResultlistDataComponent implements OnInit {
 
   @Input() public control: FormGroup;
 
-  constructor(
+  public constructor(
   ) { }
 
   public ngOnInit() {

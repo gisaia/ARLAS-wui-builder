@@ -1,7 +1,7 @@
 import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
 import { StatusComponent } from '@components/status/status.component';
 import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
-import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { MockComponent } from 'ng-mocks';
 import { AppComponent } from './app.component';
 
@@ -37,7 +37,7 @@ describe('AppComponent', () => {
   });
 
   it('should contain the left menu and the page content', () => {
-    expect(spectator.query('app-left-menu')).toBeDefined();
+    expect(spectator.query('arlas-left-menu')).toBeDefined();
     expect(spectator.query('outer-outlet')).toBeDefined();
   });
 });

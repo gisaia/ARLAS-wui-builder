@@ -3,9 +3,9 @@ import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-build
 import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { MockComponent } from 'ng-mocks';
 import { BasemapsComponent } from './basemaps.component';
-import { ArlasSettingsService } from 'arlas-wui-toolkit/services/settings/arlas.settings.service';
 
 describe('BasemapsComponent', () => {
 

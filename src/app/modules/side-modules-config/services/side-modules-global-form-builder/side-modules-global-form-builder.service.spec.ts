@@ -1,6 +1,6 @@
+import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/spectator';
+import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit';
 import { SideModulesGlobalFormBuilderService } from './side-modules-global-form-builder.service';
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
-import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit/services/configuration-descriptor/configurationDescriptor.service';
 
 describe('SideModulesGlobalFormBuilderService', () => {
   let spectator: SpectatorService<SideModulesGlobalFormBuilderService>;
