@@ -1,11 +1,12 @@
 # Change Log
 
-## [v20.0.0-rc.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v20.0.0-rc.1) (2022-01-07)
+## [v20.0.0-rc.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v20.0.0-rc.1) (2022-01-10)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v19.2.0...v20.0.0-rc.1)
 
 **New stuff:**
 
+- Migrate to Angular 13 [\#653](https://github.com/gisaia/ARLAS-wui-builder/issues/653)
 - Add a  button to screen the map content in preview [\#470](https://github.com/gisaia/ARLAS-wui-builder/issues/470) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 
 **Fixed bugs:**
