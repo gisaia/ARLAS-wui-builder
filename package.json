@@ -1,6 +1,6 @@
 {
   "name": "arlas-wui-builder",
-  "version": "20.0.0-rc.1",
+  "version": "20.0.0-beta.10",
   "scripts": {
     "ng": "ng",
     "postinstall": "patch-package --patch-dir ./node_modules/arlas-web-core/patches",
