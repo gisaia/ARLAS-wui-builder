@@ -151,12 +151,9 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                 optional: true,
                 dependsOn: () => [this.customControls.dataStep.collection],
                 onDependencyChange: (control: SelectFormControl) => {
-                  this.setCollection(this.customControls.dataStep.collection.value);
-                  toOptionsObs(collectionService
-                    .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
-                    control.setSyncOptions(collectionFs);
-                    control.setValue('');
-                  });
+                  if (!this.collection || this.customControls.dataStep.collection.dirty) {
+                    this.updateSelectFormControl(collectionService, control);
+                  }
                 }
               }
             ),
@@ -166,7 +163,13 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
               marker('Transformation title description'),
               1,
               {
-                optional: true
+                optional: true,
+                dependsOn: () => [this.customControls.dataStep.collection],
+                onDependencyChange: (control: TextareaFormControl) => {
+                  if (!this.collection || this.customControls.dataStep.collection.dirty) {
+                    control.setValue('');
+                  }
+                }
               }
             ),
             tooltipField: new SelectFormControl(
@@ -179,12 +182,9 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                 optional: true,
                 dependsOn: () => [this.customControls.dataStep.collection],
                 onDependencyChange: (control: SelectFormControl) => {
-                  this.setCollection(this.customControls.dataStep.collection.value);
-                  toOptionsObs(collectionService
-                    .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
-                    control.setSyncOptions(collectionFs);
-                    control.setValue('');
-                  });
+                  if (!this.collection || this.customControls.dataStep.collection.dirty) {
+                    this.updateSelectFormControl(collectionService, control);
+                  }
                 }
               }
             ),
@@ -194,7 +194,13 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
               marker('Transformation tooltip description'),
               1,
               {
-                optional: true
+                optional: true,
+                dependsOn: () => [this.customControls.dataStep.collection],
+                onDependencyChange: (control: TextareaFormControl) => {
+                  if (!this.collection || this.customControls.dataStep.collection.dirty) {
+                    control.setValue('');
+                  }
+                }
               }
             ),
             thumbnailUrl: new UrlTemplateControl(
@@ -207,13 +213,9 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                 optional: true,
                 dependsOn: () => [this.customControls.dataStep.collection],
                 onDependencyChange: (control: UrlTemplateControl) => {
-                  this.setCollection(this.customControls.dataStep.collection.value);
-                  toNumericOrDateOrKeywordOrTextObs(collectionService
-                    .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
-                    control.setValue('');
-                    control.fields = collectionFs;
-                    control.filterAutocomplete();
-                  });
+                  if (!this.collection || this.customControls.dataStep.collection.dirty) {
+                    this.updateUrlTemplateControl(collectionService, control);
+                  }
                 }
               }
             ),
@@ -227,13 +229,9 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                 optional: true,
                 dependsOn: () => [this.customControls.dataStep.collection],
                 onDependencyChange: (control: UrlTemplateControl) => {
-                  this.setCollection(this.customControls.dataStep.collection.value);
-                  toNumericOrDateOrKeywordOrTextObs(collectionService
-                    .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
-                    control.setValue('');
-                    control.fields = collectionFs;
-                    control.filterAutocomplete();
-                  });
+                  if (!this.collection || this.customControls.dataStep.collection.dirty) {
+                    this.updateUrlTemplateControl(collectionService, control);
+                  }
                 }
               }
             ),
@@ -247,12 +245,9 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                 optional: true,
                 dependsOn: () => [this.customControls.dataStep.collection],
                 onDependencyChange: (control: SelectFormControl) => {
-                  this.setCollection(this.customControls.dataStep.collection.value);
-                  toOptionsObs(collectionService
-                    .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
-                    control.setSyncOptions(collectionFs);
-                    control.setValue('');
-                  });
+                  if (!this.collection || this.customControls.dataStep.collection.dirty) {
+                    this.updateSelectFormControl(collectionService, control);
+                  }
                 }
               }
             ),
@@ -358,6 +353,25 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
 
     }
   };
+
+  private updateUrlTemplateControl(collectionService: CollectionService, control: UrlTemplateControl) {
+    this.setCollection(this.customControls.dataStep.collection.value);
+    toNumericOrDateOrKeywordOrTextObs(collectionService
+      .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
+      control.setValue('');
+      control.fields = collectionFs;
+      control.filterAutocomplete();
+    });
+  }
+
+  private updateSelectFormControl(collectionService: CollectionService, control: SelectFormControl): void {
+    this.setCollection(this.customControls.dataStep.collection.value);
+    toOptionsObs(collectionService
+      .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
+      control.setSyncOptions(collectionFs);
+      control.setValue('');
+    });
+  }
 }
 
 export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
