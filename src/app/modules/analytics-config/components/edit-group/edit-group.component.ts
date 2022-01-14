@@ -82,7 +82,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
   @Input() public formGroup: FormGroup;
   @Input() public groupIndex: number;
-  @Input() public updateDisplay: Subject<any>;
+  @Input() public updateDisplay: Subject<any> = new Subject();
   @Output() public remove = new EventEmitter();
 
   public content: FormArray;
@@ -240,8 +240,6 @@ export class EditGroupComponent implements OnInit, OnDestroy {
       ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, this.analyticsInitService.groupIndex++)
     );
     this.updateDisplay.next(null);
-
-
   }
 
   public ngOnDestroy() {

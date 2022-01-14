@@ -11,6 +11,7 @@ import {
   ArlasStartupService, AuthentificationService, ConfigMenuModule, ErrorModalModule, getOptionsFactory, GET_OPTIONS
 } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
+import { of } from 'rxjs';
 import { LandingPageComponent, LandingPageDialogComponent } from './landing-page.component';
 
 describe('LandingPageComponent', () => {
@@ -26,7 +27,12 @@ describe('LandingPageComponent', () => {
     providers: [
       mockProvider(MatDialogRef),
       mockProvider(NGXLogger),
-      mockProvider(MainFormService),
+      mockProvider(MainFormService, {
+        getMainCollection: () => '',
+        startingConfig: {
+          init: () => undefined
+        }
+      }),
       mockProvider(ArlasConfigService),
       mockProvider(ArlasCollaborativesearchService),
       mockProvider(StartupService),
@@ -35,12 +41,14 @@ describe('LandingPageComponent', () => {
       mockProvider(HttpClient),
       mockProvider(ArlasColorGeneratorLoader),
       mockProvider(StartingConfigFormBuilderService),
-      mockProvider(AuthentificationService),
+      mockProvider(AuthentificationService, {
+        canActivateProtectedRoutes: of()
+      }),
       mockProvider(MenuService),
       {
         provide: GET_OPTIONS,
         useFactory: getOptionsFactory,
-        deps: [AuthentificationService]
+        deps: [AuthentificationService],
       }
     ],
     entryComponents: [
