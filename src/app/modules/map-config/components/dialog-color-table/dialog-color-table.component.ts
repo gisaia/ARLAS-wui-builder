@@ -56,7 +56,7 @@ export class DialogColorTableComponent implements OnInit {
 
     // build the form with all keywords / colors
     this.keywordColorsForm = this.formBuilder.array([]);
-    this.data.keywordColors.forEach(kc =>
+    this.data.keywordColors.filter(kc => kc.keyword.length > 0).forEach(kc =>
       this.keywordColorsForm.push(this.formBuilder.group({
         keyword: [kc.keyword],
         color: [kc.color]
