@@ -48,6 +48,7 @@ import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOME
 
 
 export const PRECISION_TOLERATED_DIFFERENCE = 3;
+export const MAX_ZOOM = 23;
 
 export class MapLayerFormGroup extends ConfigFormGroup {
   private currentCollection;
@@ -269,7 +270,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
   public static adjustZoomVisibilityTonetworkFetchingLevel(networkFetchingLevelControl: SliderFormControl,
     zoomMinControl: SliderFormControl, zoomMaxControl: SliderFormControl): void {
     zoomMinControl.min = Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0);
-    zoomMaxControl.min = Math.min(22, Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE) + 1);
+    zoomMaxControl.min = Math.min(MAX_ZOOM, Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE) + 1);
 
     if (zoomMinControl.value < Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0)) {
       zoomMinControl.setValue(Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0));
@@ -277,7 +278,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
       zoomMinControl.warningMessage = marker('Network Analytics Fetching Precision is') + ' ' + networkFetchingLevelControl.value +
         '. ' + marker('Therefore; minimum zoom level of the layer should be greater than or equal to') + ' ' + zoomMinControl.value + '.';
       if (zoomMaxControl.value <= zoomMinControl.value) {
-        zoomMaxControl.setValue(Math.min(22, zoomMinControl.value + 1));
+        zoomMaxControl.setValue(Math.min(MAX_ZOOM, zoomMinControl.value + 1));
         zoomMaxControl.hasWarning = true;
         zoomMaxControl.warningMessage = marker('Maximum zoom level of the layer should be greater than') + ' ' + zoomMinControl.value + '.';
       } else {
@@ -801,7 +802,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           marker('Network Fetching Level'),
           marker('Network Fetching Level description'),
           0,
-          22,
+          MAX_ZOOM,
           1,
           undefined,
           undefined,
@@ -818,7 +819,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           marker('Zoom min'),
           marker('zoom min description'),
           0,
-          22,
+          MAX_ZOOM,
           1,
           () => this.zoomMax,
           undefined,
@@ -827,7 +828,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             dependsOn: () => [this.networkFetchingLevel],
             onDependencyChange: () => {
               this.zoomMin.min = Math.max(this.networkFetchingLevel.value - PRECISION_TOLERATED_DIFFERENCE, 0);
-              this.zoomMax.min = Math.min(22, Math.max(this.networkFetchingLevel.value - PRECISION_TOLERATED_DIFFERENCE) + 1);
+              this.zoomMax.min = Math.min(MAX_ZOOM, Math.max(this.networkFetchingLevel.value - PRECISION_TOLERATED_DIFFERENCE) + 1);
               if (this.networkFetchingLevel.dirty) {
                 MapLayerFormGroup.adjustZoomVisibilityTonetworkFetchingLevel(this.networkFetchingLevel, this.zoomMin, this.zoomMax);
               }
@@ -839,7 +840,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           marker('Zoom max'),
           marker('zoom max description'),
           0,
-          22,
+          MAX_ZOOM,
           1,
           undefined,
           () => this.zoomMin,
