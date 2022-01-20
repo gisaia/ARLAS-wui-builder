@@ -30,7 +30,7 @@ import { BasemapStyle, LayerMetadata, VisualisationSetConfig } from 'arlas-web-c
 import { ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, LayerSourceConfig } from 'arlas-web-contributors';
 import { ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
-import { MapLayerFormBuilderService, MapLayerFormGroup } from '../map-layer-form-builder/map-layer-form-builder.service';
+import { MapLayerFormBuilderService, MapLayerFormGroup, MAX_ZOOM } from '../map-layer-form-builder/map-layer-form-builder.service';
 import { CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE, LINE_TYPE_VALUES } from '../map-layer-form-builder/models';
 import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
 
@@ -270,7 +270,7 @@ export class MapImportService {
 
     typeFg.enable();
     const minzoom = !!layer.minzoom ? layer.minzoom : (!!layerSource.minzoom ? layerSource.minzoom : 0);
-    const maxzoom = !!layer.maxzoom ? layer.maxzoom : (!!layerSource.maxzoom ? layerSource.maxzoom : 22);
+    const maxzoom = !!layer.maxzoom ? layer.maxzoom : (!!layerSource.maxzoom ? layerSource.maxzoom : MAX_ZOOM);
     const renderMode = !!layerSource.render_mode ? layerSource.render_mode : FeatureRenderMode.wide;
     const values: any = {
       geometryStep: {
