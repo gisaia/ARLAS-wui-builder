@@ -58,7 +58,6 @@ export class ResultListImportService {
     const inputs = component.input as AnalyticComponentResultListInputConfig;
     const titleFieldNames = contributor.fieldsConfiguration.titleFieldNames;
     const tooltipFieldNames = contributor.fieldsConfiguration.tooltipFieldNames;
-
     importElements([
       {
         value: contributor.name,
@@ -105,11 +104,11 @@ export class ResultListImportService {
         control: renderStep.gridStep.tooltipFieldProcess
       },
       {
-        value: contributor.fieldsConfiguration.urlThumbnailTemplate,
+        value: !!contributor.fieldsConfiguration.urlThumbnailTemplate ? contributor.fieldsConfiguration.urlThumbnailTemplate : '',
         control: renderStep.gridStep.thumbnailUrl
       },
       {
-        value: contributor.fieldsConfiguration.urlImageTemplate,
+        value: !!contributor.fieldsConfiguration.urlImageTemplate ? contributor.fieldsConfiguration.urlImageTemplate : '',
         control: renderStep.gridStep.imageUrl
       },
       {

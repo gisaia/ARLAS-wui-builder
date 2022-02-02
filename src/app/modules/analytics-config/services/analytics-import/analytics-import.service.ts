@@ -645,11 +645,11 @@ export class AnalyticsImportService {
         control: renderStep.gridStep.tooltipFieldProcess
       },
       {
-        value: contributor.fieldsConfiguration.urlThumbnailTemplate,
+        value: !!contributor.fieldsConfiguration.urlThumbnailTemplate ? contributor.fieldsConfiguration.urlThumbnailTemplate : '',
         control: renderStep.gridStep.thumbnailUrl
       },
       {
-        value: contributor.fieldsConfiguration.urlImageTemplate,
+        value: !!contributor.fieldsConfiguration.urlImageTemplate ? contributor.fieldsConfiguration.urlImageTemplate : '',
         control: renderStep.gridStep.imageUrl
       },
       {
