@@ -1,5 +1,16 @@
 # Change Log
 
+## [v20.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v20.0.0) (2022-02-02)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v20.0.0-rc.1...v20.0.0)
+
+**Fixed bugs:**
+
+- thumbnail/image url input not initialized when inserting fields [\#661](https://github.com/gisaia/ARLAS-wui-builder/issues/661)
+- RESULTLIST: the tiles section \(render\) is emptied at dashboard releoad [\#656](https://github.com/gisaia/ARLAS-wui-builder/issues/656)
+- Layers beyond zoom 22 disappear [\#663](https://github.com/gisaia/ARLAS-wui-builder/issues/663)
+- Color picker popup is too high, that colors can't be chosen [\#615](https://github.com/gisaia/ARLAS-wui-builder/issues/615)
+
 ## [v20.0.0-rc.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v20.0.0-rc.1) (2022-01-10)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v19.2.0...v20.0.0-rc.1)
