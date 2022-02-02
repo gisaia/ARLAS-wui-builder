@@ -34,7 +34,7 @@
     "@types/file-saver": "^2.0.1",
     "ajv": "8.8.2",
     "ajv-keywords": "5.1.0",
-    "arlas-wui-toolkit": "20.0.0",
+    "arlas-wui-toolkit": "20.0.1",
     "ang-jsoneditor": "1.10.5",
     "core-js": "~3.19.3",
     "d3-interpolate": "^1.4.0",
@@ -51,8 +51,8 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~13.1.1",
-    "@angular/cli": "~13.1.1",
+    "@angular-devkit/build-angular": "~13.2.1",
+    "@angular/cli": "~13.2.1",
     "@angular/compiler-cli": "13.0.2",
     "@angular-eslint/builder": "13.0.1",
     "@angular-eslint/eslint-plugin": "13.0.1",
