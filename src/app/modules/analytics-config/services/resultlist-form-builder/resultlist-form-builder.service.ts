@@ -75,7 +75,7 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
             '',
             marker('Search size'),
             marker('Search size description'),
-            10,
+            50,
             500,
             10
           ),
