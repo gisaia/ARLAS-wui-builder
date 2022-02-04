@@ -68,7 +68,7 @@ export class ResultListImportService {
         control: dataStep.collection
       },
       {
-        value: contributor.search_size,
+        value: contributor.search_size >= 50 ? contributor.search_size : 50,
         control: dataStep.searchSize
       },
       {
