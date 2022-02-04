@@ -67,7 +67,10 @@
                   "glob": "*.yaml"
                 },
                 "src/assets",
-                "src/silent-refresh.html"
+                "src/config.json",
+                "src/silent-refresh.html",
+                "src/default.json",
+                "src/favicon.ico"
               ],
               "optimization": true,
               "outputHashing": "all",
