@@ -216,6 +216,8 @@
 	"A field is required to manage colors": "Un champs doit être renseigné pour régler les couleurs associées",
 	"Display the filter": "Autoriser recherche",
 	"powerbar display filter description": "Permet de rechercher textuellement des valeurs du champ représenté dans la Powerbar",
+  "Scrollable powerbar": "Powerbar défilante",
+  "Scrollable powerbar description": "Permet de fixer la taille de la Powerbar et la faire défiler",
 	"export csv powerbars": "Export CSV",
 	"export csv powerbars description": "Une fois activé, un bouton apparaîtra à côté des Powerbars qui permet d'exporter leurs contenus en tant que fichier CSV",
 	"resultlist title": "Titre du tableau de données",

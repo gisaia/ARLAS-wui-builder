@@ -440,6 +440,9 @@
                     "metric" : {
                         "metricCollectFunction": "Count"
                     }
+                },
+                "renderStep": {
+                  "scrollable": true
                 }
             },
             "resultlist": {

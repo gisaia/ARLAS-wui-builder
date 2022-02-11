@@ -216,6 +216,8 @@
 	"A field is required to manage colors": "A field must be filled in to adjust the associated colours",
 	"Display the filter": "Allow search",
 	"powerbar display filter description": "Allows to search textually for values of the field represented in the powerbar",
+	"Scrollable powerbar": "Scrollable powerbar",
+	"Scrollable powerbar description": "Allows to fix powerbar size and scroll into it",
 	"export csv powerbars": "Export CSV",
 	"export csv powerbars description": "If activated, a button will be displayed near the powerbars to export its content as CSV file",
 	"resultlist title": "Data table title",
