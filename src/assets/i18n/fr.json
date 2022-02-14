@@ -660,6 +660,12 @@
 	"Another dashboad already exists with the same name, please choose another one": "Un autre dashboad existe déjà avec ce même nom, veuillez en choisir un autre.",
 	"collection unit": "unité",
 	"Data tables are out of analytics": "Les tableaux de données doivent maintenant être déclarés dans le menu dédié (à gauche), en dehors de ce tableau de bord.",
-	"No collection with geometries is available in the server": "Aucune collection avec géométries n'est disponible dans le serveur."
+	"No collection with geometries is available in the server": "Aucune collection avec géométries n'est disponible dans le serveur.",
+	"Powerbar operator": "Opération à la sélection",
+	"Powerbar operator description": "Opération appliquée à la sélection d'une powerbar. \n • Inclure : La powerbar va chercher les données incluant les termes sélectionnés. \n • Exclure : La powerbar récupère les données en excluant les termes sélectionnés..",
+	"operator powerbars": "Permettre le changement d'opération",
+	"operator powerbars description": "Si cette option est activée, l'utilisateur peut modifier l'opération choisie (Inclure/Exclure) à la volée.",
+	"include": "Inclure",
+	"exclude": "Exclure"
 
 }
