@@ -761,7 +761,10 @@ export class ConfigExportHelper {
         contrib.jsonpath = widgetData.dataStep.metric.metricCollectFunction === DEFAULT_METRIC_VALUE ?
           JSONPATH_COUNT : JSONPATH_METRIC;
         contrib.aggregationmodels = [aggregationModel];
-
+        if (!!widgetData.dataStep.operator) {
+          contrib.filterOperator = widgetData.dataStep.operator === 'Neq' ? 'Ne' : 'Eq';
+        }
+        contrib.allowOperatorChange = widgetData.renderStep.allowOperatorChange;
         break;
       }
       case WIDGET_TYPE.donut: {
@@ -1093,11 +1096,16 @@ export class ConfigExportHelper {
         contributorId,
         showExportCsv: widgetData.renderStep.showExportCsv,
         componentType: WIDGET_TYPE.powerbars,
+
         input: {
           chartTitle: widgetData.title,
           powerbarTitle: widgetData.title,
           displayFilter: !!widgetData.renderStep.displayFilter,
           scrollable: !!widgetData.renderStep.scrollable,
+          filterOperator: {
+            value: !!widgetData.dataStep.operator ? widgetData.dataStep.operator : 'Eq',
+            display: !!widgetData.renderStep.allowOperatorChange
+          },
           useColorService: !!widgetData.renderStep.useColorService,
           useColorFromData: !!widgetData.renderStep.useColorFromData,
           unit: widgetData.dataStep.unit,
