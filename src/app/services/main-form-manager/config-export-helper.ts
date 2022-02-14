@@ -1097,6 +1097,7 @@ export class ConfigExportHelper {
           chartTitle: widgetData.title,
           powerbarTitle: widgetData.title,
           displayFilter: !!widgetData.renderStep.displayFilter,
+          scrollable: !!widgetData.renderStep.scrollable,
           useColorService: !!widgetData.renderStep.useColorService,
           useColorFromData: !!widgetData.renderStep.useColorFromData,
           unit: widgetData.dataStep.unit,

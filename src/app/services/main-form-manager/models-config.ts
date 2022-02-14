@@ -247,6 +247,7 @@ export interface AnalyticComponentInputConfig {
   actionOnItemEvent?: any;
   globalActionEvent?: any;
   cellBackgroundStyle?: string;
+  scrollable?: boolean;
 }
 
 export interface AnalyticComponentResultListInputConfig extends AnalyticComponentInputConfig {

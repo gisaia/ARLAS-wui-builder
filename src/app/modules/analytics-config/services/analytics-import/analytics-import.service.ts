@@ -532,6 +532,10 @@ export class AnalyticsImportService {
       {
         value: component.showExportCsv,
         control: renderStep.showExportCsv
+      },
+      {
+        value: component.input.scrollable,
+        control: renderStep.scrollable
       }
     ]);
     return widgetData;

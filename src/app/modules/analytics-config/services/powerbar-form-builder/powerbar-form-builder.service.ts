@@ -254,6 +254,11 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
             marker('Display the filter'),
             marker('powerbar display filter description')
           ),
+          scrollable: new SlideToggleFormControl(
+            '',
+            marker('Scrollable powerbar'),
+            marker('Scrollable powerbar description')
+          ),
           showExportCsv: new SlideToggleFormControl(
             '',
             marker('export csv powerbars'),
@@ -280,6 +285,7 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
       useColorFromData: this.get('renderStep').get('useColorFromData') as HiddenFormControl,
       keysToColorsButton: this.get('renderStep').get('keysToColorsButton') as ButtonFormControl,
       displayFilter: this.get('renderStep').get('displayFilter') as SlideToggleFormControl,
+      scrollable: this.get('renderStep').get('scrollable') as SlideToggleFormControl,
       showExportCsv: this.get('renderStep').get('showExportCsv') as SlideToggleFormControl,
     },
     unmanagedFields: {}
