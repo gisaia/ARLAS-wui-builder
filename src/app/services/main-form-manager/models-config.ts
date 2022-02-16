@@ -149,6 +149,8 @@ export interface ContributorConfig {
   useUtc?: boolean;
   additionalCollections?: Array<{ collectionName: string; field: string; }>;
   includeMetadata?: Array<string>;
+  filterOperator?: string;
+  allowOperatorChange?: boolean;
 }
 
 export interface FieldsConfiguration {
@@ -225,6 +227,10 @@ export interface AnalyticComponentInputConfig {
   shortValue?: boolean;
   valuePrecision?: number;
   displayFilter?: boolean;
+  filterOperator?: {
+    value: 'Neq' | 'Eq';
+    display: boolean;
+  };
   useColorService?: boolean;
   useColorFromData?: boolean;
   opacity?: number;
