@@ -518,7 +518,7 @@ export class AnalyticsImportService {
         control: dataStep.operator
       },
       {
-        value: !!component.input.filterOperator ? component.input.filterOperator.display : false,
+        value: !!component.input.filterOperator ? component.input.filterOperator.display : true,
         control: renderStep.allowOperatorChange
       },
       {

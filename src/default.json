@@ -444,7 +444,9 @@
                 },
                 "renderStep": {
                     "scrollable": true,
-                    "allowOperatorChange": true
+                    "allowOperatorChange": true,
+                    "showExportCsv": true,
+                    "displayFilter": true
                 }
             },
             "resultlist": {
