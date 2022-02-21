@@ -123,7 +123,17 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
             {
               optional: true
             }
-          )
+          ),
+          operator: new SelectFormControl(
+            '',
+            marker('Powerbar operator'),
+            marker('Powerbar operator description'),
+            false,
+            [
+              { label: 'include', value: 'Eq' },
+              { label: 'exclude', value: 'Neq' }
+            ],
+          ),
         }).withTabName(marker('Data')),
         renderStep: new ConfigFormGroup({
           modeColor: new SelectFormControl(
@@ -263,6 +273,11 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
             '',
             marker('export csv powerbars'),
             marker('export csv powerbars description')
+          ),
+          allowOperatorChange: new SlideToggleFormControl(
+            '',
+            marker('operator powerbars'),
+            marker('operator powerbars description')
           )
         }).withTabName(marker('Render')),
         unmanagedFields: new FormGroup({}) // for consistency with other widgets form builders
@@ -277,6 +292,7 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
       aggregationSize: this.get('dataStep').get('aggregationSize') as SliderFormControl,
       metric: this.get('dataStep').get('metric') as MetricCollectFormGroup,
       unit: this.get('dataStep').get('unit') as TitleInputFormControl,
+      operator: this.get('dataStep').get('operator') as SelectFormControl,
     },
     renderStep: {
       modeColor: this.get('renderStep').get('modeColor') as SelectFormControl,
@@ -286,6 +302,7 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
       keysToColorsButton: this.get('renderStep').get('keysToColorsButton') as ButtonFormControl,
       displayFilter: this.get('renderStep').get('displayFilter') as SlideToggleFormControl,
       scrollable: this.get('renderStep').get('scrollable') as SlideToggleFormControl,
+      allowOperatorChange: this.get('renderStep').get('allowOperatorChange') as SlideToggleFormControl,
       showExportCsv: this.get('renderStep').get('showExportCsv') as SlideToggleFormControl,
     },
     unmanagedFields: {}

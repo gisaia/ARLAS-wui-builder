@@ -322,8 +322,8 @@
                         "aggregationBucketOrInterval": "bucket",
                         "aggregationBucketsNumber": 50
                     },
-                    "useUtc":true,
-                    "metric" : {
+                    "useUtc": true,
+                    "metric": {
                         "metricCollectFunction": "Count"
                     }
                 },
@@ -374,7 +374,7 @@
                     "metric": {
                         "metricCollectFunction": "Count"
                     },
-                    "useUtc":true
+                    "useUtc": true
                 },
                 "renderStep": {
                     "swimlaneMode": "fixedHeight",
@@ -437,12 +437,16 @@
             "powerbar": {
                 "dataStep": {
                     "aggregationSize": 10,
-                    "metric" : {
+                    "operator": "include",
+                    "metric": {
                         "metricCollectFunction": "Count"
                     }
                 },
                 "renderStep": {
-                  "scrollable": true
+                    "scrollable": true,
+                    "allowOperatorChange": true,
+                    "showExportCsv": true,
+                    "displayFilter": true
                 }
             },
             "resultlist": {

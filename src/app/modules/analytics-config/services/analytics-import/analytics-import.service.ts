@@ -482,7 +482,8 @@ export class AnalyticsImportService {
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
     const contribAggregationModel = contributor.aggregationmodels[0];
-
+    const filterOperatorValue = !!component.input.filterOperator && !!component.input.filterOperator.value
+      ? component.input.filterOperator.value : 'Eq';
     importElements([
       {
         value: contributor.title,
@@ -511,6 +512,14 @@ export class AnalyticsImportService {
       {
         value: component.input.displayFilter,
         control: renderStep.displayFilter
+      },
+      {
+        value: filterOperatorValue,
+        control: dataStep.operator
+      },
+      {
+        value: !!component.input.filterOperator ? component.input.filterOperator.display : true,
+        control: renderStep.allowOperatorChange
       },
       {
         value: component.input.useColorService === true ? PROPERTY_SELECTOR_SOURCE.manual : component.input.useColorFromData === true ?

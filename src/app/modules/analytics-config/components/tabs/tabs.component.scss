@@ -20,7 +20,7 @@ under the License.
 
 .tab-wrapper {
   display: flex;
-  height: 100%;
+  height: calc(100% - 25px);
 
   mat-tab-group {
     flex: 1;
