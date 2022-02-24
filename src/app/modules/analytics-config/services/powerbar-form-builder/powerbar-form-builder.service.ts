@@ -133,6 +133,9 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
               { label: 'include', value: 'Eq' },
               { label: 'exclude', value: 'Neq' }
             ],
+            {
+              optional: false
+            }
           ),
         }).withTabName(marker('Data')),
         renderStep: new ConfigFormGroup({
