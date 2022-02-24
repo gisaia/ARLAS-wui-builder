@@ -437,7 +437,7 @@
             "powerbar": {
                 "dataStep": {
                     "aggregationSize": 10,
-                    "operator": "include",
+                    "operator": "Eq",
                     "metric": {
                         "metricCollectFunction": "Count"
                     }
