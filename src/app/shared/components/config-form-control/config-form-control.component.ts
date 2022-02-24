@@ -231,7 +231,7 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
 
   public isUrlTemplate(): UrlTemplateControl | null {
     return Object.getPrototypeOf(this.control) === UrlTemplateControl.prototype ?
-    this.control as UrlTemplateControl : null;
+      this.control as UrlTemplateControl : null;
   }
 
   public isTextarea(): TextareaFormControl | null {
@@ -241,5 +241,4 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   public isComponent(): ComponentFormControl | null {
     return Object.getPrototypeOf(this.control) === ComponentFormControl.prototype ? this.control as ComponentFormControl : null;
   }
-
 }

@@ -284,3 +284,31 @@ mat-option {
 .radio-button{
   padding: 5px;
 }
+
+.arlas-filter-expansion-panel{
+  width: 83%;
+  box-shadow: none;
+}
+
+.arlas-filter-expansion-panel-header{
+  padding-left: 0px;
+  font-size: smaller;
+}
+.arlas-filter-expansion-panel-header:hover{
+  background: white !important;
+
+}
+
+.arlas-filter-expansion-panel .mat-expansion-panel-body{
+  padding: 0px !important;
+}
+
+.panel-chevron{
+  display: flex;
+}
+.arlas-filter-expansion-panel-title {
+  align-items: center;
+}
+.filter-chip{
+  cursor: pointer;
+}

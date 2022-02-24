@@ -68,6 +68,7 @@ import { AlertOnChangeDirective } from './directives/alert-on-change/alert-on-ch
 import { AutoFocusDirective } from './directives/auto-focus/auto-focus.directive';
 import { ResetOnChangeDirective } from './directives/reset-on-change/reset-on-change.directive';
 import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 
 
@@ -106,6 +107,7 @@ export function createTranslateLoader(http: HttpClient) {
     MatSlideToggleModule,
     ReactiveFormsModule,
     FormsModule,
+    MatExpansionModule,
     MatInputModule,
     MatSliderModule,
     MatAutocompleteModule,

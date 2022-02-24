@@ -93,7 +93,7 @@ export class MetricFormGroup extends CollectionConfigFormGroup {
               optional: true
             }
           ),
-          valuePrecision:  new InputFormControl(
+          valuePrecision: new InputFormControl(
             '',
             marker('Metric value precision'),
             marker('Metric value precision description'),

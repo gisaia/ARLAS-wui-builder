@@ -738,10 +738,10 @@
 	"short format description": " • Afficher les valeurs numériques sours forme : 1.5k , 3M, ...",
 	"Input fixed labelContent": "Saisir le texte du label",
 	"provided field feature": "Champ affiché",
-	"Provided field feature": "Valeur d'un champ"
-
-
-
-
+	"Provided field feature": "Valeur d'un champ",
+	"metric filter":"Ajout d'un filtre ARLAS à la métrique (Optionnel)",
+	"no filter":"Sans filtre",
+	"with filter": "Avec filtre",
+	"Update":"Modifier"
 
 }
