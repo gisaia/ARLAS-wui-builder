@@ -1,5 +1,5 @@
 {
-    "ignore": [".git/**","src/settings.yaml", "src/environments/prod/settings.yaml", "e2e/**", "*", "*.yml", "*.md", "**/*.svg", "**/*.spec.ts", "**/*.html", "src/assets/fonts/material-icons*", "src/test.ts", "**/.DS_Store", "**/.gitkeep", "nginx/default.conf"],
+    "ignore": [".github/**",".git/**","src/settings.yaml", "src/environments/prod/settings.yaml", "e2e/**", "*", "*.yml", "*.md", "**/*.svg", "**/*.spec.ts", "**/*.html", "src/assets/fonts/material-icons*", "src/test.ts", "**/.DS_Store", "**/.gitkeep", "nginx/default.conf"],
     "license": "LICENSE",
     "trailingWhitespace": "TRIM"
 }
