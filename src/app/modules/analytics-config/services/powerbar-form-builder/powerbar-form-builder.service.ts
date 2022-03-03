@@ -145,7 +145,7 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
             marker('Method to retrive powerbar color description'),
             false,
             [
-              PROPERTY_SELECTOR_SOURCE.manual, PROPERTY_SELECTOR_SOURCE.provided
+              PROPERTY_SELECTOR_SOURCE.manual, PROPERTY_SELECTOR_SOURCE.provided_color
             ].map(d => ({
               value: d,
               enabled: true,
@@ -183,7 +183,7 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
                 this.customControls.renderStep.modeColor
               ],
               onDependencyChange: (control: ButtonFormControl) => {
-                if (this.customControls.renderStep.modeColor.value === PROPERTY_SELECTOR_SOURCE.provided) {
+                if (this.customControls.renderStep.modeColor.value === PROPERTY_SELECTOR_SOURCE.provided_color) {
                   control.setValue(true);
                 } else {
                   control.setValue(false);
@@ -191,7 +191,7 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
               }
             }
           ),
-          propertyProvidedFieldCtrl: new SelectFormControl(
+          propertyProvidedColorFieldCtrl: new SelectFormControl(
             '',
             marker('Provided field'),
             marker('Provided source powerbar field description'),
@@ -200,7 +200,7 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
             {
               dependsOn: () => [this.customControls.renderStep.modeColor, this.customControls.dataStep.collection],
               onDependencyChange: (control: SelectFormControl) => {
-                control.enableIf(this.customControls.renderStep.modeColor.value === PROPERTY_SELECTOR_SOURCE.provided);
+                control.enableIf(this.customControls.renderStep.modeColor.value === PROPERTY_SELECTOR_SOURCE.provided_color);
                 if (control.enabled && (!this.collection || this.customControls.dataStep.collection.value !== this.collection)) {
                   this.setCollection(this.customControls.dataStep.collection.value);
                   toKeywordOptionsObs(collectionService.getCollectionFields(this.collection)).subscribe(collectionFds => {
@@ -299,7 +299,7 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
     },
     renderStep: {
       modeColor: this.get('renderStep').get('modeColor') as SelectFormControl,
-      propertyProvidedFieldCtrl: this.get('renderStep').get('propertyProvidedFieldCtrl') as SelectFormControl,
+      propertyProvidedColorFieldCtrl: this.get('renderStep').get('propertyProvidedColorFieldCtrl') as SelectFormControl,
       useColorService: this.get('renderStep').get('useColorService') as HiddenFormControl,
       useColorFromData: this.get('renderStep').get('useColorFromData') as HiddenFormControl,
       keysToColorsButton: this.get('renderStep').get('keysToColorsButton') as ButtonFormControl,

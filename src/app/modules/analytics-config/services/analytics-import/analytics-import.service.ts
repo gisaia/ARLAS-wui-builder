@@ -523,7 +523,7 @@ export class AnalyticsImportService {
       },
       {
         value: component.input.useColorService === true ? PROPERTY_SELECTOR_SOURCE.manual : component.input.useColorFromData === true ?
-          PROPERTY_SELECTOR_SOURCE.provided : undefined,
+          PROPERTY_SELECTOR_SOURCE.provided_color : undefined,
         control: renderStep.modeColor
       },
       {
@@ -536,7 +536,7 @@ export class AnalyticsImportService {
       },
       {
         value: contributor.colorField,
-        control: renderStep.propertyProvidedFieldCtrl
+        control: renderStep.propertyProvidedColorFieldCtrl
       },
       {
         value: component.showExportCsv,

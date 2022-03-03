@@ -17,8 +17,10 @@ specific language governing permissions and limitations
 under the License.
 */
 export enum PROPERTY_SELECTOR_SOURCE {
-    fix = 'Fix',
-    provided = 'Provided',
+    fix_color = 'Fix color',
+    fix_slider = 'Fix slider',
+    fix_input = 'Fix input',
+    provided_color = 'Provided color',
     generated = 'Generated',
     manual = 'Manual',
     interpolated = 'Interpolated',
@@ -28,7 +30,8 @@ export enum PROPERTY_SELECTOR_SOURCE {
 
 export enum PROPERTY_TYPE {
     color,
-    number
+    number,
+    text
 }
 
 export interface ProportionedValues {
