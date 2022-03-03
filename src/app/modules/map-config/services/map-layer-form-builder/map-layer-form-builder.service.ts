@@ -45,6 +45,8 @@ import { ClusterAggType, FeatureRenderMode, Granularity } from 'arlas-web-contri
 import { Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE } from './models';
+import { TitleInputFormControl } from '../../../../shared/models/config-form';
+import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 
 
 export const PRECISION_TOLERATED_DIFFERENCE = 3;
@@ -298,14 +300,14 @@ export class MapLayerFormGroup extends ConfigFormGroup {
   private setKeyrwodFields(p: PropertySelectorFormGroup, collection: string, collectionFields: SelectOption[]): void {
     p.setCollection(collection);
     p.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl.setSyncOptions(collectionFields);
-    p.customControls.propertyProvidedFieldCtrl.setSyncOptions(collectionFields);
+    p.customControls.propertyProvidedColorFieldCtrl.setSyncOptions(collectionFields);
     p.customControls.propertyGeneratedFieldCtrl.setSyncOptions(collectionFields);
     p.customControls.propertyManualFg.propertyManualFieldCtrl.setSyncOptions(collectionFields);
   }
 
   private setTextKeyrwodFields(p: PropertySelectorFormGroup, collection: string, collectionFields: SelectOption[]): void {
     p.setCollection(collection);
-    p.customControls.propertyProvidedFieldLabelCtrl.setSyncOptions(collectionFields);
+    p.customControls.propertyProvidedColorLabelCtrl.setSyncOptions(collectionFields);
   }
 
   private updateCollectionInForms(mapFg: MapLayerAllTypesFormGroup, collectionService: CollectionService): void {
@@ -591,6 +593,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
   public constructor(
     collection: string,
+    collectionFieldsObs:  Observable<Array<CollectionField>>,
     type: string,
     geometryTypes: Array<GEOMETRY_TYPE>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService,
@@ -682,11 +685,21 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           }
         ),
         filter: new FormControl(),
+        // labelContentFg: propertySelectorFormBuilder.build(
+        //   PROPERTY_TYPE.text,
+        //   'labelContent',
+        //   [
+        //     PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.provided_color
+        //   ],
+        //   isAggregated,
+        //   collection,
+        //   marker('opacity description')
+        // ),
         opacity: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
           'opacity',
           [
-            PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
+            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
           isAggregated,
           collection,
@@ -706,7 +719,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           PROPERTY_TYPE.number,
           'width',
           [
-            PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
+            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
           isAggregated,
           collection,
@@ -719,7 +732,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           PROPERTY_TYPE.number,
           'radius',
           [
-            PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
+            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
           isAggregated,
           collection,
@@ -744,7 +757,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           PROPERTY_TYPE.number,
           'strokeWidth',
           [
-            PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
+            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
           isAggregated,
           collection,
@@ -756,7 +769,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           PROPERTY_TYPE.number,
           'strokeOpacity',
           [
-            PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
+            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
           isAggregated,
           collection,
@@ -768,7 +781,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           PROPERTY_TYPE.number,
           'weight',
           [
-            PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
+            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
           isAggregated,
           collection,
@@ -781,14 +794,60 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           PROPERTY_TYPE.number,
           'intensity',
           [
-            PROPERTY_SELECTOR_SOURCE.fix
+            PROPERTY_SELECTOR_SOURCE.fix_slider
           ],
           isAggregated,
           collection,
           marker('property intensity description')
         )
           .withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.heatmap))
+          .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.heatmap)),
+        labelSizeFg: propertySelectorFormBuilder.build(
+          PROPERTY_TYPE.number,
+          'labelSize',
+          [
+            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
+          ],
+          isAggregated,
+          collection,
+          marker('property label size description')
+        )
+          .withDependsOn(() => [this.geometryType])
+          .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
+        labelRotationFg: propertySelectorFormBuilder.build(
+          PROPERTY_TYPE.number,
+          'labelRotation',
+          [
+            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
+          ],
+          isAggregated,
+          collection,
+          marker('property label rotation description')
+        )
+          .withDependsOn(() => [this.geometryType])
+          .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
+        labelOffsetFg: new ConfigFormGroup({
+          dx: new InputFormControl(
+            0,
+            marker('label offset dx'),
+            marker('label offset dx description'),
+            'number',
+            {
+              optional: true
+            }
+          ),
+          dy: new InputFormControl(
+            0,
+            marker('label offset dy'),
+            marker('label offset dy description'),
+            'number',
+            {
+              optional: true
+            }
+          )
+        })
+          .withDependsOn(() => [this.geometryType])
+          .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
 
       }).withStepName(marker('Style')),
       visibilityStep: new ConfigFormGroup({
@@ -929,6 +988,29 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
     return this.visibilityStep.get('filters') as MapFiltersControl;
   }
 
+
+  public get layerNameCtrl() {
+    return this.styleStep.get('layerFg.layerNameCtrl') as CollectionConfigFormGroup;
+  }
+
+  public get labelSizeFg() {
+    return this.styleStep.get('labelSizeFg') as PropertySelectorFormGroup;
+  }
+
+  public get labelRotationFg() {
+    return this.styleStep.get('labelRotationFg') as PropertySelectorFormGroup;
+  }
+
+  public get labelOffsetFg() {
+    return this.styleStep.get('labelOffsetFg') as ConfigFormGroup;
+  }
+  public get labelOffsetDx() {
+    return this.styleStep.get('labelOffsetFg.dx') as InputFormControl;
+  }
+  public get labelOffsetDy() {
+    return this.styleStep.get('labelOffsetFg.dy') as InputFormControl;
+  }
+
   private isCircleOrFill(): boolean {
     return this.isCircle() || this.isFill();
   }
@@ -939,6 +1021,10 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
   private isFill(): boolean {
     return this.geometryType.value === GEOMETRY_TYPE.fill;
+  }
+
+  private isLabel(): boolean {
+    return this.geometryType.value === GEOMETRY_TYPE.label;
   }
 }
 
@@ -955,17 +1041,19 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
 
     super(
       collection,
+      collectionFields,
       type,
       [
         GEOMETRY_TYPE.fill,
         GEOMETRY_TYPE.line,
-        GEOMETRY_TYPE.circle
+        GEOMETRY_TYPE.circle,
+        GEOMETRY_TYPE.label
       ],
       propertySelectorFormBuilder,
       isAggregated,
       [
-        PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.generated,
-        PROPERTY_SELECTOR_SOURCE.manual, PROPERTY_SELECTOR_SOURCE.provided
+        PROPERTY_SELECTOR_SOURCE.fix_color, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.generated,
+        PROPERTY_SELECTOR_SOURCE.manual, PROPERTY_SELECTOR_SOURCE.provided_color
       ],
       {
         geometry: new SelectFormControl(
@@ -1021,6 +1109,7 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
         )
       },
       {
+
       }
     );
   }
@@ -1102,16 +1191,18 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
   ) {
     super(
       collection,
+      collectionFields,
       'cluster',
       [
         GEOMETRY_TYPE.fill,
         GEOMETRY_TYPE.circle,
-        GEOMETRY_TYPE.heatmap
+        GEOMETRY_TYPE.heatmap,
+        GEOMETRY_TYPE.label
       ],
       propertySelectorFormBuilder,
       true,
       [
-        PROPERTY_SELECTOR_SOURCE.fix, PROPERTY_SELECTOR_SOURCE.interpolated
+        PROPERTY_SELECTOR_SOURCE.fix_color, PROPERTY_SELECTOR_SOURCE.interpolated
       ],
       {
         aggGeometry: new SelectFormControl(

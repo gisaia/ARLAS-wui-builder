@@ -66,9 +66,10 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           valuesToOptions(sources),
           {
             childs: () => [
-              this.customControls.propertyFix,
-              this.customControls.propertyProvidedFieldCtrl,
-              this.customControls.propertyProvidedFieldLabelCtrl,
+              this.customControls.propertyFixColor,
+              this.customControls.propertyFixSlider,
+              this.customControls.propertyProvidedColorFieldCtrl,
+              this.customControls.propertyProvidedColorLabelCtrl,
               this.customControls.propertyGeneratedFieldCtrl,
               this.customControls.propertyManualFg.propertyManualFieldCtrl,
               this.customControls.propertyManualFg.propertyManualButton,
@@ -101,36 +102,36 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             }
           }
         ),
-        propertyFix: propertyType === PROPERTY_TYPE.color ?
-          new ColorFormControl(
-            '',
-            marker('Fixed') + ' ' + propertyName,
-            marker('Color fixed description'),
-            {
-              dependsOn: () => [this.customControls.propertySource],
-              onDependencyChange: (control) => control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix)
-            }
-          ) :
-          new SliderFormControl(
-            '',
-            marker('Fixed') + ' ' + propertyName,
-            marker('Slider fixed value description') + ' ' + propertyName,
-            defaultConfig[propertyName + 'Min'],
-            defaultConfig[propertyName + 'Max'],
-            defaultConfig[propertyName + 'Step'],
-            undefined,
-            undefined,
-            {
-              dependsOn: () => [this.customControls.propertySource],
-              onDependencyChange: (control) => {
-                if (!control.value && !control.touched && defaultConfig[propertyName + 'Min'] !== undefined) {
-                  control.setValue(defaultConfig[propertyName + 'Min']);
-                }
-                control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix);
+        propertyFixSlider: new SliderFormControl(
+          '',
+          marker('Fixed') + ' ' + propertyName,
+          marker('Slider fixed value description') + ' ' + propertyName,
+          defaultConfig[propertyName + 'Min'],
+          defaultConfig[propertyName + 'Max'],
+          defaultConfig[propertyName + 'Step'],
+          undefined,
+          undefined,
+          {
+            dependsOn: () => [this.customControls.propertySource],
+            onDependencyChange: (control) => {
+              if (!control.value && !control.touched && defaultConfig[propertyName + 'Min'] !== undefined) {
+                control.setValue(defaultConfig[propertyName + 'Min']);
               }
+              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix_slider);
             }
-          ),
-        propertyProvidedFieldCtrl: new SelectFormControl(
+          }
+        ),
+        propertyFixColor: new ColorFormControl(
+          '',
+          marker('Fixed') + ' ' + propertyName,
+          marker('Color fixed description'),
+          {
+            dependsOn: () => [this.customControls.propertySource],
+            onDependencyChange: (control) =>
+              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix_color)
+          }
+        ),
+        propertyProvidedColorFieldCtrl: new SelectFormControl(
           '',
           marker('Provided field'),
           marker('Provided source field description'),
@@ -139,10 +140,10 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           {
             dependsOn: () => [this.customControls.propertySource],
             onDependencyChange: (control) =>
-              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided)
+              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_color)
           }
         ),
-        propertyProvidedFieldLabelCtrl: new SelectFormControl(
+        propertyProvidedColorLabelCtrl: new SelectFormControl(
           '',
           marker('Label field'),
           marker('label field description'),
@@ -151,7 +152,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           {
             dependsOn: () => [this.customControls.propertySource],
             onDependencyChange: (control) =>
-              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided),
+              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_color),
             optional: true
           }
         ),
@@ -241,7 +242,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             '',
             [
               { label: marker('Count'), value: COUNT_OR_METRIC.COUNT },
-              { label: marker('Metric'), value: COUNT_OR_METRIC.METRIC },
+              { label: marker('Metric'), value: COUNT_OR_METRIC.METRIC }
             ],
             'Interpolated ' + propertyName + ' description',
             {
@@ -476,8 +477,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                   const maxValue = doNormalize ? 1.0 : isAggregatedCount ?
                     parseFloat(this.customControls.propertyInterpolatedFg.propertyInterpolatedCountValueCtrl.value) :
                     parseFloat(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value);
-                  const minInterpolatedValue = this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl.value;
-                  const maxInterpolatedValue = this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl.value;
+                  const minInterpolatedValue = +this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl.value;
+                  const maxInterpolatedValue = +this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl.value;
                   // if we import a config where we don't interpolate linearly, we will maintain this custom interpolation
                   // as long as we don't change the dependants values : max, min, normalise. If we change those values, we lose
                   // the custom interpolation
@@ -635,9 +636,11 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
 
   public customControls = {
     propertySource: this.get('propertySource') as SelectFormControl,
-    propertyFix: this.get('propertyFix') as ColorFormControl | SliderFormControl,
-    propertyProvidedFieldCtrl: this.get('propertyProvidedFieldCtrl') as SelectFormControl,
-    propertyProvidedFieldLabelCtrl: this.get('propertyProvidedFieldLabelCtrl') as SelectFormControl,
+    propertyFixColor: this.get('propertyFixColor') as ColorFormControl,
+    propertyFixSlider: this.get('propertyFixSlider') as SliderFormControl,
+    propertyFixInput: this.get('propertyFixInput') as InputFormControl,
+    propertyProvidedColorFieldCtrl: this.get('propertyProvidedColorFieldCtrl') as SelectFormControl,
+    propertyProvidedColorLabelCtrl: this.get('propertyProvidedColorLabelCtrl') as SelectFormControl,
     propertyGeneratedFieldCtrl: this.get('propertyGeneratedFieldCtrl') as SelectFormControl,
     propertyManualFg: {
       propertyManualFieldCtrl: this.get('propertyManualFg').get('propertyManualFieldCtrl') as SelectFormControl,

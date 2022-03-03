@@ -48,6 +48,10 @@ export interface Layout {
   visibility?: string;
   'line-cap'?: string;
   'line-join'?: string;
+  'text-field'?: string;
+  'text-size'?: PaintValue;
+  'text-font'?: string[];
+  'text-rotate'?: PaintValue;
 }
 
 type PaintValue = Array<string | Array<string> | number> | PaintColor | string | number;
@@ -67,6 +71,8 @@ export interface Paint {
   'heatmap-weight'?: PaintValue;
   'heatmap-intensity'?: number;
   'heatmap-opacity'?: number;
+  'text-color'?: PaintValue;
+  'text-opacity'?: PaintValue;
 }
 
 export interface PaintColor {

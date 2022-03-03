@@ -31,8 +31,9 @@ import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
-import { FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID } from 'arlas-web-components';
+import { FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID, LabelStyle, LABEL_ARLAS_ID } from 'arlas-web-components';
 import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
+import { Layout } from './models-map-config';
 export enum VISIBILITY {
   visible = 'visible',
   none = 'none'
@@ -44,6 +45,7 @@ export class ConfigMapExportHelper {
     taggableFieldsMap?: Map<string, Set<string>>) {
     const fillStrokeLayers = [];
     const scrollableLayers = [];
+    const labelLayers = [];
     const layers: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: MapLayerFormGroup) => {
       const taggableFields = taggableFieldsMap.get(layerFg.customControls.collection.value);
       const layer = this.getLayer(layerFg, colorService, taggableFields);
@@ -140,7 +142,7 @@ export class ConfigMapExportHelper {
       });
     const mapConfig: MapConfig = {
       layers: Array.from(new Set(layers.map(l => l[0]).concat(layersSelect.map(l => l[0])).concat(layersHover.map(l => l[0]))
-        .concat(fillStrokeLayers.map(l => l[0])).concat(scrollableLayers.map(l => l[0])))),
+        .concat(fillStrokeLayers.map(l => l[0])).concat(scrollableLayers.map(l => l[0])))).concat(labelLayers.map(l => l[0])),
       externalEventLayers: Array.from(new Set(layersHover.map(lh => ({
         id: lh[0].id,
         on: ExternalEvent.hover
@@ -176,23 +178,18 @@ export class ConfigMapExportHelper {
       (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
 
     const paint = this.getLayerPaint(modeValues, mode, colorService, taggableFields);
+    const layout = this.getLayerLayout(modeValues, mode, colorService, taggableFields);
     const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
     const layer: Layer = {
       id: layerFg.value.arlasId,
-      type: modeValues.styleStep.geometryType,
+      type: modeValues.styleStep.geometryType === 'label' ? 'symbol' : modeValues.styleStep.geometryType,
       source: layerSource.source,
       minzoom: modeValues.visibilityStep.zoomMin,
       maxzoom: modeValues.visibilityStep.zoomMax,
-      layout: {
-        visibility: modeValues.visibilityStep.visible ? VISIBILITY.visible : VISIBILITY.none
-      },
+      layout,
       paint,
       metadata: this.getLayerMetadata(layerFg.customControls.collection.value, mode, modeValues, colorService, taggableFields)
     };
-    if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.line) {
-      layer.layout['line-cap'] = 'round';
-      layer.layout['line-join'] = 'round';
-    }
     /** 'all' is the operator that allows to apply an "AND" operator in mapbox */
     layer.filter = ['all'];
     const filters = !!modeValues.visibilityStep.filters ? modeValues.visibilityStep.filters.value : undefined;
@@ -226,16 +223,16 @@ export class ConfigMapExportHelper {
 
   public static getLayerPaint(modeValues, mode, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>) {
     const paint: Paint = {};
-    const opacity = modeValues.styleStep.opacity;
     const color = this.getMapProperty(modeValues.styleStep.colorFg, mode, colorService, taggableFields);
+    const opacity = this.getMapProperty(modeValues.styleStep.opacity, mode, colorService, taggableFields);
     switch (modeValues.styleStep.geometryType) {
       case GEOMETRY_TYPE.fill: {
-        paint['fill-opacity'] = this.getMapProperty(modeValues.styleStep.opacity, mode, colorService, taggableFields);
+        paint['fill-opacity'] = opacity;
         paint['fill-color'] = color;
         break;
       }
       case GEOMETRY_TYPE.line: {
-        paint['line-opacity'] = this.getMapProperty(modeValues.styleStep.opacity, mode, colorService, taggableFields);
+        paint['line-opacity'] = opacity;
         paint['line-color'] = color;
         paint['line-width'] = this.getMapProperty(modeValues.styleStep.widthFg, mode, colorService, taggableFields);
         const lineType = modeValues.styleStep.lineType;
@@ -247,7 +244,7 @@ export class ConfigMapExportHelper {
         break;
       }
       case GEOMETRY_TYPE.circle: {
-        paint['circle-opacity'] = this.getMapProperty(modeValues.styleStep.opacity, mode, colorService, taggableFields);
+        paint['circle-opacity'] = opacity;
         paint['circle-color'] = color;
         paint['circle-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, colorService, taggableFields);
         paint['circle-stroke-width'] = this.getMapProperty(modeValues.styleStep.strokeWidthFg, mode, colorService, taggableFields);
@@ -258,13 +255,39 @@ export class ConfigMapExportHelper {
       }
       case GEOMETRY_TYPE.heatmap: {
         paint['heatmap-color'] = color;
-        paint['heatmap-opacity'] = this.getMapProperty(modeValues.styleStep.opacity, mode, colorService, taggableFields);
+        paint['heatmap-opacity'] = opacity;
         paint['heatmap-intensity'] = this.getMapProperty(modeValues.styleStep.intensityFg, mode, colorService, taggableFields);
         paint['heatmap-weight'] = this.getMapProperty(modeValues.styleStep.weightFg, mode, colorService, taggableFields);
         paint['heatmap-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, colorService, taggableFields);
+        break;
+      }
+      case GEOMETRY_TYPE.label: {
+        paint['text-color'] = color;
+        paint['text-opacity']= opacity;
+        break;
       }
     }
     return paint;
+  }
+
+  public static getLayerLayout(modeValues, mode, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>) {
+    const layout: Layout = {};
+    layout.visibility = modeValues.visibilityStep.visible ? VISIBILITY.visible : VISIBILITY.none;
+    switch (modeValues.styleStep.geometryType) {
+      case GEOMETRY_TYPE.line: {
+        layout['line-cap'] = 'round';
+        layout['line-join'] = 'round';
+        break;
+      }
+      case GEOMETRY_TYPE.label: {
+        layout['text-field'] = '→';
+        layout['text-font'] = ['Open Sans Bold','Arial Unicode MS Bold'];
+        layout['text-size'] = this.getMapProperty(modeValues.styleStep.labelSizeFg, mode, colorService, taggableFields);
+        layout['text-rotate'] = this.getMapProperty(modeValues.styleStep.labelRotationFg, mode, colorService, taggableFields);
+        break;
+      }
+    }
+    return layout;
   }
 
   public static getLayerFilters(modeValues, mode, taggableFields?: Set<string>) {
@@ -309,10 +332,12 @@ export class ConfigMapExportHelper {
 
   public static getMapProperty(fgValues: any, mode: LAYER_MODE, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>) {
     switch (fgValues.propertySource) {
-      case PROPERTY_SELECTOR_SOURCE.fix:
-        return fgValues.propertyFix;
-      case PROPERTY_SELECTOR_SOURCE.provided:
-        return this.getArray(fgValues.propertyProvidedFieldCtrl);
+      case PROPERTY_SELECTOR_SOURCE.fix_color:
+        return fgValues.propertyFixColor;
+      case PROPERTY_SELECTOR_SOURCE.fix_slider:
+        return +fgValues.propertyFixSlider;
+      case PROPERTY_SELECTOR_SOURCE.provided_color:
+        return this.getArray(fgValues.propertyProvidedColorFieldCtrl);
       case PROPERTY_SELECTOR_SOURCE.generated:
         return this.getArray(fgValues.propertyGeneratedFieldCtrl + '_arlas__color');
       case PROPERTY_SELECTOR_SOURCE.manual:
@@ -394,9 +419,11 @@ export class ConfigMapExportHelper {
 
   public static getFilter(fgValues: any, mode: LAYER_MODE, taggableFields?: Set<string>) {
     switch (fgValues.propertySource) {
-      case PROPERTY_SELECTOR_SOURCE.fix:
+      case PROPERTY_SELECTOR_SOURCE.fix_color:
+      case PROPERTY_SELECTOR_SOURCE.fix_input:
+      case PROPERTY_SELECTOR_SOURCE.fix_slider:
         break;
-      case PROPERTY_SELECTOR_SOURCE.provided:
+      case PROPERTY_SELECTOR_SOURCE.provided_color:
         return null;
       case PROPERTY_SELECTOR_SOURCE.generated:
         return null;

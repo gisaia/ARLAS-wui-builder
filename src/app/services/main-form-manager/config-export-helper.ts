@@ -366,6 +366,12 @@ export class ConfigExportHelper {
     if (!!modeValues.styleStep.weightFg) {
       this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.weightFg, layerValues.mode);
     }
+    if (!!modeValues.styleStep.labelSizeFg) {
+      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.labelSizeFg, layerValues.mode);
+    }
+    if (!!modeValues.styleStep.labelRotationFg) {
+      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.labelRotationFg, layerValues.mode);
+    }
     layerSource.source = getSourceName(layerSource) + '-' + layerFg.value.collection;
     return layerSource;
   }
@@ -508,15 +514,16 @@ export class ConfigExportHelper {
 
   private static addLayerSourceInterpolationData(layerSource: LayerSourceConfig, layerValues: any, mode: LAYER_MODE) {
     switch (layerValues.propertySource) {
-      case PROPERTY_SELECTOR_SOURCE.fix: {
+      case PROPERTY_SELECTOR_SOURCE.fix_color:
+      case PROPERTY_SELECTOR_SOURCE.fix_slider:
+      case PROPERTY_SELECTOR_SOURCE.fix_input:
         break;
-      }
-      case PROPERTY_SELECTOR_SOURCE.provided: {
+      case PROPERTY_SELECTOR_SOURCE.provided_color: {
         const colorConfig: ColorConfig = {
-          color: layerValues.propertyProvidedFieldCtrl
+          color: layerValues.propertyProvidedColorFieldCtrl
         };
-        if (!!layerValues.propertyProvidedFieldLabelCtrl) {
-          colorConfig.label = layerValues.propertyProvidedFieldLabelCtrl;
+        if (!!layerValues.propertyProvidedColorLabelCtrl) {
+          colorConfig.label = layerValues.propertyProvidedColorLabelCtrl;
         }
         layerSource.provided_fields.push(colorConfig);
         break;
@@ -760,8 +767,8 @@ export class ConfigExportHelper {
           order: widgetData.dataStep.metric.sortOrder,
           on: widgetData.dataStep.metric.sortOn
         };
-        if (!!widgetData.renderStep.propertyProvidedFieldCtrl) {
-          contrib.colorField = widgetData.renderStep.propertyProvidedFieldCtrl;
+        if (!!widgetData.renderStep.propertyProvidedColorFieldCtrl) {
+          contrib.colorField = widgetData.renderStep.propertyProvidedColorFieldCtrl;
           aggregationModel.fetch_hits = {
             size: 1,
             include: [contrib.colorField]

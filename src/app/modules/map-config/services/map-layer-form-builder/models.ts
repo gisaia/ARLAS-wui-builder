@@ -20,7 +20,8 @@ export enum GEOMETRY_TYPE {
   fill = 'fill',
   line = 'line',
   circle = 'circle',
-  heatmap = 'heatmap'
+  heatmap = 'heatmap',
+  label = 'label'
 }
 
 export enum LINE_TYPE {
