@@ -599,6 +599,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
     propertySelectorFormBuilder: PropertySelectorFormBuilderService,
     isAggregated: boolean,
     colorSources: Array<PROPERTY_SELECTOR_SOURCE>,
+    labelSources: Array<PROPERTY_SELECTOR_SOURCE>,
     geometryFormControls: { [key: string]: AbstractControl; },
     visibilityFormControls: { [key: string]: AbstractControl; },
     styleFormControls: { [key: string]: AbstractControl; }
@@ -685,16 +686,15 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           }
         ),
         filter: new FormControl(),
-        // labelContentFg: propertySelectorFormBuilder.build(
-        //   PROPERTY_TYPE.text,
-        //   'labelContent',
-        //   [
-        //     PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.provided_color
-        //   ],
-        //   isAggregated,
-        //   collection,
-        //   marker('opacity description')
-        // ),
+        labelContentFg: propertySelectorFormBuilder.build(
+          PROPERTY_TYPE.text,
+          'labelContent',
+          labelSources,
+          isAggregated,
+          collection,
+          marker('label content description')
+        ).withDependsOn(() => [this.geometryType])
+          .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
         opacity: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
           'opacity',
@@ -1036,7 +1036,8 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
     collectionFields: Observable<Array<CollectionField>>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService,
     isAggregated: boolean = false,
-    geometryFormControls: { [key: string]: AbstractControl; } = {}
+    geometryFormControls: { [key: string]: AbstractControl; } = {},
+    labelSources: Array<PROPERTY_SELECTOR_SOURCE>,
   ) {
 
     super(
@@ -1055,6 +1056,7 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
         PROPERTY_SELECTOR_SOURCE.fix_color, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.generated,
         PROPERTY_SELECTOR_SOURCE.manual, PROPERTY_SELECTOR_SOURCE.provided_color
       ],
+      labelSources,
       {
         geometry: new SelectFormControl(
           '',
@@ -1168,7 +1170,10 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
           true,
           toKeywordOptionsObs(collectionFields)
         )
-      });
+      },
+      [
+        PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.provided_field_for_agg
+      ]);
   }
   public get featureMetricSort() {
     return this.geometryStep.get('featureMetricSort') as OrderedSelectFormControl;
@@ -1202,7 +1207,12 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
       propertySelectorFormBuilder,
       true,
       [
+        /** Sources for cluser colors */
         PROPERTY_SELECTOR_SOURCE.fix_color, PROPERTY_SELECTOR_SOURCE.interpolated
+      ],
+      [
+        /** Sources for cluser label */
+        PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.provided_field_for_agg
       ],
       {
         aggGeometry: new SelectFormControl(
@@ -1394,7 +1404,12 @@ export class MapLayerFormBuilderService {
       collection,
       'feature',
       collectionFields,
-      this.propertySelectorFormBuilder);
+      this.propertySelectorFormBuilder,
+      false,
+      {},
+      [
+        PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.provided_field_for_feature
+      ]);
 
     this.defaultValuesService.setDefaultValueRecursively('map.layer', featureFormGroup);
     return featureFormGroup;

@@ -27,12 +27,13 @@ import { DialogPaletteSelectorData } from '@map-config/components/dialog-palette
 import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
-import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toTextOrKeywordOptionsObs } from '@services/collection-service/tools';
+import { toAllButGeoOptionsObs, toKeywordOptionsObs, toNumericOrDateOptionsObs,
+  toTextOrKeywordOptionsObs } from '@services/collection-service/tools';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
   ButtonFormControl, ButtonToggleFormControl, ColorFormControl, ColorPreviewFormControl,
-  ConfigFormControl, ConfigFormGroup, HiddenFormControl, InputFormControl, SelectFormControl,
+  ConfigFormControl, ConfigFormGroup, HiddenFormControl, InputFormControl, OrderedSelectFormControl, SelectFormControl,
   SliderFormControl, SlideToggleFormControl
 } from '@shared-models/config-form';
 import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
@@ -131,6 +132,57 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
               control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix_color)
           }
         ),
+        propertyFixInput: new InputFormControl(
+          '',
+          marker('Input fixed') + ' ' + propertyName,
+          marker('Input fixed value description') + ' ' + propertyName,
+          'text',
+          {
+            optional: false,
+            dependsOn: () => [this.customControls.propertySource],
+            onDependencyChange: (control) => {
+              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix_input);
+            }
+          }
+        ),
+        propertyProvidedFieldAggFg: new ConfigFormGroup({
+          propertyProvidedFieldAggCtrl: new SelectFormControl(
+            '',
+            marker('provided field agg'),
+            marker('provided field agg description'),
+            false,
+            toAllButGeoOptionsObs(collectionFieldsObs),
+            {
+              resetDependantsOnChange: true,
+              dependsOn: () => [this.customControls.propertySource],
+              onDependencyChange: (control) => control.enableIf(this.customControls.propertySource.value
+                === PROPERTY_SELECTOR_SOURCE.provided_field_for_agg)
+            }
+          ),
+          propertyProvidedFieldSortCtrl: new OrderedSelectFormControl(
+            '',
+            marker('Order provided field'),
+            marker('Order provided field description'),
+            false,
+            toAllButGeoOptionsObs(collectionFieldsObs),
+            {
+              dependsOn: () => [this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl,
+                this.customControls.propertySource],
+              onDependencyChange: (control) => {
+                control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_field_for_agg);
+                if (!!this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl.value) {
+                  this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl.sorts
+                    = new Set(this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl.value.split(','));
+                }
+              }
+            }
+          ),
+        },
+        {
+          dependsOn: () => [this.customControls.propertySource],
+          onDependencyChange: (control) =>
+            control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_field_for_agg)
+        }),
         propertyProvidedColorFieldCtrl: new SelectFormControl(
           '',
           marker('Provided field'),
@@ -646,6 +698,12 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
       propertyManualFieldCtrl: this.get('propertyManualFg').get('propertyManualFieldCtrl') as SelectFormControl,
       propertyManualButton: this.get('propertyManualFg').get('propertyManualButton') as ButtonFormControl,
       propertyManualValuesCtrl: this.get('propertyManualFg').get('propertyManualValuesCtrl') as FormArray,
+    },
+    propertyProvidedFieldAggFg: {
+      propertyProvidedFieldAggCtrl: this.get('propertyProvidedFieldAggFg')
+        .get('propertyProvidedFieldAggCtrl') as SelectFormControl,
+      propertyProvidedFieldSortCtrl: this.get('propertyProvidedFieldAggFg')
+        .get('propertyProvidedFieldSortCtrl') as OrderedSelectFormControl
     },
     propertyInterpolatedFg: {
       propertyInterpolatedCountOrMetricCtrl:

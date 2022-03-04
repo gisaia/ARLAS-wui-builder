@@ -337,40 +337,43 @@ export class ConfigExportHelper {
       }
     }
 
-    this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.colorFg, layerValues.mode);
+    this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.colorFg, layerValues.mode);
 
     if (!!modeValues.styleStep.opacity) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.opacity, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.opacity, layerValues.mode);
     }
 
     if (!!modeValues.styleStep.widthFg) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.widthFg, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.widthFg, layerValues.mode);
     }
 
     if (!!modeValues.styleStep.radiusFg) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.radiusFg, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.radiusFg, layerValues.mode);
     }
 
     if (!!modeValues.styleStep.strokeColorFg) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.strokeColorFg, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.strokeColorFg, layerValues.mode);
     }
 
     if (!!modeValues.styleStep.strokeWidthFg) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.strokeWidthFg, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.strokeWidthFg, layerValues.mode);
     }
 
     if (!!modeValues.styleStep.strokeOpacityFg) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.strokeOpacityFg, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.strokeOpacityFg, layerValues.mode);
     }
 
     if (!!modeValues.styleStep.weightFg) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.weightFg, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.weightFg, layerValues.mode);
     }
     if (!!modeValues.styleStep.labelSizeFg) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.labelSizeFg, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelSizeFg, layerValues.mode);
     }
     if (!!modeValues.styleStep.labelRotationFg) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.labelRotationFg, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelRotationFg, layerValues.mode);
+    }
+    if (!!modeValues.styleStep.labelContentFg) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelContentFg, layerValues.mode);
     }
     layerSource.source = getSourceName(layerSource) + '-' + layerFg.value.collection;
     return layerSource;
@@ -512,7 +515,7 @@ export class ConfigExportHelper {
     return mapComponent;
   }
 
-  private static addLayerSourceInterpolationData(layerSource: LayerSourceConfig, layerValues: any, mode: LAYER_MODE) {
+  private static declareFieldsToLayerSource(layerSource: LayerSourceConfig, layerValues: any, mode: LAYER_MODE) {
     switch (layerValues.propertySource) {
       case PROPERTY_SELECTOR_SOURCE.fix_color:
       case PROPERTY_SELECTOR_SOURCE.fix_slider:
@@ -526,6 +529,26 @@ export class ConfigExportHelper {
           colorConfig.label = layerValues.propertyProvidedColorLabelCtrl;
         }
         layerSource.provided_fields.push(colorConfig);
+        break;
+      }
+      case PROPERTY_SELECTOR_SOURCE.provided_field_for_agg: {
+        let sorts = [];
+        if (!layerSource.fetched_hits) {
+          layerSource.fetched_hits = {
+            sorts,
+            fields: []
+          };
+        }
+        const fieldsSet = new Set(layerSource.fetched_hits.fields);
+        if (layerValues.propertyProvidedFieldAggFg && layerValues.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl) {
+          sorts = layerValues.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl.split(',');
+        }
+        fieldsSet.add(layerValues.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl);
+        console.log(layerValues.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl);
+        layerSource.fetched_hits = {
+          sorts,
+          fields: Array.from(fieldsSet)
+        };
         break;
       }
       case PROPERTY_SELECTOR_SOURCE.generated: {
