@@ -280,7 +280,7 @@ export class ConfigMapExportHelper {
         break;
       }
       case GEOMETRY_TYPE.label: {
-        layout['text-field'] = '→';
+        layout['text-field'] = this.getMapProperty(modeValues.styleStep.labelContentFg, mode, colorService, taggableFields);
         layout['text-font'] = ['Open Sans Bold','Arial Unicode MS Bold'];
         layout['text-size'] = this.getMapProperty(modeValues.styleStep.labelSizeFg, mode, colorService, taggableFields);
         layout['text-rotate'] = this.getMapProperty(modeValues.styleStep.labelRotationFg, mode, colorService, taggableFields);
@@ -338,6 +338,8 @@ export class ConfigMapExportHelper {
         return +fgValues.propertyFixSlider;
       case PROPERTY_SELECTOR_SOURCE.provided_color:
         return this.getArray(fgValues.propertyProvidedColorFieldCtrl);
+      case PROPERTY_SELECTOR_SOURCE.provided_field_for_agg:
+        return this.getArray(fgValues.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl);
       case PROPERTY_SELECTOR_SOURCE.generated:
         return this.getArray(fgValues.propertyGeneratedFieldCtrl + '_arlas__color');
       case PROPERTY_SELECTOR_SOURCE.manual:
