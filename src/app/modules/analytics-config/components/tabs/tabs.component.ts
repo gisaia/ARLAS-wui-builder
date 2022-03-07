@@ -119,7 +119,7 @@ export class TabsComponent implements OnDestroy {
   }
 
   public startEditTabName(index: number) {
-    if (!this.isEditingTab) {
+    if (!this.isEditingTab && index === this.matTabGroup.selectedIndex) {
       this.editingTabIndex = index;
       this.editingTabName = this.getTab(index).get('tabName').value;
       this.isEditingTab = true;

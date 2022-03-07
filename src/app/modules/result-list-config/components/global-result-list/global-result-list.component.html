@@ -1,14 +1,14 @@
-<mat-tab-group [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)" class="list-tab-group">
+<mat-tab-group [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)"
+    class="list-tab-group">
     <mat-tab *ngFor="let listFg of listsFa.controls;let i = index">
         <ng-template mat-tab-label>
-
-            <span class="tab-name">
-                {{listFg.value.title}}
-            </span>
-            <button mat-icon-button class="delete-icon" (click)="$event.stopPropagation(); removeTab(i)"
-                [matTooltip]="'Delete tab' | translate">
-                <mat-icon>delete</mat-icon>
-            </button>
+            <div class="content">
+                <span class="tab-name">
+                    {{listFg.value.title}}
+                </span>
+                <mat-icon class="close" (click)="$event.stopPropagation(); removeTab(i)"
+                    [matTooltip]="'Delete tab' | translate">close</mat-icon>
+            </div>
 
         </ng-template>
         <arlas-config-form-group [configFormGroup]="listFg" defaultKey="resultlists"></arlas-config-form-group>
