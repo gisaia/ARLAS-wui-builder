@@ -280,7 +280,7 @@ export class ConfigMapExportHelper {
         break;
       }
       case GEOMETRY_TYPE.label: {
-        layout['text-field'] = '→';
+        layout['text-field'] = this.getMapProperty(modeValues.styleStep.labelContentFg, mode, colorService, taggableFields);
         layout['text-font'] = ['Open Sans Bold','Arial Unicode MS Bold'];
         layout['text-size'] = this.getMapProperty(modeValues.styleStep.labelSizeFg, mode, colorService, taggableFields);
         layout['text-rotate'] = this.getMapProperty(modeValues.styleStep.labelRotationFg, mode, colorService, taggableFields);
@@ -336,8 +336,14 @@ export class ConfigMapExportHelper {
         return fgValues.propertyFixColor;
       case PROPERTY_SELECTOR_SOURCE.fix_slider:
         return +fgValues.propertyFixSlider;
+      case PROPERTY_SELECTOR_SOURCE.fix_input:
+        return fgValues.propertyFixInput;
       case PROPERTY_SELECTOR_SOURCE.provided_color:
         return this.getArray(fgValues.propertyProvidedColorFieldCtrl);
+      case PROPERTY_SELECTOR_SOURCE.provided_field_for_agg:
+        return this.getArray(fgValues.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl);
+      case PROPERTY_SELECTOR_SOURCE.provided_field_for_feature:
+        return this.getArray(fgValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl);
       case PROPERTY_SELECTOR_SOURCE.generated:
         return this.getArray(fgValues.propertyGeneratedFieldCtrl + '_arlas__color');
       case PROPERTY_SELECTOR_SOURCE.manual:
@@ -355,8 +361,27 @@ export class ConfigMapExportHelper {
           manualValues.flatMap(kc => kc.keyword !== OTHER_KEYWORD ?
             [kc.keyword, colorService.getColor(kc.keyword)] : [kc.color])
         );
+      case PROPERTY_SELECTOR_SOURCE.metric_on_field: {
+        const countMetricFg = fgValues.propertyCountOrMetricFg;
+        let field = '';
+        if (countMetricFg.propertyCountOrMetricCtrl === 'count') {
+          field = 'count';
+        } else {
+          field = `${countMetricFg.propertyFieldCtrl.replace(/\./g, '_')}_${countMetricFg.propertyMetricCtrl.toLowerCase()}_`;
+        }
+        if (countMetricFg.propertyShortFormatCtrl) {
+          if (field === 'count') {
+            field = `${field}_:_arlas__short_format`;
+          } else {
+            field = `${field}:_arlas__short_format`;
+          }
+        }
+        return [
+          'get',
+          field
+        ];
+      }
       case PROPERTY_SELECTOR_SOURCE.interpolated: {
-
         const interpolatedValues = fgValues.propertyInterpolatedFg;
         let interpolatedColor: Array<string | Array<string | number>>;
         const getField = () =>
@@ -370,7 +395,7 @@ export class ConfigMapExportHelper {
           interpolatedColor = [
             'interpolate',
             ['linear'],
-            ['get', 'count' + (!!interpolatedValues.propertyInterpolatedCountNormalizeCtrl ? '_:normalized' : '')]
+            ['get', 'count' + (!!interpolatedValues.propertyInterpolatedCountNormalizeCtrl ? `_:${NORMALIZED}` : '')]
           ];
         } else if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
           // otherwise if we normalize

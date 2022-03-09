@@ -27,7 +27,7 @@ import { importElements } from '@services/main-form-manager/tools';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
 import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { BasemapStyle, LayerMetadata, VisualisationSetConfig } from 'arlas-web-components';
-import { ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, LayerSourceConfig } from 'arlas-web-contributors';
+import { ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, LayerSourceConfig, MetricConfig } from 'arlas-web-contributors';
 import { ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
 import { MapLayerFormBuilderService, MapLayerFormGroup, MAX_ZOOM } from '../map-layer-form-builder/map-layer-form-builder.service';
@@ -89,6 +89,74 @@ export class MapImportService {
         this.importPropertySelectorManual(inputValues, propertySelectorValues, layerSource);
       } else if (inputValues[0] === 'interpolate') {
         this.importPropertySelectorInterpolated(inputValues, propertySelectorValues, isAggregated, layerSource);
+      }
+    }
+  }
+
+
+  public static importPropertySelectorForLabel(
+    inputValues: any,
+    propertySelectorValues: any,
+    isAggregated: boolean,
+    layerSource: LayerSourceConfig) {
+    console.log(inputValues);
+    if (typeof inputValues === 'string' || typeof inputValues === 'number') {
+      propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.fix_input;
+      propertySelectorValues.propertyFixInput = inputValues;
+    } else if (inputValues instanceof Array) {
+      if (inputValues.length === 2) {
+        const flatField = (inputValues as Array<string>)[1];
+        if (isAggregated) {
+          const isFetchedHits = !!layerSource.fetched_hits && !!layerSource.fetched_hits.fields
+            && layerSource.fetched_hits.fields.length > 0;
+          const hasMetricForLabels = !!layerSource.metrics && layerSource.metrics.filter(m => m.short_format !== undefined).length > 0;
+          if (isFetchedHits) {
+            const providedField = layerSource.fetched_hits.fields.find(f => f.replace(/\./g, '_') === flatField);
+            propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_field_for_agg;
+            if(providedField) {
+              propertySelectorValues.propertyProvidedFieldAggFg = {
+                propertyProvidedFieldAggCtrl: providedField,
+                propertyProvidedFieldSortCtrl: layerSource.fetched_hits.sorts.join(',')
+              };
+            }
+          } else if (hasMetricForLabels) {
+            const getFlatMetric = (m: MetricConfig) => {
+              let flatMetric = '';
+              if(m.metric === 'count') {
+                flatMetric = 'count';
+              } else {
+                flatMetric = `${m.field.replace(/\./g, '_')}_${m.metric.toString().toLowerCase()}_`;
+              }
+              if (m.short_format) {
+                if (flatMetric === 'count') {
+                  flatMetric += `_:_arlas__short_format`;
+                } else {
+                  flatMetric += `:_arlas__short_format`;
+                }
+              }
+              console.log(flatMetric);
+              return flatMetric;
+            };
+            const metric = layerSource.metrics
+              .filter(m => m.short_format !== undefined)
+              .find(m => getFlatMetric(m) === flatField);
+            if (!!metric) {
+              propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.metric_on_field;
+              propertySelectorValues.propertyCountOrMetricFg = {
+                propertyCountOrMetricCtrl: metric.metric === 'count' ? COUNT_OR_METRIC.COUNT : COUNT_OR_METRIC.METRIC,
+                propertyMetricCtrl: metric.metric === 'count' ? undefined : metric.metric.toString().toUpperCase(),
+                propertyFieldCtrl: metric.metric === 'count' ? undefined : metric.field,
+                propertyShortFormatCtrl: metric.short_format
+              };
+            }
+          }
+        } else {
+          const providedField = layerSource.include_fields.find(f => f.replace(/\./g, '_') === flatField);
+          propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_field_for_feature;
+          propertySelectorValues.propertyProvidedFieldFeatureFg = {
+            propertyProvidedFieldFeatureCtrl: providedField
+          };
+        }
       }
     }
   }
@@ -367,6 +435,19 @@ export class MapImportService {
     values.styleStep.colorFg = {};
     this.importPropertySelector(colors, values.styleStep.colorFg,
       PROPERTY_SELECTOR_SOURCE.fix_color, isAggregated, layerSource);
+    if (layer.type === 'symbol') {
+      values.styleStep.labelSizeFg = {};
+      values.styleStep.labelRotationFg = {};
+      values.styleStep.labelContentFg = {};
+      const size = layer.layout['text-size'];
+      const content = layer.layout['text-field'];
+      this.importPropertySelector(size, values.styleStep.labelSizeFg,
+        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+      const rotation = layer.layout['text-rotate'];
+      this.importPropertySelector(rotation, values.styleStep.labelRotationFg,
+        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+      this.importPropertySelectorForLabel(content, values.styleStep.labelContentFg, isAggregated, layerSource);
+    }
     if (layerMode === LAYER_MODE.features) {
       this.importLayerFeatures(values, layer, layerSource);
     } else if (layerMode === LAYER_MODE.featureMetric) {
@@ -375,16 +456,6 @@ export class MapImportService {
       this.importLayerCluster(values, layer, layerSource);
     }
 
-    if (layer.type === 'symbol') {
-      values.styleStep.labelSizeFg = {};
-      values.styleStep.labelRotationFg = {};
-      const size = layer.layout['text-size'];
-      this.importPropertySelector(size, values.styleStep.labelSizeFg,
-        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
-      const rotation = layer.layout['text-rotate'];
-      this.importPropertySelector(rotation, values.styleStep.labelRotationFg,
-        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
-    }
 
     typeFg.patchValue(values);
 
@@ -405,7 +476,7 @@ export class MapImportService {
 
     values.geometryStep.geometry = layerSource.returned_geometry;
     values.visibilityStep.featuresMax = layerSource.maxfeatures;
-    values.styleStep.geometryType = layer.type === 'symbol' ? 'label' : values.styleStep.geometryType;
+    values.styleStep.geometryType = layer.type === 'symbol' ? 'label' : layer.type;
     values.styleStep.filter = layer.filter;
 
   }
@@ -454,7 +525,7 @@ export class MapImportService {
     values.geometryStep.rawGeometry = isGeometryTypeRaw ? layerSource.raw_geometry.geometry : null;
     values.geometryStep.clusterSort = isGeometryTypeRaw ? layerSource.raw_geometry.sort : null;
     values.visibilityStep.featuresMin = layerSource.minfeatures;
-    values.styleStep.geometryType = layer.type === 'symbol' ? 'label' : values.styleStep.geometryType;
+    values.styleStep.geometryType = layer.type === 'symbol' ? 'label' : layer.type;
     values.styleStep.filter = layer.filter;
 
   }

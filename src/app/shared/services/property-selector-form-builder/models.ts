@@ -21,6 +21,8 @@ export enum PROPERTY_SELECTOR_SOURCE {
     fix_slider = 'Fix slider',
     fix_input = 'Fix input',
     provided_color = 'Provided color',
+    provided_field_for_feature = 'Provided field feature',
+    provided_field_for_agg = 'Provided field agg',
     generated = 'Generated',
     manual = 'Manual',
     interpolated = 'Interpolated',
