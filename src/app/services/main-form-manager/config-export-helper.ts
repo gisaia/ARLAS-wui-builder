@@ -543,6 +543,29 @@ export class ConfigExportHelper {
         };
         break;
       }
+      case PROPERTY_SELECTOR_SOURCE.provided_field_for_feature: {
+        layerSource.include_fields.push(layerValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl);
+        break;
+      }
+      case PROPERTY_SELECTOR_SOURCE.metric_on_field: {
+        const countMetricFg = layerValues.propertyCountOrMetricFg;
+        if (countMetricFg.propertyCountOrMetricCtrl === 'count') {
+          layerSource.metrics.push({
+            field: '',
+            metric: 'count',
+            normalize: false,
+            short_format: !!countMetricFg.propertyShortFormatCtrl
+          });
+        } else {
+          layerSource.metrics.push({
+            field: countMetricFg.propertyFieldCtrl,
+            metric: countMetricFg.propertyMetricCtrl.toString().toLowerCase(),
+            normalize: false,
+            short_format: !!countMetricFg.propertyShortFormatCtrl
+          });
+        }
+        break;
+      }
       case PROPERTY_SELECTOR_SOURCE.generated: {
         layerSource.colors_from_fields.push(layerValues.propertyGeneratedFieldCtrl);
         break;

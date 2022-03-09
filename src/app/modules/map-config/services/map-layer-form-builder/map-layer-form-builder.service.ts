@@ -295,9 +295,17 @@ export class MapLayerFormGroup extends ConfigFormGroup {
   private setNumericOrDateFields(p: PropertySelectorFormGroup, collection: string, collectionFields: SelectOption[]): void {
     p.setCollection(collection);
     p.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.setSyncOptions(collectionFields);
+    p.customControls.propertyCountOrMetricFg.propertyFieldCtrl.setSyncOptions(collectionFields);
   }
 
-  private setKeyrwodFields(p: PropertySelectorFormGroup, collection: string, collectionFields: SelectOption[]): void {
+  private setAllButGeoFields(p: PropertySelectorFormGroup, collection: string, collectionFields: SelectOption[]): void {
+    p.setCollection(collection);
+    p.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl.setSyncOptions(collectionFields);
+    p.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl.setSyncOptions(collectionFields);
+    p.customControls.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl.setSyncOptions(collectionFields);
+  }
+
+  private setKeywordFields(p: PropertySelectorFormGroup, collection: string, collectionFields: SelectOption[]): void {
     p.setCollection(collection);
     p.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl.setSyncOptions(collectionFields);
     p.customControls.propertyProvidedColorFieldCtrl.setSyncOptions(collectionFields);
@@ -305,7 +313,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
     p.customControls.propertyManualFg.propertyManualFieldCtrl.setSyncOptions(collectionFields);
   }
 
-  private setTextKeyrwodFields(p: PropertySelectorFormGroup, collection: string, collectionFields: SelectOption[]): void {
+  private setTextKeywordFields(p: PropertySelectorFormGroup, collection: string, collectionFields: SelectOption[]): void {
     p.setCollection(collection);
     p.customControls.propertyProvidedColorLabelCtrl.setSyncOptions(collectionFields);
   }
@@ -314,26 +322,30 @@ export class MapLayerFormGroup extends ConfigFormGroup {
     toKeywordOptionsObs(collectionService
       .getCollectionFields(this.customControls.collection.value))
       .subscribe(collectionFs => {
-        this.setKeyrwodFields(mapFg.opacity, this.customControls.collection.value, collectionFs);
-        this.setKeyrwodFields(mapFg.colorFg, this.customControls.collection.value, collectionFs);
-        this.setKeyrwodFields(mapFg.widthFg, this.customControls.collection.value, collectionFs);
-        this.setKeyrwodFields(mapFg.radiusFg, this.customControls.collection.value, collectionFs);
-        this.setKeyrwodFields(mapFg.strokeColorFg, this.customControls.collection.value, collectionFs);
-        this.setKeyrwodFields(mapFg.strokeOpacityFg, this.customControls.collection.value, collectionFs);
-        this.setKeyrwodFields(mapFg.strokeWidthFg, this.customControls.collection.value, collectionFs);
-        this.setKeyrwodFields(mapFg.weightFg, this.customControls.collection.value, collectionFs);
+        this.setKeywordFields(mapFg.opacity, this.customControls.collection.value, collectionFs);
+        this.setKeywordFields(mapFg.colorFg, this.customControls.collection.value, collectionFs);
+        this.setKeywordFields(mapFg.widthFg, this.customControls.collection.value, collectionFs);
+        this.setKeywordFields(mapFg.radiusFg, this.customControls.collection.value, collectionFs);
+        this.setKeywordFields(mapFg.strokeColorFg, this.customControls.collection.value, collectionFs);
+        this.setKeywordFields(mapFg.strokeOpacityFg, this.customControls.collection.value, collectionFs);
+        this.setKeywordFields(mapFg.strokeWidthFg, this.customControls.collection.value, collectionFs);
+        this.setKeywordFields(mapFg.weightFg, this.customControls.collection.value, collectionFs);
+        this.setKeywordFields(mapFg.labelRotationFg, this.customControls.collection.value, collectionFs);
+        this.setKeywordFields(mapFg.labelSizeFg, this.customControls.collection.value, collectionFs);
       });
     toTextOrKeywordOptionsObs(collectionService
       .getCollectionFields(this.customControls.collection.value))
       .subscribe(collectionFs => {
-        this.setTextKeyrwodFields(mapFg.opacity, this.customControls.collection.value, collectionFs);
-        this.setTextKeyrwodFields(mapFg.colorFg, this.customControls.collection.value, collectionFs);
-        this.setTextKeyrwodFields(mapFg.widthFg, this.customControls.collection.value, collectionFs);
-        this.setTextKeyrwodFields(mapFg.radiusFg, this.customControls.collection.value, collectionFs);
-        this.setTextKeyrwodFields(mapFg.strokeColorFg, this.customControls.collection.value, collectionFs);
-        this.setTextKeyrwodFields(mapFg.strokeOpacityFg, this.customControls.collection.value, collectionFs);
-        this.setTextKeyrwodFields(mapFg.strokeWidthFg, this.customControls.collection.value, collectionFs);
-        this.setTextKeyrwodFields(mapFg.weightFg, this.customControls.collection.value, collectionFs);
+        this.setTextKeywordFields(mapFg.opacity, this.customControls.collection.value, collectionFs);
+        this.setTextKeywordFields(mapFg.colorFg, this.customControls.collection.value, collectionFs);
+        this.setTextKeywordFields(mapFg.widthFg, this.customControls.collection.value, collectionFs);
+        this.setTextKeywordFields(mapFg.radiusFg, this.customControls.collection.value, collectionFs);
+        this.setTextKeywordFields(mapFg.strokeColorFg, this.customControls.collection.value, collectionFs);
+        this.setTextKeywordFields(mapFg.strokeOpacityFg, this.customControls.collection.value, collectionFs);
+        this.setTextKeywordFields(mapFg.strokeWidthFg, this.customControls.collection.value, collectionFs);
+        this.setTextKeywordFields(mapFg.weightFg, this.customControls.collection.value, collectionFs);
+        this.setTextKeywordFields(mapFg.labelRotationFg, this.customControls.collection.value, collectionFs);
+        this.setTextKeywordFields(mapFg.labelSizeFg, this.customControls.collection.value, collectionFs);
       });
     toNumericOrDateOptionsObs(collectionService
       .getCollectionFields(this.customControls.collection.value))
@@ -346,9 +358,16 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         this.setNumericOrDateFields(mapFg.strokeOpacityFg, this.customControls.collection.value, collectionFs);
         this.setNumericOrDateFields(mapFg.strokeWidthFg, this.customControls.collection.value, collectionFs);
         this.setNumericOrDateFields(mapFg.weightFg, this.customControls.collection.value, collectionFs);
+        this.setNumericOrDateFields(mapFg.labelRotationFg, this.customControls.collection.value, collectionFs);
+        this.setNumericOrDateFields(mapFg.labelSizeFg, this.customControls.collection.value, collectionFs);
+        this.setNumericOrDateFields(mapFg.labelContentFg, this.customControls.collection.value, collectionFs);
+      });
+    toAllButGeoOptionsObs(collectionService
+      .getCollectionFields(this.customControls.collection.value))
+      .subscribe(collectionFs => {
+        this.setAllButGeoFields(mapFg.labelContentFg, this.customControls.collection.value, collectionFs);
       });
   }
-
   private calculatenetworkFetchingLevel(collection: string, collectionService: CollectionService,
     networkFetchingLevelControl: SliderFormControl,
     zoomMinControl: SliderFormControl, zoomMaxControl: SliderFormControl) {
@@ -593,7 +612,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
   public constructor(
     collection: string,
-    collectionFieldsObs:  Observable<Array<CollectionField>>,
+    collectionFieldsObs: Observable<Array<CollectionField>>,
     type: string,
     geometryTypes: Array<GEOMETRY_TYPE>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService,
@@ -957,6 +976,9 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   public get opacity() {
     return this.styleStep.get('opacity') as PropertySelectorFormGroup;
   }
+  public get labelContentFg() {
+    return this.styleStep.get('labelContentFg') as PropertySelectorFormGroup;
+  }
   public get colorFg() {
     return this.styleStep.get('colorFg') as PropertySelectorFormGroup;
   }
@@ -1172,7 +1194,7 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
         )
       },
       [
-        PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.provided_field_for_agg
+        PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.provided_field_for_agg, PROPERTY_SELECTOR_SOURCE.metric_on_field
       ]);
   }
   public get featureMetricSort() {
@@ -1212,7 +1234,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
       ],
       [
         /** Sources for cluser label */
-        PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.provided_field_for_agg
+        PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.provided_field_for_agg, PROPERTY_SELECTOR_SOURCE.metric_on_field
       ],
       {
         aggGeometry: new SelectFormControl(
