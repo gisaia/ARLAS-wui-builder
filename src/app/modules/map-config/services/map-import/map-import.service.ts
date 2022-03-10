@@ -59,7 +59,7 @@ export class MapImportService {
       if (fixType === PROPERTY_SELECTOR_SOURCE.fix_color) {
         propertySelectorValues.propertyFixColor = inputValues;
       } else if (fixType === PROPERTY_SELECTOR_SOURCE.fix_slider) {
-        propertySelectorValues.propertyFixSlider = inputValues;
+        propertySelectorValues.propertyFixSlider = inputValues + '';
       }
 
     } else if (inputValues instanceof Array) {
@@ -111,13 +111,18 @@ export class MapImportService {
             && layerSource.fetched_hits.fields.length > 0;
           const hasMetricForLabels = !!layerSource.metrics && layerSource.metrics.filter(m => m.short_format !== undefined).length > 0;
           if (isFetchedHits) {
-            const providedField = layerSource.fetched_hits.fields.find(f => f.replace(/\./g, '_') === flatField);
+            const providedField = layerSource.fetched_hits.fields.find(f => f.replace(/\./g, '_') === flatField ||
+             (f.replace(/\./g, '_') + ':_arlas__short_format')  === flatField);
             propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_field_for_agg;
             if(providedField) {
               propertySelectorValues.propertyProvidedFieldAggFg = {
                 propertyProvidedFieldAggCtrl: providedField,
                 propertyProvidedFieldSortCtrl: layerSource.fetched_hits.sorts.join(',')
               };
+              if (flatField.includes(':_arlas__short_format') && !!layerSource.fetched_hits.short_form_fields) {
+                propertySelectorValues.propertyProvidedFieldAggFg.propertyShortFormatCtrl = true;
+
+              }
             }
           } else if (hasMetricForLabels) {
             const getFlatMetric = (m: MetricConfig) => {
@@ -151,11 +156,16 @@ export class MapImportService {
             }
           }
         } else {
-          const providedField = layerSource.include_fields.find(f => f.replace(/\./g, '_') === flatField);
+          const providedField = layerSource.include_fields.find(f => f.replace(/\./g, '_') === flatField ||
+            (f.replace(/\./g, '_') + ':_arlas__short_format')  === flatField);
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_field_for_feature;
           propertySelectorValues.propertyProvidedFieldFeatureFg = {
             propertyProvidedFieldFeatureCtrl: providedField
           };
+          if (flatField.includes(':_arlas__short_format') && layerSource.short_form_fields) {
+            propertySelectorValues.propertyProvidedFieldFeatureFg.propertyShortFormatCtrl = true;
+
+          }
         }
       }
     }

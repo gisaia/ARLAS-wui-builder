@@ -43,6 +43,8 @@ export const TEXT_OR_KEYWORD = [
   typeEnum.TEXT, typeEnum.KEYWORD
 ];
 
+
+
 export function toOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
   return collectionFieldsObs.pipe(map(
     fields => fields

@@ -265,6 +265,7 @@ export class ConfigExportHelper {
       minzoom: modeValues.visibilityStep.zoomMin,
       maxzoom: modeValues.visibilityStep.zoomMax,
       include_fields: [],
+      short_form_fields: [],
       colors_from_fields: [],
       provided_fields: [],
       normalization_fields: [],
@@ -536,23 +537,31 @@ export class ConfigExportHelper {
         if (!layerSource.fetched_hits) {
           layerSource.fetched_hits = {
             sorts,
-            fields: []
+            fields: [],
+            short_form_fields: []
           };
         }
         const fieldsSet = new Set(layerSource.fetched_hits.fields);
+        const shortFieldsSet: Set<string> = new Set(layerSource.fetched_hits.short_form_fields);
         if (layerValues.propertyProvidedFieldAggFg && layerValues.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl) {
           sorts = layerValues.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl.split(',');
         }
         fieldsSet.add(layerValues.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl);
-        console.log(layerValues.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl);
+        if (layerValues.propertyProvidedFieldAggFg.propertyShortFormatCtrl) {
+          shortFieldsSet.add(layerValues.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl);
+        }
         layerSource.fetched_hits = {
           sorts,
-          fields: Array.from(fieldsSet)
+          fields: Array.from(fieldsSet),
+          short_form_fields: Array.from(shortFieldsSet)
         };
         break;
       }
       case PROPERTY_SELECTOR_SOURCE.provided_field_for_feature: {
         layerSource.include_fields.push(layerValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl);
+        if (layerValues.propertyProvidedFieldFeatureFg.propertyShortFormatCtrl) {
+          layerSource.short_form_fields.push(layerValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl);
+        }
         break;
       }
       case PROPERTY_SELECTOR_SOURCE.metric_on_field: {
