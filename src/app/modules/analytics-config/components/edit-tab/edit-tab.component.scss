@@ -35,4 +35,13 @@ under the License.
       }
     }
   }
+
+  ::ng-deep .ip-button-icon {
+    min-width: -webkit-fill-available;
+    padding: 0 !important;
+  }
+
+  ::ng-deep .ip-button-icon:hover {
+    background-color: lightgray;
+  }
 }

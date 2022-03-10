@@ -218,7 +218,6 @@ export class ConfigExportHelper {
 
     if (!!analyticsConfigList) {
       (analyticsConfigList.value as Array<any>).forEach(tab => {
-        console.log(tab);
         config.arlas.web.options.tabs.push(
           {
             name: tab.tabName,
@@ -1187,7 +1186,10 @@ export class ConfigExportHelper {
           options: {
             showActionsOnhover: 'true',
             showDetailIconName: 'keyboard_arrow_down',
-            hideDetailIconName: 'keyboard_arrow_up'
+            hideDetailIconName: 'keyboard_arrow_up',
+            icon: widgetData.icon,
+            showName: widgetData.showName,
+            showIcon: widgetData.showIcon
           }
         } as AnalyticComponentResultListInputConfig
       } as AnalyticComponentConfig;

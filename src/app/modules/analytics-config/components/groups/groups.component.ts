@@ -126,8 +126,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   public drop(event: CdkDragDrop<string[]>) {
-    console.log(this.groupsFa);
-    console.log(event);
     moveItemInFormArray(event.previousIndex, event.currentIndex, this.groupsFa);
     this.updateAnalytics();
   }

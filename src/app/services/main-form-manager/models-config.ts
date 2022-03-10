@@ -270,6 +270,9 @@ export interface AnalyticComponentResultListInputOptions {
   showActionsOnhover?: string;
   showDetailIconName?: string;
   hideDetailIconName?: string;
+  icon?: string;
+  showName?: boolean;
+  showIcon?: boolean;
 }
 
 export interface AnalyticComponentHistogramInputConfig extends AnalyticComponentInputConfig {

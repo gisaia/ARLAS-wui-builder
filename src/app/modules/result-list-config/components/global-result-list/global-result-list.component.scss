@@ -22,54 +22,42 @@ under the License.
     padding: 0 12px;
   }
 
+  & > ::ng-deep .mat-tab-header {
+    .mat-tab-label {
+      min-width: 210px;
+      .mat-tab-label-content {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
+    }
+  }
+
   ::ng-deep .mat-tab-labels :last-child.mat-tab-label {
     min-width: 0;
     color: unset;
     opacity: unset;
   }
 
-  .content{
+  .content {
     display: flex;
     align-items: center;
     width: 100%;
     gap: 0 10px;
 
     .tab-name {
+      flex: 5;
+    }
+
+    .icon {
       flex: 1;
     }
 
-    .close {
+    .close,
+    .settings {
       font-size: 16px;
       width: 16px;
       height: 16px;
     }
   }
-}
-
-.list-tab-group
-  > ::ng-deep
-  .mat-tab-header
-  > .mat-tab-label-container
-  > .mat-tab-list
-  > .mat-tab-labels
-  > .mat-tab-label
-  > .mat-tab-label-content {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.list-tab-group
-  > ::ng-deep
-  .mat-tab-header
-  > .mat-tab-label-container
-  > .mat-tab-list
-  > .mat-tab-labels
-  > .mat-tab-label:hover
-  .delete-icon {
-  opacity: 1;
-}
-
-.delete-icon {
-  opacity: 0;
 }

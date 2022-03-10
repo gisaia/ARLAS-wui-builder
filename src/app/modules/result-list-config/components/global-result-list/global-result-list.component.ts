@@ -17,10 +17,11 @@ specific language governing permissions and limitations
 under the License.
 */
 
+import { EditTabComponent } from '@analytics-config/components/edit-tab/edit-tab.component';
 import { ResultlistConfigForm } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { Component, OnDestroy } from '@angular/core';
 import { FormArray, FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
@@ -42,6 +43,7 @@ export class GlobalResultListComponent implements OnDestroy {
 
   private removeAfterClosedSub: Subscription;
   public preview = [];
+  private editDialogRef: MatDialogRef<EditTabComponent>;
 
   public constructor(
     public mainFormService: MainFormService,
@@ -90,6 +92,27 @@ export class GlobalResultListComponent implements OnDestroy {
         if (this.selected.value !== 0) {
           this.selected.setValue(this.selected.value - 1);
         }
+      }
+    });
+  }
+
+  public configTab(tabIndex: number){
+    const tab = this.listsFa.at(tabIndex);
+    this.editDialogRef = this.dialog.open(EditTabComponent, {
+      data: {
+        name: tab.value.title,
+        icon: tab.value.icon,
+        showName: tab.value.showName,
+        showIcon: tab.value.showIcon
+      }
+    });
+
+    this.editDialogRef.afterClosed().subscribe( result => {
+      if (result) {
+        tab.get('title').setValue(result.name);
+        tab.get('icon').setValue(result.icon);
+        tab.get('showName').setValue(result.showName);
+        tab.get('showIcon').setValue(result.showIcon);
       }
     });
   }
