@@ -20,7 +20,7 @@ import { AnalyticsInitService } from '@analytics-config/services/analytics-init/
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { TranslateService } from '@ngx-translate/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
@@ -30,6 +30,7 @@ import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { isFullyTouched, moveInFormArray } from '@utils/tools';
 import { Subscription } from 'rxjs';
+import { EditTabComponent } from '@analytics-config/components/edit-tab/edit-tab.component';
 
 @Component({
   selector: 'arlas-tabs',
@@ -47,6 +48,7 @@ export class TabsComponent implements OnDestroy {
   private newAfterClosedSub: Subscription;
   private removeAfterClosedSub: Subscription;
   private finishAfterClosedSub: Subscription;
+  private editDialogRef: MatDialogRef<EditTabComponent>;
 
   public constructor(
     private defaultValuesService: DefaultValuesService,
@@ -114,6 +116,45 @@ export class TabsComponent implements OnDestroy {
       if (result) {
         this.tabsFa.removeAt(tabIndex);
         this.matTabGroup.selectedIndex = Math.min(tabIndex, this.tabsFa.controls.length - 1);
+      }
+    });
+  }
+
+  public configTab(tabIndex: number){
+    const tab = this.getTab(tabIndex);
+    this.editDialogRef = this.dialog.open(EditTabComponent, {
+      data: {
+        name: tab.value.tabName,
+        icon: tab.value.tabIcon,
+        showName: tab.value.showName,
+        showIcon: tab.value.showIcon
+      }
+    });
+
+    this.editDialogRef.afterClosed().subscribe( result => {
+      if (result) {
+        const otherTabNames = Object.values(this.tabsFa.controls).filter((c, index) => index !== tabIndex).map(c => c.get('tabName').value);
+        const updateByCheckingDuplicates = (newTabName: string) => {
+          if (otherTabNames.indexOf(newTabName) >= 0) {
+            const dialogRef = this.dialog.open(InputModalComponent, {
+              data: {
+                title: 'Tab name',
+                message: 'Another tab already exists with the same name, please choose another one',
+                initialValue: newTabName,
+                noCancel: true
+              }
+            });
+            this.finishAfterClosedSub = dialogRef.afterClosed().subscribe(tabName => {
+              updateByCheckingDuplicates(tabName);
+            });
+          } else {
+            this.getTab(tabIndex).get('tabName').setValue(newTabName);
+          }
+        };
+        updateByCheckingDuplicates(result.name);
+        this.getTab(tabIndex).get('tabIcon').setValue(result.icon);
+        this.getTab(tabIndex).get('showName').setValue(result.showName);
+        this.getTab(tabIndex).get('showIcon').setValue(result.showIcon);
       }
     });
   }

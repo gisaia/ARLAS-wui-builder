@@ -49,21 +49,25 @@ under the License.
               background-color: white;
               font-weight: bold;
               height: 30px;
-              flex: 1;
+              flex: 5;
+            }
+
+            .icon {
+              flex:1;
             }
 
             .tab-name {
               align-self: center;
               cursor: text;
               min-height: 15px;
-              flex: 1;
+              flex: 5;
 
               &.pointer {
                 cursor: pointer;
               }
             }
 
-            .close {
+            .close, .settings {
               font-size: 16px;
               width: 16px;
               height: 16px;

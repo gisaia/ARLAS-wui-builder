@@ -1,0 +1,33 @@
+<div mat-dialog-title>{{'Update tab' | translate}}</div>
+<div mat-dialog-content [formGroup]="tabForm">
+  <div class="edit-tab-top">
+    <div>
+      <mat-form-field>
+        <mat-label>{{'Name' | translate}}</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+    </div>
+    <div class="icon">
+      <mat-icon style="cursor: pointer;" (click)="iconInput.click();">
+        {{this.tabForm.get('icon').value}}</mat-icon>
+      <input #iconInput matInput [iconPicker]="this.tabForm.get('icon').value" [ipIconPack]="['mat']"
+        [ipFallbackIcon]="'short_text'" [ipPosition]="'right'" [ipButtonStyleClass]="'mat-raised-button'"
+        [ipMaxHeight]="'250px'" [ipWidth]="'307px'" (iconPickerSelect)="onIconPickerSelect($event)" />
+    </div>
+  </div>
+  <div>
+    <mat-form-field style="width: 100%;">
+      <mat-label>{{'Display' | translate}}</mat-label>
+      <mat-select formControlName="display" (selectionChange)="displayChange($event)">
+          <mat-option [value]="'both'">{{ 'Text and icon' | translate}}</mat-option>
+          <mat-option [value]="'text'">{{'Only text' | translate}}</mat-option>
+          <mat-option [value]="'icon'">{{'Only icon' | translate}}</mat-option>
+      </mat-select>
+  </mat-form-field>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]>{{'Cancel' | translate}}</button>
+  <button cdkFocusInitial [mat-dialog-close]="this.tabForm.value" mat-raised-button color="primary">{{'Validate' |
+    translate}}</button>
+</div>

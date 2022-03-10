@@ -29,6 +29,7 @@ import { EditResultlistColumnsComponent } from './components/edit-resultlist-col
 import { EditResultlistDetailsComponent } from './components/edit-resultlist-details/edit-resultlist-details.component';
 import { ResultlistDataComponent } from './components/resultlist-data/resultlist-data.component';
 import { ImportWidgetDialogComponent } from './components/import-widget-dialog/import-widget-dialog.component';
+import { EditTabComponent } from './components/edit-tab/edit-tab.component';
 
 @NgModule({
   entryComponents: [
@@ -46,7 +47,8 @@ import { ImportWidgetDialogComponent } from './components/import-widget-dialog/i
     EditResultlistColumnsComponent,
     EditResultlistDetailsComponent,
     ResultlistDataComponent,
-    ImportWidgetDialogComponent
+    ImportWidgetDialogComponent,
+    EditTabComponent
   ],
   imports: [
     ArlasToolkitSharedModule,
