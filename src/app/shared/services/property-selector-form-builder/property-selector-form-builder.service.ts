@@ -40,6 +40,7 @@ import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@share
 import { valuesToOptions } from '@utils/tools';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
+import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 
 export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
   public constructor(
@@ -153,7 +154,6 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             false,
             toAllButGeoOptionsObs(collectionFieldsObs),
             {
-              resetDependantsOnChange: true,
               dependsOn: () => [this.customControls.propertySource],
               onDependencyChange: (control) => control.enableIf(this.customControls.propertySource.value
                 === PROPERTY_SELECTOR_SOURCE.provided_field_for_agg)
@@ -177,6 +177,32 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
               }
             }
           ),
+          propertyShortFormatCtrl: new SlideToggleFormControl(
+            false,
+            marker('short format'),
+            marker('short format description'),
+            {
+              optional: true,
+              dependsOn: () => [
+                this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl,
+              ],
+              onDependencyChange: (control) => {
+                let isNumericField = false;
+                const field = this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl.value;
+                const importValue = this.customControls.propertyProvidedFieldAggFg.propertyShortFormatCtrl.value;
+                if (!!field && field !== '') {
+                  const fieldOption = this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl
+                    .syncOptions.find(so => so.label === field);
+                  isNumericField = !!fieldOption && (fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.DOUBLE
+                    || fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.FLOAT
+                    || fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.INTEGER
+                    || fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.LONG
+                  ) || (!!importValue && !this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl.dirty);
+                }
+                control.enableIf(isNumericField);
+              }
+            },
+          )
         },
         {
           dependsOn: () => [this.customControls.propertySource],
@@ -191,11 +217,36 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             false,
             toAllButGeoOptionsObs(collectionFieldsObs),
             {
-              resetDependantsOnChange: true,
               dependsOn: () => [this.customControls.propertySource],
               onDependencyChange: (control) => control.enableIf(this.customControls.propertySource.value
                 === PROPERTY_SELECTOR_SOURCE.provided_field_for_feature)
             }
+          ),
+          propertyShortFormatCtrl: new SlideToggleFormControl(
+            false,
+            marker('short format'),
+            marker('short format description'),
+            {
+              optional: true,
+              dependsOn: () => [
+                this.customControls.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl,
+              ],
+              onDependencyChange: (control) => {
+                let isNumericField = false;
+                const field = this.customControls.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl.value;
+                const importValue = this.customControls.propertyProvidedFieldFeatureFg.propertyShortFormatCtrl.value;
+                if (!!field && field !== '') {
+                  const fieldOption = this.customControls.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl
+                    .syncOptions.find(so => so.label === field);
+                  isNumericField = !!fieldOption && (fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.DOUBLE
+                    || fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.FLOAT
+                    || fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.INTEGER
+                    || fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.LONG
+                  ) || (!!importValue && !this.customControls.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl.dirty);
+                }
+                control.enableIf(isNumericField);
+              }
+            },
           )
         },
         {
@@ -798,11 +849,15 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
       propertyProvidedFieldAggCtrl: this.get('propertyProvidedFieldAggFg')
         .get('propertyProvidedFieldAggCtrl') as SelectFormControl,
       propertyProvidedFieldSortCtrl: this.get('propertyProvidedFieldAggFg')
-        .get('propertyProvidedFieldSortCtrl') as OrderedSelectFormControl
+        .get('propertyProvidedFieldSortCtrl') as OrderedSelectFormControl,
+      propertyShortFormatCtrl: this.get('propertyProvidedFieldAggFg').get('propertyShortFormatCtrl') as SlideToggleFormControl
+
     },
     propertyProvidedFieldFeatureFg: {
       propertyProvidedFieldFeatureCtrl: this.get('propertyProvidedFieldFeatureFg')
-        .get('propertyProvidedFieldFeatureCtrl') as SelectFormControl
+        .get('propertyProvidedFieldFeatureCtrl') as SelectFormControl,
+      propertyShortFormatCtrl: this.get('propertyProvidedFieldFeatureFg').get('propertyShortFormatCtrl') as SlideToggleFormControl
+
     },
     propertyCountOrMetricFg: {
       propertyCountOrMetricCtrl: this.get('propertyCountOrMetricFg').get('propertyCountOrMetricCtrl') as ButtonToggleFormControl,

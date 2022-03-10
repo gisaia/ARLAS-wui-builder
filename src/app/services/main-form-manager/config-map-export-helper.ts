@@ -341,9 +341,17 @@ export class ConfigMapExportHelper {
       case PROPERTY_SELECTOR_SOURCE.provided_color:
         return this.getArray(fgValues.propertyProvidedColorFieldCtrl);
       case PROPERTY_SELECTOR_SOURCE.provided_field_for_agg:
-        return this.getArray(fgValues.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl);
+        let suffix = '';
+        if (fgValues.propertyProvidedFieldAggFg.propertyShortFormatCtrl) {
+          suffix = ':_arlas__short_format';
+        }
+        return this.getArray(fgValues.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl + suffix);
       case PROPERTY_SELECTOR_SOURCE.provided_field_for_feature:
-        return this.getArray(fgValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl);
+        let featureSuffix = '';
+        if (fgValues.propertyProvidedFieldFeatureFg.propertyShortFormatCtrl) {
+          featureSuffix = ':_arlas__short_format';
+        }
+        return this.getArray(fgValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl + featureSuffix);
       case PROPERTY_SELECTOR_SOURCE.generated:
         return this.getArray(fgValues.propertyGeneratedFieldCtrl + '_arlas__color');
       case PROPERTY_SELECTOR_SOURCE.manual:
