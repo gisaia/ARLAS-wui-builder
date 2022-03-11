@@ -332,6 +332,9 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         this.setKeywordFields(mapFg.weightFg, this.customControls.collection.value, collectionFs);
         this.setKeywordFields(mapFg.labelRotationFg, this.customControls.collection.value, collectionFs);
         this.setKeywordFields(mapFg.labelSizeFg, this.customControls.collection.value, collectionFs);
+        this.setKeywordFields(mapFg.labelHaloBlurFg, this.customControls.collection.value, collectionFs);
+        this.setKeywordFields(mapFg.labelHaloColorFg, this.customControls.collection.value, collectionFs);
+        this.setKeywordFields(mapFg.labelHaloWidthFg, this.customControls.collection.value, collectionFs);
       });
     toTextOrKeywordOptionsObs(collectionService
       .getCollectionFields(this.customControls.collection.value))
@@ -346,6 +349,9 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         this.setTextKeywordFields(mapFg.weightFg, this.customControls.collection.value, collectionFs);
         this.setTextKeywordFields(mapFg.labelRotationFg, this.customControls.collection.value, collectionFs);
         this.setTextKeywordFields(mapFg.labelSizeFg, this.customControls.collection.value, collectionFs);
+        this.setTextKeywordFields(mapFg.labelHaloBlurFg, this.customControls.collection.value, collectionFs);
+        this.setTextKeywordFields(mapFg.labelHaloColorFg, this.customControls.collection.value, collectionFs);
+        this.setTextKeywordFields(mapFg.labelHaloWidthFg, this.customControls.collection.value, collectionFs);
       });
     toNumericOrDateOptionsObs(collectionService
       .getCollectionFields(this.customControls.collection.value))
@@ -361,6 +367,9 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         this.setNumericOrDateFields(mapFg.labelRotationFg, this.customControls.collection.value, collectionFs);
         this.setNumericOrDateFields(mapFg.labelSizeFg, this.customControls.collection.value, collectionFs);
         this.setNumericOrDateFields(mapFg.labelContentFg, this.customControls.collection.value, collectionFs);
+        this.setNumericOrDateFields(mapFg.labelHaloBlurFg, this.customControls.collection.value, collectionFs);
+        this.setNumericOrDateFields(mapFg.labelHaloColorFg, this.customControls.collection.value, collectionFs);
+        this.setNumericOrDateFields(mapFg.labelHaloWidthFg, this.customControls.collection.value, collectionFs);
       });
     toAllButGeoOptionsObs(collectionService
       .getCollectionFields(this.customControls.collection.value))
@@ -832,7 +841,8 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           marker('property label size description')
         )
           .withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
+          .withOnDependencyChange((control) => control.enableIf(this.isLabel()))
+          .withTitle(marker('size rotation offset')),
         labelRotationFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
           'labelRotation',
@@ -852,7 +862,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             marker('label offset dx description'),
             'number',
             {
-              optional: true
+              optional: false
             }
           ),
           dy: new InputFormControl(
@@ -861,12 +871,47 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             marker('label offset dy description'),
             'number',
             {
-              optional: true
+              optional: false
             }
           )
         })
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
+        labelHaloColorFg: propertySelectorFormBuilder.build(
+          PROPERTY_TYPE.color,
+          'labelHaloColor',
+          colorSources,
+          isAggregated,
+          collection,
+          marker('property label halo color description')
+        )
+          .withDependsOn(() => [this.geometryType])
+          .withOnDependencyChange((control) => control.enableIf(this.isLabel()))
+          .withTitle(marker('Halo title')),
+        labelHaloWidthFg: propertySelectorFormBuilder.build(
+          PROPERTY_TYPE.number,
+          'labelHaloWidth',
+          [
+            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
+          ],
+          isAggregated,
+          collection,
+          marker('property label halo width description')
+        )
+          .withDependsOn(() => [this.geometryType])
+          .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
+        labelHaloBlurFg: propertySelectorFormBuilder.build(
+          PROPERTY_TYPE.number,
+          'labelHaloBlur',
+          [
+            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
+          ],
+          isAggregated,
+          collection,
+          marker('property label halo blur description')
+        )
+          .withDependsOn(() => [this.geometryType])
+          .withOnDependencyChange((control) => control.enableIf(this.isLabel()))
 
       }).withStepName(marker('Style')),
       visibilityStep: new ConfigFormGroup({
@@ -1010,11 +1055,6 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
     return this.visibilityStep.get('filters') as MapFiltersControl;
   }
 
-
-  public get layerNameCtrl() {
-    return this.styleStep.get('layerFg.layerNameCtrl') as CollectionConfigFormGroup;
-  }
-
   public get labelSizeFg() {
     return this.styleStep.get('labelSizeFg') as PropertySelectorFormGroup;
   }
@@ -1023,14 +1063,26 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
     return this.styleStep.get('labelRotationFg') as PropertySelectorFormGroup;
   }
 
+  public get labelHaloColorFg() {
+    return this.styleStep.get('labelHaloColorFg') as PropertySelectorFormGroup;
+  }
+
+  public get labelHaloBlurFg() {
+    return this.styleStep.get('labelHaloBlurFg') as PropertySelectorFormGroup;
+  }
+
+  public get labelHaloWidthFg() {
+    return this.styleStep.get('labelHaloWidthFg') as PropertySelectorFormGroup;
+  }
+
   public get labelOffsetFg() {
     return this.styleStep.get('labelOffsetFg') as ConfigFormGroup;
   }
   public get labelOffsetDx() {
-    return this.styleStep.get('labelOffsetFg.dx') as InputFormControl;
+    return this.styleStep.get('labelOffsetFg').get('dx') as InputFormControl;
   }
   public get labelOffsetDy() {
-    return this.styleStep.get('labelOffsetFg.dy') as InputFormControl;
+    return this.styleStep.get('labelOffsetFg').get('dy') as InputFormControl;
   }
 
   private isCircleOrFill(): boolean {

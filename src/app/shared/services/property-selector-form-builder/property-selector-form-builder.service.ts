@@ -276,7 +276,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           propertyMetricCtrl: new SelectFormControl(
             '',
             marker('label metric'),
-            '',
+            marker('label metric description'),
             false,
             [METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX]
               .map(m => ({ label: m, value: m })),

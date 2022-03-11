@@ -85,6 +85,18 @@
                     "labelRotationFg": {
                         "propertySource": "Fix slider",
                         "propertyFixSlider": "0"
+                    },
+                    "labelHaloBlurFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
+                    },
+                    "labelHaloWidthFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
+                    },
+                    "labelHaloColorFg": {
+                        "propertySource": "Fix color",
+                        "propertyFixColor": "#000"
                     }
                 }
             },
@@ -137,6 +149,18 @@
                     "labelRotationFg": {
                         "propertySource": "Fix slider",
                         "propertyFixSlider": "0"
+                    },
+                    "labelHaloBlurFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
+                    },
+                    "labelHaloWidthFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
+                    },
+                    "labelHaloColorFg": {
+                        "propertySource": "Fix color",
+                        "propertyFixColor": "#000"
                     }
                 }
             },
@@ -196,6 +220,18 @@
                     "labelRotationFg": {
                         "propertySource": "Fix slider",
                         "propertyFixSlider": "0"
+                    },
+                    "labelHaloBlurFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
+                    },
+                    "labelHaloWidthFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
+                    },
+                    "labelHaloColorFg": {
+                        "propertySource": "Fix color",
+                        "propertyFixColor": "#000"
                     }
                 }
             }
@@ -605,6 +641,12 @@
         "labelRotationMin": -90,
         "labelRotationMax": 90,
         "labelRotationStep": 5,
+        "labelHaloWidthMin": 0,
+        "labelHaloWidthMax": 5,
+        "labelHaloWidthStep": 0.1,
+        "labelHaloBlurMin": 0,
+        "labelHaloBlurMax": 5,
+        "labelHaloBlurStep": 0.1,
         "swimlaneZeroColor": "#D6D6D6",
         "swimlaneNanColor": "#D6D6D6",
         "swimlaneRepresentation": "global"

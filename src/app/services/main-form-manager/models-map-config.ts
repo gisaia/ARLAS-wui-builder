@@ -73,6 +73,11 @@ export interface Paint {
   'heatmap-opacity'?: number;
   'text-color'?: PaintValue;
   'text-opacity'?: PaintValue;
+  'text-halo-blur'?: PaintValue;
+  'text-halo-width'?: PaintValue;
+  'text-halo-color'?: PaintValue;
+  'text-translate'?: [number, number];
+
 }
 
 export interface PaintColor {

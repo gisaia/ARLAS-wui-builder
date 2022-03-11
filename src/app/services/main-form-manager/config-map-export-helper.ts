@@ -264,6 +264,11 @@ export class ConfigMapExportHelper {
       case GEOMETRY_TYPE.label: {
         paint['text-color'] = color;
         paint['text-opacity']= opacity;
+        paint['text-halo-color'] = this.getMapProperty(modeValues.styleStep.labelHaloColorFg, mode, colorService, taggableFields);
+        paint['text-halo-width'] = this.getMapProperty(modeValues.styleStep.labelHaloWidthFg, mode, colorService, taggableFields);
+        paint['text-halo-blur'] = this.getMapProperty(modeValues.styleStep.labelHaloBlurFg, mode, colorService, taggableFields);
+        paint['text-translate'] = [+modeValues.styleStep.labelOffsetFg.dx, +modeValues.styleStep.labelOffsetFg.dy];
+
         break;
       }
     }

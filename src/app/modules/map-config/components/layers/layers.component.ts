@@ -290,7 +290,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     /** listen to all the ondepencychnage to correctly initiate the controls */
     ConfigFormGroupComponent.listenToAllControlsOnDependencyChange(newLayerFg, this.toUnsubscribe);
     this.layersFa.insert(formGroupIndex + 1, newLayerFg);
-    this.layersFa.markAllAsTouched();
+    this.layersFa.markAsUntouched();
     /** reattribute ids to all layers to have id unicity */
     const layers = this.layersFa.value;
     for (let i = 0; i < layers.length; i++) {

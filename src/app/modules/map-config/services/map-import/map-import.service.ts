@@ -99,7 +99,6 @@ export class MapImportService {
     propertySelectorValues: any,
     isAggregated: boolean,
     layerSource: LayerSourceConfig) {
-    console.log(inputValues);
     if (typeof inputValues === 'string' || typeof inputValues === 'number') {
       propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.fix_input;
       propertySelectorValues.propertyFixInput = inputValues;
@@ -139,7 +138,6 @@ export class MapImportService {
                   flatMetric += `:_arlas__short_format`;
                 }
               }
-              console.log(flatMetric);
               return flatMetric;
             };
             const metric = layerSource.metrics
@@ -350,7 +348,6 @@ export class MapImportService {
         layerMode === LAYER_MODE.cluster ? layerFg.customControls.clusterFg :
           null;
     const isAggregated = layerMode !== LAYER_MODE.features;
-
     typeFg.enable();
     const minzoom = !!layer.minzoom ? layer.minzoom : (!!layerSource.minzoom ? layerSource.minzoom : 0);
     const maxzoom = !!layer.maxzoom ? layer.maxzoom : (!!layerSource.maxzoom ? layerSource.maxzoom : MAX_ZOOM);
@@ -449,14 +446,33 @@ export class MapImportService {
       values.styleStep.labelSizeFg = {};
       values.styleStep.labelRotationFg = {};
       values.styleStep.labelContentFg = {};
+      values.styleStep.labelHaloColorFg = {};
+      values.styleStep.labelHaloBlurFg = {};
+      values.styleStep.labelHaloWidthFg = {};
       const size = layer.layout['text-size'];
       const content = layer.layout['text-field'];
+      const haloColor = layer.paint['text-halo-color'];
+      const haloBlur = layer.paint['text-halo-blur'];
+      const haloWidth = layer.paint['text-halo-width'];
       this.importPropertySelector(size, values.styleStep.labelSizeFg,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
       const rotation = layer.layout['text-rotate'];
       this.importPropertySelector(rotation, values.styleStep.labelRotationFg,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
       this.importPropertySelectorForLabel(content, values.styleStep.labelContentFg, isAggregated, layerSource);
+      this.importPropertySelector(haloColor, values.styleStep.labelHaloColorFg,
+        PROPERTY_SELECTOR_SOURCE.fix_color, isAggregated, layerSource);
+      this.importPropertySelector(haloBlur, values.styleStep.labelHaloBlurFg,
+        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+      this.importPropertySelector(haloWidth, values.styleStep.labelHaloWidthFg,
+        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+      const offset = layer.paint['text-translate'];
+      if (offset) {
+        values.styleStep.labelOffsetFg = {
+          dx: offset[0],
+          dy: offset[1]
+        };
+      }
     }
     if (layerMode === LAYER_MODE.features) {
       this.importLayerFeatures(values, layer, layerSource);
