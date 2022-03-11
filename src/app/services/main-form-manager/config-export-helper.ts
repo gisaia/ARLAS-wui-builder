@@ -362,6 +362,15 @@ export class ConfigExportHelper {
     if (!!modeValues.styleStep.labelSizeFg) {
       this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelSizeFg, layerValues.mode);
     }
+    if (!!modeValues.styleStep.labelHaloColorFg) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelHaloColorFg, layerValues.mode);
+    }
+    if (!!modeValues.styleStep.labelHaloBlurFg) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelHaloBlurFg, layerValues.mode);
+    }
+    if (!!modeValues.styleStep.labelHaloWidthFg) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelHaloWidthFg, layerValues.mode);
+    }
     if (!!modeValues.styleStep.labelRotationFg) {
       this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelRotationFg, layerValues.mode);
     }
