@@ -26,6 +26,7 @@ export const JSONPATH_METRIC = '$.metrics[0].value';
 export const CHIPSEARCH_TYPE = 'chipssearch';
 export const CHIPSEARCH_IDENTIFIER = 'chipssearch';
 import { LayerSourceConfig } from 'arlas-web-contributors';
+import { Aggregation } from 'arlas-api';
 
 export interface Config {
   arlas: ArlasConfig;
@@ -333,6 +334,9 @@ export interface AggregationModelConfig {
     include: Array<string>;
   };
   metrics?: Array<AggregationModelMetricConfig>;
+  order?: Aggregation.OrderEnum;
+  on?: Aggregation.OnEnum;
+
 }
 
 export interface AggregationModelMetricConfig {

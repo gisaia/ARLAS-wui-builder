@@ -358,6 +358,21 @@ export class ButtonToggleFormControl extends ConfigFormControl {
       optionalParams);
   }
 }
+export class RadioButtonFormControl extends ConfigFormControl {
+  public constructor(
+    public options: Array<{ label: string; value: any; }>,
+    description: string,
+    optionalParams?: ControlOptionalParams
+  ) {
+    super(
+      !!options.length ? options[0].value : null,
+      null,
+      description,
+      optionalParams);
+  }
+}
+
+
 
 export class ComponentFormControl extends ConfigFormControl {
   public constructor(

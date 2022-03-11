@@ -29,7 +29,7 @@ import { DefaultConfig, DefaultValuesService } from '@services/default-values/de
 import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
-  ButtonFormControl, ConfigFormGroup, SelectFormControl, SliderFormControl,
+  ButtonFormControl, ButtonToggleFormControl, ConfigFormGroup, SelectFormControl, SliderFormControl,
   SlideToggleFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
@@ -115,6 +115,7 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
               );
             }
             ),
+
           unit: new TitleInputFormControl(
             '',
             marker('powerbar unit'),
@@ -354,7 +355,7 @@ export class PowerbarFormBuilderService extends WidgetFormBuilder {
       this.dialog,
       this.collectionService,
       this.colorService,
-      this.metricBuilderService.build(collection, 'powerbars'));
+      this.metricBuilderService.build(collection, 'powerbars',true));
     this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
 
     return formGroup;

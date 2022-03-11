@@ -748,7 +748,9 @@ export class ConfigExportHelper {
         const aggregationModel: AggregationModelConfig = {
           type: 'term',
           field: widgetData.dataStep.aggregationField,
-          size: widgetData.dataStep.aggregationSize
+          size: widgetData.dataStep.aggregationSize,
+          order: widgetData.dataStep.metric.sortOrder,
+          on: widgetData.dataStep.metric.sortOn
         };
         if (!!widgetData.renderStep.propertyProvidedFieldCtrl) {
           contrib.colorField = widgetData.renderStep.propertyProvidedFieldCtrl;
@@ -973,6 +975,8 @@ export class ConfigExportHelper {
         idString += widgetData.dataStep.metric.metricCollectFunction !== undefined ?
           ('-' + widgetData.dataStep.metric.metricCollectFunction) : '';
         idString += !!widgetData.dataStep.metric.metricCollectField ? ('-' + widgetData.dataStep.metric.metricCollectField) : '';
+        idString += widgetData.dataStep.metric.sortOrder !== undefined ? ('-' + widgetData.dataStep.metric.sortOrder) : '';
+        idString += widgetData.dataStep.metric.sortOn !== undefined ? ('-' + widgetData.dataStep.metric.sortOn) : '';
       }
     } else if (widgetType === WIDGET_TYPE.metric) {
       idString += widgetData.dataStep.function;

@@ -15,6 +15,14 @@
     </mat-button-toggle-group>
 </div>
 
+<div *ngIf="isRadioButton(); let typedControl">
+    <mat-radio-group [formControl]="typedControl"
+        [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
+        [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
+        <mat-radio-button class="radio-button" *ngFor="let opt of typedControl.options" [value]="opt.value">{{ opt.label | translate}} </mat-radio-button>
+    </mat-radio-group>
+</div>
+
 <div *ngIf="isSlider(); let typedControl">
     <mat-label [class.control-error]="typedControl.touched && typedControl.invalid">{{ typedControl.label | translate}}
         {{typedControl.optional ? '' : '*'}}</mat-label>

@@ -36,6 +36,7 @@ import { MetricFormBuilderService } from '../metric-form-builder/metric-form-bui
 import { PowerbarFormBuilderService } from '../powerbar-form-builder/powerbar-form-builder.service';
 import { ResultlistFormBuilderService } from '../resultlist-form-builder/resultlist-form-builder.service';
 import { SwimlaneFormBuilderService, SwimlaneFormGroup } from '../swimlane-form-builder/swimlane-form-builder.service';
+import { Aggregation } from 'arlas-api';
 
 @Injectable({
   providedIn: 'root'
@@ -835,7 +836,6 @@ export class AnalyticsImportService {
   private getMetricImportElements(
     contribAggregationModel: AggregationModelConfig,
     metricControls: MetricCollectControls) {
-
     return [
       {
         value: contribAggregationModel.metrics ? contribAggregationModel.metrics[0].collect_field : null,
@@ -844,8 +844,20 @@ export class AnalyticsImportService {
       {
         value: contribAggregationModel.metrics ? contribAggregationModel.metrics[0].collect_fct.toUpperCase() : DEFAULT_METRIC_VALUE,
         control: metricControls.metricCollectFunction
+      },
+      {
+        value: contribAggregationModel.on ? contribAggregationModel.on : Aggregation.OnEnum.Count,
+        control: metricControls.sortOn
+      },
+      {
+        value: contribAggregationModel.order ? contribAggregationModel.order : Aggregation.OrderEnum.Desc,
+        control: metricControls.sortOrder
       }
     ] as Array<ImportElement>;
+  };
+
+  private  capitalize(s) {
+    return s[0].toUpperCase() + s.slice(1);
   }
 
 }

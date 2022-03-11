@@ -22,14 +22,18 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { CollectionField } from '@services/collection-service/models';
 import { NUMERIC_OR_DATE_TYPES, titleCase } from '@services/collection-service/tools';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
-import { ConfigFormGroup, InputFormControl, SelectFormControl } from '@shared-models/config-form';
-import { Metric } from 'arlas-api';
+import { ButtonToggleFormControl, ConfigFormGroup, InputFormControl, RadioButtonFormControl, SelectFormControl }
+  from '@shared-models/config-form';
+import { Metric, Aggregation } from 'arlas-api';
 
 export const DEFAULT_METRIC_VALUE = 'Count';
 
 export interface MetricCollectControls {
   metricCollectFunction: SelectFormControl;
   metricCollectField: SelectFormControl;
+  sortOn: ButtonToggleFormControl;
+  sortOrder: RadioButtonFormControl;
+
 }
 
 export class MetricCollectFormGroup extends CollectionConfigFormGroup {
@@ -38,7 +42,7 @@ export class MetricCollectFormGroup extends CollectionConfigFormGroup {
     return this.get('metricCollectFunction') as InputFormControl;
   }
 
-  public constructor(collection: string, collectionService: CollectionService, type: string) {
+  public constructor(collection: string, collectionService: CollectionService, type: string, sortable) {
     super(
       collection,
       {
@@ -87,15 +91,68 @@ export class MetricCollectFormGroup extends CollectionConfigFormGroup {
               }
             }
           }
+        ),
+        sortOn: new ButtonToggleFormControl(
+          '',
+          [
+            { label: marker('count'), value: Aggregation.OnEnum.Count },
+            { label: marker('label'), value: Aggregation.OnEnum.Field }
+          ]
+          ,
+          marker('metric sort on description'),
+          {
+            dependsOn: () => [this.metricCollectFunction],
+            onDependencyChange: (control: ButtonToggleFormControl) => {
+              control.enableIf(sortable);
+              if (sortable) {
+                if (this.metricCollectFunction.value &&
+                  this.metricCollectFunction.value !== 'Count') {
+                  if (this.metricCollectFunction.dirty) {
+                    control.setValue(Aggregation.OnEnum.Result);
+                  }
+                  control.options = [
+                    { label: marker('count-METRIC'), value: Aggregation.OnEnum.Count },
+                    { label: marker('label-METRIC'), value: Aggregation.OnEnum.Field },
+                    { label: marker('metric-METRIC'), value: Aggregation.OnEnum.Result }
+
+                  ];
+                } else {
+                  if (this.metricCollectFunction.dirty) {
+                    control.setValue(Aggregation.OnEnum.Count);
+                  }
+                  control.options = [
+                    { label: marker('count-METRIC'), value: Aggregation.OnEnum.Count },
+                    { label: marker('label-METRIC'), value: Aggregation.OnEnum.Field }
+                  ];
+                }
+              }
+            }
+          }
+        ),
+        sortOrder: new RadioButtonFormControl(
+          [
+            { label: marker('DESC-METRIC'), value: Aggregation.OrderEnum.Desc },
+            { label: marker('ASC-METRIC'), value: Aggregation.OrderEnum.Asc }
+          ]
+          ,
+          marker('metric sort order description'),
+          {
+            dependsOn: () => [this.metricCollectFunction],
+            onDependencyChange: (control: ButtonToggleFormControl) => {
+              control.enableIf(sortable);
+            }
+          }
         )
       }
     );
   }
 
-  public customControls = {
+  public customControls: MetricCollectControls = {
     metricCollectFunction: this.get('metricCollectFunction') as SelectFormControl,
-    metricCollectField: this.get('metricCollectField') as SelectFormControl
-  } as MetricCollectControls;
+    metricCollectField: this.get('metricCollectField') as SelectFormControl,
+    sortOn: this.get('sortOn') as ButtonToggleFormControl,
+    sortOrder: this.get('sortOrder') as RadioButtonFormControl
+  };
 
 }
 
@@ -108,8 +165,8 @@ export class MetricCollectFormBuilderService {
 
   public constructor(private collectionService: CollectionService) { }
 
-  public build(collection: string, type: string) {
-    return new MetricCollectFormGroup(collection, this.collectionService, type);
+  public build(collection: string, type: string, sortable = false) {
+    return new MetricCollectFormGroup(collection, this.collectionService, type, sortable);
   }
 
 }

@@ -25,7 +25,7 @@ import {
   ButtonFormControl, ButtonToggleFormControl, CollectionsUnitsControl, ColorFormControl, ColorPreviewFormControl,
   ComponentFormControl, ConfigFormControl, FieldWithSizeListFormControl, HiddenFormControl,
   HuePaletteFormControl, IconFormControl, InputFormControl, MapFiltersControl, MetricWithFieldListFormControl,
-  MultipleSelectFormControl, OrderedSelectFormControl, SelectFormControl, SliderFormControl, SlideToggleFormControl,
+  MultipleSelectFormControl, OrderedSelectFormControl, RadioButtonFormControl, SelectFormControl, SliderFormControl, SlideToggleFormControl,
   TextareaFormControl, TitleInputFormControl, TypedSelectFormControl, UrlTemplateControl, VisualisationCheckboxFormControl
 } from '@shared-models/config-form';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
@@ -124,6 +124,10 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
 
   public isButtonToggle(): ButtonToggleFormControl | null {
     return Object.getPrototypeOf(this.control) === ButtonToggleFormControl.prototype ? this.control as ButtonToggleFormControl : null;
+  }
+
+  public isRadioButton(): RadioButtonFormControl | null {
+    return Object.getPrototypeOf(this.control) === RadioButtonFormControl.prototype ? this.control as RadioButtonFormControl : null;
   }
 
   public isSlider(): SliderFormControl | null {
