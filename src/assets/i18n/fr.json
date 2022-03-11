@@ -72,6 +72,7 @@
 	"Columns": "Colonnes",
 	"Details": "Détails",
 	"Delete tab": "Effacer l'onglet",
+	"Configure tab": "Configurer l'onglet",
 	"Analytics board is empty.": "Le tableau de bord est vide",
 	"Create a new tab.": "Créer un nouvel onglet.",
 	"At least one tab is required": "Au moins un onglet est nécessaire",
@@ -673,6 +674,10 @@
 	"count-METRIC":"Nombre d'éléments",
 	"label-METRIC":"Label",
 	"metric sort order description":"Choix du sens du tris : ascendant ou descendant.",
-	"metric sort on description": "Choix du type de tris : \n • Nombre d'éléments : les powerbars sont triées selon le nombre d'élément par bucket.  \n • Label : les powerbars sont triées selon le label du bucket (valeur du champs représenté). \n • Métrique : si une métrique est choisi, les powerbars sont triées selon la valeur de cette métrique."
+	"metric sort on description": "Choix du type de tris : \n • Nombre d'éléments : les powerbars sont triées selon le nombre d'élément par bucket.  \n • Label : les powerbars sont triées selon le label du bucket (valeur du champs représenté). \n • Métrique : si une métrique est choisi, les powerbars sont triées selon la valeur de cette métrique.",
+	"Display": "Mode d'affichage",
+	"Text and icon": "Icône et texte",
+	"Only text": "Texte seul",
+	"Only icon": "Icône seule"
 
 }
