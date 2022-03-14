@@ -31,7 +31,7 @@ import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
-import { FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID, LabelStyle, LABEL_ARLAS_ID } from 'arlas-web-components';
+import { FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID} from 'arlas-web-components';
 import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { Layout } from './models-map-config';
 export enum VISIBILITY {
