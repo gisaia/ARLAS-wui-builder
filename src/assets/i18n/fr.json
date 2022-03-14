@@ -125,8 +125,10 @@
 	"Search...": "Rechercher...",
 	"All layers": "Toutes les couches cartographiques",
 	"This layer is not assigned to a visualisation set, it will not be visible on the map": "* La couche cartographique n'appartient à aucun Espace de visualisation. Elle ne sera pas visible sur la carte",
-	"ASC": "MIN",
-	"DESC": "MAX",
+	"ASC": "ASC",
+	"DESC": "DESC",
+	"ASC-METRIC": "Ascendant",
+	"DESC-METRIC": "Descendant",
 	"At least one ": "Au moins un?",
 	"is required": "est nécessaire",
 	"metric field": "Champs utilisé",
@@ -666,6 +668,11 @@
 	"operator powerbars": "Permettre le changement d'opération",
 	"operator powerbars description": "Si cette option est activée, l'utilisateur peut modifier l'opération choisie (Inclure/Exclure) à la volée.",
 	"include": "Inclure",
-	"exclude": "Exclure"
+	"exclude": "Exclure",
+	"metric-METRIC":"Métrique",
+	"count-METRIC":"Nombre d'éléments",
+	"label-METRIC":"Label",
+	"metric sort order description":"Choix du sens du tris : ascendant ou descendant.",
+	"metric sort on description": "Choix du type de tris : \n • Nombre d'éléments : les powerbars sont triées selon le nombre d'élément par bucket.  \n • Label : les powerbars sont triées selon le label du bucket (valeur du champs représenté). \n • Métrique : si une métrique est choisi, les powerbars sont triées selon la valeur de cette métrique."
 
 }
