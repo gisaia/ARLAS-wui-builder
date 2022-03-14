@@ -725,12 +725,10 @@
 	"short format description": " • Display numeric values in short format. E.g: 1.5k , 3M, ...",
 	"Input fixed labelContent": "Enter the label's content",
 	"provided field feature": "Displayed field value",
-	"Provided field feature": "Field's value"
+	"Provided field feature": "Field's value",
+	"metric filter":"ARLAS filter apply to the metric (optional)",
+	"no filter":"No filter",
+	"with filter": "With filter",
+	"Update":"Update"
 
-
-
-
-
-
-	
 }

@@ -73,10 +73,10 @@
             <mat-checkbox [matTooltip]="opt.label | translate" class="multiply-to-select" [checked]="false"
                 *ngIf="!typedControl.savedItems.has(opt.value)" (change)="onchangeMulitpleSelection($event)"
                 [value]="opt" [style.borderLeftColor]="opt.color">
-                
+
                 <span class="label">{{opt.label | translate}}</span>
                 <span class="detail">{{opt.detail | translate }}</span>
-            
+
             </mat-checkbox>
         </ng-container>
         <mat-select style="display: none;" [formControl]="typedControl" [required]="!typedControl.optional"
@@ -221,18 +221,57 @@
                         </mat-autocomplete>
                     </mat-form-field>
                 </div>
-                <div class="add-container">
+                <div class="add-container" *ngIf="!typedControl.isUpdateState">
                     <button type="button" mat-stroked-button
-                        [disabled]="typedControl.metricCtrl.invalid || typedControl.fieldCtrl.invalid"
-                        (click)="typedControl.addMetric()">{{ 'Add' | translate}}</button>
+                        [disabled]="typedControl.metricCtrl.invalid || typedControl.fieldCtrl.invalid || typedControl.arlasFilterCtrl.invalid"
+                        (click)="typedControl.addMetric()">{{ 'Add' | translate}}
+                    </button>
+                </div>
+                <div class="add-container" *ngIf="typedControl.isUpdateState">
+                    <button type="button" mat-stroked-button
+                        [disabled]="typedControl.metricCtrl.invalid || typedControl.fieldCtrl.invalid || typedControl.arlasFilterCtrl.invalid"
+                        (click)="typedControl.updateMetric()">{{ 'Update' | translate}}
+                    </button>
+                    <button type="button" mat-stroked-button (click)="typedControl.cancelUpdateMetric()">{{ 'Cancel' |
+                        translate}}
+                    </button>
                 </div>
             </div>
+
+
+            <mat-accordion>
+                <mat-expansion-panel class="arlas-filter-expansion-panel" hideToggle
+                    (afterCollapse)="typedControl.afterCloseFilter()" (afterExpand)="typedControl.afterExpandFilter()">
+                    <mat-expansion-panel-header class="arlas-filter-expansion-panel-header">
+                        <mat-panel-title class="arlas-filter-expansion-panel-title">
+                            <div class="panel-chevron">
+                                <mat-icon *ngIf="typedControl.isPanelClose"> chevron_right</mat-icon>
+                                <mat-icon *ngIf="!typedControl.isPanelClose"> expand_more</mat-icon>
+                            </div>
+                            {{ 'metric filter' | translate}}
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="textarea-form-control metric-filter">
+                        <mat-form-field>
+                            <textarea matInput [formControl]="typedControl.arlasFilterCtrl"
+                                [required]="false"></textarea>
+                        </mat-form-field>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+
+
+
+
         </div>
         <div class="chips-container">
             <mat-chip-list #chipSortList>
-                <mat-chip *ngFor="let opt of typedControl.value" [selectable]="false" [removable]="true"
-                    (removed)="typedControl.removeMetric(opt)">
-                    {{opt.field}} ({{opt.metric}})
+                <mat-chip *ngFor="let opt of typedControl.value;let indexOfelement=index;" class="filter-chip"
+                    (click)="typedControl.onClickFilterChip($event, opt,indexOfelement)" [selectable]="true"
+                    [removable]="true" (removed)="typedControl.removeMetric(opt,indexOfelement)"
+                    [matTooltip]="opt.filter | json">
+                    m[{{indexOfelement}}] : {{opt.field}} ({{opt.metric}}) ({{ (opt.filter | json) === '{}' ? ('no
+                    filter'| translate) : ('with filter'| translate) }})
                     <mat-icon matChipRemove>cancel</mat-icon>
                 </mat-chip>
             </mat-chip-list>
@@ -317,10 +356,10 @@
                     <button type="button" mat-stroked-button *ngIf="typedControl?.showInsertButton"
                         (click)="typedControl.showInsertButton = false">{{ 'Insert field to URL' | translate}}</button>
                     <button type="button" mat-stroked-button *ngIf="!typedControl?.showInsertButton" class="insert"
-                    [disabled]="typedControl.fieldCtrl.invalid"
-                    (click)="typedControl.add()">{{ 'Insert' | translate}}</button>
+                        [disabled]="typedControl.fieldCtrl.invalid" (click)="typedControl.add()">{{ 'Insert' |
+                        translate}}</button>
                     <button type="button" mat-stroked-button *ngIf="!typedControl?.showInsertButton"
-                    (click)="typedControl.showInsertButton = true">{{ 'Cancel' | translate}}</button>
+                        (click)="typedControl.showInsertButton = true">{{ 'Cancel' | translate}}</button>
                 </div>
             </div>
         </div>

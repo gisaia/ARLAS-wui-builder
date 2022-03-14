@@ -19,7 +19,7 @@ under the License.
 import {
   FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators, FormArray
 } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, skip } from 'rxjs';
 import { HistogramUtils } from 'arlas-d3';
 import { CollectionField } from '@services/collection-service/models';
 import { METRIC_TYPES } from '@services/collection-service/collection.service';
@@ -28,8 +28,7 @@ import { ProportionedValues } from '@shared-services/property-selector-form-buil
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { updateValueAndValidity } from '@utils/tools';
-
-
+import { ComputeConfig } from 'arlas-web-contributors';
 /**
  * These are wrappers above existing FormGroup and FormControl in order to add a custom behavior.
  * The goal is to have a full model-driven form without putting (or duplicating) the logic
@@ -559,6 +558,23 @@ export class OrderedSelectFormControl extends SelectFormControl {
   }
 }
 
+export function checkArlasFilter(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any; } | null => {
+    let isValid = false;
+    try {
+      const f = JSON.parse(control.value);
+      isValid = !!f.q || !!f.f || Object.keys(f).length === 0;
+      if (isValid) {
+        return null;
+      } else {
+        return { jsonNotValid: true };;
+      }
+    } catch (e) {
+      return { jsonNotValid: true };;
+    }
+  };
+}
+
 export class MetricWithFieldListFormControl extends ConfigFormControl {
 
   public METRICS = [
@@ -571,9 +587,13 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
     (c) => !!this.autocompleteFilteredFields && this.autocompleteFilteredFields.map(f => f.value).indexOf(c.value) >= 0 ?
       null : { validateField: { valid: false } }
   ]);
+  public arlasFilterCtrl = new FormControl('{}', checkArlasFilter());
   public metricFields: Array<SelectOption>;
   public autocompleteFilteredFields: Array<SelectOption>;
-
+  public isUpdateState = false;
+  public currentEditing;
+  public valueChanged = false;
+  public isPanelClose = true;
   public constructor(
     formState: any,
     label: string,
@@ -585,7 +605,8 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
     if (!this.optional) {
       // as the value is a set, if the control is required, an empty set should also be an error
       this.setValidators([
-        (control) => !!control.value && Array.from(control.value).length > 0 ? null : { required: { valid: false } }
+        (control) => !!control.value && Array.from(control.value).length > 0 ? null : { required: { valid: false } },
+        checkArlasFilter
       ]);
     }
     this.metricCtrl.valueChanges.subscribe(v => {
@@ -607,6 +628,69 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
     });
   }
 
+  public afterExpandFilter() {
+    this.isPanelClose = false;
+  }
+  public afterCloseFilter() {
+    this.isPanelClose = true;
+
+  }
+
+  public stringToMetricsEnum(value: string) {
+    switch (value) {
+      case 'avg': {
+        return METRIC_TYPES.AVG;
+      }
+      case 'sum': {
+        return METRIC_TYPES.SUM;
+      }
+      case 'min': {
+        return METRIC_TYPES.MIN;
+      }
+      case 'max': {
+        return METRIC_TYPES.MAX;
+      }
+      case 'cardinality': {
+        return METRIC_TYPES.CARDINALITY;
+      }
+    }
+  }
+
+  public onClickFilterChip(event, opt) {
+    this.isUpdateState = true;
+    this.currentEditing = opt;
+    this.metricCtrl.setValue(this.stringToMetricsEnum(opt.metric));
+    this.updateFieldsByMetric(this.stringToMetricsEnum(opt.metric));
+    setTimeout(() => {
+      this.fieldCtrl.setValue(opt.field);
+      this.arlasFilterCtrl.setValue(JSON.stringify(opt.filter));
+      this.updateValueAndValidity();
+    }, 0);
+  }
+
+  public updateMetric() {
+    this.getValueAsSet().delete(this.currentEditing);
+    this.getValueAsSet().add({
+      field: this.fieldCtrl.value,
+      metric: String(this.metricCtrl.value).toLowerCase(),
+      filter: JSON.parse(this.arlasFilterCtrl.value)
+    });
+    this.isUpdateState = false;
+    this.metricCtrl.reset();
+    this.fieldCtrl.reset();
+    this.arlasFilterCtrl.setValue(JSON.stringify({}));
+    this.updateValueAndValidity();
+    this.markAsDirty();
+  }
+
+  public cancelUpdateMetric() {
+    this.isUpdateState = false;
+    this.updateValueAndValidity();
+    this.metricCtrl.reset();
+    this.fieldCtrl.reset();
+    this.arlasFilterCtrl.setValue(JSON.stringify({}));
+  }
+
   public filterAutocomplete(value?: string) {
     if (!!value) {
       this.autocompleteFilteredFields = this.metricFields.filter(o => o.label.indexOf(value) >= 0);
@@ -616,17 +700,23 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
   }
 
   public addMetric() {
-    this.getValueAsSet().add({ field: this.fieldCtrl.value, metric: String(this.metricCtrl.value).toLowerCase() });
+    this.getValueAsSet().add({
+      field: this.fieldCtrl.value,
+      metric: String(this.metricCtrl.value).toLowerCase(),
+      filter: JSON.parse(this.arlasFilterCtrl.value)
+    });
     this.updateValueAndValidity();
     this.fieldCtrl.reset();
+    this.markAsDirty();
   }
 
-  public removeMetric(metric: { metric: string; field: string; }) {
+  public removeMetric(metric: ComputeConfig) {
     this.getValueAsSet().delete(metric);
     this.updateValueAndValidity();
+    this.markAsDirty();
   }
 
-  public getValueAsSet = () => (this.value as Set<{ metric: string; field: string; }>);
+  public getValueAsSet = () => (this.value as Set<ComputeConfig>);
 
   public setCollectionFieldsObs(collectionFieldsObs: Observable<Array<CollectionField>>): void {
     this.collectionFields = collectionFieldsObs;
