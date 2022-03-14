@@ -238,12 +238,19 @@ export class MapImportService {
           propertyInterpolatedNormalizeCtrl: isNormalize,
           propertyInterpolatedNormalizeByKeyCtrl: isNormalize ? getValue.split(':').length === 3 : null,
         };
-
         if (isAggregated) {
           propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl = COUNT_OR_METRIC.METRIC;
-          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMetricCtrl =
-            layerSource.metrics[0].metric.toString().toUpperCase();
-          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = layerSource.metrics[0].field;
+          const findMetric = layerSource.metrics.find(m => {
+            let flatMetric = m.field.replace(/\./g, '_') + '_' + m.metric.toString().toLowerCase() + '_';
+            if (m.normalize) {
+              flatMetric += ':normalized';
+            }
+            return flatMetric === getValue;
+          });
+          if (findMetric) {
+            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMetricCtrl = findMetric.metric.toString().toUpperCase();
+            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = findMetric.field;
+          }
         } else {
           let field;
           if (isNormalize) {
