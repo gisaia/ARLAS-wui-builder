@@ -1,5 +1,20 @@
 # Change Log
 
+## [v21.0.0-beta.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v21.0.0-beta.1) (2022-03-14)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v20.1.1...v21.0.0-beta.1)
+
+**New stuff:**
+
+- Conditional metric with metric ratio support [\#665](https://github.com/gisaia/ARLAS-wui-builder/issues/665) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Choose icons for analytics and resultlist tabs [\#640](https://github.com/gisaia/ARLAS-wui-builder/issues/640) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Add the possibility to show a label when creating a map layer [\#638](https://github.com/gisaia/ARLAS-wui-builder/issues/638) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
+**Fixed bugs:**
+
+- Layers with multiple metric are wrongly initiated after import [\#692](https://github.com/gisaia/ARLAS-wui-builder/issues/692) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Users loose their new widgets/layers construction if they are logged out during the building phase [\#650](https://github.com/gisaia/ARLAS-wui-builder/issues/650)
+
 ## [v20.1.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v20.1.1) (2022-02-24)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v20.1.0...v20.1.1)
@@ -7,6 +22,10 @@
 **New stuff:**
 
 - \[Powerbars\] Add option to set filter default operator \(Eq, Ne\) and display button to switch [\#675](https://github.com/gisaia/ARLAS-wui-builder/issues/675) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+
+**Fixed bugs:**
+
+- Powerbars default operator wrongly initialized [\#683](https://github.com/gisaia/ARLAS-wui-builder/issues/683)
 
 ## [v20.1.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v20.1.0) (2022-02-21)
 
@@ -307,7 +326,6 @@
 **New stuff:**
 
 - Allow min 2 buckets instead of 10 in histograms [\#494](https://github.com/gisaia/ARLAS-wui-builder/issues/494)
-- Add the possibility to change widgets order inside a group [\#459](https://github.com/gisaia/ARLAS-wui-builder/issues/459) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
 - Make lines caps rounded so that connections between linestrings are smooth [\#458](https://github.com/gisaia/ARLAS-wui-builder/issues/458)
 - Make Tab title configurable [\#441](https://github.com/gisaia/ARLAS-wui-builder/issues/441)
 - Rename a dashboard [\#430](https://github.com/gisaia/ARLAS-wui-builder/issues/430)
