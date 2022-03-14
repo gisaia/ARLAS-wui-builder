@@ -55,6 +55,9 @@ export class ResultListImportService {
     const renderStep = widgetData.customControls.renderStep;
     const actionStep = widgetData.customControls.zactionStep;
     const title = widgetData.customControls.title;
+    const icon = widgetData.customControls.icon;
+    const showName = widgetData.customControls.showName;
+    const showIcon = widgetData.customControls.showIcon;
     const inputs = component.input as AnalyticComponentResultListInputConfig;
     const titleFieldNames = contributor.fieldsConfiguration.titleFieldNames;
     const tooltipFieldNames = contributor.fieldsConfiguration.tooltipFieldNames;
@@ -62,6 +65,18 @@ export class ResultListImportService {
       {
         value: contributor.name,
         control: title
+      },
+      {
+        value: !!inputs.options.icon ? inputs.options.icon : 'short_text',
+        control: icon
+      },
+      {
+        value: inputs.options.showName !== undefined ? inputs.options.showName : true,
+        control: showName
+      },
+      {
+        value: inputs.options.showIcon !== undefined ? inputs.options.showIcon : true,
+        control: showIcon
       },
       {
         value: contributor.collection,

@@ -5,6 +5,7 @@
     <div class="bloc">
         <div formArrayName="groupsFa" cdkDropList (cdkDropListDropped)="drop($event)">
             <div *ngFor="let group of groupsFa.controls; index as gi;" [formGroupName]="gi" cdkDrag class="group">
+                <div class="placeholder" *cdkDragPlaceholder></div>
                 <button *cdkDragPreview mat-button>
                     <mat-icon>unfold_more</mat-icon>{{'Move' | translate}}
                 </button>
@@ -20,7 +21,6 @@
                 </arlas-edit-group>
 
 
-                <div class="placeholder" *cdkDragPlaceholder></div>
             </div>
             <div class="add-button">
                 <button mat-stroked-button color="primary" (click)="addGroup()" [matTooltip]="'Add a group' | translate">

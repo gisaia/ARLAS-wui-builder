@@ -72,6 +72,7 @@
 	"Columns": "Columns",
 	"Details": "Details",
 	"Delete tab": "Delete tab",
+	"Configure tab": "Configure tab",
 	"Analytics board is empty.": "Analytics board is empty.",
 	"Create a new tab.": "Create a new tab.",
 	"At least one tab is required": "At least one tab is required",
@@ -655,5 +656,9 @@
 	"count-METRIC":"Number of elements",
 	"label-METRIC":"Label",
 	"metric sort order description":"Choice of sorting direction: ascending or descending.",
-	"metric sort on description":"Choice of sorting type: \n • Number of elements: the powerbars are sorted according to the number of elements per bucket. \n • Label: the powerbars are sorted according to the label of the bucket (value of the aggregation field) \n • Metric: if a metric is chosen, the powerbars are sorted according to the value of this metric."
+	"metric sort on description":"Choice of sorting type: \n • Number of elements: the powerbars are sorted according to the number of elements per bucket. \n • Label: the powerbars are sorted according to the label of the bucket (value of the aggregation field) \n • Metric: if a metric is chosen, the powerbars are sorted according to the value of this metric.",
+	"Display": "Display mode",
+	"Text and icon": "Text and icon",
+	"Only text": "Only text",
+	"Only icon": "Only icon"
 }

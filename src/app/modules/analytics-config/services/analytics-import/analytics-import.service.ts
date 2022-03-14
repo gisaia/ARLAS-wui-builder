@@ -62,6 +62,12 @@ export class AnalyticsImportService {
     const tabs: Map<string, FormGroup> = new Map();
 
     if (!!config.arlas.web.analytics) {
+      if (!!config.arlas.web.options.tabs) {
+        config.arlas.web.options.tabs.forEach(tab => {
+          tabs.set(tab.name, this.analyticsInitService.initNewTab(tab.name, tab.icon, tab.showName, tab.showIcon));
+        });
+      }
+
       config.arlas.web.analytics.forEach(analyticGroup => {
         const tabName = analyticGroup.tab || this.defaultValuesService.getValue('analytics.tabs.default');
         const tab = tabs.has(tabName) ?

@@ -218,6 +218,14 @@ export class ConfigExportHelper {
 
     if (!!analyticsConfigList) {
       (analyticsConfigList.value as Array<any>).forEach(tab => {
+        config.arlas.web.options.tabs.push(
+          {
+            name: tab.tabName,
+            icon: tab.tabIcon,
+            showIcon: tab.showIcon,
+            showName: tab.showName
+          }
+        );
         tab.contentFg.groupsFa.forEach(group => {
           group.content.forEach(widget => {
             const contributorId = this.getContributorId(widget.widgetData, widget.widgetType);
@@ -1178,7 +1186,10 @@ export class ConfigExportHelper {
           options: {
             showActionsOnhover: 'true',
             showDetailIconName: 'keyboard_arrow_down',
-            hideDetailIconName: 'keyboard_arrow_up'
+            hideDetailIconName: 'keyboard_arrow_up',
+            icon: widgetData.icon,
+            showName: widgetData.showName,
+            showIcon: widgetData.showIcon
           }
         } as AnalyticComponentResultListInputConfig
       } as AnalyticComponentConfig;
@@ -1217,6 +1228,7 @@ export class ConfigExportHelper {
     const showSpinner = !!lookAndFeelConfigGlobal.customControls.spinner.value;
     const spinnerColor: string = lookAndFeelConfigGlobal.customControls.spinnerColor.value;
     const spinnerDiameter: string = lookAndFeelConfigGlobal.customControls.spinnerDiameter.value;
+
     const options = {
       drag_items: !!lookAndFeelConfigGlobal.customControls.dragAndDrop.value,
       zoom_to_data: !!lookAndFeelConfigGlobal.customControls.zoomToData.value,
@@ -1225,7 +1237,8 @@ export class ConfigExportHelper {
         show: showSpinner,
         color: (showSpinner && !!spinnerColor) ? spinnerColor : '',
         diameter: (showSpinner && !!spinnerDiameter) ? spinnerDiameter : ''
-      }
+      },
+      tabs: []
     } as WebConfigOptions;
     return options;
   }

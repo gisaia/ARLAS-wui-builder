@@ -131,15 +131,15 @@ export function moveInFormArray(previousIndex: number, newIndex: number, fa: For
   if (previousIndex === newIndex) {
     return;
   }
-
   const previousTab = fa.at(previousIndex);
-
-  if (previousIndex < newIndex) {
-    fa.insert(newIndex + 1, previousTab);
-    fa.removeAt(previousIndex);
-  } else {
-    fa.insert(newIndex, previousTab);
-    fa.removeAt(previousIndex + 1);
+  if (!!previousTab) {
+    if (previousIndex < newIndex) {
+      fa.insert(newIndex + 1, previousTab);
+      fa.removeAt(previousIndex);
+    } else {
+      fa.insert(newIndex, previousTab);
+      fa.removeAt(previousIndex + 1);
+    }
   }
 }
 

@@ -52,12 +52,12 @@ export class AnalyticsInitService {
       tabsList);
   }
 
-  public initNewTab(name: string) {
+  public initNewTab(name: string, icon = 'short_text', showName = true, showIcon = true) {
     return this.formBuilder.group({
-      tabName: [
-        name,
-        Validators.required
-      ],
+      tabName: [name, Validators.required],
+      tabIcon: [icon, Validators.required],
+      showName: [showName, Validators.required],
+      showIcon: [showIcon, Validators.required],
       contentFg: this.formBuilder.group({})
     });
   }

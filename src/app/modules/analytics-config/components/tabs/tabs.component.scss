@@ -37,41 +37,66 @@ under the License.
             display: inline-flex;
           }
 
-          .edit-tab-name {
+          .content {
             display: flex;
-            box-shadow: inset black 0px 0px 2px 0px;
-            background-color: white;
-            font-weight: bold;
-          }
-        
-          .tab-name {
-            min-width: 165px;
-            align-self: center;
-            cursor: text;
-            min-height: 15px;
+            align-items: center;
+            min-width: 210px;
+            gap: 0 10px;
+
+            .edit-tab-name {
+              display: flex;
+              box-shadow: inset black 0px 0px 2px 0px;
+              background-color: white;
+              font-weight: bold;
+              height: 30px;
+              flex: 5;
+            }
+
+            .icon {
+              flex:1;
+            }
+
+            .tab-name {
+              align-self: center;
+              cursor: text;
+              min-height: 15px;
+              flex: 5;
+
+              &.pointer {
+                cursor: pointer;
+              }
+            }
+
+            .close, .settings {
+              font-size: 16px;
+              width: 16px;
+              height: 16px;
+            }
           }
         }
       }
     }
 
-    ::ng-deep .mat-tab-body-wrapper{
+    ::ng-deep .mat-tab-body-wrapper {
       height: 100%;
     }
 
-    ::ng-deep .mat-tab-body-content{
+    ::ng-deep .mat-tab-body-content {
       height: 100%;
+    }
+
+    ::ng-deep .mat-tab-labels .mat-tab-label {
+      padding: 0 12px;
     }
 
     ::ng-deep .mat-tab-labels :last-child.mat-tab-label {
       min-width: 0;
-      padding: 0 12px;
       color: unset;
       opacity: unset;
     }
   }
 
-  .no-tabs{
+  .no-tabs {
     padding: 20px;
   }
-  
 }

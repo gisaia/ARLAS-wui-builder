@@ -1,14 +1,17 @@
 <div class="tab-wrapper">
     <mat-tab-group disableRipple mat-align-tabs="start" #matTabGroup>
-        <mat-tab #matTab *ngFor="let tab of tabs; let index = index">
+        <mat-tab #matTab *ngFor="let fg of this.tabsFa.controls; let index = index">
             <ng-template mat-tab-label>
                 <div [id]="'tab-' + index" cdkDropList cdkDropListOrientation="horizontal"
                     (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="getOtherTabsIds(index)">
-                    <div cdkDrag>
-                        <span *ngIf="editingTabIndex !== index" class="tab-name" tabindex="-1"
-                            (focus)="startEditTabName(index)"
+                    <div cdkDrag class="content">
+                        
+                        <mat-icon class="icon" *ngIf="fg.value.showIcon">{{fg.value.tabIcon}}</mat-icon>
+                        
+                        <span *ngIf="fg.value.showName && editingTabIndex !== index" class="tab-name" tabindex="-1"
+                            (focus)="startEditTabName(index)" [class.pointer]="!matTab.isActive"
                             [class.tab-error]="!matTab.isActive && tabHasError(index)">
-                            {{tab}}
+                            {{fg.value.tabName}}
                         </span>
                         <span *ngIf="editingTabIndex === index" class="edit-tab-name">
                             <!-- keydown stopPropagation needed to allow spaces -->
@@ -17,10 +20,10 @@
                                 (keydown.enter)="finishEditTabName(index);">
 
                         </span>
-                        <button mat-icon-button (click)="$event.stopPropagation(); removeTab(index)"
-                            [matTooltip]="'Delete tab' | translate">
-                            <mat-icon>delete</mat-icon>
-                        </button>
+                        <mat-icon class="settings" *ngIf="matTab.isActive" (click)="$event.stopPropagation(); configTab(index)"
+                        [matTooltip]="'Configure tab' | translate">settings</mat-icon>
+                        <mat-icon class="close" (click)="$event.stopPropagation(); removeTab(index)"
+                            [matTooltip]="'Delete tab' | translate">close</mat-icon>
                     </div>
                 </div>
             </ng-template>

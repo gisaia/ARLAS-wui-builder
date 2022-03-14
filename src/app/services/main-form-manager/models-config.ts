@@ -27,6 +27,7 @@ export const CHIPSEARCH_TYPE = 'chipssearch';
 export const CHIPSEARCH_IDENTIFIER = 'chipssearch';
 import { LayerSourceConfig } from 'arlas-web-contributors';
 import { Aggregation } from 'arlas-api';
+import { AnalyticsTabs } from 'arlas-wui-toolkit';
 
 export interface Config {
   arlas: ArlasConfig;
@@ -96,6 +97,7 @@ export interface WebConfigOptions {
   zoom_to_data?: boolean;
   indicators?: boolean;
   spinner?: SpinnerOptions;
+  tabs: AnalyticsTabs[];
 }
 
 export interface SpinnerOptions {
@@ -268,6 +270,9 @@ export interface AnalyticComponentResultListInputOptions {
   showActionsOnhover?: string;
   showDetailIconName?: string;
   hideDetailIconName?: string;
+  icon?: string;
+  showName?: boolean;
+  showIcon?: boolean;
 }
 
 export interface AnalyticComponentHistogramInputConfig extends AnalyticComponentInputConfig {

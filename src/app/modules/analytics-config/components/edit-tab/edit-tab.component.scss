@@ -16,48 +16,32 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+.edit-tab-top {
+  display: flex;
+  align-items: center;
+  gap: 0 30px;
 
-.list-tab-group {
-  ::ng-deep .mat-tab-labels .mat-tab-label {
-    padding: 0 12px;
-  }
+  .icon {
+    width: 24px !important;
+    height: 24px;
+    display: flex;
 
-  & > ::ng-deep .mat-tab-header {
-    .mat-tab-label {
-      min-width: 210px;
-      .mat-tab-label-content {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
+    ::ng-deep .icon-picker {
+      .icon-search {
+        input {
+          width: 95%;
+          padding: 5px;
+        }
       }
     }
   }
 
-  ::ng-deep .mat-tab-labels :last-child.mat-tab-label {
-    min-width: 0;
-    color: unset;
-    opacity: unset;
+  ::ng-deep .ip-button-icon {
+    min-width: -webkit-fill-available;
+    padding: 0 !important;
   }
 
-  .content {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    gap: 0 10px;
-
-    .tab-name {
-      flex: 5;
-    }
-
-    .icon {
-      flex: 1;
-    }
-
-    .close,
-    .settings {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-    }
+  ::ng-deep .ip-button-icon:hover {
+    background-color: lightgray;
   }
 }

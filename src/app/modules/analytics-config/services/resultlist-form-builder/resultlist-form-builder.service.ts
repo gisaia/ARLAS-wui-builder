@@ -45,7 +45,8 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
   public constructor(
     collection: string,
     collectionService: CollectionService,
-    title?: string
+    title?: string,
+    options?: any
   ) {
     super(
       collection,
@@ -58,6 +59,16 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
           {
             childs: () => [this.customControls.dataStep.idFieldName]
           }
+        ),
+        icon: new HiddenFormControl(
+          !!options && !!options.icon ? options.icon : 'short_text',
+          ''
+        ),
+        showName: new HiddenFormControl(
+          !!options && !!options.showName ? options.showName : true
+        ),
+        showIcon: new HiddenFormControl(
+          !!options && !!options.showIcon ? options.showIcon : true
         ),
         dataStep: new ConfigFormGroup({
           collection: new SelectFormControl(
@@ -306,6 +317,9 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
 
   public customControls = {
     title: this.get('title') as TitleInputFormControl,
+    icon: this.get('icon') as HiddenFormControl,
+    showName: this.get('showName') as HiddenFormControl,
+    showIcon: this.get('showIcon') as HiddenFormControl,
     dataStep: {
       collection: this.get('dataStep.collection') as SelectFormControl,
       searchSize: this.get('dataStep.searchSize') as SliderFormControl,
