@@ -27,18 +27,20 @@ import { DialogPaletteSelectorData } from '@map-config/components/dialog-palette
 import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
-import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toTextOrKeywordOptionsObs } from '@services/collection-service/tools';
+import { toAllButGeoOptionsObs, toKeywordOptionsObs, toNumericOrDateOptionsObs,
+  toTextOrKeywordOptionsObs } from '@services/collection-service/tools';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
   ButtonFormControl, ButtonToggleFormControl, ColorFormControl, ColorPreviewFormControl,
-  ConfigFormControl, ConfigFormGroup, HiddenFormControl, InputFormControl, SelectFormControl,
+  ConfigFormControl, ConfigFormGroup, HiddenFormControl, InputFormControl, OrderedSelectFormControl, SelectFormControl,
   SliderFormControl, SlideToggleFormControl
 } from '@shared-models/config-form';
 import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
 import { valuesToOptions } from '@utils/tools';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
+import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 
 export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
   public constructor(
@@ -66,9 +68,10 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           valuesToOptions(sources),
           {
             childs: () => [
-              this.customControls.propertyFix,
-              this.customControls.propertyProvidedFieldCtrl,
-              this.customControls.propertyProvidedFieldLabelCtrl,
+              this.customControls.propertyFixColor,
+              this.customControls.propertyFixSlider,
+              this.customControls.propertyProvidedColorFieldCtrl,
+              this.customControls.propertyProvidedColorLabelCtrl,
               this.customControls.propertyGeneratedFieldCtrl,
               this.customControls.propertyManualFg.propertyManualFieldCtrl,
               this.customControls.propertyManualFg.propertyManualButton,
@@ -101,36 +104,232 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             }
           }
         ),
-        propertyFix: propertyType === PROPERTY_TYPE.color ?
-          new ColorFormControl(
-            '',
-            marker('Fixed') + ' ' + propertyName,
-            marker('Color fixed description'),
-            {
-              dependsOn: () => [this.customControls.propertySource],
-              onDependencyChange: (control) => control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix)
+        propertyFixSlider: new SliderFormControl(
+          '',
+          marker('Fixed') + ' ' + propertyName,
+          marker('Slider fixed value description') + ' ' + propertyName,
+          defaultConfig[propertyName + 'Min'],
+          defaultConfig[propertyName + 'Max'],
+          defaultConfig[propertyName + 'Step'],
+          undefined,
+          undefined,
+          {
+            dependsOn: () => [this.customControls.propertySource],
+            onDependencyChange: (control) => {
+              if (!control.value && !control.touched && defaultConfig[propertyName + 'Min'] !== undefined) {
+                control.setValue(defaultConfig[propertyName + 'Min']);
+              }
+              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix_slider);
             }
-          ) :
-          new SliderFormControl(
+          }
+        ),
+        propertyFixColor: new ColorFormControl(
+          '',
+          marker('Fixed') + ' ' + propertyName,
+          marker('Color fixed description'),
+          {
+            dependsOn: () => [this.customControls.propertySource],
+            onDependencyChange: (control) =>
+              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix_color)
+          }
+        ),
+        propertyFixInput: new InputFormControl(
+          '',
+          marker('Input fixed') + ' ' + propertyName,
+          marker('Input fixed value description') + ' ' + propertyName,
+          'text',
+          {
+            optional: false,
+            dependsOn: () => [this.customControls.propertySource],
+            onDependencyChange: (control) => {
+              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix_input);
+            }
+          }
+        ),
+        propertyProvidedFieldAggFg: new ConfigFormGroup({
+          propertyProvidedFieldAggCtrl: new SelectFormControl(
             '',
-            marker('Fixed') + ' ' + propertyName,
-            marker('Slider fixed value description') + ' ' + propertyName,
-            defaultConfig[propertyName + 'Min'],
-            defaultConfig[propertyName + 'Max'],
-            defaultConfig[propertyName + 'Step'],
-            undefined,
-            undefined,
+            marker('provided field agg'),
+            marker('provided field agg description'),
+            false,
+            toAllButGeoOptionsObs(collectionFieldsObs),
             {
               dependsOn: () => [this.customControls.propertySource],
+              onDependencyChange: (control) => control.enableIf(this.customControls.propertySource.value
+                === PROPERTY_SELECTOR_SOURCE.provided_field_for_agg)
+            }
+          ),
+          propertyProvidedFieldSortCtrl: new OrderedSelectFormControl(
+            '',
+            marker('Order provided field'),
+            marker('Order provided field description'),
+            false,
+            toAllButGeoOptionsObs(collectionFieldsObs),
+            {
+              dependsOn: () => [this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl,
+                this.customControls.propertySource],
               onDependencyChange: (control) => {
-                if (!control.value && !control.touched && defaultConfig[propertyName + 'Min'] !== undefined) {
-                  control.setValue(defaultConfig[propertyName + 'Min']);
+                control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_field_for_agg);
+                if (!!this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl.value) {
+                  this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl.sorts
+                    = new Set(this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl.value.split(','));
                 }
-                control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix);
               }
             }
           ),
-        propertyProvidedFieldCtrl: new SelectFormControl(
+          propertyShortFormatCtrl: new SlideToggleFormControl(
+            false,
+            marker('short format'),
+            marker('short format description'),
+            {
+              optional: true,
+              dependsOn: () => [
+                this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl,
+              ],
+              onDependencyChange: (control) => {
+                let isNumericField = false;
+                const field = this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl.value;
+                const importValue = this.customControls.propertyProvidedFieldAggFg.propertyShortFormatCtrl.value;
+                if (!!field && field !== '') {
+                  const fieldOption = this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl
+                    .syncOptions.find(so => so.label === field);
+                  isNumericField = !!fieldOption && (fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.DOUBLE
+                    || fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.FLOAT
+                    || fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.INTEGER
+                    || fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.LONG
+                  ) || (!!importValue && !this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl.dirty);
+                }
+                control.enableIf(isNumericField);
+              }
+            },
+          )
+        },
+        {
+          dependsOn: () => [this.customControls.propertySource],
+          onDependencyChange: (control) =>
+            control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_field_for_agg)
+        }),
+        propertyProvidedFieldFeatureFg: new ConfigFormGroup({
+          propertyProvidedFieldFeatureCtrl: new SelectFormControl(
+            '',
+            marker('provided field feature'),
+            marker('provided field feature description'),
+            false,
+            toAllButGeoOptionsObs(collectionFieldsObs),
+            {
+              dependsOn: () => [this.customControls.propertySource],
+              onDependencyChange: (control) => control.enableIf(this.customControls.propertySource.value
+                === PROPERTY_SELECTOR_SOURCE.provided_field_for_feature)
+            }
+          ),
+          propertyShortFormatCtrl: new SlideToggleFormControl(
+            false,
+            marker('short format'),
+            marker('short format description'),
+            {
+              optional: true,
+              dependsOn: () => [
+                this.customControls.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl,
+              ],
+              onDependencyChange: (control) => {
+                let isNumericField = false;
+                const field = this.customControls.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl.value;
+                const importValue = this.customControls.propertyProvidedFieldFeatureFg.propertyShortFormatCtrl.value;
+                if (!!field && field !== '') {
+                  const fieldOption = this.customControls.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl
+                    .syncOptions.find(so => so.label === field);
+                  isNumericField = !!fieldOption && (fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.DOUBLE
+                    || fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.FLOAT
+                    || fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.INTEGER
+                    || fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.LONG
+                  ) || (!!importValue && !this.customControls.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl.dirty);
+                }
+                control.enableIf(isNumericField);
+              }
+            },
+          )
+        },
+        {
+          dependsOn: () => [this.customControls.propertySource],
+          onDependencyChange: (control) =>
+            control.enableIf(
+              !isAggregated &&
+              this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_field_for_feature)
+        }),
+        propertyCountOrMetricFg: new ConfigFormGroup({
+          propertyCountOrMetricCtrl: new ButtonToggleFormControl(
+            '',
+            [
+              { label: marker('Count'), value: COUNT_OR_METRIC.COUNT },
+              { label: marker('Metric'), value: COUNT_OR_METRIC.METRIC }
+            ],
+            'Metric or count ' + propertyName + ' description',
+            {
+              resetDependantsOnChange: true,
+              optional: false,
+              dependsOn: () => [this.customControls.propertySource],
+              onDependencyChange: (control) => control.enableIf(
+                isAggregated &&
+                this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field)
+            }
+          ),
+          propertyMetricCtrl: new SelectFormControl(
+            '',
+            marker('label metric'),
+            marker('label metric description'),
+            false,
+            [METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX]
+              .map(m => ({ label: m, value: m })),
+            {
+              optional: false,
+              dependsOn: () => [this.customControls.propertyCountOrMetricFg.propertyCountOrMetricCtrl],
+              onDependencyChange: (control) => control.enableIf(
+                isAggregated &&
+                this.customControls.propertyCountOrMetricFg.propertyCountOrMetricCtrl.value === COUNT_OR_METRIC.METRIC)
+            }
+          ),
+          propertyFieldCtrl: new SelectFormControl(
+            '',
+            marker('label metric field'),
+            marker('label metric field description'),
+            true,
+            toNumericOrDateOptionsObs(collectionFieldsObs),
+            {
+              resetDependantsOnChange: true,
+              optional: false,
+              dependsOn: () => [
+                this.customControls.propertyCountOrMetricFg.propertyMetricCtrl,
+                this.customControls.propertyCountOrMetricFg.propertyCountOrMetricCtrl
+              ],
+              onDependencyChange: (control) => {
+                control.enableIf(
+                  this.customControls.propertyCountOrMetricFg.propertyCountOrMetricCtrl.value === COUNT_OR_METRIC.METRIC &&
+                  !!this.customControls.propertyCountOrMetricFg.propertyMetricCtrl.value);
+              }
+            }
+          ),
+          propertyShortFormatCtrl: new SlideToggleFormControl(
+            false,
+            marker('short format'),
+            marker('short format description'),
+            {
+              optional: true,
+              dependsOn: () => [
+                this.customControls.propertyCountOrMetricFg.propertyMetricCtrl,
+                this.customControls.propertyCountOrMetricFg.propertyCountOrMetricCtrl
+              ],
+              onDependencyChange: (control) => {
+                control.enableIf(!!this.customControls.propertyCountOrMetricFg.propertyCountOrMetricCtrl.value);
+              }
+            },
+          )
+        },
+        {
+          dependsOn: () => [this.customControls.propertySource],
+          onDependencyChange: (control) =>
+            control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field)
+        }),
+        propertyProvidedColorFieldCtrl: new SelectFormControl(
           '',
           marker('Provided field'),
           marker('Provided source field description'),
@@ -139,10 +338,10 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           {
             dependsOn: () => [this.customControls.propertySource],
             onDependencyChange: (control) =>
-              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided)
+              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_color)
           }
         ),
-        propertyProvidedFieldLabelCtrl: new SelectFormControl(
+        propertyProvidedColorLabelCtrl: new SelectFormControl(
           '',
           marker('Label field'),
           marker('label field description'),
@@ -151,7 +350,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           {
             dependsOn: () => [this.customControls.propertySource],
             onDependencyChange: (control) =>
-              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided),
+              control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_color),
             optional: true
           }
         ),
@@ -241,7 +440,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             '',
             [
               { label: marker('Count'), value: COUNT_OR_METRIC.COUNT },
-              { label: marker('Metric'), value: COUNT_OR_METRIC.METRIC },
+              { label: marker('Metric'), value: COUNT_OR_METRIC.METRIC }
             ],
             'Interpolated ' + propertyName + ' description',
             {
@@ -476,8 +675,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                   const maxValue = doNormalize ? 1.0 : isAggregatedCount ?
                     parseFloat(this.customControls.propertyInterpolatedFg.propertyInterpolatedCountValueCtrl.value) :
                     parseFloat(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value);
-                  const minInterpolatedValue = this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl.value;
-                  const maxInterpolatedValue = this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl.value;
+                  const minInterpolatedValue = +this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl.value;
+                  const maxInterpolatedValue = +this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl.value;
                   // if we import a config where we don't interpolate linearly, we will maintain this custom interpolation
                   // as long as we don't change the dependants values : max, min, normalise. If we change those values, we lose
                   // the custom interpolation
@@ -635,14 +834,36 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
 
   public customControls = {
     propertySource: this.get('propertySource') as SelectFormControl,
-    propertyFix: this.get('propertyFix') as ColorFormControl | SliderFormControl,
-    propertyProvidedFieldCtrl: this.get('propertyProvidedFieldCtrl') as SelectFormControl,
-    propertyProvidedFieldLabelCtrl: this.get('propertyProvidedFieldLabelCtrl') as SelectFormControl,
+    propertyFixColor: this.get('propertyFixColor') as ColorFormControl,
+    propertyFixSlider: this.get('propertyFixSlider') as SliderFormControl,
+    propertyFixInput: this.get('propertyFixInput') as InputFormControl,
+    propertyProvidedColorFieldCtrl: this.get('propertyProvidedColorFieldCtrl') as SelectFormControl,
+    propertyProvidedColorLabelCtrl: this.get('propertyProvidedColorLabelCtrl') as SelectFormControl,
     propertyGeneratedFieldCtrl: this.get('propertyGeneratedFieldCtrl') as SelectFormControl,
     propertyManualFg: {
       propertyManualFieldCtrl: this.get('propertyManualFg').get('propertyManualFieldCtrl') as SelectFormControl,
       propertyManualButton: this.get('propertyManualFg').get('propertyManualButton') as ButtonFormControl,
       propertyManualValuesCtrl: this.get('propertyManualFg').get('propertyManualValuesCtrl') as FormArray,
+    },
+    propertyProvidedFieldAggFg: {
+      propertyProvidedFieldAggCtrl: this.get('propertyProvidedFieldAggFg')
+        .get('propertyProvidedFieldAggCtrl') as SelectFormControl,
+      propertyProvidedFieldSortCtrl: this.get('propertyProvidedFieldAggFg')
+        .get('propertyProvidedFieldSortCtrl') as OrderedSelectFormControl,
+      propertyShortFormatCtrl: this.get('propertyProvidedFieldAggFg').get('propertyShortFormatCtrl') as SlideToggleFormControl
+
+    },
+    propertyProvidedFieldFeatureFg: {
+      propertyProvidedFieldFeatureCtrl: this.get('propertyProvidedFieldFeatureFg')
+        .get('propertyProvidedFieldFeatureCtrl') as SelectFormControl,
+      propertyShortFormatCtrl: this.get('propertyProvidedFieldFeatureFg').get('propertyShortFormatCtrl') as SlideToggleFormControl
+
+    },
+    propertyCountOrMetricFg: {
+      propertyCountOrMetricCtrl: this.get('propertyCountOrMetricFg').get('propertyCountOrMetricCtrl') as ButtonToggleFormControl,
+      propertyMetricCtrl: this.get('propertyCountOrMetricFg').get('propertyMetricCtrl') as SelectFormControl,
+      propertyFieldCtrl: this.get('propertyCountOrMetricFg').get('propertyFieldCtrl') as SelectFormControl,
+      propertyShortFormatCtrl: this.get('propertyCountOrMetricFg').get('propertyShortFormatCtrl') as SlideToggleFormControl
     },
     propertyInterpolatedFg: {
       propertyInterpolatedCountOrMetricCtrl:

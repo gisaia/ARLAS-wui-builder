@@ -27,7 +27,7 @@ import { importElements } from '@services/main-form-manager/tools';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
 import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { BasemapStyle, LayerMetadata, VisualisationSetConfig } from 'arlas-web-components';
-import { ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, LayerSourceConfig } from 'arlas-web-contributors';
+import { ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, LayerSourceConfig, MetricConfig } from 'arlas-web-contributors';
 import { ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
 import { MapLayerFormBuilderService, MapLayerFormGroup, MAX_ZOOM } from '../map-layer-form-builder/map-layer-form-builder.service';
@@ -51,12 +51,16 @@ export class MapImportService {
   public static importPropertySelector(
     inputValues: any,
     propertySelectorValues: any,
-    isColor: boolean,
+    fixType: PROPERTY_SELECTOR_SOURCE,
     isAggregated: boolean,
     layerSource: LayerSourceConfig) {
     if (typeof inputValues === 'string' || typeof inputValues === 'number') {
-      propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.fix;
-      propertySelectorValues.propertyFix = inputValues;
+      propertySelectorValues.propertySource = fixType;
+      if (fixType === PROPERTY_SELECTOR_SOURCE.fix_color) {
+        propertySelectorValues.propertyFixColor = inputValues;
+      } else if (fixType === PROPERTY_SELECTOR_SOURCE.fix_slider) {
+        propertySelectorValues.propertyFixSlider = inputValues + '';
+      }
 
     } else if (inputValues instanceof Array) {
       if (inputValues.length === 2) {
@@ -74,17 +78,93 @@ export class MapImportService {
           propertySelectorValues.propertyGeneratedFieldCtrl = layerSource.colors_from_fields
             .find(f => f.replace(/\./g, '_') === this.removeLastcolor(field));
         } else {
-          propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided;
+          propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_color;
           const colorProvidedField = layerSource.provided_fields.find((pf: ColorConfig) => pf.color.replace(/\./g, '_') === field);
-          propertySelectorValues.propertyProvidedFieldCtrl = colorProvidedField.color;
+          propertySelectorValues.propertyProvidedColorFieldCtrl = colorProvidedField.color;
           if (inputValues.length === 2) {
-            propertySelectorValues.propertyProvidedFieldLabelCtrl = colorProvidedField.label;
+            propertySelectorValues.propertyProvidedColorLabelCtrl = colorProvidedField.label;
           }
         }
       } else if (inputValues[0] === 'match') {
         this.importPropertySelectorManual(inputValues, propertySelectorValues, layerSource);
       } else if (inputValues[0] === 'interpolate') {
-        this.importPropertySelectorInterpolated(inputValues, propertySelectorValues, isColor, isAggregated, layerSource);
+        this.importPropertySelectorInterpolated(inputValues, propertySelectorValues, isAggregated, layerSource);
+      }
+    }
+  }
+
+
+  public static importPropertySelectorForLabel(
+    inputValues: any,
+    propertySelectorValues: any,
+    isAggregated: boolean,
+    layerSource: LayerSourceConfig) {
+    if (typeof inputValues === 'string' || typeof inputValues === 'number') {
+      propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.fix_input;
+      propertySelectorValues.propertyFixInput = inputValues;
+    } else if (inputValues instanceof Array) {
+      if (inputValues.length === 2) {
+        const flatField = (inputValues as Array<string>)[1];
+        if (isAggregated) {
+          const isFetchedHits = !!layerSource.fetched_hits && !!layerSource.fetched_hits.fields
+            && layerSource.fetched_hits.fields.length > 0;
+          const hasMetricForLabels = !!layerSource.metrics && layerSource.metrics.filter(m => m.short_format !== undefined).length > 0;
+          if (isFetchedHits) {
+            const providedField = layerSource.fetched_hits.fields.find(f => f.replace(/\./g, '_') === flatField ||
+             (f.replace(/\./g, '_') + ':_arlas__short_format')  === flatField);
+            propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_field_for_agg;
+            if(providedField) {
+              propertySelectorValues.propertyProvidedFieldAggFg = {
+                propertyProvidedFieldAggCtrl: providedField,
+                propertyProvidedFieldSortCtrl: layerSource.fetched_hits.sorts.join(',')
+              };
+              if (flatField.includes(':_arlas__short_format') && !!layerSource.fetched_hits.short_form_fields) {
+                propertySelectorValues.propertyProvidedFieldAggFg.propertyShortFormatCtrl = true;
+
+              }
+            }
+          } else if (hasMetricForLabels) {
+            const getFlatMetric = (m: MetricConfig) => {
+              let flatMetric = '';
+              if(m.metric === 'count') {
+                flatMetric = 'count';
+              } else {
+                flatMetric = `${m.field.replace(/\./g, '_')}_${m.metric.toString().toLowerCase()}_`;
+              }
+              if (m.short_format) {
+                if (flatMetric === 'count') {
+                  flatMetric += `_:_arlas__short_format`;
+                } else {
+                  flatMetric += `:_arlas__short_format`;
+                }
+              }
+              return flatMetric;
+            };
+            const metric = layerSource.metrics
+              .filter(m => m.short_format !== undefined)
+              .find(m => getFlatMetric(m) === flatField);
+            if (!!metric) {
+              propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.metric_on_field;
+              propertySelectorValues.propertyCountOrMetricFg = {
+                propertyCountOrMetricCtrl: metric.metric === 'count' ? COUNT_OR_METRIC.COUNT : COUNT_OR_METRIC.METRIC,
+                propertyMetricCtrl: metric.metric === 'count' ? undefined : metric.metric.toString().toUpperCase(),
+                propertyFieldCtrl: metric.metric === 'count' ? undefined : metric.field,
+                propertyShortFormatCtrl: metric.short_format
+              };
+            }
+          }
+        } else {
+          const providedField = layerSource.include_fields.find(f => f.replace(/\./g, '_') === flatField ||
+            (f.replace(/\./g, '_') + ':_arlas__short_format')  === flatField);
+          propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_field_for_feature;
+          propertySelectorValues.propertyProvidedFieldFeatureFg = {
+            propertyProvidedFieldFeatureCtrl: providedField
+          };
+          if (flatField.includes(':_arlas__short_format') && layerSource.short_form_fields) {
+            propertySelectorValues.propertyProvidedFieldFeatureFg.propertyShortFormatCtrl = true;
+
+          }
+        }
       }
     }
   }
@@ -137,7 +217,6 @@ export class MapImportService {
   public static importPropertySelectorInterpolated(
     inputValues: any,
     propertySelectorValues: any,
-    isColor: boolean,
     isAggregated: boolean,
     layerSource: LayerSourceConfig) {
     if ((inputValues[2] as Array<string>)[0] === 'heatmap-density') {
@@ -159,12 +238,19 @@ export class MapImportService {
           propertyInterpolatedNormalizeCtrl: isNormalize,
           propertyInterpolatedNormalizeByKeyCtrl: isNormalize ? getValue.split(':').length === 3 : null,
         };
-
         if (isAggregated) {
           propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl = COUNT_OR_METRIC.METRIC;
-          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMetricCtrl =
-            layerSource.metrics[0].metric.toString().toUpperCase();
-          propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = layerSource.metrics[0].field;
+          const findMetric = layerSource.metrics.find(m => {
+            let flatMetric = m.field.replace(/\./g, '_') + '_' + m.metric.toString().toLowerCase() + '_';
+            if (m.normalize) {
+              flatMetric += ':normalized';
+            }
+            return flatMetric === getValue;
+          });
+          if (findMetric) {
+            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMetricCtrl = findMetric.metric.toString().toUpperCase();
+            propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = findMetric.field;
+          }
         } else {
           let field;
           if (isNormalize) {
@@ -194,8 +280,10 @@ export class MapImportService {
         value: inputValues[i + 1]
       });
     }
-    propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl = inputValues[4];
-    propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl = inputValues.pop();
+    const min = inputValues[4];
+    const max = inputValues.pop();
+    propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl = min === 0 ? '0' : min;
+    propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl = max === 0 ? '0' : max;
   }
 
   public static importLayerFg(
@@ -267,7 +355,6 @@ export class MapImportService {
         layerMode === LAYER_MODE.cluster ? layerFg.customControls.clusterFg :
           null;
     const isAggregated = layerMode !== LAYER_MODE.features;
-
     typeFg.enable();
     const minzoom = !!layer.minzoom ? layer.minzoom : (!!layerSource.minzoom ? layerSource.minzoom : 0);
     const maxzoom = !!layer.maxzoom ? layer.maxzoom : (!!layerSource.maxzoom ? layerSource.maxzoom : MAX_ZOOM);
@@ -289,11 +376,13 @@ export class MapImportService {
     };
 
     values.styleStep.opacity = {};
-    this.importPropertySelector(layer.paint[layer.type + '-opacity'], values.styleStep.opacity, false, isAggregated, layerSource);
+    this.importPropertySelector(layer.paint[(layer.type === 'symbol' ? 'text' : layer.type) + '-opacity'], values.styleStep.opacity,
+      PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
     if (layer.type === GEOMETRY_TYPE.line.toString()) {
       values.styleStep.widthFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-width'], values.styleStep.widthFg, false, isAggregated, layerSource);
+      this.importPropertySelector(layer.paint[layer.type + '-width'], values.styleStep.widthFg,
+        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
       if (!!layer.paint['line-dasharray']) {
         switch (layer.paint['line-dasharray'].toString()) {
@@ -315,46 +404,83 @@ export class MapImportService {
 
     } else if (layer.type === GEOMETRY_TYPE.circle.toString()) {
       values.styleStep.radiusFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-radius'], values.styleStep.radiusFg, false, isAggregated, layerSource);
+      this.importPropertySelector(layer.paint[layer.type + '-radius'], values.styleStep.radiusFg,
+        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
       values.styleStep.strokeWidthFg = {};
       this.importPropertySelector(layer.paint[layer.type + '-stroke-width'], values.styleStep.strokeWidthFg,
-        false, isAggregated, layerSource);
+        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
       values.styleStep.strokeColorFg = {};
       this.importPropertySelector(layer.paint[layer.type + '-stroke-color'], values.styleStep.strokeColorFg,
-        false, isAggregated, layerSource);
+        PROPERTY_SELECTOR_SOURCE.fix_color, isAggregated, layerSource);
 
       values.styleStep.strokeOpacityFg = {};
       this.importPropertySelector(layer.paint[layer.type + '-stroke-opacity'], values.styleStep.strokeOpacityFg,
-        false, isAggregated, layerSource);
+        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
     } else if (layer.type === GEOMETRY_TYPE.heatmap.toString()) {
       values.styleStep.intensityFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-intensity'], values.styleStep.intensityFg, false, isAggregated, layerSource);
+      this.importPropertySelector(layer.paint[layer.type + '-intensity'], values.styleStep.intensityFg,
+        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
       values.styleStep.weightFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-weight'], values.styleStep.weightFg, false, isAggregated, layerSource);
+      this.importPropertySelector(layer.paint[layer.type + '-weight'], values.styleStep.weightFg,
+        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
       values.styleStep.radiusFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-radius'], values.styleStep.radiusFg, false, isAggregated, layerSource);
+      this.importPropertySelector(layer.paint[layer.type + '-radius'], values.styleStep.radiusFg,
+        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
     } else if (layer.type === GEOMETRY_TYPE.fill.toString()) {
       if (!!layer.metadata && !!(layer.metadata as LayerMetadata).stroke) {
         values.styleStep.strokeWidthFg = {};
         this.importPropertySelector((layer.metadata as LayerMetadata).stroke.width, values.styleStep.strokeWidthFg,
-          false, isAggregated, layerSource);
+          PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
         values.styleStep.strokeColorFg = {};
         this.importPropertySelector((layer.metadata as LayerMetadata).stroke.color, values.styleStep.strokeColorFg,
-          false, isAggregated, layerSource);
+          PROPERTY_SELECTOR_SOURCE.fix_color, isAggregated, layerSource);
 
         values.styleStep.strokeOpacityFg = {};
         this.importPropertySelector((layer.metadata as LayerMetadata).stroke.opacity, values.styleStep.strokeOpacityFg,
-          false, isAggregated, layerSource);
+          PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
       }
     }
     values.visibilityStep.filters = filtersFa;
-    const colors = layer.paint[layer.type + '-color'];
+    const colors = layer.paint[(layer.type === 'symbol' ? 'text' : layer.type) + '-color'];
     values.styleStep.colorFg = {};
-    this.importPropertySelector(colors, values.styleStep.colorFg, true, isAggregated, layerSource);
+    this.importPropertySelector(colors, values.styleStep.colorFg,
+      PROPERTY_SELECTOR_SOURCE.fix_color, isAggregated, layerSource);
+    if (layer.type === 'symbol') {
+      values.styleStep.labelSizeFg = {};
+      values.styleStep.labelRotationFg = {};
+      values.styleStep.labelContentFg = {};
+      values.styleStep.labelHaloColorFg = {};
+      values.styleStep.labelHaloBlurFg = {};
+      values.styleStep.labelHaloWidthFg = {};
+      const size = layer.layout['text-size'];
+      const content = layer.layout['text-field'];
+      const haloColor = layer.paint['text-halo-color'];
+      const haloBlur = layer.paint['text-halo-blur'];
+      const haloWidth = layer.paint['text-halo-width'];
+      this.importPropertySelector(size, values.styleStep.labelSizeFg,
+        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+      const rotation = layer.layout['text-rotate'];
+      this.importPropertySelector(rotation, values.styleStep.labelRotationFg,
+        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+      this.importPropertySelectorForLabel(content, values.styleStep.labelContentFg, isAggregated, layerSource);
+      this.importPropertySelector(haloColor, values.styleStep.labelHaloColorFg,
+        PROPERTY_SELECTOR_SOURCE.fix_color, isAggregated, layerSource);
+      this.importPropertySelector(haloBlur, values.styleStep.labelHaloBlurFg,
+        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+      this.importPropertySelector(haloWidth, values.styleStep.labelHaloWidthFg,
+        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+      const offset = layer.paint['text-translate'];
+      if (offset) {
+        values.styleStep.labelOffsetFg = {
+          dx: offset[0],
+          dy: offset[1]
+        };
+      }
+    }
     if (layerMode === LAYER_MODE.features) {
       this.importLayerFeatures(values, layer, layerSource);
     } else if (layerMode === LAYER_MODE.featureMetric) {
@@ -362,6 +488,7 @@ export class MapImportService {
     } else if (layerMode === LAYER_MODE.cluster) {
       this.importLayerCluster(values, layer, layerSource);
     }
+
 
     typeFg.patchValue(values);
 
@@ -382,7 +509,7 @@ export class MapImportService {
 
     values.geometryStep.geometry = layerSource.returned_geometry;
     values.visibilityStep.featuresMax = layerSource.maxfeatures;
-    values.styleStep.geometryType = layer.type;
+    values.styleStep.geometryType = layer.type === 'symbol' ? 'label' : layer.type;
     values.styleStep.filter = layer.filter;
 
   }
@@ -431,7 +558,7 @@ export class MapImportService {
     values.geometryStep.rawGeometry = isGeometryTypeRaw ? layerSource.raw_geometry.geometry : null;
     values.geometryStep.clusterSort = isGeometryTypeRaw ? layerSource.raw_geometry.sort : null;
     values.visibilityStep.featuresMin = layerSource.minfeatures;
-    values.styleStep.geometryType = layer.type;
+    values.styleStep.geometryType = layer.type === 'symbol' ? 'label' : layer.type;
     values.styleStep.filter = layer.filter;
 
   }

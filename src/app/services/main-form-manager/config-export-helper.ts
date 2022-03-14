@@ -265,6 +265,7 @@ export class ConfigExportHelper {
       minzoom: modeValues.visibilityStep.zoomMin,
       maxzoom: modeValues.visibilityStep.zoomMax,
       include_fields: [],
+      short_form_fields: [],
       colors_from_fields: [],
       provided_fields: [],
       normalization_fields: [],
@@ -337,34 +338,52 @@ export class ConfigExportHelper {
       }
     }
 
-    this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.colorFg, layerValues.mode);
+    this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.colorFg, layerValues.mode);
 
     if (!!modeValues.styleStep.opacity) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.opacity, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.opacity, layerValues.mode);
     }
 
     if (!!modeValues.styleStep.widthFg) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.widthFg, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.widthFg, layerValues.mode);
     }
 
     if (!!modeValues.styleStep.radiusFg) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.radiusFg, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.radiusFg, layerValues.mode);
     }
 
     if (!!modeValues.styleStep.strokeColorFg) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.strokeColorFg, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.strokeColorFg, layerValues.mode);
     }
 
     if (!!modeValues.styleStep.strokeWidthFg) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.strokeWidthFg, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.strokeWidthFg, layerValues.mode);
     }
 
     if (!!modeValues.styleStep.strokeOpacityFg) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.strokeOpacityFg, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.strokeOpacityFg, layerValues.mode);
     }
 
     if (!!modeValues.styleStep.weightFg) {
-      this.addLayerSourceInterpolationData(layerSource, modeValues.styleStep.weightFg, layerValues.mode);
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.weightFg, layerValues.mode);
+    }
+    if (!!modeValues.styleStep.labelSizeFg) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelSizeFg, layerValues.mode);
+    }
+    if (!!modeValues.styleStep.labelHaloColorFg) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelHaloColorFg, layerValues.mode);
+    }
+    if (!!modeValues.styleStep.labelHaloBlurFg) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelHaloBlurFg, layerValues.mode);
+    }
+    if (!!modeValues.styleStep.labelHaloWidthFg) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelHaloWidthFg, layerValues.mode);
+    }
+    if (!!modeValues.styleStep.labelRotationFg) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelRotationFg, layerValues.mode);
+    }
+    if (!!modeValues.styleStep.labelContentFg) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelContentFg, layerValues.mode);
     }
     layerSource.source = getSourceName(layerSource) + '-' + layerFg.value.collection;
     return layerSource;
@@ -506,19 +525,71 @@ export class ConfigExportHelper {
     return mapComponent;
   }
 
-  private static addLayerSourceInterpolationData(layerSource: LayerSourceConfig, layerValues: any, mode: LAYER_MODE) {
+  private static declareFieldsToLayerSource(layerSource: LayerSourceConfig, layerValues: any, mode: LAYER_MODE) {
     switch (layerValues.propertySource) {
-      case PROPERTY_SELECTOR_SOURCE.fix: {
+      case PROPERTY_SELECTOR_SOURCE.fix_color:
+      case PROPERTY_SELECTOR_SOURCE.fix_slider:
+      case PROPERTY_SELECTOR_SOURCE.fix_input:
         break;
-      }
-      case PROPERTY_SELECTOR_SOURCE.provided: {
+      case PROPERTY_SELECTOR_SOURCE.provided_color: {
         const colorConfig: ColorConfig = {
-          color: layerValues.propertyProvidedFieldCtrl
+          color: layerValues.propertyProvidedColorFieldCtrl
         };
-        if (!!layerValues.propertyProvidedFieldLabelCtrl) {
-          colorConfig.label = layerValues.propertyProvidedFieldLabelCtrl;
+        if (!!layerValues.propertyProvidedColorLabelCtrl) {
+          colorConfig.label = layerValues.propertyProvidedColorLabelCtrl;
         }
         layerSource.provided_fields.push(colorConfig);
+        break;
+      }
+      case PROPERTY_SELECTOR_SOURCE.provided_field_for_agg: {
+        let sorts = [];
+        if (!layerSource.fetched_hits) {
+          layerSource.fetched_hits = {
+            sorts,
+            fields: [],
+            short_form_fields: []
+          };
+        }
+        const fieldsSet = new Set(layerSource.fetched_hits.fields);
+        const shortFieldsSet: Set<string> = new Set(layerSource.fetched_hits.short_form_fields);
+        if (layerValues.propertyProvidedFieldAggFg && layerValues.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl) {
+          sorts = layerValues.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl.split(',');
+        }
+        fieldsSet.add(layerValues.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl);
+        if (layerValues.propertyProvidedFieldAggFg.propertyShortFormatCtrl) {
+          shortFieldsSet.add(layerValues.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl);
+        }
+        layerSource.fetched_hits = {
+          sorts,
+          fields: Array.from(fieldsSet),
+          short_form_fields: Array.from(shortFieldsSet)
+        };
+        break;
+      }
+      case PROPERTY_SELECTOR_SOURCE.provided_field_for_feature: {
+        layerSource.include_fields.push(layerValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl);
+        if (layerValues.propertyProvidedFieldFeatureFg.propertyShortFormatCtrl) {
+          layerSource.short_form_fields.push(layerValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl);
+        }
+        break;
+      }
+      case PROPERTY_SELECTOR_SOURCE.metric_on_field: {
+        const countMetricFg = layerValues.propertyCountOrMetricFg;
+        if (countMetricFg.propertyCountOrMetricCtrl === 'count') {
+          layerSource.metrics.push({
+            field: '',
+            metric: 'count',
+            normalize: false,
+            short_format: !!countMetricFg.propertyShortFormatCtrl
+          });
+        } else {
+          layerSource.metrics.push({
+            field: countMetricFg.propertyFieldCtrl,
+            metric: countMetricFg.propertyMetricCtrl.toString().toLowerCase(),
+            normalize: false,
+            short_format: !!countMetricFg.propertyShortFormatCtrl
+          });
+        }
         break;
       }
       case PROPERTY_SELECTOR_SOURCE.generated: {
@@ -760,8 +831,8 @@ export class ConfigExportHelper {
           order: widgetData.dataStep.metric.sortOrder,
           on: widgetData.dataStep.metric.sortOn
         };
-        if (!!widgetData.renderStep.propertyProvidedFieldCtrl) {
-          contrib.colorField = widgetData.renderStep.propertyProvidedFieldCtrl;
+        if (!!widgetData.renderStep.propertyProvidedColorFieldCtrl) {
+          contrib.colorField = widgetData.renderStep.propertyProvidedColorFieldCtrl;
           aggregationModel.fetch_hits = {
             size: 1,
             include: [contrib.colorField]

@@ -407,7 +407,10 @@ export class SelectFormControl extends ConfigFormControl {
       optionalParams);
 
     if (options instanceof Observable) {
-      options.subscribe(opts => this.setSyncOptions(opts));
+      options.subscribe(opts => {
+        this.setSyncOptions(opts);
+        this.updateValueAndValidity({emitEvent: true});
+      });
     } else if (options instanceof Array) {
       this.setSyncOptions(options);
     }

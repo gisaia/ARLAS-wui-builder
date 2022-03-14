@@ -51,32 +51,52 @@
                     "geometryType": "fill",
                     "lineType": "solid",
                     "opacity": {
-                        "propertySource": "Fix",
-                        "propertyFix": 1
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": 1
                     },
                     "colorFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": "#abcdef"
+                        "propertySource": "Fix color",
+                        "propertyFixColor": "#abcdef"
                     },
                     "radiusFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": 1.5
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": 1.5
                     },
                     "strokeColorFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": "#fff"
+                        "propertySource": "Fix color",
+                        "propertyFixColor": "#fff"
                     },
                     "strokeWidthFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": 0
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
                     },
                     "strokeOpacityFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": 0
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
                     },
                     "widthFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": 2
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": 2
+                    },
+                    "labelSizeFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": 12
+                    },
+                    "labelRotationFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
+                    },
+                    "labelHaloBlurFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
+                    },
+                    "labelHaloWidthFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
+                    },
+                    "labelHaloColorFg": {
+                        "propertySource": "Fix color",
+                        "propertyFixColor": "#000"
                     }
                 }
             },
@@ -95,32 +115,52 @@
                     "geometryType": "fill",
                     "lineType": "solid",
                     "opacity": {
-                        "propertySource": "Fix",
-                        "propertyFix": 1
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": 1
                     },
                     "colorFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": "#abcdef"
+                        "propertySource": "Fix color",
+                        "propertyFixColor": "#abcdef"
                     },
                     "radiusFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": 1.5
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": 1.5
                     },
                     "strokeColorFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": "#fff"
+                        "propertySource": "Fix color",
+                        "propertyFixColor": "#fff"
                     },
                     "strokeWidthFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": 0
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
                     },
                     "strokeOpacityFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": 0
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
                     },
                     "widthFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": 2
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": 2
+                    },
+                    "labelSizeFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": 12
+                    },
+                    "labelRotationFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
+                    },
+                    "labelHaloBlurFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
+                    },
+                    "labelHaloWidthFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
+                    },
+                    "labelHaloColorFg": {
+                        "propertySource": "Fix color",
+                        "propertyFixColor": "#000"
                     }
                 }
             },
@@ -142,36 +182,56 @@
                     "geometryType": "fill",
                     "lineType": "solid",
                     "opacity": {
-                        "propertySource": "Fix",
-                        "propertyFix": 0.7
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": 0.7
                     },
                     "colorFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": "#abcdef"
+                        "propertySource": "Fix color",
+                        "propertyFixColor": "#abcdef"
                     },
                     "radiusFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": 1.5
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": 1.5
                     },
                     "strokeColorFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": "#fff"
+                        "propertySource": "Fix color",
+                        "propertyFixColor": "#fff"
                     },
                     "strokeWidthFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": 0
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
                     },
                     "strokeOpacityFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": 0
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
                     },
                     "weightFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": 1
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": 1
                     },
                     "intensityFg": {
-                        "propertySource": "Fix",
-                        "propertyFix": 1
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": 1
+                    },
+                    "labelSizeFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": 12
+                    },
+                    "labelRotationFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
+                    },
+                    "labelHaloBlurFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
+                    },
+                    "labelHaloWidthFg": {
+                        "propertySource": "Fix slider",
+                        "propertyFixSlider": "0"
+                    },
+                    "labelHaloColorFg": {
+                        "propertySource": "Fix color",
+                        "propertyFixColor": "#000"
                     }
                 }
             }
@@ -575,6 +635,18 @@
         "intensityMin": 0,
         "intensityMax": 10,
         "intensityStep": 0.5,
+        "labelSizeMin": 1,
+        "labelSizeMax": 20,
+        "labelSizeStep": 1,
+        "labelRotationMin": -90,
+        "labelRotationMax": 90,
+        "labelRotationStep": 5,
+        "labelHaloWidthMin": 0,
+        "labelHaloWidthMax": 5,
+        "labelHaloWidthStep": 0.1,
+        "labelHaloBlurMin": 0,
+        "labelHaloBlurMax": 5,
+        "labelHaloBlurStep": 0.1,
         "swimlaneZeroColor": "#D6D6D6",
         "swimlaneNanColor": "#D6D6D6",
         "swimlaneRepresentation": "global"
