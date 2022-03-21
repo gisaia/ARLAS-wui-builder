@@ -95,8 +95,8 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
             marker('Powerbar size'),
             marker('powerbar size description'),
             1,
-            30,
-            1
+            500,
+            10
           ),
           metric: metricFg.withTitle(marker('Metric')).withDependsOn(() => [this.customControls.dataStep.collection])
             .withOnDependencyChange((control) => {
