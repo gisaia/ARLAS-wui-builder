@@ -496,7 +496,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           propertyInterpolatedFieldCtrl: new SelectFormControl(
             '',
             marker('Interpolation field'),
-            marker('Interpolated source field description') + ' ' + propertyName,
+            isAggregated ? '' : marker('Interpolated source field description') + ' ' + propertyName,
             true,
             toNumericOrDateOptionsObs(collectionFieldsObs),
             {

@@ -78,6 +78,10 @@
                         "propertySource": "Fix slider",
                         "propertyFixSlider": 2
                     },
+                    "labelContentFg": {
+                        "propertySource": "Fix input",
+                        "propertyFixInput": "→"
+                    },
                     "labelSizeFg": {
                         "propertySource": "Fix slider",
                         "propertyFixSlider": 12
@@ -97,6 +101,10 @@
                     "labelHaloColorFg": {
                         "propertySource": "Fix color",
                         "propertyFixColor": "#000"
+                    },
+                    "labelOffsetFg": {
+                        "dx": "0",
+                        "dy": "0"
                     }
                 }
             },
@@ -636,10 +644,10 @@
         "intensityMax": 10,
         "intensityStep": 0.5,
         "labelSizeMin": 1,
-        "labelSizeMax": 20,
+        "labelSizeMax": 50,
         "labelSizeStep": 1,
-        "labelRotationMin": -90,
-        "labelRotationMax": 90,
+        "labelRotationMin": 0,
+        "labelRotationMax": 360,
         "labelRotationStep": 5,
         "labelHaloWidthMin": 0,
         "labelHaloWidthMax": 5,
