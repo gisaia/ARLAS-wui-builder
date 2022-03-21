@@ -476,8 +476,8 @@ export class MapImportService {
       const offset = layer.paint['text-translate'];
       if (offset) {
         values.styleStep.labelOffsetFg = {
-          dx: offset[0],
-          dy: offset[1]
+          dx: offset[0] + '',
+          dy: offset[1] + ''
         };
       }
     }
