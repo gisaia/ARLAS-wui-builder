@@ -723,6 +723,16 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           marker('label content description')
         ).withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
+        labelOverlapFg: new SlideToggleFormControl(
+          true,
+          marker('overlap'),
+          marker('overlap description'),
+          {
+            optional: true,
+            dependsOn: () => [this.geometryType],
+            onDependencyChange: (control) => control.enableIf(this.isLabel())
+          }
+        ),
         opacity: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
           'opacity',
@@ -1023,6 +1033,9 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   }
   public get labelContentFg() {
     return this.styleStep.get('labelContentFg') as PropertySelectorFormGroup;
+  }
+  public get labelOverlapFg() {
+    return this.styleStep.get('labelOverlapFg') as SlideToggleFormControl;
   }
   public get colorFg() {
     return this.styleStep.get('colorFg') as PropertySelectorFormGroup;

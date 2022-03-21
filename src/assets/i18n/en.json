@@ -670,7 +670,8 @@
 	"property label size description": "Setting the labels size in pixels:",
 	"Interpolated labelSize description": " • Labels size linearaly is interpolated with the Hits count or a field's metric.",
 	"Interpolated source field description labelSize": " • Labels size linearaly is interpolated with the Hits count or a field's metric.",
-
+	"overlap": "Text overlap",
+	"overlap description": "If true, the text will be visible even if it collides with other previously drawn labels",
 	"Slider fixed value description labelSize": " • All labels have the same size",
 	"Fixed labelSize": "Size (pixels)",
 	"LabelSize": "Size",
