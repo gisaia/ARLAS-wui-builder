@@ -461,9 +461,11 @@ export class MapImportService {
       const haloColor = layer.paint['text-halo-color'];
       const haloBlur = layer.paint['text-halo-blur'];
       const haloWidth = layer.paint['text-halo-width'];
+      const rotation = layer.layout['text-rotate'];
+      const overlap = layer.layout['text-allow-overlap'];
+      values.styleStep.labelOverlapFg = !!overlap;
       this.importPropertySelector(size, values.styleStep.labelSizeFg,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
-      const rotation = layer.layout['text-rotate'];
       this.importPropertySelector(rotation, values.styleStep.labelRotationFg,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
       this.importPropertySelectorForLabel(content, values.styleStep.labelContentFg, isAggregated, layerSource);

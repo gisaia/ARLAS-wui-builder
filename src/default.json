@@ -105,7 +105,8 @@
                     "labelOffsetFg": {
                         "dx": "0",
                         "dy": "0"
-                    }
+                    },
+                    "labelOverlapFg": true
                 }
             },
             "featureMetricFg": {
@@ -169,6 +170,15 @@
                     "labelHaloColorFg": {
                         "propertySource": "Fix color",
                         "propertyFixColor": "#000"
+                    },
+                    "labelContentFg": {
+                        "propertySource": "Fix input",
+                        "propertyFixInput": "→"
+                    },
+                    "labelOverlapFg": true,
+                    "labelOffsetFg": {
+                        "dx": "0",
+                        "dy": "0"
                     }
                 }
             },
@@ -240,6 +250,15 @@
                     "labelHaloColorFg": {
                         "propertySource": "Fix color",
                         "propertyFixColor": "#000"
+                    },
+                    "labelContentFg": {
+                        "propertySource": "Fix input",
+                        "propertyFixInput": "→"
+                    },
+                    "labelOverlapFg": true,
+                    "labelOffsetFg": {
+                        "dx": "0",
+                        "dy": "0"
                     }
                 }
             }

@@ -52,6 +52,7 @@ export interface Layout {
   'text-size'?: PaintValue;
   'text-font'?: string[];
   'text-rotate'?: PaintValue;
+  'text-allow-overlap'?: boolean;
 }
 
 type PaintValue = Array<string | Array<string> | number> | PaintColor | string | number;
