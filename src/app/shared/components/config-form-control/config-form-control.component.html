@@ -1,4 +1,4 @@
-<div *ngIf="isSlideToggle(); let typedControl">
+<div *ngIf="isSlideToggle(); let typedControl" class="slider-toggle-form-control">
     <mat-slide-toggle [formControl]="typedControl" labelPosition="before"
         [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
         [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
@@ -6,7 +6,7 @@
     </mat-slide-toggle>
 </div>
 
-<div *ngIf="isButtonToggle(); let typedControl">
+<div *ngIf="isButtonToggle(); let typedControl" class="button-form-control">
     <mat-button-toggle-group [formControl]="typedControl"
         [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
         [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
@@ -15,7 +15,7 @@
     </mat-button-toggle-group>
 </div>
 
-<div *ngIf="isRadioButton(); let typedControl">
+<div *ngIf="isRadioButton(); let typedControl" class="radio-form-control">
     <mat-radio-group [formControl]="typedControl"
         [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
         [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
@@ -23,7 +23,7 @@
     </mat-radio-group>
 </div>
 
-<div *ngIf="isSlider(); let typedControl">
+<div *ngIf="isSlider(); let typedControl" class="slider-form-control">
     <mat-label [class.control-error]="typedControl.touched && typedControl.invalid">{{ typedControl.label | translate}}
         {{typedControl.optional ? '' : '*'}}</mat-label>
     <mat-slider thumbLabel [formControl]="typedControl" [min]="typedControl.min" [max]="typedControl.max"
@@ -35,7 +35,7 @@
     </mat-card>
 </div>
 
-<div *ngIf="isSelect(); let typedControl">
+<div *ngIf="isSelect(); let typedControl" class="select-form-control">
     <mat-form-field>
         <mat-label>{{ typedControl.label | translate}}</mat-label>
         <mat-select [formControl]="typedControl" [required]="!typedControl.optional"
@@ -52,7 +52,7 @@
     </mat-form-field>
 </div>
 
-<div *ngIf="isMultipleSelect(); let typedControl">
+<div *ngIf="isMultipleSelect(); let typedControl" class="multi-select-form-control">
     <div class="box-search" *ngIf="typedControl.searchable">
         <input #searchInput type="text" [ngClass]="'pl-1'" (input)="debouncer.next(searchInput.value)"
             placeholder="{{'Search...' | translate}}" />
@@ -89,7 +89,7 @@
 
 </div>
 
-<div *ngIf="isCheckbox(); let typedControl">
+<div *ngIf="isCheckbox(); let typedControl"  class="checkbox-form-control">
     <mat-label>{{ typedControl.label | translate}}</mat-label>
     <div *ngIf="!typedControl.syncOptions || typedControl.syncOptions.length == 0">
         <mat-checkbox class="checkbox" (change)="typedControl.addLayer($event, 'All layers')">
@@ -119,9 +119,9 @@
     </mat-form-field>
 </div>
 
-<div *ngIf="isAutocomplete(); let typedControl">
+<div *ngIf="isAutocomplete(); let typedControl" class="autocomplete-input-form-control">
     <mat-form-field>
-        <mat-label>{{ typedControl.label | translate}}</mat-label>
+        <mat-label *ngIf="showLabel">{{ typedControl.label | translate}}</mat-label>
         <input type="text" matInput [formControl]="typedControl" [matAutocomplete]="auto" #autocompleteInput
             [required]="!typedControl.optional"
             [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? 'Warning, changing this field\'s value will reset some other fields' : null"
@@ -141,9 +141,9 @@
     </mat-form-field>
 </div>
 
-<div *ngIf="isTypedAutocomplete(); let typedControl">
+<div *ngIf="isTypedAutocomplete(); let typedControl" class="typed-autocomplete-input-form-control">
     <mat-form-field>
-        <mat-label>{{ typedControl.label | translate}}</mat-label>
+        <mat-label *ngIf="showLabel">{{ typedControl.label | translate}}</mat-label>
         <input type="text" matInput [formControl]="typedControl" [matAutocomplete]="autotyped" #autocompleteInput
             [required]="!typedControl.optional"
             [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? 'Warning, changing this field\'s value will reset some other fields' : null"
@@ -369,9 +369,9 @@
     </mat-error>
 </div>
 
-<div *ngIf="isInput(); let typedControl">
+<div *ngIf="isInput(); let typedControl" class="input-field-form-control">
     <mat-form-field [style.width]="typedControl.width ? typedControl.width : 'unset' ">
-        <mat-label>{{ typedControl.label | translate}}</mat-label>
+        <mat-label *ngIf="showLabel">{{ typedControl.label | translate}}</mat-label>
         <input matInput [formControl]="typedControl" [type]="typedControl.inputType" [required]="!typedControl.optional"
             [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null"
@@ -380,7 +380,7 @@
     </mat-form-field>
 </div>
 
-<div *ngIf="isTitleInput(); let typedControl">
+<div *ngIf="isTitleInput(); let typedControl" class="title-field-form-control">
     <mat-form-field>
         <input matInput [formControl]="typedControl" [placeholder]="typedControl.label | translate"
             [type]="typedControl.inputType" [required]="!typedControl.optional"
@@ -391,7 +391,7 @@
 
 <div *ngIf="isIcon(); let typedControl" class="icon-form-control">
     <mat-form-field>
-        <mat-label>{{ typedControl.label | translate}}</mat-label>
+        <mat-label *ngIf="showLabel">{{ typedControl.label | translate}}</mat-label>
         <input matInput [formControl]="typedControl" type="text" [required]="!typedControl.optional">
     </mat-form-field>
     <mat-icon>{{ typedControl.value }}</mat-icon>
@@ -437,7 +437,7 @@
 
 <div *ngIf="isTextarea(); let typedControl" class="textarea-form-control">
     <mat-form-field>
-        <mat-label>{{ typedControl.label | translate}}</mat-label>
+        <mat-label *ngIf="showLabel">{{ typedControl.label | translate}}</mat-label>
         <textarea matInput [formControl]="typedControl" [required]="!typedControl.optional"
             [rows]="typedControl.nbRows"></textarea>
     </mat-form-field>

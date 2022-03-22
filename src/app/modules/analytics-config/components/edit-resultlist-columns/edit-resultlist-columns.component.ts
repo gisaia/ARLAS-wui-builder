@@ -19,7 +19,8 @@ under the License.
 import {
   ResultlistColumnFormGroup, ResultlistFormBuilderService
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { SelectFormControl } from '@shared-models/config-form';
 
@@ -32,6 +33,11 @@ export class EditResultlistColumnsComponent implements OnInit {
 
   @Input() public control: FormArray;
   @Input() public collection: SelectFormControl;
+  @ViewChild('columnTable', { static: true }) public columnTable;
+
+  public dragDisabled = true;
+
+  public displayedColumns: string[] = ['action', 'name', 'field', 'unit', 'process', 'colorService'];
 
   public constructor(
     private resultlistFormBuilder: ResultlistFormBuilderService
@@ -48,14 +54,26 @@ export class EditResultlistColumnsComponent implements OnInit {
 
   public addColumn(collection: string) {
     this.control.push(this.resultlistFormBuilder.buildColumn(collection));
+    this.columnTable.renderRows();
   }
 
   public deleteColumn(colIndex: number) {
     this.control.removeAt(colIndex);
+    this.columnTable.renderRows();
   }
 
   public get columns() {
     return this.control.controls as Array<ResultlistColumnFormGroup>;
+  }
+
+  public drop(event: CdkDragDrop<any[]>) {
+    const previousIndex = this.control.controls.findIndex(row => row === event.item.data);
+    moveItemInArray(this.control.controls, previousIndex, event.currentIndex);
+    this.columnTable.renderRows();
+  }
+
+  public dragStarted(event){
+    this.dragDisabled = true;
   }
 
 }

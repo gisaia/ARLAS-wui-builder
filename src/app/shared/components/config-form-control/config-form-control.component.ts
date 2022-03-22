@@ -43,6 +43,7 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   @Input() public control: ConfigFormControl;
   @Input() public parentFormGroup: FormGroup;
   @Input() public defaultKey: string;
+  @Input() public showLabel = true;
   @ViewChild('component', { read: ViewContainerRef, static: false }) private componentContainer: ViewContainerRef;
   @Output() public updateSyncOptions: Subject<string> = new Subject();
 
