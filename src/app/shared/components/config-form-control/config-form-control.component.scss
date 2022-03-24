@@ -24,6 +24,24 @@ $primary-color: mat-color($primary-palette);
 $accent-color-light: mat-color($accent-palette, 300);
 $primary-color-light: mat-color($primary-palette, 300);
 
+.description {
+  align-self: center;
+  width: fit-content;
+  font-size: 14px;
+  color: $config-element-description-text-color;
+  line-height: 1.6;
+  border-left: 0.2rem solid $config-element-description-border-color;
+  background-color: white;
+  border-radius: 4px;
+  display: inline-block;
+  white-space: pre-wrap;
+}
+
+.description:not(:empty) {
+  margin-left: 36px;
+  padding: 10px;
+}
+
 .control-error {
   color: $error-color;
 }
@@ -82,8 +100,8 @@ mat-option {
 
 .metric-field-form-control {
   .action-container {
-    // prevent to expend width with the parent
-    width: fit-content;
+    .metric-toggle {
+    }
     .field-add-container {
       display: flex;
 
@@ -131,6 +149,13 @@ mat-option {
 .textarea-form-control {
   mat-form-field {
     width: 100%;
+  }
+}
+
+.metric-filter {
+  width: 45%;
+  ::ng-deep textarea {
+    height: 250px;
   }
 }
 .mapfilter-form-control {
@@ -286,8 +311,12 @@ mat-option {
 }
 
 .arlas-filter-expansion-panel{
-  width: 83%;
   box-shadow: none;
+  ::ng-deep {
+    .mat-expansion-panel-body {
+      display: flex;
+    }
+  }
 }
 
 .arlas-filter-expansion-panel-header{

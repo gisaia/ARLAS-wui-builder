@@ -199,7 +199,7 @@
 <div *ngIf="isMetricWithFieldList(); let typedControl" class="metric-field-form-control">
     <div>
         <div class="action-container">
-            <div>
+            <div class="metric-toggle">
                 <mat-button-toggle-group [formControl]="typedControl.metricCtrl">
                     <mat-button-toggle *ngFor="let opt of typedControl.METRICS" [value]="opt">
                         {{opt | titlecase | translate}}
@@ -256,6 +256,10 @@
                             <textarea matInput [formControl]="typedControl.arlasFilterCtrl"
                                 [required]="false"></textarea>
                         </mat-form-field>
+                    </div>
+                    <div class="description">
+                        {{'arlas filter description' | translate}}
+                        <a target="_blank" href="https://docs.arlas.io/arlas-api-exploration/#f-parameter-syntax">{{'here' | translate}}</a>
                     </div>
                 </mat-expansion-panel>
             </mat-accordion>

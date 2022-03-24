@@ -728,11 +728,15 @@
 	"Input fixed labelContent": "Enter the label's content",
 	"provided field feature": "Displayed field value",
 	"Provided field feature": "Field's value",
-	"metric filter":"ARLAS filter apply to the metric (optional)",
+	"metric filter":"Apply an ARLAS filter to the metric (optional)",
 	"no filter":"No filter",
 	"with filter": "With filter",
 	"Update":"Update",
 	"Not sorted": "Not sorted",
 	"asc": "Ascending sort",
-	"desc": "Descending sort"
+	"desc": "Descending sort",
+	"compute metric description": " • Compute a metric on the chosen field. \n • Optionally, apply an ARLAS filter on the computed metric.",
+	"arlas filter description": "• The metric is calculated given the ARLAS filter.\n  - Example of an ARLAS filter.\n {\n     \"f\":[\n        [{\n            \"field\":\"city\",\n            \"op\":\"eq\",\n            \"value\":\"Bordeaux\"\n        }] \n      ]\n }\n• Check out the ARLAS filter documentation",
+	"here": "here"
+
 }
