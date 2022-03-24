@@ -745,6 +745,8 @@
 	"with filter": "Avec filtre",
 	"Update":"Modifier",
 	"overlap": "Chevauchement de texte",
-	"overlap description": "Si l'option est activée, le texte sera visible même s'il entre en collision avec d'autres labels précédemment dessinés."
-
+	"overlap description": "Si l'option est activée, le texte sera visible même s'il entre en collision avec d'autres labels précédemment dessinés.",
+	"Not sorted": "Pas de tri",
+	"asc": "Tri ascendant",
+	"desc": "Tri descendant"
 }

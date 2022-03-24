@@ -11,7 +11,9 @@
                     <button mat-icon-button (click)="deleteColumn(i)">
                         <mat-icon>delete</mat-icon>
                     </button>
-                </div>
+                    <mat-icon *ngIf="column.controls.sort.value !== ''" class="sort" [matTooltip]="column.controls.sort.value | translate" (click)="setSort(i, column.controls.sort.value)" [class.reversed]="column.controls.sort.value === 'desc'" >north</mat-icon>
+                    <mat-icon *ngIf="column.controls.sort.value === ''" class="sort-disabled" (click)="setSort(i, column.controls.sort.value)" [matTooltip]="'Not sorted' | translate" >sync_alt</mat-icon>
+                </div> 
             </td>
         </ng-container>
         <ng-container matColumnDef="name">
@@ -46,7 +48,7 @@
             <th class="color-service" mat-header-cell *matHeaderCellDef>{{'Colorize' | translate}}</th>
             <td class="color-service" mat-cell *matCellDef="let column">
                 <div class="color-service-wrapper">
-                    <arlas-config-form-control [control]="column.controls.useColorService"></arlas-config-form-control>
+                    <arlas-config-form-control [showLabel]="false" [control]="column.controls.useColorService"></arlas-config-form-control>
                     <arlas-config-form-control *ngIf="column.controls.useColorService.value"
                         [control]="column.controls.keysToColorsButton"></arlas-config-form-control>
                 </div>

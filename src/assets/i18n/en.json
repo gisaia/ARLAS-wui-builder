@@ -731,6 +731,8 @@
 	"metric filter":"ARLAS filter apply to the metric (optional)",
 	"no filter":"No filter",
 	"with filter": "With filter",
-	"Update":"Update"
-
+	"Update":"Update",
+	"Not sorted": "Not sorted",
+	"asc": "Ascending sort",
+	"desc": "Descending sort"
 }
