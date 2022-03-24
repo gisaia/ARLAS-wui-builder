@@ -2,7 +2,7 @@
     <mat-slide-toggle [formControl]="typedControl" labelPosition="before"
         [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
         [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
-        {{ typedControl.label | translate}}
+        <ng-container *ngIf="showLabel">{{ typedControl.label | translate}}</ng-container>
     </mat-slide-toggle>
 </div>
 

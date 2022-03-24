@@ -72,8 +72,18 @@ export class EditResultlistColumnsComponent implements OnInit {
     this.columnTable.renderRows();
   }
 
-  public dragStarted(event){
+  public dragStarted(event) {
     this.dragDisabled = true;
   }
 
+  public setSort(index, sort: string) {
+    this.control.controls.forEach( c => c.get('sort').setValue(''));
+    if (sort === '') {
+      this.control.controls[index].get('sort').setValue('asc');
+    } else if (sort === 'asc') {
+      this.control.controls[index].get('sort').setValue('desc');
+    } else {
+      this.control.controls[index].get('sort').setValue('');
+    }
+  }
 }

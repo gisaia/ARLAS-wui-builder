@@ -166,6 +166,10 @@ export class ResultListImportService {
         {
           value: c.useColorService,
           control: column.customControls.useColorService
+        },
+        {
+          value: !!c.sort ? c.sort : '',
+          control: column.customControls.sort
         }
       ]);
       widgetData.customControls.dataStep.columns.push(column);

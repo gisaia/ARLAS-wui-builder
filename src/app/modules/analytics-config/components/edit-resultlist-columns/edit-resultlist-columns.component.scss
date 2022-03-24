@@ -60,6 +60,19 @@ under the License.
                 padding-top: 4px;
                 cursor: pointer;
             }
+
+            .sort {
+                cursor: pointer;
+
+                &.reversed {
+                    transform: rotate(180deg);
+                }
+            }
+            .sort-disabled{
+                cursor: pointer;
+                color: lightgray;
+                transform: rotate(90deg);
+            }
         }
 
         .transformation {
@@ -100,6 +113,16 @@ under the License.
             .drag {
                 padding-top: 4px;
                 cursor: pointer;
+            }
+
+            .sort {
+                &.reversed {
+                    transform: rotate(180deg);
+                }
+            }
+            .sort-disabled{
+                color: lightgray;
+                transform: rotate(90deg);
             }
         }
     }

@@ -266,7 +266,7 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
           }).withTitle('Grid view')
         }).withTabName(marker('Render')),
         zactionStep: new ConfigFormGroup({
-          visualisationLink : new InputFormControl(
+          visualisationLink: new InputFormControl(
             '',
             marker('Visualisation url service title'),
             marker('Visualisation url service description'),
@@ -277,7 +277,7 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
               dependsOn: () => [this.customControls.dataStep.collection]
             }
           ),
-          downloadLink : new InputFormControl(
+          downloadLink: new InputFormControl(
             '',
             marker('Download url service title'),
             marker('Download url service description'),
@@ -371,20 +371,22 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
   private updateUrlTemplateControl(collectionService: CollectionService, control: UrlTemplateControl) {
     this.setCollection(this.customControls.dataStep.collection.value);
     toNumericOrDateOrKeywordOrTextObs(collectionService
-      .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
-      control.setValue('');
-      control.fields = collectionFs;
-      control.filterAutocomplete();
-    });
+      .getCollectionFields(this.customControls.dataStep.collection.value))
+      .subscribe(collectionFs => {
+        control.setValue('');
+        control.fields = collectionFs;
+        control.filterAutocomplete();
+      });
   }
 
   private updateSelectFormControl(collectionService: CollectionService, control: SelectFormControl): void {
     this.setCollection(this.customControls.dataStep.collection.value);
     toOptionsObs(collectionService
-      .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
-      control.setSyncOptions(collectionFs);
-      control.setValue('');
-    });
+      .getCollectionFields(this.customControls.dataStep.collection.value))
+      .subscribe(collectionFs => {
+        control.setSyncOptions(collectionFs);
+        control.setValue('');
+      });
   }
 }
 
@@ -434,6 +436,14 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
         useColorService: new SlideToggleFormControl(
           '',
           marker('Colorize'),
+          '',
+          {
+            optional: true
+
+          }
+        ),
+        sort: new HiddenFormControl(
+          '',
           '',
           {
             optional: true
@@ -498,7 +508,7 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
     dataType: this.get('dataType') as InputFormControl,
     process: this.get('process') as TextareaFormControl,
     useColorService: this.get('useColorService') as SlideToggleFormControl,
-
+    sort: this.get('sort') as HiddenFormControl
   };
   private addToColorManualValuesCtrl(kc: KeywordColor, index?: number) {
     if (!Object.values(this.globalKeysToColortrl.controls)
