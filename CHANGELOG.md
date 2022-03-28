@@ -1,5 +1,24 @@
 # Change Log
 
+## [v21.0.0-beta.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v21.0.0-beta.2) (2022-03-28)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v21.0.0-beta.1...v21.0.0-beta.2)
+
+**New stuff:**
+
+- Increase size of buckets of powerbars  [\#699](https://github.com/gisaia/ARLAS-wui-builder/issues/699)
+- Conditional metric: adda link to doc and a filter example in the description [\#698](https://github.com/gisaia/ARLAS-wui-builder/issues/698)
+- Add the possibility to reorder columns of the list [\#672](https://github.com/gisaia/ARLAS-wui-builder/issues/672)
+
+**Fixed bugs:**
+
+- Manage overlap of labels [\#697](https://github.com/gisaia/ARLAS-wui-builder/issues/697)
+- Label layers: description texts have some inconsistencies [\#696](https://github.com/gisaia/ARLAS-wui-builder/issues/696)
+
+**Miscellaneous:**
+
+- Add the possibility to sort on a column of the resultlist [\#646](https://github.com/gisaia/ARLAS-wui-builder/issues/646)
+
 ## [v21.0.0-beta.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v21.0.0-beta.1) (2022-03-14)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v20.1.1...v21.0.0-beta.1)
