@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+
 export enum PROPERTY_SELECTOR_SOURCE {
     fix_color = 'Fix color',
     fix_slider = 'Fix slider',
@@ -23,10 +24,13 @@ export enum PROPERTY_SELECTOR_SOURCE {
     provided_color = 'Provided color',
     provided_field_for_feature = 'Provided field feature',
     provided_field_for_agg = 'Provided field agg',
+    provided_numeric_field_for_feature = 'Provided numeric field feature',
+    provided_numeric_field_for_agg = 'Provided numeric field agg',
     generated = 'Generated',
     manual = 'Manual',
     interpolated = 'Interpolated',
-    metric_on_field = 'Metric on field',
+    displayable_metric_on_field = 'displayable metric on field',
+    metric_on_field = 'metric on field',
     heatmap_density = 'Density'
 }
 

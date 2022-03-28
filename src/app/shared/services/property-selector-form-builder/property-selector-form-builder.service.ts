@@ -41,6 +41,7 @@ import { valuesToOptions } from '@utils/tools';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
+import { toNumericOptionsObs, toNumericFieldsObs } from '../../../services/collection-service/tools';
 
 export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
   public constructor(
@@ -63,7 +64,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
         propertySource: new SelectFormControl(
           '',
           propertyName.charAt(0).toUpperCase() + propertyName.slice(1),
-          description,
+          marker(description),
           false,
           valuesToOptions(sources),
           {
@@ -155,8 +156,9 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             toAllButGeoOptionsObs(collectionFieldsObs),
             {
               dependsOn: () => [this.customControls.propertySource],
-              onDependencyChange: (control) => control.enableIf(this.customControls.propertySource.value
-                === PROPERTY_SELECTOR_SOURCE.provided_field_for_agg)
+              onDependencyChange: (control: SelectFormControl) => {
+                control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_field_for_agg);
+              }
             }
           ),
           propertyProvidedFieldSortCtrl: new OrderedSelectFormControl(
@@ -185,6 +187,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
               optional: true,
               dependsOn: () => [
                 this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl,
+                this.customControls.propertySource
               ],
               onDependencyChange: (control) => {
                 let isNumericField = false;
@@ -199,7 +202,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                     || fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.LONG
                   ) || (!!importValue && !this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl.dirty);
                 }
-                control.enableIf(isNumericField);
+                control.enableIf(isNumericField &&
+                  this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_field_for_agg);
               }
             },
           )
@@ -212,14 +216,15 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
         propertyProvidedFieldFeatureFg: new ConfigFormGroup({
           propertyProvidedFieldFeatureCtrl: new SelectFormControl(
             '',
-            marker('provided field feature'),
-            marker('provided field feature description'),
+            marker(description + ' provided field feature'),
+            marker(description + ' provided field feature description'),
             false,
             toAllButGeoOptionsObs(collectionFieldsObs),
             {
               dependsOn: () => [this.customControls.propertySource],
               onDependencyChange: (control) => control.enableIf(this.customControls.propertySource.value
-                === PROPERTY_SELECTOR_SOURCE.provided_field_for_feature)
+                === PROPERTY_SELECTOR_SOURCE.provided_field_for_feature ||
+                this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_numeric_field_for_feature)
             }
           ),
           propertyShortFormatCtrl: new SlideToggleFormControl(
@@ -244,7 +249,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                     || fieldOption.type === CollectionReferenceDescriptionProperty.TypeEnum.LONG
                   ) || (!!importValue && !this.customControls.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl.dirty);
                 }
-                control.enableIf(isNumericField);
+                control.enableIf(isNumericField &&
+                  this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_field_for_feature);
               }
             },
           )
@@ -254,7 +260,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           onDependencyChange: (control) =>
             control.enableIf(
               !isAggregated &&
-              this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_field_for_feature)
+              (this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_field_for_feature
+                || this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_numeric_field_for_feature))
         }),
         propertyCountOrMetricFg: new ConfigFormGroup({
           propertyCountOrMetricCtrl: new ButtonToggleFormControl(
@@ -270,7 +277,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
               dependsOn: () => [this.customControls.propertySource],
               onDependencyChange: (control) => control.enableIf(
                 isAggregated &&
-                this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field)
+                (this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.displayable_metric_on_field
+                  || this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field))
             }
           ),
           propertyMetricCtrl: new SelectFormControl(
@@ -285,7 +293,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
               dependsOn: () => [this.customControls.propertyCountOrMetricFg.propertyCountOrMetricCtrl],
               onDependencyChange: (control) => control.enableIf(
                 isAggregated &&
-                this.customControls.propertyCountOrMetricFg.propertyCountOrMetricCtrl.value === COUNT_OR_METRIC.METRIC)
+                (this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.displayable_metric_on_field
+                  || this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field))
             }
           ),
           propertyFieldCtrl: new SelectFormControl(
@@ -319,7 +328,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                 this.customControls.propertyCountOrMetricFg.propertyCountOrMetricCtrl
               ],
               onDependencyChange: (control) => {
-                control.enableIf(!!this.customControls.propertyCountOrMetricFg.propertyCountOrMetricCtrl.value);
+                control.enableIf(!!this.customControls.propertyCountOrMetricFg.propertyCountOrMetricCtrl.value &&
+                  this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.displayable_metric_on_field);
               }
             },
           )
@@ -327,7 +337,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
         {
           dependsOn: () => [this.customControls.propertySource],
           onDependencyChange: (control) =>
-            control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field)
+            control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.displayable_metric_on_field
+              || this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field)
         }),
         propertyProvidedColorFieldCtrl: new SelectFormControl(
           '',

@@ -566,13 +566,15 @@ export class ConfigExportHelper {
         };
         break;
       }
-      case PROPERTY_SELECTOR_SOURCE.provided_field_for_feature: {
+      case PROPERTY_SELECTOR_SOURCE.provided_field_for_feature:
+      case PROPERTY_SELECTOR_SOURCE.provided_numeric_field_for_feature: {
         layerSource.include_fields.push(layerValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl);
         if (layerValues.propertyProvidedFieldFeatureFg.propertyShortFormatCtrl) {
           layerSource.short_form_fields.push(layerValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl);
         }
         break;
       }
+      case PROPERTY_SELECTOR_SOURCE.displayable_metric_on_field:
       case PROPERTY_SELECTOR_SOURCE.metric_on_field: {
         const countMetricFg = layerValues.propertyCountOrMetricFg;
         if (countMetricFg.propertyCountOrMetricCtrl === 'count') {

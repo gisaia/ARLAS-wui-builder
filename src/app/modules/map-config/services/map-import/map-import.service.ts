@@ -98,10 +98,17 @@ export class MapImportService {
     inputValues: any,
     propertySelectorValues: any,
     isAggregated: boolean,
-    layerSource: LayerSourceConfig) {
+    layerSource: LayerSourceConfig,
+    fixType: PROPERTY_SELECTOR_SOURCE.fix_input | PROPERTY_SELECTOR_SOURCE.fix_slider,
+    displayable: boolean,
+    numeric: boolean) {
     if (typeof inputValues === 'string' || typeof inputValues === 'number') {
-      propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.fix_input;
-      propertySelectorValues.propertyFixInput = inputValues;
+      propertySelectorValues.propertySource = fixType;
+      if (fixType === PROPERTY_SELECTOR_SOURCE.fix_input) {
+        propertySelectorValues.propertyFixInput = inputValues;
+      }  else if (fixType === PROPERTY_SELECTOR_SOURCE.fix_slider) {
+        propertySelectorValues.propertyFixSlider = inputValues + '';
+      }
     } else if (inputValues instanceof Array) {
       if (inputValues.length === 2) {
         const flatField = (inputValues as Array<string>)[1];
@@ -144,7 +151,8 @@ export class MapImportService {
               .filter(m => m.short_format !== undefined)
               .find(m => getFlatMetric(m) === flatField);
             if (!!metric) {
-              propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.metric_on_field;
+              propertySelectorValues.propertySource = displayable ? PROPERTY_SELECTOR_SOURCE.displayable_metric_on_field :
+                PROPERTY_SELECTOR_SOURCE.metric_on_field;
               propertySelectorValues.propertyCountOrMetricFg = {
                 propertyCountOrMetricCtrl: metric.metric === 'count' ? COUNT_OR_METRIC.COUNT : COUNT_OR_METRIC.METRIC,
                 propertyMetricCtrl: metric.metric === 'count' ? undefined : metric.metric.toString().toUpperCase(),
@@ -156,7 +164,8 @@ export class MapImportService {
         } else {
           const providedField = layerSource.include_fields.find(f => f.replace(/\./g, '_') === flatField ||
             (f.replace(/\./g, '_') + ':_arlas__short_format')  === flatField);
-          propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_field_for_feature;
+          propertySelectorValues.propertySource = numeric ? PROPERTY_SELECTOR_SOURCE.provided_numeric_field_for_feature :
+            PROPERTY_SELECTOR_SOURCE.provided_field_for_feature;
           propertySelectorValues.propertyProvidedFieldFeatureFg = {
             propertyProvidedFieldFeatureCtrl: providedField
           };
@@ -165,6 +174,8 @@ export class MapImportService {
 
           }
         }
+      } else if (inputValues[0] === 'interpolate') {
+        this.importPropertySelectorInterpolated(inputValues, propertySelectorValues, isAggregated, layerSource);
       }
     }
   }
@@ -466,9 +477,10 @@ export class MapImportService {
       values.styleStep.labelOverlapFg = !!overlap;
       this.importPropertySelector(size, values.styleStep.labelSizeFg,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
-      this.importPropertySelector(rotation, values.styleStep.labelRotationFg,
-        PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
-      this.importPropertySelectorForLabel(content, values.styleStep.labelContentFg, isAggregated, layerSource);
+      this.importPropertySelectorForLabel(rotation, values.styleStep.labelRotationFg, isAggregated, layerSource,
+        PROPERTY_SELECTOR_SOURCE.fix_slider, /** dsplayable */ false, /** numeric */ true);
+      this.importPropertySelectorForLabel(content, values.styleStep.labelContentFg, isAggregated, layerSource,
+        PROPERTY_SELECTOR_SOURCE.fix_input, /** dsplayable */ true, /** numeric */ false);
       this.importPropertySelector(haloColor, values.styleStep.labelHaloColorFg,
         PROPERTY_SELECTOR_SOURCE.fix_color, isAggregated, layerSource);
       this.importPropertySelector(haloBlur, values.styleStep.labelHaloBlurFg,

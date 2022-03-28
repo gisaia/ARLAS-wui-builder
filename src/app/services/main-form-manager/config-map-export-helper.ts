@@ -353,6 +353,7 @@ export class ConfigMapExportHelper {
         }
         return this.getArray(fgValues.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl + suffix);
       case PROPERTY_SELECTOR_SOURCE.provided_field_for_feature:
+      case PROPERTY_SELECTOR_SOURCE.provided_numeric_field_for_feature:
         let featureSuffix = '';
         if (fgValues.propertyProvidedFieldFeatureFg.propertyShortFormatCtrl) {
           featureSuffix = ':_arlas__short_format';
@@ -375,6 +376,7 @@ export class ConfigMapExportHelper {
           manualValues.flatMap(kc => kc.keyword !== OTHER_KEYWORD ?
             [kc.keyword, colorService.getColor(kc.keyword)] : [kc.color])
         );
+      case PROPERTY_SELECTOR_SOURCE.displayable_metric_on_field:
       case PROPERTY_SELECTOR_SOURCE.metric_on_field: {
         const countMetricFg = fgValues.propertyCountOrMetricFg;
         let field = '';

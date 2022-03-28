@@ -35,6 +35,9 @@ export const NUMERIC_OR_DATE_TYPES = [
   ...INTEGER_OR_DATE_TYPES, typeEnum.DOUBLE, typeEnum.FLOAT
 ];
 
+export const NUMERIC_TYPES = [
+  typeEnum.INTEGER, typeEnum.LONG, typeEnum.DOUBLE, typeEnum.FLOAT
+];
 export const NUMERIC_OR_DATE_OR_TEXT_TYPES = [
   ...NUMERIC_OR_DATE_TYPES, typeEnum.TEXT, typeEnum.KEYWORD
 ];
@@ -57,6 +60,12 @@ export function toNumericOrDateFieldsObs(collectionFieldsObs: Observable<Array<C
   return collectionFieldsObs.pipe(map(
     fields => fields
       .filter(f => NUMERIC_OR_DATE_TYPES.indexOf(f.type) >= 0)));
+}
+
+export function toNumericFieldsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+  return collectionFieldsObs.pipe(map(
+    fields => fields
+      .filter(f => NUMERIC_TYPES.indexOf(f.type) >= 0)));
 }
 
 export function toDateFieldsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
@@ -84,6 +93,10 @@ export function toNumericOrDateOrKeywordOrTextObs(collectionFieldsObs: Observabl
 
 export function toNumericOrDateOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
   return toOptionsObs(toNumericOrDateFieldsObs(collectionFieldsObs));
+}
+
+export function toNumericOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+  return toOptionsObs(toNumericFieldsObs(collectionFieldsObs));
 }
 
 export function toIntegerOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
