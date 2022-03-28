@@ -734,7 +734,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           labelSources,
           isAggregated,
           collection,
-          'label content description'
+          marker('label content description')
         ).withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
         labelOverlapFg: new SlideToggleFormControl(
@@ -755,7 +755,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           ],
           isAggregated,
           collection,
-          'opacity description'
+          marker('opacity description')
         ),
         colorFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.color,
@@ -763,7 +763,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           colorSources,
           isAggregated,
           collection,
-          'property color ' + (type === 'cluster' ? type : '') + ' description',
+          marker('property color ' + (type === 'cluster' ? type : '') + ' description'),
           geometryTypes.indexOf(GEOMETRY_TYPE.heatmap) >= 0 ? () => this.geometryType : undefined
         ),
 
@@ -775,7 +775,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           ],
           isAggregated,
           collection,
-          'property width description'
+          marker('property width description')
         )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.line)),
@@ -788,7 +788,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           ],
           isAggregated,
           collection,
-          'property radius ' + type + ' description'
+          marker('property radius ' + type + ' description')
         )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle
@@ -800,7 +800,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           colorSources,
           isAggregated,
           collection,
-          'property stroke color description'
+          marker('property stroke color description')
         ).withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.isCircleOrFill() && this.enabled))
           .withTitle(marker('stroke')),
@@ -813,7 +813,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           ],
           isAggregated,
           collection,
-          'property stroke width description'
+          marker('property stroke width description')
         ).withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.isCircleOrFill() && this.enabled)),
 
@@ -825,7 +825,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           ],
           isAggregated,
           collection,
-          'property stroke opacity description'
+          marker('property stroke opacity description')
         ).withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.isCircleOrFill() && this.enabled)),
 
@@ -837,7 +837,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           ],
           isAggregated,
           collection,
-          'property weight description'
+          marker('property weight description')
         )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.heatmap)),
@@ -850,7 +850,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           ],
           isAggregated,
           collection,
-          'property intensity description'
+          marker('property intensity description')
         )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.heatmap)),
@@ -862,7 +862,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           ],
           isAggregated,
           collection,
-          'property label size description'
+          marker('property label size description')
         )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.isLabel()))
@@ -873,7 +873,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           labelRotationSources,
           isAggregated,
           collection,
-          'property label rotation description'
+          marker('property label rotation description')
         )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
@@ -905,7 +905,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           colorSources,
           isAggregated,
           collection,
-          'property label halo color description'
+          marker('property label halo color description')
         )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.isLabel()))
@@ -918,7 +918,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           ],
           isAggregated,
           collection,
-          'property label halo width description'
+          marker('property label halo width description')
         )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
@@ -930,7 +930,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           ],
           isAggregated,
           collection,
-          'property label halo blur description'
+          marker('property label halo blur description')
         )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.isLabel()))
