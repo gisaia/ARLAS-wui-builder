@@ -47,6 +47,7 @@ import { map } from 'rxjs/internal/operators/map';
 import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE } from './models';
 import { TitleInputFormControl } from '../../../../shared/models/config-form';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
+import { toNumericOptionsObs } from '../../../../services/collection-service/tools';
 
 
 export const PRECISION_TOLERATED_DIFFERENCE = 3;
@@ -305,6 +306,13 @@ export class MapLayerFormGroup extends ConfigFormGroup {
     p.customControls.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl.setSyncOptions(collectionFields);
   }
 
+  private setNumericFields(p: PropertySelectorFormGroup, collection: string, collectionFields: SelectOption[]): void {
+    p.setCollection(collection);
+    p.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl.setSyncOptions(collectionFields);
+    p.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldSortCtrl.setSyncOptions(collectionFields);
+    p.customControls.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl.setSyncOptions(collectionFields);
+  }
+
   private setKeywordFields(p: PropertySelectorFormGroup, collection: string, collectionFields: SelectOption[]): void {
     p.setCollection(collection);
     p.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl.setSyncOptions(collectionFields);
@@ -375,6 +383,11 @@ export class MapLayerFormGroup extends ConfigFormGroup {
       .getCollectionFields(this.customControls.collection.value))
       .subscribe(collectionFs => {
         this.setAllButGeoFields(mapFg.labelContentFg, this.customControls.collection.value, collectionFs);
+      });
+    toNumericOptionsObs(collectionService
+      .getCollectionFields(this.customControls.collection.value))
+      .subscribe(collectionFs => {
+        this.setNumericFields(mapFg.labelRotationFg, this.customControls.collection.value, collectionFs);
       });
   }
   private calculatenetworkFetchingLevel(collection: string, collectionService: CollectionService,
@@ -628,6 +641,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
     isAggregated: boolean,
     colorSources: Array<PROPERTY_SELECTOR_SOURCE>,
     labelSources: Array<PROPERTY_SELECTOR_SOURCE>,
+    labelRotationSources: Array<PROPERTY_SELECTOR_SOURCE>,
     geometryFormControls: { [key: string]: AbstractControl; },
     visibilityFormControls: { [key: string]: AbstractControl; },
     styleFormControls: { [key: string]: AbstractControl; }
@@ -856,9 +870,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         labelRotationFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
           'labelRotation',
-          [
-            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
-          ],
+          labelRotationSources,
           isAggregated,
           collection,
           marker('property label rotation description')
@@ -1125,6 +1137,7 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
     isAggregated: boolean = false,
     geometryFormControls: { [key: string]: AbstractControl; } = {},
     labelSources: Array<PROPERTY_SELECTOR_SOURCE>,
+    labelRotationSources: Array<PROPERTY_SELECTOR_SOURCE>,
   ) {
 
     super(
@@ -1144,6 +1157,7 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
         PROPERTY_SELECTOR_SOURCE.manual, PROPERTY_SELECTOR_SOURCE.provided_color
       ],
       labelSources,
+      labelRotationSources,
       {
         geometry: new SelectFormControl(
           '',
@@ -1259,7 +1273,11 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
         )
       },
       [
-        PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.provided_field_for_agg, PROPERTY_SELECTOR_SOURCE.metric_on_field
+        PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.provided_field_for_agg,
+        PROPERTY_SELECTOR_SOURCE.displayable_metric_on_field
+      ],
+      [
+        PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.metric_on_field
       ]);
   }
   public get featureMetricSort() {
@@ -1294,12 +1312,18 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
       propertySelectorFormBuilder,
       true,
       [
-        /** Sources for cluser colors */
+        /** Sources for cluster colors */
         PROPERTY_SELECTOR_SOURCE.fix_color, PROPERTY_SELECTOR_SOURCE.interpolated
       ],
       [
-        /** Sources for cluser label */
-        PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.provided_field_for_agg, PROPERTY_SELECTOR_SOURCE.metric_on_field
+        /** Sources for cluster label */
+        PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.provided_field_for_agg,
+        PROPERTY_SELECTOR_SOURCE.displayable_metric_on_field
+      ],
+      [
+        /** Sources for cluster label rotation */
+        PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated,
+        PROPERTY_SELECTOR_SOURCE.metric_on_field
       ],
       {
         aggGeometry: new SelectFormControl(
@@ -1496,6 +1520,10 @@ export class MapLayerFormBuilderService {
       {},
       [
         PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.provided_field_for_feature
+      ],
+      [
+        PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated,
+        PROPERTY_SELECTOR_SOURCE.provided_numeric_field_for_feature
       ]);
 
     this.defaultValuesService.setDefaultValueRecursively('map.layer', featureFormGroup);
