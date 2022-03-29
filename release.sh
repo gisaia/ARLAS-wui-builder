@@ -113,9 +113,9 @@ git checkout "${REF_BRANCH}"
 git pull origin "${REF_BRANCH}"
 
 if [ "$TESTS" == "YES" ]; then
-  ng lint
-  ng test
-  ng e2e
+  npm run lint
+  npm run test
+  npm run e2e
 else
   echo "==> Skip tests"
 fi
@@ -132,7 +132,7 @@ git add package.json
 
 echo "==> Build (the artifact will be stored in the 'dist' directory)"
 npm install
-ng lint
+npm run lint
 npm run build
 
 echo "  -- Create and push tag"
