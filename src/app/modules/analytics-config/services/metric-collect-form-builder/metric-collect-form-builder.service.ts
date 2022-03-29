@@ -101,6 +101,7 @@ export class MetricCollectFormGroup extends CollectionConfigFormGroup {
           ,
           marker('metric sort on description'),
           {
+            title: marker('order-title-METRIC'),
             dependsOn: () => [this.metricCollectFunction],
             onDependencyChange: (control: ButtonToggleFormControl) => {
               control.enableIf(sortable);
