@@ -102,11 +102,12 @@
                         "propertySource": "Fix color",
                         "propertyFixColor": "#000"
                     },
+                    "labelOverlapFg": true,
                     "labelOffsetFg": {
                         "dx": "0",
                         "dy": "0"
                     },
-                    "labelOverlapFg": true
+                    "labelAlignmentCtrl": "center"
                 }
             },
             "featureMetricFg": {
@@ -179,7 +180,8 @@
                     "labelOffsetFg": {
                         "dx": "0",
                         "dy": "0"
-                    }
+                    },
+                    "labelAlignmentCtrl": "center"
                 }
             },
             "clusterFg": {
@@ -259,7 +261,8 @@
                     "labelOffsetFg": {
                         "dx": "0",
                         "dy": "0"
-                    }
+                    },
+                    "labelAlignmentCtrl": "center"
                 }
             }
         }

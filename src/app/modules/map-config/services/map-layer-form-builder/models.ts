@@ -24,6 +24,14 @@ export enum GEOMETRY_TYPE {
   label = 'label'
 }
 
+export enum LABEL_ALIGNMENT {
+  bottom = 'bottom',
+  top = 'top',
+  center = 'center',
+  right = 'right',
+  left = 'left'
+}
+
 export enum LINE_TYPE {
   solid = 'solid',
   dashed = 'dashed',

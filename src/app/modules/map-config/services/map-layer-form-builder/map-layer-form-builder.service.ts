@@ -44,8 +44,8 @@ import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { ClusterAggType, FeatureRenderMode, Granularity } from 'arlas-web-contributors/models/models';
 import { Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
-import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE } from './models';
-import { TitleInputFormControl } from '../../../../shared/models/config-form';
+import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE, LABEL_ALIGNMENT } from './models';
+import { TitleInputFormControl, ButtonToggleFormControl } from '../../../../shared/models/config-form';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import { toNumericOptionsObs } from '../../../../services/collection-service/tools';
 
@@ -877,6 +877,23 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
+        labelAlignmentCtrl: new ButtonToggleFormControl(
+          'center',
+          [
+            { label: marker('right'), value: LABEL_ALIGNMENT.right },
+            { label: marker('center'), value: LABEL_ALIGNMENT.center },
+            { label: marker('left'), value: LABEL_ALIGNMENT.left },
+
+          ]
+          ,
+          marker('label alignment description'),
+          {
+            optional: true,
+            title: marker('Label alignment'),
+            dependsOn: () =>[this.geometryType],
+            onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.label)
+          }
+        ),
         labelOffsetFg: new ConfigFormGroup({
           dx: new InputFormControl(
             0,
@@ -1098,6 +1115,10 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
   public get labelHaloWidthFg() {
     return this.styleStep.get('labelHaloWidthFg') as PropertySelectorFormGroup;
+  }
+
+  public get labelAlignmentCtrl() {
+    return this.styleStep.get('labelAlignmentCtrl') as ButtonToggleFormControl;
   }
 
   public get labelOffsetFg() {

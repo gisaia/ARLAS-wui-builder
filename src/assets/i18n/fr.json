@@ -758,5 +758,10 @@
 	"arlas filter description": "• La métrique est calculée compte tenu du filtre ARLAS.\n  - Exemple de filtre ARLAS : \n {\n     \"f\":[\n        [{\n            \"field\":\"city\",\n            \"op\":\"eq\",\n            \"value\":\"Bordeaux\"\n        }] \n      ]\n }\n• Retrouvez la documentation des filtres ARLAS",
 	"here": "ici",
 	"metric": "Métrique",
-	"order-title-METRIC":"Options de tri"
+	"order-title-METRIC":"Options de tri",
+	"right": "gauche",
+	"left": "droite",
+	"center": "centre",
+	"label alignment description": "• Aligner le label par rapport la position du point. \n - gauche : le label est affiché à gauche du point. \n - centre : le centre du label coincide avec le point. \n - droite : le label est affiché à droite du point.",
+	"Label alignment": "Alignement des labels"
 }
