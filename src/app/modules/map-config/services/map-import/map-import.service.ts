@@ -31,7 +31,8 @@ import { ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, LayerSourceConfig, MetricConf
 import { ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
 import { MapLayerFormBuilderService, MapLayerFormGroup, MAX_ZOOM } from '../map-layer-form-builder/map-layer-form-builder.service';
-import { CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE, LINE_TYPE_VALUES } from '../map-layer-form-builder/models';
+import { CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE, LINE_TYPE_VALUES,
+  LABEL_ALIGNMENT } from '../map-layer-form-builder/models';
 import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
 
 @Injectable({
@@ -474,6 +475,7 @@ export class MapImportService {
       const haloWidth = layer.paint['text-halo-width'];
       const rotation = layer.layout['text-rotate'];
       const overlap = layer.layout['text-allow-overlap'];
+      const alignment = layer.layout['text-anchor'];
       values.styleStep.labelOverlapFg = !!overlap;
       this.importPropertySelector(size, values.styleStep.labelSizeFg,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
@@ -493,6 +495,11 @@ export class MapImportService {
           dx: offset[0] + '',
           dy: offset[1] + ''
         };
+      }
+      if (!!alignment) {
+        values.styleStep.labelAlignmentCtrl = alignment;
+      } else {
+        values.styleStep.labelAlignmentCtrl = LABEL_ALIGNMENT.center.toString();
       }
     }
     if (layerMode === LAYER_MODE.features) {

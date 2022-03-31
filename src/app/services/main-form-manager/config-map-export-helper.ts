@@ -290,6 +290,7 @@ export class ConfigMapExportHelper {
         layout['text-size'] = this.getMapProperty(modeValues.styleStep.labelSizeFg, mode, colorService, taggableFields);
         layout['text-rotate'] = this.getMapProperty(modeValues.styleStep.labelRotationFg, mode, colorService, taggableFields);
         layout['text-allow-overlap'] = modeValues.styleStep.labelOverlapFg;
+        layout['text-anchor'] = modeValues.styleStep.labelAlignmentCtrl;
         break;
       }
     }
