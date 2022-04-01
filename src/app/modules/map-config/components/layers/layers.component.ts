@@ -97,7 +97,8 @@ export class LayersComponent implements OnInit, OnDestroy {
         (layer.mode === LAYER_MODE.featureMetric ? layer.featureMetricFg : layer.clusterFg);
       const taggableFields = this.collectionService.taggableFieldsMap.get(layer.collection);
       const paint = ConfigMapExportHelper.getLayerPaint(modeValues, layer.mode, this.colorService, taggableFields);
-      const exportedLayer = this.getLayer(layer, modeValues, paint, layer.collection, this.colorService, taggableFields);
+      const layout = ConfigMapExportHelper.getLayerLayout(modeValues, layer.mode, this.colorService, taggableFields);
+      const exportedLayer = this.getLayer(layer, modeValues, paint, layout, layer.collection, this.colorService, taggableFields);
       this.layerLegend.set(
         layer.arlasId + '#' + layer.mode,
         {
@@ -163,19 +164,17 @@ export class LayersComponent implements OnInit, OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  public getLayer(layerFg, modeValues, paint, collection: string, colorService, taggableFields) {
+  public getLayer(layerFg, modeValues, paint, layout, collection: string, colorService, taggableFields) {
     const sourceName = layerFg.mode === LAYER_MODE.features ? 'feature' :
       (layerFg.mode === LAYER_MODE.featureMetric ? 'feature-metric' : 'cluster');
 
     const layer: LayerMap = {
       id: layerFg.arlasId,
-      type: modeValues.styleStep.geometryType,
+      type: modeValues.styleStep.geometryType === 'label' ? 'symbol' : modeValues.styleStep.geometryType,
       source: sourceName,
       minzoom: modeValues.visibilityStep.zoomMin,
       maxzoom: modeValues.visibilityStep.zoomMax,
-      layout: {
-        visibility: modeValues.visibilityStep.visible ? VISIBILITY.visible : VISIBILITY.none
-      },
+      layout,
       paint,
       filter: modeValues.styleStep.filter,
       metadata: ConfigMapExportHelper.getLayerMetadata(collection, layerFg.mode, modeValues, colorService, taggableFields)
@@ -184,7 +183,7 @@ export class LayersComponent implements OnInit, OnDestroy {
   }
 
   public getColorLegend(paint) {
-    const styleColor = paint['circle-color'] || paint['heatmap-color'] || paint['fill-color'] || paint['line-color'];
+    const styleColor = paint['circle-color'] || paint['heatmap-color'] || paint['fill-color'] || paint['line-color'] || paint['text-color'];
     const colorLegend = MapglLegendComponent.buildColorLegend(styleColor as any, true, null);
     return colorLegend[0];
   }
@@ -276,8 +275,10 @@ export class LayersComponent implements OnInit, OnDestroy {
         newLayerFg.customControls.featureMetricFg.value : newLayerFg.customControls.clusterFg.value);
     const paint = ConfigMapExportHelper.getLayerPaint(modeValues,
       newLayerFg.customControls.mode.value, this.colorService, taggableFields);
+    const layout = ConfigMapExportHelper.getLayerLayout(modeValues,
+      newLayerFg.customControls.mode.value, this.colorService, taggableFields);
     /** Add the duplicated layer to legend set in order to have the icon */
-    const exportedLayer = this.getLayer(layer, modeValues, paint, layerFg.customControls.collection.value,
+    const exportedLayer = this.getLayer(layer, modeValues, paint, layout, layerFg.customControls.collection.value,
       this.colorService, taggableFields);
     this.layerLegend.set(
       newId + '#' + newLayerFg.customControls.mode.value,
@@ -408,9 +409,11 @@ export class LayersComponent implements OnInit, OnDestroy {
         const taggableFields = this.collectionService.taggableFieldsMap.get(layerFg.customControls.collection.value);
         const paint = ConfigMapExportHelper.getLayerPaint(modeValues,
           layerFg.customControls.mode.value, this.colorService, taggableFields);
+        const layout = ConfigMapExportHelper.getLayerLayout(modeValues,
+          layerFg.customControls.mode.value, this.colorService, taggableFields);
 
         /** Add the duplicated layer to legend set in order to have the icon */
-        const exportedLayer = this.getLayer(layer, modeValues, paint,
+        const exportedLayer = this.getLayer(layer, modeValues, paint, layout,
           collection, this.colorService, taggableFields);
         this.layerLegend.set(
           newId + '#' + layerFg.customControls.mode.value,
