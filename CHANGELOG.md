@@ -1,5 +1,14 @@
 # Change Log
 
+## [v21.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v21.0.0) (2022-04-05)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v21.0.0-beta.4...v21.0.0)
+
+**New stuff:**
+
+- display icons for label layers [\#717](https://github.com/gisaia/ARLAS-wui-builder/issues/717)
+- Add label alignment [\#715](https://github.com/gisaia/ARLAS-wui-builder/issues/715)
+
 ## [v21.0.0-beta.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v21.0.0-beta.4) (2022-03-30)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v21.0.0-beta.3...v21.0.0-beta.4)
