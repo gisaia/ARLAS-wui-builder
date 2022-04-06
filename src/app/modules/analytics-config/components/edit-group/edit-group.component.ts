@@ -32,8 +32,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { Subject } from 'rxjs/internal/Subject';
 import { Subscription } from 'rxjs';
-import { OnDestroy } from '@angular/core';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { CdkDragDrop, CdkDragEnter, CdkDragMove, moveItemInArray } from '@angular/cdk/drag-drop';
 import { moveInFormArray } from '@utils/tools';
 import { AnalyticsImportService } from '@analytics-config/services/analytics-import/analytics-import.service';
 import { ImportWidgetDialogComponent } from '../import-widget-dialog/import-widget-dialog.component';
@@ -84,7 +84,13 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   @Input() public groupIndex: number;
   @Input() public updateDisplay: Subject<any> = new Subject();
   @Output() public remove = new EventEmitter();
+  @ViewChild('dropListContainer') public dropListContainer?: ElementRef;
 
+  public dropListReceiverElement?: HTMLElement;
+  public dragDropInfo?: {
+    dragIndex: number;
+    dropIndex: number;
+  };
   public content: FormArray;
   public itemPerLine;
   public toUnsubscribe: Array<Subscription> = [];
@@ -265,9 +271,11 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
   }
   public drop(event: CdkDragDrop<string[]>) {
+
     const previousIndex = parseInt(event.previousContainer.id.replace('widget-' + this.groupIndex + '-', ''), 10);
     const newIndex = parseInt(event.container.id.replace('widget-' + this.groupIndex + '-', ''), 10);
-    moveInFormArray(previousIndex, newIndex, this.content);
+
+    moveInFormArray(event.previousIndex, event.currentIndex, this.content);
     this.updatePreview();
 
   }
@@ -278,6 +286,62 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
   public get contentTypeValue() {
     return this.formGroup.controls.contentType.value as Array<string>;
+  }
+
+  public dragEntered(event: CdkDragEnter<number>) {
+    const drag = event.item;
+    const dropList = event.container;
+    const dragIndex = drag.data;
+    const dropIndex = dropList.data;
+
+    this.dragDropInfo = { dragIndex, dropIndex };
+    console.log('dragEntered', { dragIndex, dropIndex });
+
+    const phContainer = dropList.element.nativeElement;
+    const phElement = phContainer.querySelector('.cdk-drag-placeholder');
+
+    if (phElement) {
+      phContainer.removeChild(phElement);
+      phContainer.parentElement?.insertBefore(phElement, phContainer);
+      console.log(dragIndex)
+      console.log(dropIndex)
+      moveInFormArray(dragIndex, dropIndex, this.content);
+      this.updatePreview();
+
+    }
+  }
+
+  public dragMoved(event: CdkDragMove<number>) {
+    if (!this.dropListContainer || !this.dragDropInfo) {
+      return;
+    }
+
+    const placeholderElement =
+      this.dropListContainer.nativeElement.querySelector(
+        '.cdk-drag-placeholder'
+      );
+
+    const receiverElement =
+      this.dragDropInfo.dragIndex > this.dragDropInfo.dropIndex
+        ? placeholderElement?.nextElementSibling
+        : placeholderElement?.previousElementSibling;
+
+    if (!receiverElement) {
+      return;
+    }
+
+    receiverElement.style.display = 'none';
+    this.dropListReceiverElement = receiverElement;
+  }
+
+  public dragDropped(event: CdkDragDrop<number>) {
+    if (!this.dropListReceiverElement) {
+      return;
+    }
+
+    this.dropListReceiverElement.style.removeProperty('display');
+    this.dropListReceiverElement = undefined;
+    this.dragDropInfo = undefined;
   }
 }
 
