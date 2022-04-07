@@ -57,5 +57,10 @@ export class AppComponent implements OnInit {
       this.arlasSettingsService.settings['tab_name'] : 'ARLAS-wui-builder';
     this.titleService.setTitle(this.title);
     this.iconService.registerIcons();
+    // remove arlas gif after
+    const gifElement = document.querySelector('.gif');
+    if (!!gifElement) {
+      document.querySelector('.gif').remove();
+    }
   }
 }
