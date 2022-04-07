@@ -271,13 +271,8 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
   }
   public drop(event: CdkDragDrop<string[]>) {
-
-    const previousIndex = parseInt(event.previousContainer.id.replace('widget-' + this.groupIndex + '-', ''), 10);
-    const newIndex = parseInt(event.container.id.replace('widget-' + this.groupIndex + '-', ''), 10);
-
     moveInFormArray(event.previousIndex, event.currentIndex, this.content);
     this.updatePreview();
-
   }
 
   public get contentType() {

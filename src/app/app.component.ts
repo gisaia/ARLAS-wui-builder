@@ -58,6 +58,9 @@ export class AppComponent implements OnInit {
     this.titleService.setTitle(this.title);
     this.iconService.registerIcons();
     // remove arlas gif after
-    document.querySelector('.gif').remove();
+    const gifElement = document.querySelector('.gif');
+    if (!!gifElement) {
+      document.querySelector('.gif').remove();
+    }
   }
 }
