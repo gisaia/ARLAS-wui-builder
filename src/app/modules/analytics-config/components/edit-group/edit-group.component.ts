@@ -295,18 +295,18 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     const dropIndex = dropList.data;
 
     this.dragDropInfo = { dragIndex, dropIndex };
-    console.log('dragEntered', { dragIndex, dropIndex });
 
     const phContainer = dropList.element.nativeElement;
     const phElement = phContainer.querySelector('.cdk-drag-placeholder');
 
     if (phElement) {
       phContainer.removeChild(phElement);
-      phContainer.parentElement?.insertBefore(phElement, phContainer);
-      console.log(dragIndex)
-      console.log(dropIndex)
-      moveInFormArray(dragIndex, dropIndex, this.content);
-      this.updatePreview();
+      if (this.dragDropInfo.dragIndex > this.dragDropInfo.dropIndex) {
+        phContainer.parentElement?.insertBefore(phElement, phContainer);
+      } else if (this.dragDropInfo.dragIndex < this.dragDropInfo.dropIndex){
+        phContainer.parentElement?.insertBefore(phElement, phContainer.nextSibling);
+
+      }
 
     }
   }
@@ -330,16 +330,18 @@ export class EditGroupComponent implements OnInit, OnDestroy {
       return;
     }
 
-    receiverElement.style.display = 'none';
     this.dropListReceiverElement = receiverElement;
   }
 
   public dragDropped(event: CdkDragDrop<number>) {
+    if (!!this.dragDropInfo && this.dragDropInfo.dragIndex !== undefined && this.dragDropInfo.dropIndex !== undefined) {
+      moveInFormArray(this.dragDropInfo.dragIndex, this.dragDropInfo.dropIndex, this.content);
+      this.updatePreview();
+    }
     if (!this.dropListReceiverElement) {
       return;
     }
 
-    this.dropListReceiverElement.style.removeProperty('display');
     this.dropListReceiverElement = undefined;
     this.dragDropInfo = undefined;
   }
