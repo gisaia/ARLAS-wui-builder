@@ -75,7 +75,8 @@ export class BasemapsComponent implements OnInit {
       this.basemapFa.push(
         new FormGroup({
           name: new FormControl(this.basemaps[0].name),
-          url: new FormControl(this.basemaps[0].url)
+          url: new FormControl(this.basemaps[0].url),
+          image: new FormControl(this.basemaps[0].image)
         })
       );
     }
@@ -100,14 +101,16 @@ export class BasemapsComponent implements OnInit {
       selectedBasemaps.map(b => this.basemapFa.push(
         new FormGroup({
           name: new FormControl(b.name),
-          url: new FormControl(b.url)
+          url: new FormControl(b.url),
+          image: new FormControl(b.image),
         })
       ));
     } else {
       this.basemapFa.push(
         new FormGroup({
           name: new FormControl(this.basemaps[0].name),
-          url: new FormControl(this.basemaps[0].url)
+          url: new FormControl(this.basemaps[0].url),
+          image: new FormControl(this.basemaps[0].image)
         })
       );
     }
