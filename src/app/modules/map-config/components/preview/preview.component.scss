@@ -18,5 +18,14 @@ under the License.
 */
 ::ng-deep arlas-mapgl div.map__visu-list--wrapper {
     z-index: 1;
+}
 
+.preview {
+    position: relative;
+
+    .button {
+        position: absolute;
+        right: 40px;
+        top: 7px;
+    }
 }

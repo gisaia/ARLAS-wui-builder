@@ -28,6 +28,7 @@ import { MapglComponent } from 'arlas-web-components';
 import { MapContributor } from 'arlas-web-contributors';
 import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService, ContributorBuilder } from 'arlas-wui-toolkit';
 import { merge, Subscription } from 'rxjs';
+import * as FileSaver from 'file-saver';
 
 export interface MapglComponentInput {
   mapglContributors: MapContributor[];
@@ -152,5 +153,10 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
 
   public onMove(event) {
     this.mapglContributors.forEach(contrib => contrib.onMove(event, true));
+  }
+
+  public export() {
+    const img = this.mapglComponent.map.getCanvas().toDataURL('image/png');
+    FileSaver.saveAs(img, 'map.png');
   }
 }

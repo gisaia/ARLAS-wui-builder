@@ -12,3 +12,7 @@
   (visualisations)="changeVisualisation($event)" (onAoiChanged)="onChangeAoi($event)"
   (onMove)="onMove($event)">
 </arlas-mapgl>
+<div class="preview">
+  
+  <button matTooltip="{{'Use current view as dashboard preview'}}" class="button" mat-raised-button (click)="export()">Save preview</button>
+</div>
