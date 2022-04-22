@@ -16,42 +16,19 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-mat-row {
-  line-height: 60px;
-}
 
-mat-cell.column-color {
-  display: flex;
-  justify-content: space-between;
-}
+import { Injectable } from '@angular/core';
+import { CollectionService } from '@services/collection-service/collection.service';
 
-mat-cell.column-keyword {
-  display: inline-block;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  display: inline-block;
-}
-
-.mat-dialog-actions {
-  justify-content: space-around;
-}
-
-.mat-header-cell {
-  justify-content: start;
-}
-
-div.add-header {
-  display: flex;
-  align-items: baseline;
-  width: 100%;
-
-  mat-form-field.add-input {
-    width: 100%;
-    margin-right: 20px;
+@Injectable({
+  providedIn: 'root'
+})
+export class LayersManualColorsService {
+  /** {"layerId1": {"style1": {"field1": [...keys]}} }  */
+  public layersKeysPerStyle: Map<string, Map<string,  Map<string, Set<string>>>> = new Map();
+  public currentLayerKeys: Map<string,  Map<string, Set<string>>>;
+  public constructor(
+        public collectionService: CollectionService
+  ) {
   }
-}
-
-button.remove-button {
-  transform: scale(0.7);
-  opacity: 0.7;
 }

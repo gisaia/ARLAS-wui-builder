@@ -681,6 +681,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
 export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
   public constructor(
+    layerId: string,
     collection: string,
     collectionFieldsObs: Observable<Array<CollectionField>>,
     type: MAP_LAYER_TYPE,
@@ -777,6 +778,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         ),
         filter: new FormControl(),
         labelContentFg: propertySelectorFormBuilder.build(
+          layerId,
           PROPERTY_TYPE.text,
           'labelContent',
           labelSources,
@@ -796,6 +798,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           }
         ),
         opacity: propertySelectorFormBuilder.build(
+          layerId,
           PROPERTY_TYPE.number,
           'opacity',
           [
@@ -806,6 +809,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           marker('opacity description')
         ),
         colorFg: propertySelectorFormBuilder.build(
+          layerId,
           PROPERTY_TYPE.color,
           'color',
           colorSources,
@@ -816,6 +820,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         ),
 
         widthFg: propertySelectorFormBuilder.build(
+          layerId,
           PROPERTY_TYPE.number,
           'width',
           [
@@ -829,6 +834,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.line)),
 
         radiusFg: propertySelectorFormBuilder.build(
+          layerId,
           PROPERTY_TYPE.number,
           'radius',
           [
@@ -843,6 +849,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             || this.geometryType.value === GEOMETRY_TYPE.heatmap)),
 
         strokeColorFg: propertySelectorFormBuilder.build(
+          layerId,
           PROPERTY_TYPE.color,
           'strokeColor',
           colorSources,
@@ -854,6 +861,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withTitle(marker('stroke')),
 
         strokeWidthFg: propertySelectorFormBuilder.build(
+          layerId,
           PROPERTY_TYPE.number,
           'strokeWidth',
           [
@@ -866,6 +874,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withOnDependencyChange((control) => control.enableIf(this.isCircleOrFill() && this.enabled)),
 
         strokeOpacityFg: propertySelectorFormBuilder.build(
+          layerId,
           PROPERTY_TYPE.number,
           'strokeOpacity',
           [
@@ -878,6 +887,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withOnDependencyChange((control) => control.enableIf(this.isCircleOrFill() && this.enabled)),
 
         weightFg: propertySelectorFormBuilder.build(
+          layerId,
           PROPERTY_TYPE.number,
           'weight',
           [
@@ -891,6 +901,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.heatmap)),
 
         intensityFg: propertySelectorFormBuilder.build(
+          layerId,
           PROPERTY_TYPE.number,
           'intensity',
           [
@@ -903,6 +914,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.heatmap)),
         labelSizeFg: propertySelectorFormBuilder.build(
+          layerId,
           PROPERTY_TYPE.number,
           'labelSize',
           [
@@ -916,6 +928,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withOnDependencyChange((control) => control.enableIf(this.isLabel()))
           .withTitle(marker('size rotation offset')),
         labelRotationFg: propertySelectorFormBuilder.build(
+          layerId,
           PROPERTY_TYPE.number,
           'labelRotation',
           labelRotationSources,
@@ -1023,6 +1036,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
         labelHaloColorFg: propertySelectorFormBuilder.build(
+          layerId,
           PROPERTY_TYPE.color,
           'labelHaloColor',
           colorSources,
@@ -1034,6 +1048,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withOnDependencyChange((control) => control.enableIf(this.isLabel()))
           .withTitle(marker('Halo title')),
         labelHaloWidthFg: propertySelectorFormBuilder.build(
+          layerId,
           PROPERTY_TYPE.number,
           'labelHaloWidth',
           [
@@ -1046,6 +1061,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
         labelHaloBlurFg: propertySelectorFormBuilder.build(
+          layerId,
           PROPERTY_TYPE.number,
           'labelHaloBlur',
           [
@@ -1261,6 +1277,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
 
   public constructor(
+    layerId: string,
     collection: string,
     type: MAP_LAYER_TYPE,
     collectionFields: Observable<Array<CollectionField>>,
@@ -1272,6 +1289,7 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
   ) {
 
     super(
+      layerId,
       collection,
       collectionFields,
       type,
@@ -1368,11 +1386,13 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
 export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesFormGroup {
 
   public constructor(
+    layerId: string,
     collection: string,
     collectionFields: Observable<Array<CollectionField>>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService
   ) {
     super(
+      layerId,
       collection,
       MAP_LAYER_TYPE.FEATURE_METRIC,
       collectionFields,
@@ -1426,11 +1446,13 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
 export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
 
   public constructor(
+    layerId: string,
     collection: string,
     collectionFields: Observable<Array<CollectionField>>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService
   ) {
     super(
+      layerId,
       collection,
       collectionFields,
       MAP_LAYER_TYPE.CLUSTER,
@@ -1602,7 +1624,7 @@ export class MapLayerFormBuilderService {
     private collectionService: CollectionService
   ) { }
 
-  public buildLayer(collection: string, edit?: boolean) {
+  public buildLayer(layerid, collection: string, edit?: boolean) {
     /** check if collection has geom */
     const collectionsWithCentroid = this.collectionService.getCollectionsWithCentroid();
     const isGeoCollection = (new Set(collectionsWithCentroid)).has(collection);
@@ -1619,11 +1641,10 @@ export class MapLayerFormBuilderService {
         );
       }
     }
-
     const mapLayerFormGroup = new MapLayerFormGroup(
-      this.buildFeatures(collection, collectionFields),
-      this.buildFeatureMetric(collection, collectionFields),
-      this.buildCluster(collection, collectionFields),
+      this.buildFeatures(layerid, collection, collectionFields),
+      this.buildFeatureMetric(layerid, collection, collectionFields),
+      this.buildCluster(layerid,collection, collectionFields),
       this.mainFormService.mapConfig.getVisualisationsFa(),
       collection,
       edit,
@@ -1642,8 +1663,9 @@ export class MapLayerFormBuilderService {
     return mapFilterFormGroup;
   }
 
-  public buildFeatures(collection: string, collectionFields: Observable<Array<CollectionField>>) {
+  public buildFeatures(layerId, collection: string, collectionFields: Observable<Array<CollectionField>>) {
     const featureFormGroup = new MapLayerTypeFeaturesFormGroup(
+      layerId,
       collection,
       MAP_LAYER_TYPE.FEATURE,
       collectionFields,
@@ -1662,8 +1684,9 @@ export class MapLayerFormBuilderService {
     return featureFormGroup;
   }
 
-  private buildFeatureMetric(collection: string, collectionFields: Observable<Array<CollectionField>>) {
+  private buildFeatureMetric(layerId, collection: string, collectionFields: Observable<Array<CollectionField>>) {
     const featureMetricFormGroup = new MapLayerTypeFeatureMetricFormGroup(
+      layerId,
       collection,
       collectionFields,
       this.propertySelectorFormBuilder);
@@ -1672,8 +1695,9 @@ export class MapLayerFormBuilderService {
     return featureMetricFormGroup;
   }
 
-  private buildCluster(collection: string, collectionFields: Observable<Array<CollectionField>>) {
+  private buildCluster(layerid, collection: string, collectionFields: Observable<Array<CollectionField>>) {
     const clusterFormGroup = new MapLayerTypeClusterFormGroup(
+      layerid,
       collection,
       collectionFields,
       this.propertySelectorFormBuilder);

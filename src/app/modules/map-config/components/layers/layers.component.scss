@@ -70,3 +70,9 @@ mat-error {
   vertical-align: bottom;
   color: #999999;
 }
+
+.layer_row {
+  &:hover {
+    background-color: #F5F5F5;
+  }
+}

@@ -41,14 +41,16 @@ import { valuesToOptions } from '@utils/tools';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
-import { toNumericOptionsObs, toNumericFieldsObs } from '../../../services/collection-service/tools';
+import { LayersManualColorsService } from '@services/manual-color/manual-color.service';
 
 export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
   public constructor(
+    layerId: string,
     defaultConfig: DefaultConfig,
     dialog: MatDialog,
     collectionService: CollectionService,
     colorService: ArlasColorGeneratorLoader,
+    manualColorService: LayersManualColorsService,
     collection: string,
     collectionFieldsObs: Observable<Array<CollectionField>>,
     private propertyType: PROPERTY_TYPE,
@@ -381,35 +383,50 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           propertyManualFieldCtrl: new SelectFormControl(
             '',
             marker('Source field'),
-            marker('Manual source field description'),
+            'Manual source field description',
             true,
             toKeywordOptionsObs(collectionFieldsObs),
             {
-              resetDependantsOnChange: true
+              resetDependantsOnChange: true,
+              dependsOn: () => [this.customControls.propertySource],
+              onDependencyChange: (control) =>
+                control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.manual)
             }
           ),
           propertyManualButton: new ButtonFormControl(
             '',
             marker('Manage colors'),
             marker('Manage colors description'),
-            () => dialog.open(DialogColorTableComponent, {
-              data: {
-                collection: this.collection,
-                sourceField: this.customControls.propertyManualFg.propertyManualFieldCtrl.value,
-                keywordColors: this.customControls.propertyManualFg.propertyManualValuesCtrl.value
-              } as DialogColorTableData,
-              autoFocus: false,
-            })
-              .afterClosed().subscribe((result: Array<KeywordColor>) => {
-                if (result !== undefined) {
-                  this.customControls.propertyManualFg.propertyManualValuesCtrl.clear();
-                  result.forEach((kc: KeywordColor) => {
-                    /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
-                    colorService.updateKeywordColor(kc.keyword, kc.color);
-                    this.addToColorManualValuesCtrl(kc);
-                  });
-                }
-              }),
+            () => {
+              dialog.open(DialogColorTableComponent, {
+                data: {
+                  collection: this.collection,
+                  sourceField: this.customControls.propertyManualFg.propertyManualFieldCtrl.value,
+                  keywordColors: this.customControls.propertyManualFg.propertyManualValuesCtrl.value
+                } as DialogColorTableData,
+                autoFocus: false,
+              })
+                .afterClosed().subscribe((result: Array<KeywordColor>) => {
+                  if (result !== undefined) {
+                    this.customControls.propertyManualFg.propertyManualValuesCtrl.clear();
+                    const keys = new Set<string>();
+                    result.forEach((kc: KeywordColor) => {
+                      /** after closing the dialog, save the [keyword, color]list in the Arlas color service */
+                      colorService.updateKeywordColor(kc.keyword, kc.color);
+                      this.addToColorManualValuesCtrl(kc);
+                      keys.add(kc.keyword);
+                    });
+
+                    if (!!layerId) {
+                      manualColorService.layersKeysPerStyle.get(layerId).get(propertyName)
+                        .set(this.customControls.propertyManualFg.propertyManualFieldCtrl.value, keys);
+                    } else {
+                      manualColorService.currentLayerKeys.get(propertyName)
+                        .set(this.customControls.propertyManualFg.propertyManualFieldCtrl.value, keys);
+                    }
+                  }
+                });
+            },
             undefined,
             {
               optional: true,
@@ -425,16 +442,62 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                  */
                 this.customControls.propertyManualFg.propertyManualValuesCtrl.clear();
                 if (!!field) {
-                  collectionService.getTermAggregation(this.collection, field).then((keywords: Array<string>) => {
-                    const existingKeywords =
-                      (this.customControls.propertyManualFg.propertyManualValuesCtrl.value as Array<KeywordColor>)
-                        .map(v => v.keyword);
-                    [...keywords, 'OTHER']
-                      .filter(k => existingKeywords.indexOf(k) < 0)
-                      .forEach((k: string) => {
-                        this.addToColorManualValuesCtrl({ keyword: k, color: colorService.getColor(k) });
-                      });
-                  });
+                  let fieldsPerPropertyName = manualColorService.layersKeysPerStyle.get(layerId);
+                  if (!!layerId && !!fieldsPerPropertyName) {
+                    let keysPerField = fieldsPerPropertyName.get(propertyName);
+                    if (keysPerField) {
+                      let keys = keysPerField.get(field);
+                      if (!!keys) {
+                        keys.delete('OTHER');
+                        [...keys, 'OTHER']
+                          .forEach((k: string) => {
+                            this.addToColorManualValuesCtrl({ keyword: k, color: colorService.getColor(k) });
+                          });
+                      } else {
+                        keys = new Set<string>();
+                        this.fetchManualColorKeys(
+                          layerId,
+                          collectionService, colorService, manualColorService,
+                          propertyName, field,
+                          keys, keysPerField, fieldsPerPropertyName);
+                      }
+                    } else {
+                      keysPerField = new Map();
+                      const keys = new Set<string>();
+                      this.fetchManualColorKeys(
+                        layerId,
+                        collectionService, colorService, manualColorService,
+                        propertyName, field,
+                        keys, keysPerField, fieldsPerPropertyName);
+                    }
+                  } else {
+                    if (!!layerId || !manualColorService.currentLayerKeys) {
+                      fieldsPerPropertyName = new Map();
+                      const keysPerField = new Map();
+                      const keys = new Set<string>();
+                      this.fetchManualColorKeys(
+                        layerId,
+                        collectionService, colorService, manualColorService,
+                        propertyName, field,
+                        keys, keysPerField, fieldsPerPropertyName);
+                    } else {
+                      let keys = manualColorService.currentLayerKeys.get(propertyName).get(field);
+                      if (!!keys) {
+                        keys.delete('OTHER');
+                        [...keys, 'OTHER']
+                          .forEach((k: string) => {
+                            this.addToColorManualValuesCtrl({ keyword: k, color: colorService.getColor(k) });
+                          });
+                      } else {
+                        keys = new Set<string>();
+                        this.fetchManualColorKeys(
+                          layerId,
+                          collectionService, colorService, manualColorService,
+                          propertyName, field,
+                          keys, manualColorService.currentLayerKeys.get(propertyName), manualColorService.currentLayerKeys);
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -970,6 +1033,38 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
     this.customControls.propertyManualFg.propertyManualValuesCtrl.push(keywordColorGrp);
   }
 
+  private fetchManualColorKeys(
+    layerId: string,
+    collectionService: CollectionService,
+    colorService: ArlasColorGeneratorLoader,
+    manualColorService: LayersManualColorsService,
+    propertyName: string,
+    field: string,
+    keys: Set<string>,
+    keysPerField: Map<string,  Set<string>>,
+    fieldsPerPropertyName: Map<string, Map<string,  Set<string>>>
+  ) {
+    collectionService.getTermAggregation(this.collection, field).then((keywords: Array<string>) => {
+      const existingKeywords =
+        (this.customControls.propertyManualFg.propertyManualValuesCtrl.value as Array<KeywordColor>)
+          .map(v => v.keyword);
+      [...keywords, 'OTHER']
+        .filter(k => existingKeywords.indexOf(k) < 0)
+        .forEach((k: string) => {
+          this.addToColorManualValuesCtrl({ keyword: k, color: colorService.getColor(k) });
+          keys.add(k);
+        });
+
+      keysPerField.set(field, keys);
+      fieldsPerPropertyName.set(propertyName, keysPerField);
+      if (layerId) {
+        manualColorService.layersKeysPerStyle.set(layerId, fieldsPerPropertyName);
+      } else {
+        manualColorService.currentLayerKeys = fieldsPerPropertyName;
+      }
+    });
+  }
+
 }
 
 @Injectable({
@@ -981,10 +1076,12 @@ export class PropertySelectorFormBuilderService {
     private defaultValuesService: DefaultValuesService,
     private dialog: MatDialog,
     private collectionService: CollectionService,
-    private colorService: ArlasColorGeneratorLoader
+    private colorService: ArlasColorGeneratorLoader,
+    private manualColorService: LayersManualColorsService
   ) { }
 
   public build(
+    layerId: string,
     propertyType: PROPERTY_TYPE,
     propertyName: string,
     sources: Array<PROPERTY_SELECTOR_SOURCE>,
@@ -994,10 +1091,12 @@ export class PropertySelectorFormBuilderService {
     geometryTypeControl?: () => SelectFormControl) {
 
     return new PropertySelectorFormGroup(
+      layerId,
       this.defaultValuesService.getDefaultConfig(),
       this.dialog,
       this.collectionService,
       this.colorService,
+      this.manualColorService,
       collection,
       this.collectionService.getCollectionFields(collection),
       propertyType,

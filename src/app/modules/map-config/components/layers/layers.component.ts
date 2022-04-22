@@ -34,6 +34,7 @@ import { ConfigMapExportHelper, VISIBILITY } from '@services/main-form-manager/c
 import { Config } from '@services/main-form-manager/models-config';
 import { Layer as LayerMap } from '@services/main-form-manager/models-map-config';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
+import { LayersManualColorsService } from '@services/manual-color/manual-color.service';
 import { StartupService } from '@services/startup/startup.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
@@ -84,6 +85,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     private collectionService: CollectionService,
     private mapImportService: MapImportService,
     private colorService: ArlasColorGeneratorLoader,
+    private manualColorsService: LayersManualColorsService,
     private mapLayerFormBuilder: MapLayerFormBuilderService,
     private mapGlobalFormBuilder: MapGlobalFormBuilderService,
     protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
@@ -260,6 +262,10 @@ export class LayersComponent implements OnInit, OnDestroy {
     const formGroupIndex = (this.layersFa.value as any[]).findIndex(el => el.id === layerId);
     const layerFg = this.layersFa.at(formGroupIndex) as MapLayerFormGroup;
     const newId = ARLAS_ID + layerFg.customControls.name.value + ' copy' + ':' + Date.now();
+    // const originalManualColorsKeywords = this.manualColorsService.layersKeysPerStyle.get(arlasId);
+    // if (!!originalManualColorsKeywords) {
+    //   this.manualColorsService.layersKeysPerStyle.set(newId, originalManualColorsKeywords);
+    // }
     /** Add the new layer to the same visualisation sets of the original one */
     const visualisationSetValue = this.visualisationSetFa.value;
     visualisationSetValue.forEach(vs => {
@@ -278,7 +284,7 @@ export class LayersComponent implements OnInit, OnDestroy {
       vs.layers = ls;
     });
     /** we now should build a new layer form group for the new one  */
-    const newLayerFg = this.mapLayerFormBuilder.buildLayer(layerFg.customControls.collection.value);
+    const newLayerFg = this.mapLayerFormBuilder.buildLayer(newId, layerFg.customControls.collection.value);
     /** the easiest way I found is to export the original layer and then re-import it in order to initialize correctly
      * all the subcontrols of the layer fg
      */
@@ -290,8 +296,15 @@ export class LayersComponent implements OnInit, OnDestroy {
     layer.id = newId;
     const filtersFa: FormArray = new FormArray([], []);
     this.mapImportService.importMapFilters(layerSource, filtersFa, layerFg.customControls.collection.value);
-    MapImportService.importLayerFg(layer, layerSource,
-      layerFg.customControls.collection.value, layerId + 1, visualisationSetValue, newLayerFg, filtersFa);
+    MapImportService.importLayerFg(
+      layer,
+      layerSource,
+      layerFg.customControls.collection.value,
+      layerId + 1,
+      visualisationSetValue,
+      newLayerFg,
+      filtersFa,
+      this.manualColorsService);
     const modeValues = newLayerFg.customControls.mode.value === LAYER_MODE.features ? newLayerFg.customControls.featuresFg.value :
       (newLayerFg.customControls.mode.value === LAYER_MODE.featureMetric ?
         newLayerFg.customControls.featureMetricFg.value : newLayerFg.customControls.clusterFg.value);
@@ -413,7 +426,7 @@ export class LayersComponent implements OnInit, OnDestroy {
           }
         });
         const visualisationSets: Array<VisualisationSetConfig> = config.arlas.web.components.mapgl.input.visualisations_sets;
-        let layerFg = this.mapLayerFormBuilder.buildLayer(collection);
+        let layerFg = this.mapLayerFormBuilder.buildLayer(layer.id, collection);
         const layerSource = Object.assign({}, layersSources.find(s => s.id === layer.id));
         layerSource.id = newId;
         const filtersFa: FormArray = new FormArray([], []);
@@ -425,7 +438,8 @@ export class LayersComponent implements OnInit, OnDestroy {
           this.mainFormService.mapConfig.getLayersFa().length + 1,
           visualisationSets,
           layerFg,
-          filtersFa
+          filtersFa,
+          this.manualColorsService
         );
         const modeValues = layerFg.customControls.mode.value === LAYER_MODE.features ? layerFg.customControls.featuresFg.value :
           (layerFg.customControls.mode.value === LAYER_MODE.featureMetric ?
