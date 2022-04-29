@@ -19,16 +19,20 @@ under the License.
 
 import { AfterViewInit, ChangeDetectorRef, Component, Inject, Input, OnDestroy, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { StartupService } from '@services/startup/startup.service';
+import { StartupService, ZONE_PREVIEW } from '@services/startup/startup.service';
 import { MapglComponent } from 'arlas-web-components';
 import { MapContributor } from 'arlas-web-contributors';
-import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService, ContributorBuilder } from 'arlas-wui-toolkit';
+import {
+  ArlasCollaborativesearchService, ArlasColorGeneratorLoader,
+  ArlasConfigService, ContributorBuilder, PersistenceService
+} from 'arlas-wui-toolkit';
 import { merge, Subscription } from 'rxjs';
-import * as FileSaver from 'file-saver';
 
 export interface MapglComponentInput {
   mapglContributors: MapContributor[];
@@ -61,6 +65,9 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     private collectionService: CollectionService,
     private colorService: ArlasColorGeneratorLoader,
     private cdr: ChangeDetectorRef,
+    private persistenceService: PersistenceService,
+    private snackbar: MatSnackBar,
+    private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public dataMap: MapglComponentInput
   ) {
     if (this.dataMap.mapglContributors !== undefined || this.dataMap.mapComponentConfig !== undefined) {
@@ -155,8 +162,35 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     this.mapglContributors.forEach(contrib => contrib.onMove(event, true));
   }
 
-  public export() {
+  public savePreview() {
     const img = this.mapglComponent.map.getCanvas().toDataURL('image/png');
-    FileSaver.saveAs(img, 'map.png');
+    const name = this.mainFormService.configurationName.concat('_preview');
+
+    this.persistenceService.existByZoneKey('preview', name).subscribe(
+      exist => {
+        if (exist.exists) {
+          this.persistenceService.getByZoneKey('preview', name).subscribe({
+            next: (data) => {
+              this.persistenceService.update(data.id, img, new Date(data.last_update_date).getTime());
+              this.snackbar.open(
+                this.translate.instant('Preview updated !')
+              );
+            }
+          });
+        } else {
+          this.persistenceService.create(
+            ZONE_PREVIEW,
+            name,
+            img
+          ).subscribe({
+            next: () => {
+              this.snackbar.open(
+                this.translate.instant('Preview saved !')
+              );
+            }
+          });
+        }
+      }
+    );
   }
 }

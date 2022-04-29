@@ -750,5 +750,8 @@
 	"left": "right",
 	"center": "centre",
 	"label alignment description": "•  Align the label to the position of the point. \n left: The label is displayed to the left of the point. \n - center : the center of the label coincides with the point. \n - right : the label is displayed to the right of the point.",
-	"Label alignment": "Label alignment"
+	"Label alignment": "Label alignment",
+	"Save preview": "Save preview",
+	"Preview updated !": "Preview updated",
+	"Preview saved !": "Preview saved !"
 }
