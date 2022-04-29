@@ -244,8 +244,26 @@ export class MapLayerFormGroup extends ConfigFormGroup {
               toGeoPointOptionsObs(collectionService
                 .getCollectionFields(this.customControls.collection.value))
                 .subscribe(collectionFs => {
-                  clusterFg.aggGeometry.setSyncOptions(collectionFs);
+                  if (clusterFg.aggType.value !== ClusterAggType.h3) {
+                    (clusterFg.aggGeometry as SelectFormControl).setSyncOptions(collectionFs);
+                  }
                 });
+              collectionService.getDescribe(this.customControls.collection.value).pipe(map(desc => desc.params.h3_path)).pipe(map(v => {
+                if (!!v) {
+                  return [
+                    { label: marker('Tile Grid'), value: ClusterAggType.tile },
+                    { label: marker('GeohashGrid'), value: ClusterAggType.geohash },
+                    { label: marker('H3 Grid'), value: ClusterAggType.h3 }
+                  ];
+                } else {
+                  return [
+                    { label: marker('Tile Grid'), value: ClusterAggType.tile },
+                    { label: marker('GeohashGrid'), value: ClusterAggType.geohash }
+                  ];
+                }
+              })).subscribe(aggType => {
+                clusterFg.aggType.setSyncOptions(aggType);
+              });
               toAllButGeoOptionsObs(collectionService
                 .getCollectionFields(this.customControls.collection.value))
                 .subscribe(collectionFs => {
@@ -890,7 +908,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           {
             optional: true,
             title: marker('Label alignment'),
-            dependsOn: () =>[this.geometryType],
+            dependsOn: () => [this.geometryType],
             onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.label)
           }
         ),
@@ -1347,6 +1365,15 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
         PROPERTY_SELECTOR_SOURCE.metric_on_field
       ],
       {
+        aggType: new SelectFormControl(
+          '',
+          marker('Geographic type grid'),
+          marker('Geographic type grid description'),
+          false,
+          [],
+          {
+            title: marker('Aggregate data to a geographic grid')
+          }),
         aggGeometry: new SelectFormControl(
           '',
           marker('geo aggregation field'),
@@ -1354,18 +1381,24 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
           false,
           toGeoPointOptionsObs(collectionFields),
           {
-            title: marker('Aggregate data to a geographic grid')
+            dependsOn: () => [this.aggType],
+            onDependencyChange: (control: SelectFormControl) => {
+              control.enableIf(this.aggType.value !== ClusterAggType.h3);
+              if (control.enabled) {
+                toGeoPointOptionsObs(collectionFields).subscribe(collectionFds => {
+                  control.setSyncOptions(collectionFds);
+                });
+              }
+            }
           }
         ),
-        aggType: new SelectFormControl(
-          '',
-          marker('Geographic type grid'),
-          marker('Geographic type grid description'),
-          false,
-          [
-            { label: marker('Tile Grid'), value: ClusterAggType.tile },
-            { label: marker('GeohashGrid'), value: ClusterAggType.geohash }
-          ]),
+        h3_path: new HiddenFormControl(
+          'h3',
+          null,
+          {
+            optional: true
+          }
+        ),
         granularity: new SelectFormControl(
           '',
           marker('Granularity'),
@@ -1452,7 +1485,11 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
   }
 
   public get aggGeometry() {
-    return this.geometryStep.get('aggGeometry') as SelectFormControl;
+    if (this.aggType.value !== ClusterAggType.h3) {
+      return this.geometryStep.get('aggGeometry') as SelectFormControl;
+    } else {
+      return this.geometryStep.get('h3_path') as HiddenFormControl;
+    }
   }
   public get granularity() {
     return this.geometryStep.get('granularity') as SelectFormControl;
@@ -1509,7 +1546,6 @@ export class MapLayerFormBuilderService {
         );
       }
     }
-
     const mapLayerFormGroup = new MapLayerFormGroup(
       this.buildFeatures(collection, collectionFields),
       this.buildFeatureMetric(collection, collectionFields),
@@ -1517,7 +1553,7 @@ export class MapLayerFormBuilderService {
       this.mainFormService.mapConfig.getVisualisationsFa(),
       collection,
       edit,
-      this.collectionService
+      this.collectionService,
     );
     this.defaultValuesService.setDefaultValueRecursively('map.layer', mapLayerFormGroup);
     return mapLayerFormGroup;

@@ -323,7 +323,11 @@ export class ConfigExportHelper {
         break;
       }
       case LAYER_MODE.cluster: {
-        layerSource.agg_geo_field = modeValues.geometryStep.aggGeometry;
+        if( modeValues.geometryStep.aggType === 'h3' ){
+          layerSource.agg_geo_field = modeValues.geometryStep.h3_path;
+        } else {
+          layerSource.agg_geo_field = modeValues.geometryStep.aggGeometry;
+        }
         layerSource.aggType = modeValues.geometryStep.aggType;
         layerSource.granularity = modeValues.geometryStep.granularity;
         layerSource.minfeatures = modeValues.visibilityStep.featuresMin;
