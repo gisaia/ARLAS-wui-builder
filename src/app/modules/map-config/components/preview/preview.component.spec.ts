@@ -1,55 +1,47 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { PreviewComponent } from './preview.component';
-import { MapglComponent, MapglModule } from 'arlas-web-components';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { TranslateLoader, TranslateService } from '@ngx-translate/core';
-import { MockComponent } from 'ng-mocks';
-import { ArlasCollaborativesearchService, ArlasStartupService, ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-import { mockProvider } from '@ngneat/spectator';
 import { HttpClient } from '@angular/common/http';
-import { ArlasConfigurationUpdaterService } from 'arlas-wui-toolkit';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
+import {
+  ArlasCollaborativesearchService, ArlasColorGeneratorLoader,
+  ArlasConfigurationUpdaterService, ArlasStartupService, PersistenceService
+} from 'arlas-wui-toolkit';
+import { MockComponent } from 'ng-mocks';
+import { PreviewComponent } from './preview.component';
+import { MapglComponent } from 'arlas-web-components';
 
 describe('PreviewComponent', () => {
-  let component: PreviewComponent;
-  let fixture: ComponentFixture<PreviewComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        PreviewComponent,
-        MockComponent(MapglComponent)
-      ],
-      providers: [
-        mockProvider(HttpClient),
-        mockProvider(TranslateLoader),
-        mockProvider(TranslateService),
-        mockProvider(ArlasCollaborativesearchService),
-        mockProvider(ArlasConfigurationUpdaterService),
-        mockProvider(ArlasColorGeneratorLoader),
-        mockProvider(ArlasStartupService),
-        mockProvider(CollectionService),
-        { provide: MatDialogRef, useValue: {} },
-        {
-          provide: MAT_DIALOG_DATA, useValue: {
-            mapglContributor: null,
-            mapComponentConfig: {
-              input: {}
-            }
+  let spectator: Spectator<PreviewComponent>;
+  const createComponent = createComponentFactory({
+    declarations: [
+      MockComponent(MapglComponent)
+    ],
+    providers: [
+      mockProvider(HttpClient),
+      mockProvider(ArlasCollaborativesearchService),
+      mockProvider(ArlasConfigurationUpdaterService),
+      mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(ArlasStartupService),
+      mockProvider(CollectionService),
+      mockProvider(PersistenceService),
+      { provide: MatDialogRef, useValue: {} },
+      {
+        provide: MAT_DIALOG_DATA, useValue: {
+          mapglContributor: null,
+          mapComponentConfig: {
+            input: {}
           }
         }
-      ]
-    })
-      .compileComponents();
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(PreviewComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+      }
+    ],
+    component: PreviewComponent,
   });
+
+  beforeEach(() => spectator = createComponent());
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(spectator.component).toBeTruthy();
   });
 });
+

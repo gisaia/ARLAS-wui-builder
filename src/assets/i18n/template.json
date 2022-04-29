@@ -469,5 +469,8 @@
 	"A Palette": "A Palette",
 	"Manage palette": "Manage palette",
 	"Minimum": "Minimum",
-	"Maximum": "Maximum"
+	"Maximum": "Maximum",
+	"Save preview": "Save preview",
+	"Preview updated !": "Preview updated",
+	"Preview saved !": "Preview saved !"
 }

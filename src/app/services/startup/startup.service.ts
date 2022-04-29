@@ -28,6 +28,7 @@ import {
 import * as portableFetch from 'portable-fetch';
 
 export const ZONE_WUI_BUILDER = 'config.json';
+export const ZONE_PREVIEW = 'preview';
 
 @Injectable({
   providedIn: 'root'
