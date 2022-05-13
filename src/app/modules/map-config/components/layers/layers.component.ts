@@ -98,7 +98,8 @@ export class LayersComponent implements OnInit, OnDestroy {
       const taggableFields = this.collectionService.taggableFieldsMap.get(layer.collection);
       const paint = ConfigMapExportHelper.getLayerPaint(modeValues, layer.mode, this.colorService, taggableFields);
       const layout = ConfigMapExportHelper.getLayerLayout(modeValues, layer.mode, this.colorService, taggableFields);
-      const exportedLayer = this.getLayer(layer, modeValues, paint, layout, layer.collection, this.colorService, taggableFields);
+      const exportedLayer = this.getLayer(layer, modeValues, paint, layout, layer.collection, layer.collectionDisplayName,
+        this.colorService, taggableFields);
       this.layerLegend.set(
         layer.arlasId + '#' + layer.mode,
         {
@@ -164,7 +165,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  public getLayer(layerFg, modeValues, paint, layout, collection: string, colorService, taggableFields) {
+  public getLayer(layerFg, modeValues, paint, layout, collection: string, collectionDisplayName: string, colorService, taggableFields) {
     const sourceName = layerFg.mode === LAYER_MODE.features ? 'feature' :
       (layerFg.mode === LAYER_MODE.featureMetric ? 'feature-metric' : 'cluster');
 
@@ -177,7 +178,8 @@ export class LayersComponent implements OnInit, OnDestroy {
       layout,
       paint,
       filter: modeValues.styleStep.filter,
-      metadata: ConfigMapExportHelper.getLayerMetadata(collection, layerFg.mode, modeValues, colorService, taggableFields)
+      metadata: ConfigMapExportHelper.getLayerMetadata(collection, collectionDisplayName,
+        layerFg.mode, modeValues, colorService, taggableFields)
     };
     return layer;
   }
@@ -279,6 +281,7 @@ export class LayersComponent implements OnInit, OnDestroy {
       newLayerFg.customControls.mode.value, this.colorService, taggableFields);
     /** Add the duplicated layer to legend set in order to have the icon */
     const exportedLayer = this.getLayer(layer, modeValues, paint, layout, layerFg.customControls.collection.value,
+      layerFg.customControls.collectionDisplayName.value,
       this.colorService, taggableFields);
     this.layerLegend.set(
       newId + '#' + newLayerFg.customControls.mode.value,
@@ -414,7 +417,7 @@ export class LayersComponent implements OnInit, OnDestroy {
 
         /** Add the duplicated layer to legend set in order to have the icon */
         const exportedLayer = this.getLayer(layer, modeValues, paint, layout,
-          collection, this.colorService, taggableFields);
+          collection, layerFg.customControls.collectionDisplayName.value, this.colorService, taggableFields);
         this.layerLegend.set(
           newId + '#' + layerFg.customControls.mode.value,
           {
