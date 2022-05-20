@@ -449,6 +449,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
       } else {
         this.configChoice = InitialChoice.setup;
       }
+      this.mainFormService.configurationName = data.doc_key;
       this.mainFormService.configurationId = id;
     });
   }

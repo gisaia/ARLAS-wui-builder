@@ -271,7 +271,7 @@
         "global": {
             "name": "Search...",
             "searchField": "internal.fulltext",
-            "autocompleteField": "internal.fulltext",
+            "autocompleteField": "internal.autocomplete",
             "autocompleteSize": 10,
             "unmanagedFields": {
                 "icon": "search"
