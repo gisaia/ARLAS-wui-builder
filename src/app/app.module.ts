@@ -24,7 +24,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LandingPageComponent, LandingPageDialogComponent } from '@components/landing-page/landing-page.component';
 import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
-import { PageNotFoundComponent } from '@components/page-not-found/page-not-found.component';
 import { LookAndFeelConfigModule } from '@look-and-feel-config/look-and-feel-config.module';
 import { MapConfigModule } from '@map-config/map-config.module';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -77,7 +76,6 @@ export function createTranslateLoader(http: HttpClient) {
   declarations: [
     AppComponent,
     LeftMenuComponent,
-    PageNotFoundComponent,
     LandingPageComponent,
     LandingPageDialogComponent,
     StatusComponent,

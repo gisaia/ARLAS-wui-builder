@@ -20,7 +20,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LandingPageComponent } from '@components/landing-page/landing-page.component';
 import { MainFormInitializedGuard } from '@guards/main-form-initialized/main-form-initialized.guard';
-import { PageNotFoundComponent } from '@components/page-not-found/page-not-found.component';
 import { CollectionComponent } from '@components/collection/collection.component';
 
 
@@ -76,7 +75,7 @@ const routes: Routes = [
     loadChildren: () => import('./modules/external-node-config/external-node-config.module').then(m => m.ExternalNodeConfigModule),
     canActivate: [MainFormInitializedGuard]
   },
-  { path: '**', component: PageNotFoundComponent }
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
