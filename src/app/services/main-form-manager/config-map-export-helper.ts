@@ -31,7 +31,7 @@ import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
-import { FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID} from 'arlas-web-components';
+import { FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID } from 'arlas-web-components';
 import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { Layout } from './models-map-config';
 export enum VISIBILITY {
@@ -78,6 +78,7 @@ export class ConfigMapExportHelper {
           minzoom: layer.minzoom,
           metadata: {
             collection: layer.metadata.collection,
+            collectionDisplayName: layer.metadata.collectionDisplayName,
             isScrollableLayer: false
           },
           filter: layer.filter,
@@ -154,10 +155,12 @@ export class ConfigMapExportHelper {
     return mapConfig;
   }
 
-  public static getLayerMetadata(collection: string, mode: LAYER_MODE, modeValues,
+  public static getLayerMetadata(collection: string, collectionDisplayName: string,
+    mode: LAYER_MODE, modeValues,
     colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>): LayerMetadata {
     const metadata: LayerMetadata = {
-      collection
+      collection,
+      collectionDisplayName
     };
     if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.fill.toString()) {
       const fillStroke: FillStroke = {
@@ -188,7 +191,8 @@ export class ConfigMapExportHelper {
       maxzoom: modeValues.visibilityStep.zoomMax,
       layout,
       paint,
-      metadata: this.getLayerMetadata(layerFg.customControls.collection.value, mode, modeValues, colorService, taggableFields)
+      metadata: this.getLayerMetadata(layerFg.customControls.collection.value, layerFg.customControls.collectionDisplayName.value,
+        mode, modeValues, colorService, taggableFields)
     };
     /** 'all' is the operator that allows to apply an "AND" operator in mapbox */
     layer.filter = ['all'];
@@ -263,7 +267,7 @@ export class ConfigMapExportHelper {
       }
       case GEOMETRY_TYPE.label: {
         paint['text-color'] = color;
-        paint['text-opacity']= opacity;
+        paint['text-opacity'] = opacity;
         paint['text-halo-color'] = this.getMapProperty(modeValues.styleStep.labelHaloColorFg, mode, colorService, taggableFields);
         paint['text-halo-width'] = this.getMapProperty(modeValues.styleStep.labelHaloWidthFg, mode, colorService, taggableFields);
         paint['text-halo-blur'] = this.getMapProperty(modeValues.styleStep.labelHaloBlurFg, mode, colorService, taggableFields);
@@ -286,7 +290,7 @@ export class ConfigMapExportHelper {
       }
       case GEOMETRY_TYPE.label: {
         layout['text-field'] = this.getMapProperty(modeValues.styleStep.labelContentFg, mode, colorService, taggableFields);
-        layout['text-font'] = ['Open Sans Bold','Arial Unicode MS Bold'];
+        layout['text-font'] = ['Open Sans Bold', 'Arial Unicode MS Bold'];
         layout['text-size'] = this.getMapProperty(modeValues.styleStep.labelSizeFg, mode, colorService, taggableFields);
         layout['text-rotate'] = this.getMapProperty(modeValues.styleStep.labelRotationFg, mode, colorService, taggableFields);
         layout['text-allow-overlap'] = modeValues.styleStep.labelOverlapFg;

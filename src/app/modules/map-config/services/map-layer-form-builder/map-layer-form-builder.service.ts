@@ -105,6 +105,24 @@ export class MapLayerFormGroup extends ConfigFormGroup {
           resetDependantsOnChange: true
         }
       ),
+
+      collectionDisplayName: new HiddenFormControl(
+        '',
+        null,
+        {
+          dependsOn: () => [this.customControls.collection],
+          onDependencyChange: (control: HiddenFormControl) => {
+            collectionService.getDescribe(this.customControls.collection.value).subscribe(desc => {
+              if(!!desc.params.display_names && !!desc.params.display_names.collection){
+                control.setValue(desc.params.display_names.collection);
+              }else{
+                control.setValue(desc.collection_name);
+              }
+            });
+          },
+          optional: true
+        }
+      ),
       visualisation: new VisualisationCheckboxFormControl(
         '',
         marker('Visualisation sets'),
@@ -266,6 +284,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
     arlasId: this.get('arlasId') as HiddenFormControl,
     /** need to make the collection availbale at this level to ease the export */
     collection: this.get('collection') as HiddenFormControl,
+    collectionDisplayName: this.get('collectionDisplayName') as HiddenFormControl,
     featuresFg: this.get('featuresFg') as MapLayerTypeFeaturesFormGroup,
     featureMetricFg: this.get('featureMetricFg') as MapLayerTypeFeatureMetricFormGroup,
     clusterFg: this.get('clusterFg') as MapLayerTypeClusterFormGroup
@@ -890,7 +909,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           {
             optional: true,
             title: marker('Label alignment'),
-            dependsOn: () =>[this.geometryType],
+            dependsOn: () => [this.geometryType],
             onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.label)
           }
         ),
