@@ -637,7 +637,8 @@ export class MapImportService {
     basemaps.forEach(basemap => {
       this.mainFormService.mapConfig.getBasemapsFg().customControls.basemaps.push(new FormGroup({
         name: new FormControl(basemap.name),
-        url: new FormControl(basemap.styleFile)
+        url: new FormControl(basemap.styleFile),
+        image: new FormControl(basemap.image)
       }));
     });
 

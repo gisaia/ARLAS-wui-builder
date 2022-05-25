@@ -51,10 +51,11 @@ export class MapBasemapFormBuilderService {
     return mapBasemapFormGroup;
   }
 
-  public buildBasemapFormArray(name: string, url: string): FormGroup {
+  public buildBasemapFormArray(name: string, url: string, image: string): FormGroup {
     return new FormGroup({
       name: new FormControl(name),
-      url: new FormControl(url)
+      url: new FormControl(url),
+      image: new FormControl(image)
     });
   }
 }

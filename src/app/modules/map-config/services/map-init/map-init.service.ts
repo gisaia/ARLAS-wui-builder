@@ -92,7 +92,7 @@ export class MapInitService {
     }
 
     this.mainFormService.mapConfig.getBasemapsFg().customControls.basemaps.push(
-      this.mapBasemapFormBuilder.buildBasemapFormArray(basemaps[0].name, basemaps[0].url)
+      this.mapBasemapFormBuilder.buildBasemapFormArray(basemaps[0].name, basemaps[0].url, basemaps[0].image)
     );
 
   }

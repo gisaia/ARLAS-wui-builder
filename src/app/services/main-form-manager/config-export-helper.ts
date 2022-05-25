@@ -480,19 +480,20 @@ export class ConfigExportHelper {
     mapConfigBasemaps.customControls.basemaps.controls.forEach(basemap => {
       basemaps.push({
         name: basemap.value.name,
-        styleFile: basemap.value.url
+        styleFile: basemap.value.url,
+        image: basemap.value.image
       });
       if (mapConfigBasemaps.customControls.default.value === basemap.value.name) {
         defaultBasemap = {
           name: basemap.value.name,
-          styleFile: basemap.value.url
+          styleFile: basemap.value.url,
+          image: basemap.value.image
         };
       }
     });
     if (!defaultBasemap) {
       defaultBasemap = basemaps[0];
     }
-
     const mapComponent: MapglComponentConfig = {
       allowMapExtend: customControls.allowMapExtend.value,
       nbVerticesLimit: customControls.unmanagedFields.nbVerticesLimit.value,
