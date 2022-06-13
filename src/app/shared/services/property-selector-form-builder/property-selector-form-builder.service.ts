@@ -480,9 +480,15 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             '',
             'undefined',
             {
-              dependsOn: () => [this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl],
+              dependsOn: () => [this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl,
+                this.customControls.propertySource],
               onDependencyChange: (control) => {
-                if (!!this.collection) {
+                control.enableIf(isAggregated
+                  && this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT
+                  && !!this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl.enabled
+                  && !this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl.value
+                  && this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated);
+                if (!!this.collection && control.enabled) {
                   collectionService.countNbDocuments(this.collection).subscribe(
                     count => control.setValue(count.totalnb)
                   );
