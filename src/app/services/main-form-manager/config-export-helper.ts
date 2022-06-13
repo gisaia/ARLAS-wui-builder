@@ -58,6 +58,8 @@ import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/m
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionReferenceDescription } from 'arlas-api';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
+import { hashCode, stringifyArlasFilter } from './tools';
+import { filter } from 'rxjs/internal/operators/filter';
 
 export enum EXPORT_TYPE {
   json = 'json',
@@ -1063,10 +1065,9 @@ export class ConfigExportHelper {
         idString += widgetData.dataStep.metric.sortOn !== undefined ? ('-' + widgetData.dataStep.metric.sortOn) : '';
       }
     } else if (widgetType === WIDGET_TYPE.metric) {
-      idString += widgetData.dataStep.function;
-      widgetData.dataStep.metrics.forEach(m => {
-        idString += m.field + '-' + m.metric;
-      });
+      idString += widgetData.dataStep.function +
+        Array.from(widgetData.dataStep.metrics)
+          .map((m: any)=> m.field + '-' + m.metric + '-'+ hashCode(stringifyArlasFilter(m.filter))).sort().join('');
     } else if (widgetType === WIDGET_TYPE.donut) {
       widgetData.dataStep.aggregationmodels.forEach(am => {
         idString += am.field + '-' + am.size + '-';
