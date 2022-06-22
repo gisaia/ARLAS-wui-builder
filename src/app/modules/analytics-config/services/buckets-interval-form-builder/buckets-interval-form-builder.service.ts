@@ -108,7 +108,8 @@ export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
           {
             dependsOn: () => [this.customControls.aggregationBucketOrInterval],
             onDependencyChange: (control) =>
-              control.enableIf(this.customControls.aggregationBucketOrInterval.value === BY_BUCKET_OR_INTERVAL.BUCKET)
+              control.enableIf(this.customControls.aggregationBucketOrInterval.value === BY_BUCKET_OR_INTERVAL.BUCKET),
+
           }
         ),
         aggregationIntervalUnit: new SelectFormControl(
@@ -117,10 +118,9 @@ export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
           marker(''),
           false,
           Array.from(new Set(
-            Object.keys(Interval.UnitEnum).map(u => u.charAt(0).toUpperCase() + u.slice(1))))
-            .sort()
+            Object.keys(Interval.UnitEnum).map(u => u.toLowerCase())))
             .map(u => ({
-              value: u.toLowerCase(), label: u
+              value: u, label: u
             })),
           {
             dependsOn: () => [this.customControls.aggregationBucketOrInterval, this.customControls.aggregationField],
@@ -142,14 +142,15 @@ export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
           }
         ),
         aggregationIntervalSize: new InputFormControl(
-          '',
+          1,
           marker('Interval size'),
           marker(''),
           'number',
           {
             dependsOn: () => [this.customControls.aggregationBucketOrInterval],
-            onDependencyChange: (control) =>
-              control.enableIf(this.customControls.aggregationBucketOrInterval.value === BY_BUCKET_OR_INTERVAL.INTERVAL),
+            onDependencyChange: (control) => {
+              control.enableIf(this.customControls.aggregationBucketOrInterval.value === BY_BUCKET_OR_INTERVAL.INTERVAL);
+            },
             validators: [integerValidator]
           }
         )
