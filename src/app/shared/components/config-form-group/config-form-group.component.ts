@@ -25,6 +25,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatStepper } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { AbstractControl, FormControl } from '@angular/forms';
+import { BucketsIntervalFormGroup } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
 
 /**
  * TODO this class can probably be optimized.
@@ -32,6 +33,7 @@ import { AbstractControl, FormControl } from '@angular/forms';
  * this may be grouped into a sigle listener if multiple controls depend on a same one.
  */
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'arlas-config-form-group',
   templateUrl: './config-form-group.component.html',
   styleUrls: ['./config-form-group.component.scss'],
@@ -152,7 +154,11 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
   }
 
   public isFormGroup(control: AbstractControl): ConfigFormGroup | null {
-    return control instanceof ConfigFormGroup ? control : null;
+    return !this.isHistogramBucketFormGroup(control) && control instanceof ConfigFormGroup ? control : null;
+  }
+
+  public isHistogramBucketFormGroup(control: AbstractControl): BucketsIntervalFormGroup | null {
+    return control instanceof BucketsIntervalFormGroup ? control : null;
   }
 
   public isFormGroupArray(control: AbstractControl): ConfigFormGroupArray | null {
@@ -161,15 +167,14 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
 
   public trustHtml = (html) => this.sanitizer.bypassSecurityTrustHtml(html);
 
-  public hasChildSteps = () =>
-    Object.values(this.configFormGroup.controls)
-      .filter(c => (c instanceof ConfigFormGroup && !!c.stepName))
-      .length > 0;
+  public hasChildSteps = () => Object.values(this.configFormGroup.controls)
+    .filter(c => (c instanceof ConfigFormGroup && !!c.stepName))
+    .length > 0;
 
-  public hasChildTabs = () =>
-    Object.values(this.configFormGroup.controls)
-      .filter(c => (c instanceof ConfigFormGroup && !!c.tabName))
-      .length > 0;
+  public hasChildTabs = () => Object.values(this.configFormGroup.controls)
+    .filter(c => (c instanceof ConfigFormGroup && !!c.tabName))
+    .length > 0;
+
 
   public isFirstControl = (control: AbstractControl) =>
     Object.values(this.configFormGroup.controls)[0] === control;
