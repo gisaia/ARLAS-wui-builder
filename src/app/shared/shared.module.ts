@@ -69,8 +69,6 @@ import { AutoFocusDirective } from './directives/auto-focus/auto-focus.directive
 import { ResetOnChangeDirective } from './directives/reset-on-change/reset-on-change.directive';
 import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
 import {MatExpansionModule} from '@angular/material/expansion';
-import { HistogramBucketFormGroupComponent } from './components/histogram-bucket-form-group/histogram-bucket-form-group.component';
-import { HistogramBucketPipe } from './pipes/histogram-buckets/histogram-buckets.pipe';
 
 
 
@@ -88,10 +86,8 @@ export function createTranslateLoader(http: HttpClient) {
     ColorPickerWrapperComponent,
     ResetOnChangeDirective,
     ObjectvaluesPipe,
-    HistogramBucketPipe,
     AutoFocusDirective,
     ConfigFormGroupComponent,
-    HistogramBucketFormGroupComponent,
     ConfigFormControlComponent,
     InputModalComponent,
     ConfigFormGroupArrayComponent,
@@ -149,11 +145,9 @@ export function createTranslateLoader(http: HttpClient) {
     ColorPickerWrapperComponent,
     ResetOnChangeDirective,
     ObjectvaluesPipe,
-    HistogramBucketPipe,
     AutoFocusDirective,
     ConfigFormGroupComponent,
     ConfigFormControlComponent,
-    HistogramBucketFormGroupComponent,
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
