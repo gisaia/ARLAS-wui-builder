@@ -337,6 +337,24 @@ export class ConfigMapExportHelper {
         }
         break;
       }
+      case GEOMETRY_TYPE.label: {
+        const orientationFilter = this.getFilter(modeValues.styleStep.labelRotationFg, mode, taggableFields);
+        if (orientationFilter) {
+          filterLayer = filterLayer.concat(orientationFilter);
+        }
+        const sizeFilter = this.getFilter(modeValues.styleStep.labelSizeFg, mode, taggableFields);
+        if (sizeFilter) {
+          filterLayer = filterLayer.concat(sizeFilter);
+        }
+        const haloWidthFilter = this.getFilter(modeValues.styleStep.labelHaloWidthFg, mode, taggableFields);
+        if (haloWidthFilter) {
+          filterLayer = filterLayer.concat(haloWidthFilter);
+        }
+        const haloBlurFilter = this.getFilter(modeValues.styleStep.labelHaloBlurFg, mode, taggableFields);
+        if (haloBlurFilter) {
+          filterLayer = filterLayer.concat(haloBlurFilter);
+        }
+      }
     }
     return filterLayer;
   }
@@ -474,6 +492,15 @@ export class ConfigMapExportHelper {
       case PROPERTY_SELECTOR_SOURCE.generated:
         return null;
       case PROPERTY_SELECTOR_SOURCE.manual:
+        return null;
+      case PROPERTY_SELECTOR_SOURCE.metric_on_field:
+        if (fgValues.propertyCountOrMetricFg && fgValues.propertyCountOrMetricFg.propertyCountOrMetricCtrl
+          && fgValues.propertyCountOrMetricFg.propertyCountOrMetricCtrl === 'metric') {
+          const flatField = fgValues.propertyCountOrMetricFg.propertyFieldCtrl.replace(/\./g, '_');
+          const metric = (fgValues.propertyCountOrMetricFg.propertyMetricCtrl as string).toLowerCase();
+          const layerField = `${flatField}_${metric}_`;
+          return [['<', ['get', layerField], Number.MAX_VALUE], ['>', ['get', layerField], -Number.MAX_VALUE]];
+        }
         return null;
       case PROPERTY_SELECTOR_SOURCE.interpolated: {
 
