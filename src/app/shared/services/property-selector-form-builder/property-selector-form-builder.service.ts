@@ -152,7 +152,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             '',
             marker('provided field agg'),
             marker('provided field agg description'),
-            false,
+            true,
             toAllButGeoOptionsObs(collectionFieldsObs),
             {
               dependsOn: () => [this.customControls.propertySource],
@@ -165,7 +165,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             '',
             marker('Order provided field'),
             marker('Order provided field description'),
-            false,
+            true,
             toAllButGeoOptionsObs(collectionFieldsObs),
             {
               dependsOn: () => [this.customControls.propertyProvidedFieldAggFg.propertyProvidedFieldAggCtrl,
@@ -218,7 +218,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             '',
             marker(description + ' provided field feature'),
             marker(description + ' provided field feature description'),
-            false,
+            true,
             toAllButGeoOptionsObs(collectionFieldsObs),
             {
               dependsOn: () => [this.customControls.propertySource],
