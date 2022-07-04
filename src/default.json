@@ -297,9 +297,7 @@
                     "timeline": {
                         "aggregation": {
                             "aggregationBucketOrInterval": "bucket",
-                            "aggregationBucketsNumber": 50,
-                            "aggregationIntervalUnit": "hour",
-                            "aggregationIntervalSize": 1
+                            "aggregationBucketsNumber": 50
                         }
                     },
                     "detailedTimeline": {
@@ -412,9 +410,7 @@
                 "dataStep": {
                     "aggregation": {
                         "aggregationBucketOrInterval": "bucket",
-                        "aggregationBucketsNumber": 50,
-                        "aggregationIntervalUnit": "hour",
-                        "aggregationIntervalSize": 1
+                        "aggregationBucketsNumber": 50
                     },
                     "useUtc": true,
                     "metric": {
