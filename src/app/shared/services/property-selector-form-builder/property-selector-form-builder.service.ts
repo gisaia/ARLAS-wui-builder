@@ -292,7 +292,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
               optional: false,
               dependsOn: () => [this.customControls.propertyCountOrMetricFg.propertyCountOrMetricCtrl],
               onDependencyChange: (control) => control.enableIf(
-                isAggregated &&
+                isAggregated && this.customControls.propertyCountOrMetricFg.propertyCountOrMetricCtrl.value === COUNT_OR_METRIC.METRIC &&
                 (this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.displayable_metric_on_field
                   || this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field))
             }
