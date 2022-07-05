@@ -772,5 +772,10 @@
 	"Label alignment": "Alignement des labels",
 	"Save preview": "Sauvegarder l'aperçu",
 	"Preview updated !": "Aperçu mis à jour",
-	"Preview saved !": "Aperçu sauvegardé !"
+	"Preview saved !": "Aperçu sauvegardé !",
+	"Cannot update the preview": "Impossible de mettre à jour l'aperçu",
+	"Cannot create the preview": "Impossible de créer l'aperçu",
+	"Cannot save the preview": "Impossible de sauvegarder l'aperçu",
+	"Use the map view as a dashboard preview on the ARLAS Hub": "Utiliser la vue cartographique comme aperçu du tableau de bord sur ARLAS Hub.",
+	"You need to save your dashbord first in order to save a map preview.": "Vous devez d'abord enregistrer votre tableau de bord pour pouvoir enregistrer un aperçu de la carte."
 }

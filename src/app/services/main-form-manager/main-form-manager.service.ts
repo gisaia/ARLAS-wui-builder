@@ -176,20 +176,24 @@ export class MainFormManagerService {
             this.mainFormService.configurationId,
             conf,
             new Date(data.last_update_date).getTime(), this.mainFormService.configurationName, data.doc_readers, data.doc_writers
-          ).subscribe(
-            () => {
-              ['i18n', 'tour']
-                .forEach(zone => ['fr', 'en']
-                  .forEach(lg => this.renameLinkedData(zone, data.doc_key, this.mainFormService.configurationName, lg)));
+          ).subscribe({
+            next: () => {
+              ['i18n', 'tour'].forEach(zone => ['fr', 'en']
+                .forEach(lg => this.renameLinkedData(zone, data.doc_key, this.mainFormService.configurationName, lg)));
+
+              this.updatePreview(
+                this.mainFormService.configurationId,
+                this.mainFormService.configurationName.concat('_preview'));
+
               this.snackbar.open(
                 this.translate.instant('Dashboard updated !') + ' (' + this.mainFormService.configurationName + ')'
               );
             },
-            (error) => {
+            error: (error) => {
               this.snackbar.open(this.translate.instant('Error : Dashboard not updated'));
               this.raiseError(error);
             }
-          );
+          });
         });
       } else {
         // Create new config
@@ -260,6 +264,30 @@ export class MainFormManagerService {
     }
 
     this.updateControlsFromOtherControls(this.mainFormService.mainForm);
+  }
+
+
+  public updatePreview(configId: string, previewName: string) {
+    this.persistenceService.existByZoneKey('preview', previewName).subscribe(
+      exist => {
+        if (exist.exists) {
+          this.persistenceService.getByZoneKey('preview', previewName).subscribe({
+            next: (data) => {
+              this.persistenceService.get(configId).subscribe({
+                next: (currentConfig) => {
+                  this.persistenceService.update(data.id, data.doc_value, new Date(data.last_update_date).getTime(), previewName,
+                    currentConfig.doc_readers, currentConfig.doc_writers);
+                },
+                error: (e) => {
+                  this.snackbar.open(
+                    this.translate.instant('Cannot update the preview')
+                  );
+                }
+              });
+            }
+          });
+        }
+      });
   }
 
   private saveJson(json: any, filename: string, separator?: string) {

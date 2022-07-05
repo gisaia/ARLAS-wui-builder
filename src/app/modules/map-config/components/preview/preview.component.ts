@@ -56,6 +56,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   public mapLegendUpdater;
   public mapVisibilityUpdater;
   public mainMapContributor;
+  public configId;
 
   public constructor(
     protected mainFormService: MainFormService,
@@ -70,6 +71,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public dataMap: MapglComponentInput
   ) {
+    this.configId = this.mainFormService.configurationId;
     if (this.dataMap.mapglContributors !== undefined || this.dataMap.mapComponentConfig !== undefined) {
       this.mapglContributors = dataMap.mapglContributors;
       this.mapComponentConfig = dataMap.mapComponentConfig.input;
@@ -164,33 +166,64 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
 
   public savePreview() {
     const img = this.mapglComponent.map.getCanvas().toDataURL('image/png');
-    const name = this.mainFormService.configurationName.concat('_preview');
-
-    this.persistenceService.existByZoneKey('preview', name).subscribe(
-      exist => {
-        if (exist.exists) {
-          this.persistenceService.getByZoneKey('preview', name).subscribe({
-            next: (data) => {
-              this.persistenceService.update(data.id, img, new Date(data.last_update_date).getTime());
-              this.snackbar.open(
-                this.translate.instant('Preview updated !')
-              );
-            }
-          });
-        } else {
-          this.persistenceService.create(
-            ZONE_PREVIEW,
-            name,
-            img
-          ).subscribe({
-            next: () => {
-              this.snackbar.open(
-                this.translate.instant('Preview saved !')
-              );
-            }
-          });
+    if (!!this.mainFormService.configurationName) {
+      const name = this.mainFormService.configurationName.concat('_preview');
+      this.persistenceService.existByZoneKey('preview', name).subscribe(
+        exist => {
+          if (exist.exists) {
+            this.persistenceService.getByZoneKey('preview', name).subscribe({
+              next: (data) => {
+                this.persistenceService.get(this.configId).subscribe({
+                  next: (currentConfig) => {
+                    this.persistenceService.update(data.id, img, new Date(data.last_update_date).getTime(), name,
+                      currentConfig.doc_readers, currentConfig.doc_writers);
+                    this.snackbar.open(
+                      this.translate.instant('Preview updated !')
+                    );
+                  },
+                  error: (e) => {
+                    this.snackbar.open(
+                      this.translate.instant('Cannot update the preview')
+                    );
+                  }
+                });
+              }
+            });
+          } else {
+            this.persistenceService.get(this.configId).subscribe({
+              next: (currentConfig) => {
+                this.persistenceService.create(
+                  ZONE_PREVIEW,
+                  name,
+                  img,
+                  currentConfig.doc_readers,
+                  currentConfig.doc_writers
+                ).subscribe({
+                  next: () => {
+                    this.snackbar.open(
+                      this.translate.instant('Preview saved !')
+                    );
+                  },
+                  error: (e) => {
+                    this.snackbar.open(
+                      this.translate.instant('Cannot create the preview')
+                    );
+                  }
+                });
+              },
+              error: (e) => {
+                this.snackbar.open(
+                  this.translate.instant('Cannot save the preview')
+                );
+              }
+            });
+          }
         }
-      }
-    );
+      );
+    } else {
+      this.snackbar.open(
+        this.translate.instant('Cannot save Preview: You need to save the dashboard first')
+      );
+    }
   }
 }
