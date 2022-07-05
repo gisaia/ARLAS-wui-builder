@@ -789,12 +789,12 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           ),
           propertyInterpolatedMinValueCtrl: new SliderFormControl(
             '',
-            marker('Minimum') + ' ' + propertyName,
+            marker('Start') + ' ' + propertyName,
             null,
             defaultConfig[propertyName + 'Min'],
             defaultConfig[propertyName + 'Max'],
             defaultConfig[propertyName + 'Step'],
-            () => this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl,
+            undefined,
             undefined,
             {
               dependsOn: () => [
@@ -815,13 +815,13 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           ),
           propertyInterpolatedMaxValueCtrl: new SliderFormControl(
             '',
-            marker('Maximum') + ' ' + propertyName,
+            marker('End') + ' ' + propertyName,
             null,
             defaultConfig[propertyName + 'Min'],
             defaultConfig[propertyName + 'Max'],
             defaultConfig[propertyName + 'Step'],
             undefined,
-            () => this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl,
+            undefined,
             {
               dependsOn: () => [
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
