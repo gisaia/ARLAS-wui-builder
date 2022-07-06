@@ -578,7 +578,7 @@ export function checkArlasFilter(): ValidatorFn {
 export class MetricWithFieldListFormControl extends ConfigFormControl {
 
   public METRICS = [
-    METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX, METRIC_TYPES.CARDINALITY
+    METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX, METRIC_TYPES.CARDINALITY, 'count'
   ];
   // TODO do not use validators, the fields look like in error
   public metricCtrl = new FormControl('', Validators.required);
@@ -610,6 +610,11 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
       ]);
     }
     this.metricCtrl.valueChanges.subscribe(v => {
+      if (this.metricCtrl.value === 'count') {
+        this.fieldCtrl.disable();
+      } else {
+        this.fieldCtrl.enable();
+      }
       this.updateFieldsByMetric(this.metricCtrl.value);
       this.fieldCtrl.reset();
     });
@@ -619,7 +624,7 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
     this.setValue(new Set());
   }
 
-  public updateFieldsByMetric(metric: METRIC_TYPES) {
+  public updateFieldsByMetric(metric: METRIC_TYPES | 'count') {
     const fieldObs = this.metricCtrl.value === METRIC_TYPES.CARDINALITY ?
       toKeywordOptionsObs(this.collectionFields) : toNumericOrDateOptionsObs(this.collectionFields);
     fieldObs.subscribe(f => {
@@ -652,6 +657,9 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
       }
       case 'cardinality': {
         return METRIC_TYPES.CARDINALITY;
+      }
+      case 'count': {
+        return 'count';
       }
     }
   }

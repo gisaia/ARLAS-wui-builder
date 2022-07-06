@@ -207,7 +207,7 @@
                 </mat-button-toggle-group>
             </div>
             <div class="field-add-container">
-                <div class="field-container">
+                <div class="field-container" *ngIf="typedControl.metricCtrl.value != 'count'">
                     <mat-form-field>
                         <mat-label>{{'metric field' | translate}}</mat-label>
                         <input type="text" matInput [matAutocomplete]="auto" #autocompleteInput
