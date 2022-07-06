@@ -5,14 +5,26 @@
   [initCenter]="mapComponentConfig?.initCenter" [initZoom]="mapComponentConfig?.initZoom"
   [minZoom]="mapComponentConfig?.minZoom" [maxZoom]="mapComponentConfig?.maxZoom" [displayScale]="true"
   [maxWidthScale]="mapComponentConfig?.maxWidthScale" [idFeatureField]="mapComponentConfig?.idFieldName"
-  [mapLayers]="mapComponentConfig?.mapLayers" [mapSources]="mapComponentConfig?.mapSources"
-  [drawButtonEnabled]="false"
+  [mapLayers]="mapComponentConfig?.mapLayers" [mapSources]="mapComponentConfig?.mapSources" [drawButtonEnabled]="false"
   [visualisationSetsConfig]="mapComponentConfig?.visualisations_sets" [legendUpdater]="mapLegendUpdater"
-  [visibilityUpdater]="mapVisibilityUpdater"
-  (visualisations)="changeVisualisation($event)" (onAoiChanged)="onChangeAoi($event)"
-  (onMove)="onMove($event)">
+  [visibilityUpdater]="mapVisibilityUpdater" [preserveDrawingBuffer]="true"
+  (visualisations)="changeVisualisation($event)" (onAoiChanged)="onChangeAoi($event)" (onMove)="onMove($event)">
 </arlas-mapgl>
-<div class="preview" [matTooltip]="configId ? 'Use the map view as a dashboard preview on the ARLAS Hub' : 'You need to save your dashbord first in order to save a map preview.' | translate">
-  
-  <button  class="button" mat-raised-button (click)="savePreview()" [disabled]="!configId">{{'Save preview' | translate}}</button>
+<div class="preview" *ngIf="configId"
+  [matTooltip]="'Use the map view as a dashboard preview on the ARLAS Hub' | translate">
+  <button class="button" mat-raised-button (click)="savePreview()">{{'Save preview' |
+    translate}}</button>
+
+</div>
+
+<div class="preview" *ngIf="!configId"
+  [matTooltip]="'You need to save your dashbord first in order to save a map preview.' | translate">
+  <button class="button" mat-raised-button [disabled]="true">{{'Save preview' |
+    translate}}</button>
+
+</div>
+
+<div class="basemaps" [matTooltipPosition]="'left'"
+  matTooltip="{{'Basemaps' | translate}}">
+  <mat-icon style="width:22px;height:22px" (click)="this.mapglComponent.showBasemapSwitcher()">public</mat-icon>
 </div>

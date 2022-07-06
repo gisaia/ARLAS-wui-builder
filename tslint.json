@@ -18,7 +18,7 @@
     "component-selector": [
       true,
       "element",
-      "app",
+      "arlas",
       "kebab-case"
     ],
     "import-blacklist": [
