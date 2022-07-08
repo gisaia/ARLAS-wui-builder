@@ -759,5 +759,6 @@
 	"Label alignment": "Label alignment",
 	"Save preview": "Save preview",
 	"Preview updated !": "Preview updated",
-	"Preview saved !": "Preview saved !"
+	"Preview saved !": "Preview saved !",
+	"Cannot fetch current config": "Cannot fetch the current dashboards' information"
 }
