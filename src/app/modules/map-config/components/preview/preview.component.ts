@@ -165,7 +165,28 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   }
 
   public savePreview() {
-    const img = this.mapglComponent.map.getCanvas().toDataURL('image/png');
+    let img;
+    const mapCanvas = this.mapglComponent.map.getCanvas();
+    const maxWidth = 300;
+    const maxHeight = 150;
+    const widthScale = maxWidth / mapCanvas.width;
+    const heightScale = maxHeight / mapCanvas.height;
+
+    if (widthScale > 1 && heightScale > 1) {
+      img = mapCanvas.toDataURL('image/png');
+    } else {
+      const rescaledCanvas = document.createElement('canvas');
+      const context = rescaledCanvas.getContext('2d');
+      const scale = Math.min(widthScale, heightScale);
+      rescaledCanvas.width = mapCanvas.width * scale;
+      rescaledCanvas.height = mapCanvas.height * scale;
+      rescaledCanvas.style.width = '100%';
+      rescaledCanvas.style.height = '100%';
+      context.scale(scale, scale);
+      context.drawImage(mapCanvas, 0, 0);
+      img = rescaledCanvas.toDataURL('image/png');
+    }
+    this.mapglComponent.map.resize();
     if (!!this.mainFormService.configurationName) {
       const name = this.mainFormService.configurationName.concat('_preview');
       this.persistenceService.existByZoneKey('preview', name).subscribe(
