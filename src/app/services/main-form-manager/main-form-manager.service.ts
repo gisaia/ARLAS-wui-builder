@@ -275,8 +275,16 @@ export class MainFormManagerService {
             next: (data) => {
               this.persistenceService.get(configId).subscribe({
                 next: (currentConfig) => {
+                  let previewReaders = [];
+                  let previewWriters = [];
+                  if (currentConfig.doc_readers) {
+                    previewReaders = currentConfig.doc_readers.map(reader => reader.replace('config.json', 'preview'));
+                  }
+                  if (currentConfig.doc_writers) {
+                    previewWriters = currentConfig.doc_writers.map(writer => writer.replace('config.json', 'preview'));
+                  }
                   this.persistenceService.update(data.id, data.doc_value, new Date(data.last_update_date).getTime(), previewName,
-                    currentConfig.doc_readers, currentConfig.doc_writers);
+                    previewReaders, previewWriters);
                 },
                 error: (e) => {
                   this.snackbar.open(
