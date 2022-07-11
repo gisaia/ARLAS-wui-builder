@@ -191,13 +191,21 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       const name = this.mainFormService.configurationName.concat('_preview');
       this.persistenceService.existByZoneKey('preview', name).subscribe(
         exist => {
-          if (exist.exists) {
-            this.persistenceService.getByZoneKey('preview', name).subscribe({
-              next: (data) => {
-                this.persistenceService.get(this.configId).subscribe({
-                  next: (currentConfig) => {
+          this.persistenceService.get(this.configId).subscribe({
+            next: (currentConfig) => {
+              let previewReaders = [];
+              let previewWriters = [];
+              if (currentConfig.doc_readers) {
+                previewReaders = currentConfig.doc_readers.map(reader => reader.replace('config.json', 'preview'));
+              }
+              if (currentConfig.doc_writers) {
+                previewWriters = currentConfig.doc_writers.map(writer => writer.replace('config.json', 'preview'));
+              }
+              if (exist.exists) {
+                this.persistenceService.getByZoneKey('preview', name).subscribe({
+                  next: (data) => {
                     this.persistenceService.update(data.id, img, new Date(data.last_update_date).getTime(), name,
-                      currentConfig.doc_readers, currentConfig.doc_writers);
+                      previewReaders, previewWriters);
                     this.snackbar.open(
                       this.translate.instant('Preview updated !')
                     );
@@ -208,17 +216,13 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
                     );
                   }
                 });
-              }
-            });
-          } else {
-            this.persistenceService.get(this.configId).subscribe({
-              next: (currentConfig) => {
+              } else {
                 this.persistenceService.create(
                   ZONE_PREVIEW,
                   name,
                   img,
-                  currentConfig.doc_readers,
-                  currentConfig.doc_writers
+                  previewReaders,
+                  previewWriters
                 ).subscribe({
                   next: () => {
                     this.snackbar.open(
@@ -231,14 +235,16 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
                     );
                   }
                 });
-              },
-              error: (e) => {
-                this.snackbar.open(
-                  this.translate.instant('Cannot save the preview')
-                );
               }
-            });
-          }
+            },
+            error: (e) => {
+              this.snackbar.open(
+                this.translate.instant('Cannot fetch current config')
+              );
+            }
+          });
+
+
         }
       );
     } else {
