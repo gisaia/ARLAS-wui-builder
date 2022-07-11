@@ -30,7 +30,7 @@ describe('GlobalTimelineComponent', () => {
           getGlobalFg: () => new TimelineGlobalFormGroup(
             'collection',
             new CollectionService(null, null, null, null, null),
-            new BucketsIntervalFormGroup(undefined, undefined)
+            new BucketsIntervalFormGroup(undefined, undefined, undefined)
           )
         },
         getMainCollection: () => ''

@@ -61,4 +61,6 @@ external_node_schemas:
     url: /assets/schema1.json
   - name: Schema 2
     url: /assets/schema2.json
-
+histogram:
+  max_buckets: 100
+  export_nb_buckets: 1000

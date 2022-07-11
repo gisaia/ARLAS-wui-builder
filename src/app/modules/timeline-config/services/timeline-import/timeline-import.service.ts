@@ -24,7 +24,7 @@ import {
 } from '@services/main-form-manager/models-config';
 import { importElements } from '@services/main-form-manager/tools';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { ArlasColorGeneratorLoader, ArlasSettingsService } from 'arlas-wui-toolkit';
 import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timeline-global-form-builder.service';
 
 @Injectable({
@@ -35,7 +35,9 @@ export class TimelineImportService {
   public constructor(
     private mainFormService: MainFormService,
     private colorService: ArlasColorGeneratorLoader,
-    private collectionService: CollectionService
+    private collectionService: CollectionService,
+    private settingsService: ArlasSettingsService
+
   ) { }
 
   public doImport(config: Config) {
@@ -57,7 +59,10 @@ export class TimelineImportService {
     if (!timelineContributor.collection) {
       timelineContributor.collection = config.arlas.server.collection.name;
     }
-
+    let nbBuckets = timelineContributor.numberOfBuckets;
+    if (!!nbBuckets) {
+      nbBuckets = Math.min(this.settingsService.getHistogramMaxBucket(), timelineContributor.numberOfBuckets);
+    }
     importElements([
       {
         value: hasDetailedTimeline,
@@ -84,7 +89,7 @@ export class TimelineImportService {
         control: timelineDataStep.aggregation.customControls.aggregationBucketOrInterval
       },
       {
-        value: timelineContributor.numberOfBuckets,
+        value: nbBuckets,
         control: timelineDataStep.aggregation.customControls.aggregationBucketsNumber
       },
       {

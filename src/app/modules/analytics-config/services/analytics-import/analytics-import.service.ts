@@ -37,6 +37,7 @@ import { PowerbarFormBuilderService } from '../powerbar-form-builder/powerbar-fo
 import { ResultlistFormBuilderService } from '../resultlist-form-builder/resultlist-form-builder.service';
 import { SwimlaneFormBuilderService, SwimlaneFormGroup } from '../swimlane-form-builder/swimlane-form-builder.service';
 import { Aggregation } from 'arlas-api';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +56,7 @@ export class AnalyticsImportService {
     private powerbarFormBuilder: PowerbarFormBuilderService,
     private donutFormBuilder: DonutFormBuilderService,
     private resultlistFormBuilder: ResultlistFormBuilderService,
+    private settingsService: ArlasSettingsService
   ) { }
 
   public doImport(config: Config) {
@@ -187,7 +189,7 @@ export class AnalyticsImportService {
         contributor,
         dataStep.aggregation.customControls,
         contribAggregationModel,
-        component.input.dataType),
+        component.input.dataType,),
       ,
       ...this.getMetricImportElements(
         contribAggregationModel,
@@ -813,12 +815,18 @@ export class AnalyticsImportService {
     aggregationControls: BucketsIntervalControls,
     contribAggregationModel: AggregationModelConfig,
     dataType: string): Array<ImportElement> {
+
+    let aggregationBucketsNumber = contributor.numberOfBuckets;
+    if (!!aggregationBucketsNumber) {
+      aggregationBucketsNumber = Math.min(this.settingsService.getHistogramMaxBucket(), contributor.numberOfBuckets);
+    }
+
     return [{
       value: !contributor.numberOfBuckets ? BY_BUCKET_OR_INTERVAL.INTERVAL : BY_BUCKET_OR_INTERVAL.BUCKET,
       control: aggregationControls.aggregationBucketOrInterval
     },
     {
-      value: contributor.numberOfBuckets,
+      value: aggregationBucketsNumber,
       control: aggregationControls.aggregationBucketsNumber
     },
     {

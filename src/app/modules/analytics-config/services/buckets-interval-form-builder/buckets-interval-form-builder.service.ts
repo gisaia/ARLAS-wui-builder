@@ -28,6 +28,7 @@ import { integerValidator } from '@utils/validators';
 import { CollectionReferenceDescriptionProperty, Interval } from 'arlas-api';
 import { Observable, of, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 export interface BucketsIntervalControls {
   aggregationField: SelectFormControl;
@@ -46,7 +47,9 @@ export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
 
   public constructor(
     collection: string,
-    collectionService: CollectionService, bucketType?: string) {
+    collectionService: CollectionService,
+    nbBucketsMax,
+    bucketType?: string) {
 
     super(
       collection,
@@ -86,7 +89,8 @@ export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
             { label: marker('By bucket'), value: BY_BUCKET_OR_INTERVAL.BUCKET },
             { label: marker('By interval'), value: BY_BUCKET_OR_INTERVAL.INTERVAL },
           ],
-          marker('Choose ' + bucketType + ' aggregation Mode'),
+          marker('Choose ' + bucketType + ' aggregation Mode') + 'DESC_SPLITER'
+            + marker('maximum number of bucket is') + 'DESC_SPLITER' + nbBucketsMax,
           {
             resetDependantsOnChange: true,
             childs: () => [
@@ -101,7 +105,7 @@ export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
           marker('Number of buckets'),
           marker(''),
           2,
-          150,
+          nbBucketsMax,
           1,
           undefined,
           undefined,
@@ -202,10 +206,10 @@ export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
 })
 export class BucketsIntervalFormBuilderService {
 
-  public constructor(private collectionService: CollectionService) { }
+  public constructor(private collectionService: CollectionService, private settingsService: ArlasSettingsService) { }
 
   public build(collection: string, bucketType: string) {
-    return new BucketsIntervalFormGroup(collection, this.collectionService, bucketType);
+    return new BucketsIntervalFormGroup(collection, this.collectionService, this.settingsService.getHistogramMaxBucket(), bucketType);
   }
 
 }

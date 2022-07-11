@@ -46,3 +46,6 @@ basemaps: ${ARLAS_BASEMAPS}
 tab_name:  ${ARLAS_TAB_NAME}
 external_node_page: ${ARLAS_EXTERNAL_NODE_PAGE}
 external_node_schemas: ${ARLAS_EXTERNAL_NODE_SCHEMAS}
+histogram:
+  max_buckets: ${ARLAS_HISTOGRAMS_MAX_BUCKETS}
+  export_nb_buckets: ${ARLAS_EXPORT_HISTOGRAMS_NB_BUCKETS}
