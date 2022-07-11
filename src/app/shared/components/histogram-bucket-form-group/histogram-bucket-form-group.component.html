@@ -99,7 +99,9 @@
                 <div *ngIf="bucketTypeControl.isDescriptionHtml" [innerHtml]="trustHtml(bucketTypeControl.description)">
                 </div>
                 <div *ngIf="!bucketTypeControl.isDescriptionHtml">
-                    {{ bucketTypeControl.description | translate}}
+                    <ng-container *ngFor="let d of bucketTypeControl.description.split('DESC_SPLITER')">
+                        {{ d | translate}}
+                    </ng-container>
                 </div>
             </div>
         </arlas-config-element>

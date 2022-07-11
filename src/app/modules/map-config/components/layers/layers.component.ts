@@ -40,7 +40,8 @@ import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-
 import { camelize } from '@utils/tools';
 import { LayerMetadata, MapglLegendComponent, VisualisationSetConfig } from 'arlas-web-components';
 import { MapContributor } from 'arlas-web-contributors';
-import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService, ContributorBuilder } from 'arlas-wui-toolkit';
+import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService,
+  ArlasSettingsService, ContributorBuilder } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { PreviewComponent } from '../preview/preview.component';
 
@@ -84,6 +85,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     private colorService: ArlasColorGeneratorLoader,
     private mapLayerFormBuilder: MapLayerFormBuilderService,
     protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
+    private settingsService: ArlasSettingsService
   ) {
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
     this.visualisationSetFa = this.mainFormService.mapConfig.getVisualisationsFa();
@@ -334,6 +336,7 @@ export class LayersComponent implements OnInit, OnDestroy {
         mapConfig.identifier,
         this.configService,
         this.collaborativesearchService,
+        this.settingsService,
         this.colorService);
       contributors.push(mapContributor);
     });

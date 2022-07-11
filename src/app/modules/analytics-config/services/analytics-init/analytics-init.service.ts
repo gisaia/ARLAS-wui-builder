@@ -22,7 +22,8 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { OperationEnum } from 'arlas-web-core';
-import { ArlasCollaborativesearchService, ArlasConfigService, ArlasStartupService, ContributorBuilder } from 'arlas-wui-toolkit';
+import { ArlasCollaborativesearchService, ArlasConfigService, ArlasStartupService,
+  ContributorBuilder, ArlasSettingsService } from 'arlas-wui-toolkit';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,8 @@ export class AnalyticsInitService {
     private mainFormService: MainFormService,
     private arlasStartupService: ArlasStartupService,
     private collaborativesearchService: ArlasCollaborativesearchService,
-    private configService: ArlasConfigService
+    private configService: ArlasConfigService,
+    private settingsService: ArlasSettingsService
   ) { }
 
   public initModule() {
@@ -134,7 +136,8 @@ export class AnalyticsInitService {
       contribType,
       contribConfig.identifier,
       this.configService,
-      this.collaborativesearchService);
+      this.collaborativesearchService,
+      this.settingsService);
     this.arlasStartupService.contributorRegistry.set(
       contribConfig.identifier, contributor);
     return this.arlasStartupService.contributorRegistry.get(contribConfig.identifier);
