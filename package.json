@@ -34,7 +34,7 @@
     "@types/file-saver": "^2.0.1",
     "ajv": "8.8.2",
     "ajv-keywords": "5.1.0",
-    "arlas-wui-toolkit": "~22.0.5",
+    "arlas-wui-toolkit": "~23.0.0-rc.1",
     "ang-jsoneditor": "1.10.5",
     "core-js": "~3.19.3",
     "d3-interpolate": "^1.4.0",

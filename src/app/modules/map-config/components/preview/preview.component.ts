@@ -33,6 +33,7 @@ import {
   ArlasConfigService, ContributorBuilder, PersistenceService
 } from 'arlas-wui-toolkit';
 import { merge, Subscription } from 'rxjs';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 export interface MapglComponentInput {
   mapglContributors: MapContributor[];
@@ -69,6 +70,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     private persistenceService: PersistenceService,
     private snackbar: MatSnackBar,
     private translate: TranslateService,
+    private settingsService: ArlasSettingsService,
     @Inject(MAT_DIALOG_DATA) public dataMap: MapglComponentInput
   ) {
     this.configId = this.mainFormService.configurationId;
@@ -101,6 +103,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
           mapConfig.identifier,
           this.configService,
           this.collaborativeService,
+          this.settingsService,
           this.colorService);
         contributors.push(mapContributor);
       });
