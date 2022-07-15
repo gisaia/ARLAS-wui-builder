@@ -65,15 +65,7 @@ export class MapInitService {
   private initCollectionFields() {
     // init global -> request geometries, by collection
     const collection = this.mainFormService.getMainCollection();
-    this.collectionService.getDescribe(collection).subscribe(c => {
-      this.mainFormService.mapConfig.getGlobalFg().customControls.requestGeometries.push(
-        this.mapGlobalFormBuilder.buildRequestGeometry(
-          collection,
-          c.params.geometry_path,
-          c.params.id_path
-        )
-      );
-    });
+    this.collectionService.getDescribe(collection).subscribe();
   }
 
   // init the basemap array, only when creating a new configuration

@@ -787,5 +787,10 @@
 	"Cannot save the preview": "Impossible de sauvegarder l'aperçu",
 	"Cannot fetch current config": "Impossible de récupérer le dashbord actuel",
 	"Use the map view as a dashboard preview on the ARLAS Hub": "Utiliser la vue cartographique comme aperçu du tableau de bord sur ARLAS Hub.",
-	"You need to save your dashbord first in order to save a map preview.": "Vous devez d'abord enregistrer votre tableau de bord pour pouvoir enregistrer un aperçu de la carte."
+	"You need to save your dashbord first in order to save a map preview.": "Vous devez d'abord enregistrer votre tableau de bord pour pouvoir enregistrer un aperçu de la carte.",
+	"geofilters description": "Choisir, pour chaque collection, le champ et le type d'opération géographiques appliqués par défaut lors d'une sélection géographiuqe sur la carte.",
+	"list of geofilters": "La liste des collections est automatiquement remplie à partir des 'Couches de données' configurées",
+	"no geofilter": "• La liste des collections est vide tant qu'aucune 'Couche de données' n'est configurée"
+
+
 }
