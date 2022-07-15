@@ -29,13 +29,14 @@ import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@
 import { BasemapStyle, LayerMetadata, VisualisationSetConfig } from 'arlas-web-components';
 import { ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, LayerSourceConfig, MetricConfig } from 'arlas-web-contributors';
 import { ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
-import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
-import { MapLayerFormBuilderService, MapLayerFormGroup, MAX_ZOOM } from '../map-layer-form-builder/map-layer-form-builder.service';
+import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
+import { MapLayerFormBuilderService, MapLayerFormGroup, MAX_ZOOM }
+  from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import {
   CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE, LINE_TYPE_VALUES,
   LABEL_ALIGNMENT
-} from '../map-layer-form-builder/models';
-import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
+} from '@map-config/services/map-layer-form-builder/models';
+import { MapVisualisationFormBuilderService } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 
 @Injectable({
   providedIn: 'root'

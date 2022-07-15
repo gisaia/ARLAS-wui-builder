@@ -30,7 +30,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { KeywordColor } from '../dialog-color-table/models';
 import { LAYER_MODE } from './models';
-import { MapGlobalFormBuilderService } from '../../services/map-global-form-builder/map-global-form-builder.service';
+import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 
 @Component({

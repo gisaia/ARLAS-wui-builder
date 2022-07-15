@@ -43,7 +43,7 @@ import { MapContributor } from 'arlas-web-contributors';
 import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService, ContributorBuilder } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { PreviewComponent } from '../preview/preview.component';
-import { MapGlobalFormBuilderService } from '../../services/map-global-form-builder/map-global-form-builder.service';
+import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 
 export interface Layer {
   id: string;
