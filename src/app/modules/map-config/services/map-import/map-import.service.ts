@@ -29,11 +29,14 @@ import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@
 import { BasemapStyle, LayerMetadata, VisualisationSetConfig } from 'arlas-web-components';
 import { ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, LayerSourceConfig, MetricConfig } from 'arlas-web-contributors';
 import { ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
-import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
-import { MapLayerFormBuilderService, MapLayerFormGroup, MAX_ZOOM } from '../map-layer-form-builder/map-layer-form-builder.service';
-import { CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE, LINE_TYPE_VALUES,
-  LABEL_ALIGNMENT } from '../map-layer-form-builder/models';
-import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
+import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
+import { MapLayerFormBuilderService, MapLayerFormGroup, MAX_ZOOM }
+  from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import {
+  CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE, LINE_TYPE_VALUES,
+  LABEL_ALIGNMENT
+} from '@map-config/services/map-layer-form-builder/models';
+import { MapVisualisationFormBuilderService } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -107,7 +110,7 @@ export class MapImportService {
       propertySelectorValues.propertySource = fixType;
       if (fixType === PROPERTY_SELECTOR_SOURCE.fix_input) {
         propertySelectorValues.propertyFixInput = inputValues;
-      }  else if (fixType === PROPERTY_SELECTOR_SOURCE.fix_slider) {
+      } else if (fixType === PROPERTY_SELECTOR_SOURCE.fix_slider) {
         propertySelectorValues.propertyFixSlider = inputValues + '';
       }
     } else if (inputValues instanceof Array) {
@@ -119,9 +122,9 @@ export class MapImportService {
           const hasMetricForLabels = !!layerSource.metrics && layerSource.metrics.filter(m => m.short_format !== undefined).length > 0;
           if (isFetchedHits) {
             const providedField = layerSource.fetched_hits.fields.find(f => f.replace(/\./g, '_') === flatField ||
-             (f.replace(/\./g, '_') + ':_arlas__short_format')  === flatField);
+              (f.replace(/\./g, '_') + ':_arlas__short_format') === flatField);
             propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_field_for_agg;
-            if(providedField) {
+            if (providedField) {
               propertySelectorValues.propertyProvidedFieldAggFg = {
                 propertyProvidedFieldAggCtrl: providedField,
                 propertyProvidedFieldSortCtrl: layerSource.fetched_hits.sorts.join(',')
@@ -134,7 +137,7 @@ export class MapImportService {
           } else if (hasMetricForLabels) {
             const getFlatMetric = (m: MetricConfig) => {
               let flatMetric = '';
-              if(m.metric === 'count') {
+              if (m.metric === 'count') {
                 flatMetric = 'count';
               } else {
                 flatMetric = `${m.field.replace(/\./g, '_')}_${m.metric.toString().toLowerCase()}_`;
@@ -164,7 +167,7 @@ export class MapImportService {
           }
         } else {
           const providedField = layerSource.include_fields.find(f => f.replace(/\./g, '_') === flatField ||
-            (f.replace(/\./g, '_') + ':_arlas__short_format')  === flatField);
+            (f.replace(/\./g, '_') + ':_arlas__short_format') === flatField);
           propertySelectorValues.propertySource = numeric ? PROPERTY_SELECTOR_SOURCE.provided_numeric_field_for_feature :
             PROPERTY_SELECTOR_SOURCE.provided_field_for_feature;
           propertySelectorValues.propertyProvidedFieldFeatureFg = {
@@ -612,6 +615,24 @@ export class MapImportService {
         layers_sources: []
       };
     }
+    const mapcontributors = config.arlas.web.contributors.filter(c => c.type === 'map');
+
+    const mapGlobalForm = this.mainFormService.mapConfig.getGlobalFg();
+    mapGlobalForm.collectionGeoFiltersMap.clear();
+    mapcontributors.forEach(mc => {
+      if (mc.layers_sources && mc.layers_sources.length > 0) {
+        mapGlobalForm.addGeoFilter(mc.collection, this.mapGlobalFormBuilder.buildRequestGeometry(
+          mc.collection,
+          mc.geo_query_field,
+          mc.geo_query_op.toLowerCase()
+        ));
+      } else {
+        mapGlobalForm.collectionGeoFiltersMap.set(mc.collection, {
+          geoField: mc.geo_query_field,
+          geoOp: mc.geo_query_op.toLowerCase()
+        });
+      }
+    });
     this.importMapGlobal(mapgl, defaultMapContributor, defaultMapContributor.collection);
 
     const mapContributors = config.arlas.web.contributors.filter(c => c.type === 'map');
@@ -653,18 +674,7 @@ export class MapImportService {
     collection: string) {
 
     const mapGlobalForm = this.mainFormService.mapConfig.getGlobalFg();
-    mapGlobalForm.customControls.requestGeometries.push(
-      this.mapGlobalFormBuilder.buildRequestGeometry(
-        collection,
-        mapContrib.geo_query_field,
-        mapgl.input.idFeatureField
-      )
-    );
     importElements([
-      {
-        value: !!mapContrib.geo_query_op ? mapContrib.geo_query_op.toLowerCase() : 'intersects',
-        control: mapGlobalForm.customControls.geographicalOperator
-      },
       {
         value: mapgl.allowMapExtend,
         control: mapGlobalForm.customControls.allowMapExtend

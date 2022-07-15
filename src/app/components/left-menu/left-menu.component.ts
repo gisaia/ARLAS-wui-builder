@@ -25,7 +25,7 @@ import { MainFormManagerService } from '@services/main-form-manager/main-form-ma
 import { MainFormService } from '@services/main-form/main-form.service';
 import { getNbErrorsInControl, isFullyTouched, Page } from '@utils/tools';
 import { ArlasSettingsService, AuthentificationService, LinkSettings, PersistenceService, UserInfosComponent } from 'arlas-wui-toolkit';
-import { MenuService } from '../../services/menu/menu.service';
+import { MenuService } from '@services/menu/menu.service';
 
 @Component({
   selector: 'arlas-left-menu',

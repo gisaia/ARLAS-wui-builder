@@ -14,6 +14,8 @@ import { ConfigFormGroup } from '@shared-models/config-form';
 import {
   MapVisualisationFormBuilderService
 } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { of } from 'rxjs';
 
 @Component({ template: '' }) class DummyComponent { }
 
@@ -36,7 +38,10 @@ describe('EditLayerComponent', () => {
       }),
       mockProvider(MapVisualisationFormBuilderService, {
         buildVisualisation: () => new ConfigFormGroup({})
-      })
+      }),
+      mockProvider(CollectionService, {
+        getCollectionFields: () => of([])
+      }),
     ],
     declarations: [
       DummyComponent,
