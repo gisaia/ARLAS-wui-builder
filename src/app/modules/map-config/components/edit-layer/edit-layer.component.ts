@@ -30,6 +30,8 @@ import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { KeywordColor } from '../dialog-color-table/models';
 import { LAYER_MODE } from './models';
+import { MapGlobalFormBuilderService } from '../../services/map-global-form-builder/map-global-form-builder.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 @Component({
   selector: 'arlas-edit-layer',
@@ -53,6 +55,8 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
     protected mapLayerFormBuilder: MapLayerFormBuilderService,
     protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
     private mainFormService: MainFormService,
+    private mapGlobalFormBuilder: MapGlobalFormBuilderService,
+    private collectionService: CollectionService,
     private route: ActivatedRoute,
     private cdref: ChangeDetectorRef,
     private router: Router,
@@ -210,7 +214,15 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
 
       this.visualisationsFa.setValue(visualisationValue);
     }
-
+    const collection = this.layerFg.customControls.collection.value;
+    const collectionParams = this.collectionService.collectionParamsMap.get(collection);
+    const requestGeometryFg = this.mapGlobalFormBuilder.buildRequestGeometry(
+      collection,
+      collectionParams.params.centroid_path,
+      'intersects'
+    );
+    const mapGlobalFg = this.mainFormService.mapConfig.getGlobalFg();
+    mapGlobalFg.addGeoFilter(collection, requestGeometryFg);
     this.layerFg.markAsPristine();
     this.navigateToParentPage();
   }

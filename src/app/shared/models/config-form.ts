@@ -283,8 +283,32 @@ export class ConfigFormGroup extends FormGroup {
 // Can be used to handle some fields by collection for example.
 export class ConfigFormGroupArray extends FormArray {
 
+  public title: string;
+  public description: string;
+  public note: string;
+  public emptylistNote: string;
   public constructor(controls: ConfigFormGroup[]) {
     super(controls);
+  }
+
+  public addTitle(t: string): ConfigFormGroupArray {
+    this.title = t;
+    return this;
+  }
+
+  public addDescription(desc: string): ConfigFormGroupArray {
+    this.description = desc;
+    return this;
+  }
+
+  public addNote(note: string): ConfigFormGroupArray {
+    this.note = note;
+    return this;
+  }
+
+  public addEmptylistNote(emptylistNote: string): ConfigFormGroupArray {
+    this.emptylistNote = emptylistNote;
+    return this;
   }
 }
 

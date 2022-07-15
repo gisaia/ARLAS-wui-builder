@@ -760,5 +760,8 @@
 	"Save preview": "Save preview",
 	"Preview updated !": "Preview updated",
 	"Preview saved !": "Preview saved !",
-	"Cannot fetch current config": "Cannot fetch the current dashboards' information"
+	"Cannot fetch current config": "Cannot fetch the current dashboards' information",
+	"geofilters description": "Choose, for each collection, the default queried geographical field and the geographical operator when drawing a bbox or a polygon on the map.",
+	"list of geofilters": "The collections list is automatically filled from the configured map 'Layers'",
+	"no geofilter": "• The collections list is empty as long as no 'Layer' is configured"
 }

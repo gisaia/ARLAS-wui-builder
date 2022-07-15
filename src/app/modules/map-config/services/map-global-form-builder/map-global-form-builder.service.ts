@@ -30,7 +30,13 @@ import {
 import { Expression } from 'arlas-api';
 import { Observable, of } from 'rxjs';
 
+export interface GeoFilter {
+  geoOp: string | Expression.OpEnum;
+  geoField: string;
+};
+
 export class MapGlobalFormGroup extends ConfigFormGroup {
+  public collectionGeoFiltersMap: Map<string, GeoFilter> = new Map();
   public constructor() {
     super({
       initZoom: new SliderFormControl(
@@ -76,25 +82,11 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
         marker('Display coordinates'),
         marker('Display coordinates description'),
       ),
-      geographicalOperator: new SelectFormControl(
-        null,
-        marker('Geographical operator'),
-        marker('Geographical operator description'),
-        false,
-        [
-          Expression.OpEnum.Intersects,
-          Expression.OpEnum.Notintersects,
-          Expression.OpEnum.Notwithin,
-          Expression.OpEnum.Within
-        ].map(op => ({
-          label: op,
-          value: op
-        })),
-        {
-          title: marker('Querying data on the map')
-        }
-      ),
-      requestGeometries: new ConfigFormGroupArray([]),
+      requestGeometries: (new ConfigFormGroupArray([]))
+        .addTitle(marker('Querying data on the map'))
+        .addDescription(marker('geofilters description'))
+        .addNote(marker('list of geofilters'))
+        .addEmptylistNote(marker('no geofilter')),
       margePanForLoad: new InputFormControl(
         '',
         marker('MargePanForLoad'),
@@ -125,7 +117,6 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
   }
 
   public customControls = {
-    geographicalOperator: this.get('geographicalOperator') as SelectFormControl,
     requestGeometries: this.get('requestGeometries') as FormArray,
     initZoom: this.get('initZoom') as SliderFormControl,
     initCenterLat: this.get('initCenterLat') as InputFormControl,
@@ -147,13 +138,83 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
       }
     }
   };
+
+  public updateGeoFiltersMap() {
+    this.collectionGeoFiltersMap = this.getCurrentGeoFilters();
+  }
+
+  public getGeoFilter(collection: string): MapGlobalRequestGeometryFormGroup {
+    const currentGeoFiltersMap = this.getCurrentGeoFilters();
+    const collectionExist = currentGeoFiltersMap.has(collection);
+    if (collectionExist) {
+      const collectionsList: string[] = this.customControls.requestGeometries.getRawValue().map(r => r.collection);
+      const index = (collectionsList.sort()).indexOf(collection);
+      const geoFilterToReturn: MapGlobalRequestGeometryFormGroup =
+        (this.customControls.requestGeometries.at(index) as MapGlobalRequestGeometryFormGroup);
+      this.collectionGeoFiltersMap.set(collection, {
+        geoField: geoFilterToReturn.customControls.requestGeom.value,
+        geoOp: geoFilterToReturn.customControls.geographicalOperator.value
+      });
+      return geoFilterToReturn;
+    }
+    return undefined;
+  }
+  public addGeoFilter(collection, requestGeometryFg: MapGlobalRequestGeometryFormGroup): void {
+    const currentGeoFiltersMap = this.getCurrentGeoFilters();
+    const collectionExist = currentGeoFiltersMap.has(collection);
+    if (!collectionExist) {
+      const cachedGeoFilter = this.collectionGeoFiltersMap.get(collection);
+      if (cachedGeoFilter) {
+        requestGeometryFg.customControls.geographicalOperator.setValue(cachedGeoFilter.geoOp);
+        requestGeometryFg.customControls.requestGeom.setValue(cachedGeoFilter.geoField);
+      } else {
+        this.collectionGeoFiltersMap.set(collection, {
+          geoField: requestGeometryFg.customControls.requestGeom.value,
+          geoOp: requestGeometryFg.customControls.geographicalOperator.value
+        });
+      }
+      /** insert geofilter according to collection alphabetical order */
+      const collectionsSet: Set<string>= new Set(this.customControls.requestGeometries.getRawValue().map(r => r.collection));
+      collectionsSet.add(collection);
+      const index = (Array.from(collectionsSet).sort()).indexOf(collection);
+      this.customControls.requestGeometries.insert(index, requestGeometryFg);
+    }
+  }
+
+  public removeGeofilter(collection): void {
+    const currentGeoFiltersMap = this.getCurrentGeoFilters();
+    const collectionExist = currentGeoFiltersMap.has(collection);
+    if (collectionExist) {
+      const collectionsList: string[] = this.customControls.requestGeometries.getRawValue().map(r => r.collection);
+      const index = (collectionsList.sort()).indexOf(collection);
+      const geoFilterToRemove: MapGlobalRequestGeometryFormGroup =
+        (this.customControls.requestGeometries.at(index) as MapGlobalRequestGeometryFormGroup);
+      this.collectionGeoFiltersMap.set(collection, {
+        geoField: geoFilterToRemove.customControls.requestGeom.value,
+        geoOp: geoFilterToRemove.customControls.geographicalOperator.value
+      });
+      this.customControls.requestGeometries.removeAt(index);
+    }
+  }
+
+  private getCurrentGeoFilters() {
+    const currentGeoFilters = this.customControls.requestGeometries.getRawValue();
+    const currentGeoFiltersMap = new Map<string, GeoFilter>();
+    currentGeoFilters.forEach(gf => {
+      currentGeoFiltersMap.set(gf.collection, {
+        geoField: gf.requestGeom,
+        geoOp: gf.geographicalOperator,
+      });
+    });
+    return currentGeoFiltersMap;
+  }
 }
 
 export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
   public constructor(
     collection: string,
     geometryPath: string,
-    idPath: string,
+    geoOp: Expression.OpEnum | string,
     collectionFields: Observable<Array<CollectionField>>,
     collectionService: CollectionService
   ) {
@@ -161,52 +222,46 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
       collection: new SelectFormControl(
         collection,
         marker('Collection'),
-        marker('Layer collection description'),
+        undefined,
         false,
         collectionService.getCollectionsWithCentroid().map(c => ({ label: c, value: c })),
         {
           optional: false,
-          resetDependantsOnChange: true
+        }
+      ),
+      geographicalOperator: new SelectFormControl(
+        geoOp,
+        marker('Geographical operator'),
+        undefined,
+        false,
+        [
+          Expression.OpEnum.Intersects,
+          Expression.OpEnum.Notintersects,
+          Expression.OpEnum.Notwithin,
+          Expression.OpEnum.Within
+        ].map(op => ({
+          label: op,
+          value: op
+        })),
+        {
+          title: marker('Querying data on the map')
         }
       ),
       requestGeom: new SelectFormControl(
         geometryPath,
         marker('Geographical field'),
-        marker('Geographical field description'),
+        undefined,
         true,
         toGeoOptionsObs(collectionFields),
-        {
-          dependsOn: () => [this.customControls.collection],
-          onDependencyChange: (control: SelectFormControl) => {
-            if (this.customControls.collection.value) {
-              toGeoOptionsObs(collectionService
-                .getCollectionFields(this.customControls.collection.value))
-                .subscribe(collectionFs => {
-                  control.setSyncOptions(collectionFs);
-                });
-            }
-          }
-        }
-      ),
-      idPath: new HiddenFormControl(
-        idPath,
-        null,
-        {
-          dependsOn: () => [this.customControls.collection],
-          onDependencyChange: (control) => {
-            if (!!this.customControls.collection.value) {
-              control.setValue(collectionService.collectionParamsMap.get(this.customControls.collection.value).params.id_path);
-            }
-          },
-          optional: false
-        }
       )
     });
+    this.customControls.collection.disable();
   }
 
   public customControls = {
     collection: this.get('collection') as SelectFormControl,
-    requestGeom: this.get('requestGeom') as SelectFormControl
+    requestGeom: this.get('requestGeom') as SelectFormControl,
+    geographicalOperator: this.get('geographicalOperator') as SelectFormControl
   };
 }
 
@@ -215,11 +270,10 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
 })
 export class MapGlobalFormBuilderService {
 
+
   public constructor(
     private defaultValuesService: DefaultValuesService,
-    private mainFormService: MainFormService,
     private collectionService: CollectionService
-
   ) { }
 
   public build() {
@@ -228,10 +282,9 @@ export class MapGlobalFormBuilderService {
     return mapGlobalFormGroup;
   }
 
-  public buildRequestGeometry(collection: string, geometryPath: string, idPath: string) {
+  public buildRequestGeometry(collection: string, geometryPath: string, geoOp: Expression.OpEnum | string) {
     if (!geometryPath) {
       collection = undefined;
-      idPath = undefined;
     }
     let collectionFields = of([]);
     if (!!collection) {
@@ -239,7 +292,7 @@ export class MapGlobalFormBuilderService {
         collection
       );
     }
-    return new MapGlobalRequestGeometryFormGroup(collection, geometryPath, idPath, collectionFields, this.collectionService);
+    return new MapGlobalRequestGeometryFormGroup(collection, geometryPath, geoOp, collectionFields, this.collectionService);
   }
 
 }
