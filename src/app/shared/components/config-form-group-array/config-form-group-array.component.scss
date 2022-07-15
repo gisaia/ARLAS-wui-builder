@@ -16,6 +16,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+@import "variables.scss";
+
 div .form-group-form-fields {
     display: flex;
     flex-direction: row;
@@ -25,8 +27,6 @@ div .form-group-form-fields {
         margin-right: 20px;
     }
 }
-
-@import "variables.scss";
 
 .array_header {
     display: flex;

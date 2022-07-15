@@ -27,7 +27,7 @@ import {
   SliderFormControl,
   SlideToggleFormControl
 } from '@shared-models/config-form';
-import { MainFormService } from '../../../../services/main-form/main-form.service';
+import { MainFormService } from '@services/main-form/main-form.service';
 
 
 export class CollectionUnitFormGroup extends ConfigFormGroup {

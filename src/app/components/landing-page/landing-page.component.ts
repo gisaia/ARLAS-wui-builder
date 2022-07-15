@@ -40,7 +40,7 @@ import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
-import { StartupService, ZONE_WUI_BUILDER } from '../../services/startup/startup.service';
+import { StartupService, ZONE_WUI_BUILDER } from '@services/startup/startup.service';
 
 enum InitialChoice {
   none = 0,
