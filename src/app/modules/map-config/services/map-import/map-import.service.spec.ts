@@ -1,8 +1,8 @@
 import { MapImportService } from './map-import.service';
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
-import { MapLayerFormBuilderService } from '../map-layer-form-builder/map-layer-form-builder.service';
-import { MapVisualisationFormBuilderService } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
-import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';
+import { MapLayerFormBuilderService } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { MapVisualisationFormBuilderService } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
+import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 

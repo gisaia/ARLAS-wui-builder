@@ -1,4 +1,11 @@
 <!-- Displaying a control according to its enabled state is not yet supported -->
+<div class="array_header">
+    <h3 *ngIf="configFormGroupArray.title" class="form-control-title">{{configFormGroupArray.title | translate}}</h3>
+    <mat-icon *ngIf="configFormGroupArray.description" class="icon" matTooltip="{{configFormGroupArray.description| translate}}">info_outline</mat-icon>
+</div>
+<div class="note" *ngIf="configFormGroupArray.note">
+    {{configFormGroupArray.note | translate}}
+</div>
 <div *ngFor="let formGroup of formGroups">
     <arlas-config-element>
         <div form-fields>
@@ -9,10 +16,14 @@
                 </div>
             </div>
         </div>
-        <div description>
+        <div description *ngIf="formGroup.description">
             <div *ngFor="let control of formGroup.configFormControls ">
                 {{control.description | translate}}
             </div>
         </div>
     </arlas-config-element>
+</div>
+
+<div class="emptylist_note" *ngIf="configFormGroupArray.emptylistNote && formGroups.length === 0">
+    {{configFormGroupArray.emptylistNote | translate}}
 </div>

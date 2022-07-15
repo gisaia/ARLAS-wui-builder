@@ -79,8 +79,13 @@ export class ConfigExportHelper {
     resultLists: FormArray,
     collectionService: CollectionService
   ): string[] {
-    let contributors = this.getMapContributors(mapConfigGlobal, mapConfigLayers,
-      mapConfigGlobal.customControls.requestGeometries.value[0].collection, collectionService);
+
+    let mainCollection;
+    const collectionFormControl = startingConfig.customControls.collection;
+    if (!!startingConfig && !!collectionFormControl) {
+      mainCollection = collectionFormControl.value;
+    }
+    let contributors = this.getMapContributors(mapConfigGlobal, mapConfigLayers, mainCollection, collectionService);
     contributors.push(this.getChipsearchContributor(searchConfigGlobal,
       startingConfig.customControls.collection.value));
     contributors.push(this.getTimelineContributor(timelineConfigGlobal,
@@ -199,9 +204,13 @@ export class ConfigExportHelper {
         }
       ]
     };
-
+    let mainCollection;
+    const collectionFormControl = startingConfig.customControls.collection;
+    if (!!startingConfig && !!collectionFormControl) {
+      mainCollection = collectionFormControl.value;
+    }
     config.arlas.web.contributors = config.arlas.web.contributors.concat(this.getMapContributors(mapConfigGlobal, mapConfigLayers,
-      mapConfigGlobal.customControls.requestGeometries.value[0].collection, collectionService));
+      mainCollection, collectionService));
     config.arlas.web.contributors.push(this.getChipsearchContributor(searchConfigGlobal,
       startingConfig.customControls.collection.value));
     config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal,
@@ -400,16 +409,20 @@ export class ConfigExportHelper {
       const collection = layerFg.customControls.collection.value;
       let mapContributor = contributorsCollectionsMap.get(collection);
       if (!mapContributor) {
-        let geoQueryField = mapConfigGlobal.value.requestGeometries[0].requestGeom;
-        if (collection !== mainCollection) {
-          geoQueryField = collectionService.collectionParamsMap.get(collection).params.centroid_path;
+        const requestGeometry = mapConfigGlobal.getRawValue().requestGeometries.find(rg => rg.collection ===  collection);
+        let geoQueryField = collectionService.collectionParamsMap.get(collection).params.centroid_path;
+        let geoQueryOp = 'Intersects';
+
+        if (requestGeometry) {
+          geoQueryField = requestGeometry.requestGeom;
+          geoQueryOp = requestGeometry.geographicalOperator;
         }
         mapContributor = {
           type: 'map',
           identifier: collection,
           name: 'Map ' + collection,
           collection,
-          geo_query_op: titleCase(mapConfigGlobal.value.geographicalOperator),
+          geo_query_op: titleCase(geoQueryOp),
           geo_query_field: geoQueryField,
           icon: mapConfigGlobal.customControls.unmanagedFields.icon.value,
           layers_sources: []
@@ -420,13 +433,20 @@ export class ConfigExportHelper {
     });
     /** if no layer has been defined, create the default mapcontributor wihtout any layers */
     if (mapConfigLayers.controls.length === 0) {
+      let geoQueryField = collectionService.collectionParamsMap.get(mainCollection).params.centroid_path;
+      let geoQueryOp = 'Intersects';
+      const geoFilterFg = mapConfigGlobal.getGeoFilter(mainCollection);
+      if (geoFilterFg) {
+        geoQueryField = geoFilterFg.customControls.requestGeom.value;
+        geoQueryOp = geoFilterFg.customControls.geographicalOperator.value;
+      }
       const mapContributor: ContributorConfig = {
         type: 'map',
         identifier: mainCollection,
         name: 'Map ' + mainCollection,
         collection: mainCollection,
-        geo_query_op: titleCase(mapConfigGlobal.value.geographicalOperator),
-        geo_query_field: mapConfigGlobal.value.requestGeometries[0].requestGeom,
+        geo_query_op: titleCase(geoQueryOp),
+        geo_query_field: geoQueryField,
         icon: mapConfigGlobal.customControls.unmanagedFields.icon.value,
         layers_sources: []
       };
@@ -511,7 +531,7 @@ export class ConfigExportHelper {
         ],
         displayScale: customControls.displayScale.value,
         displayCurrentCoordinates: customControls.displayCurrentCoordinates.value,
-        idFeatureField: customControls.requestGeometries.value[0].idPath,
+        idFeatureField: 'deprecated, to be removed',
         mapLayers: {
           layers: [],
           events: {

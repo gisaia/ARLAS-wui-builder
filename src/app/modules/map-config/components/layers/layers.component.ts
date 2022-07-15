@@ -43,6 +43,7 @@ import { MapContributor } from 'arlas-web-contributors';
 import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService, ContributorBuilder } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { PreviewComponent } from '../preview/preview.component';
+import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 
 export interface Layer {
   id: string;
@@ -83,6 +84,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     private mapImportService: MapImportService,
     private colorService: ArlasColorGeneratorLoader,
     private mapLayerFormBuilder: MapLayerFormBuilderService,
+    private mapGlobalFormBuilder: MapGlobalFormBuilderService,
     protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
   ) {
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
@@ -231,6 +233,22 @@ export class LayersComponent implements OnInit, OnDestroy {
         });
         this.visualisationSetFa.setValue(visualisationSetValue);
         this.dataSource.data = this.layersFa.value;
+        const mapGlobalFg = this.mainFormService.mapConfig.getGlobalFg();
+
+        /** clean geofilters forms and rebuild them based on the left list of layers
+         * if no layer is left, we keep the geo-filter related to the main collection
+         */
+        mapGlobalFg.updateGeoFiltersMap();
+        mapGlobalFg.customControls.requestGeometries.clear();
+        const declaredCollections = this.layersFa.value.map(l => l.collection);
+        Array.from((new Set(declaredCollections))).sort().forEach((c: string) => {
+          const collectionGeoFilter = mapGlobalFg.collectionGeoFiltersMap.get(c);
+          mapGlobalFg.addGeoFilter(c, this.mapGlobalFormBuilder.buildRequestGeometry(
+            c,
+            collectionGeoFilter.geoField,
+            collectionGeoFilter.geoOp
+          ));
+        });
       }
     });
   }
@@ -432,6 +450,15 @@ export class LayersComponent implements OnInit, OnDestroy {
 
         // Add the layer to the list
         this.mainFormService.mapConfig.getLayersFa().push(layerFg);
+        // add the collection to the list of geofilters
+        const collectionParams = this.collectionService.collectionParamsMap.get(collection);
+        const requestGeometryFg = this.mapGlobalFormBuilder.buildRequestGeometry(
+          collection,
+          collectionParams.params.centroid_path,
+          'intersects'
+        );
+        const mapGlobalFg = this.mainFormService.mapConfig.getGlobalFg();
+        mapGlobalFg.addGeoFilter(collection, requestGeometryFg);
         this.ngOnInit();
       }
     });
