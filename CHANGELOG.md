@@ -1,5 +1,9 @@
 # Change Log
 
+## [v22.0.6](https://github.com/gisaia/ARLAS-wui-builder/tree/v22.0.6) (2022-07-15)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v22.0.5...v22.0.6)
+
 ## [v22.0.5](https://github.com/gisaia/ARLAS-wui-builder/tree/v22.0.5) (2022-07-11)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v23.0.0...v22.0.5)
