@@ -1,5 +1,25 @@
 # Change Log
 
+## [v23.0.1-beta.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v23.0.1-beta.2) (2022-08-22)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v23.0.1-beta.1...v23.0.1-beta.2)
+
+## [v23.0.1-beta.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v23.0.1-beta.1) (2022-08-22)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v22.0.6...v23.0.1-beta.1)
+
+## [v22.0.6](https://github.com/gisaia/ARLAS-wui-builder/tree/v22.0.6) (2022-07-18)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v22.0.5...v22.0.6)
+
+**New stuff:**
+
+- Handle geographical fields and operations for each collection  [\#729](https://github.com/gisaia/ARLAS-wui-builder/issues/729)
+
+## [v22.0.5](https://github.com/gisaia/ARLAS-wui-builder/tree/v22.0.5) (2022-07-11)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v23.0.0...v22.0.5)
+
 ## [v23.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v23.0.0) (2022-07-11)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v22.0.4...v23.0.0)
