@@ -606,12 +606,17 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                     !this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.touched) {
                     control.setValue(+allValuesCtr.value[0].proportion);
                   } else {
-                    collectionService.getComputationMetric(
-                      this.collection,
-                      this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value,
-                      METRIC_TYPES.MIN)
-                      .then(min =>
-                        control.setValue(min));
+                    const value = this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value;
+                    const fieldExists = !!this.customControls.propertyInterpolatedFg
+                      .propertyInterpolatedFieldCtrl.syncOptions.find(o => o.label === value);
+                    if (fieldExists) {
+                      collectionService.getComputationMetric(
+                        this.collection,
+                        value,
+                        METRIC_TYPES.MIN)
+                        .then(min =>
+                          control.setValue(min));
+                    }
                   }
                 }
               }
@@ -646,12 +651,17 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                     && !this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.touched) {
                     control.setValue(+allValuesCtr.value[allValuesCtr.value.length - 1].proportion);
                   } else {
-                    collectionService.getComputationMetric(
-                      this.collection,
-                      this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value,
-                      metric)
-                      .then(sum =>
-                        control.setValue(sum));
+                    const value = this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value;
+                    const fieldExists = !!this.customControls.propertyInterpolatedFg
+                      .propertyInterpolatedFieldCtrl.syncOptions.find(o => o.label === value);
+                    if (fieldExists) {
+                      collectionService.getComputationMetric(
+                        this.collection,
+                        value,
+                        metric)
+                        .then(v =>
+                          control.setValue(v));
+                    }
                   }
                 }
               }
