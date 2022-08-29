@@ -18,7 +18,8 @@ under the License.
 */
 import {
   AfterViewChecked, AfterViewInit,
-  ChangeDetectorRef, Component, ComponentFactory, ComponentFactoryResolver, Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef
+  ChangeDetectorRef, Component, ComponentFactory, ComponentFactoryResolver,
+  Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import {
@@ -100,6 +101,20 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
         componentRef.instance[c] = componentFormControl.inputs[c]();
       });
     }
+  }
+
+  /**
+   * Clears the input's value and opens the panel of options to choose
+   * @param event Event object emitted by the "Click"
+   * @param inputElement The input HTML element
+   * @param selectControl The Angular control that holds the Input's value
+   */
+  public clearAutoComplete(event: Event, inputElement: HTMLElement, selectControl: SelectFormControl) {
+    event.stopPropagation();
+    selectControl.filteredOptions = selectControl.syncOptions;
+    selectControl.setValue('');
+    inputElement.nodeValue = '';
+    inputElement.focus();
   }
 
   public trackByFn(index, item) {
