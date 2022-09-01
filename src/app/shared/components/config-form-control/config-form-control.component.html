@@ -168,7 +168,7 @@
         <input matInput [formControl]="typedControl" [hidden]="true" [required]="!typedControl.optional">
         <mat-form-field>
             <mat-label>{{ typedControl.label | translate}}</mat-label>
-            <mat-select #selectSort>
+            <mat-select #selectSort [required]="!typedControl.optional">
                 <mat-option *ngIf="typedControl.optional"></mat-option>
                 <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value"
                     [matTooltip]="opt.label | translate" [disabled]="opt.enabled === false">
