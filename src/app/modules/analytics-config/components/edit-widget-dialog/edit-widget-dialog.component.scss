@@ -20,3 +20,9 @@ under the License.
     display: flex;
     justify-content: space-evenly;
 }
+
+.mat-dialog-content {
+    ::ng-deep .mat-tab-body-content {
+        overflow: hidden;
+    }
+}
