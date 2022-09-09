@@ -1,5 +1,17 @@
 # Change Log
 
+## [v23.0.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v23.0.2) (2022-09-09)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v23.0.1...v23.0.2)
+
+**New stuff:**
+
+- Add the possibility to change widgets order inside a group [\#459](https://github.com/gisaia/ARLAS-wui-builder/issues/459) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+
+**Fixed bugs:**
+
+- Impossible to save a configuration that has been downloaded [\#811](https://github.com/gisaia/ARLAS-wui-builder/issues/811)
+
 ## [v23.0.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v23.0.1) (2022-09-02)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v23.0.1-beta.3...v23.0.1)
@@ -285,19 +297,19 @@
 
 ## [v18.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v18.0.0) (2021-07-12)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.4...v18.0.0)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.3...v18.0.0)
 
 **New stuff:**
 
 - Add the possibility to display a timeline for each collection on the same graph [\#568](https://github.com/gisaia/ARLAS-wui-builder/issues/568)
 
-## [v17.2.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.4) (2021-06-30)
-
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.3...v17.2.4)
-
 ## [v17.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.3) (2021-06-30)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.2...v17.2.3)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.4...v17.2.3)
+
+## [v17.2.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.4) (2021-06-30)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.2...v17.2.4)
 
 ## [v17.2.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.2) (2021-06-30)
 
