@@ -295,6 +295,7 @@ export class ConfigMapExportHelper {
         layout['text-rotate'] = this.getMapProperty(modeValues.styleStep.labelRotationFg, mode, colorService, taggableFields);
         layout['text-allow-overlap'] = modeValues.styleStep.labelOverlapFg;
         layout['text-anchor'] = modeValues.styleStep.labelAlignmentCtrl;
+        layout['symbol-placement'] = modeValues.styleStep.labelPlacementCtrl;
         break;
       }
     }

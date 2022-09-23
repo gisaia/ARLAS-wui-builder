@@ -44,9 +44,11 @@ import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { ClusterAggType, FeatureRenderMode, Granularity } from 'arlas-web-contributors/models/models';
 import { Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
-import { AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE, LABEL_ALIGNMENT } from './models';
-import { TitleInputFormControl, ButtonToggleFormControl } from '../../../../shared/models/config-form';
-import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
+import {
+  AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION,
+  GEOMETRY_TYPE, LINE_TYPE, LABEL_ALIGNMENT, LABEL_PLACEMENT
+} from './models';
+import { ButtonToggleFormControl } from '@shared-models/config-form';
 import { toNumericOptionsObs } from '../../../../services/collection-service/tools';
 
 
@@ -113,9 +115,9 @@ export class MapLayerFormGroup extends ConfigFormGroup {
           dependsOn: () => [this.customControls.collection],
           onDependencyChange: (control: HiddenFormControl) => {
             collectionService.getDescribe(this.customControls.collection.value).subscribe(desc => {
-              if(!!desc.params.display_names && !!desc.params.display_names.collection){
+              if (!!desc.params.display_names && !!desc.params.display_names.collection) {
                 control.setValue(desc.params.display_names.collection);
-              }else{
+              } else {
                 control.setValue(desc.collection_name);
               }
             });
@@ -896,6 +898,64 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         )
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
+        labelPlacementCtrl: new ButtonToggleFormControl(
+          'point',
+          [
+            { label: marker('point'), value: LABEL_PLACEMENT.point },
+            { label: marker('line'), value: LABEL_PLACEMENT.line },
+            { label: marker('line-center'), value: LABEL_PLACEMENT.line_center },
+
+          ]
+          ,
+          marker('label placement description'),
+          {
+            optional: true,
+            title: marker('Label placement'),
+            dependsOn: () => [this.geometryType, this.geometryStep],
+            onDependencyChange: (control) => {
+              control.enableIf(this.geometryType.value === GEOMETRY_TYPE.label);
+              if (control.enabled) {
+                // Feature Mode and Feature Metric Mode
+                if (
+                  !!this.geometryStep.get('geometry') && !!this.geometryStep.get('geometry').value
+                  && this.geometryStep.get('geometry').touched
+                ) {
+                  const sub = (this.geometryStep.get('geometry') as SelectFormControl).sourceData.subscribe((fields: CollectionField[]) => {
+                    fields.forEach(f => {
+                      if (f.name === this.geometryStep.get('geometry').value) {
+                        control.enableIf(f.type !== CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT);
+                      }
+                    });
+                    sub.unsubscribe();
+                  });
+                }
+
+                // Cluster Mode
+                if (
+                  !!this.geometryStep.get('aggregatedGeometry') && !!this.geometryStep.get('aggregatedGeometry').value
+                  && this.geometryStep.get('aggregatedGeometry').touched
+                ) {
+                  control.enableIf(this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.bbox ||
+                  this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.cell );
+                }
+                if (
+                  !!this.geometryStep.get('rawGeometry') && !!this.geometryStep.get('rawGeometry').value
+                  && this.geometryStep.get('rawGeometry').touched
+                ) {
+                  const sub = (this.geometryStep.get('rawGeometry') as SelectFormControl).sourceData.subscribe(
+                    (fields: CollectionField[]) => {
+                      fields.forEach(f => {
+                        if (f.name === this.geometryStep.get('rawGeometry').value) {
+                          control.enableIf(f.type !== CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT);
+                        }
+                      });
+                      sub.unsubscribe();
+                    });
+                }
+              }
+            }
+          }
+        ),
         labelAlignmentCtrl: new ButtonToggleFormControl(
           'center',
           [
@@ -1134,6 +1194,10 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
   public get labelHaloWidthFg() {
     return this.styleStep.get('labelHaloWidthFg') as PropertySelectorFormGroup;
+  }
+
+  public get labelPlacementCtrl() {
+    return this.styleStep.get('labelPlacementCtrl') as ButtonToggleFormControl;
   }
 
   public get labelAlignmentCtrl() {
