@@ -585,7 +585,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             '',
             'number',
             {
-              resetDependantsOnChange: true,
+              resetDependantsOnChange: false,
               dependsOn: () => [
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl,
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
@@ -628,7 +628,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             '',
             'number',
             {
-              resetDependantsOnChange: true,
+              resetDependantsOnChange: false,
               dependsOn: () => [
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedNormalizeCtrl,
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
