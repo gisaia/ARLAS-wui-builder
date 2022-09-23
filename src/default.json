@@ -107,6 +107,7 @@
                         "dx": "0",
                         "dy": "0"
                     },
+                    "labelPlacementCtrl": "point",
                     "labelAlignmentCtrl": "center"
                 }
             },
@@ -181,6 +182,7 @@
                         "dx": "0",
                         "dy": "0"
                     },
+                    "labelPlacementCtrl": "point",
                     "labelAlignmentCtrl": "center"
                 }
             },
@@ -262,6 +264,7 @@
                         "dx": "0",
                         "dy": "0"
                     },
+                    "labelPlacementCtrl": "point",
                     "labelAlignmentCtrl": "center"
                 }
             }

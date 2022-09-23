@@ -34,7 +34,8 @@ import { MapLayerFormBuilderService, MapLayerFormGroup, MAX_ZOOM }
   from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import {
   CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE, LINE_TYPE_VALUES,
-  LABEL_ALIGNMENT
+  LABEL_ALIGNMENT,
+  LABEL_PLACEMENT
 } from '@map-config/services/map-layer-form-builder/models';
 import { MapVisualisationFormBuilderService } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 
@@ -479,6 +480,7 @@ export class MapImportService {
       const rotation = layer.layout['text-rotate'];
       const overlap = layer.layout['text-allow-overlap'];
       const alignment = layer.layout['text-anchor'];
+      const placement = layer.layout['symbol-placement'];
       values.styleStep.labelOverlapFg = !!overlap;
       this.importPropertySelector(size, values.styleStep.labelSizeFg,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
@@ -498,6 +500,11 @@ export class MapImportService {
           dx: offset[0] + '',
           dy: offset[1] + ''
         };
+      }
+      if (!!placement) {
+        values.styleStep.labelPlacementCtrl = placement;
+      } else {
+        values.styleStep.labelPlacementCtrl = LABEL_PLACEMENT.point.toString();
       }
       if (!!alignment) {
         values.styleStep.labelAlignmentCtrl = alignment;

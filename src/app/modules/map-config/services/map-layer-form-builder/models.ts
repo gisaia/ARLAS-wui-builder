@@ -32,6 +32,12 @@ export enum LABEL_ALIGNMENT {
   left = 'left'
 }
 
+export enum LABEL_PLACEMENT {
+  point = 'point',
+  line = 'line',
+  line_center = 'line-center'
+}
+
 export enum LINE_TYPE {
   solid = 'solid',
   dashed = 'dashed',
