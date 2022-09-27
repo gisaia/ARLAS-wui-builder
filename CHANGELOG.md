@@ -1,5 +1,18 @@
 # Change Log
 
+## [v23.0.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v23.0.3) (2022-09-27)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v23.0.2...v23.0.3)
+
+**New stuff:**
+
+- Display labels along the line [\#780](https://github.com/gisaia/ARLAS-wui-builder/issues/780) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
+**Fixed bugs:**
+
+- The name of donuts appear to their side when building the analytics [\#795](https://github.com/gisaia/ARLAS-wui-builder/issues/795) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Changing a max value in label size interpolation does not work [\#783](https://github.com/gisaia/ARLAS-wui-builder/issues/783)
+
 ## [v23.0.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v23.0.2) (2022-09-09)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v23.0.1...v23.0.2)
