@@ -218,15 +218,6 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                     }
                   }
                 ),
-                dateFormat: new SelectFormControl(
-                  '',
-                  marker('Date format'),
-                  marker('Date format description'),
-                  false,
-                  Object.keys(DateFormats).map(df => ({
-                    label: df + ' (' + DateFormats[df] + ')', value: DateFormats[df]
-                  }))
-                ),
                 selectionExtentPercent: new SliderFormControl(
                   '',
                   marker('Percent of selection extent'),
@@ -342,7 +333,6 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
         detailedTimeline: {
           chartTitle: this.get('tabsContainer.renderStep.detailedTimeline.chartTitle') as InputFormControl,
           chartType: this.get('tabsContainer.renderStep.detailedTimeline.chartType') as SelectFormControl,
-          dateFormat: this.get('tabsContainer.renderStep.detailedTimeline.dateFormat') as SelectFormControl,
           selectionExtentPercent: this.get('tabsContainer.renderStep.detailedTimeline.selectionExtentPercent') as SliderFormControl
         }
       }
