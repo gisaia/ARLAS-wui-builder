@@ -763,7 +763,7 @@ export class ConfigExportHelper {
         brushHandlesHeightWeight: unmanagedFields.brushHandlesHeightWeight.value,
         dataType: 'time',
         isHistogramSelectable: unmanagedFields.isHistogramSelectable.value,
-        ticksDateFormat: renderStep.dateFormat.value,
+        ticksDateFormat: timelineConfigGlobal.customControls.tabsContainer.renderStep.timeline.dateFormat.value,
         chartType: renderStep.chartType.value,
         chartHeight: unmanagedFields.chartHeight.value,
         chartWidth: unmanagedFields.chartWidth.value,
