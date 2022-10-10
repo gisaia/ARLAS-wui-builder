@@ -163,7 +163,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
               chartType: new SelectFormControl(
                 '',
                 marker('Chart type'),
-                marker('Chart type description'),
+                marker('Timeline type description'),
                 false,
                 [ChartType[ChartType.area], ChartType[ChartType.bars], ChartType[ChartType.curve]].map(s =>
                   ({ label: s, value: s })),
@@ -189,7 +189,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
               ),
               isMultiselectable: new SlideToggleFormControl(
                 false,
-                marker('Is multi-selectable'),
+                marker('Is multiselectable?'),
                 marker('Is timeline multi-selectable description')
               )
             }).withTitle('Timeline'),
@@ -203,7 +203,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                 chartType: new SelectFormControl(
                   '',
                   marker('Chart type'),
-                  marker('Chart type description'),
+                  marker('Timeline type description'),
                   false,
                   [ChartType[ChartType.area], ChartType[ChartType.bars], ChartType[ChartType.curve]].map(s =>
                     ({ label: s, value: s })),
