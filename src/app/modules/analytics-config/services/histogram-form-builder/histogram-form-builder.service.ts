@@ -119,7 +119,7 @@ export class HistogramFormGroup extends ConfigFormGroup {
           chartType: new SelectFormControl(
             '',
             marker('Chart type'),
-            marker('chart type description'),
+            marker('Chart type description'),
             false,
             [ChartType[ChartType.area], ChartType[ChartType.bars], ChartType[ChartType.curve]].map(value => ({ value, label: value }))
           ),
