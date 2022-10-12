@@ -103,9 +103,9 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
           '',
           marker('Spinner diameter'),
           null,
-          10,
-          100,
-          10,
+          20,
+          70,
+          5,
           null,
           null,
           {

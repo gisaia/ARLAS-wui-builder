@@ -51,6 +51,10 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   private afterClosedSub: Subscription;
 
+  public spinnerColor: string;
+  public spinnerDiameter: number;
+  public showSpinner: boolean;
+
   public constructor(
     private defaultValuesService: DefaultValuesService,
     public dialog: MatDialog,
@@ -70,6 +74,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.updateDisplay.pipe(
       debounceTime(200)
     ).subscribe(() => this.updateAnalytics());
+    this.spinnerColor = this.mainFormService.lookAndFeelConfig?.control.value.LookAndFeelConfigGlobal.spinnerColor;
+    this.spinnerDiameter = this.mainFormService.lookAndFeelConfig?.control.value.LookAndFeelConfigGlobal.spinnerDiameter;
+    this.showSpinner = this.mainFormService.lookAndFeelConfig?.control.value.LookAndFeelConfigGlobal.spinner;
   }
 
   public addGroup() {
