@@ -95,21 +95,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
     this.afterClosedSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        let currentContributors = this.configService.getValue('arlas.web.contributors') as Array<ContributorConfig>;
-        if (currentContributors !== undefined) {
-          this.groupsFa.at(gi).value.content.forEach(c => {
-            if (c.widgetData && c.widgetData.dataStep) {
-              const contributorId = ConfigExportHelper.getContributorId(c.widgetData, c.widgetType);
-              // remove contributors from registry
-              this.arlasStartupService.contributorRegistry.delete(contributorId);
-              // remove contributors from config
-              currentContributors = currentContributors.filter(config => config.identifier !== contributorId);
-            }
-          });
-          // set new config
-          const currentConfig = this.configService.getConfig() as any;
-          currentConfig.arlas.web.contributors = currentContributors;
-        }
         this.groupsFa.removeAt(gi);
         this.updateAnalytics();
       }
