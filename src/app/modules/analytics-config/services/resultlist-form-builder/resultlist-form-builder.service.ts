@@ -263,7 +263,7 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
               }
             ),
 
-          }).withTitle('Grid view')
+          }).withTitle(marker('Grid view'))
         }).withTabName(marker('Render')),
         zactionStep: new ConfigFormGroup({
           visualisationLink: new InputFormControl(
