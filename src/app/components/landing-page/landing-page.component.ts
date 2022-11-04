@@ -33,7 +33,7 @@ import { StartingConfigFormBuilderService } from '@services/starting-config-form
 import { DialogData } from '@shared-components/input-modal/input-modal.component';
 import { DataWithLinks } from 'arlas-persistence-api';
 import {
-  ArlasConfigService, ArlasConfigurationDescriptor, ArlasSettingsService, AuthentificationService, ConfigAction,
+  ArlasConfigService, ArlasConfigurationDescriptor, ArlasIamService, ArlasSettingsService, AuthentificationService, ConfigAction,
   ConfigActionEnum, ErrorService, PersistenceService, UserInfosComponent
 } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
@@ -74,8 +74,10 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
 
   public showLoginButton: boolean;
   public showLogOutButton: boolean;
+  public authentMode = 'false';
 
   public isAuthenticated = false;
+  public isAuthentActivated = false;
   private errorAlreadyThrown = false;
   public name: string;
   public avatar: string;
@@ -108,9 +110,24 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     private router: Router,
     private menu: MenuService,
     private injector: Injector,
+    private arlasIamService: ArlasIamService
   ) {
-    this.showLoginButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
-    this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
+
+    this.isAuthentActivated = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
+
+    const isOpenID = this.isAuthentActivated && this.arlasIamService.authConfigValue.auth_mode !== 'iam';
+    const isIam = this.isAuthentActivated && this.arlasIamService.authConfigValue.auth_mode === 'iam';
+    this.isAuthentActivated = isOpenID || isIam;
+    if (isOpenID) {
+      this.authentMode = 'openid';
+    }
+    if (isIam) {
+      this.authentMode = 'iam';
+    }
+
+
+    this.showLoginButton = this.isAuthentActivated && !this.isAuthenticated;
+    this.showLogOutButton = this.isAuthentActivated && this.isAuthenticated;
   }
 
   public ngOnInit(): void {
@@ -137,23 +154,50 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     this.mainFormService.startingConfig.init(
       this.startingConfigFormBuilder.build()
     );
-    const claims = this.authService.identityClaims as any;
-    this.subscription = this.authService.canActivateProtectedRoutes.subscribe(isAuthenticated => {
-      // show login button when authentication is enabled in settings.yaml file && the app is not authenticated
-      this.showLoginButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent && !isAuthenticated;
-      this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent && isAuthenticated;
-      this.isAuthenticated = isAuthenticated;
-      if (this.persistenceService.isAvailable) {
-        this.getConfigList();
-      }
-      if (isAuthenticated) {
-        this.name = claims.nickname;
-        this.avatar = claims.picture;
-      } else {
-        this.name = '';
-        this.avatar = '';
-      }
-    });
+
+    if (this.authentMode === 'openid') {
+      const claims = this.authService.identityClaims as any;
+      this.subscription = this.authService.canActivateProtectedRoutes.subscribe(isAuthenticated => {
+        console.log(isAuthenticated);
+        // show login button when authentication is enabled in settings.yaml file && the app is not authenticated
+        this.showLoginButton = this.isAuthentActivated && !isAuthenticated;
+        this.showLogOutButton = this.isAuthentActivated && isAuthenticated;
+        this.isAuthenticated = isAuthenticated;
+        if (this.persistenceService.isAvailable) {
+          this.getConfigList();
+        }
+        if (isAuthenticated) {
+          this.name = claims.nickname;
+          this.avatar = claims.picture;
+        } else {
+          this.name = '';
+          this.avatar = '';
+        }
+      });
+    }
+    if (this.authentMode === 'iam') {
+      this.arlasIamService.currentUserSubject.subscribe({
+        next: (data) => {
+          if (this.persistenceService.isAvailable) {
+            this.getConfigList();
+          }
+          if (!!data) {
+            this.isAuthenticated = true;
+            this.name = data?.user.email;
+            this.avatar = '';
+          } else {
+            this.isAuthenticated = false;
+            this.name = '';
+            this.avatar = '';
+          }
+          this.showLoginButton = this.isAuthentActivated && !this.isAuthenticated;
+          this.showLogOutButton = this.isAuthentActivated && this.isAuthenticated;
+        },
+        error: () => {
+          this.isAuthenticated = false;
+        }
+      });
+    }
     // if persistence is configured and anonymous mode is enabled, we fetch the configuration accessible as anonymous
     // if ARLAS-persistence doesn't allow anonymous access, a suitable error is displayed in a modal
     if (this.persistenceService.isAvailable && (!this.authService.authConfigValue || !this.authService.authConfigValue.use_authent)) {
@@ -177,7 +221,12 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   }
 
   public logout() {
-    this.authService.logout();
+    if (this.authentMode === 'openid') {
+      this.authService.logout();
+    }
+    if (this.authentMode === 'iam') {
+      this.arlasIamService.logout(['/']);
+    }
   }
 
   public cancel(): void {
@@ -195,15 +244,22 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     const url = this.mainFormService.startingConfig.getFg().get('serverUrl').value;
     this.urlSubscription = this.http.get(url + '/swagger.json').subscribe(
       () => {
-        this.getServerCollections(url).then(() => {
-          this.urlCollectionsSubscription = this.configDescritor.getAllCollections().subscribe(collections => {
-            this.availablesCollections = collections;
-            this.collectionService.setCollections(collections);
-            this.collectionService.getCollectionsReferenceDescription().subscribe(cdrs => this.collectionService.setCollectionsRef(cdrs));
-          }, error => this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'))
-          , () => this.spinner.hide('connectServer'));
-          this.isServerReady = true;
-        });
+        this.getServerCollections(url).then(
+          () => {
+            this.urlCollectionsSubscription = this.configDescritor.getAllCollections().subscribe(
+              collections => {
+                this.availablesCollections = collections;
+                this.collectionService.setCollections(collections);
+                this.collectionService.getCollectionsReferenceDescription().subscribe(cdrs => this.collectionService.setCollectionsRef(cdrs));
+              },
+              error => {
+                this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
+                this.spinner.hide('connectServer');
+              },
+              () => this.spinner.hide('connectServer')
+            );
+            this.isServerReady = true;
+          });
       },
       () => {
         this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
@@ -450,7 +506,13 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   }
 
   public login() {
-    this.authService.login();
+    if (this.authentMode === 'openid') {
+      this.authService.login();
+    }
+    if (this.authentMode === 'iam') {
+      this.dialogRef.close();
+      this.router.navigate(['login']);
+    }
   }
 
   public loadConfig(id: string) {

@@ -37,8 +37,9 @@ import { TimelineConfigModule } from '@timeline-config/timeline-config.module';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import {
   ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigurationDescriptor, ArlasConfigurationUpdaterService,
-  ArlasStartupService, ArlasWalkthroughService, AuthentificationService, ConfigMenuModule, configUpdaterFactory,
-  CONFIG_UPDATER, ErrorModalModule, FETCH_OPTIONS, getOptionsFactory, GET_OPTIONS, PaginatorI18n, UserInfosComponent
+  ArlasIamService,
+  ArlasStartupService, ArlasWalkthroughService, auhtentServiceFactory, AuthentificationService, ConfigMenuModule, configUpdaterFactory,
+  CONFIG_UPDATER, ErrorModalModule, FETCH_OPTIONS, getOptionsFactory, GET_OPTIONS, iamServiceFactory, PaginatorI18n, UserInfosComponent
 } from 'arlas-wui-toolkit';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
@@ -155,9 +156,15 @@ export class CustomTranslateLoader implements TranslateLoader {
       multi: true
     },
     {
+      provide: 'ArlasIamService',
+      useFactory: iamServiceFactory,
+      deps: [ArlasIamService],
+      multi: true
+    },
+    {
       provide: GET_OPTIONS,
       useFactory: getOptionsFactory,
-      deps: [AuthentificationService]
+      deps: [AuthentificationService, ArlasIamService]
     },
     {
       provide: ArlasWalkthroughService,
@@ -175,11 +182,6 @@ export class CustomTranslateLoader implements TranslateLoader {
     {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
       useValue: { duration: 3000, verticalPosition: 'bottom' }
-    },
-    {
-      provide: GET_OPTIONS,
-      useFactory: getOptionsFactory,
-      deps: [AuthentificationService]
     },
     {
       provide: MatPaginatorIntl,
