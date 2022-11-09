@@ -18,8 +18,9 @@ under the License.
 */
 import {
   BucketsIntervalFormBuilderService,
-  BucketsIntervalFormGroup
+  BucketsIntervalFormGroup,
 } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
+import { BUCKET_TYPE } from '@analytics-config/services/buckets-interval-form-builder/models';
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
@@ -459,7 +460,7 @@ export class TimelineGlobalFormBuilderService {
   ) { }
 
   public build(collection: string) {
-    const timelineBucketIntervalFg = this.bucketsIntervalBuilderService.build(collection, 'temporal');
+    const timelineBucketIntervalFg = this.bucketsIntervalBuilderService.build(collection, BUCKET_TYPE.TEMPORAL);
     const timelineFormGroup = new TimelineGlobalFormGroup(
       collection, this.collectionService, this.startupService, this.mainFormService, this.settingsService,
       timelineBucketIntervalFg, this.colorService

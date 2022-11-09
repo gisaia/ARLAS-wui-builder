@@ -46,7 +46,7 @@ import { Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import {
   AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION,
-  GEOMETRY_TYPE, LINE_TYPE, LABEL_ALIGNMENT, LABEL_PLACEMENT
+  GEOMETRY_TYPE, LINE_TYPE, LABEL_ALIGNMENT, LABEL_PLACEMENT, MAP_LAYER_TYPE
 } from './models';
 import { ButtonToggleFormControl } from '@shared-models/config-form';
 import { toNumericOptionsObs } from '../../../../services/collection-service/tools';
@@ -683,7 +683,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   public constructor(
     collection: string,
     collectionFieldsObs: Observable<Array<CollectionField>>,
-    type: string,
+    type: MAP_LAYER_TYPE,
     geometryTypes: Array<GEOMETRY_TYPE>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService,
     isAggregated: boolean,
@@ -811,7 +811,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           colorSources,
           isAggregated,
           collection,
-          marker('property color ' + (type === 'cluster' ? type : '') + ' description'),
+          marker('property color ' + (type === MAP_LAYER_TYPE.CLUSTER ? type : '') + ' description'),
           geometryTypes.indexOf(GEOMETRY_TYPE.heatmap) >= 0 ? () => this.geometryType : undefined
         ),
 
@@ -1262,7 +1262,7 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
 
   public constructor(
     collection: string,
-    type: string,
+    type: MAP_LAYER_TYPE,
     collectionFields: Observable<Array<CollectionField>>,
     propertySelectorFormBuilder: PropertySelectorFormBuilderService,
     isAggregated: boolean = false,
@@ -1374,7 +1374,7 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
   ) {
     super(
       collection,
-      'feature-metric',
+      MAP_LAYER_TYPE.FEATURE_METRIC,
       collectionFields,
       propertySelectorFormBuilder,
       true,
@@ -1433,7 +1433,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
     super(
       collection,
       collectionFields,
-      'cluster',
+      MAP_LAYER_TYPE.CLUSTER,
       [
         GEOMETRY_TYPE.fill,
         GEOMETRY_TYPE.circle,
@@ -1645,7 +1645,7 @@ export class MapLayerFormBuilderService {
   public buildFeatures(collection: string, collectionFields: Observable<Array<CollectionField>>) {
     const featureFormGroup = new MapLayerTypeFeaturesFormGroup(
       collection,
-      'feature',
+      MAP_LAYER_TYPE.FEATURE,
       collectionFields,
       this.propertySelectorFormBuilder,
       false,

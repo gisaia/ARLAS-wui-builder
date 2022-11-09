@@ -25,6 +25,7 @@ import { CollectionConfigFormGroup } from '@shared-models/collection-config-form
 import { ButtonToggleFormControl, ConfigFormGroup, InputFormControl, RadioButtonFormControl, SelectFormControl }
   from '@shared-models/config-form';
 import { Metric, Aggregation } from 'arlas-api';
+import { METRIC_TYPE } from './models';
 
 export const DEFAULT_METRIC_VALUE = 'Count';
 
@@ -42,7 +43,7 @@ export class MetricCollectFormGroup extends CollectionConfigFormGroup {
     return this.get('metricCollectFunction') as InputFormControl;
   }
 
-  public constructor(collection: string, collectionService: CollectionService, type: string, sortable) {
+  public constructor(collection: string, collectionService: CollectionService, type: METRIC_TYPE, sortable) {
     super(
       collection,
       {
@@ -166,7 +167,7 @@ export class MetricCollectFormBuilderService {
 
   public constructor(private collectionService: CollectionService) { }
 
-  public build(collection: string, type: string, sortable = false) {
+  public build(collection: string, type: METRIC_TYPE, sortable = false) {
     return new MetricCollectFormGroup(collection, this.collectionService, type, sortable);
   }
 

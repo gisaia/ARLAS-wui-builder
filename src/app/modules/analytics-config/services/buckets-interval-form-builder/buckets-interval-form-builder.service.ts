@@ -29,6 +29,7 @@ import { CollectionReferenceDescriptionProperty, Interval } from 'arlas-api';
 import { Observable, of, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
+import { BUCKET_TYPE } from './models';
 
 export interface BucketsIntervalControls {
   aggregationField: SelectFormControl;
@@ -43,13 +44,14 @@ export enum BY_BUCKET_OR_INTERVAL {
   BUCKET = 'bucket',
   INTERVAL = 'interval'
 }
+
 export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
 
   public constructor(
     collection: string,
     collectionService: CollectionService,
     nbBucketsMax,
-    bucketType?: string) {
+    bucketType?: BUCKET_TYPE) {
 
     super(
       collection,
@@ -208,7 +210,7 @@ export class BucketsIntervalFormBuilderService {
 
   public constructor(private collectionService: CollectionService, private settingsService: ArlasSettingsService) { }
 
-  public build(collection: string, bucketType: string) {
+  public build(collection: string, bucketType: BUCKET_TYPE) {
     return new BucketsIntervalFormGroup(collection, this.collectionService, this.settingsService.getHistogramMaxBucket(), bucketType);
   }
 

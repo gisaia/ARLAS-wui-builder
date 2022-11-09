@@ -73,3 +73,9 @@ export enum CLUSTER_GEOMETRY_TYPE {
   aggregated_geometry = 'aggregated_geometry',
   raw_geometry = 'raw_geometry'
 }
+
+export enum MAP_LAYER_TYPE {
+  CLUSTER = 'cluster',
+  FEATURE = 'feature',
+  FEATURE_METRIC = 'feature-metric'
+}
