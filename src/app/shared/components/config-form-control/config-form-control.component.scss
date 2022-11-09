@@ -182,6 +182,10 @@ mat-option {
   }
 }
 
+.slider-toggle-form-control {
+  margin: 15px 0px;
+}
+
 .checkbox {
   &::ng-deep .mat-checkbox-label {
     font-size: 0.9em;
