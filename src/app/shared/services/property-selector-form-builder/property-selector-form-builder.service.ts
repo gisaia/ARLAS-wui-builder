@@ -490,7 +490,23 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                   && this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.interpolated);
                 if (!!this.collection && control.enabled) {
                   collectionService.countNbDocuments(this.collection).subscribe(
-                    count => control.setValue(count.totalnb)
+                    count => {
+                      control.setValue(count.totalnb);
+                      if (propertyType === PROPERTY_TYPE.number ) {
+                        const minValue = 0;
+                        const maxValue = count.totalnb;
+                        const minInterpolatedValue = +this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl.value;
+                        const maxInterpolatedValue = +this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl.value;
+                        this.customControls.propertyInterpolatedFg.propertyInterpolatedValuesCtrl.setValue(
+                          [...Array(6).keys()].map(k =>
+                            ({
+                              proportion: minValue + (maxValue - minValue) * k / 5,
+                              value: minInterpolatedValue + (maxInterpolatedValue - minInterpolatedValue) * k / 5
+                            })
+                          )
+                        );
+                      }
+                    }
                   );
                 }
               }
@@ -676,13 +692,12 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
               dependsOn: () => [
                 this.customControls.propertySource,
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl,
-
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedMinFieldValueCtrl,
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl,
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl,
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl,
                 this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl,
-                this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl,
+                this.customControls.propertyInterpolatedFg.propertyInterpolatedCountNormalizeCtrl
               ],
               onDependencyChange: (control) => {
                 // if propertyType is not color => create interpolation values from the min and max
@@ -704,22 +719,14 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                     parseFloat(this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxFieldValueCtrl.value);
                   const minInterpolatedValue = +this.customControls.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl.value;
                   const maxInterpolatedValue = +this.customControls.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl.value;
-                  // if we import a config where we don't interpolate linearly, we will maintain this custom interpolation
-                  // as long as we don't change the dependants values : max, min, normalise. If we change those values, we lose
-                  // the custom interpolation
-                  if (!control.value || +control.value[0].proportion !== minValue ||
-                    +control.value[control.value.length - 1].proportion !== maxValue ||
-                    +control.value[0].value !== minInterpolatedValue ||
-                    +control.value[control.value.length - 1].value !== maxInterpolatedValue) {
-                    control.setValue(
-                      [...Array(6).keys()].map(k =>
-                        ({
-                          proportion: minValue + (maxValue - minValue) * k / 5,
-                          value: minInterpolatedValue + (maxInterpolatedValue - minInterpolatedValue) * k / 5
-                        })
-                      )
-                    );
-                  }
+                  control.setValue(
+                    [...Array(6).keys()].map(k =>
+                      ({
+                        proportion: minValue + (maxValue - minValue) * k / 5,
+                        value: minInterpolatedValue + (maxInterpolatedValue - minInterpolatedValue) * k / 5
+                      })
+                    )
+                  );
                   // enable if a color or a number can be interpolated
                   this.enableControlIfColorInterpolable(control as ConfigFormControl, isAggregated, false);
                 }
