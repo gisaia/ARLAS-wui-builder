@@ -161,7 +161,7 @@ export function createTranslateLoader(http: HttpClient) {
     {
       provide: MatPaginatorIntl,
       deps: [TranslateService],
-      useFactory: (translateService: TranslateService) => new PaginatorI18n(translateService)
+      useFactory: (translateService: TranslateService) => new PaginatorI18n(translateService).getPaginatorIntl()
     },
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
