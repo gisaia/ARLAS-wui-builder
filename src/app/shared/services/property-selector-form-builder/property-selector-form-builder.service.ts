@@ -455,7 +455,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             ],
             'Interpolated ' + propertyName + ' description',
             {
-              resetDependantsOnChange: true,
+              resetDependantsOnChange: false,
               dependsOn: () => [this.customControls.propertySource],
               onDependencyChange: (control) => control.enableIf(
                 this.customControls.propertySource.value !== PROPERTY_SELECTOR_SOURCE.heatmap_density && isAggregated)
