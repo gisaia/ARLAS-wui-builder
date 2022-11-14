@@ -144,6 +144,16 @@ body {
   top: unset !important;
 }
 
+.map-preview .basemaps {
+  right: 202px !important;
+  top: 110px !important;
+}
+
+.map-preview .basemap-container {
+  top: 108px !important;
+  right: 240px !important;
+}
+
 .mat-button-toggle-group {
   mat-button-toggle.mat-button-toggle-checked {
     background-color: white !important;
