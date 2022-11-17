@@ -58,7 +58,8 @@ export enum FILTER_OPERATION {
   RANGE = 'RANGE',
   EQUAL = 'EQUAL',
   NOT_EQUAL = 'NOT_EQUAL',
-  OUT_RANGE = 'OUT_RANGE'
+  OUT_RANGE = 'OUT_RANGE',
+  IS = 'IS'
 }
 
 export enum AGGREGATE_GEOMETRY_TYPE {

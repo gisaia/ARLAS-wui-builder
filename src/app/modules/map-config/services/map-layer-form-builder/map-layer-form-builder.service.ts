@@ -25,7 +25,7 @@ import { CollectionService, METRIC_TYPES } from '@services/collection-service/co
 import { CollectionField } from '@services/collection-service/models';
 import {
   toAllButGeoOptionsObs, toGeoOptionsObs, toGeoPointOptionsObs, toKeywordOptionsObs, toNumericOrDateOptionsObs,
-  toNumericOrDateOrKeywordObs, toTextOrKeywordOptionsObs
+  toNumericOrDateOrKeywordObs, toNumericOrDateOrKeywordOrBooleanObs, toTextOrKeywordOptionsObs
 } from '@services/collection-service/tools';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
@@ -452,7 +452,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
         marker('Filter Field'),
         marker('Filter field description'),
         true,
-        toNumericOrDateOrKeywordObs(collectionFields),
+        toNumericOrDateOrKeywordOrBooleanObs(collectionFields),
         {
         }
       ),
@@ -483,6 +483,10 @@ export class MapFilterFormGroup extends ConfigFormGroup {
                   { value: FILTER_OPERATION.IN, label: FILTER_OPERATION.IN },
                   { value: FILTER_OPERATION.NOT_IN, label: FILTER_OPERATION.NOT_IN }
                 ]);
+              } else if (this.customControls.filterField.value.type === 'KEYWORD') {
+                control.setSyncOptions([
+                  { value: FILTER_OPERATION.IS, label: FILTER_OPERATION.IS }
+                ]);
               } else {
                 control.setSyncOptions([
                   { value: FILTER_OPERATION.EQUAL, label: FILTER_OPERATION.EQUAL },
@@ -494,7 +498,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
               control.setValue(control.syncOptions[0].value);
             } else {
               // if we are editing an existing filter, keep the selected operation.
-              // otherwise there os no way to remember it
+              // otherwise there is no way to remember it
               if ((this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
                 this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN)) {
                 control.setSyncOptions([
@@ -630,6 +634,24 @@ export class MapFilterFormGroup extends ConfigFormGroup {
         undefined,
         () => this.customControls.filterMinRangeValues
       ),
+      filterBoolean: new ButtonToggleFormControl(
+        true,
+        [
+          {
+            label: marker('activated'), value: true
+          },
+          {
+            label: marker('not activated'), value: false
+          }
+        ],
+        undefined,
+        {
+          resetDependantsOnChange: true,
+          dependsOn: () => [this.customControls.filterField],
+          onDependencyChange: (control: ButtonToggleFormControl) => {
+            control.enableIf(this.customControls.filterOperation.value === FILTER_OPERATION.IS);
+          }
+        }),
       id: new HiddenFormControl(
         '',
         null,
@@ -936,7 +958,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
                   && this.geometryStep.get('aggregatedGeometry').touched
                 ) {
                   control.enableIf(this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.bbox ||
-                  this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.cell );
+                    this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.cell);
                 }
                 if (
                   !!this.geometryStep.get('rawGeometry') && !!this.geometryStep.get('rawGeometry').value
