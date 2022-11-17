@@ -296,6 +296,13 @@ export class MapImportService {
         value: inputValues[i + 1]
       });
     }
+    if (propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl === COUNT_OR_METRIC.COUNT) {
+      const interpolatedValues = propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedValuesCtrl;
+      if (!!interpolatedValues && Array.isArray(interpolatedValues) && interpolatedValues.length > 0) {
+        propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedCountValueCtrl =
+          interpolatedValues[interpolatedValues.length - 1].proportion;
+      }
+    }
     const min = inputValues[4];
     const max = inputValues.pop();
     propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl = min === 0 ? '0' : min;
