@@ -483,7 +483,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
                   { value: FILTER_OPERATION.IN, label: FILTER_OPERATION.IN },
                   { value: FILTER_OPERATION.NOT_IN, label: FILTER_OPERATION.NOT_IN }
                 ]);
-              } else if (this.customControls.filterField.value.type === 'KEYWORD') {
+              } else if (this.customControls.filterField.value.type === 'BOOLEAN') {
                 control.setSyncOptions([
                   { value: FILTER_OPERATION.IS, label: FILTER_OPERATION.IS }
                 ]);
@@ -504,6 +504,10 @@ export class MapFilterFormGroup extends ConfigFormGroup {
                 control.setSyncOptions([
                   { value: FILTER_OPERATION.IN, label: FILTER_OPERATION.IN },
                   { value: FILTER_OPERATION.NOT_IN, label: FILTER_OPERATION.NOT_IN }
+                ]);
+              } else if (this.customControls.filterOperation.value === FILTER_OPERATION.IS) {
+                control.setSyncOptions([
+                  { value: FILTER_OPERATION.IS, label: FILTER_OPERATION.IS }
                 ]);
               } else {
                 control.setSyncOptions([
@@ -669,6 +673,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
     filterEqualValues: this.get('filterEqualValues') as InputFormControl,
     filterMinRangeValues: this.get('filterMinRangeValues') as InputFormControl,
     filterMaxRangeValues: this.get('filterMaxRangeValues') as InputFormControl,
+    filterBoolean: this.get('filterBoolean') as ButtonToggleFormControl,
     id: this.get('id') as HiddenFormControl
   };
 
@@ -1631,7 +1636,8 @@ export class MapLayerFormBuilderService {
   public buildMapFilter(collection: string) {
     const collectionFields = this.collectionService.getCollectionFields(collection);
     const mapFilterFormGroup = new MapFilterFormGroup(collectionFields,
-      [FILTER_OPERATION.IN, FILTER_OPERATION.RANGE, FILTER_OPERATION.EQUAL, FILTER_OPERATION.NOT_IN],
+      [FILTER_OPERATION.IN, FILTER_OPERATION.RANGE, FILTER_OPERATION.EQUAL, FILTER_OPERATION.NOT_IN,
+        FILTER_OPERATION.IS, FILTER_OPERATION.OUT_RANGE, FILTER_OPERATION.NOT_EQUAL],
       this.collectionService, collection);
     return mapFilterFormGroup;
   }

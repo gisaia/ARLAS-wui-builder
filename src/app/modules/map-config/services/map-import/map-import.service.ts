@@ -829,6 +829,13 @@ export class MapImportService {
               control: mapFilterFg.customControls.filterMaxRangeValues
             }
           ]);
+        } else if (f.op === FILTER_OPERATION.IS) {
+          importElements([
+            {
+              value: f.value,
+              control: mapFilterFg.customControls.filterBoolean
+            }
+          ]);
         }
         filtersFa.insert(i, mapFilterFg);
         i++;

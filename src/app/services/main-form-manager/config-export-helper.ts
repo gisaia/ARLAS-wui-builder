@@ -305,6 +305,11 @@ export class ConfigExportHelper {
             field: f.filterField.value, op: f.filterOperation,
             value: f.filterMinRangeValues + ';' + f.filterMaxRangeValues
           });
+        } else if (f.filterOperation === FILTER_OPERATION.IS) {
+          layerSource.filters.push({
+            field: f.filterField.value, op: f.filterOperation,
+            value: f.filterBoolean
+          });
         }
         if (!layerSource.include_fields) {
           layerSource.include_fields = [];
