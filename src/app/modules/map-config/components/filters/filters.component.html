@@ -18,6 +18,7 @@
             </ul>
             <span *ngIf="element.filterOperation === 'EQUAL' || element.filterOperation === 'NOT_EQUAL'">{{element?.filterEqualValues}}</span>
             <span *ngIf="element.filterOperation === 'RANGE' || element.filterOperation === 'OUT_RANGE'">[{{element?.filterMinRangeValues}}, {{element?.filterMaxRangeValues}}] </span>
+            <span *ngIf="element.filterOperation === 'IS'">{{element?.filterBoolean.toString() | translate}} </span>
         
         </td>
 

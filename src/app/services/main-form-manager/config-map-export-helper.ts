@@ -217,6 +217,8 @@ export class ConfigMapExportHelper {
           outRangeExpression.push(['<', fieldPath, +f.filterMinRangeValues]);
           outRangeExpression.push(['>', fieldPath, +f.filterMaxRangeValues]);
           layer.filter.push(outRangeExpression);
+        } else if (f.filterOperation === FILTER_OPERATION.IS) {
+          layer.filter.push(['in', fieldPath, ['literal', [f.filterBoolean, `${f.filterBoolean.toString()}`]]]);
         }
       });
     }

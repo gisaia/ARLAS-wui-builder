@@ -92,6 +92,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
       mapFormGroup.customControls.filterField.setValue(oldmapFormGroup.customControls.filterField.value);
       mapFormGroup.customControls.filterOperation.setValue(oldmapFormGroup.customControls.filterOperation.value);
       mapFormGroup.customControls.filterInValues.setValue(oldmapFormGroup.customControls.filterInValues.value);
+      mapFormGroup.customControls.filterBoolean.setValue(oldmapFormGroup.customControls.filterBoolean.value);
       mapFormGroup.customControls.filterEqualValues.setValue(oldmapFormGroup.customControls.filterEqualValues.value);
       mapFormGroup.customControls.filterMinRangeValues.setValue(oldmapFormGroup.customControls.filterMinRangeValues.value);
       mapFormGroup.customControls.filterMaxRangeValues.setValue(oldmapFormGroup.customControls.filterMaxRangeValues.value);

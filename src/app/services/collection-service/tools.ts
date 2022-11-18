@@ -85,6 +85,13 @@ export function toNumericOrDateOrKeywordObs(collectionFieldsObs: Observable<Arra
       .filter(f => f.type === typeEnum.KEYWORD || NUMERIC_OR_DATE_TYPES.indexOf(f.type) >= 0))));
 }
 
+export function toNumericOrDateOrKeywordOrBooleanObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+  return toOptionsObs(collectionFieldsObs.pipe(map(
+    fields => fields
+      .filter(f => f.type === typeEnum.KEYWORD || NUMERIC_OR_DATE_TYPES.indexOf(f.type) >= 0
+      || f.type === typeEnum.BOOLEAN))));
+}
+
 export function toNumericOrDateOrKeywordOrTextObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
   return toOptionsObs(collectionFieldsObs.pipe(map(
     fields => fields
