@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, Inject, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, Inject, Injector, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -107,6 +107,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     private spinner: NgxSpinnerService,
     private router: Router,
     private menu: MenuService,
+    private injector: Injector,
   ) {
     this.showLoginButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
     this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
@@ -247,7 +248,6 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     this.collectionService.getCollectionsReferenceDescription().subscribe(cdrs => {
       this.collectionService.setCollectionsRef(cdrs);
       const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
-
       if (!collection) {
         this.spinner.hide('importconfig');
         this.logger.error(
@@ -257,15 +257,28 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
           + collections.join(', '));
 
       } else {
+        // tslint:disable-next-line:no-string-literal
+        if (this.arlasSettingsService.settings['use_time_filter']) {
+          this.startupService.getTimeFilter(collection, configJson.arlas.server.url, this.collectionService, this.arlasSettingsService)
+            .subscribe(timeFilter => {
+              this.startupService.applyArlasInterceptor(collection, timeFilter);
+              setTimeout(() => {
+                this.mainFormManager.doImport(configJson, configMapJson);
+                this.startEvent.next(null);
+                this.spinner.hide('importconfig');
+              }, 100);
+            });
+          /** hack in order to trigger the spinner 'importconfig'
+           * otherwise, we will think the application is not loading
+           */
+        } else {
+          setTimeout(() => {
+            this.mainFormManager.doImport(configJson, configMapJson);
+            this.startEvent.next(null);
+            this.spinner.hide('importconfig');
+          }, 100);
+        }
 
-        /** hack in order to trigger the spinner 'importconfig'
-         * otherwise, we will think the application is not loading
-         */
-        setTimeout(() => {
-          this.mainFormManager.doImport(configJson, configMapJson);
-          this.startEvent.next(null);
-          this.spinner.hide('importconfig');
-        }, 100);
       }
       if (!!configId && !!configName) {
         this.mainFormService.configChange.next({ id: configId, name: configName });

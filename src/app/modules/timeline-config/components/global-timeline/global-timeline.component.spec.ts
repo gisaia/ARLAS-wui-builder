@@ -9,7 +9,8 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 import { BucketsIntervalFormGroup } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
 import { TestBed } from '@angular/core/testing';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import {  ArlasSettingsService } from 'arlas-wui-toolkit';
+import { StartupService } from '@services/startup/startup.service';
 
 describe('GlobalTimelineComponent', () => {
   let spectator: Spectator<GlobalTimelineComponent>;
@@ -30,6 +31,9 @@ describe('GlobalTimelineComponent', () => {
           getGlobalFg: () => new TimelineGlobalFormGroup(
             'collection',
             new CollectionService(null, null, null, null, null),
+            new StartupService(null, null, null, null, null, null),
+            new MainFormService(),
+            new ArlasSettingsService(),
             new BucketsIntervalFormGroup(undefined, undefined, undefined)
           )
         },

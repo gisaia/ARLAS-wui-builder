@@ -32,7 +32,8 @@ import {
   SliderFormControl, SlideToggleFormControl
 } from '@shared-models/config-form';
 import { ChartType } from 'arlas-web-components';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { ArlasColorGeneratorLoader, ArlasSettingsService } from 'arlas-wui-toolkit';
+import { StartupService } from '@services/startup/startup.service';
 
 enum DateFormats {
   English = '%b %d %Y  %H:%M',
@@ -44,8 +45,11 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
   public constructor(
     collection: string,
     collectionService: CollectionService,
+    startupService: StartupService,
+    mainFormService: MainFormService,
+    settingsService: ArlasSettingsService,
     timelineBucketsIntervalFg?: BucketsIntervalFormGroup,
-    colorService?: ArlasColorGeneratorLoader
+    colorService?: ArlasColorGeneratorLoader,
   ) {
     super(
       {
@@ -305,6 +309,26 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
 
         })
       });
+
+    // tslint:disable-next-line:no-string-literal
+    if (!!settingsService.settings && settingsService.settings['use_time_filter']) {
+      this.customControls.tabsContainer.dataStep.additionalCollections.collections.valueChanges.subscribe(r => {
+        startupService.interceptorRegistry.forEach((v, k) => {
+          if (r.map(c => c.value).indexOf(k) < 0 && k !== collection) {
+            startupService.removeArlasInterceptor(k);
+          }
+        });
+        r.map(c => c.value).forEach(value => {
+          if (startupService.interceptorRegistry.get(value) === null || startupService.interceptorRegistry.get(value) === undefined) {
+            const url = mainFormService.startingConfig.getFg().get('serverUrl').value;
+            startupService.getTimeFilter(value, url, collectionService, settingsService).subscribe(filter => {
+              startupService.applyArlasInterceptor(value, filter);
+            });
+          }
+        });
+      });
+    }
+
   }
 
   public customControls = {
@@ -428,13 +452,17 @@ export class TimelineGlobalFormBuilderService {
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
     private collectionService: CollectionService,
     private mainFormService: MainFormService,
-    private colorService: ArlasColorGeneratorLoader
+    private colorService: ArlasColorGeneratorLoader,
+    private startupService: StartupService,
+    private settingsService: ArlasSettingsService,
+
   ) { }
 
   public build(collection: string) {
     const timelineBucketIntervalFg = this.bucketsIntervalBuilderService.build(collection, 'temporal');
     const timelineFormGroup = new TimelineGlobalFormGroup(
-      collection, this.collectionService, timelineBucketIntervalFg, this.colorService
+      collection, this.collectionService, this.startupService, this.mainFormService, this.settingsService,
+      timelineBucketIntervalFg, this.colorService
     );
     this.defaultValuesService.setDefaultValueRecursively(
       'timeline.global',
