@@ -440,6 +440,19 @@ fi
 envsubst '$ARLAS_EXTERNAL_NODE_SCHEMAS' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
 mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
 
+
+
+### Boolean
+if [ -z "${ARLAS_USE_TIME_FILTER}" ]; then
+  ARLAS_USE_TIME_FILTER=false
+  export ARLAS_USE_TIME_FILTER
+  echo "No time filter are used"
+else
+  echo ${ARLAS_USE_TIME_FILTER} "is used for 'use_time_filter' in settings.yaml file"
+fi
+envsubst '$ARLAS_USE_TIME_FILTER' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
+mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
+
 # Set App base path
 if [ -z "${ARLAS_BUILDER_APP_PATH}" ]; then
   ARLAS_BUILDER_APP_PATH=""

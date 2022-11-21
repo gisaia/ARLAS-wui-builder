@@ -26,6 +26,7 @@ import { importElements } from '@services/main-form-manager/tools';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ArlasColorGeneratorLoader, ArlasSettingsService } from 'arlas-wui-toolkit';
 import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timeline-global-form-builder.service';
+import { StartupService } from '@services/startup/startup.service';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,8 @@ export class TimelineImportService {
     private mainFormService: MainFormService,
     private colorService: ArlasColorGeneratorLoader,
     private collectionService: CollectionService,
-    private settingsService: ArlasSettingsService
+    private settingsService: ArlasSettingsService,
+    private startupService: StartupService
 
   ) { }
 
@@ -303,6 +305,14 @@ export class TimelineImportService {
     additionalCollectionDataStep.collections.selectedMultipleItems = additionalCollections
       .map(c => ({ value: c, color: this.colorService.getColor(c), detail: this.collectionService.getCollectionInterval(c) }));
     additionalCollectionDataStep.collections.savedItems = new Set(additionalCollections);
+    // tslint:disable-next-line:no-string-literal
+    if (this.settingsService.settings['use_time_filter']) {
+      additionalCollections.forEach(c => {
+        const url = this.mainFormService.startingConfig.getFg().get('serverUrl').value;
+        this.startupService.getTimeFilter(c,url,this.collectionService,this.settingsService).subscribe(filter => {
+          this.startupService.applyArlasInterceptor(c,filter);
+        });
+      });
+    }
   }
-
 }

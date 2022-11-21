@@ -23,9 +23,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { Configuration } from 'arlas-api';
 import {
   ArlasCollaborativesearchService, ArlasConfigService, ArlasExploreApi,
-  ArlasStartupService, ArlasSettings
+  ArlasStartupService, ArlasSettings, AuthentificationService
 } from 'arlas-wui-toolkit';
-import * as portableFetch from 'portable-fetch';
+import fetchIntercept from 'fetch-intercept';
+import { map, Observable } from 'rxjs';
 
 export const ZONE_WUI_BUILDER = 'config.json';
 export const ZONE_PREVIEW = 'preview';
@@ -36,6 +37,7 @@ export const ZONE_PREVIEW = 'preview';
 export class StartupService {
 
   public contributorRegistry: Map<string, any> = new Map<string, any>();
+  public interceptorRegistry: Map<string, any> = new Map<string, any>();
 
   public static translationLoaded(translateService: TranslateService, injector) {
     return new Promise<any>((resolve: any) => {
@@ -89,7 +91,7 @@ export class StartupService {
       const arlasExploreApi: ArlasExploreApi = new ArlasExploreApi(
         configuraiton,
         this.configService.getValue('arlas.server.url'),
-        portableFetch
+        window.fetch
       );
       this.arlasCss.setExploreApi(arlasExploreApi);
       resolve(data);
@@ -112,4 +114,67 @@ export class StartupService {
     }
     return currentConfig;
   }
+
+
+  public applyArlasInterceptor(collection, filter) {
+    const unregister = fetchIntercept.register({
+      request: (url, config) => {
+        if (url.indexOf('/explore/' + collection +'/') >= 0) {
+          // tslint:disable-next-line:no-string-literal
+          config['headers']['partition-filter'] = JSON.stringify(filter);
+        }
+        return [url, config];
+      },
+      requestError: (error) => Promise.reject(error),
+      response: (response) => response,
+      responseError: (error) =>
+        // Handle an fetch error
+        Promise.reject(error)
+    });
+    this.interceptorRegistry.set(collection, unregister);
+  }
+
+  public removeArlasInterceptor(collection) {
+    this.interceptorRegistry.get(collection)();
+    this.interceptorRegistry.delete(collection);
+  }
+
+  public getTimeFilter(collection, serverUrl, collectionService, arlasSettingsService): Observable<any> {
+    return collectionService.getDescribe(collection).pipe(map(c => {
+      const timeStampField = (c as any).params.timestamp_path;
+      const url = serverUrl + '/explore/' + collection + '/_compute?field=' + timeStampField + '&metric=MAX';
+      const request = new XMLHttpRequest();
+      request.open('GET', url, false);  // `false`
+      // tslint:disable-next-line:no-string-literal
+      const authent = arlasSettingsService.settings['authentication'];
+      if (!!authent && authent.use_authent) {
+        const authService: AuthentificationService = this.injector.get('AuthentificationService')[0];
+        request.setRequestHeader('Authorization', 'bearer ' + authService.accessToken);
+      }
+      request.send();
+      let response;
+      if (request.status === 200) {
+        response = request.response;
+      } else {
+        throw new Error('request failed');
+      }
+      // tslint:disable-next-line:no-string-literal
+      const maxValue = +JSON.parse(response)['value'];
+      const minValue = maxValue - (7 * 24 * 60 * 60 * 1000);
+      // tslint:disable-next-line:no-string-literal
+      const timeFilter = {
+        f: [
+          [
+            {
+              field: timeStampField,
+              op: 'range',
+              value: '[' + minValue + '<' + maxValue + ']'
+            }
+          ]
+        ]
+      };
+      return timeFilter;
+    }));
+  };
+
 }
