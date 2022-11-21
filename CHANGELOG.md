@@ -1,5 +1,21 @@
 # Change Log
 
+## [v23.0.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v23.0.4) (2022-11-21)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v23.0.3...v23.0.4)
+
+**Fixed bugs:**
+
+- Filter on boolean for Network Analytics layer not possible [\#823](https://github.com/gisaia/ARLAS-wui-builder/issues/823)
+- Basemap icon in previews is not centered [\#819](https://github.com/gisaia/ARLAS-wui-builder/issues/819)
+- In this configuration, the map style of the layer PM10 is said not to exist [\#841](https://github.com/gisaia/ARLAS-wui-builder/issues/841)
+- When resetting the midpoints of the palette the icons in the circle move and are not centered [\#808](https://github.com/gisaia/ARLAS-wui-builder/issues/808)
+- The initialisation of the opacity settings of Network Analytics with interpolated Hits count is at 0 for both minimum and maximum [\#797](https://github.com/gisaia/ARLAS-wui-builder/issues/797)
+- When creating 2 widgets with the same information displayed, deleting one deletes the other [\#794](https://github.com/gisaia/ARLAS-wui-builder/issues/794) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- The animation when changing the selected range of an histogram is bigger than its height [\#792](https://github.com/gisaia/ARLAS-wui-builder/issues/792) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- The date format can be different in the Timeline and the Detailed Timeline [\#791](https://github.com/gisaia/ARLAS-wui-builder/issues/791)
+- Filter on keyword or boolean not working/possible [\#784](https://github.com/gisaia/ARLAS-wui-builder/issues/784)
+
 ## [v23.0.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v23.0.3) (2022-09-27)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v23.0.2...v23.0.3)
@@ -310,19 +326,19 @@
 
 ## [v18.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v18.0.0) (2021-07-12)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.3...v18.0.0)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.4...v18.0.0)
 
 **New stuff:**
 
 - Add the possibility to display a timeline for each collection on the same graph [\#568](https://github.com/gisaia/ARLAS-wui-builder/issues/568)
 
-## [v17.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.3) (2021-06-30)
-
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.4...v17.2.3)
-
 ## [v17.2.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.4) (2021-06-30)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.2...v17.2.4)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.3...v17.2.4)
+
+## [v17.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.3) (2021-06-30)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.2...v17.2.3)
 
 ## [v17.2.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.2) (2021-06-30)
 
