@@ -119,9 +119,11 @@ export class StartupService {
   public applyArlasInterceptor(collection, filter) {
     const unregister = fetchIntercept.register({
       request: (url, config) => {
-        if (url.indexOf('/explore/' + collection +'/') >= 0) {
-          // tslint:disable-next-line:no-string-literal
-          config['headers']['partition-filter'] = JSON.stringify(filter);
+        if (typeof url === 'string' || (url as any) instanceof String){
+          if (url.indexOf('/explore/' + collection +'/') >= 0) {
+            // tslint:disable-next-line:no-string-literal
+            config['headers']['partition-filter'] = JSON.stringify(filter);
+          }
         }
         return [url, config];
       },
