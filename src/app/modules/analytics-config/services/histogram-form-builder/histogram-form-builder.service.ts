@@ -32,9 +32,11 @@ import { ChartType } from 'arlas-web-components';
 import {
   BucketsIntervalFormBuilderService, BucketsIntervalFormGroup
 } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
+import { BUCKET_TYPE } from '../buckets-interval-form-builder/models';
 import {
   MetricCollectFormBuilderService, MetricCollectFormGroup
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
+import { METRIC_TYPE } from '../metric-collect-form-builder/models';
 import { WidgetFormBuilder } from '../widget-form-builder';
 
 // TODO put in common with timeline
@@ -253,8 +255,8 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
     const formGroup = new HistogramFormGroup(
       collection,
       this.collectionService,
-      this.bucketsIntervalBuilderService.build(collection, 'histogram'),
-      this.metricBuilderService.build(collection, 'histogram')
+      this.bucketsIntervalBuilderService.build(collection, BUCKET_TYPE.HISTOGRAM),
+      this.metricBuilderService.build(collection, METRIC_TYPE.HISTOGRAM)
     );
 
     this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);

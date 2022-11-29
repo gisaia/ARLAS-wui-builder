@@ -34,9 +34,11 @@ import { Observable } from 'rxjs';
 import {
   BucketsIntervalFormBuilderService, BucketsIntervalFormGroup
 } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
+import { BUCKET_TYPE } from '../buckets-interval-form-builder/models';
 import {
   MetricCollectFormBuilderService, MetricCollectFormGroup
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
+import { METRIC_TYPE } from '../metric-collect-form-builder/models';
 import { WidgetFormBuilder } from '../widget-form-builder';
 
 export enum SWIMLANE_REPRESENTATION {
@@ -313,10 +315,10 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
       collection,
       this.collectionService,
       this.bucketsIntervalBuilderService
-        .build(collection, 'swimlane')
+        .build(collection, BUCKET_TYPE.SWIMLANE)
         .withTitle(marker('swimlane x-axis')),
       this.metricBuilderService
-        .build(collection, 'swimlane')
+        .build(collection, METRIC_TYPE.SWIMLANE)
         .withTitle(marker('swimlane metric')),
       this.defaultValuesService.getDefaultConfig(),
       toKeywordOptionsObs(collectionFieldsObs));

@@ -40,6 +40,7 @@ import { HiddenFormControl } from '../../../../shared/models/config-form';
 import {
   MetricCollectFormBuilderService, MetricCollectFormGroup
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
+import { METRIC_TYPE } from '../metric-collect-form-builder/models';
 import { WidgetFormBuilder } from '../widget-form-builder';
 
 export class PowerbarConfigForm extends CollectionConfigFormGroup {
@@ -355,7 +356,7 @@ export class PowerbarFormBuilderService extends WidgetFormBuilder {
       this.dialog,
       this.collectionService,
       this.colorService,
-      this.metricBuilderService.build(collection, 'powerbars',true));
+      this.metricBuilderService.build(collection, METRIC_TYPE.POWERBARS, true));
     this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
 
     return formGroup;

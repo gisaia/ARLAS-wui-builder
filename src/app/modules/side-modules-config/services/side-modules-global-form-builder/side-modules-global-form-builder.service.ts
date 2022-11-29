@@ -43,7 +43,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
           marker('maxAgeCache description'),
           'number'
         ),
-      }).withTitle('ARLAS server'),
+      }).withTitle(marker('ARLAS server')),
       useShare: new SlideToggleFormControl(
         '',
         marker('Share module'),
