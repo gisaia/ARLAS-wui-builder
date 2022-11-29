@@ -1,5 +1,13 @@
 # Change Log
 
+## [v23.1.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v23.1.0) (2022-11-29)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v23.0.5...v23.1.0)
+
+**Fixed bugs:**
+
+- In previews, the basemap icon is outside of the preview map [\#818](https://github.com/gisaia/ARLAS-wui-builder/issues/818)
+
 ## [v23.0.5](https://github.com/gisaia/ARLAS-wui-builder/tree/v23.0.5) (2022-11-22)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v23.0.4...v23.0.5)
@@ -10,6 +18,7 @@
 
 **Fixed bugs:**
 
+- The normalise option of the interpolated settings is not evenly spaced bottom and top-wise [\#837](https://github.com/gisaia/ARLAS-wui-builder/issues/837)
 - Filter on boolean for Network Analytics layer not possible [\#823](https://github.com/gisaia/ARLAS-wui-builder/issues/823)
 - Basemap icon in previews is not centered [\#819](https://github.com/gisaia/ARLAS-wui-builder/issues/819)
 - In this configuration, the map style of the layer PM10 is said not to exist [\#841](https://github.com/gisaia/ARLAS-wui-builder/issues/841)
@@ -330,11 +339,15 @@
 
 ## [v18.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v18.0.0) (2021-07-12)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.4...v18.0.0)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.2...v18.0.0)
 
 **New stuff:**
 
 - Add the possibility to display a timeline for each collection on the same graph [\#568](https://github.com/gisaia/ARLAS-wui-builder/issues/568)
+
+## [v17.2.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.2) (2021-06-30)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.4...v17.2.2)
 
 ## [v17.2.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.4) (2021-06-30)
 
@@ -342,11 +355,7 @@
 
 ## [v17.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.3) (2021-06-30)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.2...v17.2.3)
-
-## [v17.2.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.2) (2021-06-30)
-
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.1...v17.2.2)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.1...v17.2.3)
 
 ## [v17.2.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.1) (2021-06-25)
 
