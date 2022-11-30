@@ -110,6 +110,7 @@ export class AnalyticsImportService {
     if (!contributor.collection) {
       contributor.collection = config.arlas.server.collection.name;
     }
+    console.log(contributor);
     let widgetData;
     if (c.componentType === WIDGET_TYPE.histogram) {
       contentTypes.push(WIDGET_TYPE.histogram);
@@ -434,11 +435,20 @@ export class AnalyticsImportService {
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
-
     // create a set to initialize metrics properly
-    const metrics: Set<{ field: string; metric: string; }> = new Set<{ field: string; metric: string; }>();
-    contributor.metrics.forEach(metric => metrics.add(metric));
-
+    const metrics: Set<{ field: string; metric: string; hash_field: string; }> =
+      new Set<{ field: string; metric: string; hash_field: string; }>();
+    contributor.metrics.map(m => {
+      if (m.hash_field.length > 0) {
+        const field = m.field.split(m.hash_field).slice(0, -1).join(m.hash_field);
+        if(field.length > 0){
+          m.field = field;
+        }else{
+          m.field = m.field.concat(m.hash_field);
+        };
+      }
+      return m;
+    }).forEach(metric => metrics.add(metric));
     importElements([
       {
         value: contributor.title,
@@ -850,13 +860,25 @@ export class AnalyticsImportService {
   private getMetricImportElements(
     contribAggregationModel: AggregationModelConfig,
     metricControls: MetricCollectControls) {
+    const metrics = contribAggregationModel.metrics;
+    let collectField;
+    if (metrics) {
+      if (metrics[0].hash_field.length > 0) {
+        const field = metrics[0].collect_field.split(metrics[0].hash_field).slice(0, -1).join(metrics[0].hash_field);
+        collectField = field;
+      } else {
+        collectField = metrics[0].collect_field;
+      }
+    } else {
+      collectField = null;
+    }
     return [
       {
-        value: contribAggregationModel.metrics ? contribAggregationModel.metrics[0].collect_field : null,
+        value: collectField,
         control: metricControls.metricCollectField
       },
       {
-        value: contribAggregationModel.metrics ? contribAggregationModel.metrics[0].collect_fct.toUpperCase() : DEFAULT_METRIC_VALUE,
+        value: metrics ? metrics[0].collect_fct.toUpperCase() : DEFAULT_METRIC_VALUE,
         control: metricControls.metricCollectFunction
       },
       {
@@ -870,7 +892,7 @@ export class AnalyticsImportService {
     ] as Array<ImportElement>;
   };
 
-  private  capitalize(s) {
+  private capitalize(s) {
     return s[0].toUpperCase() + s.slice(1);
   }
 

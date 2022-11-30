@@ -139,7 +139,7 @@ export interface ContributorConfig {
   jsonpath?: string;
   swimlanes?: Array<SwimlaneConfig>;
   function?: string;
-  metrics?: Array<{ field: string; metric: string; }>;
+  metrics?: Array<{ field: string; metric: string; hash_field: string; }>;
   search_size?: number;
   fieldsConfiguration?: FieldsConfiguration;
   columns?: Array<{ columnName: string; fieldName: string; dataType: string; process: string; useColorService: boolean; sort: string; }>;
@@ -347,6 +347,8 @@ export interface AggregationModelConfig {
 export interface AggregationModelMetricConfig {
   collect_field: string;
   collect_fct: string;
+  hash_field: string;
+  precision_threshold: number;
 }
 
 export interface NormalizationFieldConfig {
