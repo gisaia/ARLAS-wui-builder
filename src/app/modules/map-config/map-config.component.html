@@ -1,5 +1,5 @@
 <nav mat-tab-nav-bar mat-align-tabs="center" animationDuration="500ms" mat-stretch-tabs class="map-container">
-    <a mat-tab-link #matTab *ngFor="let tab of tabs" [routerLink]="tab.routeurLink" (click)="activeTab = tab" queryParamsHandling="preserve"
+    <a mat-tab-link #matTab *ngFor="let tab of tabs" [routerLink]="tab.routeurLink" queryParamsHandling="preserve"
         [active]="activeTab == tab" [class.tab-error]="activeTab != tab && tab.hasError()">
         {{ tab.label | translate }}
     </a>
