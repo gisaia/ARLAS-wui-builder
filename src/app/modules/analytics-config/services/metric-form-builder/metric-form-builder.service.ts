@@ -24,7 +24,7 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
-  ConfigFormGroup, InputFormControl, MetricWithFieldListFormControl, SelectFormControl,
+  ConfigFormGroup, HiddenFormControl, InputFormControl, MetricWithFieldListFormControl, SelectFormControl,
   SlideToggleFormControl, TextareaFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { WidgetFormBuilder } from '../widget-form-builder';
@@ -60,6 +60,8 @@ export class MetricFormGroup extends CollectionConfigFormGroup {
             'metric/field',
             '',
             collectionService.getCollectionFields(collection),
+            collectionService,
+            collection,
             {
               dependsOn: () => [
                 this.customControls.dataStep.collection,
@@ -67,6 +69,7 @@ export class MetricFormGroup extends CollectionConfigFormGroup {
               onDependencyChange: (control: MetricWithFieldListFormControl) => {
                 this.setCollection(this.customControls.dataStep.collection.value);
                 control.setCollectionFieldsObs(collectionService.getCollectionFields(this.collection));
+                control.collection = this.customControls.dataStep.collection.value;
                 control.updateFieldsByMetric(control.metricCtrl.value);
                 if (!control.getValueAsSet()) {
                   control.setValue(new Set());

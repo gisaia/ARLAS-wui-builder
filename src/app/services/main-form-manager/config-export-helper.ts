@@ -610,14 +610,16 @@ export class ConfigExportHelper {
             field: '',
             metric: 'count',
             normalize: false,
-            short_format: !!countMetricFg.propertyShortFormatCtrl
+            short_format: !!countMetricFg.propertyShortFormatCtrl,
+            precision_threshold: 0
           });
         } else {
           layerSource.metrics.push({
             field: countMetricFg.propertyFieldCtrl,
             metric: countMetricFg.propertyMetricCtrl.toString().toLowerCase(),
             normalize: false,
-            short_format: !!countMetricFg.propertyShortFormatCtrl
+            short_format: !!countMetricFg.propertyShortFormatCtrl,
+            precision_threshold: 0
           });
         }
         break;
@@ -647,13 +649,15 @@ export class ConfigExportHelper {
             layerSource.metrics.push({
               field: '',
               metric: 'count',
-              normalize: !!interpolatedValues.propertyInterpolatedCountNormalizeCtrl
+              normalize: !!interpolatedValues.propertyInterpolatedCountNormalizeCtrl,
+              precision_threshold:0
             });
           } else {
             layerSource.metrics.push({
               field: interpolatedValues.propertyInterpolatedFieldCtrl,
               metric: (interpolatedValues.propertyInterpolatedMetricCtrl).toString().toLowerCase(),
-              normalize: !!interpolatedValues.propertyInterpolatedNormalizeCtrl
+              normalize: !!interpolatedValues.propertyInterpolatedNormalizeCtrl,
+              precision_threshold:0
             });
           }
         }
@@ -849,7 +853,6 @@ export class ConfigExportHelper {
         contrib.type = 'metric';
         contrib.function = !!widgetData.dataStep.function ? widgetData.dataStep.function : 'm[0]';
         contrib.metrics = Array.from(widgetData.dataStep.metrics);
-
         break;
       }
       case WIDGET_TYPE.powerbars: {
@@ -1050,7 +1053,10 @@ export class ConfigExportHelper {
       aggregationModel.metrics = [
         {
           collect_fct: metricData.metricCollectFunction.toLowerCase(),
-          collect_field: metricData.metricCollectField
+          collect_field: metricData.metricCollectField.concat(metricData.metricCollectHashField),
+          hash_field: metricData.metricCollectHashField,
+          // TODO change it, add a form to customize this value
+          precision_threshold: 10000
         }
       ];
     }
@@ -1067,6 +1073,7 @@ export class ConfigExportHelper {
       const agg = widgetData.dataStep.aggregation;
       idString += agg.aggregationField + '-' + agg.aggregationFieldType + '-' + agg.aggregationBucketOrInterval;
       if (!!widgetData.dataStep.metric) {
+        // TODO had precision threshold in id ?
         idString += '-' + (widgetData.dataStep.metric.metricCollectFunction !== undefined ?
           widgetData.dataStep.metric.metricCollectFunction : '') + '-' + (!!widgetData.dataStep.metric.metricCollectField ?
           widgetData.dataStep.metric.metricCollectField : '');
@@ -1083,6 +1090,7 @@ export class ConfigExportHelper {
     } else if (widgetType === WIDGET_TYPE.powerbars) {
       idString += widgetData.dataStep.aggregationField + '-' + widgetData.dataStep.aggregationSize;
       if (!!widgetData.dataStep.metric) {
+        // TODO had precision threshold in id ?
         idString += widgetData.dataStep.metric.metricCollectFunction !== undefined ?
           ('-' + widgetData.dataStep.metric.metricCollectFunction) : '';
         idString += !!widgetData.dataStep.metric.metricCollectField ? ('-' + widgetData.dataStep.metric.metricCollectField) : '';
@@ -1090,6 +1098,7 @@ export class ConfigExportHelper {
         idString += widgetData.dataStep.metric.sortOn !== undefined ? ('-' + widgetData.dataStep.metric.sortOn) : '';
       }
     } else if (widgetType === WIDGET_TYPE.metric) {
+      // TODO had precision threshold  in id ?
       idString += widgetData.dataStep.function +
         Array.from(widgetData.dataStep.metrics)
           .map((m: any)=> m.field + '-' + m.metric + '-'+ hashCode(stringifyArlasFilter(m.filter))).sort().join('');

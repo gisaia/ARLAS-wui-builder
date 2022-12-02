@@ -26,12 +26,14 @@ import { ButtonToggleFormControl, ConfigFormGroup, InputFormControl, RadioButton
   from '@shared-models/config-form';
 import { Metric, Aggregation } from 'arlas-api';
 import { METRIC_TYPE } from './models';
+import { HiddenFormControl } from '../../../../shared/models/config-form';
 
 export const DEFAULT_METRIC_VALUE = 'Count';
 
 export interface MetricCollectControls {
   metricCollectFunction: SelectFormControl;
   metricCollectField: SelectFormControl;
+  metricCollectHashField: HiddenFormControl;
   sortOn: ButtonToggleFormControl;
   sortOrder: RadioButtonFormControl;
 
@@ -84,7 +86,7 @@ export class MetricCollectFormGroup extends CollectionConfigFormGroup {
                       fields
                         .filter(filterCallback)
                         .sort((a, b) => a.name.localeCompare(b.name))
-                        .map(f => ({ value: f.name, label: f.name, enabled: f.indexed })));
+                        .map(f => ({ value: f.name, label: f.name, enabled: f.indexed, hash_field: f.hash_field })));
                     sub.unsubscribe();
                   });
               } else {
@@ -93,6 +95,22 @@ export class MetricCollectFormGroup extends CollectionConfigFormGroup {
             }
           }
         ),
+        metricCollectHashField: new HiddenFormControl('',
+          '',
+          {
+            optional: true,
+            dependsOn: () => [this.customControls.metricCollectField],
+            onDependencyChange: (control: HiddenFormControl) => {
+              const sub = collectionService.getCollectionFields(this.collection).subscribe(
+                fields => {
+                  const hashField = !!fields.filter(f => f.name === this.customControls.metricCollectField.value)[0] ?
+                    fields.filter(f => f.name === this.customControls.metricCollectField.value)[0].hash_field : undefined;
+                  const hasFieldValue = !!hashField ? '.'.concat(hashField) : '';
+                  control.setValue(hasFieldValue);
+                  sub.unsubscribe();
+                });
+            }
+          }),
         sortOn: new ButtonToggleFormControl(
           '',
           [
@@ -152,6 +170,7 @@ export class MetricCollectFormGroup extends CollectionConfigFormGroup {
   public customControls: MetricCollectControls = {
     metricCollectFunction: this.get('metricCollectFunction') as SelectFormControl,
     metricCollectField: this.get('metricCollectField') as SelectFormControl,
+    metricCollectHashField: this.get('metricCollectHashField') as HiddenFormControl,
     sortOn: this.get('sortOn') as ButtonToggleFormControl,
     sortOrder: this.get('sortOrder') as RadioButtonFormControl
   };

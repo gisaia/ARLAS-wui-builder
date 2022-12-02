@@ -22,4 +22,5 @@ export interface CollectionField {
     name: string;
     type: CollectionReferenceDescriptionProperty.TypeEnum;
     indexed: boolean;
+    hash_field?: string;
 }

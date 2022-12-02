@@ -140,7 +140,7 @@ export class CollectionService {
                   taggableFields.add(path);
                   this.taggableFieldsMap.set(collection, taggableFields);
                 }
-                return { name: path, type: property.type, indexed: property.indexed };
+                return { name: path, type: property.type, indexed: property.indexed, hash_field: property.hash_field };
               } else if (exclude && (!types || !types.includes(property.type))) {
                 if (property && property.taggable) {
                   let taggableFields = this.taggableFieldsMap.get(collection);
@@ -150,7 +150,7 @@ export class CollectionService {
                   taggableFields.add(path);
                   this.taggableFieldsMap.set(collection, taggableFields);
                 }
-                return { name: path, type: property.type, indexed: property.indexed };
+                return { name: path, type: property.type, indexed: property.indexed, hash_field: property.hash_field };
               } else {
                 return null;
               }

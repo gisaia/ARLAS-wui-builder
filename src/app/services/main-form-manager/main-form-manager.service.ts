@@ -209,6 +209,7 @@ export class MainFormManagerService {
         }
       }
     } else {
+      this.doImport(generatedConfig, generatedMapConfig);
       this.saveJson(generatedConfig, 'config.json');
       this.saveJson(generatedMapConfig, 'config.map.json', '-');
     }

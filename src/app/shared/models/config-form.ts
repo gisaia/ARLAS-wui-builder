@@ -29,6 +29,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { updateValueAndValidity } from '@utils/tools';
 import { ComputeConfig } from 'arlas-web-contributors';
+import { CollectionService } from '../../services/collection-service/collection.service';
 /**
  * These are wrappers above existing FormGroup and FormControl in order to add a custom behavior.
  * The goal is to have a full model-driven form without putting (or duplicating) the logic
@@ -623,6 +624,8 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
     label: string,
     description: string,
     public collectionFields: Observable<Array<CollectionField>>,
+    public collectionService: CollectionService,
+    public collection: string,
     optionalParams?: ControlOptionalParams
   ) {
     super(formState, label, description, optionalParams);
@@ -701,18 +704,27 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
   }
 
   public updateMetric() {
-    this.getValueAsSet().delete(this.currentEditing);
-    this.getValueAsSet().add({
-      field: this.fieldCtrl.value,
-      metric: String(this.metricCtrl.value).toLowerCase(),
-      filter: JSON.parse(this.arlasFilterCtrl.value)
-    });
-    this.isUpdateState = false;
-    this.metricCtrl.reset();
-    this.fieldCtrl.reset();
-    this.arlasFilterCtrl.setValue(JSON.stringify({}));
-    this.updateValueAndValidity();
-    this.markAsDirty();
+    const sub = this.collectionService.getCollectionFields(this.collection).subscribe(
+      fields => {
+        const hashField = fields.filter(f => f.name ===  this.fieldCtrl.value)[0].hash_field;
+        const hasFieldValue = !!hashField ? '.'.concat(hashField) : '';
+        this.getValueAsSet().delete(this.currentEditing);
+        this.getValueAsSet().add({
+          field: this.fieldCtrl.value.concat(hasFieldValue),
+          metric: String(this.metricCtrl.value).toLowerCase(),
+          hash_field: hasFieldValue,
+          filter: JSON.parse(this.arlasFilterCtrl.value),
+          // TODO change it, add a form to customize this value
+          precision_threshold: 10000
+        });
+        this.isUpdateState = false;
+        this.metricCtrl.reset();
+        this.fieldCtrl.reset();
+        this.arlasFilterCtrl.setValue(JSON.stringify({}));
+        this.updateValueAndValidity();
+        this.markAsDirty();
+        sub.unsubscribe();
+      });
   }
 
   public cancelUpdateMetric() {
@@ -732,14 +744,25 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
   }
 
   public addMetric() {
-    this.getValueAsSet().add({
-      field: this.fieldCtrl.value,
-      metric: String(this.metricCtrl.value).toLowerCase(),
-      filter: JSON.parse(this.arlasFilterCtrl.value)
-    });
-    this.updateValueAndValidity();
-    this.fieldCtrl.reset();
-    this.markAsDirty();
+    const sub = this.collectionService.getCollectionFields(this.collection).subscribe(
+      fields => {
+        console.log(fields);
+        console.log(this.fieldCtrl.value);
+
+        const hashField = fields.filter(f => f.name ===  this.fieldCtrl.value)[0].hash_field;
+        const hasFieldValue = !!hashField ? '.'.concat(hashField) : '';
+        this.getValueAsSet().add({
+          field: this.fieldCtrl.value.concat(hasFieldValue),
+          hash_field: hasFieldValue,
+          metric: String(this.metricCtrl.value).toLowerCase(),
+          filter: JSON.parse(this.arlasFilterCtrl.value),
+          // TODO change it, add a form to customize this value
+          precision_threshold:10000
+        });
+        this.updateValueAndValidity();
+        this.fieldCtrl.reset();
+        this.markAsDirty();
+      });
   }
 
   public removeMetric(metric: ComputeConfig) {
