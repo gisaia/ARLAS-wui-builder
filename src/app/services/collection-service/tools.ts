@@ -46,6 +46,10 @@ export const TEXT_OR_KEYWORD = [
   typeEnum.TEXT, typeEnum.KEYWORD
 ];
 
+export const NUMERIC_OR_DATE_OR_KEYWORD = [
+  ...NUMERIC_OR_DATE_TYPES, typeEnum.KEYWORD
+];
+
 
 
 export function toOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
@@ -89,7 +93,7 @@ export function toNumericOrDateOrKeywordOrBooleanObs(collectionFieldsObs: Observ
   return toOptionsObs(collectionFieldsObs.pipe(map(
     fields => fields
       .filter(f => f.type === typeEnum.KEYWORD || NUMERIC_OR_DATE_TYPES.indexOf(f.type) >= 0
-      || f.type === typeEnum.BOOLEAN))));
+        || f.type === typeEnum.BOOLEAN))));
 }
 
 export function toNumericOrDateOrKeywordOrTextObs(collectionFieldsObs: Observable<Array<CollectionField>>) {

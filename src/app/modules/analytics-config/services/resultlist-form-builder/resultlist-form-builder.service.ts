@@ -25,6 +25,7 @@ import { DialogColorTableComponent } from '@map-config/components/dialog-color-t
 import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
 import { CollectionService } from '@services/collection-service/collection.service';
 import {
+  NUMERIC_OR_DATE_OR_KEYWORD,
   NUMERIC_OR_DATE_OR_TEXT_TYPES, TEXT_OR_KEYWORD,
   toNumericOrDateOrKeywordOrTextObs, toOptionsObs
 } from '@services/collection-service/tools';
@@ -624,7 +625,7 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
 
   // TODO Optimize by not requesting the collection fields (also for other build methods)
   public buildColumn(collection: string) {
-    const fieldObs = toOptionsObs(this.collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES));
+    const fieldObs = toOptionsObs(this.collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_KEYWORD));
     return new ResultlistColumnFormGroup(
       fieldObs,
       collection,
