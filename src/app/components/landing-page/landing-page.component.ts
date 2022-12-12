@@ -32,6 +32,7 @@ import { MenuService } from '@services/menu/menu.service';
 import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import { DialogData } from '@shared-components/input-modal/input-modal.component';
 import { DataWithLinks } from 'arlas-persistence-api';
+import { UserOrgData } from 'arlas-iam-api';
 import {
   ArlasConfigService, ArlasConfigurationDescriptor, ArlasIamService, ArlasSettingsService, AuthentificationService, ConfigAction,
   ConfigActionEnum, ErrorService, PersistenceService, UserInfosComponent
@@ -41,6 +42,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { StartupService, ZONE_WUI_BUILDER } from '@services/startup/startup.service';
+import { MatSelectChange } from '@angular/material/select';
 
 enum InitialChoice {
   none = 0,
@@ -81,6 +83,8 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   private errorAlreadyThrown = false;
   public name: string;
   public avatar: string;
+  public orgs: UserOrgData[] = [];
+  public currentOrga = '';
 
   private subscription: Subscription;
   private urlSubscription: Subscription;
@@ -94,7 +98,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private logger: NGXLogger,
     private configService: ArlasConfigService,
-    private startupService: StartupService,
+    public startupService: StartupService,
     private configDescritor: ArlasConfigurationDescriptor,
     private startingConfigFormBuilder: StartingConfigFormBuilderService,
     private defaultValuesService: DefaultValuesService,
@@ -158,7 +162,6 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     if (this.authentMode === 'openid') {
       const claims = this.authService.identityClaims as any;
       this.subscription = this.authService.canActivateProtectedRoutes.subscribe(isAuthenticated => {
-        console.log(isAuthenticated);
         // show login button when authentication is enabled in settings.yaml file && the app is not authenticated
         this.showLoginButton = this.isAuthentActivated && !isAuthenticated;
         this.showLogOutButton = this.isAuthentActivated && isAuthenticated;
@@ -177,14 +180,22 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     }
     if (this.authentMode === 'iam') {
       this.arlasIamService.currentUserSubject.subscribe({
-        next: (data) => {
+        next: (userSubject) => {
           if (this.persistenceService.isAvailable) {
             this.getConfigList();
           }
-          if (!!data) {
+          if (!!userSubject) {
+            console.log(userSubject)
             this.isAuthenticated = true;
-            this.name = data?.user.email;
+            this.name = userSubject?.user.email;
             this.avatar = '';
+            this.orgs = userSubject.user.organisations.map(org => {
+              org.displayName = org.name === userSubject.user.id ? userSubject.user.email.split('@')[0] : org.name;
+              return org;
+            });
+            if (this.startupService.currentOrga === '') {
+              this.startupService.currentOrga = this.orgs.length > 0 ? this.orgs[0].name : '';
+            }
           } else {
             this.isAuthenticated = false;
             this.name = '';
@@ -391,7 +402,8 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
       readers: data.doc_readers,
       writers: data.doc_writers,
       lastUpdate: +data.last_update_date,
-      zone: data.doc_zone
+      zone: data.doc_zone,
+      org: ''
     };
     actions.push({
       config,
@@ -530,6 +542,12 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   }
   public getUserInfos() {
     this.dialog.open(UserInfosComponent);
+  }
+
+  public changeOrg(event: MatSelectChange) {
+    this.startupService.currentOrga = event.value;
+    this.startupService.changeOrgHeader(event.value, this.arlasIamService.currentUserValue.accessToken);
+    this.getConfigList();
   }
 }
 
