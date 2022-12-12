@@ -1,5 +1,5 @@
 import { FormControl, FormGroup } from '@angular/forms';
-import { IconPickerComponent } from '@gisaia-team/ngx-icon-picker';
+import { IconPickerComponent } from 'ngx-icon-picker';
 import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
 import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
