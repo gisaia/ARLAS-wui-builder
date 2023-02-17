@@ -1,6 +1,6 @@
 {
   "name": "arlas-wui-builder",
-  "version": "23.2.0-dev",
+  "version": "23.2.0",
   "scripts": {
     "ng": "ng",
     "postinstall": "patch-package --patch-dir ./node_modules/arlas-web-core/patches && patch-package --patch-dir node_modules/arlas-d3/patches",
@@ -92,5 +92,5 @@
     "portable-fetch": {
       "node-fetch": "3.3.0"
     }
-  } 
+  }
 }
