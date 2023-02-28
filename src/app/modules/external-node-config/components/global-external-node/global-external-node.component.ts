@@ -58,6 +58,9 @@ export class GlobalExternalNodeComponent implements OnInit {
   public jsonValidator(): ValidatorFn {
     return (group: FormGroup): ValidationErrors => {
       if (!!this.editor) {
+        if(!!this.externalNodeForm.value.externalNode && !this.editor.getText()){
+          this.editor.set(this.externalNodeForm.value.externalNode);
+        }
         const control = group.controls.externalNode;
         if (!this.editor.isValidJson() || (!!this.editor.getValidateSchema() && !this.editor.getValidateSchema()(this.editor.get()))) {
           control.setErrors({ jsonNotValid: true });
