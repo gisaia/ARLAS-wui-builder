@@ -254,9 +254,10 @@ export class CollectionService {
 
   public computeBbox(collection): Observable<ComputationResponse> {
     this.spinner.show();
-    return from(this.collabSearchService.getExploreApi().compute(collection, this.collectionParamsMap.get(collection).params.centroid_path,
-      ComputationRequest.MetricEnum.GEOBBOX.toString()).finally(() => this.spinner.hide()));
+    return from(this.collabSearchService.getExploreApi().compute(
+      collection, this.collectionParamsMap.get(collection).params.centroid_path,
+      ComputationRequest.MetricEnum.GEOBBOX.toString(), null, null, null, null, null, null, this.collabSearchService.getFetchOptions()
+    ).finally(() => this.spinner.hide()));
   }
-
 
 }
