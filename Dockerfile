@@ -21,7 +21,7 @@ RUN export NODE_OPTIONS=--max_old_space_size=6144 && $(npm bin)/ng build --confi
 
 FROM nginx:1.23.3-alpine
 
-RUN apk add --update bash jq netcat-openbsd curl && rm -rf /var/cache/apk/*
+RUN apk update && apk upgrade && apk add  bash jq netcat-openbsd curl && rm -rf /var/cache/apk/*
 
 ## Copy our default nginx config
 COPY nginx/default.conf /etc/nginx/conf.d/
