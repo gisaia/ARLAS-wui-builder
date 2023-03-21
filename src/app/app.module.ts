@@ -44,16 +44,17 @@ import {
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { Observable } from 'rxjs';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CollectionComponent } from './components/collection/collection.component';
 import { StatusComponent } from './components/status/status.component';
 import { AnalyticsConfigModule } from './modules/analytics-config/analytics-config.module';
 import { ResultListConfigModule } from './modules/result-list-config/result-list-config.module';
-
-
-
-
+import enComponents from 'arlas-web-components/assets/i18n/en.json';
+import frComponents from 'arlas-web-components/assets/i18n/fr.json';
+import enToolkit from 'arlas-wui-toolkit/assets/i18n/en.json';
+import frToolkit from 'arlas-wui-toolkit/assets/i18n/fr.json';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -68,10 +69,33 @@ export function auhtentServiceFactory(service: AuthentificationService) {
   return service;
 }
 
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
-}
+export class CustomTranslateLoader implements TranslateLoader {
 
+  public constructor(private http: HttpClient) { }
+
+  public getTranslation(lang: string): Observable<any> {
+    const apiAddress = 'assets/i18n/' + lang + '.json?' + Date.now();
+    return Observable.create(observer => {
+      this.http.get(apiAddress).subscribe(
+        res => {
+          let merged = res;
+          // Properties in res will overwrite those in fr.
+          if (lang === 'fr') {
+            merged = { ...frComponents, ...frToolkit, ...res };
+          } else if (lang === 'en') {
+            merged = { ...enComponents, ...enToolkit, ...res };
+          }
+          observer.next(merged);
+          observer.complete();
+        },
+        error => {
+          // failed to retrieve requested language file, use default
+          observer.complete(); // => Default language is already loaded
+        }
+      );
+    });
+  }
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -96,7 +120,7 @@ export function createTranslateLoader(http: HttpClient) {
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
+        useClass: CustomTranslateLoader,
         deps: [HttpClient]
       }
     }),
