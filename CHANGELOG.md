@@ -1,5 +1,21 @@
 # Change Log
 
+## [v23.2.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v23.2.1) (2023-03-21)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v23.1.1...v23.2.1)
+
+**Fixed bugs:**
+
+- Switch to network analytics mode, log out the user. [\#871](https://github.com/gisaia/ARLAS-wui-builder/issues/871)
+
+## [v23.1.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v23.1.1) (2023-03-07)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v23.2.0...v23.1.1)
+
+**Fixed bugs:**
+
+- \[Custom Config\] invalid form on save or download in Arlas 23 [\#867](https://github.com/gisaia/ARLAS-wui-builder/issues/867)
+
 ## [v23.2.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v23.2.0) (2023-02-17)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v23.2.0-alpha.2...v23.2.0)
@@ -356,11 +372,15 @@
 
 ## [v18.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v18.0.0) (2021-07-12)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.3...v18.0.0)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.4...v18.0.0)
 
 **New stuff:**
 
 - Add the possibility to display a timeline for each collection on the same graph [\#568](https://github.com/gisaia/ARLAS-wui-builder/issues/568)
+
+## [v17.2.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.4) (2021-06-30)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.3...v17.2.4)
 
 ## [v17.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.3) (2021-06-30)
 
@@ -368,11 +388,7 @@
 
 ## [v17.2.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.2) (2021-06-30)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.4...v17.2.2)
-
-## [v17.2.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.4) (2021-06-30)
-
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.1...v17.2.4)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.1...v17.2.2)
 
 ## [v17.2.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.1) (2021-06-25)
 
