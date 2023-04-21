@@ -94,6 +94,7 @@ export class DialogColorTableComponent implements OnInit {
   }
 
   public alreadyHasNewKeyword() {
+    console.log('bcp de log, javoue.')
     return this.keywordColorsForm.value.filter(fg => fg.keyword === this.newKeywordCtrl.value).length > 0;
   }
 
