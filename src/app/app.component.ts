@@ -18,7 +18,7 @@ under the License.
 */
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { LandingPageComponent } from '@components/landing-page/landing-page.component';
-import { NGXLogInterface, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
+import { INGXLoggerMetadata, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IconService } from '@services/icon-service/icon.service';
 import { MainFormService } from './services/main-form/main-form.service';
@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
     private arlasSettingsService: ArlasSettingsService) {
 
     this.logger.registerMonitor({
-      onLog(logObject: NGXLogInterface): void {
+      onLog(logObject: INGXLoggerMetadata): void {
         if (logObject.level >= NgxLoggerLevel.ERROR) {
           snackbar.open(logObject.message);
         }

@@ -25,6 +25,9 @@ under the License.
     width: 24px !important;
     height: 24px;
     display: flex;
+    .icon-picker-icon {
+      width: 0;
+    }
 
     ::ng-deep .icon-picker {
       .icon-search {

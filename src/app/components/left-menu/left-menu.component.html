@@ -1,13 +1,13 @@
 <div class="menu_container">
   <div class="logo">
-    <a matTooltip="Back to home page" [routerLink]="['/']" queryParamsHandling="preserve">
+    <a matTooltip="Back to home page" [routerLink]="['/']" queryParamsHandling="preserve" [matTooltipPosition]="'right'">
       <mat-icon class="icon">build_circle</mat-icon>
     </a>
   </div>
 
   <div>
     <mat-nav-list>
-      <mat-list-item *ngFor="let page of pages" [matTooltip]="page?.tooltip | translate" [routerLink]="page.enabled ? page?.link : null"
+      <mat-list-item *ngFor="let page of pages" [matTooltip]="page?.tooltip | translate" [matTooltipPosition]="'right'" [routerLink]="page.enabled ? page?.link : null"
         [routerLinkActive]="page.enabled ? 'active-menu' : 'inactive-menu'" queryParamsHandling="preserve">
         <button mat-icon-button [disabled]="!page?.enabled" [routerLinkActive]="page.enabled ? 'mat-accent' : ''">
           <mat-icon [matBadge]="nbErrorsByPage.get(page.name)" [matBadgeHidden]="!nbErrorsByPage.get(page.name)"
@@ -22,7 +22,7 @@
   <div>
     <div class="action-list">
       <mat-nav-list>
-        <mat-list-item [matTooltip]="'Collection' | translate" [routerLink]="'/collection'"
+        <mat-list-item [matTooltip]="'Collection' | translate" [routerLink]="'/collection'" [matTooltipPosition]="'right'"
           routerLinkActive="active-menu" queryParamsHandling="preserve">
           <button mat-icon-button routerLinkActive="mat-accent">
             <mat-icon>library_books</mat-icon>
@@ -31,30 +31,30 @@
         <mat-divider></mat-divider>
         <mat-nav-list>
           <mat-list-item *ngFor="let link of links">
-            <button matTooltip="{{ link.name | translate}}" mat-icon-button (click)="navigateTo(link.url)">
+            <button matTooltip="{{ link.name | translate}}" mat-icon-button (click)="navigateTo(link.url)" [matTooltipPosition]="'right'">
               <mat-icon>{{link.icon}}</mat-icon>
             </button>
           </mat-list-item>
         </mat-nav-list>
         <mat-divider></mat-divider>
-        <mat-list-item matTooltip="{{'Save' | translate}}" (click)="save($event)"
+        <mat-list-item matTooltip="{{'Save' | translate}}" (click)="save($event)" [matTooltipPosition]="'right'"
           [class.disabled-item]="!this.persistenceService.isAvailable">
           <button mat-icon-button>
             <mat-icon>save</mat-icon>
           </button>
         </mat-list-item>
-        <mat-list-item matTooltip="{{'Download configuration files' | translate}}" (click)="export()">
+        <mat-list-item matTooltip="{{'Download configuration files' | translate}}" (click)="export()" [matTooltipPosition]="'right'">
           <button mat-icon-button>
             <mat-icon>save_alt</mat-icon>
           </button>
         </mat-list-item>
         <mat-divider></mat-divider>
-        <mat-list-item *ngIf="showLogOutButton" matTooltip="{{name}}" (click)="getUserInfos()">
+        <mat-list-item *ngIf="showLogOutButton" matTooltip="{{name}}" (click)="getUserInfos()" [matTooltipPosition]="'right'">
           <button mat-icon-button>
             <img src="{{avatar}}" class="user_avatar">
           </button>
         </mat-list-item>
-        <mat-list-item *ngIf="showLogOutButton" matTooltip="{{'Log Out' | translate}}" (click)="logout()">
+        <mat-list-item *ngIf="showLogOutButton" matTooltip="{{'Log Out' | translate}}" (click)="logout()" [matTooltipPosition]="'right'">
           <button mat-icon-button>
             <mat-icon>lock_open</mat-icon>
           </button>

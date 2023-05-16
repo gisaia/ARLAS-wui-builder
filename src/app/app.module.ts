@@ -27,7 +27,6 @@ import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
 import { LookAndFeelConfigModule } from '@look-and-feel-config/look-and-feel-config.module';
 import { MapConfigModule } from '@map-config/map-config.module';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SearchConfigModule } from '@search-config/search-config.module';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { StartupService } from '@services/startup/startup.service';

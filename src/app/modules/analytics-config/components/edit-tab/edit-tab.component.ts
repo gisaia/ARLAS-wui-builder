@@ -36,8 +36,8 @@ export enum TAB_DISPLAY_MODE {
 export class EditTabComponent implements OnInit {
 
   public tabForm = new FormGroup({
-    icon: new FormControl(false, Validators.required),
-    name: new FormControl(false, Validators.required),
+    icon: new FormControl('', Validators.required),
+    name: new FormControl('', Validators.required),
     showName: new FormControl(),
     showIcon: new FormControl(),
     display: new FormControl()

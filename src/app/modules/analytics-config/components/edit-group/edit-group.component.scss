@@ -54,6 +54,10 @@ $primary-color: mat-color($primary-palette);
                 height: 24px;
                 display: flex;
 
+                .icon-picker-input {
+                    width: 0;
+                }
+
                 ::ng-deep .icon-picker {
                     .icon-search {
                         input {
