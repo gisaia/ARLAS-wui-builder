@@ -10,7 +10,7 @@
     <div class="icon">
       <mat-icon style="cursor: pointer;" (click)="iconInput.click();">
         {{this.tabForm.get('icon').value}}</mat-icon>
-      <input #iconInput matInput [iconPicker]="this.tabForm.get('icon').value" [ipIconPack]="['mat']"
+      <input class="icon-picker-icon" #iconInput matInput [iconPicker]="this.tabForm.get('icon').value" [ipIconPack]="['mat']"
         [ipFallbackIcon]="'short_text'" [ipPosition]="'right'" [ipButtonStyleClass]="'mat-raised-button'"
         [ipMaxHeight]="'250px'" [ipWidth]="'307px'" (iconPickerSelect)="onIconPickerSelect($event)" />
     </div>

@@ -605,7 +605,7 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
     METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX, METRIC_TYPES.CARDINALITY, 'count'
   ];
   // TODO do not use validators, the fields look like in error
-  public metricCtrl = new FormControl('', Validators.required);
+  public metricCtrl = new FormControl<METRIC_TYPES | 'count'>('count', Validators.required);
   public fieldCtrl = new FormControl('', [
     Validators.required,
     (c) => !!this.autocompleteFilteredFields && this.autocompleteFilteredFields.map(f => f.value).indexOf(c.value) >= 0 ?
@@ -759,7 +759,7 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
 export class FieldWithSizeListFormControl extends ConfigFormControl {
 
   // TODO do not use validators, the fields look like in error
-  public sizeCtrl = new FormControl(10, Validators.required);
+  public sizeCtrl = new FormControl<number>(10, Validators.required);
   public fieldCtrl = new FormControl('', [
     Validators.required,
     (c) => !!this.autocompleteFilteredFields && this.autocompleteFilteredFields.map(f => f.value).indexOf(c.value) >= 0 ?
@@ -799,7 +799,7 @@ export class FieldWithSizeListFormControl extends ConfigFormControl {
   }
 
   public add() {
-    this.getValueAsSet().add({ field: this.fieldCtrl.value, size: parseInt(this.sizeCtrl.value, 10) });
+    this.getValueAsSet().add({ field: this.fieldCtrl.value, size: this.sizeCtrl.value });
     this.updateValueAndValidity();
     this.fieldCtrl.reset();
   }

@@ -5,7 +5,7 @@
                 <div class="icon">
                     <mat-icon matPrefix style="cursor: pointer;" (click)="iconInput.click()">
                         {{this.formGroup.controls.icon.value}}</mat-icon>
-                    <input #iconInput matInput formControlName="icon" [iconPicker]="this.formGroup.controls.icon.value"
+                    <input class="icon-picker-input" #iconInput matInput formControlName="icon" [iconPicker]="this.formGroup.controls.icon.value"
                         [ipIconPack]="['mat']" [ipFallbackIcon]="'poll'" [ipPosition]="'right'"
                         [ipButtonStyleClass]="'mat-raised-button'" [ipMaxHeight]="'250px'" [ipWidth]="'307px'"
                         (iconPickerSelect)="onIconPickerSelect($event)" />

@@ -74,7 +74,7 @@ export class AnalyticsInitService {
   public initNewGroup(name: string) {
     return this.formBuilder.group({
       icon: [
-        null,
+        '',
         Validators.required
       ],
       title: [
@@ -85,7 +85,7 @@ export class AnalyticsInitService {
         null
       ],
       contentType: [
-        null,
+        [''],
         Validators.required
       ],
       content: this.formBuilder.array([]),
