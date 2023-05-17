@@ -27,9 +27,8 @@ import { CollectionField } from '@services/collection-service/models';
 import { NUMERIC_OR_DATE_TYPES, toKeywordOptionsObs } from '@services/collection-service/tools';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
-  ButtonFormControl, ButtonToggleFormControl, ConfigFormGroup, SelectFormControl, SliderFormControl,
+  ButtonFormControl, ConfigFormGroup, SelectFormControl, SliderFormControl,
   SlideToggleFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
@@ -42,8 +41,9 @@ import {
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { METRIC_TYPE } from '../metric-collect-form-builder/models';
 import { WidgetFormBuilder } from '../widget-form-builder';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 
-export class PowerbarConfigForm extends CollectionConfigFormGroup {
+export class PowerbarConfigForm extends WidgetConfigFormGroup {
 
   public constructor(
     collection: string,
@@ -290,6 +290,7 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
   }
 
   public customControls = {
+    uuid: this.get('uuid') as HiddenFormControl,
     title: this.get('title') as TitleInputFormControl,
     dataStep: {
       collection: this.get('dataStep').get('collection') as SelectFormControl,

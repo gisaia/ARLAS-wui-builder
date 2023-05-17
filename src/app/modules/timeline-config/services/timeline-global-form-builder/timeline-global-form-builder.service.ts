@@ -29,7 +29,7 @@ import { toNumericOrDateFieldsObs, toOptionsObs } from '@services/collection-ser
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
-  ConfigFormGroup, InputFormControl, MultipleSelectFormControl, SelectFormControl,
+  ConfigFormGroup, HiddenFormControl, InputFormControl, MultipleSelectFormControl, SelectFormControl,
   SliderFormControl, SlideToggleFormControl
 } from '@shared-models/config-form';
 import { ChartType } from 'arlas-web-components';
@@ -246,11 +246,23 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
               name: new FormControl(),
               icon: new FormControl(),
               isOneDimension: new FormControl(),
+              uuid: new HiddenFormControl(
+                '',
+                null,
+                {
+                  optional: true
+                })
             }),
             detailedTimeline: new FormGroup({
               name: new FormControl(),
               icon: new FormControl(),
               isOneDimension: new FormControl(),
+              uuid: new HiddenFormControl(
+                '',
+                null,
+                {
+                  optional: true
+                })
             })
           }),
           renderStep: new FormGroup({
@@ -368,11 +380,13 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
           name: this.get('unmanagedFields.dataStep.timeline.name'),
           icon: this.get('unmanagedFields.dataStep.timeline.icon'),
           isOneDimension: this.get('unmanagedFields.dataStep.timeline.isOneDimension'),
+          uuid: this.get('unmanagedFields.dataStep.timeline.uuid')
         },
         detailedTimeline: {
           name: this.get('unmanagedFields.dataStep.detailedTimeline.name'),
           icon: this.get('unmanagedFields.dataStep.detailedTimeline.icon'),
           isOneDimension: this.get('unmanagedFields.dataStep.detailedTimeline.isOneDimension'),
+          uuid: this.get('unmanagedFields.dataStep.detailedTimeline.uuid')
         }
       },
       renderStep: {

@@ -24,7 +24,7 @@ export class CollectionConfigFormGroup extends ConfigFormGroup {
   public collection: string;
   public collectionFieldsObs: Observable<Array<CollectionField>>;
   public constructor(
-    collection,
+    collection: string,
     controls: {
       [key: string]: AbstractControl;
     }) {
