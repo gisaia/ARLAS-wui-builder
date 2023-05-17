@@ -186,8 +186,13 @@ export interface AnalyticConfig {
   components: Array<AnalyticComponentConfig>;
 }
 
+
+
 export interface AnalyticComponentConfig {
+  /** this uuid will be used a reference to a component configuration and reused by a shortcut. */
+  uuid: string;
   contributorId: string;
+  shortcutContributorId?: string;
   componentType: string;
   showExportCsv?: boolean;
   input: AnalyticComponentInputConfig;

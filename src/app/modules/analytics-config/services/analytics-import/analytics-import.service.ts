@@ -38,6 +38,8 @@ import { ResultlistFormBuilderService } from '../resultlist-form-builder/resultl
 import { SwimlaneFormBuilderService, SwimlaneFormGroup } from '../swimlane-form-builder/swimlane-form-builder.service';
 import { Aggregation } from 'arlas-api';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
+import { v4 as uuidv4 } from 'uuid';
+
 
 @Injectable({
   providedIn: 'root'
@@ -102,11 +104,14 @@ export class AnalyticsImportService {
   }
 
   public importWidget(c: AnalyticComponentConfig, config: Config, contentTypes = new Array()): [FormGroup, number] {
+    /** generate uuid of component */
+    if (!c.uuid) {
+      c.uuid = uuidv4();
+    }
     const widget = this.analyticsInitService.initNewWidget(c.componentType);
     const contributorId = c.contributorId;
     const contributor = config.arlas.web.contributors.find(contrib => contrib.identifier === contributorId);
-    const defaultCollection = config.arlas.server.collection.name;
-    /** retro-combatibility with mono-collection dashboards */
+    /** retro-compatibility with mono-collection dashboards */
     if (!contributor.collection) {
       contributor.collection = config.arlas.server.collection.name;
     }
@@ -175,8 +180,13 @@ export class AnalyticsImportService {
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
+    const uuid = widgetData.customControls.uuid;
     const contribAggregationModel = contributor.aggregationmodels[0];
     importElements([
+      {
+        value: component.uuid,
+        control: uuid
+      },
       {
         value: component.input.chartTitle,
         control: title
@@ -244,12 +254,17 @@ export class AnalyticsImportService {
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
+    const uuid = widgetData.customControls.uuid;
     const termeAggregationFg = dataStep.termAggregation;
     const dateAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'datehistogram' || m.type === 'histogram');
     const termAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'term');
     const swimlaneInput = component.input as AnalyticComponentSwimlaneInputConfig;
 
     importElements([
+      {
+        value: component.uuid,
+        control: uuid
+      },
       {
         value: component.input.chartTitle,
         control: title
@@ -433,6 +448,7 @@ export class AnalyticsImportService {
     const widgetData = this.metricFormBuilder.build(contributor.collection);
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
+    const uuid = widgetData.customControls.uuid;
     const title = widgetData.customControls.title;
 
     // create a set to initialize metrics properly
@@ -440,6 +456,10 @@ export class AnalyticsImportService {
     contributor.metrics.forEach(metric => metrics.add(metric));
 
     importElements([
+      {
+        value: component.uuid,
+        control: uuid
+      },
       {
         value: contributor.title,
         control: title
@@ -489,11 +509,16 @@ export class AnalyticsImportService {
     const widgetData = this.powerbarFormBuilder.build(contributor.collection);
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
+    const uuid = widgetData.customControls.uuid;
     const title = widgetData.customControls.title;
     const contribAggregationModel = contributor.aggregationmodels[0];
     const filterOperatorValue = !!component.input.filterOperator && !!component.input.filterOperator.value
       ? component.input.filterOperator.value : 'Eq';
     importElements([
+      {
+        value: component.uuid,
+        control: uuid
+      },
       {
         value: contributor.title,
         control: title
@@ -563,6 +588,7 @@ export class AnalyticsImportService {
     const widgetData = this.donutFormBuilder.build(contributor.collection);
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
+    const uuid = widgetData.customControls.uuid;
     const title = widgetData.customControls.title;
 
     // create a set to initialize aggregationmodels properly
@@ -577,6 +603,10 @@ export class AnalyticsImportService {
       }
     }
     importElements([
+      {
+        value: component.uuid,
+        control: uuid
+      },
       {
         value: contributor.title,
         control: title

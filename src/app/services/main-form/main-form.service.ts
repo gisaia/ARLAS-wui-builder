@@ -45,6 +45,8 @@ enum MAIN_FORM_KEYS {
   TIMELINE_CONFIG_GLOBAL = 'TimelineConfigGlobal',
   ANALYTICS_CONFIG = 'AnalyticsConfig',
   ANALYTICS_CONFIG_LIST = 'AnalyticsConfigList',
+  SHORTCUTS_CONFIG = 'ShortcutsConfig',
+  SHORTCUTS_CONFIG_LIST = 'ShortcutsConfigList',
   COMMON_CONFIG = 'CommonConfig',
   COMMON_CONFIG_KEYS_TO_COLOR = 'CommonConfigKeysToColor',
   SIDE_MODULES_CONFIG = 'SideModulesConfig',

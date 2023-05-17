@@ -91,7 +91,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     dragIndex: number;
     dropIndex: number;
   };
-  public content: FormArray;
+  public content: FormArray<FormGroup>;
   public itemPerLine;
   public toUnsubscribe: Array<Subscription> = [];
 

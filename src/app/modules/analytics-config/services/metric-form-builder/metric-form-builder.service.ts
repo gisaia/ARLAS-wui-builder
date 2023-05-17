@@ -24,12 +24,13 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
-  ConfigFormGroup, InputFormControl, MetricWithFieldListFormControl, SelectFormControl,
+  ConfigFormGroup, HiddenFormControl, InputFormControl, MetricWithFieldListFormControl, SelectFormControl,
   SlideToggleFormControl, TextareaFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { WidgetFormBuilder } from '../widget-form-builder';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 
-export class MetricFormGroup extends CollectionConfigFormGroup {
+export class MetricFormGroup extends WidgetConfigFormGroup {
 
   public constructor(
     collection: string,
@@ -130,6 +131,7 @@ export class MetricFormGroup extends CollectionConfigFormGroup {
   }
 
   public customControls = {
+    uuid: this.get('uuid') as HiddenFormControl,
     title: this.get('title') as TitleInputFormControl,
     dataStep: {
       collection: this.get('dataStep').get('collection') as SelectFormControl,
