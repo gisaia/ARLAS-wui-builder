@@ -87,6 +87,7 @@ export interface WebConfig {
     };
   };
   analytics: Array<AnalyticConfig>;
+  filters_shortcuts: ShortcutsConfig[];
   colorGenerator: { keysToColors: Array<[string, string]>; };
   options?: WebConfigOptions;
   externalNode: any;

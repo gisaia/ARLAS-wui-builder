@@ -17,6 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
@@ -25,6 +26,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 import { ArlasColorService } from 'arlas-web-components';
 import { AnalyticsBoardComponent, AnalyticsService, ArlasConfigService, ArlasStartupService } from 'arlas-wui-toolkit';
@@ -59,6 +61,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private cdr: ChangeDetectorRef,
     private cs: ArlasColorService,
+    private shortcutsService: ShortcutsService,
     protected mainFormService: MainFormService,
     private analyticsService: AnalyticsService
 
@@ -82,6 +85,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
     );
   }
 
+  public getGroup = (index: number) => this.groupsFa.at(index) as FormGroup;
+
+
   public remove(gi) {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
@@ -90,6 +96,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
     this.afterClosedSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.removeAllShortcuts(gi);
         this.groupsFa.removeAt(gi);
         this.updateAnalytics();
       }
@@ -131,5 +138,16 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.analyticsBoard = null;
     this.groupsPreview = null;
     this.contentFg = null;
+  }
+
+  private removeAllShortcuts(groupIndex: number) {
+    const group = this.getGroup(groupIndex);
+    const widgetsFa: FormArray = group.controls.content as FormArray;
+    if (widgetsFa) {
+      widgetsFa.controls.forEach((widget: FormGroup) => {
+        const widgetConfigFg = widget.controls.widgetData as WidgetConfigFormGroup;
+        this.shortcutsService.removeShortcut(widgetConfigFg.uuidControl.value);
+      });
+    }
   }
 }

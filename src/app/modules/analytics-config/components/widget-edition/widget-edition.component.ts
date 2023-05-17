@@ -53,14 +53,12 @@ export class WidgetEditionComponent implements OnInit{
       }
       if (this.widgetControls.widgetData) {
         const widgetConfigFg = this.widgetControls.widgetData;
-        console.log(widgetConfigFg.usage);
         this.setPinTemplate(widgetConfigFg.usage);
       }
     }
   }
 
   public update() {
-    console.log('zzzzz');
     if (this.widgetControls.widgetData) {
       const widgetConfigFg = this.widgetControls.widgetData;
       this.setPinTemplate(widgetConfigFg.usage);

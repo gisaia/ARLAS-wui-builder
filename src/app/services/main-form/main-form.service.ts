@@ -88,9 +88,6 @@ export class MainFormService {
 
   });
 
-  public constructor(public shortcutsService: ShortcutsService) {
-  }
-
   // STARTING FORM
   public startingConfig = new class {
     public constructor(public mainForm: FormGroup) { }

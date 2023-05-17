@@ -16,20 +16,32 @@ export class ShortcutsService {
     const uuid = widget.uuidControl.value;
     this.widgets.set(uuid, widget);
     const shortcutConfig = widget.getShortcutConfig();
-    shortcutConfig.order = this.shortcutsMap.size + 1;
-    this.shortcuts.push(shortcutConfig);
+    const existingShortcutConfig = this.shortcutsMap.get(uuid);
+    if (!!existingShortcutConfig) {
+      shortcutConfig.order = existingShortcutConfig.order;
+    } else {
+      shortcutConfig.order = this.shortcutsMap.size + 1;
+    }
     this.shortcutsMap.set(uuid, shortcutConfig);
+    this.shortcuts = Array.from(this.shortcutsMap.values()).sort((a, b) => a.order - b.order);
   }
 
   public removeShortcut(uuid: string) {
     const widget = this.widgets.get(uuid);
-    widget.setUsage('analytics');
-    this.widgets.delete(uuid);
+    if (widget) {
+      widget.setUsage('analytics');
+      this.widgets.delete(uuid);
+    }
     this.shortcutsMap.delete(uuid);
     this.shortcuts = this.shortcuts.filter(s => s.uuid !== uuid);
     this.shortcuts.forEach((s, i) => {
       s.order = i + 1;
+      this.shortcutsMap.set(s.uuid, s);
     });
+  }
+
+  public isShortcut(uuid: string): boolean {
+    return this.shortcutsMap.has(uuid);
   }
 
 }
