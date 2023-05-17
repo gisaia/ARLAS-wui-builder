@@ -41,8 +41,9 @@ import { Observable } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { ArlasColorService } from 'arlas-web-components';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 
-export class ResultlistConfigForm extends CollectionConfigFormGroup {
+export class ResultlistConfigForm extends WidgetConfigFormGroup {
 
   public constructor(
     collection: string,

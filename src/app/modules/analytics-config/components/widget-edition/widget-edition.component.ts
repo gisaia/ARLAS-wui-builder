@@ -19,8 +19,10 @@ under the License.
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { WidgetConfigFormGroup, WidgetUsage } from '@shared-models/widget-config-form';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { WIDGET_TYPE } from '../edit-group/models';
+import { WidgetUsage } from '@services/main-form-manager/models-config';
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 
 @Component({
   selector: 'arlas-widget-edition',
@@ -39,6 +41,9 @@ export class WidgetEditionComponent implements OnInit{
   public pinIconName = 'add_circle_outline';
   public pinText = 'Pin widget';
 
+  public constructor(public shortcutService: ShortcutsService) {
+  }
+
   public ngOnInit(): void {
     if (!!this.widgetControls) {
       if (this.widgetControls.widgetType) {
@@ -48,8 +53,17 @@ export class WidgetEditionComponent implements OnInit{
       }
       if (this.widgetControls.widgetData) {
         const widgetConfigFg = this.widgetControls.widgetData;
+        console.log(widgetConfigFg.usage);
         this.setPinTemplate(widgetConfigFg.usage);
       }
+    }
+  }
+
+  public update() {
+    console.log('zzzzz');
+    if (this.widgetControls.widgetData) {
+      const widgetConfigFg = this.widgetControls.widgetData;
+      this.setPinTemplate(widgetConfigFg.usage);
     }
   }
 
@@ -60,8 +74,10 @@ export class WidgetEditionComponent implements OnInit{
     const widgetConfigFg = this.widgetControls.widgetData;
     if (widgetConfigFg.usage === 'analytics') {
       widgetConfigFg.setUsage('both');
+      this.shortcutService.addShortcut(widgetConfigFg);
     } else {
       widgetConfigFg.setUsage('analytics');
+      this.shortcutService.removeShortcut(widgetConfigFg.uuidControl.value);
     }
     this.setPinTemplate(widgetConfigFg.usage);
   }

@@ -4,7 +4,7 @@
 <button mat-icon-button [matMenuTriggerFor]="menuEditWidget">
     <mat-icon>more_vert</mat-icon>
 </button>
-<mat-menu #menuEditWidget="matMenu">
+<mat-menu #menuEditWidget="matMenu" (click)="update()">
     <button *ngIf="showPinInMenu" mat-menu-item (click)="pin()" >
         <mat-icon>{{pinIconName}}</mat-icon>
         <span>{{pinText | translate}}</span>
