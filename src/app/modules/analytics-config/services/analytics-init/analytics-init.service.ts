@@ -42,16 +42,11 @@ export class AnalyticsInitService {
   ) { }
 
   public initModule() {
-
-    this.mainFormService.analyticsConfig.initListFa(
-      this.initTabsList([
-      ])
-    );
+    this.mainFormService.analyticsConfig.initListFa(this.initTabsList([]));
   }
 
   public initTabsList(tabsList: Array<AbstractControl>) {
-    return this.formBuilder.array(
-      tabsList);
+    return this.formBuilder.array(tabsList);
   }
 
   public initNewTab(name: string, icon = 'short_text', showName = true, showIcon = true) {

@@ -19,6 +19,7 @@ under the License.
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfigFormGroup } from '@shared-models/config-form';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 
 export abstract class WidgetFormBuilder {
 
@@ -32,7 +33,7 @@ export abstract class WidgetFormBuilder {
     /**
      * Must return a FormGroup with controls "dataStep" and "renderStep"
      */
-    protected abstract build(collection: string): ConfigFormGroup;
+    protected abstract build(collection: string): WidgetConfigFormGroup;
 
     /**
      * Build the FormGroup and set the value to it
@@ -42,6 +43,10 @@ export abstract class WidgetFormBuilder {
     public buildWithValues(value: any, collection) {
       const formGroup = this.build(collection);
       formGroup.patchValue(value);
+      console.log(formGroup.usage);
+      if (formGroup.usage === 'both') {
+        this.mainFormService.shortcutsService.addShortcut(formGroup);
+      }
       return formGroup;
     }
 
