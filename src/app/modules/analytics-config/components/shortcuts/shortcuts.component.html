@@ -1,7 +1,9 @@
-<div *ngIf="shortcutService.shortcuts.length > 0" class="container">
-    <div *ngFor="let shortcut of shortcutService.shortcuts" class="shortcut">
-        <div>{{shortcut.title}}</div>
-        <mat-icon class="remove" (click)="shortcutService.removeShortcut(shortcut.uuid)">remove</mat-icon>
+<ng-container *ngIf="shortcutService.shortcuts.length > 0">
+    <div class="title">{{'shortcuts_title' | translate}}</div>
+    <div class="container">
+        <div *ngFor="let shortcut of shortcutService.shortcuts" class="shortcut">
+            <div class="title">{{shortcut.title}}</div>
+            <mat-icon class="remove" (click)="shortcutService.removeShortcut(shortcut.uuid)">clear</mat-icon>
+        </div>
     </div>
-
-</div>
+</ng-container>

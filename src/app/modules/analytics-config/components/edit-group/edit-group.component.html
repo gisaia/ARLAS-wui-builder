@@ -56,9 +56,9 @@
                         (cdkDragMoved)="dragMoved($event)"
                         (cdkDragDropped)="dragDropped($event)">
                         <arlas-widget-edition 
-                            [isValid]="content.controls[ci].valid" 
-                            [widgetControls]="content.controls[ci].controls"
-                            (edit)="editWidget(ci, content.controls[ci].value.widgetData?.dataStep?.collection)"
+                            [isValid]="content?.controls[ci]?.valid" 
+                            [widgetControls]="content?.controls[ci]?.controls"
+                            (edit)="editWidget(ci, content?.controls[ci].value.widgetData?.dataStep?.collection)"
                             (delete)="deleteWidget(ci)"
                         ></arlas-widget-edition>
                         <div class="placeholder" *cdkDragPlaceholder></div>

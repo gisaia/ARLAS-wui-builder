@@ -58,7 +58,7 @@ export class WidgetConfigFormGroup extends CollectionConfigFormGroup {
   public getShortcutConfig(): ShortcutsConfig {
     return {
       uuid: this.uuidControl.value,
-      title: 'todo'
+      title: this.controls['title'].value
     };
   }
 
