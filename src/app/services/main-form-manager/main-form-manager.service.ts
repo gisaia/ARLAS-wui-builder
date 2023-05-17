@@ -52,6 +52,7 @@ import { ConfigMapExportHelper } from './config-map-export-helper';
 import { Config } from './models-config';
 import { MapConfig } from './models-map-config';
 import { importElements } from './tools';
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -84,7 +85,8 @@ export class MainFormManagerService {
     private collectionService: CollectionService,
     private colorService: ArlasColorGeneratorLoader,
     private router: Router,
-    private arlasStartupService: ArlasStartupService
+    private arlasStartupService: ArlasStartupService,
+    private shortcutsService: ShortcutsService
   ) { }
 
   /**
@@ -147,7 +149,8 @@ export class MainFormManagerService {
       resultLists,
       externalNodeGlobal,
       this.colorService,
-      this.collectionService
+      this.collectionService,
+      this.shortcutsService
     );
 
     const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFieldsMap);

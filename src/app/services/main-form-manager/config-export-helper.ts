@@ -60,6 +60,7 @@ import { CollectionReferenceDescription } from 'arlas-api';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
 import { hashCode, stringifyArlasFilter } from './tools';
 import { filter } from 'rxjs/internal/operators/filter';
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 
 export enum EXPORT_TYPE {
   json = 'json',
@@ -143,7 +144,8 @@ export class ConfigExportHelper {
     resultLists: FormArray,
     externalNode: FormGroup,
     colorService: ArlasColorGeneratorLoader,
-    collectionService: CollectionService
+    collectionService: CollectionService,
+    shortcutsService: ShortcutsService
   ): any {
     const chipssearch: ChipSearchConfig = {
       name: searchConfigGlobal.customControls.name.value,
@@ -160,6 +162,7 @@ export class ConfigExportHelper {
             resultlists: this.getResultListComponent(resultLists)
           },
           analytics: [],
+          filters_shortcuts: shortcutsService.shortcuts,
           colorGenerator: {
             keysToColors: colorService.keysToColors
           },
@@ -244,6 +247,17 @@ export class ConfigExportHelper {
             // check if the contributor already exists to avoid duplication in the final config json object
             if (!contributor) {
               contributor = this.getAnalyticsContributor(widget.widgetType, widget.widgetData, group.icon);
+              const uuid = widget.widgetData.uuid;
+              if (widget.widgetType === 'histogram' && shortcutsService.isShortcut(uuid)) {
+                const shortcutContributor = Object.assign({}, contributor);
+                shortcutContributor.identifier = uuid;
+                shortcutContributor.linked_contributor_id = contributorId;
+                // todo : configurate this nb of buckets
+                shortcutContributor.numberOfBuckets = 20;
+                contributor.linked_contributor_id = shortcutContributor.identifier;
+                contributorsMap.set(shortcutContributor.identifier, shortcutContributor);
+                config.arlas.web.contributors.push(shortcutContributor);
+              }
               contributorsMap.set(contributorId, contributor);
               config.arlas.web.contributors.push(contributor);
             }
@@ -1116,6 +1130,7 @@ export class ConfigExportHelper {
     const analyticsBoardWidth = 445;
     const contributorId = this.getContributorId(widgetData, widgetType);
     const uuid = widgetData.uuid;
+    const usage = widgetData.usage;
     let component: AnalyticComponentConfig;
     if ([WIDGET_TYPE.histogram, WIDGET_TYPE.swimlane].indexOf(widgetType) >= 0) {
       const title = widgetData.title;
@@ -1286,6 +1301,7 @@ export class ConfigExportHelper {
     }
     component.contributorId = contributorId;
     component.uuid = uuid;
+    component.usage = usage;
     return component;
 
   }
