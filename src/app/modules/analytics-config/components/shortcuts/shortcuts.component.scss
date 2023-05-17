@@ -17,14 +17,26 @@ specific language governing permissions and limitations
 under the License.
 */
 
+.title {
+    padding: 3px 0;
+}
+
 .container {
     display: flex;
     align-items: center;
+    padding: 3px;
     .shortcut {
         margin: 2px;
+        background-color: #fff;
+        padding: 2px;
+        border-radius: 2px;
+        box-shadow: 0px -2px 3px -6px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14);
         display: flex;
         align-items: center;
         justify-content: space-between;
+        .title {
+            padding: 0 2px;
+        }
         .remove {
             cursor: pointer;
             width: 20px;
