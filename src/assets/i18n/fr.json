@@ -821,5 +821,7 @@
 	"compute metric description": " • Calculez une métrique sur le champ choisi. \n • Optionallement, appliquez un filtre ARLAS sur la métrique calculée. ",
 	"metric": "Métrique",
 	"Cannot save the preview": "Impossible de sauvegarder l'aperçu",
-	"Pin widget" : "Ajouter à la barre des filtres"
+	"Pin widget" : "Ajouter à la barre des filtres",
+	"Unpin widget" : "Retier de la barre des filtres"
+
 }
