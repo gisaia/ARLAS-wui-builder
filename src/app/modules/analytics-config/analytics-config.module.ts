@@ -31,6 +31,7 @@ import { ResultlistDataComponent } from './components/resultlist-data/resultlist
 import { ImportWidgetDialogComponent } from './components/import-widget-dialog/import-widget-dialog.component';
 import { EditTabComponent } from './components/edit-tab/edit-tab.component';
 import { WidgetEditionComponent } from './components/widget-edition/widget-edition.component';
+import { ShortcutsComponent } from './components/shortcuts/shortcuts.component';
 
 @NgModule({
   entryComponents: [
@@ -42,6 +43,7 @@ import { WidgetEditionComponent } from './components/widget-edition/widget-editi
   declarations: [
     TabsComponent,
     GroupsComponent,
+    ShortcutsComponent,
     EditGroupComponent,
     WidgetEditionComponent,
     EditWidgetDialogComponent,

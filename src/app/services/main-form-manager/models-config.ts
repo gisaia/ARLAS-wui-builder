@@ -87,6 +87,7 @@ export interface WebConfig {
     };
   };
   analytics: Array<AnalyticConfig>;
+  filters_shortcuts: ShortcutsConfig[];
   colorGenerator: { keysToColors: Array<[string, string]>; };
   options?: WebConfigOptions;
   externalNode: any;
@@ -191,11 +192,26 @@ export interface AnalyticConfig {
 export interface AnalyticComponentConfig {
   /** this uuid will be used a reference to a component configuration and reused by a shortcut. */
   uuid: string;
+  usage?: WidgetUsage;
   contributorId: string;
   shortcutContributorId?: string;
   componentType: string;
   showExportCsv?: boolean;
   input: AnalyticComponentInputConfig;
+}
+
+/** a widget can be displayed in
+ * - analytics only
+ * - shortcuts only
+ * - both
+ */
+export type WidgetUsage = 'analytics' | 'shortcuts' | 'both';
+
+
+export interface ShortcutsConfig {
+  uuid: string;
+  title: string;
+  order?: number;
 }
 
 export interface AnalyticComponentInputConfig {

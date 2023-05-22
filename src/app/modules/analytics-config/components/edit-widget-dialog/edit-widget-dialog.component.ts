@@ -28,6 +28,8 @@ import { SwimlaneFormBuilderService } from '../../services/swimlane-form-builder
 import { WidgetFormBuilder } from '../../services/widget-form-builder';
 import { WIDGET_TYPE } from '../edit-group/models';
 import { EditWidgetDialogData } from './models';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 
 @Component({
   selector: 'arlas-edit-widget-dialog',
@@ -36,7 +38,7 @@ import { EditWidgetDialogData } from './models';
 })
 export class EditWidgetDialogComponent implements OnInit {
 
-  public formGroup: FormGroup;
+  public formGroup: WidgetConfigFormGroup;
   public defaultKey: string;
   public WIDGET_TYPE = WIDGET_TYPE;
 
@@ -49,6 +51,7 @@ export class EditWidgetDialogComponent implements OnInit {
     private powerFormBuilder: PowerbarFormBuilderService,
     private donutFormBuilder: DonutFormBuilderService,
     private resultlistFormBuilder: ResultlistFormBuilderService,
+    private shortcutsService: ShortcutsService
   ) {
 
     this.initFormGroup();
@@ -91,6 +94,9 @@ export class EditWidgetDialogComponent implements OnInit {
     this.formGroup.markAllAsTouched();
     if (this.formGroup.valid) {
       this.dialogRef.close(this.formGroup);
+      if (this.formGroup.usage === 'both') {
+        this.shortcutsService.addShortcut(this.formGroup);
+      }
     }
   }
 

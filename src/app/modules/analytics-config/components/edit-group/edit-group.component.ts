@@ -41,6 +41,8 @@ import { ConfigFormGroupComponent } from '@shared-components/config-form-group/c
 import { ConfigFormGroup } from '@shared-models/config-form';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 
 @Component({
   selector: 'arlas-add-widget-dialog',
@@ -106,7 +108,8 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private analyticsImportService: AnalyticsImportService,
     private analyticsInitService: AnalyticsInitService,
-    private main: MainFormService
+    private main: MainFormService,
+    private shortcutsService: ShortcutsService
   ) { }
 
   public ngOnInit() {
@@ -227,6 +230,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
     this.afterClosedconfirmSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.removeShortcut(widgetIndex);
         this.content.removeAt(widgetIndex);
         this.contentTypeValue.splice(widgetIndex, 1);
         this.formGroup.controls.contentType.setValue(this.contentTypeValue);
@@ -339,6 +343,12 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
     this.dropListReceiverElement = undefined;
     this.dragDropInfo = undefined;
+  }
+
+  private removeShortcut(widgetIndex: number) {
+    const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup;
+    const widgetConfigFg = widgetFg.controls.widgetData as WidgetConfigFormGroup;
+    this.shortcutsService.removeShortcut(widgetConfigFg.uuidControl.value);
   }
 }
 

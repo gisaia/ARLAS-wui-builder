@@ -18,7 +18,7 @@ under the License.
 */
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { OperationEnum } from 'arlas-web-core';
@@ -42,16 +42,11 @@ export class AnalyticsInitService {
   ) { }
 
   public initModule() {
-
-    this.mainFormService.analyticsConfig.initListFa(
-      this.initTabsList([
-      ])
-    );
+    this.mainFormService.analyticsConfig.initListFa(this.initTabsList([]));
   }
 
   public initTabsList(tabsList: Array<AbstractControl>) {
-    return this.formBuilder.array(
-      tabsList);
+    return this.formBuilder.array(tabsList);
   }
 
   public initNewTab(name: string, icon = 'short_text', showName = true, showIcon = true) {
@@ -84,10 +79,7 @@ export class AnalyticsInitService {
       itemPerLine: [
         null
       ],
-      contentType: [
-        [''],
-        Validators.required
-      ],
+      contentType: new FormControl<WIDGET_TYPE[]>([], Validators.required),
       content: this.formBuilder.array([]),
       preview: [new Array()]
     });

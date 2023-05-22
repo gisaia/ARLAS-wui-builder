@@ -1,7 +1,7 @@
 <div class="invalid-widget-edition" *ngIf="!isValid && !!widgetControls?.widgetData?.value?.title"
     [matTooltip]="'The widget has invalid inputs. Edit to fix them.' | translate">!</div>
 <span [matTooltip]="widgetControls?.widgetData?.value?.title">{{widgetControls?.widgetData?.value?.title}}</span>
-<button mat-icon-button [matMenuTriggerFor]="menuEditWidget">
+<button mat-icon-button [matMenuTriggerFor]="menuEditWidget" (click)="update()">
     <mat-icon>more_vert</mat-icon>
 </button>
 <mat-menu #menuEditWidget="matMenu">

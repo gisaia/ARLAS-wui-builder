@@ -21,9 +21,11 @@ import { AbstractControl } from '@angular/forms';
 import { HiddenFormControl } from './config-form';
 import { CollectionConfigFormGroup } from './collection-config-form';
 import { v4 as uuidv4 } from 'uuid';
+import { ShortcutsConfig, WidgetUsage } from '@services/main-form-manager/models-config';
 
 export class WidgetConfigFormGroup extends CollectionConfigFormGroup {
   public usage: WidgetUsage = 'analytics';
+  public uuidControl: HiddenFormControl;
   public constructor(
     collection: string,
     controls: {
@@ -42,7 +44,7 @@ export class WidgetConfigFormGroup extends CollectionConfigFormGroup {
         optional: true
       });
     super(collection, controls);
-
+    this.uuidControl = controls['uuid'] as HiddenFormControl;
     controls['usage'].valueChanges.subscribe(v => {
       this.usage = v;
     });
@@ -53,11 +55,12 @@ export class WidgetConfigFormGroup extends CollectionConfigFormGroup {
     this.controls['usage'].setValue(u);
   }
 
+  public getShortcutConfig(): ShortcutsConfig {
+    return {
+      uuid: this.uuidControl.value,
+      title: this.controls['title'].value
+    };
+  }
+
 }
 
-/** a widget can be displayed in
- * - analytics only
- * - shortcuts only
- * - both
- */
-export type WidgetUsage = 'analytics' | 'shortcuts' | 'both';
