@@ -188,6 +188,7 @@ export class HistogramFormGroup extends WidgetConfigFormGroup {
 
   public customControls = {
     uuid: this.get('uuid') as HiddenFormControl,
+    usage: this.get('usage') as HiddenFormControl,
     title: this.get('title') as TitleInputFormControl,
     dataStep: {
       aggregation: this.get('dataStep').get('aggregation') as BucketsIntervalFormGroup,
