@@ -39,6 +39,7 @@ import { SwimlaneFormBuilderService, SwimlaneFormGroup } from '../swimlane-form-
 import { Aggregation } from 'arlas-api';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { v4 as uuidv4 } from 'uuid';
+import { ShortcutsService } from '../shortcuts/shortcuts.service';
 
 
 @Injectable({
@@ -58,7 +59,8 @@ export class AnalyticsImportService {
     private powerbarFormBuilder: PowerbarFormBuilderService,
     private donutFormBuilder: DonutFormBuilderService,
     private resultlistFormBuilder: ResultlistFormBuilderService,
-    private settingsService: ArlasSettingsService
+    private settingsService: ArlasSettingsService,
+    private shortcutService: ShortcutsService
   ) { }
 
   public doImport(config: Config) {
@@ -181,11 +183,16 @@ export class AnalyticsImportService {
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
     const uuid = widgetData.customControls.uuid;
+    const usage = widgetData.customControls.usage;
     const contribAggregationModel = contributor.aggregationmodels[0];
     importElements([
       {
         value: component.uuid,
         control: uuid
+      },
+      {
+        value: component.usage,
+        control: usage
       },
       {
         value: component.input.chartTitle,
@@ -246,6 +253,9 @@ export class AnalyticsImportService {
       }
     ]);
 
+    if (widgetData.customControls.usage.value === 'both') {
+      this.shortcutService.addShortcut(widgetData);
+    }
     return widgetData;
   }
 
@@ -255,6 +265,7 @@ export class AnalyticsImportService {
     const renderStep = widgetData.customControls.renderStep;
     const title = widgetData.customControls.title;
     const uuid = widgetData.customControls.uuid;
+    const usage = widgetData.customControls.usage;
     const termeAggregationFg = dataStep.termAggregation;
     const dateAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'datehistogram' || m.type === 'histogram');
     const termAggregationModel = contributor.swimlanes[0].aggregationmodels.find(m => m.type === 'term');
@@ -264,6 +275,10 @@ export class AnalyticsImportService {
       {
         value: component.uuid,
         control: uuid
+      },
+      {
+        value: component.usage,
+        control: usage
       },
       {
         value: component.input.chartTitle,
@@ -449,6 +464,7 @@ export class AnalyticsImportService {
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
     const uuid = widgetData.customControls.uuid;
+    const usage = widgetData.customControls.usage;
     const title = widgetData.customControls.title;
 
     // create a set to initialize metrics properly
@@ -459,6 +475,10 @@ export class AnalyticsImportService {
       {
         value: component.uuid,
         control: uuid
+      },
+      {
+        value: component.usage,
+        control: usage
       },
       {
         value: contributor.title,
@@ -510,6 +530,7 @@ export class AnalyticsImportService {
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
     const uuid = widgetData.customControls.uuid;
+    const usage = widgetData.customControls.usage;
     const title = widgetData.customControls.title;
     const contribAggregationModel = contributor.aggregationmodels[0];
     const filterOperatorValue = !!component.input.filterOperator && !!component.input.filterOperator.value
@@ -518,6 +539,10 @@ export class AnalyticsImportService {
       {
         value: component.uuid,
         control: uuid
+      },
+      {
+        value: component.usage,
+        control: usage
       },
       {
         value: contributor.title,
@@ -581,6 +606,9 @@ export class AnalyticsImportService {
         control: renderStep.scrollable
       }
     ]);
+    if (widgetData.customControls.usage.value === 'both') {
+      this.shortcutService.addShortcut(widgetData);
+    }
     return widgetData;
   }
 
@@ -590,7 +618,7 @@ export class AnalyticsImportService {
     const renderStep = widgetData.customControls.renderStep;
     const uuid = widgetData.customControls.uuid;
     const title = widgetData.customControls.title;
-
+    const usage = widgetData.customControls.usage;
     // create a set to initialize aggregationmodels properly
     const aggregationsModels: Set<{ field: string; size: number; }> = new Set<{ field: string; size: number; }>();
     contributor.aggregationmodels.forEach(aggModel => aggregationsModels.add({ field: aggModel.field, size: aggModel.size }));
@@ -606,6 +634,10 @@ export class AnalyticsImportService {
       {
         value: component.uuid,
         control: uuid
+      },
+      {
+        value: component.usage,
+        control: usage
       },
       {
         value: contributor.title,

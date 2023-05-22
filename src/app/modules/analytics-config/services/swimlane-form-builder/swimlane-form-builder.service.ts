@@ -242,6 +242,7 @@ export class SwimlaneFormGroup extends WidgetConfigFormGroup {
 
   public customControls = {
     uuid: this.get('uuid') as HiddenFormControl,
+    usage: this.get('usage') as HiddenFormControl,
     title: this.get('title') as TitleInputFormControl,
     dataStep: {
       collection: this.get('dataStep').get('collection') as SelectFormControl,

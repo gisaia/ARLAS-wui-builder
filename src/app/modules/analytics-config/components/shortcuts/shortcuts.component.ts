@@ -18,7 +18,8 @@ under the License.
 */
 
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
-import { Component } from '@angular/core';
+import { CdkDragDrop, CdkDragEnter, CdkDragMove, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'arlas-shortcuts',
@@ -26,8 +27,75 @@ import { Component } from '@angular/core';
   styleUrls: ['./shortcuts.component.scss']
 })
 export class ShortcutsComponent {
+  public dropListReceiverElement?: HTMLElement;
+  public dragDropInfo?: {
+    dragIndex: number;
+    dropIndex: number;
+  };
+  @ViewChild('dropShortcutsListContainer') public dropListContainer?: ElementRef;
+
 
   public constructor(public shortcutService: ShortcutsService) {
 
   }
+
+  public dragEntered(event: CdkDragEnter<number>) {
+    const drag = event.item;
+    const dropList = event.container;
+    const dragIndex = drag.data;
+    const dropIndex = dropList.data;
+
+    this.dragDropInfo = { dragIndex, dropIndex };
+
+    const phContainer = dropList.element.nativeElement;
+    const phElement = phContainer.querySelector('.cdk-drag-placeholder');
+
+    if (phElement) {
+      phContainer.removeChild(phElement);
+      if (this.dragDropInfo.dragIndex > this.dragDropInfo.dropIndex) {
+        phContainer.parentElement?.insertBefore(phElement, phContainer);
+      } else if (this.dragDropInfo.dragIndex < this.dragDropInfo.dropIndex) {
+        phContainer.parentElement?.insertBefore(phElement, phContainer.nextSibling);
+
+      }
+
+    }
+  }
+
+  public dragMoved(event: CdkDragMove<number>) {
+    if (!this.dropListContainer || !this.dragDropInfo) {
+      return;
+    }
+
+    const placeholderElement =
+      this.dropListContainer.nativeElement.querySelector(
+        '.cdk-drag-placeholder'
+      );
+
+    const receiverElement =
+      this.dragDropInfo.dragIndex > this.dragDropInfo.dropIndex
+        ? placeholderElement?.nextElementSibling
+        : placeholderElement?.previousElementSibling;
+
+    if (!receiverElement) {
+      return;
+    }
+
+    this.dropListReceiverElement = receiverElement;
+  }
+
+  public dragDropped(event: CdkDragDrop<number>) {
+    if (!!this.dragDropInfo && this.dragDropInfo.dragIndex !== undefined && this.dragDropInfo.dropIndex !== undefined) {
+      const shortcuts = this.shortcutService.shortcuts;
+      moveItemInArray(shortcuts, this.dragDropInfo.dragIndex, this.dragDropInfo.dropIndex);
+      this.shortcutService.reorderFromList();
+    }
+    if (!this.dropListReceiverElement) {
+      return;
+    }
+
+    this.dropListReceiverElement = undefined;
+    this.dragDropInfo = undefined;
+  }
+
 }
