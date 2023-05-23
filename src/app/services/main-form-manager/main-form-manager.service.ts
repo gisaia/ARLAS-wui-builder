@@ -244,6 +244,7 @@ export class MainFormManagerService {
 
     this.initMainModulesForms(false);
     this.startupService.setDefaultCollection(config.arlas.server.collection.name);
+    this.shortcutsService.doImport(config);
     this.mapImportService.doImport(config, mapConfig);
     this.timelineImportService.doImport(config);
     this.searchImportService.doImport(config);

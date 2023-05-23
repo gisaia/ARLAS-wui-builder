@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { WIDGET_TYPE } from '../edit-group/models';
@@ -29,7 +29,7 @@ import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts
   templateUrl: './widget-edition.component.html',
   styleUrls: ['./widget-edition.component.scss']
 })
-export class WidgetEditionComponent implements OnInit{
+export class WidgetEditionComponent implements OnInit, OnChanges{
   @Input() public widgetControls: { widgetType: FormControl<WIDGET_TYPE>; widgetData: WidgetConfigFormGroup; };
   @Input() public isValid: boolean;
 
@@ -53,15 +53,19 @@ export class WidgetEditionComponent implements OnInit{
       }
       if (this.widgetControls.widgetData) {
         const widgetConfigFg = this.widgetControls.widgetData;
-        this.setPinTemplate(widgetConfigFg.usage);
+        this.updateTemplate(widgetConfigFg.usage);
       }
     }
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    this.ngOnInit();
   }
 
   public update() {
     if (this.widgetControls.widgetData) {
       const widgetConfigFg = this.widgetControls.widgetData;
-      this.setPinTemplate(widgetConfigFg.usage);
+      this.updateTemplate(widgetConfigFg.usage);
     }
   }
 
@@ -77,11 +81,11 @@ export class WidgetEditionComponent implements OnInit{
       widgetConfigFg.setUsage('analytics');
       this.shortcutService.removeShortcut(widgetConfigFg.uuidControl.value);
     }
-    this.setPinTemplate(widgetConfigFg.usage);
+    this.updateTemplate(widgetConfigFg.usage);
   }
 
   /** changes icon/text according to add/remove the shortcut */
-  private setPinTemplate(usage: WidgetUsage) {
+  private updateTemplate(usage: WidgetUsage) {
     if (!usage || usage === 'analytics') {
       this.pinIconName = 'add_circle_outline';
       this.pinText = 'Pin widget';
