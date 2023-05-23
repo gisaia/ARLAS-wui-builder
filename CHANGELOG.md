@@ -1,40 +1,5 @@
 # Change Log
 
-## [v24.2.0-beta.5](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.2.0-beta.5) (2023-10-10)
-
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.2.0-beta.4...v24.2.0-beta.5)
-
-**Fixed bugs:**
-
-- Listing collections to choose for the dashboard doesn't call the right organisation [\#889](https://github.com/gisaia/ARLAS-wui-builder/issues/889)
-
-## [v24.2.0-beta.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.2.0-beta.4) (2023-09-27)
-
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.2.0-beta.3...v24.2.0-beta.4)
-
-## [v24.2.0-beta.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.2.0-beta.3) (2023-09-21)
-
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.2.0-beta.2...v24.2.0-beta.3)
-
-## [v24.2.0-beta.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.2.0-beta.2) (2023-09-11)
-
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.2.0-beta.1...v24.2.0-beta.2)
-
-## [v24.2.0-beta.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.2.0-beta.1) (2023-08-29)
-
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.1.0-beta.2...v24.2.0-beta.1)
-
-**Miscellaneous:**
-
-- Migrate to angular 14 [\#876](https://github.com/gisaia/ARLAS-wui-builder/issues/876)
-
-## [v24.1.0-beta.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.1.0-beta.2) (2023-05-24)
-
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.1.0-beta.1...v24.1.0-beta.2)
-
-## [v24.1.0-beta.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.1.0-beta.1) (2023-05-23)
-
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.0.1...v24.1.0-beta.1)
 
 ## [v24.0.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.0.1) (2023-05-23)
 
@@ -424,15 +389,15 @@
 
 ## [v17.2.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.2) (2021-06-30)
 
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.2...v17.2.4)
+
+## [v17.2.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.4) (2021-06-30)
+
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.3...v17.2.2)
 
 ## [v17.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.3) (2021-06-30)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.4...v17.2.3)
-
-## [v17.2.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.4) (2021-06-30)
-
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.1...v17.2.4)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.1...v17.2.3)
 
 ## [v17.2.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.1) (2021-06-25)
 
