@@ -5,10 +5,6 @@
     <mat-icon>more_vert</mat-icon>
 </button>
 <mat-menu #menuEditWidget="matMenu">
-    <button *ngIf="showPinInMenu" mat-menu-item (click)="pin()" >
-        <mat-icon>{{pinIconName}}</mat-icon>
-        <span>{{pinText | translate}}</span>
-    </button>
     <button mat-menu-item (click)="edit.emit()">
         <mat-icon>edit</mat-icon>
         <span>{{'Edit' | translate}}</span>
@@ -16,5 +12,9 @@
     <button mat-menu-item (click)="delete.emit()">
         <mat-icon>delete</mat-icon>
         <span>{{'Delete' | translate}}</span>
+    </button>
+    <button *ngIf="showPinInMenu" mat-menu-item (click)="pin()" >
+        <mat-icon>{{pinIconName}}</mat-icon>
+        <span>{{pinText | translate}}</span>
     </button>
 </mat-menu>

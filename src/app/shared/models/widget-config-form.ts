@@ -32,7 +32,7 @@ export class WidgetConfigFormGroup extends CollectionConfigFormGroup {
       [key: string]: AbstractControl;
     }) {
     controls['uuid'] = new HiddenFormControl(
-      new uuidv4(),
+      uuidv4(),
       null,
       {
         optional: true
