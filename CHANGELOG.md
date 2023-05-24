@@ -1,5 +1,9 @@
 # Change Log
 
+## [v24.1.0-beta.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.1.0-beta.2) (2023-05-24)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.1.0-beta.1...v24.1.0-beta.2)
+
 ## [v24.1.0-beta.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.1.0-beta.1) (2023-05-23)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.0.1...v24.1.0-beta.1)
@@ -384,11 +388,15 @@
 
 ## [v18.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v18.0.0) (2021-07-12)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.4...v18.0.0)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.3...v18.0.0)
 
 **New stuff:**
 
 - Add the possibility to display a timeline for each collection on the same graph [\#568](https://github.com/gisaia/ARLAS-wui-builder/issues/568)
+
+## [v17.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.3) (2021-06-30)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.4...v17.2.3)
 
 ## [v17.2.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.4) (2021-06-30)
 
@@ -396,11 +404,7 @@
 
 ## [v17.2.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.2) (2021-06-30)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.3...v17.2.2)
-
-## [v17.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.3) (2021-06-30)
-
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.1...v17.2.3)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v17.2.1...v17.2.2)
 
 ## [v17.2.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.1) (2021-06-25)
 
