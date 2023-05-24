@@ -819,7 +819,7 @@
 	"compute metric description": " • Compute a metric on the chosen field. \n • Optionally, apply an ARLAS filter on the computed metric.",
 	"metric": "Metric",
 	"Cannot save the preview": "Cannot save the preview",
-	"Pin widget" : "Add to filters bae",
+	"Pin widget" : "Add to filters bar",
 	"Unpin widget" : "Remove from filters bar",
 	"shortcuts_title" : "Filters bar shortcuts"
 }
