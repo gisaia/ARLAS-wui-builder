@@ -254,6 +254,7 @@ export class ConfigExportHelper {
                 shortcutContributor.linked_contributor_id = contributorId;
                 // todo : configurate this nb of buckets
                 shortcutContributor.numberOfBuckets = 20;
+                shortcutContributor.noDetail = true;
                 contributor.linked_contributor_id = shortcutContributor.identifier;
                 contributorsMap.set(shortcutContributor.identifier, shortcutContributor);
                 config.arlas.web.contributors.push(shortcutContributor);
