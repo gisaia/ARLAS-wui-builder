@@ -16,15 +16,19 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-input.ngx-color-picker {
-    width: 145px;
-    height: 25px;
-    margin: 10px 0px;
-    border: 0;
-    border-radius: 3px;
-    cursor: pointer;
-}
 
-::ng-deep .color-picker {
-    position: fixed !important;
+import { Injectable } from '@angular/core';
+import { CollectionService } from '@services/collection-service/collection.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LayersManualColorsService {
+  /** {"layerId1": {"style1": {"field1": [...keys]}} }  */
+  public layersKeysPerStyle: Map<string, Map<string,  Map<string, Set<string>>>> = new Map();
+  public currentLayerKeys: Map<string,  Map<string, Set<string>>>;
+  public constructor(
+        public collectionService: CollectionService
+  ) {
+  }
 }

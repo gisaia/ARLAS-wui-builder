@@ -428,7 +428,6 @@ export class SelectFormControl extends ConfigFormControl {
       label,
       description,
       optionalParams);
-
     if (options instanceof Observable) {
       options.subscribe(opts => {
         this.setSyncOptions(opts);

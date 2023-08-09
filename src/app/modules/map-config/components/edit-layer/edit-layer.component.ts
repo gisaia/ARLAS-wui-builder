@@ -32,6 +32,7 @@ import { KeywordColor } from '../dialog-color-table/models';
 import { LAYER_MODE } from './models';
 import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { LayersManualColorsService } from '@services/manual-color/manual-color.service';
 
 @Component({
   selector: 'arlas-edit-layer',
@@ -57,6 +58,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
     private mainFormService: MainFormService,
     private mapGlobalFormBuilder: MapGlobalFormBuilderService,
     private collectionService: CollectionService,
+    private manualColorService: LayersManualColorsService,
     private route: ActivatedRoute,
     private cdref: ChangeDetectorRef,
     private router: Router,
@@ -76,7 +78,9 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
       this.routerSub = this.route.paramMap.subscribe(params => {
         const layerId = params.get('id');
         if (!layerId) {
-          this.layerFg = this.mapLayerFormBuilder.buildLayer(this.mainFormService.getMainCollection(), false);
+          this.layerFg = this.mapLayerFormBuilder.buildLayer(
+            layerId,
+            this.mainFormService.getMainCollection(), false);
         } else {
           // there we are editing an existing layer
           const layerIndex = this.getLayerIndex(Number(layerId));
@@ -84,7 +88,9 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
             // cannot simply update the existing form instance because we want to allow cancellation
             // so we rather propagate the existing form properties
             const existingLayerFg = this.getLayerAt(layerIndex) as MapLayerFormGroup;
-            this.layerFg = this.mapLayerFormBuilder.buildLayer(existingLayerFg.customControls.collection.value, true);
+            this.layerFg = this.mapLayerFormBuilder.buildLayer(
+              existingLayerFg.customControls.arlasId.value,
+              existingLayerFg.customControls.collection.value, true);
             this.layerFg.patchValue(existingLayerFg.value);
             this.populateManualValuesFormArray(existingLayerFg);
           } else {
@@ -132,19 +138,30 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
       this.logger.warn('validation failed', this.layerFg);
       return;
     }
+
     // sets the layer id : 'arlas_id:NAME:creationDate
     this.layerFg.customControls.arlasId.setValue(ARLAS_ID + this.layerFg.customControls.name.value + ':' + Date.now());
+    const newLayerId = this.layerFg.customControls.arlasId.value;
     /** add the layer to list of layers */
     if (!this.isNewLayer()) {
       const layerIndex = this.getLayerIndex(this.layerFg.customControls.id.value);
       if (layerIndex < 0) {
         this.logger.error('There was an error while saving the layer, unknown layer ID');
       }
+      const oldManualColorsKeywords = this.manualColorService.layersKeysPerStyle.get(oldLayerId);
+      if (!!oldManualColorsKeywords) {
+        this.manualColorService.layersKeysPerStyle.set(newLayerId, oldManualColorsKeywords);
+        this.manualColorService.layersKeysPerStyle.delete(oldLayerId);
+      }
       this.layersFa.setControl(layerIndex, this.layerFg);
     } else {
       const newId = this.layersValues.reduce((acc, val) => acc.id > val.id ? acc.id : val.id, 0) + 1;
       this.layerFg.customControls.id.setValue(newId);
       this.layersFa.insert(newId, this.layerFg);
+      if (this.manualColorService.currentLayerKeys) {
+        this.manualColorService.layersKeysPerStyle.set(newLayerId, this.manualColorService.currentLayerKeys);
+        this.manualColorService.currentLayerKeys= undefined;
+      }
     }
 
     // if we create a layer and there is no visualisation set yet, then
@@ -153,7 +170,6 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
 
     const savedVisualisations = this.layerFg.customControls.visualisation.syncOptions;
     const visualisationValue = this.visualisationsFa.value;
-    const newLayerId = this.layerFg.customControls.arlasId.value;
 
     if (savedVisualisations.length <= 1 && this.visualisationsFa.length === 0) {
       const allLayers = [];

@@ -25,6 +25,7 @@ import { Config, ContributorConfig, MapglComponentConfig, NormalizationFieldConf
 import { isTechnicalArlasLayer, Layer, MapConfig } from '@services/main-form-manager/models-map-config';
 import { importElements } from '@services/main-form-manager/tools';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
+import { LayersManualColorsService } from '@services/manual-color/manual-color.service';
 import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { BasemapStyle, LayerMetadata, VisualisationSetConfig } from 'arlas-web-components';
 import { ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, LayerSourceConfig, MetricConfig } from 'arlas-web-contributors';
@@ -48,7 +49,8 @@ export class MapImportService {
     private mainFormService: MainFormService,
     private mapGlobalFormBuilder: MapGlobalFormBuilderService,
     private mapLayerFormBuilder: MapLayerFormBuilderService,
-    private mapVisualisationFormBuilder: MapVisualisationFormBuilderService
+    private mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
+    private layersManualColorsService: LayersManualColorsService
   ) { }
 
   public static removeLastcolor = (value) => value.substring(0, value.lastIndexOf('_arlas__color'));
@@ -58,7 +60,10 @@ export class MapImportService {
     propertySelectorValues: any,
     fixType: PROPERTY_SELECTOR_SOURCE,
     isAggregated: boolean,
-    layerSource: LayerSourceConfig) {
+    layerSource: LayerSourceConfig,
+    manualColorService?: LayersManualColorsService,
+    layerId?: string,
+    styleName?: string) {
     if (typeof inputValues === 'string' || typeof inputValues === 'number') {
       propertySelectorValues.propertySource = fixType;
       if (fixType === PROPERTY_SELECTOR_SOURCE.fix_color) {
@@ -91,7 +96,7 @@ export class MapImportService {
           }
         }
       } else if (inputValues[0] === 'match') {
-        this.importPropertySelectorManual(inputValues, propertySelectorValues, layerSource);
+        this.importPropertySelectorManual(inputValues, propertySelectorValues, layerSource, manualColorService, layerId, styleName);
       } else if (inputValues[0] === 'interpolate') {
         this.importPropertySelectorInterpolated(inputValues, propertySelectorValues, isAggregated, layerSource);
       }
@@ -185,7 +190,9 @@ export class MapImportService {
     }
   }
 
-  public static importPropertySelectorManual(inputValues: any, propertySelectorValues: any, layerSource: LayerSourceConfig) {
+  public static importPropertySelectorManual(inputValues: any, propertySelectorValues: any, layerSource: LayerSourceConfig,
+    manualColorService?: LayersManualColorsService,
+    layerId?: string, styleName?: string) {
     propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.manual;
     const keywordsAndColors = (inputValues.slice(2) as Array<string>);
     let manualField = '';
@@ -216,12 +223,25 @@ export class MapImportService {
       propertyManualFieldCtrl: manualField,
       propertyManualValuesCtrl: new Array<KeywordColor>()
     };
+    let fieldsPerStyle = manualColorService.layersKeysPerStyle.get(layerId);
+    if (!fieldsPerStyle) {
+      fieldsPerStyle = new Map<string, Map<string, Set<string>>>();
+    }
+    let keysPerField = fieldsPerStyle.get(styleName);
+    if (!keysPerField) {
+      keysPerField = new Map<string, Set<string>>();
+    }
+    const manualKeys = new Set<string>();
     for (let i = 0; i < keywordsAndColors.length - 1; i = i + 2) {
       propertySelectorValues.propertyManualFg.propertyManualValuesCtrl.push({
         keyword: keywordsAndColors[i] + '',
         color: keywordsAndColors[i + 1]
       });
+      manualKeys.add(keywordsAndColors[i] + '');
     }
+    keysPerField.set(manualField, manualKeys);
+    fieldsPerStyle.set(styleName, keysPerField);
+    manualColorService.layersKeysPerStyle.set(layerId, fieldsPerStyle);
 
     propertySelectorValues.propertyManualFg.propertyManualValuesCtrl.push({
       keyword: OTHER_KEYWORD,
@@ -316,7 +336,8 @@ export class MapImportService {
     layerId: number,
     visualisationSets: Array<VisualisationSetConfig>,
     layerFg: MapLayerFormGroup,
-    filtersFa: FormArray
+    filtersFa: FormArray,
+    manualColorService: LayersManualColorsService
   ) {
     const type = layer.source.split('-')[0];
     // TODO extract type with toolkit, once it is available (contrary of `getSourceName`)
@@ -471,7 +492,7 @@ export class MapImportService {
     const colors = layer.paint[(layer.type === 'symbol' ? 'text' : layer.type) + '-color'];
     values.styleStep.colorFg = {};
     this.importPropertySelector(colors, values.styleStep.colorFg,
-      PROPERTY_SELECTOR_SOURCE.fix_color, isAggregated, layerSource);
+      PROPERTY_SELECTOR_SOURCE.fix_color, isAggregated, layerSource, manualColorService, layer.id, 'color');
     if (layer.type === 'symbol') {
       values.styleStep.labelSizeFg = {};
       values.styleStep.labelRotationFg = {};
@@ -849,10 +870,11 @@ export class MapImportService {
     collectionName: string,
     layerId: number,
     visualisationSets: Array<VisualisationSetConfig>) {
-    const layerFg = this.mapLayerFormBuilder.buildLayer(collectionName);
+    const layerFg = this.mapLayerFormBuilder.buildLayer(layer.id, collectionName);
     const filtersFa: FormArray = new FormArray([]);
     this.importMapFilters(layerSource, filtersFa, collectionName);
-    return MapImportService.importLayerFg(layer, layerSource, collectionName, layerId, visualisationSets, layerFg, filtersFa);
+    return MapImportService.importLayerFg(layer, layerSource, collectionName, layerId, visualisationSets, layerFg,
+      filtersFa, this.layersManualColorsService);
   }
 
 }

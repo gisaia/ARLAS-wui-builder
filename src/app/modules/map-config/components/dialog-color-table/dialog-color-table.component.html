@@ -1,8 +1,15 @@
+<div mat-dialog-title>
+    {{'Colorer la géométrie en fonction de la valeur du champ'}} <b>object.ship_type</b>
+</div>
+<div mat-dialog-content style="margin-left: 0; font-size: 14px; color: #333;">
+    {{'Seules les géométries ayant une valeur de'}} <b>object.ship_type</b> {{' dans la liste ci-dessous seront colorées'}}
+</div>
+
 <div mat-dialog-content>
 
     <form [formGroup]="keywordColorsForm" autocomplete="off">
-        <mat-table [dataSource]="dataSource">
-
+        <mat-table [dataSource]="dataSource" class="color-table">
+<!-- 
             <ng-container matColumnDef="add-keyword">
                 <mat-header-cell *matHeaderCellDef>
                     <div class="add-header">
@@ -20,7 +27,7 @@
                     </div>
                     <mat-divider></mat-divider>
                 </mat-header-cell>
-            </ng-container>
+            </ng-container> -->
 
             <ng-container matColumnDef="keyword">
                 <mat-header-cell *matHeaderCellDef>
@@ -52,12 +59,16 @@
                 </mat-cell>
             </ng-container>
 
-            <mat-header-row *matHeaderRowDef="['add-keyword']; sticky: true"></mat-header-row>
+            <!-- <mat-header-row *matHeaderRowDef="['add-keyword']; sticky: true"></mat-header-row> -->
             <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
         </mat-table>
     </form>
+</div>
+
+<div mat-dialog-content style="margin-left: 0; margin-top: 10px; font-size: 14px; color: #333;">
+    {{'Choisir la couleur des géométries dont la valeur de'}} <b>object.ship_type</b> {{'ne correspond pas à la liste ci-dessus.'}}
 </div>
 
 <div mat-dialog-actions>
