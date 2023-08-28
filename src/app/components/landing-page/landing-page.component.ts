@@ -185,7 +185,6 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
             this.getConfigList();
           }
           if (!!userSubject) {
-            console.log(userSubject)
             this.isAuthenticated = true;
             this.name = userSubject?.user.email;
             this.avatar = '';

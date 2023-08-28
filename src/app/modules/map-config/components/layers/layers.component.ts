@@ -38,7 +38,7 @@ import { StartupService } from '@services/startup/startup.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { camelize } from '@utils/tools';
-import { LayerMetadata, MapglLegendComponent, VisualisationSetConfig } from 'arlas-web-components';
+import { ArlasColorService, LayerMetadata, MapglLegendComponent, VisualisationSetConfig } from 'arlas-web-components';
 import { MapContributor } from 'arlas-web-contributors';
 import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService,
   ArlasSettingsService, ContributorBuilder } from 'arlas-wui-toolkit';
@@ -83,7 +83,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     private startupService: StartupService,
     private collectionService: CollectionService,
     private mapImportService: MapImportService,
-    private colorService: ArlasColorGeneratorLoader,
+    private colorService: ArlasColorService,
     private mapLayerFormBuilder: MapLayerFormBuilderService,
     private mapGlobalFormBuilder: MapGlobalFormBuilderService,
     protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,

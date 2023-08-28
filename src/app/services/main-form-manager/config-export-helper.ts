@@ -50,7 +50,7 @@ import {
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
-import { VisualisationSetConfig, BasemapStyle, SCROLLABLE_ARLAS_ID } from 'arlas-web-components';
+import { VisualisationSetConfig, BasemapStyle, SCROLLABLE_ARLAS_ID, ArlasColorService } from 'arlas-web-components';
 import { titleCase } from '@services/collection-service/tools';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
@@ -142,7 +142,8 @@ export class ConfigExportHelper {
     analyticsConfigList: FormArray,
     resultLists: FormArray,
     externalNode: FormGroup,
-    colorService: ArlasColorGeneratorLoader,
+    colorService: ArlasColorService,
+    colorGeneratorService: ArlasColorGeneratorLoader,
     collectionService: CollectionService
   ): any {
     const chipssearch: ChipSearchConfig = {
@@ -161,7 +162,7 @@ export class ConfigExportHelper {
           },
           analytics: [],
           colorGenerator: {
-            keysToColors: colorService.keysToColors
+            keysToColors: colorGeneratorService.keysToColors
           },
           options: this.getOptions(lookAndFeelConfigGlobal),
           externalNode: externalNode.controls.externalNode.value

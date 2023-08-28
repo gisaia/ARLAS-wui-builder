@@ -38,8 +38,9 @@ import { OAuthModule } from 'angular-oauth2-oidc';
 import {
   ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigurationDescriptor, ArlasConfigurationUpdaterService,
   ArlasIamService,
-  ArlasStartupService, ArlasWalkthroughService, auhtentServiceFactory, AuthentificationService, ConfigMenuModule, configUpdaterFactory,
-  CONFIG_UPDATER, ErrorModalModule, FETCH_OPTIONS, getOptionsFactory, GET_OPTIONS, iamServiceFactory, PaginatorI18n, UserInfosComponent
+  ArlasStartupService, ArlasWalkthroughService, AuthentificationService, ConfigMenuModule, configUpdaterFactory,
+  CONFIG_UPDATER, ErrorModalModule, FETCH_OPTIONS, getOptionsFactory,
+  iamServiceFactory, PaginatorI18n, UserInfosComponent, GET_OPTIONS, ArlasConfigService
 } from 'arlas-wui-toolkit';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
@@ -135,7 +136,6 @@ export class CustomTranslateLoader implements TranslateLoader {
   providers: [
     forwardRef(() => ArlasConfigurationDescriptor),
     forwardRef(() => ArlasCollaborativesearchService),
-    forwardRef(() => ArlasColorGeneratorLoader),
     forwardRef(() => ArlasStartupService),
     {
       provide: APP_INITIALIZER,
@@ -188,6 +188,10 @@ export class CustomTranslateLoader implements TranslateLoader {
       deps: [TranslateService],
       useFactory: (translateService: TranslateService) => new PaginatorI18n(translateService)
     },
+    {
+      provide: ArlasColorGeneratorLoader,
+      deps: [ArlasConfigService, ArlasCollaborativesearchService]
+    }
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 

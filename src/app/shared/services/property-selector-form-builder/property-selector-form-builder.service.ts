@@ -42,13 +42,15 @@ import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { toNumericOptionsObs, toNumericFieldsObs } from '../../../services/collection-service/tools';
+import { ArlasColorService } from 'arlas-web-components';
 
 export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
   public constructor(
     defaultConfig: DefaultConfig,
     dialog: MatDialog,
     collectionService: CollectionService,
-    colorService: ArlasColorGeneratorLoader,
+    colorService: ArlasColorService,
+    colorGeneratorService: ArlasColorGeneratorLoader,
     collection: string,
     collectionFieldsObs: Observable<Array<CollectionField>>,
     private propertyType: PROPERTY_TYPE,
@@ -405,7 +407,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                   this.customControls.propertyManualFg.propertyManualValuesCtrl.clear();
                   result.forEach((kc: KeywordColor) => {
                     /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
-                    colorService.updateKeywordColor(kc.keyword, kc.color);
+                    colorGeneratorService.updateKeywordColor(kc.keyword, kc.color);
                     this.addToColorManualValuesCtrl(kc);
                   });
                 }
@@ -981,7 +983,8 @@ export class PropertySelectorFormBuilderService {
     private defaultValuesService: DefaultValuesService,
     private dialog: MatDialog,
     private collectionService: CollectionService,
-    private colorService: ArlasColorGeneratorLoader
+    private colorService: ArlasColorService,
+    private colorGeneratorService: ArlasColorGeneratorLoader
   ) { }
 
   public build(
@@ -998,6 +1001,7 @@ export class PropertySelectorFormBuilderService {
       this.dialog,
       this.collectionService,
       this.colorService,
+      this.colorGeneratorService,
       collection,
       this.collectionService.getCollectionFields(collection),
       propertyType,

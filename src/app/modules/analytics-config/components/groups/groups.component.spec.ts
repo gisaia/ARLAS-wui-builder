@@ -3,7 +3,7 @@ import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectat
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ArlasColorService } from 'arlas-web-components';
 import {
-  AnalyticsBoardComponent, ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService,
+  AnalyticsBoardComponent, ArlasCollaborativesearchService, ArlasConfigService,
   ArlasConfigurationUpdaterService, ArlasStartupService, CONFIG_UPDATER
 } from 'arlas-wui-toolkit';
 import { MockComponent } from 'ng-mocks';
@@ -22,7 +22,6 @@ describe('GroupsComponent', () => {
     providers: [
       mockProvider(ArlasConfigService),
       mockProvider(MainFormService),
-      mockProvider(ArlasColorGeneratorLoader),
       mockProvider(ArlasColorService),
       mockProvider(ArlasStartupService),
       mockProvider(ArlasCollaborativesearchService),
