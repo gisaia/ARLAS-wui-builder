@@ -1,6 +1,8 @@
 import { DonutFormBuilderService } from './donut-form-builder.service';
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { ArlasColorService } from 'arlas-web-components';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 describe('DonutFormBuilderService', () => {
   let spectator: SpectatorService<DonutFormBuilderService>;
@@ -8,7 +10,9 @@ describe('DonutFormBuilderService', () => {
   const createService = createServiceFactory({
     service: DonutFormBuilderService,
     providers: [
-      mockProvider(CollectionService)
+      mockProvider(CollectionService),
+      mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(ArlasColorService)
     ]
   });
 

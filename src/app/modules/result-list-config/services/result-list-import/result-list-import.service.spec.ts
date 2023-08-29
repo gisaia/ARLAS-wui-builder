@@ -3,6 +3,7 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasStartupService } from 'arlas-wui-toolkit';
 
 import { ResultListImportService } from './result-list-import.service';
+import { ArlasColorService } from 'arlas-web-components';
 
 describe('ResultListImportService', () => {
   let spectator: SpectatorService<ResultListImportService>;
@@ -14,6 +15,7 @@ describe('ResultListImportService', () => {
       mockProvider(ArlasStartupService),
       mockProvider(ArlasCollaborativesearchService),
       mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(ArlasColorService),
     ]
   });
 

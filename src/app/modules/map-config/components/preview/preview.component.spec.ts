@@ -8,7 +8,7 @@ import {
 } from 'arlas-wui-toolkit';
 import { MockComponent } from 'ng-mocks';
 import { PreviewComponent } from './preview.component';
-import { MapglComponent } from 'arlas-web-components';
+import { ArlasColorService, MapglComponent } from 'arlas-web-components';
 
 describe('PreviewComponent', () => {
 
@@ -22,6 +22,7 @@ describe('PreviewComponent', () => {
       mockProvider(ArlasCollaborativesearchService),
       mockProvider(ArlasConfigurationUpdaterService),
       mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(ArlasColorService),
       mockProvider(ArlasStartupService),
       mockProvider(CollectionService),
       mockProvider(PersistenceService),

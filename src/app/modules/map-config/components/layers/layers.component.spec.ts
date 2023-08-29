@@ -2,7 +2,7 @@ import { FormArray } from '@angular/forms';
 import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { MapglLayerIconModule, MapglLegendModule } from 'arlas-web-components';
+import { ArlasColorService, MapglLayerIconModule, MapglLegendModule } from 'arlas-web-components';
 import {
   ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService, ArlasConfigurationUpdaterService,
   ArlasStartupService, CONFIG_UPDATER
@@ -17,6 +17,7 @@ describe('LayersComponent', () => {
       mockProvider(ArlasStartupService),
       mockProvider(ArlasCollaborativesearchService),
       mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(ArlasColorService),
       mockProvider(ArlasConfigurationUpdaterService),
       mockProvider(CollectionService),
       { provide: CONFIG_UPDATER, useValue: {} },

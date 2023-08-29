@@ -6,6 +6,7 @@ import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit';
 import { AuthentificationService } from 'arlas-wui-toolkit';
 import { GET_OPTIONS } from 'arlas-wui-toolkit';
 import { getOptionsFactory } from 'arlas-wui-toolkit';
+import { ArlasColorService } from 'arlas-web-components';
 
 describe('MainFormManagerService', () => {
   let spectator: SpectatorService<MainFormManagerService>;
@@ -16,6 +17,7 @@ describe('MainFormManagerService', () => {
       mockProvider(ArlasStartupService),
       mockProvider(ArlasCollaborativesearchService),
       mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(ArlasColorService),
       mockProvider(ArlasConfigurationDescriptor),
       mockProvider(AuthentificationService),
       mockProvider(CollectionService),

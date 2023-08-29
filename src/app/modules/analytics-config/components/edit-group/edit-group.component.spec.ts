@@ -4,11 +4,12 @@ import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectat
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
 import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
 import {
-  AnalyticsBoardComponent, ArlasCollaborativesearchService, ArlasConfigService,
+  AnalyticsBoardComponent, ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService,
   ArlasConfigurationUpdaterService, ArlasStartupService, CONFIG_UPDATER
 } from 'arlas-wui-toolkit';
 import { MockComponent } from 'ng-mocks';
 import { AddWidgetDialogComponent, EditGroupComponent } from './edit-group.component';
+import { ArlasColorService } from 'arlas-web-components';
 
 describe('EditGroupComponent', () => {
   let spectator: Spectator<EditGroupComponent>;
@@ -19,13 +20,15 @@ describe('EditGroupComponent', () => {
       AlertOnChangeDirective,
       ResetOnChangeDirective,
       MockComponent(AnalyticsBoardComponent),
-      MockComponent(IconPickerComponent)
+      MockComponent(IconPickerComponent),
     ],
     providers: [
       mockProvider(ArlasConfigService),
       mockProvider(ArlasStartupService),
       mockProvider(ArlasCollaborativesearchService),
       mockProvider(ArlasConfigurationUpdaterService),
+      mockProvider(ArlasColorService),
+      mockProvider(ArlasColorGeneratorLoader),
       { provide: CONFIG_UPDATER, useValue: {} }
     ],
     entryComponents: [
