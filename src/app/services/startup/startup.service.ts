@@ -23,7 +23,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Configuration } from 'arlas-api';
 import {
   ArlasCollaborativesearchService, ArlasConfigService, ArlasExploreApi,
-  ArlasStartupService, ArlasSettings, AuthentificationService
+  ArlasStartupService, ArlasSettings, AuthentificationService, AuthentSetting, ArlasIamService
 } from 'arlas-wui-toolkit';
 import fetchIntercept from 'fetch-intercept';
 import { map, Observable } from 'rxjs';
@@ -149,10 +149,15 @@ export class StartupService {
       const request = new XMLHttpRequest();
       request.open('GET', url, false);  // `false`
       // tslint:disable-next-line:no-string-literal
-      const authent = arlasSettingsService.settings['authentication'];
+      const authent: AuthentSetting = arlasSettingsService.settings['authentication'];
       if (!!authent && authent.use_authent) {
-        const authService: AuthentificationService = this.injector.get('AuthentificationService')[0];
-        request.setRequestHeader('Authorization', 'bearer ' + authService.accessToken);
+        if( authent.auth_mode === 'openid'){
+          const authService: AuthentificationService = this.injector.get('AuthentificationService')[0];
+          request.setRequestHeader('Authorization', 'Bearer ' + authService.accessToken);
+        } else { // IAM
+          const authService: ArlasIamService = this.injector.get('ArlasIamService')[0];
+          request.setRequestHeader('Authorization', 'Bearer ' + authService.currentUserValue.accessToken);
+        }
       }
       request.send();
       let response;
