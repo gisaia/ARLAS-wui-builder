@@ -17,9 +17,10 @@ specific language governing permissions and limitations
 under the License.
 */
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, Inject, Injector, OnDestroy, OnInit, Output } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit, Output } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
+import { MatSelectChange } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -30,10 +31,12 @@ import { MapConfig } from '@services/main-form-manager/models-map-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { MenuService } from '@services/menu/menu.service';
 import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
+import { StartupService, ZONE_WUI_BUILDER } from '@services/startup/startup.service';
 import { DialogData } from '@shared-components/input-modal/input-modal.component';
-import { DataWithLinks } from 'arlas-persistence-api';
 import { UserOrgData } from 'arlas-iam-api';
+import { DataWithLinks } from 'arlas-persistence-api';
 import {
+  ArlasAuthentificationService,
   ArlasConfigService, ArlasConfigurationDescriptor, ArlasIamService, ArlasSettingsService, AuthentificationService, ConfigAction,
   ConfigActionEnum, ErrorService, PersistenceService, UserInfosComponent
 } from 'arlas-wui-toolkit';
@@ -41,8 +44,6 @@ import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
-import { StartupService, ZONE_WUI_BUILDER } from '@services/startup/startup.service';
-import { MatSelectChange } from '@angular/material/select';
 
 enum InitialChoice {
   none = 0,
@@ -113,23 +114,12 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     private spinner: NgxSpinnerService,
     private router: Router,
     private menu: MenuService,
-    private injector: Injector,
-    private arlasIamService: ArlasIamService
+    private arlasIamService: ArlasIamService,
+    private arlasAuthentService: ArlasAuthentificationService
   ) {
 
-    this.isAuthentActivated = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
-
-    const isOpenID = this.isAuthentActivated && this.arlasIamService.authConfigValue.auth_mode !== 'iam';
-    const isIam = this.isAuthentActivated && this.arlasIamService.authConfigValue.auth_mode === 'iam';
-    this.isAuthentActivated = isOpenID || isIam;
-    if (isOpenID) {
-      this.authentMode = 'openid';
-    }
-    if (isIam) {
-      this.authentMode = 'iam';
-    }
-
-
+    this.isAuthentActivated = !!this.arlasAuthentService.authConfigValue && !!this.arlasAuthentService.authConfigValue.use_authent;
+    this.authentMode = this.arlasAuthentService.authConfigValue.auth_mode;
     this.showLoginButton = this.isAuthentActivated && !this.isAuthenticated;
     this.showLogOutButton = this.isAuthentActivated && this.isAuthenticated;
   }
@@ -210,7 +200,10 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     }
     // if persistence is configured and anonymous mode is enabled, we fetch the configuration accessible as anonymous
     // if ARLAS-persistence doesn't allow anonymous access, a suitable error is displayed in a modal
-    if (this.persistenceService.isAvailable && (!this.authService.authConfigValue || !this.authService.authConfigValue.use_authent)) {
+    if (
+      this.persistenceService.isAvailable
+      && (!this.arlasAuthentService.authConfigValue || !this.arlasAuthentService.authConfigValue.use_authent)
+    ) {
       this.getConfigList();
     }
   }
