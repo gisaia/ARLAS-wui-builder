@@ -18,12 +18,13 @@ under the License.
 */
 import { LOCATION_INITIALIZED } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Injector } from '@angular/core';
+import { Inject, Injectable, Injector } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Configuration } from 'arlas-api';
 import {
   ArlasCollaborativesearchService, ArlasConfigService, ArlasExploreApi,
-  ArlasStartupService, ArlasSettings, AuthentificationService
+  ArlasStartupService, ArlasSettings, AuthentificationService, ArlasSettingsService,
+  PersistenceService, PermissionService, ErrorService, FetchInterceptorService, CONFIG_UPDATER, GET_OPTIONS, FETCH_OPTIONS
 } from 'arlas-wui-toolkit';
 import fetchIntercept from 'fetch-intercept';
 import { map, Observable } from 'rxjs';
@@ -34,7 +35,7 @@ export const ZONE_PREVIEW = 'preview';
 @Injectable({
   providedIn: 'root'
 })
-export class StartupService {
+export class StartupService extends ArlasStartupService {
 
   public contributorRegistry: Map<string, any> = new Map<string, any>();
   public interceptorRegistry: Map<string, any> = new Map<string, any>();
@@ -65,32 +66,48 @@ export class StartupService {
   }
 
   public constructor(
-    private configService: ArlasConfigService,
-    private arlasCss: ArlasCollaborativesearchService,
-    private arlasStartupService: ArlasStartupService,
-    private injector: Injector,
-    private http: HttpClient,
-    private translateService: TranslateService) { }
+    settingsService: ArlasSettingsService,
+    protected _configService: ArlasConfigService,
+    protected arlasCss: ArlasCollaborativesearchService,
+    protected _injector: Injector,
+    @Inject(FETCH_OPTIONS) protected _fetchOptions,
+    @Inject(GET_OPTIONS) protected _getOptions,
+    protected _http: HttpClient,
+    protected _translateService: TranslateService,
+    @Inject(CONFIG_UPDATER) protected _configUpdater,
+    protected _persistenceService: PersistenceService,
+    protected _errorService: ErrorService,
+    protected _fetchInterceptorService: FetchInterceptorService
+  ) {
+    super(
+      settingsService, _configService, arlasCss, _injector,
+      _fetchOptions, _getOptions, _http, _translateService,
+      _configUpdater, _persistenceService,
+      _errorService, _fetchInterceptorService
+    );
+  }
+
+
 
   public init(): Promise<string> {
-    return this.arlasStartupService.applyAppSettings()
-      .then((s: ArlasSettings) => this.arlasStartupService.authenticate(s))
-      .then((s: ArlasSettings) => this.arlasStartupService.enrichHeaders(s))
+    return this.applyAppSettings()
+      .then((s: ArlasSettings) => this.authenticate(s))
+      .then((s: ArlasSettings) => this.enrichHeaders(s))
       .then((s: ArlasSettings) => new Promise((resolve, reject) => {
-        this.configService.setConfig({});
+        this._configService.setConfig({});
         resolve('Successfullly initialized app');
       }))
       // Init app with the language read from url
-      .then(() => StartupService.translationLoaded(this.translateService, this.injector));
+      .then(() => StartupService.translationLoaded(this._translateService, this._injector));
   }
 
   public setCollaborativeService(data) {
     return new Promise<any>((resolve, reject) => {
-      this.arlasCss.setConfigService(this.configService);
+      this.arlasCss.setConfigService(this._configService);
       const configuraiton: Configuration = new Configuration();
       const arlasExploreApi: ArlasExploreApi = new ArlasExploreApi(
         configuraiton,
-        this.configService.getValue('arlas.server.url'),
+        this._configService.getValue('arlas.server.url'),
         window.fetch
       );
       this.arlasCss.setExploreApi(arlasExploreApi);
@@ -104,7 +121,7 @@ export class StartupService {
 
   public getConfigWithInitContrib(): any {
     // Add contributor part in arlasConfigService
-    const currentConfig = this.configService.getConfig() as any;
+    const currentConfig = this._configService.getConfig() as any;
     // Add web contributors in config if not exist
     if (currentConfig.arlas.web === undefined) {
       currentConfig.arlas.web = {};
@@ -119,8 +136,8 @@ export class StartupService {
   public applyArlasInterceptor(collection, filter) {
     const unregister = fetchIntercept.register({
       request: (url, config) => {
-        if (typeof url === 'string' || (url as any) instanceof String){
-          if (url.indexOf('/explore/' + collection +'/') >= 0) {
+        if (typeof url === 'string' || (url as any) instanceof String) {
+          if (url.indexOf('/explore/' + collection + '/') >= 0) {
             // tslint:disable-next-line:no-string-literal
             config['headers']['partition-filter'] = JSON.stringify(filter);
           }
@@ -150,7 +167,7 @@ export class StartupService {
       // tslint:disable-next-line:no-string-literal
       const authent = arlasSettingsService.settings['authentication'];
       if (!!authent && authent.use_authent) {
-        const authService: AuthentificationService = this.injector.get('AuthentificationService')[0];
+        const authService: AuthentificationService = this._injector.get('AuthentificationService')[0];
         request.setRequestHeader('Authorization', 'bearer ' + authService.accessToken);
       }
       request.send();

@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-import { NgModule } from '@angular/core';
+import { NgModule, forwardRef } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
@@ -35,6 +35,7 @@ import { PreviewComponent } from './components/preview/preview.component';
 import { VisualisationsComponent } from './components/visualisations/visualisations.component';
 import { MapConfigRoutingModule } from './map-config-routing.module';
 import { MapConfigComponent } from './map-config.component';
+import { PersistenceService } from 'arlas-wui-toolkit';
 
 @NgModule({
   entryComponents: [
@@ -69,8 +70,9 @@ import { MapConfigComponent } from './map-config.component';
 
   ],
   providers: [
+    forwardRef(() => PersistenceService),
     ConfirmExitGuard,
-    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MAT_DIALOG_DATA, useValue: {} }
 
   ]
 })
