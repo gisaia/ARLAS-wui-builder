@@ -42,7 +42,7 @@ import {
 } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject, Subscription, take } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 
 enum InitialChoice {
@@ -449,7 +449,6 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
 
   public getConfigList() {
     this.persistenceService.list(ZONE_WUI_BUILDER, this.configPageSize, this.configPageNumber + 1, 'desc')
-      .pipe(take(1))
       .pipe(map(data => {
         if (data.data !== undefined) {
           return [data.total, data.data.map(d => this.computeData(d))];
