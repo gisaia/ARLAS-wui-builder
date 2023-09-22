@@ -42,7 +42,7 @@ import {
 } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, take } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 
 enum InitialChoice {
@@ -91,6 +91,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   private urlSubscription: Subscription;
   private urlCollectionsSubscription: Subscription;
   private collectionsSubscription: Subscription;
+  private refreshSubscription: Subscription;
 
   public constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -169,22 +170,26 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
       });
     }
     if (this.authentMode === 'iam') {
-      this.arlasIamService.currentUserSubject.subscribe({
-        next: (userSubject) => {
+      this.refreshSubscription = this.arlasIamService.tokenRefreshed$.subscribe({
+        next: (loginData) => {
           if (this.persistenceService.isAvailable) {
             this.getConfigList();
           }
-          if (!!userSubject) {
+          if (!!loginData) {
             this.isAuthenticated = true;
-            this.name = userSubject?.user.email;
+            this.name = loginData?.user.email;
             this.avatar = '';
-            this.orgs = userSubject.user.organisations.map(org => {
-              org.displayName = org.name === userSubject.user.id ? userSubject.user.email.split('@')[0] : org.name;
+            this.orgs = loginData.user.organisations.map(org => {
+              org.displayName = org.name === loginData.user.id ? loginData.user.email.split('@')[0] : org.name;
               return org;
             });
-            if (this.startupService.currentOrga === '') {
+            if (this.arlasIamService.getOrganisation()) {
+              this.startupService.currentOrga = this.arlasIamService.getOrganisation();
+            } else {
               this.startupService.currentOrga = this.orgs.length > 0 ? this.orgs[0].name : '';
+              this.arlasIamService.storeOrganisation(this.startupService.currentOrga);
             }
+
           } else {
             this.isAuthenticated = false;
             this.name = '';
@@ -220,6 +225,9 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     }
     if (this.collectionsSubscription) {
       this.collectionsSubscription.unsubscribe();
+    }
+    if (this.refreshSubscription) {
+      this.refreshSubscription.unsubscribe();
     }
   }
 
@@ -441,6 +449,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
 
   public getConfigList() {
     this.persistenceService.list(ZONE_WUI_BUILDER, this.configPageSize, this.configPageNumber + 1, 'desc')
+      .pipe(take(1))
       .pipe(map(data => {
         if (data.data !== undefined) {
           return [data.total, data.data.map(d => this.computeData(d))];
@@ -538,7 +547,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
 
   public changeOrg(event: MatSelectChange) {
     this.startupService.currentOrga = event.value;
-    this.startupService.changeOrgHeader(event.value, this.arlasIamService.currentUserValue.accessToken);
+    this.startupService.changeOrgHeader(event.value, this.arlasIamService.getAccessToken());
     this.getConfigList();
   }
 }

@@ -156,7 +156,7 @@ export class StartupService {
           request.setRequestHeader('Authorization', 'Bearer ' + authService.accessToken);
         } else { // IAM
           const authService: ArlasIamService = this.injector.get('ArlasIamService')[0];
-          request.setRequestHeader('Authorization', 'Bearer ' + authService.currentUserValue.accessToken);
+          request.setRequestHeader('Authorization', 'Bearer ' + authService.getAccessToken());
         }
       }
       request.send();
