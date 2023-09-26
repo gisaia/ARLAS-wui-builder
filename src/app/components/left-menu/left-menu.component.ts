@@ -91,11 +91,11 @@ export class LeftMenuComponent implements OnInit {
       });
     }
     if (this.authentMode === 'iam') {
-      this.arlasIamService.currentUserSubject.subscribe({
-        next: (data) => {
-          if (!!data) {
+      this.arlasIamService.tokenRefreshed$.subscribe({
+        next: (loginData) => {
+          if (!!loginData) {
             this.showLogOutButton = true;
-            this.name = data?.user.email;
+            this.name = loginData?.user.email;
             this.avatar = this.getInitials(this.name);
           } else {
             this.name = '';
