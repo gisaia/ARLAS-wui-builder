@@ -172,9 +172,6 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     if (this.authentMode === 'iam') {
       this.refreshSubscription = this.arlasIamService.tokenRefreshed$.subscribe({
         next: (loginData) => {
-          if (this.persistenceService.isAvailable) {
-            this.getConfigList();
-          }
           if (!!loginData) {
             this.isAuthenticated = true;
             this.name = loginData?.user.email;
@@ -194,6 +191,9 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
             this.isAuthenticated = false;
             this.name = '';
             this.avatar = '';
+          }
+          if (this.persistenceService.isAvailable) {
+            this.getConfigList();
           }
           this.showLoginButton = this.isAuthentActivated && !this.isAuthenticated;
           this.showLogOutButton = this.isAuthentActivated && this.isAuthenticated;
@@ -466,6 +466,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
           });
         },
         error: (msg) => {
+          this.configurations = [];
           if (!this.errorAlreadyThrown) {
             let message = '';
             if (msg.url) {
