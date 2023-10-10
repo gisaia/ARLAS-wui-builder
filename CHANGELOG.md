@@ -1,5 +1,13 @@
 # Change Log
 
+## [v24.2.0-beta.5](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.2.0-beta.5) (2023-10-10)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.2.0-beta.4...v24.2.0-beta.5)
+
+**Fixed bugs:**
+
+- Listing collections to choose for the dashboard doesn't call the right organisation [\#889](https://github.com/gisaia/ARLAS-wui-builder/issues/889)
+
 ## [v24.2.0-beta.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.2.0-beta.4) (2023-09-27)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.2.0-beta.3...v24.2.0-beta.4)
