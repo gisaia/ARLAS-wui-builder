@@ -38,7 +38,6 @@ export class StartupService {
 
   public contributorRegistry: Map<string, any> = new Map<string, any>();
   public interceptorRegistry: Map<string, any> = new Map<string, any>();
-  public currentOrga = '';
 
   public static translationLoaded(translateService: TranslateService, injector) {
     return new Promise<any>((resolve: any) => {

@@ -3,7 +3,7 @@
     <h2 mat-dialog-title *ngIf="this.persistenceService.isAvailable" class="title">
         <div>{{'Available dashboards' | translate}}</div>
         <div *ngIf="this.isAuthenticated && this.orgs.length > 0" class="organisations">
-            <mat-select (selectionChange)="changeOrg($event)" [value]="startupService.currentOrga">
+            <mat-select (selectionChange)="changeOrg($event)" [value]="currentOrga">
                 <mat-option *ngFor="let org of orgs" value="{{org.name}}">{{org.displayName}}</mat-option>
             </mat-select>
         </div>

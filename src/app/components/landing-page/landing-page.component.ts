@@ -180,13 +180,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
               org.displayName = org.name === loginData.user.id ? loginData.user.email.split('@')[0] : org.name;
               return org;
             });
-            if (this.arlasIamService.getOrganisation()) {
-              this.startupService.currentOrga = this.arlasIamService.getOrganisation();
-            } else {
-              this.startupService.currentOrga = this.orgs.length > 0 ? this.orgs[0].name : '';
-              this.arlasIamService.storeOrganisation(this.startupService.currentOrga);
-            }
-
+            this.currentOrga = this.arlasIamService.getOrganisation();
           } else {
             this.isAuthenticated = false;
             this.name = '';
@@ -403,7 +397,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
       writers: data.doc_writers,
       lastUpdate: +data.last_update_date,
       zone: data.doc_zone,
-      org: ''
+      org: this.arlasIamService.getOrganisation()
     };
     actions.push({
       config,
@@ -546,7 +540,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   }
 
   public changeOrg(event: MatSelectChange) {
-    this.startupService.currentOrga = event.value;
+    this.arlasIamService.storeOrganisation(event.value);
     this.startupService.changeOrgHeader(event.value, this.arlasIamService.getAccessToken());
     this.getConfigList();
   }
