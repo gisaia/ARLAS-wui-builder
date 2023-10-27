@@ -38,6 +38,7 @@ import {
   LABEL_PLACEMENT
 } from '@map-config/services/map-layer-form-builder/models';
 import { MapVisualisationFormBuilderService } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
+import { BasemapFormGroup } from '../map-basemap-form-builder/map-basemap-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -670,11 +671,8 @@ export class MapImportService {
     });
 
     basemaps.forEach(basemap => {
-      this.mainFormService.mapConfig.getBasemapsFg().customControls.basemaps.push(new FormGroup({
-        name: new FormControl(basemap.name),
-        url: new FormControl(basemap.styleFile),
-        image: new FormControl(basemap.image)
-      }));
+      this.mainFormService.mapConfig.getBasemapsFg()
+        .customControls.basemaps.push(new BasemapFormGroup(basemap.name, basemap.styleFile, basemap.image, basemap.type));
     });
 
     this.importBasemap(defaultBasemap);

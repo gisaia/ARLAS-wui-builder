@@ -1,12 +1,26 @@
 ########################################################
 ############   AUTHENTICATION SETTINGS   ###############
 ########################################################
-authentication:  
-  use_authent: true
-  auth_mode: 'iam'
+authentication:
+  use_authent: false
   force_connect: false
-  threshold: 60000
-  url: http://localhost:9997/arlas_iam_server
+  use_discovery: true
+  issuer: https://arlas-cloud-dev.eu.auth0.com/
+  client_id: TrAfmjESYNWrikvK1d7RPnc5Uve7WJqs
+  redirect_uri: http://localhost:4201/callback
+  scope: "openid profile"
+  silent_refresh_redirect_uri: http://localhost:4201/silent-refresh.html
+  require_https: true
+  response_type: "id_token token"
+  silent_refresh_timeout: 10000
+  timeout_factor: 0.75
+  session_checks_enabled: true
+  clear_hash_after_login: true
+  disable_at_hash_check: false
+  show_debug_information: true
+  logout_url: https://arlas-cloud-dev.eu.auth0.com/v2/logout?returnTo=http://localhost:4201
+  storage: sessionstorage
+  custom_query_params: [{"audience":"http://arlas.io/api/server"}]
 
 ########################################################
 ############   Persistence SETTINGS   ##################
@@ -25,22 +39,23 @@ arlas_wui_url: "http://localhost:4200"
 links: [ { "icon": "lock", "name": "Google", "url": "http://www.google.com" }, { "icon": "public", "name": "Yahoo", "url": "http://www.yahoo.com" } ]
 basemaps: 
   [
-                {"name":"Basic","url":"https://api.maptiler.com/maps/basic/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/basic.png"},
-                {"name":"Bright","url":"https://api.maptiler.com/maps/bright/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/bright.png"},
-                {"name":"Outdoor","url":"https://api.maptiler.com/maps/outdoor/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/outdoor.png"},
-                {"name":"Pastel","url":"https://api.maptiler.com/maps/pastel/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/pastel.png"},
-                {"name":"Satellite Hybrid","url":"https://api.maptiler.com/maps/hybrid/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/hybrid.png"},
-                {"name":"Streets","url":"https://api.maptiler.com/maps/streets/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/streets.png"},
-                {"name":"Toner","url":"https://api.maptiler.com/maps/toner/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/toner.png"},
-                {"name":"Topo","url":"https://api.maptiler.com/maps/topo/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/topo.png"},
-                {"name":"Topographique","url":"https://api.maptiler.com/maps/topographique/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/topographique.png"},
-                {"name":"Voyager","url":"https://api.maptiler.com/maps/voyager/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/voyager.png"},
-                {"name":"Positron","url":"https://api.maptiler.com/maps/8bb9093c-9865-452b-8be4-7a397f552b49/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/8bb9093c-9865-452b-8be4-7a397f552b49/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"},
-                {"name":"Dark Topo","url":"https://api.maptiler.com/maps/99521f88-ff7f-4c7b-b1dc-05a5a773b1f1/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/99521f88-ff7f-4c7b-b1dc-05a5a773b1f1/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"},
-                {"name":"Streets-dark","url":"https://api.maptiler.com/maps/a1e62ee0-aca6-451a-a4b8-42250422a212/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/a1e62ee0-aca6-451a-a4b8-42250422a212/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"},
-                {"name":"Streets-light","url":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"}
-                ]
-tab_name: "ARLAS Wui builder Dev"
+    {"name":"Basic","url":"https://api.maptiler.com/maps/basic/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/basic.png"},
+    {"name":"Bright","url":"https://api.maptiler.com/maps/bright/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/bright.png"},
+    {"name":"Outdoor","url":"https://api.maptiler.com/maps/outdoor/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/outdoor.png"},
+    {"name":"Pastel","url":"https://api.maptiler.com/maps/pastel/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/pastel.png"},
+    {"name":"Satellite Hybrid","url":"https://api.maptiler.com/maps/hybrid/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/hybrid.png"},
+    {"name":"Streets","url":"https://api.maptiler.com/maps/streets/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/streets.png"},
+    {"name":"Toner","url":"https://api.maptiler.com/maps/toner/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/toner.png"},
+    {"name":"Topo","url":"https://api.maptiler.com/maps/topo/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/topo.png"},
+    {"name":"Topographique","url":"https://api.maptiler.com/maps/topographique/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/topographique.png"},
+    {"name":"Voyager","url":"https://api.maptiler.com/maps/voyager/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/voyager.png"},
+    {"name":"Positron","url":"https://api.maptiler.com/maps/8bb9093c-9865-452b-8be4-7a397f552b49/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/8bb9093c-9865-452b-8be4-7a397f552b49/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"},
+    {"name":"Dark Topo","url":"https://api.maptiler.com/maps/99521f88-ff7f-4c7b-b1dc-05a5a773b1f1/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/99521f88-ff7f-4c7b-b1dc-05a5a773b1f1/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"},
+    {"name":"Streets-dark","url":"https://api.maptiler.com/maps/a1e62ee0-aca6-451a-a4b8-42250422a212/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/a1e62ee0-aca6-451a-a4b8-42250422a212/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"},
+    {"name":"Streets-light","url":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"},
+    {"name":"Light Protomaps","url":"https://storage.googleapis.com/gisaia-public/light_protomap.json","image":"https://storage.googleapis.com/gisaia-public/light_protomap.png", "type": "protomap"}
+  ]
+tab_name: "ARLAS-wui-builder Dev"
 external_node_page: true
 external_node_schemas:
   - name: Schema 1
