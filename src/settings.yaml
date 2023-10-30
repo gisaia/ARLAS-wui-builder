@@ -53,7 +53,9 @@ basemaps:
     {"name":"Dark Topo","url":"https://api.maptiler.com/maps/99521f88-ff7f-4c7b-b1dc-05a5a773b1f1/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/99521f88-ff7f-4c7b-b1dc-05a5a773b1f1/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"},
     {"name":"Streets-dark","url":"https://api.maptiler.com/maps/a1e62ee0-aca6-451a-a4b8-42250422a212/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/a1e62ee0-aca6-451a-a4b8-42250422a212/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"},
     {"name":"Streets-light","url":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"},
-    {"name":"Light Protomaps","url":"https://storage.googleapis.com/gisaia-public/light_protomap.json","image":"https://storage.googleapis.com/gisaia-public/light_protomap.png", "type": "protomap"}
+    {"name":"Light Protomaps","url":"https://storage.googleapis.com/gisaia-public/protomaps/styles/light.json","image":"https://storage.googleapis.com/gisaia-public/protomaps/quicklooks/light.png", "type": "protomap"},
+    {"name":"Dark Protomaps","url":"https://storage.googleapis.com/gisaia-public/protomaps/styles/dark.json","image":"https://storage.googleapis.com/gisaia-public/protomaps/quicklooks/dark.png", "type": "protomap"}
+
   ]
 tab_name: "ARLAS-wui-builder Dev"
 external_node_page: true
