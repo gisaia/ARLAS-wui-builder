@@ -17,13 +17,12 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatRadioChange } from '@angular/material/radio';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { HiddenFormControl, SlideToggleFormControl } from '@shared-models/config-form';
+import { HiddenFormControl } from '@shared-models/config-form';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
-import { HttpClient } from '@angular/common/http';
 import { MapBasemapFormGroup, BasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 
 @Component({
@@ -33,16 +32,13 @@ import { MapBasemapFormGroup, BasemapFormGroup } from '@map-config/services/map-
 })
 export class BasemapsComponent implements OnInit {
 
-  public useSelfHostedThemesFc: SlideToggleFormControl;
-
   public basemapFa: FormArray;
   public basemaps: Basemap[] = [];
   public defaultBasemapFc: HiddenFormControl;
 
   public constructor(
     private settingsService: ArlasSettingsService,
-    private mainformService: MainFormService,
-    private http: HttpClient
+    private mainformService: MainFormService
   ) { }
 
   public ngOnInit() {
