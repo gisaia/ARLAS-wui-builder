@@ -53,13 +53,12 @@ import { StartingConfigFormGroup } from '@services/starting-config-form-builder/
 import { VisualisationSetConfig, BasemapStyle, SCROLLABLE_ARLAS_ID, ArlasColorService } from 'arlas-web-components';
 import { titleCase } from '@services/collection-service/tools';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
+import { MapBasemapFormGroup, BasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionReferenceDescription } from 'arlas-api';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
 import { hashCode, stringifyArlasFilter } from './tools';
-import { filter } from 'rxjs/internal/operators/filter';
 
 export enum EXPORT_TYPE {
   json = 'json',
@@ -415,7 +414,7 @@ export class ConfigExportHelper {
       const collection = layerFg.customControls.collection.value;
       let mapContributor = contributorsCollectionsMap.get(collection);
       if (!mapContributor) {
-        const requestGeometry = mapConfigGlobal.getRawValue().requestGeometries.find(rg => rg.collection ===  collection);
+        const requestGeometry = mapConfigGlobal.getRawValue().requestGeometries.find(rg => rg.collection === collection);
         let geoQueryField = collectionService.collectionParamsMap.get(collection).params.centroid_path;
         let geoQueryOp = 'Intersects';
 
@@ -505,17 +504,19 @@ export class ConfigExportHelper {
     }
     const basemaps: BasemapStyle[] = [];
     let defaultBasemap: BasemapStyle;
-    mapConfigBasemaps.customControls.basemaps.controls.forEach(basemap => {
+    mapConfigBasemaps.customControls.basemaps.controls.forEach((basemap: BasemapFormGroup) => {
       basemaps.push({
-        name: basemap.value.name,
-        styleFile: basemap.value.url,
-        image: basemap.value.image
+        name: basemap.customControls.name.value,
+        styleFile: basemap.customControls.url.value,
+        image: basemap.customControls.image.value,
+        type: basemap.customControls.type.value
       });
       if (mapConfigBasemaps.customControls.default.value === basemap.value.name) {
         defaultBasemap = {
-          name: basemap.value.name,
-          styleFile: basemap.value.url,
-          image: basemap.value.image
+          name: basemap.customControls.name.value,
+          styleFile: basemap.customControls.url.value,
+          image: basemap.customControls.image.value,
+          type: basemap.customControls.type.value
         };
       }
     });
@@ -1093,7 +1094,7 @@ export class ConfigExportHelper {
     } else if (widgetType === WIDGET_TYPE.metric) {
       idString += widgetData.dataStep.function +
         Array.from(widgetData.dataStep.metrics)
-          .map((m: any)=> m.field + '-' + m.metric + '-'+ hashCode(stringifyArlasFilter(m.filter))).sort().join('');
+          .map((m: any) => m.field + '-' + m.metric + '-' + hashCode(stringifyArlasFilter(m.filter))).sort().join('');
     } else if (widgetType === WIDGET_TYPE.donut) {
       widgetData.dataStep.aggregationmodels.forEach(am => {
         idString += am.field + '-' + am.size + '-';

@@ -27,7 +27,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 import { ArlasColorService } from 'arlas-web-components';
-import { AnalyticsBoardComponent, ArlasConfigService, ArlasStartupService } from 'arlas-wui-toolkit';
+import { AnalyticsBoardComponent, AnalyticsService, ArlasConfigService, ArlasStartupService } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
 import { debounceTime } from 'rxjs/operators';
@@ -56,14 +56,13 @@ export class GroupsComponent implements OnInit, OnDestroy {
   public constructor(
     private defaultValuesService: DefaultValuesService,
     public dialog: MatDialog,
-    private arlasStartupService: ArlasStartupService,
-    private configService: ArlasConfigService,
     private analyticsInitService: AnalyticsInitService,
     private translate: TranslateService,
     private cdr: ChangeDetectorRef,
     private colorService: ArlasColorService,
     private cs: ArlasColorService,
     protected mainFormService: MainFormService,
+    private analyticsService: AnalyticsService
 
   ) {}
 
@@ -113,6 +112,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
       analytics.push(group.preview);
     });
     this.groupsPreview = analytics;
+    this.analyticsService.initializeGroups(this.groupsPreview);
+
   }
 
   public drop(event: CdkDragDrop<string[]>) {
