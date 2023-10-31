@@ -21,7 +21,6 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { from, Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';

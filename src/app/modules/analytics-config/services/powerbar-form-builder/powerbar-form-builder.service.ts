@@ -54,7 +54,6 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
     dialog: MatDialog,
     collectionService: CollectionService,
     private colorService: ArlasColorService,
-    private colorGeneratorService: ArlasColorGeneratorLoader,
     metricFg: MetricCollectFormGroup
   ) {
     super(
@@ -246,7 +245,7 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
                     if (result !== undefined) {
                       result.forEach((kc: KeywordColor) => {
                         /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
-                        this.colorGeneratorService.updateKeywordColor(kc.keyword, kc.color);
+                        (colorService.colorGenerator as ArlasColorGeneratorLoader).updateKeywordColor(kc.keyword, kc.color);
                         this.addToColorManualValuesCtrl(kc);
                       });
                     }
@@ -346,7 +345,6 @@ export class PowerbarFormBuilderService extends WidgetFormBuilder {
     private colorService: ArlasColorService,
     private defaultValuesService: DefaultValuesService,
     private metricBuilderService: MetricCollectFormBuilderService,
-    private colorGeneratorService: ArlasColorGeneratorLoader
   ) {
     super(collectionService, mainFormService);
   }
@@ -360,7 +358,6 @@ export class PowerbarFormBuilderService extends WidgetFormBuilder {
       this.dialog,
       this.collectionService,
       this.colorService,
-      this.colorGeneratorService,
       this.metricBuilderService.build(collection, METRIC_TYPE.POWERBARS, true));
     this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
 

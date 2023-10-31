@@ -28,10 +28,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { StartupService, ZONE_PREVIEW } from '@services/startup/startup.service';
 import { ArlasColorService, MapglComponent } from 'arlas-web-components';
 import { MapContributor } from 'arlas-web-contributors';
-import {
-  ArlasCollaborativesearchService, ArlasColorGeneratorLoader,
-  ArlasConfigService, ContributorBuilder, PersistenceService
-} from 'arlas-wui-toolkit';
+import { ArlasCollaborativesearchService, ArlasConfigService, ContributorBuilder, PersistenceService } from 'arlas-wui-toolkit';
 import { merge, Subscription } from 'rxjs';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 

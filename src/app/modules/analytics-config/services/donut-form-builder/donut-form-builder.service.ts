@@ -47,7 +47,6 @@ export class DonutConfigForm extends CollectionConfigFormGroup {
     dialog: MatDialog,
     collectionService: CollectionService,
     private colorService: ArlasColorService,
-    private colorGenerator: ArlasColorGeneratorLoader
   ) {
     super(
       collection,
@@ -138,7 +137,7 @@ export class DonutConfigForm extends CollectionConfigFormGroup {
                       globalKeysToColortrl.clear();
                       result.forEach((kc: KeywordColor) => {
                         /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
-                        colorGenerator.updateKeywordColor(kc.keyword, kc.color);
+                        (colorService.colorGenerator as ArlasColorGeneratorLoader).updateKeywordColor(kc.keyword, kc.color);
                         this.addToColorManualValuesCtrl(kc);
                       });
                     }
@@ -223,7 +222,6 @@ export class DonutFormBuilderService extends WidgetFormBuilder {
     private defaultValuesService: DefaultValuesService,
     private dialog: MatDialog,
     private colorService: ArlasColorService,
-    private colorGenerator: ArlasColorGeneratorLoader,
   ) {
     super(collectionService, mainFormService);
   }
@@ -236,8 +234,7 @@ export class DonutFormBuilderService extends WidgetFormBuilder {
       this.defaultValuesService.getDefaultConfig(),
       this.dialog,
       this.collectionService,
-      this.colorService,
-      this.colorGenerator
+      this.colorService
     );
     this.defaultValuesService.setDefaultValueRecursively(this.defaultKey, formGroup);
 

@@ -30,7 +30,7 @@ import {
 } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
-import { ConfigMapExportHelper, VISIBILITY } from '@services/main-form-manager/config-map-export-helper';
+import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
 import { Config } from '@services/main-form-manager/models-config';
 import { Layer as LayerMap } from '@services/main-form-manager/models-map-config';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
@@ -40,8 +40,7 @@ import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-
 import { camelize } from '@utils/tools';
 import { ArlasColorService, LayerMetadata, MapglLegendComponent, VisualisationSetConfig } from 'arlas-web-components';
 import { MapContributor } from 'arlas-web-contributors';
-import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService,
-  ArlasSettingsService, ContributorBuilder } from 'arlas-wui-toolkit';
+import { ArlasCollaborativesearchService, ArlasConfigService, ArlasSettingsService, ContributorBuilder } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { PreviewComponent } from '../preview/preview.component';
 import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';

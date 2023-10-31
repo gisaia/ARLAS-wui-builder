@@ -24,7 +24,6 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { TranslateService } from '@ngx-translate/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
@@ -43,6 +42,7 @@ export class TabsComponent implements OnDestroy {
   public editingTabIndex = -1;
   public editingTabName = '';
   public isEditingTab = false;
+  public selectedIndex = 0;
   @ViewChild('matTabGroup', { static: false }) private matTabGroup: MatTabGroup;
 
   private newAfterClosedSub: Subscription;
@@ -54,10 +54,9 @@ export class TabsComponent implements OnDestroy {
     private defaultValuesService: DefaultValuesService,
     private translateService: TranslateService,
     private mainFormService: MainFormService,
-    private mainFormManager: MainFormManagerService,
     private analyticsInitService: AnalyticsInitService,
     private dialog: MatDialog,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {
 
     this.tabsFa = this.mainFormService.analyticsConfig.getListFa();
