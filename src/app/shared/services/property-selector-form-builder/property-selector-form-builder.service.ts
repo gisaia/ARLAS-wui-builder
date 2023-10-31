@@ -38,11 +38,10 @@ import {
 } from '@shared-models/config-form';
 import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
 import { valuesToOptions } from '@utils/tools';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
-import { toNumericOptionsObs, toNumericFieldsObs } from '../../../services/collection-service/tools';
 import { ArlasColorService } from 'arlas-web-components';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
   public constructor(
@@ -50,7 +49,6 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
     dialog: MatDialog,
     collectionService: CollectionService,
     colorService: ArlasColorService,
-    colorGeneratorService: ArlasColorGeneratorLoader,
     collection: string,
     collectionFieldsObs: Observable<Array<CollectionField>>,
     private propertyType: PROPERTY_TYPE,
@@ -407,7 +405,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                   this.customControls.propertyManualFg.propertyManualValuesCtrl.clear();
                   result.forEach((kc: KeywordColor) => {
                     /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
-                    colorGeneratorService.updateKeywordColor(kc.keyword, kc.color);
+                    (colorService.colorGenerator as ArlasColorGeneratorLoader).updateKeywordColor(kc.keyword, kc.color);
                     this.addToColorManualValuesCtrl(kc);
                   });
                 }
@@ -983,8 +981,7 @@ export class PropertySelectorFormBuilderService {
     private defaultValuesService: DefaultValuesService,
     private dialog: MatDialog,
     private collectionService: CollectionService,
-    private colorService: ArlasColorService,
-    private colorGeneratorService: ArlasColorGeneratorLoader
+    private colorService: ArlasColorService
   ) { }
 
   public build(
@@ -1001,7 +998,6 @@ export class PropertySelectorFormBuilderService {
       this.dialog,
       this.collectionService,
       this.colorService,
-      this.colorGeneratorService,
       collection,
       this.collectionService.getCollectionFields(collection),
       propertyType,

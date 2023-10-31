@@ -56,6 +56,7 @@ import enComponents from 'arlas-web-components/assets/i18n/en.json';
 import frComponents from 'arlas-web-components/assets/i18n/fr.json';
 import enToolkit from 'arlas-wui-toolkit/assets/i18n/en.json';
 import frToolkit from 'arlas-wui-toolkit/assets/i18n/fr.json';
+import { ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -187,10 +188,6 @@ export class CustomTranslateLoader implements TranslateLoader {
       provide: MatPaginatorIntl,
       deps: [TranslateService],
       useFactory: (translateService: TranslateService) => new PaginatorI18n(translateService)
-    },
-    {
-      provide: ArlasColorGeneratorLoader,
-      deps: [ArlasConfigService, ArlasCollaborativesearchService]
     }
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

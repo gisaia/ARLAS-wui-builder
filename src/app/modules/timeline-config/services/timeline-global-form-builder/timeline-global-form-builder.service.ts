@@ -35,7 +35,7 @@ import {
   SliderFormControl
 } from '@shared-models/config-form';
 import { ArlasColorService, ChartType } from 'arlas-web-components';
-import { ArlasColorGeneratorLoader, ArlasSettingsService } from 'arlas-wui-toolkit';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 enum DateFormats {
   English = '%b %d %Y  %H:%M',

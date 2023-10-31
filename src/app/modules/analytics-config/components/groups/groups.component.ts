@@ -52,19 +52,17 @@ export class GroupsComponent implements OnInit, OnDestroy {
   public spinnerColor: string;
   public spinnerDiameter: number;
   public showSpinner: boolean;
-
   public constructor(
     private defaultValuesService: DefaultValuesService,
     public dialog: MatDialog,
     private analyticsInitService: AnalyticsInitService,
     private translate: TranslateService,
     private cdr: ChangeDetectorRef,
-    private colorService: ArlasColorService,
     private cs: ArlasColorService,
     protected mainFormService: MainFormService,
     private analyticsService: AnalyticsService
 
-  ) {}
+  ) { }
 
   public ngOnInit() {
     this.analyticsInitService.initTabContent(this.contentFg);
@@ -103,16 +101,16 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   public updateAnalytics() {
-    // get the keyToColors list to inject it in the ColorService used by the arlas-web-components
-    this.cs.colorGenerator = this.colorService.colorGenerator;
     const analytics = [];
     this.groupsPreview = [];
     this.cdr.detectChanges();
     this.groupsFa.value.forEach(group => {
       analytics.push(group.preview);
     });
+    this.analyticsService.initializeGroups(analytics);
     this.groupsPreview = analytics;
-    this.analyticsService.initializeGroups(this.groupsPreview);
+    this.analyticsService.selectTab(0);
+
 
   }
 

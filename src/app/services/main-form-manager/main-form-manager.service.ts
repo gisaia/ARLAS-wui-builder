@@ -84,7 +84,6 @@ export class MainFormManagerService {
     private startupService: StartupService,
     private collectionService: CollectionService,
     private colorService: ArlasColorService,
-    private colorGeneratorService: ArlasColorGeneratorLoader,
     private router: Router,
     private arlasStartupService: ArlasStartupService
   ) { }
@@ -149,7 +148,6 @@ export class MainFormManagerService {
       resultLists,
       externalNodeGlobal,
       this.colorService,
-      this.colorGeneratorService,
       this.collectionService
     );
 
@@ -255,7 +253,7 @@ export class MainFormManagerService {
 
     // load keys to colors
     if (!!config.arlas.web.colorGenerator && !!config.arlas.web.colorGenerator.keysToColors) {
-      this.colorGeneratorService.setKeysToColors(config.arlas.web.colorGenerator.keysToColors);
+      (this.colorService.colorGenerator as ArlasColorGeneratorLoader).setKeysToColors(config.arlas.web.colorGenerator.keysToColors);
       const keysToColor = new FormArray([]);
       config.arlas.web.colorGenerator.keysToColors.forEach(kc =>
         keysToColor.push(new FormGroup({

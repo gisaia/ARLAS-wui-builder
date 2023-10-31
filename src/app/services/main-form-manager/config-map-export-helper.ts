@@ -26,7 +26,6 @@ import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/p
 import { ArlasColorService, FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID } from 'arlas-web-components';
 import { LayerSourceConfig } from 'arlas-web-contributors';
 import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
 import { ConfigExportHelper } from './config-export-helper';
 import {
