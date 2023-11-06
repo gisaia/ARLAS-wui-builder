@@ -158,7 +158,7 @@ git push origin v${VERSION}
 git push origin ${REF_BRANCH}
 
 echo "==> Docker"
-docker build --no-cache --build-arg version=${VERSION} --tag gisaia/arlas-wui-builder:${VERSION} --tag gisaia/arlas-wui-builder:latest .
+docker build --no-cache --build-arg version=${VERSION} --tag gisaia/arlas-wui-builder:${VERSION} .
 
 docker push gisaia/arlas-wui-builder:${VERSION}
 if [ "${STAGE}" == "stable" ];

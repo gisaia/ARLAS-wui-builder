@@ -27,7 +27,7 @@ export class StartingConfigFormGroup extends FormGroup {
         [
           Validators.required,
           Validators.pattern(
-            '(https?://)?(([0-9.]{1,4}){4}(:[0-9]{2,5})|([a-z0-9-.]+)(\\.[a-z-.]+)(:[0-9]{2,5})?|localhost(:[0-9]{2,5}))+([/?].*)?'
+            '(https?://)?(([0-9.]{1,4}){4}(:[0-9]{2,5})|([a-z0-9-.]+)(:[0-9]{2,5})?|localhost(:[0-9]{2,5}))+([/?].*)?'
           )
         ]),
 

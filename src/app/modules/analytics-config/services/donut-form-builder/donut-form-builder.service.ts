@@ -35,6 +35,7 @@ import {
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable, Subscription } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
+import { ArlasColorService } from 'arlas-web-components';
 
 export class DonutConfigForm extends CollectionConfigFormGroup {
 
@@ -45,7 +46,7 @@ export class DonutConfigForm extends CollectionConfigFormGroup {
     defaultConfig: DefaultConfig,
     dialog: MatDialog,
     collectionService: CollectionService,
-    private colorService: ArlasColorGeneratorLoader
+    private colorService: ArlasColorService,
   ) {
     super(
       collection,
@@ -115,7 +116,7 @@ export class DonutConfigForm extends CollectionConfigFormGroup {
                 keywords.forEach((k: string, index: number) => {
                   this.addToColorManualValuesCtrl({
                     keyword: k,
-                    color: colorService.getColor(k)
+                    color: this.colorService.getColor(k)
                   }, index);
                 });
                 this.addToColorManualValuesCtrl({
@@ -136,7 +137,7 @@ export class DonutConfigForm extends CollectionConfigFormGroup {
                       globalKeysToColortrl.clear();
                       result.forEach((kc: KeywordColor) => {
                         /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
-                        colorService.updateKeywordColor(kc.keyword, kc.color);
+                        (colorService.colorGenerator as ArlasColorGeneratorLoader).updateKeywordColor(kc.keyword, kc.color);
                         this.addToColorManualValuesCtrl(kc);
                       });
                     }
@@ -220,7 +221,7 @@ export class DonutFormBuilderService extends WidgetFormBuilder {
     protected mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,
     private dialog: MatDialog,
-    private colorService: ArlasColorGeneratorLoader
+    private colorService: ArlasColorService,
   ) {
     super(collectionService, mainFormService);
   }

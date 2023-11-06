@@ -26,12 +26,9 @@ import { ConfigExportHelper } from '@services/main-form-manager/config-export-he
 import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { StartupService, ZONE_PREVIEW } from '@services/startup/startup.service';
-import { MapglComponent } from 'arlas-web-components';
+import { ArlasColorService, MapglComponent } from 'arlas-web-components';
 import { MapContributor } from 'arlas-web-contributors';
-import {
-  ArlasCollaborativesearchService, ArlasColorGeneratorLoader,
-  ArlasConfigService, ContributorBuilder, PersistenceService
-} from 'arlas-wui-toolkit';
+import { ArlasCollaborativesearchService, ArlasConfigService, ContributorBuilder, PersistenceService } from 'arlas-wui-toolkit';
 import { merge, Subscription } from 'rxjs';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
@@ -65,7 +62,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     private configService: ArlasConfigService,
     private startupService: StartupService,
     private collectionService: CollectionService,
-    private colorService: ArlasColorGeneratorLoader,
+    private colorService: ArlasColorService,
     private cdr: ChangeDetectorRef,
     private persistenceService: PersistenceService,
     private snackbar: MatSnackBar,

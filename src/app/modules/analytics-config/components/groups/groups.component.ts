@@ -23,13 +23,11 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
-import { ContributorConfig } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 import { ArlasColorService } from 'arlas-web-components';
-import { AnalyticsBoardComponent, ArlasColorGeneratorLoader, ArlasConfigService, ArlasStartupService } from 'arlas-wui-toolkit';
+import { AnalyticsBoardComponent, AnalyticsService, ArlasConfigService, ArlasStartupService } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
 import { debounceTime } from 'rxjs/operators';
@@ -54,20 +52,17 @@ export class GroupsComponent implements OnInit, OnDestroy {
   public spinnerColor: string;
   public spinnerDiameter: number;
   public showSpinner: boolean;
-
   public constructor(
     private defaultValuesService: DefaultValuesService,
     public dialog: MatDialog,
-    private arlasStartupService: ArlasStartupService,
-    private configService: ArlasConfigService,
     private analyticsInitService: AnalyticsInitService,
     private translate: TranslateService,
     private cdr: ChangeDetectorRef,
-    private colorService: ArlasColorGeneratorLoader,
     private cs: ArlasColorService,
     protected mainFormService: MainFormService,
+    private analyticsService: AnalyticsService
 
-  ) {}
+  ) { }
 
   public ngOnInit() {
     this.analyticsInitService.initTabContent(this.contentFg);
@@ -106,15 +101,17 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   public updateAnalytics() {
-    // get the keyToColors list to inject it in the ColorService used by the arlas-web-components
-    this.cs.colorGenerator = this.colorService;
     const analytics = [];
     this.groupsPreview = [];
     this.cdr.detectChanges();
     this.groupsFa.value.forEach(group => {
       analytics.push(group.preview);
     });
+    this.analyticsService.initializeGroups(analytics);
     this.groupsPreview = analytics;
+    this.analyticsService.selectTab(0);
+
+
   }
 
   public drop(event: CdkDragDrop<string[]>) {

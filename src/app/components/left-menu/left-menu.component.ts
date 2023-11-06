@@ -24,7 +24,10 @@ import { EXPORT_TYPE } from '@services/main-form-manager/config-export-helper';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { getNbErrorsInControl, isFullyTouched, Page } from '@utils/tools';
-import { ArlasSettingsService, AuthentificationService, LinkSettings, PersistenceService, UserInfosComponent } from 'arlas-wui-toolkit';
+import {
+  ArlasIamService, ArlasSettingsService, AuthentificationService,
+  LinkSettings, PersistenceService, UserInfosComponent
+} from 'arlas-wui-toolkit';
 import { MenuService } from '@services/menu/menu.service';
 
 @Component({
@@ -36,9 +39,10 @@ export class LeftMenuComponent implements OnInit {
 
   public isLabelDisplayed = false;
   public nbErrorsByPage: Map<string, number> = new Map();
-  public showLogOutButton: boolean;
+  public showLogOutButton = false;
   public name: string;
   public avatar: string;
+  public authentMode = 'false';
 
   public pages: Page[] = [];
   public links: LinkSettings[] = [];
@@ -52,29 +56,57 @@ export class LeftMenuComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private settings: ArlasSettingsService,
-    private menu: MenuService
+    private menu: MenuService,
+    private arlasIamService: ArlasIamService
   ) {
     // recompute nberrors of each page anytime the mainform validity changes
     this.mainFormService.mainForm.statusChanges.subscribe(st => this.updateNbErrors());
-    this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
-    const claims = this.authService.identityClaims as any;
-    this.authService.canActivateProtectedRoutes.subscribe(isAuthenticated => {
-      // show login button when authentication is enabled in settings.yaml file && the app is not authenticated
-      this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent && isAuthenticated;
-      if (isAuthenticated) {
-        this.name = claims.nickname;
-        this.avatar = claims.picture;
-      } else {
-        this.name = '';
-        this.avatar = '';
-      }
 
-    });
+    const isAuthentActivated = !!this.authService.authConfigValue && this.authService.authConfigValue.use_authent;
+    const isOpenID = isAuthentActivated && this.arlasIamService.authConfigValue.auth_mode !== 'iam';
+    const isIam = isAuthentActivated && this.arlasIamService.authConfigValue.auth_mode === 'iam';
+    if (isOpenID) {
+      this.authentMode = 'openid';
+    }
+    if (isIam) {
+      this.authentMode = 'iam';
+    }
+
   }
 
   public ngOnInit() {
     this.links = this.settings.getLinksSettings();
     this.pages = this.menu.pages;
+    if (this.authentMode === 'openid') {
+      const claims = this.authService.identityClaims as any;
+      this.authService.canActivateProtectedRoutes.subscribe(isAuthenticated => {
+        this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent && isAuthenticated;
+        if (isAuthenticated) {
+          this.name = claims.nickname;
+          this.avatar = claims.picture;
+        } else {
+          this.name = '';
+          this.avatar = '';
+        }
+      });
+    }
+    if (this.authentMode === 'iam') {
+      this.arlasIamService.tokenRefreshed$.subscribe({
+        next: (loginData) => {
+          if (!!loginData) {
+            this.showLogOutButton = true;
+            this.name = loginData?.user.email;
+            this.avatar = this.getInitials(this.name);
+          } else {
+            this.name = '';
+            this.avatar = '';
+          }
+        },
+        error: () => {
+          this.showLogOutButton = false;
+        }
+      });
+    }
   }
 
   public navigateTo(url: string) {
@@ -119,5 +151,36 @@ export class LeftMenuComponent implements OnInit {
 
   public getUserInfos() {
     this.dialog.open(UserInfosComponent);
+  }
+
+  public getInitials(name) {
+
+    const canvas = document.createElement('canvas');
+    canvas.style.display = 'none';
+    canvas.width = 32;
+    canvas.height = 32;
+    document.body.appendChild(canvas);
+
+
+    const context = canvas.getContext('2d');
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = 16;
+    context.beginPath();
+    context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+    context.fillStyle = '#999';
+    context.fill();
+    context.font = '16px Roboto';
+    context.fillStyle = '#eee';
+
+    if (name && name !== '') {
+      const first = name[0];
+      context.fillText(first.toUpperCase(), 10, 23);
+      const data = canvas.toDataURL();
+      document.body.removeChild(canvas);
+      return data;
+    } else {
+      return '';
+    }
   }
 }

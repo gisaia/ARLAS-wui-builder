@@ -24,9 +24,10 @@ import {
 } from '@services/main-form-manager/models-config';
 import { importElements } from '@services/main-form-manager/tools';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ArlasColorGeneratorLoader, ArlasSettingsService } from 'arlas-wui-toolkit';
-import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timeline-global-form-builder.service';
 import { StartupService } from '@services/startup/startup.service';
+import { ArlasColorService } from 'arlas-web-components';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
+import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timeline-global-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,7 @@ export class TimelineImportService {
 
   public constructor(
     private mainFormService: MainFormService,
-    private colorService: ArlasColorGeneratorLoader,
+    private colorService: ArlasColorService,
     private collectionService: CollectionService,
     private settingsService: ArlasSettingsService,
     private startupService: StartupService

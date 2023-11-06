@@ -17,9 +17,10 @@ specific language governing permissions and limitations
 under the License.
 */
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, Inject, Injector, OnDestroy, OnInit, Output } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit, Output } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
+import { MatSelectChange } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -30,17 +31,19 @@ import { MapConfig } from '@services/main-form-manager/models-map-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { MenuService } from '@services/menu/menu.service';
 import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
+import { StartupService, ZONE_WUI_BUILDER } from '@services/startup/startup.service';
 import { DialogData } from '@shared-components/input-modal/input-modal.component';
+import { UserOrgData } from 'arlas-iam-api';
 import { DataWithLinks } from 'arlas-persistence-api';
 import {
-  ArlasConfigService, ArlasConfigurationDescriptor, ArlasSettingsService, AuthentificationService, ConfigAction,
+  ArlasAuthentificationService,
+  ArlasConfigService, ArlasConfigurationDescriptor, ArlasIamService, ArlasSettingsService, AuthentificationService, ConfigAction,
   ConfigActionEnum, ErrorService, PersistenceService, UserInfosComponent
 } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject, Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
-import { StartupService, ZONE_WUI_BUILDER } from '@services/startup/startup.service';
 
 enum InitialChoice {
   none = 0,
@@ -74,16 +77,21 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
 
   public showLoginButton: boolean;
   public showLogOutButton: boolean;
+  public authentMode = 'false';
 
   public isAuthenticated = false;
+  public isAuthentActivated = false;
   private errorAlreadyThrown = false;
   public name: string;
   public avatar: string;
+  public orgs: UserOrgData[] = [];
+  public currentOrga = '';
 
   private subscription: Subscription;
   private urlSubscription: Subscription;
   private urlCollectionsSubscription: Subscription;
   private collectionsSubscription: Subscription;
+  private refreshSubscription: Subscription;
 
   public constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -92,7 +100,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private logger: NGXLogger,
     private configService: ArlasConfigService,
-    private startupService: StartupService,
+    public startupService: StartupService,
     private configDescritor: ArlasConfigurationDescriptor,
     private startingConfigFormBuilder: StartingConfigFormBuilderService,
     private defaultValuesService: DefaultValuesService,
@@ -107,10 +115,14 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     private spinner: NgxSpinnerService,
     private router: Router,
     private menu: MenuService,
-    private injector: Injector,
+    private arlasIamService: ArlasIamService,
+    private arlasAuthentService: ArlasAuthentificationService
   ) {
-    this.showLoginButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
-    this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
+
+    this.isAuthentActivated = !!this.arlasAuthentService.authConfigValue && !!this.arlasAuthentService.authConfigValue.use_authent;
+    this.authentMode = this.arlasAuthentService.authConfigValue.auth_mode;
+    this.showLoginButton = this.isAuthentActivated && !this.isAuthenticated;
+    this.showLogOutButton = this.isAuthentActivated && this.isAuthenticated;
   }
 
   public ngOnInit(): void {
@@ -137,26 +149,60 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     this.mainFormService.startingConfig.init(
       this.startingConfigFormBuilder.build()
     );
-    const claims = this.authService.identityClaims as any;
-    this.subscription = this.authService.canActivateProtectedRoutes.subscribe(isAuthenticated => {
-      // show login button when authentication is enabled in settings.yaml file && the app is not authenticated
-      this.showLoginButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent && !isAuthenticated;
-      this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent && isAuthenticated;
-      this.isAuthenticated = isAuthenticated;
-      if (this.persistenceService.isAvailable) {
-        this.getConfigList();
-      }
-      if (isAuthenticated) {
-        this.name = claims.nickname;
-        this.avatar = claims.picture;
-      } else {
-        this.name = '';
-        this.avatar = '';
-      }
-    });
+
+    if (this.authentMode === 'openid') {
+      const claims = this.authService.identityClaims as any;
+      this.subscription = this.authService.canActivateProtectedRoutes.subscribe(isAuthenticated => {
+        // show login button when authentication is enabled in settings.yaml file && the app is not authenticated
+        this.showLoginButton = this.isAuthentActivated && !isAuthenticated;
+        this.showLogOutButton = this.isAuthentActivated && isAuthenticated;
+        this.isAuthenticated = isAuthenticated;
+        if (this.persistenceService.isAvailable) {
+          this.getConfigList();
+        }
+        if (isAuthenticated) {
+          this.name = claims.nickname;
+          this.avatar = claims.picture;
+        } else {
+          this.name = '';
+          this.avatar = '';
+        }
+      });
+    }
+    if (this.authentMode === 'iam') {
+      this.refreshSubscription = this.arlasIamService.tokenRefreshed$.subscribe({
+        next: (loginData) => {
+          if (!!loginData) {
+            this.isAuthenticated = true;
+            this.name = loginData?.user.email;
+            this.avatar = '';
+            this.orgs = loginData.user.organisations.map(org => {
+              org.displayName = org.name === loginData.user.id ? loginData.user.email.split('@')[0] : org.name;
+              return org;
+            });
+            this.currentOrga = this.arlasIamService.getOrganisation();
+          } else {
+            this.isAuthenticated = false;
+            this.name = '';
+            this.avatar = '';
+          }
+          if (this.persistenceService.isAvailable) {
+            this.getConfigList();
+          }
+          this.showLoginButton = this.isAuthentActivated && !this.isAuthenticated;
+          this.showLogOutButton = this.isAuthentActivated && this.isAuthenticated;
+        },
+        error: () => {
+          this.isAuthenticated = false;
+        }
+      });
+    }
     // if persistence is configured and anonymous mode is enabled, we fetch the configuration accessible as anonymous
     // if ARLAS-persistence doesn't allow anonymous access, a suitable error is displayed in a modal
-    if (this.persistenceService.isAvailable && (!this.authService.authConfigValue || !this.authService.authConfigValue.use_authent)) {
+    if (
+      this.persistenceService.isAvailable
+      && (!this.arlasAuthentService.authConfigValue || !this.arlasAuthentService.authConfigValue.use_authent)
+    ) {
       this.getConfigList();
     }
   }
@@ -174,10 +220,18 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     if (this.collectionsSubscription) {
       this.collectionsSubscription.unsubscribe();
     }
+    if (this.refreshSubscription) {
+      this.refreshSubscription.unsubscribe();
+    }
   }
 
   public logout() {
-    this.authService.logout();
+    if (this.authentMode === 'openid') {
+      this.authService.logout();
+    }
+    if (this.authentMode === 'iam') {
+      this.arlasIamService.logout(['/']);
+    }
   }
 
   public cancel(): void {
@@ -195,15 +249,22 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     const url = this.mainFormService.startingConfig.getFg().get('serverUrl').value;
     this.urlSubscription = this.http.get(url + '/swagger.json').subscribe(
       () => {
-        this.getServerCollections(url).then(() => {
-          this.urlCollectionsSubscription = this.configDescritor.getAllCollections().subscribe(collections => {
-            this.availablesCollections = collections;
-            this.collectionService.setCollections(collections);
-            this.collectionService.getCollectionsReferenceDescription().subscribe(cdrs => this.collectionService.setCollectionsRef(cdrs));
-          }, error => this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'))
-          , () => this.spinner.hide('connectServer'));
-          this.isServerReady = true;
-        });
+        this.getServerCollections(url).then(
+          () => {
+            this.urlCollectionsSubscription = this.configDescritor.getAllCollections().subscribe(
+              collections => {
+                this.availablesCollections = collections;
+                this.collectionService.setCollections(collections);
+                this.collectionService.getCollectionsReferenceDescription().subscribe(cdrs => this.collectionService.setCollectionsRef(cdrs));
+              },
+              error => {
+                this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
+                this.spinner.hide('connectServer');
+              },
+              () => this.spinner.hide('connectServer')
+            );
+            this.isServerReady = true;
+          });
       },
       () => {
         this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
@@ -335,7 +396,8 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
       readers: data.doc_readers,
       writers: data.doc_writers,
       lastUpdate: +data.last_update_date,
-      zone: data.doc_zone
+      zone: data.doc_zone,
+      org: this.arlasIamService.getOrganisation()
     };
     actions.push({
       config,
@@ -398,6 +460,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
           });
         },
         error: (msg) => {
+          this.configurations = [];
           if (!this.errorAlreadyThrown) {
             let message = '';
             if (msg.url) {
@@ -450,7 +513,13 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   }
 
   public login() {
-    this.authService.login();
+    if (this.authentMode === 'openid') {
+      this.authService.login();
+    }
+    if (this.authentMode === 'iam') {
+      this.dialogRef.close();
+      this.router.navigate(['login']);
+    }
   }
 
   public loadConfig(id: string) {
@@ -468,6 +537,12 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   }
   public getUserInfos() {
     this.dialog.open(UserInfosComponent);
+  }
+
+  public changeOrg(event: MatSelectChange) {
+    this.arlasIamService.storeOrganisation(event.value);
+    this.startupService.changeOrgHeader(event.value, this.arlasIamService.getAccessToken());
+    this.getConfigList();
   }
 }
 

@@ -10,6 +10,7 @@ import { FiltersComponent } from '@map-config/components/filters/filters.compone
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionsUnitsComponent } from '@look-and-feel-config/components/collections-units/collections-units.component';
+import { ArlasColorService } from 'arlas-web-components';
 
 describe('ConfigFormControlComponent', () => {
   let spectator: Spectator<ConfigFormControlComponent>;
@@ -28,6 +29,7 @@ describe('ConfigFormControlComponent', () => {
     ],
     providers: [
       mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(ArlasColorService),
       mockProvider(CollectionService)
     ]
   });

@@ -6,7 +6,7 @@
                 <span class="name">{{basemap.name}}</span>
                 <img src="{{basemap.image}}" class="image" draggable="false" />
             </mat-checkbox>
-            <mat-radio-button [disabled]="!basemap.checked" [value]="basemap.name" (change)="setDefault($event)" [checked]="basemap.default">{{'default' | translate}}</mat-radio-button>
+            <mat-radio-button [disabled]="!basemap.checked" [value]="basemap.name" (change)="setDefaultBasemap($event)" [checked]="basemap.default">{{'default' | translate}}</mat-radio-button>
         </div>
     </div>
 </div>

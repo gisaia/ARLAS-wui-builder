@@ -21,6 +21,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LandingPageComponent } from '@components/landing-page/landing-page.component';
 import { MainFormInitializedGuard } from '@guards/main-form-initialized/main-form-initialized.guard';
 import { CollectionComponent } from '@components/collection/collection.component';
+import { ForgotComponent, LoginComponent, RegisterComponent, ResetComponent, VerifyComponent } from 'arlas-wui-toolkit';
 
 
 const routes: Routes = [
@@ -75,6 +76,11 @@ const routes: Routes = [
     loadChildren: () => import('./modules/external-node-config/external-node-config.module').then(m => m.ExternalNodeConfigModule),
     canActivate: [MainFormInitializedGuard]
   },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'verify/:id/user/:token', component: VerifyComponent },
+  { path: 'password_forgot', component: ForgotComponent },
+  { path: 'reset/:id/user/:token', component: ResetComponent },
   { path: '**', redirectTo: '' }
 ];
 

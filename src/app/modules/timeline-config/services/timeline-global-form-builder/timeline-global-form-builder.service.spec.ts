@@ -3,6 +3,7 @@ import { TimelineGlobalFormBuilderService } from './timeline-global-form-builder
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ArlasColorGeneratorLoader, ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
 import { StartupService } from '@services/startup/startup.service';
+import { ArlasColorService } from 'arlas-web-components';
 
 describe('TimelineGlobalFormBuilderService', () => {
   let spectator: SpectatorService<TimelineGlobalFormBuilderService>;
@@ -13,6 +14,7 @@ describe('TimelineGlobalFormBuilderService', () => {
     providers: [
       mockProvider(CollectionService),
       mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(ArlasColorService),
       mockProvider(StartupService)
     ]
   });

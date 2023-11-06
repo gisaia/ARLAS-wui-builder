@@ -62,6 +62,18 @@ else
   fetchI18nFRContent;
 fi
 
+### Array of basemaps
+if [ -z "${ARLAS_BASEMAPS}" ]; then
+  ARLAS_BASEMAPS="[]"
+  export ARLAS_BASEMAPS
+  echo "No basemap is defined"
+else
+  echo ${ARLAS_BASEMAPS} "is used for 'basemaps' in settings.yaml file"
+fi
+envsubst '$ARLAS_BASEMAPS' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
+mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
+
+
 ### URL to ARLAS-wui
 if [ -z "${ARLAS_WUI_URL}" ]; then
   ARLAS_WUI_URL="https://arlas.stack/wui"
@@ -395,6 +407,39 @@ fi
 envsubst '$ARLAS_AUTHENT_CUSTOM_QUERY_PARAMS' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
 mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
 
+### ARLAS_AUTHENT_MODE
+if [ -z "${ARLAS_AUTHENT_MODE}" ]; then
+  ARLAS_AUTHENT_MODE='iam'
+  export ARLAS_AUTHENT_MODE
+  echo "Default auth.mod: 'iam' "
+else
+  echo ${ARLAS_AUTHENT_MODE} "is used for 'authentication.auth_mode'. Default value is 'iam'"
+fi
+envsubst '$ARLAS_AUTHENT_MODE' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
+mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
+
+### THRESHOLD
+if [ -z "${ARLAS_AUTHENT_THRESHOLD}" ]; then
+  ARLAS_AUTHENT_THRESHOLD=60000
+  export ARLAS_AUTHENT_THRESHOLD
+  echo "Default threshold: 60000"
+else
+  echo ${ARLAS_AUTHENT_THRESHOLD} "is used for 'authentication.threshold'. Default value is '60000'"
+fi
+envsubst '$ARLAS_AUTHENT_THRESHOLD' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
+mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
+
+### ARLAS_IAM_SERVER_URL
+if [ -z "${ARLAS_IAM_SERVER_URL}" ]; then
+  ARLAS_IAM_SERVER_URL="http://localhost:9997"
+  export ARLAS_IAM_SERVER_URL
+  echo "Default url : http://localhost:9997"
+else
+  echo ${ARLAS_IAM_SERVER_URL} "is used for 'authentication.url'."
+fi
+envsubst '$ARLAS_IAM_SERVER_URL' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
+mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
+
 ### Array of statics links
 if [ -z "${ARLAS_STATIC_LINKS}" ]; then
   ARLAS_STATIC_LINKS="[]"
@@ -405,18 +450,6 @@ else
 fi
 envsubst '$ARLAS_STATIC_LINKS' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
 mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
-
-### Array of basemaps
-if [ -z "${ARLAS_BASEMAPS}" ]; then
-  ARLAS_BASEMAPS="[]"
-  export ARLAS_BASEMAPS
-  echo "None basemap is defined"
-else
-  echo ${ARLAS_BASEMAPS} "is used for 'basemaps' in settings.yaml file"
-fi
-envsubst '$ARLAS_BASEMAPS' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
-mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
-
 
 ### Array of schemas json
 if [ -z "${ARLAS_EXTERNAL_NODE_PAGE}" ]; then

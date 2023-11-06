@@ -37,8 +37,10 @@ import { TimelineConfigModule } from '@timeline-config/timeline-config.module';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import {
   ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigurationDescriptor, ArlasConfigurationUpdaterService,
+  ArlasIamService,
   ArlasStartupService, ArlasWalkthroughService, AuthentificationService, ConfigMenuModule, configUpdaterFactory,
-  CONFIG_UPDATER, ErrorModalModule, FETCH_OPTIONS, getOptionsFactory, GET_OPTIONS, PaginatorI18n, UserInfosComponent
+  CONFIG_UPDATER, ErrorModalModule, FETCH_OPTIONS, getOptionsFactory,
+  iamServiceFactory, PaginatorI18n, UserInfosComponent, GET_OPTIONS, ArlasConfigService
 } from 'arlas-wui-toolkit';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
@@ -54,6 +56,7 @@ import enComponents from 'arlas-web-components/assets/i18n/en.json';
 import frComponents from 'arlas-web-components/assets/i18n/fr.json';
 import enToolkit from 'arlas-wui-toolkit/assets/i18n/en.json';
 import frToolkit from 'arlas-wui-toolkit/assets/i18n/fr.json';
+import { ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
@@ -134,7 +137,6 @@ export class CustomTranslateLoader implements TranslateLoader {
   providers: [
     forwardRef(() => ArlasConfigurationDescriptor),
     forwardRef(() => ArlasCollaborativesearchService),
-    forwardRef(() => ArlasColorGeneratorLoader),
     forwardRef(() => ArlasStartupService),
     {
       provide: APP_INITIALIZER,
@@ -155,9 +157,15 @@ export class CustomTranslateLoader implements TranslateLoader {
       multi: true
     },
     {
+      provide: 'ArlasIamService',
+      useFactory: iamServiceFactory,
+      deps: [ArlasIamService],
+      multi: true
+    },
+    {
       provide: GET_OPTIONS,
       useFactory: getOptionsFactory,
-      deps: [AuthentificationService]
+      deps: [AuthentificationService, ArlasIamService]
     },
     {
       provide: ArlasWalkthroughService,
@@ -177,15 +185,10 @@ export class CustomTranslateLoader implements TranslateLoader {
       useValue: { duration: 3000, verticalPosition: 'bottom' }
     },
     {
-      provide: GET_OPTIONS,
-      useFactory: getOptionsFactory,
-      deps: [AuthentificationService]
-    },
-    {
       provide: MatPaginatorIntl,
       deps: [TranslateService],
       useFactory: (translateService: TranslateService) => new PaginatorI18n(translateService)
-    },
+    }
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 

@@ -24,6 +24,8 @@ import { IconService } from '@services/icon-service/icon.service';
 import { MainFormService } from './services/main-form/main-form.service';
 import { Title } from '@angular/platform-browser';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'arlas-root',
@@ -33,6 +35,7 @@ import { ArlasSettingsService } from 'arlas-wui-toolkit';
 export class AppComponent implements OnInit {
 
   public title = 'ARLAS-wui-builder';
+  public displayMenu = true;
   @ViewChild('landing', { static: false }) public landing: LandingPageComponent;
 
   public constructor(
@@ -41,7 +44,9 @@ export class AppComponent implements OnInit {
     private snackbar: MatSnackBar,
     private iconService: IconService,
     private titleService: Title,
-    private arlasSettingsService: ArlasSettingsService) {
+    private arlasSettingsService: ArlasSettingsService,
+    private router: Router
+  ) {
 
     this.logger.registerMonitor({
       onLog(logObject: INGXLoggerMetadata): void {
@@ -62,5 +67,13 @@ export class AppComponent implements OnInit {
     if (!!gifElement) {
       document.querySelector('.gif').remove();
     }
+
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(
+      (data) => this.displayMenu = (data as NavigationEnd).url !== '/login'
+        && !(data as NavigationEnd).url.startsWith('/register')
+        && (data as NavigationEnd).url !== '/password_forgot'
+        && !(data as NavigationEnd).url.startsWith('/verify/')
+        && (data as NavigationEnd).url !== '/reset/'
+    );
   }
 }

@@ -1,10 +1,10 @@
 <mat-drawer-container class="container" autosize>
-  <mat-drawer #drawer class="sidenav" mode="side" opened>
-    <arlas-left-menu></arlas-left-menu>
+  <mat-drawer #drawer class="sidenav" mode="side" opened >
+    <arlas-left-menu *ngIf="displayMenu"></arlas-left-menu>
   </mat-drawer>
 
   <div class="content">
-    <arlas-status></arlas-status>
+    <arlas-status *ngIf="displayMenu"></arlas-status>
     <router-outlet></router-outlet>
   </div>
 

@@ -3,8 +3,11 @@
 ########################################################
 authentication:
   use_authent: ${ARLAS_USE_AUTHENT}
+  auth_mode: ${ARLAS_AUTHENT_MODE}
   force_connect: ${ARLAS_AUTHENT_FORCE_CONNECT}
   use_discovery: ${ARLAS_AUTHENT_USE_DISCOVERY}
+  threshold: ${ARLAS_AUTHENT_THRESHOLD}
+  url: ${ARLAS_IAM_SERVER_URL}
   issuer: ${ARLAS_AUTHENT_ISSUER}
   client_id: ${ARLAS_AUTHENT_CLIENT_ID}
   redirect_uri: ${ARLAS_AUTHENT_REDIRECT_URI}
@@ -42,6 +45,9 @@ permission:
 ########################################################
 arlas_wui_url: ${ARLAS_WUI_URL}
 links: ${ARLAS_STATIC_LINKS}
+########################################################
+############        Basemaps                ############
+########################################################
 basemaps: ${ARLAS_BASEMAPS}
 tab_name:  ${ARLAS_TAB_NAME}
 external_node_page: ${ARLAS_EXTERNAL_NODE_PAGE}
