@@ -822,7 +822,7 @@
 	"metric": "Métrique",
 	"Cannot save the preview": "Impossible de sauvegarder l'aperçu",
 	"Pin widget" : "Ajouter à la barre des filtres",
-	"Unpin widget" : "Retier de la barre des filtres",
+	"Unpin widget" : "Retirer de la barre des filtres",
 	"shortcuts_title" : "Barre des filtres"
 
 }

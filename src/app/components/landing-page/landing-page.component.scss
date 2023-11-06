@@ -16,3 +16,98 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+@import "variables.scss";
+
+$accent-color: mat-color($accent-palette);
+$primary-color: mat-color($primary-palette);
+
+.collection {
+   .mat-form-field {
+      width: 100%;
+   }
+}
+
+.server-url {
+   .mat-form-field {
+      width: 100%;
+   }
+}
+
+.import-content {
+   .import-valid {
+      padding: 20px 0px;
+      color: green;
+   }
+
+   .upload-files {
+      display: flex;
+   }
+
+   .upload-single-files {
+      margin: 15px;
+
+      ::ng-deep .mat-button-wrapper {
+         display: flex;
+
+         .upload-check {
+            display: flex;
+            align-items: center;
+            margin-left: 7px;
+         }
+      }
+   }
+}
+
+.title {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   .organisations {
+      min-width: 200px;
+      border-radius: 5px;
+      font-weight: 400;
+      font-size: 16px;
+      ::ng-deep .mat-form-field-wrapper {
+         padding: 0 !important;
+      }
+   }
+}
+
+.load-content {
+   table {
+      width: 100% !important;
+   }
+}
+
+.new-config-content {
+   overflow: unset;
+}
+
+.actions {
+   .buttons {
+      width: 100%;
+
+      .right {
+         float: right;
+      }
+   }
+}
+
+.mat-column-detail {
+   width: 50px;
+}
+
+.user_info_img {
+   vertical-align: middle;
+   height: 26px;
+}
+
+.buttons {
+   margin-top: calc(2 * $sm-margin);
+   display: flex;
+   justify-content: center;
+
+   .new_dashboard {
+      margin-right: $sm-margin ;
+   }
+}

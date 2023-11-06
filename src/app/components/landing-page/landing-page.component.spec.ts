@@ -12,7 +12,8 @@ import {
 } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { of } from 'rxjs';
-import { LandingPageComponent, LandingPageDialogComponent } from './landing-page.component';
+import { LandingPageComponent } from './landing-page.component';
+import { LandingPageDialogComponent } from './landing-page-dialog.component';
 
 describe('LandingPageComponent', () => {
   let spectator: Spectator<LandingPageComponent>;

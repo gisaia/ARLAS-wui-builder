@@ -1,67 +1,3 @@
-<div *ngIf="!configChoice">
-
-    <h2 mat-dialog-title *ngIf="this.persistenceService.isAvailable" class="title">
-        <div>{{'Available dashboards' | translate}}</div>
-        <div *ngIf="this.isAuthenticated && this.orgs.length > 0" class="organisations">
-            <mat-select (selectionChange)="changeOrg($event)" [value]="currentOrga">
-                <mat-option *ngFor="let org of orgs" value="{{org.name}}">{{org.displayName}}</mat-option>
-            </mat-select>
-        </div>
-    </h2>
-    <mat-dialog-content class="load-content">
-        <div *ngIf="showLoginButton">
-            {{'Log in to access saved dashboards' | translate}}
-            <button mat-raised-button color="primary" (click)="login()">{{'Log In' | translate}}</button>
-        </div>
-        <ng-container *ngIf="this.persistenceService.isAvailable">
-            <table mat-table [dataSource]="configurations">
-
-                <ng-container matColumnDef="id">
-                    <th mat-header-cell *matHeaderCellDef>{{'Name' | translate}}</th>
-                    <td mat-cell *matCellDef="let config">{{config.name}}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="creation">
-                    <th mat-header-cell *matHeaderCellDef>{{'Last update' | translate}}</th>
-                    <td mat-cell *matCellDef="let config">
-                        <ng-container *ngIf="config.last_update_date != 0">{{config.last_update_date | date:'short'}}
-                        </ng-container>
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="detail">
-                    <th mat-header-cell *matHeaderCellDef>{{'Actions' | translate}}</th>
-                    <td mat-cell *matCellDef="let config">
-                        <arlas-config-menu matTooltip="{{'Menu' | translate}}" [zone]="'config.json'"
-                            [actions]="config?.actions" (actionExecutedEmitter)="afterAction($event)">
-                        </arlas-config-menu>
-                    </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let config; columns: displayedColumns;"></tr>
-            </table>
-            <mat-paginator [pageIndex]="this.configPageNumber" [pageSize]="this.configPageSize"
-                [length]="configurationsLength" [showFirstLastButtons]=true (page)="pageChange($event)">
-            </mat-paginator>
-        </ng-container>
-    </mat-dialog-content>
-    <mat-dialog-actions class="actions">
-        <div class="buttons" style="width: 100%;">
-            <button mat-stroked-button color="primary" (click)="configChoice = InitialChoice.setup">{{'New dashboard' |
-                translate}}</button>
-            <button mat-stroked-button color="primary" (click)="configChoice = InitialChoice.load">{{'Import from file'
-                | translate}}</button>
-            <button class="right" mat-stroked-button *ngIf="showLogOutButton" (click)="logout()">{{'Log Out' |
-                translate}}</button>
-            <button class="right" style="margin-left:40px" mat-button *ngIf="showLogOutButton"
-                matTooltip="{{'User info' | translate}}" (click)="getUserInfos()">
-                <img src="{{avatar}}" class="user_info_img">
-                {{name}}
-            </button>
-        </div>
-    </mat-dialog-actions>
-</div>
 <ng-container *ngIf="configChoice === InitialChoice.setup">
     <ngx-spinner [name]="'connectServer'" bdOpacity="0.2" bdColor="rgba(51,51,51,0.6)" size="medium" color="#fff"
         type="ball-clip-rotate-pulse">
@@ -102,7 +38,7 @@
         </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button mat-button (click)="configChoice = InitialChoice.none">{{'Back' | translate}}</button>
+        <button mat-button (click)="configChoice = InitialChoice.none; cancel()">{{'Back' | translate}}</button>
         <button (click)="saveConfig()" [disabled]="this.mainFormService.startingConfig.getFg().invalid"
             mat-raised-button color="primary">{{'Start' | translate}}</button>
     </mat-dialog-actions>
@@ -137,7 +73,7 @@
         </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button mat-button (click)="configChoice = InitialChoice.none">{{'Back' | translate}}</button>
+        <button mat-button (click)="configChoice = InitialChoice.none;cancel()">{{'Back' | translate}}</button>
         <button (click)="upload(confFileInput.files[0], mapFileInput.files[0]);"
             [disabled]="!confFileInput.files.length || !mapFileInput.files.length" mat-raised-button color="primary">
 
@@ -145,7 +81,3 @@
     </mat-dialog-actions>
 
 </ng-container>
-<ngx-spinner [name]="'importconfig'" bdOpacity="0.2" bdColor="rgba(51,51,51,0.6)" size="medium" color="#fff"
-    type="ball-clip-rotate-pulse">
-    <p style="color: white"> {{'Importing dashboard...' | translate }} </p>
-</ngx-spinner>

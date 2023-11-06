@@ -1,10 +1,4 @@
 <div class="menu_container">
-  <div class="logo">
-    <a matTooltip="Back to home page" [routerLink]="['/']" queryParamsHandling="preserve" [matTooltipPosition]="'right'">
-      <mat-icon class="icon">build_circle</mat-icon>
-    </a>
-  </div>
-
   <div>
     <mat-nav-list>
       <mat-list-item *ngFor="let page of pages" [matTooltip]="page?.tooltip | translate" [matTooltipPosition]="'right'" [routerLink]="page.enabled ? page?.link : null"

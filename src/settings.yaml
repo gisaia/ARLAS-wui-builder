@@ -3,7 +3,9 @@
 ########################################################
 authentication:
   use_authent: false
-  force_connect: false
+  auth_mode: iam
+  force_connect: true
+  threshold: 60000
   use_discovery: true
   issuer: https://arlas-cloud-dev.eu.auth0.com/
   client_id: TrAfmjESYNWrikvK1d7RPnc5Uve7WJqs
