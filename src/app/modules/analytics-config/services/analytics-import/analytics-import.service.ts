@@ -191,7 +191,7 @@ export class AnalyticsImportService {
         control: uuid
       },
       {
-        value: component.usage,
+        value: !!component.usage ? component.usage : 'analytics',
         control: usage
       },
       {
@@ -277,7 +277,7 @@ export class AnalyticsImportService {
         control: uuid
       },
       {
-        value: component.usage,
+        value: !!component.usage ? component.usage : 'analytics',
         control: usage
       },
       {
@@ -477,7 +477,7 @@ export class AnalyticsImportService {
         control: uuid
       },
       {
-        value: component.usage,
+        value: !!component.usage ? component.usage : 'analytics',
         control: usage
       },
       {
@@ -541,7 +541,7 @@ export class AnalyticsImportService {
         control: uuid
       },
       {
-        value: component.usage,
+        value: !!component.usage ? component.usage : 'analytics',
         control: usage
       },
       {
@@ -636,7 +636,7 @@ export class AnalyticsImportService {
         control: uuid
       },
       {
-        value: component.usage,
+        value: !!component.usage ? component.usage : 'analytics',
         control: usage
       },
       {
