@@ -139,3 +139,9 @@ export class LandingPageService {
     return this.startupService.setCollaborativeService(newConf);
   }
 }
+
+export enum InitialChoice {
+  none = 0,
+  setup = 1,
+  load = 2
+}

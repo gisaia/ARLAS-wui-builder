@@ -38,7 +38,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { LandingPageDialogComponent } from './landing-page-dialog.component';
-import { LandingPageService } from '@services/landing-page/landing-page.service';
+import { InitialChoice, LandingPageService } from '@services/landing-page/landing-page.service';
 
 
 
@@ -46,12 +46,6 @@ export interface Configuration {
   name: string;
   last_update_date: any;
   actions: Array<ConfigAction>;
-}
-
-enum InitialChoice {
-  none = 0,
-  setup = 1,
-  load = 2
 }
 
 @Component({

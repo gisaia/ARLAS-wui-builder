@@ -23,7 +23,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { LandingPageService } from '@services/landing-page/landing-page.service';
+import { InitialChoice, LandingPageService } from '@services/landing-page/landing-page.service';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { Config } from '@services/main-form-manager/models-config';
 import { MapConfig } from '@services/main-form-manager/models-map-config';
@@ -31,19 +31,11 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { MenuService } from '@services/menu/menu.service';
 import { StartupService } from '@services/startup/startup.service';
 import { DialogData } from '@shared-components/input-modal/input-modal.component';
-import { UserOrgData } from 'arlas-iam-api';
-import {
-  ArlasConfigurationDescriptor, ArlasIamService, ArlasSettingsService, AuthentificationService, PersistenceService, UserInfosComponent
-} from 'arlas-wui-toolkit';
+import { ArlasConfigurationDescriptor, PersistenceService, UserInfosComponent } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 
-enum InitialChoice {
-  none = 0,
-  setup = 1,
-  load = 2
-}
 
 @Component({
   templateUrl: './landing-page-dialog.component.html',
@@ -57,20 +49,8 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   public InitialChoice = InitialChoice;
 
   public displayedColumns: string[] = ['id', 'creation', 'detail'];
-  public configurationsLength = 0;
-  public configPageNumber = 0;
-  public configPageSize = 5;
 
-  public showLoginButton: boolean;
-  public showLogOutButton: boolean;
-  public authentMode = 'false';
 
-  public isAuthenticated = false;
-  public isAuthentActivated = false;
-  public name: string;
-  public avatar: string;
-  public orgs: UserOrgData[] = [];
-  public currentOrga = '';
 
   private subscription: Subscription;
   private urlSubscription: Subscription;
@@ -90,11 +70,9 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     private collectionService: CollectionService,
     public persistenceService: PersistenceService,
     private dialog: MatDialog,
-    private authService: AuthentificationService,
     private spinner: NgxSpinnerService,
     private router: Router,
     private menu: MenuService,
-    private arlasIamService: ArlasIamService,
     private landingPageService: LandingPageService
   ) {
 
@@ -219,15 +197,6 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  public login() {
-    if (this.authentMode === 'openid') {
-      this.authService.login();
-    }
-    if (this.authentMode === 'iam') {
-      this.dialogRef.close();
-      this.router.navigate(['login']);
-    }
-  }
 
   public getUserInfos() {
     this.dialog.open(UserInfosComponent);
