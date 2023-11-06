@@ -50,6 +50,10 @@ export class StartingConfigFormGroup extends FormGroup {
     },
   };
 
+  public reset() {
+    this.customControls.collection.setValue('');
+  }
+
 }
 
 @Injectable({

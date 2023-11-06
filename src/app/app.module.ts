@@ -22,7 +22,8 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LandingPageComponent, LandingPageDialogComponent } from '@components/landing-page/landing-page.component';
+import { LandingPageComponent,  } from '@components/landing-page/landing-page.component';
+import { LandingPageDialogComponent } from '@components/landing-page/landing-page-dialog.component';
 import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
 import { LookAndFeelConfigModule } from '@look-and-feel-config/look-and-feel-config.module';
 import { MapConfigModule } from '@map-config/map-config.module';
@@ -40,7 +41,7 @@ import {
   ArlasIamService,
   ArlasStartupService, ArlasWalkthroughService, AuthentificationService, ConfigMenuModule, configUpdaterFactory,
   CONFIG_UPDATER, ErrorModalModule, FETCH_OPTIONS, getOptionsFactory,
-  iamServiceFactory, PaginatorI18n, UserInfosComponent, GET_OPTIONS, ArlasConfigService
+  iamServiceFactory, PaginatorI18n, UserInfosComponent, GET_OPTIONS, TopMenuComponent, ArlasToolkitSharedModule,
 } from 'arlas-wui-toolkit';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
@@ -105,7 +106,7 @@ export class CustomTranslateLoader implements TranslateLoader {
     LandingPageComponent,
     LandingPageDialogComponent,
     StatusComponent,
-    CollectionComponent
+    CollectionComponent,
   ],
   imports: [
     BrowserModule,
@@ -132,7 +133,8 @@ export class CustomTranslateLoader implements TranslateLoader {
     }),
     NgxSpinnerModule,
     AnalyticsConfigModule,
-    OAuthModule.forRoot()
+    OAuthModule.forRoot(),
+    ArlasToolkitSharedModule
   ],
   providers: [
     forwardRef(() => ArlasConfigurationDescriptor),

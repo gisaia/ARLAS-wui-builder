@@ -1,10 +1,24 @@
+<div *ngIf="displayTopMenu">
+  <arlas-top-menu [wuiName]="'ARLAS-wui-builder'">
+    <div left-menu class="top-left-menu">
+      <div class="logo">
+        <a matTooltip="Back to home page" [routerLink]="['/']" queryParamsHandling="preserve" [matTooltipPosition]="'right'">
+          <mat-icon class="icon">build_circle</mat-icon>
+        </a>
+      </div>
+      <arlas-status *ngIf="displayTopMenu"></arlas-status>
+    </div>
+    <div right-menu class="title" id="title">
+      <mat-divider vertical class="vertical-divider"></mat-divider>
+    </div>
+  </arlas-top-menu>
+</div>
 <mat-drawer-container class="container" autosize>
   <mat-drawer #drawer class="sidenav" mode="side" opened >
-    <arlas-left-menu *ngIf="displayMenu"></arlas-left-menu>
+    <arlas-left-menu *ngIf="displayLeftMenu"></arlas-left-menu>
   </mat-drawer>
 
   <div class="content">
-    <arlas-status *ngIf="displayMenu"></arlas-status>
     <router-outlet></router-outlet>
   </div>
 

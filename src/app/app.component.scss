@@ -16,11 +16,43 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+
+@import '../variables.scss';
+
 .container {
-  height: 100vh;
+  height: calc(100vh - $top-menu-height);
 }
 
 .content {
   margin: 10px;
-  height: calc(100vh - 20px);
+  height: calc(100vh - $top-menu-height - (6 * $sm-margin));
+}
+
+::ng-deep .top-menu {
+  border-bottom: 1px solid #dadada;
+}
+
+.top-left-menu {
+  display: flex;
+  align-items: center;
+  justify-content: spa;
+  height: $top-menu-height;
+  .logo {
+    text-align: center;
+    width: min($left-menu-width, $top-menu-height);
+    margin: 0 calc(($left-menu-width - min($left-menu-width, $top-menu-height)) / 2);
+    a {
+      display: flex;
+    }
+    .icon {
+      color: $arlasColor;
+      height: min($left-menu-width, $top-menu-height);;
+      width: min($left-menu-width, $top-menu-height);
+      font-size: min($left-menu-width, $top-menu-height);
+    }
+  }
+}
+
+.title {
+  display: flex;
 }

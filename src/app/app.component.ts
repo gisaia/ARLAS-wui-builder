@@ -35,7 +35,8 @@ import { filter } from 'rxjs';
 export class AppComponent implements OnInit {
 
   public title = 'ARLAS-wui-builder';
-  public displayMenu = true;
+  public displayTopMenu = true;
+  public displayLeftMenu = true;
   @ViewChild('landing', { static: false }) public landing: LandingPageComponent;
 
   public constructor(
@@ -69,11 +70,15 @@ export class AppComponent implements OnInit {
     }
 
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(
-      (data) => this.displayMenu = (data as NavigationEnd).url !== '/login'
+      (data) => {
+        this.displayTopMenu = (data as NavigationEnd).url !== '/login'
         && !(data as NavigationEnd).url.startsWith('/register')
         && (data as NavigationEnd).url !== '/password_forgot'
         && !(data as NavigationEnd).url.startsWith('/verify/')
-        && (data as NavigationEnd).url !== '/reset/'
+        && (data as NavigationEnd).url !== '/reset/';
+
+        this.displayLeftMenu = this.displayTopMenu && (data as NavigationEnd).url !== '/' && !(data as NavigationEnd).url.startsWith('/?');
+      }
     );
   }
 }
