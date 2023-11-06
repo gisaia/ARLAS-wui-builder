@@ -53,6 +53,7 @@ import { Config } from './models-config';
 import { MapConfig } from './models-map-config';
 import { importElements } from './tools';
 import { ArlasColorService } from 'arlas-web-components';
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -85,7 +86,8 @@ export class MainFormManagerService {
     private collectionService: CollectionService,
     private colorService: ArlasColorService,
     private router: Router,
-    private arlasStartupService: ArlasStartupService
+    private arlasStartupService: ArlasStartupService,
+    private shortcutsService: ShortcutsService
   ) { }
 
   /**
@@ -148,7 +150,8 @@ export class MainFormManagerService {
       resultLists,
       externalNodeGlobal,
       this.colorService,
-      this.collectionService
+      this.collectionService,
+      this.shortcutsService
     );
 
     const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFieldsMap);
@@ -242,6 +245,7 @@ export class MainFormManagerService {
 
     this.initMainModulesForms(false);
     this.startupService.setDefaultCollection(config.arlas.server.collection.name);
+    this.shortcutsService.doImport(config);
     this.mapImportService.doImport(config, mapConfig);
     this.timelineImportService.doImport(config);
     this.searchImportService.doImport(config);

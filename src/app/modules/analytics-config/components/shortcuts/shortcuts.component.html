@@ -1,0 +1,20 @@
+<ng-container *ngIf="shortcutService.shortcuts.length > 0">
+    <div class="title">{{'shortcuts_title' | translate}}</div>
+    <div class="container" cdkDropList #dropShortcutsListContainer cdkDropListGroup>
+        <div *ngFor="let shortcut of shortcutService.shortcuts; index as ci;"  cdkDropList style="display: flex;"
+            [cdkDropListData]="ci">
+            <div cdkDrag 
+                [cdkDragData]="ci" 
+                (cdkDragEntered)="dragEntered($event)"
+                (cdkDragMoved)="dragMoved($event)"
+                (cdkDragDropped)="dragDropped($event)">
+                <div class="shortcut">
+                    <div class="title">{{shortcut.title}}</div>
+                    <mat-icon class="remove" (click)="shortcutService.removeShortcut(shortcut.uuid)">clear</mat-icon>
+                </div>
+                <div class="placeholder" *cdkDragPlaceholder></div>
+                
+            </div>
+        </div>
+    </div>
+</ng-container>

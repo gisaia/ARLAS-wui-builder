@@ -111,19 +111,6 @@ $primary-color: mat-color($primary-palette);
                 display: inline-block;
                 vertical-align: middle;
             }
-            .invalid-widget-edition {
-                border-radius: 50%;
-                background: red;
-                width: 15px;
-                height: 15px;
-                vertical-align: middle;
-                line-height: 16px;
-                font-size: 0.8em;
-                color: white;
-                font-weight: bold;
-                display: inline-block;
-            }
-
             .add {
                 float: left;
                 border: unset;

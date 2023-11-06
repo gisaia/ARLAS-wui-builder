@@ -25,7 +25,7 @@ import { NUMERIC_OR_DATE_TYPES, toNumericOrDateFieldsObs, toOptionsObs } from '@
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
-  ConfigFormGroup, SelectFormControl, SlideToggleFormControl, TitleInputFormControl
+  ConfigFormGroup, HiddenFormControl, SelectFormControl, SlideToggleFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { Metric } from 'arlas-api';
 import { ChartType } from 'arlas-web-components';
@@ -38,6 +38,7 @@ import {
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { METRIC_TYPE } from '../metric-collect-form-builder/models';
 import { WidgetFormBuilder } from '../widget-form-builder';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 
 // TODO put in common with timeline
 enum DateFormats {
@@ -45,7 +46,7 @@ enum DateFormats {
   French = '%d %b %Y  %H:%M'
 }
 
-export class HistogramFormGroup extends ConfigFormGroup {
+export class HistogramFormGroup extends WidgetConfigFormGroup {
 
   public constructor(
     collection: string,
@@ -54,12 +55,14 @@ export class HistogramFormGroup extends ConfigFormGroup {
     metricFg: MetricCollectFormGroup
   ) {
     super(
+      collection,
       {
         title: new TitleInputFormControl(
           '',
           marker('histogram title'),
           marker('histogram title description')
         ),
+
         dataStep: new ConfigFormGroup({
           collection: new SelectFormControl(
             collection,
@@ -184,6 +187,8 @@ export class HistogramFormGroup extends ConfigFormGroup {
   }
 
   public customControls = {
+    uuid: this.get('uuid') as HiddenFormControl,
+    usage: this.get('usage') as HiddenFormControl,
     title: this.get('title') as TitleInputFormControl,
     dataStep: {
       aggregation: this.get('dataStep').get('aggregation') as BucketsIntervalFormGroup,

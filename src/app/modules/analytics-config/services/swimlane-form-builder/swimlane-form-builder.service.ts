@@ -40,6 +40,7 @@ import {
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { METRIC_TYPE } from '../metric-collect-form-builder/models';
 import { WidgetFormBuilder } from '../widget-form-builder';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 
 export enum SWIMLANE_REPRESENTATION {
   GLOBALLY = 'global',
@@ -49,7 +50,7 @@ enum DateFormats {
   English = '%b %d %Y  %H:%M',
   French = '%d %b %Y  %H:%M'
 }
-export class SwimlaneFormGroup extends ConfigFormGroup {
+export class SwimlaneFormGroup extends WidgetConfigFormGroup {
 
   public constructor(
     collection: string,
@@ -60,6 +61,7 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
     keywordsFieldsObs: Observable<SelectOption[]>
   ) {
     super(
+      collection,
       {
         title: new TitleInputFormControl(
           '',
@@ -239,6 +241,8 @@ export class SwimlaneFormGroup extends ConfigFormGroup {
   }
 
   public customControls = {
+    uuid: this.get('uuid') as HiddenFormControl,
+    usage: this.get('usage') as HiddenFormControl,
     title: this.get('title') as TitleInputFormControl,
     dataStep: {
       collection: this.get('dataStep').get('collection') as SelectFormControl,

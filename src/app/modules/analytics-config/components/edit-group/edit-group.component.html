@@ -50,30 +50,17 @@
                     cdkDropList
                     [cdkDropListData]="ci"
                     >
-                    <div class="mok" cdkDrag
+                    <div cdkDrag
                         [cdkDragData]="ci"
                         (cdkDragEntered)="dragEntered($event)"
                         (cdkDragMoved)="dragMoved($event)"
                         (cdkDragDropped)="dragDropped($event)">
-                        <div class="invalid-widget-edition"
-                        *ngIf="!content.controls[ci].valid && !!content.controls[ci].value.widgetData?.title"
-                        [matTooltip]="'The widget has invalid inputs. Edit to fix them.' | translate">!</div>
-                        <span
-                            [matTooltip]="content.controls[ci].value.widgetData?.title">{{content.controls[ci].value.widgetData?.title}}</span>
-                        <button mat-icon-button [matMenuTriggerFor]="menuEditWidget">
-                            <mat-icon>more_vert</mat-icon>
-                        </button>
-                        <mat-menu #menuEditWidget="matMenu">
-                            <button mat-menu-item
-                                (click)="editWidget(ci, content.controls[ci].value.widgetData?.dataStep?.collection)">
-                                <mat-icon>edit</mat-icon>
-                                <span>{{'Edit' | translate}}</span>
-                            </button>
-                            <button mat-menu-item (click)="deleteWidget(ci)">
-                                <mat-icon>delete</mat-icon>
-                                <span>{{'Delete' | translate}}</span>
-                            </button>
-                        </mat-menu>
+                        <arlas-widget-edition 
+                            [isValid]="content?.controls[ci]?.valid" 
+                            [widgetControls]="content?.controls[ci]?.controls"
+                            (edit)="editWidget(ci, content?.controls[ci].value.widgetData?.dataStep?.collection)"
+                            (delete)="deleteWidget(ci)"
+                        ></arlas-widget-edition>
                         <div class="placeholder" *cdkDragPlaceholder></div>
                     </div>
                 </div>

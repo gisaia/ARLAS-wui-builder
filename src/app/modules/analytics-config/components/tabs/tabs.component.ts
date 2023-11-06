@@ -30,6 +30,8 @@ import { InputModalComponent } from '@shared-components/input-modal/input-modal.
 import { isFullyTouched, moveInFormArray } from '@utils/tools';
 import { Subscription } from 'rxjs';
 import { EditTabComponent } from '@analytics-config/components/edit-tab/edit-tab.component';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 
 @Component({
   selector: 'arlas-tabs',
@@ -57,6 +59,7 @@ export class TabsComponent implements OnDestroy {
     private analyticsInitService: AnalyticsInitService,
     private dialog: MatDialog,
     private translate: TranslateService,
+    private shortcutsService: ShortcutsService,
   ) {
 
     this.tabsFa = this.mainFormService.analyticsConfig.getListFa();
@@ -113,6 +116,7 @@ export class TabsComponent implements OnDestroy {
 
     this.removeAfterClosedSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.removeAllShortcuts(tabIndex);
         this.tabsFa.removeAt(tabIndex);
         this.matTabGroup.selectedIndex = Math.min(tabIndex, this.tabsFa.controls.length - 1);
       }
@@ -230,6 +234,22 @@ export class TabsComponent implements OnDestroy {
     }
     if (this.finishAfterClosedSub) {
       this.finishAfterClosedSub.unsubscribe();
+    }
+  }
+
+  private removeAllShortcuts(tabIndex: number) {
+    const tab = this.getTab(tabIndex);
+    const groupsFa: FormArray = (tab.controls.contentFg as FormGroup).controls.groupsFa as FormArray;
+    if (groupsFa) {
+      groupsFa.controls.forEach((group: FormGroup) => {
+        const widgetsFa: FormArray = group.controls.content as FormArray;
+        if (widgetsFa) {
+          widgetsFa.controls.forEach((widget: FormGroup) => {
+            const widgetConfigFg = widget.controls.widgetData as WidgetConfigFormGroup;
+            this.shortcutsService.removeShortcut(widgetConfigFg.uuidControl.value);
+          });
+        }
+      });
     }
   }
 

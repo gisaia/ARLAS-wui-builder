@@ -27,17 +27,17 @@ import { CollectionField } from '@services/collection-service/models';
 import { toKeywordOptionsObs } from '@services/collection-service/tools';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
-  ButtonFormControl, ConfigFormGroup, FieldWithSizeListFormControl, SelectFormControl,
+  ButtonFormControl, ConfigFormGroup, FieldWithSizeListFormControl, HiddenFormControl, SelectFormControl,
   SliderFormControl, SlideToggleFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable, Subscription } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { ArlasColorService } from 'arlas-web-components';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 
-export class DonutConfigForm extends CollectionConfigFormGroup {
+export class DonutConfigForm extends WidgetConfigFormGroup {
 
   public constructor(
     collection: string,
@@ -172,6 +172,8 @@ export class DonutConfigForm extends CollectionConfigFormGroup {
   }
 
   public customControls = {
+    uuid: this.get('uuid') as HiddenFormControl,
+    usage: this.get('usage') as HiddenFormControl,
     title: this.get('title') as TitleInputFormControl,
     dataStep: {
       collection: this.get('dataStep').get('collection') as SelectFormControl,

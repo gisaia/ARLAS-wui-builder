@@ -1,0 +1,81 @@
+/*
+Licensed to Gisaïa under one or more contributor
+license agreements. See the NOTICE.txt file distributed with
+this work for additional information regarding copyright
+ownership. Gisaïa licenses this file to you under
+the Apache License, Version 2.0 (the "License"); you may
+not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
+.title {
+    padding: 3px 0;
+}
+
+.container, .cdk-drag-preview {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 3px;
+
+    .shortcut {
+        cursor: grab;
+        margin: 2px;
+        background-color: #fff;
+        padding: 2px;
+        border-radius: 2px;
+        box-shadow: 0px -2px 3px -6px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .title {
+            padding: 0 2px;
+        }
+
+        .remove {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            font-size: 16px
+        }
+    }
+}
+.placeholder {
+    background: #999;
+    border: 1px dashed #777 ;
+    border-radius: 2px;
+    width: 100px;
+    height: 30px;
+}
+
+.cdk-drag-preview {
+    .shortcut {
+        box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+            0 8px 10px 1px rgba(0, 0, 0, 0.14),
+            0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    }
+}
+
+
+.cdk-drag-placeholder {
+    opacity: 0.1;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.container.cdk-drop-list-dragging .shortcut:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+
+}
