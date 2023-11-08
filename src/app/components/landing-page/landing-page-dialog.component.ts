@@ -88,6 +88,10 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
         this.configChoice = InitialChoice.none;
       }
     }
+
+    this.subscription = this.landingPageService.startEvent$.subscribe((b) => {
+      this.dialogRef.close();
+    });
   }
 
   public ngOnDestroy() {
@@ -106,12 +110,11 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
 
   }
 
-
-
   public cancel(): void {
     this.mainFormService.startingConfig.getFg().reset();
     this.dialogRef.close();
   }
+
   public onKeyUp(event: KeyboardEvent) {
     // On press enter
     if (event.key === 'Enter') {
@@ -153,7 +156,6 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().customControls.collection.value;
     this.startupService.setDefaultCollection(collection);
     this.mainFormManager.initMainModulesForms(true);
-    this.dialogRef.close();
     setTimeout(() => this.landingPageService.startingEvent(null), 100);
   }
 
@@ -178,7 +180,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     ]).then(values => {
       const configJson = values[0] as Config;
       const configMapJson = values[1] as MapConfig;
-
+      this.dialogRef.close();
       this.landingPageService.initWithConfig(configJson, configMapJson);
     }).catch(err => this.logger.error(this.translate.instant('Could not load config files ') + err));
   }

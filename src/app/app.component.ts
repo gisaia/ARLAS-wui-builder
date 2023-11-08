@@ -77,7 +77,9 @@ export class AppComponent implements OnInit {
         && !(data as NavigationEnd).url.startsWith('/verify/')
         && (data as NavigationEnd).url !== '/reset/';
 
-        this.displayLeftMenu = this.displayTopMenu && (data as NavigationEnd).url !== '/' && !(data as NavigationEnd).url.startsWith('/?');
+        this.displayLeftMenu = this.displayTopMenu && (data as NavigationEnd).url !== '/'
+        && !(data as NavigationEnd).url.startsWith('/?')
+        && !(data as NavigationEnd).url.startsWith('/load');
       }
     );
   }

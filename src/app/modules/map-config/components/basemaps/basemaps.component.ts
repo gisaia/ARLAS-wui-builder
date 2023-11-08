@@ -75,7 +75,7 @@ export class BasemapsComponent implements OnInit {
     const activeBasemaps = this.basemaps.filter(b => b.checked === true);
     if (activeBasemaps.length === 0) {
       this.basemaps[0].checked = true;
-      this.basemapFa.push(new BasemapFormGroup(this.basemaps[0].name, this.basemaps[0].url, this.basemaps[0].image));
+      this.basemapFa.push(new BasemapFormGroup(this.basemaps[0].name, this.basemaps[0].url, this.basemaps[0].image, this.basemaps[0].type));
     }
     // Set first by default
     const defaultBasemap = this.basemaps.filter(b => b.default === true);
