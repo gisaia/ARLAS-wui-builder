@@ -1,6 +1,6 @@
 import { Layer } from './models-map-config';
 import { BasemapStyle } from 'arlas-web-components';
-import { VisualisationSetConfig } from 'arlas-web-components';
+import { VisualisationSetConfig, FieldsConfiguration } from 'arlas-web-components';
 
 /*
 Licensed to Gisaïa under one or more contributor
@@ -155,18 +155,6 @@ export interface ContributorConfig {
   includeMetadata?: Array<string>;
   filterOperator?: string;
   allowOperatorChange?: boolean;
-}
-
-export interface FieldsConfiguration {
-  idFieldName: string;
-  thumbnailFieldName?: string;
-  imageFieldName?: string;
-  urlImageTemplate?: string;
-  urlThumbnailTemplate?: string;
-  titleFieldNames?: Array<{ fieldPath: string; process: string; }>;
-  tooltipFieldNames?: Array<{ fieldPath: string; process: string; }>;
-  iconColorFieldName?: string;
-  icon?: string;
 }
 
 export interface SwimlaneConfig {
