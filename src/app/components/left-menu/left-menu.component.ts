@@ -62,9 +62,10 @@ export class LeftMenuComponent implements OnInit {
     // recompute nberrors of each page anytime the mainform validity changes
     this.mainFormService.mainForm.statusChanges.subscribe(st => this.updateNbErrors());
 
-    const isAuthentActivated = !!this.authService.authConfigValue && this.authService.authConfigValue.use_authent;
-    const isOpenID = isAuthentActivated && this.arlasIamService.authConfigValue.auth_mode !== 'iam';
-    const isIam = isAuthentActivated && this.arlasIamService.authConfigValue.auth_mode === 'iam';
+    const authSettings = this.settings.getAuthentSettings();
+    const isAuthentActivated = !!authSettings && authSettings.use_authent;
+    const isOpenID = isAuthentActivated && authSettings.auth_mode !== 'iam';
+    const isIam = isAuthentActivated && authSettings.auth_mode === 'iam';
     if (isOpenID) {
       this.authentMode = 'openid';
     }

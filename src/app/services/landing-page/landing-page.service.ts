@@ -100,7 +100,6 @@ export class LandingPageService {
           + collections.join(', '));
 
       } else {
-        // tslint:disable-next-line:no-string-literal
         if (this.arlasSettingsService.settings['use_time_filter']) {
           this.startupService.getTimeFilter(collection, configJson.arlas.server.url, this.collectionService, this.arlasSettingsService)
             .subscribe(timeFilter => {
