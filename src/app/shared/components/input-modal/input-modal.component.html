@@ -1,5 +1,5 @@
 <div mat-dialog-content>
-  <h1 class="modal_title" mat-dialog-title>{{ data?.title || 'Name' | translate }} </h1>
+  <h1 class="modal_title" mat-dialog-title>{{ data?.title || 'Dashboard name' | translate }} </h1>
   <div>{{data?.message | translate}}</div>
   <mat-form-field>
     <input matInput tabindex="1" [(ngModel)]="textName" (keypress)="pressEvent($event)">

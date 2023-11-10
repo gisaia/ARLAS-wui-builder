@@ -1,4 +1,5 @@
 {
+	"Back to home page": "Back to home page",
 	"Loading...": "Loading...",
 	"Explore collections": "Explore collections",
 	"Params": "Params",
@@ -35,7 +36,6 @@
 	"Collection": "Collection",
 	"Save": "Save",
 	"Download configuration files": "Download configuration files",
-	"Log Out": "Log Out",
 	"Editing dashboard": "Editing dashboard",
 	"Rename": "Rename",
 	"Create dashboard": "Create dashboard",
@@ -59,7 +59,9 @@
 	"Add a column": "Add a column",
 	"At least one field is required within a detail": "At least one field is required within a detail",
 	"Add a field": "Add a field",
+	"Add a field tooltip": "Add a field tooltip",
 	"Add a detail": "Add a detail",
+	"Add a detail tooltip": "Add a detail tooltip",
 	"Update tab": "Update tab",
 	"Display": "Display",
 	"Text and icon": "Text and icon",

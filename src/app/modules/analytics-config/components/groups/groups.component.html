@@ -7,10 +7,10 @@
             <div *ngFor="let group of groupsFa.controls; index as gi;" [formGroupName]="gi" cdkDrag class="group">
                 <div class="placeholder" *cdkDragPlaceholder></div>
                 <div class="header" cdkDragHandle>
-                    <button mat-icon-button [matTooltip]="'Move group' | translate">
+                    <button mat-icon-button [matTooltip]="'Move group' | translate" matTooltipPosition="left">
                         <mat-icon>drag_indicator</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="remove(gi)" [matTooltip]="'Delete group' | translate">
+                    <button mat-icon-button (click)="remove(gi)" [matTooltip]="'Delete group' | translate"  matTooltipPosition="before">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </div>

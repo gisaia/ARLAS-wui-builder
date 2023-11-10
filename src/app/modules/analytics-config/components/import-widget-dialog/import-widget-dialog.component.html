@@ -18,7 +18,7 @@
                         <div><mat-icon>{{analytic.icon}}</mat-icon></div>
                         <div class="title"> {{analytic.title}}</div>
                     </div>
-                    <div *ngFor="let comp of analytic.components" class="component" [matTooltip]="comp.componentType | translate" [matTooltipPosition]="'after'">
+                    <div *ngFor="let comp of analytic.components" class="component">
                         <mat-checkbox (change)="onChange($event)" [value]="comp">
                             <div class="container">
                                 <span>{{contributors.get(comp.contributorId)}}</span>

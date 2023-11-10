@@ -16,11 +16,11 @@
             [ngStyle]="{'background': selectedPalette.length > 1 ? 'linear-gradient(to right, ' + getSelectedPaletteGradients() + ')' : selectedPalette[0].value}">
             <div class="parent-gradient-buttons">
                 <button mat-mini-fab mat-icon-button (click)="reverse()"
-                    matTooltip="{{ 'Reverse the colors order' | translate}}">
+                    matTooltip="{{ 'Reverse the colors order' | translate}}" matTooltipPosition="left">
                     <mat-icon>swap_horiz</mat-icon>
                 </button>
                 <button mat-mini-fab mat-icon-button (click)="resetProportions()"
-                    matTooltip="{{ 'Reset the colors midpoints' | translate}}">
+                    matTooltip="{{ 'Reset the colors midpoints' | translate}}" matTooltipPosition="right">
                     <mat-icon>settings_backup_restore</mat-icon>
                 </button>
             </div>
@@ -36,7 +36,7 @@
                         </arlas-color-picker-wrapper>
                     </div>
                     <div class="color-buttons">
-                        <button mat-mini-fab cdkDragHandle matTooltip="{{ 'Reorder this color' | translate}}">
+                        <button mat-mini-fab cdkDragHandle matTooltip="{{ 'Reorder this color' | translate}}" matTooltipPosition="left">
                             <mat-icon>open_with</mat-icon>
                         </button>
                         <button mat-mini-fab (click)="add(i)" matTooltip="{{ 'Add new color' | translate}}">
@@ -48,7 +48,7 @@
                         </button>
                         <mat-slider [min]="data.min" [max]="data.max" [step]="(data.max - data.min) / 20" thumbLabel
                             [(ngModel)]="selectedPalette[i].proportion"
-                            matTooltip="{{ 'Change color midpoint' | translate}}"></mat-slider>
+                            matTooltip="{{ 'Change color midpoint' | translate}}" matTooltipPosition="right"></mat-slider>
                     </div>
                 </div>
                 <div *cdkDragPlaceholder class="color-panel">

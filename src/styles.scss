@@ -127,8 +127,8 @@ body {
 
 #mapgl {
   width: 100% !important;
-  top: 102px !important;
-  height: unset !important;
+  top: 59px !important;
+  height: calc(100% - 59px) !important;
   position: absolute !important;
   bottom: 0px !important;
   right: 0px !important;
