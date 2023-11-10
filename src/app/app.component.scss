@@ -55,3 +55,7 @@ under the License.
 .title {
   display: flex;
 }
+
+::ng-deep.mat-tooltip {
+  margin: 5px !important;
+}
