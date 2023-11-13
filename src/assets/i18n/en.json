@@ -28,7 +28,7 @@
 	"Select a config.map.json file": "Select a config.map.json file",
 	"Importing dashboard...": "Importing dashboard...",
 	"Available dashboards": "Available dashboards",
-	"Name": "Name",
+	"Name": "The dashboard's name",
 	"Last update": "Last update",
 	"Actions": "Actions",
 	"Menu": "Menu",

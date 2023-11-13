@@ -28,7 +28,7 @@
 	"Select a config.map.json file": "Charger config.map.json",
 	"Importing dashboard...": "Import du dashboard...",
 	"Available dashboards": "Dashboards disponibles",
-	"Name": "Nom",
+	"Name": "Nom du dashbord",
 	"Last update": "Dernière modification",
 	"Actions": "Actions",
 	"Menu": "Menu",

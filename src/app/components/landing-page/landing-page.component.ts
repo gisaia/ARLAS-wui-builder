@@ -119,6 +119,9 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.activatedRoute.snapshot.paramMap.has('id')) {
       this.confId = this.activatedRoute.snapshot.paramMap.get('id');
       this.loadConfig(this.confId);
+    } else if (!!this.activatedRoute.snapshot.routeConfig && this.activatedRoute.snapshot.routeConfig.path === 'import') {
+      this.configChoice = InitialChoice.load;
+      this.openChoice(this.configChoice);
     } else {
       if (
         this.persistenceService.isAvailable
