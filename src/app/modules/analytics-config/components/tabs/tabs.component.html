@@ -26,7 +26,7 @@
     
                             </span>
                             <mat-icon class="settings" *ngIf="matTab.isActive" (click)="$event.stopPropagation(); configTab(index)"
-                            [matTooltip]="'Configure tab' | translate">settings</mat-icon>
+                                [matTooltip]="'Configure tab' | translate">settings</mat-icon>
                             <mat-icon class="close" (click)="$event.stopPropagation(); removeTab(index)"
                                 [matTooltip]="'Delete tab' | translate">close</mat-icon>
                         </div>

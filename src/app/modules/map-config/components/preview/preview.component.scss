@@ -35,13 +35,10 @@ arlas-mapgl ::ng-deep .basemap-container {
 }
 
 .preview {
-    position: relative;
+    position: absolute;
     width: fit-content;
     height: 35px;
-    .button {
-        position: absolute;
-        top: 7px;
-    }
+    top: 68px;
 }
 
 .basemaps {
