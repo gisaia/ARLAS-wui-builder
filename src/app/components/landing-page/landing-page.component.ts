@@ -314,6 +314,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
         this.landingPageService.initWithConfig(configJson, configMapJson, id, data.doc_key);
       } else {
         this.configChoice = InitialChoice.setup;
+        this.openChoice(this.configChoice);
       }
       this.mainFormService.configurationName = data.doc_key;
       this.mainFormService.configurationId = id;
