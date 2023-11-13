@@ -167,6 +167,7 @@
 	"x-Axis": "",
 	"Preferred N° of buckets": "Nombre de cases de préférence",
 	"Preferred bucket's interval": "Taille des cases de préférence",
+	"Dashboard name": "Nom du dashboard",
 	"OK": "OK",
 	"Unable to access the server. Please, verify the url.": "Server inaccessible. Merci de vérifier l'url",
 	"Could not load config files ": "Impossible de charger les fichiers de configuration",

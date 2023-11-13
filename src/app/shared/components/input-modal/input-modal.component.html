@@ -1,5 +1,9 @@
 <div mat-dialog-content>
-  <h1 class="modal_title" mat-dialog-title>{{ data?.title || 'Dashboard name' | translate }} </h1>
+  <h1 class="modal_title" mat-dialog-title>
+    <!-- Allows for the i18n extraction to pick up the key -->
+    <ng-container *ngIf="data?.title">{{ data?.title | translate}}</ng-container>
+    <ng-container *ngIf="!data?.title">{{ 'Dashboard name' | translate }}</ng-container>
+  </h1>
   <div>{{data?.message | translate}}</div>
   <mat-form-field>
     <input matInput tabindex="1" [(ngModel)]="textName" (keypress)="pressEvent($event)">

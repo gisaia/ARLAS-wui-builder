@@ -167,6 +167,7 @@
 	"x-Axis": "x-Axis",
 	"Preferred N° of buckets": "Preferred N° of buckets",
 	"Preferred bucket's interval": "Preferred bucket's interval",
+	"Dashboard name": "Dashboard name",
 	"OK": "OK",
 	"Unable to access the server. Please, verify the url.": "Unable to access the server. Please, verify the url.",
 	"Could not load config files ": "Could not load config files ",
