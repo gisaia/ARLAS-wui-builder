@@ -26,6 +26,8 @@ import { Title } from '@angular/platform-browser';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
+import { environment } from '../environments/environment';
+
 
 @Component({
   selector: 'arlas-root',
@@ -35,6 +37,7 @@ import { filter } from 'rxjs';
 export class AppComponent implements OnInit {
 
   public title = 'ARLAS-wui-builder';
+  public version: string;
   public displayTopMenu = true;
   public displayLeftMenu = true;
   @ViewChild('landing', { static: false }) public landing: LandingPageComponent;
@@ -61,6 +64,8 @@ export class AppComponent implements OnInit {
   public ngOnInit(): void {
     this.title = this.arlasSettingsService.settings['tab_name'] ?
       this.arlasSettingsService.settings['tab_name'] : 'ARLAS-wui-builder';
+    this.version = environment.VERSION;
+
     this.titleService.setTitle(this.title);
     this.iconService.registerIcons();
     // remove arlas gif after

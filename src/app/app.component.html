@@ -1,5 +1,5 @@
 <div *ngIf="displayTopMenu">
-  <arlas-top-menu [wuiName]="'ARLAS-wui-builder'">
+  <arlas-top-menu [wuiName]="'ARLAS-wui-builder'" [version]="version">
     <div left-menu class="top-left-menu">
       <div class="logo">
         <a matTooltip="{{'Back to home page' | translate }}" [routerLink]="['/']" queryParamsHandling="preserve" [matTooltipPosition]="'right'">

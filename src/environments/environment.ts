@@ -17,6 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 import { NgxLoggerLevel } from 'ngx-logger';
+import version from '../../package.json';
 
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
@@ -24,7 +25,8 @@ import { NgxLoggerLevel } from 'ngx-logger';
 
 export const environment = {
   production: false,
-  logLevel: NgxLoggerLevel.DEBUG
+  logLevel: NgxLoggerLevel.DEBUG,
+  VERSION: version.version
 };
 
 /*
