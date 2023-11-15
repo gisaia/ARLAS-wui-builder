@@ -52,6 +52,8 @@ import { ConfigMapExportHelper } from './config-map-export-helper';
 import { Config } from './models-config';
 import { MapConfig } from './models-map-config';
 import { importElements } from './tools';
+import { ArlasColorService } from 'arlas-web-components';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -82,7 +84,7 @@ export class MainFormManagerService {
     private dialog: MatDialog,
     private startupService: StartupService,
     private collectionService: CollectionService,
-    private colorService: ArlasColorGeneratorLoader,
+    private colorService: ArlasColorService,
     private router: Router,
     private arlasStartupService: ArlasStartupService
   ) { }
@@ -252,7 +254,7 @@ export class MainFormManagerService {
 
     // load keys to colors
     if (!!config.arlas.web.colorGenerator && !!config.arlas.web.colorGenerator.keysToColors) {
-      this.colorService.setKeysToColors(config.arlas.web.colorGenerator.keysToColors);
+      (this.colorService.colorGenerator as ArlasColorGeneratorLoader).setKeysToColors(config.arlas.web.colorGenerator.keysToColors);
       const keysToColor = new FormArray([]);
       config.arlas.web.colorGenerator.keysToColors.forEach(kc =>
         keysToColor.push(new FormGroup({

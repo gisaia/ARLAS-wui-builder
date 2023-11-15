@@ -40,6 +40,7 @@ import {
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
+import { ArlasColorService } from 'arlas-web-components';
 
 export class ResultlistConfigForm extends CollectionConfigFormGroup {
 
@@ -152,6 +153,11 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
               false,
               marker('List default mode'),
               marker('List default mode description')
+            ),
+            useHttpQuicklooks: new SlideToggleFormControl(
+              false,
+              marker('Use http quicklooks'),
+              marker('Use http quicklooks description')
             ),
             tileLabelField: new SelectFormControl(
               '',
@@ -336,6 +342,7 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
       cellBackgroundStyle: this.get('renderStep.cellBackgroundStyle') as SelectFormControl,
       gridStep: {
         isDefaultMode: this.get('renderStep.gridStep.isDefaultMode') as SlideToggleFormControl,
+        useHttpQuicklooks: this.get('renderStep.gridStep.useHttpQuicklooks') as SlideToggleFormControl,
         tileLabelField: this.get('renderStep.gridStep.tileLabelField') as SelectFormControl,
         tileLabelFieldProcess: this.get('renderStep.gridStep.tileLabelFieldProcess') as TextareaFormControl,
         tooltipField: this.get('renderStep.gridStep.tooltipField') as SelectFormControl,
@@ -400,7 +407,7 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
     defaultConfig: DefaultConfig,
     dialog: MatDialog,
     collectionService: CollectionService,
-    private colorService: ArlasColorGeneratorLoader
+    private colorService: ArlasColorService
   ) {
     super(collection,
       {
@@ -461,7 +468,7 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
               keywords.forEach((k: string, index: number) => {
                 this.addToColorManualValuesCtrl({
                   keyword: k.toString(),
-                  color: colorService.getColor(k)
+                  color: this.colorService.getColor(k)
                 }, index);
               });
               this.addToColorManualValuesCtrl({
@@ -481,7 +488,7 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
                   if (result !== undefined) {
                     result.forEach((kc: KeywordColor) => {
                       /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
-                      colorService.updateKeywordColor(kc.keyword, kc.color);
+                      (colorService.colorGenerator as ArlasColorGeneratorLoader).updateKeywordColor(kc.keyword, kc.color);
                       this.addToColorManualValuesCtrl(kc);
                     });
                   }
@@ -593,7 +600,7 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
     protected mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,
     private dialog: MatDialog,
-    private colorService: ArlasColorGeneratorLoader
+    private colorService: ArlasColorService
   ) {
     super(collectionService, mainFormService);
   }

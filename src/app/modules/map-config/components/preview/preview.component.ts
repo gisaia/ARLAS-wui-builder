@@ -26,12 +26,10 @@ import { ConfigExportHelper } from '@services/main-form-manager/config-export-he
 import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { StartupService, ZONE_PREVIEW } from '@services/startup/startup.service';
-import { MapglComponent } from 'arlas-web-components';
+import { ArlasColorService, MapglComponent } from 'arlas-web-components';
 import { MapContributor } from 'arlas-web-contributors';
-import {
-  ArlasCollaborativesearchService, ArlasColorGeneratorLoader,
-  ArlasConfigService, ContributorBuilder, PersistenceService
-} from 'arlas-wui-toolkit';
+import { ArlasCollaborativesearchService, ArlasColorGeneratorLoader,
+  ArlasConfigService, ContributorBuilder, PersistenceService } from 'arlas-wui-toolkit';
 import { merge, Subscription } from 'rxjs';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
@@ -65,7 +63,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     private configService: ArlasConfigService,
     private startupService: StartupService,
     private collectionService: CollectionService,
-    private colorService: ArlasColorGeneratorLoader,
+    private colorService: ArlasColorService,
     private cdr: ChangeDetectorRef,
     private persistenceService: PersistenceService,
     private snackbar: MatSnackBar,
@@ -85,7 +83,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       const mapConfigBasemaps = this.mainFormService.mapConfig.getBasemapsFg();
       // Get contributor config for this layer
       // Get config.map part for this layer
-      const configMap = ConfigMapExportHelper.process(mapConfigLayers, colorService, this.collectionService.taggableFieldsMap);
+      const configMap = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFieldsMap);
       const mapContribConfigs = ConfigExportHelper.getMapContributors(mapConfigGlobal, mapConfigLayers,
         this.mainFormService.getMainCollection(), collectionService);
       // Add contributor part in arlasConfigService
@@ -104,7 +102,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
           this.configService,
           this.collaborativeService,
           this.settingsService,
-          this.colorService);
+          this.colorService.colorGenerator as ArlasColorGeneratorLoader);
         contributors.push(mapContributor);
       });
       const mapComponentConfig = ConfigExportHelper.getMapComponent(

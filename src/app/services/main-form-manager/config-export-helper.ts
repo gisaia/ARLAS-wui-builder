@@ -27,8 +27,7 @@ import {
   JSONPATH_COUNT,
   CHIPSEARCH_TYPE,
   CHIPSEARCH_IDENTIFIER,
-  WebConfigOptions,
-  FieldsConfiguration
+  WebConfigOptions
 } from './models-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
@@ -50,16 +49,14 @@ import {
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
-import { VisualisationSetConfig, BasemapStyle, SCROLLABLE_ARLAS_ID } from 'arlas-web-components';
+import { VisualisationSetConfig, BasemapStyle, SCROLLABLE_ARLAS_ID, ArlasColorService, FieldsConfiguration } from 'arlas-web-components';
 import { titleCase } from '@services/collection-service/tools';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionReferenceDescription } from 'arlas-api';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
 import { hashCode, stringifyArlasFilter } from './tools';
-import { filter } from 'rxjs/internal/operators/filter';
 
 export enum EXPORT_TYPE {
   json = 'json',
@@ -142,7 +139,7 @@ export class ConfigExportHelper {
     analyticsConfigList: FormArray,
     resultLists: FormArray,
     externalNode: FormGroup,
-    colorService: ArlasColorGeneratorLoader,
+    colorService: ArlasColorService,
     collectionService: CollectionService
   ): any {
     const chipssearch: ChipSearchConfig = {
@@ -161,7 +158,7 @@ export class ConfigExportHelper {
           },
           analytics: [],
           colorGenerator: {
-            keysToColors: colorService.keysToColors
+            keysToColors: colorService.colorGenerator.keysToColors
           },
           options: this.getOptions(lookAndFeelConfigGlobal),
           externalNode: externalNode.controls.externalNode.value
@@ -958,8 +955,8 @@ export class ConfigExportHelper {
           fieldPath: list.renderStep.gridStep.tooltipField,
           process: list.renderStep.gridStep.tooltipFieldProcess
         }],
-        icon: 'fiber_manual_record',
-        iconColorFieldName: list.renderStep.gridStep.colorIdentifier
+        iconColorFieldName: list.renderStep.gridStep.colorIdentifier,
+        useHttpQuicklooks: list.renderStep.gridStep.useHttpQuicklooks
       };
       if (list.renderStep.gridStep.thumbnailUrl) {
         fieldsConfig.urlThumbnailTemplate = list.renderStep.gridStep.thumbnailUrl;
@@ -996,7 +993,7 @@ export class ConfigExportHelper {
       contrib.includeMetadata = [];
       const metadatas = new Set<string>();
       Object.keys(list.renderStep.gridStep).forEach(v => {
-        if (!!list.renderStep.gridStep[v] && v !== 'isDefaultMode') {
+        if (!!list.renderStep.gridStep[v] && v !== 'isDefaultMode' && v !== 'useHttpQuicklooks') {
           metadatas.add(list.renderStep.gridStep[v]);
         }
       });

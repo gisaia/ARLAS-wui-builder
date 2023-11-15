@@ -55,6 +55,7 @@ import frComponents from 'arlas-web-components/assets/i18n/fr.json';
 import enToolkit from 'arlas-wui-toolkit/assets/i18n/en.json';
 import frToolkit from 'arlas-wui-toolkit/assets/i18n/fr.json';
 
+
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
   return load;
@@ -134,7 +135,6 @@ export class CustomTranslateLoader implements TranslateLoader {
   providers: [
     forwardRef(() => ArlasConfigurationDescriptor),
     forwardRef(() => ArlasCollaborativesearchService),
-    forwardRef(() => ArlasColorGeneratorLoader),
     forwardRef(() => ArlasStartupService),
     {
       provide: APP_INITIALIZER,

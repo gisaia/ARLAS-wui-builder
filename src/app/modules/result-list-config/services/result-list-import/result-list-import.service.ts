@@ -103,6 +103,10 @@ export class ResultListImportService {
         control: renderStep.gridStep.isDefaultMode
       },
       {
+        value: contributor.fieldsConfiguration.useHttpQuicklooks,
+        control: renderStep.gridStep.useHttpQuicklooks
+      },
+      {
         value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].fieldPath : '',
         control: renderStep.gridStep.tileLabelField
       },
