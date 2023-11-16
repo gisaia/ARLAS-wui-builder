@@ -40,8 +40,6 @@ import { map } from 'rxjs/internal/operators/map';
 import { LandingPageDialogComponent } from './landing-page-dialog.component';
 import { InitialChoice, LandingPageService } from '@services/landing-page/landing-page.service';
 
-
-
 export interface Configuration {
   name: string;
   last_update_date: any;
@@ -64,7 +62,6 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   public configurationsLength = 0;
   public configPageNumber = 0;
   public configPageSize = 5;
-  private errorAlreadyThrown = false;
   public configChoice;
   public availablesCollections: string[];
   public InitialChoice = InitialChoice;
@@ -268,28 +265,11 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         error: (msg) => {
           this.configurations = [];
-          if (!this.errorAlreadyThrown) {
-            let message = '';
-            if (msg.url) {
-              message =
-                '- An ARLAS-persistence error occured: ' + (msg.status === 404 ? 'unreachable server \n' : 'unauthorized access \n') +
-                '   - url: ' + msg.url + '\n' + '   - status : ' + msg.status;
-            } else {
-              message = msg.toString();
-            }
-            const error = {
-              origin: 'ARLAS-persistence',
-              message,
-              reason: (msg.status === 404 || msg.toString().includes('Failed to fetch') ?
-                'Please check if ARLAS-persistence server is up & running,' +
-                ' and that you have access to the asked endpoint' :
-                'Please check if you\'re authenticated to have access to ARLAS-persistence server')
-            };
-            if (msg.status !== 403 && msg.status !== 401) {
-              this.errorService.errorEmitter.next(error);
-            }
+          if (msg instanceof Response) {
+            this.errorService.emitBackendError(msg.status, 'An error occured', 'ARLAS-persistence');
+          } else {
+            this.errorService.emitUnavailableService('ARLAS-persistence');
           }
-          this.errorAlreadyThrown = true;
         }
       });
   }

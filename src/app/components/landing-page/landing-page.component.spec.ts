@@ -8,7 +8,7 @@ import { StartupService } from '@services/startup/startup.service';
 import { SharedModule } from '@shared/shared.module';
 import {
   ArlasCollaborativesearchService, ArlasConfigService, ArlasConfigurationDescriptor,
-  ArlasStartupService, AuthentificationService, ConfigMenuModule, ErrorModalModule, getOptionsFactory, GET_OPTIONS
+  ArlasStartupService, AuthentificationService, ConfigMenuModule, getOptionsFactory, GET_OPTIONS
 } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { of } from 'rxjs';
@@ -22,7 +22,6 @@ describe('LandingPageComponent', () => {
     component: LandingPageComponent,
     imports: [
       SharedModule,
-      ErrorModalModule,
       ConfigMenuModule
     ],
     providers: [
