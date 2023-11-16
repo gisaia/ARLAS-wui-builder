@@ -33,13 +33,12 @@ import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-
 import { Subject } from 'rxjs/internal/Subject';
 import { Subscription } from 'rxjs';
 import { OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { CdkDragDrop, CdkDragEnter, CdkDragMove, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragEnter, CdkDragMove } from '@angular/cdk/drag-drop';
 import { moveInFormArray } from '@utils/tools';
 import { AnalyticsImportService } from '@analytics-config/services/analytics-import/analytics-import.service';
 import { ImportWidgetDialogComponent } from '../import-widget-dialog/import-widget-dialog.component';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfigFormGroup } from '@shared-models/config-form';
-import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';

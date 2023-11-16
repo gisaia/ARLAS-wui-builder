@@ -37,11 +37,11 @@ import { SharedModule } from '@shared/shared.module';
 import { TimelineConfigModule } from '@timeline-config/timeline-config.module';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import {
-  ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigurationDescriptor, ArlasConfigurationUpdaterService,
+  ArlasCollaborativesearchService, ArlasConfigurationDescriptor, ArlasConfigurationUpdaterService,
   ArlasIamService,
   ArlasStartupService, ArlasWalkthroughService, AuthentificationService, ConfigMenuModule, configUpdaterFactory,
-  CONFIG_UPDATER, ErrorModalModule, FETCH_OPTIONS, getOptionsFactory,
-  iamServiceFactory, PaginatorI18n, UserInfosComponent, GET_OPTIONS, TopMenuComponent, ArlasToolkitSharedModule,
+  CONFIG_UPDATER, FETCH_OPTIONS, getOptionsFactory,
+  iamServiceFactory, PaginatorI18n, UserInfosComponent, GET_OPTIONS, ArlasToolkitSharedModule,
 } from 'arlas-wui-toolkit';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
@@ -112,7 +112,6 @@ export class CustomTranslateLoader implements TranslateLoader {
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    ErrorModalModule,
     MapConfigModule,
     ResultListConfigModule,
     SearchConfigModule,
