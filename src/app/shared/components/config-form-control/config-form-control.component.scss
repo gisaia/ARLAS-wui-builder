@@ -345,3 +345,10 @@ mat-option {
 .filter-chip{
   cursor: pointer;
 }
+
+.multi-select-form-control {
+  .empty-select {
+    color: gray;
+    font-size: 14px;
+  }
+}

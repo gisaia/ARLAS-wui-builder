@@ -57,6 +57,7 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { CollectionReferenceDescription } from 'arlas-api';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
 import { hashCode, stringifyArlasFilter } from './tools';
+import { DescribedUrl } from 'arlas-web-components/lib/components/results/utils/results.utils';
 
 export enum EXPORT_TYPE {
   json = 'json',
@@ -961,8 +962,15 @@ export class ConfigExportHelper {
       if (list.renderStep.gridStep.thumbnailUrl) {
         fieldsConfig.urlThumbnailTemplate = list.renderStep.gridStep.thumbnailUrl;
       }
-      if (list.renderStep.gridStep.imageUrl) {
-        fieldsConfig.urlImageTemplate = list.renderStep.gridStep.imageUrl;
+
+      if (list.renderStep.gridStep.quicklookUrls) {
+        fieldsConfig.urlImageTemplates = list.renderStep.gridStep.quicklookUrls.map(formValues => {
+          const quicklook: DescribedUrl = {url: formValues.url, description: formValues.description};
+          if (formValues.filter.field !== '') {
+            quicklook.filter = {field: formValues.filter.field, values: formValues.filter.values.map(v => v.value)};
+          }
+          return quicklook;
+        });
       }
 
       contrib.fieldsConfiguration = fieldsConfig;
@@ -993,7 +1001,7 @@ export class ConfigExportHelper {
       contrib.includeMetadata = [];
       const metadatas = new Set<string>();
       Object.keys(list.renderStep.gridStep).forEach(v => {
-        if (!!list.renderStep.gridStep[v] && v !== 'isDefaultMode' && v !== 'useHttpQuicklooks') {
+        if (!!list.renderStep.gridStep[v] && v !== 'isDefaultMode' && v !== 'useHttpQuicklooks' && v !== 'quicklookUrls') {
           metadatas.add(list.renderStep.gridStep[v]);
         }
       });

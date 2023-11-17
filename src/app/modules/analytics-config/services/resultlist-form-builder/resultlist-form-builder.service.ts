@@ -34,6 +34,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
   ButtonFormControl, ComponentFormControl, ConfigFormGroup, HiddenFormControl, InputFormControl,
+  MultipleSelectFormControl,
   SelectFormControl, SelectOption, SliderFormControl, SlideToggleFormControl, TextareaFormControl,
   TitleInputFormControl, UrlTemplateControl
 } from '@shared-models/config-form';
@@ -41,6 +42,9 @@ import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { ArlasColorService } from 'arlas-web-components';
+import { CollectionField } from '@services/collection-service/models';
+import { EditResultlistQuicklookComponent } from '@analytics-config/components/edit-resultlist-quicklook/edit-resultlist-quicklook.component';
+import { Router } from '@angular/router';
 
 export class ResultlistConfigForm extends CollectionConfigFormGroup {
 
@@ -269,7 +273,15 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                 }
               }
             ),
-
+            quicklookUrls: new FormArray([]),
+            // DataStep is needed because the collection is needed
+            quicklook: new ComponentFormControl(
+              EditResultlistQuicklookComponent,
+              {
+                collectionControl: () => this.customControls.dataStep.collection,
+                control: () => this.customControls.renderStep.gridStep.quicklookUrls
+              }
+            )
           }).withTitle(marker('Grid view'))
         }).withTabName(marker('Render')),
         zactionStep: new ConfigFormGroup({
@@ -349,7 +361,8 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
         tooltipFieldProcess: this.get('renderStep.gridStep.tooltipFieldProcess') as TextareaFormControl,
         thumbnailUrl: this.get('renderStep.gridStep.thumbnailUrl') as UrlTemplateControl,
         imageUrl: this.get('renderStep.gridStep.imageUrl') as UrlTemplateControl,
-        colorIdentifier: this.get('renderStep.gridStep.colorIdentifier') as SelectFormControl
+        colorIdentifier: this.get('renderStep.gridStep.colorIdentifier') as SelectFormControl,
+        quicklookUrls: this.get('renderStep.gridStep.quicklookUrls') as FormArray
       }
     },
     zactionStep: {
@@ -588,6 +601,94 @@ export class ResultlistDetailFieldFormGroup extends FormGroup {
   };
 }
 
+
+export class ResultlistQuicklookFormGroup extends FormGroup {
+
+  /** TODO:
+   * Put filter fields as optional
+   * Put filterValues only if filterField is set
+   */
+  public constructor(fieldsObs: Observable<Array<CollectionField>>, collection: string, collectionService: CollectionService) {
+    super({
+      url: new UrlTemplateControl(
+        '',
+        marker('Image url'),
+        marker('Image url description'),
+        fieldsObs,
+        true
+      ),
+      description: new UrlTemplateControl(
+        '',
+        marker('Image description'),
+        marker('Image description description'),
+        fieldsObs,
+        true,
+        {
+          optional: true
+        }
+      ),
+      filter: new ConfigFormGroup({
+        field: new SelectFormControl(
+          '',
+          marker('Image filter field'),
+          marker('Image filter field description'),
+          true,
+          toOptionsObs(fieldsObs),
+          {
+            optional: true,
+            childs: () => [this.customControls.filter.values]
+          }
+        ),
+        values: new MultipleSelectFormControl(
+          // Mark as invalid if there is a value on filterField and not there
+          '',
+          marker('Image filter values'),
+          marker('Image filter values description'),
+          false,
+          [],
+          {
+            optional: true,
+            dependsOn: () => [this.customControls.filter.field],
+            onDependencyChange: (control: MultipleSelectFormControl) => {
+              // Works if i go in analytics then to result list. Load module ?
+              console.log('dependency change');
+              if (!this.customControls.filter.field.touched) {
+                // Avoid to reset the imported configuration when first loading it
+              } else if (!!this.customControls.filter.field.value && this.customControls.filter.field.value !== ''
+                  && this.customControls.filter.field.syncOptions
+                  && this.customControls.filter.field.syncOptions.map(f => f.value).includes(this.customControls.filter.field.value)) {
+                console.log('in change');
+                control.setSyncOptions([]);
+                collectionService.getTermAggregation(
+                  collection,
+                  this.customControls.filter.field.value)
+                  .then(keywords => {
+                    control.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
+                  });
+              } else {
+                console.log('resetting');
+                control.setSyncOptions([]);
+              }
+              control.markAsUntouched();
+            }
+          },
+          false
+        )
+      })
+    });
+  }
+
+  public customControls = {
+    url: this.get('url') as UrlTemplateControl,
+    description: this.get('description') as UrlTemplateControl,
+    filter: {
+      field: this.get('filter.field') as SelectFormControl,
+      values: this.get('filter.values') as MultipleSelectFormControl
+    }
+  };
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -600,7 +701,8 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
     protected mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,
     private dialog: MatDialog,
-    private colorService: ArlasColorService
+    private colorService: ArlasColorService,
+    private router: Router,
   ) {
     super(collectionService, mainFormService);
   }
@@ -652,6 +754,15 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
       toOptionsObs(
         this.collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES))
     );
+  }
+
+  public buildQuicklook(collection: string) {
+    const fieldObs = this.collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD);
+    const control = new ResultlistQuicklookFormGroup(
+      fieldObs,
+      collection,
+      this.collectionService);
+    return control;
   }
 
 }

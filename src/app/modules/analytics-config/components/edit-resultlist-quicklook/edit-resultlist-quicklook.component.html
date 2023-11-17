@@ -1,0 +1,56 @@
+<table [hidden]="quicklooks.length === 0" #quicklookTable mat-table [dataSource]="quicklooks" class="quicklooks"
+    cdkDropList [cdkDropListData]="quicklooks" (cdkDropListDropped)="drop($event)"
+    [cdkDropListDisabled]="dragDisabled" [cdkDropListLockAxis]="'y'">
+
+    <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td class="cell action" mat-cell *matCellDef="let quicklook; let qi = index">
+            <div class="action-wrapper">
+                <mat-icon class="drag" (mousedown)="dragDisabled = false">drag_indicator</mat-icon>
+                <button mat-icon-button (click)="removeQuicklook(qi)" [matTooltip]="'Delete quicklook' | translate">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="url">
+        <th mat-header-cell *matHeaderCellDef>{{'Quicklook url' | translate}}</th>
+        <td class="cell url" mat-cell *matCellDef="let quicklook">
+            <arlas-config-form-control [showLabel]="false" [control]="quicklook.controls.url">
+            </arlas-config-form-control>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>{{'Quicklook description' | translate}}</th>
+        <td class="cell description" mat-cell *matCellDef="let quicklook">
+            <arlas-config-form-control [showLabel]="false" [control]="quicklook.controls.description">
+            </arlas-config-form-control>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="filterField">
+        <th mat-header-cell *matHeaderCellDef>{{'Quicklook filter field' | translate}}</th>
+        <td class="cell filterField" mat-cell *matCellDef="let quicklook">
+            <arlas-config-form-control [showLabel]="false" [control]="quicklook.controls.filter.controls.field">
+            </arlas-config-form-control>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="filterValues">
+        <th mat-header-cell *matHeaderCellDef>{{'Quicklook filter values' | translate}}</th>
+        <td class="cell filterValues" mat-cell *matCellDef="let quicklook">
+            <arlas-config-form-control [showLabel]="false" [control]="quicklook.controls.filter.controls.values">
+            </arlas-config-form-control>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (cdkDragStarted)="dragStarted($event)" cdkDrag
+        [cdkDragData]="row"></tr>
+</table>
+
+<div class="add-quicklook">
+    <button mat-stroked-button (click)="addQuicklook()" color="primary"
+        [matTooltip]="'Add a quicklook tooltip' | translate">
+        <mat-icon>add</mat-icon>
+        {{'Add a quicklook' | translate}}
+    </button>
+</div>

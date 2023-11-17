@@ -85,6 +85,9 @@
             [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
         </mat-select>
+        <div *ngIf="typedControl.syncOptions.length === 0 && typedControl.selectedMultipleItems.length === 0" class="empty-select">
+            {{'No choices available' | translate}}
+        </div>
     </div>
 
 </div>
