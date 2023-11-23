@@ -25,7 +25,13 @@ under the License.
         padding: 5px;
 
         &.action {
-            padding-left: 0;
+            padding-left: 5px;
+        }
+
+        &.filterField {
+            ::ng-deep.mat-form-field {
+                width: 100%;
+            }
         }
 
         ::ng-deep.field-insert-container {

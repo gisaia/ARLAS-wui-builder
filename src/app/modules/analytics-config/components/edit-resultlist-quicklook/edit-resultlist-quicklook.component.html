@@ -14,31 +14,35 @@
         </td>
     </ng-container>
     <ng-container matColumnDef="url">
-        <th mat-header-cell *matHeaderCellDef>{{'Quicklook url' | translate}}</th>
+        <th mat-header-cell *matHeaderCellDef>
+            {{'Quicklook url' | translate}}
+        </th>
         <td class="cell url" mat-cell *matCellDef="let quicklook">
-            <arlas-config-form-control [showLabel]="false" [control]="quicklook.controls.url">
-            </arlas-config-form-control>
+            <arlas-config-form-control [showLabel]="false" [control]="quicklook.controls.url"></arlas-config-form-control>
         </td>
     </ng-container>
     <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef>{{'Quicklook description' | translate}}</th>
+        <th mat-header-cell *matHeaderCellDef>
+            {{'Quicklook description' | translate}}
+        </th>
         <td class="cell description" mat-cell *matCellDef="let quicklook">
-            <arlas-config-form-control [showLabel]="false" [control]="quicklook.controls.description">
-            </arlas-config-form-control>
+            <arlas-config-form-control [showLabel]="false" [control]="quicklook.controls.description"></arlas-config-form-control>
         </td>
     </ng-container>
     <ng-container matColumnDef="filterField">
-        <th mat-header-cell *matHeaderCellDef>{{'Quicklook filter field' | translate}}</th>
+        <th mat-header-cell *matHeaderCellDef>
+            {{'Quicklook filter field' | translate}}
+        </th>
         <td class="cell filterField" mat-cell *matCellDef="let quicklook">
-            <arlas-config-form-control [showLabel]="false" [control]="quicklook.controls.filter.controls.field">
-            </arlas-config-form-control>
+            <arlas-config-form-control [showLabel]="false" [control]="quicklook.controls.filter.controls.field"></arlas-config-form-control>
         </td>
     </ng-container>
     <ng-container matColumnDef="filterValues">
-        <th mat-header-cell *matHeaderCellDef>{{'Quicklook filter values' | translate}}</th>
+        <th mat-header-cell *matHeaderCellDef>
+            {{'Quicklook filter values' | translate}}
+        </th>
         <td class="cell filterValues" mat-cell *matCellDef="let quicklook">
-            <arlas-config-form-control [showLabel]="false" [control]="quicklook.controls.filter.controls.values">
-            </arlas-config-form-control>
+            <arlas-config-form-control [showLabel]="false" [control]="quicklook.controls.filter.controls.values"></arlas-config-form-control>
         </td>
     </ng-container>
 

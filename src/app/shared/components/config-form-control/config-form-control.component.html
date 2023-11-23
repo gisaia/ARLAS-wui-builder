@@ -277,8 +277,7 @@
                     (click)="typedControl.onClickFilterChip($event, opt,indexOfelement)" [selectable]="true"
                     [removable]="true" (removed)="typedControl.removeMetric(opt,indexOfelement)"
                     [matTooltip]="opt.filter | json">
-                    m[{{indexOfelement}}] : {{opt.field}} ({{opt.metric}}) ({{ (opt.filter | json) === '{}' ? ('no
-                    filter'| translate) : ('with filter'| translate) }})
+                    m[{{indexOfelement}}] : {{opt.field}} ({{opt.metric}}) ({{ (opt.filter | json) === '{}' ? ('no filter'| translate) : ('with filter'| translate) }})
                     <mat-icon matChipRemove>cancel</mat-icon>
                 </mat-chip>
             </mat-chip-list>
@@ -339,7 +338,7 @@
     <div>
         <div class="action-container">
             <mat-form-field [style.width]="typedControl.width ? typedControl.width : 'unset' ">
-                <mat-label>{{ typedControl.label | translate}}</mat-label>
+                <mat-label *ngIf="showLabel">{{ typedControl.label | translate }}</mat-label>
                 <input matInput [formControl]="typedControl" [type]="'text'" [required]="!typedControl.optional"
                     [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
                     [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
@@ -361,12 +360,17 @@
                 </div>
                 <div class="insert-container">
                     <button type="button" mat-stroked-button *ngIf="typedControl?.showInsertButton"
-                        (click)="typedControl.showInsertButton = false">{{ 'Insert field to URL' | translate}}</button>
+                        (click)="typedControl.showInsertButton = false" [matTooltip]="'Insert field to URL tooltip' | translate" matTooltipPosition="right">
+                        {{ 'Insert field to URL' | translate}}
+                    </button>
                     <button type="button" mat-stroked-button *ngIf="!typedControl?.showInsertButton" class="insert"
-                        [disabled]="typedControl.fieldCtrl.invalid" (click)="typedControl.add()">{{ 'Insert' |
-                        translate}}</button>
+                        [disabled]="typedControl.fieldCtrl.invalid" (click)="typedControl.add()">
+                        {{ 'Insert' | translate}}
+                    </button>
                     <button type="button" mat-stroked-button *ngIf="!typedControl?.showInsertButton"
-                        (click)="typedControl.showInsertButton = true">{{ 'Cancel' | translate}}</button>
+                        (click)="typedControl.showInsertButton = true">
+                        {{ 'Cancel' | translate}}
+                    </button>
                 </div>
             </div>
         </div>
