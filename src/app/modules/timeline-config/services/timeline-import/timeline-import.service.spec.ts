@@ -1,8 +1,9 @@
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { TimelineImportService } from './timeline-import.service';
-import { ArlasColorGeneratorLoader, ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
+import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { StartupService } from '@services/startup/startup.service';
+import { ArlasColorService } from 'arlas-web-components';
 
 describe('TimelineImportService', () => {
   let spectator: SpectatorService<TimelineImportService>;
@@ -11,7 +12,7 @@ describe('TimelineImportService', () => {
     service: TimelineImportService,
     imports: [ArlasToolkitSharedModule],
     providers: [
-      mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(ArlasColorService),
       mockProvider(CollectionService),
       mockProvider(StartupService)
     ]

@@ -73,6 +73,6 @@ export class EditResultlistQuicklookComponent implements OnInit {
   }
 
   public get quicklooks() {
-    return this.control.controls as Array<ResultlistQuicklookFormGroup>;
+    return this.control? this.control.controls as Array<ResultlistQuicklookFormGroup> : [];
   }
 }

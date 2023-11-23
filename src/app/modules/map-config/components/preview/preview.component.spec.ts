@@ -3,12 +3,12 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
 import {
-  ArlasCollaborativesearchService, ArlasColorGeneratorLoader,
+  ArlasCollaborativesearchService,
   ArlasConfigurationUpdaterService, ArlasStartupService, PersistenceService
 } from 'arlas-wui-toolkit';
 import { MockComponent } from 'ng-mocks';
 import { PreviewComponent } from './preview.component';
-import { MapglComponent } from 'arlas-web-components';
+import { MapglComponent, ArlasColorService } from 'arlas-web-components';
 
 describe('PreviewComponent', () => {
 
@@ -21,7 +21,7 @@ describe('PreviewComponent', () => {
       mockProvider(HttpClient),
       mockProvider(ArlasCollaborativesearchService),
       mockProvider(ArlasConfigurationUpdaterService),
-      mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(ArlasColorService),
       mockProvider(ArlasStartupService),
       mockProvider(CollectionService),
       mockProvider(PersistenceService),

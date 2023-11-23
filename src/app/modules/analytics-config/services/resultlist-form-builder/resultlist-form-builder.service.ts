@@ -762,6 +762,7 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
       fieldObs,
       collection,
       this.collectionService);
+    // control.customControls.filterValues.onDependencyChange(control.customControls.filterValues, false);
     return control;
   }
 
