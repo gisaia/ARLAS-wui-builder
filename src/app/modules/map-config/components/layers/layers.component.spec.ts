@@ -4,10 +4,11 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { MainFormService } from '@services/main-form/main-form.service';
 import { MapglLayerIconModule, MapglLegendModule } from 'arlas-web-components';
 import {
-  ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService, ArlasConfigurationUpdaterService,
+  ArlasCollaborativesearchService, ArlasConfigService, ArlasConfigurationUpdaterService,
   ArlasStartupService, CONFIG_UPDATER
 } from 'arlas-wui-toolkit';
 import { LayersComponent } from './layers.component';
+import { ArlasColorService } from 'arlas-web-components';
 
 describe('LayersComponent', () => {
   let spectator: Spectator<LayersComponent>;
@@ -16,7 +17,7 @@ describe('LayersComponent', () => {
       mockProvider(ArlasConfigService),
       mockProvider(ArlasStartupService),
       mockProvider(ArlasCollaborativesearchService),
-      mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(ArlasColorService),
       mockProvider(ArlasConfigurationUpdaterService),
       mockProvider(CollectionService),
       { provide: CONFIG_UPDATER, useValue: {} },

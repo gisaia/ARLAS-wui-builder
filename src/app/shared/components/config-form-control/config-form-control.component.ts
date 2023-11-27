@@ -29,7 +29,7 @@ import {
   MultipleSelectFormControl, OrderedSelectFormControl, RadioButtonFormControl, SelectFormControl, SliderFormControl, SlideToggleFormControl,
   TextareaFormControl, TitleInputFormControl, TypedSelectFormControl, UrlTemplateControl, VisualisationCheckboxFormControl
 } from '@shared-models/config-form';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { ArlasColorService } from 'arlas-web-components';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -54,7 +54,7 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   public constructor(
     private resolver: ComponentFactoryResolver,
     private changeDetector: ChangeDetectorRef,
-    private colorService: ArlasColorGeneratorLoader,
+    private colorService: ArlasColorService,
     private collectionService: CollectionService
   ) { }
 

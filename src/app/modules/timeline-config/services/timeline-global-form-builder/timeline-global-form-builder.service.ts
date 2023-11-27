@@ -32,9 +32,10 @@ import {
   ConfigFormGroup, InputFormControl, MultipleSelectFormControl, SelectFormControl,
   SliderFormControl, SlideToggleFormControl
 } from '@shared-models/config-form';
-import { ChartType } from 'arlas-web-components';
-import { ArlasColorGeneratorLoader, ArlasSettingsService } from 'arlas-wui-toolkit';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { StartupService } from '@services/startup/startup.service';
+import { ArlasColorService, ChartType } from 'arlas-web-components';
+
 
 enum DateFormats {
   English = '%b %d %Y  %H:%M',
@@ -50,7 +51,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
     mainFormService: MainFormService,
     settingsService: ArlasSettingsService,
     timelineBucketsIntervalFg?: BucketsIntervalFormGroup,
-    colorService?: ArlasColorGeneratorLoader,
+    colorService?: ArlasColorService,
   ) {
     super(
       {
@@ -453,7 +454,7 @@ export class TimelineGlobalFormBuilderService {
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
     private collectionService: CollectionService,
     private mainFormService: MainFormService,
-    private colorService: ArlasColorGeneratorLoader,
+    private colorService: ArlasColorService,
     private startupService: StartupService,
     private settingsService: ArlasSettingsService,
 

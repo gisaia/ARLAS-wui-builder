@@ -7,9 +7,9 @@ import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wra
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FiltersComponent } from '@map-config/components/filters/filters.component';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionsUnitsComponent } from '@look-and-feel-config/components/collections-units/collections-units.component';
+import { ArlasColorService } from 'arlas-web-components';
 
 describe('ConfigFormControlComponent', () => {
   let spectator: Spectator<ConfigFormControlComponent>;
@@ -27,7 +27,7 @@ describe('ConfigFormControlComponent', () => {
       MockComponent(CollectionsUnitsComponent)
     ],
     providers: [
-      mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(ArlasColorService),
       mockProvider(CollectionService)
     ]
   });

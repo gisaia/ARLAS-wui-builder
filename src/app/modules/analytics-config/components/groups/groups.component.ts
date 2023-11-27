@@ -29,7 +29,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 import { ArlasColorService } from 'arlas-web-components';
-import { AnalyticsBoardComponent, ArlasColorGeneratorLoader, ArlasConfigService, ArlasStartupService } from 'arlas-wui-toolkit';
+import { AnalyticsBoardComponent, ArlasConfigService, ArlasStartupService } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
 import { debounceTime } from 'rxjs/operators';
@@ -63,8 +63,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
     private analyticsInitService: AnalyticsInitService,
     private translate: TranslateService,
     private cdr: ChangeDetectorRef,
-    private colorService: ArlasColorGeneratorLoader,
-    private cs: ArlasColorService,
     protected mainFormService: MainFormService,
 
   ) {}
@@ -102,16 +100,14 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   public get groupsFa() {
-    return this.contentFg.get('groupsFa') as FormArray;
+    return !!this.contentFg ? this.contentFg.get('groupsFa') as FormArray : null;
   }
 
   public updateAnalytics() {
-    // get the keyToColors list to inject it in the ColorService used by the arlas-web-components
-    this.cs.colorGenerator = this.colorService;
     const analytics = [];
     this.groupsPreview = [];
     this.cdr.detectChanges();
-    this.groupsFa.value.forEach(group => {
+    this.groupsFa?.value.forEach(group => {
       analytics.push(group.preview);
     });
     this.groupsPreview = analytics;

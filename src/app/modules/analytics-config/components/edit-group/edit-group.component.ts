@@ -245,7 +245,9 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     this.formGroup.controls.preview.setValue(
       ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, this.analyticsInitService.groupIndex++)
     );
-    this.updateDisplay.next(null);
+    if (!this.updateDisplay.closed) {
+      this.updateDisplay.next(null);
+    }
   }
 
   public ngOnDestroy() {

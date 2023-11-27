@@ -7,12 +7,13 @@ import { StartingConfigFormBuilderService } from '@services/starting-config-form
 import { StartupService } from '@services/startup/startup.service';
 import { SharedModule } from '@shared/shared.module';
 import {
-  ArlasCollaborativesearchService, ArlasColorGeneratorLoader, ArlasConfigService, ArlasConfigurationDescriptor,
+  ArlasCollaborativesearchService, ArlasConfigService, ArlasConfigurationDescriptor,
   ArlasStartupService, AuthentificationService, ConfigMenuModule, ErrorModalModule, getOptionsFactory, GET_OPTIONS
 } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { of } from 'rxjs';
 import { LandingPageComponent, LandingPageDialogComponent } from './landing-page.component';
+import { ArlasColorService } from 'arlas-web-components';
 
 describe('LandingPageComponent', () => {
   let spectator: Spectator<LandingPageComponent>;
@@ -39,7 +40,7 @@ describe('LandingPageComponent', () => {
       mockProvider(ArlasStartupService),
       mockProvider(ArlasConfigurationDescriptor),
       mockProvider(HttpClient),
-      mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(ArlasColorService),
       mockProvider(StartingConfigFormBuilderService),
       mockProvider(AuthentificationService, {
         canActivateProtectedRoutes: of()

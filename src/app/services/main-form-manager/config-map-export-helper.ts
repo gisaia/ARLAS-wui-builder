@@ -27,11 +27,10 @@ import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/p
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 import { ConfigExportHelper } from './config-export-helper';
 import { LayerSourceConfig } from 'arlas-web-contributors';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
-import { FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID } from 'arlas-web-components';
+import { ArlasColorService, FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID } from 'arlas-web-components';
 import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { Layout } from './models-map-config';
 export enum VISIBILITY {
@@ -41,7 +40,7 @@ export enum VISIBILITY {
 export const NORMALIZED = 'normalized';
 export class ConfigMapExportHelper {
 
-  public static process(mapConfigLayers: FormArray, colorService: ArlasColorGeneratorLoader,
+  public static process(mapConfigLayers: FormArray, colorService: ArlasColorService,
     taggableFieldsMap?: Map<string, Set<string>>) {
     const fillStrokeLayers = [];
     const scrollableLayers = [];
@@ -157,7 +156,7 @@ export class ConfigMapExportHelper {
 
   public static getLayerMetadata(collection: string, collectionDisplayName: string,
     mode: LAYER_MODE, modeValues,
-    colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>): LayerMetadata {
+    colorService: ArlasColorService, taggableFields?: Set<string>): LayerMetadata {
     const metadata: LayerMetadata = {
       collection,
       collectionDisplayName
@@ -175,7 +174,7 @@ export class ConfigMapExportHelper {
     }
     return metadata;
   }
-  public static getLayer(layerFg: MapLayerFormGroup, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>): Layer {
+  public static getLayer(layerFg: MapLayerFormGroup, colorService: ArlasColorService, taggableFields?: Set<string>): Layer {
     const mode = layerFg.value.mode as LAYER_MODE;
     const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
       (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
@@ -227,7 +226,7 @@ export class ConfigMapExportHelper {
     return layer;
   }
 
-  public static getLayerPaint(modeValues, mode, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>) {
+  public static getLayerPaint(modeValues, mode, colorService: ArlasColorService, taggableFields?: Set<string>) {
     const paint: Paint = {};
     const color = this.getMapProperty(modeValues.styleStep.colorFg, mode, colorService, taggableFields);
     const opacity = this.getMapProperty(modeValues.styleStep.opacity, mode, colorService, taggableFields);
@@ -281,7 +280,7 @@ export class ConfigMapExportHelper {
     return paint;
   }
 
-  public static getLayerLayout(modeValues, mode, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>) {
+  public static getLayerLayout(modeValues, mode, colorService: ArlasColorService, taggableFields?: Set<string>) {
     const layout: Layout = {};
     layout.visibility = modeValues.visibilityStep.visible ? VISIBILITY.visible : VISIBILITY.none;
     switch (modeValues.styleStep.geometryType) {
@@ -362,7 +361,7 @@ export class ConfigMapExportHelper {
     return filterLayer;
   }
 
-  public static getMapProperty(fgValues: any, mode: LAYER_MODE, colorService: ArlasColorGeneratorLoader, taggableFields?: Set<string>) {
+  public static getMapProperty(fgValues: any, mode: LAYER_MODE, colorService: ArlasColorService, taggableFields?: Set<string>) {
     switch (fgValues.propertySource) {
       case PROPERTY_SELECTOR_SOURCE.fix_color:
         return fgValues.propertyFixColor;

@@ -38,6 +38,8 @@ import { ResultlistFormBuilderService } from '../resultlist-form-builder/resultl
 import { SwimlaneFormBuilderService, SwimlaneFormGroup } from '../swimlane-form-builder/swimlane-form-builder.service';
 import { Aggregation } from 'arlas-api';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { ArlasColorService } from 'arlas-web-components';
 
 @Injectable({
   providedIn: 'root'
@@ -56,7 +58,9 @@ export class AnalyticsImportService {
     private powerbarFormBuilder: PowerbarFormBuilderService,
     private donutFormBuilder: DonutFormBuilderService,
     private resultlistFormBuilder: ResultlistFormBuilderService,
-    private settingsService: ArlasSettingsService
+    private settingsService: ArlasSettingsService,
+    private collectionService: CollectionService,
+    private colorService: ArlasColorService
   ) { }
 
   public doImport(config: Config) {
@@ -671,10 +675,6 @@ export class AnalyticsImportService {
         control: renderStep.gridStep.thumbnailUrl
       },
       {
-        value: !!contributor.fieldsConfiguration.urlImageTemplate ? contributor.fieldsConfiguration.urlImageTemplate : '',
-        control: renderStep.gridStep.imageUrl
-      },
-      {
         value: contributor.fieldsConfiguration.iconColorFieldName,
         control: renderStep.gridStep.colorIdentifier
       },
@@ -691,6 +691,54 @@ export class AnalyticsImportService {
         control: renderStep.cellBackgroundStyle
       }
     ]);
+    if (contributor.fieldsConfiguration.urlImageTemplate) {
+      const quicklook = this.resultlistFormBuilder.buildQuicklook(contributor.collection);
+      importElements([
+        {
+          value: contributor.fieldsConfiguration.urlImageTemplate,
+          control: quicklook.customControls.url
+        }
+      ]);
+      widgetData.customControls.renderStep.gridStep.quicklookUrls.push(quicklook);
+    }
+
+    contributor.fieldsConfiguration.urlImageTemplates?.forEach(descUrl => {
+      const quicklook = this.resultlistFormBuilder.buildQuicklook(contributor.collection);
+      importElements([
+        {
+          value: descUrl.url,
+          control: quicklook.customControls.url
+        },
+        {
+          value: descUrl.description,
+          control: quicklook.customControls.description
+        }
+      ]);
+      if (descUrl.filter) {
+        const selectedItems = descUrl.filter.values.map(
+          v => ({ value: v, label: v, color: this.colorService.getColor(v) }));
+
+        importElements([{
+          value: descUrl.filter.field,
+          control: quicklook.customControls.filter.field
+        },
+        {
+          value: selectedItems,
+          control: quicklook.customControls.filter.values
+        }]);
+
+        quicklook.customControls.filter.values.selectedMultipleItems = selectedItems;
+        quicklook.customControls.filter.values.savedItems = new Set(descUrl.filter.values);
+        this.collectionService.getTermAggregation(
+          contributor.collection,
+          quicklook.customControls.filter.field.value)
+          .then(keywords => {
+            quicklook.customControls.filter.values.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
+          });
+      }
+
+      widgetData.customControls.renderStep.gridStep.quicklookUrls.push(quicklook);
+    });
 
     contributor.columns.forEach(c => {
       const column = this.resultlistFormBuilder.buildColumn(contributor.collection);

@@ -1,7 +1,7 @@
 import { MapLayerFormBuilderService } from './map-layer-form-builder.service';
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { ArlasColorService } from 'arlas-web-components';
 
 describe('MapLayerFormBuilderService', () => {
   let spectator: SpectatorService<MapLayerFormBuilderService>;
@@ -10,7 +10,7 @@ describe('MapLayerFormBuilderService', () => {
     service: MapLayerFormBuilderService,
     providers: [
       mockProvider(CollectionService),
-      mockProvider(ArlasColorGeneratorLoader),
+      mockProvider(ArlasColorService),
     ]
   });
 

@@ -42,6 +42,8 @@ import {
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { METRIC_TYPE } from '../metric-collect-form-builder/models';
 import { WidgetFormBuilder } from '../widget-form-builder';
+import { ArlasColorService } from 'arlas-web-components';
+
 
 export class PowerbarConfigForm extends CollectionConfigFormGroup {
 
@@ -52,7 +54,7 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
     defaultConfig: DefaultConfig,
     dialog: MatDialog,
     collectionService: CollectionService,
-    private colorService: ArlasColorGeneratorLoader,
+    private colorService: ArlasColorService,
     metricFg: MetricCollectFormGroup
   ) {
     super(
@@ -222,7 +224,7 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
                 keywords.forEach((k: string, index: number) => {
                   this.addToColorManualValuesCtrl({
                     keyword: k,
-                    color: colorService.getColor(k)
+                    color: this.colorService.getColor(k)
                   }, index);
                 });
                 this.addToColorManualValuesCtrl({
@@ -242,7 +244,7 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
                     if (result !== undefined) {
                       result.forEach((kc: KeywordColor) => {
                         /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
-                        colorService.updateKeywordColor(kc.keyword, kc.color);
+                        (colorService.colorGenerator as ArlasColorGeneratorLoader).updateKeywordColor(kc.keyword, kc.color);
                         this.addToColorManualValuesCtrl(kc);
                       });
                     }
@@ -339,7 +341,7 @@ export class PowerbarFormBuilderService extends WidgetFormBuilder {
     protected collectionService: CollectionService,
     protected mainFormService: MainFormService,
     private dialog: MatDialog,
-    private colorService: ArlasColorGeneratorLoader,
+    private colorService: ArlasColorService,
     private defaultValuesService: DefaultValuesService,
     private metricBuilderService: MetricCollectFormBuilderService
 
