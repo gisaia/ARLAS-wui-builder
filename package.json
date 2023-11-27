@@ -1,6 +1,6 @@
 {
   "name": "arlas-wui-builder",
-  "version": "24.1.0-dev",
+  "version": "24.1.0",
   "scripts": {
     "ng": "ng",
     "postinstall": "patch-package --patch-dir ./node_modules/arlas-web-core/patches && patch-package --patch-dir node_modules/arlas-d3/patches",
