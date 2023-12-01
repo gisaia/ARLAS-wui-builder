@@ -3,7 +3,7 @@ import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectat
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { MenuService } from '@services/menu/menu.service';
-import { AuthentificationService, getOptionsFactory, GET_OPTIONS } from 'arlas-wui-toolkit';
+import { AuthentificationService, getOptionsFactory, GET_OPTIONS, ArlasSettingsService, PersistenceService } from 'arlas-wui-toolkit';
 import { Subject } from 'rxjs/internal/Subject';
 import { LeftMenuComponent } from './left-menu.component';
 
@@ -37,8 +37,12 @@ describe('LeftMenuComponent', () => {
         }),
       mockProvider(MainFormManagerService),
       mockProvider(MenuService),
+      mockProvider(PersistenceService),
       mockProvider(AuthentificationService, {
         canActivateProtectedRoutes: new Subject()
+      }),
+      mockProvider(ArlasSettingsService, {
+        getAuthentSettings: () => undefined
       }),
       {
         provide: GET_OPTIONS,

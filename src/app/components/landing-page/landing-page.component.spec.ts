@@ -8,7 +8,8 @@ import { StartupService } from '@services/startup/startup.service';
 import { SharedModule } from '@shared/shared.module';
 import {
   ArlasCollaborativesearchService, ArlasConfigService, ArlasConfigurationDescriptor,
-  ArlasStartupService, AuthentificationService, ConfigMenuModule, getOptionsFactory, GET_OPTIONS
+  ArlasStartupService, AuthentificationService, ConfigMenuModule, getOptionsFactory, GET_OPTIONS, 
+  ArlasSettingsService, ArlasIamService, PersistenceService
 } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { of } from 'rxjs';
@@ -35,8 +36,13 @@ describe('LandingPageComponent', () => {
       }),
       mockProvider(ArlasConfigService),
       mockProvider(ArlasCollaborativesearchService),
+      mockProvider(ArlasIamService),
       mockProvider(StartupService),
       mockProvider(ArlasStartupService),
+      mockProvider(PersistenceService),
+      mockProvider(ArlasSettingsService, {
+        getAuthentSettings: () => undefined
+      }),
       mockProvider(ArlasConfigurationDescriptor),
       mockProvider(HttpClient),
       mockProvider(StartingConfigFormBuilderService),
