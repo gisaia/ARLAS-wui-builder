@@ -1,7 +1,8 @@
 import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ArlasCollaborativesearchService, ArlasStartupService,
-  getOptionsFactory, GET_OPTIONS, AuthentificationService, ArlasConfigurationDescriptor, ArlasSettingsService, PersistenceService } from 'arlas-wui-toolkit';
+  getOptionsFactory, GET_OPTIONS, AuthentificationService,
+  ArlasConfigurationDescriptor, ArlasSettingsService, PersistenceService } from 'arlas-wui-toolkit';
 import { MainFormManagerService } from './main-form-manager.service';
 import { ArlasColorService } from 'arlas-web-components';
 

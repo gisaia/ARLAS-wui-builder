@@ -8,7 +8,7 @@ import { StartupService } from '@services/startup/startup.service';
 import { SharedModule } from '@shared/shared.module';
 import {
   ArlasCollaborativesearchService, ArlasConfigService, ArlasConfigurationDescriptor,
-  ArlasStartupService, AuthentificationService, ConfigMenuModule, getOptionsFactory, GET_OPTIONS, 
+  ArlasStartupService, AuthentificationService, ConfigMenuModule, getOptionsFactory, GET_OPTIONS,
   ArlasSettingsService, ArlasIamService, PersistenceService
 } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
