@@ -46,6 +46,7 @@ import { CollectionField } from '@services/collection-service/models';
 import { EditResultlistQuicklookComponent } from '@analytics-config/components/edit-resultlist-quicklook/edit-resultlist-quicklook.component';
 import { Router } from '@angular/router';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
 
@@ -257,11 +258,6 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                   }
                 }
               }
-            ),
-            useHttpQuicklooks: new SlideToggleFormControl(
-              false,
-              marker('Use http quicklooks'),
-              marker('Use http quicklooks description')
             ),
             quicklookUrls: new FormArray([]),
             // DataStep is needed because the collection is needed

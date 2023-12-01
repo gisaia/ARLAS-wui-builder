@@ -62,6 +62,8 @@ export class AnalyticsImportService {
     private donutFormBuilder: DonutFormBuilderService,
     private resultlistFormBuilder: ResultlistFormBuilderService,
     private settingsService: ArlasSettingsService,
+    private colorService: ArlasColorService,
+    private collectionService: CollectionService,
     private shortcutService: ShortcutsService
   ) { }
 

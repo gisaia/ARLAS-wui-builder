@@ -28,8 +28,6 @@ describe('EditGroupComponent', () => {
       mockProvider(ArlasCollaborativesearchService),
       mockProvider(ArlasColorService),
       mockProvider(ArlasConfigurationUpdaterService),
-      mockProvider(ArlasColorService),
-      mockProvider(ArlasColorGeneratorLoader),
       { provide: CONFIG_UPDATER, useValue: {} }
     ],
     entryComponents: [

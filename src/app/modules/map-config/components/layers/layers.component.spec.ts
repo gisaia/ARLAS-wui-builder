@@ -8,7 +8,6 @@ import {
   ArlasStartupService, CONFIG_UPDATER
 } from 'arlas-wui-toolkit';
 import { LayersComponent } from './layers.component';
-import { ArlasColorService } from 'arlas-web-components';
 
 describe('LayersComponent', () => {
   let spectator: Spectator<LayersComponent>;

@@ -101,7 +101,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
           this.configService,
           this.collaborativeService,
           this.settingsService,
-          this.colorService.colorGenerator as ArlasColorGeneratorLoader);
+          this.colorService);
         contributors.push(mapContributor);
       });
       const mapComponentConfig = ConfigExportHelper.getMapComponent(

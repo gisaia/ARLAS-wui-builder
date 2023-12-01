@@ -354,7 +354,7 @@ export class LayersComponent implements OnInit, OnDestroy {
         this.configService,
         this.collaborativesearchService,
         this.settingsService,
-        this.colorService.colorGenerator as ArlasColorGeneratorLoader);
+        this.colorService);
       contributors.push(mapContributor);
     });
     const mapComponentConfigValue = ConfigExportHelper.getMapComponent(mapConfigGlobal, mapConfigLayers,

@@ -3,7 +3,6 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { ArlasCollaborativesearchService, ArlasStartupService } from 'arlas-wui-toolkit';
 import { ArlasColorService } from 'arlas-web-components';
 import { ResultListImportService } from './result-list-import.service';
-import { ArlasColorService } from 'arlas-web-components';
 
 describe('ResultListImportService', () => {
   let spectator: SpectatorService<ResultListImportService>;
