@@ -35,6 +35,7 @@ import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable, Subscription } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { ArlasColorService } from 'arlas-web-components';
+
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 
 export class DonutConfigForm extends WidgetConfigFormGroup {
@@ -46,7 +47,7 @@ export class DonutConfigForm extends WidgetConfigFormGroup {
     defaultConfig: DefaultConfig,
     dialog: MatDialog,
     collectionService: CollectionService,
-    private colorService: ArlasColorService,
+    private colorService: ArlasColorService
   ) {
     super(
       collection,
@@ -137,7 +138,7 @@ export class DonutConfigForm extends WidgetConfigFormGroup {
                       globalKeysToColortrl.clear();
                       result.forEach((kc: KeywordColor) => {
                         /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
-                        (colorService.colorGenerator as ArlasColorGeneratorLoader).updateKeywordColor(kc.keyword, kc.color);
+                        (this.colorService.colorGenerator as ArlasColorGeneratorLoader).updateKeywordColor(kc.keyword, kc.color);
                         this.addToColorManualValuesCtrl(kc);
                       });
                     }
@@ -223,7 +224,7 @@ export class DonutFormBuilderService extends WidgetFormBuilder {
     protected mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,
     private dialog: MatDialog,
-    private colorService: ArlasColorService,
+    private colorService: ArlasColorService
   ) {
     super(collectionService, mainFormService);
   }

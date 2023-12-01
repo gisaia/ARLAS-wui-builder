@@ -24,10 +24,10 @@ import {
 } from '@services/main-form-manager/models-config';
 import { importElements } from '@services/main-form-manager/tools';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { StartupService } from '@services/startup/startup.service';
-import { ArlasColorService } from 'arlas-web-components';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { TimelineGlobalFormGroup } from '../timeline-global-form-builder/timeline-global-form-builder.service';
+import { StartupService } from '@services/startup/startup.service';
+import { ArlasColorService } from 'arlas-web-components';
 
 @Injectable({
   providedIn: 'root'

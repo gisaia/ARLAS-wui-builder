@@ -82,7 +82,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       const mapConfigBasemaps = this.mainFormService.mapConfig.getBasemapsFg();
       // Get contributor config for this layer
       // Get config.map part for this layer
-      const configMap = ConfigMapExportHelper.process(mapConfigLayers, colorService, this.collectionService.taggableFieldsMap);
+      const configMap = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFieldsMap);
       const mapContribConfigs = ConfigExportHelper.getMapContributors(mapConfigGlobal, mapConfigLayers,
         this.mainFormService.getMainCollection(), collectionService);
       // Add contributor part in arlasConfigService
@@ -101,7 +101,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
           this.configService,
           this.collaborativeService,
           this.settingsService,
-          this.colorService);
+          this.colorService.colorGenerator as ArlasColorGeneratorLoader);
         contributors.push(mapContributor);
       });
       const mapComponentConfig = ConfigExportHelper.getMapComponent(

@@ -32,6 +32,7 @@ import { ImportWidgetDialogComponent } from './components/import-widget-dialog/i
 import { EditTabComponent } from './components/edit-tab/edit-tab.component';
 import { WidgetEditionComponent } from './components/widget-edition/widget-edition.component';
 import { ShortcutsComponent } from './components/shortcuts/shortcuts.component';
+import { EditResultlistQuicklookComponent } from './components/edit-resultlist-quicklook/edit-resultlist-quicklook.component';
 
 @NgModule({
   entryComponents: [
@@ -52,7 +53,8 @@ import { ShortcutsComponent } from './components/shortcuts/shortcuts.component';
     EditResultlistDetailsComponent,
     ResultlistDataComponent,
     ImportWidgetDialogComponent,
-    EditTabComponent
+    EditTabComponent,
+    EditResultlistQuicklookComponent
   ],
   imports: [
     ArlasToolkitSharedModule,

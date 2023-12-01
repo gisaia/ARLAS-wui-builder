@@ -104,14 +104,14 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   public get groupsFa() {
-    return this.contentFg.get('groupsFa') as FormArray;
+    return !!this.contentFg ? this.contentFg.get('groupsFa') as FormArray : null;
   }
 
   public updateAnalytics() {
     const analytics = [];
     this.groupsPreview = [];
     this.cdr.detectChanges();
-    this.groupsFa.value.forEach(group => {
+    this.groupsFa?.value.forEach(group => {
       analytics.push(group.preview);
     });
     this.analyticsService.initializeGroups(analytics);

@@ -59,6 +59,7 @@ import enToolkit from 'arlas-wui-toolkit/assets/i18n/en.json';
 import frToolkit from 'arlas-wui-toolkit/assets/i18n/fr.json';
 import { ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
 
+
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
   const load = () => defaultValuesService.load('default.json?' + Date.now());
   return load;

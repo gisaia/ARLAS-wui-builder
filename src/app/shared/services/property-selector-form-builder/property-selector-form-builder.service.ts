@@ -38,10 +38,10 @@ import {
 } from '@shared-models/config-form';
 import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
 import { valuesToOptions } from '@utils/tools';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { ArlasColorService } from 'arlas-web-components';
 import { Observable } from 'rxjs';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
-import { ArlasColorService } from 'arlas-web-components';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
   public constructor(

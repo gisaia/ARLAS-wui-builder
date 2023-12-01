@@ -1,11 +1,8 @@
 import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasCollaborativesearchService, ArlasStartupService, ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { ArlasCollaborativesearchService, ArlasStartupService,
+  getOptionsFactory, GET_OPTIONS, AuthentificationService, ArlasConfigurationDescriptor } from 'arlas-wui-toolkit';
 import { MainFormManagerService } from './main-form-manager.service';
-import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit';
-import { AuthentificationService } from 'arlas-wui-toolkit';
-import { GET_OPTIONS } from 'arlas-wui-toolkit';
-import { getOptionsFactory } from 'arlas-wui-toolkit';
 import { ArlasColorService } from 'arlas-web-components';
 
 describe('MainFormManagerService', () => {
@@ -16,7 +13,6 @@ describe('MainFormManagerService', () => {
       mockProvider(CollectionService),
       mockProvider(ArlasStartupService),
       mockProvider(ArlasCollaborativesearchService),
-      mockProvider(ArlasColorGeneratorLoader),
       mockProvider(ArlasColorService),
       mockProvider(ArlasConfigurationDescriptor),
       mockProvider(AuthentificationService),

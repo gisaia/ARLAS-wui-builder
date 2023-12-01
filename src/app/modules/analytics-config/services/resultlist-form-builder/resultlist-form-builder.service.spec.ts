@@ -2,7 +2,6 @@ import { ResultlistFormBuilderService } from './resultlist-form-builder.service'
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { of } from 'rxjs';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { ArlasColorService } from 'arlas-web-components';
 
 describe('ResultlistFormBuilderService', () => {
@@ -15,8 +14,7 @@ describe('ResultlistFormBuilderService', () => {
         getCollectionFields: () => of([])
       }),
       mockProvider(CollectionService),
-      mockProvider(ArlasColorGeneratorLoader),
-      mockProvider(ArlasColorService)
+      mockProvider(ArlasColorService),
     ]
   });
 

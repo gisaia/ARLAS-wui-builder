@@ -42,6 +42,7 @@ import {
 import { METRIC_TYPE } from '../metric-collect-form-builder/models';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { ArlasColorService } from 'arlas-web-components';
+
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 
 export class PowerbarConfigForm extends WidgetConfigFormGroup {

@@ -10,7 +10,6 @@ import { FormGroup } from '@angular/forms';
 import { ResultlistDataComponent } from '../resultlist-data/resultlist-data.component';
 import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
 import { ArlasColorService } from 'arlas-web-components';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 describe('EditWidgetDialogComponent', () => {
   let spectator: Spectator<EditWidgetDialogComponent>;
@@ -30,9 +29,7 @@ describe('EditWidgetDialogComponent', () => {
       mockProvider(HistogramFormBuilderService, {
         buildWithValues: () => new FormGroup({})
       }),
-      mockProvider(ArlasColorService),
-      mockProvider(ArlasColorGeneratorLoader)
-
+      mockProvider(ArlasColorService)
     ],
     declarations: [
       MockComponent(ConfigFormGroupComponent),

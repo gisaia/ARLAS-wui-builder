@@ -2,7 +2,6 @@ import { PowerbarFormBuilderService } from './powerbar-form-builder.service';
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ArlasColorService } from 'arlas-web-components';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
 describe('PowerbarFormBuilderService', () => {
   let spectator: SpectatorService<PowerbarFormBuilderService>;
@@ -11,8 +10,7 @@ describe('PowerbarFormBuilderService', () => {
     service: PowerbarFormBuilderService,
     providers: [
       mockProvider(CollectionService),
-      mockProvider(ArlasColorGeneratorLoader),
-      mockProvider(ArlasColorService)
+      mockProvider(ArlasColorService),
     ]
   });
 

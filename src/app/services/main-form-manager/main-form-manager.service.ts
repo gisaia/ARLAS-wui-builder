@@ -53,6 +53,7 @@ import { Config } from './models-config';
 import { MapConfig } from './models-map-config';
 import { importElements } from './tools';
 import { ArlasColorService } from 'arlas-web-components';
+
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 @Injectable({
   providedIn: 'root'
