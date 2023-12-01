@@ -20,7 +20,7 @@ describe('EditGroupComponent', () => {
       AlertOnChangeDirective,
       ResetOnChangeDirective,
       MockComponent(AnalyticsBoardComponent),
-      MockComponent(IconPickerComponent)
+      MockComponent(IconPickerComponent),
     ],
     providers: [
       mockProvider(ArlasConfigService),

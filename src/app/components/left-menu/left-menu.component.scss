@@ -24,18 +24,9 @@ under the License.
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  .logo {
-    text-align: center;
-    padding-top: 5px;
-
-    .icon{
-      color: $arlasColor;
-      height: 50px;
-      width: 50px;
-      font-size: 50px;
-    }
-    
+  width: $left-menu-width;
+  ::ng-deep .mat-list-item-content {
+    padding: 0 5px !important;
   }
 
   .active-menu{
@@ -56,14 +47,6 @@ under the License.
       button {
         cursor: not-allowed;
       }
-    }
-
-    .user_avatar {
-      vertical-align: middle;
-      height: 26px;
-    }
-    .user_name {
-      margin-left: 5px;
     }
   }
 }

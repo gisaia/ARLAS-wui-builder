@@ -27,7 +27,6 @@ import { mergeMap } from 'rxjs/operators';
 import { DialogColorTableData } from './models';
 import { ArlasColorService } from 'arlas-web-components';
 
-
 @Component({
   selector: 'arlas-dialog-color-table',
   templateUrl: './dialog-color-table.component.html',

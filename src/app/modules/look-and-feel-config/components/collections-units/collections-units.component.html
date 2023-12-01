@@ -13,7 +13,7 @@
               <input matInput [formControl]="c.controls.unit" [placeholder]="c.controls.unit.label | translate"
                   [type]="c.controls.unit.inputType" [required]="!c.controls.unit.optional">
             </mat-form-field>
-            <button mat-icon-button (click)="hide(c.controls.ignored)" [matTooltip]="'Hide collection' | translate">
+            <button mat-icon-button (click)="hide(c.controls.ignored)" [matTooltip]="'Hide collection' | translate" matTooltipPosition="right">
               <mat-icon class="mat-icon-rtl-mirror">
                 south
               </mat-icon>
@@ -34,7 +34,7 @@
             </div>
           </div>
           <div class="unit">
-            <button mat-icon-button (click)="display(c.controls.ignored)" [matTooltip]="'Display collection' | translate">
+            <button mat-icon-button (click)="display(c.controls.ignored)" [matTooltip]="'Display collection' | translate" matTooltipPosition="right">
               <mat-icon class="mat-icon-rtl-mirror">
                 north
               </mat-icon>

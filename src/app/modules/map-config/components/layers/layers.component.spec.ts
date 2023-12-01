@@ -2,13 +2,12 @@ import { FormArray } from '@angular/forms';
 import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { MapglLayerIconModule, MapglLegendModule } from 'arlas-web-components';
+import { ArlasColorService, MapglLayerIconModule, MapglLegendModule } from 'arlas-web-components';
 import {
   ArlasCollaborativesearchService, ArlasConfigService, ArlasConfigurationUpdaterService,
   ArlasStartupService, CONFIG_UPDATER
 } from 'arlas-wui-toolkit';
 import { LayersComponent } from './layers.component';
-import { ArlasColorService } from 'arlas-web-components';
 
 describe('LayersComponent', () => {
   let spectator: Spectator<LayersComponent>;

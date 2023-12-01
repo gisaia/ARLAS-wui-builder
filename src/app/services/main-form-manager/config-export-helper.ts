@@ -51,12 +51,13 @@ import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import { VisualisationSetConfig, BasemapStyle, SCROLLABLE_ARLAS_ID, ArlasColorService, FieldsConfiguration } from 'arlas-web-components';
 import { titleCase } from '@services/collection-service/tools';
-import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
+import { MapBasemapFormGroup, BasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionReferenceDescription } from 'arlas-api';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
 import { hashCode, stringifyArlasFilter } from './tools';
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { DescribedUrl } from 'arlas-web-components/lib/components/results/utils/results.utils';
 
 export enum EXPORT_TYPE {
@@ -141,7 +142,8 @@ export class ConfigExportHelper {
     resultLists: FormArray,
     externalNode: FormGroup,
     colorService: ArlasColorService,
-    collectionService: CollectionService
+    collectionService: CollectionService,
+    shortcutsService: ShortcutsService
   ): any {
     const chipssearch: ChipSearchConfig = {
       name: searchConfigGlobal.customControls.name.value,
@@ -158,6 +160,7 @@ export class ConfigExportHelper {
             resultlists: this.getResultListComponent(resultLists)
           },
           analytics: [],
+          filters_shortcuts: shortcutsService.shortcuts,
           colorGenerator: {
             keysToColors: colorService.colorGenerator.keysToColors
           },
@@ -242,6 +245,17 @@ export class ConfigExportHelper {
             // check if the contributor already exists to avoid duplication in the final config json object
             if (!contributor) {
               contributor = this.getAnalyticsContributor(widget.widgetType, widget.widgetData, group.icon);
+              const uuid = widget.widgetData.uuid;
+              if (widget.widgetType === 'histogram' && shortcutsService.isShortcut(uuid)) {
+                const shortcutContributor = Object.assign({}, contributor);
+                shortcutContributor.identifier = uuid;
+                shortcutContributor.linked_contributor_id = contributorId;
+                // todo : configurate this nb of buckets
+                shortcutContributor.numberOfBuckets = 20;
+                contributor.linked_contributor_id = shortcutContributor.identifier;
+                contributorsMap.set(shortcutContributor.identifier, shortcutContributor);
+                config.arlas.web.contributors.push(shortcutContributor);
+              }
               contributorsMap.set(contributorId, contributor);
               config.arlas.web.contributors.push(contributor);
             }
@@ -412,7 +426,7 @@ export class ConfigExportHelper {
       const collection = layerFg.customControls.collection.value;
       let mapContributor = contributorsCollectionsMap.get(collection);
       if (!mapContributor) {
-        const requestGeometry = mapConfigGlobal.getRawValue().requestGeometries.find(rg => rg.collection ===  collection);
+        const requestGeometry = mapConfigGlobal.getRawValue().requestGeometries.find(rg => rg.collection === collection);
         let geoQueryField = collectionService.collectionParamsMap.get(collection).params.centroid_path;
         let geoQueryOp = 'Intersects';
 
@@ -502,17 +516,19 @@ export class ConfigExportHelper {
     }
     const basemaps: BasemapStyle[] = [];
     let defaultBasemap: BasemapStyle;
-    mapConfigBasemaps.customControls.basemaps.controls.forEach(basemap => {
+    mapConfigBasemaps.customControls.basemaps.controls.forEach((basemap: BasemapFormGroup) => {
       basemaps.push({
-        name: basemap.value.name,
-        styleFile: basemap.value.url,
-        image: basemap.value.image
+        name: basemap.customControls.name.value,
+        styleFile: basemap.customControls.url.value,
+        image: basemap.customControls.image.value,
+        type: basemap.customControls.type.value
       });
       if (mapConfigBasemaps.customControls.default.value === basemap.value.name) {
         defaultBasemap = {
-          name: basemap.value.name,
-          styleFile: basemap.value.url,
-          image: basemap.value.image
+          name: basemap.customControls.name.value,
+          styleFile: basemap.customControls.url.value,
+          image: basemap.customControls.image.value,
+          type: basemap.customControls.type.value
         };
       }
     });
@@ -739,7 +755,8 @@ export class ConfigExportHelper {
     const renderStep = isDetailed ? timelineConfigGlobal.customControls.tabsContainer.renderStep.detailedTimeline :
       timelineConfigGlobal.customControls.tabsContainer.renderStep.timeline;
 
-    const collection = timelineConfigGlobal.customControls.tabsContainer.dataStep.timeline.collection.value;
+    const timelineUuid = timelineConfigGlobal.customControls.unmanagedFields.dataStep.timeline.uuid;
+    const detailedTimelineUuid = timelineConfigGlobal.customControls.unmanagedFields.dataStep.detailedTimeline.uuid;
 
     const unmanagedTimelineFields = timelineConfigGlobal.customControls.unmanagedFields.renderStep.timeline;
     const unmanagedDetailedTimelineFields = timelineConfigGlobal.customControls.unmanagedFields.renderStep.detailedTimeline;
@@ -748,6 +765,7 @@ export class ConfigExportHelper {
     const timelineComponent: AnalyticComponentConfig = {
       contributorId: (isDetailed ? 'detailedTimeline' : 'timeline'),
       componentType: 'histogram',
+      uuid: isDetailed ? detailedTimelineUuid.value : timelineUuid.value,
       input: {
         id: isDetailed ? 'histogram-detailed-timeline' : 'histogram-timeline',
         xTicks: unmanagedFields.xTicks.value,
@@ -1097,7 +1115,7 @@ export class ConfigExportHelper {
     } else if (widgetType === WIDGET_TYPE.metric) {
       idString += widgetData.dataStep.function +
         Array.from(widgetData.dataStep.metrics)
-          .map((m: any)=> m.field + '-' + m.metric + '-'+ hashCode(stringifyArlasFilter(m.filter))).sort().join('');
+          .map((m: any) => m.field + '-' + m.metric + '-' + hashCode(stringifyArlasFilter(m.filter))).sort().join('');
     } else if (widgetType === WIDGET_TYPE.donut) {
       widgetData.dataStep.aggregationmodels.forEach(am => {
         idString += am.field + '-' + am.size + '-';
@@ -1118,11 +1136,12 @@ export class ConfigExportHelper {
     const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
     const analyticsBoardWidth = 445;
     const contributorId = this.getContributorId(widgetData, widgetType);
-
+    const uuid = widgetData.uuid;
+    const usage = widgetData.usage;
+    let component: AnalyticComponentConfig;
     if ([WIDGET_TYPE.histogram, WIDGET_TYPE.swimlane].indexOf(widgetType) >= 0) {
       const title = widgetData.title;
-      const component = {
-        contributorId,
+      component = {
         input: {
           id: contributorId,
           isHistogramSelectable: unmanagedRenderFields.isHistogramSelectable,
@@ -1187,11 +1206,8 @@ export class ConfigExportHelper {
           break;
         }
       }
-      return component;
-
     } else if (widgetType === WIDGET_TYPE.metric) {
-      const component = {
-        contributorId,
+      component = {
         componentType: WIDGET_TYPE.metric,
         input: {
           customizedCssClass: unmanagedRenderFields.customizedCssClass,
@@ -1207,15 +1223,10 @@ export class ConfigExportHelper {
       if (widgetData.renderStep.afterValue) {
         component.input.afterValue = widgetData.renderStep.afterValue;
       }
-
-      return component;
-
     } else if (widgetType === WIDGET_TYPE.powerbars) {
-      const component = {
-        contributorId,
+      component = {
         showExportCsv: widgetData.renderStep.showExportCsv,
         componentType: WIDGET_TYPE.powerbars,
-
         input: {
           chartTitle: widgetData.title,
           powerbarTitle: widgetData.title,
@@ -1232,9 +1243,6 @@ export class ConfigExportHelper {
             Math.ceil(analyticsBoardWidth / itemPerLine) - 6 : analyticsBoardWidth // 6 => margin and padding left/right
         }
       } as AnalyticComponentConfig;
-
-      return component;
-
     } else if (widgetType === WIDGET_TYPE.donut) {
       if (!itemPerLine) {
         itemPerLine = 1;
@@ -1247,8 +1255,7 @@ export class ConfigExportHelper {
       if (!!itemPerLine && +itemPerLine === 3) {
         donutDiameter = 125;
       }
-      const component = {
-        contributorId,
+      component = {
         componentType: WIDGET_TYPE.donut,
         showExportCsv: widgetData.renderStep.showExportCsv,
         input: {
@@ -1261,10 +1268,8 @@ export class ConfigExportHelper {
         }
       } as AnalyticComponentConfig;
 
-      return component;
     } else if (widgetType === WIDGET_TYPE.resultlist) {
-      const component = {
-        contributorId,
+      component = {
         componentType: WIDGET_TYPE.resultlist,
         input: {
           id: contributorId,
@@ -1300,9 +1305,11 @@ export class ConfigExportHelper {
           }
         } as AnalyticComponentResultListInputConfig
       } as AnalyticComponentConfig;
-
-      return component;
     }
+    component.contributorId = contributorId;
+    component.uuid = uuid;
+    component.usage = usage;
+    return component;
 
   }
 

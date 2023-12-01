@@ -79,12 +79,13 @@ export class MapInitService {
         url: 'https://api.maptiler.com/maps/positron/style.json?key=xIhbu1RwgdbxfZNmoXn4',
         image: 'https://api.maptiler.com/maps/8bb9093c-9865-452b-8be4-7a397f552b49/0/0/0.png?key=kO3nZIVLnPvIVn8AEnuk',
         checked: true,
-        default: true
+        default: true,
+        type: 'mapbox'
       });
     }
-
+    const b = basemaps[0];
     this.mainFormService.mapConfig.getBasemapsFg().customControls.basemaps.push(
-      this.mapBasemapFormBuilder.buildBasemapFormArray(basemaps[0].name, basemaps[0].url, basemaps[0].image)
+      this.mapBasemapFormBuilder.buildBasemapFormArray(b.name, b.url, b.image, b.type)
     );
 
   }

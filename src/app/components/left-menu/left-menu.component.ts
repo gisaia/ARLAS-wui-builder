@@ -17,14 +17,13 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { EXPORT_TYPE } from '@services/main-form-manager/config-export-helper';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { getNbErrorsInControl, isFullyTouched, Page } from '@utils/tools';
-import { ArlasSettingsService, AuthentificationService, LinkSettings, PersistenceService, UserInfosComponent } from 'arlas-wui-toolkit';
+import {
+  ArlasSettingsService, LinkSettings, PersistenceService
+} from 'arlas-wui-toolkit';
 import { MenuService } from '@services/menu/menu.service';
 
 @Component({
@@ -36,9 +35,6 @@ export class LeftMenuComponent implements OnInit {
 
   public isLabelDisplayed = false;
   public nbErrorsByPage: Map<string, number> = new Map();
-  public showLogOutButton: boolean;
-  public name: string;
-  public avatar: string;
 
   public pages: Page[] = [];
   public links: LinkSettings[] = [];
@@ -46,30 +42,12 @@ export class LeftMenuComponent implements OnInit {
   public constructor(
     private mainFormService: MainFormService,
     private mainFormManager: MainFormManagerService,
-    private translate: TranslateService,
     public persistenceService: PersistenceService,
-    private authService: AuthentificationService,
-    private router: Router,
-    private dialog: MatDialog,
     private settings: ArlasSettingsService,
     private menu: MenuService
   ) {
     // recompute nberrors of each page anytime the mainform validity changes
     this.mainFormService.mainForm.statusChanges.subscribe(st => this.updateNbErrors());
-    this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent;
-    const claims = this.authService.identityClaims as any;
-    this.authService.canActivateProtectedRoutes.subscribe(isAuthenticated => {
-      // show login button when authentication is enabled in settings.yaml file && the app is not authenticated
-      this.showLogOutButton = !!this.authService.authConfigValue && !!this.authService.authConfigValue.use_authent && isAuthenticated;
-      if (isAuthenticated) {
-        this.name = claims.nickname;
-        this.avatar = claims.picture;
-      } else {
-        this.name = '';
-        this.avatar = '';
-      }
-
-    });
   }
 
   public ngOnInit() {
@@ -104,20 +82,10 @@ export class LeftMenuComponent implements OnInit {
     this.updateNbErrors();
   }
 
-  public logout() {
-    this.authService.logout();
-    this.router.navigate([''], { queryParamsHandling: 'preserve' });
-
-  }
-
   public expand() {
     this.isLabelDisplayed = !this.isLabelDisplayed;
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
     }, 100);
-  }
-
-  public getUserInfos() {
-    this.dialog.open(UserInfosComponent);
   }
 }

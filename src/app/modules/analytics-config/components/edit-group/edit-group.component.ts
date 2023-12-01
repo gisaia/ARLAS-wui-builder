@@ -33,14 +33,15 @@ import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-
 import { Subject } from 'rxjs/internal/Subject';
 import { Subscription } from 'rxjs';
 import { OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { CdkDragDrop, CdkDragEnter, CdkDragMove, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragEnter, CdkDragMove } from '@angular/cdk/drag-drop';
 import { moveInFormArray } from '@utils/tools';
 import { AnalyticsImportService } from '@analytics-config/services/analytics-import/analytics-import.service';
 import { ImportWidgetDialogComponent } from '../import-widget-dialog/import-widget-dialog.component';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfigFormGroup } from '@shared-models/config-form';
-import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 
 @Component({
   selector: 'arlas-add-widget-dialog',
@@ -91,7 +92,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     dragIndex: number;
     dropIndex: number;
   };
-  public content: FormArray;
+  public content: FormArray<FormGroup>;
   public itemPerLine;
   public toUnsubscribe: Array<Subscription> = [];
 
@@ -106,7 +107,8 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private analyticsImportService: AnalyticsImportService,
     private analyticsInitService: AnalyticsInitService,
-    private main: MainFormService
+    private main: MainFormService,
+    private shortcutsService: ShortcutsService
   ) { }
 
   public ngOnInit() {
@@ -227,6 +229,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
     this.afterClosedconfirmSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.removeShortcut(widgetIndex);
         this.content.removeAt(widgetIndex);
         this.contentTypeValue.splice(widgetIndex, 1);
         this.formGroup.controls.contentType.setValue(this.contentTypeValue);
@@ -341,6 +344,12 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
     this.dropListReceiverElement = undefined;
     this.dragDropInfo = undefined;
+  }
+
+  private removeShortcut(widgetIndex: number) {
+    const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup;
+    const widgetConfigFg = widgetFg.controls.widgetData as WidgetConfigFormGroup;
+    this.shortcutsService.removeShortcut(widgetConfigFg.uuidControl.value);
   }
 }
 

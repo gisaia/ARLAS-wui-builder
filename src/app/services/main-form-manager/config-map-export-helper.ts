@@ -17,22 +17,27 @@ specific language governing permissions and limitations
 under the License.
 */
 import { FormArray } from '@angular/forms';
-import { LAYER_MODE } from '@map-config/components/edit-layer/models';
-import {
-  Paint, Layer, MapConfig, ExternalEvent, HOVER_LAYER_PREFIX,
-  SELECT_LAYER_PREFIX, FILLSTROKE_LAYER_PREFIX
-} from './models-map-config';
-import { GEOMETRY_TYPE, FILTER_OPERATION, LINE_TYPE } from '@map-config/services/map-layer-form-builder/models';
-import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
-import { ConfigExportHelper } from './config-export-helper';
-import { LayerSourceConfig } from 'arlas-web-contributors';
-import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
+import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
+import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { ArlasColorService, FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID } from 'arlas-web-components';
+import { LayerSourceConfig } from 'arlas-web-contributors';
 import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
-import { Layout } from './models-map-config';
+import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
+import { ConfigExportHelper } from './config-export-helper';
+import {
+  ExternalEvent,
+  FILLSTROKE_LAYER_PREFIX,
+  HOVER_LAYER_PREFIX,
+  Layer,
+  Layout,
+  MapConfig,
+  Paint,
+  SELECT_LAYER_PREFIX
+} from './models-map-config';
 export enum VISIBILITY {
   visible = 'visible',
   none = 'none'

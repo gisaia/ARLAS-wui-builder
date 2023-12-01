@@ -17,12 +17,13 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatRadioChange } from '@angular/material/radio';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { HiddenFormControl } from '@shared-models/config-form';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
+import { MapBasemapFormGroup, BasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 
 @Component({
   selector: 'arlas-basemaps',
@@ -32,8 +33,8 @@ import { ArlasSettingsService } from 'arlas-wui-toolkit';
 export class BasemapsComponent implements OnInit {
 
   public basemapFa: FormArray;
-  public defaultBasemap: HiddenFormControl;
   public basemaps: Basemap[] = [];
+  public defaultBasemapFc: HiddenFormControl;
 
   public constructor(
     private settingsService: ArlasSettingsService,
@@ -42,11 +43,13 @@ export class BasemapsComponent implements OnInit {
 
   public ngOnInit() {
     const mapBasemapFg = this.mainformService.mapConfig.getBasemapsFg();
+    this.initBasemaps(mapBasemapFg);
+  }
+
+  public initBasemaps(mapBasemapFg: MapBasemapFormGroup) {
     this.basemapFa = mapBasemapFg.customControls.basemaps;
-    this.defaultBasemap = mapBasemapFg.customControls.default;
-
-    const existingBasemap = this.basemapFa.controls.map((fg: FormGroup) => fg.value.name);
-
+    this.defaultBasemapFc = mapBasemapFg.customControls.default;
+    const basemapsFromConfig = new Set(this.basemapFa.controls.map((fg: FormGroup) => fg.value.name));
     // Init list of basemap with a default if not defined
     let basemaps: Basemap[] = [];
     if (!!(this.settingsService.settings as any).basemaps) {
@@ -57,14 +60,14 @@ export class BasemapsComponent implements OnInit {
         url: 'https://api.maptiler.com/maps/positron/style.json?key=xIhbu1RwgdbxfZNmoXn4',
         image: 'https://api.maptiler.com/maps/8bb9093c-9865-452b-8be4-7a397f552b49/0/0/0.png?key=kO3nZIVLnPvIVn8AEnuk',
         checked: true,
-        default: true
+        default: true,
+        type: 'mapbox'
       });
     }
-
     basemaps.forEach((basemap: Basemap) => {
       // check if selected in editing config and checked it
-      basemap.checked = existingBasemap.indexOf(basemap.name) >= 0;
-      basemap.default = this.defaultBasemap.value === basemap.name;
+      basemap.checked = basemapsFromConfig.has(basemap.name);
+      basemap.default = this.defaultBasemapFc.value === basemap.name;
       this.basemaps.push(basemap);
     });
 
@@ -72,19 +75,13 @@ export class BasemapsComponent implements OnInit {
     const activeBasemaps = this.basemaps.filter(b => b.checked === true);
     if (activeBasemaps.length === 0) {
       this.basemaps[0].checked = true;
-      this.basemapFa.push(
-        new FormGroup({
-          name: new FormControl(this.basemaps[0].name),
-          url: new FormControl(this.basemaps[0].url),
-          image: new FormControl(this.basemaps[0].image)
-        })
-      );
+      this.basemapFa.push(new BasemapFormGroup(this.basemaps[0].name, this.basemaps[0].url, this.basemaps[0].image, this.basemaps[0].type));
     }
     // Set first by default
     const defaultBasemap = this.basemaps.filter(b => b.default === true);
     if (defaultBasemap.length === 0) {
       this.basemaps[0].default = true;
-      this.defaultBasemap.setValue(this.basemaps[0].name);
+      this.defaultBasemapFc.setValue(this.basemaps[0].name);
     }
   }
 
@@ -99,28 +96,21 @@ export class BasemapsComponent implements OnInit {
     const selectedBasemaps = this.basemaps.filter(b => b.checked === true);
     if (selectedBasemaps.length > 0) {
       selectedBasemaps.map(b => this.basemapFa.push(
-        new FormGroup({
-          name: new FormControl(b.name),
-          url: new FormControl(b.url),
-          image: new FormControl(b.image),
-        })
+        new BasemapFormGroup(b.name, b.url, b.image, b.type)
       ));
     } else {
+      const b = this.basemaps[0];
       this.basemapFa.push(
-        new FormGroup({
-          name: new FormControl(this.basemaps[0].name),
-          url: new FormControl(this.basemaps[0].url),
-          image: new FormControl(this.basemaps[0].image)
-        })
+        new BasemapFormGroup(b.name, b.url, b.image, b.type)
       );
     }
   }
 
-  public setDefault(event: MatRadioChange) {
+  public setDefaultBasemap(event: MatRadioChange) {
     this.basemaps.map(basemap => {
       basemap.default = (basemap.name === event.value);
     });
-    this.defaultBasemap.setValue(event.value);
+    this.defaultBasemapFc.setValue(event.value);
   }
 }
 
@@ -130,4 +120,5 @@ export interface Basemap {
   image: string;
   checked: boolean;
   default: boolean;
+  type: string;
 }

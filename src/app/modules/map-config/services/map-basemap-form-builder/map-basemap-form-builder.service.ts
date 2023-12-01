@@ -17,21 +17,40 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Injectable } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl } from '@angular/forms';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { ConfigFormGroup, HiddenFormControl } from '@shared-models/config-form';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 export class MapBasemapFormGroup extends ConfigFormGroup {
   public constructor() {
     super({
-      basemaps: new FormArray([]),
-      default: new HiddenFormControl('', null)
+      basemaps: new FormArray<BasemapFormGroup>([]),
+      default: new HiddenFormControl('', null),
     });
   }
 
   public customControls = {
     default: this.get('default') as HiddenFormControl,
-    basemaps: this.get('basemaps') as FormArray
+    basemaps: this.get('basemaps') as FormArray<BasemapFormGroup>
+  };
+}
+
+export class BasemapFormGroup extends ConfigFormGroup {
+  public constructor(name, url, image, type?: string) {
+    super({
+      name: new FormControl(name),
+      url: new FormControl(url),
+      image: new FormControl(image),
+      type: new FormControl(type)
+    });
+  }
+
+  public customControls = {
+    name: this.get('name') as FormControl,
+    url: this.get('url') as FormControl,
+    image: this.get('image') as FormControl,
+    type: this.get('type') as FormControl
   };
 }
 
@@ -42,7 +61,8 @@ export class MapBasemapFormGroup extends ConfigFormGroup {
 export class MapBasemapFormBuilderService {
 
   public constructor(
-    private defaultValuesService: DefaultValuesService
+    private defaultValuesService: DefaultValuesService,
+    private settingsService: ArlasSettingsService
   ) { }
 
   public build() {
@@ -51,11 +71,7 @@ export class MapBasemapFormBuilderService {
     return mapBasemapFormGroup;
   }
 
-  public buildBasemapFormArray(name: string, url: string, image: string): FormGroup {
-    return new FormGroup({
-      name: new FormControl(name),
-      url: new FormControl(url),
-      image: new FormControl(image)
-    });
+  public buildBasemapFormArray(name: string, url: string, image: string, type: string): BasemapFormGroup {
+    return new BasemapFormGroup(name, url, image, type);
   }
 }

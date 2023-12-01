@@ -17,8 +17,10 @@ specific language governing permissions and limitations
 under the License.
 */
 import { NgxLoggerLevel } from 'ngx-logger';
+import version from '../../package.json';
 
 export const environment = {
   production: true,
-  logLevel: NgxLoggerLevel.ERROR
+  logLevel: NgxLoggerLevel.ERROR,
+  VERSION: version.version
 };

@@ -43,10 +43,10 @@
                         (setValue)="element.get('color').patchValue($event)">
                     </arlas-color-picker-wrapper>
                     <button type="button" mat-icon-button (click)="remove(i)" matTooltip="{{ 'Remove row' | translate}}"
-                        class="remove-button">
+                        matTooltipPosition="left" class="remove-button">
                         <mat-icon>delete</mat-icon>
                     </button>
-                    <button type="button" mat-icon-button (click)="reset(element)" matTooltip="{{ 'Reset color' | translate}}">
+                    <button type="button" mat-icon-button (click)="reset(element)" matTooltip="{{ 'Reset color' | translate}}" matTooltipPosition="right">
                         <mat-icon>settings_backup_restore</mat-icon>
                     </button>
                 </mat-cell>

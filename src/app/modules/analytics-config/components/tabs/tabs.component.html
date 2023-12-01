@@ -1,48 +1,54 @@
-<div class="tab-wrapper">
-    <mat-tab-group disableRipple mat-align-tabs="start" #matTabGroup>
-        <mat-tab #matTab *ngFor="let fg of this.tabsFa.controls; let index = index">
-            <ng-template mat-tab-label>
-                <div [id]="'tab-' + index" cdkDropList cdkDropListOrientation="horizontal"
-                    (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="getOtherTabsIds(index)">
-                    <div cdkDrag class="content">
-                        
-                        <mat-icon class="icon" *ngIf="fg.value.showIcon">{{fg.value.tabIcon}}</mat-icon>
-                        
-                        <span *ngIf="fg.value.showName && editingTabIndex !== index" class="tab-name" tabindex="-1"
-                            (focus)="startEditTabName(index)" [class.pointer]="!matTab.isActive"
-                            [class.tab-error]="!matTab.isActive && tabHasError(index)">
-                            {{fg.value.tabName}}
-                        </span>
-                        <span *ngIf="editingTabIndex === index" class="edit-tab-name">
-                            <!-- keydown stopPropagation needed to allow spaces -->
-                            <input matInput [(ngModel)]="editingTabName" arlasAutoFocus autocomplete="off"
-                                (focusout)="finishEditTabName(index)" (keydown)="$event.stopPropagation();"
-                                (keydown.enter)="finishEditTabName(index);">
-
-                        </span>
-                        <mat-icon class="settings" *ngIf="matTab.isActive" (click)="$event.stopPropagation(); configTab(index)"
-                        [matTooltip]="'Configure tab' | translate">settings</mat-icon>
-                        <mat-icon class="close" (click)="$event.stopPropagation(); removeTab(index)"
-                            [matTooltip]="'Delete tab' | translate">close</mat-icon>
+<div class="container">
+    <div class="shortcuts">
+        <arlas-shortcuts></arlas-shortcuts>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="tab-wrapper">
+        <mat-tab-group disableRipple mat-align-tabs="start" #matTabGroup [(selectedIndex)]="selectedIndex">
+            <mat-tab #matTab *ngFor="let fg of this.tabsFa.controls; let index = index">
+                <ng-template mat-tab-label>
+                    <div [id]="'tab-' + index" cdkDropList cdkDropListOrientation="horizontal"
+                        (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="getOtherTabsIds(index)">
+                        <div cdkDrag class="content">
+                            
+                            <mat-icon class="icon" *ngIf="fg.value.showIcon">{{fg.value.tabIcon}}</mat-icon>
+                            
+                            <span *ngIf="fg.value.showName && editingTabIndex !== index" class="tab-name" tabindex="-1"
+                                (focus)="startEditTabName(index)" [class.pointer]="!matTab.isActive"
+                                [class.tab-error]="!matTab.isActive && tabHasError(index)">
+                                {{fg.value.tabName}}
+                            </span>
+                            <span *ngIf="editingTabIndex === index" class="edit-tab-name">
+                                <!-- keydown stopPropagation needed to allow spaces -->
+                                <input matInput [(ngModel)]="editingTabName" arlasAutoFocus autocomplete="off"
+                                    (focusout)="finishEditTabName(index)" (keydown)="$event.stopPropagation();"
+                                    (keydown.enter)="finishEditTabName(index);">
+    
+                            </span>
+                            <mat-icon class="settings" *ngIf="matTab.isActive" (click)="$event.stopPropagation(); configTab(index)"
+                                [matTooltip]="'Configure tab' | translate">settings</mat-icon>
+                            <mat-icon class="close" (click)="$event.stopPropagation(); removeTab(index)"
+                                [matTooltip]="'Delete tab' | translate">close</mat-icon>
+                        </div>
                     </div>
+                </ng-template>
+                <arlas-groups [contentFg]="getTab(index).controls.contentFg" *ngIf="index === selectedIndex">
+                </arlas-groups>
+            </mat-tab>
+            <mat-tab [disabled]="true">
+                <ng-template mat-tab-label>
+                    <button mat-icon-button (click)="addTab()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </ng-template>
+                <div class="no-tabs" *ngIf="this.tabs.length === 0">
+                    {{ 'Analytics board is empty.' | translate}}
+                    <button mat-stroked-button color="primary" (click)="newTab()">
+                        {{ 'Create a new tab.' | translate}}</button>
                 </div>
-            </ng-template>
-            <arlas-groups [contentFg]="getTab(index).controls.contentFg">
-            </arlas-groups>
-        </mat-tab>
-        <mat-tab [disabled]="true">
-            <ng-template mat-tab-label>
-                <button mat-icon-button (click)="addTab()">
-                    <mat-icon>add</mat-icon>
-                </button>
-            </ng-template>
-            <div class="no-tabs" *ngIf="this.tabs.length === 0">
-                {{ 'Analytics board is empty.' | translate}}
-                <button mat-stroked-button color="primary" (click)="newTab()">
-                    {{ 'Create a new tab.' | translate}}</button>
-            </div>
-        </mat-tab>
-    </mat-tab-group>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
 </div>
 <mat-error *ngIf="tabsFa.touched && tabsFa.errors?.required">
     {{'At least one tab is required' | translate}}

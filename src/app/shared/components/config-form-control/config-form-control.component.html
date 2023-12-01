@@ -44,8 +44,7 @@
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
             <mat-option *ngIf="typedControl.optional"></mat-option>
             <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value"
-                [ngClass]="'option-color-' + opt.value" [matTooltip]="opt.label | translate"
-                [disabled]="opt.enabled === false">
+                [ngClass]="'option-color-' + opt.value" [disabled]="opt.enabled === false">
                 {{opt.label | translate}}
             </mat-option>
         </mat-select>
@@ -63,14 +62,14 @@
         </div>
     </div>
     <div style="max-height: 250px; overflow-y: auto;">
-        <mat-checkbox class="multiply-selected" [matTooltip]="opt.value" (change)="onchangeMulitpleSelection($event)"
-            [checked]="true" *ngFor="let opt of typedControl.selectedMultipleItems;" [value]="opt"
+        <mat-checkbox class="multiply-selected" *ngFor="let opt of typedControl.selectedMultipleItems;" [value]="opt"
+            (change)="onchangeMulitpleSelection($event)" [checked]="true" 
             [style.borderLeftColor]="opt.color">
             <span class="label">{{opt.value | translate}}</span>
             <span class="detail">{{opt.detail | translate }}</span>
         </mat-checkbox>
         <ng-container *ngFor="let opt of typedControl.syncOptions; trackBy: trackByFn">
-            <mat-checkbox [matTooltip]="opt.label | translate" class="multiply-to-select" [checked]="false"
+            <mat-checkbox class="multiply-to-select" [checked]="false"
                 *ngIf="!typedControl.savedItems.has(opt.value)" (change)="onchangeMulitpleSelection($event)"
                 [value]="opt" [style.borderLeftColor]="opt.color">
 
@@ -116,7 +115,7 @@
             <mat-option *ngIf="typedControl.optional"></mat-option>
             <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value"
                 [ngStyle]="{'backgroundImage': 'linear-gradient(to left, ' + opt.label + ')'}"
-                [matTooltip]="opt.label | translate" [disabled]="opt.enabled === false">
+                [matTooltip]="opt.label | translate" matTooltipPosition="right" [disabled]="opt.enabled === false">
             </mat-option>
         </mat-select>
     </mat-form-field>
@@ -137,7 +136,7 @@
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
             <mat-option *ngIf="typedControl.optional"></mat-option>
             <mat-option *ngFor="let opt of typedControl.filteredOptions" [value]="opt.value"
-                [matTooltip]="opt.label | translate" [disabled]="opt.enabled === false">
+                [disabled]="opt.enabled === false">
                 {{opt.label | translate}}
             </mat-option>
         </mat-autocomplete>
@@ -158,8 +157,9 @@
         </button>
         <mat-autocomplete autoActiveFirstOption #autotyped="matAutocomplete" [displayWith]="displayWith">
             <mat-option *ngIf="typedControl.optional"></mat-option>
+            <!-- TODO: have a description for the labels ? Example: the geographic intersection. Should it be explained in the form description what each element does, or should it be in the tooltip ? -->
             <mat-option *ngFor="let opt of typedControl.filteredOptions" [value]="{value: opt.value,  type: opt.type}"
-                [matTooltip]="opt.label | translate" [disabled]="opt.enabled === false">
+                [disabled]="opt.enabled === false">
                 {{opt.label | translate}}
             </mat-option>
         </mat-autocomplete>
@@ -173,8 +173,7 @@
             <mat-label>{{ typedControl.label | translate}}</mat-label>
             <mat-select #selectSort [required]="!typedControl.optional">
                 <mat-option *ngIf="typedControl.optional"></mat-option>
-                <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value"
-                    [matTooltip]="opt.label | translate" [disabled]="opt.enabled === false">
+                <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value" [disabled]="opt.enabled === false">
                     {{opt.label | translate}}
                 </mat-option>
             </mat-select>
@@ -218,7 +217,7 @@
 
                         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                             <mat-option *ngFor="let opt of typedControl.autocompleteFilteredFields" [value]="opt.value"
-                                [matTooltip]="opt.label | translate" [disabled]="opt.enabled === false">
+                                [disabled]="opt.enabled === false">
                                 {{opt.label | translate}}
                             </mat-option>
                         </mat-autocomplete>
@@ -266,17 +265,13 @@
                     </div>
                 </mat-expansion-panel>
             </mat-accordion>
-
-
-
-
         </div>
         <div class="chips-container">
             <mat-chip-list #chipSortList>
                 <mat-chip *ngFor="let opt of typedControl.value;let indexOfelement=index;" class="filter-chip"
                     (click)="typedControl.onClickFilterChip($event, opt,indexOfelement)" [selectable]="true"
                     [removable]="true" (removed)="typedControl.removeMetric(opt,indexOfelement)"
-                    [matTooltip]="opt.filter | json">
+                    [matTooltip]="opt.filter | json" matTooltipPosition="above">
                     m[{{indexOfelement}}] : {{opt.field}} ({{opt.metric}}) ({{ (opt.filter | json) === '{}' ? ('no filter'| translate) : ('with filter'| translate) }})
                     <mat-icon matChipRemove>cancel</mat-icon>
                 </mat-chip>
@@ -305,7 +300,7 @@
 
                         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                             <mat-option *ngFor="let opt of typedControl.autocompleteFilteredFields" [value]="opt.value"
-                                [matTooltip]="opt.label | translate" [disabled]="opt.enabled === false">
+                                [disabled]="opt.enabled === false">
                                 {{opt.label | translate}}
                             </mat-option>
                         </mat-autocomplete>
@@ -352,7 +347,7 @@
 
                         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                             <mat-option *ngFor="let opt of typedControl.autocompleteFilteredFields" [value]="opt.value"
-                                [matTooltip]="opt.label | translate" [disabled]="opt.enabled === false">
+                                [disabled]="opt.enabled === false">
                                 {{opt.label | translate}}
                             </mat-option>
                         </mat-autocomplete>

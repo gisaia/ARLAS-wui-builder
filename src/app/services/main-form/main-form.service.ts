@@ -30,6 +30,7 @@ import {
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import { Subject } from 'rxjs/internal/Subject';
 import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 
 
 enum MAIN_FORM_KEYS {
@@ -45,6 +46,8 @@ enum MAIN_FORM_KEYS {
   TIMELINE_CONFIG_GLOBAL = 'TimelineConfigGlobal',
   ANALYTICS_CONFIG = 'AnalyticsConfig',
   ANALYTICS_CONFIG_LIST = 'AnalyticsConfigList',
+  SHORTCUTS_CONFIG = 'ShortcutsConfig',
+  SHORTCUTS_CONFIG_LIST = 'ShortcutsConfigList',
   COMMON_CONFIG = 'CommonConfig',
   COMMON_CONFIG_KEYS_TO_COLOR = 'CommonConfigKeysToColor',
   SIDE_MODULES_CONFIG = 'SideModulesConfig',
@@ -85,9 +88,6 @@ export class MainFormService {
 
   });
 
-  public constructor() {
-  }
-
   // STARTING FORM
   public startingConfig = new class {
     public constructor(public mainForm: FormGroup) { }
@@ -102,7 +102,6 @@ export class MainFormService {
   // MAP CONFIG
   public mapConfig = new class {
     public constructor(public control: FormGroup) { }
-
     public initGlobalFg = (fg: MapGlobalFormGroup) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL, fg);
     public initLayersFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS, fa);
     public initVisualisationsFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_VISUALISATIONS, fa);
@@ -135,7 +134,6 @@ export class MainFormService {
   // ANALYTICS CONFIG
   public analyticsConfig = new class {
     public constructor(public control: FormGroup) { }
-
     public initListFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.ANALYTICS_CONFIG_LIST, fa);
     public getListFa = () => this.control.get(MAIN_FORM_KEYS.ANALYTICS_CONFIG_LIST) as FormArray;
 

@@ -22,17 +22,19 @@ import {
   Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { CollectionService } from '@services/collection-service/collection.service';
 import {
   ButtonFormControl, ButtonToggleFormControl, CollectionsUnitsControl, ColorFormControl, ColorPreviewFormControl,
   ComponentFormControl, ConfigFormControl, FieldWithSizeListFormControl, HiddenFormControl,
   HuePaletteFormControl, IconFormControl, InputFormControl, MapFiltersControl, MetricWithFieldListFormControl,
-  MultipleSelectFormControl, OrderedSelectFormControl, RadioButtonFormControl, SelectFormControl, SliderFormControl, SlideToggleFormControl,
+  MultipleSelectFormControl, OrderedSelectFormControl, RadioButtonFormControl, SelectFormControl,
+  SlideToggleFormControl,
+  SliderFormControl,
   TextareaFormControl, TitleInputFormControl, TypedSelectFormControl, UrlTemplateControl, VisualisationCheckboxFormControl
 } from '@shared-models/config-form';
 import { ArlasColorService } from 'arlas-web-components';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { CollectionService } from '@services/collection-service/collection.service';
 
 @Component({
   selector: 'arlas-config-form-control',

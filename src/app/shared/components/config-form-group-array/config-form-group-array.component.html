@@ -1,7 +1,7 @@
 <!-- Displaying a control according to its enabled state is not yet supported -->
 <div class="array_header">
     <h3 *ngIf="configFormGroupArray.title" class="form-control-title">{{configFormGroupArray.title | translate}}</h3>
-    <mat-icon *ngIf="configFormGroupArray.description" class="icon" matTooltip="{{configFormGroupArray.description| translate}}">info_outline</mat-icon>
+    <mat-icon *ngIf="configFormGroupArray.description" class="icon" matTooltip="{{configFormGroupArray.description | translate}}" matTooltipPosition="right">info_outline</mat-icon>
 </div>
 <div class="note" *ngIf="configFormGroupArray.note">
     {{configFormGroupArray.note | translate}}

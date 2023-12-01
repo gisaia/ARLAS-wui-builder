@@ -22,7 +22,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export interface DialogData {
   title?: string;
   message?: string;
-  configChoice?: string;
+  configChoice?: string | number;
   initialValue?: string;
   noCancel?: boolean;
 }

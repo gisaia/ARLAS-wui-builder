@@ -19,12 +19,13 @@ under the License.
 @import "variables.scss";
 
 .status-container {
-    border-bottom: 1px dashed $primaryColor;
    
     .inner {
         color: #000;
-        padding: 7px 10px;
-        height: 20px;
+        font-size: $default-font-size;
+        display: flex;
+        align-items: center;
+        margin-left: $sm-margin;
     }
 
     .edit-name {
@@ -34,10 +35,7 @@ under the License.
       }
 
       .edit-name-button{
-        display: inline-block;
-        position: absolute;
-        padding: -3px;
-        top: 7px;
+        
       }
 
 }

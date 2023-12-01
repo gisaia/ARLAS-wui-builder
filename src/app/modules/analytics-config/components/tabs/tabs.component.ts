@@ -24,13 +24,14 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { TranslateService } from '@ngx-translate/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { isFullyTouched, moveInFormArray } from '@utils/tools';
 import { Subscription } from 'rxjs';
 import { EditTabComponent } from '@analytics-config/components/edit-tab/edit-tab.component';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 
 @Component({
   selector: 'arlas-tabs',
@@ -43,6 +44,7 @@ export class TabsComponent implements OnDestroy {
   public editingTabIndex = -1;
   public editingTabName = '';
   public isEditingTab = false;
+  public selectedIndex = 0;
   @ViewChild('matTabGroup', { static: false }) private matTabGroup: MatTabGroup;
 
   private newAfterClosedSub: Subscription;
@@ -54,10 +56,10 @@ export class TabsComponent implements OnDestroy {
     private defaultValuesService: DefaultValuesService,
     private translateService: TranslateService,
     private mainFormService: MainFormService,
-    private mainFormManager: MainFormManagerService,
     private analyticsInitService: AnalyticsInitService,
     private dialog: MatDialog,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private shortcutsService: ShortcutsService,
   ) {
 
     this.tabsFa = this.mainFormService.analyticsConfig.getListFa();
@@ -114,6 +116,7 @@ export class TabsComponent implements OnDestroy {
 
     this.removeAfterClosedSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.removeAllShortcuts(tabIndex);
         this.tabsFa.removeAt(tabIndex);
         this.matTabGroup.selectedIndex = Math.min(tabIndex, this.tabsFa.controls.length - 1);
       }
@@ -231,6 +234,22 @@ export class TabsComponent implements OnDestroy {
     }
     if (this.finishAfterClosedSub) {
       this.finishAfterClosedSub.unsubscribe();
+    }
+  }
+
+  private removeAllShortcuts(tabIndex: number) {
+    const tab = this.getTab(tabIndex);
+    const groupsFa: FormArray = (tab.controls.contentFg as FormGroup).controls.groupsFa as FormArray;
+    if (groupsFa) {
+      groupsFa.controls.forEach((group: FormGroup) => {
+        const widgetsFa: FormArray = group.controls.content as FormArray;
+        if (widgetsFa) {
+          widgetsFa.controls.forEach((widget: FormGroup) => {
+            const widgetConfigFg = widget.controls.widgetData as WidgetConfigFormGroup;
+            this.shortcutsService.removeShortcut(widgetConfigFg.uuidControl.value);
+          });
+        }
+      });
     }
   }
 

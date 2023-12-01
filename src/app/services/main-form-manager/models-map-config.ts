@@ -1,4 +1,3 @@
-import { LayerMetadata } from 'arlas-web-components';
 /*
 Licensed to Gisaïa under one or more contributor
 license agreements. See the NOTICE.txt file distributed with
@@ -17,6 +16,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+
+import { LayerMetadata } from 'arlas-web-components';
 
 export enum ExternalEvent {
   hover = 'hover',

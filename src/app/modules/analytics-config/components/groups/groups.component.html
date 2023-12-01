@@ -7,17 +7,15 @@
             <div *ngFor="let group of groupsFa.controls; index as gi;" [formGroupName]="gi" cdkDrag class="group">
                 <div class="placeholder" *cdkDragPlaceholder></div>
                 <div class="header" cdkDragHandle>
-                    <button mat-icon-button [matTooltip]="'Move group' | translate">
+                    <button mat-icon-button [matTooltip]="'Move group' | translate" matTooltipPosition="left">
                         <mat-icon>drag_indicator</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="remove(gi)" [matTooltip]="'Delete group' | translate">
+                    <button mat-icon-button (click)="remove(gi)" [matTooltip]="'Delete group' | translate"  matTooltipPosition="before">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </div>
                 <arlas-edit-group [formGroup]="group" [groupIndex]="gi" [updateDisplay]="updateDisplay" (remove)="remove(gi)">
                 </arlas-edit-group>
-
-
             </div>
             <div class="add-button">
                 <button mat-stroked-button color="primary" (click)="addGroup()" [matTooltip]="'Add a group' | translate">
@@ -28,7 +26,7 @@
         </div>
 
         <div class="preview-group" *ngIf="groupsPreview.length > 0">
-            <arlas-analytics-board #analyticsBoard [groups]="groupsPreview" [showSpinner]="showSpinner" [diameterSpinner]="spinnerDiameter" [colorSpinner]="spinnerColor"></arlas-analytics-board>
+            <arlas-analytics-board #analyticsBoard [showSpinner]="showSpinner" [diameterSpinner]="spinnerDiameter" [colorSpinner]="spinnerColor"></arlas-analytics-board>
         </div>
     </div>
 

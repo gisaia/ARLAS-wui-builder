@@ -10,21 +10,12 @@
   [visibilityUpdater]="mapVisibilityUpdater" [preserveDrawingBuffer]="true"
   (visualisations)="changeVisualisation($event)" (onAoiChanged)="onChangeAoi($event)" (onMove)="onMove($event)">
 </arlas-mapgl>
-<div class="preview" *ngIf="configId"
-  [matTooltip]="'Use the map view as a dashboard preview on the ARLAS Hub' | translate">
-  <button class="button" mat-raised-button (click)="savePreview()">{{'Save preview' |
-    translate}}</button>
 
-</div>
+<button class="preview" mat-raised-button [disabled]="!configId" (click)="savePreview()"
+  [matTooltip]="(configId ? 'Use the map view as a dashboard preview on the ARLAS Hub' : 'You need to save your dashbord first in order to save a map preview.') | translate" matTooltipPosition="below">
+  {{'Save preview' | translate}}
+</button>
 
-<div class="preview" *ngIf="!configId"
-  [matTooltip]="'You need to save your dashbord first in order to save a map preview.' | translate">
-  <button class="button" mat-raised-button [disabled]="true">{{'Save preview' |
-    translate}}</button>
-
-</div>
-
-<div class="basemaps" [matTooltipPosition]="'left'"
-  matTooltip="{{'Basemaps' | translate}}">
+<div class="basemaps" matTooltipPosition="left" matTooltip="{{'Basemaps' | translate}}">
   <mat-icon style="width:22px;height:22px" (click)="this.mapglComponent.showBasemapSwitcher()">public</mat-icon>
 </div>

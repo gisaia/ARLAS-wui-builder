@@ -28,6 +28,7 @@ under the License.
     background-color: white;
     border-radius: 4px;
     display: inline-block;
+    box-sizing: border-box;
   }
 
 .description:not(:empty) {

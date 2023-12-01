@@ -18,85 +18,91 @@ under the License.
 */
 @import "variables.scss";
 
-.tab-wrapper {
+.container {
+  height: calc(100vh - 45px);
   display: flex;
-  height: calc(100% - 25px);
-
-  mat-tab-group {
-    flex: 1;
-    overflow-y: hidden;
-
-    .tab-error {
-      color: $error-color;
-    }
-
-    ::ng-deep mat-tab-header {
-      .mat-tab-label {
-        .mat-tab-label-content {
-          div {
-            display: inline-flex;
-          }
-
-          .content {
-            display: flex;
-            align-items: center;
-            min-width: 210px;
-            gap: 0 10px;
-
-            .edit-tab-name {
+  flex-direction: column;
+  .tab-wrapper {
+    display: flex;
+    overflow-y: auto;
+    flex-grow: 2;
+    mat-tab-group {
+      flex: 1;
+      overflow-y: hidden;
+  
+      .tab-error {
+        color: $error-color;
+      }
+  
+      ::ng-deep mat-tab-header {
+        .mat-tab-label {
+          .mat-tab-label-content {
+            div {
+              display: inline-flex;
+            }
+  
+            .content {
               display: flex;
-              box-shadow: inset black 0px 0px 2px 0px;
-              background-color: white;
-              font-weight: bold;
-              height: 30px;
-              flex: 5;
-            }
-
-            .icon {
-              flex:1;
-            }
-
-            .tab-name {
-              align-self: center;
-              cursor: text;
-              min-height: 15px;
-              flex: 5;
-
-              &.pointer {
-                cursor: pointer;
+              align-items: center;
+              min-width: 210px;
+              gap: 0 10px;
+  
+              .edit-tab-name {
+                display: flex;
+                box-shadow: inset black 0px 0px 2px 0px;
+                background-color: white;
+                font-weight: bold;
+                height: 30px;
+                flex: 5;
               }
-            }
-
-            .close, .settings {
-              font-size: 16px;
-              width: 16px;
-              height: 16px;
+  
+              .icon {
+                flex:1;
+              }
+  
+              .tab-name {
+                align-self: center;
+                cursor: text;
+                min-height: 15px;
+                flex: 5;
+  
+                &.pointer {
+                  cursor: pointer;
+                }
+              }
+  
+              .close, .settings {
+                font-size: 16px;
+                width: 16px;
+                height: 16px;
+              }
             }
           }
         }
       }
+  
+      ::ng-deep .mat-tab-body-wrapper {
+        height: 100%;
+      }
+  
+      ::ng-deep .mat-tab-body-content {
+        height: 100%;
+      }
+  
+      ::ng-deep .mat-tab-labels .mat-tab-label {
+        padding: 0 12px;
+      }
+  
+      ::ng-deep .mat-tab-labels :last-child.mat-tab-label {
+        min-width: 0;
+        color: unset;
+        opacity: unset;
+      }
     }
-
-    ::ng-deep .mat-tab-body-wrapper {
-      height: 100%;
-    }
-
-    ::ng-deep .mat-tab-body-content {
-      height: 100%;
-    }
-
-    ::ng-deep .mat-tab-labels .mat-tab-label {
-      padding: 0 12px;
-    }
-
-    ::ng-deep .mat-tab-labels :last-child.mat-tab-label {
-      min-width: 0;
-      color: unset;
-      opacity: unset;
+  
+    .no-tabs {
+      padding: 20px;
     }
   }
-
-  .no-tabs {
-    padding: 20px;
-  }
+  
 }

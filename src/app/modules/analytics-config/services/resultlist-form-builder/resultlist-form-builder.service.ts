@@ -38,16 +38,17 @@ import {
   SelectFormControl, SelectOption, SliderFormControl, SlideToggleFormControl, TextareaFormControl,
   TitleInputFormControl, UrlTemplateControl
 } from '@shared-models/config-form';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { ArlasColorService } from 'arlas-web-components';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { CollectionField } from '@services/collection-service/models';
 import { EditResultlistQuicklookComponent } from '@analytics-config/components/edit-resultlist-quicklook/edit-resultlist-quicklook.component';
 import { Router } from '@angular/router';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 
-export class ResultlistConfigForm extends CollectionConfigFormGroup {
+export class ResultlistConfigForm extends WidgetConfigFormGroup {
 
   public constructor(
     collection: string,
@@ -159,6 +160,11 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
               marker('List default mode'),
               marker('List default mode description')
             ),
+            useHttpQuicklooks: new SlideToggleFormControl(
+              false,
+              marker('Use http quicklooks'),
+              marker('Use http quicklooks description')
+            ),
             tileLabelField: new SelectFormControl(
               '',
               marker('Tile label'),
@@ -252,11 +258,6 @@ export class ResultlistConfigForm extends CollectionConfigFormGroup {
                   }
                 }
               }
-            ),
-            useHttpQuicklooks: new SlideToggleFormControl(
-              false,
-              marker('Use http quicklooks'),
-              marker('Use http quicklooks description')
             ),
             quicklookUrls: new FormArray([]),
             // DataStep is needed because the collection is needed
@@ -720,7 +721,8 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
       this.defaultValuesService.getDefaultConfig(),
       this.dialog,
       this.collectionService,
-      this.colorService);
+      this.colorService
+    );
   }
 
   public buildDetail() {

@@ -54,21 +54,32 @@ $primary-color: mat-color($primary-palette);
   }
 }
 
+.title {
+  display: flex;
+    justify-content: space-between;
+  .organisations {
+    min-width: 200px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 16px;
+  }
+}
+
 .load-content {
   table {
     width: 100% !important;
   }
 }
 
-.new-config-content{
-  overflow: unset;
-}
 
-.actions{
-  .buttons{
+
+.actions {
+  .buttons {
     width: 100%;
 
-    .right{
+    .right {
       float: right;
     }
   }

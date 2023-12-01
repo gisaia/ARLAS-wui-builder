@@ -8,12 +8,13 @@ import { StartupService } from '@services/startup/startup.service';
 import { SharedModule } from '@shared/shared.module';
 import {
   ArlasCollaborativesearchService, ArlasConfigService, ArlasConfigurationDescriptor,
-  ArlasStartupService, AuthentificationService, ConfigMenuModule, ErrorModalModule, getOptionsFactory, GET_OPTIONS
+  ArlasStartupService, AuthentificationService, ConfigMenuModule, getOptionsFactory, GET_OPTIONS,
+  ArlasSettingsService, ArlasIamService, PersistenceService
 } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { of } from 'rxjs';
-import { LandingPageComponent, LandingPageDialogComponent } from './landing-page.component';
-import { ArlasColorService } from 'arlas-web-components';
+import { LandingPageComponent } from './landing-page.component';
+import { LandingPageDialogComponent } from './landing-page-dialog.component';
 
 describe('LandingPageComponent', () => {
   let spectator: Spectator<LandingPageComponent>;
@@ -22,7 +23,6 @@ describe('LandingPageComponent', () => {
     component: LandingPageComponent,
     imports: [
       SharedModule,
-      ErrorModalModule,
       ConfigMenuModule
     ],
     providers: [
@@ -36,11 +36,15 @@ describe('LandingPageComponent', () => {
       }),
       mockProvider(ArlasConfigService),
       mockProvider(ArlasCollaborativesearchService),
+      mockProvider(ArlasIamService),
       mockProvider(StartupService),
       mockProvider(ArlasStartupService),
+      mockProvider(PersistenceService),
+      mockProvider(ArlasSettingsService, {
+        getAuthentSettings: () => undefined
+      }),
       mockProvider(ArlasConfigurationDescriptor),
       mockProvider(HttpClient),
-      mockProvider(ArlasColorService),
       mockProvider(StartingConfigFormBuilderService),
       mockProvider(AuthentificationService, {
         canActivateProtectedRoutes: of()

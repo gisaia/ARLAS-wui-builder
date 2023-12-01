@@ -27,9 +27,8 @@ import { CollectionField } from '@services/collection-service/models';
 import { NUMERIC_OR_DATE_TYPES, toKeywordOptionsObs } from '@services/collection-service/tools';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
-  ButtonFormControl, ButtonToggleFormControl, ConfigFormGroup, SelectFormControl, SliderFormControl,
+  ButtonFormControl, ConfigFormGroup, SelectFormControl, SliderFormControl,
   SlideToggleFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
@@ -44,8 +43,9 @@ import { METRIC_TYPE } from '../metric-collect-form-builder/models';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { ArlasColorService } from 'arlas-web-components';
 
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 
-export class PowerbarConfigForm extends CollectionConfigFormGroup {
+export class PowerbarConfigForm extends WidgetConfigFormGroup {
 
   public constructor(
     collection: string,
@@ -87,9 +87,10 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
               dependsOn: () => [this.customControls.dataStep.collection],
               onDependencyChange: (control: SelectFormControl) => {
                 toKeywordOptionsObs(collectionService
-                  .getCollectionFields(this.customControls.dataStep.collection.value)).subscribe(collectionFs => {
-                  control.setSyncOptions(collectionFs);
-                });
+                  .getCollectionFields(this.customControls.dataStep.collection.value))
+                  .subscribe(collectionFs => {
+                    control.setSyncOptions(collectionFs);
+                  });
               }
             }
           ),
@@ -154,7 +155,8 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
               value: d,
               enabled: true,
               label: d.toString()
-            })), {
+            })),
+            {
               optional: true,
               childs: () => [
                 this.customControls.renderStep.useColorService,
@@ -292,6 +294,8 @@ export class PowerbarConfigForm extends CollectionConfigFormGroup {
   }
 
   public customControls = {
+    uuid: this.get('uuid') as HiddenFormControl,
+    usage: this.get('usage') as HiddenFormControl,
     title: this.get('title') as TitleInputFormControl,
     dataStep: {
       collection: this.get('dataStep').get('collection') as SelectFormControl,
@@ -343,8 +347,7 @@ export class PowerbarFormBuilderService extends WidgetFormBuilder {
     private dialog: MatDialog,
     private colorService: ArlasColorService,
     private defaultValuesService: DefaultValuesService,
-    private metricBuilderService: MetricCollectFormBuilderService
-
+    private metricBuilderService: MetricCollectFormBuilderService,
   ) {
     super(collectionService, mainFormService);
   }
