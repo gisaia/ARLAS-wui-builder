@@ -1,12 +1,16 @@
 # Change Log
 
-## [v24.1.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.1.0) (2023-11-27)
+## [v24.3.0-rc.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.3.0-rc.1) (2023-12-01)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.2.0...v24.1.0)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.2.0...v24.3.0-rc.1)
 
 ## [v24.2.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.2.0) (2023-11-27)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.3.0-beta.7...v24.2.0)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.1.0...v24.2.0)
+
+## [v24.1.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.1.0) (2023-11-27)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.3.0-beta.7...v24.1.0)
 
 ## [v24.3.0-beta.7](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.3.0-beta.7) (2023-11-16)
 
