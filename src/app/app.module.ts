@@ -41,7 +41,7 @@ import {
   ArlasIamService,
   ArlasStartupService, ArlasWalkthroughService, AuthentificationService, ConfigMenuModule, configUpdaterFactory,
   CONFIG_UPDATER, FETCH_OPTIONS, getOptionsFactory,
-  iamServiceFactory, PaginatorI18n, UserInfosComponent, GET_OPTIONS, ArlasToolkitSharedModule,
+  iamServiceFactory, PaginatorI18n, UserInfosComponent, GET_OPTIONS, ArlasToolkitSharedModule, ArlasSettingsService,
 } from 'arlas-wui-toolkit';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
@@ -167,7 +167,7 @@ export class CustomTranslateLoader implements TranslateLoader {
     {
       provide: GET_OPTIONS,
       useFactory: getOptionsFactory,
-      deps: [AuthentificationService, ArlasIamService]
+      deps: [ArlasSettingsService, AuthentificationService, ArlasIamService]
     },
     {
       provide: ArlasWalkthroughService,
