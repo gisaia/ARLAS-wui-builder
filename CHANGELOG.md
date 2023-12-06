@@ -1,8 +1,27 @@
 # Change Log
 
+## [v24.3.0-rc.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.3.0-rc.2) (2023-12-06)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.3.0-rc.1...v24.3.0-rc.2)
+
 ## [v24.3.0-rc.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.3.0-rc.1) (2023-12-01)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.2.0...v24.3.0-rc.1)
+
+**New stuff:**
+
+- Rename 'Nom' par 'Nom du dashboard' when saving the a dashboard for the first time [\#900](https://github.com/gisaia/ARLAS-wui-builder/issues/900)
+- Allow host without domains in server url field [\#887](https://github.com/gisaia/ARLAS-wui-builder/issues/887)
+
+**Fixed bugs:**
+
+- Creating a new dashboard from the hub doesn't work [\#904](https://github.com/gisaia/ARLAS-wui-builder/issues/904)
+- The login icon on the builder is on the top bar and on the left bar [\#906](https://github.com/gisaia/ARLAS-wui-builder/issues/906)
+- The `import config` modal doesn't close after importing a dashboard [\#897](https://github.com/gisaia/ARLAS-wui-builder/issues/897)
+
+**Miscellaneous:**
+
+- Save preview does not send token [\#886](https://github.com/gisaia/ARLAS-wui-builder/issues/886)
 
 ## [v24.2.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.2.0) (2023-11-27)
 
