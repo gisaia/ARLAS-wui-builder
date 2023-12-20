@@ -16,7 +16,6 @@
     "i18n:init": "ngx-translate-extract --input ./src/app --output ./src/assets/i18n/template.json --key-as-default-value --replace --format json",
     "i18n:extract": "ngx-translate-extract --input ./src/app --output ./src/assets/i18n/{en,fr}.json --format json"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^14.2.12",
     "@angular/cdk": "^14.2.7",
@@ -36,7 +35,7 @@
     "ajv": "8.8.2",
     "ajv-keywords": "5.1.0",
     "ang-jsoneditor": "1.10.5",
-    "arlas-wui-toolkit": "~24.3.0",
+    "arlas-wui-toolkit": "~24.3.4",
     "file-saver": "^2.0.2",
     "jsoneditor": "9.5.6",
     "moment": "^2.29.4",
