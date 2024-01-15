@@ -416,7 +416,7 @@
 	"property label size description": "Réglage de la taille des labels en pixels:",
 	"size rotation offset": "Taille, orientation et décalage",
 	"property label rotation description": "Réglage de l'angle de rotation des labels (degrés):\n • L'orientation est dans le sens horaire. 0 pointe vers l'Est. 0° → ; 45° ↘",
-	"point": "",
+	"point": "point",
 	"line": "ligne",
 	"line-center": "centre de ligne",
 	"label placement description": "• Placement du label par rapport à sa géométrie. \n point: Le label est placé à l'endroit où se trouve la géométrie.. \n - ligne : Le label est placé le long de la ligne de la géométrie. \n - centre de ligne : Le label est placé au centre de la ligne de la géométrie.",
