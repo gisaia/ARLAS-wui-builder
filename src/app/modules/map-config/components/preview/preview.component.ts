@@ -193,17 +193,10 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     if (!!this.mainFormService.dashboard) {
       const currentConfig = this.mainFormService.dashboard;
       const name = this.mainFormService.configurationName.concat('_preview');
-      let previewReaders = [];
-      let previewWriters = [];
-      if (currentConfig.doc_readers) {
-        previewReaders = currentConfig.doc_readers.map(reader => reader.replace('config.json', 'preview'));
-      }
-      if (currentConfig.doc_writers) {
-        previewWriters = currentConfig.doc_writers.map(writer => writer.replace('config.json', 'preview'));
-      }
+      const pGroups = this.persistenceService.dashboardToPreviewGroups(currentConfig.doc_readers, currentConfig.doc_writers);
       this.previewExists$(previewId)
         .pipe(
-          map(exists => this.createOrUpdatePreview$(exists, previewId, img, name, previewReaders, previewWriters)))
+          map(exists => this.createOrUpdatePreview$(exists, previewId, img, name, pGroups.readers, pGroups.writers)))
         .subscribe({
           complete: () => this.snackbar.open(this.translate.instant('Preview saved !'))
         });
