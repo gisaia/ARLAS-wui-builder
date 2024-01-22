@@ -44,6 +44,9 @@ export interface Config {
       };
     };
   };
+  resources: {
+    previewId?: string;
+  };
   extraConfigs?: Array<ArlasExtraConfig>;
 }
 export interface ArlasExtraConfig {
