@@ -30,11 +30,13 @@ import {
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import { Subject } from 'rxjs/internal/Subject';
 import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
-import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
+import { DataWithLinks } from 'arlas-persistence-api';
+import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
 
 
 enum MAIN_FORM_KEYS {
   STARTING_CONFIG = 'StartingConfig',
+  RESOURCES_CONFIG = 'ResourcesConfig',
   MAP_CONFIG = 'MapConfig',
   MAP_CONFIG_LAYERS = 'MapConfigLayers',
   MAP_CONFIG_VISUALISATIONS = 'MapConfigVisualisations',
@@ -72,10 +74,13 @@ export class MainFormService {
 
   public configurationName: string;
 
+  public dashboard: DataWithLinks;
+
   public configChange: Subject<{ id: string; name: string; }> = new Subject<{ id: string; name: string; }>();
 
   public mainForm = new FormGroup({
     [MAIN_FORM_KEYS.STARTING_CONFIG]: new FormGroup({}),
+    [MAIN_FORM_KEYS.RESOURCES_CONFIG]: new FormGroup({}),
     [MAIN_FORM_KEYS.COMMON_CONFIG]: new FormGroup({}),
     [MAIN_FORM_KEYS.MAP_CONFIG]: new FormGroup({}),
     [MAIN_FORM_KEYS.TIMELINE_CONFIG]: new FormGroup({}),
@@ -96,6 +101,16 @@ export class MainFormService {
       this.mainForm.setControl(MAIN_FORM_KEYS.STARTING_CONFIG, control);
     }
     public getFg = () => this.mainForm.get(MAIN_FORM_KEYS.STARTING_CONFIG) as StartingConfigFormGroup;
+
+  }(this.mainForm);
+
+  public resourcesConfig = new class {
+    public constructor(public mainForm: FormGroup) { }
+
+    public init(control: ResourcesConfigFormGroup) {
+      this.mainForm.setControl(MAIN_FORM_KEYS.RESOURCES_CONFIG, control);
+    }
+    public getFg = () => this.mainForm.get(MAIN_FORM_KEYS.RESOURCES_CONFIG) as ResourcesConfigFormGroup;
 
   }(this.mainForm);
 
@@ -186,6 +201,7 @@ export class MainFormService {
     // (mapConfig, analyticsConfig...) keep the initial related instance
     [
       this.mainForm.get(MAIN_FORM_KEYS.STARTING_CONFIG),
+      this.mainForm.get(MAIN_FORM_KEYS.RESOURCES_CONFIG),
       this.mainForm.get(MAIN_FORM_KEYS.MAP_CONFIG),
       this.mainForm.get(MAIN_FORM_KEYS.TIMELINE_CONFIG),
       this.mainForm.get(MAIN_FORM_KEYS.SEARCH_CONFIG),
