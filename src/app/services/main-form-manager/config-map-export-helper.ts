@@ -281,6 +281,12 @@ export class ConfigMapExportHelper {
 
         break;
       }
+      case GEOMETRY_TYPE.circleHeat: {
+        paint['circle-opacity'] = opacity;
+        paint['circle-color'] = color;
+        paint['circle-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, colorService, taggableFields);
+        break;
+      }
     }
     return paint;
   }
