@@ -63,7 +63,7 @@
     </div>
     <div style="max-height: 250px; overflow-y: auto;">
         <mat-checkbox class="multiply-selected" *ngFor="let opt of typedControl.selectedMultipleItems;" [value]="opt"
-            (change)="onchangeMulitpleSelection($event)" [checked]="true" 
+            (change)="onchangeMulitpleSelection($event)" [checked]="true"
             [style.borderLeftColor]="opt.color">
             <span class="label">{{opt.value | translate}}</span>
             <span class="detail">{{opt.detail | translate }}</span>
