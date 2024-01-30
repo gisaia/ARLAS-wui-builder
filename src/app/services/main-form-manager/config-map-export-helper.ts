@@ -35,13 +35,16 @@ import {
   Layer,
   Layout,
   MapConfig,
-  Paint,
+  Paint, PaintValue,
   SELECT_LAYER_PREFIX
 } from './models-map-config';
+import {InterpolatedProperty, ModesValues} from '@shared/interfaces/config-map.interfaces';
+import {circleHeatMapRadiusGranularity} from '@shared-models/circle-heat-map-radius-granularity';
 export enum VISIBILITY {
   visible = 'visible',
   none = 'none'
 }
+
 export const NORMALIZED = 'normalized';
 export class ConfigMapExportHelper {
 
@@ -282,9 +285,11 @@ export class ConfigMapExportHelper {
         break;
       }
       case GEOMETRY_TYPE.circleHeat: {
+
         paint['circle-opacity'] = opacity;
         paint['circle-color'] = color;
-        paint['circle-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, colorService, taggableFields);
+        paint['circle-radius'] = this.getRadPropFromGranularity(modeValues as ModesValues);
+        paint['circle-blur'] = 1;
         break;
       }
     }
@@ -308,6 +313,10 @@ export class ConfigMapExportHelper {
         layout['text-allow-overlap'] = modeValues.styleStep.labelOverlapFg;
         layout['text-anchor'] = modeValues.styleStep.labelAlignmentCtrl;
         layout['symbol-placement'] = modeValues.styleStep.labelPlacementCtrl;
+        break;
+      }
+      case GEOMETRY_TYPE.circleHeat: {
+        layout['circle-sort-key'] = this.getCircleHeatMapSortKey(modeValues.styleStep.colorFg);
         break;
       }
     }
@@ -490,6 +499,51 @@ export class ConfigMapExportHelper {
     }
   }
 
+  /**
+   *  Methode used to construct the key props
+   */
+  public static getCircleHeatMapSortKey(fgValues: any): PaintValue {
+    switch (fgValues.propertySource) {
+      case PROPERTY_SELECTOR_SOURCE.fix_color:
+        return 1;
+      case PROPERTY_SELECTOR_SOURCE.interpolated:
+        const interpolatedValues = fgValues.propertyInterpolatedFg as InterpolatedProperty;
+        const minValue = interpolatedValues.propertyInterpolatedValuesCtrl[0].proportion;
+        const maxValue = interpolatedValues
+          .propertyInterpolatedValuesCtrl[interpolatedValues.propertyInterpolatedValuesCtrl.length - 1]
+          .proportion;
+        return [
+          'interpolate',
+          [
+            'linear'
+          ],
+          [
+            'get',
+            'count_:normalized'
+          ],
+          minValue, 0,
+          maxValue, 8
+        ];
+    }
+  }
+
+  /**
+   *  set default Radius according to granularity. WARNING : only for circle-heatMap
+   */
+  public static getRadPropFromGranularity(modeValues: ModesValues): PaintValue {
+    const granularity = modeValues.geometryStep.granularity?.toLowerCase();
+    const radiusSteps = circleHeatMapRadiusGranularity[granularity] || [];
+    return [
+      'interpolate',
+      [
+        'linear'
+      ],
+      ['zoom'],
+      ...radiusSteps
+    ];
+  }
+
+
   public static getFieldPath(field: string, taggableFields: Set<string>): string {
     return (taggableFields && taggableFields.has(field)) ? field + '.0' : field;
   }
@@ -563,4 +617,5 @@ export class ConfigMapExportHelper {
       return value as number + nbPixel;
     }
   }
+
 }
