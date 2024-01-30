@@ -56,9 +56,10 @@ export interface Layout {
   'text-allow-overlap'?: boolean;
   'text-anchor'?: string;
   'symbol-placement'?: string;
+  'circle-sort-key'?: PaintValue;
 }
 
-type PaintValue = Array<string | Array<string> | number> | PaintColor | string | number;
+export type PaintValue = Array<string | Array<string> | number> | PaintColor | string | number;
 export interface Paint {
   'fill-color'?: PaintValue;
   'fill-opacity'?: number;
@@ -69,6 +70,7 @@ export interface Paint {
   'line-width'?: PaintValue;
   'line-dasharray'?: PaintValue;
   'circle-radius'?: PaintValue;
+  'circle-blur'?: number;
   'circle-stroke-width'?: PaintValue;
   'heatmap-color'?: PaintValue;
   'heatmap-radius'?: PaintValue;

@@ -99,7 +99,6 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
      * depend on a displayed field, this was not managed.
      */
     if (!this.isSubGroup) {
-      console.error(this.configFormGroup);
       ConfigFormGroupComponent.listenToAllControlsOnDependencyChange(this.configFormGroup, this.toUnsubscribe);
       this.initDependentControls();
       this.markChildControls();
