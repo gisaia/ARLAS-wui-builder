@@ -33,7 +33,7 @@ export const circleHeatMapRadiusGranularity = {
   'medium': [
     0, 50,
     2.999999, 110,
-    3, 30,
+    3, 90,
     5.999999, 180,
     6, 40,
     8.999999, 200,
@@ -48,7 +48,7 @@ export const circleHeatMapRadiusGranularity = {
     0, 30,
     3.999999, 250,
     4, 50,
-    6.999999, 320,
+    6.999999, 300,
     7, 120,
     9.999999, 480,
     10, 120,

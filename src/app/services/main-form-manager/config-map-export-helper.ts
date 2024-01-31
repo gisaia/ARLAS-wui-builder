@@ -53,6 +53,7 @@ export class ConfigMapExportHelper {
     const fillStrokeLayers = [];
     const scrollableLayers = [];
     const labelLayers = [];
+    console.error('in process config map export');
     const layers: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: MapLayerFormGroup) => {
       const taggableFields = taggableFieldsMap.get(layerFg.customControls.collection.value);
       const layer = this.getLayer(layerFg, colorService, taggableFields);
@@ -169,6 +170,13 @@ export class ConfigMapExportHelper {
       collection,
       collectionDisplayName
     };
+
+    // with this prop we ll be able to restore the good geomType when we ll reload the layer;
+    metadata.hiddenProps = {geomType: ''};
+    if(modeValues.styleStep.geometryType === GEOMETRY_TYPE.circleHeat) {
+      metadata.hiddenProps.geomType = GEOMETRY_TYPE.circleHeat;
+    }
+
     if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.fill.toString()) {
       const fillStroke: FillStroke = {
         color: this.getMapProperty(modeValues.styleStep.strokeColorFg, mode, colorService, taggableFields),
@@ -192,7 +200,7 @@ export class ConfigMapExportHelper {
     const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
     const layer: Layer = {
       id: layerFg.value.arlasId,
-      type: modeValues.styleStep.geometryType === 'label' ? 'symbol' : modeValues.styleStep.geometryType,
+      type: this.getLayerType(modeValues),
       source: layerSource.source,
       minzoom: modeValues.visibilityStep.zoomMin,
       maxzoom: modeValues.visibilityStep.zoomMax,
@@ -232,6 +240,19 @@ export class ConfigMapExportHelper {
     /** This filter is added to layers to avoid metrics having 'Infinity' as a value */
     layer.filter = layer.filter.concat([this.getLayerFilters(modeValues, mode, taggableFields)]);
     return layer;
+  }
+
+  /**
+   * set the correct layer type before we save it.
+   * @param modeValues
+   */
+  public static getLayerType(modeValues: ModesValues): GEOMETRY_TYPE {
+    /** we change the type of circle heat map  to keep the compatibility with mapbox **/
+    if(modeValues.styleStep.geometryType === GEOMETRY_TYPE.circleHeat){
+      return GEOMETRY_TYPE.circle;
+    }
+
+    return modeValues.styleStep.geometryType === 'label' ? 'symbol' : modeValues.styleStep.geometryType;
   }
 
   public static getLayerPaint(modeValues, mode, colorService: ArlasColorService, taggableFields?: Set<string>) {
@@ -285,7 +306,7 @@ export class ConfigMapExportHelper {
         break;
       }
       case GEOMETRY_TYPE.circleHeat: {
-
+        paint['circle-stroke-color'] = color;
         paint['circle-opacity'] = opacity;
         paint['circle-color'] = color;
         paint['circle-radius'] = this.getRadPropFromGranularity(modeValues as ModesValues);
