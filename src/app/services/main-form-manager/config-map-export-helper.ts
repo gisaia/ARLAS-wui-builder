@@ -306,6 +306,7 @@ export class ConfigMapExportHelper {
         break;
       }
       case GEOMETRY_TYPE.circleHeat: {
+        paint['circle-stroke-opacity'] = 0;
         paint['circle-stroke-color'] = color;
         paint['circle-opacity'] = opacity;
         paint['circle-color'] = color;
@@ -553,7 +554,8 @@ export class ConfigMapExportHelper {
    */
   public static getRadPropFromGranularity(modeValues: ModesValues): PaintValue {
     const granularity = modeValues.geometryStep.granularity?.toLowerCase();
-    const radiusSteps = circleHeatMapRadiusGranularity[granularity] || [];
+    const aggType = modeValues.geometryStep.aggType?.toLowerCase();
+    const radiusSteps = circleHeatMapRadiusGranularity[aggType][granularity] || [];
     return [
       'interpolate',
       [
