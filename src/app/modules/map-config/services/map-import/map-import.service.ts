@@ -307,7 +307,7 @@ export class MapImportService {
       }
     }
     const min = inputValues[4];
-    const max = inputValues.pop();
+    const max = inputValues[inputValues.length - 1];
     propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl = min === 0 ? '0' : min;
     propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl = max === 0 ? '0' : max;
   }
