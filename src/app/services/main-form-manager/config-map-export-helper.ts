@@ -53,7 +53,6 @@ export class ConfigMapExportHelper {
     const fillStrokeLayers = [];
     const scrollableLayers = [];
     const labelLayers = [];
-    console.error('in process config map export');
     const layers: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: MapLayerFormGroup) => {
       const taggableFields = taggableFieldsMap.get(layerFg.customControls.collection.value);
       const layer = this.getLayer(layerFg, colorService, taggableFields);
@@ -338,7 +337,7 @@ export class ConfigMapExportHelper {
         break;
       }
       case GEOMETRY_TYPE.circleHeat: {
-        layout['circle-sort-key'] = this.getCircleHeatMapSortKey(modeValues.styleStep.colorFg);
+        layout['circle-sort-key'] = this.getCircleHeatMapSortKey(modeValues.styleStep.colorFg, mode);
         break;
       }
     }
@@ -466,41 +465,9 @@ export class ConfigMapExportHelper {
       }
       case PROPERTY_SELECTOR_SOURCE.interpolated: {
         const interpolatedValues = fgValues.propertyInterpolatedFg;
-        let interpolatedColor: Array<string | Array<string | number>>;
-        const getField = () =>
-          (interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'metric')
-            ? interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
-            (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_' :
-            interpolatedValues.propertyInterpolatedFieldCtrl;
-
-        if (mode !== LAYER_MODE.features && interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'count') {
-          // for types FEATURE-METRIC and CLUSTER, if we interpolate by count
-          interpolatedColor = [
-            'interpolate',
-            ['linear'],
-            ['get', 'count' + (!!interpolatedValues.propertyInterpolatedCountNormalizeCtrl ? `_:${NORMALIZED}` : '')]
-          ];
-        } else if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
-          // otherwise if we normalize
-          interpolatedColor = [
-            'interpolate',
-            ['linear'],
-            this.getArray(
-              getField()
-                .concat(':' + NORMALIZED)
-                .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
-                  ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl : ''))
-          ];
-        } else {
-          // if we don't normalize
-          interpolatedColor = [
-            'interpolate',
-            ['linear'],
-            this.getArray(getField())
-          ];
-        }
-        return interpolatedColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
-          .flatMap(pc => [pc.proportion, pc.value]));
+        const values = (interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
+          .flatMap(pc => [pc.proportion, pc.value]);
+        return this.buildPropsValuesFromInterpolatedValues(interpolatedValues, mode, values);
       }
       case PROPERTY_SELECTOR_SOURCE.heatmap_density: {
         const interpolatedValues = fgValues.propertyInterpolatedFg;
@@ -522,9 +489,60 @@ export class ConfigMapExportHelper {
   }
 
   /**
+   * build the correct values from interpolated values.
+   * @param interpolatedValues
+   * @param mode
+   * @param valuesToInsert
+   * @private
+   */
+  private static buildPropsValuesFromInterpolatedValues(interpolatedValues: InterpolatedProperty,
+    mode: LAYER_MODE,
+    valuesToInsert?: (string | number)[]){
+    let interpolatedColor: Array<string | Array<string | number>>;
+    const getField = () =>
+      (interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'metric')
+        ? interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
+            (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_' :
+        interpolatedValues.propertyInterpolatedFieldCtrl;
+
+    if (mode !== LAYER_MODE.features && interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'count') {
+      // for types FEATURE-METRIC and CLUSTER, if we interpolate by count
+      interpolatedColor = [
+        'interpolate',
+        ['linear'],
+        ['get', 'count' + (!!interpolatedValues.propertyInterpolatedCountNormalizeCtrl ? `_:${NORMALIZED}` : '')]
+      ];
+    } else if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
+      // otherwise if we normalize
+      interpolatedColor = [
+        'interpolate',
+        ['linear'],
+        this.getArray(
+          getField()
+            .concat(':' + NORMALIZED)
+            .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
+              ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl : ''))
+      ];
+    } else {
+      // if we don't normalize
+      interpolatedColor = [
+        'interpolate',
+        ['linear'],
+        this.getArray(getField())
+      ];
+    }
+
+    if(valuesToInsert){
+      return interpolatedColor.concat(valuesToInsert);
+    }
+
+    return interpolatedColor;
+  }
+
+  /**
    *  Methode used to construct the key props
    */
-  public static getCircleHeatMapSortKey(fgValues: any): PaintValue {
+  public static getCircleHeatMapSortKey(fgValues: any, mode: LAYER_MODE): PaintValue {
     switch (fgValues.propertySource) {
       case PROPERTY_SELECTOR_SOURCE.fix_color:
         return 1;
@@ -534,18 +552,7 @@ export class ConfigMapExportHelper {
         const maxValue = interpolatedValues
           .propertyInterpolatedValuesCtrl[interpolatedValues.propertyInterpolatedValuesCtrl.length - 1]
           .proportion;
-        return [
-          'interpolate',
-          [
-            'linear'
-          ],
-          [
-            'get',
-            'count_:normalized'
-          ],
-          minValue, 0,
-          maxValue, 8
-        ];
+        return <PaintValue> this.buildPropsValuesFromInterpolatedValues(interpolatedValues, mode, [minValue, 0, maxValue, 8]);
     }
   }
 
