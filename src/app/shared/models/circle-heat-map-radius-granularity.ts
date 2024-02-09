@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-export const circleHeatMapRadiusGranularity = {
+export const CIRCLE_HEATMAP_RADIUS_GRANULARITY = {
   geohash: {
     finest: [
       0, 9,
