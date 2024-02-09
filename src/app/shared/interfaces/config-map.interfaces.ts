@@ -66,7 +66,7 @@ export interface GeometryStep {
     aggregatedGeometry: string;
 }
 
-export interface StylesStep {
+export interface StyleStep {
     geometryType: string;
     filter?: [];
     opacity?: {
@@ -85,8 +85,9 @@ export interface StylesStep {
 
 type interpolatedValues = InterpolatedValueString | InterpolatedValueNumber;
 
+// TODO: when we ll be sure of the object structure remove the any.
 export interface ModesValues {
     geometryStep: GeometryStep | any;
-    styleStep: StylesStep | any;
+    styleStep: StyleStep | any;
     visibilityStep: VisibilityStep;
 }
