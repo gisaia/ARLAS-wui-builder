@@ -39,7 +39,7 @@ import {
   SELECT_LAYER_PREFIX
 } from './models-map-config';
 import {InterpolatedProperty, ModesValues} from '@shared/interfaces/config-map.interfaces';
-import {circleHeatMapRadiusGranularity} from '@shared-models/circle-heat-map-radius-granularity';
+import {CIRCLE_HEATMAP_RADIUS_GRANULARITY} from '@shared-models/circle-heat-map-radius-granularity';
 export enum VISIBILITY {
   visible = 'visible',
   none = 'none'
@@ -171,10 +171,14 @@ export class ConfigMapExportHelper {
     };
 
     // with this prop we ll be able to restore the good geomType when we ll reload the layer;
-    metadata.hiddenProps = {geomType: ''};
-    if(modeValues.styleStep.geometryType === GEOMETRY_TYPE.circleHeat) {
-      metadata.hiddenProps.geomType = GEOMETRY_TYPE.circleHeat;
+    if (metadata.hasOwnProperty('hiddenProps')) {
+      delete metadata['hiddenProps'];
     }
+
+    if(modeValues.styleStep.geometryType === GEOMETRY_TYPE.circleHeat) {
+      metadata.hiddenProps = {geomType: GEOMETRY_TYPE.circleHeat};
+    }
+
 
     if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.fill.toString()) {
       const fillStroke: FillStroke = {
@@ -199,7 +203,7 @@ export class ConfigMapExportHelper {
     const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
     const layer: Layer = {
       id: layerFg.value.arlasId,
-      type: this.getLayerType(modeValues),
+      type: this.getLayerType(modeValues.styleStep.geometryType),
       source: layerSource.source,
       minzoom: modeValues.visibilityStep.zoomMin,
       maxzoom: modeValues.visibilityStep.zoomMax,
@@ -243,15 +247,15 @@ export class ConfigMapExportHelper {
 
   /**
    * set the correct layer type before we save it.
-   * @param modeValues
+   * @param geometryType
    */
-  public static getLayerType(modeValues: ModesValues): GEOMETRY_TYPE {
+  public static getLayerType(geometryType: GEOMETRY_TYPE): GEOMETRY_TYPE | string {
     /** we change the type of circle heat map  to keep the compatibility with mapbox **/
-    if(modeValues.styleStep.geometryType === GEOMETRY_TYPE.circleHeat){
+    if(geometryType === GEOMETRY_TYPE.circleHeat){
       return GEOMETRY_TYPE.circle;
     }
 
-    return modeValues.styleStep.geometryType === 'label' ? 'symbol' : modeValues.styleStep.geometryType;
+    return geometryType === 'label' ? 'symbol' : geometryType;
   }
 
   public static getLayerPaint(modeValues, mode, colorService: ArlasColorService, taggableFields?: Set<string>) {
@@ -489,10 +493,11 @@ export class ConfigMapExportHelper {
   }
 
   /**
-   * build the correct values from interpolated values.
-   * @param interpolatedValues
+   * Build the correct array from interpolated values to obtain an array that respects the MapBox expression format
+   * https://docs.mapbox.com/style-spec/reference/expressions/
+   * @param interpolatedValues interpolated properties that determine the type of array we build ( count, normalize )
    * @param mode
-   * @param valuesToInsert
+   * @param valuesToInsert the value to insert at the end of the array
    * @private
    */
   private static buildPropsValuesFromInterpolatedValues(interpolatedValues: InterpolatedProperty,
@@ -532,7 +537,7 @@ export class ConfigMapExportHelper {
       ];
     }
 
-    if(valuesToInsert){
+    if (valuesToInsert) {
       return interpolatedColor.concat(valuesToInsert);
     }
 
@@ -540,7 +545,8 @@ export class ConfigMapExportHelper {
   }
 
   /**
-   *  Methode used to construct the key props
+   *  Method used to construct the key props.
+   *  based on color props.
    */
   public static getCircleHeatMapSortKey(fgValues: any, mode: LAYER_MODE): PaintValue {
     switch (fgValues.propertySource) {
@@ -552,6 +558,7 @@ export class ConfigMapExportHelper {
         const maxValue = interpolatedValues
           .propertyInterpolatedValuesCtrl[interpolatedValues.propertyInterpolatedValuesCtrl.length - 1]
           .proportion;
+        // those values ([minValue, 0, maxValue, 8]) don't have a special meaning and made to guarantee the interpolation of the circle sort key
         return <PaintValue> this.buildPropsValuesFromInterpolatedValues(interpolatedValues, mode, [minValue, 0, maxValue, 8]);
     }
   }
@@ -562,7 +569,7 @@ export class ConfigMapExportHelper {
   public static getRadPropFromGranularity(modeValues: ModesValues): PaintValue {
     const granularity = modeValues.geometryStep.granularity?.toLowerCase();
     const aggType = modeValues.geometryStep.aggType?.toLowerCase();
-    const radiusSteps = circleHeatMapRadiusGranularity[aggType][granularity] || [];
+    const radiusSteps = CIRCLE_HEATMAP_RADIUS_GRANULARITY[aggType][granularity] || [];
     return [
       'interpolate',
       [
