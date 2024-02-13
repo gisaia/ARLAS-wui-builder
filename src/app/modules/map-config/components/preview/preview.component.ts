@@ -193,7 +193,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     if (!!this.mainFormService.dashboard) {
       const currentConfig = this.mainFormService.dashboard;
       const name = this.mainFormService.configurationName.concat('_preview');
-      const pGroups = this.persistenceService.dashboardToPreviewGroups(currentConfig.doc_readers, currentConfig.doc_writers);
+      const pGroups = this.persistenceService.dashboardToResourcesGroups(currentConfig.doc_readers, currentConfig.doc_writers);
       this.previewExists$(previewId)
         .pipe(
           map(exists => this.createOrUpdatePreview$(exists, previewId, img, name, pGroups.readers, pGroups.writers)))
@@ -212,7 +212,6 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     if (!previewId || previewId === '') {
       return of(false);
     } else {
-      console.log(previewId);
       return this.persistenceService.exists(previewId).pipe(map(r => r.exists));
     }
   }
@@ -220,14 +219,10 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   private createOrUpdatePreview$(previewExists: boolean, previewId: string, img, name: string, previewReaders?, previewWriters?) {
     const resourcesConfig = this.mainFormService.resourcesConfig.getFg();
     resourcesConfig.customControls.resources.previewValue.setValue(img);
-    console.log(previewExists);
     if (previewExists) {
-      this.persistenceService.updatePreview(previewId, previewReaders, previewWriters, img);
-    } else {
-      console.log('yey');
+      this.persistenceService.updateResource(previewId, previewReaders, previewWriters, img);
       this.persistenceService.create(ZONE_PREVIEW, name, img, previewReaders, previewWriters)
         .pipe(map((p: DataWithLinks) => {
-          console.log('creating');
           resourcesConfig.customControls.resources.previewId.setValue(p.id);
           return p;
         }))

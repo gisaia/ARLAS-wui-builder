@@ -184,7 +184,6 @@ export class MainFormManagerService {
           const dialogRef = this.dialog.open(InputModalComponent);
           dialogRef.afterClosed().subscribe(configName => {
             if (!!configName) {
-              console.log(configName);
               this.createDashboard(configName, generatedConfig, generatedMapConfig);
             }
           });
@@ -282,8 +281,8 @@ export class MainFormManagerService {
       ).subscribe({
         next: () => {
           if (resourcesConfig.hasPreviewId()) {
-            const previewGroups = this.persistenceService.dashboardToPreviewGroups(data.doc_readers, data.doc_writers);
-            this.persistenceService.updatePreview(generatedConfig.resources.previewId, previewGroups.readers, previewGroups.writers);
+            const previewGroups = this.persistenceService.dashboardToResourcesGroups(data.doc_readers, data.doc_writers);
+            this.persistenceService.updateResource(generatedConfig.resources.previewId, previewGroups.readers, previewGroups.writers);
           }
           this.snackbar.open(
             this.translate.instant('Dashboard updated !') + ' (' + this.mainFormService.configurationName + ')'
