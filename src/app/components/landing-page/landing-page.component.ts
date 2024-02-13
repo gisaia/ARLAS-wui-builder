@@ -211,7 +211,8 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     actions.push({
       config,
       configIdParam: 'config_id',
-      type: ConfigActionEnum.VIEW
+      type: ConfigActionEnum.VIEW,
+      enabled: data.updatable
     });
     actions.push({
       config,
@@ -227,7 +228,9 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     actions.push({
       config,
       type: ConfigActionEnum.DUPLICATE,
-      name: data.doc_key
+      name: data.doc_key,
+      enabled: data.updatable
+
     });
     actions.push({
       config,
