@@ -112,10 +112,10 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
       this.mainFormService.configChange.next({ id: undefined, name: undefined });
     }
 
-    this.mainFormService.startingConfig.init(
+    this.mainFormService.startingConfig?.init(
       this.startingConfigFormBuilder.build()
     );
-    this.mainFormService.resourcesConfig.init(
+    this.mainFormService.resourcesConfig?.init(
       this.resourcesConfigFormBuilder.build()
     );
     if (this.activatedRoute.snapshot.paramMap.has('id')) {
