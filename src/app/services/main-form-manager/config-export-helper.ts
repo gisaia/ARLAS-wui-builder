@@ -59,6 +59,7 @@ import { ARLAS_ID } from '@services/main-form/main-form.service';
 import { hashCode, stringifyArlasFilter } from './tools';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { DescribedUrl } from 'arlas-web-components/lib/components/results/utils/results.utils';
+import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
 
 export enum EXPORT_TYPE {
   json = 'json',
@@ -130,6 +131,7 @@ export class ConfigExportHelper {
   }
   public static process(
     startingConfig: StartingConfigFormGroup,
+    resourcesConfig: ResourcesConfigFormGroup,
     mapConfigGlobal: MapGlobalFormGroup,
     mapConfigLayers: FormArray,
     mapConfigVisualisations: FormArray,
@@ -144,7 +146,7 @@ export class ConfigExportHelper {
     colorService: ArlasColorService,
     collectionService: CollectionService,
     shortcutsService: ShortcutsService
-  ): any {
+  ): Config {
     const chipssearch: ChipSearchConfig = {
       name: searchConfigGlobal.customControls.name.value,
       icon: searchConfigGlobal.customControls.unmanagedFields.icon.value
@@ -203,7 +205,8 @@ export class ConfigExportHelper {
           replacedAttribute: 'arlas.web.components.mapgl.input.mapLayers.externalEventLayers',
           replacer: 'external-event-layers'
         }
-      ]
+      ],
+      resources: {}
     };
     let mainCollection;
     const collectionFormControl = startingConfig.customControls.collection;
@@ -271,8 +274,15 @@ export class ConfigExportHelper {
     }
 
     this.exportSideModulesConfig(config, sideModulesGlobal);
-
+    this.exportPreview(config, resourcesConfig);
     return config;
+  }
+
+
+  private static exportPreview(config: Config, resourcesForm: ResourcesConfigFormGroup) {
+    if (resourcesForm.hasPreviewId()) {
+      config.resources.previewId = resourcesForm.customControls.resources.previewId.value;
+    }
   }
 
   public static getLayerSourceConfig(layerFg: FormGroup): LayerSourceConfig {

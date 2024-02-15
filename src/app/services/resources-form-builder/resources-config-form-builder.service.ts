@@ -21,39 +21,29 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { HiddenFormControl } from '@shared-models/config-form';
 
-export class StartingConfigFormGroup extends FormGroup {
+export class ResourcesConfigFormGroup extends FormGroup {
   public constructor() {
     super({
-      serverUrl: new FormControl(null,
-        [
-          Validators.required,
-          Validators.pattern(
-            '(https?://)?(([0-9.]{1,4}){4}(:[0-9]{2,5})|([a-z0-9-.]+)(:[0-9]{2,5})?|localhost(:[0-9]{2,5}))+([/?].*)?'
-          )
-        ]),
-
-      collection: new FormControl(null, [Validators.required]),
-      colorGenerator: new FormControl(),
-      unmanagedFields: new FormGroup({
-        appName: new FormControl(),
-        appNameBackgroundColor: new FormControl()
+      resources: new FormGroup({
+        previewId: new HiddenFormControl(''),
+        previewValue: new HiddenFormControl('')
       })
     });
   }
 
   public customControls = {
-    serverUrl: this.get('serverUrl'),
-    collection: this.get('collection'),
-    colorGenerator: this.get('colorGenerator'),
-    unmanagedFields: {
-      appName: this.get('unmanagedFields.appName'),
-      appNameBackgroundColor: this.get('unmanagedFields.appNameBackgroundColor'),
+    resources: {
+      previewId: this.get('resources.previewId'),
+      previewValue: this.get('resources.previewValue'),
     }
   };
 
+  public hasPreviewId() {
+    return !!this.customControls.resources.previewId.value;
+  }
 
-  public reset() {
-    this.customControls.collection.setValue('');
+  public hasPreviewImage() {
+    return !!this.customControls.resources.previewValue.value;
   }
 
 }
@@ -61,15 +51,16 @@ export class StartingConfigFormGroup extends FormGroup {
 @Injectable({
   providedIn: 'root'
 })
-export class StartingConfigFormBuilderService {
+export class ResourcesConfigFormBuilderService {
 
   public constructor(
     private defaultValuesService: DefaultValuesService,
   ) { }
 
   public build() {
-    const formGroup = new StartingConfigFormGroup();
+    const formGroup = new ResourcesConfigFormGroup();
     this.defaultValuesService.setDefaultValueRecursively('global', formGroup);
+    formGroup.disable();
     return formGroup;
   }
 }

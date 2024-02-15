@@ -57,7 +57,6 @@ import enComponents from 'arlas-web-components/assets/i18n/en.json';
 import frComponents from 'arlas-web-components/assets/i18n/fr.json';
 import enToolkit from 'arlas-wui-toolkit/assets/i18n/en.json';
 import frToolkit from 'arlas-wui-toolkit/assets/i18n/fr.json';
-import { ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
 
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {

@@ -35,7 +35,7 @@
     "ajv": "8.8.2",
     "ajv-keywords": "5.1.0",
     "ang-jsoneditor": "1.10.5",
-    "arlas-wui-toolkit": "~24.3.4",
+    "arlas-wui-toolkit": "25.0.0-beta.3",
     "file-saver": "^2.0.2",
     "jsoneditor": "9.5.6",
     "moment": "^2.29.4",
@@ -91,6 +91,9 @@
   "overrides": {
     "portable-fetch": {
       "node-fetch": "3.3.0"
+    },
+    "angular-oauth2-oidc-jwks": {
+      "jsrsasign": "^11.0.0"
     }
   }
 }
