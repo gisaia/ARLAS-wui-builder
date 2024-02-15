@@ -39,11 +39,11 @@ export class ResourcesConfigFormGroup extends FormGroup {
   };
 
   public hasPreviewId() {
-    return !!this.customControls.resources.previewId.value && this.customControls.resources.previewId.value !== '';
+    return !!this.customControls.resources.previewId.value;
   }
 
   public hasPreviewImage() {
-    return !!this.customControls.resources.previewValue.value && this.customControls.resources.previewValue.value !== '';
+    return !!this.customControls.resources.previewValue.value;
   }
 
 }
