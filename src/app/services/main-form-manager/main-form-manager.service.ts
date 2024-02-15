@@ -258,7 +258,7 @@ export class MainFormManagerService {
    * @param startForm The form where the preview image is stored
    * @returns Whether we should create the preview in persistence or not
    */
-  private shoulCreatePreview(startForm: ResourcesConfigFormGroup) {
+  private shouldCreatePreview(startForm: ResourcesConfigFormGroup) {
     const hasPreviewImage = startForm.hasPreviewImage();
     const hasPreviewId = startForm.hasPreviewId();
     return hasPreviewImage && !hasPreviewId;
@@ -396,7 +396,7 @@ export class MainFormManagerService {
    */
   private createPreview$(name: string, generatedConfig: Config): Observable<Config> {
     const resourcesConfig = this.mainFormService.resourcesConfig.getFg();
-    if (this.shoulCreatePreview(resourcesConfig)) {
+    if (this.shouldCreatePreview(resourcesConfig)) {
       const img = resourcesConfig.customControls.resources.previewValue.value;
       return this.persistenceService.create(ZONE_PREVIEW, name.concat('_preview'), img)
         .pipe(tap((p: DataWithLinks) => resourcesConfig.customControls.resources.previewId.setValue(p.id)))
