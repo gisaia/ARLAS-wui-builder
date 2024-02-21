@@ -956,9 +956,14 @@ export class ConfigExportHelper {
         });
         contrib.includeMetadata = [];
         const metadatas = new Set<string>();
+        /** TODO :Grid steps contains, booleans, urls...; we need to filter those controls properly */
         Object.keys(widgetData.renderStep.gridStep).forEach(v => {
           if (!!widgetData.renderStep.gridStep[v] && v !== 'isDefaultMode') {
-            metadatas.add(widgetData.renderStep.gridStep[v]);
+            if (Array.isArray(widgetData.renderStep.gridStep[v])) {
+              (widgetData.renderStep.gridStep[v] as Array<string>).forEach(f => metadatas.add(f));
+            } else {
+              metadatas.add(widgetData.renderStep.gridStep[v]);
+            }
           }
         });
         contrib.includeMetadata = Array.from(metadatas);
@@ -1028,12 +1033,16 @@ export class ConfigExportHelper {
       });
       contrib.includeMetadata = [];
       const metadatas = new Set<string>();
+      /** TODO : Grid steps contains, booleans, urls...; we need to filter those controls properly */
       Object.keys(list.renderStep.gridStep).forEach(v => {
-        if (!!list.renderStep.gridStep[v] && v !== 'isDefaultMode' && v !== 'useHttpQuicklooks' && v !== 'quicklookUrls') {
-          metadatas.add(list.renderStep.gridStep[v]);
+        if (!!list.renderStep.gridStep[v] && v !== 'isDefaultMode') {
+          if (Array.isArray(list.renderStep.gridStep[v])) {
+            (list.renderStep.gridStep[v] as Array<string>).forEach(f => metadatas.add(f));
+          } else {
+            metadatas.add(list.renderStep.gridStep[v]);
+          }
         }
       });
-      contrib.includeMetadata = Array.from(metadatas);
       contribs.push(contrib);
     });
     return contribs;
