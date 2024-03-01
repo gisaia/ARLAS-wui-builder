@@ -301,7 +301,6 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.persistenceService.get(id).subscribe((data: DataWithLinks) => {
       this.mainFormService.configurationName = data.doc_key;
       this.mainFormService.configurationId = id;
-      this.mainFormService.dashboard = data;
       const configJson = JSON.parse(data.doc_value) as Config;
       if (configJson.arlas !== undefined) {
         const configMapJson = configJson.arlas.web.components.mapgl.input.mapLayers as MapConfig;

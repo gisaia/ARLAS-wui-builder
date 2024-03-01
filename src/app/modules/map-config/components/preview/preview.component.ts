@@ -29,7 +29,7 @@ import { StartupService, ZONE_PREVIEW } from '@services/startup/startup.service'
 import { ArlasColorService, MapglComponent } from 'arlas-web-components';
 import { MapContributor } from 'arlas-web-contributors';
 import { ArlasCollaborativesearchService, ArlasConfigService, ContributorBuilder, PersistenceService } from 'arlas-wui-toolkit';
-import { catchError, map, merge, Observable, of, Subscription, tap, throwError } from 'rxjs';
+import { catchError, map, merge, mergeMap, Observable, of, Subscription, tap, throwError } from 'rxjs';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { DataWithLinks } from 'arlas-persistence-api';
 
@@ -55,7 +55,6 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   public mapLegendUpdater;
   public mapVisibilityUpdater;
   public mainMapContributor;
-  public configId;
 
   public constructor(
     protected mainFormService: MainFormService,
@@ -71,7 +70,6 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     private settingsService: ArlasSettingsService,
     @Inject(MAT_DIALOG_DATA) public dataMap: MapglComponentInput
   ) {
-    this.configId = this.mainFormService.configurationId;
     if (this.dataMap.mapglContributors !== undefined || this.dataMap.mapComponentConfig !== undefined) {
       this.mapglContributors = dataMap.mapglContributors;
       this.mapComponentConfig = dataMap.mapComponentConfig.input;
@@ -187,23 +185,27 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       context.drawImage(mapCanvas, 0, 0);
       img = rescaledCanvas.toDataURL('image/png');
     }
+    const jsonifiedImg = JSON.stringify({img});
     this.mapglComponent.map.resize();
     const resourcesConfig = this.mainFormService.resourcesConfig.getFg();
     const previewId = resourcesConfig.customControls.resources.previewId.value;
-    if (!!this.mainFormService.dashboard) {
-      const currentConfig = this.mainFormService.dashboard;
-      const name = this.mainFormService.configurationName.concat('_preview');
-      const pGroups = this.persistenceService.dashboardToResourcesGroups(currentConfig.doc_readers, currentConfig.doc_writers);
-      this.previewExists$(previewId)
-        .pipe(
-          map(exists => this.createOrUpdatePreview$(exists, previewId, img, name, pGroups.readers, pGroups.writers)))
-        .subscribe({
-          complete: () => this.snackbar.open(this.translate.instant('Preview saved !'))
-        });
+    if (!!this.mainFormService.configurationId) {
+      this.persistenceService.get(this.mainFormService.configurationId).pipe(
+        map((currentConfig: DataWithLinks) => {
+          const name = this.mainFormService.configurationName.concat('_preview');
+          const pGroups = this.persistenceService.dashboardToResourcesGroups(currentConfig.doc_readers, currentConfig.doc_writers);
+          return this.previewExists$(previewId)
+            .pipe(
+              map(exists => this.createOrUpdatePreview$(exists, previewId, jsonifiedImg, name, pGroups.readers, pGroups.writers)))
+            .subscribe({
+              complete: () => this.snackbar.open(this.translate.instant('Preview saved !'))
+            });
+        })
+      ).subscribe();
     } else {
-      resourcesConfig.customControls.resources.previewValue.setValue(img);
+      resourcesConfig.customControls.resources.previewValue.setValue(jsonifiedImg);
       this.snackbar.open(
-        this.translate.instant('Preview saved !')
+        this.translate.instant('Preview saved temporarily. Save the dashboard to validate the preview too.')
       );
     }
   }
@@ -221,6 +223,8 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     resourcesConfig.customControls.resources.previewValue.setValue(img);
     if (previewExists) {
       this.persistenceService.updateResource(previewId, previewReaders, previewWriters, img);
+      resourcesConfig.customControls.resources.previewId.setValue(previewId);
+    } else {
       this.persistenceService.create(ZONE_PREVIEW, name, img, previewReaders, previewWriters)
         .pipe(map((p: DataWithLinks) => {
           resourcesConfig.customControls.resources.previewId.setValue(p.id);

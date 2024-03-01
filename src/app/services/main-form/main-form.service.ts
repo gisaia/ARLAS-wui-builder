@@ -74,8 +74,6 @@ export class MainFormService {
 
   public configurationName: string;
 
-  public dashboard: DataWithLinks;
-
   public configChange: Subject<{ id: string; name: string; }> = new Subject<{ id: string; name: string; }>();
 
   public mainForm = new FormGroup({

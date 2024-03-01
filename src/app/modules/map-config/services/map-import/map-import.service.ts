@@ -680,6 +680,10 @@ export class MapImportService {
       this.mainFormService.mapConfig.getBasemapsFg()
         .customControls.basemaps.push(new BasemapFormGroup(basemap.name, basemap.styleFile, basemap.image, basemap.type));
     });
+    if (basemaps.length === 0 && !!defaultBasemap) {
+      this.mainFormService.mapConfig.getBasemapsFg().customControls
+        .basemaps.push(new BasemapFormGroup(defaultBasemap.name, defaultBasemap.styleFile, defaultBasemap.image, defaultBasemap.type));
+    }
 
     this.importBasemap(defaultBasemap);
   }

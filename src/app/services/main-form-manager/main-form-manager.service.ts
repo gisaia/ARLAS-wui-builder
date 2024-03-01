@@ -59,6 +59,7 @@ import { StartingConfigFormGroup } from '@services/starting-config-form-builder/
 import { Observable, catchError, map, of, tap } from 'rxjs';
 import { DataWithLinks } from 'arlas-persistence-api';
 import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root'
@@ -93,7 +94,8 @@ export class MainFormManagerService {
     private colorService: ArlasColorService,
     private router: Router,
     private arlasStartupService: ArlasStartupService,
-    private shortcutsService: ShortcutsService
+    private shortcutsService: ShortcutsService,
+    private spinner: NgxSpinnerService,
   ) { }
 
   /**
@@ -175,15 +177,18 @@ export class MainFormManagerService {
       generatedConfig.arlas.web.components.mapgl.input.visualisations_sets.forEach(vs => vs.layers = Array.from(vs.layers));
       if (this.mainFormService.configurationId) {
         // Update existing
+        this.spinner.show('saveconfig');
         this.updateDashboard(generatedConfig, generatedMapConfig, resourcesConfig);
       } else {
         // Create new config
         if (!!this.mainFormService.configurationName) {
+          this.spinner.show('saveconfig');
           this.createDashboard(this.mainFormService.configurationName, generatedConfig, generatedMapConfig);
         } else {
           const dialogRef = this.dialog.open(InputModalComponent);
           dialogRef.afterClosed().subscribe(configName => {
             if (!!configName) {
+              this.spinner.show('saveconfig');
               this.createDashboard(configName, generatedConfig, generatedMapConfig);
             }
           });
@@ -284,11 +289,13 @@ export class MainFormManagerService {
             const previewGroups = this.persistenceService.dashboardToResourcesGroups(data.doc_readers, data.doc_writers);
             this.persistenceService.updateResource(generatedConfig.resources.previewId, previewGroups.readers, previewGroups.writers);
           }
+          this.spinner.hide('saveconfig');
           this.snackbar.open(
             this.translate.instant('Dashboard updated !') + ' (' + this.mainFormService.configurationName + ')'
           );
         },
         error: (error) => {
+          this.spinner.hide('saveconfig');
           this.snackbar.open(this.translate.instant('Error : Dashboard not updated'));
           this.raiseError(error);
         }
@@ -376,12 +383,14 @@ export class MainFormManagerService {
               this.snackbar.open(
                 this.translate.instant('Dashboard saved !') + ' (' + configName + ')'
               );
+              this.spinner.hide('saveconfig');
               this.doImport(generatedConfig, generatedMapConfig);
               this.mainFormService.configurationId = data.id;
               this.mainFormService.configChange.next({ id: data.id, name: data.doc_key });
               this.router.navigate(['map-config'], { queryParamsHandling: 'preserve' });
             },
             error: (error) => {
+              this.spinner.hide('saveconfig');
               this.snackbar.open(this.translate.instant('Error : Dashboard not saved'));
               this.raiseError(error);
             }

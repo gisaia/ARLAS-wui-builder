@@ -4,7 +4,7 @@
 authentication:
   use_authent: true
   auth_mode: iam
-  url: https://demo.cloud.staging.arlas.io/arlas/iam
+  url: http://mgoun/arlas_iam_server
   force_connect: false
   threshold: 60000
   use_discovery: false
@@ -24,19 +24,18 @@ authentication:
   storage: sessionstorage
   custom_query_params: [{"audience":"http://arlas.io/api/server"}]
 persistence:
-  url: 'https://demo.cloud.staging.arlas.io/arlas/persistence'
+  url: 'http://mgoun/arlas_persistence_server'
 ########################################################
 ############   Permissions SETTINGS   ##################
 ########################################################
 permission:
-  url: 'https://demo.cloud.staging.arlas.io/arlas/permissions'
+  url: http://mgoun/arlas_permissions_server
 ########################################################
 ############   URLs to WUI app   #######################
 ########################################################
 arlas_wui_url: "http://localhost:4200"
 links: [ { "icon": "lock", "name": "Google", "url": "http://www.google.com" }, { "icon": "public", "name": "Yahoo", "url": "http://www.yahoo.com" } ]
-basemaps: 
-  [
+basemaps: [
     {"name":"Basic","url":"https://api.maptiler.com/maps/basic/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/basic.png"},
     {"name":"Bright","url":"https://api.maptiler.com/maps/bright/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/bright.png"},
     {"name":"Outdoor","url":"https://api.maptiler.com/maps/outdoor/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/outdoor.png"},
@@ -53,7 +52,6 @@ basemaps:
     {"name":"Streets-light","url":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"},
     {"name":"Light Protomaps","url":"https://storage.googleapis.com/gisaia-public/protomaps/styles/light.json","image":"https://storage.googleapis.com/gisaia-public/protomaps/quicklooks/light.png", "type": "protomap"},
     {"name":"Dark Protomaps","url":"https://storage.googleapis.com/gisaia-public/protomaps/styles/dark.json","image":"https://storage.googleapis.com/gisaia-public/protomaps/quicklooks/dark.png", "type": "protomap"}
-
   ]
 tab_name: "ARLAS-wui-builder Dev"
 external_node_page: true
