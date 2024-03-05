@@ -697,14 +697,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
     super({
       geometryStep: new ConfigFormGroup({
         ...geometryFormControls,
-      }).withStepName(marker('Geometry'))
-        .withDependsOn(() => [this.geometryType])
-        .withOnDependencyChange(
-          configForm =>  {
-            if(this.geometryType.value === GEOMETRY_TYPE.circleHeat) {
-              configForm.get('aggregatedGeometry').setValue(AGGREGATE_GEOMETRY_TYPE.cell_center);
-            }
-          }),
+      }).withStepName(marker('Geometry')),
       styleStep: new ConfigFormGroup({
         ...styleFormControls,
         geometryType: new SelectFormControl(
