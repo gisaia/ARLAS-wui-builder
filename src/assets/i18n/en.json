@@ -416,7 +416,7 @@
 	"property label size description": "Setting the labels size in pixels:",
 	"size rotation offset": "Size, orientation & offset",
 	"property label rotation description": "Setting the labels rotation angle (degrees): \n • Orientation is clockwise. 0 does point to the east. 0° → ; 45° ↘",
-	"point": "",
+	"point": "point",
 	"line": "line",
 	"line-center": "line-center",
 	"label placement description": "• Placement of the label relative to its geometry. \n - point: The label is placed at the point where the geometry is located. \n - line : The label is placed along the line of the geometry. \n - line-center : The label is placed at the center of the line of the geometry.",
