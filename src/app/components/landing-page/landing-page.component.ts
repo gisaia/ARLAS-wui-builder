@@ -146,7 +146,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
           if (!!loginData) {
             this.isAuthenticated = true;
             this.orgs = loginData.user.organisations.map(org => {
-              org.displayName = org.name === loginData.user.id ? loginData.user.email.split('@')[0] : org.name;
+              org.display_name = org.name === loginData.user.id ? loginData.user.email.split('@')[0] : org.name;
               return org;
             });
             this.currentOrga = this.arlasIamService.getOrganisation();
