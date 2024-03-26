@@ -1,5 +1,13 @@
 # Change Log
 
+## [v25.0.0-beta.5](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.0.0-beta.5) (2024-03-26)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0-beta.4...v25.0.0-beta.5)
+
+**Fixed bugs:**
+
+- Le choix du placement d'un layer "label" n'affiche pas l'option "point" [\#902](https://github.com/gisaia/ARLAS-wui-builder/issues/902)
+
 ## [v25.0.0-beta.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.0.0-beta.4) (2024-03-01)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0-beta.3...v25.0.0-beta.4)
