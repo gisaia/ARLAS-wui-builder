@@ -125,7 +125,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   public checkUrl() {
     this.spinner.show('connectServer');
     const url = this.mainFormService.startingConfig.getFg().get('serverUrl').value;
-    this.urlSubscription = this.http.get(url + '/swagger.json').subscribe(
+    this.urlSubscription = this.http.get(url + '/openapi.json').subscribe(
       () => {
         this.landingPageService.getServerCollections(url).then(
           () => {
