@@ -10,7 +10,7 @@
        <mat-form-field appearance="outline">
         <mat-label>{{'organisation'}}</mat-label>
         <mat-select (selectionChange)="changeOrg($event)" [value]="currentOrga" >
-            <mat-option *ngFor="let org of orgs" value="{{org.name}}">{{org.display_name}}</mat-option>
+            <mat-option *ngFor="let org of orgs" value="{{org.name}}">{{org.displayName}}</mat-option>
         </mat-select>
        </mat-form-field>
     </div>
