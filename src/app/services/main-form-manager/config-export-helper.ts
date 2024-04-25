@@ -35,7 +35,7 @@ import { CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION } from '@map-config/services/ma
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
 import { MapComponentInputConfig, MapComponentInputMapLayersConfig, AnalyticComponentResultListInputConfig } from './models-config';
-import { getSourceName, ColorConfig, LayerSourceConfig } from 'arlas-web-contributors';
+import { getSourceName, ColorConfig, LayerSourceConfig, FieldsConfiguration } from 'arlas-web-contributors';
 import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
@@ -49,7 +49,7 @@ import {
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
-import { VisualisationSetConfig, BasemapStyle, SCROLLABLE_ARLAS_ID, ArlasColorService, FieldsConfiguration } from 'arlas-web-components';
+import { VisualisationSetConfig, BasemapStyle, SCROLLABLE_ARLAS_ID, ArlasColorService } from 'arlas-web-components';
 import { titleCase } from '@services/collection-service/tools';
 import { MapBasemapFormGroup, BasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
@@ -990,7 +990,8 @@ export class ConfigExportHelper {
           process: list.renderStep.gridStep.tooltipFieldProcess
         }],
         iconColorFieldName: list.renderStep.gridStep.colorIdentifier,
-        useHttpQuicklooks: list.renderStep.gridStep.useHttpQuicklooks
+        useHttpQuicklooks: list.renderStep.gridStep.useHttpQuicklooks,
+        useHttpThumbnails: list.renderStep.gridStep.useHttpThumbnails
       };
       if (list.renderStep.gridStep.thumbnailUrl) {
         fieldsConfig.urlThumbnailTemplate = list.renderStep.gridStep.thumbnailUrl;

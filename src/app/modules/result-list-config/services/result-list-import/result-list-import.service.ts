@@ -108,6 +108,10 @@ export class ResultListImportService {
         control: renderStep.gridStep.isDefaultMode
       },
       {
+        value: contributor.fieldsConfiguration.useHttpThumbnails,
+        control: renderStep.gridStep.useHttpThumbnails
+      },
+      {
         value: contributor.fieldsConfiguration.useHttpQuicklooks,
         control: renderStep.gridStep.useHttpQuicklooks
       },
