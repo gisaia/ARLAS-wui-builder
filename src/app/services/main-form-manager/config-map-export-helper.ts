@@ -38,8 +38,8 @@ import {
   Paint, PaintValue,
   SELECT_LAYER_PREFIX
 } from './models-map-config';
-import {InterpolatedProperty, ModesValues} from '@shared/interfaces/config-map.interfaces';
-import {CIRCLE_HEATMAP_RADIUS_GRANULARITY} from '@shared-models/circle-heat-map-radius-granularity';
+import { InterpolatedProperty, ModesValues } from '@shared/interfaces/config-map.interfaces';
+import { CIRCLE_HEATMAP_RADIUS_GRANULARITY } from '@shared-models/circle-heat-map-radius-granularity';
 export enum VISIBILITY {
   visible = 'visible',
   none = 'none'
@@ -175,8 +175,8 @@ export class ConfigMapExportHelper {
       delete metadata['hiddenProps'];
     }
 
-    if(modeValues.styleStep.geometryType === GEOMETRY_TYPE.circleHeat) {
-      metadata.hiddenProps = {geomType: GEOMETRY_TYPE.circleHeat};
+    if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.circleHeat) {
+      metadata.hiddenProps = { geomType: GEOMETRY_TYPE.circleHeat };
     }
 
 
@@ -251,7 +251,7 @@ export class ConfigMapExportHelper {
    */
   public static getLayerType(geometryType: GEOMETRY_TYPE): GEOMETRY_TYPE | string {
     /** we change the type of circle heat map  to keep the compatibility with mapbox **/
-    if(geometryType === GEOMETRY_TYPE.circleHeat){
+    if (geometryType === GEOMETRY_TYPE.circleHeat) {
       return GEOMETRY_TYPE.circle;
     }
 
@@ -502,12 +502,12 @@ export class ConfigMapExportHelper {
    */
   private static buildPropsValuesFromInterpolatedValues(interpolatedValues: InterpolatedProperty,
     mode: LAYER_MODE,
-    valuesToInsert?: (string | number)[]){
+    valuesToInsert?: (string | number)[]) {
     let interpolatedColor: Array<string | Array<string | number>>;
     const getField = () =>
       (interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'metric')
         ? interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
-            (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_' :
+        (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_' :
         interpolatedValues.propertyInterpolatedFieldCtrl;
 
     if (mode !== LAYER_MODE.features && interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'count') {
@@ -559,7 +559,7 @@ export class ConfigMapExportHelper {
           .propertyInterpolatedValuesCtrl[interpolatedValues.propertyInterpolatedValuesCtrl.length - 1]
           .proportion;
         // those values ([minValue, 0, maxValue, 8]) don't have a special meaning and made to guarantee the interpolation of the circle sort key
-        return <PaintValue> this.buildPropsValuesFromInterpolatedValues(interpolatedValues, mode, [minValue, 0, maxValue, 8]);
+        return <PaintValue>this.buildPropsValuesFromInterpolatedValues(interpolatedValues, mode, [minValue, 0, maxValue, 8]);
     }
   }
 
