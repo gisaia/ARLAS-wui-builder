@@ -1,5 +1,53 @@
 # Change Log
 
+## [v25.0.0-beta.10](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.0.0-beta.10) (2024-04-29)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0-beta.9...v25.0.0-beta.10)
+
+## [v25.0.0-beta.9](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.0.0-beta.9) (2024-04-02)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0-beta.8...v25.0.0-beta.9)
+
+## [v25.0.0-beta.8](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.0.0-beta.8) (2024-03-29)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0-beta.7...v25.0.0-beta.8)
+
+## [v25.0.0-beta.7](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.0.0-beta.7) (2024-03-26)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0-beta.6...v25.0.0-beta.7)
+
+## [v25.0.0-beta.6](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.0.0-beta.6) (2024-03-26)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0-beta.5...v25.0.0-beta.6)
+
+## [v25.0.0-beta.5](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.0.0-beta.5) (2024-03-26)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0-beta.4...v25.0.0-beta.5)
+
+**Fixed bugs:**
+
+- Le choix du placement d'un layer "label" n'affiche pas l'option "point" [\#902](https://github.com/gisaia/ARLAS-wui-builder/issues/902)
+
+## [v25.0.0-beta.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.0.0-beta.4) (2024-03-01)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0-beta.3...v25.0.0-beta.4)
+
+**Fixed bugs:**
+
+- Saving imported dahsboard fails [\#930](https://github.com/gisaia/ARLAS-wui-builder/issues/930)
+
+## [v25.0.0-beta.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.0.0-beta.3) (2024-02-21)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0-beta.2...v25.0.0-beta.3)
+
+## [v25.0.0-beta.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.0.0-beta.2) (2024-02-20)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0-beta.1...v25.0.0-beta.2)
+
+## [v25.0.0-beta.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.0.0-beta.1) (2024-02-15)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.3.0...v25.0.0-beta.1)
+
 ## [v24.3.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v24.3.0) (2023-12-20)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v24.3.0-rc.3...v24.3.0)

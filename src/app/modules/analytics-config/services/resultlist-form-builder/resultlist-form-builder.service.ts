@@ -160,6 +160,11 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
               marker('List default mode'),
               marker('List default mode description')
             ),
+            useHttpThumbnails: new SlideToggleFormControl(
+              false,
+              marker('Use http thumbnails'),
+              marker('Use http thumbnails description')
+            ),
             useHttpQuicklooks: new SlideToggleFormControl(
               false,
               marker('Use http quicklooks'),
@@ -340,6 +345,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
       cellBackgroundStyle: this.get('renderStep.cellBackgroundStyle') as SelectFormControl,
       gridStep: {
         isDefaultMode: this.get('renderStep.gridStep.isDefaultMode') as SlideToggleFormControl,
+        useHttpThumbnails: this.get('renderStep.gridStep.useHttpThumbnails') as SlideToggleFormControl,
         useHttpQuicklooks: this.get('renderStep.gridStep.useHttpQuicklooks') as SlideToggleFormControl,
         tileLabelField: this.get('renderStep.gridStep.tileLabelField') as SelectFormControl,
         tileLabelFieldProcess: this.get('renderStep.gridStep.tileLabelFieldProcess') as TextareaFormControl,

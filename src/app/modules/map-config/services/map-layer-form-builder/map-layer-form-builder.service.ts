@@ -696,7 +696,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   ) {
     super({
       geometryStep: new ConfigFormGroup({
-        ...geometryFormControls
+        ...geometryFormControls,
       }).withStepName(marker('Geometry')),
       styleStep: new ConfigFormGroup({
         ...styleFormControls,
@@ -1438,6 +1438,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
         GEOMETRY_TYPE.fill,
         GEOMETRY_TYPE.circle,
         GEOMETRY_TYPE.heatmap,
+        GEOMETRY_TYPE.circleHeat,
         GEOMETRY_TYPE.label
       ],
       propertySelectorFormBuilder,

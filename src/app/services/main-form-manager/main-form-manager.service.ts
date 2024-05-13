@@ -38,7 +38,7 @@ import { SearchImportService } from '@search-config/services/search-import/searc
 import { SearchInitService } from '@search-config/services/search-init/search-init.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { StartupService, ZONE_WUI_BUILDER } from '@services/startup/startup.service';
+import { StartupService, ZONE_PREVIEW, ZONE_WUI_BUILDER } from '@services/startup/startup.service';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { ConfigFormControl, ConfigFormGroup } from '@shared-models/config-form';
 import { TimelineImportService } from '@timeline-config/services/timeline-import/timeline-import.service';
@@ -55,6 +55,12 @@ import { importElements } from './tools';
 import { ArlasColorService } from 'arlas-web-components';
 
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
+import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
+import { Observable, catchError, map, of, tap } from 'rxjs';
+import { DataWithLinks } from 'arlas-persistence-api';
+import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -88,7 +94,8 @@ export class MainFormManagerService {
     private colorService: ArlasColorService,
     private router: Router,
     private arlasStartupService: ArlasStartupService,
-    private shortcutsService: ShortcutsService
+    private shortcutsService: ShortcutsService,
+    private spinner: NgxSpinnerService,
   ) { }
 
   /**
@@ -125,6 +132,7 @@ export class MainFormManagerService {
 
   private doExport(type: EXPORT_TYPE) {
     const startingConfig = this.mainFormService.startingConfig.getFg();
+    const resourcesConfig = this.mainFormService.resourcesConfig.getFg();
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
     const mapConfigLayers = this.mainFormService.mapConfig.getLayersFa();
     const mapConfigVisualisations = this.mainFormService.mapConfig.getVisualisationsFa();
@@ -139,6 +147,7 @@ export class MainFormManagerService {
     const externalNodeGlobal = this.mainFormService.externalNodeConfig.getExternalNodeFg();
     const generatedConfig = ConfigExportHelper.process(
       startingConfig,
+      resourcesConfig,
       mapConfigGlobal,
       mapConfigLayers,
       mapConfigVisualisations,
@@ -161,54 +170,26 @@ export class MainFormManagerService {
       generatedMapConfig.layers
     )));
     this.arlasStartupService.validateConfiguration(confToValidate);
-
     if (this.persistenceService.isAvailable && type === EXPORT_TYPE.persistence) {
-
-
       // remove extraConfigs property if persistence is used
       delete generatedConfig.extraConfigs;
       // transform sets to arrays in order to be stringified
       generatedConfig.arlas.web.components.mapgl.input.visualisations_sets.forEach(vs => vs.layers = Array.from(vs.layers));
-      const conf: any = JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
-        generatedMapConfig.layers
-      )).replace('"externalEventLayers":[]', '"externalEventLayers":' + JSON.stringify(
-        generatedMapConfig.externalEventLayers
-      ));
       if (this.mainFormService.configurationId) {
         // Update existing
-        this.persistenceService.get(this.mainFormService.configurationId).subscribe(data => {
-          this.persistenceService.update(
-            this.mainFormService.configurationId,
-            conf,
-            new Date(data.last_update_date).getTime(), this.mainFormService.configurationName, data.doc_readers, data.doc_writers
-          ).subscribe({
-            next: () => {
-              ['i18n', 'tour'].forEach(zone => ['fr', 'en']
-                .forEach(lg => this.renameLinkedData(zone, data.doc_key, this.mainFormService.configurationName, lg)));
-
-              this.updatePreview(
-                this.mainFormService.configurationId,
-                this.mainFormService.configurationName.concat('_preview'));
-
-              this.snackbar.open(
-                this.translate.instant('Dashboard updated !') + ' (' + this.mainFormService.configurationName + ')'
-              );
-            },
-            error: (error) => {
-              this.snackbar.open(this.translate.instant('Error : Dashboard not updated'));
-              this.raiseError(error);
-            }
-          });
-        });
+        this.spinner.show('saveconfig');
+        this.updateDashboard(generatedConfig, generatedMapConfig, resourcesConfig);
       } else {
         // Create new config
         if (!!this.mainFormService.configurationName) {
-          this.createDashboard(this.mainFormService.configurationName, conf, generatedConfig, generatedMapConfig);
+          this.spinner.show('saveconfig');
+          this.createDashboard(this.mainFormService.configurationName, generatedConfig, generatedMapConfig);
         } else {
           const dialogRef = this.dialog.open(InputModalComponent);
           dialogRef.afterClosed().subscribe(configName => {
             if (!!configName) {
-              this.createDashboard(configName, conf, generatedConfig, generatedMapConfig);
+              this.spinner.show('saveconfig');
+              this.createDashboard(configName, generatedConfig, generatedMapConfig);
             }
           });
         }
@@ -221,6 +202,7 @@ export class MainFormManagerService {
 
   public doImport(config: Config, mapConfig: MapConfig) {
     const startingConfigControls = this.mainFormService.startingConfig.getFg().customControls;
+    const resourcesConfigControls = this.mainFormService.resourcesConfig.getFg().customControls;
     importElements([
       {
         value: config.arlas.server.url,
@@ -241,6 +223,10 @@ export class MainFormManagerService {
       {
         value: config['arlas-wui'].web.app.name_background_color,
         control: startingConfigControls.unmanagedFields.appNameBackgroundColor
+      },
+      {
+        value: config?.resources?.previewId,
+        control: resourcesConfigControls.resources.previewId
       }
     ]);
 
@@ -272,36 +258,49 @@ export class MainFormManagerService {
     this.updateControlsFromOtherControls(this.mainFormService.mainForm);
   }
 
+  /**
+   * The preview should be created if the a preview image has been captured by the user but no identifier has yet been created.
+   * @param startForm The form where the preview image is stored
+   * @returns Whether we should create the preview in persistence or not
+   */
+  private shouldCreatePreview(startForm: ResourcesConfigFormGroup) {
+    const hasPreviewImage = startForm.hasPreviewImage();
+    const hasPreviewId = startForm.hasPreviewId();
+    return hasPreviewImage && !hasPreviewId;
+  }
 
-  public updatePreview(configId: string, previewName: string) {
-    this.persistenceService.existByZoneKey('preview', previewName).subscribe(
-      exist => {
-        if (exist.exists) {
-          this.persistenceService.getByZoneKey('preview', previewName).subscribe({
-            next: (data) => {
-              this.persistenceService.get(configId).subscribe({
-                next: (currentConfig) => {
-                  let previewReaders = [];
-                  let previewWriters = [];
-                  if (currentConfig.doc_readers) {
-                    previewReaders = currentConfig.doc_readers.map(reader => reader.replace('config.json', 'preview'));
-                  }
-                  if (currentConfig.doc_writers) {
-                    previewWriters = currentConfig.doc_writers.map(writer => writer.replace('config.json', 'preview'));
-                  }
-                  this.persistenceService.update(data.id, data.doc_value, new Date(data.last_update_date).getTime(), previewName,
-                    previewReaders, previewWriters);
-                },
-                error: (e) => {
-                  this.snackbar.open(
-                    this.translate.instant('Cannot update the preview')
-                  );
-                }
-              });
-            }
-          });
+  private stringifyGeneratedConfig(generatedConfig: Config, generatedMapConfig: MapConfig): string {
+    return JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
+      generatedMapConfig.layers
+    )).replace('"externalEventLayers":[]', '"externalEventLayers":' + JSON.stringify(
+      generatedMapConfig.externalEventLayers
+    ));
+  }
+
+  private updateDashboard(generatedConfig: Config, generatedMapConfig: MapConfig, resourcesConfig: ResourcesConfigFormGroup) {
+    this.persistenceService.get(this.mainFormService.configurationId).subscribe(data => {
+      this.persistenceService.update(
+        this.mainFormService.configurationId,
+        this.stringifyGeneratedConfig(generatedConfig, generatedMapConfig),
+        new Date(data.last_update_date).getTime(), this.mainFormService.configurationName, data.doc_readers, data.doc_writers
+      ).subscribe({
+        next: () => {
+          if (resourcesConfig.hasPreviewId()) {
+            const previewGroups = this.persistenceService.dashboardToResourcesGroups(data.doc_readers, data.doc_writers);
+            this.persistenceService.updateResource(generatedConfig.resources.previewId, previewGroups.readers, previewGroups.writers);
+          }
+          this.spinner.hide('saveconfig');
+          this.snackbar.open(
+            this.translate.instant('Dashboard updated !') + ' (' + this.mainFormService.configurationName + ')'
+          );
+        },
+        error: (error) => {
+          this.spinner.hide('saveconfig');
+          this.snackbar.open(this.translate.instant('Error : Dashboard not updated'));
+          this.raiseError(error);
         }
       });
+    });
   }
 
   private saveJson(json: any, filename: string, separator?: string) {
@@ -370,36 +369,51 @@ export class MainFormManagerService {
       });
     }
   }
-  private createDashboard(configName, conf, generatedConfig, generatedMapConfig) {
-    this.persistenceService.create(
-      ZONE_WUI_BUILDER,
-      configName,
-      conf
-    ).subscribe(
-      (data) => {
-        this.snackbar.open(
-          this.translate.instant('Dashboard saved !') + ' (' + configName + ')'
-        );
-        this.doImport(generatedConfig, generatedMapConfig);
-        this.mainFormService.configurationId = data.id;
-        this.mainFormService.configChange.next({ id: data.id, name: data.doc_key });
-        this.router.navigate(['map-config'], { queryParamsHandling: 'preserve' });
-      },
-      (error) => {
-        this.snackbar.open(this.translate.instant('Error : Dashboard not saved'));
-        this.raiseError(error);
-      }
-    );
+  private createDashboard(configName, generatedConfig, generatedMapConfig) {
+    this.createPreview$(configName, generatedConfig)
+      .pipe(
+        tap((g: Config) => {
+          const conf = this.stringifyGeneratedConfig(g, generatedMapConfig);
+          this.persistenceService.create(
+            ZONE_WUI_BUILDER,
+            configName,
+            conf
+          ).subscribe({
+            next: (data) => {
+              this.snackbar.open(
+                this.translate.instant('Dashboard saved !') + ' (' + configName + ')'
+              );
+              this.spinner.hide('saveconfig');
+              this.doImport(generatedConfig, generatedMapConfig);
+              this.mainFormService.configurationId = data.id;
+              this.mainFormService.configChange.next({ id: data.id, name: data.doc_key });
+              this.router.navigate(['map-config'], { queryParamsHandling: 'preserve' });
+            },
+            error: (error) => {
+              this.spinner.hide('saveconfig');
+              this.snackbar.open(this.translate.instant('Error : Dashboard not saved'));
+              this.raiseError(error);
+            }
+          }
+          );
+        })
+      ).subscribe();
   }
 
-  private renameLinkedData(zone: string, key: string, newName: string, lg: string) {
-    this.persistenceService.existByZoneKey(zone, key.concat('_').concat(lg)).subscribe(
-      exist => {
-        if (exist.exists) {
-          this.persistenceService.getByZoneKey(zone, key.concat('_').concat(lg))
-            .subscribe(i => this.persistenceService.rename(i.id, newName.concat('_').concat(lg)).subscribe(d => { }));
-        }
-      }
-    );
+  /** Creates the preview associated to the dashbord if the user has already created one
+   * @returns The config object enriched with the preview id.
+   */
+  private createPreview$(name: string, generatedConfig: Config): Observable<Config> {
+    const resourcesConfig = this.mainFormService.resourcesConfig.getFg();
+    if (this.shouldCreatePreview(resourcesConfig)) {
+      const img = resourcesConfig.customControls.resources.previewValue.value;
+      return this.persistenceService.create(ZONE_PREVIEW, name.concat('_preview'), img)
+        .pipe(tap((p: DataWithLinks) => resourcesConfig.customControls.resources.previewId.setValue(p.id)))
+        .pipe(tap((p: DataWithLinks) => generatedConfig.resources.previewId = p.id))
+        .pipe(map((p: DataWithLinks) => generatedConfig))
+        .pipe(catchError((err) => of(generatedConfig)));
+    } else {
+      return of(generatedConfig);
+    }
   }
 }

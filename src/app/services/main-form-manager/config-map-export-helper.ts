@@ -35,13 +35,16 @@ import {
   Layer,
   Layout,
   MapConfig,
-  Paint,
+  Paint, PaintValue,
   SELECT_LAYER_PREFIX
 } from './models-map-config';
+import { InterpolatedProperty, ModesValues } from '@shared/interfaces/config-map.interfaces';
+import { CIRCLE_HEATMAP_RADIUS_GRANULARITY } from '@shared-models/circle-heat-map-radius-granularity';
 export enum VISIBILITY {
   visible = 'visible',
   none = 'none'
 }
+
 export const NORMALIZED = 'normalized';
 export class ConfigMapExportHelper {
 
@@ -166,6 +169,17 @@ export class ConfigMapExportHelper {
       collection,
       collectionDisplayName
     };
+
+    // with this prop we ll be able to restore the good geomType when we ll reload the layer;
+    if (metadata.hasOwnProperty('hiddenProps')) {
+      delete metadata['hiddenProps'];
+    }
+
+    if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.circleHeat) {
+      metadata.hiddenProps = { geomType: GEOMETRY_TYPE.circleHeat };
+    }
+
+
     if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.fill.toString()) {
       const fillStroke: FillStroke = {
         color: this.getMapProperty(modeValues.styleStep.strokeColorFg, mode, colorService, taggableFields),
@@ -189,7 +203,7 @@ export class ConfigMapExportHelper {
     const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
     const layer: Layer = {
       id: layerFg.value.arlasId,
-      type: modeValues.styleStep.geometryType === 'label' ? 'symbol' : modeValues.styleStep.geometryType,
+      type: this.getLayerType(modeValues.styleStep.geometryType),
       source: layerSource.source,
       minzoom: modeValues.visibilityStep.zoomMin,
       maxzoom: modeValues.visibilityStep.zoomMax,
@@ -229,6 +243,19 @@ export class ConfigMapExportHelper {
     /** This filter is added to layers to avoid metrics having 'Infinity' as a value */
     layer.filter = layer.filter.concat([this.getLayerFilters(modeValues, mode, taggableFields)]);
     return layer;
+  }
+
+  /**
+   * set the correct layer type before we save it.
+   * @param geometryType
+   */
+  public static getLayerType(geometryType: GEOMETRY_TYPE): GEOMETRY_TYPE | string {
+    /** we change the type of circle heat map  to keep the compatibility with mapbox **/
+    if (geometryType === GEOMETRY_TYPE.circleHeat) {
+      return GEOMETRY_TYPE.circle;
+    }
+
+    return geometryType === 'label' ? 'symbol' : geometryType;
   }
 
   public static getLayerPaint(modeValues, mode, colorService: ArlasColorService, taggableFields?: Set<string>) {
@@ -281,6 +308,15 @@ export class ConfigMapExportHelper {
 
         break;
       }
+      case GEOMETRY_TYPE.circleHeat: {
+        paint['circle-stroke-opacity'] = 0;
+        paint['circle-stroke-color'] = color;
+        paint['circle-opacity'] = opacity;
+        paint['circle-color'] = color;
+        paint['circle-radius'] = this.getRadPropFromGranularity(modeValues as ModesValues);
+        paint['circle-blur'] = 1;
+        break;
+      }
     }
     return paint;
   }
@@ -302,6 +338,10 @@ export class ConfigMapExportHelper {
         layout['text-allow-overlap'] = modeValues.styleStep.labelOverlapFg;
         layout['text-anchor'] = modeValues.styleStep.labelAlignmentCtrl;
         layout['symbol-placement'] = modeValues.styleStep.labelPlacementCtrl;
+        break;
+      }
+      case GEOMETRY_TYPE.circleHeat: {
+        layout['circle-sort-key'] = this.getCircleHeatMapSortKey(modeValues.styleStep.colorFg, mode);
         break;
       }
     }
@@ -429,41 +469,9 @@ export class ConfigMapExportHelper {
       }
       case PROPERTY_SELECTOR_SOURCE.interpolated: {
         const interpolatedValues = fgValues.propertyInterpolatedFg;
-        let interpolatedColor: Array<string | Array<string | number>>;
-        const getField = () =>
-          (interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'metric')
-            ? interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
-            (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_' :
-            interpolatedValues.propertyInterpolatedFieldCtrl;
-
-        if (mode !== LAYER_MODE.features && interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'count') {
-          // for types FEATURE-METRIC and CLUSTER, if we interpolate by count
-          interpolatedColor = [
-            'interpolate',
-            ['linear'],
-            ['get', 'count' + (!!interpolatedValues.propertyInterpolatedCountNormalizeCtrl ? `_:${NORMALIZED}` : '')]
-          ];
-        } else if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
-          // otherwise if we normalize
-          interpolatedColor = [
-            'interpolate',
-            ['linear'],
-            this.getArray(
-              getField()
-                .concat(':' + NORMALIZED)
-                .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
-                  ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl : ''))
-          ];
-        } else {
-          // if we don't normalize
-          interpolatedColor = [
-            'interpolate',
-            ['linear'],
-            this.getArray(getField())
-          ];
-        }
-        return interpolatedColor.concat((interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
-          .flatMap(pc => [pc.proportion, pc.value]));
+        const values = (interpolatedValues.propertyInterpolatedValuesCtrl as Array<ProportionedValues>)
+          .flatMap(pc => [pc.proportion, pc.value]);
+        return this.buildPropsValuesFromInterpolatedValues(interpolatedValues, mode, values);
       }
       case PROPERTY_SELECTOR_SOURCE.heatmap_density: {
         const interpolatedValues = fgValues.propertyInterpolatedFg;
@@ -483,6 +491,95 @@ export class ConfigMapExportHelper {
       }
     }
   }
+
+  /**
+   * Build the correct array from interpolated values to obtain an array that respects the MapBox expression format
+   * https://docs.mapbox.com/style-spec/reference/expressions/
+   * @param interpolatedValues interpolated properties that determine the type of array we build ( count, normalize )
+   * @param mode
+   * @param valuesToInsert the value to insert at the end of the array
+   * @private
+   */
+  private static buildPropsValuesFromInterpolatedValues(interpolatedValues: InterpolatedProperty,
+    mode: LAYER_MODE,
+    valuesToInsert?: (string | number)[]) {
+    let interpolatedColor: Array<string | Array<string | number>>;
+    const getField = () =>
+      (interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'metric')
+        ? interpolatedValues.propertyInterpolatedFieldCtrl + '_' +
+        (interpolatedValues.propertyInterpolatedMetricCtrl as string).toLowerCase() + '_' :
+        interpolatedValues.propertyInterpolatedFieldCtrl;
+
+    if (mode !== LAYER_MODE.features && interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'count') {
+      // for types FEATURE-METRIC and CLUSTER, if we interpolate by count
+      interpolatedColor = [
+        'interpolate',
+        ['linear'],
+        ['get', 'count' + (!!interpolatedValues.propertyInterpolatedCountNormalizeCtrl ? `_:${NORMALIZED}` : '')]
+      ];
+    } else if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
+      // otherwise if we normalize
+      interpolatedColor = [
+        'interpolate',
+        ['linear'],
+        this.getArray(
+          getField()
+            .concat(':' + NORMALIZED)
+            .concat(interpolatedValues.propertyInterpolatedNormalizeByKeyCtrl ?
+              ':' + interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl : ''))
+      ];
+    } else {
+      // if we don't normalize
+      interpolatedColor = [
+        'interpolate',
+        ['linear'],
+        this.getArray(getField())
+      ];
+    }
+
+    if (valuesToInsert) {
+      return interpolatedColor.concat(valuesToInsert);
+    }
+
+    return interpolatedColor;
+  }
+
+  /**
+   *  Method used to construct the key props.
+   *  based on color props.
+   */
+  public static getCircleHeatMapSortKey(fgValues: any, mode: LAYER_MODE): PaintValue {
+    switch (fgValues.propertySource) {
+      case PROPERTY_SELECTOR_SOURCE.fix_color:
+        return 1;
+      case PROPERTY_SELECTOR_SOURCE.interpolated:
+        const interpolatedValues = fgValues.propertyInterpolatedFg as InterpolatedProperty;
+        const minValue = interpolatedValues.propertyInterpolatedValuesCtrl[0].proportion;
+        const maxValue = interpolatedValues
+          .propertyInterpolatedValuesCtrl[interpolatedValues.propertyInterpolatedValuesCtrl.length - 1]
+          .proportion;
+        // those values ([minValue, 0, maxValue, 8]) don't have a special meaning and made to guarantee the interpolation of the circle sort key
+        return <PaintValue>this.buildPropsValuesFromInterpolatedValues(interpolatedValues, mode, [minValue, 0, maxValue, 8]);
+    }
+  }
+
+  /**
+   *  set default Radius according to granularity. WARNING : only for circle-heatMap
+   */
+  public static getRadPropFromGranularity(modeValues: ModesValues): PaintValue {
+    const granularity = modeValues.geometryStep.granularity?.toLowerCase();
+    const aggType = modeValues.geometryStep.aggType?.toLowerCase();
+    const radiusSteps = CIRCLE_HEATMAP_RADIUS_GRANULARITY[aggType][granularity] || [];
+    return [
+      'interpolate',
+      [
+        'linear'
+      ],
+      ['zoom'],
+      ...radiusSteps
+    ];
+  }
+
 
   public static getFieldPath(field: string, taggableFields: Set<string>): string {
     return (taggableFields && taggableFields.has(field)) ? field + '.0' : field;
@@ -557,4 +654,5 @@ export class ConfigMapExportHelper {
       return value as number + nbPixel;
     }
   }
+
 }

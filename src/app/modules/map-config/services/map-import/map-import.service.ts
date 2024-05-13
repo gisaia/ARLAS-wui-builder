@@ -242,7 +242,9 @@ export class MapImportService {
 
     } else {
       propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.interpolated;
-      const getValue = (inputValues[2] as Array<string>)[1];
+      const interpolatedColumn = (inputValues[2] as Array<string>);
+      // cause interpolated column could contain only one value, ex: [zoom]
+      const getValue = (interpolatedColumn.length > 1) ?  interpolatedColumn[1] : interpolatedColumn[0];
       if (getValue.startsWith('count')) {
         propertySelectorValues.propertyInterpolatedFg = {
           propertyInterpolatedCountOrMetricCtrl: COUNT_OR_METRIC.COUNT,
@@ -305,7 +307,7 @@ export class MapImportService {
       }
     }
     const min = inputValues[4];
-    const max = inputValues.pop();
+    const max = inputValues[inputValues.length - 1];
     propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMinValueCtrl = min === 0 ? '0' : min;
     propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedMaxValueCtrl = max === 0 ? '0' : max;
   }
@@ -536,6 +538,7 @@ export class MapImportService {
     (manualValues || []).forEach(kc =>
       typeFg.colorFg.addToColorManualValuesCtrl(kc));
 
+
     return layerFg;
   }
 
@@ -550,7 +553,6 @@ export class MapImportService {
     values.visibilityStep.featuresMax = layerSource.maxfeatures;
     values.styleStep.geometryType = layer.type === 'symbol' ? 'label' : layer.type;
     values.styleStep.filter = layer.filter;
-
   }
 
   public static importLayerFeaturesMetric(
@@ -597,9 +599,13 @@ export class MapImportService {
     values.geometryStep.rawGeometry = isGeometryTypeRaw ? layerSource.raw_geometry.geometry : null;
     values.geometryStep.clusterSort = isGeometryTypeRaw ? layerSource.raw_geometry.sort : null;
     values.visibilityStep.featuresMin = layerSource.minfeatures;
-    values.styleStep.geometryType = layer.type === 'symbol' ? 'label' : layer.type;
+    // to display the correct geom type when editing a circle-heat layer
+    if(layer.metadata.hiddenProps && layer.metadata.hiddenProps.geomType === GEOMETRY_TYPE.circleHeat) {
+      values.styleStep.geometryType = GEOMETRY_TYPE.circleHeat;
+    } else {
+      values.styleStep.geometryType = layer.type === 'symbol' ? 'label' : layer.type;
+    }
     values.styleStep.filter = layer.filter;
-
   }
 
   public doImport(config: Config, mapConfig: MapConfig) {
@@ -674,6 +680,10 @@ export class MapImportService {
       this.mainFormService.mapConfig.getBasemapsFg()
         .customControls.basemaps.push(new BasemapFormGroup(basemap.name, basemap.styleFile, basemap.image, basemap.type));
     });
+    if (basemaps.length === 0 && !!defaultBasemap) {
+      this.mainFormService.mapConfig.getBasemapsFg().customControls
+        .basemaps.push(new BasemapFormGroup(defaultBasemap.name, defaultBasemap.styleFile, defaultBasemap.image, defaultBasemap.type));
+    }
 
     this.importBasemap(defaultBasemap);
   }

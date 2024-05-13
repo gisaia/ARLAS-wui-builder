@@ -1,6 +1,7 @@
 import { Layer } from './models-map-config';
 import { BasemapStyle } from 'arlas-web-components';
-import { VisualisationSetConfig, FieldsConfiguration } from 'arlas-web-components';
+import { VisualisationSetConfig } from 'arlas-web-components';
+import { FieldsConfiguration } from 'arlas-web-contributors';
 
 /*
 Licensed to Gisaïa under one or more contributor
@@ -43,6 +44,9 @@ export interface Config {
         name_background_color: string;
       };
     };
+  };
+  resources: {
+    previewId?: string;
   };
   extraConfigs?: Array<ArlasExtraConfig>;
 }

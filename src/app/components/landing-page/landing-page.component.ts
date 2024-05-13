@@ -39,6 +39,7 @@ import { Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { LandingPageDialogComponent } from './landing-page-dialog.component';
 import { InitialChoice, LandingPageService } from '@services/landing-page/landing-page.service';
+import { ResourcesConfigFormBuilderService } from '@services/resources-form-builder/resources-config-form-builder.service';
 
 export interface Configuration {
   name: string;
@@ -80,6 +81,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     public persistenceService: PersistenceService,
     public mainFormService: MainFormService,
     private startingConfigFormBuilder: StartingConfigFormBuilderService,
+    private resourcesConfigFormBuilder: ResourcesConfigFormBuilderService,
     private arlasAuthentService: ArlasAuthentificationService,
     private dialog: MatDialog,
     private authService: AuthentificationService,
@@ -110,8 +112,11 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
       this.mainFormService.configChange.next({ id: undefined, name: undefined });
     }
 
-    this.mainFormService.startingConfig.init(
+    this.mainFormService.startingConfig?.init(
       this.startingConfigFormBuilder.build()
+    );
+    this.mainFormService.resourcesConfig?.init(
+      this.resourcesConfigFormBuilder.build()
     );
     if (this.activatedRoute.snapshot.paramMap.has('id')) {
       this.confId = this.activatedRoute.snapshot.paramMap.get('id');
@@ -206,7 +211,8 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     actions.push({
       config,
       configIdParam: 'config_id',
-      type: ConfigActionEnum.VIEW
+      type: ConfigActionEnum.VIEW,
+      enabled: data.updatable
     });
     actions.push({
       config,
@@ -222,7 +228,9 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     actions.push({
       config,
       type: ConfigActionEnum.DUPLICATE,
-      name: data.doc_key
+      name: data.doc_key,
+      enabled: data.updatable
+
     });
     actions.push({
       config,
@@ -290,7 +298,9 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public loadConfig(id: string) {
-    this.persistenceService.get(id).subscribe(data => {
+    this.persistenceService.get(id).subscribe((data: DataWithLinks) => {
+      this.mainFormService.configurationName = data.doc_key;
+      this.mainFormService.configurationId = id;
       const configJson = JSON.parse(data.doc_value) as Config;
       if (configJson.arlas !== undefined) {
         const configMapJson = configJson.arlas.web.components.mapgl.input.mapLayers as MapConfig;
@@ -299,8 +309,6 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
         this.configChoice = InitialChoice.setup;
         this.openChoice(this.configChoice);
       }
-      this.mainFormService.configurationName = data.doc_key;
-      this.mainFormService.configurationId = id;
     });
   }
   public getUserInfos() {

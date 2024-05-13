@@ -29,8 +29,9 @@ import { StartupService, ZONE_PREVIEW } from '@services/startup/startup.service'
 import { ArlasColorService, MapglComponent } from 'arlas-web-components';
 import { MapContributor } from 'arlas-web-contributors';
 import { ArlasCollaborativesearchService, ArlasConfigService, ContributorBuilder, PersistenceService } from 'arlas-wui-toolkit';
-import { merge, Subscription } from 'rxjs';
+import { catchError, map, merge, mergeMap, Observable, of, Subscription, tap, throwError } from 'rxjs';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
+import { DataWithLinks } from 'arlas-persistence-api';
 
 export interface MapglComponentInput {
   mapglContributors: MapContributor[];
@@ -54,7 +55,6 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   public mapLegendUpdater;
   public mapVisibilityUpdater;
   public mainMapContributor;
-  public configId;
 
   public constructor(
     protected mainFormService: MainFormService,
@@ -70,7 +70,6 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     private settingsService: ArlasSettingsService,
     @Inject(MAT_DIALOG_DATA) public dataMap: MapglComponentInput
   ) {
-    this.configId = this.mainFormService.configurationId;
     if (this.dataMap.mapglContributors !== undefined || this.dataMap.mapComponentConfig !== undefined) {
       this.mapglContributors = dataMap.mapglContributors;
       this.mapComponentConfig = dataMap.mapComponentConfig.input;
@@ -186,71 +185,60 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       context.drawImage(mapCanvas, 0, 0);
       img = rescaledCanvas.toDataURL('image/png');
     }
+    const jsonifiedImg = JSON.stringify({img});
     this.mapglComponent.map.resize();
-    if (!!this.mainFormService.configurationName) {
-      const name = this.mainFormService.configurationName.concat('_preview');
-      this.persistenceService.existByZoneKey('preview', name).subscribe(
-        exist => {
-          this.persistenceService.get(this.configId).subscribe({
-            next: (currentConfig) => {
-              let previewReaders = [];
-              let previewWriters = [];
-              if (currentConfig.doc_readers) {
-                previewReaders = currentConfig.doc_readers.map(reader => reader.replace('config.json', 'preview'));
-              }
-              if (currentConfig.doc_writers) {
-                previewWriters = currentConfig.doc_writers.map(writer => writer.replace('config.json', 'preview'));
-              }
-              if (exist.exists) {
-                this.persistenceService.getByZoneKey('preview', name).subscribe({
-                  next: (data) => {
-                    this.persistenceService.update(data.id, img, new Date(data.last_update_date).getTime(), name,
-                      previewReaders, previewWriters);
-                    this.snackbar.open(
-                      this.translate.instant('Preview updated !')
-                    );
-                  },
-                  error: (e) => {
-                    this.snackbar.open(
-                      this.translate.instant('Cannot update the preview')
-                    );
-                  }
-                });
-              } else {
-                this.persistenceService.create(
-                  ZONE_PREVIEW,
-                  name,
-                  img,
-                  previewReaders,
-                  previewWriters
-                ).subscribe({
-                  next: () => {
-                    this.snackbar.open(
-                      this.translate.instant('Preview saved !')
-                    );
-                  },
-                  error: (e) => {
-                    this.snackbar.open(
-                      this.translate.instant('Cannot create the preview')
-                    );
-                  }
-                });
-              }
-            },
-            error: (e) => {
-              this.snackbar.open(
-                this.translate.instant('Cannot fetch current config')
-              );
-            }
-          });
-
-
-        }
-      );
+    const resourcesConfig = this.mainFormService.resourcesConfig.getFg();
+    const previewId = resourcesConfig.customControls.resources.previewId.value;
+    if (!!this.mainFormService.configurationId) {
+      this.persistenceService.get(this.mainFormService.configurationId).pipe(
+        map((currentConfig: DataWithLinks) => {
+          const name = this.mainFormService.configurationName.concat('_preview');
+          const pGroups = this.persistenceService.dashboardToResourcesGroups(currentConfig.doc_readers, currentConfig.doc_writers);
+          return this.previewExists$(previewId)
+            .pipe(
+              map(exists => this.createOrUpdatePreview$(exists, previewId, jsonifiedImg, name, pGroups.readers, pGroups.writers)))
+            .subscribe({
+              complete: () => this.snackbar.open(this.translate.instant('Preview saved !'))
+            });
+        })
+      ).subscribe();
     } else {
+      resourcesConfig.customControls.resources.previewValue.setValue(jsonifiedImg);
       this.snackbar.open(
-        this.translate.instant('Cannot save Preview: You need to save the dashboard first')
+        this.translate.instant('Preview saved temporarily. Save the dashboard to validate the preview too.')
       );
     }
   }
+
+  private previewExists$(previewId): Observable<boolean> {
+    if (!previewId || previewId === '') {
+      return of(false);
+    } else {
+      return this.persistenceService.exists(previewId).pipe(map(r => r.exists));
+    }
+  }
+
+  private createOrUpdatePreview$(previewExists: boolean, previewId: string, img, name: string, previewReaders?, previewWriters?) {
+    const resourcesConfig = this.mainFormService.resourcesConfig.getFg();
+    resourcesConfig.customControls.resources.previewValue.setValue(img);
+    if (previewExists) {
+      this.persistenceService.updateResource(previewId, previewReaders, previewWriters, img);
+      resourcesConfig.customControls.resources.previewId.setValue(previewId);
+    } else {
+      this.persistenceService.create(ZONE_PREVIEW, name, img, previewReaders, previewWriters)
+        .pipe(map((p: DataWithLinks) => {
+          resourcesConfig.customControls.resources.previewId.setValue(p.id);
+          return p;
+        }))
+        .pipe(catchError((err) => this.catchPreviewError(err, 'Cannot update the preview'))).subscribe();
+    }
+  }
+
+  private catchPreviewError(err, msg) {
+    this.snackbar.open(
+      this.translate.instant(msg)
+    );
+    return throwError(() => new Error(err));
+  }
+
 }

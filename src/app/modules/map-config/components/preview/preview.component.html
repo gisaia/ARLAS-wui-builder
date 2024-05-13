@@ -11,8 +11,8 @@
   (visualisations)="changeVisualisation($event)" (onAoiChanged)="onChangeAoi($event)" (onMove)="onMove($event)">
 </arlas-mapgl>
 
-<button class="preview" mat-raised-button [disabled]="!configId" (click)="savePreview()"
-  [matTooltip]="(configId ? 'Use the map view as a dashboard preview on the ARLAS Hub' : 'You need to save your dashbord first in order to save a map preview.') | translate" matTooltipPosition="below">
+<button class="preview" mat-raised-button (click)="savePreview()"
+  [matTooltip]="'Use the map view as a dashboard preview on the ARLAS Hub' | translate" matTooltipPosition="below">
   {{'Save preview' | translate}}
 </button>
 

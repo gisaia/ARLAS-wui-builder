@@ -35,7 +35,7 @@ import { CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION } from '@map-config/services/ma
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
 import { MapComponentInputConfig, MapComponentInputMapLayersConfig, AnalyticComponentResultListInputConfig } from './models-config';
-import { getSourceName, ColorConfig, LayerSourceConfig } from 'arlas-web-contributors';
+import { getSourceName, ColorConfig, LayerSourceConfig, FieldsConfiguration } from 'arlas-web-contributors';
 import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
@@ -49,7 +49,7 @@ import {
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
-import { VisualisationSetConfig, BasemapStyle, SCROLLABLE_ARLAS_ID, ArlasColorService, FieldsConfiguration } from 'arlas-web-components';
+import { VisualisationSetConfig, BasemapStyle, SCROLLABLE_ARLAS_ID, ArlasColorService } from 'arlas-web-components';
 import { titleCase } from '@services/collection-service/tools';
 import { MapBasemapFormGroup, BasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
@@ -59,6 +59,7 @@ import { ARLAS_ID } from '@services/main-form/main-form.service';
 import { hashCode, stringifyArlasFilter } from './tools';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { DescribedUrl } from 'arlas-web-components/lib/components/results/utils/results.utils';
+import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
 
 export enum EXPORT_TYPE {
   json = 'json',
@@ -130,6 +131,7 @@ export class ConfigExportHelper {
   }
   public static process(
     startingConfig: StartingConfigFormGroup,
+    resourcesConfig: ResourcesConfigFormGroup,
     mapConfigGlobal: MapGlobalFormGroup,
     mapConfigLayers: FormArray,
     mapConfigVisualisations: FormArray,
@@ -144,7 +146,7 @@ export class ConfigExportHelper {
     colorService: ArlasColorService,
     collectionService: CollectionService,
     shortcutsService: ShortcutsService
-  ): any {
+  ): Config {
     const chipssearch: ChipSearchConfig = {
       name: searchConfigGlobal.customControls.name.value,
       icon: searchConfigGlobal.customControls.unmanagedFields.icon.value
@@ -203,7 +205,8 @@ export class ConfigExportHelper {
           replacedAttribute: 'arlas.web.components.mapgl.input.mapLayers.externalEventLayers',
           replacer: 'external-event-layers'
         }
-      ]
+      ],
+      resources: {}
     };
     let mainCollection;
     const collectionFormControl = startingConfig.customControls.collection;
@@ -271,8 +274,15 @@ export class ConfigExportHelper {
     }
 
     this.exportSideModulesConfig(config, sideModulesGlobal);
-
+    this.exportPreview(config, resourcesConfig);
     return config;
+  }
+
+
+  private static exportPreview(config: Config, resourcesForm: ResourcesConfigFormGroup) {
+    if (resourcesForm.hasPreviewId()) {
+      config.resources.previewId = resourcesForm.customControls.resources.previewId.value;
+    }
   }
 
   public static getLayerSourceConfig(layerFg: FormGroup): LayerSourceConfig {
@@ -946,9 +956,14 @@ export class ConfigExportHelper {
         });
         contrib.includeMetadata = [];
         const metadatas = new Set<string>();
+        /** TODO :Grid steps contains, booleans, urls...; we need to filter those controls properly */
         Object.keys(widgetData.renderStep.gridStep).forEach(v => {
           if (!!widgetData.renderStep.gridStep[v] && v !== 'isDefaultMode') {
-            metadatas.add(widgetData.renderStep.gridStep[v]);
+            if (Array.isArray(widgetData.renderStep.gridStep[v])) {
+              (widgetData.renderStep.gridStep[v] as Array<string>).forEach(f => metadatas.add(f));
+            } else {
+              metadatas.add(widgetData.renderStep.gridStep[v]);
+            }
           }
         });
         contrib.includeMetadata = Array.from(metadatas);
@@ -975,7 +990,8 @@ export class ConfigExportHelper {
           process: list.renderStep.gridStep.tooltipFieldProcess
         }],
         iconColorFieldName: list.renderStep.gridStep.colorIdentifier,
-        useHttpQuicklooks: list.renderStep.gridStep.useHttpQuicklooks
+        useHttpQuicklooks: list.renderStep.gridStep.useHttpQuicklooks,
+        useHttpThumbnails: list.renderStep.gridStep.useHttpThumbnails
       };
       if (list.renderStep.gridStep.thumbnailUrl) {
         fieldsConfig.urlThumbnailTemplate = list.renderStep.gridStep.thumbnailUrl;
@@ -1018,12 +1034,16 @@ export class ConfigExportHelper {
       });
       contrib.includeMetadata = [];
       const metadatas = new Set<string>();
+      /** TODO : Grid steps contains, booleans, urls...; we need to filter those controls properly */
       Object.keys(list.renderStep.gridStep).forEach(v => {
-        if (!!list.renderStep.gridStep[v] && v !== 'isDefaultMode' && v !== 'useHttpQuicklooks' && v !== 'quicklookUrls') {
-          metadatas.add(list.renderStep.gridStep[v]);
+        if (!!list.renderStep.gridStep[v] && v !== 'isDefaultMode') {
+          if (Array.isArray(list.renderStep.gridStep[v])) {
+            (list.renderStep.gridStep[v] as Array<string>).forEach(f => metadatas.add(f));
+          } else {
+            metadatas.add(list.renderStep.gridStep[v]);
+          }
         }
       });
-      contrib.includeMetadata = Array.from(metadatas);
       contribs.push(contrib);
     });
     return contribs;

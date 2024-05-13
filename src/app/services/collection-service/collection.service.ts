@@ -252,7 +252,7 @@ export class CollectionService {
 
   }
 
-  public computeBbox(collection): Observable<ComputationResponse> {
+  public computeBbox(collection): Observable<any> {
     this.spinner.show();
     return from(this.collabSearchService.getExploreApi().compute(
       collection, this.collectionParamsMap.get(collection).params.centroid_path,

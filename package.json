@@ -1,6 +1,6 @@
 {
   "name": "arlas-wui-builder",
-  "version": "24.3.0",
+  "version": "25.0.0-beta.10",
   "scripts": {
     "ng": "ng",
     "postinstall": "patch-package --patch-dir ./node_modules/arlas-web-core/patches && patch-package --patch-dir node_modules/arlas-d3/patches",
@@ -27,7 +27,7 @@
     "@angular/platform-browser": "^14.2.12",
     "@angular/platform-browser-dynamic": "^14.2.12",
     "@angular/router": "^14.2.12",
-    "@gisaia-team/ngx-icon-picker": "13.0.0",
+    "@gisaia-team/ngx-icon-picker": "13.1.0",
     "@mapbox/tilebelt": "^1.0.2",
     "@ngx-translate/core": "14.0.0",
     "@ngx-translate/http-loader": "7.0.0",
@@ -35,7 +35,7 @@
     "ajv": "8.8.2",
     "ajv-keywords": "5.1.0",
     "ang-jsoneditor": "1.10.5",
-    "arlas-wui-toolkit": "~24.3.4",
+    "arlas-wui-toolkit": "25.0.0-rc.2",
     "file-saver": "^2.0.2",
     "jsoneditor": "9.5.6",
     "moment": "^2.29.4",
@@ -89,8 +89,11 @@
     "@babel/preset-env": "7.5.5"
   },
   "overrides": {
-    "portable-fetch": {
-      "node-fetch": "3.3.0"
+    "angular-oauth2-oidc-jwks": {
+      "jsrsasign": "^11.0.0"
+    },
+    "@angular-devkit/build-angular": {
+      "webpack-dev-middleware": "~5.3.4"
     }
   }
 }

@@ -156,6 +156,7 @@ export class StartupService {
         } else { // IAM
           const authService: ArlasIamService = this.injector.get('ArlasIamService')[0];
           request.setRequestHeader('Authorization', 'Bearer ' + authService.getAccessToken());
+          request.setRequestHeader('Arlas-Org-Filter', authService.getOrganisation());
         }
       }
       request.send();
