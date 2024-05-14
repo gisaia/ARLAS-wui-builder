@@ -150,13 +150,13 @@ export class StartupService {
       // tslint:disable-next-line:no-string-literal
       const authent: AuthentSetting = arlasSettingsService.settings['authentication'];
       if (!!authent && authent.use_authent) {
-        if( authent.auth_mode === 'openid'){
-          const authService: AuthentificationService = this.injector.get('AuthentificationService')[0];
-          request.setRequestHeader('Authorization', 'Bearer ' + authService.accessToken);
-        } else { // IAM
+        if (authent.auth_mode === 'iam') {
           const authService: ArlasIamService = this.injector.get('ArlasIamService')[0];
           request.setRequestHeader('Authorization', 'Bearer ' + authService.getAccessToken());
           request.setRequestHeader('Arlas-Org-Filter', authService.getOrganisation());
+        } else { // OpenId
+          const authService: AuthentificationService = this.injector.get('AuthentificationService')[0];
+          request.setRequestHeader('Authorization', 'Bearer ' + authService.accessToken);
         }
       }
       request.send();
