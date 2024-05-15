@@ -1,5 +1,13 @@
 # Change Log
 
+## [v25.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.0.0) (2024-05-15)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0-rc.2...v25.0.0)
+
+**Fixed bugs:**
+
+- ARLAS Builder: Save preview does not work [\#929](https://github.com/gisaia/ARLAS-wui-builder/issues/929)
+
 ## [v25.0.0-rc.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.0.0-rc.2) (2024-05-14)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0-rc.1...v25.0.0-rc.2)
