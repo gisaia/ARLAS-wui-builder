@@ -2,10 +2,10 @@
 ############   AUTHENTICATION SETTINGS   ###############
 ########################################################
 authentication:
-  use_authent: false
+  use_authent: true
   auth_mode: iam
-  url: http://localhost:81/iam
-  force_connect: false
+  url: http://localhost/arlas_iam_server
+  force_connect: true
   threshold: 60000
   use_discovery: false
   issuer: https://arlas-cloud-dev.eu.auth0.com/
@@ -24,17 +24,17 @@ authentication:
   storage: sessionstorage
   custom_query_params: [{"audience":"http://arlas.io/api/server"}]
 persistence:
-  url: 'http://localhost:81/persist'
+  url: 'http://localhost/arlas_persistence_server'
 ########################################################
 ############   Permissions SETTINGS   ##################
 ########################################################
 permission:
-  url: http://localhost:81/permissions
+  url: http://localhost/arlas_permissions_server
 ########################################################
 ############   URLs to WUI app   #######################
 ########################################################
 arlas_wui_url: "http://localhost:4200"
-links: [ { "icon": "lock", "name": "Google", "url": "http://www.google.com" }, { "icon": "public", "name": "Yahoo", "url": "http://www.yahoo.com" } ]
+links: [ ]
 basemaps: [
     {"name":"Basic","url":"https://api.maptiler.com/maps/basic/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/basic.png"},
     {"name":"Bright","url":"https://api.maptiler.com/maps/bright/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/bright.png"},
