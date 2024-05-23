@@ -29,10 +29,11 @@ import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 import { ArlasColorService } from 'arlas-web-components';
-import { AnalyticsBoardComponent, AnalyticsService, ArlasConfigService, ArlasStartupService } from 'arlas-wui-toolkit';
+import { AnalyticsBoardComponent, AnalyticsService } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
 import { debounceTime } from 'rxjs/operators';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 
 @Component({
@@ -91,7 +92,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   public remove(gi) {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
-      data: { message: 'delete this group' }
+      data: { message: marker('Do you really want to delete this group?') }
     });
 
     this.afterClosedSub = dialogRef.afterClosed().subscribe(result => {

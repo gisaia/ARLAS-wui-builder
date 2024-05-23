@@ -21,6 +21,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRouteSnapshot, CanDeactivate, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { Observable } from 'rxjs';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 /**
  * To be implements by components that need a confirmation before changing location
@@ -52,7 +53,7 @@ export class ConfirmExitGuard implements CanDeactivate<CanComponentExit> {
     if (!component.canExit()) {
       const dialogRef = this.dialog.open(ConfirmModalComponent, {
         width: '400px',
-        data: { message: 'Exit without saving ?' }
+        data: { message: marker('Do you really want to exit without saving?') }
       });
       return dialogRef.afterClosed();
     } else {

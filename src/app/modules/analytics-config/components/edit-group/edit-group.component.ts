@@ -42,6 +42,7 @@ import { ConfigFormGroup } from '@shared-models/config-form';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 @Component({
   selector: 'arlas-add-widget-dialog',
@@ -224,7 +225,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   public deleteWidget(widgetIndex: number) {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
-      data: { message: 'delete the widget' }
+      data: { message: marker('Do you really want to delete the widget?') }
     });
 
     this.afterClosedconfirmSub = dialogRef.afterClosed().subscribe(result => {

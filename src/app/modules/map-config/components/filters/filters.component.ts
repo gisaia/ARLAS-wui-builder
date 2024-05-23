@@ -30,6 +30,7 @@ import { MapglLegendComponent } from 'arlas-web-components';
 import { Subscription } from 'rxjs';
 import { DialogFilterComponent } from '../dialog-filter/dialog-filter.component';
 import { LAYER_MODE } from '../edit-layer/models';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 
 export interface Layer {
@@ -139,7 +140,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
   public confirmDelete(filterId: number): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
-      data: { message: 'delete the Filter' }
+      data: { message: marker('Do you really want to delete the filter?') }
     });
     this.confirmDeleteSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
