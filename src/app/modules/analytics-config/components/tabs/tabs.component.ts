@@ -32,6 +32,7 @@ import { Subscription } from 'rxjs';
 import { EditTabComponent } from '@analytics-config/components/edit-tab/edit-tab.component';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 @Component({
   selector: 'arlas-tabs',
@@ -72,7 +73,7 @@ export class TabsComponent implements OnDestroy {
   public getTab = (index: number) => this.tabsFa.at(index) as FormGroup;
 
   public newTab() {
-    const dialogRef = this.dialog.open(InputModalComponent);
+    const dialogRef = this.dialog.open(InputModalComponent, {data: {title: marker('Tab name')}});
     this.newAfterClosedSub = dialogRef.afterClosed().subscribe(tabName => {
       if (tabName) {
         this._addTab(tabName);
@@ -111,7 +112,7 @@ export class TabsComponent implements OnDestroy {
   public removeTab(tabIndex: number) {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
-      data: { message: 'delete this tab' }
+      data: { message: marker('Do you really want to delete this tab?') }
     });
 
     this.removeAfterClosedSub = dialogRef.afterClosed().subscribe(result => {

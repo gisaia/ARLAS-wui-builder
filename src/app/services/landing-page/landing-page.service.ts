@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
@@ -29,21 +29,19 @@ import { StartupService } from '@services/startup/startup.service';
 import { ArlasConfigService, ArlasConfigurationDescriptor, ArlasSettingsService } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class LandingPageService {
+export class LandingPageService implements OnDestroy {
 
-  private subscription: Subscription;
-  private urlSubscription: Subscription;
-  private urlCollectionsSubscription: Subscription;
-  private collectionsSubscription: Subscription;
-  private refreshSubscription: Subscription;
   public startEventSource: Subject<boolean> = new Subject<boolean>();
   public startEvent$: Observable<boolean> = this.startEventSource.asObservable();
+
+  private _onDestroy$ = new Subject<boolean>();
+
   public constructor(
     public startupService: StartupService,
     private spinner: NgxSpinnerService,
@@ -58,6 +56,11 @@ export class LandingPageService {
     public mainFormService: MainFormService) {
   }
 
+  public ngOnDestroy() {
+    this._onDestroy$.next(true);
+    this._onDestroy$.complete();
+  }
+
 
   public startingEvent(boolean: boolean) {
     this.startEventSource.next(boolean);
@@ -66,7 +69,7 @@ export class LandingPageService {
   public initWithConfig(configJson: Config, configMapJson: MapConfig, configId?: string, configName?: string, isRetry?: boolean) {
     this.spinner.show('importconfig');
     this.getServerCollections(configJson.arlas.server.url).then(() => {
-      this.collectionsSubscription = this.configDescritor.getAllCollections().subscribe({
+      this.configDescritor.getAllCollections().pipe(takeUntil(this._onDestroy$)).subscribe({
         next: collections => {
           this.initCollections(collections, configJson, configMapJson, configId, configName);
         },

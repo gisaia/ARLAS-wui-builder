@@ -29,6 +29,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { Subscription } from 'rxjs';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 @Component({
   selector: 'arlas-global-result-list',
@@ -83,7 +84,7 @@ export class GlobalResultListComponent implements OnDestroy {
   public removeTab(tabIndex: number) {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
-      data: { message: 'delete this list' }
+      data: { message: marker('Do you really want to delete this list?') }
     });
 
     this.removeAfterClosedSub = dialogRef.afterClosed().subscribe(result => {

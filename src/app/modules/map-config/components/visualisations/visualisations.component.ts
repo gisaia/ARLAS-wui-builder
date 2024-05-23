@@ -24,6 +24,8 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { camelize } from '@utils/tools';
 import { Subscription } from 'rxjs';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+
 
 export interface Layer {
   id: string;
@@ -73,7 +75,7 @@ export class VisualisationsComponent implements OnInit, AfterViewChecked, OnDest
   public confirmDelete(visualisationId: number, visualisationName: string): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
-      data: { message: 'delete the visualisation set' }
+      data: { message: marker('Do you really want to delete the visualisation set?') }
     });
 
     this.confirmDeleteSub = dialogRef.afterClosed().subscribe(result => {

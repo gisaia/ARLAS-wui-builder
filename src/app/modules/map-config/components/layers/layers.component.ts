@@ -44,6 +44,7 @@ import { ArlasCollaborativesearchService, ArlasConfigService, ArlasSettingsServi
 import { Subscription } from 'rxjs';
 import { PreviewComponent } from '../preview/preview.component';
 import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 export interface Layer {
   id: string;
@@ -211,7 +212,7 @@ export class LayersComponent implements OnInit, OnDestroy {
   public confirmDelete(layerId: number, arlasId: string): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
-      data: { message: 'delete the layer' }
+      data: { message: marker('Do you really want to delete the layer?') }
     });
 
     this.confirmDeleteSub = dialogRef.afterClosed().subscribe(result => {
