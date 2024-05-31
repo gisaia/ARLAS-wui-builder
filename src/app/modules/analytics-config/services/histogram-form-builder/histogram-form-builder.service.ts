@@ -25,6 +25,7 @@ import { NUMERIC_OR_DATE_TYPES, toNumericOrDateFieldsObs, toOptionsObs } from '@
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
+  ComponentFormControl,
   ConfigFormGroup, HiddenFormControl, SelectFormControl, SlideToggleFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
 import { Metric } from 'arlas-api';
@@ -39,6 +40,10 @@ import {
 import { METRIC_TYPE } from '../metric-collect-form-builder/models';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+import { ResultlistDataComponent } from "@analytics-config/components/resultlist-data/resultlist-data.component";
+import {
+  EditHistogramLabelComponent
+} from "@analytics-config/components/edit-histogram-label/edit-histogram-label.component";
 
 // TODO put in common with timeline
 enum DateFormats {
@@ -116,6 +121,15 @@ export class HistogramFormGroup extends WidgetConfigFormGroup {
             )
         }).withTabName(marker('Data')),
         renderStep: new ConfigFormGroup({
+          histogramLabel: new ConfigFormGroup({
+            customComponent: new ComponentFormControl(
+                EditHistogramLabelComponent,
+                {
+                  dataStep: () => this.customControls.dataStep,
+                  unmanagedFieldRenderStep: () => this.customControls.unmanagedFields.renderStep,
+                }
+            )
+          }).withTitle(marker('Labels and Units')),
           multiselectable: new SlideToggleFormControl(
             '',
             marker('Is multiselectable?'),
@@ -168,9 +182,10 @@ export class HistogramFormGroup extends WidgetConfigFormGroup {
             yTicks: new FormControl(),
             xLabels: new FormControl(),
             yLabels: new FormControl(),
-            xUnit: new FormControl(),
-            yUnit: new FormControl(),
-            chartXLabel: new FormControl(),
+            xUnit: new TitleInputFormControl('', '', '', 'text', {optional: true}),
+            yUnit: new TitleInputFormControl('', '', '', 'text', {optional: true}),
+            chartXLabel: new TitleInputFormControl('', '', '', 'text', {optional: true}),
+            chartYLabel: new TitleInputFormControl('', '', '', 'text', {optional: true}),
             showXTicks: new FormControl(),
             showYTicks: new FormControl(),
             showXLabels: new FormControl(),
@@ -222,6 +237,7 @@ export class HistogramFormGroup extends WidgetConfigFormGroup {
         xUnit: this.get('unmanagedFields.renderStep.xUnit'),
         yUnit: this.get('unmanagedFields.renderStep.yUnit'),
         chartXLabel: this.get('unmanagedFields.renderStep.chartXLabel'),
+        chartYLabel: this.get('unmanagedFields.renderStep.chartYLabel'),
         showXTicks: this.get('unmanagedFields.renderStep.showXTicks'),
         showYTicks: this.get('unmanagedFields.renderStep.showYTicks'),
         showXLabels: this.get('unmanagedFields.renderStep.showXLabels'),

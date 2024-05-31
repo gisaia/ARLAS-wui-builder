@@ -1,0 +1,31 @@
+<table mat-table class="label-editor"  [dataSource]="data">
+    <ng-container matColumnDef="recap">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td class="name" mat-cell *matCellDef="let element">
+            {{element.title | translate}}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="fieldLabel">
+        <th mat-header-cell *matHeaderCellDef>{{'Field' | translate}}</th>
+        <td class="name" mat-cell *matCellDef="let element">
+           <!-- recap value -->
+            {{ element.dataFieldValue.value }} <span *ngIf="element.title === 'y-label'">({{ element.dataFieldFunction.value}})</span>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="fieldColumn">
+        <th mat-header-cell *matHeaderCellDef>{{'Field label' | translate}}</th>
+        <td class="field" mat-cell *matCellDef="let element">
+             <arlas-config-form-control [showLabel]="false" [control]="element.labelControl">
+             </arlas-config-form-control>
+         </td>
+     </ng-container>
+     <ng-container matColumnDef="fieldUnits">
+         <th mat-header-cell *matHeaderCellDef>{{'Field unit' | translate}}</th>
+         <td class="field" mat-cell *matCellDef="let element">
+             <arlas-config-form-control [showLabel]="false" [control]="element.unitControl">
+             </arlas-config-form-control>
+         </td>
+     </ng-container>
+     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+ </table>
