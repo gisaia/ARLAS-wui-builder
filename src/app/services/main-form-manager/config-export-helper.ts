@@ -268,7 +268,7 @@ export class ConfigExportHelper {
 
       (analyticsConfigList.value as Array<any>).forEach(tab => {
         tab.contentFg.groupsFa.forEach((group: any, groupIndex: number) => {
-          config.arlas.web.analytics.push(this.getAnalyticsGroup(tab.tabName, group, groupIndex));
+          config.arlas.web.analytics.push(this.getAnalyticsGroup(tab.tabName, group, groupIndex, lookAndFeelConfigGlobal));
         });
       });
     }
@@ -1073,7 +1073,7 @@ export class ConfigExportHelper {
     } as ContributorConfig;
   }
 
-  public static getAnalyticsGroup(tabName: string, group: any, groupIndex: number) {
+  public static getAnalyticsGroup(tabName: string, group: any, groupIndex: number, lookAndFeelGlobalFormGroup?: LookAndFeelGlobalFormGroup) {
     const groupAnalytic = {
       groupId: tabName + '-' + groupIndex.toString(),
       title: group.title,
@@ -1082,7 +1082,8 @@ export class ConfigExportHelper {
       components: []
     } as AnalyticConfig;
     group.content.forEach(widget => {
-      groupAnalytic.components.push(this.getAnalyticsComponent(widget.widgetType, widget.widgetData, group.itemPerLine));
+      groupAnalytic.components.push(this.getAnalyticsComponent(
+        widget.widgetType, widget.widgetData, group.itemPerLine, lookAndFeelGlobalFormGroup));
     });
 
     return groupAnalytic;
@@ -1152,7 +1153,11 @@ export class ConfigExportHelper {
     return idString;
   }
 
-  private static getAnalyticsComponent(widgetType: any, widgetData: any, itemPerLine: number): AnalyticComponentConfig {
+  private static getAnalyticsComponent(
+    widgetType: any,
+    widgetData: any,
+    itemPerLine: number,
+    lookAndFeelConfigGlobal?: LookAndFeelGlobalFormGroup): AnalyticComponentConfig {
     const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
     const analyticsBoardWidth = 445;
     const contributorId = this.getContributorId(widgetData, widgetType);
@@ -1184,6 +1189,7 @@ export class ConfigExportHelper {
           xUnit: unmanagedRenderFields.xUnit,
           yUnit: unmanagedRenderFields.yUnit,
           chartXLabel: unmanagedRenderFields.chartXLabel,
+          chartYLabel: unmanagedRenderFields.chartYLabel,
           shortYLabels: unmanagedRenderFields.shortYLabels,
           showXTicks: unmanagedRenderFields.showXTicks,
           showYTicks: unmanagedRenderFields.showYTicks,
@@ -1204,6 +1210,19 @@ export class ConfigExportHelper {
           component.input.customizedCssClass = widgetData.dataStep.aggregation.aggregationFieldType === 'numeric' ?
             'arlas-histogram-analytics' : 'arlas-timeline-analytics';
           (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve = unmanagedRenderFields.isSmoothedCurve;
+          /**
+           *  Use mainConfigForm group. Look in process to see how its imported. And retrive collection unit in filter global options
+           */
+          let collectionUnit;
+          if (lookAndFeelConfigGlobal && !component.input.yUnit) {
+            collectionUnit = (lookAndFeelConfigGlobal.customControls.units.value as FormArray)
+              .controls
+              .filter((c: CollectionUnitFormGroup) => c.customControls.collection.value === widgetData.dataStep.collection)
+              .map((c: CollectionUnitFormGroup) => c.customControls.unit.value);
+          }
+          const shouldAddCollectionUnit = !component.input.yUnit && widgetData.dataStep.metric.metricCollectFunction === 'Count'
+              && (collectionUnit && collectionUnit.length > 0);
+          component.input.yUnit = (shouldAddCollectionUnit) ?  collectionUnit[0] : component.input.yUnit;
           break;
         }
         case WIDGET_TYPE.swimlane: {

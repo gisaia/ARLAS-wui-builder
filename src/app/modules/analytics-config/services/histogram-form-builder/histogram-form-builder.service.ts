@@ -26,24 +26,29 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
   ComponentFormControl,
-  ConfigFormGroup, HiddenFormControl, SelectFormControl, SlideToggleFormControl, TitleInputFormControl
+  ConfigFormGroup,
+  HiddenFormControl,
+  SelectFormControl,
+  SlideToggleFormControl,
+  TitleInputFormControl
 } from '@shared-models/config-form';
 import { Metric } from 'arlas-api';
 import { ChartType } from 'arlas-web-components';
 import {
-  BucketsIntervalFormBuilderService, BucketsIntervalFormGroup
+  BucketsIntervalFormBuilderService,
+  BucketsIntervalFormGroup
 } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
 import { BUCKET_TYPE } from '../buckets-interval-form-builder/models';
 import {
-  MetricCollectFormBuilderService, MetricCollectFormGroup
+  MetricCollectFormBuilderService,
+  MetricCollectFormGroup
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { METRIC_TYPE } from '../metric-collect-form-builder/models';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
-import { ResultlistDataComponent } from "@analytics-config/components/resultlist-data/resultlist-data.component";
 import {
   EditHistogramLabelComponent
-} from "@analytics-config/components/edit-histogram-label/edit-histogram-label.component";
+} from '@analytics-config/components/edit-histogram-label/edit-histogram-label.component';
 
 // TODO put in common with timeline
 enum DateFormats {
@@ -123,11 +128,11 @@ export class HistogramFormGroup extends WidgetConfigFormGroup {
         renderStep: new ConfigFormGroup({
           histogramLabel: new ConfigFormGroup({
             customComponent: new ComponentFormControl(
-                EditHistogramLabelComponent,
-                {
-                  dataStep: () => this.customControls.dataStep,
-                  unmanagedFieldRenderStep: () => this.customControls.unmanagedFields.renderStep,
-                }
+              EditHistogramLabelComponent,
+              {
+                dataStep: () => this.customControls.dataStep,
+                unmanagedFieldRenderStep: () => this.customControls.unmanagedFields.renderStep,
+              }
             )
           }).withTitle(marker('Labels and Units')),
           multiselectable: new SlideToggleFormControl(

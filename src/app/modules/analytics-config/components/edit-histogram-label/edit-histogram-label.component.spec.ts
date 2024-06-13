@@ -10,7 +10,7 @@ describe('EditHistogramLabelComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ EditHistogramLabelComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(EditHistogramLabelComponent);
     component = fixture.componentInstance;

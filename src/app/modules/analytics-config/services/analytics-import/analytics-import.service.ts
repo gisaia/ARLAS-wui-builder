@@ -425,6 +425,10 @@ export class AnalyticsImportService {
         control: unmanagedFields.renderStep.yUnit
       },
       {
+        value: component.input.chartYLabel,
+        control: unmanagedFields.renderStep.chartYLabel
+      },
+      {
         value: component.input.chartXLabel,
         control: unmanagedFields.renderStep.chartXLabel
       },

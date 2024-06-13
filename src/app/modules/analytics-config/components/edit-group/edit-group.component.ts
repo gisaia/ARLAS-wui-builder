@@ -189,7 +189,6 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
   public editWidget(widgetIndex: number, collection: string, newWidget?: boolean) {
     const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup;
-    console.log(widgetFg)
     this.afterClosedEditSub = this.dialog.open(EditWidgetDialogComponent, {
       data: {
         widgetType: widgetFg.value.widgetType,
