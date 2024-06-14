@@ -15,7 +15,7 @@
     <ng-container matColumnDef="fieldColumn">
         <th mat-header-cell *matHeaderCellDef>{{'Field label' | translate}}</th>
         <td mat-cell *matCellDef="let element">
-             <arlas-config-form-control [showLabel]="false" [control]="element.labelControl">
+             <arlas-config-form-control  [showLabel]="false" [control]="element.labelControl">
              </arlas-config-form-control>
          </td>
      </ng-container>
@@ -23,7 +23,7 @@
          <th mat-header-cell *matHeaderCellDef>{{'Field unit' | translate}}</th>
          <td c mat-cell *matCellDef="let element">
              <div class="field">
-                 <arlas-config-form-control [showLabel]="false" [control]="element.unitControl">
+                 <arlas-config-form-control [readonly]="element.readonly | async"  [showLabel]="false" [control]="element.unitControl">
                  </arlas-config-form-control>
                  <ng-container *ngIf="(element.message | async) as message">
                      <mat-icon class="icon" matTooltip="{{message | translate}}" matTooltipPosition="right">info_outline</mat-icon>

@@ -29,6 +29,7 @@ interface LabelConfig {
     labelControl: AbstractControl;
     unitControl: AbstractControl;
     message?: BehaviorSubject<string>;
+    readonly?: BehaviorSubject<boolean>;
 }
 
 @Component({
@@ -70,7 +71,8 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
         dataFieldValue: this.dataStep.aggregation.get('aggregationField'),
         labelControl: this.unmanagedFieldRenderStep.chartXLabel,
         unitControl: this.unmanagedFieldRenderStep.xUnit,
-        message: new BehaviorSubject('')
+        message: new BehaviorSubject(''),
+        readonly: new BehaviorSubject(false)
       };
 
       this.yLabelConfig =  {
@@ -79,7 +81,8 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
         dataFieldFunction: this.dataStep.metric.get('metricCollectFunction'),
         labelControl: this.unmanagedFieldRenderStep.chartYLabel,
         unitControl: this.unmanagedFieldRenderStep.yUnit,
-        message: new BehaviorSubject('')
+        message: new BehaviorSubject(''),
+        readonly: new BehaviorSubject(false)
       };
 
       if (this.xFieldIsDate()) {
@@ -125,6 +128,8 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
           if(this.metricCollectionIsCount()) {
             this.disableYUnitField();
             this.setYUnitFieldWithCollectionUnit();
+          } else {
+            this.enableYUnitField();
           }
         });
 
@@ -159,31 +164,40 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
     }
 
     private disableXUnitField() {
-      this.xLabelConfig.unitControl.disable();
+      this.xLabelConfig.readonly.next(true);
       this.xLabelConfig.unitControl.setValue('');
       this.xLabelConfig.message.next('Managed by Arlas');
     }
 
     private disableYUnitField (){
-      this.yLabelConfig.unitControl.disable();
+      this.yLabelConfig.readonly.next(true);
       this.yLabelConfig.message.next('Field set by unit collection in look and feel');
     }
 
     private setYUnitFieldWithCollectionUnit(){
       this.getLookAndFeelControl();
       const collectionUnit =(this.lookAndFeelFOrmControl) ? this.lookAndFeelFOrmControl?.value.unit : '';
-      console.log(collectionUnit)
       this.yLabelConfig.unitControl.setValue(collectionUnit);
     }
 
     private enableXUnitField(value?: string) {
-      this.unmanagedFieldRenderStep.xUnit.enable();
+      this.xLabelConfig.readonly.next(false);
       if (value) {
         this.unmanagedFieldRenderStep.xUnit.setValue(marker(value));
       } else {
         this.unmanagedFieldRenderStep.xUnit.setValue('');
       }
     }
+
+    private enableYUnitField(value?: string) {
+      this.yLabelConfig.readonly.next(false);
+      if (value) {
+        this.unmanagedFieldRenderStep.yUnit.setValue(marker(value));
+      } else {
+        this.unmanagedFieldRenderStep.yUnit.setValue('');
+      }
+    }
+
 
     public ngOnDestroy() {
       this._destroyed$.next(true);
