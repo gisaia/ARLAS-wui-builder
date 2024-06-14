@@ -20,7 +20,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, Subject, takeUntil } from 'rxjs';
-import { MainFormService } from "@services/main-form/main-form.service";
+import { MainFormService } from '@services/main-form/main-form.service';
 
 interface LabelConfig {
     title: string;
@@ -38,7 +38,7 @@ interface LabelConfig {
 })
 export class EditHistogramLabelComponent implements OnInit, OnDestroy {
   public displayedColumns = ['recap', 'fieldLabel', 'fieldColumn', 'fieldUnits'];
-    @Input() public dataStep: { aggregation: FormGroup; metric: FormGroup; collection: FormControl};
+    @Input() public dataStep: { aggregation: FormGroup; metric: FormGroup; collection: FormControl;};
     @Input() public unmanagedFieldRenderStep: {
         chartXLabel: FormControl;
         chartYLabel: FormControl;
@@ -114,7 +114,7 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
       combineLatest([
         this.yLabelConfig.dataFieldValue.valueChanges,
         this.yLabelConfig.dataFieldFunction.valueChanges
-          ])
+      ])
         .pipe(
           takeUntil(this._destroyed$),
           distinctUntilChanged()
@@ -129,15 +129,15 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
         });
 
       this.dataStep.collection.valueChanges
-          .pipe(
-              takeUntil(this._destroyed$),
-              distinctUntilChanged()
-          ).subscribe(value => {
-            if(this.metricCollectionIsCount()) {
-              this.disableYUnitField();
-              this.setYUnitFieldWithCollectionUnit();
-            }
-      });
+        .pipe(
+          takeUntil(this._destroyed$),
+          distinctUntilChanged()
+        ).subscribe(value => {
+          if(this.metricCollectionIsCount()) {
+            this.disableYUnitField();
+            this.setYUnitFieldWithCollectionUnit();
+          }
+        });
     }
 
     private getLookAndFeelControl(){
@@ -145,7 +145,7 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
         this.currentCollectionName = this.dataStep.collection.value;
         const globalFormGroup = this.mainFromService.lookAndFeelConfig.getGlobalFg();
         const lookAndFeelFormControl = (<FormArray>globalFormGroup.customControls.units.value).controls
-            .filter(c => c.value.collection ===  this.dataStep.collection.value);
+          .filter(c => c.value.collection ===  this.dataStep.collection.value);
         this.lookAndFeelFOrmControl = lookAndFeelFormControl[0] ?? null;
       }
     }
@@ -154,10 +154,9 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
       return this.dataStep.aggregation.get('aggregationFieldType').value === 'time';
     }
 
-  private metricCollectionIsCount() {
-      console.log(this.yLabelConfig.dataFieldFunction.value)
-    return this.yLabelConfig.dataFieldFunction.value === 'Count';
-  }
+    private metricCollectionIsCount() {
+      return this.yLabelConfig.dataFieldFunction.value === 'Count';
+    }
 
     private disableXUnitField() {
       this.xLabelConfig.unitControl.disable();
@@ -166,8 +165,8 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
     }
 
     private disableYUnitField (){
-        this.yLabelConfig.unitControl.disable();
-        this.yLabelConfig.message.next('Field set by unit collection in look and feel');
+      this.yLabelConfig.unitControl.disable();
+      this.yLabelConfig.message.next('Field set by unit collection in look and feel');
     }
 
     private setYUnitFieldWithCollectionUnit(){
