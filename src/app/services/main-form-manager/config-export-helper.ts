@@ -79,7 +79,6 @@ export class ConfigExportHelper {
     resultLists: FormArray,
     collectionService: CollectionService
   ): string[] {
-
     let mainCollection;
     const collectionFormControl = startingConfig.customControls.collection;
     if (!!startingConfig && !!collectionFormControl) {
@@ -1210,19 +1209,6 @@ export class ConfigExportHelper {
           component.input.customizedCssClass = widgetData.dataStep.aggregation.aggregationFieldType === 'numeric' ?
             'arlas-histogram-analytics' : 'arlas-timeline-analytics';
           (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve = unmanagedRenderFields.isSmoothedCurve;
-          /**
-           *  Use mainConfigForm group. Look in process to see how its imported. And retrive collection unit in filter global options
-           */
-          let collectionUnit;
-          if (lookAndFeelConfigGlobal && !component.input.yUnit) {
-            collectionUnit = (lookAndFeelConfigGlobal.customControls.units.value as FormArray)
-              .controls
-              .filter((c: CollectionUnitFormGroup) => c.customControls.collection.value === widgetData.dataStep.collection)
-              .map((c: CollectionUnitFormGroup) => c.customControls.unit.value);
-          }
-          const shouldAddCollectionUnit = !component.input.yUnit && widgetData.dataStep.metric.metricCollectFunction === 'Count'
-              && (collectionUnit && collectionUnit.length > 0);
-          component.input.yUnit = (shouldAddCollectionUnit) ?  collectionUnit[0] : component.input.yUnit;
           break;
         }
         case WIDGET_TYPE.swimlane: {

@@ -17,10 +17,10 @@ specific language governing permissions and limitations
 under the License.
 */
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
-import { combineLatest, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, Subject, takeUntil } from 'rxjs';
+import { MainFormService } from "@services/main-form/main-form.service";
 
 interface LabelConfig {
     title: string;
@@ -28,6 +28,7 @@ interface LabelConfig {
     dataFieldFunction?: AbstractControl;
     labelControl: AbstractControl;
     unitControl: AbstractControl;
+    message?: BehaviorSubject<string>;
 }
 
 @Component({
@@ -37,7 +38,7 @@ interface LabelConfig {
 })
 export class EditHistogramLabelComponent implements OnInit, OnDestroy {
   public displayedColumns = ['recap', 'fieldLabel', 'fieldColumn', 'fieldUnits'];
-    @Input() public dataStep: { aggregation: FormGroup; metric: FormGroup; };
+    @Input() public dataStep: { aggregation: FormGroup; metric: FormGroup; collection: FormControl};
     @Input() public unmanagedFieldRenderStep: {
         chartXLabel: FormControl;
         chartYLabel: FormControl;
@@ -46,9 +47,14 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
     };
     @Input() public data: LabelConfig[];
 
+    protected xLabelConfig: LabelConfig;
+    protected yLabelConfig: LabelConfig;
+    protected lookAndFeelFOrmControl: AbstractControl<any>;
+    protected currentCollectionName: string;
+
     private _destroyed$ = new Subject();
 
-    public constructor(private translateService: TranslateService) {
+    public constructor(private mainFromService: MainFormService) {
     }
 
     public ngOnInit(): void {
@@ -56,31 +62,43 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
         console.error('no config found');
         return;
       }
-      if (this.xFieldIsDate()) {
-        this.disableXUnitField();
-      }
 
-      const xLabel: LabelConfig = {
+      this.currentCollectionName = this.dataStep.collection.value;
+
+      this.xLabelConfig = {
         title: marker('x-label'),
         dataFieldValue: this.dataStep.aggregation.get('aggregationField'),
         labelControl: this.unmanagedFieldRenderStep.chartXLabel,
-        unitControl: this.unmanagedFieldRenderStep.xUnit
+        unitControl: this.unmanagedFieldRenderStep.xUnit,
+        message: new BehaviorSubject('')
       };
-      const yLabel: LabelConfig = {
+
+      this.yLabelConfig =  {
         title: marker('y-label'),
         dataFieldValue: this.dataStep.metric.get('metricCollectField'),
         dataFieldFunction: this.dataStep.metric.get('metricCollectFunction'),
         labelControl: this.unmanagedFieldRenderStep.chartYLabel,
-        unitControl: this.unmanagedFieldRenderStep.yUnit
+        unitControl: this.unmanagedFieldRenderStep.yUnit,
+        message: new BehaviorSubject('')
       };
-      this.data = [xLabel, yLabel];
+
+      if (this.xFieldIsDate()) {
+        this.disableXUnitField();
+      }
+
+      if(this.metricCollectionIsCount()) {
+        this.disableYUnitField();
+        this.setYUnitFieldWithCollectionUnit();
+      }
+
+      this.data = [this.xLabelConfig, this.yLabelConfig];
       this.listenChanges();
     }
 
     private listenChanges() {
       combineLatest([
         this.dataStep.aggregation.get('aggregationFieldType').valueChanges,
-        this.dataStep.aggregation.get('aggregationField').valueChanges
+        this.xLabelConfig.dataFieldValue.valueChanges
       ])
         .pipe(
           takeUntil(this._destroyed$),
@@ -94,26 +112,69 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
           }
         });
       combineLatest([
-        this.dataStep.metric.get('metricCollectField').valueChanges,
-        this.dataStep.metric.get('metricCollectFunction').valueChanges]
-      )
+        this.yLabelConfig.dataFieldValue.valueChanges,
+        this.yLabelConfig.dataFieldFunction.valueChanges
+          ])
         .pipe(
           takeUntil(this._destroyed$),
           distinctUntilChanged()
         )
         .subscribe(_ => {
-          this.unmanagedFieldRenderStep.chartYLabel.setValue('');
-          this.unmanagedFieldRenderStep.yUnit.setValue('');
+          this.yLabelConfig.labelControl.setValue('');
+          this.yLabelConfig.unitControl.setValue('');
+          if(this.metricCollectionIsCount()) {
+            this.disableYUnitField();
+            this.setYUnitFieldWithCollectionUnit();
+          }
         });
+
+      this.dataStep.collection.valueChanges
+          .pipe(
+              takeUntil(this._destroyed$),
+              distinctUntilChanged()
+          ).subscribe(value => {
+            if(this.metricCollectionIsCount()) {
+              this.disableYUnitField();
+              this.setYUnitFieldWithCollectionUnit();
+            }
+      });
+    }
+
+    private getLookAndFeelControl(){
+      if(!this.lookAndFeelFOrmControl || this.currentCollectionName !== this.dataStep.collection.value) {
+        this.currentCollectionName = this.dataStep.collection.value;
+        const globalFormGroup = this.mainFromService.lookAndFeelConfig.getGlobalFg();
+        const lookAndFeelFormControl = (<FormArray>globalFormGroup.customControls.units.value).controls
+            .filter(c => c.value.collection ===  this.dataStep.collection.value);
+        this.lookAndFeelFOrmControl = lookAndFeelFormControl[0] ?? null;
+      }
     }
 
     private xFieldIsDate() {
       return this.dataStep.aggregation.get('aggregationFieldType').value === 'time';
     }
 
+  private metricCollectionIsCount() {
+      console.log(this.yLabelConfig.dataFieldFunction.value)
+    return this.yLabelConfig.dataFieldFunction.value === 'Count';
+  }
+
     private disableXUnitField() {
-      this.unmanagedFieldRenderStep.xUnit.disable();
-      this.unmanagedFieldRenderStep.xUnit.setValue(this.translateService.instant('At export'));
+      this.xLabelConfig.unitControl.disable();
+      this.xLabelConfig.unitControl.setValue('');
+      this.xLabelConfig.message.next('Managed by Arlas');
+    }
+
+    private disableYUnitField (){
+        this.yLabelConfig.unitControl.disable();
+        this.yLabelConfig.message.next('Field set by unit collection in look and feel');
+    }
+
+    private setYUnitFieldWithCollectionUnit(){
+      this.getLookAndFeelControl();
+      const collectionUnit =(this.lookAndFeelFOrmControl) ? this.lookAndFeelFOrmControl?.value.unit : '';
+      console.log(collectionUnit)
+      this.yLabelConfig.unitControl.setValue(collectionUnit);
     }
 
     private enableXUnitField(value?: string) {

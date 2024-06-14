@@ -16,10 +16,22 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+
+.field{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .label-editor {
   width: 80%;
 
   td {
     min-width: 60px;
   }
+}
+
+.icon {
+  cursor: pointer;
+  color: #777;
 }
