@@ -52,6 +52,10 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+      if(!this.dataStep && !this.unmanagedFieldRenderStep) {
+        console.error('no config found');
+        return;
+      }
       if (this.xFieldIsDate()) {
         this.disableXUnitField();
       }
@@ -109,7 +113,7 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
 
     private disableXUnitField() {
       this.unmanagedFieldRenderStep.xUnit.disable();
-      this.unmanagedFieldRenderStep.xUnit.setValue(this.translateService.instant('at export'));
+      this.unmanagedFieldRenderStep.xUnit.setValue(this.translateService.instant('At export'));
     }
 
     private enableXUnitField(value?: string) {
