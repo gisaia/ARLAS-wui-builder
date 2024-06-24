@@ -41,7 +41,7 @@
                 },
                 "visibilityStep": {
                     "visible": true,
-                    "zoomMin": 1,
+                    "zoomMin": 0,
                     "zoomMax": 23,
                     "featuresMax": 5000,
                     "featuresMin": 5000,
@@ -118,7 +118,7 @@
                 },
                 "visibilityStep": {
                     "visible": true,
-                    "zoomMin": 1,
+                    "zoomMin": 0,
                     "zoomMax": 23,
                     "featuresMax": 5000
                 },
@@ -196,7 +196,7 @@
                 },
                 "visibilityStep": {
                     "visible": true,
-                    "zoomMin": 1,
+                    "zoomMin": 0,
                     "zoomMax": 23,
                     "featuresMin": 5000
                 },
