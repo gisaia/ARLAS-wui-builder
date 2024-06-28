@@ -1083,7 +1083,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           }
         ),
         zoomMin: new SliderFormControl(
-          '',
+          0,
           marker('Zoom min'),
           marker('zoom min description'),
           0,

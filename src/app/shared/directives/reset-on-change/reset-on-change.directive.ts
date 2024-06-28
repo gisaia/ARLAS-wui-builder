@@ -96,7 +96,7 @@ export class ResetOnChangeDirective implements OnInit, OnDestroy {
    */
   private resetControl(control: AbstractControl) {
     if (control instanceof FormControl) {
-      if (control instanceof ConfigFormControl && !!control.initialValue) {
+      if (control instanceof ConfigFormControl && (!!control.initialValue || control.initialValue === 0)) {
         control.reset(control.initialValue);
       } else {
         // reset to the default value of the control, or null if no default value prefix provided
