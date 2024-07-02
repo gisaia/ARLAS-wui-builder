@@ -454,6 +454,7 @@
                         "xUnit": "",
                         "yUnit": "",
                         "chartXLabel": "",
+                        "chartYLabel": "",
                         "shortYLabels": false,
                         "barWeight": 0.8,
                         "isSmoothedCurve": false

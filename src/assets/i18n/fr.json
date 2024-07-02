@@ -1,4 +1,6 @@
 {
+	"Managed by Arlas": "Ce champ sera automatiquement rempli par Arlas",
+	"Field set by unit collection in look and feel": "Ce champ est automatiquement rempli avec l'unité de collection saisie dans l'onglet \"look and feel\". Si vous souhaitez modifier cette valeur, allez dans l'onglet \"look and feel\".",
 	"Back to home page": "Retour à l'accueil",
 	"Loading...": "Chargement...",
 	"Saving...": "Sauvegarde en cours ...",
@@ -577,6 +579,7 @@
 	"Cannot update the preview": "Impossible de mettre à jour l'aperçu",
 	"Cannot create the preview": "Impossible de créer l'aperçu",
 	"Cannot fetch current config": "Impossible de récupérer le dashbord actuel",
+	"Labels and Units": "Labels et Unités",
 	"Log Out": "Se déconnecter",
 	"Log in to access saved dashboards": "Se connecter pour accéder aux dashboards existants",
 	"Log In": "Se connecter",
@@ -612,6 +615,8 @@
 	"App unit": "Eléments explorés",
 	"App unit description": "Unité affichée après le nombre total d'éléments explorés",
 	"Field": "Champ représenté",
+	"Field unit": "Unités",
+	"Field label": "Libellé",
 	"Powerbar manage colors description": "",
 	"IN": "appartient",
 	"IS": "est",

@@ -79,7 +79,6 @@ export class ConfigExportHelper {
     resultLists: FormArray,
     collectionService: CollectionService
   ): string[] {
-
     let mainCollection;
     const collectionFormControl = startingConfig.customControls.collection;
     if (!!startingConfig && !!collectionFormControl) {
@@ -268,7 +267,7 @@ export class ConfigExportHelper {
 
       (analyticsConfigList.value as Array<any>).forEach(tab => {
         tab.contentFg.groupsFa.forEach((group: any, groupIndex: number) => {
-          config.arlas.web.analytics.push(this.getAnalyticsGroup(tab.tabName, group, groupIndex));
+          config.arlas.web.analytics.push(this.getAnalyticsGroup(tab.tabName, group, groupIndex, lookAndFeelConfigGlobal));
         });
       });
     }
@@ -1073,7 +1072,7 @@ export class ConfigExportHelper {
     } as ContributorConfig;
   }
 
-  public static getAnalyticsGroup(tabName: string, group: any, groupIndex: number) {
+  public static getAnalyticsGroup(tabName: string, group: any, groupIndex: number, lookAndFeelGlobalFormGroup?: LookAndFeelGlobalFormGroup) {
     const groupAnalytic = {
       groupId: tabName + '-' + groupIndex.toString(),
       title: group.title,
@@ -1082,7 +1081,8 @@ export class ConfigExportHelper {
       components: []
     } as AnalyticConfig;
     group.content.forEach(widget => {
-      groupAnalytic.components.push(this.getAnalyticsComponent(widget.widgetType, widget.widgetData, group.itemPerLine));
+      groupAnalytic.components.push(this.getAnalyticsComponent(
+        widget.widgetType, widget.widgetData, group.itemPerLine, lookAndFeelGlobalFormGroup));
     });
 
     return groupAnalytic;
@@ -1152,7 +1152,11 @@ export class ConfigExportHelper {
     return idString;
   }
 
-  private static getAnalyticsComponent(widgetType: any, widgetData: any, itemPerLine: number): AnalyticComponentConfig {
+  private static getAnalyticsComponent(
+    widgetType: any,
+    widgetData: any,
+    itemPerLine: number,
+    lookAndFeelConfigGlobal?: LookAndFeelGlobalFormGroup): AnalyticComponentConfig {
     const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
     const analyticsBoardWidth = 445;
     const contributorId = this.getContributorId(widgetData, widgetType);
@@ -1184,6 +1188,7 @@ export class ConfigExportHelper {
           xUnit: unmanagedRenderFields.xUnit,
           yUnit: unmanagedRenderFields.yUnit,
           chartXLabel: unmanagedRenderFields.chartXLabel,
+          chartYLabel: unmanagedRenderFields.chartYLabel,
           shortYLabels: unmanagedRenderFields.shortYLabels,
           showXTicks: unmanagedRenderFields.showXTicks,
           showYTicks: unmanagedRenderFields.showYTicks,

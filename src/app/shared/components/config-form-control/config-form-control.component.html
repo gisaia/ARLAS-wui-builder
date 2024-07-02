@@ -378,7 +378,7 @@
 <div *ngIf="isInput(); let typedControl" class="input-field-form-control">
     <mat-form-field [style.width]="typedControl.width ? typedControl.width : 'unset' ">
         <mat-label *ngIf="showLabel">{{ typedControl.label | translate}}</mat-label>
-        <input matInput [formControl]="typedControl" [type]="typedControl.inputType" [required]="!typedControl.optional"
+        <input matInput [readonly]="readonly" [formControl]="typedControl" [type]="typedControl.inputType" [required]="!typedControl.optional"
             [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null"
             (change)="typedControl.ensureLessThan ? typedControl.checkLessThan(+$event.target.value) : null;
@@ -388,7 +388,7 @@
 
 <div *ngIf="isTitleInput(); let typedControl" class="title-field-form-control">
     <mat-form-field>
-        <input matInput [formControl]="typedControl" [placeholder]="typedControl.label | translate"
+        <input  matInput [readonly]="readonly" [formControl]="typedControl" [placeholder]="typedControl.label | translate"
             [type]="typedControl.inputType" [required]="!typedControl.optional"
             [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">

@@ -1,4 +1,6 @@
 {
+	"Managed by Arlas": "This field will be automatically filled by Arlas",
+	"Field set by unit collection in look and feel": "This field is automatically filled in with the collection unit entered in look and feel. If you want to change this value, go to the look and feel tab.",
 	"Back to home page": "Back to home page",
 	"Loading...": "Loading...",
 	"Saving...": "Saving...",
@@ -577,6 +579,7 @@
 	"Cannot update the preview": "Cannot update the preview",
 	"Cannot create the preview": "Cannot create the preview",
 	"Cannot fetch current config": "Cannot fetch the current dashboards' information",
+	"Labels and Units": "Labels and Units",
 	"Log Out": "Log Out",
 	"Log in to access saved dashboards": "Log in to access saved dashboards",
 	"Log In": "Log In",
@@ -612,6 +615,8 @@
 	"App unit": "Explored elements",
 	"App unit description": "Unit displayed after the global count of explored elements",
 	"Field": "Field",
+	"Field unit": "Field unit",
+	"Field label": "Field label",
 	"Powerbar manage colors description": "",
 	"IS": "is",
 	"IN": "in",

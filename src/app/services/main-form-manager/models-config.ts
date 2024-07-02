@@ -231,6 +231,7 @@ export interface AnalyticComponentInputConfig {
   yUnit?: string;
   unit?: string;
   chartXLabel?: string;
+  chartYLabel?: string;
   showXTicks?: boolean;
   showYTicks?: boolean;
   showXLabels?: boolean;
