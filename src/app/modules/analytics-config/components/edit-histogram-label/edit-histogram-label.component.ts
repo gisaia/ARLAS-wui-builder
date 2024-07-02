@@ -33,9 +33,9 @@ interface LabelConfig {
 }
 
 @Component({
-    selector: 'arlas-edit-histogram-label',
-    templateUrl: './edit-histogram-label.component.html',
-    styleUrls: ['./edit-histogram-label.component.scss']
+  selector: 'arlas-edit-histogram-label',
+  templateUrl: './edit-histogram-label.component.html',
+  styleUrls: ['./edit-histogram-label.component.scss']
 })
 export class EditHistogramLabelComponent implements OnInit, OnDestroy {
     /**
@@ -80,150 +80,150 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        if (!this.dataStep && !this.unmanagedFieldRenderStep) {
-            console.error('no config found');
-            return;
-        }
+      if (!this.dataStep && !this.unmanagedFieldRenderStep) {
+        console.error('no config found');
+        return;
+      }
 
-        this.currentCollectionName = this.dataStep.collection.value;
+      this.currentCollectionName = this.dataStep.collection.value;
 
-        this.xLabelConfig = {
-            title: marker('x-label'),
-            dataFieldValue: this.dataStep.aggregation.get('aggregationField'),
-            labelControl: this.unmanagedFieldRenderStep.chartXLabel,
-            unitControl: this.unmanagedFieldRenderStep.xUnit,
-            message: new BehaviorSubject(''),
-            readonly: new BehaviorSubject(false)
-        };
+      this.xLabelConfig = {
+        title: marker('x-label'),
+        dataFieldValue: this.dataStep.aggregation.get('aggregationField'),
+        labelControl: this.unmanagedFieldRenderStep.chartXLabel,
+        unitControl: this.unmanagedFieldRenderStep.xUnit,
+        message: new BehaviorSubject(''),
+        readonly: new BehaviorSubject(false)
+      };
 
-        this.yLabelConfig = {
-            title: marker('y-label'),
-            dataFieldValue: this.dataStep.metric.get('metricCollectField'),
-            dataFieldFunction: this.dataStep.metric.get('metricCollectFunction'),
-            labelControl: this.unmanagedFieldRenderStep.chartYLabel,
-            unitControl: this.unmanagedFieldRenderStep.yUnit,
-            message: new BehaviorSubject(''),
-            readonly: new BehaviorSubject(false)
-        };
+      this.yLabelConfig = {
+        title: marker('y-label'),
+        dataFieldValue: this.dataStep.metric.get('metricCollectField'),
+        dataFieldFunction: this.dataStep.metric.get('metricCollectFunction'),
+        labelControl: this.unmanagedFieldRenderStep.chartYLabel,
+        unitControl: this.unmanagedFieldRenderStep.yUnit,
+        message: new BehaviorSubject(''),
+        readonly: new BehaviorSubject(false)
+      };
 
-        if (this.xFieldIsDate()) {
-            this.disableXUnitField();
-        }
+      if (this.xFieldIsDate()) {
+        this.disableXUnitField();
+      }
 
-        if (this.metricCollectionIsCount()) {
-            this.disableYUnitField();
-            this.setYUnitFieldWithCollectionUnit();
-        }
+      if (this.metricCollectionIsCount()) {
+        this.disableYUnitField();
+        this.setYUnitFieldWithCollectionUnit();
+      }
 
-        this.data = [this.xLabelConfig, this.yLabelConfig];
-        this.listenChanges();
+      this.data = [this.xLabelConfig, this.yLabelConfig];
+      this.listenChanges();
     }
 
     private listenChanges() {
-        combineLatest([
-            this.dataStep.aggregation.get('aggregationFieldType').valueChanges,
-            this.xLabelConfig.dataFieldValue.valueChanges
-        ])
-            .pipe(
-                takeUntil(this._destroyed$),
-                distinctUntilChanged())
-            .subscribe(_ => {
-                if (this.xFieldIsDate()) {
-                    this.disableXUnitField();
-                } else {
-                    this.enableXUnitField();
-                }
-            });
-        combineLatest([
-            this.yLabelConfig.dataFieldValue.valueChanges,
-            this.yLabelConfig.dataFieldFunction.valueChanges
-        ])
-            .pipe(
-                takeUntil(this._destroyed$),
-                distinctUntilChanged()
-            )
-            .subscribe(_ => {
-                if (this.metricCollectionIsCount()) {
-                    this.disableYUnitField();
-                    this.setYUnitFieldWithCollectionUnit();
-                } else {
-                    this.enableYUnitField();
-                }
-            });
+      combineLatest([
+        this.dataStep.aggregation.get('aggregationFieldType').valueChanges,
+        this.xLabelConfig.dataFieldValue.valueChanges
+      ])
+        .pipe(
+          takeUntil(this._destroyed$),
+          distinctUntilChanged())
+        .subscribe(_ => {
+          if (this.xFieldIsDate()) {
+            this.disableXUnitField();
+          } else {
+            this.enableXUnitField();
+          }
+        });
+      combineLatest([
+        this.yLabelConfig.dataFieldValue.valueChanges,
+        this.yLabelConfig.dataFieldFunction.valueChanges
+      ])
+        .pipe(
+          takeUntil(this._destroyed$),
+          distinctUntilChanged()
+        )
+        .subscribe(_ => {
+          if (this.metricCollectionIsCount()) {
+            this.disableYUnitField();
+            this.setYUnitFieldWithCollectionUnit();
+          } else {
+            this.enableYUnitField();
+          }
+        });
 
-        this.dataStep.collection.valueChanges
-            .pipe(
-                takeUntil(this._destroyed$),
-                distinctUntilChanged()
-            ).subscribe(value => {
-            if (this.metricCollectionIsCount()) {
-                this.disableYUnitField();
-                this.setYUnitFieldWithCollectionUnit();
-            }
+      this.dataStep.collection.valueChanges
+        .pipe(
+          takeUntil(this._destroyed$),
+          distinctUntilChanged()
+        ).subscribe(value => {
+          if (this.metricCollectionIsCount()) {
+            this.disableYUnitField();
+            this.setYUnitFieldWithCollectionUnit();
+          }
         });
     }
 
     private getLookAndFeelControl() {
-        if (!this.lookAndFeelFormControl || this.currentCollectionName !== this.dataStep.collection.value) {
-            this.currentCollectionName = this.dataStep.collection.value;
-            const globalFormGroup = this.mainFromService.lookAndFeelConfig.getGlobalFg();
-            const lookAndFeelFormControl = (<FormArray>globalFormGroup.customControls.units.value).controls
-                .filter(c => c.value.collection === this.dataStep.collection.value);
-            this.lookAndFeelFormControl = lookAndFeelFormControl[0] ?? null;
-        }
+      if (!this.lookAndFeelFormControl || this.currentCollectionName !== this.dataStep.collection.value) {
+        this.currentCollectionName = this.dataStep.collection.value;
+        const globalFormGroup = this.mainFromService.lookAndFeelConfig.getGlobalFg();
+        const lookAndFeelFormControl = (<FormArray>globalFormGroup.customControls.units.value).controls
+          .filter(c => c.value.collection === this.dataStep.collection.value);
+        this.lookAndFeelFormControl = lookAndFeelFormControl[0] ?? null;
+      }
     }
 
     private xFieldIsDate() {
-        return this.dataStep.aggregation.get('aggregationFieldType').value === 'time';
+      return this.dataStep.aggregation.get('aggregationFieldType').value === 'time';
     }
 
     private metricCollectionIsCount() {
-        return this.yLabelConfig.dataFieldFunction.value === 'Count';
+      return this.yLabelConfig.dataFieldFunction.value === 'Count';
     }
 
     private disableXUnitField() {
-        this.xLabelConfig.readonly.next(true);
-        this.xLabelConfig.unitControl.setValue('');
-        this.xLabelConfig.message.next('Managed by Arlas');
+      this.xLabelConfig.readonly.next(true);
+      this.xLabelConfig.unitControl.setValue('');
+      this.xLabelConfig.message.next('Managed by Arlas');
     }
 
     private disableYUnitField() {
-        this.yLabelConfig.readonly.next(true);
-        this.yLabelConfig.message.next('Field set by unit collection in look and feel');
+      this.yLabelConfig.readonly.next(true);
+      this.yLabelConfig.message.next('Field set by unit collection in look and feel');
     }
 
     private setYUnitFieldWithCollectionUnit() {
-        this.getLookAndFeelControl();
-        const collectionUnit = (this.lookAndFeelFormControl) ? this.lookAndFeelFormControl?.value.unit : '';
-        this.yLabelConfig.unitControl.setValue(collectionUnit);
+      this.getLookAndFeelControl();
+      const collectionUnit = (this.lookAndFeelFormControl) ? this.lookAndFeelFormControl?.value.unit : '';
+      this.yLabelConfig.unitControl.setValue(collectionUnit);
     }
 
     private enableXUnitField(value?: string) {
-        this.xLabelConfig.readonly.next(false);
-        this.xLabelConfig.labelControl.setValue('');
-        this.xLabelConfig.message.next('');
-        if (value) {
-            this.xLabelConfig.unitControl.setValue(marker(value));
-        } else {
-            this.xLabelConfig.unitControl.setValue('');
-        }
+      this.xLabelConfig.readonly.next(false);
+      this.xLabelConfig.labelControl.setValue('');
+      this.xLabelConfig.message.next('');
+      if (value) {
+        this.xLabelConfig.unitControl.setValue(marker(value));
+      } else {
+        this.xLabelConfig.unitControl.setValue('');
+      }
     }
 
     private enableYUnitField(value?: string) {
-        this.yLabelConfig.readonly.next(false);
-        this.yLabelConfig.labelControl.setValue('');
-        this.yLabelConfig.message.next('');
-        if (value) {
-            this.yLabelConfig.unitControl.setValue(marker(value));
-        } else {
-            this.yLabelConfig.unitControl.setValue('');
-        }
+      this.yLabelConfig.readonly.next(false);
+      this.yLabelConfig.labelControl.setValue('');
+      this.yLabelConfig.message.next('');
+      if (value) {
+        this.yLabelConfig.unitControl.setValue(marker(value));
+      } else {
+        this.yLabelConfig.unitControl.setValue('');
+      }
     }
 
 
     public ngOnDestroy() {
-        this._destroyed$.next(true);
-        this._destroyed$.complete();
+      this._destroyed$.next(true);
+      this._destroyed$.complete();
     }
 
 }
