@@ -57,12 +57,12 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
      *  X axis config
      * @protected
      */
-    protected xLabelConfig: LabelConfig;
+    protected xAxisConfig: LabelConfig;
     /**
      *  Y axis config
      * @protected
      */
-    protected yLabelConfig: LabelConfig;
+    protected yAxisConfig: LabelConfig;
     /**
      * Get lookAndField value to listen collection unit change
      * @protected
@@ -87,7 +87,7 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
 
       this.currentCollectionName = this.dataStep.collection.value;
 
-      this.xLabelConfig = {
+      this.xAxisConfig = {
         title: marker('x-label'),
         dataFieldValue: this.dataStep.aggregation.get('aggregationField'),
         labelControl: this.unmanagedFieldRenderStep.chartXLabel,
@@ -96,7 +96,7 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
         readonly: new BehaviorSubject(false)
       };
 
-      this.yLabelConfig = {
+      this.yAxisConfig = {
         title: marker('y-label'),
         dataFieldValue: this.dataStep.metric.get('metricCollectField'),
         dataFieldFunction: this.dataStep.metric.get('metricCollectFunction'),
@@ -115,14 +115,14 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
         this.setYUnitFieldWithCollectionUnit();
       }
 
-      this.data = [this.xLabelConfig, this.yLabelConfig];
+      this.data = [this.xAxisConfig, this.yAxisConfig];
       this.listenChanges();
     }
 
     private listenChanges() {
       combineLatest([
         this.dataStep.aggregation.get('aggregationFieldType').valueChanges,
-        this.xLabelConfig.dataFieldValue.valueChanges
+        this.xAxisConfig.dataFieldValue.valueChanges
       ])
         .pipe(
           takeUntil(this._destroyed$),
@@ -135,8 +135,8 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
           }
         });
       combineLatest([
-        this.yLabelConfig.dataFieldValue.valueChanges,
-        this.yLabelConfig.dataFieldFunction.valueChanges
+        this.yAxisConfig.dataFieldValue.valueChanges,
+        this.yAxisConfig.dataFieldFunction.valueChanges
       ])
         .pipe(
           takeUntil(this._destroyed$),
@@ -178,45 +178,45 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
     }
 
     private metricCollectionIsCount() {
-      return this.yLabelConfig.dataFieldFunction.value === 'Count';
+      return this.yAxisConfig.dataFieldFunction.value === 'Count';
     }
 
     private disableXUnitField() {
-      this.xLabelConfig.readonly.next(true);
-      this.xLabelConfig.unitControl.setValue('');
-      this.xLabelConfig.message.next('Managed by Arlas');
+      this.xAxisConfig.readonly.next(true);
+      this.xAxisConfig.unitControl.setValue('');
+      this.xAxisConfig.message.next('Managed by Arlas');
     }
 
     private disableYUnitField() {
-      this.yLabelConfig.readonly.next(true);
-      this.yLabelConfig.message.next('Field set by unit collection in look and feel');
+      this.yAxisConfig.readonly.next(true);
+      this.yAxisConfig.message.next('Field set by unit collection in look and feel');
     }
 
     private setYUnitFieldWithCollectionUnit() {
       this.getLookAndFeelControl();
       const collectionUnit = (this.lookAndFeelFormControl) ? this.lookAndFeelFormControl?.value.unit : '';
-      this.yLabelConfig.unitControl.setValue(collectionUnit);
+      this.yAxisConfig.unitControl.setValue(collectionUnit);
     }
 
     private enableXUnitField(value?: string) {
-      this.xLabelConfig.readonly.next(false);
-      this.xLabelConfig.labelControl.setValue('');
-      this.xLabelConfig.message.next('');
+      this.xAxisConfig.readonly.next(false);
+      this.xAxisConfig.labelControl.setValue('');
+      this.xAxisConfig.message.next('');
       if (value) {
-        this.xLabelConfig.unitControl.setValue(marker(value));
+        this.xAxisConfig.unitControl.setValue(marker(value));
       } else {
-        this.xLabelConfig.unitControl.setValue('');
+        this.xAxisConfig.unitControl.setValue('');
       }
     }
 
     private enableYUnitField(value?: string) {
-      this.yLabelConfig.readonly.next(false);
-      this.yLabelConfig.labelControl.setValue('');
-      this.yLabelConfig.message.next('');
+      this.yAxisConfig.readonly.next(false);
+      this.yAxisConfig.labelControl.setValue('');
+      this.yAxisConfig.message.next('');
       if (value) {
-        this.yLabelConfig.unitControl.setValue(marker(value));
+        this.yAxisConfig.unitControl.setValue(marker(value));
       } else {
-        this.yLabelConfig.unitControl.setValue('');
+        this.yAxisConfig.unitControl.setValue('');
       }
     }
 
