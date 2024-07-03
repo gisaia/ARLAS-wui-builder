@@ -1,5 +1,6 @@
 {
-	"Managed by Arlas": "Ce champ sera automatiquement rempli par Arlas",
+	"Filled by Arlas": "Ce champ sera automatiquement rempli par Arlas",
+	"Managed by Arlas": "Managé par Arlas",
 	"Field set by unit collection in look and feel": "Ce champ est automatiquement rempli avec l'unité de collection saisie dans l'onglet \"look and feel\". Si vous souhaitez modifier cette valeur, allez dans l'onglet \"look and feel\".",
 	"Back to home page": "Retour à l'accueil",
 	"Loading...": "Chargement...",

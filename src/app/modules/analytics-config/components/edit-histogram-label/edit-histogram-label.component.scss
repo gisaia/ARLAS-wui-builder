@@ -17,6 +17,8 @@ specific language governing permissions and limitations
 under the License.
 */
 
+@import "variables.scss";
+
 :host ::ng-deep {
   .field .mat-form-field-disabled .mat-form-field-underline
   {
@@ -38,10 +40,15 @@ under the License.
 
   td {
     min-width: 60px;
+    padding: 0 6px;
   }
 }
 
 .icon {
   cursor: pointer;
   color: #777;
+}
+
+.text-hint{
+  color:$text-input-disabled
 }

@@ -97,7 +97,11 @@ export class AnalyticsInitService {
       widgetFg.value.widgetType,
       widgetFg.value.widgetData,
       groupFg.controls.icon.value);
-    groupFg.controls.preview.setValue(ConfigExportHelper.getAnalyticsGroup('preview', groupFg.value, this.groupIndex++));
+      groupFg.controls.preview.setValue(ConfigExportHelper.getAnalyticsGroup(
+      'preview',
+      groupFg.value,
+      this.groupIndex++,
+      this.mainFormService.lookAndFeelConfig.getGlobalFg()));
     contrib.updateFromCollaboration({
       id: '',
       operation: OperationEnum.add,

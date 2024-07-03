@@ -247,7 +247,10 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   public updatePreview() {
     this.formGroup.controls.preview.setValue(null);
     this.formGroup.controls.preview.setValue(
-      ConfigExportHelper.getAnalyticsGroup('preview', this.formGroup.value, this.analyticsInitService.groupIndex++)
+      ConfigExportHelper.getAnalyticsGroup('preview',
+        this.formGroup.value,
+        this.analyticsInitService.groupIndex++,
+        this.main.lookAndFeelConfig.getGlobalFg())
     );
     if (!this.updateDisplay.closed) {
       this.updateDisplay.next(null);

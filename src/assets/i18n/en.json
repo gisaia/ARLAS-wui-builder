@@ -1,5 +1,6 @@
 {
-	"Managed by Arlas": "This field will be automatically filled by Arlas",
+	"Filled by Arlas": "This field will be automatically filled by Arlas",
+	"Managed by Arlas": "Managed by Arlas",
 	"Field set by unit collection in look and feel": "This field is automatically filled in with the collection unit entered in look and feel. If you want to change this value, go to the look and feel tab.",
 	"Back to home page": "Back to home page",
 	"Loading...": "Loading...",

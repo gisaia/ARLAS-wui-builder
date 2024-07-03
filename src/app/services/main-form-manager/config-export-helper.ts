@@ -1209,6 +1209,8 @@ export class ConfigExportHelper {
           component.input.customizedCssClass = widgetData.dataStep.aggregation.aggregationFieldType === 'numeric' ?
             'arlas-histogram-analytics' : 'arlas-timeline-analytics';
           (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve = unmanagedRenderFields.isSmoothedCurve;
+
+          ConfigExportHelper.updateCollectionUnit(widgetData, lookAndFeelConfigGlobal, component);
           break;
         }
         case WIDGET_TYPE.swimlane: {
@@ -1335,7 +1337,19 @@ export class ConfigExportHelper {
     component.uuid = uuid;
     component.usage = usage;
     return component;
+  }
 
+  public static updateCollectionUnit(widgetData: any, lookAndFeelConfigGlobal: LookAndFeelGlobalFormGroup, com: AnalyticComponentConfig) {
+    if(widgetData.dataStep.metric.metricCollectFunction === 'Count' && lookAndFeelConfigGlobal !== null && lookAndFeelConfigGlobal !== undefined){
+      const value =  widgetData.unmanagedFields.renderStep.yUnit;
+      const  lookAndFeelFormControl = (<FormArray>lookAndFeelConfigGlobal.customControls.units.value).controls
+        .filter(c => c.value.collection === widgetData.dataStep.collection);
+      const hasFoundValue = lookAndFeelFormControl !== null && lookAndFeelFormControl !== undefined && lookAndFeelFormControl.length > 0;
+      if(hasFoundValue) {
+        const collectionUnit = lookAndFeelFormControl[0]?.value?.unit ?? widgetData.dataStep.collection.value;
+        com.input.yUnit = (widgetData.unmanagedFields.renderStep.yUnit !== collectionUnit) ? collectionUnit : value;
+      }
+    }
   }
 
   private static exportSideModulesConfig(config: Config, sideModulesGlobal: SideModulesGlobalFormGroup) {
