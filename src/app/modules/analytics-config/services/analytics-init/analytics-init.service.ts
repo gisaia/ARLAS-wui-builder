@@ -22,8 +22,10 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { OperationEnum } from 'arlas-web-core';
-import { ArlasCollaborativesearchService, ArlasConfigService, ArlasStartupService,
-  ContributorBuilder, ArlasSettingsService } from 'arlas-wui-toolkit';
+import {
+  ArlasCollaborativesearchService, ArlasConfigService, ArlasStartupService,
+  ContributorBuilder, ArlasSettingsService
+} from 'arlas-wui-toolkit';
 
 @Injectable({
   providedIn: 'root'
@@ -33,13 +35,14 @@ export class AnalyticsInitService {
   public groupIndex = 0;
 
   public constructor(
-    private formBuilder: FormBuilder,
-    private mainFormService: MainFormService,
-    private arlasStartupService: ArlasStartupService,
-    private collaborativesearchService: ArlasCollaborativesearchService,
-    private configService: ArlasConfigService,
-    private settingsService: ArlasSettingsService
-  ) { }
+        private formBuilder: FormBuilder,
+        private mainFormService: MainFormService,
+        private arlasStartupService: ArlasStartupService,
+        private collaborativesearchService: ArlasCollaborativesearchService,
+        private configService: ArlasConfigService,
+        private settingsService: ArlasSettingsService
+  ) {
+  }
 
   public initModule() {
     this.mainFormService.analyticsConfig.initListFa(this.initTabsList([]));
@@ -88,7 +91,7 @@ export class AnalyticsInitService {
   public initNewWidget(type: string) {
     return this.formBuilder.group({
       widgetType: [type],
-      widgetData: new FormGroup({}, (fg: FormGroup) => ({ validateWidget: { valid: !!fg.controls.length } }))
+      widgetData: new FormGroup({}, (fg: FormGroup) => ({validateWidget: {valid: !!fg.controls.length}}))
     });
   }
 
@@ -97,7 +100,7 @@ export class AnalyticsInitService {
       widgetFg.value.widgetType,
       widgetFg.value.widgetData,
       groupFg.controls.icon.value);
-      groupFg.controls.preview.setValue(ConfigExportHelper.getAnalyticsGroup(
+    groupFg.controls.preview.setValue(ConfigExportHelper.getAnalyticsGroup(
       'preview',
       groupFg.value,
       this.groupIndex++,

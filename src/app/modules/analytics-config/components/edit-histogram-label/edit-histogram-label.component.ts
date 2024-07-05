@@ -199,7 +199,7 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
     }
 
     private enableXUnitField() {
-      this.xAxisConfig.unitControl.enable();
+      this.xAxisConfig?.unitControl.enable();
     }
 
     private disableYUnitField() {
@@ -208,7 +208,7 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
     }
 
     private enableYUnitField() {
-      this.yAxisConfig.unitControl.enable();
+      this.yAxisConfig?.unitControl.enable();
     }
 
     private setYUnitFieldWithCollectionUnit() {

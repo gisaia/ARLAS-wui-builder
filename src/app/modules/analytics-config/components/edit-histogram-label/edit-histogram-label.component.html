@@ -2,20 +2,20 @@
     <ng-container matColumnDef="recap">
         <th mat-header-cell *matHeaderCellDef></th>
         <td class="name" mat-cell *matCellDef="let element">
-            {{element.title | translate}}
+            {{element?.title | translate}}
         </td>
     </ng-container>
     <ng-container matColumnDef="fieldLabel">
         <th mat-header-cell *matHeaderCellDef>{{'Field' | translate}}</th>
         <td class="name" mat-cell *matCellDef="let element">
            <!-- recap value -->
-            {{ element.dataFieldValue.value }} <span *ngIf="element.title === 'y-label'">({{ element.dataFieldFunction.value}})</span>
+            {{ element?.dataFieldValue.value }} <span *ngIf="element.title === 'y-label'">({{ element?.dataFieldFunction.value}})</span>
         </td>
     </ng-container>
     <ng-container matColumnDef="fieldColumn">
         <th mat-header-cell *matHeaderCellDef>{{'Label' | translate}}</th>
         <td mat-cell *matCellDef="let element">
-             <arlas-config-form-control  [showLabel]="false" [control]="element.labelControl">
+             <arlas-config-form-control  [showLabel]="false" [control]="element?.labelControl">
              </arlas-config-form-control>
          </td>
      </ng-container>
@@ -23,12 +23,12 @@
          <th mat-header-cell *matHeaderCellDef>{{'Unit' | translate}}</th>
          <td mat-cell *matCellDef="let element">
              <div class="field">
-                 <arlas-config-form-control *ngIf="(element.displayUnitControl | async); else hint"  [showLabel]="false" [control]="element.unitControl">
+                 <arlas-config-form-control *ngIf="(element?.displayUnitControl | async); else hint"  [showLabel]="false" [control]="element?.unitControl">
                  </arlas-config-form-control>
                  <ng-template #hint>
-                     <div *ngIf="(element.hint | async) as hint" class="text-hint">{{hint}}</div>
+                     <div *ngIf="(element?.hint | async) as hint" class="text-hint">{{hint}}</div>
                  </ng-template>
-                 <ng-container *ngIf="(element.infoMessage | async) as message">
+                 <ng-container *ngIf="(element?.infoMessage | async) as message">
                      <mat-icon class="icon" matTooltip="{{message | translate}}" matTooltipPosition="right">info_outline</mat-icon>
                  </ng-container>
              </div>
