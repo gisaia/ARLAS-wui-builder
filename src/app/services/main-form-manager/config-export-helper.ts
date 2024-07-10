@@ -79,7 +79,6 @@ export class ConfigExportHelper {
     resultLists: FormArray,
     collectionService: CollectionService
   ): string[] {
-
     let mainCollection;
     const collectionFormControl = startingConfig.customControls.collection;
     if (!!startingConfig && !!collectionFormControl) {
@@ -268,7 +267,7 @@ export class ConfigExportHelper {
 
       (analyticsConfigList.value as Array<any>).forEach(tab => {
         tab.contentFg.groupsFa.forEach((group: any, groupIndex: number) => {
-          config.arlas.web.analytics.push(this.getAnalyticsGroup(tab.tabName, group, groupIndex));
+          config.arlas.web.analytics.push(this.getAnalyticsGroup(tab.tabName, group, groupIndex, lookAndFeelConfigGlobal));
         });
       });
     }
@@ -1073,7 +1072,7 @@ export class ConfigExportHelper {
     } as ContributorConfig;
   }
 
-  public static getAnalyticsGroup(tabName: string, group: any, groupIndex: number) {
+  public static getAnalyticsGroup(tabName: string, group: any, groupIndex: number, lookAndFeelGlobalFormGroup?: LookAndFeelGlobalFormGroup) {
     const groupAnalytic = {
       groupId: tabName + '-' + groupIndex.toString(),
       title: group.title,
@@ -1082,7 +1081,8 @@ export class ConfigExportHelper {
       components: []
     } as AnalyticConfig;
     group.content.forEach(widget => {
-      groupAnalytic.components.push(this.getAnalyticsComponent(widget.widgetType, widget.widgetData, group.itemPerLine));
+      groupAnalytic.components.push(this.getAnalyticsComponent(
+        widget.widgetType, widget.widgetData, group.itemPerLine, lookAndFeelGlobalFormGroup));
     });
 
     return groupAnalytic;
@@ -1152,7 +1152,11 @@ export class ConfigExportHelper {
     return idString;
   }
 
-  private static getAnalyticsComponent(widgetType: any, widgetData: any, itemPerLine: number): AnalyticComponentConfig {
+  private static getAnalyticsComponent(
+    widgetType: any,
+    widgetData: any,
+    itemPerLine: number,
+    lookAndFeelConfigGlobal?: LookAndFeelGlobalFormGroup): AnalyticComponentConfig {
     const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
     const analyticsBoardWidth = 445;
     const contributorId = this.getContributorId(widgetData, widgetType);
@@ -1184,6 +1188,7 @@ export class ConfigExportHelper {
           xUnit: unmanagedRenderFields.xUnit,
           yUnit: unmanagedRenderFields.yUnit,
           chartXLabel: unmanagedRenderFields.chartXLabel,
+          chartYLabel: unmanagedRenderFields.chartYLabel,
           shortYLabels: unmanagedRenderFields.shortYLabels,
           showXTicks: unmanagedRenderFields.showXTicks,
           showYTicks: unmanagedRenderFields.showYTicks,
@@ -1204,6 +1209,8 @@ export class ConfigExportHelper {
           component.input.customizedCssClass = widgetData.dataStep.aggregation.aggregationFieldType === 'numeric' ?
             'arlas-histogram-analytics' : 'arlas-timeline-analytics';
           (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve = unmanagedRenderFields.isSmoothedCurve;
+
+          ConfigExportHelper.updateCollectionUnit(widgetData, lookAndFeelConfigGlobal, component);
           break;
         }
         case WIDGET_TYPE.swimlane: {
@@ -1330,7 +1337,19 @@ export class ConfigExportHelper {
     component.uuid = uuid;
     component.usage = usage;
     return component;
+  }
 
+  public static updateCollectionUnit(widgetData: any, lookAndFeelConfigGlobal: LookAndFeelGlobalFormGroup, com: AnalyticComponentConfig) {
+    if(widgetData.dataStep.metric.metricCollectFunction === 'Count' && lookAndFeelConfigGlobal !== null && lookAndFeelConfigGlobal !== undefined){
+      const value =  widgetData.unmanagedFields.renderStep.yUnit;
+      const  lookAndFeelFormControl = (<FormArray>lookAndFeelConfigGlobal.customControls.units.value).controls
+        .filter(c => c.value.collection === widgetData.dataStep.collection);
+      const hasFoundValue = lookAndFeelFormControl !== null && lookAndFeelFormControl !== undefined && lookAndFeelFormControl.length > 0;
+      if(hasFoundValue) {
+        const collectionUnit = lookAndFeelFormControl[0]?.value?.unit ?? widgetData.dataStep.collection.value;
+        com.input.yUnit = (widgetData.unmanagedFields.renderStep.yUnit !== collectionUnit) ? collectionUnit : value;
+      }
+    }
   }
 
   private static exportSideModulesConfig(config: Config, sideModulesGlobal: SideModulesGlobalFormGroup) {
