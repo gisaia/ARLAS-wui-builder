@@ -321,6 +321,10 @@ export class MapImportService {
     layerFg: MapLayerFormGroup,
     filtersFa: FormArray
   ) {
+    // convert to circle heatmap
+    if(layer.metadata['hidden-props'] && layer.metadata['hidden-props']['geom-type'] === GEOMETRY_TYPE.circleHeat) {
+      layer.type = GEOMETRY_TYPE.circleHeat;
+    }
     const type = layer.source.split('-')[0];
     // TODO extract type with toolkit, once it is available (contrary of `getSourceName`)
     const layerMode = layer.source.startsWith('feature-metric') ? LAYER_MODE.featureMetric :
@@ -522,6 +526,8 @@ export class MapImportService {
         values.styleStep.labelAlignmentCtrl = LABEL_ALIGNMENT.center.toString();
       }
     }
+
+
     if (layerMode === LAYER_MODE.features) {
       this.importLayerFeatures(values, layer, layerSource);
     } else if (layerMode === LAYER_MODE.featureMetric) {
