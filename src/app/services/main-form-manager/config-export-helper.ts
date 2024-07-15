@@ -189,7 +189,6 @@ export class ConfigExportHelper {
                 unit: c.customControls.unit.value,
                 ignored: c.customControls.ignored.value
               })),
-            name_background_color: startingConfig.customControls.unmanagedFields.appNameBackgroundColor.value
           }
         }
       },

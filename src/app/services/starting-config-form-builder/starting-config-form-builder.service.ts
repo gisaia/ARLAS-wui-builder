@@ -19,7 +19,6 @@ under the License.
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { HiddenFormControl } from '@shared-models/config-form';
 
 export class StartingConfigFormGroup extends FormGroup {
   public constructor() {
@@ -36,7 +35,6 @@ export class StartingConfigFormGroup extends FormGroup {
       colorGenerator: new FormControl(),
       unmanagedFields: new FormGroup({
         appName: new FormControl(),
-        appNameBackgroundColor: new FormControl()
       })
     });
   }
@@ -47,7 +45,6 @@ export class StartingConfigFormGroup extends FormGroup {
     colorGenerator: this.get('colorGenerator'),
     unmanagedFields: {
       appName: this.get('unmanagedFields.appName'),
-      appNameBackgroundColor: this.get('unmanagedFields.appNameBackgroundColor'),
     }
   };
 
