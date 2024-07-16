@@ -41,7 +41,6 @@ export interface Config {
         name: string;
         unit?: string;
         units?: { unit?: string; collection?: string; ignored?: boolean; }[];
-        name_background_color: string;
       };
     };
   };
