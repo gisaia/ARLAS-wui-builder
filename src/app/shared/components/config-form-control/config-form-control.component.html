@@ -26,10 +26,16 @@
 <div *ngIf="isSlider(); let typedControl" class="slider-form-control">
     <mat-label [class.control-error]="typedControl.touched && typedControl.invalid">{{ typedControl.label | translate}}
         {{typedControl.optional ? '' : '*'}}</mat-label>
-    <mat-slider thumbLabel [formControl]="typedControl" [min]="typedControl.min" [max]="typedControl.max"
-        [step]="typedControl.step" (input)="typedControl.ensureLessThan ? typedControl.checkLessThan($event.value) : null;
+    <div class="slider-container">
+        <mat-form-field class="slider-input" appearance="outline">
+            <input   matInput type="number" [step]="typedControl.step" [formControl]="typedControl" [min]="typedControl.min" [max]="typedControl.max" [value]="typedControl.value">
+        </mat-form-field>
+        <mat-slider thumbLabel [formControl]="typedControl" [min]="typedControl.min" [max]="typedControl.max" [value]="typedControl.value"
+                    [step]="typedControl.step" (input)="typedControl.ensureLessThan ? typedControl.checkLessThan($event.value) : null;
         typedControl.ensureGeaterThan ? typedControl.checkGreaterThan($event.value) : null">
-    </mat-slider>
+        </mat-slider>
+    </div>
+
     <mat-card *ngIf="typedControl.hasWarning" class="empty_visulisation">
         {{ typedControl.warningMessage | translate}}
     </mat-card>
@@ -288,8 +294,15 @@
         <div class="action-container">
             <div>
                 <mat-label>{{ 'donut size' | translate}}</mat-label>
-                <mat-slider thumbLabel [formControl]="typedControl.sizeCtrl" [min]="1" [max]="30" [step]="1">
-                </mat-slider>
+                <div class="slider-form-control">
+                    <div class="slider-container">
+                        <mat-form-field class="slider-input" appearance="outline">
+                            <input   matInput type="number" [step]="1" [formControl]="typedControl.sizeCtrl" [min]="1" [max]="30" [value]="typedControl.sizeCtrl.value">
+                        </mat-form-field>
+                    <mat-slider thumbLabel [formControl]="typedControl.sizeCtrl" [min]="1" [max]="30" [step]="1" [value]="typedControl.value">
+                    </mat-slider>
+                    </div>
+                </div>
             </div>
             <div class="field-add-container">
                 <div class="field-container">
