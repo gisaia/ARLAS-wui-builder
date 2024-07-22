@@ -695,7 +695,9 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
     this.updateFieldsByMetric(this.stringToMetricsEnum(opt.metric));
     setTimeout(() => {
       this.fieldCtrl.setValue(opt.field);
-      this.arlasFilterCtrl.setValue(JSON.stringify(opt.filter));
+      if(opt.filter) {
+        this.arlasFilterCtrl.setValue(JSON.stringify(opt.filter));
+      }
       this.updateValueAndValidity();
     }, 0);
   }
