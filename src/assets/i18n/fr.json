@@ -448,7 +448,7 @@
 	"Zoom min": "Zoom minimal",
 	"zoom min description": "Niveau de zoom minimal pour visualiser la couche dans l'application.Par exemple, un zoom minimal configurer à 3 rendra votre couche visible à partir de l'échelle continentale. Avant ce seuil, elle ne sera pas visible.",
 	"Zoom max": "Zoom maximal",
-	"zoom max description": "Niveau de zoom maximal pour visualiser la couche dans l'application. Par exemple, un zoom maximal configurer à 15 rendra votre couche visible jusqu'à l'échelle du bâtiment. Au-delà, elle ne sera plus visible.",
+	"zoom max description": "Niveau de zoom maximal pour visualiser la couche dans l'application. Par exemple, un zoom maximal configurer à 15 rendra votre couche visible jusqu'à l'échelle du bâtiment. Au-delà de ce seuil, elle ne sera plus visible.",
 	"Add filter": "",
 	"Map filters description": "Liste des filtre appliquées à la couche",
 	"Filter elements to display": "Filtrer les éléments à afficher",
