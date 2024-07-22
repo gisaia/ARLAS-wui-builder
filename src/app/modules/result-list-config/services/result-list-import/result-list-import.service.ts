@@ -232,6 +232,13 @@ export class ResultListImportService {
       widgetData.customControls.dataStep.columns.push(column);
     });
 
+    importElements([
+      {
+        value: !!contributor.fieldsConfiguration.detailsTitleTemplate ? contributor.fieldsConfiguration.detailsTitleTemplate : '',
+        control: dataStep.detailsTitle
+      }
+    ]);
+
     (contributor.details || [])
       .sort((d1, d2) => d1.order - d2.order)
       .forEach(d => {

@@ -945,6 +945,9 @@ export class ConfigExportHelper {
         if (widgetData.renderStep.gridStep.imageUrl) {
           fieldsConfig.urlImageTemplate = widgetData.renderStep.gridStep.imageUrl;
         }
+        if (widgetData.dataStep.detailsTitle) {
+          fieldsConfig.detailsTitleTemplate = widgetData.dataStep.detailsTitle;
+        }
 
         contrib.fieldsConfiguration = fieldsConfig;
         contrib.columns = [];
@@ -1010,6 +1013,9 @@ export class ConfigExportHelper {
         useHttpQuicklooks: list.renderStep.gridStep.useHttpQuicklooks,
         useHttpThumbnails: list.renderStep.gridStep.useHttpThumbnails
       };
+      if( list.dataStep.detailsTitle){
+        fieldsConfig.detailsTitleTemplate = list.dataStep.detailsTitle;
+      }
       if (list.renderStep.gridStep.thumbnailUrl) {
         fieldsConfig.urlThumbnailTemplate = list.renderStep.gridStep.thumbnailUrl;
       }
