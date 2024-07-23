@@ -46,9 +46,19 @@
                             matTooltip="{{ 'Remove color' | translate}}">
                             <mat-icon>remove</mat-icon>
                         </button>
-                        <mat-slider [min]="data.min" [max]="data.max" [step]="(data.max - data.min) / 20" thumbLabel
-                            [(ngModel)]="selectedPalette[i].proportion"
-                            matTooltip="{{ 'Change color midpoint' | translate}}" matTooltipPosition="right"></mat-slider>
+                       <div class="slider-form-control">
+                           <div class="slider-container">
+                               <mat-form-field class="slider-input" appearance="outline">
+                                   <input   matInput type="number"  [(ngModel)]="selectedPalette[i].proportion"
+                                            [step]="(data.max - data.min) / 20"
+                                            [min]="data.min"
+                                            [max]="data.max" >
+                               </mat-form-field>
+                               <mat-slider [min]="data.min" [max]="data.max" [step]="(data.max - data.min) / 20" thumbLabel
+                                           [(ngModel)]="selectedPalette[i].proportion"
+                                           matTooltip="{{ 'Change color midpoint' | translate}}" matTooltipPosition="right"></mat-slider>
+                       </div>
+                       </div>
                     </div>
                 </div>
                 <div *cdkDragPlaceholder class="color-panel">

@@ -32,7 +32,7 @@
         <arlas-config-element [fullSize]="!bucketTypeControl.description">
             <div form-fields>
                 <table class="table">
-                    <tbody>
+                    <tbody >
                         <mat-radio-group [formControl]="bucketTypeControl"
                             [arlasResetOnChange]="bucketTypeControl.resetDependantsOnChange && bucketTypeControl.dependantControls ? defaultKey : null"
                             [dependants]="bucketTypeControl.resetDependantsOnChange && bucketTypeControl.dependantControls ? bucketTypeControl.dependantControls : null">
@@ -50,15 +50,26 @@
                         </mat-radio-group>
 
                     </tbody>
-                    <tbody>
+                    <tbody class="table-body-right">
                         <tr class="cell">
-                            <td>
-                                <mat-slider thumbLabel [formControl]="preferredBucketsNumber"
-                                [min]="preferredBucketsNumber.min" [max]="preferredBucketsNumber.max"
-                                [step]="preferredBucketsNumber.step"
-                                (input)="preferredBucketsNumber.ensureLessThan ? preferredBucketsNumber.checkLessThan($event.value) : null;
-                            preferredBucketsNumber.ensureGeaterThan ? preferredBucketsNumber.checkGreaterThan($event.value) : null">
-                            </mat-slider>
+                            <td class="slider-form-control">
+                                <div class="slider-container">
+                                    <mat-form-field class="slider-input" appearance="outline">
+                                    <input   matInput type="number"
+                                             [step]="preferredBucketsNumber.step"
+                                             [formControl]="preferredBucketsNumber"
+                                             [min]="preferredBucketsNumber.min"
+                                             [max]="preferredBucketsNumber.max"
+                                             [value]="preferredBucketsNumber.value"
+                                    >
+                                    </mat-form-field>
+                                    <mat-slider thumbLabel [formControl]="preferredBucketsNumber"
+                                    [min]="preferredBucketsNumber.min" [max]="preferredBucketsNumber.max"
+                                    [step]="preferredBucketsNumber.step" [value]="preferredBucketsNumber.value"
+                                    (input)="preferredBucketsNumber.ensureLessThan ? preferredBucketsNumber.checkLessThan($event.value) : null;
+                                    preferredBucketsNumber.ensureGeaterThan ? preferredBucketsNumber.checkGreaterThan($event.value) : null">
+                                    </mat-slider>
+                                </div>
                             </td>
                         </tr>
                         <tr class="cell">
