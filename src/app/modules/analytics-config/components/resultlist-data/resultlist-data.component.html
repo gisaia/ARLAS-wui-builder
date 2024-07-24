@@ -16,6 +16,17 @@
                 {{'Details' | translate}}
             </span>
         </ng-template>
+
+        <div class="details-title">
+            <arlas-config-element [fullSize]="!detailsTitleControl.description">
+                <div form-fields>
+                    <arlas-config-form-control [control]="detailsTitleControl"></arlas-config-form-control>
+                </div>
+                <div description *ngIf="detailsTitleControl.description">
+                    {{ detailsTitleControl.description | translate}}
+                </div>
+            </arlas-config-element>
+        </div>
         <arlas-edit-resultlist-details [control]="control.get('details')" [collection]="control.get('collection')">
         </arlas-edit-resultlist-details>
     </mat-tab>
