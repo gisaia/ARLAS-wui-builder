@@ -98,10 +98,18 @@ export interface WebConfig {
 
 export interface WebConfigOptions {
   drag_items?: boolean;
+  /** @deprecated */
   zoom_to_data?: boolean;
+  zoom_to_strategy?: ZoomToDataStrategy;
   indicators?: boolean;
   spinner?: SpinnerOptions;
   tabs: AnalyticsTabs[];
+}
+
+export enum ZoomToDataStrategy{
+  NONE = 'none',
+  CENTROID = 'centroid',
+  GEOMETRY = 'geometry'
 }
 
 export interface SpinnerOptions {

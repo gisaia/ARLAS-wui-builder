@@ -21,7 +21,7 @@ import { FormArray } from '@angular/forms';
 import {
   LookAndFeelGlobalFormGroup
 } from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
-import { Config } from '@services/main-form-manager/models-config';
+import { Config, ZoomToDataStrategy } from '@services/main-form-manager/models-config';
 import { importElements } from '@services/main-form-manager/tools';
 import { MainFormService } from '@services/main-form/main-form.service';
 
@@ -68,8 +68,9 @@ export class LookAndFeelImportService {
           control: globalLookAndFeelFg.customControls.dragAndDrop
         },
         {
-          value: configOptions.zoom_to_data,
-          control: globalLookAndFeelFg.customControls.zoomToData
+          value: !!configOptions.zoom_to_strategy ? configOptions.zoom_to_strategy :
+            (configOptions.zoom_to_data ? ZoomToDataStrategy[ZoomToDataStrategy.CENTROID] : ZoomToDataStrategy[ZoomToDataStrategy.NONE]),
+          control: globalLookAndFeelFg.customControls.zoomToDataStrategy
         },
         {
           value: configOptions.indicators,
@@ -77,7 +78,7 @@ export class LookAndFeelImportService {
         }
       ]);
 
-      if ( configOptions.spinner) {
+      if (configOptions.spinner) {
         importElements([
           {
             value: configOptions.spinner.show,

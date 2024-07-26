@@ -28,7 +28,8 @@ import {
   CHIPSEARCH_TYPE,
   CHIPSEARCH_IDENTIFIER,
   WebConfigOptions,
-  MetricsSubTableConfig
+  MetricsSubTableConfig,
+  ZoomToDataStrategy
 } from './models-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
@@ -1421,10 +1422,11 @@ export class ConfigExportHelper {
     const showSpinner = !!lookAndFeelConfigGlobal.customControls.spinner.value;
     const spinnerColor: string = lookAndFeelConfigGlobal.customControls.spinnerColor.value;
     const spinnerDiameter: string = lookAndFeelConfigGlobal.customControls.spinnerDiameter.value;
+    const zoomToDataStrategy: string = lookAndFeelConfigGlobal.customControls.zoomToDataStrategy.value;
 
     const options = {
       drag_items: !!lookAndFeelConfigGlobal.customControls.dragAndDrop.value,
-      zoom_to_data: !!lookAndFeelConfigGlobal.customControls.zoomToData.value,
+      zoom_to_strategy: !!zoomToDataStrategy ? zoomToDataStrategy : ZoomToDataStrategy.NONE,
       indicators: !!lookAndFeelConfigGlobal.customControls.indicators.value,
       spinner: {
         show: showSpinner,
