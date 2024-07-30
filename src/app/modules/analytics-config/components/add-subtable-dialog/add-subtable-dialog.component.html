@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>{{title| translate }}</h1>
+<h1 mat-dialog-title>{{title | translate }}</h1>
 <div mat-dialog-content>
     <arlas-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey">
     </arlas-config-form-group>
@@ -7,7 +7,7 @@
         <table #columnTable mat-table [dataSource]="columns.controls" class="columns" cdkDropList
             [cdkDropListData]="columns.controls" (cdkDropListDropped)="drop($event)"
             [cdkDropListDisabled]="dragDisabled" [cdkDropListLockAxis]="'y'">
-    
+
             <ng-container matColumnDef="action">
                 <th class="action" mat-header-cell *matHeaderCellDef></th>
                 <td class="action" class="action" mat-cell *matCellDef="let column; let i = index">
@@ -16,7 +16,7 @@
                         <button mat-icon-button (click)="deleteColumn(i)">
                             <mat-icon>delete</mat-icon>
                         </button>
-                    </div> 
+                    </div>
                 </td>
             </ng-container>
             <ng-container matColumnDef="metric">
@@ -38,25 +38,18 @@
                 [cdkDragData]="row" class="column-drag"></tr>
         </table>
     </div>
-    
-    <mat-error *ngIf="columns.touched && columns?.hasError('required')">{{'At least one column is required' | translate}}
+    <mat-error *ngIf="columns.touched && columns?.hasError('required')">{{'At least one column is required' |
+        translate}}
     </mat-error>
     <div class="button-wrapper">
-        <button mat-stroked-button color="primary" (click)="addColumn()"
-            [matTooltip]="'Add a column' | translate" type="button">
+        <button mat-stroked-button color="primary" (click)="addColumn()" [matTooltip]="'Add a column' | translate"
+            type="button">
             <mat-icon>add</mat-icon>
             {{'Add a column' | translate}}
         </button>
     </div>
-
-
-
-
-
-
-
 </div>
 <div mat-dialog-actions>
     <button mat-button [mat-dialog-close]>{{'Cancel' | translate}}</button>
-    <button cdkFocusInitial (click)="add()" mat-raised-button color="primary">{{buttonLabel| translate}}</button>
+    <button cdkFocusInitial (click)="add()" mat-raised-button color="primary">{{buttonLabel | translate}}</button>
 </div>

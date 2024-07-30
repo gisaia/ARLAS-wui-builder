@@ -44,14 +44,17 @@ export class AddSubtableDialogComponent implements OnInit, OnDestroy {
   @ViewChild('columnTable', { static: true }) public columnTable;
   public dragDisabled = true;
   public displayedColumns: string[] = ['action', 'metric', 'field'];
-  public title = 'Add a sub table';
-  public buttonLabel = 'Add';
+  public title: string = marker('Add a sub table');
+  public buttonLabel: string = marker('Add');
 
   private metricCollectFunctionValuesChangeSub: Subscription;
   private collectionValuesChangeSub: Subscription;
 
   public constructor(
-    @Inject(MAT_DIALOG_DATA) public dialogData: any,
+    @Inject(MAT_DIALOG_DATA) public dialogData: {
+      subTable: SubTableFormGroup;
+      collection: string;
+    },
     public dialogRef: MatDialogRef<AddSubtableDialogComponent>,
     private metricsTableFormBuilder: MetricsTableFormBuilderService,
     private collectionService: CollectionService
@@ -64,8 +67,8 @@ export class AddSubtableDialogComponent implements OnInit, OnDestroy {
       (this.formGroup.get('columns') as FormArray).controls.forEach(c => {
         this.initMetricCollectField(c as SubTableColumnFormGroup);
       });
-      this.title = 'Edit sub table';
-      this.buttonLabel = 'Edit';
+      this.title = marker('Edit sub table');
+      this.buttonLabel = marker('Edit');
 
     } else {
       this.formGroup = formBuilder.buildSubTable(this.dialogData.collection);
@@ -142,8 +145,8 @@ export class AddSubtableDialogComponent implements OnInit, OnDestroy {
     const previousIndex = this.columns.controls.findIndex(row => row === event.item.data);
     moveItemInArray(this.columns.controls, previousIndex, event.currentIndex);
     const newOrders = new Array(...this.columns.controls);
-    newOrders.forEach((v,i) => {
-      this.columns.setControl(i,v);
+    newOrders.forEach((v, i) => {
+      this.columns.setControl(i, v);
     });
     this.columnTable.renderRows();
   }

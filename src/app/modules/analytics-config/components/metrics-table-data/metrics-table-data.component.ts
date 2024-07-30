@@ -17,9 +17,9 @@ specific language governing permissions and limitations
 under the License.
 */
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
-import { Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { AddSubtableDialogComponent } from '../add-subtable-dialog/add-subtable-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MetricsTableSortConfig } from '@services/main-form-manager/models-config';
@@ -30,7 +30,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
   templateUrl: './metrics-table-data.component.html',
   styleUrls: ['./metrics-table-data.component.scss']
 })
-export class MetricsTableDataComponent implements OnInit, OnDestroy {
+export class MetricsTableDataComponent implements OnInit {
 
   @Input() public control: FormArray = new FormArray([]);
   @Input() public collection: string;
@@ -40,7 +40,6 @@ export class MetricsTableDataComponent implements OnInit, OnDestroy {
 
   public dragDisabled = true;
   public displayedColumns: string[] = ['drag', 'collection', 'field', 'columns', 'actions'];
-  private afterClosedAddSub: Subscription;
   private metricsTableSortConfig: MetricsTableSortConfig = {};
 
   public constructor(private dialog: MatDialog, private main: MainFormService,
@@ -55,14 +54,8 @@ export class MetricsTableDataComponent implements OnInit, OnDestroy {
     }
   }
 
-  public ngOnDestroy(): void {
-    if (this.afterClosedAddSub) {
-      this.afterClosedAddSub.unsubscribe();
-    }
-  }
-
   public addSubtable() {
-    this.afterClosedAddSub = this.dialog.open(AddSubtableDialogComponent, {
+    this.dialog.open(AddSubtableDialogComponent, {
       width: '1200px', data: {
         collection: this.collection
       }
@@ -83,14 +76,14 @@ export class MetricsTableDataComponent implements OnInit, OnDestroy {
     const previousIndex = this.control.controls.findIndex(row => row === event.item.data);
     moveItemInArray(this.control.controls, previousIndex, event.currentIndex);
     const newOrders = new Array(...this.control.controls);
-    newOrders.forEach((v,i) => {
-      this.control.setControl(i,v);
+    newOrders.forEach((v, i) => {
+      this.control.setControl(i, v);
     });
     this.subTables.renderRows();
   }
 
   public editSubTable(index, collection) {
-    this.afterClosedAddSub = this.dialog.open(AddSubtableDialogComponent, {
+    this.dialog.open(AddSubtableDialogComponent, {
       width: '1200px', data: {
         collection: collection,
         subTable: this.control.at(index)
