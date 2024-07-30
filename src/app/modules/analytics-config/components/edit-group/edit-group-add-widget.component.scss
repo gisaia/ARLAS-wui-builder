@@ -35,12 +35,18 @@ under the License.
          background-color: $accentColor;
          color: white;
          border-color: $accentColor;
+         svg path {
+            fill:white !important;
+         }
       }
 
       &:hover{
          background-color: rgba($accentColor, 0.2);
          border-color: $accentColor;
-         color: $accentColor
+         color: $accentColor;
+         svg path {
+            fill:$accentColor !important;
+         }
       }
 
       .icon{

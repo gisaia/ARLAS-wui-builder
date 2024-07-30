@@ -403,6 +403,9 @@ export class ComponentFormControl extends ConfigFormControl {
     // inputs of the component, to be returned from the callback
     public inputs: {
       [key: string]: () => any;
+    },
+    public outputs?: {
+      [key: string]: (val) => any;
     }
   ) {
     super(null, null, null, { optional: true });
@@ -432,7 +435,7 @@ export class SelectFormControl extends ConfigFormControl {
     if (options instanceof Observable) {
       options.subscribe(opts => {
         this.setSyncOptions(opts);
-        this.updateValueAndValidity({emitEvent: true});
+        this.updateValueAndValidity({ emitEvent: true });
       });
     } else if (options instanceof Array) {
       this.setSyncOptions(options);

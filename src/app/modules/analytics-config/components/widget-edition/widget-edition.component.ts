@@ -29,7 +29,7 @@ import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts
   templateUrl: './widget-edition.component.html',
   styleUrls: ['./widget-edition.component.scss']
 })
-export class WidgetEditionComponent implements OnInit, OnChanges{
+export class WidgetEditionComponent implements OnInit, OnChanges {
   @Input() public widgetControls: { widgetType: FormControl<WIDGET_TYPE>; widgetData: WidgetConfigFormGroup; };
   @Input() public isValid: boolean;
 
@@ -49,7 +49,10 @@ export class WidgetEditionComponent implements OnInit, OnChanges{
       if (this.widgetControls.widgetType) {
         /** show add/remove shortcut only for powerbars and histograms */
         this.showPinInMenu =
-         (this.widgetControls.widgetType.value === WIDGET_TYPE.powerbars || this.widgetControls.widgetType.value === WIDGET_TYPE.histogram);
+          (this.widgetControls.widgetType.value === WIDGET_TYPE.metricstable ||
+            this.widgetControls.widgetType.value === WIDGET_TYPE.powerbars ||
+            this.widgetControls.widgetType.value === WIDGET_TYPE.histogram
+          );
       }
       if (this.widgetControls.widgetData) {
         const widgetConfigFg = this.widgetControls.widgetData;

@@ -3,15 +3,18 @@
 </div>
 <div mat-dialog-content>
     <mat-radio-group [(ngModel)]="widgetType" class="group">
-            <mat-radio-button *ngFor="let types of this.contentTypes; let idx=index;" class="widget-type" [value]="types.label" [disabled]="types.label === 'resultlist'"
-                [matTooltip]="((types.label === 'resultlist') ?  'Data tables are out of analytics' : types.label) | translate" [matTooltipPosition]="idx%2 !== 0 ? 'right' : 'left'">
-                <mat-icon class="icon">{{types.icon}}</mat-icon>
-                {{types.label | translate}}
-            </mat-radio-button>
+        <mat-radio-button *ngFor="let types of this.contentTypes; let idx=index;" class="widget-type"
+            [value]="types.label" [disabled]="types.label === 'resultlist'"
+            [matTooltip]="((types.label === 'resultlist') ?  'Data tables are out of analytics' : types.label) | translate"
+            [matTooltipPosition]="idx%2 !== 0 ? 'right' : 'left'">
+            <mat-icon *ngIf="types.iconType == 'svg'" class="icon" svgIcon="{{types.icon}}"></mat-icon>
+            <mat-icon *ngIf="types.iconType == 'icon'" class="icon">{{types.icon}}</mat-icon>
+            {{types.label | translate}}
+        </mat-radio-button>
     </mat-radio-group>
 </div>
 <div mat-dialog-actions>
-    <button mat-raised-button class="modal_button" color="primary" [mat-dialog-close]="widgetType" [disabled]="!widgetType"
-        tabindex="2">{{ 'Add' | translate }}</button>
+    <button mat-raised-button class="modal_button" color="primary" [mat-dialog-close]="widgetType"
+        [disabled]="!widgetType" tabindex="2">{{ 'Add' | translate }}</button>
     <button mat-raised-button class="modal_button" (click)="cancel()" tabindex="-1">{{ 'Cancel' | translate }}</button>
 </div>

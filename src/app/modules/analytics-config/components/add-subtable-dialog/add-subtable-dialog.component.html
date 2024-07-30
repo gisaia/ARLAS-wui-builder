@@ -1,0 +1,62 @@
+<h1 mat-dialog-title>{{title| translate }}</h1>
+<div mat-dialog-content>
+    <arlas-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey">
+    </arlas-config-form-group>
+
+    <div class="columns-wrapper">
+        <table #columnTable mat-table [dataSource]="columns.controls" class="columns" cdkDropList
+            [cdkDropListData]="columns.controls" (cdkDropListDropped)="drop($event)"
+            [cdkDropListDisabled]="dragDisabled" [cdkDropListLockAxis]="'y'">
+    
+            <ng-container matColumnDef="action">
+                <th class="action" mat-header-cell *matHeaderCellDef></th>
+                <td class="action" class="action" mat-cell *matCellDef="let column; let i = index">
+                    <div class="action-wrapper">
+                        <mat-icon class="drag" (mousedown)="dragDisabled = false">drag_indicator</mat-icon>
+                        <button mat-icon-button (click)="deleteColumn(i)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div> 
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="metric">
+                <th mat-header-cell *matHeaderCellDef>{{'Column metric' | translate}}</th>
+                <td class="metric" mat-cell *matCellDef="let column">
+                    <arlas-config-form-control [showLabel]="false" [control]="column.controls.metricCollectFunction">
+                    </arlas-config-form-control>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="field">
+                <th class="field" mat-header-cell *matHeaderCellDef>{{'Column field' | translate}}</th>
+                <td class="field" mat-cell *matCellDef="let column">
+                    <arlas-config-form-control [showLabel]="false" [control]="column.controls.metricCollectField">
+                    </arlas-config-form-control>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (cdkDragStarted)="dragStarted($event)" cdkDrag
+                [cdkDragData]="row" class="column-drag"></tr>
+        </table>
+    </div>
+    
+    <mat-error *ngIf="columns.touched && columns?.hasError('required')">{{'At least one column is required' | translate}}
+    </mat-error>
+    <div class="button-wrapper">
+        <button mat-stroked-button color="primary" (click)="addColumn()"
+            [matTooltip]="'Add a column' | translate" type="button">
+            <mat-icon>add</mat-icon>
+            {{'Add a column' | translate}}
+        </button>
+    </div>
+
+
+
+
+
+
+
+</div>
+<div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]>{{'Cancel' | translate}}</button>
+    <button cdkFocusInitial (click)="add()" mat-raised-button color="primary">{{buttonLabel| translate}}</button>
+</div>

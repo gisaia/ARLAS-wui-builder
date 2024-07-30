@@ -159,6 +159,30 @@ export interface ContributorConfig {
   includeMetadata?: Array<string>;
   filterOperator?: string;
   allowOperatorChange?: boolean;
+  sort?: MetricsTableSortConfig;
+  configuration?: Array<MetricsSubTableConfig>;
+
+}
+
+export interface MetricsSubTableConfig {
+  termfield: string;
+  collection: string;
+  metrics: Array<{
+    metric: string;
+    field?: string;
+  }>;
+
+}
+
+export interface MetricsTableSortConfig {
+  collection?: string;
+  termfield?: string;
+  order?: Aggregation.OrderEnum;
+  on?: 'metric' | 'count';
+  metric?: {
+    metric: string;
+    field: string;
+  };
 }
 
 export interface SwimlaneConfig {
@@ -271,6 +295,11 @@ export interface AnalyticComponentInputConfig {
   globalActionEvent?: any;
   cellBackgroundStyle?: string;
   scrollable?: boolean;
+  applyColorTo?: 'column'|'row';
+  headerDisplayMode?: 'chip'|'title'|'full';
+  normaliseBy?:  'column'|'table';
+  selectWithCheckbox?: boolean;
+  showRowField?: boolean;
 }
 
 export interface AnalyticComponentResultListInputConfig extends AnalyticComponentInputConfig {

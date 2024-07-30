@@ -1,0 +1,101 @@
+
+<mat-accordion>
+    <mat-expansion-panel [expanded]="displaySchema" style="text-align: center; box-shadow: none;">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                {{'Metrics table schema' | translate}}
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <img src="assets/metrics-table-doc.png" width="451px" height="176px">
+    </mat-expansion-panel>
+</mat-accordion>
+
+
+
+<div class="sub-tables-wrapper">
+    <table #subTables mat-table [dataSource]="this.control.controls" class="sub-tables" cdkDropList
+        [cdkDropListData]="this.control.controls" (cdkDropListDropped)="drop($event)"
+        [cdkDropListDisabled]="dragDisabled" [cdkDropListLockAxis]="'y'">
+
+        <ng-container matColumnDef="drag">
+            <th class="drag" mat-header-cell *matHeaderCellDef></th>
+            <td class="drag" mat-cell *matCellDef="let subTable">
+                <div class="action-wrapper">
+                    <mat-icon class="drag" (mousedown)="dragDisabled = false">drag_indicator</mat-icon>
+                </div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="collection">
+            <th class="collection" mat-header-cell *matHeaderCellDef>{{'Collection ' | translate}}</th>
+            <td class="collection" mat-cell *matCellDef="let subTable">{{subTable.controls.collection.value | translate}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="field">
+            <th mat-header-cell *matHeaderCellDef>{{'Row field' | translate}}</th>
+            <td class="field" mat-cell *matCellDef="let subTable">{{subTable.controls.aggregationField.value | translate}}</td>
+        </ng-container>
+        <ng-container matColumnDef="columns">
+            <th mat-header-cell *matHeaderCellDef>{{'Columns' | translate}}</th>
+            <td class="columns" mat-cell *matCellDef="let subTable">
+            <div class="columns-cell">
+            <div *ngFor="let c of subTable.controls.columns.controls" class="column-item">
+                <div class="action-wrapper">
+                <mat-icon *ngIf="c.get('sort').value !== ''" 
+                class="sort" 
+                [matTooltip]="c.get('sort').value  | translate" 
+                (click)="setSort(c,c.get('sort').value,subTable.controls.collection.value,subTable.controls.aggregationField.value,c.get('metricCollectFunction').value,c.get('metricCollectField').value )" 
+                [class.reversed]="c.get('sort').value === 'desc'" >north</mat-icon>
+                <mat-icon *ngIf="c.get('sort').value === ''" class="sort-disabled" 
+                (click)="setSort(c,c.get('sort').value,subTable.controls.collection.value,subTable.controls.aggregationField.value,c.get('metricCollectFunction').value,c.get('metricCollectField').value )"  [matTooltip]="'Not sorted' | translate" >sync_alt</mat-icon>
+                
+                <span  *ngIf="!c.get('metricCollectField').value">{{c.get("metricCollectFunction").value}}</span>
+
+                <span  *ngIf="c.get('metricCollectField').value">{{c.get("metricCollectFunction").value}} of {{c.get("metricCollectField").value}}</span>
+            </div>
+                
+                
+            </div>
+        </div>
+
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell class="action" *matHeaderCellDef></th>
+            <td mat-cell class="action"  *matCellDef="let subTable; let i = index">
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item  (click)="editSubTable(i,subTable.controls.collection.value)">
+                        <mat-icon>edit</mat-icon>
+                        <span>{{'Edit' | translate}}</span>
+                    </button>
+                    <button mat-menu-item (click)="deleteSubTable(i)">
+                        <mat-icon>delete</mat-icon>
+                        <span>{{'Delete' | translate}}</span>
+                    </button>
+                </mat-menu>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (cdkDragStarted)="dragStarted($event)" cdkDrag
+            [cdkDragData]="row" class="column-drag"></tr>
+    </table>
+</div>
+
+<mat-error *ngIf="control.touched && control?.hasError('required')">{{'At least one sub table is required' | translate}}
+</mat-error>
+<div class="description">
+    {{'Add a sub table description' | translate}}
+</div>
+<div class="button-wrapper">
+
+    <button mat-stroked-button color="primary" (click)="addSubtable()" [matTooltip]="'Add a sub table' | translate"
+        type="button">
+        <mat-icon>add</mat-icon>
+        {{'Add a sub table' | translate}}
+    </button>
+
+
+    
+</div>

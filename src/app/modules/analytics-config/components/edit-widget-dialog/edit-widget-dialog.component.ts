@@ -29,6 +29,7 @@ import { WIDGET_TYPE } from '../edit-group/models';
 import { EditWidgetDialogData } from './models';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
+import { MetricsTableFormBuilderService } from '@analytics-config/services/metrics-table-form-builder/metrics-table-form-builder.service';
 
 @Component({
   selector: 'arlas-edit-widget-dialog',
@@ -47,6 +48,7 @@ export class EditWidgetDialogComponent implements OnInit {
     private histogramBuilder: HistogramFormBuilderService,
     private swimlaneBuilder: SwimlaneFormBuilderService,
     private metricBuilder: MetricFormBuilderService,
+    private metricsTableFormBuilder: MetricsTableFormBuilderService,
     private powerFormBuilder: PowerbarFormBuilderService,
     private donutFormBuilder: DonutFormBuilderService,
     private resultlistFormBuilder: ResultlistFormBuilderService,
@@ -76,6 +78,9 @@ export class EditWidgetDialogComponent implements OnInit {
         break;
       case WIDGET_TYPE.resultlist:
         formBuilder = this.resultlistFormBuilder;
+        break;
+      case WIDGET_TYPE.metricstable:
+        formBuilder = this.metricsTableFormBuilder;
         break;
     }
 
