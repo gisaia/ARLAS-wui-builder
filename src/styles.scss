@@ -134,24 +134,24 @@ body {
   right: 0px !important;
 }
 
-.map-preview #mapgl {
-  width: 80% !important;
-  height: 80% !important;
-  margin: -24px !important;
-  position: absolute !important;
-  bottom: unset !important;
-  right: unset !important;
-  top: unset !important;
-}
+.map-preview {
+  #mapgl {
+    width: 80% !important;
+    height: 80% !important;
+    margin: -24px !important;
+    position: absolute !important;
+    bottom: unset !important;
+    right: unset !important;
+    top: unset !important;
+  }
 
-.map-preview .basemaps {
-  right: 202px !important;
-  top: 110px !important;
-}
-
-.map-preview .basemap-container {
-  top: 108px !important;
-  right: 240px !important;
+  // Properly position basemap when in window preview mode
+  .basemaps {
+    right: calc(10% + 10px) !important;
+  }
+  .basemap-container {
+    right: calc(10% + 10px + 30px + 5px) !important;
+  }
 }
 
 .mat-button-toggle-group {
@@ -218,7 +218,7 @@ body {
 }
 
 .gif{
-  background-color: #FF4081; 
+  background-color: #FF4081;
   border-radius: 50%;
   width: 100px;
   height: 100px;
@@ -312,8 +312,8 @@ div.jsoneditor-value.jsoneditor-invalid {
 .jsoneditor-menu>button.jsoneditor-repair {
   display: none;
 }
-.jsoneditor-contextmenu .jsoneditor-menu li button.jsoneditor-selected, 
-.jsoneditor-contextmenu .jsoneditor-menu li button.jsoneditor-selected:focus, 
+.jsoneditor-contextmenu .jsoneditor-menu li button.jsoneditor-selected,
+.jsoneditor-contextmenu .jsoneditor-menu li button.jsoneditor-selected:focus,
 .jsoneditor-contextmenu .jsoneditor-menu li button.jsoneditor-selected:hover {
   background-color: #ff4081 !important;
 
