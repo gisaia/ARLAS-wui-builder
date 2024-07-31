@@ -35,7 +35,17 @@
               "src/default.json",
               "src/config.json",
               "src/settings.yaml",
-              "src/silent-refresh.html"
+              "src/silent-refresh.html",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/arlas-web-components/assets/resize",
+                "output": "/assets/resize/"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/arlas-web-components/assets/rotate",
+                "output": "/assets/rotate/"
+              }
             ],
             "styles": [
               "src/styles.scss",
@@ -71,7 +81,17 @@
                 "src/config.json",
                 "src/silent-refresh.html",
                 "src/default.json",
-                "src/favicon.ico"
+                "src/favicon.ico",
+                {
+                  "glob": "**/*",
+                  "input": "./node_modules/arlas-web-components/assets/resize",
+                  "output": "/assets/resize/"
+                },
+                {
+                  "glob": "**/*",
+                  "input": "./node_modules/arlas-web-components/assets/rotate",
+                  "output": "/assets/rotate/"
+                }
               ],
               "optimization": true,
               "outputHashing": "all",
@@ -125,7 +145,17 @@
               "src/default.json",
               "src/config.json",
               "src/settings.yaml",
-              "src/silent-refresh.html"
+              "src/silent-refresh.html",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/arlas-web-components/assets/resize",
+                "output": "/assets/resize/"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/arlas-web-components/assets/rotate",
+                "output": "/assets/rotate/"
+              }
             ],
             "styles": [
               "src/styles.scss"

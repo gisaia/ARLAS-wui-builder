@@ -16,33 +16,52 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-::ng-deep arlas-mapgl div.map__visu-list--wrapper {
-    z-index: 1;
-    top: 270px;
-    right: 10px;
-    .map_legend-button--wrapper {
-        height: 30px;
+arlas-mapgl {
+    ::ng-deep div.map__visu-list {
+        top: 10px;
+        right: 10px;
+        flex-direction: row-reverse;
+        align-items: flex-end;
+
+        .map__legend-button {
+           box-sizing: border-box;
+        }
+
+        .map__visu-list--container {
+            position: relative;
+            top: -2px;
+            padding-top: 0;
+            padding-right: 5px;
+        }
+    }
+
+    ::ng-deep .mapboxgl-ctrl-top-right {
+        top: 45px;
+    }
+
+    ::ng-deep .basemap-container {
+        top: 250px;
+        z-index: 1;
+    }
+
+    ::ng-deep.mapboxgl-ctrl-group {
+        box-shadow: none;
+    }
+
+    ::ng-deep.mapboxgl-ctrl-group-addgeobox,
+    ::ng-deep.mapboxgl-ctrl-group-removeaois {
+        display: none;
     }
 }
 
-arlas-mapgl ::ng-deep .mapboxgl-ctrl-top-right {
-    top: 45px;
-}
-
-arlas-mapgl ::ng-deep .basemap-container {
-    top: 115px;
-    z-index: 1;
-}
-
 .preview {
-    position: absolute;
+    position: relative;
     width: fit-content;
     height: 35px;
-    top: 68px;
+    top: 10px;
 }
 
 .basemaps {
-    box-shadow: 0 0 0 2px #0000001a;
     border-radius: 4px;
     background-color: #fff;
     width: 30px;
@@ -52,6 +71,6 @@ arlas-mapgl ::ng-deep .basemap-container {
     align-items: center;
     cursor: pointer;
     position: absolute;
-    right: 10px;
-    top: 115px;
+    right: 9px;
+    top: 250px;
 }
