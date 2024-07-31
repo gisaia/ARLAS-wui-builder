@@ -16,6 +16,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
+
+// TODO: add h3
 export const CIRCLE_HEATMAP_RADIUS_GRANULARITY = {
   geohash: {
     finest: [
@@ -78,9 +80,9 @@ export const CIRCLE_HEATMAP_RADIUS_GRANULARITY = {
     ],
   },
   tile: {
-    finest: [0,9, 23,15],
-    fine: [0, 35, 23,45],
+    finest: [0, 9,  23, 15],
+    fine:   [0, 35, 23, 45],
     medium: [0, 50, 23, 100],
-    coarse: [0, 80, 23,150]
+    coarse: [0, 80, 23, 150]
   }
 };
