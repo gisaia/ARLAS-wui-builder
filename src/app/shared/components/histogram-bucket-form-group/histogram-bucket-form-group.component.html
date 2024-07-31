@@ -87,7 +87,7 @@
                                 <mat-form-field class="unit" *ngIf="aggregationFieldTypeControl.value === 'time'">
                                     <mat-select [formControl]="preferredIntervalUnit"
                                         [required]="!preferredIntervalUnit.optional"
-                                        [arlasAlertOnChange]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? 'Warning, changing this field\'s value will reset some other fields' : null"
+                                        [arlasAlertOnChange]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? WARNING_MESSAGE : null"
                                         [arlasResetOnChange]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? defaultKey : null"
                                         [dependants]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? preferredIntervalUnit.dependantControls : null">
                                         <mat-option *ngIf="preferredIntervalUnit.optional"></mat-option>

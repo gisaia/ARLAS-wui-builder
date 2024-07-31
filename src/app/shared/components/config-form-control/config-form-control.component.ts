@@ -22,6 +22,7 @@ import {
   Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
 import {
   ButtonFormControl, ButtonToggleFormControl, CollectionsUnitsControl, ColorFormControl, ColorPreviewFormControl,
@@ -53,6 +54,8 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
 
   public colorPreviewControl: ColorPreviewFormControl;
   public debouncer: Subject<string> = new Subject();
+
+  protected readonly WARNING_MESSAGE = marker('Warning, changing this field\'s value will reset some other fields');
 
   public constructor(
     private resolver: ComponentFactoryResolver,

@@ -18,6 +18,7 @@
  */
 
 import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { ConfigFormGroupComponent } from '../config-form-group/config-form-group.component';
 @Component({
   // tslint:disable-next-line: component-selector
@@ -36,6 +37,8 @@ export class HistogramBucketFormGroupComponent extends ConfigFormGroupComponent 
   public preferredBucketsNumber;
   public preferredIntervalSize;
   public preferredIntervalUnit;
+
+  protected readonly WARNING_MESSAGE = marker('Warning, changing this field\'s value will reset some other fields');
 
   public ngOnInit(): void {
     super.ngOnInit();

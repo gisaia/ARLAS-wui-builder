@@ -45,7 +45,7 @@
     <mat-form-field>
         <mat-label>{{ typedControl.label | translate}}</mat-label>
         <mat-select [formControl]="typedControl" [required]="!typedControl.optional"
-            [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? 'Warning, changing this field\'s value will reset some other fields' : null"
+            [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? WARNING_MESSAGE : null"
             [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
             <mat-option *ngIf="typedControl.optional"></mat-option>
@@ -86,7 +86,7 @@
         </ng-container>
         <mat-select style="display: none;" [formControl]="typedControl" [required]="!typedControl.optional"
             [(ngModel)]="typedControl.selectedMultipleItems"
-            [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? 'Warning, changing this field\'s value will reset some other fields' : null"
+            [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? WARNING_MESSAGE : null"
             [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
         </mat-select>
@@ -132,7 +132,7 @@
         <mat-label *ngIf="showLabel">{{ typedControl.label | translate}}</mat-label>
         <input type="text" matInput [formControl]="typedControl" [matAutocomplete]="auto" #autocompleteInput
             [required]="!typedControl.optional"
-            [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? 'Warning, changing this field\'s value will reset some other fields' : null"
+            [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? WARNING_MESSAGE : null"
             [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
         <button mat-button *ngIf="typedControl.value" matSuffix mat-icon-button
@@ -154,7 +154,7 @@
         <mat-label *ngIf="showLabel">{{ typedControl.label | translate}}</mat-label>
         <input type="text" matInput [formControl]="typedControl" [matAutocomplete]="autotyped" #typedAutocompleteInput
             [required]="!typedControl.optional"
-            [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? 'Warning, changing this field\'s value will reset some other fields' : null"
+            [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? WARNING_MESSAGE : null"
             [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
         <button mat-button *ngIf="typedControl.value" matSuffix mat-icon-button
