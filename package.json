@@ -10,8 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "licence-check": "license-check-and-add check -f license-check-and-add.json",
-    "licence-add": "license-check-and-add add -f license-check-and-add.json",
+    "license-check": "license-check-and-add check -f license-check-and-add.json",
+    "license-add": "license-check-and-add add -f license-check-and-add.json",
     "analyze": "webpack-bundle-analyzer dist/ARLAS-wui-builder/stats-es2015.json",
     "i18n:init": "ngx-translate-extract --input ./src/app --output ./src/assets/i18n/template.json --key-as-default-value --replace --format json",
     "i18n:extract": "ngx-translate-extract --input ./src/app --output ./src/assets/i18n/{en,fr}.json --format json"

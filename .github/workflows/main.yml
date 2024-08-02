@@ -27,8 +27,8 @@ jobs:
         run: npm ci
       - name: Lint
         run: npm run lint
-      - name: Licence
-        run: npm run licence-check
+      - name: License check
+        run: npm run license-check
       - name: Test
         run: npm run test
       - name: Build
