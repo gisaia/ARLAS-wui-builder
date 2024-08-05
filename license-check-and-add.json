@@ -1,5 +1,14 @@
 {
-    "ignore": [".github/**",".git/**","src/settings.yaml", "src/environments/prod/settings.yaml", "e2e/**", "*", "*.yml", "*.md", "**/*.svg", "**/*.spec.ts", "**/*.html", "src/assets/fonts/material-icons*", "src/test.ts", "**/.DS_Store", "**/.gitkeep", "nginx/default.conf", "docs/**", "src/assets/about/**"],
+    "ignore": [".github/**",".git/**", "**/*.yaml", "e2e/**", "*", "*.yml", "*.md", "**/*.svg", "**/*.spec.ts", "**/*.html", "src/assets/fonts/material-icons*", "src/test.ts", "**/.DS_Store", "**/.gitkeep", "nginx/default.conf", "docs/**", "src/assets/about/**"],
     "license": "LICENSE",
-    "trailingWhitespace": "TRIM"
+    "trailingWhitespace": "TRIM",
+    "licenseFormats": {
+        "ts|js|css|scss": {
+            "prepend": "/*",
+            "append": " */",
+            "eachLine": {
+                "prepend": " * "
+            }
+        }
+    }
 }
