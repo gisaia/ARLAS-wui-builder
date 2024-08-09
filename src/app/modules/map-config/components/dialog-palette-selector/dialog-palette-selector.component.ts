@@ -18,7 +18,7 @@
  */
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import * as d3c from 'd3-color';
 import * as d3i from 'd3-interpolate';
