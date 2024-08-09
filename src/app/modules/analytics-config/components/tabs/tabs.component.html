@@ -5,14 +5,14 @@
     <mat-divider></mat-divider>
     <div class="tab-wrapper">
         <mat-tab-group disableRipple mat-align-tabs="start" #matTabGroup [(selectedIndex)]="selectedIndex">
-            <mat-tab #matTab *ngFor="let fg of this.tabsFa.controls; let index = index">
+            <mat-tab #matTab *ngFor="let fg of tabsFa.controls; let index = index">
                 <ng-template mat-tab-label>
                     <div [id]="'tab-' + index" cdkDropList cdkDropListOrientation="horizontal"
                         (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="getOtherTabsIds(index)">
                         <div cdkDrag class="content">
-                            
+
                             <mat-icon class="icon" *ngIf="fg.value.showIcon">{{fg.value.tabIcon}}</mat-icon>
-                            
+
                             <span *ngIf="fg.value.showName && editingTabIndex !== index" class="tab-name" tabindex="-1"
                                 (focus)="startEditTabName(index)" [class.pointer]="!matTab.isActive"
                                 [class.tab-error]="!matTab.isActive && tabHasError(index)">
@@ -23,7 +23,7 @@
                                 <input matInput [(ngModel)]="editingTabName" arlasAutoFocus autocomplete="off"
                                     (focusout)="finishEditTabName(index)" (keydown)="$event.stopPropagation();"
                                     (keydown.enter)="finishEditTabName(index);">
-    
+
                             </span>
                             <mat-icon class="settings" *ngIf="matTab.isActive" (click)="$event.stopPropagation(); configTab(index)"
                                 [matTooltip]="'Configure tab' | translate">settings</mat-icon>
@@ -41,7 +41,7 @@
                         <mat-icon>add</mat-icon>
                     </button>
                 </ng-template>
-                <div class="no-tabs" *ngIf="this.tabs.length === 0">
+                <div class="no-tabs" *ngIf="tabs.length === 0">
                     {{ 'Analytics board is empty.' | translate}}
                     <button mat-stroked-button color="primary" (click)="newTab()">
                         {{ 'Create a new tab.' | translate}}</button>

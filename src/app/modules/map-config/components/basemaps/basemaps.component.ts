@@ -18,8 +18,8 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
-import { MatLegacyRadioChange as MatRadioChange } from '@angular/material/legacy-radio';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatRadioChange } from '@angular/material/radio';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { HiddenFormControl } from '@shared-models/config-form';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';

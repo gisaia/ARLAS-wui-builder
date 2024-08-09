@@ -18,27 +18,6 @@
  */
 
 .list-tab-group {
-  ::ng-deep .mat-tab-labels .mat-tab-label {
-    padding: 0 12px;
-  }
-
-  & > ::ng-deep .mat-tab-header {
-    .mat-tab-label {
-      min-width: 210px;
-      .mat-tab-label-content {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-      }
-    }
-  }
-
-  ::ng-deep .mat-tab-labels :last-child.mat-tab-label {
-    min-width: 0;
-    color: unset;
-    opacity: unset;
-  }
-
   .content {
     display: flex;
     align-items: center;
@@ -47,10 +26,6 @@
 
     .tab-name {
       flex: 5;
-    }
-
-    .icon {
-      flex: 1;
     }
 
     .close,

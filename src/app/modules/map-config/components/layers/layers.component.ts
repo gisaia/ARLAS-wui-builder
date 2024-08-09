@@ -18,9 +18,9 @@
  */
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource } from '@angular/material/table';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { ImportLayerDialogComponent } from '@map-config/components/import-layer-dialog/import-layer-dialog.component';
 import { MapImportService } from '@map-config/services/map-import/map-import.service';

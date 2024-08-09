@@ -18,11 +18,7 @@
  */
 
 @import "variables.scss";
-$accent-color: mat-color($accent-palette);
-$primary-color: mat-color($primary-palette);
-
-$accent-color-light: mat-color($accent-palette, 300);
-$primary-color-light: mat-color($primary-palette, 300);
+@import "theme.scss";
 
 .description {
   align-self: center;
@@ -47,21 +43,28 @@ $primary-color-light: mat-color($primary-palette, 300);
   color: $error-color;
 }
 
+.slider-form-control {
+  gap: 10px;
+  display: flex;
+  align-items: center;
+}
+
 mat-option {
   margin: 2px 0px;
 
-  &.mat-selected.option-color-primary {
+  // TODO: not used anymore, so what were they used for
+  &.mat-mdc-selected.option-color-primary {
     background-color: $primary-color-light !important;
     color: white !important;
   }
 
-  &.mat-selected.option-color-accent {
+  &.mat-mdc-selected.option-color-accent {
     background-color: $accent-color-light !important;
     color: black !important;
   }
 
   &.option-color-primary {
-    background-color: $primary-color;
+    background-color: $primaryColor;
     color: white;
     &:hover {
       background-color: $primary-color-light;
@@ -69,7 +72,7 @@ mat-option {
   }
 
   &.option-color-accent {
-    background-color: $accent-color;
+    background-color: $accentColor;
     color: black;
     &:hover {
       background-color: $accent-color-light;
@@ -91,10 +94,11 @@ mat-option {
   }
 
   mat-radio-group {
-    padding: 0 5px;
+    padding: 0 10px;
+    --mdc-radio-state-layer-size: 24px;
+
     mat-radio-button {
-      width: 80px;
-      font-size: 0.9rem;
+      font-size: 14px;
     }
   }
 }
@@ -128,7 +132,7 @@ mat-option {
 
 .url-field-form-control {
   .action-container {
-    .mat-form-field {
+    .mat-mdc-form-field {
       display: block;
     }
     .field-insert-container {
@@ -187,12 +191,6 @@ mat-option {
   margin: 15px 0;
 }
 
-.checkbox {
-  &::ng-deep .mat-checkbox-label {
-    font-size: 0.9em;
-  }
-}
-
 .empty_visulisation {
   font-size: 0.9em;
   font-style: italic;
@@ -229,71 +227,47 @@ mat-option {
 }
 
 .multiply-selected {
-  border-bottom: 1px solid #d8e0e9;
-  border-left: 3px solid;
-  padding: 2px 5px;
-  background-color: #f4f5f7;
-  display: flex;
-  font-size: 0.85em;
-  height: 25px;
-  align-items: center;
   background-color: #fff;
-
-  .detail {
-    float: right;
-    font-style: italic;
-  }
-
-  ::ng-deep label {
-    align-items: baseline;
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  ::ng-deep .mat-checkbox-layout {
-    width: 100%;
-  }
-
-  ::ng-deep .mat-checkbox-label {
-    width: 100%;
-  }
 }
 
 .multiply-to-select {
-  border-bottom: 1px solid #d8e0e9;
-  border-left: 3px solid;
-  padding: 2px 5px;
-  background-color: #f4f5f7;
-  display: flex;
-  font-size: 0.85em;
-  height: 25px;
-  align-items: center;
   background-color: #f4f5f7;
   &:hover {
     background-color: #eee;
   }
+}
+
+.multiply-to-select,
+.multiply-selected {
+  border-bottom: 1px solid #d8e0e9;
+  border-left: 3px solid;
+  padding: 2px 5px;
+  background-color: #f4f5f7;
+  display: flex;
+  font-size: 0.85em;
+  height: 25px;
+  align-items: center;
 
   .detail {
     float: right;
     font-style: italic;
   }
 
-  ::ng-deep label {
-    align-items: baseline;
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  ::ng-deep .mat-checkbox-layout {
+  ::ng-deep.mdc-form-field {
     width: 100%;
-  }
 
-  ::ng-deep .mat-checkbox-label {
-    width: 100%;
+    ::ng-deep label {
+      align-items: baseline;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-right: 5px;
+      gap: 10px;
+    }
   }
 }
 

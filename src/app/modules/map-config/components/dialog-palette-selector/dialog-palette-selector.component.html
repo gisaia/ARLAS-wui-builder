@@ -15,11 +15,11 @@
         <div class="palette-gradient"
             [ngStyle]="{'background': selectedPalette.length > 1 ? 'linear-gradient(to right, ' + getSelectedPaletteGradients() + ')' : selectedPalette[0].value}">
             <div class="parent-gradient-buttons">
-                <button mat-mini-fab mat-icon-button (click)="reverse()"
+                <button mat-mini-fab (click)="reverse()"
                     matTooltip="{{ 'Reverse the colors order' | translate}}" matTooltipPosition="left">
                     <mat-icon>swap_horiz</mat-icon>
                 </button>
-                <button mat-mini-fab mat-icon-button (click)="resetProportions()"
+                <button mat-mini-fab (click)="resetProportions()"
                     matTooltip="{{ 'Reset the colors midpoints' | translate}}" matTooltipPosition="right">
                     <mat-icon>settings_backup_restore</mat-icon>
                 </button>
@@ -54,7 +54,7 @@
                                             [min]="data.min"
                                             [max]="data.max" >
                                </mat-form-field>
-                               <mat-slider [min]="data.min" [max]="data.max" [step]="(data.max - data.min) / 20" thumbLabel
+                               <mat-slider ngDefaultControl [min]="data.min" [max]="data.max" [step]="(data.max - data.min) / 20" thumbLabel
                                            [(ngModel)]="selectedPalette[i].proportion"
                                            matTooltip="{{ 'Change color midpoint' | translate}}" matTooltipPosition="right"></mat-slider>
                        </div>

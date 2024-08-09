@@ -18,8 +18,8 @@
  */
 import { HttpClient } from '@angular/common/http';
 import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, forwardRef, NgModule } from '@angular/core';
-import { MatLegacyPaginatorIntl as MatPaginatorIntl } from '@angular/material/legacy-paginator';
-import { MAT_LEGACY_SNACK_BAR_DEFAULT_OPTIONS as MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/legacy-snack-bar';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LandingPageComponent,  } from '@components/landing-page/landing-page.component';
@@ -45,7 +45,7 @@ import {
   GET_OPTIONS, ArlasToolkitSharedModule, ArlasSettingsService
 } from 'arlas-wui-toolkit';
 import { environment } from 'environments/environment';
-import { LoggerModule } from 'ngx-logger';
+import { LoggerModule, TOKEN_LOGGER_CONFIG } from 'ngx-logger';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { AppRoutingModule } from './app-routing.module';

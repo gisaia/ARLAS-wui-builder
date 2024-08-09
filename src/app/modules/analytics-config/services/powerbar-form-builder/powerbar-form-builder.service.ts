@@ -18,7 +18,7 @@
  */
 import { Injectable } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';

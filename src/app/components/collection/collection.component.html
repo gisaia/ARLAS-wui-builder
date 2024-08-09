@@ -1,6 +1,6 @@
 <h3 class="form-control-title">{{'Explore collections' | translate}}</h3>
 <div class="content">
-    <mat-card *ngFor="let def of collectionsDef" class="collection">
+    <mat-card appearance="outlined" *ngFor="let def of collectionsDef" class="collection">
         <mat-card-title>{{ def.collection.collection_name | getCollectionDisplayName | translate }}</mat-card-title>
         <mat-card-content>
             <mat-divider></mat-divider>

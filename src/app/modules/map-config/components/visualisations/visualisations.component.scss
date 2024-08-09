@@ -17,6 +17,7 @@
  * under the License.
  */
 @import "variables.scss";
+@import "theme.scss";
 
 .description {
   align-self: center;
@@ -87,6 +88,14 @@ mat-error {
   text-align: center;
 }
 
+.td-layers {
+  .layer {
+    display: inline-block;
+    margin-right: 5px;
+    white-space: nowrap
+  }
+}
+
 .tr-visualisation {
   background-color: white;
   .th-layers,
@@ -153,7 +162,7 @@ mat-error {
     min-width: 8%;
     text-align: center;
   }
-  td.mat-cell {
+  td.mat-mdc-cell {
     border-bottom-width: 0px;
   }
 

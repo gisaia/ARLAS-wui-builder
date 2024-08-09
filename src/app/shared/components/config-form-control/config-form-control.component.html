@@ -36,7 +36,7 @@
         </mat-slider>
     </div>
 
-    <mat-card *ngIf="typedControl.hasWarning" class="empty_visulisation">
+    <mat-card appearance="outlined" *ngIf="typedControl.hasWarning" class="empty_visulisation">
         {{ typedControl.warningMessage | translate}}
     </mat-card>
 </div>
@@ -113,7 +113,7 @@
 
 </div>
 
-<div *ngIf="isCheckbox(); let typedControl"  class="checkbox-form-control">
+<div *ngIf="isCheckbox(); let typedControl" class="checkbox-form-control">
     <mat-label>{{ typedControl.label | translate}}</mat-label>
     <div *ngIf="!typedControl.syncOptions || typedControl.syncOptions.length == 0">
         <mat-checkbox class="checkbox" (change)="typedControl.addLayer($event, 'All layers')">
@@ -124,7 +124,7 @@
         <mat-checkbox class="checkbox" [checked]="opt.include" (change)="typedControl.addLayer($event, opt.name)">
             {{opt.name}}</mat-checkbox>
     </div>
-    <mat-card *ngIf="!typedControl.hasLayer" class="empty_visulisation">
+    <mat-card appearance="outlined" *ngIf="!typedControl.hasLayer" class="empty_visulisation">
         {{ 'This layer is not assigned to a visualisation set, it will not be visible on the map' | translate}}
     </mat-card>
 </div>
@@ -151,7 +151,7 @@
             [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? WARNING_MESSAGE : null"
             [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
-        <button mat-button *ngIf="typedControl.value" matSuffix mat-icon-button
+        <button *ngIf="typedControl.value" matSuffix mat-icon-button
             (click)="clearAutoComplete($event, autocompleteInput, typedControl)">
             <mat-icon>close</mat-icon>
         </button>
@@ -207,13 +207,13 @@
         <button type="button" mat-stroked-button [disabled]="!typedControl.sortDirection || !selectSort.value"
             (click)="typedControl.addSort(typedControl.sortDirection + selectSort.value, $event)">{{ 'Add' |
             translate}}</button>
-        <mat-chip-list #chipSortList>
-            <mat-chip *ngFor="let sort of typedControl.sorts" [selectable]="false" [removable]="true"
+        <mat-chip-listbox #chipSortList>
+            <mat-chip-option *ngFor="let sort of typedControl.sorts" [selectable]="false" [removable]="true"
                 (removed)="typedControl.removeSort(sort)">
                 {{sort}}
                 <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip>
-        </mat-chip-list>
+            </mat-chip-option>
+        </mat-chip-listbox>
     </div>
     <mat-error *ngIf="typedControl.touched && typedControl.invalid && typedControl?.errors?.required">
         {{ 'At least one ' | translate}} {{typedControl.label | lowercase | translate}} {{ 'is required' | translate}}
@@ -289,15 +289,15 @@
             </mat-accordion>
         </div>
         <div class="chips-container">
-            <mat-chip-list #chipSortList>
-                <mat-chip *ngFor="let opt of typedControl.value;let indexOfelement=index;" class="filter-chip"
+            <mat-chip-listbox #chipSortList>
+                <mat-chip-option *ngFor="let opt of typedControl.value;let indexOfelement=index;" class="filter-chip"
                     (click)="typedControl.onClickFilterChip($event, opt,indexOfelement)" [selectable]="true"
                     [removable]="true" (removed)="typedControl.removeMetric(opt,indexOfelement)"
                     [matTooltip]="opt.filter | json" matTooltipPosition="above">
                     m[{{indexOfelement}}] : {{opt.field}} ({{opt.metric}}) ({{ (opt.filter | json) === '{}' ? ('no filter'| translate) : ('with filter'| translate) }})
                     <mat-icon matChipRemove>cancel</mat-icon>
-                </mat-chip>
-            </mat-chip-list>
+                </mat-chip-option>
+            </mat-chip-listbox>
         </div>
     </div>
     <mat-error *ngIf="typedControl.touched && typedControl.invalid && typedControl?.errors?.required">
@@ -316,6 +316,7 @@
                             <input   matInput type="number" [step]="1" [formControl]="typedControl.sizeCtrl" [min]="1" [max]="30" [value]="typedControl.sizeCtrl.value">
                         </mat-form-field>
                     <mat-slider thumbLabel [formControl]="typedControl.sizeCtrl" [min]="1" [max]="30" [step]="1" [value]="typedControl.value">
+                        <input matSliderThumb #sliderValue />
                     </mat-slider>
                     </div>
                 </div>
@@ -343,13 +344,13 @@
             </div>
         </div>
         <div class="chips-container">
-            <mat-chip-list #chipSortList>
-                <mat-chip *ngFor="let opt of typedControl.value" [selectable]="false" [removable]="true"
+            <mat-chip-listbox #chipSortList>
+                <mat-chip-option *ngFor="let opt of typedControl.value" [selectable]="false" [removable]="true"
                     (removed)="typedControl.remove(opt)">
                     {{opt.field}} ({{opt.size}})
                     <mat-icon matChipRemove>cancel</mat-icon>
-                </mat-chip>
-            </mat-chip-list>
+                </mat-chip-option>
+            </mat-chip-listbox>
         </div>
     </div>
     <mat-error *ngIf="typedControl.touched && typedControl.invalid && typedControl?.errors?.required">

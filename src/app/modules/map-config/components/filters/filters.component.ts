@@ -18,7 +18,7 @@
  */
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import {
   MapFilterFormGroup, MapLayerFormBuilderService, MapLayerFormGroup
 } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';

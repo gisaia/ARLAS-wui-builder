@@ -1,8 +1,10 @@
 import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
 import { StatusComponent } from '@components/status/status.component';
+import { environment } from '@environments/environment';
 import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { MockComponent } from 'ng-mocks';
+import { TOKEN_LOGGER_CONFIG } from 'ngx-logger';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -19,7 +21,14 @@ describe('AppComponent', () => {
         settings: {
           tab_name: 'ARLAS Wui builder Test'
         }
-      })
+      }),
+      {
+        provide: TOKEN_LOGGER_CONFIG,
+        useValue: {
+          level: environment.logLevel,
+          disableConsoleLogging: false
+        }
+      }
     ]
   });
 

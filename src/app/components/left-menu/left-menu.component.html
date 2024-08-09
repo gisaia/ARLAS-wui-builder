@@ -1,49 +1,44 @@
 <div class="menu_container">
-  <div>
+  <mat-nav-list>
+    <mat-list-item *ngFor="let page of pages" [matTooltip]="page?.tooltip | translate" matTooltipPosition="right" [routerLink]="page.enabled ? page?.link : null"
+      [routerLinkActive]="page.enabled ? 'active-menu' : 'inactive-menu'" queryParamsHandling="preserve">
+      <button mat-icon-button [disabled]="!page?.enabled" [routerLinkActive]="page.enabled ? 'mat-accent' : ''">
+        <mat-icon [matBadge]="nbErrorsByPage.get(page.name)" [matBadgeHidden]="!nbErrorsByPage.get(page.name)"
+          matBadgePosition="above before" matBadgeColor="warn">
+          {{ page?.icon }}</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-nav-list>
+
+  <div class="action-list">
     <mat-nav-list>
-      <mat-list-item *ngFor="let page of pages" [matTooltip]="page?.tooltip | translate" matTooltipPosition="right" [routerLink]="page.enabled ? page?.link : null"
-        [routerLinkActive]="page.enabled ? 'active-menu' : 'inactive-menu'" queryParamsHandling="preserve">
-        <button mat-icon-button [disabled]="!page?.enabled" [routerLinkActive]="page.enabled ? 'mat-accent' : ''">
-          <mat-icon [matBadge]="nbErrorsByPage.get(page.name)" [matBadgeHidden]="!nbErrorsByPage.get(page.name)"
-            matBadgePosition="above before" matBadgeColor="warn">
-            {{ page?.icon }}</mat-icon>
+      <mat-list-item [matTooltip]="'Collection' | translate" [routerLink]="'/collection'" matTooltipPosition="right"
+        routerLinkActive="active-menu" queryParamsHandling="preserve">
+        <button mat-icon-button routerLinkActive="mat-accent">
+          <mat-icon>library_books</mat-icon>
         </button>
       </mat-list-item>
-
-    </mat-nav-list>
-  </div>
-
-  <div>
-    <div class="action-list">
+      <mat-divider></mat-divider>
       <mat-nav-list>
-        <mat-list-item [matTooltip]="'Collection' | translate" [routerLink]="'/collection'" matTooltipPosition="right"
-          routerLinkActive="active-menu" queryParamsHandling="preserve">
-          <button mat-icon-button routerLinkActive="mat-accent">
-            <mat-icon>library_books</mat-icon>
+        <mat-list-item *ngFor="let link of links">
+          <button matTooltip="{{ link.name | translate}}" mat-icon-button (click)="navigateTo(link.url)" [matTooltipPosition]="'right'">
+            <mat-icon>{{link.icon}}</mat-icon>
           </button>
         </mat-list-item>
-        <mat-divider></mat-divider>
-        <mat-nav-list>
-          <mat-list-item *ngFor="let link of links">
-            <button matTooltip="{{ link.name | translate}}" mat-icon-button (click)="navigateTo(link.url)" [matTooltipPosition]="'right'">
-              <mat-icon>{{link.icon}}</mat-icon>
-            </button>
-          </mat-list-item>
-        </mat-nav-list>
-        <mat-divider></mat-divider>
-        <mat-list-item matTooltip="{{'Save' | translate}}" (click)="save($event)" matTooltipPosition="right"
-          [class.disabled-item]="!this.persistenceService.isAvailable">
-          <button mat-icon-button>
-            <mat-icon>save</mat-icon>
-          </button>
-        </mat-list-item>
-        <mat-list-item matTooltip="{{'Download configuration files' | translate}}" (click)="export()" matTooltipPosition="right">
-          <button mat-icon-button>
-            <mat-icon>save_alt</mat-icon>
-          </button>
-        </mat-list-item>
-        <mat-divider></mat-divider>
       </mat-nav-list>
-    </div>
+      <mat-divider></mat-divider>
+      <mat-list-item matTooltip="{{'Save' | translate}}" (click)="save($event)" matTooltipPosition="right"
+        [class.disabled-item]="!this.persistenceService.isAvailable">
+        <button mat-icon-button>
+          <mat-icon>save</mat-icon>
+        </button>
+      </mat-list-item>
+      <mat-list-item matTooltip="{{'Download configuration files' | translate}}" (click)="export()" matTooltipPosition="right">
+        <button mat-icon-button>
+          <mat-icon>save_alt</mat-icon>
+        </button>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </mat-nav-list>
   </div>
 </div>

@@ -17,7 +17,7 @@
  * under the License.
  */
 @import "variables.scss";
-$primary-color: mat-color($primary-palette);
+@import "theme.scss";
 
 .group-wrapper {
     display: flex;
@@ -66,19 +66,6 @@ $primary-color: mat-color($primary-palette);
                         }
                     }
                 }
-            }
-
-            ::ng-deep .mat-button-toggle-label-content {
-                line-height: 30px !important;
-                padding: 0 4px !important;
-
-                mat-icon {
-                    padding-bottom: 1px;
-                }
-            }
-
-            ::ng-deep .mat-button-toggle-group {
-                border-radius: 0px;
             }
         }
 

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { MenuService } from '@services/menu/menu.service';

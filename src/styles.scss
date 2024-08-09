@@ -18,6 +18,7 @@
  */
 @import "./theme.scss";
 @import "./variables.scss";
+@import "styles/material-override.scss";
 
 @font-face {
   font-family: "Material Icons";
@@ -36,7 +37,7 @@ body {
   min-height: 100%;
   overflow: hidden;
   margin: 0;
-  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-family: Roboto, "Helvetica Neue", Arial;
   font-size: 1rem;
   line-height: 1.5;
 }
@@ -84,43 +85,6 @@ body {
   }
 }
 
-.mat-slider-horizontal,
-.mat-slider-vertical {
-  // force mat-slider labels to be always displayed & to be on the slider itself, not above it
-  .mat-slider-thumb-label {
-    transform: rotate(45deg) !important;
-    top: -16px !important;
-    border-radius: 50% !important;
-    height: 34px;
-    width: 34px;
-  }
-
-  .mat-slider-thumb {
-    transform: scale(0) !important;
-  }
-
-  .mat-slider-thumb-label-text {
-    opacity: 1 !important;
-  }
-}
-
-.mat-slider-disabled .mat-slider-thumb-label {
-  display: flex !important;
-  border: 1px solid rgba(0, 0, 0, 0.38) !important;
-  .mat-slider-thumb-label-text {
-    color: rgba(0, 0, 0, 0.38) !important;
-  }
-}
-
-// force mat-slider background when set to min value
-.mat-slider-min-value.mat-slider-thumb-label-showing .mat-slider-thumb-label {
-  background-color: $accent-color;
-}
-
-.mat-slider-min-value.mat-slider-thumb-label-showing.cdk-focused .mat-slider-thumb-label {
-  background-color: $accent-color;
-}
-
 .dialog-with-overflow mat-dialog-container {
   overflow: visible;
 }
@@ -159,26 +123,47 @@ body {
   }
 }
 
+/*
+ TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.
+ */
+/*
+ TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.
+ */
 .mat-button-toggle-group {
+  /*
+ TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.
+ */
   mat-button-toggle.mat-button-toggle-checked {
     background-color: white !important;
   }
+  /*
+ TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.
+ */
   mat-button-toggle:not(.mat-button-toggle-checked) {
     background-color: rgb(224, 224, 224) !important;
     color: rgb(0, 0, 0, 0.25) !important;
   }
 }
 
+/*
+ TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version.
+ */
 .mat-slider-thumb-label {
   background-color: white !important;
   border: 1px solid rgba(0, 0, 0, 0.87) !important;
 }
 
+/*
+ TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version.
+ */
 .mat-slider-thumb-label-text {
   color: black !important;
 }
 
-.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+/*
+ TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version.
+ */
+.mat-mdc-slide-toggle.mat-checked .mat-slide-toggle-thumb {
   background-color: white !important;
 }
 

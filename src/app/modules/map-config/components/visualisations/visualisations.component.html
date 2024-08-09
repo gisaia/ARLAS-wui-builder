@@ -12,7 +12,7 @@
 
     <ng-container matColumnDef="name">
         <th class="th-name" mat-header-cell *matHeaderCellDef>{{'Name' | translate}}</th>
-        <td class="td-name" mat-cell *matCellDef="let element"> {{element.name}} 
+        <td class="td-name" mat-cell *matCellDef="let element"> {{element.name}}
             <mat-icon cdkDragHandle class="td-draghandle" >drag_indicator</mat-icon>
         </td>
     </ng-container>
@@ -21,14 +21,14 @@
         <th class="th-layers" mat-header-cell *matHeaderCellDef>{{'Layers' | translate}}</th>
         <td class="td-layers" mat-cell *matCellDef="let element">
             <div style="display: flex;">
-                <span style="display: inline-block; margin-right: 5px;" *ngFor="let l of element.layers"> • {{l | layerIdToName}}</span>
+                <span class="layer" *ngFor="let l of element.layers"> • {{l | layerIdToName}}</span>
             </div>
         </td>
     </ng-container>
 
     <ng-container matColumnDef="displayed">
         <th class="th-display" mat-header-cell *matHeaderCellDef>{{'Displayed by default' | translate}}</th>
-        <td class="td-display" mat-cell *matCellDef="let element"> 
+        <td class="td-display" mat-cell *matCellDef="let element">
             <mat-icon *ngIf="element.displayed">done</mat-icon>
         </td>
     </ng-container>

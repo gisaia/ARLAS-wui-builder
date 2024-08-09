@@ -17,7 +17,7 @@
  * under the License.
  */
 
-@import "variables.scss";
+@import "theme.scss";
 
 .group {
    display: flex;
@@ -25,14 +25,20 @@
 
    .widget-type {
       flex: 1;
-
+      display: flex;
       border: 1px solid grey;
       border-radius: 5px;
       margin: 5px 10px 5px 0;
       cursor: pointer;
+      // Fix size to avoid too big variations when selecting widget
+      box-sizing: border-box;
+      width: 118px;
+      height: 48px;
 
-      &.mat-radio-checked{
-         background-color: $accentColor;
+      ::ng-deep.mdc-radio {
+         display: none;
+      }
+      &.mat-mdc-radio-checked{
          color: white;
          border-color: $accentColor;
          svg path {
@@ -53,16 +59,12 @@
          vertical-align: top;
       }
 
-      ::ng-deep .mat-radio-label {
+      ::ng-deep.mdc-form-field>label {
          padding: 10px;
-
-         .mat-radio-container {
-            display: none !important;
-         }
-
-         .mat-radio-label-content{
-            padding-left: 0;
-         }
+         display: flex;
+         align-items: center;
+         gap: 5px;
+         margin-left: 0 !important;
       }
    }
 }
