@@ -17,7 +17,7 @@
  * under the License.
  */
 import { NgModule } from '@angular/core';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
 import { SharedModule } from '@shared/shared.module';
 import { AbstractArlasMapService, ArlasMapFrameworkService, ArlasMapModule, BasemapService, LegendService } from 'arlas-map';

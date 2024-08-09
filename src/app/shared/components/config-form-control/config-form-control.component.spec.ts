@@ -5,7 +5,7 @@ import { SlideToggleFormControl } from '@shared-models/config-form';
 import { MockComponent } from 'ng-mocks';
 import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
-import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FiltersComponent } from '@map-config/components/filters/filters.component';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionsUnitsComponent } from '@shared-components/collections-units/collections-units.component';

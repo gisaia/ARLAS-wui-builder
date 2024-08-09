@@ -22,13 +22,13 @@ import {
 } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
 import { WIDGET_TYPE } from './models';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { EditWidgetDialogComponent } from '../edit-widget-dialog/edit-widget-dialog.component';
 import { EditWidgetDialogData } from '../edit-widget-dialog/models';
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { OperationEnum } from 'arlas-web-core';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { Subject } from 'rxjs/internal/Subject';
 import { Subscription } from 'rxjs';
