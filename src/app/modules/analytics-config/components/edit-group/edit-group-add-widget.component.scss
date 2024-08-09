@@ -30,7 +30,9 @@
       border-radius: 5px;
       margin: 5px 10px 5px 0;
       cursor: pointer;
-
+      /*
+ TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.
+ */
       &.mat-radio-checked{
          background-color: $accentColor;
          color: white;
@@ -46,14 +48,23 @@
       .icon{
          vertical-align: top;
       }
-
+      /*
+ TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.
+ */
+      /*
+ TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.
+ */
       ::ng-deep .mat-radio-label {
          padding: 10px;
-
+         /*
+ TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.
+ */
          .mat-radio-container {
             display: none !important;
          }
-
+         /*
+ TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.
+ */
          .mat-radio-label-content{
             padding-left: 0;
          }

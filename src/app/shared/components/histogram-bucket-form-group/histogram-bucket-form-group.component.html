@@ -55,9 +55,8 @@
                             <td>
                                 <mat-slider thumbLabel [formControl]="preferredBucketsNumber"
                                 [min]="preferredBucketsNumber.min" [max]="preferredBucketsNumber.max"
-                                [step]="preferredBucketsNumber.step"
-                                (input)="preferredBucketsNumber.ensureLessThan ? preferredBucketsNumber.checkLessThan($event.value) : null;
-                            preferredBucketsNumber.ensureGeaterThan ? preferredBucketsNumber.checkGreaterThan($event.value) : null">
+                                [step]="preferredBucketsNumber.step" #ngSlider><input matSliderThumb (input)="preferredBucketsNumber.ensureLessThan ? preferredBucketsNumber.checkLessThan({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value}.value) : null;
+                            preferredBucketsNumber.ensureGeaterThan ? preferredBucketsNumber.checkGreaterThan($event.value) : null" #ngSliderThumb="matSliderThumb" />
                             </mat-slider>
                             </td>
                         </tr>

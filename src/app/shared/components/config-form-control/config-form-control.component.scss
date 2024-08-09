@@ -47,15 +47,27 @@ $primary-color-light: mat-color($primary-palette, 300);
   color: $error-color;
 }
 
+.slider-form-control {
+  gap: 10px;
+  display: flex;
+  align-items: center;
+}
+
+/*
+ TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version.
+ */
+/*
+ TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version.
+ */
 mat-option {
   margin: 2px 0px;
 
-  &.mat-selected.option-color-primary {
+  &.mat-mdc-selected.option-color-primary {
     background-color: $primary-color-light !important;
     color: white !important;
   }
 
-  &.mat-selected.option-color-accent {
+  &.mat-mdc-selected.option-color-accent {
     background-color: $accent-color-light !important;
     color: black !important;
   }
@@ -89,9 +101,17 @@ mat-option {
       width: 50%;
     }
   }
-
+  /*
+ TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.
+ */
+  /*
+ TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.
+ */
   mat-radio-group {
     padding: 0 5px;
+    /*
+ TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.
+ */
     mat-radio-button {
       width: 80px;
       font-size: 0.9rem;
@@ -128,7 +148,7 @@ mat-option {
 
 .url-field-form-control {
   .action-container {
-    .mat-form-field {
+    .mat-mdc-form-field {
       display: block;
     }
     .field-insert-container {
@@ -188,6 +208,9 @@ mat-option {
 }
 
 .checkbox {
+  /*
+ TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.
+ */
   &::ng-deep .mat-checkbox-label {
     font-size: 0.9em;
   }
@@ -251,11 +274,15 @@ mat-option {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
+  /*
+ TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.
+ */
   ::ng-deep .mat-checkbox-layout {
     width: 100%;
   }
-
+  /*
+ TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.
+ */
   ::ng-deep .mat-checkbox-label {
     width: 100%;
   }
@@ -287,11 +314,15 @@ mat-option {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
+  /*
+ TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.
+ */
   ::ng-deep .mat-checkbox-layout {
     width: 100%;
   }
-
+  /*
+ TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.
+ */
   ::ng-deep .mat-checkbox-label {
     width: 100%;
   }

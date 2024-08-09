@@ -48,7 +48,7 @@
                         </button>
                         <mat-slider [min]="data.min" [max]="data.max" [step]="(data.max - data.min) / 20" thumbLabel
                             [(ngModel)]="selectedPalette[i].proportion"
-                            matTooltip="{{ 'Change color midpoint' | translate}}" matTooltipPosition="right"></mat-slider>
+                            matTooltip="{{ 'Change color midpoint' | translate}}" matTooltipPosition="right"><input matSliderThumb /></mat-slider>
                     </div>
                 </div>
                 <div *cdkDragPlaceholder class="color-panel">

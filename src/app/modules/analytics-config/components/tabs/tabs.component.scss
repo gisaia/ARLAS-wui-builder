@@ -26,6 +26,15 @@
     display: flex;
     overflow-y: auto;
     flex-grow: 2;
+    /*
+ TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.
+ */
+    /*
+ TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.
+ */
+    /*
+ TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.
+ */
     mat-tab-group {
       flex: 1;
       overflow-y: hidden;
@@ -35,7 +44,16 @@
       }
 
       ::ng-deep mat-tab-header {
+        /*
+ TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.
+ */
+        /*
+ TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.
+ */
         .mat-tab-label {
+          /*
+ TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.
+ */
           .mat-tab-label-content {
             div {
               display: inline-flex;
@@ -80,19 +98,27 @@
           }
         }
       }
-
+      /*
+ TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.
+ */
       ::ng-deep .mat-tab-body-wrapper {
         height: 100%;
       }
-
+      /*
+ TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.
+ */
       ::ng-deep .mat-tab-body-content {
         height: 100%;
       }
-
+      /*
+ TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.
+ */
       ::ng-deep .mat-tab-labels .mat-tab-label {
         padding: 0 12px;
       }
-
+      /*
+ TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.
+ */
       ::ng-deep .mat-tab-labels :last-child.mat-tab-label {
         min-width: 0;
         color: unset;

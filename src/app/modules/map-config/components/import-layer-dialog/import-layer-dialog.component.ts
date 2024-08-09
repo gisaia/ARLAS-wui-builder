@@ -18,7 +18,7 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
+import { MatSelectChange } from '@angular/material/select';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { Config } from '@services/main-form-manager/models-config';
 import { isTechnicalArlasLayer, Layer, MapConfig } from '@services/main-form-manager/models-map-config';

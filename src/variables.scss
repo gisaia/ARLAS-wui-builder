@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import "~@angular/material/theming";
+@import "@angular/material/theming";
 
 $primary-palette: mat-palette($mat-blue, 800);
 $accent-palette: mat-palette($mat-blue, 800);

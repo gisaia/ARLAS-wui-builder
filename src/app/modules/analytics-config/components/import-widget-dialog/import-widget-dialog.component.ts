@@ -18,7 +18,7 @@
  */
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
+import { MatSelectChange } from '@angular/material/select';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { AnalyticComponentConfig, AnalyticConfig, Config, ContributorConfig } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';

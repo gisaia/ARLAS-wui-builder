@@ -19,7 +19,7 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { LandingPageComponent } from '@components/landing-page/landing-page.component';
 import { INGXLoggerMetadata, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { IconService } from '@services/icon-service/icon.service';
 import { MainFormService } from './services/main-form/main-form.service';
 import { Title } from '@angular/platform-browser';

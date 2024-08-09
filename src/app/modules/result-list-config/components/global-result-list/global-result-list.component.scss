@@ -18,13 +18,25 @@
  */
 
 .list-tab-group {
+  /*
+ TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.
+ */
   ::ng-deep .mat-tab-labels .mat-tab-label {
     padding: 0 12px;
   }
 
-  & > ::ng-deep .mat-tab-header {
+  & > ::ng-deep .mat-mdc-tab-header {
+    /*
+ TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.
+ */
+    /*
+ TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.
+ */
     .mat-tab-label {
       min-width: 210px;
+      /*
+ TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.
+ */
       .mat-tab-label-content {
         display: flex;
         justify-content: space-between;
@@ -32,7 +44,9 @@
       }
     }
   }
-
+  /*
+ TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.
+ */
   ::ng-deep .mat-tab-labels :last-child.mat-tab-label {
     min-width: 0;
     color: unset;

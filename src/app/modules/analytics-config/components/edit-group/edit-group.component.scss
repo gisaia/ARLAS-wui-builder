@@ -67,7 +67,9 @@ $primary-color: mat-color($primary-palette);
                     }
                 }
             }
-
+            /*
+ TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.
+ */
             ::ng-deep .mat-button-toggle-label-content {
                 line-height: 30px !important;
                 padding: 0 4px !important;
@@ -76,7 +78,9 @@ $primary-color: mat-color($primary-palette);
                     padding-bottom: 1px;
                 }
             }
-
+            /*
+ TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.
+ */
             ::ng-deep .mat-button-toggle-group {
                 border-radius: 0px;
             }
