@@ -18,8 +18,8 @@
  */
 import { Directive, ElementRef, Input, OnInit, Optional, OnDestroy } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
-import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
-import { MatLegacySlideToggle as MatSlideToggle, MatLegacySlideToggleChange as MatSlideToggleChange } from '@angular/material/legacy-slide-toggle';
+import { MatSelect } from '@angular/material/select';
+import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { NGXLogger } from 'ngx-logger';
 import { ConfigFormControl } from '@shared-models/config-form';
