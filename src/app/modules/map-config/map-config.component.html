@@ -1,8 +1,9 @@
-<nav mat-tab-nav-bar mat-align-tabs="center" animationDuration="500ms" mat-stretch-tabs class="map-container">
+<nav mat-tab-nav-bar mat-align-tabs="center" animationDuration="500ms" mat-stretch-tabs class="map-container" [tabPanel]="tabPanel">
     <a mat-tab-link #matTab *ngFor="let tab of tabs" [routerLink]="tab.routeurLink" queryParamsHandling="preserve"
         [active]="activeTab == tab" [class.tab-error]="activeTab != tab && tab.hasError()">
         {{ tab.label | translate }}
     </a>
 </nav>
-
-<router-outlet></router-outlet>
+<mat-tab-nav-panel #tabPanel>
+    <router-outlet></router-outlet>
+</mat-tab-nav-panel>

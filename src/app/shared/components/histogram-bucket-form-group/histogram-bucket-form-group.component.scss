@@ -20,8 +20,10 @@
 .table {
     display: flex;
     justify-content: space-between;
+    gap: 10px;
+
     .cell {
-        height: 55px;
+        height: 60px;
         display: flex;
         align-items: center;
 
@@ -34,6 +36,15 @@
             }
             .unit {
                 width: 80px;
+            }
+
+            // Align form field content with text
+            .mat-mdc-form-field-infix {
+                padding-top: 0;
+                min-height: unset !important;
+            }
+            .mat-mdc-form-field-subscript-wrapper {
+                display: none;
             }
         }
     }

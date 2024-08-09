@@ -21,7 +21,7 @@ import { EditTabComponent } from '@analytics-config/components/edit-tab/edit-tab
 import { ResultlistConfigForm } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { Component, OnDestroy } from '@angular/core';
 import { FormArray, FormControl } from '@angular/forms';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';

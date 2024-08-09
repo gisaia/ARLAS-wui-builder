@@ -18,8 +18,8 @@
  */
 import { Directive, ElementRef, HostListener, Input, OnInit, Optional, OnDestroy } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSelect } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 
 /**

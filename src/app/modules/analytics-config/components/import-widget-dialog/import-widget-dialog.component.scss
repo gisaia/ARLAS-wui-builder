@@ -28,13 +28,21 @@
 
   .group {
     margin: 0 0 10px 10px;
+    border-width: 0;
+    border-left-width: 3px;
+    border-radius: 0;
+    padding-left: 5px;
 
     .title-container {
       display: flex;
       font-size: 0.85em;
       color: #555;
+      align-items: center;
+
       mat-icon {
         font-size: 18px;
+        width: 18px;
+        height: 18px;
       }
       .title {
         font-weight: bold;
@@ -44,6 +52,7 @@
 
     .component {
       display: flex;
+
       mat-checkbox {
         display: flex;
         align-items: center;
@@ -60,8 +69,8 @@
             color: #555;
             font-style: italic;
             align-items: center;
-            div{
-                display: flex;
+            div {
+              display: flex;
             }
             mat-icon {
               font-size: 15px;

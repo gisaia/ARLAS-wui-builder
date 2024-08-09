@@ -4,8 +4,8 @@
             <div class="fields">
                 <div class="icon">
                     <mat-icon matPrefix style="cursor: pointer;" (click)="iconInput.click()">
-                        {{this.formGroup.controls.icon.value}}</mat-icon>
-                    <input class="icon-picker-input" #iconInput matInput formControlName="icon" [iconPicker]="this.formGroup.controls.icon.value"
+                        {{formGroup.controls.icon.value}}</mat-icon>
+                    <input class="icon-picker-input" #iconInput matInput formControlName="icon" [iconPicker]="formGroup.controls.icon.value"
                         [ipIconPack]="['mat']" [ipFallbackIcon]="'poll'" [ipPosition]="'right'"
                         [ipButtonStyleClass]="'mat-raised-button'" [ipMaxHeight]="'250px'" [ipWidth]="'307px'"
                         (iconPickerSelect)="onIconPickerSelect($event)" />
@@ -44,9 +44,9 @@
             </div>
             <div class="edit-widgets" #dropListContainer cdkDropListGroup>
                 <div class="container"
-                    *ngFor="let comp of contentTypeValue; index as ci;" 
+                    *ngFor="let comp of contentTypeValue; index as ci;"
                     mat-raised-button
-                    [id]="'widget-' + groupIndex + '-' + ci" 
+                    [id]="'widget-' + groupIndex + '-' + ci"
                     cdkDropList
                     [cdkDropListData]="ci"
                     >
@@ -55,8 +55,8 @@
                         (cdkDragEntered)="dragEntered($event)"
                         (cdkDragMoved)="dragMoved($event)"
                         (cdkDragDropped)="dragDropped($event)">
-                        <arlas-widget-edition 
-                            [isValid]="content?.controls[ci]?.valid" 
+                        <arlas-widget-edition
+                            [isValid]="content?.controls[ci]?.valid"
                             [widgetControls]="content?.controls[ci]?.controls"
                             (edit)="editWidget(ci, content?.controls[ci].value.widgetData?.dataStep?.collection)"
                             (delete)="deleteWidget(ci)"

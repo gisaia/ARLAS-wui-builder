@@ -13,7 +13,7 @@
         <div mat-dialog-title> {{'Choose of the following widgets' | translate}}</div>
             <div *ngFor="let tab of analytics | keyvalue">
                 <div class="tab">{{tab.key}}</div>
-                <mat-card class="group" *ngFor="let analytic of tab.value">
+                <mat-card appearance="outlined" class="group" *ngFor="let analytic of tab.value">
                     <div class="title-container">
                         <div><mat-icon>{{analytic.icon}}</mat-icon></div>
                         <div class="title"> {{analytic.title}}</div>

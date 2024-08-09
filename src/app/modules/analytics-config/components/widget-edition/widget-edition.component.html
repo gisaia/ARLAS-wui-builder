@@ -1,9 +1,12 @@
-<div class="invalid-widget-edition" *ngIf="!isValid && !!widgetControls?.widgetData?.value?.title"
-    [matTooltip]="'The widget has invalid inputs. Edit to fix them.' | translate" matTooltipPosition="above">!</div>
-<span>{{widgetControls?.widgetData?.value?.title}}</span>
-<button mat-icon-button [matMenuTriggerFor]="menuEditWidget" (click)="update()">
-    <mat-icon>more_vert</mat-icon>
-</button>
+<div class="widget-edition">
+    <div class="widget-edition--invalid" *ngIf="!isValid && !!widgetControls?.widgetData?.value?.title"
+        [matTooltip]="'The widget has invalid inputs. Edit to fix them.' | translate" matTooltipPosition="above">!</div>
+    <span>{{widgetControls?.widgetData?.value?.title}}</span>
+    <button mat-icon-button [matMenuTriggerFor]="menuEditWidget" (click)="update()">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+</div>
+
 <mat-menu #menuEditWidget="matMenu">
     <button mat-menu-item (click)="edit.emit()">
         <mat-icon>edit</mat-icon>

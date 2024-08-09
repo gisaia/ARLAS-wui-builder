@@ -20,8 +20,8 @@ import { AnalyticsImportService } from '@analytics-config/services/analytics-imp
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ExternalNodeImportService } from '@app/modules/external-node-config/services/external-node-import/external-node-import.service';
 import { ExternalNodeInitService } from '@app/modules/external-node-config/services/external-node-init/external-node-init.service';
