@@ -17,7 +17,7 @@
  * under the License.
  */
 import { NgModule } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
 import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { SharedModule } from '@shared/shared.module';
