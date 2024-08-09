@@ -12,7 +12,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "importHelpers": true,
-    "target": "es6",
+    "target": "ES2022",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -20,28 +20,66 @@
       "es2019",
       "dom"
     ],
-    // the most specific path should be the first, to be used with auto import
     "paths": {
-      "@components/*": ["app/components/*"],
-      "@guards/*": ["app/guards/*"],
-      "@services/*": ["app/services/*"],
-      "@shared-components/*": ["app/shared/components/*"],
-      "@shared-directives/*": ["app/shared/directives/*"],
-      "@shared-models/*": ["app/shared/models/*"],
-      "@shared-services/*": ["app/shared/services/*"],
-      "@utils/*": ["app/utils/*"],
-      "@shared/*": ["app/shared/*"],
-      "@map-config/*": ["app/modules/map-config/*"],
-      "@search-config/*": ["app/modules/search-config/*"],
-      "@timeline-config/*": ["app/modules/timeline-config/*"],
-      "@analytics-config/*": ["app/modules/analytics-config/*"],
-      "@result-list-config/*": ["app/modules/result-list-config/*"],
-      "@side-modules-config/*": ["app/modules/side-modules-config/*"],
-      "@look-and-feel-config/*": ["app/modules/look-and-feel-config/*"],
-      "@assets/*": ["assets/*"],
-      "@environments/*": ["environments/*"],
-      "@app/*": ["app/*"]      
-    }
+      "@components/*": [
+        "app/components/*"
+      ],
+      "@guards/*": [
+        "app/guards/*"
+      ],
+      "@services/*": [
+        "app/services/*"
+      ],
+      "@shared-components/*": [
+        "app/shared/components/*"
+      ],
+      "@shared-directives/*": [
+        "app/shared/directives/*"
+      ],
+      "@shared-models/*": [
+        "app/shared/models/*"
+      ],
+      "@shared-services/*": [
+        "app/shared/services/*"
+      ],
+      "@utils/*": [
+        "app/utils/*"
+      ],
+      "@shared/*": [
+        "app/shared/*"
+      ],
+      "@map-config/*": [
+        "app/modules/map-config/*"
+      ],
+      "@search-config/*": [
+        "app/modules/search-config/*"
+      ],
+      "@timeline-config/*": [
+        "app/modules/timeline-config/*"
+      ],
+      "@analytics-config/*": [
+        "app/modules/analytics-config/*"
+      ],
+      "@result-list-config/*": [
+        "app/modules/result-list-config/*"
+      ],
+      "@side-modules-config/*": [
+        "app/modules/side-modules-config/*"
+      ],
+      "@look-and-feel-config/*": [
+        "app/modules/look-and-feel-config/*"
+      ],
+      "@assets/*": [
+        "assets/*"
+      ],
+      "@environments/*": [
+        "environments/*"
+      ],
+      "@app/*": [
+        "app/*"
+      ]
+    },
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "skipTemplateCodegen": true,
