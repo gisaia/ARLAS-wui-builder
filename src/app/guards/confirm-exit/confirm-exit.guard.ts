@@ -17,7 +17,7 @@
  * under the License.
  */
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ActivatedRouteSnapshot, CanDeactivate, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { Observable } from 'rxjs';

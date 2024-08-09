@@ -19,7 +19,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { camelize } from '@utils/tools';

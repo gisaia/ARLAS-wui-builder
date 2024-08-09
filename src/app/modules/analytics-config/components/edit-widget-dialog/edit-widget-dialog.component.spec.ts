@@ -2,7 +2,7 @@ import { EditWidgetDialogComponent } from './edit-widget-dialog.component';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { MockComponent } from 'ng-mocks';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { of } from 'rxjs';
 import { HistogramFormBuilderService } from '../../services/histogram-form-builder/histogram-form-builder.service';

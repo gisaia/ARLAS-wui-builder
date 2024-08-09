@@ -1,6 +1,6 @@
 import { DialogColorTableComponent } from './dialog-color-table.component';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { MockComponent } from 'ng-mocks';
 import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
 import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
