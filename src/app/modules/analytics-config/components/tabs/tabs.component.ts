@@ -20,8 +20,8 @@ import { AnalyticsInitService } from '@analytics-config/services/analytics-init/
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatTabGroup } from '@angular/material/tabs';
+import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatLegacyTabGroup as MatTabGroup } from '@angular/material/legacy-tabs';
 import { TranslateService } from '@ngx-translate/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
