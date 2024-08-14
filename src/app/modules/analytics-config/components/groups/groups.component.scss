@@ -18,7 +18,7 @@
  */
 
 .groups-wrapper {
-  overflow-y: hidden;
+  overflow: hidden;
 
   .add-button {
     display: flex;
@@ -30,6 +30,7 @@
     display: flex;
     justify-content: space-evenly;
     padding: 3px 0;
+    width: calc(100vw - 48px);
 
     .group {
       margin: 10px 2px;
