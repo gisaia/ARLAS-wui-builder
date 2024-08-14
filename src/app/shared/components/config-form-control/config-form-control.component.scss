@@ -43,41 +43,19 @@
   color: $error-color;
 }
 
+.donut-size,
 .slider-form-control {
   gap: 10px;
   display: flex;
   align-items: center;
+
+  mat-hint {
+    margin-left: 10px;
+  }
 }
 
 mat-option {
   margin: 2px 0px;
-
-  // TODO: not used anymore, so what were they used for
-  &.mat-mdc-selected.option-color-primary {
-    background-color: $primary-color-light !important;
-    color: white !important;
-  }
-
-  &.mat-mdc-selected.option-color-accent {
-    background-color: $accent-color-light !important;
-    color: black !important;
-  }
-
-  &.option-color-primary {
-    background-color: $primaryColor;
-    color: white;
-    &:hover {
-      background-color: $primary-color-light;
-    }
-  }
-
-  &.option-color-accent {
-    background-color: $accentColor;
-    color: black;
-    &:hover {
-      background-color: $accent-color-light;
-    }
-  }
 }
 
 .icon-form-control {

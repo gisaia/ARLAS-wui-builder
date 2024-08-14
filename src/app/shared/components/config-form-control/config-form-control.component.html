@@ -30,9 +30,10 @@
         <mat-form-field class="slider-input" appearance="outline">
             <input matInput type="number" [step]="typedControl.step" [formControl]="typedControl" [min]="typedControl.min" [max]="typedControl.max" [value]="typedControl.value">
         </mat-form-field>
-        <mat-slider thumbLabel [formControl]="typedControl" [min]="typedControl.min" [max]="typedControl.max" [value]="typedControl.value"
-                    [step]="typedControl.step" (input)="typedControl.ensureLessThan ? typedControl.checkLessThan($event.value) : null;
-                        typedControl.ensureGeaterThan ? typedControl.checkGreaterThan($event.value) : null">
+        <mat-slider #ngSlider [min]="typedControl.min" [max]="typedControl.max" [step]="typedControl.step">
+            <input matSliderThumb (input)="typedControl.ensureLessThan ? typedControl.checkLessThan({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value}.value) : null;
+                typedControl.ensureGeaterThan ? typedControl.checkGreaterThan($event.value) : null" #ngSliderThumb="matSliderThumb"
+                [(value)]="typedControl.value"/>
         </mat-slider>
     </div>
 
@@ -308,16 +309,16 @@
 <div *ngIf="isFieldWithSizeList(); let typedControl" class="metric-field-form-control">
     <div>
         <div class="action-container">
-            <div>
+            <div class="donut-size">
                 <mat-label>{{ 'donut size' | translate}}</mat-label>
                 <div class="slider-form-control">
                     <div class="slider-container">
                         <mat-form-field class="slider-input" appearance="outline">
                             <input   matInput type="number" [step]="1" [formControl]="typedControl.sizeCtrl" [min]="1" [max]="30" [value]="typedControl.sizeCtrl.value">
                         </mat-form-field>
-                    <mat-slider thumbLabel [formControl]="typedControl.sizeCtrl" [min]="1" [max]="30" [step]="1" [value]="typedControl.value">
-                        <input matSliderThumb #sliderValue />
-                    </mat-slider>
+                        <mat-slider [min]="1" [max]="30" [step]="1">
+                            <input matSliderThumb [(value)]="typedControl.sizeCtrl.value" #sliderValue/>
+                        </mat-slider>
                     </div>
                 </div>
             </div>

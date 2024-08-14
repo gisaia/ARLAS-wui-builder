@@ -54,9 +54,9 @@
                                             [min]="data.min"
                                             [max]="data.max" >
                                </mat-form-field>
-                               <mat-slider ngDefaultControl [min]="data.min" [max]="data.max" [step]="(data.max - data.min) / 20" thumbLabel
-                                           [(ngModel)]="selectedPalette[i].proportion"
-                                           matTooltip="{{ 'Change color midpoint' | translate}}" matTooltipPosition="right"></mat-slider>
+                               <mat-slider ngDefaultControl [min]="data.min" [max]="data.max" [step]="(data.max - data.min) / 20"
+                            matTooltip="{{ 'Change color midpoint' | translate}}" matTooltipPosition="right">
+                            <input matSliderThumb [(value)]="selectedPalette[i].proportion"/></mat-slider>
                        </div>
                        </div>
                     </div>

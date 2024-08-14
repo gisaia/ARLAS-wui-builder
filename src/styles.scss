@@ -123,50 +123,6 @@ body {
   }
 }
 
-/*
- TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.
- */
-/*
- TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.
- */
-.mat-button-toggle-group {
-  /*
- TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.
- */
-  mat-button-toggle.mat-button-toggle-checked {
-    background-color: white !important;
-  }
-  /*
- TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.
- */
-  mat-button-toggle:not(.mat-button-toggle-checked) {
-    background-color: rgb(224, 224, 224) !important;
-    color: rgb(0, 0, 0, 0.25) !important;
-  }
-}
-
-/*
- TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version.
- */
-.mat-slider-thumb-label {
-  background-color: white !important;
-  border: 1px solid rgba(0, 0, 0, 0.87) !important;
-}
-
-/*
- TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version.
- */
-.mat-slider-thumb-label-text {
-  color: black !important;
-}
-
-/*
- TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version.
- */
-.mat-mdc-slide-toggle.mat-checked .mat-slide-toggle-thumb {
-  background-color: white !important;
-}
-
 .cdk-overlay-connected-position-bounding-box {
   .cdk-overlay-pane {
     width: auto !important;
@@ -207,7 +163,7 @@ body {
   }
 }
 
-.gif{
+.gif {
   background-color: #FF4081;
   border-radius: 50%;
   width: 100px;

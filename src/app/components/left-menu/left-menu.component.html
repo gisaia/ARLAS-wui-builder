@@ -18,14 +18,16 @@
           <mat-icon>library_books</mat-icon>
         </button>
       </mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-nav-list>
-        <mat-list-item *ngFor="let link of links">
-          <button matTooltip="{{ link.name | translate}}" mat-icon-button (click)="navigateTo(link.url)" [matTooltipPosition]="'right'">
-            <mat-icon>{{link.icon}}</mat-icon>
-          </button>
-        </mat-list-item>
-      </mat-nav-list>
+      <ng-container *ngIf="!!links && links.length > 0">
+        <mat-divider></mat-divider>
+        <mat-nav-list>
+          <mat-list-item *ngFor="let link of links">
+            <button matTooltip="{{ link.name | translate}}" mat-icon-button (click)="navigateTo(link.url)" [matTooltipPosition]="'right'">
+              <mat-icon>{{link.icon}}</mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-nav-list>
+      </ng-container>
       <mat-divider></mat-divider>
       <mat-list-item matTooltip="{{'Save' | translate}}" (click)="save($event)" matTooltipPosition="right"
         [class.disabled-item]="!this.persistenceService.isAvailable">

@@ -30,6 +30,16 @@
         display: flex;
         align-items: center;
 
+        .buckets {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            mat-hint {
+                margin-left: 10px;
+            }
+        }
+
         .interval {
             display: flex;
             align-items: flex-end;
