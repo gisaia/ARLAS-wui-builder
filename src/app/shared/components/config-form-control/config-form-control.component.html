@@ -26,14 +26,13 @@
 <div *ngIf="isSlider(); let typedControl" class="slider-form-control">
     <mat-label [class.control-error]="typedControl.touched && typedControl.invalid">
         {{ typedControl.label | translate}}{{typedControl.optional ? '' : '*'}}</mat-label>
-    <mat-slider ngDefaultControl [formControl]="typedControl" #ngSlider
-            [min]="typedControl.min" [max]="typedControl.max" [step]="typedControl.step">
-        <input matSliderThumb #sliderValue (input)="typedControl.ensureLessThan ? typedControl.checkLessThan({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value}.value) : null;
-            typedControl.ensureGeaterThan ? typedControl.checkGreaterThan($event.value) : null" #ngSliderThumb="matSliderThumb"/>
+    <mat-slider #ngSlider [min]="typedControl.min" [max]="typedControl.max" [step]="typedControl.step">
+        <input matSliderThumb (input)="typedControl.ensureLessThan ? typedControl.checkLessThan({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value}.value) : null;
+            typedControl.ensureGeaterThan ? typedControl.checkGreaterThan($event.value) : null" #ngSliderThumb="matSliderThumb"
+            [(value)]="typedControl.value"/>
     </mat-slider>
-    <!-- TODO: properly integrate it -->
     <!-- Added to replace the previous behaviour of the slider -->
-    <mat-hint>{{ sliderValue.value }}</mat-hint>
+    <mat-hint>{{ ngSliderThumb.value }}</mat-hint>
     <mat-card appearance="outlined" *ngIf="typedControl.hasWarning" class="empty_visulisation">
         {{ typedControl.warningMessage | translate}}
     </mat-card>
@@ -290,10 +289,10 @@
 <div *ngIf="isFieldWithSizeList(); let typedControl" class="metric-field-form-control">
     <div>
         <div class="action-container">
-            <div>
+            <div class="donut-size">
                 <mat-label>{{ 'donut size' | translate}}</mat-label>
-                <mat-slider thumbLabel [formControl]="typedControl.sizeCtrl" [min]="1" [max]="30" [step]="1">
-                    <input matSliderThumb #sliderValue />
+                <mat-slider [min]="1" [max]="30" [step]="1">
+                    <input matSliderThumb [(value)]="typedControl.sizeCtrl.value" #sliderValue/>
                 </mat-slider>
                 <mat-hint>{{sliderValue.value}}</mat-hint>
             </div>

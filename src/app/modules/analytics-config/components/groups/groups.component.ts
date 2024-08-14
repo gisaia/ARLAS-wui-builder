@@ -134,8 +134,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     if (this.updateDisplay) {
       this.updateDisplay.unsubscribe();
     }
-    // TODO: activate when toolkit updated
-    // this.analyticsBoard.ngOnDestroy();
+
     this.analyticsBoard = null;
     this.groupsPreview = null;
     this.contentFg = null;

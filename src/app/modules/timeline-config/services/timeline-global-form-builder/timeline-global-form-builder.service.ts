@@ -18,7 +18,7 @@
  */
 import {
   BucketsIntervalFormBuilderService,
-  BucketsIntervalFormGroup,
+  BucketsIntervalFormGroup
 } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
 import { BUCKET_TYPE } from '@analytics-config/services/buckets-interval-form-builder/models';
 import { Injectable } from '@angular/core';
@@ -33,13 +33,10 @@ import {
   ConfigFormGroup, HiddenFormControl, InputFormControl, MultipleSelectFormControl, SelectFormControl,
   SliderFormControl, SlideToggleFormControl
 } from '@shared-models/config-form';
+import { DateFormats } from '@shared/models/enum';
 import { ArlasColorService, ChartType } from 'arlas-web-components';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
-enum DateFormats {
-  English = '%b %d %Y  %H:%M',
-  French = '%d %b %Y  %H:%M'
-}
 
 export class TimelineGlobalFormGroup extends ConfigFormGroup {
 

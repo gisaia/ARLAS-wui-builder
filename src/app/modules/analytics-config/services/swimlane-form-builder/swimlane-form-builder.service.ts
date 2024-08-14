@@ -28,6 +28,8 @@ import {
   ButtonToggleFormControl, ConfigFormGroup, HiddenFormControl, HuePaletteFormControl, SelectFormControl, SelectOption, SliderFormControl,
   SlideToggleFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+import { DateFormats } from '@shared/models/enum';
 import { Metric } from 'arlas-api';
 import { SwimlaneMode } from 'arlas-web-components';
 import { Observable } from 'rxjs';
@@ -40,16 +42,13 @@ import {
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { METRIC_TYPE } from '../metric-collect-form-builder/models';
 import { WidgetFormBuilder } from '../widget-form-builder';
-import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+
 
 export enum SWIMLANE_REPRESENTATION {
   GLOBALLY = 'global',
   BY_COLUMN = 'column'
 }
-enum DateFormats {
-  English = '%b %d %Y  %H:%M',
-  French = '%d %b %Y  %H:%M'
-}
+
 export class SwimlaneFormGroup extends WidgetConfigFormGroup {
 
   public constructor(

@@ -52,13 +52,13 @@
                     </tbody>
                     <tbody>
                         <tr class="cell">
-                            <td>
-                                <mat-slider thumbLabel [formControl]="preferredBucketsNumber" [min]="preferredBucketsNumber.min"
-                                    [max]="preferredBucketsNumber.max" [step]="preferredBucketsNumber.step" #ngSlider>
-                                    <input matSliderThumb #sliderValue (input)="preferredBucketsNumber.ensureLessThan ? preferredBucketsNumber.checkLessThan({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value}.value) : null;
-                                        preferredBucketsNumber.ensureGeaterThan ? preferredBucketsNumber.checkGreaterThan($event.value) : null" #ngSliderThumb="matSliderThumb" />
+                            <td class="buckets">
+                                <mat-slider [min]="preferredBucketsNumber.min" [max]="preferredBucketsNumber.max" [step]="preferredBucketsNumber.step" #ngSlider>
+                                    <input matSliderThumb (input)="preferredBucketsNumber.ensureLessThan ? preferredBucketsNumber.checkLessThan({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value}.value) : null;
+                                        preferredBucketsNumber.ensureGeaterThan ? preferredBucketsNumber.checkGreaterThan($event.value) : null" #ngSliderThumb="matSliderThumb"
+                                        [(value)]="preferredBucketsNumber.value"/>
                                 </mat-slider>
-                                <mat-hint>{{ sliderValue.value }}</mat-hint>
+                                <mat-hint>{{ ngSliderThumb.value }}</mat-hint>
                             </td>
                         </tr>
                         <tr class="cell">
