@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import "./theme.scss";
 @import "./variables.scss";
 @import "styles/material-override.scss";
 
@@ -27,9 +26,6 @@
   src: local("Material Icons"), local("MaterialIcons-Regular"),
     url("./assets/fonts/material-icons.woff2") format("woff2");
 }
-
-$accent-color: mat-color($accent-palette);
-$primary-color: mat-color($primary-palette);
 
 body {
   width: 100%;

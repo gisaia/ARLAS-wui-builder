@@ -16,7 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import "theme.scss";
+@use "@angular/material" as mat;
+@import "styles/theme-variables.scss";
 
 .content {
     .basemaps {
@@ -33,7 +34,7 @@
                 background-color: rgba(0, 0, 0, 0.05);
 
                 &:hover {
-                    background-color: rgba($primaryColor, 0.35);
+                    background-color: rgba(mat.get-color-from-palette($app-primary), 0.35);
                 }
 
                 ::ng-deep.mdc-checkbox {
@@ -47,7 +48,7 @@
                     margin-left: 0 !important;
                 }
                 &.mat-mdc-checkbox-checked {
-                    border: 3px solid $primaryColor;
+                    border: 3px solid mat.get-color-from-palette($app-primary);
                     padding: 7px;
                     background-color: white;
                 }

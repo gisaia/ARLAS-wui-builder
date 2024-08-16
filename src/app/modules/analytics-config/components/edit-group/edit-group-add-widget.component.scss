@@ -17,7 +17,8 @@
  * under the License.
  */
 
-@import "theme.scss";
+@use "@angular/material" as mat;
+@import "styles/theme-variables.scss";
 
 .group {
    display: flex;
@@ -40,13 +41,13 @@
       }
       &.mat-mdc-radio-checked{
          color: white;
-         border: 3px solid $accentColor;
+         border: 3px solid mat.get-color-from-palette($app-accent);
       }
 
       &:hover{
-         background-color: rgba($accentColor, 0.2);
-         border-color: $accentColor;
-         color: $accentColor
+         background-color: rgba(mat.get-color-from-palette($app-accent), 0.2);
+         border-color: mat.get-color-from-palette($app-accent);
+         color: mat.get-color-from-palette($app-accent);
       }
 
       .icon{
