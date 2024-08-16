@@ -17,8 +17,9 @@
  * under the License.
  */
 
+@use "@angular/material" as mat;
 @import "variables.scss";
-@import "theme.scss";
+@import "styles/theme-variables.scss";
 
 .menu_container {
   height: 100%;
@@ -28,7 +29,7 @@
   width: $left-menu-width;
 
   .active-menu{
-    background-color: rgba($accentColor, 0.2);
+    background-color: rgba(mat.get-color-from-palette($app-accent), 0.2);
   }
 
   .action-list {

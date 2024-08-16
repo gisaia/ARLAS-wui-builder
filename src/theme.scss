@@ -16,42 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import "@angular/material/theming";
+@use "@angular/material" as mat;
+@import "styles/theme-variables.scss";
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core();
+@include mat.core();
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$app-primary: mat-palette($mat-blue, 800);
-$app-accent: mat-palette($mat-blue, 800);
 
-// The warn palette is optional (defaults to red).
-$app-warn: mat-palette($mat-red);
 
-// Create the theme object (a Sass map containing all of the palettes).
-$app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include angular-material-theme($app-theme);
-
-$primary-palette: mat-palette($mat-blue, 800);
-$accent-palette: mat-palette($mat-blue, 800);
-$warn-palette: mat-palette($mat-red);
-
-$config-element-description-background: mat-color($mat-grey, 50);
-$config-element-description-border-color: transparentize(mat-color($mat-blue, A700), 0.6);
-$config-element-description-text-color: transparentize(mat-color($mat-blue-grey, A700), 0.4);
-$error-color: mat-color($warn-palette);
-
-$primaryColor: mat-color($primary-palette);
-$accentColor: mat-color($accent-palette);
-
-$accent-color-light: mat-color($accent-palette, 300);
-$primary-color-light: mat-color($primary-palette, 300);
+// TODO: refine to avoid useless imports ?
+@include mat.all-component-themes($app-theme);
