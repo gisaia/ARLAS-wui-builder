@@ -20,6 +20,9 @@
 .table {
     display: flex;
     justify-content: space-between;
+    &-body-right {
+        padding-left: 5px;
+    }
     .cell {
         height: 55px;
         display: flex;
