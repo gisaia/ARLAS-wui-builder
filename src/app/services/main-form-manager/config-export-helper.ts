@@ -28,8 +28,7 @@ import {
   CHIPSEARCH_TYPE,
   CHIPSEARCH_IDENTIFIER,
   WebConfigOptions,
-  MetricsSubTableConfig,
-  ZoomToDataStrategy
+  MetricsSubTableConfig
 } from './models-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
@@ -62,6 +61,7 @@ import { hashCode, stringifyArlasFilter } from './tools';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { DescribedUrl } from 'arlas-web-components/lib/components/results/utils/results.utils';
 import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
+import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
 
 export enum EXPORT_TYPE {
   json = 'json',

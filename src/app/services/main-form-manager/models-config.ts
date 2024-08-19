@@ -28,7 +28,7 @@ export const CHIPSEARCH_TYPE = 'chipssearch';
 export const CHIPSEARCH_IDENTIFIER = 'chipssearch';
 import { LayerSourceConfig } from 'arlas-web-contributors';
 import { Aggregation } from 'arlas-api';
-import { AnalyticsTabs } from 'arlas-wui-toolkit';
+import { AnalyticsTabs, ZoomToDataStrategy } from 'arlas-wui-toolkit';
 
 export interface Config {
   arlas: ArlasConfig;
@@ -104,12 +104,6 @@ export interface WebConfigOptions {
   indicators?: boolean;
   spinner?: SpinnerOptions;
   tabs: AnalyticsTabs[];
-}
-
-export enum ZoomToDataStrategy{
-  NONE = 'none',
-  CENTROID = 'centroid',
-  GEOMETRY = 'geometry'
 }
 
 export interface SpinnerOptions {

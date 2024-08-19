@@ -346,7 +346,7 @@
 	"Drag and drop description": "Allows widgets to be moved by dragging them",
 	"Look and feel": "Look and feel",
 	"Zoom to data strategy": "Zoom to data",
-	"Zoom to data strategy description": "Choose the zoom to data strategy: \n • None: disable the feature \n • Centroid: zoom to centroid extent \n • Geometry: zoom to geometry extent",
+	"Zoom to data strategy description": "Choose the zoom to data strategy: \n • None: Zoom to data is disabled \n • Centroid: Zoom to the extent formed by data's centroids \n • Geometry: Zoom to the extent formed by data's geometries",
 	"Display indicators": "Display indicators",
 	"Display indicators description": "Displays a red dot to signify the presence of a filter on a widget in the application",
 	"Display spinners": "Display spinners",

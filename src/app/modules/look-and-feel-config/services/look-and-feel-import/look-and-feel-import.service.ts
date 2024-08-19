@@ -21,9 +21,10 @@ import { FormArray } from '@angular/forms';
 import {
   LookAndFeelGlobalFormGroup
 } from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
-import { Config, ZoomToDataStrategy } from '@services/main-form-manager/models-config';
+import { Config } from '@services/main-form-manager/models-config';
 import { importElements } from '@services/main-form-manager/tools';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
 
 @Injectable({
   providedIn: 'root'

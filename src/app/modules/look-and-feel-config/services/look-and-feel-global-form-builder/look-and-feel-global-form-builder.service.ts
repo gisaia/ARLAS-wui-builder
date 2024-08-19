@@ -28,7 +28,7 @@ import {
   SlideToggleFormControl
 } from '@shared-models/config-form';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ZoomToDataStrategy } from '@services/main-form-manager/models-config';
+import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
 
 
 export class CollectionUnitFormGroup extends ConfigFormGroup {
