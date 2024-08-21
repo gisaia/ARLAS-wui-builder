@@ -134,24 +134,29 @@ body {
   right: 0px !important;
 }
 
-.map-preview #mapgl {
-  width: 80% !important;
-  height: 80% !important;
-  margin: -24px !important;
-  position: absolute !important;
-  bottom: unset !important;
-  right: unset !important;
-  top: unset !important;
-}
+.map-preview {
+  #mapgl {
+    width: 80% !important;
+    height: 80% !important;
+    margin: -24px !important;
+    position: absolute !important;
+    bottom: unset !important;
+    right: unset !important;
+    top: unset !important;
+  }
 
-.map-preview .basemaps {
-  right: 202px !important;
-  top: 110px !important;
-}
+  // Properly position basemap when in window preview mode
+  .basemaps {
+    right: calc(10% + 9px) !important;
+    top: 298px !important;
+  }
+  .basemap-container {
+    right: calc(10% + 9px + 30px + 5px) !important;
+  }
 
-.map-preview .basemap-container {
-  top: 108px !important;
-  right: 240px !important;
+  .preview {
+    top: 0 !important;
+  }
 }
 
 .mat-button-toggle-group {
