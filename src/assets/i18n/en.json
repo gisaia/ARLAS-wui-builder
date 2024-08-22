@@ -447,7 +447,7 @@
 	"Network Fetching Level": "Fetching data",
 	"Network Fetching Level description": "Network Analytics data are fetched on the map according to a X.Y.Z grid. Choose the zoom level Z of the X.Y.Z tiles.",
 	"Zoom min": "Zoom min",
-	"zoom min description": "Minimum zoom level to display the layer.For example, setting a minimum zoom to 3 will make your layer visible from the continental scale. Before this threshold, it will not be visible.",
+	"zoom min description": "Minimum zoom level to display the layer. For example, setting a minimum zoom to 3 will make your layer visible from the continental scale. Before this threshold, it will not be visible.",
 	"Zoom max": "Zoom max",
 	"zoom max description": "Maximum zoom level to display the layer. For example, setting a maximum zoom to 15 will make your layer visible down to building scale. Beyond that, it will no longer be visible.",
 	"Add filter": "",
