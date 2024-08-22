@@ -1,5 +1,17 @@
 # Change Log
 
+## [v25.1.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.1.0) (2024-07-18)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0...v25.1.0)
+
+**Fixed bugs:**
+
+- BUILDER: Default visibility level for a layer is 1 to 23. It should be 0 to 23. [\#951](https://github.com/gisaia/ARLAS-wui-builder/issues/951)
+
+**Miscellaneous:**
+
+- Set labels and units for X and Y axis of a histogram [\#938](https://github.com/gisaia/ARLAS-wui-builder/issues/938) [[WIDGET](https://github.com/gisaia/ARLAS-wui-builder/labels/WIDGET)]
+
 ## [v25.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.0.0) (2024-05-15)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0-rc.2...v25.0.0)

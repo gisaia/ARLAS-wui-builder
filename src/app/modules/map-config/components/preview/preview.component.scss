@@ -1,48 +1,67 @@
 /*
-Licensed to Gisaïa under one or more contributor
-license agreements. See the NOTICE.txt file distributed with
-this work for additional information regarding copyright
-ownership. Gisaïa licenses this file to you under
-the Apache License, Version 2.0 (the "License"); you may
-not use this file except in compliance with the License.
-You may obtain a copy of the License at
+ * Licensed to Gisaïa under one or more contributor
+ * license agreements. See the NOTICE.txt file distributed with
+ * this work for additional information regarding copyright
+ * ownership. Gisaïa licenses this file to you under
+ * the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+arlas-mapgl {
+    ::ng-deep div.map__visu-list {
+        top: 10px;
+        right: 10px;
+        flex-direction: row-reverse;
+        align-items: flex-end;
 
-   http://www.apache.org/licenses/LICENSE-2.0
+        .map__legend-button {
+           box-sizing: border-box;
+        }
 
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
-*/
-::ng-deep arlas-mapgl div.map__visu-list--wrapper {
-    z-index: 1;
-    top: 270px;
-    right: 10px;
-    .map_legend-button--wrapper {
-        height: 30px;
+        .map__visu-list--container {
+            position: relative;
+            top: -2px;
+            padding-top: 0;
+            padding-right: 5px;
+        }
+    }
+
+    ::ng-deep .mapboxgl-ctrl-top-right {
+        top: 45px;
+    }
+
+    ::ng-deep .basemap-container {
+        top: 250px;
+        z-index: 1;
+    }
+
+    ::ng-deep.mapboxgl-ctrl-group {
+        box-shadow: none;
+    }
+
+    ::ng-deep.mapboxgl-ctrl-group-addgeobox,
+    ::ng-deep.mapboxgl-ctrl-group-removeaois {
+        display: none;
     }
 }
 
-arlas-mapgl ::ng-deep .mapboxgl-ctrl-top-right {
-    top: 45px;
-}
-
-arlas-mapgl ::ng-deep .basemap-container {
-    top: 115px;
-    z-index: 1;
-}
-
 .preview {
-    position: absolute;
+    position: relative;
     width: fit-content;
     height: 35px;
-    top: 68px;
+    top: 10px;
 }
 
 .basemaps {
-    box-shadow: 0 0 0 2px #0000001a;
     border-radius: 4px;
     background-color: #fff;
     width: 30px;
@@ -52,6 +71,6 @@ arlas-mapgl ::ng-deep .basemap-container {
     align-items: center;
     cursor: pointer;
     position: absolute;
-    right: 10px;
-    top: 115px;
+    right: 9px;
+    top: 250px;
 }

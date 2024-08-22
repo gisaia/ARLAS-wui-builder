@@ -1,21 +1,21 @@
 /*
-Licensed to Gisaïa under one or more contributor
-license agreements. See the NOTICE.txt file distributed with
-this work for additional information regarding copyright
-ownership. Gisaïa licenses this file to you under
-the Apache License, Version 2.0 (the "License"); you may
-not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
-*/
+ * Licensed to Gisaïa under one or more contributor
+ * license agreements. See the NOTICE.txt file distributed with
+ * this work for additional information regarding copyright
+ * ownership. Gisaïa licenses this file to you under
+ * the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 
 import { AfterViewInit, ChangeDetectorRef, Component, Inject, Input, OnDestroy, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -26,12 +26,14 @@ import { ConfigExportHelper } from '@services/main-form-manager/config-export-he
 import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { StartupService, ZONE_PREVIEW } from '@services/startup/startup.service';
+import { FeatureCollection } from '@turf/helpers';
+import { DataWithLinks } from 'arlas-persistence-api';
 import { ArlasColorService, MapglComponent } from 'arlas-web-components';
 import { MapContributor } from 'arlas-web-contributors';
-import { ArlasCollaborativesearchService, ArlasConfigService, ContributorBuilder, PersistenceService } from 'arlas-wui-toolkit';
-import { catchError, map, merge, mergeMap, Observable, of, Subscription, tap, throwError } from 'rxjs';
-import { ArlasSettingsService } from 'arlas-wui-toolkit';
-import { DataWithLinks } from 'arlas-persistence-api';
+import { OnMoveResult } from 'arlas-web-contributors/models/models';
+import { ArlasCollaborativesearchService, ArlasConfigService,
+  ArlasSettingsService, ContributorBuilder, PersistenceService } from 'arlas-wui-toolkit';
+import { catchError, map, merge, Observable, of, Subscription, throwError } from 'rxjs';
 
 export interface MapglComponentInput {
   mapglContributors: MapContributor[];
@@ -130,6 +132,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   public ngAfterViewInit() {
     this.onMapLoadSub = this.mapglComponent.onMapLoaded.subscribe(isLoaded => {
       if (isLoaded && !!this.mapglContributors) {
+        this.mapglComponent.map.resize();
         this.mapglContributors.forEach(mapglContributor => {
           mapglContributor.updateData = true;
           mapglContributor.fetchData(null);
@@ -145,11 +148,11 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     this.onMapLoadSub.unsubscribe();
   }
 
-  public changeVisualisation(event) {
+  public changeVisualisation(event: Set<string>) {
     this.mapglContributors.forEach(contrib => contrib.changeVisualisation(event));
   }
 
-  public onChangeAoi(event) {
+  public onChangeAoi(event: FeatureCollection) {
     const configDebounceTime = this.configService.getValue('arlas.server.debounceCollaborationTime');
     const debounceDuration = configDebounceTime !== undefined ? configDebounceTime : 750;
     this.mapglContributors.forEach((contrib, i) => {
@@ -159,7 +162,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  public onMove(event) {
+  public onMove(event: OnMoveResult) {
     this.mapglContributors.forEach(contrib => contrib.onMove(event, true));
   }
 

@@ -563,7 +563,7 @@
                         "detailedGridHeight": 300,
                         "nbGridColumns": 3,
                         "isBodyHidden": false,
-                        "isGeoSortEnabled": true,
+                        "isGeoSortActived": false,
                         "selectedItemsEvent": null,
                         "consultedItemEvent": null,
                         "actionOnItemEvent": null,
