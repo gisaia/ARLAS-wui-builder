@@ -30,7 +30,6 @@ import {
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import { Subject } from 'rxjs/internal/Subject';
 import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
-import { DataWithLinks } from 'arlas-persistence-api';
 import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
 
 

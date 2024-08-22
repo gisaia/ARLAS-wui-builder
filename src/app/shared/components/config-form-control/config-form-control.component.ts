@@ -103,6 +103,9 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
       Object.keys(componentFormControl.inputs).forEach(c => {
         componentRef.instance[c] = componentFormControl.inputs[c]();
       });
+      Object.keys(componentFormControl.outputs).forEach(c => {
+        componentRef.instance[c].subscribe(val => componentFormControl.outputs[c](val));
+      });
     }
   }
 

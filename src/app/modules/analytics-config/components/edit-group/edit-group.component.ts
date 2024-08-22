@@ -43,6 +43,8 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { IconService } from '@services/icon-service/icon.service';
+import { MatIconRegistry } from '@angular/material/icon';
 
 @Component({
   selector: 'arlas-add-widget-dialog',
@@ -52,17 +54,18 @@ import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 export class AddWidgetDialogComponent {
   public widgetType: Array<string> = [];
 
-  public contentTypes: { label: WIDGET_TYPE; icon: string; }[] = [
-    { label: WIDGET_TYPE.histogram, icon: 'bar_chart' },
-    { label: WIDGET_TYPE.donut, icon: 'donut_small' },
-    { label: WIDGET_TYPE.powerbars, icon: 'sort' },
-    { label: WIDGET_TYPE.resultlist, icon: 'table_chart' },
-    { label: WIDGET_TYPE.metric, icon: 'functions' },
-    { label: WIDGET_TYPE.swimlane, icon: 'waves' }
+  public contentTypes: { label: WIDGET_TYPE; icon: string; iconType?: 'svg' | 'icon'; }[] = [
+    { label: WIDGET_TYPE.histogram, icon: 'bar_chart', iconType: 'icon' },
+    { label: WIDGET_TYPE.donut, icon: 'donut_small', iconType: 'icon' },
+    { label: WIDGET_TYPE.powerbars, icon: 'sort', iconType: 'icon' },
+    { label: WIDGET_TYPE.metricstable, icon: 'metricstable', iconType: 'svg' },
+    { label: WIDGET_TYPE.metric, icon: 'functions', iconType: 'icon' },
+    { label: WIDGET_TYPE.swimlane, icon: 'waves', iconType: 'icon' }
   ];
   public constructor(
     public dialogRef: MatDialogRef<AddWidgetDialogComponent>
-  ) { }
+  ) {
+  }
 
   public cancel(): void {
     this.dialogRef.close();
@@ -307,7 +310,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
       phContainer.removeChild(phElement);
       if (this.dragDropInfo.dragIndex > this.dragDropInfo.dropIndex) {
         phContainer.parentElement?.insertBefore(phElement, phContainer);
-      } else if (this.dragDropInfo.dragIndex < this.dragDropInfo.dropIndex){
+      } else if (this.dragDropInfo.dragIndex < this.dragDropInfo.dropIndex) {
         phContainer.parentElement?.insertBefore(phElement, phContainer.nextSibling);
 
       }

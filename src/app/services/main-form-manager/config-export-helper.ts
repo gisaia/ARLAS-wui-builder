@@ -27,7 +27,8 @@ import {
   JSONPATH_COUNT,
   CHIPSEARCH_TYPE,
   CHIPSEARCH_IDENTIFIER,
-  WebConfigOptions
+  WebConfigOptions,
+  MetricsSubTableConfig
 } from './models-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
@@ -876,6 +877,23 @@ export class ConfigExportHelper {
 
         break;
       }
+      case WIDGET_TYPE.metricstable: {
+        contrib.type = 'metricstable';
+        contrib.collection = widgetData.collection;
+        contrib.numberOfBuckets = widgetData.dataStep.numberOfBuckets;
+        if (!!widgetData.dataStep.sort) {
+          contrib.sort = widgetData.dataStep.sort;
+        }
+        contrib.configuration = widgetData.dataStep.subtables.map(c => ({
+          termfield: c.aggregationField,
+          collection: c.collection,
+          metrics: c.columns.map(c => ({
+            metric: c.metricCollectFunction,
+            field: c.metricCollectField,
+          }))
+        }));
+        break;
+      }
       case WIDGET_TYPE.powerbars: {
         contrib.type = 'tree';
         const aggregationModel: AggregationModelConfig = {
@@ -997,9 +1015,9 @@ export class ConfigExportHelper {
 
       if (list.renderStep.gridStep.quicklookUrls) {
         fieldsConfig.urlImageTemplates = list.renderStep.gridStep.quicklookUrls.map(formValues => {
-          const quicklook: DescribedUrl = {url: formValues.url, description: formValues.description};
+          const quicklook: DescribedUrl = { url: formValues.url, description: formValues.description };
           if (formValues.filter.field !== '') {
-            quicklook.filter = {field: formValues.filter.field, values: formValues.filter.values.map(v => v.value)};
+            quicklook.filter = { field: formValues.filter.field, values: formValues.filter.values.map(v => v.value) };
           }
           return quicklook;
         });
@@ -1135,6 +1153,12 @@ export class ConfigExportHelper {
       idString += widgetData.dataStep.function +
         Array.from(widgetData.dataStep.metrics)
           .map((m: any) => m.field + '-' + m.metric + '-' + hashCode(stringifyArlasFilter(m.filter))).sort().join('');
+    } else if (widgetType === WIDGET_TYPE.metricstable) {
+      idString = Array.from(widgetData.dataStep.subtables).map((sb: any) =>
+        sb.collection + '-' + sb.aggregationField + '-' + Array.from(sb.columns)
+          .map((c: any) => c.metricCollectFunction + '-' + c.metricCollectField).join('-')
+
+      ).join('-');
     } else if (widgetType === WIDGET_TYPE.donut) {
       widgetData.dataStep.aggregationmodels.forEach(am => {
         idString += am.field + '-' + am.size + '-';
@@ -1269,6 +1293,22 @@ export class ConfigExportHelper {
             Math.ceil(analyticsBoardWidth / itemPerLine) - 6 : analyticsBoardWidth // 6 => margin and padding left/right
         }
       } as AnalyticComponentConfig;
+    } else if (widgetType === WIDGET_TYPE.metricstable) {
+      component = {
+        componentType: WIDGET_TYPE.metricstable,
+        input: {
+          filterOperator: {
+            value: 'Eq',
+            display: !!widgetData.renderStep.allowOperatorChange
+          },
+          useColorService: !!widgetData.renderStep.useColorService,
+          normaliseBy: widgetData.renderStep.normaliseBy,
+          showRowField: widgetData.renderStep.showRowField,
+          applyColorTo: 'row',
+          headerDisplayMode: widgetData.renderStep.headerDisplayMode,
+          selectWithCheckbox: !!widgetData.renderStep.selectWithCheckbox,
+        }
+      } as AnalyticComponentConfig;
     } else if (widgetType === WIDGET_TYPE.donut) {
       if (!itemPerLine) {
         itemPerLine = 1;
@@ -1339,12 +1379,13 @@ export class ConfigExportHelper {
   }
 
   public static updateCollectionUnit(widgetData: any, lookAndFeelConfigGlobal: LookAndFeelGlobalFormGroup, com: AnalyticComponentConfig) {
-    if(widgetData.dataStep.metric.metricCollectFunction === 'Count' && lookAndFeelConfigGlobal !== null && lookAndFeelConfigGlobal !== undefined){
-      const value =  widgetData.unmanagedFields.renderStep.yUnit;
-      const  lookAndFeelFormControl = (<FormArray>lookAndFeelConfigGlobal.customControls.units.value).controls
+    if (widgetData.dataStep.metric.metricCollectFunction === 'Count' &&
+      lookAndFeelConfigGlobal !== null && lookAndFeelConfigGlobal !== undefined) {
+      const value = widgetData.unmanagedFields.renderStep.yUnit;
+      const lookAndFeelFormControl = (<FormArray>lookAndFeelConfigGlobal.customControls.units.value).controls
         .filter(c => c.value.collection === widgetData.dataStep.collection);
       const hasFoundValue = lookAndFeelFormControl !== null && lookAndFeelFormControl !== undefined && lookAndFeelFormControl.length > 0;
-      if(hasFoundValue) {
+      if (hasFoundValue) {
         const collectionUnit = lookAndFeelFormControl[0]?.value?.unit ?? widgetData.dataStep.collection.value;
         com.input.yUnit = (widgetData.unmanagedFields.renderStep.yUnit !== collectionUnit) ? collectionUnit : value;
       }

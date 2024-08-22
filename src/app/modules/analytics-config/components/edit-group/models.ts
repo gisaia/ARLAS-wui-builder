@@ -22,5 +22,6 @@ export enum WIDGET_TYPE {
     powerbars = 'powerbars',
     resultlist = 'resultlist',
     metric = 'metric',
-    swimlane = 'swimlane'
+    swimlane = 'swimlane',
+    metricstable = 'metricstable',
 }

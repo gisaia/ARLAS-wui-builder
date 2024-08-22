@@ -21,7 +21,8 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 
 enum CustomIcons {
-  move = 'move'
+  move = 'move',
+  metricstable = 'metricstable'
 }
 
 @Injectable({
@@ -35,7 +36,7 @@ export class IconService {
   ) { }
 
   public registerIcons(): void {
-    this.loadIcons(Object.values(CustomIcons), '../assets/svg');
+    this.loadIcons(Object.values(CustomIcons), 'assets/svg');
   }
 
   private loadIcons(iconKeys: string[], iconUrl: string): void {

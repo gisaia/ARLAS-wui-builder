@@ -34,6 +34,9 @@ import { WidgetEditionComponent } from './components/widget-edition/widget-editi
 import { ShortcutsComponent } from './components/shortcuts/shortcuts.component';
 import { EditResultlistQuicklookComponent } from './components/edit-resultlist-quicklook/edit-resultlist-quicklook.component';
 import { EditHistogramLabelComponent } from './components/edit-histogram-label/edit-histogram-label.component';
+import { MetricsTableDataComponent } from './components/metrics-table-data/metrics-table-data.component';
+import { AddSubtableDialogComponent } from './components/add-subtable-dialog/add-subtable-dialog.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   entryComponents: [
@@ -56,13 +59,16 @@ import { EditHistogramLabelComponent } from './components/edit-histogram-label/e
     ImportWidgetDialogComponent,
     EditTabComponent,
     EditResultlistQuicklookComponent,
-    EditHistogramLabelComponent
+    EditHistogramLabelComponent,
+    MetricsTableDataComponent,
+    AddSubtableDialogComponent
   ],
   imports: [
     ArlasToolkitSharedModule,
     SharedModule,
     AnalyticsConfigRoutingModule,
-    IconPickerModule
+    IconPickerModule,
+    MatExpansionModule
   ]
 })
 export class AnalyticsConfigModule { }

@@ -42,6 +42,7 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { ArlasColorService } from 'arlas-web-components';
 import { v4 as uuidv4 } from 'uuid';
 import { ShortcutsService } from '../shortcuts/shortcuts.service';
+import { MetricsTableFormBuilderService } from '../metrics-table-form-builder/metrics-table-form-builder.service';
 
 
 @Injectable({
@@ -58,6 +59,7 @@ export class AnalyticsImportService {
     private histogramFormBuilder: HistogramFormBuilderService,
     private swimlaneFormBuilder: SwimlaneFormBuilderService,
     private metricFormBuilder: MetricFormBuilderService,
+    private metricsTableFormBuilder: MetricsTableFormBuilderService,
     private powerbarFormBuilder: PowerbarFormBuilderService,
     private donutFormBuilder: DonutFormBuilderService,
     private resultlistFormBuilder: ResultlistFormBuilderService,
@@ -131,6 +133,9 @@ export class AnalyticsImportService {
     } else if (c.componentType === WIDGET_TYPE.metric) {
       contentTypes.push(WIDGET_TYPE.metric);
       widgetData = this.getMetricWidgetData(c, contributor);
+    } else if (c.componentType === WIDGET_TYPE.metricstable) {
+      contentTypes.push(WIDGET_TYPE.metricstable);
+      widgetData = this.getMetricsTableWidgetData(c, contributor);
     } else if (c.componentType === WIDGET_TYPE.powerbars) {
       contentTypes.push(WIDGET_TYPE.powerbars);
       widgetData = this.getPowerbarWidgetData(c, contributor);
@@ -532,6 +537,89 @@ export class AnalyticsImportService {
     ]);
     return widgetData;
   }
+
+  private getMetricsTableWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
+    const widgetData = this.metricsTableFormBuilder.build(contributor.collection);
+    const dataStep = widgetData.customControls.dataStep;
+    const renderStep = widgetData.customControls.renderStep;
+    const uuid = widgetData.customControls.uuid;
+    const usage = widgetData.customControls.usage;
+    const title = widgetData.customControls.title;
+    contributor.configuration.forEach(config => {
+      const subtable = this.metricsTableFormBuilder.buildSubTable(config.collection);
+      subtable.customControls.aggregationField.setValue(config.termfield);
+      config.metrics.forEach(m => {
+        const column = this.metricsTableFormBuilder.buildSubTableColumn(config.collection);
+        column.customControls.metricCollectFunction.setValue(m.metric);
+        column.customControls.metricCollectField.setValue(m.field);
+        column.customControls.sort.setValue('');
+        if (!!contributor.sort) {
+          let sortMatch = contributor.sort.collection === config.collection && contributor.sort.termfield === config.termfield;
+          if (contributor.sort.on === 'count') {
+            sortMatch = sortMatch && m.metric === 'count';
+          } else {
+            sortMatch = sortMatch && m.metric === contributor.sort.metric.field && m.field === contributor.sort.metric.field;
+          }
+          if (sortMatch) {
+            column.get('sort').setValue(contributor.sort.order);
+          }
+        }
+        subtable.customControls.columns.push(column);
+      });
+      widgetData.customControls.dataStep.subtables.push(subtable);
+    });
+    importElements([
+      {
+        value: component.uuid,
+        control: uuid
+      },
+      {
+        value: !!component.usage ? component.usage : 'analytics',
+        control: usage
+      },
+      {
+        value: contributor.title,
+        control: title
+      },
+      {
+        value: contributor.numberOfBuckets,
+        control: dataStep.numberOfBuckets
+      },
+      {
+        value: contributor.sort,
+        control: dataStep.sort
+      },
+      {
+        value: !!component.input.filterOperator ? component.input.filterOperator.display : true,
+        control: renderStep.allowOperatorChange
+      },
+      {
+        value: component.input.useColorService,
+        control: renderStep.useColorService
+      },
+      {
+        value: component.input.headerDisplayMode,
+        control: renderStep.headerDisplayMode
+      },
+      {
+        value: component.input.showRowField,
+        control: renderStep.showRowField
+      },
+      {
+        value: component.input.selectWithCheckbox,
+        control: renderStep.selectWithCheckbox
+      },
+      {
+        value: component.input.normaliseBy,
+        control: renderStep.normaliseBy
+      }
+    ]);
+    if (widgetData.customControls.usage.value === 'both') {
+      this.shortcutService.addShortcut(widgetData);
+    }
+    return widgetData;
+  }
+
 
   private getPowerbarWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
     const widgetData = this.powerbarFormBuilder.build(contributor.collection);
@@ -984,7 +1072,7 @@ export class AnalyticsImportService {
     ] as Array<ImportElement>;
   };
 
-  private  capitalize(s) {
+  private capitalize(s) {
     return s[0].toUpperCase() + s.slice(1);
   }
 

@@ -18,6 +18,7 @@
  */
 
 import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/forms';
+import { KeywordColor } from '@map-config/components/dialog-color-table/models';
 
 interface OPTIONAL {
   isPresent: boolean;
@@ -157,5 +158,20 @@ export function camelize(str) {
     }
     return index === 0 ? match.toLowerCase() : match.toUpperCase();
   });
+}
+
+export function addToColorManualValuesCtrl(kc: KeywordColor, controls: any, index?: number) {
+  if (!Object.values(controls)
+    .find(keywordColorGrp => (keywordColorGrp as any).get('keyword').value === kc.keyword)) {
+    const keywordColorGrp = new FormGroup({
+      keyword: new FormControl(kc.keyword),
+      color: new FormControl(kc.color)
+    });
+    if (index !== undefined) {
+      controls.insert(index, keywordColorGrp);
+    } else {
+      controls.push(keywordColorGrp);
+    }
+  }
 }
 
