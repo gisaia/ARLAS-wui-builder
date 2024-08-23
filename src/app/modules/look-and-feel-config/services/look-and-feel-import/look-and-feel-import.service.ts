@@ -70,7 +70,7 @@ export class LookAndFeelImportService {
         },
         {
           value: !!configOptions.zoom_to_strategy ? configOptions.zoom_to_strategy :
-            (configOptions.zoom_to_data ? ZoomToDataStrategy[ZoomToDataStrategy.CENTROID] : ZoomToDataStrategy[ZoomToDataStrategy.NONE]),
+            (configOptions.zoom_to_data ? ZoomToDataStrategy.CENTROID : ZoomToDataStrategy.NONE),
           control: globalLookAndFeelFg.customControls.zoomToDataStrategy
         },
         {
