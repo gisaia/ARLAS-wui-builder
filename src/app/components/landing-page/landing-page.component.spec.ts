@@ -9,7 +9,8 @@ import { SharedModule } from '@shared/shared.module';
 import {
   ArlasCollaborativesearchService, ArlasConfigService, ArlasConfigurationDescriptor,
   ArlasStartupService, AuthentificationService, ConfigMenuModule, getOptionsFactory, GET_OPTIONS,
-  ArlasSettingsService, ArlasIamService, PersistenceService
+  ArlasSettingsService, ArlasIamService, PersistenceService,
+  PermissionService
 } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { of } from 'rxjs';
@@ -40,6 +41,7 @@ describe('LandingPageComponent', () => {
       mockProvider(StartupService),
       mockProvider(ArlasStartupService),
       mockProvider(PersistenceService),
+      mockProvider(PermissionService),
       mockProvider(ArlasSettingsService, {
         getAuthentSettings: () => undefined
       }),
