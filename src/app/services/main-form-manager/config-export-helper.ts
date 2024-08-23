@@ -61,6 +61,7 @@ import { hashCode, stringifyArlasFilter } from './tools';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { DescribedUrl } from 'arlas-web-components/lib/components/results/utils/results.utils';
 import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
+import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
 
 export enum EXPORT_TYPE {
   json = 'json',
@@ -1421,10 +1422,11 @@ export class ConfigExportHelper {
     const showSpinner = !!lookAndFeelConfigGlobal.customControls.spinner.value;
     const spinnerColor: string = lookAndFeelConfigGlobal.customControls.spinnerColor.value;
     const spinnerDiameter: string = lookAndFeelConfigGlobal.customControls.spinnerDiameter.value;
+    const zoomToDataStrategy: string = lookAndFeelConfigGlobal.customControls.zoomToDataStrategy.value;
 
     const options = {
       drag_items: !!lookAndFeelConfigGlobal.customControls.dragAndDrop.value,
-      zoom_to_data: !!lookAndFeelConfigGlobal.customControls.zoomToData.value,
+      zoom_to_strategy: !!zoomToDataStrategy ? zoomToDataStrategy : ZoomToDataStrategy.NONE,
       indicators: !!lookAndFeelConfigGlobal.customControls.indicators.value,
       spinner: {
         show: showSpinner,
