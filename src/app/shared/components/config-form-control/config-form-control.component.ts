@@ -25,12 +25,12 @@ import { FormGroup } from '@angular/forms';
 import { CollectionService } from '@services/collection-service/collection.service';
 import {
   ButtonFormControl, ButtonToggleFormControl, CollectionsUnitsControl, ColorFormControl, ColorPreviewFormControl,
-  ComponentFormControl, ConfigFormControl, FieldWithSizeListFormControl, HiddenFormControl,
+  ComponentFormControl, ConfigFormControl, FieldTemplateControl, FieldWithSizeListFormControl, HiddenFormControl,
   HuePaletteFormControl, IconFormControl, InputFormControl, MapFiltersControl, MetricWithFieldListFormControl,
   MultipleSelectFormControl, OrderedSelectFormControl, RadioButtonFormControl, SelectFormControl,
   SlideToggleFormControl,
   SliderFormControl,
-  TextareaFormControl, TitleInputFormControl, TypedSelectFormControl, UrlTemplateControl, VisualisationCheckboxFormControl
+  TextareaFormControl, TitleInputFormControl, TypedSelectFormControl, VisualisationCheckboxFormControl
 } from '@shared-models/config-form';
 import { ArlasColorService } from 'arlas-web-components';
 import { Subject } from 'rxjs';
@@ -251,9 +251,9 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
       this.control as FieldWithSizeListFormControl : null;
   }
 
-  public isUrlTemplate(): UrlTemplateControl | null {
-    return Object.getPrototypeOf(this.control) === UrlTemplateControl.prototype ?
-      this.control as UrlTemplateControl : null;
+  public isFieldTemplate(): FieldTemplateControl | null {
+    return Object.getPrototypeOf(this.control) === FieldTemplateControl.prototype ?
+      this.control as FieldTemplateControl : null;
   }
 
   public isTextarea(): TextareaFormControl | null {

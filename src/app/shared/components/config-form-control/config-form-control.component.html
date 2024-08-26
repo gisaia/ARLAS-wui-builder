@@ -342,7 +342,7 @@
 </div>
 
 
-<div *ngIf="isUrlTemplate(); let typedControl" class="url-field-form-control">
+<div *ngIf="isFieldTemplate(); let typedControl" class="url-field-form-control">
     <div>
         <div class="action-container">
             <mat-form-field [style.width]="typedControl.width ? typedControl.width : 'unset' ">
@@ -354,7 +354,7 @@
             <div class="field-insert-container">
                 <div class="field-container" *ngIf="!typedControl?.showInsertButton">
                     <mat-form-field>
-                        <mat-label>{{'url field' | translate}}</mat-label>
+                        <mat-label>{{'field to insert' | translate}}</mat-label>
                         <input type="text" matInput [matAutocomplete]="auto"
                             [formControl]="typedControl.fieldCtrl">
 
@@ -368,8 +368,8 @@
                 </div>
                 <div class="insert-container">
                     <button type="button" mat-stroked-button *ngIf="typedControl?.showInsertButton"
-                        (click)="typedControl.showInsertButton = false" [matTooltip]="'Insert field to URL tooltip' | translate" matTooltipPosition="right">
-                        {{ 'Insert field to URL' | translate}}
+                        (click)="typedControl.showInsertButton = false" [matTooltip]="'Insert field tooltip' | translate" matTooltipPosition="right">
+                        {{ 'Insert field' | translate}}
                     </button>
                     <button type="button" mat-stroked-button *ngIf="!typedControl?.showInsertButton" class="insert"
                         [disabled]="typedControl.fieldCtrl.invalid" (click)="typedControl.add()">
