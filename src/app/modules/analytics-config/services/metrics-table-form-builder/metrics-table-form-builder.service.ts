@@ -49,7 +49,7 @@ export class MetricsTableFormGroup extends WidgetConfigFormGroup {
         ''
       ),
       dataStep: new ConfigFormGroup({
-        displaySchema:new HiddenFormControl(true),
+        displaySchema: new HiddenFormControl(true),
         numberOfBuckets: new SliderFormControl(
           10,
           marker('metricstable number of bucket'),
@@ -76,15 +76,10 @@ export class MetricsTableFormGroup extends WidgetConfigFormGroup {
       }).withTabName(marker('Data')),
 
       renderStep: new ConfigFormGroup({
-
         useColorService: new SlideToggleFormControl(
-          '',
+          false,
           marker('Colorize'),
-          '',
-          {
-            optional: true
-
-          }
+          ''
         ),
         normaliseBy: new ButtonToggleFormControl(
           'column',
@@ -96,17 +91,17 @@ export class MetricsTableFormGroup extends WidgetConfigFormGroup {
           marker('metric normalize on description')
         ),
         allowOperatorChange: new SlideToggleFormControl(
-          '',
+          false,
           marker('operator metrics table'),
           marker('operator metrics table description')
         ),
         selectWithCheckbox: new SlideToggleFormControl(
-          '',
+          false,
           marker('checkbox metrics table'),
           marker('checkbox metrics table description')
         ),
         showRowField: new SlideToggleFormControl(
-          '',
+          false,
           marker('showRowField metrics table'),
           marker('showRowField metrics table description')
         ),
@@ -117,14 +112,11 @@ export class MetricsTableFormGroup extends WidgetConfigFormGroup {
             { label: marker('Display collection chip'), value: 'chip' },
             { label: marker('Display both'), value: 'full' }
 
-          ]
-          ,
+          ],
           marker('metric headerDisplayMode on description'),
         ),
       }).withTabName(marker('Render')),
       unmanagedFields: new FormGroup({}) // for consistency with other widgets form builders
-
-
     });
   }
 
@@ -204,7 +196,7 @@ export class SubTableFormGroup extends CollectionConfigFormGroup {
 }
 
 export class SubTableColumnFormGroup extends CollectionConfigFormGroup {
-  public constructor(collection, collectionService) {
+  public constructor(collection: string) {
     super(collection, {
       sort: new HiddenFormControl('', '', { optional: true }),
       metricCollectFunction: new SelectFormControl(
@@ -265,14 +257,14 @@ export class MetricsTableFormBuilderService extends WidgetFormBuilder {
     return formGroup;
   }
 
-  public buildWithValues(value: any, collection) {
+  public buildWithValues(value: any, collection: string) {
     if (!value || Object.keys(value).length === 0) {
       const formGroup = this.build(collection);
       return formGroup;
     }
     const formGroup = this.build(collection);
     if (value.dataStep.sort === undefined) {
-      value.dataStep.sort = '';
+      value.dataStep.sort = {};
     }
 
     formGroup.patchValue(value);
@@ -316,9 +308,7 @@ export class MetricsTableFormBuilderService extends WidgetFormBuilder {
   }
 
   public buildSubTableColumn(collection: string) {
-    const formGroup = new SubTableColumnFormGroup(
-      collection,
-      this.collectionService);
+    const formGroup = new SubTableColumnFormGroup(collection);
     return formGroup;
   }
 }

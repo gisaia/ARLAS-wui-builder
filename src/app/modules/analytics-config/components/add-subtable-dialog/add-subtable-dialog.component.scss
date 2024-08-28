@@ -49,6 +49,11 @@
             width: 90% !important;
             margin: 0 5px;
         }
+
+        // Align center input on line
+        ::ng-deep.mat-form-field-wrapper {
+            padding-top: 1.25em;
+        }
     }
 }
 
@@ -82,11 +87,11 @@
     }
 
     .mat-column-metric {
-        width: inherit
+        width: inherit;
     }
 
     .mat-column-field {
-        width: inherit
+        width: inherit;
     }
 
 
