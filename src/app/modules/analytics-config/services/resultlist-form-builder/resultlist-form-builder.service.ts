@@ -104,7 +104,13 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             validators: Validators.required,
           })),
           details: new FormArray([]),
-          detailsTitle: new HiddenFormControl(''),
+          detailsTitle: new HiddenFormControl(
+            '',
+            undefined,
+            {
+              optional: true
+            }
+          ),
           idFieldName: new HiddenFormControl(
             '',
             undefined,
