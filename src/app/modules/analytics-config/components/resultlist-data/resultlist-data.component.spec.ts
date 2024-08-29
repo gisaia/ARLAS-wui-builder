@@ -1,9 +1,11 @@
-import { ResultlistDataComponent } from './resultlist-data.component';
-import { Spectator, createComponentFactory } from '@ngneat/spectator';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
+import { CollectionService } from '@services/collection-service/collection.service';
 import { MockComponent } from 'ng-mocks';
+import { of } from 'rxjs';
 import { EditResultlistColumnsComponent } from '../edit-resultlist-columns/edit-resultlist-columns.component';
 import { EditResultlistDetailsComponent } from '../edit-resultlist-details/edit-resultlist-details.component';
-import { FormArray, FormGroup, FormControl } from '@angular/forms';
+import { ResultlistDataComponent } from './resultlist-data.component';
 
 describe('ResultlistDataComponent', () => {
   let spectator: Spectator<ResultlistDataComponent>;
@@ -13,6 +15,11 @@ describe('ResultlistDataComponent', () => {
     declarations: [
       MockComponent(EditResultlistColumnsComponent),
       MockComponent(EditResultlistDetailsComponent),
+    ],
+    providers: [
+      mockProvider(CollectionService, {
+        getCollectionFields: () => of([])
+      }),
     ]
   });
 

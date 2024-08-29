@@ -24,6 +24,7 @@ import {
 import { Config } from '@services/main-form-manager/models-config';
 import { importElements } from '@services/main-form-manager/tools';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
 
 @Injectable({
   providedIn: 'root'
@@ -68,8 +69,9 @@ export class LookAndFeelImportService {
           control: globalLookAndFeelFg.customControls.dragAndDrop
         },
         {
-          value: configOptions.zoom_to_data,
-          control: globalLookAndFeelFg.customControls.zoomToData
+          value: !!configOptions.zoom_to_strategy ? configOptions.zoom_to_strategy :
+            (configOptions.zoom_to_data ? ZoomToDataStrategy.CENTROID : ZoomToDataStrategy.NONE),
+          control: globalLookAndFeelFg.customControls.zoomToDataStrategy
         },
         {
           value: configOptions.indicators,
@@ -77,7 +79,7 @@ export class LookAndFeelImportService {
         }
       ]);
 
-      if ( configOptions.spinner) {
+      if (configOptions.spinner) {
         importElements([
           {
             value: configOptions.spinner.show,

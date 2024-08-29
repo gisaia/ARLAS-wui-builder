@@ -25,7 +25,7 @@ describe('LookAndFeelGlobalFormBuilderService', () => {
         lookAndFeelConfig: {
           getGlobalFg: () => new FormGroup({
             dragAndDrop: new FormControl(null),
-            zoomToData: new FormControl(null),
+            zoomToDataStrategy: new FormControl(null),
             indicators: new FormControl(null),
             spinner: new FormControl(null),
             spinnerColor: new FormControl(null),

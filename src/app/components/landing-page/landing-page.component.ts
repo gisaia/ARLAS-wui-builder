@@ -32,8 +32,9 @@ import { UserOrgData } from 'arlas-iam-api';
 import { DataWithLinks } from 'arlas-persistence-api';
 import {
   ArlasAuthentificationService, ArlasIamService, ArlasSettingsService, AuthentificationService, ConfigAction,
-  ConfigActionEnum, ErrorService, PersistenceService, UserInfosComponent
+  ConfigActionEnum, ErrorService, PermissionService, PersistenceService, UserInfosComponent
 } from 'arlas-wui-toolkit';
+import { Resource } from 'arlas-permissions-api';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
@@ -74,11 +75,14 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   public orgs: UserOrgData[] = [];
   public currentOrga = '';
 
+  public canCreateForCurrentOrg = false; // Whether the buttons to CREATE / IMPORT a dashboard are displayed
+
   private subscription: Subscription;
   private refreshSubscription: Subscription;
   public constructor(
     public startupService: StartupService,
     public persistenceService: PersistenceService,
+    private permissionService: PermissionService,
     public mainFormService: MainFormService,
     private startingConfigFormBuilder: StartingConfigFormBuilderService,
     private resourcesConfigFormBuilder: ResourcesConfigFormBuilderService,
@@ -144,6 +148,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
       this.refreshSubscription = this.arlasIamService.tokenRefreshed$.subscribe({
         next: (loginData) => {
           if (!!loginData) {
+
             this.isAuthenticated = true;
             this.orgs = loginData.user.organisations.map(org => {
               org.displayName = org.name === loginData.user.id ? loginData.user.email.split('@')[0] : org.name;
@@ -154,7 +159,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
             this.isAuthenticated = false;
           }
           if (this.persistenceService.isAvailable) {
-            this.getConfigList();
+            this.checkUserRightsForOrg(this.currentOrga);
           }
         },
         error: () => {
@@ -269,6 +274,13 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
           this.configurations.forEach(c => {
             c.actions.filter(a => a.type === ConfigActionEnum.VIEW)
               .map(a => a.url = this.settingsService.getArlasWuiUrl());
+            // for IAM only, if the user doesn't have the right to create (POST)
+            // disabled the EDIT action
+            if (this.authentMode === 'iam') {
+              c.actions.filter(a => a.type === ConfigActionEnum.EDIT).map(a =>
+                a.enabled = a.enabled && this.canCreateForCurrentOrg
+              );
+            }
           });
         },
         error: (msg) => {
@@ -318,7 +330,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   public changeOrg(event: MatSelectChange) {
     this.arlasIamService.storeOrganisation(event.value);
     this.startupService.changeOrgHeader(event.value, this.arlasIamService.getAccessToken());
-    this.getConfigList();
+    this.checkUserRightsForOrg(event.value);
   }
 
   public ngOnDestroy() {
@@ -328,6 +340,22 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.refreshSubscription) {
       this.refreshSubscription.unsubscribe();
     }
+  }
+
+  public checkUserRightsForOrg(org: string) {
+    const iamHeader = {
+      Authorization: 'Bearer ' + this.arlasIamService.getAccessToken(),
+      'arlas-org-filter': org
+    };
+    const fetchOptions = { headers: iamHeader };
+    this.permissionService.setOptions(fetchOptions);
+    // Check user rights on current organisation
+    this.permissionService.get('persist/resource/').subscribe({
+      next: (resources: Resource[]) => {
+        this.canCreateForCurrentOrg = resources.filter(r => r.verb === 'POST').length > 0;
+        this.getConfigList();
+      }
+    });
   }
 }
 

@@ -817,63 +817,6 @@ export class FieldWithSizeListFormControl extends ConfigFormControl {
   public getValueAsSet = () => (this.value as Set<{ field: string; size: number; }>);
 }
 
-
-export class UrlTemplateControl extends ConfigFormControl {
-  public urlControl = new FormControl('');
-  public fieldCtrl = new FormControl('', [
-    Validators.required,
-    (c) => !!this.autocompleteFilteredFields && this.autocompleteFilteredFields.map(f => f.value).indexOf(c.value) >= 0 ?
-      null : { validateField: { valid: false } }
-  ]);
-  public fields: Array<SelectOption>;
-  public autocompleteFilteredFields: Array<SelectOption>;
-  public isFieldFlat;
-  public showInsertButton = true;
-
-  public constructor(
-    formState: any,
-    label: string,
-    description: string,
-    collectionFields: Observable<Array<CollectionField>>,
-    flat: boolean,
-    optionalParams?: ControlOptionalParams
-  ) {
-    super(formState, label, description, optionalParams);
-    toNumericOrDateOrKeywordOrTextObs(collectionFields).subscribe(fields => {
-      this.fields = fields;
-      this.filterAutocomplete();
-    });
-    this.isFieldFlat = flat;
-    this.fieldCtrl.valueChanges.subscribe(v => this.filterAutocomplete(v));
-    this.setValue('');
-    if (!this.optional) {
-      // as the value is a set, if the control is required, an empty set should also be an error
-      this.setValidators([
-        (control) => !!control.value && Array.from(control.value).length > 0 ? null : { required: { valid: false } }
-      ]);
-    }
-  }
-
-  public filterAutocomplete(value?: string) {
-    if (!!value) {
-      this.autocompleteFilteredFields = this.fields.filter(o => o.label.indexOf(value) >= 0);
-    } else {
-      this.autocompleteFilteredFields = this.fields;
-    }
-  }
-
-  public add() {
-    this.setValue(this.getValue().concat('{').concat(this.fieldCtrl.value).concat('}'));
-    this.updateValueAndValidity();
-    this.fieldCtrl.reset();
-    this.showInsertButton = true;
-  }
-
-  public getValue(): string {
-    return this.value as string;
-  }
-}
-
 export class HuePaletteFormControl extends SelectFormControl {
   public constructor(
     formState: any,
@@ -1086,5 +1029,60 @@ export class TextareaFormControl extends ConfigFormControl {
     optionalParams?: ControlOptionalParams
   ) {
     super(formState, label, description, optionalParams);
+  }
+}
+
+export class FieldTemplateControl extends ConfigFormControl {
+  public fieldCtrl = new FormControl('', [
+    Validators.required,
+    (c) => !!this.autocompleteFilteredFields && this.autocompleteFilteredFields.map(f => f.value).indexOf(c.value) >= 0 ?
+      null : { validateField: { valid: false } }
+  ]);
+  public fields: Array<SelectOption>;
+  public autocompleteFilteredFields: Array<SelectOption>;
+  public isFieldFlat;
+  public showInsertButton = true;
+
+  public constructor(
+    formState: any,
+    label: string,
+    description: string,
+    collectionFields: Observable<Array<CollectionField>>,
+    flat: boolean,
+    optionalParams?: ControlOptionalParams
+  ) {
+    super(formState, label, description, optionalParams);
+    toNumericOrDateOrKeywordOrTextObs(collectionFields).subscribe(fields => {
+      this.fields = fields;
+      this.filterAutocomplete();
+    });
+    this.isFieldFlat = flat;
+    this.fieldCtrl.valueChanges.subscribe(v => this.filterAutocomplete(v));
+    this.setValue('');
+    if (!this.optional) {
+      // as the value is a set, if the control is required, an empty set should also be an error
+      this.setValidators([
+        (control) => !!control.value && Array.from(control.value).length > 0 ? null : { required: { valid: false } }
+      ]);
+    }
+  }
+
+  public filterAutocomplete(value?: string) {
+    if (!!value) {
+      this.autocompleteFilteredFields = this.fields.filter(o => o.label.indexOf(value) >= 0);
+    } else {
+      this.autocompleteFilteredFields = this.fields;
+    }
+  }
+
+  public add() {
+    this.setValue(this.getValue().concat('{').concat(this.fieldCtrl.value).concat('}'));
+    this.updateValueAndValidity();
+    this.fieldCtrl.reset();
+    this.showInsertButton = true;
+  }
+
+  public getValue(): string {
+    return this.value as string;
   }
 }

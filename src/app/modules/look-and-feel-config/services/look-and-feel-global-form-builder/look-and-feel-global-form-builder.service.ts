@@ -28,6 +28,7 @@ import {
   SlideToggleFormControl
 } from '@shared-models/config-form';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
 
 
 export class CollectionUnitFormGroup extends ConfigFormGroup {
@@ -69,10 +70,12 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
           marker('Drag and drop description'),
           { title: marker('Look and feel') }
         ),
-        zoomToData: new SlideToggleFormControl(
+        zoomToDataStrategy: new SelectFormControl(
           '',
-          marker('Zoom to data'),
-          marker('Zoom to data description')
+          marker('Zoom to data strategy'),
+          marker('Zoom to data strategy description'),
+          null,
+          Object.values(ZoomToDataStrategy).map(zts => ({ label: marker(zts), value: zts }))
         ),
         indicators: new SlideToggleFormControl(
           '',
@@ -132,7 +135,7 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
 
   public customControls = {
     dragAndDrop: this.get('dragAndDrop') as SlideToggleFormControl,
-    zoomToData: this.get('zoomToData') as SlideToggleFormControl,
+    zoomToDataStrategy: this.get('zoomToDataStrategy') as SelectFormControl,
     indicators: this.get('indicators') as SlideToggleFormControl,
     spinner: this.get('spinner') as SlideToggleFormControl,
     spinnerColor: this.get('spinnerColor') as SelectFormControl,
@@ -191,7 +194,7 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
     const analyticsConfigList = this.mainFormService.analyticsConfig.getListFa();
     const resultLists = this.mainFormService.resultListConfig.getResultListsFa();
     if (startingConfig.customControls && mapConfigGlobal.customControls && timelineConfigGlobal.customControls
-        && searchConfigGlobal.customControls) {
+      && searchConfigGlobal.customControls) {
       const configuredCollections = ConfigExportHelper.getConfiguredCollections(
         startingConfig,
         mapConfigGlobal,

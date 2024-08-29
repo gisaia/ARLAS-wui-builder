@@ -27,6 +27,7 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import {
   NUMERIC_OR_DATE_OR_KEYWORD,
   NUMERIC_OR_DATE_OR_TEXT_TYPES, TEXT_OR_KEYWORD,
+  toKeywordOptionsObs,
   toNumericOrDateOrKeywordOrTextObs, toOptionsObs
 } from '@services/collection-service/tools';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
@@ -36,7 +37,7 @@ import {
   ButtonFormControl, ComponentFormControl, ConfigFormGroup, HiddenFormControl, InputFormControl,
   MultipleSelectFormControl,
   SelectFormControl, SelectOption, SliderFormControl, SlideToggleFormControl, TextareaFormControl,
-  TitleInputFormControl, UrlTemplateControl
+  TitleInputFormControl, FieldTemplateControl
 } from '@shared-models/config-form';
 import { Observable } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
@@ -47,6 +48,7 @@ import { EditResultlistQuicklookComponent } from '@analytics-config/components/e
 import { Router } from '@angular/router';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
 
@@ -102,6 +104,13 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             validators: Validators.required,
           })),
           details: new FormArray([]),
+          detailsTitle: new HiddenFormControl(
+            '',
+            undefined,
+            {
+              optional: true
+            }
+          ),
           idFieldName: new HiddenFormControl(
             '',
             undefined,
@@ -248,7 +257,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                 }
               }
             ),
-            thumbnailUrl: new UrlTemplateControl(
+            thumbnailUrl: new FieldTemplateControl(
               '',
               marker('Thumbnail url'),
               marker('Thumbnail url description'),
@@ -257,9 +266,9 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
               {
                 optional: true,
                 dependsOn: () => [this.customControls.dataStep.collection],
-                onDependencyChange: (control: UrlTemplateControl) => {
+                onDependencyChange: (control: FieldTemplateControl) => {
                   if (!this.collection || this.customControls.dataStep.collection.dirty) {
-                    this.updateUrlTemplateControl(collectionService, control);
+                    this.updateFieldTemplateControl(collectionService, control);
                   }
                 }
               }
@@ -336,6 +345,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
       visualisationLink: this.get('dataStep.visualisationLink') as InputFormControl,
       downloadLink: this.get('dataStep.downloadLink') as InputFormControl,
       columns: this.get('dataStep.columns') as FormArray,
+      detailsTitle: this.get('dataStep.detailsTitle') as HiddenFormControl,
       details: this.get('dataStep.details') as FormArray,
       idFieldName: this.get('dataStep.idFieldName') as HiddenFormControl,
     },
@@ -351,7 +361,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
         tileLabelFieldProcess: this.get('renderStep.gridStep.tileLabelFieldProcess') as TextareaFormControl,
         tooltipField: this.get('renderStep.gridStep.tooltipField') as SelectFormControl,
         tooltipFieldProcess: this.get('renderStep.gridStep.tooltipFieldProcess') as TextareaFormControl,
-        thumbnailUrl: this.get('renderStep.gridStep.thumbnailUrl') as UrlTemplateControl,
+        thumbnailUrl: this.get('renderStep.gridStep.thumbnailUrl') as FieldTemplateControl,
         colorIdentifier: this.get('renderStep.gridStep.colorIdentifier') as SelectFormControl,
         quicklookUrls: this.get('renderStep.gridStep.quicklookUrls') as FormArray
       }
@@ -380,7 +390,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
     }
   };
 
-  private updateUrlTemplateControl(collectionService: CollectionService, control: UrlTemplateControl) {
+  private updateFieldTemplateControl(collectionService: CollectionService, control: FieldTemplateControl) {
     this.setCollection(this.customControls.dataStep.collection.value);
     toNumericOrDateOrKeywordOrTextObs(collectionService
       .getCollectionFields(this.customControls.dataStep.collection.value))
@@ -601,14 +611,14 @@ export class ResultlistQuicklookFormGroup extends FormGroup {
    */
   public constructor(fieldsObs: Observable<Array<CollectionField>>, collection: string, collectionService: CollectionService) {
     super({
-      url: new UrlTemplateControl(
+      url: new FieldTemplateControl(
         '',
         marker('Quicklook url'),
         marker('Quicklook url description'),
         fieldsObs,
         true
       ),
-      description: new UrlTemplateControl(
+      description: new FieldTemplateControl(
         '',
         marker('Quicklook description'),
         marker('Quicklook description description'),
@@ -643,7 +653,7 @@ export class ResultlistQuicklookFormGroup extends FormGroup {
               if (!this.customControls.filter.field.touched) {
                 // Avoid to reset the imported configuration when first loading it
               } else if (this.customControls.filter.field.value !== '' && !!this.customControls.filter.field.syncOptions
-                  && this.customControls.filter.field.syncOptions.map(f => f.value).includes(this.customControls.filter.field.value)) {
+                && this.customControls.filter.field.syncOptions.map(f => f.value).includes(this.customControls.filter.field.value)) {
                 control.setSyncOptions([]);
                 collectionService.getTermAggregation(
                   collection,
@@ -664,8 +674,8 @@ export class ResultlistQuicklookFormGroup extends FormGroup {
   }
 
   public customControls = {
-    url: this.get('url') as UrlTemplateControl,
-    description: this.get('description') as UrlTemplateControl,
+    url: this.get('url') as FieldTemplateControl,
+    description: this.get('description') as FieldTemplateControl,
     filter: {
       field: this.get('filter.field') as SelectFormControl,
       values: this.get('filter.values') as MultipleSelectFormControl

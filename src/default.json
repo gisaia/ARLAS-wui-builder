@@ -288,7 +288,7 @@
             "spinner": true,
             "spinnerColor": "accent",
             "spinnerDiameter": 50,
-            "zoomToData": true
+            "zoomToDataStrategy": "centroid"
         }
     },
     "timeline": {
