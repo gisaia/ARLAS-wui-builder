@@ -26,7 +26,7 @@
                         <mat-label>{{'Main collection' | translate}}</mat-label>
                         <mat-select formControlName="collection">
                             <mat-option *ngFor="let collection of availablesCollections" value="{{collection}}">
-                                {{collection}}
+                                {{ collection | getCollectionDisplayName | translate }}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>

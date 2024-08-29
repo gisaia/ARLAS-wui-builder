@@ -227,6 +227,7 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
         collectionService.getCollectionsWithCentroid().map(c => ({ label: c, value: c })),
         {
           optional: false,
+          isCollectionSelect: true
         }
       ),
       geographicalOperator: new SelectFormControl(
