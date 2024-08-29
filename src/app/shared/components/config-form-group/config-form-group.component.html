@@ -1,4 +1,4 @@
-<div [formGroup]="configFormGroup" style="padding-bottom: 5px;">
+<div [formGroup]="configFormGroup" class="main-form-group-div">
     <h3 *ngIf="configFormGroup.title" class="form-control-title">{{configFormGroup.title | translate}}</h3>
 
     <!-- TODO try to factorize code in case of stepper / tab / none -->
@@ -46,7 +46,7 @@
         </mat-tab-group>
     </div>
 
-    <div *ngIf="!hasChildSteps() && !hasChildTabs()" style="padding-bottom: 1px;">
+    <div *ngIf="!hasChildSteps() && !hasChildTabs()" class="no-child-step-tabs-div">
         <div *ngFor="let control of configFormGroup.controls | objectvalues">
             <ng-container *ngIf="control.enabled">
                 <div *ngIf="isFormControl(control); let formControl">

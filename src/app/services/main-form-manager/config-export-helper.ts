@@ -28,7 +28,8 @@ import {
   CHIPSEARCH_TYPE,
   CHIPSEARCH_IDENTIFIER,
   WebConfigOptions,
-  MetricsSubTableConfig
+  MetricsSubTableConfig,
+  SEARCH_TYPE
 } from './models-config';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
@@ -87,7 +88,7 @@ export class ConfigExportHelper {
       mainCollection = collectionFormControl.value;
     }
     let contributors = this.getMapContributors(mapConfigGlobal, mapConfigLayers, mainCollection, collectionService);
-    contributors.push(this.getChipsearchContributor(searchConfigGlobal,
+    contributors.push(...this.getSearchContributor(searchConfigGlobal,
       startingConfig.customControls.collection.value));
     contributors.push(this.getTimelineContributor(timelineConfigGlobal,
       false, collectionService.collectionParamsMap));
@@ -215,7 +216,7 @@ export class ConfigExportHelper {
     }
     config.arlas.web.contributors = config.arlas.web.contributors.concat(this.getMapContributors(mapConfigGlobal, mapConfigLayers,
       mainCollection, collectionService));
-    config.arlas.web.contributors.push(this.getChipsearchContributor(searchConfigGlobal,
+    config.arlas.web.contributors.push(...this.getSearchContributor(searchConfigGlobal,
       startingConfig.customControls.collection.value));
     config.arlas.web.contributors.push(this.getTimelineContributor(timelineConfigGlobal,
       false, collectionService.collectionParamsMap));
@@ -686,17 +687,19 @@ export class ConfigExportHelper {
     }
   }
 
-  private static getChipsearchContributor(searchConfigGlobal: SearchGlobalFormGroup, collection: string): ContributorConfig {
-    return {
-      type: CHIPSEARCH_TYPE,
-      identifier: CHIPSEARCH_IDENTIFIER,
-      collection,
-      search_field: searchConfigGlobal.customControls.searchField.value,
+  private static getSearchContributor(searchConfigGlobal: SearchGlobalFormGroup, collection: string): ContributorConfig[] {
+    return searchConfigGlobal.customControls.searchConfigurations.controls.map(sc => ({
+      type: SEARCH_TYPE,
+      identifier: SEARCH_TYPE + '_' + sc.customControls.collection.value + '_'
+        + sc.customControls.searchField.value + '_' + sc.customControls.autocompleteField.value,
+      collection: sc.customControls.collection.value,
+      search_field: sc.customControls.searchField.value,
       name: searchConfigGlobal.customControls.name.value,
       icon: searchConfigGlobal.customControls.unmanagedFields.icon.value,
-      autocomplete_field: searchConfigGlobal.customControls.autocompleteField.value,
+      autocomplete_field: sc.customControls.autocompleteField.value,
       autocomplete_size: searchConfigGlobal.customControls.autocompleteSize.value,
-    };
+    }));
+
   }
 
   // TODO put in common with getAnalyticsContributor ?
@@ -1013,7 +1016,7 @@ export class ConfigExportHelper {
         useHttpQuicklooks: list.renderStep.gridStep.useHttpQuicklooks,
         useHttpThumbnails: list.renderStep.gridStep.useHttpThumbnails
       };
-      if( list.dataStep.detailsTitle){
+      if (list.dataStep.detailsTitle) {
         fieldsConfig.detailsTitleTemplate = list.dataStep.detailsTitle;
       }
       if (list.renderStep.gridStep.thumbnailUrl) {

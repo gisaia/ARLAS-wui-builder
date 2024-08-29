@@ -20,10 +20,12 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { GlobalSearchComponent } from './components/global-search/global-search.component';
 import { SearchConfigRoutingModule } from './search-config-routing.module';
+import { SearchCollectionComponent } from './components/search-collection/search-collection.component';
 
 @NgModule({
   declarations: [
-    GlobalSearchComponent
+    GlobalSearchComponent,
+    SearchCollectionComponent
   ],
   imports: [
     SearchConfigRoutingModule,

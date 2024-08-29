@@ -1,0 +1,14 @@
+<h3 class="form-control-title">{{'Search configuration by collection' | translate}}</h3>
+<div class="search-config" *ngFor="let s of searchConfigurations.controls ; let i = index ">
+    <arlas-config-form-group [configFormGroup]="s" defaultKey=""></arlas-config-form-group>
+    <button class="delete" [matTooltip]="'Delete search configuration' | translate" *ngIf="i !== 0" mat-icon-button (click)="deleteSearchConfiguration(i)">
+        <mat-icon>delete</mat-icon>
+    </button>
+</div>
+<div class="button-wrapper">
+    <button mat-stroked-button color="primary" (click)="addSearchConfiguration()" [matTooltip]="'Add a search configuration' | translate"
+        type="button">
+        <mat-icon>add</mat-icon>
+        {{'Add a search configuration' | translate}}
+    </button>
+</div>

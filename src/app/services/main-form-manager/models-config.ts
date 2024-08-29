@@ -24,8 +24,13 @@ import { FieldsConfiguration } from 'arlas-web-contributors';
 
 export const JSONPATH_COUNT = '$.count';
 export const JSONPATH_METRIC = '$.metrics[0].value';
+/** @deprectaed */
 export const CHIPSEARCH_TYPE = 'chipssearch';
+export const SEARCH_TYPE = 'search';
+/** @deprectaed */
 export const CHIPSEARCH_IDENTIFIER = 'chipssearch';
+export const SEARCH_IDENTIFIER = 'search';
+
 import { LayerSourceConfig } from 'arlas-web-contributors';
 import { Aggregation } from 'arlas-api';
 import { AnalyticsTabs, ZoomToDataStrategy } from 'arlas-wui-toolkit';
