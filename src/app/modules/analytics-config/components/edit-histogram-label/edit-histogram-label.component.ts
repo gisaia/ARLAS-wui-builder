@@ -194,8 +194,8 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
     private disableXUnitField() {
       this.xAxisConfig.displayUnitControl.next(false);
       this.xAxisConfig.unitControl.disable();
-      this.xAxisConfig.hint.next('Managed by arlas');
-      this.xAxisConfig.infoMessage.next(marker('Filled by Arlas'));
+      this.xAxisConfig.hint.next(marker('Managed by ARLAS'));
+      this.xAxisConfig.infoMessage.next(marker('Filled by ARLAS'));
     }
 
     private enableXUnitField() {

@@ -22,7 +22,7 @@ All supported environment variables are listed below.
 
 Instead of overriding some properties of the settings file, it is possible to start the `arlas-wui-builder` container with a given settings file.
 
-#### File 
+#### File
 
 The `arlas-wui-builder` container can start with a mounted settings file thanks to docker volume mapping. For instance, if the current directory of the host contains a `settings.yaml` file, the container can be started as follow:
 
@@ -62,6 +62,8 @@ If you don't mount a `settings.yaml` file to the container, nor serve it with `A
 | ARLAS_EXPORT_HISTOGRAMS_NB_BUCKETS | histogram.export_nb_buckets | 1000 | The export to csv feature will download `histogram.export_nb_buckets` buckets for histograms. |
 | ARLAS_USE_TIME_FILTER | use_time_filter | false | If true, the analytics and map previews will fetch only the last 7 days of the chosen-collection data. |
 | ARLAS_BASEMAPS | basemaps | [] | List of basemaps that the users can embark within their dashbaords. View the [`basemap` structure](#)|
+| ARLAS_ENABLE_H3 | enable_h3 | false | If true, allows the user to configure cluster layers agregated by h3 cell |
+
 ## ARLAS-wui-builder assets
 
 ARLAS-wui-builder comes with several assets:
@@ -153,7 +155,7 @@ In order to make it available in the builder, please follow these instructions :
                 "tiles": ["pmtiles://https://PATH-TO-PMTILES.pmtiles/{z}/{x}/{y}"]
             }
         }
-        
+
     }
 
     ```

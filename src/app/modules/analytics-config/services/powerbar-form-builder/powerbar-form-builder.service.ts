@@ -246,7 +246,7 @@ export class PowerbarConfigForm extends WidgetConfigFormGroup {
                   .afterClosed().subscribe((result: Array<KeywordColor>) => {
                     if (result !== undefined) {
                       result.forEach((kc: KeywordColor) => {
-                        /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
+                        /** after closing the dialog, save the [keyword, color] list in the ARLAS color service */
                         (colorService.colorGenerator as ArlasColorGeneratorLoader).updateKeywordColor(kc.keyword, kc.color);
                         addToColorManualValuesCtrl(kc, this.globalKeysToColortrl.controls);
                       });

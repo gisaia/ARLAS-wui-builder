@@ -56,7 +56,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   public mapRedrawSources;
   public mapLegendUpdater;
   public mapVisibilityUpdater;
-  public mainMapContributor;
+  public mainMapContributor: MapContributor;
 
   public constructor(
     protected mainFormService: MainFormService,

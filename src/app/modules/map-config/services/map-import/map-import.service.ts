@@ -17,7 +17,7 @@
  * under the License.
  */
 import { Injectable } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormArray } from '@angular/forms';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { NORMALIZED, VISIBILITY } from '@services/main-form-manager/config-map-export-helper';
