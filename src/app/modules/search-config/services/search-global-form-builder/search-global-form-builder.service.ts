@@ -49,7 +49,8 @@ export class SearchCollectionFormGroup extends CollectionConfigFormGroup {
           collectionService.getCollections().map(c => ({ label: c, value: c })),
           {
             optional: false,
-            resetDependantsOnChange: true
+            resetDependantsOnChange: true,
+            isCollectionSelect: true
           },
         ),
         searchField: new SelectFormControl(
