@@ -57,3 +57,4 @@ histogram:
   max_buckets: ${ARLAS_HISTOGRAMS_MAX_BUCKETS}
   export_nb_buckets: ${ARLAS_EXPORT_HISTOGRAMS_NB_BUCKETS}
 use_time_filter: ${ARLAS_USE_TIME_FILTER}
+enable_h3: ${ARLAS_ENABLE_H3}

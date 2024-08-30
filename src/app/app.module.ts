@@ -41,7 +41,8 @@ import {
   ArlasIamService,
   ArlasStartupService, ArlasWalkthroughService, AuthentificationService, ConfigMenuModule, configUpdaterFactory,
   CONFIG_UPDATER, FETCH_OPTIONS, getOptionsFactory,
-  iamServiceFactory, PaginatorI18n, UserInfosComponent, GET_OPTIONS, ArlasToolkitSharedModule, ArlasSettingsService,
+  iamServiceFactory, PaginatorI18n, UserInfosComponent,
+  GET_OPTIONS, ArlasToolkitSharedModule, ArlasSettingsService, ArlasConfigService, ArlasCollectionService,
 } from 'arlas-wui-toolkit';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
@@ -57,6 +58,7 @@ import enComponents from 'arlas-web-components/assets/i18n/en.json';
 import frComponents from 'arlas-web-components/assets/i18n/fr.json';
 import enToolkit from 'arlas-wui-toolkit/assets/i18n/en.json';
 import frToolkit from 'arlas-wui-toolkit/assets/i18n/fr.json';
+import { GetCollectionDisplayModule } from 'arlas-web-components';
 
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
@@ -133,7 +135,8 @@ export class CustomTranslateLoader implements TranslateLoader {
     NgxSpinnerModule,
     AnalyticsConfigModule,
     OAuthModule.forRoot(),
-    ArlasToolkitSharedModule
+    ArlasToolkitSharedModule,
+    GetCollectionDisplayModule
   ],
   providers: [
     forwardRef(() => ArlasConfigurationDescriptor),

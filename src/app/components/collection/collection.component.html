@@ -1,7 +1,7 @@
 <h3 class="form-control-title">{{'Explore collections' | translate}}</h3>
 <div class="content">
     <mat-card *ngFor="let def of collectionsDef" class="collection">
-        <mat-card-title>{{def.collection.collection_name}}</mat-card-title>
+        <mat-card-title>{{ def.collection.collection_name | getCollectionDisplayName | translate }}</mat-card-title>
         <mat-card-content>
             <mat-divider></mat-divider>
             <div class="section">
@@ -30,7 +30,7 @@
             </div>
             <div class="fields">
                 <mat-tree [dataSource]="def.fields" [treeControl]="def.treeControl">
-                    <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePaddingIndent="10"> 
+                    <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePaddingIndent="10">
                         <!-- use a disabled button to provide padding for tree leaf -->
                         <button mat-icon-button disabled></button>
                         {{node.name}} -&nbsp;<span class="type">{{node.type}}</span>

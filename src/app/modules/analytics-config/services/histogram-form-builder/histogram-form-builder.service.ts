@@ -82,7 +82,8 @@ export class HistogramFormGroup extends WidgetConfigFormGroup {
             collectionService.getCollections().map(c => ({ label: c, value: c })),
             {
               optional: false,
-              resetDependantsOnChange: true
+              resetDependantsOnChange: true,
+              isCollectionSelect: true
             }
           ),
           aggregation: bucketsIntervalFg.withTitle(marker('histogram x-Axis'))

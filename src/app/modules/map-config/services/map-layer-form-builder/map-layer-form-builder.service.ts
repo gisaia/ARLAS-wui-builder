@@ -50,6 +50,7 @@ import {
 } from './models';
 import { ButtonToggleFormControl } from '@shared-models/config-form';
 import { toNumericOptionsObs } from '../../../../services/collection-service/tools';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 
 export const PRECISION_TOLERATED_DIFFERENCE = 3;
@@ -104,7 +105,8 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         collectionService.getCollectionsWithCentroid().map(c => ({ label: c, value: c })),
         {
           optional: false,
-          resetDependantsOnChange: true
+          resetDependantsOnChange: true,
+          isCollectionSelect: true
         }
       ),
 
@@ -1428,8 +1430,10 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
   public constructor(
     collection: string,
     collectionFields: Observable<Array<CollectionField>>,
-    propertySelectorFormBuilder: PropertySelectorFormBuilderService
+    propertySelectorFormBuilder: PropertySelectorFormBuilderService,
+    settingsService: ArlasSettingsService
   ) {
+
     super(
       collection,
       collectionFields,
@@ -1475,7 +1479,9 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
           false,
           [
             { label: marker('Tile Grid'), value: ClusterAggType.tile },
-            { label: marker('GeohashGrid'), value: ClusterAggType.geohash }
+            { label: marker('Geohash Grid'), value: ClusterAggType.geohash },
+            { label: marker('Geohex Grid'), value: ClusterAggType.h3,
+              enabled: !!settingsService.settings && settingsService.settings['enable_h3'] }
           ]),
         granularity: new SelectFormControl(
           '',
@@ -1600,7 +1606,8 @@ export class MapLayerFormBuilderService {
     private defaultValuesService: DefaultValuesService,
     private propertySelectorFormBuilder: PropertySelectorFormBuilderService,
     private mainFormService: MainFormService,
-    private collectionService: CollectionService
+    private collectionService: CollectionService,
+    private settigsService: ArlasSettingsService
   ) { }
 
   public buildLayer(collection: string, edit?: boolean) {
@@ -1677,7 +1684,8 @@ export class MapLayerFormBuilderService {
     const clusterFormGroup = new MapLayerTypeClusterFormGroup(
       collection,
       collectionFields,
-      this.propertySelectorFormBuilder);
+      this.propertySelectorFormBuilder,
+      this.settigsService);
 
     this.defaultValuesService.setDefaultValueRecursively('map.layer', clusterFormGroup);
     return clusterFormGroup;

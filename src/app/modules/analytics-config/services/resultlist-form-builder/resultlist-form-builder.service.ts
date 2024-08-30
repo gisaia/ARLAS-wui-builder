@@ -89,7 +89,8 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             collectionService.getCollections().map(c => ({ label: c, value: c })),
             {
               optional: false,
-              resetDependantsOnChange: true
+              resetDependantsOnChange: true,
+              isCollectionSelect: true
             }
           ),
           searchSize: new SliderFormControl(
@@ -104,7 +105,13 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             validators: Validators.required,
           })),
           details: new FormArray([]),
-          detailsTitle: new HiddenFormControl(''),
+          detailsTitle: new HiddenFormControl(
+            '',
+            undefined,
+            {
+              optional: true
+            }
+          ),
           idFieldName: new HiddenFormControl(
             '',
             undefined,
@@ -495,7 +502,7 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
                 .afterClosed().subscribe((result: Array<KeywordColor>) => {
                   if (result !== undefined) {
                     result.forEach((kc: KeywordColor) => {
-                      /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
+                      /** after closing the dialog, save the [keyword, color] list in the ARLAS color service */
                       (colorService.colorGenerator as ArlasColorGeneratorLoader).updateKeywordColor(kc.keyword, kc.color);
                       this.addToColorManualValuesCtrl(kc);
                     });

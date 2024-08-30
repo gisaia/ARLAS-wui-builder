@@ -66,7 +66,8 @@ export class DonutConfigForm extends WidgetConfigFormGroup {
             collectionService.getCollections().map(c => ({ label: c, value: c })),
             {
               optional: false,
-              resetDependantsOnChange: true
+              resetDependantsOnChange: true,
+              isCollectionSelect: true
             }
           ),
           aggregationmodels: new FieldWithSizeListFormControl(
@@ -137,7 +138,7 @@ export class DonutConfigForm extends WidgetConfigFormGroup {
                     if (result !== undefined) {
                       globalKeysToColortrl.clear();
                       result.forEach((kc: KeywordColor) => {
-                        /** after closing the dialog, save the [keyword, color] list in the Arlas color service */
+                        /** after closing the dialog, save the [keyword, color] list in the ARLAS color service */
                         (this.colorService.colorGenerator as ArlasColorGeneratorLoader).updateKeywordColor(kc.keyword, kc.color);
                         this.addToColorManualValuesCtrl(kc);
                       });
