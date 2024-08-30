@@ -35,6 +35,7 @@ import { PreviewComponent } from './components/preview/preview.component';
 import { VisualisationsComponent } from './components/visualisations/visualisations.component';
 import { MapConfigRoutingModule } from './map-config-routing.module';
 import { MapConfigComponent } from './map-config.component';
+import { GetCollectionDisplayModule } from 'arlas-web-components';
 
 @NgModule({
   entryComponents: [
@@ -65,8 +66,8 @@ import { MapConfigComponent } from './map-config.component';
     MapglModule,
     MapglLayerIconModule,
     MapglLegendModule,
-    SharedModule
-
+    SharedModule,
+    GetCollectionDisplayModule
   ],
   providers: [
     ConfirmExitGuard,

@@ -105,7 +105,8 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         collectionService.getCollectionsWithCentroid().map(c => ({ label: c, value: c })),
         {
           optional: false,
-          resetDependantsOnChange: true
+          resetDependantsOnChange: true,
+          isCollectionSelect: true
         }
       ),
 

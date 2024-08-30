@@ -36,13 +36,13 @@ export class CollectionUnitFormGroup extends ConfigFormGroup {
     super({
       unit: new InputFormControl(
         '',
-        'collection unit',
-        'Unit desc'
+        marker('collection unit'),
+        marker('Unit desc')
       ),
       collection: new InputFormControl(
         '',
-        'collection',
-        'collection desc'
+        marker('collection'),
+        marker('collection desc')
       ),
       ignored: new SlideToggleFormControl(false,
         '',

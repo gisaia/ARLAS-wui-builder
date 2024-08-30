@@ -110,6 +110,9 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
             collectionsObs.pipe(map(collections => collections.map(c => ({
               label: c, value: c
             })))),
+            {
+              isCollectionSelect: true
+            }
           )
         },
         {

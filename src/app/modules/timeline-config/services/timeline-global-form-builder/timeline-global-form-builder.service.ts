@@ -82,7 +82,8 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                 collectionService.getCollections().map(c => ({ label: c, value: c })),
                 {
                   optional: false,
-                  resetDependantsOnChange: true
+                  resetDependantsOnChange: true,
+                  isCollectionSelect: true
                 }
               ),
               aggregation: timelineBucketsIntervalFg

@@ -164,6 +164,9 @@ export interface ControlOptionalParams {
   sourceData?: Observable<any>;
 
   width?: string;
+
+  /** Used to properly display collection display names in selects */
+  isCollectionSelect?: boolean;
 }
 
 export interface GroupOptionalParams {

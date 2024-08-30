@@ -22,8 +22,8 @@
         </ng-container>
         <ng-container matColumnDef="collection">
             <th class="collection" mat-header-cell *matHeaderCellDef>{{'Collection' | translate}}</th>
-            <td class="collection" mat-cell *matCellDef="let subTable">{{subTable.controls.collection.value |
-                translate}}
+            <td class="collection" mat-cell *matCellDef="let subTable">
+                {{subTable.controls.collection.value | getCollectionDisplayName | translate}}
             </td>
         </ng-container>
         <ng-container matColumnDef="field">

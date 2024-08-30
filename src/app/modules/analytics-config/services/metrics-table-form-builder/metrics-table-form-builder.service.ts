@@ -170,7 +170,8 @@ export class SubTableFormGroup extends CollectionConfigFormGroup {
         collectionService.getCollections().map(c => ({ label: c, value: c })),
         {
           optional: false,
-          resetDependantsOnChange: true
+          resetDependantsOnChange: true,
+          isCollectionSelect: true
         }
       ),
       aggregationField: new SelectFormControl(

@@ -23,7 +23,8 @@ import { LookAndFeelConfigRoutingModule } from './look-and-feel-config-routing.m
 
 @NgModule({
   declarations: [
-    GlobalLookAndFeelComponent  ],
+    GlobalLookAndFeelComponent
+  ],
   imports: [
     LookAndFeelConfigRoutingModule,
     SharedModule
