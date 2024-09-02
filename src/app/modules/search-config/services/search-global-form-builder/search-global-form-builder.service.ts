@@ -17,20 +17,68 @@
  * under the License.
  */
 import { Injectable } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { SearchCollectionComponent } from '@search-config/components/search-collection/search-collection.component';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionField } from '@services/collection-service/models';
 import { toKeywordOptionsObs, toTextOptionsObs } from '@services/collection-service/tools';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ConfigFormGroup, InputFormControl, SelectFormControl, SelectOption, SliderFormControl } from '@shared-models/config-form';
+import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
+import {
+  ComponentFormControl, ConfigFormGroup, InputFormControl,
+  SelectFormControl, SelectOption, SliderFormControl
+} from '@shared-models/config-form';
 import { Observable } from 'rxjs';
 
+export class SearchCollectionFormGroup extends CollectionConfigFormGroup {
+  public constructor(
+    collection: string,
+    collectionService: CollectionService,
+    textFieldsObs: Observable<Array<SelectOption>>,
+    keywordFieldsObs: Observable<Array<SelectOption>>
+  ) {
+    super(collection,
+      {
+        collection: new SelectFormControl(
+          collection,
+          marker('Collection'),
+          undefined,
+          false,
+          collectionService.getCollections().map(c => ({ label: c, value: c })),
+          {
+            optional: false,
+            resetDependantsOnChange: true,
+            isCollectionSelect: true
+          },
+        ),
+        searchField: new SelectFormControl(
+          null,
+          marker('Search field'),
+          undefined,
+          true,
+          textFieldsObs
+        ),
+        autocompleteField: new SelectFormControl(
+          null,
+          marker('Autocomplete field'),
+          undefined,
+          true,
+          keywordFieldsObs
+        ),
+      }
+    );
+  }
+  public customControls = {
+    collection: this.get('collection') as SelectFormControl,
+    searchField: this.get('searchField') as SelectFormControl,
+    autocompleteField: this.get('autocompleteField') as SelectFormControl,
+  };
+}
 export class SearchGlobalFormGroup extends ConfigFormGroup {
 
   public constructor(
-    textFieldsObs: Observable<Array<SelectOption>>,
-    keywordFieldsObs: Observable<Array<SelectOption>>
   ) {
     super(
       {
@@ -39,21 +87,7 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
           marker('Placeholder'),
           marker('Placeholder descritpion'),
           null,
-          { title: 'Search' }),
-        searchField: new SelectFormControl(
-          null,
-          marker('Search field'),
-          marker('Search field description'),
-          true,
-          textFieldsObs
-        ),
-        autocompleteField: new SelectFormControl(
-          null,
-          marker('Autocomplete field'),
-          marker('Autocomplete field description'),
-          true,
-          keywordFieldsObs
-        ),
+          { title: marker('Search') }),
         autocompleteSize: new SliderFormControl(
           null,
           marker('Autocomplete size'),
@@ -61,6 +95,18 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
           1,
           10,
           1
+        ),
+        searchConfigurations: new FormArray<SearchCollectionFormGroup>([], {
+          validators: Validators.required,
+        }),
+        customComponent: new ComponentFormControl(
+          SearchCollectionComponent,
+          {
+            searchConfigurations: () => this.customControls.searchConfigurations
+          },
+          {
+
+          }
         ),
         unmanagedFields: new FormGroup({
           icon: new FormControl()
@@ -70,9 +116,8 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
   }
 
   public customControls = {
+    searchConfigurations: this.get('searchConfigurations') as FormArray<SearchCollectionFormGroup>,
     name: this.get('name') as InputFormControl,
-    searchField: this.get('searchField') as SelectFormControl,
-    autocompleteField: this.get('autocompleteField') as SelectFormControl,
     autocompleteSize: this.get('autocompleteSize') as SliderFormControl,
     unmanagedFields: {
       icon: this.get('unmanagedFields.icon')
@@ -91,15 +136,22 @@ export class SearchGlobalFormBuilderService {
     private mainFormService: MainFormService,
   ) { }
 
-  public build() {
+  public buildSearchMainCollection() {
     const collectionFields = this.collectionService
       .getCollectionFields(this.mainFormService.getMainCollection());
+    const initSearchMainCollection = new SearchCollectionFormGroup(
+      this.mainFormService.getMainCollection(),
+      this.collectionService, toTextOptionsObs(collectionFields),
+      toKeywordOptionsObs(collectionFields));
+    this.defaultValuesService.setDefaultValueRecursively('search.global', initSearchMainCollection);
+    return initSearchMainCollection;
+  }
 
-    const globalFg = new SearchGlobalFormGroup(
-      toTextOptionsObs(collectionFields),
-      toKeywordOptionsObs(collectionFields)
-    );
-
+  public build() {
+    const initSearchMainCollection = this.buildSearchMainCollection();
+    const globalFg = new SearchGlobalFormGroup();
+    (globalFg.get('searchConfigurations') as FormArray).push(initSearchMainCollection);
+    globalFg.customControls.searchConfigurations = new FormArray([initSearchMainCollection]);
     this.defaultValuesService.setDefaultValueRecursively('search.global', globalFg);
     return globalFg;
   }

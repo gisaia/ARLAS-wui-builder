@@ -16,21 +16,43 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 @import "variables.scss";
 
-.form-control-title {
-   @include group-title();
-   font-size: 22px;
-   margin: 10px 0 5px 10px;
+.search-config {
+    display: flex;
+
+    ::ng-deep .no-child-step-tabs-div {
+        display: flex !important;
+        padding: 5px 0px;
+        border-bottom: 1px dashed;
+        width: fit-content;
+    }
+
+    ::ng-deep .config-element {
+        box-shadow: none;
+    }
+
+    ::ng-deep .form-control-title {
+        @include group-title();
+        font-size: 22px;
+        margin: 10px 0 5px 10px;
+    }
+
 }
 
-.tab-error {
-   color: $error-color;
+
+
+.delete {
+    position: relative;
+    top: 30px;
 }
 
-.main-form-group-div {
-   padding-bottom: 5px;
-}
-.no-child-step-tabs-div{
-   padding-bottom: 1px;
+
+
+
+.button-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
 }

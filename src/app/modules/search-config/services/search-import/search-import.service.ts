@@ -17,10 +17,11 @@
  * under the License.
  */
 import { Injectable } from '@angular/core';
-import { CHIPSEARCH_IDENTIFIER, Config } from '@services/main-form-manager/models-config';
+import { FormArray } from '@angular/forms';
+import { CHIPSEARCH_TYPE, Config, SEARCH_TYPE } from '@services/main-form-manager/models-config';
 import { importElements } from '@services/main-form-manager/tools';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { SearchGlobalFormGroup } from '../search-global-form-builder/search-global-form-builder.service';
+import { SearchGlobalFormBuilderService, SearchGlobalFormGroup } from '../search-global-form-builder/search-global-form-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,15 +29,29 @@ import { SearchGlobalFormGroup } from '../search-global-form-builder/search-glob
 export class SearchImportService {
 
   public constructor(
-    private mainFormService: MainFormService
+    private mainFormService: MainFormService,
+    private searchGlobalFormBuilderService: SearchGlobalFormBuilderService
   ) { }
 
   public doImport(config: Config) {
 
-    const chipsearchContributor = config.arlas.web.contributors.find(c => c.identifier === CHIPSEARCH_IDENTIFIER);
+    const searchContributors = config.arlas.web.contributors
+      .filter(c => c.type === CHIPSEARCH_TYPE || c.type === SEARCH_TYPE);
     const chipsearchComponent = config['arlas-wui'].web.app.components.chipssearch;
 
     const globalSearchFg = this.mainFormService.searchConfig.getGlobalFg() as SearchGlobalFormGroup;
+
+
+    const searchConfigurations = new FormArray([]);
+
+    searchContributors.forEach(s => {
+      const searchConfigGroup = this.searchGlobalFormBuilderService.buildSearchMainCollection();
+      searchConfigGroup.customControls.collection.setValue(s.collection);
+      searchConfigGroup.customControls.autocompleteField.setValue(s.autocomplete_field);
+      searchConfigGroup.customControls.searchField.setValue(s.search_field);
+      searchConfigurations.push(searchConfigGroup);
+    });
+    globalSearchFg.customControls.searchConfigurations = searchConfigurations;
 
     importElements([
       {
@@ -44,22 +59,13 @@ export class SearchImportService {
         control: globalSearchFg.customControls.name
       },
       {
-        value: chipsearchContributor.search_field,
-        control: globalSearchFg.customControls.searchField
-      },
-      {
-        value: chipsearchContributor.autocomplete_field,
-        control: globalSearchFg.customControls.autocompleteField
-      },
-      {
-        value: chipsearchContributor.autocomplete_size,
+        value: searchContributors[0]?.autocomplete_size,
         control: globalSearchFg.customControls.autocompleteSize
       },
       {
-        value: chipsearchContributor.icon,
+        value: searchContributors[0]?.icon,
         control: globalSearchFg.customControls.unmanagedFields.icon
       }
     ]);
   }
-
 }
