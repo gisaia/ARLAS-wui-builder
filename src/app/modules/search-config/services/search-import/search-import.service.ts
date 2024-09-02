@@ -17,11 +17,11 @@
  * under the License.
  */
 import { Injectable } from '@angular/core';
-import { CHIPSEARCH_IDENTIFIER, CHIPSEARCH_TYPE, Config, SEARCH_IDENTIFIER, SEARCH_TYPE } from '@services/main-form-manager/models-config';
+import { FormArray } from '@angular/forms';
+import { CHIPSEARCH_TYPE, Config, SEARCH_TYPE } from '@services/main-form-manager/models-config';
 import { importElements } from '@services/main-form-manager/tools';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { SearchGlobalFormBuilderService, SearchGlobalFormGroup } from '../search-global-form-builder/search-global-form-builder.service';
-import { FormArray } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
