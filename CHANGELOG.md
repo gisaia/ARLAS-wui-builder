@@ -1,5 +1,31 @@
 # Change Log
 
+## [v26.0.0-rc.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v26.0.0-rc.1) (2024-09-02)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.1.0...v26.0.0-rc.1)
+
+**New stuff:**
+
+- When we activate short value for metrics the value precision is not taken into account [\#959](https://github.com/gisaia/ARLAS-wui-builder/issues/959)
+- Add a configuration to map in builder [\#958](https://github.com/gisaia/ARLAS-wui-builder/issues/958)
+- Add a title for detail section of the resultlist [\#957](https://github.com/gisaia/ARLAS-wui-builder/issues/957)
+- Init configuration of metrics table [\#953](https://github.com/gisaia/ARLAS-wui-builder/issues/953)
+- Add more precision to the existing description of initial zoom selection [\#918](https://github.com/gisaia/ARLAS-wui-builder/issues/918)
+- Include hex-aggregation and activate it according to deployment [\#960](https://github.com/gisaia/ARLAS-wui-builder/issues/960)
+- \[builder\] Add an input next to sliders to better precise the values [\#763](https://github.com/gisaia/ARLAS-wui-builder/issues/763)
+- \[collection\] replace collection name by the display\_name of the collection [\#719](https://github.com/gisaia/ARLAS-wui-builder/issues/719)
+- Handle multi-collection for powerbars [\#642](https://github.com/gisaia/ARLAS-wui-builder/issues/642) [[WIDGET](https://github.com/gisaia/ARLAS-wui-builder/labels/WIDGET)]
+- Support H3 cells aggregation [\#637](https://github.com/gisaia/ARLAS-wui-builder/issues/637)
+
+**Fixed bugs:**
+
+- ARLAS Builder maps : Strange button around legend in layer preview tab [\#971](https://github.com/gisaia/ARLAS-wui-builder/issues/971)
+- Layers don't show in preview tabs when scrollable layers are defined [\#970](https://github.com/gisaia/ARLAS-wui-builder/issues/970)
+- Import config.json file with existing preview ID could crash all the hub app [\#967](https://github.com/gisaia/ARLAS-wui-builder/issues/967)
+- When loading builder, the vertical menu overlaps the builder content [\#922](https://github.com/gisaia/ARLAS-wui-builder/issues/922)
+- Update of metric not working [\#914](https://github.com/gisaia/ARLAS-wui-builder/issues/914)
+- Typos and inconsistencies [\#727](https://github.com/gisaia/ARLAS-wui-builder/issues/727)
+
 ## [v25.1.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v25.1.0) (2024-07-18)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v25.0.0...v25.1.0)
