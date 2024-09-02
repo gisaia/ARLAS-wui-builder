@@ -882,7 +882,7 @@ export class ConfigExportHelper {
         contrib.type = 'metricstable';
         contrib.collection = widgetData.collection;
         contrib.numberOfBuckets = widgetData.dataStep.numberOfBuckets;
-        if (!!widgetData.dataStep.sort) {
+        if (!!widgetData.dataStep.sort && !!widgetData.dataStep.sort.collection) {
           contrib.sort = widgetData.dataStep.sort;
         }
         contrib.configuration = widgetData.dataStep.subtables.map(c => ({
