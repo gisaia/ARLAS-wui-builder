@@ -176,7 +176,7 @@
 	"Are you sure?": "Êtes vous sûr(e)?",
 	"Yes": "Oui",
 	"x-Axis": "",
-	
+
 	"Preferred N° of buckets": "Nombre de cases de préférence",
 	"Preferred bucket's interval": "Taille des cases de préférence",
 	"Dashboard name": "Nom du dashboard",
@@ -711,7 +711,7 @@
 	"day": "jour",
 	"ITEMS_PER_PAGE_LABEL": "Items par page",
 	"NEXT_PAGE_LABEL": "Page suivante",
-	"PREVIOUS_PAGE_LABEL": "Page précédente",	
+	"PREVIOUS_PAGE_LABEL": "Page précédente",
 	"RANGE_PAGE_LABEL_1": "0 sur {{length}}",
 	"RANGE_PAGE_LABEL_2": "{{startIndex}} - {{endIndex}} sur {{length}}",
 	"FIRST_PAGE_LABEL": "Première page",
@@ -893,5 +893,6 @@
 	"Edit sub table":"Edition du sous-tableau",
 	"none": "Aucune",
 	"centroid": "Centroïde",
-	"geometry": "Géométrie"
+	"geometry": "Géométrie",
+	"Symbol": "Label"
 }

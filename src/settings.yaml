@@ -31,7 +31,7 @@ persistence:
 ############   Permissions SETTINGS   ##################
 ########################################################
 permission:
-  url: http://localhost/arlas_permissions_server
+  url: http://localhost:81/permissions
 ########################################################
 ############   URLs to WUI app   #######################
 ########################################################

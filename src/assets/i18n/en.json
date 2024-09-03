@@ -891,5 +891,6 @@
 	"Edit sub table":"Edit sub-table",
 	"none": "None",
 	"centroid": "Centroid",
-	"geometry": "Geometry"
+	"geometry": "Geometry",
+	"Symbol": "Label"
 }

@@ -22,7 +22,7 @@ export enum GEOMETRY_TYPE {
   circle = 'circle',
   circleHeat = 'circle-heatmap',
   heatmap = 'heatmap',
-  label = 'label'
+  symbol = 'symbol'
 }
 
 export enum LABEL_ALIGNMENT {

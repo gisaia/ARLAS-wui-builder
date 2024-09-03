@@ -255,7 +255,7 @@ export class ConfigMapExportHelper {
       return GEOMETRY_TYPE.circle;
     }
 
-    return geometryType === 'label' ? 'symbol' : geometryType;
+    return geometryType;
   }
 
   public static getLayerPaint(modeValues, mode, colorService: ArlasColorService, taggableFields?: Set<string>) {
@@ -298,7 +298,7 @@ export class ConfigMapExportHelper {
         paint['heatmap-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, colorService, taggableFields);
         break;
       }
-      case GEOMETRY_TYPE.label: {
+      case GEOMETRY_TYPE.symbol: {
         paint['text-color'] = color;
         paint['text-opacity'] = opacity;
         paint['text-halo-color'] = this.getMapProperty(modeValues.styleStep.labelHaloColorFg, mode, colorService, taggableFields);
@@ -330,7 +330,7 @@ export class ConfigMapExportHelper {
         layout['line-join'] = 'round';
         break;
       }
-      case GEOMETRY_TYPE.label: {
+      case GEOMETRY_TYPE.symbol: {
         layout['text-field'] = this.getMapProperty(modeValues.styleStep.labelContentFg, mode, colorService, taggableFields);
         layout['text-font'] = ['Open Sans Bold', 'Arial Unicode MS Bold'];
         layout['text-size'] = this.getMapProperty(modeValues.styleStep.labelSizeFg, mode, colorService, taggableFields);
@@ -384,7 +384,7 @@ export class ConfigMapExportHelper {
         }
         break;
       }
-      case GEOMETRY_TYPE.label: {
+      case GEOMETRY_TYPE.symbol: {
         const orientationFilter = this.getFilter(modeValues.styleStep.labelRotationFg, mode, taggableFields);
         if (orientationFilter) {
           filterLayer = filterLayer.concat(orientationFilter);

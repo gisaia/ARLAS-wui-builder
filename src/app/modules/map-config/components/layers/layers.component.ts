@@ -175,7 +175,7 @@ export class LayersComponent implements OnInit, OnDestroy {
 
     const layer: LayerMap = {
       id: layerFg.arlasId,
-      type: modeValues.styleStep.geometryType === 'label' ? 'symbol' : modeValues.styleStep.geometryType,
+      type: modeValues.styleStep.geometryType,
       source: sourceName,
       minzoom: modeValues.visibilityStep.zoomMin,
       maxzoom: modeValues.visibilityStep.zoomMax,
