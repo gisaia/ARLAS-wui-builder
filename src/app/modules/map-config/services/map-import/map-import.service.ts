@@ -557,7 +557,7 @@ export class MapImportService {
 
     values.geometryStep.geometry = layerSource.returned_geometry;
     values.visibilityStep.featuresMax = layerSource.maxfeatures;
-    values.styleStep.geometryType = layer.type === 'symbol' ? 'label' : layer.type;
+    values.styleStep.geometryType = layer.type;
     values.styleStep.filter = layer.filter;
   }
 
@@ -609,7 +609,7 @@ export class MapImportService {
     if(layer.metadata.hiddenProps && layer.metadata.hiddenProps.geomType === GEOMETRY_TYPE.circleHeat) {
       values.styleStep.geometryType = GEOMETRY_TYPE.circleHeat;
     } else {
-      values.styleStep.geometryType = layer.type === 'symbol' ? 'label' : layer.type;
+      values.styleStep.geometryType = layer.type;
     }
     values.styleStep.filter = layer.filter;
   }

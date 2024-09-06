@@ -942,7 +942,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             title: marker('Label placement'),
             dependsOn: () => [this.geometryType, this.geometryStep],
             onDependencyChange: (control) => {
-              control.enableIf(this.geometryType.value === GEOMETRY_TYPE.label);
+              control.enableIf(this.geometryType.value === GEOMETRY_TYPE.symbol);
               if (control.enabled) {
                 // Feature Mode and Feature Metric Mode
                 if (
@@ -999,7 +999,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             optional: true,
             title: marker('Label alignment'),
             dependsOn: () => [this.geometryType],
-            onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.label)
+            onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.symbol)
           }
         ),
         labelOffsetFg: new ConfigFormGroup({
@@ -1256,7 +1256,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   }
 
   private isLabel(): boolean {
-    return this.geometryType.value === GEOMETRY_TYPE.label;
+    return this.geometryType.value === GEOMETRY_TYPE.symbol;
   }
 }
 
@@ -1281,7 +1281,7 @@ export class MapLayerTypeFeaturesFormGroup extends MapLayerAllTypesFormGroup {
         GEOMETRY_TYPE.fill,
         GEOMETRY_TYPE.line,
         GEOMETRY_TYPE.circle,
-        GEOMETRY_TYPE.label
+        GEOMETRY_TYPE.symbol
       ],
       propertySelectorFormBuilder,
       isAggregated,
@@ -1443,7 +1443,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
         GEOMETRY_TYPE.circle,
         GEOMETRY_TYPE.heatmap,
         GEOMETRY_TYPE.circleHeat,
-        GEOMETRY_TYPE.label
+        GEOMETRY_TYPE.symbol
       ],
       propertySelectorFormBuilder,
       true,
