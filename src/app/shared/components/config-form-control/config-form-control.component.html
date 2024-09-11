@@ -462,6 +462,9 @@
         <mat-label *ngIf="showLabel">{{ typedControl.label | translate}}</mat-label>
         <textarea matInput [formControl]="typedControl" [required]="!typedControl.optional"
             [rows]="typedControl.nbRows"></textarea>
+            <span *ngIf="typedControl?.errors">
+                <mat-error>{{ 'Process error message' | translate }}</mat-error>
+            </span>
     </mat-form-field>
 </div>
 

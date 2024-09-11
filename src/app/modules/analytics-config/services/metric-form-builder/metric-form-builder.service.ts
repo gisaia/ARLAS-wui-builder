@@ -82,7 +82,8 @@ export class MetricFormGroup extends WidgetConfigFormGroup {
             marker('metric function description'),
             undefined,
             {
-              optional: true
+              optional: true,
+              validators:[TextareaFormControl.processValidator('m')]
             }
           )
         }).withTabName(marker('Data')),

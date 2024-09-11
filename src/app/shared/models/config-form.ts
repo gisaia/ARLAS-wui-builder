@@ -17,7 +17,8 @@
  * under the License.
  */
 import {
-  FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators, FormArray
+  FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators, FormArray,
+  ValidationErrors
 } from '@angular/forms';
 import { Observable, skip } from 'rxjs';
 import { HistogramUtils } from 'arlas-d3';
@@ -28,7 +29,7 @@ import { ProportionedValues } from '@shared-services/property-selector-form-buil
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { updateValueAndValidity } from '@utils/tools';
-import { ComputeConfig } from 'arlas-web-contributors';
+import { ComputeConfig, validProcess } from 'arlas-web-contributors';
 /**
  * These are wrappers above existing FormGroup and FormControl in order to add a custom behavior.
  * The goal is to have a full model-driven form without putting (or duplicating) the logic
@@ -701,7 +702,7 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
     this.updateFieldsByMetric(this.stringToMetricsEnum(opt.metric));
     setTimeout(() => {
       this.fieldCtrl.setValue(opt.field);
-      if(opt.filter) {
+      if (opt.filter) {
         this.arlasFilterCtrl.setValue(JSON.stringify(opt.filter));
       }
       this.updateValueAndValidity();
@@ -1032,6 +1033,17 @@ export class TextareaFormControl extends ConfigFormControl {
     optionalParams?: ControlOptionalParams
   ) {
     super(formState, label, description, optionalParams);
+  }
+
+  public static processValidator(variableName: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (!value) {
+        return null;
+      }
+      const inputValid = validProcess(value,variableName);
+      return !inputValid ? { inputNotValid: true } : null;
+    };
   }
 }
 

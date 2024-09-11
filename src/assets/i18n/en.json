@@ -892,5 +892,6 @@
 	"none": "None",
 	"centroid": "Centroid",
 	"geometry": "Geometry",
-	"Symbol": "Label"
+	"Symbol": "Label",
+	"Process error message":"Only mathematical operations + operations on dates and strings are allowed. Also your JS code should contain 250 chars or less."
 }
