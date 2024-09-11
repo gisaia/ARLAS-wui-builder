@@ -894,5 +894,6 @@
 	"none": "Aucune",
 	"centroid": "Centroïde",
 	"geometry": "Géométrie",
-	"Symbol": "Label"
+	"Symbol": "Label",
+	"Process error message":"Seules les opérations mathématiques et les opérations sur les dates et les chaînes de caractères sont autorisées. De plus, votre code JS ne doit pas dépasser 250 caractères."
 }

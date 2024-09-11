@@ -203,6 +203,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
               1,
               {
                 optional: true,
+                validators:[TextareaFormControl.processValidator('result')],
                 dependsOn: () => [this.customControls.dataStep.collection],
                 onDependencyChange: (control: TextareaFormControl) => {
                   if (!this.collection || this.customControls.dataStep.collection.dirty) {
@@ -234,6 +235,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
               1,
               {
                 optional: true,
+                validators:[TextareaFormControl.processValidator('result')],
                 dependsOn: () => [this.customControls.dataStep.collection],
                 onDependencyChange: (control: TextareaFormControl) => {
                   if (!this.collection || this.customControls.dataStep.collection.dirty) {
@@ -453,7 +455,8 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
           '',
           1,
           {
-            optional: true
+            optional: true,
+            validators:[TextareaFormControl.processValidator('result')],
           }
         ),
         useColorService: new SlideToggleFormControl(
@@ -590,7 +593,8 @@ export class ResultlistDetailFieldFormGroup extends FormGroup {
         '',
         1,
         {
-          optional: true
+          optional: true,
+          validators:[TextareaFormControl.processValidator('result')],
         }
       )
     });
