@@ -322,7 +322,7 @@ export class MapImportService {
     filtersFa: FormArray
   ) {
     // convert to circle heatmap
-    if(layer.metadata['hidden-props'] && layer.metadata['hidden-props']['geom-type'] === GEOMETRY_TYPE.circleHeat) {
+    if(layer.metadata && layer.metadata['hidden-props'] && layer.metadata['hidden-props']['geom-type'] === GEOMETRY_TYPE.circleHeat) {
       layer.type = GEOMETRY_TYPE.circleHeat;
     }
     const type = layer.source.split('-')[0];
@@ -606,7 +606,7 @@ export class MapImportService {
     values.geometryStep.clusterSort = isGeometryTypeRaw ? layerSource.raw_geometry.sort : null;
     values.visibilityStep.featuresMin = layerSource.minfeatures;
     // to display the correct geom type when editing a circle-heat layer
-    if(layer.metadata.hiddenProps && layer.metadata.hiddenProps.geomType === GEOMETRY_TYPE.circleHeat) {
+    if(layer.metadata && layer.metadata.hiddenProps && layer.metadata.hiddenProps.geomType === GEOMETRY_TYPE.circleHeat) {
       values.styleStep.geometryType = GEOMETRY_TYPE.circleHeat;
     } else {
       values.styleStep.geometryType = layer.type;

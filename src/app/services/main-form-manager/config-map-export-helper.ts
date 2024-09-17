@@ -171,7 +171,7 @@ export class ConfigMapExportHelper {
     };
 
     // with this prop we ll be able to restore the good geomType when we ll reload the layer;
-    if (metadata.hasOwnProperty('hiddenProps')) {
+    if (metadata && metadata.hasOwnProperty('hiddenProps')) {
       delete metadata['hiddenProps'];
     }
 
