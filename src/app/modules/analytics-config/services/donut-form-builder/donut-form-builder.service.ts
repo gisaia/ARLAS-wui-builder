@@ -37,6 +37,7 @@ import { WidgetFormBuilder } from '../widget-form-builder';
 import { ArlasColorService } from 'arlas-web-components';
 
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+import { addToColorManualValuesCtrl } from '@utils/tools';
 
 export class DonutConfigForm extends WidgetConfigFormGroup {
 
@@ -116,15 +117,15 @@ export class DonutConfigForm extends WidgetConfigFormGroup {
               (Array.from(this.customControls.dataStep.aggregationmodels.value)[0] as any).field)
               .then((keywords: Array<string>) => {
                 keywords.forEach((k: string, index: number) => {
-                  this.addToColorManualValuesCtrl({
+                  addToColorManualValuesCtrl({
                     keyword: k,
                     color: this.colorService.getColor(k)
-                  }, index);
+                  }, this.globalKeysToColortrl, index);
                 });
-                this.addToColorManualValuesCtrl({
+                addToColorManualValuesCtrl({
                   keyword: 'OTHER',
                   color: defaultConfig.otherColor
-                });
+                }, this.globalKeysToColortrl);
 
                 const sub: Subscription = dialog.open(DialogColorTableComponent, {
                   data: {
@@ -140,7 +141,7 @@ export class DonutConfigForm extends WidgetConfigFormGroup {
                       result.forEach((kc: KeywordColor) => {
                         /** after closing the dialog, save the [keyword, color] list in the ARLAS color service */
                         (this.colorService.colorGenerator as ArlasColorGeneratorLoader).updateKeywordColor(kc.keyword, kc.color);
-                        this.addToColorManualValuesCtrl(kc);
+                        addToColorManualValuesCtrl(kc, this.globalKeysToColortrl);
                       });
                     }
                     sub.unsubscribe();
@@ -195,22 +196,6 @@ export class DonutConfigForm extends WidgetConfigFormGroup {
       }
     }
   };
-
-  private addToColorManualValuesCtrl(kc: KeywordColor, index?: number) {
-    if (!Object.values(this.globalKeysToColortrl.controls)
-      .find(keywordColorGrp => keywordColorGrp.get('keyword').value === kc.keyword)) {
-      const keywordColorGrp = new FormGroup({
-        keyword: new FormControl(kc.keyword),
-        color: new FormControl(kc.color)
-      });
-      if (index !== undefined) {
-        this.globalKeysToColortrl.insert(index, keywordColorGrp);
-      } else {
-        this.globalKeysToColortrl.push(keywordColorGrp);
-      }
-    }
-  }
-
 }
 
 @Injectable({

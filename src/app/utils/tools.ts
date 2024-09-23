@@ -160,17 +160,17 @@ export function camelize(str) {
   });
 }
 
-export function addToColorManualValuesCtrl(kc: KeywordColor, controls: any, index?: number) {
-  if (!Object.values(controls)
-    .find(keywordColorGrp => (keywordColorGrp as any).get('keyword').value === kc.keyword)) {
+export function addToColorManualValuesCtrl(kc: KeywordColor, fa: FormArray, index?: number) {
+  if (!Object.values(fa.controls)
+    .find(keywordColorGrp => keywordColorGrp.get('keyword').value === kc.keyword)) {
     const keywordColorGrp = new FormGroup({
       keyword: new FormControl(kc.keyword),
       color: new FormControl(kc.color)
     });
     if (index !== undefined) {
-      controls.insert(index, keywordColorGrp);
+      fa.insert(index, keywordColorGrp);
     } else {
-      controls.push(keywordColorGrp);
+      fa.push(keywordColorGrp);
     }
   }
 }
