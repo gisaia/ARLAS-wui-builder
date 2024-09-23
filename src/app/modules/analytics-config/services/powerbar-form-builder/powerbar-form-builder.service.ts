@@ -229,12 +229,12 @@ export class PowerbarConfigForm extends WidgetConfigFormGroup {
                   addToColorManualValuesCtrl({
                     keyword: k,
                     color: this.colorService.getColor(k)
-                  }, this.globalKeysToColortrl.controls, index);
+                  }, this.globalKeysToColortrl, index);
                 });
                 addToColorManualValuesCtrl({
                   keyword: 'OTHER',
                   color: defaultConfig.otherColor
-                }, this.globalKeysToColortrl.controls);
+                }, this.globalKeysToColortrl);
 
                 const sub = dialog.open(DialogColorTableComponent, {
                   data: {
@@ -249,7 +249,7 @@ export class PowerbarConfigForm extends WidgetConfigFormGroup {
                       result.forEach((kc: KeywordColor) => {
                         /** after closing the dialog, save the [keyword, color] list in the ARLAS color service */
                         (colorService.colorGenerator as ArlasColorGeneratorLoader).updateKeywordColor(kc.keyword, kc.color);
-                        addToColorManualValuesCtrl(kc, this.globalKeysToColortrl.controls);
+                        addToColorManualValuesCtrl(kc, this.globalKeysToColortrl);
                       });
                     }
                     sub.unsubscribe();
