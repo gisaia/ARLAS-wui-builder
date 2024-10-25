@@ -49,7 +49,7 @@
     "zone.js": "^0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^14.2.13",
+    "@angular-devkit/build-angular": "^18.2.5",
     "@angular-eslint/builder": "14.4.0",
     "@angular-eslint/eslint-plugin": "14.4.0",
     "@angular-eslint/eslint-plugin-template": "14.4.0",
@@ -77,7 +77,7 @@
     "karma-jasmine-html-reporter": "~1.7.0",
     "license-check-and-add": "^3.0.4",
     "ng-mocks": "~14.10.1",
-    "ng-packagr": "^14.2.2",
+    "ng-packagr": "^18.2.1",
     "node": "^16.3.0",
     "patch-package": "^6.4.7",
     "protractor": "~7.0.0",
