@@ -180,7 +180,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     ]).then(values => {
       const configJson = values[0] as Config;
       // Delete existing previewID to avoid right access problem on erase existing resource
-      if(!!configJson.resources.previewId){
+      if(!!configJson.resources?.previewId){
         delete configJson.resources.previewId;
       }
       const configMapJson = values[1] as MapConfig;
