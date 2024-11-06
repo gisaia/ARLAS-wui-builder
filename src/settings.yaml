@@ -2,9 +2,9 @@
 ############   AUTHENTICATION SETTINGS   ###############
 ########################################################
 authentication:
-  use_authent: false
+  use_authent: true
   auth_mode: iam
-  url: http://localhost/arlas_iam_server
+  url: 'https://localhost/arlas_iam_server'
   force_connect: true
   threshold: 60000
   use_discovery: false
@@ -26,12 +26,12 @@ authentication:
   sign_up_enabled: true
 
 persistence:
-  url: 'http://localhost:81/persist'
+  url: 'https://localhost/persist'
 ########################################################
 ############   Permissions SETTINGS   ##################
 ########################################################
 permission:
-  url: http://localhost:81/permissions
+  url: 'https://localhost/arlas_permissions_server'
 ########################################################
 ############   URLs to WUI app   #######################
 ########################################################
