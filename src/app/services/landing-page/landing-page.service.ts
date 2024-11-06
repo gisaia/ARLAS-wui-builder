@@ -30,6 +30,7 @@ import { ArlasConfigService, ArlasConfigurationDescriptor, ArlasSettingsService 
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
+import { CollectionReferenceDescription } from 'arlas-api';
 
 
 @Injectable({
@@ -48,7 +49,6 @@ export class LandingPageService implements OnDestroy {
     private logger: NGXLogger,
     private translate: TranslateService,
     private configService: ArlasConfigService,
-    private configDescritor: ArlasConfigurationDescriptor,
     private defaultValuesService: DefaultValuesService,
     private collectionService: CollectionService,
     private arlasSettingsService: ArlasSettingsService,
@@ -69,9 +69,9 @@ export class LandingPageService implements OnDestroy {
   public initWithConfig(configJson: Config, configMapJson: MapConfig, configId?: string, configName?: string, isRetry?: boolean) {
     this.spinner.show('importconfig');
     this.getServerCollections(configJson.arlas.server.url).then(() => {
-      this.configDescritor.getAllCollections().pipe(takeUntil(this._onDestroy$)).subscribe({
-        next: collections => {
-          this.initCollections(collections, configJson, configMapJson, configId, configName);
+      this.collectionService.getCollectionsReferenceDescription().pipe(takeUntil(this._onDestroy$)).subscribe({
+        next: cdrs => {
+          this.initCollections(cdrs, configJson, configMapJson, configId, configName);
         },
         error: () => {
           this.spinner.hide('importconfig');
@@ -89,46 +89,44 @@ export class LandingPageService implements OnDestroy {
     });
   }
 
-  public initCollections(collections: string[], configJson: Config, configMapJson: MapConfig, configId?: string, configName?: string) {
+  private initCollections(cdrs: CollectionReferenceDescription[], configJson: Config,
+    configMapJson: MapConfig, configId?: string, configName?: string) {
+    const collections = cdrs.map(c => c.collection_name);
     this.collectionService.setCollections(collections);
-    this.collectionService.getCollectionsReferenceDescription().subscribe(cdrs => {
-      this.collectionService.setCollectionsRef(cdrs);
-      const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
-      if (!collection) {
-        this.spinner.hide('importconfig');
-        this.logger.error(
-          this.translate.instant('Collection ')
-          + configJson.arlas.server.collection.name
-          + this.translate.instant(' unknown. Available collections: ')
-          + collections.join(', '));
-
+    this.collectionService.setCollectionsRef(cdrs);
+    const collection = (collections.find(c => c === configJson.arlas.server.collection.name));
+    if (!collection) {
+      this.spinner.hide('importconfig');
+      this.logger.error(
+        this.translate.instant('Collection ')
+        + configJson.arlas.server.collection.name
+        + this.translate.instant(' unknown. Available collections: ')
+        + collections.join(', '));
+    } else {
+      if (this.arlasSettingsService.settings['use_time_filter']) {
+        this.startupService.getTimeFilter(collection, configJson.arlas.server.url, this.collectionService, this.arlasSettingsService)
+          .subscribe(timeFilter => {
+            this.startupService.applyArlasInterceptor(collection, timeFilter);
+            setTimeout(() => {
+              this.mainFormManager.doImport(configJson, configMapJson);
+              this.startEventSource.next(null);
+              this.spinner.hide('importconfig');
+            }, 100);
+          });
+        /** hack in order to trigger the spinner 'importconfig'
+         * otherwise, we will think the application is not loading
+         */
       } else {
-        if (this.arlasSettingsService.settings['use_time_filter']) {
-          this.startupService.getTimeFilter(collection, configJson.arlas.server.url, this.collectionService, this.arlasSettingsService)
-            .subscribe(timeFilter => {
-              this.startupService.applyArlasInterceptor(collection, timeFilter);
-              setTimeout(() => {
-                this.mainFormManager.doImport(configJson, configMapJson);
-                this.startEventSource.next(null);
-                this.spinner.hide('importconfig');
-              }, 100);
-            });
-          /** hack in order to trigger the spinner 'importconfig'
-           * otherwise, we will think the application is not loading
-           */
-        } else {
-          setTimeout(() => {
-            this.mainFormManager.doImport(configJson, configMapJson);
-            this.startEventSource.next(null);
-            this.spinner.hide('importconfig');
-          }, 100);
-        }
-
+        setTimeout(() => {
+          this.mainFormManager.doImport(configJson, configMapJson);
+          this.startEventSource.next(null);
+          this.spinner.hide('importconfig');
+        }, 100);
       }
-      if (!!configId && !!configName) {
-        this.mainFormService.configChange.next({ id: configId, name: configName });
-      }
-    });
+    }
+    if (!!configId && !!configName) {
+      this.mainFormService.configChange.next({ id: configId, name: configName });
+    }
   }
 
   public getServerCollections(serverUrl: string) {

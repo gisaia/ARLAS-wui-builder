@@ -64,7 +64,6 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private logger: NGXLogger,
     public startupService: StartupService,
-    private configDescritor: ArlasConfigurationDescriptor,
     private translate: TranslateService,
     private mainFormManager: MainFormManagerService,
     private collectionService: CollectionService,
@@ -129,11 +128,12 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
       () => {
         this.landingPageService.getServerCollections(url).then(
           () => {
-            this.urlCollectionsSubscription = this.configDescritor.getAllCollections().subscribe(
-              collections => {
-                this.availablesCollections = collections;
-                this.collectionService.setCollections(collections);
-                this.collectionService.getCollectionsReferenceDescription().subscribe(cdrs => this.collectionService.setCollectionsRef(cdrs));
+            this.urlCollectionsSubscription = this.collectionService.getCollectionsReferenceDescription().subscribe(
+              cdrs => {
+                const collectionsNames = cdrs.map(c => c.collection_name);
+                this.availablesCollections = collectionsNames;
+                this.collectionService.setCollections(collectionsNames);
+                this.collectionService.setCollectionsRef(cdrs);
               },
               error => {
                 this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
@@ -180,7 +180,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     ]).then(values => {
       const configJson = values[0] as Config;
       // Delete existing previewID to avoid right access problem on erase existing resource
-      if(!!configJson.resources?.previewId){
+      if (!!configJson.resources?.previewId) {
         delete configJson.resources.previewId;
       }
       const configMapJson = values[1] as MapConfig;
