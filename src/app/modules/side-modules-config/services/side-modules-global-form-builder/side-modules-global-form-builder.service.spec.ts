@@ -1,5 +1,7 @@
 import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/spectator';
-import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { ArlasCollaborativesearchService, ArlasConfigurationDescriptor } from 'arlas-wui-toolkit';
+import { of } from 'rxjs';
 import { SideModulesGlobalFormBuilderService } from './side-modules-global-form-builder.service';
 
 describe('SideModulesGlobalFormBuilderService', () => {
@@ -8,7 +10,11 @@ describe('SideModulesGlobalFormBuilderService', () => {
   const createService = createServiceFactory({
     service: SideModulesGlobalFormBuilderService,
     providers: [
-      mockProvider(ArlasConfigurationDescriptor)
+      mockProvider(ArlasConfigurationDescriptor),
+      mockProvider(ArlasCollaborativesearchService),
+      mockProvider(CollectionService, {
+        getGroupCollectionItems: () => of()
+      })
     ]
   });
 

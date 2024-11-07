@@ -29,7 +29,6 @@ import {
   SlideToggleFormControl
 } from '@shared-models/config-form';
 import { urlValidator } from '@utils/validators';
-import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit';
 
 export class SideModulesGlobalFormGroup extends ConfigFormGroup {
 

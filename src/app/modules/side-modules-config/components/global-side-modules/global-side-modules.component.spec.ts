@@ -7,10 +7,14 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import {
   SideModulesGlobalFormGroup
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
-import { of } from 'rxjs';
 
 describe('GlobalSideModulesComponent', () => {
   let spectator: Spectator<GlobalSideModulesComponent>;
+
+  const mockCollectionService = jasmine.createSpyObj('CollectionService', ['getGroupCollectionItems', 'getCollections']);
+  mockCollectionService.getGroupCollectionItems.and.returnValue({});
+  mockCollectionService.getCollections.and.returnValue([]);
+
   const createComponent = createComponentFactory({
     component: GlobalSideModulesComponent,
     declarations: [
@@ -20,7 +24,7 @@ describe('GlobalSideModulesComponent', () => {
     providers: [
       mockProvider(MainFormService, {
         sideModulesConfig: {
-          getGlobalFg: () => new SideModulesGlobalFormGroup(of([]))
+          getGlobalFg: () => new SideModulesGlobalFormGroup(mockCollectionService)
         },
         getMainCollection: () => ''
       })
