@@ -19,6 +19,7 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { CollectionService } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import {
   ConfigFormGroup,
@@ -28,13 +29,10 @@ import {
   SlideToggleFormControl
 } from '@shared-models/config-form';
 import { urlValidator } from '@utils/validators';
-import { ArlasConfigurationDescriptor } from 'arlas-wui-toolkit';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 export class SideModulesGlobalFormGroup extends ConfigFormGroup {
 
-  public constructor(collectionsObs: Observable<Array<string>>) {
+  public constructor(collectionService: CollectionService,) {
     super({
       cache: new ConfigFormGroup({
         maxAgeCache: new InputFormControl(
@@ -107,12 +105,12 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
             marker('Collection'),
             '',
             true,
-            collectionsObs.pipe(map(collections => collections.map(c => ({
-              label: c, value: c
-            })))),
+            [],
             {
+              optional:false,
               isCollectionSelect: true
-            }
+            },
+            collectionService.getGroupCollectionItems()
           )
         },
         {
@@ -161,12 +159,11 @@ export class SideModulesGlobalFormBuilderService {
 
   public constructor(
     private defaultValuesService: DefaultValuesService,
-    private configDescritor: ArlasConfigurationDescriptor,
+    private collectionService: CollectionService,
   ) { }
 
   public build() {
-    const globalFg = new SideModulesGlobalFormGroup(
-      this.configDescritor.getAllCollections());
+    const globalFg = new SideModulesGlobalFormGroup(this.collectionService);
 
     this.defaultValuesService.setDefaultValueRecursively('sideModules.global', globalFg);
     return globalFg;

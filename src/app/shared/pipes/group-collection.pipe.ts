@@ -16,25 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { CollectionReferenceDescriptionProperty } from 'arlas-api';
+import { Pipe, PipeTransform } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
-export interface CollectionField {
-    name: string;
-    type: CollectionReferenceDescriptionProperty.TypeEnum;
-    indexed: boolean;
+@Pipe({
+  name: 'groupCollection'
+})
+export class GroupCollectionPipe implements PipeTransform {
+
+  public constructor(private translate: TranslateService,
+  ) { }
+
+  public transform(group: 'owner' | 'shared' | 'public' | 'collections', org: string): string {
+    return this.translate.instant(group.toUpperCase().concat('_GROUP_TITLE'),{org});
+  }
 }
-
-export interface CollectionItem {
-    name: string;
-    isPublic: boolean;
-    sharedWith: string[];
-    owner: string;
-}
-
-export interface GroupCollectionItem {
-    collections: CollectionItem[];
-    owner: CollectionItem[];
-    shared: CollectionItem[];
-    public: CollectionItem[];
-}
-

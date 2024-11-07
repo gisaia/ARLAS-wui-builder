@@ -224,11 +224,13 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
         marker('Collection'),
         undefined,
         false,
-        collectionService.getCollectionsWithCentroid().map(c => ({ label: c, value: c })),
+        [],
         {
           optional: false,
+          resetDependantsOnChange: true,
           isCollectionSelect: true
-        }
+        },
+        collectionService.getGroupCollectionItems()
       ),
       geographicalOperator: new SelectFormControl(
         geoOp,

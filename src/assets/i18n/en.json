@@ -893,5 +893,11 @@
 	"centroid": "Centroid",
 	"geometry": "Geometry",
 	"Symbol": "Label",
-	"Process error message":"Only mathematical operations + operations on dates and strings are allowed. Also your JS code should contain 250 chars or less."
+	"Process error message":"Only mathematical operations + operations on dates and strings are allowed. Also your JS code should contain 250 chars or less.",
+	"Include public collections":"Include public collections",
+	"OWNER_GROUP_TITLE": "Collections of {{org}}",
+	"SHARED_GROUP_TITLE": "Collections shared with {{org}}",
+	"PUBLIC_GROUP_TITLE": "Public collections",
+	"COLLECTIONS_GROUP_TITLE": "Collections"
+
 }

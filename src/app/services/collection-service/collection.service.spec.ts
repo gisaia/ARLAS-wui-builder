@@ -1,5 +1,5 @@
 import { CollectionService } from './collection.service';
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
+import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
 import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { TranslateService } from '@ngx-translate/core';

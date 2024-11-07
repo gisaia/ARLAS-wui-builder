@@ -18,6 +18,8 @@
                         (click)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
                         [disabled]="this.mainFormService.startingConfig.getFg().get('serverUrl').invalid"
                         mat-stroked-button color="accent">{{'Show collections' | translate}}</button>
+                    <mat-checkbox [disabled]="this.mainFormService.startingConfig.getFg().get('serverUrl').invalid" *ngIf="data.authentMode === 'iam'" (change)="toggleDisplayPublic($event)" class="include-public">{{'Include public collections' |
+                        translate}}</mat-checkbox>
                 </div>
             </arlas-config-element>
             <arlas-config-element *ngIf="isServerReady">
@@ -25,9 +27,11 @@
                     <mat-form-field>
                         <mat-label>{{'Main collection' | translate}}</mat-label>
                         <mat-select formControlName="collection">
-                            <mat-option *ngFor="let collection of availablesCollections" value="{{collection}}">
-                                {{ collection | getCollectionDisplayName | translate }}
-                            </mat-option>
+                            <mat-optgroup *ngFor="let group of availablesCollections | keyvalue :orderCollectionGroup" [label]="group.key | groupCollection:data.currentOrga"  [class.hideLabel]="group.value.length === 0">
+                                <mat-option *ngFor="let collection of group.value" [value]="collection.name">
+                                    {{ collection.name | getCollectionDisplayName | translate }}
+                                </mat-option>
+                            </mat-optgroup>
                         </mat-select>
                     </mat-form-field>
                 </div>

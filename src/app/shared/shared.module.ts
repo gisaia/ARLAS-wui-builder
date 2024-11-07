@@ -70,6 +70,7 @@ import { AutoFocusDirective } from './directives/auto-focus/auto-focus.directive
 import { ResetOnChangeDirective } from './directives/reset-on-change/reset-on-change.directive';
 import { HistogramBucketPipe } from './pipes/histogram-buckets/histogram-buckets.pipe';
 import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
+import { GroupCollectionPipe } from './pipes/group-collection.pipe';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -92,7 +93,8 @@ export function createTranslateLoader(http: HttpClient) {
     InputModalComponent,
     ConfigFormGroupArrayComponent,
     FiltersComponent,
-    CollectionsUnitsComponent
+    CollectionsUnitsComponent,
+    GroupCollectionPipe
   ],
   imports: [
     ArlasToolkitSharedModule,
@@ -147,6 +149,7 @@ export function createTranslateLoader(http: HttpClient) {
     ResetOnChangeDirective,
     ObjectvaluesPipe,
     HistogramBucketPipe,
+    GroupCollectionPipe,
     AutoFocusDirective,
     ConfigFormGroupComponent,
     ConfigFormControlComponent,

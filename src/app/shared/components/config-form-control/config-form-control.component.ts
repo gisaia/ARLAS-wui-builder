@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { KeyValue } from '@angular/common';
 import {
   AfterViewChecked, AfterViewInit,
   ChangeDetectorRef, Component, ComponentFactory, ComponentFactoryResolver,
@@ -24,6 +25,7 @@ import {
 import { FormGroup } from '@angular/forms';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionItem } from '@services/collection-service/models';
 import {
   ButtonFormControl, ButtonToggleFormControl, CollectionsUnitsControl, ColorFormControl, ColorPreviewFormControl,
   ComponentFormControl, ConfigFormControl, FieldTemplateControl, FieldWithSizeListFormControl, HiddenFormControl,
@@ -34,6 +36,7 @@ import {
   TextareaFormControl, TitleInputFormControl, TypedSelectFormControl, VisualisationCheckboxFormControl
 } from '@shared-models/config-form';
 import { ArlasColorService } from 'arlas-web-components';
+import { ArlasIamService } from 'arlas-wui-toolkit';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -61,7 +64,8 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
     private resolver: ComponentFactoryResolver,
     private changeDetector: ChangeDetectorRef,
     private colorService: ArlasColorService,
-    private collectionService: CollectionService
+    private collectionService: CollectionService,
+    public arlasIamService: ArlasIamService,
   ) { }
 
   public onchangeMulitpleSelection(event, clear?: boolean) {
@@ -268,4 +272,15 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   public isComponent(): ComponentFormControl | null {
     return Object.getPrototypeOf(this.control) === ComponentFormControl.prototype ? this.control as ComponentFormControl : null;
   }
+  public orderCollectionGroup = (
+    a: KeyValue<'collections' | 'owner' | 'shared' | 'public', CollectionItem[]>,
+    b: KeyValue<'collections' | 'owner' | 'shared' | 'public', CollectionItem[]>
+  ) => {
+    const mapKeyToOrder = new Map<string, number>();
+    mapKeyToOrder.set('owner', 0);
+    mapKeyToOrder.set('shared', 1);
+    mapKeyToOrder.set('public', 2);
+    mapKeyToOrder.set('collections', 3);
+    return mapKeyToOrder.get(a.key) - mapKeyToOrder.get(b.key) > 0 ? 1 : -1;
+  };
 }

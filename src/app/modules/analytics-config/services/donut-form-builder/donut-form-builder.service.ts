@@ -64,12 +64,13 @@ export class DonutConfigForm extends WidgetConfigFormGroup {
             marker('Collection'),
             marker('Donut collection description'),
             false,
-            collectionService.getCollections().map(c => ({ label: c, value: c })),
+            [],
             {
               optional: false,
               resetDependantsOnChange: true,
               isCollectionSelect: true
-            }
+            },
+            collectionService.getGroupCollectionItems()
           ),
           aggregationmodels: new FieldWithSizeListFormControl(
             '',

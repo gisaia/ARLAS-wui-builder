@@ -79,12 +79,13 @@ export class HistogramFormGroup extends WidgetConfigFormGroup {
             marker('Collection'),
             marker('Histogram collection description'),
             false,
-            collectionService.getCollections().map(c => ({ label: c, value: c })),
+            [],
             {
               optional: false,
               resetDependantsOnChange: true,
               isCollectionSelect: true
-            }
+            },
+            collectionService.getGroupCollectionItems()
           ),
           aggregation: bucketsIntervalFg.withTitle(marker('histogram x-Axis'))
             .withDependsOn(() => [this.customControls.dataStep.collection]).withOnDependencyChange(

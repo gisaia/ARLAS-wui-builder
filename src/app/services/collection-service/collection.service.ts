@@ -20,15 +20,15 @@ import { Injectable } from '@angular/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import {
   Aggregation, AggregationResponse, AggregationsRequest, CollectionReferenceDescription, CollectionReferenceDescriptionProperty,
-  ComputationRequest, ComputationResponse, Filter, Hits
+  ComputationRequest, Filter, Hits
 } from 'arlas-api';
 import { projType } from 'arlas-web-core';
-import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
+import { ArlasCollaborativesearchService, ArlasIamService } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { from, Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
-import { CollectionField } from './models';
+import { CollectionField, CollectionItem, GroupCollectionItem } from './models';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 export import FIELD_TYPES = CollectionReferenceDescriptionProperty.TypeEnum;
@@ -50,8 +50,8 @@ export class CollectionService {
     private collabSearchService: ArlasCollaborativesearchService,
     private spinner: NgxSpinnerService,
     private defaultValueService: DefaultValuesService,
-    private logger: NGXLogger,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private iamService: ArlasIamService
   ) { }
 
   public getCollections(): string[] {
@@ -260,4 +260,42 @@ export class CollectionService {
     ).finally(() => this.spinner.hide()));
   }
 
+  // eslint-disable-next-line max-len
+  public groupCollectionItems(items: CollectionItem[], currentOrg: string): GroupCollectionItem {
+    const groupCollection = items.reduce((acc, item) => {
+      if (!!currentOrg && currentOrg.length > 0) {
+        if (item.isPublic && item.owner !== currentOrg) {
+          acc.public.push(item);
+        } else {
+          if (item.sharedWith.includes(currentOrg) && item.owner !== currentOrg) {
+            acc.shared.push(item);
+          } else {
+            if (item.owner === currentOrg) {
+              acc.owner.push(item);
+            }
+          }
+        }
+      } else {
+        acc.collections.push(item);
+      }
+      return acc;
+    }, { owner: [], shared: [], public: [], collections: [] });
+    return groupCollection;
+  }
+
+  public getGroupCollectionItems(): Observable<GroupCollectionItem> {
+    return this.getCollectionsReferenceDescription()
+      .pipe(map(cdrs => {
+        const collectionsItems = cdrs
+          .map(c => ({
+            name: c.collection_name,
+            isPublic: (c.params.organisations as any).public,
+            sharedWith: c.params.organisations.shared,
+            owner: c.params.organisations.owner
+          }));
+        return this.groupCollectionItems(collectionsItems, this.iamService.getOrganisation());
+      }));
+  }
 }
+
+

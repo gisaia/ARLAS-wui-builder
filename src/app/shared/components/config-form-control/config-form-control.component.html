@@ -48,14 +48,27 @@
             [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? WARNING_MESSAGE : null"
             [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
-            <mat-option *ngIf="typedControl.optional"></mat-option>
-            <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value"
-                [ngClass]="'option-color-' + opt.value" [disabled]="opt.enabled === false">
-                <ng-container *ngIf="!typedControl.optionalParams.isCollectionSelect">
-                    {{opt.label | translate}}</ng-container>
-                <ng-container *ngIf="typedControl.optionalParams.isCollectionSelect">
-                    {{opt.label | getCollectionDisplayName | translate}}</ng-container>
-            </mat-option>
+
+            <ng-container *ngIf="!typedControl.optionalParams.isCollectionSelect">
+                <mat-option *ngIf="typedControl.optional"></mat-option>
+                <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value"
+                    [ngClass]="'option-color-' + opt.value" [disabled]="opt.enabled === false">
+                        {{opt.label | translate}}
+                </mat-option>
+            </ng-container>
+
+            <ng-container *ngIf="typedControl.optionalParams.isCollectionSelect">
+                <mat-optgroup *ngFor="let group of typedControl.groups | async |keyvalue :orderCollectionGroup" [label]="group.key | groupCollection:arlasIamService.getOrganisation()"  [class.hideLabel]="group.value.length === 0">
+                    <mat-option *ngFor="let collection of group.value" [value]="collection.name">
+                        {{ collection.name | getCollectionDisplayName | translate }}
+                    </mat-option>
+                </mat-optgroup>
+
+            </ng-container>
+
+
+
+
         </mat-select>
     </mat-form-field>
 </div>

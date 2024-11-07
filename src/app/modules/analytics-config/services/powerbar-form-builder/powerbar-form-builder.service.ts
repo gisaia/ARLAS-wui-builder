@@ -17,7 +17,7 @@
  * under the License.
  */
 import { Injectable } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
@@ -72,12 +72,13 @@ export class PowerbarConfigForm extends WidgetConfigFormGroup {
             marker('Collection'),
             marker('Powerbar collection description'),
             false,
-            collectionService.getCollections().map(c => ({ label: c, value: c })),
+            [],
             {
               optional: false,
               resetDependantsOnChange: true,
               isCollectionSelect: true
-            }
+            },
+            collectionService.getGroupCollectionItems()
           ),
           aggregationField: new SelectFormControl(
             '',

@@ -20,9 +20,9 @@ import {
   FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators, FormArray,
   ValidationErrors
 } from '@angular/forms';
-import { Observable, skip } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HistogramUtils } from 'arlas-d3';
-import { CollectionField } from '@services/collection-service/models';
+import { CollectionField, GroupCollectionItem } from '@services/collection-service/models';
 import { METRIC_TYPES } from '@services/collection-service/collection.service';
 import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toNumericOrDateOrKeywordOrTextObs } from '@services/collection-service/tools';
 import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
@@ -44,6 +44,7 @@ export interface SelectOption {
   type?: CollectionReferenceDescriptionProperty.TypeEnum;
   color?: string;
   detail?: string;
+  groups?: GroupCollectionItem;
 }
 
 export interface VisualisationCheckboxOption {
@@ -421,6 +422,7 @@ export class SelectFormControl extends ConfigFormControl {
   // used only for autocomplete: list of filtered options
   public filteredOptions: Array<SelectOption>;
   public syncOptions: Array<SelectOption> = [];
+  public groups;
 
   public constructor(
     formState: any,
@@ -428,7 +430,8 @@ export class SelectFormControl extends ConfigFormControl {
     description: string,
     public isAutocomplete: boolean,
     options: Array<SelectOption> | Observable<Array<SelectOption>>,
-    optionalParams?: ControlOptionalParams) {
+    optionalParams?: ControlOptionalParams,
+    groups?: Observable<GroupCollectionItem>) {
 
     super(
       formState,
@@ -457,7 +460,7 @@ export class SelectFormControl extends ConfigFormControl {
       }
       );
     }
-
+    this.groups = groups;
   }
 
   public setSyncOptions(newOptions: Array<SelectOption>) {
