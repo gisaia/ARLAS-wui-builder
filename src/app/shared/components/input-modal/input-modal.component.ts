@@ -25,6 +25,8 @@ export interface DialogData {
   configChoice?: string | number;
   initialValue?: string;
   noCancel?: boolean;
+  authentMode?: string;
+  currentOrga?: string;
 }
 
 @Component({

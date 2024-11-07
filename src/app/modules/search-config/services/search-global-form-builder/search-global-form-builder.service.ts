@@ -46,12 +46,13 @@ export class SearchCollectionFormGroup extends CollectionConfigFormGroup {
           marker('Collection'),
           undefined,
           false,
-          collectionService.getCollections().map(c => ({ label: c, value: c })),
+          [],
           {
             optional: false,
             resetDependantsOnChange: true,
             isCollectionSelect: true
           },
+          collectionService.getGroupCollectionItems()
         ),
         searchField: new SelectFormControl(
           null,

@@ -159,12 +159,13 @@ export class SubTableFormGroup extends CollectionConfigFormGroup {
         marker('Collection'),
         marker('Subtable collection description'),
         false,
-        collectionService.getCollections().map(c => ({ label: c, value: c })),
+        [],
         {
           optional: false,
           resetDependantsOnChange: true,
           isCollectionSelect: true
-        }
+        },
+        collectionService.getGroupCollectionItems()
       ),
       aggregationField: new SelectFormControl(
         '',

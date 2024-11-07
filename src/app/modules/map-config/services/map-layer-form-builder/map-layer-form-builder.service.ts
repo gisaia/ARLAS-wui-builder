@@ -102,12 +102,13 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         marker('Collection'),
         marker('Layer collection description'),
         false,
-        collectionService.getCollectionsWithCentroid().map(c => ({ label: c, value: c })),
+        [],
         {
           optional: false,
           resetDependantsOnChange: true,
           isCollectionSelect: true
-        }
+        },
+        collectionService.getGroupCollectionItems()
       ),
 
       collectionDisplayName: new HiddenFormControl(

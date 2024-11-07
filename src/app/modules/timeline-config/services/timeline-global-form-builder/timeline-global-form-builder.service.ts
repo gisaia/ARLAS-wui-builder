@@ -79,12 +79,13 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
                 marker('Collection'),
                 marker('Timeline collection description'),
                 false,
-                collectionService.getCollections().map(c => ({ label: c, value: c })),
+                [],
                 {
                   optional: false,
                   resetDependantsOnChange: true,
                   isCollectionSelect: true
-                }
+                },
+                collectionService.getGroupCollectionItems()
               ),
               aggregation: timelineBucketsIntervalFg
                 .withDependsOn(() => [this.customControls.tabsContainer.dataStep.timeline.collection])

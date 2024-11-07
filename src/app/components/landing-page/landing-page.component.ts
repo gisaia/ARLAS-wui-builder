@@ -182,7 +182,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     if (configChoice) {
       this.dialogRef = this.dialog.open(LandingPageDialogComponent, {
         disableClose: true, data:
-          { message: this.confId, configChoice }
+          { message: this.confId, configChoice, authentMode: this.authentMode, currentOrga: this.currentOrga }
       });
     }
   }
@@ -328,6 +328,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public changeOrg(event: MatSelectChange) {
+    this.currentOrga = event.value;
     this.arlasIamService.storeOrganisation(event.value);
     this.startupService.changeOrgHeader(event.value, this.arlasIamService.getAccessToken());
     this.checkUserRightsForOrg(event.value);

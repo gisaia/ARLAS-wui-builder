@@ -27,7 +27,6 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import {
   NUMERIC_OR_DATE_OR_KEYWORD,
   NUMERIC_OR_DATE_OR_TEXT_TYPES, TEXT_OR_KEYWORD,
-  toKeywordOptionsObs,
   toNumericOrDateOrKeywordOrTextObs, toOptionsObs
 } from '@services/collection-service/tools';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
@@ -86,12 +85,13 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             marker('Collection'),
             marker('Resultlist collection description'),
             false,
-            collectionService.getCollections().map(c => ({ label: c, value: c })),
+            [],
             {
               optional: false,
               resetDependantsOnChange: true,
               isCollectionSelect: true
-            }
+            },
+            collectionService.getGroupCollectionItems()
           ),
           searchSize: new SliderFormControl(
             '',

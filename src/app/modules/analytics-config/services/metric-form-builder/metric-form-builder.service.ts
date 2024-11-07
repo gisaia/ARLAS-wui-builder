@@ -22,7 +22,6 @@ import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
   ConfigFormGroup, HiddenFormControl, InputFormControl, MetricWithFieldListFormControl, SelectFormControl,
   SlideToggleFormControl, TextareaFormControl, TitleInputFormControl
@@ -50,12 +49,13 @@ export class MetricFormGroup extends WidgetConfigFormGroup {
             marker('Collection'),
             marker('Metric collection description'),
             false,
-            collectionService.getCollections().map(c => ({ label: c, value: c })),
+            [],
             {
               optional: false,
               resetDependantsOnChange: true,
               isCollectionSelect: true
-            }
+            },
+            collectionService.getGroupCollectionItems()
           ),
           metrics: new MetricWithFieldListFormControl(
             '',

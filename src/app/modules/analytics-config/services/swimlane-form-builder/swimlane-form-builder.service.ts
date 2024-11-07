@@ -74,12 +74,13 @@ export class SwimlaneFormGroup extends WidgetConfigFormGroup {
             marker('Collection'),
             marker('Swimlane collection description'),
             false,
-            collectionService.getCollections().map(c => ({ label: c, value: c })),
+            [],
             {
               optional: false,
               resetDependantsOnChange: true,
               isCollectionSelect: true
-            }
+            },
+            collectionService.getGroupCollectionItems()
           ),
           termAggregation: new ConfigFormGroup({
             termAggregationField: new SelectFormControl(

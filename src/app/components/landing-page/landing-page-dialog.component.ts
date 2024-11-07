@@ -17,12 +17,14 @@
  * under the License.
  */
 
+import { KeyValue } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionItem } from '@services/collection-service/models';
 import { InitialChoice, LandingPageService } from '@services/landing-page/landing-page.service';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { Config } from '@services/main-form-manager/models-config';
@@ -31,7 +33,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { MenuService } from '@services/menu/menu.service';
 import { StartupService } from '@services/startup/startup.service';
 import { DialogData } from '@shared-components/input-modal/input-modal.component';
-import { ArlasConfigurationDescriptor, PersistenceService, UserInfosComponent } from 'arlas-wui-toolkit';
+import { PersistenceService, UserInfosComponent } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
@@ -45,11 +47,11 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
 
   public configChoice = InitialChoice.none;
   public isServerReady = false;
-  public availablesCollections: string[];
+  public availablesCollections: { owner: CollectionItem[]; shared: CollectionItem[]; public: CollectionItem[]; };
   public InitialChoice = InitialChoice;
 
   public displayedColumns: string[] = ['id', 'creation', 'detail'];
-
+  public includePublicCollection = false;
 
 
   private subscription: Subscription;
@@ -130,9 +132,22 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
           () => {
             this.urlCollectionsSubscription = this.collectionService.getCollectionsReferenceDescription().subscribe(
               cdrs => {
-                const collectionsNames = cdrs.map(c => c.collection_name);
-                this.availablesCollections = collectionsNames;
-                this.collectionService.setCollections(collectionsNames);
+                const collectionsItems = cdrs
+                  .filter(c => {
+                    if (this.includePublicCollection) {
+                      return true;
+                    } else {
+                      return (c.params.organisations as any).public === false;
+                    }
+                  })
+                  .map(c => ({
+                    name: c.collection_name,
+                    isPublic: (c.params.organisations as any).public,
+                    sharedWith: c.params.organisations.shared,
+                    owner: c.params.organisations.owner
+                  }));
+                this.availablesCollections = this.collectionService.groupCollectionItems(collectionsItems, this.data.currentOrga);
+                this.collectionService.setCollections(collectionsItems.map(c => c.name));
                 this.collectionService.setCollectionsRef(cdrs);
               },
               error => {
@@ -203,8 +218,24 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  public toggleDisplayPublic(event) {
+    this.includePublicCollection = event.checked;
+    this.checkUrl();
+  }
 
   public getUserInfos() {
     this.dialog.open(UserInfosComponent);
   }
+
+  public orderCollectionGroup = (
+    a: KeyValue<'collections' | 'owner' | 'shared' | 'public', CollectionItem[]>,
+    b: KeyValue<'collections' | 'owner' | 'shared' | 'public', CollectionItem[]>
+  ) => {
+    const mapKeyToOrder = new Map<string, number>();
+    mapKeyToOrder.set('owner', 0);
+    mapKeyToOrder.set('shared', 1);
+    mapKeyToOrder.set('public', 2);
+    mapKeyToOrder.set('collections', 3);
+    return mapKeyToOrder.get(a.key) - mapKeyToOrder.get(b.key) > 0 ? 1 : -1;
+  };
 }
