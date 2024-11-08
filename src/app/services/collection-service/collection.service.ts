@@ -46,12 +46,17 @@ export class CollectionService {
   public collectionMinIntervalMap = new Map<string, number>();
   public collectionMaxIntervalMap = new Map<string, number>();
   public collections: string[] = [];
+  public groupCollectionItems: GroupCollectionItem = {
+    collections: [],
+    owner: [],
+    shared: [],
+    public: []
+  };
   public constructor(
     private collabSearchService: ArlasCollaborativesearchService,
     private spinner: NgxSpinnerService,
     private defaultValueService: DefaultValuesService,
-    private translate: TranslateService,
-    private iamService: ArlasIamService
+    private translate: TranslateService
   ) { }
 
   public getCollections(): string[] {
@@ -64,6 +69,23 @@ export class CollectionService {
 
   public setCollections(collections: string[]): void {
     this.collections = collections;
+  }
+
+  public setGroupCollectionItems(groupCollectionItems: GroupCollectionItem): void {
+    this.groupCollectionItems = groupCollectionItems;
+  }
+
+  public getGroupCollectionItems( ): GroupCollectionItem {
+    return this.groupCollectionItems;
+  }
+
+  public getGroupCollectionItemsWithCentroid( ): GroupCollectionItem {
+    const filterFuncion = (c) => !!this.collectionParamsMap.get(c.name) && !!this.collectionParamsMap.get(c.name).params.centroid_path;
+    const groupCollectionItem = {};
+    Object.keys(this.groupCollectionItems).forEach(k => {
+      groupCollectionItem[k] = this.groupCollectionItems[k].filter(filterFuncion);
+    });
+    return groupCollectionItem as GroupCollectionItem ;
   }
 
   public setCollectionsRef(crds: CollectionReferenceDescription[]): void {
@@ -261,7 +283,7 @@ export class CollectionService {
   }
 
   // eslint-disable-next-line max-len
-  public groupCollectionItems(items: CollectionItem[], currentOrg: string): GroupCollectionItem {
+  public buildGroupCollectionItems(items: CollectionItem[], currentOrg: string): GroupCollectionItem {
     const groupCollection = items.reduce((acc, item) => {
       if (!!currentOrg && currentOrg.length > 0) {
         if (item.isPublic && item.owner !== currentOrg) {
@@ -281,20 +303,6 @@ export class CollectionService {
       return acc;
     }, { owner: [], shared: [], public: [], collections: [] });
     return groupCollection;
-  }
-
-  public getGroupCollectionItems(): Observable<GroupCollectionItem> {
-    return this.getCollectionsReferenceDescription()
-      .pipe(map(cdrs => {
-        const collectionsItems = cdrs
-          .map(c => ({
-            name: c.collection_name,
-            isPublic: (c.params.organisations as any).public,
-            sharedWith: c.params.organisations.shared,
-            owner: c.params.organisations.owner
-          }));
-        return this.groupCollectionItems(collectionsItems, this.iamService.getOrganisation());
-      }));
   }
 }
 

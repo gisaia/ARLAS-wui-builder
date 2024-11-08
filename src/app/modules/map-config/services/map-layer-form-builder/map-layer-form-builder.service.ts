@@ -108,7 +108,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
           resetDependantsOnChange: true,
           isCollectionSelect: true
         },
-        collectionService.getGroupCollectionItems()
+        collectionService.getGroupCollectionItemsWithCentroid()
       ),
 
       collectionDisplayName: new HiddenFormControl(

@@ -24,7 +24,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { CollectionItem } from '@services/collection-service/models';
+import { CollectionItem, GroupCollectionItem } from '@services/collection-service/models';
 import { InitialChoice, LandingPageService } from '@services/landing-page/landing-page.service';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { Config } from '@services/main-form-manager/models-config';
@@ -47,7 +47,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
 
   public configChoice = InitialChoice.none;
   public isServerReady = false;
-  public availablesCollections: { owner: CollectionItem[]; shared: CollectionItem[]; public: CollectionItem[]; };
+  public availablesCollections: GroupCollectionItem;
   public InitialChoice = InitialChoice;
 
   public displayedColumns: string[] = ['id', 'creation', 'detail'];
@@ -146,7 +146,8 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
                     sharedWith: c.params.organisations.shared,
                     owner: c.params.organisations.owner
                   }));
-                this.availablesCollections = this.collectionService.groupCollectionItems(collectionsItems, this.data.currentOrga);
+                this.availablesCollections = this.collectionService.buildGroupCollectionItems(collectionsItems, this.data.currentOrga);
+                this.collectionService.setGroupCollectionItems(this.availablesCollections);
                 this.collectionService.setCollections(collectionsItems.map(c => c.name));
                 this.collectionService.setCollectionsRef(cdrs);
               },
