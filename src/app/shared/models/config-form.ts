@@ -422,7 +422,7 @@ export class SelectFormControl extends ConfigFormControl {
   // used only for autocomplete: list of filtered options
   public filteredOptions: Array<SelectOption>;
   public syncOptions: Array<SelectOption> = [];
-  public groups;
+  public groups: GroupCollectionItem;
 
   public constructor(
     formState: any,
@@ -431,7 +431,7 @@ export class SelectFormControl extends ConfigFormControl {
     public isAutocomplete: boolean,
     options: Array<SelectOption> | Observable<Array<SelectOption>>,
     optionalParams?: ControlOptionalParams,
-    groups?: Observable<GroupCollectionItem>) {
+    groups?: GroupCollectionItem) {
 
     super(
       formState,

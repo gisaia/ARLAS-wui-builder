@@ -26,7 +26,7 @@ import { Config } from '@services/main-form-manager/models-config';
 import { MapConfig } from '@services/main-form-manager/models-map-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { StartupService } from '@services/startup/startup.service';
-import { ArlasConfigService, ArlasConfigurationDescriptor, ArlasSettingsService } from 'arlas-wui-toolkit';
+import { ArlasConfigService, ArlasConfigurationDescriptor, ArlasIamService, ArlasSettingsService } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
@@ -53,7 +53,8 @@ export class LandingPageService implements OnDestroy {
     private collectionService: CollectionService,
     private arlasSettingsService: ArlasSettingsService,
     private mainFormManager: MainFormManagerService,
-    public mainFormService: MainFormService) {
+    public mainFormService: MainFormService,
+    private arlasIamService: ArlasIamService) {
   }
 
   public ngOnDestroy() {
@@ -72,6 +73,16 @@ export class LandingPageService implements OnDestroy {
       this.collectionService.getCollectionsReferenceDescription().pipe(takeUntil(this._onDestroy$)).subscribe({
         next: cdrs => {
           this.initCollections(cdrs, configJson, configMapJson, configId, configName);
+          const collectionsItems = cdrs
+            .map(c => ({
+              name: c.collection_name,
+              isPublic: (c.params.organisations as any).public,
+              sharedWith: c.params.organisations.shared,
+              owner: c.params.organisations.owner
+            }));
+          const groupCollectionItems = this.collectionService.buildGroupCollectionItems(collectionsItems, this.arlasIamService.getOrganisation());
+          this.collectionService.setGroupCollectionItems(groupCollectionItems);
+
         },
         error: () => {
           this.spinner.hide('importconfig');

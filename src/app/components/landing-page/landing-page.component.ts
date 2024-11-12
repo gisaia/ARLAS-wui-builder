@@ -31,16 +31,17 @@ import { StartupService, ZONE_WUI_BUILDER } from '@services/startup/startup.serv
 import { UserOrgData } from 'arlas-iam-api';
 import { DataWithLinks } from 'arlas-persistence-api';
 import {
-  ArlasAuthentificationService, ArlasIamService, ArlasSettingsService, AuthentificationService, ConfigAction,
+  ArlasAuthentificationService, ArlasCollectionService, ArlasIamService, ArlasSettingsService, AuthentificationService, ConfigAction,
   ConfigActionEnum, ErrorService, PermissionService, PersistenceService, UserInfosComponent
 } from 'arlas-wui-toolkit';
 import { Resource } from 'arlas-permissions-api';
 import { NGXLogger } from 'ngx-logger';
-import { Subscription } from 'rxjs';
+import { Subscription, zip } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { LandingPageDialogComponent } from './landing-page-dialog.component';
 import { InitialChoice, LandingPageService } from '@services/landing-page/landing-page.service';
 import { ResourcesConfigFormBuilderService } from '@services/resources-form-builder/resources-config-form-builder.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 
 export interface Configuration {
   name: string;
@@ -97,6 +98,9 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     private translate: TranslateService,
     private activatedRoute: ActivatedRoute,
     private menu: MenuService,
+    private collectionService: CollectionService,
+    private arlasCollectionService: ArlasCollectionService,
+
     private landingPageService: LandingPageService) {
 
     this.authentMode = !!this.settingsService.getAuthentSettings() ? this.settingsService.getAuthentSettings().auth_mode : undefined;
@@ -211,7 +215,8 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
       writers: data.doc_writers,
       lastUpdate: +data.last_update_date,
       zone: data.doc_zone,
-      org: this.arlasIamService.getOrganisation()
+      org: this.arlasIamService.getOrganisation(),
+      displayPublic: false
     };
     actions.push({
       config,
@@ -260,13 +265,14 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public getConfigList() {
     this.persistenceService.list(ZONE_WUI_BUILDER, this.configPageSize, this.configPageNumber + 1, 'desc')
-      .pipe(map(data => {
-        if (data.data !== undefined) {
-          return [data.total, data.data.map(d => this.computeData(d))];
-        } else {
-          return [data.total, []];
-        }
-      }))
+      .pipe(
+        map(data => {
+          if (data.data !== undefined) {
+            return [data.total, data.data.map(d => this.computeData(d))];
+          } else {
+            return [data.total, []];
+          }
+        }))
       .subscribe({
         next: (result) => {
           this.configurationsLength = result[0] as number;

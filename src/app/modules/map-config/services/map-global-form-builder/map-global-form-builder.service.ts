@@ -230,7 +230,7 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
           resetDependantsOnChange: true,
           isCollectionSelect: true
         },
-        collectionService.getGroupCollectionItems()
+        collectionService.getGroupCollectionItemsWithCentroid()
       ),
       geographicalOperator: new SelectFormControl(
         geoOp,
