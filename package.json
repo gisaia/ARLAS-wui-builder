@@ -35,7 +35,7 @@
     "ajv": "8.8.2",
     "ajv-keywords": "5.1.0",
     "ang-jsoneditor": "1.10.5",
-    "arlas-wui-toolkit": "~26.0.8",
+    "arlas-wui-toolkit": "~26.0.11",
     "file-saver": "^2.0.2",
     "jsoneditor": "9.5.6",
     "moment": "^2.29.4",
@@ -92,9 +92,17 @@
     "angular-oauth2-oidc-jwks": {
       "jsrsasign": "^11.0.0"
     },
+    "braces": "3.0.3",
+    "socks": "2.7.3",
     "@angular-devkit/build-angular": {
       "webpack-dev-middleware": "~5.3.4"
     },
-    "dompurify": "3.1.6"
+    "http-proxy-middleware": "2.0.7",
+    "shpjs": "4.0.4",
+    "@mapbox/geojson-extent": {
+      "traverse": "0.6.8"
+    },
+    "dompurify": "2.5.6",
+    "mermaid": "10.9.3"
   }
 }
