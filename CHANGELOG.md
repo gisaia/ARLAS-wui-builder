@@ -1,6 +1,21 @@
 # Change Log
 
-## [v26.0.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v26.0.4) (2024-09-11)
+## [v26.0.5](https://github.com/gisaia/ARLAS-wui-builder/tree/v26.0.5) (2024-11-12)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v26.0.4...v26.0.5)
+
+**New stuff:**
+
+- Enhance proposed collections list [\#1006](https://github.com/gisaia/ARLAS-wui-builder/issues/1006)
+
+**Fixed bugs:**
+
+- Redundant calls to server to get the collections list [\#1005](https://github.com/gisaia/ARLAS-wui-builder/issues/1005)
+- Impossible to manage powerbars colors [\#996](https://github.com/gisaia/ARLAS-wui-builder/issues/996) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Special Caracter no longer works in datatable details 'calculation' field [\#994](https://github.com/gisaia/ARLAS-wui-builder/issues/994)
+- Some dashboards don't laod due to 'hidden-props'  [\#991](https://github.com/gisaia/ARLAS-wui-builder/issues/991)
+
+## [v26.0.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v26.0.4) (2024-09-16)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v26.0.1...v26.0.4)
 
