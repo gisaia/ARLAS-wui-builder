@@ -54,19 +54,19 @@
                         <tr class="cell">
                             <td class="slider-form-control">
                                 <div class="slider-container">
-                                    <mat-form-field class="slider-input" appearance="outline">
-                                    <input   matInput type="number"
-                                             [step]="preferredBucketsNumber.step"
-                                             [formControl]="preferredBucketsNumber"
-                                             [min]="preferredBucketsNumber.min"
-                                             [max]="preferredBucketsNumber.max"
-                                             [value]="preferredBucketsNumber.value"
-                                    >
+                                    <mat-form-field class="slider-input" appearance="outline" [subscriptSizing]="'dynamic'">
+                                        <input matInput type="number"
+                                            [step]="preferredBucketsNumber.step"
+                                            [formControl]="preferredBucketsNumber"
+                                            [min]="preferredBucketsNumber.min"
+                                            [max]="preferredBucketsNumber.max"
+                                            [(ngModel)]="preferredBucketsNumber.value"
+                                        >
                                     </mat-form-field>
                                     <mat-slider [min]="preferredBucketsNumber.min" [max]="preferredBucketsNumber.max" [step]="preferredBucketsNumber.step" #ngSlider>
-                                        <input matSliderThumb (input)="preferredBucketsNumber.ensureLessThan ? preferredBucketsNumber.checkLessThan({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value}.value) : null;
-                                            preferredBucketsNumber.ensureGeaterThan ? preferredBucketsNumber.checkGreaterThan($event.value) : null" #ngSliderThumb="matSliderThumb"
-                                            [(value)]="preferredBucketsNumber.value"/>
+                                        <input matSliderThumb (input)="preferredBucketsNumber.ensureLessThan ? preferredBucketsNumber.checkLessThan(ngSliderThumb.value) : null;
+                                            preferredBucketsNumber.ensureGeaterThan ? preferredBucketsNumber.checkGreaterThan(ngSliderThumb.value) : null" #ngSliderThumb="matSliderThumb"
+                                            [(ngModel)]="preferredBucketsNumber.value"/>
                                     </mat-slider>
                                 </div>
                             </td>

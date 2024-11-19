@@ -24,9 +24,9 @@
 }
 
 .content {
-  margin: $default-spacing;
+  margin: 0 $default-spacing;
   margin-top: 0;
-  height: calc(100vh - $top-menu-height - $default-spacing);
+  height: calc(100vh - $top-menu-height - ($default-spacing * 2));
 }
 
 ::ng-deep .top-menu {

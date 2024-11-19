@@ -39,28 +39,28 @@
       ::ng-deep.mdc-radio {
          display: none;
       }
-      &.mat-mdc-radio-checked{
+      &.mat-mdc-radio-checked {
          color: white;
          border-color: mat.get-color-from-palette($app-accent);
          svg path {
-            fill:white !important;
+            fill: white !important;
          }
       }
 
-      &:hover{
+      &:hover {
          background-color: rgba(mat.get-color-from-palette($app-accent), 0.2);
          border-color: mat.get-color-from-palette($app-accent);
          color: mat.get-color-from-palette($app-accent);
          svg path {
-            fill:$accentColor !important;
+            fill: mat.get-color-from-palette($app-accent) !important;
          }
       }
 
-      .icon{
+      .icon {
          vertical-align: top;
       }
 
-      ::ng-deep.mdc-form-field>label {
+      ::ng-deep.mdc-form-field > label {
          padding: 10px;
          display: flex;
          align-items: center;

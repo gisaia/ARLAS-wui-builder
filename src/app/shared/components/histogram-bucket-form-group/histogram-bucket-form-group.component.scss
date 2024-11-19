@@ -20,10 +20,10 @@
 .table {
     display: flex;
     justify-content: space-between;
+    gap: 10px;
     &-body-right {
         padding-left: 5px;
     }
-    gap: 10px;
 
     .cell {
         height: 60px;
@@ -58,6 +58,17 @@
             }
             .mat-mdc-form-field-subscript-wrapper {
                 display: none;
+            }
+        }
+    }
+}
+
+.slider-form-control {
+    .slider-container {
+        .slider-input {
+            .mat-mdc-form-field-infix {
+                padding-left: 5px !important;
+                padding-top: 12px !important;
             }
         }
     }

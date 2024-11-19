@@ -75,17 +75,17 @@ export class CollectionService {
     this.groupCollectionItems = groupCollectionItems;
   }
 
-  public getGroupCollectionItems( ): GroupCollectionItem {
+  public getGroupCollectionItems(): GroupCollectionItem {
     return this.groupCollectionItems;
   }
 
-  public getGroupCollectionItemsWithCentroid( ): GroupCollectionItem {
+  public getGroupCollectionItemsWithCentroid(): GroupCollectionItem {
     const filterFuncion = (c) => !!this.collectionParamsMap.get(c.name) && !!this.collectionParamsMap.get(c.name).params.centroid_path;
     const groupCollectionItem = {};
     Object.keys(this.groupCollectionItems).forEach(k => {
       groupCollectionItem[k] = this.groupCollectionItems[k].filter(filterFuncion);
     });
-    return groupCollectionItem as GroupCollectionItem ;
+    return groupCollectionItem as GroupCollectionItem;
   }
 
   public setCollectionsRef(crds: CollectionReferenceDescription[]): void {

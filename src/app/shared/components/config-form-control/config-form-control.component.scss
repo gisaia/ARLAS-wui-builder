@@ -48,6 +48,15 @@
   display: flex;
   align-items: center;
 
+  .slider-container {
+    .slider-input {
+      ::ng-deep .mat-mdc-form-field-infix {
+        padding-left: 5px !important;
+        padding-top: 12px !important;
+      }
+    }
+  }
+
   mat-hint {
     margin-left: 10px;
   }
@@ -178,7 +187,9 @@ mat-option {
 .box-search {
   margin: 8px;
   border-radius: 2px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 2px 2px 0 rgba(0, 0, 0, 0.16),
+    0 0 0 1px rgba(0, 0, 0, 0.08);
   transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
 }
@@ -262,11 +273,11 @@ mat-option {
 ::-webkit-scrollbar-thumb {
   background-color: #555;
 }
-.radio-button{
+.radio-button {
   padding: 5px;
 }
 
-.arlas-filter-expansion-panel{
+.arlas-filter-expansion-panel {
   box-shadow: none;
   ::ng-deep {
     .mat-expansion-panel-body {
@@ -275,26 +286,25 @@ mat-option {
   }
 }
 
-.arlas-filter-expansion-panel-header{
+.arlas-filter-expansion-panel-header {
   padding-left: 0px;
   font-size: smaller;
 }
-.arlas-filter-expansion-panel-header:hover{
+.arlas-filter-expansion-panel-header:hover {
   background: white !important;
-
 }
 
-.arlas-filter-expansion-panel .mat-expansion-panel-body{
+.arlas-filter-expansion-panel .mat-expansion-panel-body {
   padding: 0px !important;
 }
 
-.panel-chevron{
+.panel-chevron {
   display: flex;
 }
 .arlas-filter-expansion-panel-title {
   align-items: center;
 }
-.filter-chip{
+.filter-chip {
   cursor: pointer;
 }
 
