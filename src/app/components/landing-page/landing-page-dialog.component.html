@@ -5,21 +5,22 @@
     </ngx-spinner>
     <h2 mat-dialog-title>{{'New dashboard' | translate}}</h2>
     <mat-dialog-content class="new-config-content">
-        <div [formGroup]="this.mainFormService.startingConfig.getFg()">
+        <div [formGroup]="mainFormService.startingConfig.getFg()">
             <arlas-config-element [fullSize]="true">
                 <div form-fields class="server-url">
                     <mat-form-field>
                         <mat-label>{{'Server URL' | translate}}</mat-label>
                         <input matInput (keyup)="onKeyUp($event)"
-                            (change)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
+                            (change)="mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
                             formControlName="serverUrl" type="url">
                     </mat-form-field>
                     <button
-                        (click)="this.mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
-                        [disabled]="this.mainFormService.startingConfig.getFg().get('serverUrl').invalid"
+                        (click)="mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
+                        [disabled]="mainFormService.startingConfig.getFg().get('serverUrl').invalid"
                         mat-stroked-button color="accent">{{'Show collections' | translate}}</button>
-                    <mat-checkbox [disabled]="this.mainFormService.startingConfig.getFg().get('serverUrl').invalid" *ngIf="data.authentMode === 'iam'" (change)="toggleDisplayPublic($event)" class="include-public">{{'Include public collections' |
-                        translate}}</mat-checkbox>
+                    <mat-checkbox [disabled]="mainFormService.startingConfig.getFg().get('serverUrl').invalid"
+                            *ngIf="data.isAuthentActivated && data.authentMode === 'iam'" (change)="toggleDisplayPublic($event)" class="include-public">
+                        {{'Include public collections' | translate}}</mat-checkbox>
                 </div>
             </arlas-config-element>
             <arlas-config-element *ngIf="isServerReady">

@@ -53,7 +53,6 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   public displayedColumns: string[] = ['id', 'creation', 'detail'];
   public includePublicCollection = false;
 
-
   private subscription: Subscription;
   private urlSubscription: Subscription;
   private urlCollectionsSubscription: Subscription;
@@ -75,9 +74,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     private router: Router,
     private menu: MenuService,
     private landingPageService: LandingPageService
-  ) {
-
-  }
+  ) { }
 
   public ngOnInit(): void {
     if (!!this.data.configChoice) {
@@ -132,19 +129,20 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
           () => {
             this.urlCollectionsSubscription = this.collectionService.getCollectionsReferenceDescription().subscribe(
               cdrs => {
-                const collectionsItems = cdrs
+                const collectionsItems: Array<CollectionItem> = cdrs
                   .filter(c => {
-                    if (this.includePublicCollection) {
+                    // If there is no authentication, then we want all the collections
+                    if (this.includePublicCollection || !this.data?.isAuthentActivated) {
                       return true;
                     } else {
-                      return (c.params.organisations as any).public === false;
+                      return (c.params.organisations as any)?.public === false;
                     }
                   })
                   .map(c => ({
                     name: c.collection_name,
-                    isPublic: (c.params.organisations as any).public,
-                    sharedWith: c.params.organisations.shared,
-                    owner: c.params.organisations.owner
+                    isPublic: !this.data.isAuthentActivated ? true : (c.params.organisations as any)?.public === true,
+                    sharedWith: c.params.organisations?.shared,
+                    owner: c.params.organisations?.owner
                   }));
                 this.availablesCollections = this.collectionService.buildGroupCollectionItems(collectionsItems, this.data.currentOrga);
                 this.collectionService.setGroupCollectionItems(this.availablesCollections);
