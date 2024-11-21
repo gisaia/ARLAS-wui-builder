@@ -42,7 +42,7 @@ import {
   ArlasStartupService, ArlasWalkthroughService, AuthentificationService, ConfigMenuModule, configUpdaterFactory,
   CONFIG_UPDATER, FETCH_OPTIONS, getOptionsFactory,
   iamServiceFactory, PaginatorI18n, UserInfosComponent,
-  GET_OPTIONS, ArlasToolkitSharedModule, ArlasSettingsService, ArlasConfigService, ArlasCollectionService,
+  GET_OPTIONS, ArlasToolkitSharedModule, ArlasSettingsService
 } from 'arlas-wui-toolkit';
 import { environment } from 'environments/environment';
 import { LoggerModule } from 'ngx-logger';
