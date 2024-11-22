@@ -60,6 +60,7 @@ import { Observable, catchError, map, of, tap } from 'rxjs';
 import { DataWithLinks } from 'arlas-persistence-api';
 import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 
 @Injectable({
   providedIn: 'root'
@@ -351,8 +352,8 @@ export class MainFormManagerService {
           // Open a modal to explain that a dashboard with this name already exists
           const dialogRef = this.dialog.open(InputModalComponent, {
             data: {
-              title: 'Invalid dashboard name',
-              message: 'Another dashboad already exists with the same name, please choose another one',
+              title: marker('Invalid dashboard name'),
+              message: marker('Another dashboad already exists with the same name, please choose another one'),
               initialValue: this.mainFormService.configurationName,
               noCancel: true
             }

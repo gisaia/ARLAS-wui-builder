@@ -26,6 +26,7 @@ export interface DialogData {
   initialValue?: string;
   noCancel?: boolean;
   authentMode?: string;
+  isAuthentActivated?: string;
   currentOrga?: string;
 }
 

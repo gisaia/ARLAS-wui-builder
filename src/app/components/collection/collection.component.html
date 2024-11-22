@@ -9,15 +9,15 @@
             </div>
             <div class="params">
                 <div class="value"><span class="label">{{'Id path' | translate}} :</span>
-                    {{def.collection.params.id_path }}</div>
+                    {{ def.collection.params.id_path }}</div>
                 <div class="value"><span class="label">{{'Centroid path' | translate}} :</span>
-                    {{def.collection.params.centroid_path }}</div>
-                <div class="value"><span class="label">{{'Geometry path' | translate}} :
-                    </span>{{def.collection.params.geometry_path}}</div>
-                <div class="value"><span class="label">{{'Timestamp path' | translate}} :
-                    </span>{{def.collection.params.timestamp_path}}</div>
-                <div class="value"><span class="label">{{'Index name' | translate}} :
-                    </span>{{def.collection.params.index_name}}</div>
+                    {{ def.collection.params.centroid_path }}</div>
+                <div class="value"><span class="label">{{'Geometry path' | translate}} :</span>
+                    {{ def.collection.params.geometry_path }}</div>
+                <div class="value"><span class="label">{{'Timestamp path' | translate}} :</span>
+                    {{ def.collection.params.timestamp_path }}</div>
+                <div class="value"><span class="label">{{'Index name' | translate}} :</span>
+                    {{ def.collection.params.index_name }}</div>
                 <div class="value" *ngIf="def.collection.params.taggable_fields"><span class="label">{{'Taggable fields' | translate}} :
                     </span>{{def.collection.params.taggable_fields}}</div>
 

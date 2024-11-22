@@ -142,8 +142,8 @@ export class TabsComponent implements OnDestroy {
           if (otherTabNames.indexOf(newTabName) >= 0) {
             const dialogRef = this.dialog.open(InputModalComponent, {
               data: {
-                title: 'Tab name',
-                message: 'Another tab already exists with the same name, please choose another one',
+                title: marker('Tab name'),
+                message: marker('Another tab already exists with the same name, please choose another one'),
                 initialValue: newTabName,
                 noCancel: true
               }
@@ -179,8 +179,8 @@ export class TabsComponent implements OnDestroy {
       if (otherTabNames.indexOf(newTabName) >= 0) {
         const dialogRef = this.dialog.open(InputModalComponent, {
           data: {
-            title: 'Tab name',
-            message: 'Another tab already exists with the same name, please choose another one',
+            title: marker('Tab name'),
+            message: marker('Another tab already exists with the same name, please choose another one'),
             initialValue: newTabName,
             noCancel: true
           }

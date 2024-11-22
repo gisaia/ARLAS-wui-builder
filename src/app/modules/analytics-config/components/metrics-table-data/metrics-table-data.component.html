@@ -45,10 +45,10 @@
                                 (click)="setSort(c, c.get('sort').value,subTable.controls.collection.value,subTable.controls.aggregationField.value, c.get('metricCollectFunction').value, c.get('metricCollectField').value )"
                                 [matTooltip]="'Not sorted' | translate">sync_alt</mat-icon>
                             <span
-                                *ngIf="!c.get('metricCollectField').value">{{c.get("metricCollectFunction").value}}</span>
+                                *ngIf="!c.get('metricCollectField').value">{{c.get("metricCollectFunction").value | translate}}</span>
                             <span *ngIf="c.get('metricCollectField').value">
-                                {{ 'metric of field' | translate : {metric: c.get("metricCollectFunction").value, field:
-                                c.get("metricCollectField").value} }}</span>
+                                {{ 'metric of field' | translate : {metric: c.get("metricCollectFunction").value | translate, field:
+                                c.get("metricCollectField").value | getFieldDisplayName | translate} }}</span>
                         </div>
                     </div>
                 </div>

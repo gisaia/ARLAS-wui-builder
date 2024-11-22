@@ -41,6 +41,8 @@ export class LandingPageService implements OnDestroy {
   public startEventSource: Subject<boolean> = new Subject<boolean>();
   public startEvent$: Observable<boolean> = this.startEventSource.asObservable();
 
+  private isAuthentActivated: boolean;
+
   private _onDestroy$ = new Subject<boolean>();
 
   public constructor(
@@ -54,7 +56,9 @@ export class LandingPageService implements OnDestroy {
     private arlasSettingsService: ArlasSettingsService,
     private mainFormManager: MainFormManagerService,
     public mainFormService: MainFormService,
-    private arlasIamService: ArlasIamService) {
+    private arlasIamService: ArlasIamService
+  ) {
+    this.isAuthentActivated = !!this.arlasSettingsService.getAuthentSettings()?.use_authent === true;
   }
 
   public ngOnDestroy() {
@@ -76,9 +80,9 @@ export class LandingPageService implements OnDestroy {
           const collectionsItems = cdrs
             .map(c => ({
               name: c.collection_name,
-              isPublic: (c.params.organisations as any).public,
-              sharedWith: c.params.organisations.shared,
-              owner: c.params.organisations.owner
+              isPublic: !this.isAuthentActivated ? true : (c.params.organisations as any)?.public === true,
+              sharedWith: c.params.organisations?.shared,
+              owner: c.params.organisations?.owner
             }));
           const groupCollectionItems = this.collectionService.buildGroupCollectionItems(collectionsItems, this.arlasIamService.getOrganisation());
           this.collectionService.setGroupCollectionItems(groupCollectionItems);

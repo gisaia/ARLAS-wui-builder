@@ -282,7 +282,6 @@ export class CollectionService {
     ).finally(() => this.spinner.hide()));
   }
 
-  // eslint-disable-next-line max-len
   public buildGroupCollectionItems(items: CollectionItem[], currentOrg: string): GroupCollectionItem {
     const groupCollection = items.reduce((acc, item) => {
       if (!!currentOrg && currentOrg.length > 0) {

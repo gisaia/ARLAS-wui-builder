@@ -186,7 +186,8 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     if (configChoice) {
       this.dialogRef = this.dialog.open(LandingPageDialogComponent, {
         disableClose: true, data:
-          { message: this.confId, configChoice, authentMode: this.authentMode, currentOrga: this.currentOrga }
+          { message: this.confId, configChoice, authentMode: this.authentMode,
+            currentOrga: this.currentOrga, isAuthentActivated: this.isAuthentActivated }
       });
     }
   }
