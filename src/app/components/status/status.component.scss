@@ -19,7 +19,6 @@
 @import "variables.scss";
 
 .status-container {
-
     .inner {
         color: #000;
         font-size: $default-font-size;
@@ -29,14 +28,14 @@
     }
 
     .edit-name {
-        display: inline-block;
+        display: flex;
         box-shadow: inset black 0px 0px 2px 0px;
         background-color: white;
-      }
+        &__input {
+            height: 24px;
+        }
+    }
 
-      .edit-name-button{
-
-      }
-
+    .edit-name-button {
+    }
 }
-

@@ -62,16 +62,24 @@
 .mat-mdc-tab-link {
   text-decoration: none;
 }
+.mat-mdc-tab-link:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label,
+.mat-mdc-tab:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.mat-mdc-tab-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
 
 // Change style of table back to how they were
 .mdc-data-table__header-cell {
   font-size: 12px;
   font-weight: normal;
-  color: #0000008A;
+  color: #0000008a;
 }
 .mdc-data-table__cell {
   font-size: 14px;
-  color: #000000DE;
+  color: #000000de;
 }
 th.mat-mdc-header-cell:first-of-type,
 td.mat-mdc-cell:first-of-type {
@@ -88,7 +96,7 @@ td.mat-mdc-cell:first-of-type {
   --mdc-checkbox-state-layer-size: 18px;
 }
 
-.mdc-form-field>label {
+.mdc-form-field > label {
   margin-left: 10px !important;
   font-size: 14px;
 }
@@ -101,7 +109,7 @@ mat-nav-list .mat-mdc-list-item {
   padding: 0;
 }
 
-.mat-mdc-outlined-button>.mat-icon {
+.mat-mdc-outlined-button > .mat-icon {
   margin: 0 !important;
 }
 

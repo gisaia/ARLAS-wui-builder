@@ -131,14 +131,7 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClientModule,
     MatPaginatorModule,
     MatMenuModule,
-    TranslateModule.forChild({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient]
-      },
-      isolate: false
-    }),
+    TranslateModule,
     GetCollectionDisplayModule
   ],
   exports: [

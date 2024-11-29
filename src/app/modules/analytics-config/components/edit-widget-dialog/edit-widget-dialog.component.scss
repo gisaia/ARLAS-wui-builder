@@ -16,9 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+:host {
+    .mdc-dialog__content,
+    .mdc-dialog__title {
+        padding: 0;
+    }
+}
+
 .mat-mdc-dialog-actions {
     display: flex;
     justify-content: space-evenly;
+
+    .mdc-dialog__content {
+    }
 }
 
 .mat-mdc-dialog-content {
