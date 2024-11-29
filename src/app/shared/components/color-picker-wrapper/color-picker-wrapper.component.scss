@@ -24,4 +24,8 @@ input.ngx-color-picker {
 
 ::ng-deep .color-picker {
     position: fixed !important;
+    top: 25vh !important;
+    .arrow {
+        display: none;
+    }
 }
