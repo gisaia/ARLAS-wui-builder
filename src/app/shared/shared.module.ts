@@ -19,7 +19,7 @@
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { Injector, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -31,6 +31,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -49,11 +50,10 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { FiltersComponent } from '@map-config/components/filters/filters.component';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { StartupService } from '@services/startup/startup.service';
 import { CollectionsUnitsComponent } from '@shared-components/collections-units/collections-units.component';
-
+import { GetCollectionDisplayModule } from 'arlas-web-components';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { ColorPickerWrapperComponent } from './components/color-picker-wrapper/color-picker-wrapper.component';
@@ -67,16 +67,10 @@ import { InputModalComponent } from './components/input-modal/input-modal.compon
 import { AlertOnChangeDirective } from './directives/alert-on-change/alert-on-change.directive';
 import { AutoFocusDirective } from './directives/auto-focus/auto-focus.directive';
 import { ResetOnChangeDirective } from './directives/reset-on-change/reset-on-change.directive';
+import { GroupCollectionPipe } from './pipes/group-collection.pipe';
 import { HistogramBucketPipe } from './pipes/histogram-buckets/histogram-buckets.pipe';
 import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
-import { GroupCollectionPipe } from './pipes/group-collection.pipe';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { GetCollectionDisplayModule } from 'arlas-web-components';
 
-
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
-}
 
 @NgModule({
   declarations: [

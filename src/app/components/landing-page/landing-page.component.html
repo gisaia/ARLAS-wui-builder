@@ -4,7 +4,7 @@
     <p style="color: white"> {{'Importing dashboard...' | translate }} </p>
 </ngx-spinner>
 
-<h2 mat-dialog-title *ngIf="persistenceService.isAvailable" class="title">
+<h2 *ngIf="persistenceService.isAvailable" class="landing-title">
     <div>{{'Available dashboards' | translate}}</div>
     <mat-form-field *ngIf="isAuthentActivated && orgs.length > 0" appearance="outline" class="organisations">
         <mat-label>{{'Organisation' | translate}}</mat-label>
