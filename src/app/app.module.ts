@@ -101,6 +101,7 @@ export class CustomTranslateLoader implements TranslateLoader {
     });
   }
 }
+
 @NgModule({
   declarations: [
     AppComponent,

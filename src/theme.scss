@@ -30,5 +30,4 @@
 // hue. Available color palettes: https://material.io/design/color/
 
 
-// TODO: refine to avoid useless imports ?
 @include mat.all-component-themes($app-theme);
