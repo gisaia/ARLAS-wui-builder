@@ -16,13 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-.mat-dialog-actions {
-    display: flex;
-    justify-content: space-evenly;
+
+:host {
+    .mdc-dialog__content,
+    .mdc-dialog__title {
+        padding: 0;
+    }
 }
 
-.mat-dialog-content {
-    ::ng-deep .mat-tab-body-content {
+.mat-mdc-dialog-actions {
+    display: flex;
+    justify-content: space-evenly;
+
+    .mdc-dialog__content {
+    }
+}
+
+.mat-mdc-dialog-content {
+    ::ng-deep .mat-mdc-tab-body-content {
         overflow: hidden;
     }
 }

@@ -17,7 +17,9 @@
  * under the License.
  */
 
+@use "@angular/material" as mat;
 @import "variables.scss";
+@import "styles/theme-variables.scss";
 
 .menu_container {
   height: 100%;
@@ -25,18 +27,9 @@
   flex-direction: column;
   justify-content: space-between;
   width: $left-menu-width;
-  ::ng-deep .mat-list-item-content {
-    padding: 0 5px !important;
-  }
 
   .active-menu{
-    background-color: rgba($accentColor, 0.2);
-  }
-
-  .toggler {
-    display: flex;
-    justify-content: flex-end;
-    padding: 15px;
+    background-color: rgba(mat.get-color-from-palette($app-accent), 0.2);
   }
 
   .action-list {

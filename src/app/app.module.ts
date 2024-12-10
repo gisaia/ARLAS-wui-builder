@@ -22,7 +22,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LandingPageComponent,  } from '@components/landing-page/landing-page.component';
+import { LandingPageComponent, } from '@components/landing-page/landing-page.component';
 import { LandingPageDialogComponent } from '@components/landing-page/landing-page-dialog.component';
 import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
 import { LookAndFeelConfigModule } from '@look-and-feel-config/look-and-feel-config.module';
@@ -41,11 +41,11 @@ import {
   ArlasIamService,
   ArlasStartupService, ArlasWalkthroughService, AuthentificationService, ConfigMenuModule, configUpdaterFactory,
   CONFIG_UPDATER, FETCH_OPTIONS, getOptionsFactory,
-  iamServiceFactory, PaginatorI18n, UserInfosComponent,
+  iamServiceFactory, UserInfosComponent, PaginatorI18n,
   GET_OPTIONS, ArlasToolkitSharedModule, ArlasSettingsService
 } from 'arlas-wui-toolkit';
 import { environment } from 'environments/environment';
-import { LoggerModule } from 'ngx-logger';
+import { LoggerModule, TOKEN_LOGGER_CONFIG } from 'ngx-logger';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { AppRoutingModule } from './app-routing.module';
@@ -101,6 +101,7 @@ export class CustomTranslateLoader implements TranslateLoader {
     });
   }
 }
+
 @NgModule({
   declarations: [
     AppComponent,

@@ -19,6 +19,7 @@
 .details-wrapper {
     mat-card {
         margin: 10px;
+        padding: 10px;
 
         .detail-controls {
             display: flex;
@@ -32,6 +33,7 @@
                 display: flex;
                 justify-content: space-evenly;
                 align-items: center;
+                gap: 10px;
 
                 .field-name-delete {
                     display: flex;
@@ -50,7 +52,7 @@
                 width: 350px;
             }
 
-            ::ng-deep.textarea-form-control mat-form-field{
+            ::ng-deep.textarea-form-control mat-form-field {
                 width: 350px !important;
             }
         }

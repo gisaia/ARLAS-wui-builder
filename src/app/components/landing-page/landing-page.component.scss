@@ -17,58 +17,28 @@
  * under the License.
  */
 @import "variables.scss";
+@import "theme.scss";
 
-$accent-color: mat-color($accent-palette);
-$primary-color: mat-color($primary-palette);
-
-.collection {
-   .mat-form-field {
-      width: 100%;
-   }
-}
-
-.server-url {
-   .mat-form-field {
-      width: 100%;
-   }
-}
-
-.import-content {
-   .import-valid {
-      padding: 20px 0px;
-      color: green;
-   }
-
-   .upload-files {
-      display: flex;
-   }
-
-   .upload-single-files {
-      margin: 15px;
-
-      ::ng-deep .mat-button-wrapper {
-         display: flex;
-
-         .upload-check {
-            display: flex;
-            align-items: center;
-            margin-left: 7px;
-         }
-      }
-   }
-}
-
-.title {
+.landing-title {
    display: flex;
    justify-content: space-between;
    align-items: center;
+   font: 500 20px / 32px Roboto, Helvetica Neue, sans-serif;
+
    .organisations {
       min-width: 200px;
       border-radius: 5px;
       font-weight: 400;
       font-size: 16px;
-      ::ng-deep .mat-form-field-wrapper {
-         padding: 0 !important;
+
+      ::ng-deep.mat-mdc-select-value {
+         padding-left: 10px;
+      }
+      ::ng-deep.mat-mdc-select-arrow-wrapper {
+         padding-right: 10px;
+      }
+      ::ng-deep.mat-mdc-form-field-subscript-wrapper {
+         display: none;
       }
    }
 }

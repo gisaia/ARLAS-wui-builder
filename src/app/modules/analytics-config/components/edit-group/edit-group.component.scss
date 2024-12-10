@@ -17,7 +17,7 @@
  * under the License.
  */
 @import "variables.scss";
-$primary-color: mat-color($primary-palette);
+@import "theme.scss";
 
 .group-wrapper {
     display: flex;
@@ -56,6 +56,8 @@ $primary-color: mat-color($primary-palette);
 
                 .icon-picker-input {
                     width: 0;
+                    border-width: 0;
+                    padding: 0;
                 }
 
                 ::ng-deep .icon-picker {
@@ -65,20 +67,16 @@ $primary-color: mat-color($primary-palette);
                             padding: 5px;
                         }
                     }
+
+                    .ip-button-icon {
+                        background-color: white;
+                        border-width: 1px;
+                        border-radius: 4px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
                 }
-            }
-
-            ::ng-deep .mat-button-toggle-label-content {
-                line-height: 30px !important;
-                padding: 0 4px !important;
-
-                mat-icon {
-                    padding-bottom: 1px;
-                }
-            }
-
-            ::ng-deep .mat-button-toggle-group {
-                border-radius: 0px;
             }
         }
 

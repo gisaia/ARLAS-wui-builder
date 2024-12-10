@@ -17,7 +17,7 @@
  * under the License.
  */
 import {
-  Component, OnInit, Input, OnDestroy, ViewChild, ViewChildren, ViewEncapsulation, QueryList, ChangeDetectorRef, Output
+  Component, OnInit, Input, OnDestroy, ViewChild, ViewChildren, ViewEncapsulation, QueryList, ChangeDetectorRef, Output, forwardRef
 } from '@angular/core';
 import { ConfigFormGroup, ConfigFormControl, ConfigFormGroupArray } from '@shared-models/config-form';
 import { Subscription, Subject } from 'rxjs';
@@ -52,7 +52,7 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
   @Input() public isSubGroup: boolean;
   @Input() public defaultKey: string;
   @ViewChild(MatStepper, { static: false }) private stepper: MatStepper;
-  @ViewChildren(ConfigFormGroupComponent) private subConfigFormGroups: QueryList<ConfigFormGroupComponent>;
+  @ViewChildren(forwardRef(() => ConfigFormGroupComponent)) private subConfigFormGroups: QueryList<ConfigFormGroupComponent>;
   @Output() public updateSyncOptions: Subject<{ prefix: string; control: FormControl; }> = new Subject();
 
 

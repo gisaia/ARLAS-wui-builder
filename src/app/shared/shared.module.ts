@@ -19,7 +19,7 @@
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { Injector, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -50,8 +50,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { FiltersComponent } from '@map-config/components/filters/filters.component';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { StartupService } from '@services/startup/startup.service';
 import { CollectionsUnitsComponent } from '@shared-components/collections-units/collections-units.component';
 import { GetCollectionDisplayModule } from 'arlas-web-components';
@@ -68,14 +67,10 @@ import { InputModalComponent } from './components/input-modal/input-modal.compon
 import { AlertOnChangeDirective } from './directives/alert-on-change/alert-on-change.directive';
 import { AutoFocusDirective } from './directives/auto-focus/auto-focus.directive';
 import { ResetOnChangeDirective } from './directives/reset-on-change/reset-on-change.directive';
+import { GroupCollectionPipe } from './pipes/group-collection.pipe';
 import { HistogramBucketPipe } from './pipes/histogram-buckets/histogram-buckets.pipe';
 import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
-import { GroupCollectionPipe } from './pipes/group-collection.pipe';
 
-
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
-}
 
 @NgModule({
   declarations: [
@@ -130,14 +125,7 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClientModule,
     MatPaginatorModule,
     MatMenuModule,
-    TranslateModule.forChild({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient]
-      },
-      isolate: false
-    }),
+    TranslateModule,
     GetCollectionDisplayModule
   ],
   exports: [

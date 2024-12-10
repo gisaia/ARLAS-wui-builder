@@ -17,15 +17,16 @@
  * under the License.
  */
 
-@import '../variables.scss';
+@import "../variables.scss";
 
 .container {
   height: calc(100vh - $top-menu-height);
 }
 
 .content {
-  margin: 10px;
-  height: calc(100vh - $top-menu-height - (6 * $sm-margin));
+  margin: 0 $default-spacing;
+  margin-top: 0;
+  height: calc(100vh - $top-menu-height - ($default-spacing * 2));
 }
 
 ::ng-deep .top-menu {
@@ -56,6 +57,7 @@
   display: flex;
 }
 
-::ng-deep.mat-tooltip {
+::ng-deep.mat-mdc-tooltip {
   margin: 5px !important;
+  font-size: 12px;
 }

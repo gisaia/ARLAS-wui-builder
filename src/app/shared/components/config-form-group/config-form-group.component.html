@@ -57,10 +57,10 @@
                                 <arlas-config-form-control [control]="formControl" [parentFormGroup]="parentConfigFormGroup" [defaultKey]="defaultKey" (updateSyncOptions)="updateSyncOptions.next({prefix: $event, control: formControl})">
                                 </arlas-config-form-control>
                                 <div *ngFor="let child of formControl.childs()">
-                                    <div *ngIf="child.enabled">
+                                    <ng-container *ngIf="child.enabled">
                                         <arlas-config-form-control [control]="child" [parentFormGroup]="parentConfigFormGroup" [defaultKey]="defaultKey" (updateSyncOptions)="updateSyncOptions.next({prefix: $event, control: child})">
                                         </arlas-config-form-control>
-                                    </div>
+                                    </ng-container>
                                 </div>
                             </div>
                             <div description *ngIf="control.description">

@@ -20,13 +20,25 @@
 .table {
     display: flex;
     justify-content: space-between;
+    gap: 10px;
     &-body-right {
         padding-left: 5px;
     }
+
     .cell {
-        height: 55px;
+        height: 60px;
         display: flex;
         align-items: center;
+
+        .buckets {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            mat-hint {
+                margin-left: 10px;
+            }
+        }
 
         .interval {
             display: flex;
@@ -37,6 +49,26 @@
             }
             .unit {
                 width: 80px;
+            }
+
+            // Align form field content with text
+            .mat-mdc-form-field-infix {
+                padding-top: 0;
+                min-height: unset !important;
+            }
+            .mat-mdc-form-field-subscript-wrapper {
+                display: none;
+            }
+        }
+    }
+}
+
+.slider-form-control {
+    .slider-container {
+        .slider-input {
+            .mat-mdc-form-field-infix {
+                padding-left: 5px !important;
+                padding-top: 12px !important;
             }
         }
     }

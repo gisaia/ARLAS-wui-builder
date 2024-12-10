@@ -70,4 +70,7 @@ mat-error {
 .filter-icon {
   vertical-align: bottom;
   color: #999999;
+  padding: 0;
+  // Align matPrefix with input text
+  padding-top: 6px;
 }

@@ -1,7 +1,7 @@
 <div class="details-wrapper" cdkDropList (cdkDropListDropped)="drop($event)">
-    <mat-card *ngFor="let detail of details; let di = index" cdkDrag>
+    <mat-card appearance="outlined" *ngFor="let detail of details; let di = index" cdkDrag>
         <div *cdkDragPreview>
-            <mat-card>
+            <mat-card appearance="outlined">
                 {{detail.controls.name.value}}
             </mat-card>
         </div>

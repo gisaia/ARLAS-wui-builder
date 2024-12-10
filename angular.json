@@ -48,6 +48,7 @@
               }
             ],
             "styles": [
+              "src/theme.scss",
               "src/styles.scss",
               "node_modules/mapbox-gl/dist/mapbox-gl.css",
               "node_modules/jsoneditor/dist/jsoneditor.min.css"
@@ -104,8 +105,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "9mb"
+                  "maximumWarning": "9mb",
+                  "maximumError": "10mb"
                 }
               ]
             }
@@ -158,6 +159,7 @@
               }
             ],
             "styles": [
+              "src/theme.scss",
               "src/styles.scss"
             ],
             "scripts": []

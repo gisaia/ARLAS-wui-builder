@@ -16,18 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@use "@angular/material" as mat;
-@import "styles/theme-variables.scss";
-// Plus imports for other components in your app.
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
-@include mat.core();
-
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-
-
-@include mat.all-component-themes($app-theme);
+export enum DateFormats {
+  English = '%b %d %Y  %H:%M',
+  French = '%d %b %Y  %H:%M'
+}

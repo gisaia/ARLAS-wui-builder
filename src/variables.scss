@@ -16,19 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import "~@angular/material/theming";
-
-$primary-palette: mat-palette($mat-blue, 800);
-$accent-palette: mat-palette($mat-blue, 800);
-$warn-palette: mat-palette($mat-red);
-
-$config-element-description-background: mat-color($mat-grey, 50);
-$config-element-description-border-color: transparentize(mat-color($mat-blue, A700), 0.6);
-$config-element-description-text-color: transparentize(mat-color($mat-blue-grey, A700), 0.4);
-$error-color: mat-color($warn-palette);
-
-$primaryColor: mat-color($primary-palette);
-$accentColor: mat-color($accent-palette);
 
 $arlasColor: #f63366;
 
@@ -40,10 +27,19 @@ $arlasColor: #f63366;
    padding-bottom: 3px;
 
 }
+
+$default-spacing: 10px;
+$sm-margin: calc($default-spacing / 2);
+
 $top-menu-height: 40px;
 $left-menu-width: 48px;
 $menu-border: solid 1px rgba(0, 0, 0, 0.12);
 $default-font-size: 20px;
-$sm-margin: 5px;
 $text-input-disabled: rgba(26, 27, 31, .38);
 $input-background-disabled: rgba(26, 27, 31, .04);
+
+$config-element-description-border-color: rgba(41, 98, 255, .4);
+$config-element-description-background: #fafafa;
+$config-element-description-text-color: #455a6499;
+
+$error-color: #f44336;
