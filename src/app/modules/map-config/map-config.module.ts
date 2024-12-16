@@ -49,8 +49,7 @@ import { MapConfigComponent } from './map-config.component';
     PreviewComponent,
     VisualisationsComponent,
     BasemapsComponent,
-    ImportLayerDialogComponent,
-    ConfirmModalComponent
+    ImportLayerDialogComponent
   ],
   imports: [
     MapConfigRoutingModule,
@@ -63,7 +62,6 @@ import { MapConfigComponent } from './map-config.component';
   providers: [
     ConfirmExitGuard,
     { provide: MAT_DIALOG_DATA, useValue: {} },
-
   ]
 })
 export class MapConfigModule {}

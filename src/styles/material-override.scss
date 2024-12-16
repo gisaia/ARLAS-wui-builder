@@ -139,3 +139,7 @@ mat-button-toggle-group .mat-button-toggle-appearance-standard .mat-button-toggl
 mat-select .mat-mdc-select-value {
   overflow: unset;
 }
+
+.mat-mdc-optgroup-label {
+  --mdc-list-list-item-label-text-color: grey;
+}

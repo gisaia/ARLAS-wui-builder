@@ -69,7 +69,6 @@ export class StartupService {
     private arlasCss: ArlasCollaborativesearchService,
     private arlasStartupService: ArlasStartupService,
     private injector: Injector,
-    private http: HttpClient,
     private translateService: TranslateService) { }
 
   public init(): Promise<string> {

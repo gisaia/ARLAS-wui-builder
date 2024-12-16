@@ -60,7 +60,7 @@ import { Observable, catchError, map, of, tap } from 'rxjs';
 import { DataWithLinks } from 'arlas-persistence-api';
 import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 
 @Injectable({
   providedIn: 'root'

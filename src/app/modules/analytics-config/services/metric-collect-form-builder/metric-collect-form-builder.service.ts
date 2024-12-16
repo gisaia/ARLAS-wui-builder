@@ -17,7 +17,7 @@
  * under the License.
  */
 import { Injectable } from '@angular/core';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
 import { NUMERIC_OR_DATE_TYPES, titleCase } from '@services/collection-service/tools';

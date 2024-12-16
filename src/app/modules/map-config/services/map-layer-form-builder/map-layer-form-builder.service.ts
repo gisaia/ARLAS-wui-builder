@@ -18,7 +18,7 @@
  */
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import tilebelt from '@mapbox/tilebelt';
 import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';

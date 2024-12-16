@@ -24,7 +24,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { camelize } from '@utils/tools';
 import { Subscription } from 'rxjs';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 
 
 export interface Layer {

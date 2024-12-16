@@ -18,7 +18,7 @@
  */
 
 import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { ConfigFormGroupComponent } from '../config-form-group/config-form-group.component';
 @Component({
   // tslint:disable-next-line: component-selector

@@ -17,23 +17,22 @@
  * under the License.
  */
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import {
   Aggregation, AggregationResponse, AggregationsRequest, CollectionReferenceDescription, CollectionReferenceDescriptionProperty,
   ComputationRequest, Filter, Hits
 } from 'arlas-api';
 import { projType } from 'arlas-web-core';
-import { ArlasCollaborativesearchService, ArlasIamService } from 'arlas-wui-toolkit';
-import { NGXLogger } from 'ngx-logger';
+import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
+import moment from 'moment';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { from, Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { CollectionField, CollectionItem, GroupCollectionItem } from './models';
-import { TranslateService } from '@ngx-translate/core';
-import * as moment from 'moment';
+
 export import FIELD_TYPES = CollectionReferenceDescriptionProperty.TypeEnum;
 export import METRIC_TYPES = ComputationRequest.MetricEnum;
-
 
 @Injectable({
   providedIn: 'root'

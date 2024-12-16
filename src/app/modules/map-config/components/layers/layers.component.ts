@@ -44,7 +44,7 @@ import { ArlasCollaborativesearchService, ArlasConfigService, ArlasSettingsServi
 import { Subscription } from 'rxjs';
 import { PreviewComponent } from '../preview/preview.component';
 import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 
 export interface Layer {
   id: string;

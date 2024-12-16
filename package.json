@@ -27,21 +27,21 @@
     "@angular/platform-browser": "^18.2.13",
     "@angular/platform-browser-dynamic": "^18.2.13",
     "@angular/router": "^18.2.13",
-    "@gisaia-team/ngx-icon-picker": "13.1.0",
+    "@gisaia-team/ngx-icon-picker": "18.0.1",
     "@mapbox/tilebelt": "^1.0.2",
-    "@ngx-translate/core": "14.0.0",
-    "@ngx-translate/http-loader": "7.0.0",
+    "@ngx-translate/core": "^15.0.0",
+    "@ngx-translate/http-loader": "^8.0.0",
     "@types/file-saver": "^2.0.1",
     "ajv": "8.8.2",
     "ajv-keywords": "5.1.0",
     "ang-jsoneditor": "3.1.0",
-    "arlas-wui-toolkit": "27.0.0-rc.1",
+    "arlas-wui-toolkit": "27.0.0-beta.7",
     "file-saver": "^2.0.2",
     "jsoneditor": "9.10.2",
     "moment": "^2.29.4",
-    "ngx-color-picker": "14.0.0",
-    "ngx-logger": "5.0.12",
-    "ngx-spinner": "^15.0.1",
+    "ngx-color-picker": "^17.0.0",
+    "ngx-logger": "^5.0.12",
+    "ngx-spinner": "^17.0.0",
     "patch-package": "^6.4.7",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
@@ -59,8 +59,8 @@
     "@angular/compiler-cli": "^18.2.13",
     "@angular/language-service": "^18.2.13",
     "@babel/runtime": "7.12.5",
-    "@biesbjerg/ngx-translate-extract-marker": "^1.0.0",
-    "@vendure/ngx-translate-extract": "8.3.0",
+    "@colsen1991/ngx-translate-extract-marker": "^3.0.1",
+    "@vendure/ngx-translate-extract": "^9.3.0",
     "@ngneat/spectator": "~9.0.0",
     "@types/jasmine": "~3.10.0",
     "@types/jasminewd2": "~2.0.2",
@@ -76,8 +76,8 @@
     "karma-coverage-istanbul-reporter": "~3.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
-    "license-check-and-add": "^3.0.4",
-    "ng-mocks": "~14.10.1",
+    "license-check-and-add": "^4.0.5",
+    "ng-mocks": "~14.13.1",
     "ng-packagr": "^18.2.1",
     "node": "^18.19.1",
     "patch-package": "^6.4.7",
@@ -90,20 +90,5 @@
     "@babel/preset-env": "7.5.5"
   },
   "overrides": {
-    "angular-oauth2-oidc-jwks": {
-      "jsrsasign": "^11.0.0"
-    },
-    "braces": "3.0.3",
-    "socks": "2.7.3",
-    "@angular-devkit/build-angular": {
-      "webpack-dev-middleware": "~5.3.4"
-    },
-    "http-proxy-middleware": "2.0.7",
-    "shpjs": "4.0.4",
-    "@mapbox/geojson-extent": {
-      "traverse": "0.6.8"
-    },
-    "dompurify": "2.5.6",
-    "mermaid": "10.9.3"
   }
 }

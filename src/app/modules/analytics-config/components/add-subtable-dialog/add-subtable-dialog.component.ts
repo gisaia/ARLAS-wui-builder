@@ -25,7 +25,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
 import { NUMERIC_OR_DATE_TYPES } from '@services/collection-service/tools';

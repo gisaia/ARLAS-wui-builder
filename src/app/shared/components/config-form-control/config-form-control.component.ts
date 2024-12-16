@@ -23,7 +23,7 @@ import {
   Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionItem } from '@services/collection-service/models';
 import {

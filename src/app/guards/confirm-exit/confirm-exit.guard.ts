@@ -21,7 +21,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRouteSnapshot, CanDeactivate, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { Observable } from 'rxjs';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 
 /**
  * To be implements by components that need a confirmation before changing location

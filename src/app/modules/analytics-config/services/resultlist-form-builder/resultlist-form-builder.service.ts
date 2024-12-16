@@ -20,7 +20,7 @@ import { ResultlistDataComponent } from '@analytics-config/components/resultlist
 import { Injectable } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
 import { CollectionService } from '@services/collection-service/collection.service';

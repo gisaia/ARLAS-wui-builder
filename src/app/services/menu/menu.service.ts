@@ -17,7 +17,7 @@
  * under the License.
  */
 import { Injectable } from '@angular/core';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { Page } from '@utils/tools';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
