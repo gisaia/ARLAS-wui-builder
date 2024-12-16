@@ -115,14 +115,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ARLAS-wui-builder:build"
+            "buildTarget": "ARLAS-wui-builder:build"
           },
           "configurations": {
             "development": {
-              "browserTarget": "ARLAS-wui-builder:build:development"
+              "buildTarget": "ARLAS-wui-builder:build:development"
             },
             "production": {
-              "browserTarget": "ARLAS-wui-builder:build:production"
+              "buildTarget": "ARLAS-wui-builder:build:production"
             }
           },
           "defaultConfiguration": "development"
@@ -130,7 +130,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ARLAS-wui-builder:build"
+            "buildTarget": "ARLAS-wui-builder:build"
           }
         },
         "test": {
