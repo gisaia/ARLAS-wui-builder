@@ -22,9 +22,6 @@ describe('DialogColorTableComponent', () => {
       },
       mockProvider(ArlasColorService)
     ],
-    entryComponents: [
-      DialogColorTableComponent
-    ],
     declarations: [
       MockComponent(ColorPickerWrapperComponent)
     ],

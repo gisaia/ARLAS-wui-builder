@@ -38,15 +38,6 @@ import { MapConfigComponent } from './map-config.component';
 import { GetCollectionDisplayModule } from 'arlas-web-components';
 
 @NgModule({
-  entryComponents: [
-    ConfirmModalComponent,
-    DialogColorTableComponent,
-    DialogPaletteSelectorComponent,
-    ImportLayerDialogComponent,
-    DialogFilterComponent,
-    MapglComponent,
-    PreviewComponent
-  ],
   declarations: [
     MapConfigComponent,
     GlobalMapComponent,

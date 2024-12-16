@@ -197,8 +197,6 @@ export class CustomTranslateLoader implements TranslateLoader {
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 
-  bootstrap: [AppComponent],
-  entryComponents: [LandingPageDialogComponent, InputModalComponent,
-    UserInfosComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -29,9 +29,6 @@ describe('EditGroupComponent', () => {
       mockProvider(ArlasColorService),
       mockProvider(ArlasConfigurationUpdaterService),
       { provide: CONFIG_UPDATER, useValue: {} }
-    ],
-    entryComponents: [
-      AddWidgetDialogComponent
     ]
   });
 
