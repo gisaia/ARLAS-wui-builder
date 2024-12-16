@@ -22,8 +22,8 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LandingPageComponent, } from '@components/landing-page/landing-page.component';
 import { LandingPageDialogComponent } from '@components/landing-page/landing-page-dialog.component';
+import { LandingPageComponent, } from '@components/landing-page/landing-page.component';
 import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
 import { LookAndFeelConfigModule } from '@look-and-feel-config/look-and-feel-config.module';
 import { MapConfigModule } from '@map-config/map-config.module';
@@ -32,20 +32,31 @@ import { SearchConfigModule } from '@search-config/search-config.module';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { StartupService } from '@services/startup/startup.service';
 import { WalkthroughService } from '@services/walkthrough/walkthrough.service';
-import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { SharedModule } from '@shared/shared.module';
 import { TimelineConfigModule } from '@timeline-config/timeline-config.module';
 import { OAuthModule } from 'angular-oauth2-oidc';
+import { GetCollectionDisplayModule } from 'arlas-web-components';
+import enComponents from 'arlas-web-components/assets/i18n/en.json';
+import frComponents from 'arlas-web-components/assets/i18n/fr.json';
 import {
   ArlasCollaborativesearchService, ArlasConfigurationDescriptor, ArlasConfigurationUpdaterService,
   ArlasIamService,
-  ArlasStartupService, ArlasWalkthroughService, AuthentificationService, ConfigMenuModule, configUpdaterFactory,
-  CONFIG_UPDATER, FETCH_OPTIONS, getOptionsFactory,
-  iamServiceFactory, UserInfosComponent, PaginatorI18n,
-  GET_OPTIONS, ArlasToolkitSharedModule, ArlasSettingsService
+  ArlasSettingsService,
+  ArlasStartupService,
+  ArlasToolkitSharedModule,
+  ArlasWalkthroughService, AuthentificationService,
+  CONFIG_UPDATER,
+  ConfigMenuModule, configUpdaterFactory,
+  FETCH_OPTIONS,
+  GET_OPTIONS,
+  getOptionsFactory,
+  iamServiceFactory,
+  PaginatorI18n
 } from 'arlas-wui-toolkit';
+import enToolkit from 'arlas-wui-toolkit/assets/i18n/en.json';
+import frToolkit from 'arlas-wui-toolkit/assets/i18n/fr.json';
 import { environment } from 'environments/environment';
-import { LoggerModule, TOKEN_LOGGER_CONFIG } from 'ngx-logger';
+import { LoggerModule } from 'ngx-logger';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { AppRoutingModule } from './app-routing.module';
@@ -54,11 +65,6 @@ import { CollectionComponent } from './components/collection/collection.componen
 import { StatusComponent } from './components/status/status.component';
 import { AnalyticsConfigModule } from './modules/analytics-config/analytics-config.module';
 import { ResultListConfigModule } from './modules/result-list-config/result-list-config.module';
-import enComponents from 'arlas-web-components/assets/i18n/en.json';
-import frComponents from 'arlas-web-components/assets/i18n/fr.json';
-import enToolkit from 'arlas-wui-toolkit/assets/i18n/en.json';
-import frToolkit from 'arlas-wui-toolkit/assets/i18n/fr.json';
-import { GetCollectionDisplayModule } from 'arlas-web-components';
 
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {

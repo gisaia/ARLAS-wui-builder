@@ -19,7 +19,7 @@
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { Injector, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -91,43 +91,6 @@ import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
     CollectionsUnitsComponent,
     GroupCollectionPipe
   ],
-  imports: [
-    ArlasToolkitSharedModule,
-    CommonModule,
-    MatDialogModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatCheckboxModule,
-    ColorPickerModule,
-    MatSelectModule,
-    MatSlideToggleModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatExpansionModule,
-    MatInputModule,
-    MatSliderModule,
-    MatAutocompleteModule,
-    MatIconModule,
-    MatTabsModule,
-    MatTableModule,
-    MatStepperModule,
-    MatAutocompleteModule,
-    MatDividerModule,
-    MatTooltipModule,
-    MatRadioModule,
-    MatChipsModule,
-    DragDropModule,
-    MatSidenavModule,
-    MatBadgeModule,
-    MatListModule,
-    MatButtonToggleModule,
-    HttpClientModule,
-    MatPaginatorModule,
-    MatMenuModule,
-    TranslateModule,
-    GetCollectionDisplayModule
-  ],
   exports: [
     ConfigElementComponent,
     ConfirmModalComponent,
@@ -168,13 +131,51 @@ import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
     MatSidenavModule,
     MatBadgeModule,
     MatListModule,
-    HttpClientModule,
     MatPaginatorModule,
     MatMenuModule,
     MatCheckboxModule,
     MatTreeModule,
     TranslateModule,
     MatSortModule
+  ],
+  imports: [
+    ArlasToolkitSharedModule,
+    CommonModule,
+    MatDialogModule,
+    MatCardModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    ColorPickerModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatExpansionModule,
+    MatInputModule,
+    MatSliderModule,
+    MatAutocompleteModule,
+    MatIconModule,
+    MatTabsModule,
+    MatTableModule,
+    MatStepperModule,
+    MatAutocompleteModule,
+    MatDividerModule,
+    MatTooltipModule,
+    MatRadioModule,
+    MatChipsModule,
+    DragDropModule,
+    MatSidenavModule,
+    MatBadgeModule,
+    MatListModule,
+    MatButtonToggleModule,
+    MatPaginatorModule,
+    MatMenuModule,
+    TranslateModule,
+    GetCollectionDisplayModule
+  ],
+  providers: [
+    provideHttpClient(withInterceptorsFromDi())
   ]
 })
 export class SharedModule {
