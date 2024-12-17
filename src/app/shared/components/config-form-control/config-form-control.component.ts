@@ -58,6 +58,8 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   public colorPreviewControl: ColorPreviewFormControl;
   public debouncer: Subject<string> = new Subject();
 
+  protected organisation: string;
+
   protected readonly WARNING_MESSAGE = marker('Warning, changing this field\'s value will reset some other fields');
 
   public constructor(
@@ -65,8 +67,11 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
     private changeDetector: ChangeDetectorRef,
     private colorService: ArlasColorService,
     private collectionService: CollectionService,
-    public arlasIamService: ArlasIamService,
-  ) { }
+    private arlasIamService: ArlasIamService,
+    private cdr: ChangeDetectorRef
+  ) {
+    this.organisation = this.arlasIamService.getOrganisation();
+  }
 
   public onchangeMulitpleSelection(event, clear?: boolean) {
 

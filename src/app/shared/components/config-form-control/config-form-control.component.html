@@ -59,17 +59,14 @@
             </ng-container>
 
             <ng-container *ngIf="typedControl.optionalParams.isCollectionSelect">
-                <mat-optgroup *ngFor="let group of typedControl.groups | keyvalue :orderCollectionGroup" [label]="group.key | groupCollection:arlasIamService.getOrganisation()"  [class.hideLabel]="group.value.length === 0">
-                    <mat-option *ngFor="let collection of group.value" [value]="collection.name">
-                        {{ collection.name | getCollectionDisplayName | translate }}
-                    </mat-option>
-                </mat-optgroup>
-
+                @for (group of typedControl.groups | keyvalue:orderCollectionGroup; track group.key) {
+                    <mat-optgroup [label]="group.key | groupCollection:organisation | translate" *ngIf="group.value.length > 0">
+                        <mat-option *ngFor="let collection of group.value" [value]="collection.name">
+                            {{ collection.name | getCollectionDisplayName | translate }}
+                        </mat-option>
+                    </mat-optgroup>
+                }
             </ng-container>
-
-
-
-
         </mat-select>
     </mat-form-field>
 </div>

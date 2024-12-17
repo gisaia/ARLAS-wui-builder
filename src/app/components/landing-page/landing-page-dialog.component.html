@@ -28,11 +28,13 @@
                     <mat-form-field>
                         <mat-label>{{'Main collection' | translate}}</mat-label>
                         <mat-select formControlName="collection">
-                            <mat-optgroup *ngFor="let group of availablesCollections | keyvalue :orderCollectionGroup" [label]="group.key | groupCollection:data.currentOrga"  [class.hideLabel]="group.value.length === 0">
-                                <mat-option *ngFor="let collection of group.value" [value]="collection.name">
-                                    {{ collection.name | getCollectionDisplayName | translate }}
-                                </mat-option>
-                            </mat-optgroup>
+                            @for (group of availableCollections | keyvalue:orderCollectionGroup; track group.key) {
+                                <mat-optgroup [label]="group.key | groupCollection:data.currentOrga" *ngIf="group.value.length > 0">
+                                    <mat-option *ngFor="let collection of group.value" [value]="collection.name">
+                                        {{ collection.name | getCollectionDisplayName | translate }}
+                                    </mat-option>
+                                </mat-optgroup>
+                            }
                         </mat-select>
                     </mat-form-field>
                 </div>

@@ -47,7 +47,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
 
   public configChoice = InitialChoice.none;
   public isServerReady = false;
-  public availablesCollections: GroupCollectionItem;
+  public availableCollections: GroupCollectionItem;
   public InitialChoice = InitialChoice;
 
   public displayedColumns: string[] = ['id', 'creation', 'detail'];
@@ -144,8 +144,8 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
                     sharedWith: c.params.organisations?.shared,
                     owner: c.params.organisations?.owner
                   }));
-                this.availablesCollections = this.collectionService.buildGroupCollectionItems(collectionsItems, this.data.currentOrga);
-                this.collectionService.setGroupCollectionItems(this.availablesCollections);
+                this.availableCollections = this.collectionService.buildGroupCollectionItems(collectionsItems, this.data.currentOrga);
+                this.collectionService.setGroupCollectionItems(this.availableCollections);
                 this.collectionService.setCollections(collectionsItems.map(c => c.name));
                 this.collectionService.setCollectionsRef(cdrs);
               },
