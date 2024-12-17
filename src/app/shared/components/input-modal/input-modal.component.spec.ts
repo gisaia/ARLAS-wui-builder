@@ -1,8 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { InputModalComponent } from './input-modal.component';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { InputModalComponent } from './input-modal.component';
 
 describe('InputModalComponent', () => {
   let spectator: Spectator<InputModalComponent>;
