@@ -17,7 +17,7 @@
  * under the License.
  */
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { LandingPageComponent } from '@components/landing-page/landing-page.component';
 import { MainFormInitializedGuard } from '@guards/main-form-initialized/main-form-initialized.guard';
 import { CollectionComponent } from '@components/collection/collection.component';
@@ -85,7 +85,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
+  imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload', preloadingStrategy: PreloadAllModules })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
