@@ -67,7 +67,8 @@ export class MapLayerFormGroup extends ConfigFormGroup {
     vFa: FormArray,
     collection: string,
     edit: boolean,
-    collectionService: CollectionService
+    collectionService: CollectionService,
+    settingsService: ArlasSettingsService
   ) {
     super({
       arlasId: new HiddenFormControl(
@@ -265,8 +266,8 @@ export class MapLayerFormGroup extends ConfigFormGroup {
                 .subscribe(collectionFs => {
                   clusterFg.rawGeometry.setSyncOptions(collectionFs);
                 });
-              toGeoPointOptionsObs(collectionService
-                .getCollectionFields(this.customControls.collection.value))
+              toGeoOptionsObs(collectionService
+                .getCollectionFields(this.customControls.collection.value), !!settingsService && settingsService.settings['enable_geoshape_agg'])
                 .subscribe(collectionFs => {
                   clusterFg.aggGeometry.setSyncOptions(collectionFs);
                 });
@@ -1637,7 +1638,8 @@ export class MapLayerFormBuilderService {
       this.mainFormService.mapConfig.getVisualisationsFa(),
       collection,
       edit,
-      this.collectionService
+      this.collectionService,
+      this.settigsService
     );
     this.defaultValuesService.setDefaultValueRecursively('map.layer', mapLayerFormGroup);
     return mapLayerFormGroup;
