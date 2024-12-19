@@ -20,7 +20,7 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { Injector, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -50,8 +50,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { FiltersComponent } from '@map-config/components/filters/filters.component';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { StartupService } from '@services/startup/startup.service';
+import { TranslateModule } from '@ngx-translate/core';
 import { CollectionsUnitsComponent } from '@shared-components/collections-units/collections-units.component';
 import { GetCollectionDisplayModule } from 'arlas-web-components';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
@@ -179,7 +178,5 @@ import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
   ]
 })
 export class SharedModule {
-  public constructor(translateService: TranslateService, injector: Injector) {
-    StartupService.translationLoaded(translateService, injector);
-  }
+  public constructor() { }
 }
