@@ -24,7 +24,8 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "dist/ARLAS-wui-builder"
+              "base": "dist/ARLAS-wui-builder",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [
