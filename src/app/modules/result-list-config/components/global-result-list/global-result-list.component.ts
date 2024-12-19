@@ -29,7 +29,7 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { Subscription } from 'rxjs';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 
 @Component({
   selector: 'arlas-global-result-list',

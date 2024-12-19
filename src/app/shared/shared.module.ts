@@ -19,8 +19,8 @@
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { Injector, NgModule } from '@angular/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -50,8 +50,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { FiltersComponent } from '@map-config/components/filters/filters.component';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { StartupService } from '@services/startup/startup.service';
+import { TranslateModule } from '@ngx-translate/core';
 import { CollectionsUnitsComponent } from '@shared-components/collections-units/collections-units.component';
 import { GetCollectionDisplayModule } from 'arlas-web-components';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
@@ -90,43 +89,6 @@ import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
     FiltersComponent,
     CollectionsUnitsComponent,
     GroupCollectionPipe
-  ],
-  imports: [
-    ArlasToolkitSharedModule,
-    CommonModule,
-    MatDialogModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatCheckboxModule,
-    ColorPickerModule,
-    MatSelectModule,
-    MatSlideToggleModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatExpansionModule,
-    MatInputModule,
-    MatSliderModule,
-    MatAutocompleteModule,
-    MatIconModule,
-    MatTabsModule,
-    MatTableModule,
-    MatStepperModule,
-    MatAutocompleteModule,
-    MatDividerModule,
-    MatTooltipModule,
-    MatRadioModule,
-    MatChipsModule,
-    DragDropModule,
-    MatSidenavModule,
-    MatBadgeModule,
-    MatListModule,
-    MatButtonToggleModule,
-    HttpClientModule,
-    MatPaginatorModule,
-    MatMenuModule,
-    TranslateModule,
-    GetCollectionDisplayModule
   ],
   exports: [
     ConfigElementComponent,
@@ -168,17 +130,53 @@ import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
     MatSidenavModule,
     MatBadgeModule,
     MatListModule,
-    HttpClientModule,
     MatPaginatorModule,
     MatMenuModule,
     MatCheckboxModule,
     MatTreeModule,
     TranslateModule,
     MatSortModule
+  ],
+  imports: [
+    ArlasToolkitSharedModule,
+    CommonModule,
+    MatDialogModule,
+    MatCardModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    ColorPickerModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatExpansionModule,
+    MatInputModule,
+    MatSliderModule,
+    MatAutocompleteModule,
+    MatIconModule,
+    MatTabsModule,
+    MatTableModule,
+    MatStepperModule,
+    MatAutocompleteModule,
+    MatDividerModule,
+    MatTooltipModule,
+    MatRadioModule,
+    MatChipsModule,
+    DragDropModule,
+    MatSidenavModule,
+    MatBadgeModule,
+    MatListModule,
+    MatButtonToggleModule,
+    MatPaginatorModule,
+    MatMenuModule,
+    TranslateModule,
+    GetCollectionDisplayModule
+  ],
+  providers: [
+    provideHttpClient(withInterceptorsFromDi())
   ]
 })
 export class SharedModule {
-  public constructor(translateService: TranslateService, injector: Injector) {
-    StartupService.translationLoaded(translateService, injector);
-  }
+  public constructor() { }
 }

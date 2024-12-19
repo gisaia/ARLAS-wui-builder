@@ -33,7 +33,7 @@ import { AnalyticsBoardComponent, AnalyticsService } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
 import { debounceTime } from 'rxjs/operators';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 
 
 @Component({

@@ -18,7 +18,7 @@
  */
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { toKeywordOptionsObs } from '@services/collection-service/tools';
 import { FieldTemplateControl } from '@shared-models/config-form';

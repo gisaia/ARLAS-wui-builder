@@ -13,9 +13,6 @@ describe('DialogPaletteSelectorComponent', () => {
       mockProvider(MatDialogRef),
       { provide: MAT_DIALOG_DATA, useValue: { defaultPalettes: [], selectedPalette: '' } }
     ],
-    entryComponents: [
-      DialogPaletteSelectorComponent
-    ],
     declarations: [
       MockComponent(ColorPickerWrapperComponent)
     ]

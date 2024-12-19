@@ -21,7 +21,7 @@ import {
 } from '@analytics-config/components/edit-histogram-label/edit-histogram-label.component';
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
 import { NUMERIC_OR_DATE_TYPES, toNumericOrDateFieldsObs, toOptionsObs } from '@services/collection-service/tools';

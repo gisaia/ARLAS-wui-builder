@@ -51,19 +51,17 @@ export class AppComponent implements OnInit {
     private arlasSettingsService: ArlasSettingsService,
     private router: Router
   ) {
-
     this.logger.registerMonitor({
       onLog(logObject: INGXLoggerMetadata): void {
         if (logObject.level >= NgxLoggerLevel.ERROR) {
-          snackbar.open(logObject.message);
+          this.snackbar.open(logObject.message);
         }
       }
     });
   }
 
   public ngOnInit(): void {
-    this.title = this.arlasSettingsService.settings['tab_name'] ?
-      this.arlasSettingsService.settings['tab_name'] : 'ARLAS-wui-builder';
+    this.title = this.arlasSettingsService.settings['tab_name'] ?? 'ARLAS-wui-builder';
     this.version = environment.VERSION;
 
     this.titleService.setTitle(this.title);

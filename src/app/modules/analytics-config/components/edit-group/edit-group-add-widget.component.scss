@@ -41,18 +41,18 @@
       }
       &.mat-mdc-radio-checked {
          color: white;
-         border-color: mat.get-color-from-palette($app-accent);
+         border-color: mat.m2-get-color-from-palette($app-accent);
          svg path {
             fill: white !important;
          }
       }
 
       &:hover {
-         background-color: rgba(mat.get-color-from-palette($app-accent), 0.2);
-         border-color: mat.get-color-from-palette($app-accent);
-         color: mat.get-color-from-palette($app-accent);
+         background-color: rgba(mat.m2-get-color-from-palette($app-accent), 0.2);
+         border-color: mat.m2-get-color-from-palette($app-accent);
+         color: mat.m2-get-color-from-palette($app-accent);
          svg path {
-            fill: mat.get-color-from-palette($app-accent) !important;
+            fill: mat.m2-get-color-from-palette($app-accent) !important;
          }
       }
 

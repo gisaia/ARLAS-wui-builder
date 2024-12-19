@@ -32,7 +32,7 @@ describe('GlobalTimelineComponent', () => {
           getGlobalFg: () => new TimelineGlobalFormGroup(
             'collection',
             mockCollectionService,
-            new StartupService(null, null, null, null, null, null),
+            new StartupService(null, null, null, null, null),
             new MainFormService(),
             new ArlasSettingsService(),
             new BucketsIntervalFormGroup(undefined, undefined, undefined)

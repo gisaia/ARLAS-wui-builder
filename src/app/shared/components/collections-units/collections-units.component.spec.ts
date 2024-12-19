@@ -1,8 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { CollectionsUnitsComponent } from './collections-units.component';
-import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { FormArray } from '@angular/forms';
+import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { CollectionsUnitsComponent } from './collections-units.component';
 
 
 describe('CollectionsUnitsComponent', () => {

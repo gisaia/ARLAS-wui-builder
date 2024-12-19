@@ -32,7 +32,7 @@ import { Subscription } from 'rxjs';
 import { EditTabComponent } from '@analytics-config/components/edit-tab/edit-tab.component';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 
 @Component({
   selector: 'arlas-tabs',

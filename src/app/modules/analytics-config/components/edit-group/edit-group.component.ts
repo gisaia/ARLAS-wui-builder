@@ -42,7 +42,7 @@ import { ConfigFormGroup } from '@shared-models/config-form';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { IconService } from '@services/icon-service/icon.service';
 import { MatIconRegistry } from '@angular/material/icon';
 

@@ -57,9 +57,6 @@ describe('LandingPageComponent', () => {
         useFactory: getOptionsFactory,
         deps: [AuthentificationService],
       }
-    ],
-    entryComponents: [
-      LandingPageDialogComponent
     ]
   });
 

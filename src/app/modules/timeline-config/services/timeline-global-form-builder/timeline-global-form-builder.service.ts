@@ -23,7 +23,7 @@ import {
 import { BUCKET_TYPE } from '@analytics-config/services/buckets-interval-form-builder/models';
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { toNumericOrDateFieldsObs, toOptionsObs } from '@services/collection-service/tools';
 import { DefaultValuesService } from '@services/default-values/default-values.service';

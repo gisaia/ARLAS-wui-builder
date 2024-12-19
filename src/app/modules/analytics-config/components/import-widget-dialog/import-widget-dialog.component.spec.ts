@@ -31,9 +31,6 @@ describe('ImportLayerDialogComponent', () => {
         useFactory: getOptionsFactory,
         deps: [AuthentificationService]
       }
-    ],
-    entryComponents: [
-      ImportWidgetDialogComponent
     ]
   });
 

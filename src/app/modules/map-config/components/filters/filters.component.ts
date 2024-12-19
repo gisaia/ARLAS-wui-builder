@@ -30,7 +30,7 @@ import { MapglLegendComponent } from 'arlas-web-components';
 import { Subscription } from 'rxjs';
 import { DialogFilterComponent } from '../dialog-filter/dialog-filter.component';
 import { LAYER_MODE } from '../edit-layer/models';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 
 
 export interface Layer {

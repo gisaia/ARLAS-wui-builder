@@ -23,7 +23,7 @@ import {
   Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionItem } from '@services/collection-service/models';
 import {
@@ -58,6 +58,8 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   public colorPreviewControl: ColorPreviewFormControl;
   public debouncer: Subject<string> = new Subject();
 
+  protected organisation: string;
+
   protected readonly WARNING_MESSAGE = marker('Warning, changing this field\'s value will reset some other fields');
 
   public constructor(
@@ -65,8 +67,11 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
     private changeDetector: ChangeDetectorRef,
     private colorService: ArlasColorService,
     private collectionService: CollectionService,
-    public arlasIamService: ArlasIamService,
-  ) { }
+    private arlasIamService: ArlasIamService,
+    private cdr: ChangeDetectorRef
+  ) {
+    this.organisation = this.arlasIamService.getOrganisation();
+  }
 
   public onchangeMulitpleSelection(event, clear?: boolean) {
 

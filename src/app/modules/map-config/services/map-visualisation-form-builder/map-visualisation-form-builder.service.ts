@@ -18,7 +18,7 @@
  */
 import { Injectable } from '@angular/core';
 import { FormArray } from '@angular/forms';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
   ConfigFormGroup, HiddenFormControl, InputFormControl, SlideToggleFormControl, VisualisationCheckboxFormControl

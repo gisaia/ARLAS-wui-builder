@@ -3,13 +3,13 @@ import { IconPickerComponent } from '@gisaia-team/ngx-icon-picker';
 import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
 import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
+import { ArlasColorService } from 'arlas-web-components';
 import {
   AnalyticsBoardComponent, ArlasCollaborativesearchService, ArlasConfigService,
   ArlasConfigurationUpdaterService, ArlasStartupService, CONFIG_UPDATER
 } from 'arlas-wui-toolkit';
 import { MockComponent } from 'ng-mocks';
-import { AddWidgetDialogComponent, EditGroupComponent } from './edit-group.component';
-import { ArlasColorService } from 'arlas-web-components';
+import { EditGroupComponent } from './edit-group.component';
 
 describe('EditGroupComponent', () => {
   let spectator: Spectator<EditGroupComponent>;
@@ -29,9 +29,6 @@ describe('EditGroupComponent', () => {
       mockProvider(ArlasColorService),
       mockProvider(ArlasConfigurationUpdaterService),
       { provide: CONFIG_UPDATER, useValue: {} }
-    ],
-    entryComponents: [
-      AddWidgetDialogComponent
     ]
   });
 

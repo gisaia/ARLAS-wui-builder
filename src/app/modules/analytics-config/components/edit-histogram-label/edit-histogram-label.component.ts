@@ -18,7 +18,7 @@
  */
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 

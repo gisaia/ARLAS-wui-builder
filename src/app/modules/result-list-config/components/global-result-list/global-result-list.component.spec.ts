@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { FormArray } from '@angular/forms';
 import { createComponentFactory, createServiceFactory, mockProvider, Spectator, SpectatorService } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -33,7 +33,7 @@ describe('GlobalResultListComponent', () => {
     ]
   });
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [GlobalResultListComponent],
       providers: [

@@ -40,12 +40,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { GetCollectionDisplayModule, GetFieldDisplayModule } from 'arlas-web-components';
 
 @NgModule({
-  entryComponents: [
-    EditWidgetDialogComponent,
-    AddWidgetDialogComponent,
-    ResultlistDataComponent,
-    ImportWidgetDialogComponent
-  ],
   declarations: [
     TabsComponent,
     GroupsComponent,
