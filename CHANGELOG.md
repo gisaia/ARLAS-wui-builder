@@ -1,6 +1,14 @@
 # Change Log
 
-## [v26.0.5](https://github.com/gisaia/ARLAS-wui-builder/tree/v26.0.5) (2024-11-12)
+## [v26.1.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v26.1.0) (2024-12-02)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v26.0.5...v26.1.0)
+
+**Fixed bugs:**
+
+- Impossible to get collections in builder without IAM [\#1012](https://github.com/gisaia/ARLAS-wui-builder/issues/1012)
+
+## [v26.0.5](https://github.com/gisaia/ARLAS-wui-builder/tree/v26.0.5) (2024-11-13)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v26.0.4...v26.0.5)
 
