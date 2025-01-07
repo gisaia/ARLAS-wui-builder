@@ -74,7 +74,7 @@ export class LayersComponent implements OnInit, OnDestroy {
   public layersFa: FormArray;
   public visualisationSetFa: FormArray;
 
-  public layerLegend: Map<string, { layer: any; colorLegend: any; strokeColorLegend: any; lineDashArray: any; }> = new Map();
+  public layerLegend: Map<string, { layer: any; colorLegend: any; strokeColorLegend: any; lineDashArray: any; iconType?: string;}> = new Map();
 
   public layerVs: Map<string, string[]> = new Map();
 
@@ -121,7 +121,8 @@ export class LayersComponent implements OnInit, OnDestroy {
         {
           layer: exportedLayer,
           colorLegend: this.getColorLegend(paint),
-          strokeColorLegend: this.getStrokeColorLegend(paint, exportedLayer.metadata), lineDashArray: this.getLineDashArray(paint)
+          strokeColorLegend: this.getStrokeColorLegend(paint, exportedLayer.metadata), lineDashArray: this.getLineDashArray(paint),
+          iconType: layer?.clusterFg?.geometryStep?.aggType ? layer?.clusterFg?.geometryStep?.aggType : null
         }
       );
 
@@ -320,7 +321,7 @@ export class LayersComponent implements OnInit, OnDestroy {
       newId + '#' + newLayerFg.customControls.mode.value,
       {
         layer: exportedLayer, colorLegend: this.getColorLegend(paint),
-        strokeColorLegend: this.getStrokeColorLegend(paint, exportedLayer.metadata), lineDashArray: this.getLineDashArray(paint)
+        strokeColorLegend: this.getStrokeColorLegend(paint, exportedLayer.metadata), lineDashArray: this.getLineDashArray(paint),
       }
     );
     newLayerFg.markAsPristine();
