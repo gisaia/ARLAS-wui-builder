@@ -22,8 +22,11 @@ import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE } from '@map-config/services/map-layer-form-builder/models';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
+import { CIRCLE_HEATMAP_RADIUS_GRANULARITY } from '@shared-models/circle-heat-map-radius-granularity';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
-import { ArlasColorService, FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID } from 'arlas-web-components';
+import { InterpolatedProperty, ModesValues } from '@shared/interfaces/config-map.interfaces';
+import { FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID } from 'arlas-map';
+import { ArlasColorService } from 'arlas-web-components';
 import { LayerSourceConfig } from 'arlas-web-contributors';
 import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
@@ -38,8 +41,6 @@ import {
   Paint, PaintValue,
   SELECT_LAYER_PREFIX
 } from './models-map-config';
-import { InterpolatedProperty, ModesValues } from '@shared/interfaces/config-map.interfaces';
-import { CIRCLE_HEATMAP_RADIUS_GRANULARITY } from '@shared-models/circle-heat-map-radius-granularity';
 export enum VISIBILITY {
   visible = 'visible',
   none = 'none'
@@ -56,7 +57,7 @@ export class ConfigMapExportHelper {
     const layers: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: MapLayerFormGroup) => {
       const taggableFields = taggableFieldsMap.get(layerFg.customControls.collection.value);
       const layer = this.getLayer(layerFg, colorService, taggableFields);
-      if (layer.type === GEOMETRY_TYPE.fill.toString() && !!layer.metadata && !!(layer.metadata as LayerMetadata).stroke) {
+      if (layer.type === GEOMETRY_TYPE.fill.toString() && !!layer.metadata && !!layer.metadata.stroke) {
         const fillStrokeLayer: Layer = {
           source: layer.source,
           id: layer.id.replace(ARLAS_ID, FILLSTROKE_LAYER_PREFIX),
@@ -68,9 +69,9 @@ export class ConfigMapExportHelper {
             visibility: layer.layout.visibility
           },
           paint: {
-            'line-color': (layer.metadata.stroke as FillStroke).color,
-            'line-opacity': (layer.metadata.stroke as FillStroke).opacity,
-            'line-width': (layer.metadata.stroke as FillStroke).width
+            'line-color': layer.metadata.stroke.color,
+            'line-opacity': layer.metadata.stroke.opacity,
+            'line-width': layer.metadata.stroke.width
           }
         };
         fillStrokeLayers.push([fillStrokeLayer, layerFg.value.mode as LAYER_MODE]);
@@ -92,7 +93,7 @@ export class ConfigMapExportHelper {
           layout: {
             visibility: layer.layout.visibility
           },
-          paint: Object.assign({}, layer.paint)
+          paint: { ...layer.paint}
         };
         if (layer.type === GEOMETRY_TYPE.fill.toString()) {
         } else if (layer.type === GEOMETRY_TYPE.circle.toString()) {

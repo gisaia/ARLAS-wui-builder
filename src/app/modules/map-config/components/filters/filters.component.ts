@@ -26,11 +26,11 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { ConfigFormGroup } from '@shared-models/config-form';
 import { camelize } from '@utils/tools';
-import { MapglLegendComponent } from 'arlas-web-components';
 import { Subscription } from 'rxjs';
 import { DialogFilterComponent } from '../dialog-filter/dialog-filter.component';
 import { LAYER_MODE } from '../edit-layer/models';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { LegendService } from 'arlas-map';
 
 
 export interface Layer {
@@ -54,12 +54,13 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   public constructor(
     public dialog: MatDialog,
-    private mainFormService: MainFormService,
-    private mapLayerFormBuilder: MapLayerFormBuilderService
+    private readonly mainFormService: MainFormService,
+    private readonly mapLayerFormBuilder: MapLayerFormBuilderService,
+    private readonly legendService: LegendService
   ) { }
 
   public ngOnInit() {
-    const layerFg = this.layerFg as MapLayerFormGroup;
+    const layerFg = this.layerFg;
     /** import existing filters */
     if (layerFg.customControls.mode.value === LAYER_MODE.featureMetric) {
       this.filtersFa = (layerFg.customControls.featureMetricFg.controls.visibilityStep as ConfigFormGroup)
@@ -133,7 +134,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   public getColorLegend(paint) {
     const styleColor = paint['circle-color'] || paint['heatmap-color'] || paint['fill-color'] || paint['line-color'];
-    const colorLegend = MapglLegendComponent.buildColorLegend(styleColor as any, true, null);
+    const colorLegend = LegendService.buildColorLegend(styleColor, true, null);
     return colorLegend[0];
   }
 

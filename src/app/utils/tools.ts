@@ -81,7 +81,7 @@ export function isFullyTouched(control: AbstractControl): boolean {
     } else if (control.controls.length === 1) {
       return Object.values(control.controls)[0].touched;
     } else {
-      return Object.values(control.controls).map(c => isFullyTouched(c)).reduce((b1, b2) => b1 && b2);
+      return Object.values(control.controls).map(c => isFullyTouched(c)).reduce((b1, b2) => b1 && b2, false);
     }
   }
   return false;

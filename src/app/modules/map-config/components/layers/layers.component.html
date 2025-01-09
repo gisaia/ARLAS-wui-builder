@@ -1,7 +1,7 @@
 <div style="display: flex; margin: 10px 0">
     <button mat-stroked-button color="primary" [disabled]="!enableAddLayer" class="add-layer"
-        [matTooltip]="enableAddLayer ? ('Add layer' | translate) : ('No collection with geometries is available in the server' | translate)" matTooltipPosition="below"
-        [routerLink]="['add']" queryParamsHandling="preserve">
+        [matTooltip]="enableAddLayer ? ('Add layer' | translate) : ('No collection with geometries is available in the server' | translate)"
+        matTooltipPosition="below" [routerLink]="['add']" queryParamsHandling="preserve">
         {{'Add layer' | translate}}
     </button>
     <button mat-stroked-button color="primary" class="import-layer" (click)="importLayer()"
@@ -15,6 +15,7 @@
 
 <mat-form-field>
     <mat-icon class="filter-icon" matPrefix>filter_alt</mat-icon>
+    <!-- TODO check if filters still working -->
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
 </mat-form-field>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z1" matSort>
@@ -51,11 +52,11 @@
     <ng-container matColumnDef="representation">
         <th mat-header-cell *matHeaderCellDef>{{'#' | translate}}</th>
         <td mat-cell *matCellDef="let element">
-            <arlas-mapgl-layer-icon [layer]="layerLegend.get(element.arlasId + '#' + element.mode)?.layer"
+            <arlas-layer-icon [layer]="layerLegend.get(element.arlasId + '#' + element.mode)?.layer"
                 [colorLegend]="layerLegend.get(element.arlasId + '#' + element.mode)?.colorLegend"
                 [strokeColorLegend]="layerLegend.get(element.arlasId + '#' + element.mode)?.strokeColorLegend"
                 [lineDasharray]="layerLegend.get(element.arlasId + '#' + element.mode)?.lineDashArray">
-            </arlas-mapgl-layer-icon>
+            </arlas-layer-icon>
         </td>
     </ng-container>
 

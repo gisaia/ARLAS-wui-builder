@@ -19,9 +19,10 @@
 import { NgModule } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
-import { ConfirmModalComponent } from '@shared/components/confirm-modal/confirm-modal.component';
 import { SharedModule } from '@shared/shared.module';
-import { GetCollectionDisplayModule, MapglLayerIconModule, MapglLegendModule, MapglModule } from 'arlas-web-components';
+import { AbstractArlasMapService, ArlasMapFrameworkService, ArlasMapModule, BasemapService, LegendService } from 'arlas-map';
+
+import { GetCollectionDisplayModule } from 'arlas-web-components';
 import { BasemapsComponent } from './components/basemaps/basemaps.component';
 import { DialogColorTableComponent } from './components/dialog-color-table/dialog-color-table.component';
 import { DialogFilterComponent } from './components/dialog-filter/dialog-filter.component';
@@ -35,6 +36,8 @@ import { PreviewComponent } from './components/preview/preview.component';
 import { VisualisationsComponent } from './components/visualisations/visualisations.component';
 import { MapConfigRoutingModule } from './map-config-routing.module';
 import { MapConfigComponent } from './map-config.component';
+import { ArlasMaplibreService, ArlasMapService, MaplibreBasemapService, MaplibreLegendService } from 'arlas-maplibre';
+import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 
 @NgModule({
   declarations: [
@@ -53,15 +56,32 @@ import { MapConfigComponent } from './map-config.component';
   ],
   imports: [
     MapConfigRoutingModule,
-    MapglModule,
-    MapglLayerIconModule,
-    MapglLegendModule,
+    ArlasMapModule,
     SharedModule,
     GetCollectionDisplayModule
   ],
   providers: [
     ConfirmExitGuard,
     { provide: MAT_DIALOG_DATA, useValue: {} },
+    {
+      provide: AbstractArlasMapService,
+      useClass: ArlasMapService
+    },
+    ArlasMaplibreService,
+    {
+      provide: BasemapService,
+      useClass: MaplibreBasemapService
+    },
+    {
+      provide: LegendService,
+      useClass: MaplibreLegendService
+    },
+    {
+      provide: ArlasMapFrameworkService,
+      useClass: ArlasMaplibreService
+    },
+    ArlasMapService,
+    ArlasCollaborativesearchService
   ]
 })
 export class MapConfigModule {}

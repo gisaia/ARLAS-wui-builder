@@ -27,14 +27,24 @@ import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-ex
 import { MainFormService } from '@services/main-form/main-form.service';
 import { StartupService, ZONE_PREVIEW } from '@services/startup/startup.service';
 import { FeatureCollection } from '@turf/helpers';
+import { ArlasMapComponent, ArlasMapFrameworkService } from 'arlas-map';
 import { DataWithLinks } from 'arlas-persistence-api';
-import { ArlasColorService, MapglComponent } from 'arlas-web-components';
+import { ArlasColorService } from 'arlas-web-components';
 import { MapContributor } from 'arlas-web-contributors';
 import { OnMoveResult } from 'arlas-web-contributors/models/models';
-import { ArlasCollaborativesearchService, ArlasConfigService,
-  ArlasSettingsService, ContributorBuilder, PersistenceService } from 'arlas-wui-toolkit';
-import { catchError, map, merge, Observable, of, Subscription, throwError } from 'rxjs';
+import {
+  ArlasCollaborativesearchService, ArlasConfigService,
+  ArlasSettingsService, ContributorBuilder, PersistenceService
+} from 'arlas-wui-toolkit';
+import {
+  AddLayerObject, CanvasSourceSpecification,
+  GeoJSONSource, MapOptions,
+  RasterSourceSpecification, SourceSpecification, TypedStyleLayer
+} from 'maplibre-gl';
+import { MaplibreSourceType } from 'arlas-maplibre';
 
+
+import { catchError, map, merge, Observable, of, Subscription, throwError } from 'rxjs';
 export interface MapglComponentInput {
   mapglContributors: MapContributor[];
   mapComponentConfig: any;
@@ -49,7 +59,8 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
 
   @Input() public mapComponentConfig: any;
   @Input() public mapglContributors: MapContributor[] = [];
-  @ViewChild('map', { static: false }) public mapglComponent: MapglComponent;
+  @ViewChild('map', { static: false }) public mapComponent: ArlasMapComponent<TypedStyleLayer | AddLayerObject,
+    MaplibreSourceType | GeoJSONSource | RasterSourceSpecification | SourceSpecification | CanvasSourceSpecification, MapOptions>;
 
   private onMapLoadSub: Subscription;
   public mapDataSources;
@@ -60,16 +71,18 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
 
   public constructor(
     protected mainFormService: MainFormService,
-    private collaborativeService: ArlasCollaborativesearchService,
-    private configService: ArlasConfigService,
-    private startupService: StartupService,
-    private collectionService: CollectionService,
-    private colorService: ArlasColorService,
-    private cdr: ChangeDetectorRef,
-    private persistenceService: PersistenceService,
-    private snackbar: MatSnackBar,
-    private translate: TranslateService,
-    private settingsService: ArlasSettingsService,
+    public collaborativeService: ArlasCollaborativesearchService,
+    private readonly configService: ArlasConfigService,
+    private readonly startupService: StartupService,
+    private readonly collectionService: CollectionService,
+    private readonly colorService: ArlasColorService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly persistenceService: PersistenceService,
+    private readonly snackbar: MatSnackBar,
+    private readonly translate: TranslateService,
+    private readonly settingsService: ArlasSettingsService,
+    private readonly mapFrameworkService: ArlasMapFrameworkService<TypedStyleLayer | AddLayerObject,
+      MaplibreSourceType | GeoJSONSource | RasterSourceSpecification | SourceSpecification | CanvasSourceSpecification, MapOptions>,
     @Inject(MAT_DIALOG_DATA) public dataMap: MapglComponentInput
   ) {
     if (this.dataMap.mapglContributors !== undefined || this.dataMap.mapComponentConfig !== undefined) {
@@ -97,12 +110,17 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       const contributors: MapContributor[] = [];
 
       mapContribConfigs.forEach(mapConfig => {
+        console.log(mapConfig);
+        this.collaborativeService.describe('courses').subscribe();
+        console.log(this.collaborativeService)
+
         const mapContributor = ContributorBuilder.buildContributor('map',
           mapConfig.identifier,
           this.configService,
           this.collaborativeService,
           this.settingsService,
           this.colorService);
+        console.log(mapContributor);
         contributors.push(mapContributor);
       });
       const mapComponentConfig = ConfigExportHelper.getMapComponent(
@@ -117,7 +135,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       this.mapComponentConfig = mapComponentConfig.input;
     }
     if (!!this.mapglContributors) {
-      this.mapDataSources = this.mapglContributors.map(c => c.dataSources).reduce((set1, set2) => new Set([...set1, ...set2]));
+      this.mapDataSources = this.mapglContributors.map(c => c.dataSources).reduce((set1, set2) => new Set([...set1, ...set2]), new Set());
       this.mapRedrawSources = merge(...this.mapglContributors.map(c => c.redrawSource));
       this.mapLegendUpdater = merge(...this.mapglContributors.map(c => c.legendUpdater));
       this.mapVisibilityUpdater = merge(...this.mapglContributors.map(c => c.visibilityUpdater));
@@ -130,9 +148,9 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   }
 
   public ngAfterViewInit() {
-    this.onMapLoadSub = this.mapglComponent.onMapLoaded.subscribe(isLoaded => {
+    this.onMapLoadSub = this.mapComponent.onMapLoaded.subscribe(isLoaded => {
       if (isLoaded && !!this.mapglContributors) {
-        this.mapglComponent.map.resize();
+        this.mapComponent.map.resize();
         this.mapglContributors.forEach(mapglContributor => {
           mapglContributor.updateData = true;
           mapglContributor.fetchData(null);
@@ -144,7 +162,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.mapglComponent = null;
+    this.mapComponent = null;
     this.onMapLoadSub.unsubscribe();
   }
 
@@ -152,12 +170,12 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     this.mapglContributors.forEach(contrib => contrib.changeVisualisation(event));
   }
 
-  public onChangeAoi(event: FeatureCollection) {
+  public onChangeAoi(event: FeatureCollection<GeoJSON.Geometry>) {
     const configDebounceTime = this.configService.getValue('arlas.server.debounceCollaborationTime');
     const debounceDuration = configDebounceTime !== undefined ? configDebounceTime : 750;
     this.mapglContributors.forEach((contrib, i) => {
       setTimeout(() => {
-        contrib.onChangeAoi(event);
+        contrib.onChangeAoi(event as FeatureCollection);
       }, i * (debounceDuration + 100));
     });
   }
@@ -168,7 +186,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
 
   public savePreview() {
     let img;
-    const mapCanvas = this.mapglComponent.map.getCanvas();
+    const mapCanvas = this.mapFrameworkService.getCanvas(this.mapComponent.map);
     const maxWidth = 300;
     const maxHeight = 150;
     const widthScale = maxWidth / mapCanvas.width;
@@ -188,8 +206,8 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       context.drawImage(mapCanvas, 0, 0);
       img = rescaledCanvas.toDataURL('image/png');
     }
-    const jsonifiedImg = JSON.stringify({img});
-    this.mapglComponent.map.resize();
+    const jsonifiedImg = JSON.stringify({ img });
+    this.mapComponent.map.resize();
     const resourcesConfig = this.mainFormService.resourcesConfig.getFg();
     const previewId = resourcesConfig.customControls.resources.previewId.value;
     if (!!this.mainFormService.configurationId) {

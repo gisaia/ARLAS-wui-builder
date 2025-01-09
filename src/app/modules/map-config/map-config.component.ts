@@ -18,7 +18,6 @@
  */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { isFullyTouched } from '@utils/tools';
 import { Subscription } from 'rxjs';
@@ -41,9 +40,8 @@ export class MapConfigComponent implements OnInit, OnDestroy {
   private routerSub: Subscription;
 
   public constructor(
-    private mainFormService: MainFormService,
-    private translate: TranslateService,
-    private router: Router) { }
+    private readonly mainFormService: MainFormService,
+    private readonly router: Router) { }
 
 
   public tabs: Tab[] = [
@@ -84,7 +82,7 @@ export class MapConfigComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.routerSub = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd),
-        map(navEnd => (navEnd as NavigationEnd).urlAfterRedirects))
+        map(navEnd => navEnd.urlAfterRedirects))
       .subscribe(url => this.activeTab = this.tabs.find(tabs => url.indexOf(tabs.routeurLink) > 0));
   }
 
