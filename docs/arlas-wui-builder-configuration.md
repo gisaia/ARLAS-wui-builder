@@ -53,16 +53,16 @@ If you don't mount a `settings.yaml` file to the container, nor serve it with `A
 
 #### Variables that are specific to ARLAS-wui-builder
 
-|Environment variable| settings.yaml variable|Default|Description|
-|--------------------|---------------------------|-------|-----------|
-|ARLAS_TAB_NAME   | tab_name| ARLAS-wui-builder | Title of the tab |
-|ARLAS_EXTERNAL_NODE_PAGE   | external_node_page| false | Whether or not to allow a user add a node of json configuration in their dashboards. This node is 'external' to arlas schema. |
-|ARLAS_EXTERNAL_NODE_SCHEMAS| external_node_schemas | [ ] | List of objects having 2 attributes. - 'name': name of the schema. - 'url' : path to a json file containing the schema. |
-| ARLAS_HISTOGRAMS_MAX_BUCKETS | histogram.max_buckets | 200 | The user will be able to configure a number of buclets between 0 and `histogram.max_buckets` |
-| ARLAS_EXPORT_HISTOGRAMS_NB_BUCKETS | histogram.export_nb_buckets | 1000 | The export to csv feature will download `histogram.export_nb_buckets` buckets for histograms. |
-| ARLAS_USE_TIME_FILTER | use_time_filter | false | If true, the analytics and map previews will fetch only the last 7 days of the chosen-collection data. |
-| ARLAS_BASEMAPS | basemaps | [] | List of basemaps that the users can embark within their dashbaords. View the [`basemap` structure](#)|
-| ARLAS_ENABLE_H3 | enable_h3 | false | If true, allows the user to configure cluster layers agregated by h3 cell |
+|Environment variable| settings.yaml variable      |Default| Description                                                                                                                   |
+|--------------------|-----------------------------|-------|-------------------------------------------------------------------------------------------------------------------------------|
+|ARLAS_TAB_NAME   | tab_name                    | ARLAS-wui-builder | Title of the tab                                                                                                              |
+|ARLAS_EXTERNAL_NODE_PAGE   | external_node_page          | false | Whether or not to allow a user add a node of json configuration in their dashboards. This node is 'external' to arlas schema. |
+|ARLAS_EXTERNAL_NODE_SCHEMAS| external_node_schemas       | [ ] | List of objects having 2 attributes. - 'name': name of the schema. - 'url' : path to a json file containing the schema.       |
+| ARLAS_HISTOGRAMS_MAX_BUCKETS | histogram.max_buckets       | 200 | The user will be able to configure a number of buclets between 0 and `histogram.max_buckets`                                  |
+| ARLAS_EXPORT_HISTOGRAMS_NB_BUCKETS | histogram.export_nb_buckets | 1000 | The export to csv feature will download `histogram.export_nb_buckets` buckets for histograms.                                 |
+| ARLAS_USE_TIME_FILTER | use_time_filter             | false | If true, the analytics and map previews will fetch only the last 7 days of the chosen-collection data.                        |
+| ARLAS_BASEMAPS | basemaps                    | [] | List of basemaps that the users can embark within their dashbaords. View the [`basemap` structure](#)                         |
+| ARLAS_ENABLE_ADVANCED_FEATURES | enable_advanced_features    | false | If true, allows the user to use advanced features like configure cluster layers agregated by h3 cell                          |
 
 ## ARLAS-wui-builder assets
 
