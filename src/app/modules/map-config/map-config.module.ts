@@ -81,7 +81,6 @@ import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
       useClass: ArlasMaplibreService
     },
     ArlasMapService,
-    ArlasCollaborativesearchService
   ]
 })
 export class MapConfigModule {}

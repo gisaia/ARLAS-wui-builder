@@ -110,17 +110,12 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       const contributors: MapContributor[] = [];
 
       mapContribConfigs.forEach(mapConfig => {
-        console.log(mapConfig);
-        this.collaborativeService.describe('courses').subscribe();
-        console.log(this.collaborativeService)
-
         const mapContributor = ContributorBuilder.buildContributor('map',
           mapConfig.identifier,
           this.configService,
           this.collaborativeService,
           this.settingsService,
           this.colorService);
-        console.log(mapContributor);
         contributors.push(mapContributor);
       });
       const mapComponentConfig = ConfigExportHelper.getMapComponent(

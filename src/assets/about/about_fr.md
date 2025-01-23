@@ -13,6 +13,6 @@ La solution ARLAS est basée sur:
 - D3js
 - Node
 - NPM
-- mapbox
+- maplibre
 
 Powered by __Gisaïa__

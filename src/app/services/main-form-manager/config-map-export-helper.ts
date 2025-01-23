@@ -213,7 +213,7 @@ export class ConfigMapExportHelper {
       metadata: this.getLayerMetadata(layerFg.customControls.collection.value, layerFg.customControls.collectionDisplayName.value,
         mode, modeValues, colorService, taggableFields)
     };
-    /** 'all' is the operator that allows to apply an "AND" operator in mapbox */
+    /** 'all' is the operator that allows to apply an "AND" operator */
     layer.filter = ['all'];
     const filters = !!modeValues.visibilityStep.filters ? modeValues.visibilityStep.filters.value : undefined;
     if (!!filters) {
@@ -231,7 +231,7 @@ export class ConfigMapExportHelper {
           layer.filter.push(['>=', fieldPath, +f.filterMinRangeValues]);
           layer.filter.push(['<=', fieldPath, +f.filterMaxRangeValues]);
         } else if (f.filterOperation === FILTER_OPERATION.OUT_RANGE) {
-          /** 'any' is the operator that allows to apply a "OR" filter in mapbox  */
+          /** 'any' is the operator that allows to apply a "OR" filter  */
           const outRangeExpression: Array<any> = ['any'];
           outRangeExpression.push(['<', fieldPath, +f.filterMinRangeValues]);
           outRangeExpression.push(['>', fieldPath, +f.filterMaxRangeValues]);
@@ -251,11 +251,10 @@ export class ConfigMapExportHelper {
    * @param geometryType
    */
   public static getLayerType(geometryType: GEOMETRY_TYPE): GEOMETRY_TYPE | string {
-    /** we change the type of circle heat map  to keep the compatibility with mapbox **/
+    /** we change the type of circle heat map to keep the compatibility with mapbox and maplibre **/
     if (geometryType === GEOMETRY_TYPE.circleHeat) {
       return GEOMETRY_TYPE.circle;
     }
-
     return geometryType;
   }
 
@@ -494,8 +493,8 @@ export class ConfigMapExportHelper {
   }
 
   /**
-   * Build the correct array from interpolated values to obtain an array that respects the MapBox expression format
-   * https://docs.mapbox.com/style-spec/reference/expressions/
+   * Build the correct array from interpolated values to obtain an array that respects the maplibre expression format
+   * https://maplibre.org/maplibre-style-spec/expressions/
    * @param interpolatedValues interpolated properties that determine the type of array we build ( count, normalize )
    * @param mode
    * @param valuesToInsert the value to insert at the end of the array
