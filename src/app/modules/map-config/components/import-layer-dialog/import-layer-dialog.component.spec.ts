@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { StartupService } from '@services/startup/startup.service';
-import { LayerIdToName } from 'arlas-web-components';
+import { LayerIdToName } from 'arlas-map';
 import {
   ArlasCollaborativesearchService, ArlasConfigService, ArlasConfigurationDescriptor,
   ArlasStartupService, AuthentificationService, getOptionsFactory, GET_OPTIONS, PersistenceService
