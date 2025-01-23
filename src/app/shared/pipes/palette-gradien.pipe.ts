@@ -21,7 +21,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 
 @Pipe({
-  name: 'paletteGradient'
+  name: 'paletteGradient',
+  standalone: true
 })
 export class PaletteGradientPipe implements PipeTransform {
 

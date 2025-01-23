@@ -2,6 +2,7 @@
     <h1 mat-dialog-title>{{ 'Select a template palette' | translate}}</h1>
     <div mat-dialog-content>
         <div *ngFor="let palette of defaultPalettes; let i = index"
+             onKeyDown="selectPalette(i);"
              (click)="selectPalette(i)"
              class="palette-selector"
              [ngStyle]="{'background': palette.length > 1 ? 'linear-gradient(to right, ' + (palette | paletteGradient:data.min:data.max) + ')' : palette[0].value}">

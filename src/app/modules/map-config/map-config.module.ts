@@ -20,7 +20,13 @@ import { NgModule } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
 import { SharedModule } from '@shared/shared.module';
-import { AbstractArlasMapService, ArlasMapFrameworkService, ArlasMapModule, BasemapService, LegendService } from 'arlas-map';
+import {
+  AbstractArlasMapService,
+  ArlasMapFrameworkService,
+  ArlasMapModule,
+  BasemapService,
+  LegendService
+} from 'arlas-map';
 
 import { GetCollectionDisplayModule } from 'arlas-web-components';
 import { BasemapsComponent } from './components/basemaps/basemaps.component';
@@ -37,7 +43,7 @@ import { VisualisationsComponent } from './components/visualisations/visualisati
 import { MapConfigRoutingModule } from './map-config-routing.module';
 import { MapConfigComponent } from './map-config.component';
 import { ArlasMaplibreService, ArlasMapService, MaplibreBasemapService, MaplibreLegendService } from 'arlas-maplibre';
-import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
+import { PaletteGradientPipe } from '@shared/pipes/palette-gradien.pipe';
 
 @NgModule({
   declarations: [
@@ -58,7 +64,8 @@ import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
     MapConfigRoutingModule,
     ArlasMapModule,
     SharedModule,
-    GetCollectionDisplayModule
+    GetCollectionDisplayModule,
+    PaletteGradientPipe
   ],
   providers: [
     ConfirmExitGuard,
