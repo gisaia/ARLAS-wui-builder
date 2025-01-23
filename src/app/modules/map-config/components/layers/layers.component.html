@@ -15,7 +15,6 @@
 
 <mat-form-field>
     <mat-icon class="filter-icon" matPrefix>filter_alt</mat-icon>
-    <!-- TODO check if filters still working -->
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
 </mat-form-field>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z1" matSort>
