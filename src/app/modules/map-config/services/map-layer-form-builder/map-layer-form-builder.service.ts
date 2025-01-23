@@ -267,7 +267,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
                   clusterFg.rawGeometry.setSyncOptions(collectionFs);
                 });
               toGeoOptionsObs(collectionService
-                .getCollectionFields(this.customControls.collection.value), !!settingsService && settingsService.settings['enable_geoshape_agg'])
+                .getCollectionFields(this.customControls.collection.value), !!settingsService && settingsService.settings['enable_advanced_features'])
                 .subscribe(collectionFs => {
                   clusterFg.aggGeometry.setSyncOptions(collectionFs);
                 });

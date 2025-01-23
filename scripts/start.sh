@@ -508,16 +508,6 @@ fi
 envsubst 'ARLAS_ENABLE_ADVANCED_FEATURES' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
 mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
 
-# Allow applying a geohash/geotile aggregation on a geoshape field
-if [ -z "${ARLAS_GEOSHAPE_AGG}" ]; then
-  ARLAS_GEOSHAPE_AGG=false
-  export ARLAS_GEOSHAPE_AGG
-  echo "geohash/geotile aggregation on a geoshape field is not allowed"
-else
-  echo ${ARLAS_ENABLE_H3ARLAS_GEOSHAPE_AGG} "is used for 'enable_geoshape_agg' in settings.yaml file"
-fi
-envsubst 'ARLAS_GEOSHAPE_AGG' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
-mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
 
 # Set App base path
 if [ -z "${ARLAS_BUILDER_APP_PATH}" ]; then
