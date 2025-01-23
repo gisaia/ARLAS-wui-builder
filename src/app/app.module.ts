@@ -56,7 +56,7 @@ import {
 import enToolkit from 'arlas-wui-toolkit/assets/i18n/en.json';
 import frToolkit from 'arlas-wui-toolkit/assets/i18n/fr.json';
 import { environment } from 'environments/environment';
-import { LoggerModule } from 'ngx-logger';
+import { LoggerModule, TOKEN_LOGGER_CONFIG } from 'ngx-logger';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { AppRoutingModule } from './app-routing.module';
