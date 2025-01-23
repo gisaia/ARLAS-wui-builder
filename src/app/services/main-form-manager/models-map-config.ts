@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import { LayerMetadata } from 'arlas-web-components';
+import { LayerMetadata } from 'arlas-map';
 
 export enum ExternalEvent {
   hover = 'hover',

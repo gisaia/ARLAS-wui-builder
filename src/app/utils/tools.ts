@@ -17,13 +17,22 @@
  * under the License.
  */
 
-import { AbstractControl, FormArray, FormGroup, FormControl } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { KeywordColor } from '@map-config/components/dialog-color-table/models';
+import { MaplibreSourceType } from 'arlas-maplibre';
+import {
+  AddLayerObject, CanvasSourceSpecification, GeoJSONSource,
+  RasterSourceSpecification, SourceSpecification, TypedStyleLayer
+} from 'maplibre-gl';
 
 interface OPTIONAL {
   isPresent: boolean;
   value?: any;
 }
+
+export type ArlasLayer = TypedStyleLayer | AddLayerObject;
+export type ArlasSource = MaplibreSourceType | GeoJSONSource | RasterSourceSpecification | SourceSpecification | CanvasSourceSpecification;
+
 
 export interface Page {
   link: string;
@@ -81,7 +90,7 @@ export function isFullyTouched(control: AbstractControl): boolean {
     } else if (control.controls.length === 1) {
       return Object.values(control.controls)[0].touched;
     } else {
-      return Object.values(control.controls).map(c => isFullyTouched(c)).reduce((b1, b2) => b1 && b2);
+      return Object.values(control.controls).map(c => isFullyTouched(c)).reduce((b1, b2) => b1 && b2, false);
     }
   }
   return false;

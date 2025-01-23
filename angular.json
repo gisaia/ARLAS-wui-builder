@@ -54,7 +54,7 @@
             "styles": [
               "src/theme.scss",
               "src/styles.scss",
-              "node_modules/mapbox-gl/dist/mapbox-gl.css",
+              "node_modules/maplibre-gl/dist/maplibre-gl.css",
               "node_modules/jsoneditor/dist/jsoneditor.min.css"
             ],
             "browser": "src/main.ts"

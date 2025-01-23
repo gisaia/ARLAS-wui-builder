@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-arlas-mapgl {
+arlas-map {
     ::ng-deep div.map__visu-list {
         top: 10px;
         right: 10px;
@@ -35,7 +35,7 @@ arlas-mapgl {
         }
     }
 
-    ::ng-deep .mapboxgl-ctrl-top-right {
+    ::ng-deep .maplibregl-ctrl-top-right {
         top: 45px;
     }
 
@@ -44,12 +44,12 @@ arlas-mapgl {
         z-index: 1;
     }
 
-    ::ng-deep.mapboxgl-ctrl-group {
+    ::ng-deep.maplibregl-ctrl-group {
         box-shadow: none;
     }
 
-    ::ng-deep.mapboxgl-ctrl-group-addgeobox,
-    ::ng-deep.mapboxgl-ctrl-group-removeaois {
+    ::ng-deep.maplibregl-ctrl-group-addgeobox,
+    ::ng-deep.maplibregl-ctrl-group-removeaois {
         display: none;
     }
 }

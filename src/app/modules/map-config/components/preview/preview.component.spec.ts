@@ -8,14 +8,15 @@ import {
 } from 'arlas-wui-toolkit';
 import { MockComponent } from 'ng-mocks';
 import { PreviewComponent } from './preview.component';
-import { MapglComponent, ArlasColorService } from 'arlas-web-components';
+import { ArlasColorService } from 'arlas-web-components';
+import { ArlasMapComponent } from 'arlas-map';
 
 describe('PreviewComponent', () => {
 
   let spectator: Spectator<PreviewComponent>;
   const createComponent = createComponentFactory({
     declarations: [
-      MockComponent(MapglComponent)
+      MockComponent(ArlasMapComponent)
     ],
     providers: [
       mockProvider(HttpClient),

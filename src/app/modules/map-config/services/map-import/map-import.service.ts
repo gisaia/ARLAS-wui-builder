@@ -26,7 +26,7 @@ import { isTechnicalArlasLayer, Layer, MapConfig } from '@services/main-form-man
 import { importElements } from '@services/main-form-manager/tools';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
 import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
-import { BasemapStyle, LayerMetadata, VisualisationSetConfig } from 'arlas-web-components';
+import { BasemapStyle, LayerMetadata, VisualisationSetConfig } from 'arlas-map';
 import { ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, LayerSourceConfig, MetricConfig } from 'arlas-web-contributors';
 import { ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';

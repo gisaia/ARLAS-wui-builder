@@ -1,8 +1,3 @@
-import { Layer } from './models-map-config';
-import { BasemapStyle } from 'arlas-web-components';
-import { VisualisationSetConfig } from 'arlas-web-components';
-import { FieldsConfiguration } from 'arlas-web-contributors';
-
 /*
  * Licensed to Gisaïa under one or more contributor
  * license agreements. See the NOTICE.txt file distributed with
@@ -22,6 +17,12 @@ import { FieldsConfiguration } from 'arlas-web-contributors';
  * under the License.
  */
 
+import { Aggregation } from 'arlas-api';
+import { VisualisationSetConfig, BasemapStyle } from 'arlas-map';
+import { FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
+import { AnalyticsTabs, ZoomToDataStrategy } from 'arlas-wui-toolkit';
+import { Layer } from './models-map-config';
+
 export const JSONPATH_COUNT = '$.count';
 export const JSONPATH_METRIC = '$.metrics[0].value';
 /** @deprectaed */
@@ -30,10 +31,6 @@ export const SEARCH_TYPE = 'search';
 /** @deprectaed */
 export const CHIPSEARCH_IDENTIFIER = 'chipssearch';
 export const SEARCH_IDENTIFIER = 'search';
-
-import { LayerSourceConfig } from 'arlas-web-contributors';
-import { Aggregation } from 'arlas-api';
-import { AnalyticsTabs, ZoomToDataStrategy } from 'arlas-wui-toolkit';
 
 export interface Config {
   arlas: ArlasConfig;

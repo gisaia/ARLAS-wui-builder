@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { AbstractControl, Validators, ValidatorFn } from '@angular/forms';
+import { AbstractControl, Validators } from '@angular/forms';
 
 export const urlRegexp = '(https?://)?(([0-9.]{1,4}){4}(:[0-9]{2,5})|([a-z0-9-.]+)' +
   '(\\.[a-z-.]+)(:[0-9]{2,5})?|localhost(:[0-9]{2,5}))+([/?].*)?';

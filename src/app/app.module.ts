@@ -39,7 +39,7 @@ import { GetCollectionDisplayModule } from 'arlas-web-components';
 import enComponents from 'arlas-web-components/assets/i18n/en.json';
 import frComponents from 'arlas-web-components/assets/i18n/fr.json';
 import {
-  ArlasCollaborativesearchService, ArlasConfigurationDescriptor, ArlasConfigurationUpdaterService,
+  ArlasConfigurationDescriptor, ArlasConfigurationUpdaterService,
   ArlasIamService,
   ArlasSettingsService,
   ArlasStartupService,
@@ -147,7 +147,6 @@ export class CustomTranslateLoader implements TranslateLoader {
   ],
   providers: [
     forwardRef(() => ArlasConfigurationDescriptor),
-    forwardRef(() => ArlasCollaborativesearchService),
     forwardRef(() => ArlasStartupService),
     {
       provide: APP_INITIALIZER,

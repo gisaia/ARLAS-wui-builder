@@ -38,7 +38,8 @@ import { StartupService } from '@services/startup/startup.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { camelize } from '@utils/tools';
-import { ArlasColorService, LayerMetadata, MapglLegendComponent, VisualisationSetConfig } from 'arlas-web-components';
+import { ArlasColorService } from 'arlas-web-components';
+import { LayerMetadata, LegendComponent, LegendService, VisualisationSetConfig } from 'arlas-map';
 import { MapContributor } from 'arlas-web-contributors';
 import { ArlasCollaborativesearchService, ArlasConfigService, ArlasSettingsService, ContributorBuilder } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
@@ -78,16 +79,17 @@ export class LayersComponent implements OnInit, OnDestroy {
   public constructor(
     protected mainFormService: MainFormService,
     public dialog: MatDialog,
-    private collaborativesearchService: ArlasCollaborativesearchService,
-    private configService: ArlasConfigService,
-    private startupService: StartupService,
-    private collectionService: CollectionService,
-    private mapImportService: MapImportService,
-    private colorService: ArlasColorService,
-    private mapLayerFormBuilder: MapLayerFormBuilderService,
-    private mapGlobalFormBuilder: MapGlobalFormBuilderService,
+    private readonly collaborativesearchService: ArlasCollaborativesearchService,
+    private readonly configService: ArlasConfigService,
+    private readonly startupService: StartupService,
+    private readonly collectionService: CollectionService,
+    private readonly mapImportService: MapImportService,
+    private readonly colorService: ArlasColorService,
+    private readonly mapLayerFormBuilder: MapLayerFormBuilderService,
+    private readonly mapGlobalFormBuilder: MapGlobalFormBuilderService,
     protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
-    private settingsService: ArlasSettingsService
+    private readonly settingsService: ArlasSettingsService,
+    private readonly legendService: LegendService
   ) {
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
     this.visualisationSetFa = this.mainFormService.mapConfig.getVisualisationsFa();
@@ -190,17 +192,17 @@ export class LayersComponent implements OnInit, OnDestroy {
 
   public getColorLegend(paint) {
     const styleColor = paint['circle-color'] || paint['heatmap-color'] || paint['fill-color'] || paint['line-color'] || paint['text-color'];
-    const colorLegend = MapglLegendComponent.buildColorLegend(styleColor as any, true, null);
+    const colorLegend = LegendService.buildColorLegend(styleColor, true, null);
     return colorLegend[0];
   }
 
   public getStrokeColorLegend(paint, metadata: LayerMetadata) {
     const circleStyleColor = paint['circle-stroke-color'];
-    if (!!circleStyleColor) {
-      const colorLegend = MapglLegendComponent.buildColorLegend(circleStyleColor as any, true, null);
+    if (circleStyleColor) {
+      const colorLegend = LegendService.buildColorLegend(circleStyleColor, true, null);
       return colorLegend[0];
     } else if (!!metadata && !!metadata.stroke) {
-      const colorLegend = MapglLegendComponent.buildColorLegend(metadata.stroke.color as any, true, null);
+      const colorLegend = LegendService.buildColorLegend(metadata.stroke.color, true, null);
       return colorLegend[0];
     }
   }

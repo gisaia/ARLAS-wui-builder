@@ -20,6 +20,7 @@ import { Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
+// The licence of this library is MIT.
 import tilebelt from '@mapbox/tilebelt';
 import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
