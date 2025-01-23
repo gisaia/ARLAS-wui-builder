@@ -66,4 +66,4 @@ histogram:
   max_buckets: 100
   export_nb_buckets: 1000
 use_time_filter: true
-enable_h3: false
+enable_advanced_features: false

@@ -1482,7 +1482,7 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
             { label: marker('Tile Grid'), value: ClusterAggType.tile },
             { label: marker('Geohash Grid'), value: ClusterAggType.geohash },
             { label: marker('Geohex Grid'), value: ClusterAggType.h3,
-              enabled: !!settingsService.settings && settingsService.settings['enable_h3'] }
+              enabled: !!settingsService.settings && settingsService.settings['enable_advanced_features'] }
           ]),
         granularity: new SelectFormControl(
           '',

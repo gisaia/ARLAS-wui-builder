@@ -497,15 +497,15 @@ fi
 envsubst '$ARLAS_USE_TIME_FILTER' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
 mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
 
-# Enable h3 agregations
-if [ -z "${ARLAS_ENABLE_H3}" ]; then
-  ARLAS_ENABLE_H3=false
-  export ARLAS_ENABLE_H3
-  echo "H3 agregations are not allowed"
+# Enable advanced feature like h3 aggregation
+if [ -z "${ARLAS_ENABLE_ADVANCED_FEATURES}" ]; then
+  ARLAS_ENABLE_ADVANCED_FEATURES=false
+  export ARLAS_ENABLE_ADVANCED_FEATURES
+  echo "advanced feature are not allowed"
 else
-  echo ${ARLAS_ENABLE_H3} "is used for 'enable_h3' in settings.yaml file"
+  echo ${ARLAS_ENABLE_ADVANCED_FEATURES} "is used for 'enable_advanced_features' in settings.yaml file"
 fi
-envsubst '$ARLAS_ENABLE_H3' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
+envsubst 'ARLAS_ENABLE_ADVANCED_FEATURES' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
 mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
 
 # Set App base path
