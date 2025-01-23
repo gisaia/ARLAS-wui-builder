@@ -27,6 +27,7 @@ import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-ex
 import { MainFormService } from '@services/main-form/main-form.service';
 import { StartupService, ZONE_PREVIEW } from '@services/startup/startup.service';
 import { FeatureCollection } from '@turf/helpers';
+import { ArlasLayer, ArlasSource } from '@utils/tools';
 import { ArlasMapComponent, ArlasMapFrameworkService } from 'arlas-map';
 import { DataWithLinks } from 'arlas-persistence-api';
 import { ArlasColorService } from 'arlas-web-components';
@@ -37,14 +38,10 @@ import {
   ArlasSettingsService, ContributorBuilder, PersistenceService
 } from 'arlas-wui-toolkit';
 import {
-  AddLayerObject, CanvasSourceSpecification,
-  GeoJSONSource, MapOptions,
-  RasterSourceSpecification, SourceSpecification, TypedStyleLayer
+  MapOptions
 } from 'maplibre-gl';
-import { MaplibreSourceType } from 'arlas-maplibre';
-
-
 import { catchError, map, merge, Observable, of, Subscription, throwError } from 'rxjs';
+
 export interface MapglComponentInput {
   mapglContributors: MapContributor[];
   mapComponentConfig: any;
@@ -59,8 +56,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
 
   @Input() public mapComponentConfig: any;
   @Input() public mapglContributors: MapContributor[] = [];
-  @ViewChild('map', { static: false }) public mapComponent: ArlasMapComponent<TypedStyleLayer | AddLayerObject,
-    MaplibreSourceType | GeoJSONSource | RasterSourceSpecification | SourceSpecification | CanvasSourceSpecification, MapOptions>;
+  @ViewChild('map', { static: false }) public mapComponent: ArlasMapComponent<ArlasLayer, ArlasSource, MapOptions>;
 
   private onMapLoadSub: Subscription;
   public mapDataSources;
@@ -81,8 +77,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     private readonly snackbar: MatSnackBar,
     private readonly translate: TranslateService,
     private readonly settingsService: ArlasSettingsService,
-    private readonly mapFrameworkService: ArlasMapFrameworkService<TypedStyleLayer | AddLayerObject,
-      MaplibreSourceType | GeoJSONSource | RasterSourceSpecification | SourceSpecification | CanvasSourceSpecification, MapOptions>,
+    private readonly mapFrameworkService: ArlasMapFrameworkService<ArlasLayer, ArlasSource, MapOptions>,
     @Inject(MAT_DIALOG_DATA) public dataMap: MapglComponentInput
   ) {
     if (this.dataMap.mapglContributors !== undefined || this.dataMap.mapComponentConfig !== undefined) {
