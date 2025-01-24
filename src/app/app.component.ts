@@ -19,9 +19,7 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { LandingPageComponent } from '@components/landing-page/landing-page.component';
 import { INGXLoggerMetadata, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { IconService } from '@services/icon-service/icon.service';
-import { MainFormService } from './services/main-form/main-form.service';
 import { Title } from '@angular/platform-browser';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { NavigationEnd, Router } from '@angular/router';
@@ -39,17 +37,15 @@ export class AppComponent implements OnInit {
   public title = 'ARLAS-wui-builder';
   public version: string;
   public displayTopMenu = true;
-  public displayLeftMenu = true;
+  public displayLeftMenu = false;
   @ViewChild('landing', { static: false }) public landing: LandingPageComponent;
 
   public constructor(
-    private mainFormService: MainFormService,
-    private logger: NGXLogger,
-    private snackbar: MatSnackBar,
-    private iconService: IconService,
-    private titleService: Title,
-    private arlasSettingsService: ArlasSettingsService,
-    private router: Router
+    private readonly logger: NGXLogger,
+    private readonly iconService: IconService,
+    private readonly titleService: Title,
+    private readonly arlasSettingsService: ArlasSettingsService,
+    private readonly router: Router
   ) {
     this.logger.registerMonitor({
       onLog(logObject: INGXLoggerMetadata): void {
@@ -68,21 +64,21 @@ export class AppComponent implements OnInit {
     this.iconService.registerIcons();
     // remove arlas gif after
     const gifElement = document.querySelector('.gif');
-    if (!!gifElement) {
+    if (gifElement) {
       document.querySelector('.gif').remove();
     }
 
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(
       (data) => {
-        this.displayTopMenu = (data as NavigationEnd).url !== '/login'
-        && !(data as NavigationEnd).url.startsWith('/register')
-        && (data as NavigationEnd).url !== '/password_forgot'
-        && !(data as NavigationEnd).url.startsWith('/verify/')
-        && (data as NavigationEnd).url !== '/reset/';
+        this.displayTopMenu = data.url !== '/login'
+        && !data.url.startsWith('/register')
+        && data.url !== '/password_forgot'
+        && !data.url.startsWith('/verify/')
+        && data.url !== '/reset/';
 
-        this.displayLeftMenu = this.displayTopMenu && (data as NavigationEnd).url !== '/'
-        && !(data as NavigationEnd).url.startsWith('/?')
-        && !(data as NavigationEnd).url.startsWith('/load');
+        this.displayLeftMenu = this.displayTopMenu && data.url !== '/'
+        && !data.url.startsWith('/?')
+        && !data.url.startsWith('/load');
       }
     );
   }
