@@ -86,9 +86,9 @@ body {
 }
 
 #mapgl {
-  width: 100% !important;
+  width: 100%;
   top: 49px !important;
-  height: calc(100% - 59px) !important;
+  height: calc(100% - 49px);
   position: absolute !important;
   bottom: 0px !important;
   right: 0px !important;
@@ -96,8 +96,7 @@ body {
 
 .map-preview {
   #mapgl {
-    width: 80% !important;
-    height: 80% !important;
+    height: 100%;
     margin: -24px !important;
     position: absolute !important;
     bottom: unset !important;
@@ -107,8 +106,7 @@ body {
 
   // Properly position basemap when in window preview mode
   .basemaps {
-    right: calc(10% + 9px) !important;
-    top: 298px !important;
+    top: 195px !important;
   }
   .basemap-container {
     right: calc(10% + 9px + 30px + 5px) !important;
