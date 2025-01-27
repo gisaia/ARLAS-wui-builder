@@ -112,7 +112,6 @@ export class LayersComponent implements OnInit, OnDestroy {
           layer: exportedLayer,
           colorLegend: this.getColorLegend(paint),
           strokeColorLegend: this.getStrokeColorLegend(paint, exportedLayer.metadata), lineDashArray: this.getLineDashArray(paint),
-          iconType: layer?.clusterFg?.geometryStep?.aggType ? layer?.clusterFg?.geometryStep?.aggType : null
         }
       );
 
@@ -186,7 +185,6 @@ export class LayersComponent implements OnInit, OnDestroy {
       paint,
       filter: modeValues.styleStep.filter,
       metadata: ConfigMapExportHelper.getLayerMetadata(collection, collectionDisplayName,
-          layerFg.value.clusterFg?.geometryStep?.aggType,
         layerFg.mode, modeValues, colorService, taggableFields)
     };
     return layer;
