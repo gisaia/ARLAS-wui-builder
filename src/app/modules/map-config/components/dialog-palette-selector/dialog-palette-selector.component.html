@@ -74,7 +74,7 @@
     </div>
 </div>
 
-<div mat-dialog-actions class="action-buttons-palette" align="end">
+<div mat-dialog-actions class="action-buttons-palette" [align]="'end'">
     <div>
         <button mat-button [mat-dialog-close]="undefined">{{ 'Cancel' | translate}}</button>
         <button mat-button (click)="selectedPalette = null"
