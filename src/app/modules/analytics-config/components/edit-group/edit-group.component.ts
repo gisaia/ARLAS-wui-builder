@@ -16,35 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { AnalyticsImportService } from '@analytics-config/services/analytics-import/analytics-import.service';
+import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
+import { CdkDragDrop, CdkDragEnter, CdkDragMove } from '@angular/cdk/drag-drop';
 import {
-  Component, OnInit, Input, Output, EventEmitter,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
 } from '@angular/core';
-import { FormGroup, FormArray } from '@angular/forms';
-import { WIDGET_TYPE } from './models';
-import { MatDialog } from '@angular/material/dialog';
+import { FormArray, FormGroup } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
+import { ConfigFormGroup } from '@shared-models/config-form';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+import { moveInFormArray } from '@utils/tools';
+import { OperationEnum } from 'arlas-web-core';
+import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs/internal/Subject';
 import { EditWidgetDialogComponent } from '../edit-widget-dialog/edit-widget-dialog.component';
 import { EditWidgetDialogData } from '../edit-widget-dialog/models';
-import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
-import { OperationEnum } from 'arlas-web-core';
-import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
-import { MatDialogRef } from '@angular/material/dialog';
-import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
-import { Subject } from 'rxjs/internal/Subject';
-import { Subscription } from 'rxjs';
-import { OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { CdkDragDrop, CdkDragEnter, CdkDragMove } from '@angular/cdk/drag-drop';
-import { moveInFormArray } from '@utils/tools';
-import { AnalyticsImportService } from '@analytics-config/services/analytics-import/analytics-import.service';
 import { ImportWidgetDialogComponent } from '../import-widget-dialog/import-widget-dialog.component';
-import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
-import { ConfigFormGroup } from '@shared-models/config-form';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
-import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
-import { marker } from '@colsen1991/ngx-translate-extract-marker';
-import { IconService } from '@services/icon-service/icon.service';
-import { MatIconRegistry } from '@angular/material/icon';
+import { WIDGET_TYPE } from './models';
 
 @Component({
   selector: 'arlas-add-widget-dialog',
@@ -107,12 +110,12 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   private afterClosedconfirmSub: Subscription;
 
   public constructor(
-    private dialog: MatDialog,
-    private cdr: ChangeDetectorRef,
-    private analyticsImportService: AnalyticsImportService,
-    private analyticsInitService: AnalyticsInitService,
-    private main: MainFormService,
-    private shortcutsService: ShortcutsService
+    private readonly dialog: MatDialog,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly analyticsImportService: AnalyticsImportService,
+    private readonly analyticsInitService: AnalyticsInitService,
+    private readonly main: MainFormService,
+    private readonly shortcutsService: ShortcutsService
   ) { }
 
   public ngOnInit() {
@@ -140,11 +143,11 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   }
 
   public addWidget() {
-    this.afterClosedAddSub = this.dialog.open(AddWidgetDialogComponent, { width: '350px' })
+    this.afterClosedAddSub = this.dialog.open(AddWidgetDialogComponent, { width: '440px' })
       .afterClosed().subscribe(result => {
         if (result) {
           // add the new widget to the previous ones if they exist
-          if (!!this.contentTypeValue) {
+          if (this.contentTypeValue) {
             this.contentTypeValue.push(result);
           }
           const finalResult = this.contentTypeValue ? this.contentTypeValue : [result];
@@ -155,12 +158,12 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   }
 
   public importWidget() {
-    this.dialog.open(ImportWidgetDialogComponent, { width: '800px' })
+    this.dialog.open(ImportWidgetDialogComponent, { width: '550px' })
       .afterClosed().subscribe(result => {
-        if (!!result) {
+        if (result) {
           result[0].forEach(r => {
             const type = r.componentType;
-            if (!!this.contentTypeValue) {
+            if (this.contentTypeValue) {
               this.contentTypeValue.push(type);
             }
             const finalResult = this.contentTypeValue ? this.contentTypeValue : [type];
@@ -214,13 +217,11 @@ export class EditGroupComponent implements OnInit, OnDestroy {
             all: false
           });
           this.cdr.detectChanges();
-        } else {
-          if (newWidget) {
-            // delete a new created widget after clicking on cancel
-            this.content.removeAt(this.content.length - 1);
-            this.contentTypeValue.pop();
-            this.formGroup.controls.contentType.setValue(this.contentTypeValue);
-          }
+        } else if (newWidget) {
+          // delete a new created widget after clicking on cancel
+          this.content.removeAt(this.content.length - 1);
+          this.contentTypeValue.pop();
+          this.formGroup.controls.contentType.setValue(this.contentTypeValue);
         }
       });
   }
