@@ -196,6 +196,7 @@ export class LayersComponent implements OnInit, OnDestroy {
       paint,
       filter: modeValues.styleStep.filter,
       metadata: ConfigMapExportHelper.getLayerMetadata(collection, collectionDisplayName,
+          layerFg.value.clusterFg?.geometryStep?.aggType,
         layerFg.mode, modeValues, colorService, taggableFields)
     };
     return layer;
