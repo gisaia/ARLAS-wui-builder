@@ -39,10 +39,12 @@
   --mdc-dialog-subhead-font: Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
   --mdc-dialog-subhead-weight: bold;
   --mdc-dialog-subhead-tracking: 0;
+  --mat-dialog-headline-padding: 0;
 }
 .mdc-dialog__content {
   --mdc-dialog-supporting-text-font: Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
   --mdc-dialog-supporting-text-tracking: 0;
+  --mat-dialog-with-actions-content-padding: 10px;
 }
 
 // Add padding around dialog
@@ -120,13 +122,14 @@ mat-nav-list .mat-mdc-list-item {
   }
 }
 
-.mat-mdc-form-field-icon-suffix {
-  align-self: baseline;
+.mdc-text-field--outlined {
+  // Adjust width to accomodate for the margin and have space for the numeric scroller
+  .mdc-text-field__input {
+    width: calc(100% - 10px - 3px);
+  }
 
-  mat-icon {
-    height: 18px;
-    width: 18px;
-    font-size: 18px;
+  .mat-mdc-form-field-input-control {
+    margin-left: 10px;
   }
 }
 
