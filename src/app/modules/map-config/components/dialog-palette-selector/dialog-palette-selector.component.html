@@ -74,13 +74,11 @@
     </div>
 </div>
 
-<div mat-dialog-actions class="action-buttons-palette">
+<div mat-dialog-actions class="action-buttons-palette" align="end">
     <div>
         <button mat-button [mat-dialog-close]="undefined">{{ 'Cancel' | translate}}</button>
         <button mat-button (click)="selectedPalette = null"
-            *ngIf="selectedPalette">{{ 'Back to templates' | translate}}</button>
-    </div>
-    <div>
+                *ngIf="selectedPalette">{{ 'Back to palettes' | translate}}</button>
         <button mat-button color="primary" mat-raise *ngIf="selectedPalette" [mat-dialog-close]="selectedPalette"
             [disabled]="!isValid()">{{ 'Save' | translate}}</button>
     </div>
