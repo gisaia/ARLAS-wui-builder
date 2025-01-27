@@ -10,7 +10,7 @@
     </mat-form-field>
 
     <div *ngIf="this.importWidgetFormGroup.get('dashboard').valid">
-        <div mat-dialog-title> {{'Choose of the following widgets' | translate}}</div>
+        <div mat-dialog-title class="import__widgets"> {{'Choose of the following widgets' | translate}}</div>
             <div *ngFor="let tab of analytics | keyvalue">
                 <div class="tab">{{tab.key}}</div>
                 <mat-card appearance="outlined" class="group" *ngFor="let analytic of tab.value">
@@ -24,10 +24,10 @@
                                 <span>{{contributors.get(comp.contributorId)}}</span>
                                 <div class="type" >
                                     <div>(</div>
-                                    <div><mat-icon [color]="'primary'">{{comp.componentType === 'histogram' ? 'bar_chart': 
-                                        (comp.componentType === 'donut' ? 'donut_small' : 
+                                    <div><mat-icon [color]="'primary'">{{comp.componentType === 'histogram' ? 'bar_chart':
+                                        (comp.componentType === 'donut' ? 'donut_small' :
                                         (comp.componentType === 'powerbars' ? 'sort' :
-                                        (comp.componentType === 'metric' ? 'functions' : 
+                                        (comp.componentType === 'metric' ? 'functions' :
                                         (comp.componentType === 'resultlist' ? 'table_chart' :'waves'))))}}</mat-icon></div>
                                     <div>{{comp.componentType | translate}})</div>
                                 </div>
@@ -38,7 +38,7 @@
                     <div *ngIf="analytic.components?.length === 0" class="not-importable">
                         {{'This Tab doesn\'t contain an importable widget' | translate}}
                     </div>
-    
+
                 </mat-card>
             </div>
 
