@@ -42,7 +42,7 @@ export class DialogPaletteSelectorComponent implements OnInit {
 
   public ngOnInit() {
     this.dialogRef.disableClose = true;
-    this.dialogRef.updateSize('900px');
+    this.dialogRef.updateSize('80vw');
     this.prepareDefaultPalettes();
   }
 

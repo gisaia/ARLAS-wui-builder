@@ -93,6 +93,14 @@ h1 {
       display: flex;
       align-items: center;
       justify-content: space-around;
+
+      .slider-input {
+        .mat-mdc-form-field-subscript-wrapper {
+          display: none;
+        }
+
+        max-width: 170px;
+      }
     }
   }
 }
