@@ -88,7 +88,7 @@ export class ConfigMapExportHelper {
             collection: layer.metadata.collection,
             collectionDisplayName: layer.metadata.collectionDisplayName,
             isScrollableLayer: false,
-            aggType: layerFg.value?.clusterFg?.geometryStep?.aggType ?  layerFg.value?.clusterFg?.geometryStep?.aggType : null
+            aggType:layer.metadata?.aggType
           },
           filter: layer.filter,
           layout: {
@@ -164,13 +164,13 @@ export class ConfigMapExportHelper {
     return mapConfig;
   }
 
-  public static getLayerMetadata(collection: string, collectionDisplayName: string, aggType:string,
+  public static getLayerMetadata(collection: string, collectionDisplayName: string,
     mode: LAYER_MODE, modeValues,
     colorService: ArlasColorService, taggableFields?: Set<string>): LayerMetadata {
     const metadata: LayerMetadata = {
       collection,
       collectionDisplayName,
-      aggType: aggType ?? null
+      aggType: modeValues.geometryStep?.aggType ?? null
     };
 
     if (metadata && metadata.hasOwnProperty('hiddenProps')) {
@@ -211,9 +211,9 @@ export class ConfigMapExportHelper {
       maxzoom: modeValues.visibilityStep.zoomMax,
       layout,
       paint,
-      metadata: this.getLayerMetadata(layerFg.customControls.collection.value, layerFg.customControls.collectionDisplayName.value,
-        layerFg.value.clusterFg?.geometryStep?.aggType,
-      mode, modeValues, colorService, taggableFields)
+      metadata: this.getLayerMetadata(layerFg.customControls.collection.value,
+        layerFg.customControls.collectionDisplayName.value,
+        mode, modeValues, colorService, taggableFields)
     };
     /** 'all' is the operator that allows to apply an "AND" operator */
     layer.filter = ['all'];
