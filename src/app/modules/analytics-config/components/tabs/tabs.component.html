@@ -4,7 +4,7 @@
     </div>
     <mat-divider></mat-divider>
     <div class="tab-wrapper">
-        <mat-tab-group disableRipple mat-align-tabs="start" #matTabGroup [(selectedIndex)]="selectedIndex">
+        <mat-tab-group disableRipple="true" mat-stretch-tabs="false" mat-align-tabs="start" #matTabGroup [(selectedIndex)]="selectedIndex">
             <mat-tab #matTab *ngFor="let fg of tabsFa.controls; let index = index">
                 <ng-template mat-tab-label>
                     <div [id]="'tab-' + index" cdkDropList cdkDropListOrientation="horizontal"
@@ -35,7 +35,7 @@
                 <arlas-groups [contentFg]="getTab(index).controls.contentFg" *ngIf="index === selectedIndex">
                 </arlas-groups>
             </mat-tab>
-            <mat-tab [disabled]="true">
+            <mat-tab>
                 <ng-template mat-tab-label>
                     <button mat-icon-button (click)="addTab()">
                         <mat-icon>add</mat-icon>

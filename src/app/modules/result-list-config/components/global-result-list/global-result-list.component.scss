@@ -17,6 +17,23 @@
  * under the License.
  */
 
+:host ::ng-deep {
+  .list-tab-group {
+    .mat-mdc-tab-labels .mdc-tab:last-child {
+      .mdc-tab__text-label {
+        min-width: 0;
+        color: unset;
+        opacity: unset;
+      }
+
+      .mdc-tab-indicator {
+        display: none;
+      }
+    }
+  }
+}
+
+
 .list-tab-group {
   .content {
     display: flex;

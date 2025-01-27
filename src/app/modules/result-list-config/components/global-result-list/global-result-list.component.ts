@@ -19,7 +19,7 @@
 
 import { EditTabComponent } from '@analytics-config/components/edit-tab/edit-tab.component';
 import { ResultlistConfigForm } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, signal, ViewChild } from '@angular/core';
 import { FormArray, FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -30,6 +30,7 @@ import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
 import { Subscription } from 'rxjs';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'arlas-global-result-list',
@@ -40,11 +41,12 @@ export class GlobalResultListComponent implements OnDestroy {
 
   public listsFa: FormArray;
   private newAfterClosedSub: Subscription;
-  public selected = new FormControl(0);
 
   private removeAfterClosedSub: Subscription;
   public preview = [];
   private editDialogRef: MatDialogRef<EditTabComponent>;
+
+  @ViewChild('matTabGroup', { static: false }) private matTabGroup: MatTabGroup;
 
   public constructor(
     public mainFormService: MainFormService,
@@ -63,7 +65,7 @@ export class GlobalResultListComponent implements OnDestroy {
         const formGroup = new ResultlistConfigForm(this.mainFormService.getMainCollection(), this.collectionService, name);
         this.defaultValuesService.setDefaultValueRecursively('analytics.widgets.resultlist', formGroup);
         this.listsFa.push(formGroup);
-        this.selected.setValue(this.listsFa.length - 1);
+        setTimeout(() =>  this.matTabGroup.selectedIndex = this.listsFa.length - 1, 0);
       }
     });
   }
@@ -90,8 +92,8 @@ export class GlobalResultListComponent implements OnDestroy {
     this.removeAfterClosedSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.listsFa.removeAt(tabIndex);
-        if (this.selected.value !== 0) {
-          this.selected.setValue(this.selected.value - 1);
+        if (this.matTabGroup.selectedIndex !== 0) {
+          this.matTabGroup.selectedIndex = this.matTabGroup.selectedIndex - 1;
         }
       }
     });
@@ -117,5 +119,4 @@ export class GlobalResultListComponent implements OnDestroy {
       }
     });
   }
-
 }
