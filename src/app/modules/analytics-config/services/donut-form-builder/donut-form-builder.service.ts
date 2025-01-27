@@ -148,7 +148,7 @@ export class DonutConfigForm extends WidgetConfigFormGroup {
                     sub.unsubscribe();
                   });
               }),
-            'A field is required to manage colors',
+            marker('A field is required to manage colors'),
             {
               optional: true,
               dependsOn: () => [
