@@ -87,7 +87,8 @@ export class ConfigMapExportHelper {
           metadata: {
             collection: layer.metadata.collection,
             collectionDisplayName: layer.metadata.collectionDisplayName,
-            isScrollableLayer: false
+            isScrollableLayer: false,
+            aggType: layerFg.value?.clusterFg?.geometryStep?.aggType ?  layerFg.value?.clusterFg?.geometryStep?.aggType : null
           },
           filter: layer.filter,
           layout: {
@@ -163,15 +164,15 @@ export class ConfigMapExportHelper {
     return mapConfig;
   }
 
-  public static getLayerMetadata(collection: string, collectionDisplayName: string,
+  public static getLayerMetadata(collection: string, collectionDisplayName: string, aggType:string,
     mode: LAYER_MODE, modeValues,
     colorService: ArlasColorService, taggableFields?: Set<string>): LayerMetadata {
     const metadata: LayerMetadata = {
       collection,
-      collectionDisplayName
+      collectionDisplayName,
+      aggType: aggType ?? null
     };
 
-    // with this prop we ll be able to restore the good geomType when we ll reload the layer;
     if (metadata && metadata.hasOwnProperty('hiddenProps')) {
       delete metadata['hiddenProps'];
     }
@@ -211,7 +212,8 @@ export class ConfigMapExportHelper {
       layout,
       paint,
       metadata: this.getLayerMetadata(layerFg.customControls.collection.value, layerFg.customControls.collectionDisplayName.value,
-        mode, modeValues, colorService, taggableFields)
+        layerFg.value.clusterFg?.geometryStep?.aggType,
+      mode, modeValues, colorService, taggableFields)
     };
     /** 'all' is the operator that allows to apply an "AND" operator */
     layer.filter = ['all'];
