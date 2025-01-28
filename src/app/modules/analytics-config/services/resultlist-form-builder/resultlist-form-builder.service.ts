@@ -200,6 +200,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
               '',
               marker('Transformation title'),
               marker('Transformation title description'),
+              '',
               1,
               {
                 optional: true,
@@ -232,6 +233,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
               '',
               marker('Transformation tooltip'),
               marker('Transformation tooltip description'),
+              '',
               1,
               {
                 optional: true,
@@ -453,6 +455,7 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
           '',
           marker('Transformation'),
           '',
+          '',
           1,
           {
             optional: true,
@@ -589,8 +592,9 @@ export class ResultlistDetailFieldFormGroup extends FormGroup {
       ),
       process: new TextareaFormControl(
         '',
-        marker('Transformation'),
+        marker('Apply a calculation in javascript'),
         '',
+        marker('e.g : result+\'$\''),
         1,
         {
           optional: true,
