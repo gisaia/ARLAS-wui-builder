@@ -314,3 +314,9 @@ mat-option {
     font-size: 14px;
   }
 }
+
+.title-field-form-control {
+  ::ng-deep.mat-mdc-text-field-wrapper {
+    width: 300px;
+  }
+}
