@@ -48,20 +48,20 @@ export class GlobalResultListComponent implements OnDestroy {
   public preview = [];
   private editDialogRef: MatDialogRef<EditTabComponent>;
 
-  @ViewChild('matTabGroup', { static: false }) private matTabGroup: MatTabGroup;
+  @ViewChild('matTabGroup', { static: false }) private readonly matTabGroup: MatTabGroup;
 
   public constructor(
     public mainFormService: MainFormService,
-    private collectionService: CollectionService,
-    private dialog: MatDialog,
-    private defaultValuesService: DefaultValuesService
+    private readonly collectionService: CollectionService,
+    private readonly dialog: MatDialog,
+    private readonly defaultValuesService: DefaultValuesService
   ) {
     this.listsFa = this.mainFormService.resultListConfig.getResultListsFa();
     this.updatePreview();
   }
 
   public addResultList() {
-    const dialogRef = this.dialog.open(InputModalComponent);
+    const dialogRef = this.dialog.open(InputModalComponent, { data: { title: marker('Tab name') }});
     this.newAfterClosedSub = dialogRef.afterClosed().subscribe(name => {
       if (name) {
         const formGroup = new ResultlistConfigForm(this.mainFormService.getMainCollection(), this.collectionService, name);
