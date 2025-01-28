@@ -74,7 +74,7 @@ export class LayersComponent implements OnInit, OnDestroy {
   public layersFa: FormArray;
   public visualisationSetFa: FormArray;
 
-  public layerLegend: Map<string, { layer: any; colorLegend: any; strokeColorLegend: any; lineDashArray: any; iconType?: string;}> = new Map();
+  public layerLegend: Map<string, { layer: any; colorLegend: any; strokeColorLegend: any; lineDashArray: any;}> = new Map();
 
   public layerVs: Map<string, string[]> = new Map();
 
