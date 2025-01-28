@@ -18,9 +18,11 @@
  */
 
 import { EditTabComponent } from '@analytics-config/components/edit-tab/edit-tab.component';
-import { ResultlistConfigForm } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { Component, OnDestroy, signal, ViewChild } from '@angular/core';
-import { FormArray, FormControl } from '@angular/forms';
+import {
+  ResultlistConfigForm
+} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { FormArray } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
