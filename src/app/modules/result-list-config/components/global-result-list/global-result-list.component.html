@@ -1,4 +1,4 @@
-<mat-tab-group [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)"
+<mat-tab-group #matTabGroup disableRipple="true" mat-stretch-tabs="false" mat-align-tabs="start"
     class="list-tab-group">
     <mat-tab #matTab *ngFor="let listFg of listsFa.controls;let i = index">
         <ng-template mat-tab-label>
@@ -14,7 +14,7 @@
         </ng-template>
         <arlas-config-form-group [configFormGroup]="listFg" defaultKey="resultlists"></arlas-config-form-group>
     </mat-tab>
-    <mat-tab [disabled]="true">
+    <mat-tab>
         <ng-template mat-tab-label>
             <button mat-icon-button matTooltip="{{'Add a data table' | translate}}" matTooltipPosition="right" (click)="addResultList()">
                 <mat-icon>add</mat-icon>

@@ -18,6 +18,22 @@
  */
 @import "variables.scss";
 
+:host ::ng-deep {
+  .tab-wrapper {
+    .mat-mdc-tab-labels .mdc-tab:last-child {
+      .mdc-tab__text-label {
+        min-width: 0;
+        color: unset;
+        opacity: unset;
+      }
+
+      .mdc-tab-indicator {
+        display: none;
+      }
+    }
+  }
+}
+
 .container {
   height: calc(100vh - 45px);
   display: flex;
