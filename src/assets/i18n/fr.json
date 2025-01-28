@@ -92,7 +92,7 @@
 	"Add new color": "Ajouter une nouvelle couleur",
 	"Remove color": "Supprimer la couleur",
 	"Change color midpoint": "Changer le point d'interpolation de la palette?",
-	"Back to templates": "Retour aux palettes de couleurs prédéfinies",
+    "Back to palettes": "Retourner aux palettes",
 	"Add keyword": "Ajouter une entrée",
 	"Keyword": "Valeur",
 	"Color": "Couleur",
