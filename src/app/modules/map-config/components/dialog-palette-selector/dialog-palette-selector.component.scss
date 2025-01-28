@@ -55,7 +55,7 @@ h1 {
 .palette-gradient {
   @extend %palette;
 
-  margin-top: 40px;
+  margin-top: 40px !important;
   position: relative;
 
   .parent-gradient-buttons {
