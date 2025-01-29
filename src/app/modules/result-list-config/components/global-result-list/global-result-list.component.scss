@@ -18,8 +18,7 @@
  */
 
 :host ::ng-deep {
-  .list-tab-group {
-    .mat-mdc-tab-labels .mdc-tab:last-child {
+    .last-tab {
       .mdc-tab__text-label {
         min-width: 0;
         color: unset;
@@ -30,7 +29,6 @@
         display: none;
       }
     }
-  }
 }
 
 

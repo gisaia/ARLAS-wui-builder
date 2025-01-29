@@ -19,17 +19,15 @@
 @import "variables.scss";
 
 :host ::ng-deep {
-  .tab-wrapper {
-    .mat-mdc-tab-labels .mdc-tab:last-child {
-      .mdc-tab__text-label {
-        min-width: 0;
-        color: unset;
-        opacity: unset;
-      }
+  .last-tab {
+    .mdc-tab__text-label {
+      min-width: 0;
+      color: unset;
+      opacity: unset;
+    }
 
-      .mdc-tab-indicator {
-        display: none;
-      }
+    .mdc-tab-indicator {
+      display: none;
     }
   }
 }

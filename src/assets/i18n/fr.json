@@ -144,6 +144,8 @@
 	"Column field": "Champ de la colonne",
 	"Unit of the column": "Unité (optionnel)",
 	"Transformation": "Calcul en javascript ( ex: result*1000).\n'result' étant la variable javascript à transformer",
+	"Apply a calculation in javascript": "Appliquer un calcul en javascript.",
+	"e.g : result+'$'": "ex: result+'€'. 'result' sera remplacé",
 	"Colorize": "Colorer",
 	"At least one column is required": "Au moins une colonne est nécessaire",
 	"Add a column": "Ajouter une colonne",
