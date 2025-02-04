@@ -128,12 +128,12 @@ export function toTextOptionsObs(collectionFieldsObs: Observable<Array<Collectio
       .filter(f => f.type === typeEnum.TEXT))));
 }
 
-export function toGeoOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
-  return toOptionsObs(collectionFieldsObs.pipe(map(
-    fields => fields
-      .filter(f => f.type === typeEnum.GEOPOINT || f.type === typeEnum.GEOSHAPE))));
+export function toGeoOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>, enableGeoShape = true) {
+  return toOptionsObs(collectionFieldsObs
+    .pipe(map(
+      fields => fields
+        .filter(f => f.type === typeEnum.GEOPOINT || (f.type === typeEnum.GEOSHAPE && enableGeoShape)))));
 }
-
 export function toGeoPointOptionsObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
   return toOptionsObs(collectionFieldsObs.pipe(map(
     fields => fields

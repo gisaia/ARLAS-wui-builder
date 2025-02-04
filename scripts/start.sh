@@ -508,6 +508,7 @@ fi
 envsubst 'ARLAS_ENABLE_ADVANCED_FEATURES' < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp
 mv /usr/share/nginx/html/settings.yaml.tmp /usr/share/nginx/html/settings.yaml
 
+
 # Set App base path
 if [ -z "${ARLAS_BUILDER_APP_PATH}" ]; then
   ARLAS_BUILDER_APP_PATH=""

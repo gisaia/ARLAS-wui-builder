@@ -53,6 +53,17 @@ import { ButtonToggleFormControl } from '@shared-models/config-form';
 import { toNumericOptionsObs } from '../../../../services/collection-service/tools';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
+export interface MapLayerFormGroupConfig {
+    featuresFg: MapLayerTypeFeaturesFormGroup;
+    featureMetricFg: MapLayerTypeFeatureMetricFormGroup;
+    clusterFg: MapLayerTypeClusterFormGroup;
+    vFa: FormArray;
+    collection: string;
+    edit: boolean;
+    collectionService: CollectionService;
+    settingsService: ArlasSettingsService;
+
+}
 
 export const PRECISION_TOLERATED_DIFFERENCE = 3;
 export const MAX_ZOOM = 23;
@@ -60,14 +71,9 @@ export const MAX_ZOOM = 23;
 export class MapLayerFormGroup extends ConfigFormGroup {
   private currentCollection;
   public clearFilters = new Subject<boolean>();
+
   public constructor(
-    featuresFg: MapLayerTypeFeaturesFormGroup,
-    featureMetricFg: MapLayerTypeFeatureMetricFormGroup,
-    clusterFg: MapLayerTypeClusterFormGroup,
-    vFa: FormArray,
-    collection: string,
-    edit: boolean,
-    collectionService: CollectionService
+    opt: MapLayerFormGroupConfig
   ) {
     super({
       arlasId: new HiddenFormControl(
@@ -99,7 +105,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         }
       ),
       collection: new SelectFormControl(
-        collection,
+        opt.collection,
         marker('Collection'),
         marker('Layer collection description'),
         false,
@@ -109,7 +115,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
           resetDependantsOnChange: true,
           isCollectionSelect: true
         },
-        collectionService.getGroupCollectionItemsWithCentroid()
+        opt.collectionService.getGroupCollectionItemsWithCentroid()
       ),
 
       collectionDisplayName: new HiddenFormControl(
@@ -118,7 +124,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         {
           dependsOn: () => [this.customControls.collection],
           onDependencyChange: (control: HiddenFormControl) => {
-            collectionService.getDescribe(this.customControls.collection.value).subscribe(desc => {
+            opt.collectionService.getDescribe(this.customControls.collection.value).subscribe(desc => {
               if (!!desc.params.display_names && !!desc.params.display_names.collection) {
                 control.setValue(desc.params.display_names.collection);
               } else {
@@ -133,13 +139,13 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         '',
         marker('Visualisation sets'),
         marker('The layer can be put in one or several visualisation sets'),
-        vFa.value,
+        opt.vFa.value,
         {
           dependsOn: () => [this.customControls.name],
           onDependencyChange: (control: VisualisationCheckboxFormControl) => {
             // updates the selected layers in each visualisation set
             const controlsValues = [];
-            vFa.value.forEach(vf => {
+            opt.vFa.value.forEach(vf => {
               const visualisation = !!control.value ? control.value.find(v => v.name === vf.name) : undefined;
               controlsValues.push({
                 name: vf.name,
@@ -154,7 +160,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
               controlsValues.push({
                 name: 'All layers',
                 layers: [],
-                include: !edit
+                include: ! opt.edit
               });
             }
             control.setValue(controlsValues);
@@ -169,7 +175,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
             });
             // check at least one visualisation set when we create a new layer
             // if we edit an existing layer, we don't check visualisation sets
-            if (!edit && visualisationControl.length >= 1 && !visualisationControl.find(vs => vs.include === true)) {
+            if (! opt.edit && visualisationControl.length >= 1 && !visualisationControl.find(vs => vs.include === true)) {
               visualisationControl[0].include = true;
             }
             control.setSyncOptions(visualisationControl);
@@ -183,7 +189,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         {
           optional: true
         }),
-      featuresFg: featuresFg
+      featuresFg:  opt.featuresFg
         .withDependsOn(() => [this.customControls.mode, this.customControls.collection])
         .withOnDependencyChange(
           (control) => {
@@ -193,20 +199,20 @@ export class MapLayerFormGroup extends ConfigFormGroup {
             control.enableIf(this.customControls.mode.value === LAYER_MODE.features);
             /** when the collection changes we need to update all the fields lists used the different mat-select */
             if (control.enabled && (!this.currentCollection || this.customControls.collection.value !== this.currentCollection)) {
-              toGeoOptionsObs(collectionService
+              toGeoOptionsObs( opt.collectionService
                 .getCollectionFields(this.customControls.collection.value))
                 .subscribe(collectionFs => {
-                  featuresFg.geometry.setSyncOptions(collectionFs);
+                  opt.featuresFg.geometry.setSyncOptions(collectionFs);
                 });
-              this.updateCollectionInForms(featuresFg, collectionService);
+              this.updateCollectionInForms( opt.featuresFg,  opt.collectionService);
               if (this.currentCollection !== undefined) {
-                featuresFg.filters.setValue(new FormArray([], []));
+                opt.featuresFg.filters.setValue(new FormArray([], []));
                 this.clearFilters.next(true);
               }
               this.currentCollection = this.customControls.collection.value;
             }
           }),
-      featureMetricFg: featureMetricFg
+      featureMetricFg:  opt.featureMetricFg
         .withDependsOn(() => [this.customControls.mode, this.customControls.collection])
         .withOnDependencyChange(
           (control) => {
@@ -214,43 +220,43 @@ export class MapLayerFormGroup extends ConfigFormGroup {
               this.currentCollection = undefined;
               /** Calculate the network precision */
               if (!!this.customControls.collection.value) {
-                this.calculatenetworkFetchingLevel(this.customControls.collection.value, collectionService,
-                  featureMetricFg.networkFetchingLevel, featureMetricFg.zoomMin, featureMetricFg.zoomMax);
+                this.calculatenetworkFetchingLevel(this.customControls.collection.value,  opt.collectionService,
+                  opt.featureMetricFg.networkFetchingLevel,  opt.featureMetricFg.zoomMin,  opt.featureMetricFg.zoomMax);
               }
             }
             control.enableIf(this.customControls.mode.value === LAYER_MODE.featureMetric);
             /** when the collection changes we need to update all the fields lists used the different mat-select */
             if (control.enabled && !!this.customControls.collection.value &&
               (!this.currentCollection || this.customControls.collection.value !== this.currentCollection)) {
-              toGeoOptionsObs(collectionService
+              toGeoOptionsObs( opt.collectionService
                 .getCollectionFields(this.customControls.collection.value))
                 .subscribe(collectionFs => {
-                  featureMetricFg.geometry.setSyncOptions(collectionFs);
+                  opt.featureMetricFg.geometry.setSyncOptions(collectionFs);
                 });
-              toAllButGeoOptionsObs(collectionService
+              toAllButGeoOptionsObs( opt.collectionService
                 .getCollectionFields(this.customControls.collection.value))
                 .subscribe(collectionFs => {
-                  featureMetricFg.featureMetricSort.setSyncOptions(collectionFs);
+                  opt.featureMetricFg.featureMetricSort.setSyncOptions(collectionFs);
                 });
-              toKeywordOptionsObs(collectionService
+              toKeywordOptionsObs(opt.collectionService
                 .getCollectionFields(this.customControls.collection.value))
                 .subscribe(collectionFs => {
-                  featureMetricFg.geometryId.setSyncOptions(collectionFs);
+                  opt.featureMetricFg.geometryId.setSyncOptions(collectionFs);
                 });
-              this.updateCollectionInForms(featureMetricFg, collectionService);
+              this.updateCollectionInForms( opt.featureMetricFg,  opt.collectionService);
               if (this.currentCollection !== undefined) {
-                featureMetricFg.filters.setValue(new FormArray([], []));
+                opt.featureMetricFg.filters.setValue(new FormArray([], []));
                 this.clearFilters.next(true);
               }
               // calculate bbox of the collection in order and deduce the best grid precision
               if (this.currentCollection !== undefined && this.customControls.collection.value !== this.currentCollection) {
-                this.calculatenetworkFetchingLevel(this.customControls.collection.value, collectionService,
-                  featureMetricFg.networkFetchingLevel, featureMetricFg.zoomMin, featureMetricFg.zoomMax);
+                this.calculatenetworkFetchingLevel(this.customControls.collection.value,  opt.collectionService,
+                  opt.featureMetricFg.networkFetchingLevel,  opt.featureMetricFg.zoomMin,  opt.featureMetricFg.zoomMax);
               }
               this.currentCollection = this.customControls.collection.value;
             }
           }),
-      clusterFg: clusterFg
+      clusterFg:  opt.clusterFg
         .withDependsOn(() => [this.customControls.mode, this.customControls.collection])
         .withOnDependencyChange(
           (control) => {
@@ -260,22 +266,23 @@ export class MapLayerFormGroup extends ConfigFormGroup {
             control.enableIf(this.customControls.mode.value === LAYER_MODE.cluster);
             /** when the collection changes we need to update all the fields lists used the different mat-select */
             if (control.enabled && (!this.currentCollection || this.customControls.collection.value !== this.currentCollection)) {
-              toGeoOptionsObs(collectionService
+              toGeoOptionsObs( opt.collectionService
                 .getCollectionFields(this.customControls.collection.value))
                 .subscribe(collectionFs => {
-                  clusterFg.rawGeometry.setSyncOptions(collectionFs);
+                  opt.clusterFg.rawGeometry.setSyncOptions(collectionFs);
                 });
-              toGeoPointOptionsObs(collectionService
+              toGeoOptionsObs( opt.collectionService
+                .getCollectionFields(this.customControls.collection.value),
+              !! opt.settingsService &&  opt.settingsService.settings['enable_advanced_features'])
+                .subscribe(collectionFs => {
+                  opt.clusterFg.aggGeometry.setSyncOptions(collectionFs);
+                });
+              toAllButGeoOptionsObs( opt.collectionService
                 .getCollectionFields(this.customControls.collection.value))
                 .subscribe(collectionFs => {
-                  clusterFg.aggGeometry.setSyncOptions(collectionFs);
+                  opt.clusterFg.clusterSort.setSyncOptions(collectionFs);
                 });
-              toAllButGeoOptionsObs(collectionService
-                .getCollectionFields(this.customControls.collection.value))
-                .subscribe(collectionFs => {
-                  clusterFg.clusterSort.setSyncOptions(collectionFs);
-                });
-              this.updateCollectionInForms(clusterFg, collectionService);
+              this.updateCollectionInForms( opt.clusterFg,  opt.collectionService);
               this.currentCollection = this.customControls.collection.value;
             }
           }),
@@ -1630,15 +1637,17 @@ export class MapLayerFormBuilderService {
       }
     }
 
-    const mapLayerFormGroup = new MapLayerFormGroup(
-      this.buildFeatures(collection, collectionFields),
-      this.buildFeatureMetric(collection, collectionFields),
-      this.buildCluster(collection, collectionFields),
-      this.mainFormService.mapConfig.getVisualisationsFa(),
+    const mapLayerFormGroup = new MapLayerFormGroup({
       collection,
       edit,
-      this.collectionService
-    );
+      clusterFg: this.buildCluster(collection, collectionFields),
+      collectionService:this.collectionService  ,
+      featureMetricFg:this.buildFeatureMetric(collection, collectionFields),
+      featuresFg:this.buildFeatures(collection, collectionFields),
+      settingsService:this.settigsService ,
+      vFa: this.mainFormService.mapConfig.getVisualisationsFa()
+
+    });
     this.defaultValuesService.setDefaultValueRecursively('map.layer', mapLayerFormGroup);
     return mapLayerFormGroup;
   }
