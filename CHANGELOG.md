@@ -1,12 +1,31 @@
 # Change Log
 
-## [v27.0.0-rc.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.0-rc.1) (2025-01-23)
+## [v27.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.0) (2025-02-11)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v27.0.0-rc.2...v27.0.0-rc.1)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v27.0.0-rc.2...v27.0.0)
+
+**New stuff:**
+
+- Allow applying an geohash/geotile aggregation on a geoshape field [\#949](https://github.com/gisaia/ARLAS-wui-builder/issues/949)
+- The sliders in the Visibility tab of a layer are not aligned [\#789](https://github.com/gisaia/ARLAS-wui-builder/issues/789)
+- Easier heat map creation [\#725](https://github.com/gisaia/ARLAS-wui-builder/issues/725)
+
+**Fixed bugs:**
+
+- Cut explenation of result usage within the datatable 'calculation' section of a field [\#993](https://github.com/gisaia/ARLAS-wui-builder/issues/993)
+- Colour picker is not entirely visible when choosing colours in the powerbar configuration [\#869](https://github.com/gisaia/ARLAS-wui-builder/issues/869)
+
+**Miscellaneous:**
+
+- Move palettes actions [\#1028](https://github.com/gisaia/ARLAS-wui-builder/issues/1028)
 
 ## [v27.0.0-rc.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.0-rc.2) (2025-01-23)
 
-[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v26.1.2...v27.0.0-rc.2)
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v27.0.0-rc.1...v27.0.0-rc.2)
+
+## [v27.0.0-rc.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.0-rc.1) (2025-01-23)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v26.1.2...v27.0.0-rc.1)
 
 **New stuff:**
 
