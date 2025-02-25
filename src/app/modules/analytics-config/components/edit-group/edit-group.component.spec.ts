@@ -1,4 +1,4 @@
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { IconPickerComponent } from '@gisaia-team/ngx-icon-picker';
 import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
@@ -10,6 +10,8 @@ import {
 } from 'arlas-wui-toolkit';
 import { MockComponent } from 'ng-mocks';
 import { EditGroupComponent } from './edit-group.component';
+import { WIDGET_TYPE } from './models';
+import { AnalyticConfig } from '@services/main-form-manager/models-config';
 
 describe('EditGroupComponent', () => {
   let spectator: Spectator<EditGroupComponent>;
@@ -38,10 +40,10 @@ describe('EditGroupComponent', () => {
         formGroup: new FormGroup({
           icon: new FormControl(''),
           title: new FormControl(''),
-          itemPerLine: new FormControl(''),
-          contentType: new FormControl(''),
-          content: new FormControl([]),
-          preview: new FormControl([])
+          itemPerLine: new FormControl(0),
+          contentType: new FormControl(new Array<WIDGET_TYPE>()),
+          content: new FormArray([]),
+          preview: new FormControl({} as AnalyticConfig)
         })
       }
     });

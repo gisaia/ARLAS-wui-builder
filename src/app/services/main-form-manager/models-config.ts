@@ -22,6 +22,7 @@ import { VisualisationSetConfig, BasemapStyle } from 'arlas-map';
 import { FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
 import { AnalyticsTabs, ZoomToDataStrategy } from 'arlas-wui-toolkit';
 import { Layer } from './models-map-config';
+import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 
 export const JSONPATH_COUNT = '$.count';
 export const JSONPATH_METRIC = '$.metrics[0].value';
@@ -214,7 +215,7 @@ export interface AnalyticComponentConfig {
   usage?: WidgetUsage;
   contributorId: string;
   shortcutContributorId?: string;
-  componentType: string;
+  componentType: WIDGET_TYPE;
   showExportCsv?: boolean;
   input: AnalyticComponentInputConfig;
 }

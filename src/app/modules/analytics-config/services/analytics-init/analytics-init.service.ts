@@ -88,7 +88,7 @@ export class AnalyticsInitService {
     });
   }
 
-  public initNewWidget(type: string) {
+  public initNewWidget(type: WIDGET_TYPE) {
     return this.formBuilder.group({
       widgetType: [type],
       widgetData: new FormGroup({}, (fg: FormGroup) => ({validateWidget: {valid: !!fg.controls.length}}))
