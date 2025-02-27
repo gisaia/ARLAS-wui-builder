@@ -1239,6 +1239,7 @@ export class ConfigExportHelper {
         } as AnalyticComponentInputConfig
       } as AnalyticComponentConfig;
 
+
       switch (widgetType) {
         case WIDGET_TYPE.histogram: {
           component.componentType = WIDGET_TYPE.histogram;
@@ -1376,6 +1377,7 @@ export class ConfigExportHelper {
           globalActionEvent: unmanagedRenderFields.globalActionEvent,
           useColorService: true,
           cellBackgroundStyle: widgetData.renderStep.cellBackgroundStyle,
+          visualisationsList: widgetData.zactionStep?.visualisationSection.visualisationsList,
           options: {
             showActionsOnhover: 'true',
             showDetailIconName: 'keyboard_arrow_down',

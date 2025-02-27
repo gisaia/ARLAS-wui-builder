@@ -911,5 +911,11 @@
 	"OWNER_GROUP_TITLE": "Collections of {{org}}",
 	"SHARED_GROUP_TITLE": "Collections shared with {{org}}",
 	"PUBLIC_GROUP_TITLE": "Public collections",
-	"COLLECTIONS_GROUP_TITLE": "Collections"
+	"COLLECTIONS_GROUP_TITLE": "Collections",
+	"View URL": "View URL",
+	"Protocol": "Protocol",
+	"Item family name": "Item family name",
+	"Add an item family": "Add an item family",
+	"Add a visualization configuration": "Add a visualization configuration",
+	"Add a visualization": "Add a visualization"
 }

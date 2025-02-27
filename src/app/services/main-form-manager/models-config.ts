@@ -296,6 +296,7 @@ export interface AnalyticComponentInputConfig {
   consultedItemEvent?: any;
   actionOnItemEvent?: any;
   globalActionEvent?: any;
+  visualisationsList?: any;
   cellBackgroundStyle?: string;
   scrollable?: boolean;
   applyColorTo?: 'column'|'row';
@@ -306,10 +307,24 @@ export interface AnalyticComponentInputConfig {
 }
 
 export interface AnalyticComponentResultListInputConfig extends AnalyticComponentInputConfig {
+  visualisationsList?: VisualisationListInputConfig[];
   options?: AnalyticComponentResultListInputOptions;
   detailWidth?: number;
   visualisationLink?: string;
   downloadLink?: string;
+}
+
+export interface VisualisationListInputConfig {
+  description: string;
+  name: string;
+  itemsFamilies: ItemsFamiliesInputConfig[];
+}
+
+export interface ItemsFamiliesInputConfig {
+  itemsFamily: string;
+  protocol: string;
+  visualisationUrl: string;
+  filter: { field: string; values: {value: string;color: string;detail: string;}[];};
 }
 
 export interface AnalyticComponentResultListInputOptions {

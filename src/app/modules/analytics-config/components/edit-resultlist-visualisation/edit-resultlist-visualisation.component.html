@@ -1,0 +1,55 @@
+<button mat-stroked-button color="primary" (click)="addVisualisation()">
+    <mat-icon>add</mat-icon>
+    {{'Add a visualization' | translate}}
+</button>
+<div cdkDropList [cdkDropListData]="visualisation" (cdkDropListDropped)="dropVisualisation($event)"
+     [cdkDropListLockAxis]="'y'">
+    @for (visu of visualisation; track visu.value; let visualisationIndex = $index) {
+        <div   class="result-list-visualisation mat-elevation-z1" cdkDrag>
+            <div class="result-list-visualisation_main-meta">
+                <div class="main-meta">
+                    <arlas-config-form-control  [showLabel]="true" [control]="visu.controls.name"></arlas-config-form-control>
+                    <arlas-config-form-control class="main-meta_input-desc" [showLabel]="true" [control]="visu.controls.description"></arlas-config-form-control>
+                </div>
+                <div>
+                    <mat-icon class="drag">drag_indicator</mat-icon>
+                    <button mat-icon-button (click)="removeVisualisation(0)" [matTooltip]="'Delete visualisation' | translate">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+            <div class="result-list-visualisation_item-family" cdkDropList
+                 [cdkDropListData]="(visu | castVisualisationItemFamily).controls"
+                 (cdkDropListDropped)="dropItemFamily($event, visualisationIndex)"
+                 [cdkDropListLockAxis]="'y'">
+                @for (itemFamily of (visu | castVisualisationItemFamily).controls; track itemFamily; let itemIndex = $index) {
+                    <div cdkDrag class="item-family">
+                        <div class="item-family_header">
+                            <mat-icon class="drag">drag_indicator</mat-icon>
+                            <button mat-icon-button (click)="removeItemFamily(visualisationIndex, itemIndex)" [matTooltip]="'Delete condition' | translate">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                        <div class="item-family_section">
+                            <arlas-config-form-control class="item-family_input" [showLabel]="true" [control]="itemFamily.controls.itemsFamily"></arlas-config-form-control>
+                        </div>
+                        <div class="item-family_section">
+                            <arlas-config-form-control class="item-family_input" [showLabel]="true" [control]="(itemFamily.controls.filter | castToConfigFormGroup).controls.field"></arlas-config-form-control>
+                            <arlas-config-form-control class="item-family_input" [showLabel]="true" [control]="(itemFamily.controls.filter | castToConfigFormGroup).controls.values"></arlas-config-form-control>
+                        </div>
+
+                        <div class="item-family_section">
+                            <arlas-config-form-control class="item-family_input" [showLabel]="true" [control]="itemFamily.controls.protocol"></arlas-config-form-control>
+                            <arlas-config-form-control class="item-family_input" [showLabel]="true" [control]="itemFamily.controls.visualisationUrl"></arlas-config-form-control>
+                        </div>
+                    </div>
+
+                }
+                <div class="item-family_action" >
+                    <button mat-stroked-button (click)="addItemFamily(visualisationIndex)"> {{'Add an item family' | translate}}</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -70,6 +70,9 @@ import { ResetOnChangeDirective } from './directives/reset-on-change/reset-on-ch
 import { GroupCollectionPipe } from './pipes/group-collection.pipe';
 import { HistogramBucketPipe } from './pipes/histogram-buckets/histogram-buckets.pipe';
 import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
+import {
+  MultiSelectSearchComponent
+} from '@shared-components/config-form-control/multi-select-search/multi-select-search.component';
 
 
 @NgModule({
@@ -172,7 +175,8 @@ import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
     MatPaginatorModule,
     MatMenuModule,
     TranslateModule,
-    GetCollectionDisplayModule
+    GetCollectionDisplayModule,
+    MultiSelectSearchComponent
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi())

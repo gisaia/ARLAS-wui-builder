@@ -152,6 +152,66 @@ export class ResultListImportService {
         control: renderStep.cellBackgroundStyle
       }
     ]);
+
+    inputs?.visualisationsList?.forEach( visualisation => {
+      const visualisationForm = this.resultlistFormBuilder.buildVisualisation();
+      importElements([
+        {
+          value: visualisation.description,
+          control: visualisationForm.customControls.description
+        },
+        {
+          value: visualisation.name,
+          control: visualisationForm.customControls.name
+        },
+      ]);
+
+      if(visualisation?.itemsFamilies && visualisation.itemsFamilies.length > 0) {
+        visualisation?.itemsFamilies.forEach(itemF => {
+          const itemFamily = this.resultlistFormBuilder
+            .buildVisualisationsItemFamily(contributor.collection);
+          importElements([
+            {
+              value: itemF.visualisationUrl,
+              control: itemFamily.customControls.visualisationUrl
+            },
+            {
+              value: itemF.itemsFamily,
+              control: itemFamily.customControls.itemsFamily
+            },
+            {
+              value: itemF.protocol,
+              control: itemFamily.customControls.protocol
+            },
+          ]);
+          if (itemF.filter) {
+            const selectedItems = itemF.filter.values.map(
+              v => ({ value: v.value, label: v.value, color: this.colorService.getColor(v.color) }));
+
+            importElements([{
+              value: itemF.filter.field,
+              control: itemFamily.customControls.filter.field
+            },
+            {
+              value: selectedItems,
+              control: itemFamily.customControls.filter.values
+            }]);
+
+            itemFamily.customControls.filter.values.selectedMultipleItems = selectedItems;
+            itemFamily.customControls.filter.values.savedItems = new Set(selectedItems.map(v => v.value));
+            this.collectionService.getTermAggregation(
+              contributor.collection,
+              itemFamily.customControls.filter.field.value)
+              .then(keywords => {
+                itemFamily.customControls.filter.values.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
+              });
+          }
+          visualisationForm.customControls.itemsFamilies.push(itemFamily);
+        });
+      }
+      widgetData.customControls.zactionStep.visualisationSection.visualisationsList.push(visualisationForm);
+    });
+
     if (contributor.fieldsConfiguration.urlImageTemplate) {
       const quicklook = this.resultlistFormBuilder.buildQuicklook(contributor.collection);
       importElements([
@@ -162,6 +222,7 @@ export class ResultListImportService {
       ]);
       widgetData.customControls.renderStep.gridStep.quicklookUrls.push(quicklook);
     }
+
 
     contributor.fieldsConfiguration.urlImageTemplates?.forEach(descUrl => {
       const quicklook = this.resultlistFormBuilder.buildQuicklook(contributor.collection);
