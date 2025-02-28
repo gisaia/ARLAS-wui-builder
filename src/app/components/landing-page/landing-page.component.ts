@@ -145,7 +145,12 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
       this.subscription = this.authService.canActivateProtectedRoutes.subscribe(isAuthenticated => {
         this.isAuthenticated = isAuthenticated;
         if (this.persistenceService.isAvailable) {
-          this.getConfigList();
+          this.permissionService.get('persist/resource/').subscribe({
+            next: (resources: Resource[]) => {
+              this.canCreateForCurrentOrg = resources.filter(r => r.verb === 'POST').length > 0;
+              this.getConfigList();
+            }
+          });
         }
       });
     } else if (this.authentMode === 'iam') {
