@@ -782,7 +782,7 @@ export class ConfigExportHelper {
 
     const timelineComponent: AnalyticComponentConfig = {
       contributorId: (isDetailed ? 'detailedTimeline' : 'timeline'),
-      componentType: 'histogram',
+      componentType: WIDGET_TYPE.histogram,
       uuid: isDetailed ? detailedTimelineUuid.value : timelineUuid.value,
       input: {
         id: isDetailed ? 'histogram-detailed-timeline' : 'histogram-timeline',
@@ -1135,8 +1135,11 @@ export class ConfigExportHelper {
    * generates an identifier based on the definition of the contributor:
    * - aggregationmodel
    * - metrics ...
+   * @param widgetData The widget's configuration from a form
+   * @param widgetType Type of the widget
+   * @returns The id of the resulting contributor
    */
-  public static getContributorId(widgetData: any, widgetType: any): string {
+  public static getContributorId(widgetData: any, widgetType: string): string {
     let idString = widgetData.dataStep.collection + '-';
     if (widgetType === WIDGET_TYPE.histogram || widgetType === WIDGET_TYPE.swimlane) {
       const agg = widgetData.dataStep.aggregation;

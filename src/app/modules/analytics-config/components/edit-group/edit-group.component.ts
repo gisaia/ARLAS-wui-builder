@@ -21,20 +21,13 @@ import { AnalyticsInitService } from '@analytics-config/services/analytics-init/
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { CdkDragDrop, CdkDragEnter, CdkDragMove } from '@angular/cdk/drag-drop';
 import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
+  ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild
 } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
+import { AnalyticConfig } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
@@ -42,8 +35,8 @@ import { ConfigFormGroup } from '@shared-models/config-form';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { moveInFormArray } from '@utils/tools';
 import { OperationEnum } from 'arlas-web-core';
-import { Subscription } from 'rxjs';
-import { Subject } from 'rxjs/internal/Subject';
+import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
+import { Subject, Subscription } from 'rxjs';
 import { EditWidgetDialogComponent } from '../edit-widget-dialog/edit-widget-dialog.component';
 import { EditWidgetDialogData } from '../edit-widget-dialog/models';
 import { ImportWidgetDialogComponent } from '../import-widget-dialog/import-widget-dialog.component';
@@ -88,7 +81,14 @@ export class AddWidgetDialogComponent {
 })
 export class EditGroupComponent implements OnInit, OnDestroy {
 
-  @Input() public formGroup: FormGroup;
+  @Input() public formGroup: FormGroup<{
+    content: FormArray<FormGroup<{widgetType: FormControl<WIDGET_TYPE>; widgetData: FormGroup;}>>;
+    contentType: FormControl<Array<WIDGET_TYPE>>;
+    icon: FormControl<string>;
+    itemPerLine: FormControl<number>;
+    preview: FormControl<AnalyticConfig>;
+    title: FormControl<string>;
+  }>;
   @Input() public groupIndex: number;
   @Input() public updateDisplay: Subject<any> = new Subject();
   @Output() public remove = new EventEmitter();
@@ -99,8 +99,8 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     dragIndex: number;
     dropIndex: number;
   };
-  public content: FormArray<FormGroup>;
-  public itemPerLine;
+  public content: FormArray<FormGroup<{widgetType: FormControl<WIDGET_TYPE>; widgetData: FormGroup;}>>;
+  public itemPerLine: number;
   public toUnsubscribe: Array<Subscription> = [];
 
 
@@ -115,11 +115,12 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     private readonly analyticsImportService: AnalyticsImportService,
     private readonly analyticsInitService: AnalyticsInitService,
     private readonly main: MainFormService,
-    private readonly shortcutsService: ShortcutsService
+    private readonly shortcutsService: ShortcutsService,
+    private readonly collaborativeSearchService: ArlasCollaborativesearchService
   ) { }
 
   public ngOnInit() {
-    this.content = this.formGroup.controls.content as FormArray;
+    this.content = this.formGroup.controls.content;
     this.itemPerLine = this.formGroup.value.itemPerLine;
     this.resetWidgetsOnTypeChange();
   }
@@ -194,7 +195,9 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   }
 
   public editWidget(widgetIndex: number, collection: string, newWidget?: boolean) {
-    const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup;
+    const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup<{widgetType: FormControl; widgetData: FormControl;}>;
+    const oldWidgetContributorId = ConfigExportHelper.getContributorId(widgetFg.value.widgetData, widgetFg.value.widgetType);
+
     this.afterClosedEditSub = this.dialog.open(EditWidgetDialogComponent, {
       data: {
         widgetType: widgetFg.value.widgetType,
@@ -210,6 +213,14 @@ export class EditGroupComponent implements OnInit, OnDestroy {
             widgetFg.value.widgetData,
             this.formGroup.controls.icon.value
           );
+          // If the new id of the contributor is different from the old one and it had a collaboration, remove it
+          if (contrib.identifier !== oldWidgetContributorId && this.collaborativeSearchService.collaborations.has(oldWidgetContributorId)) {
+            this.collaborativeSearchService.collaborationBus.next({
+              id: oldWidgetContributorId,
+              operation: OperationEnum.remove,
+              all: true
+            });
+          }
           this.updatePreview();
           contrib.updateFromCollaboration({
             id: '',
@@ -234,6 +245,17 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
     this.afterClosedconfirmSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        // If it had a collaboration, remove it
+        const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup<{widgetType: FormControl; widgetData: FormControl;}>;
+        const oldWidgetContributorId = ConfigExportHelper.getContributorId(widgetFg.value.widgetData, widgetFg.value.widgetType);
+        if (this.collaborativeSearchService.collaborations.has(oldWidgetContributorId)) {
+          this.collaborativeSearchService.collaborationBus.next({
+            id: oldWidgetContributorId,
+            operation: OperationEnum.remove,
+            all: true
+          });
+        }
+
         this.removeShortcut(widgetIndex);
         this.content.removeAt(widgetIndex);
         this.contentTypeValue.splice(widgetIndex, 1);
@@ -293,7 +315,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   }
 
   public get contentTypeValue() {
-    return this.formGroup.controls.contentType.value as Array<string>;
+    return this.formGroup.controls.contentType.value;
   }
 
   public dragEntered(event: CdkDragEnter<number>) {
