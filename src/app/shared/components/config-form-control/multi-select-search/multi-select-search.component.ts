@@ -28,6 +28,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { AsyncPipe } from '@angular/common';
 import { ArlasColorService } from 'arlas-web-components';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'arlas-multi-select-search',
@@ -39,7 +40,8 @@ import { CollectionService } from '@services/collection-service/collection.servi
     ReactiveFormsModule,
     TranslateModule,
     NgxMatSelectSearchModule,
-    AsyncPipe
+    AsyncPipe,
+    MatToolbarModule
 
   ],
   templateUrl: './multi-select-search.component.html',
@@ -61,7 +63,7 @@ export class MultiSelectSearchComponent implements OnInit, AfterViewInit {
   public ngOnInit() {
     // update input state. If there is value or not.
     // when there is a linked input.
-    this.control.syncOptionsUpdated
+    this.control?.syncOptionsUpdated
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(_ => {
         if(this.control.syncOptions.length === 0 && this.control.selectedMultipleItems.length === 0){
@@ -74,19 +76,19 @@ export class MultiSelectSearchComponent implements OnInit, AfterViewInit {
         }
       });
 
-    if(this.control.syncOptions.length === 0 && this.control.selectedMultipleItems.length === 0){
+    if(this.control?.syncOptions.length === 0 && this.control.selectedMultipleItems.length === 0){
       this.selectMultiFc.disable();
     }
     // retrieve selected value for the input
-    this.selectMultiFc.setValue(this.control.selectedMultipleItems.slice());
-    this.filteredSyncOption.next(this.control.syncOptions.slice());
+    this.selectMultiFc.setValue(this.control?.selectedMultipleItems.slice());
+    this.filteredSyncOption.next(this.control?.syncOptions.slice() ?? []);
     this.selectSearchFilterFc.valueChanges
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe((v) => {
         this.filterData();
       });
 
-    this.selectMultiFc.valueChanges
+    this.selectMultiFc?.valueChanges
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe((v) => {
         this.updateFcValue(v);
@@ -108,8 +110,7 @@ export class MultiSelectSearchComponent implements OnInit, AfterViewInit {
 
 
   protected setInitialValue() {
-    this.filteredSyncOption
-      .pipe(take(1), takeUntilDestroyed(this._destroyRef))
+    this.filteredSyncOption?.pipe(take(1), takeUntilDestroyed(this._destroyRef))
       .subscribe(() => {
         this.multiSelect.compareWith = (a: any, b: any) => a && b && a.value === b.value;
       });

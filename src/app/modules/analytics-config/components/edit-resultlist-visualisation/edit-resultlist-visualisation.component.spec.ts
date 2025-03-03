@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EditResultlistVisualisationComponent } from './edit-resultlist-visualisation.component';
+import { mockProvider } from '@ngneat/spectator';
+import {
+  ResultlistFormBuilderService
+} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 
 describe('EditResultlistVisualisationComponent', () => {
   let component: EditResultlistVisualisationComponent;
@@ -8,7 +12,10 @@ describe('EditResultlistVisualisationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EditResultlistVisualisationComponent]
+      imports: [EditResultlistVisualisationComponent],
+      providers: [
+        mockProvider(ResultlistFormBuilderService)
+      ]
     })
       .compileComponents();
 
