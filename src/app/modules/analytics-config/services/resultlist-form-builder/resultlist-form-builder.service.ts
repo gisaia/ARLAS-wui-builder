@@ -749,7 +749,7 @@ export class ResultListVisualisationsItemFamily extends FormGroup {
           true,
           toOptionsObs(fieldsObs),
           {
-            optional: true
+            optional: false
           }
         ),
         values: new MultipleSelectFormControl(
@@ -760,7 +760,7 @@ export class ResultListVisualisationsItemFamily extends FormGroup {
           false,
           [],
           {
-            optional: true,
+            optional: false,
             dependsOn: () => [this.customControls.filter.field],
             onDependencyChange: (control: MultipleSelectFormControl) => {
               if (!this.customControls.filter.field.touched && this.customControls.filter.field.value !== '') {

@@ -39,6 +39,8 @@ export class EditResultlistVisualisationComponent {
   @Input() public collectionControl: SelectFormControl;
   @Input() public control: FormArray<ResultListVisualisationsFormGroup>;
   private resultlistFormBuilder = inject(ResultlistFormBuilderService);
+  public dragDisabled = true;
+  public ItemFamilyDragDisabled = true;
 
 
   public get visualisation(): ResultListVisualisationsFormGroup[] {
@@ -54,11 +56,14 @@ export class EditResultlistVisualisationComponent {
   public dropVisualisation(event: CdkDragDrop<any[]>) {
     const previousIndex = this.control.controls.findIndex(row => row === event.item.data);
     moveItemInArray(this.control.controls, previousIndex, event.currentIndex);
+    this.dragDisabled = true;
   }
 
   public dropItemFamily(event: CdkDragDrop<any[]>, index: number){
     const previousIndex = (this.control.controls[index].get('itemsFamilies') as FormArray).controls.findIndex(row => row === event.item.data);
-    moveItemInArray(this.control.controls, previousIndex, event.currentIndex);
+    console.log(event, previousIndex);
+    moveItemInArray((this.control.controls[index].get('itemsFamilies') as FormArray).controls, previousIndex, event.currentIndex);
+    this.ItemFamilyDragDisabled = true;
   }
 
   public removeItemFamily(index: number, itemIndex: number) {
