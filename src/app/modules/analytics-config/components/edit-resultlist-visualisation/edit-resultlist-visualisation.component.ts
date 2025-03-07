@@ -79,7 +79,6 @@ export class EditResultlistVisualisationComponent {
 
   public dropItemFamily(event: CdkDragDrop<any[]>, index: number){
     const previousIndex = (this.control.controls[index].get('itemsFamilies') as FormArray).controls.findIndex(row => row === event.item.data);
-    console.log(event, previousIndex);
     moveItemInArray((this.control.controls[index].get('itemsFamilies') as FormArray).controls, previousIndex, event.currentIndex);
     this.ItemFamilyDragDisabled = true;
   }

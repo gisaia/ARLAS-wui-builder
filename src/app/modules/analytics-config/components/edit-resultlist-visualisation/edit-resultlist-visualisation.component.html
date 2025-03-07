@@ -5,15 +5,15 @@
 <div cdkDropList [cdkDropListData]="visualisation" (cdkDropListDropped)="dropVisualisation($event)"
      [cdkDropListLockAxis]="'y'" [cdkDropListDisabled]="dragDisabled">
     @for (visu of visualisation; track visu.value; let visualisationIndex = $index) {
-        <div   class="result-list-visualisation mat-elevation-z1" cdkDrag [cdkDragData]="visu">
+        <div   class="result-list-visualisation" cdkDrag [cdkDragData]="visu">
             <div class="result-list-visualisation_main-meta">
                 <div class="main-meta">
                     <arlas-config-form-control  [showLabel]="true" [control]="visu.controls.name"></arlas-config-form-control>
                     <arlas-config-form-control class="main-meta_input-desc" [showLabel]="true" [control]="visu.controls.description"></arlas-config-form-control>
                 </div>
                 <div>
-                    <mat-icon class="drag"  (mouseenter)="dragDisabled = false" (mouseup)="dragDisabled = true">drag_indicator</mat-icon>
-                    <button mat-icon-button (click)="removeVisualisation(0)" [matTooltip]="'Delete visualisation' | translate">
+                    <mat-icon class="drag" (mouseenter)="dragDisabled = false" (mouseup)="dragDisabled = true">drag_indicator</mat-icon>
+                    <button mat-icon-button (click)="removeVisualisation(visualisationIndex)" [matTooltip]="'Delete visualisation' | translate">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </div>
@@ -22,7 +22,6 @@
             <div class="result-list-visualisation_item-family" cdkDropList
                  [cdkDropListData]="(visu | castVisualisationItemFamily).controls"
                  (cdkDropListDropped)="dropItemFamily($event, visualisationIndex)"
-
                  [cdkDropListLockAxis]="'y'"
                  [cdkDropListDisabled]="ItemFamilyDragDisabled"
             >
@@ -36,6 +35,7 @@
                         </div>
                         <div class="item-family_section">
                             <arlas-config-form-control class="item-family_input" [showLabel]="true" [control]="itemFamily.controls.itemsFamily"></arlas-config-form-control>
+                        <div class="item-family_input"></div>
                         </div>
                         <div class="item-family_section">
                             <arlas-config-form-control class="item-family_input" [showLabel]="true" [control]="(itemFamily.controls.filter | castToConfigFormGroup).controls.field"></arlas-config-form-control>
