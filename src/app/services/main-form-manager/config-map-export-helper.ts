@@ -87,7 +87,8 @@ export class ConfigMapExportHelper {
           metadata: {
             collection: layer.metadata.collection,
             collectionDisplayName: layer.metadata.collectionDisplayName,
-            isScrollableLayer: false
+            isScrollableLayer: false,
+            aggType:layer.metadata?.aggType
           },
           filter: layer.filter,
           layout: {
@@ -168,10 +169,10 @@ export class ConfigMapExportHelper {
     colorService: ArlasColorService, taggableFields?: Set<string>): LayerMetadata {
     const metadata: LayerMetadata = {
       collection,
-      collectionDisplayName
+      collectionDisplayName,
+      aggType: modeValues.geometryStep?.aggType ?? null
     };
 
-    // with this prop we ll be able to restore the good geomType when we ll reload the layer;
     if (metadata && metadata.hasOwnProperty('hiddenProps')) {
       delete metadata['hiddenProps'];
     }
@@ -210,7 +211,8 @@ export class ConfigMapExportHelper {
       maxzoom: modeValues.visibilityStep.zoomMax,
       layout,
       paint,
-      metadata: this.getLayerMetadata(layerFg.customControls.collection.value, layerFg.customControls.collectionDisplayName.value,
+      metadata: this.getLayerMetadata(layerFg.customControls.collection.value,
+        layerFg.customControls.collectionDisplayName.value,
         mode, modeValues, colorService, taggableFields)
     };
     /** 'all' is the operator that allows to apply an "AND" operator */
