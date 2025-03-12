@@ -161,6 +161,9 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                 const useColorService = this.customControls.dataStep.columns.controls
                   .filter(c => c.get('useColorService').value === true).length > 0;
                 control.enableIf(useColorService);
+                if(!control.value && control.enabled){
+                  control.setValue('filled');
+                }
               }
             }
           ),
