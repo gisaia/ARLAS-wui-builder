@@ -144,7 +144,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             marker('Activate geosort')
           ),
           cellBackgroundStyle: new SelectFormControl(
-            '',
+            'filled',
             marker('Background style of cells'),
             marker('Background style of cells Description'),
             false,
@@ -161,9 +161,6 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                 const useColorService = this.customControls.dataStep.columns.controls
                   .filter(c => c.get('useColorService').value === true).length > 0;
                 control.enableIf(useColorService);
-                if(!control.value && control.enabled){
-                  control.setValue('filled');
-                }
               }
             }
           ),
