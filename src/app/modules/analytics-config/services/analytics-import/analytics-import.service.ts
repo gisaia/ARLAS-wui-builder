@@ -783,6 +783,8 @@ export class AnalyticsImportService {
     const widgetData = this.resultlistFormBuilder.build(contributor.collection);
     const dataStep = widgetData.customControls.dataStep;
     const renderStep = widgetData.customControls.renderStep;
+    const settingsStep = widgetData.customControls.settingsStep;
+    const sactionStep = widgetData.customControls.sactionStep;
     const title = widgetData.customControls.title;
     const inputs = component.input as AnalyticComponentResultListInputConfig;
     const titleFieldNames = contributor.fieldsConfiguration.titleFieldNames;
@@ -806,43 +808,43 @@ export class AnalyticsImportService {
       },
       {
         value: component.input.defautMode === 'grid',
-        control: renderStep.gridStep.isDefaultMode
+        control: renderStep.isDefaultMode
       },
       {
         value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].fieldPath : '',
-        control: renderStep.gridStep.tileLabelField
+        control: renderStep.tileLabelField
       },
       {
         value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].process : '',
-        control: renderStep.gridStep.tileLabelFieldProcess
+        control: renderStep.tileLabelFieldProcess
       },
       {
         value: !!tooltipFieldNames && tooltipFieldNames.length > 0 ? tooltipFieldNames[0].fieldPath : '',
-        control: renderStep.gridStep.tooltipField
+        control: renderStep.tooltipField
       },
       {
         value: !!tooltipFieldNames && tooltipFieldNames.length > 0 ? tooltipFieldNames[0].process : '',
-        control: renderStep.gridStep.tooltipFieldProcess
+        control: renderStep.tooltipFieldProcess
       },
       {
         value: !!contributor.fieldsConfiguration.urlThumbnailTemplate ? contributor.fieldsConfiguration.urlThumbnailTemplate : '',
-        control: renderStep.gridStep.thumbnailUrl
+        control: renderStep.thumbnailUrl
       },
       {
         value: contributor.fieldsConfiguration.iconColorFieldName,
-        control: renderStep.gridStep.colorIdentifier
+        control: renderStep.colorIdentifier
       },
       {
         value: inputs.displayFilters,
-        control: renderStep.displayFilters
+        control: sactionStep.displayFilters
       },
       {
         value: inputs.isGeoSortActived,
-        control: renderStep.isGeoSortActived
+        control: sactionStep.isGeoSortActived
       },
       {
         value: inputs.cellBackgroundStyle,
-        control: renderStep.cellBackgroundStyle
+        control: settingsStep.cellBackgroundStyle
       }
     ]);
     if (contributor.fieldsConfiguration.urlImageTemplate) {
@@ -853,7 +855,7 @@ export class AnalyticsImportService {
           control: quicklook.customControls.url
         }
       ]);
-      widgetData.customControls.renderStep.gridStep.quicklookUrls.push(quicklook);
+      widgetData.customControls.renderStep.quicklookUrls.push(quicklook);
     }
 
     contributor.fieldsConfiguration.urlImageTemplates?.forEach(descUrl => {
@@ -891,7 +893,7 @@ export class AnalyticsImportService {
           });
       }
 
-      widgetData.customControls.renderStep.gridStep.quicklookUrls.push(quicklook);
+      widgetData.customControls.renderStep.quicklookUrls.push(quicklook);
     });
 
     contributor.columns.forEach(c => {

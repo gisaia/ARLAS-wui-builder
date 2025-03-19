@@ -133,6 +133,130 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
           )
         }).withTabName(marker('Data')),
         renderStep: new ConfigFormGroup({
+          isDefaultMode: new SlideToggleFormControl(
+            false,
+            marker('List default mode'),
+            marker('List default mode description')
+          ),
+          useHttpThumbnails: new SlideToggleFormControl(
+            false,
+            marker('Use http thumbnails'),
+            marker('Use http thumbnails description')
+          ),
+          useHttpQuicklooks: new SlideToggleFormControl(
+            false,
+            marker('Use http quicklooks'),
+            marker('Use http quicklooks description')
+          ),
+          tileLabelField: new SelectFormControl(
+            '',
+            marker('Tile label'),
+            marker('Tile label description'),
+            true,
+            toOptionsObs(collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES)),
+            {
+              optional: true,
+              dependsOn: () => [this.customControls.dataStep.collection],
+              onDependencyChange: (control: SelectFormControl) => {
+                if (!this.collection || this.customControls.dataStep.collection.dirty) {
+                  this.updateSelectFormControl(collectionService, control);
+                }
+              }
+            }
+          ),
+          tileLabelFieldProcess: new TextareaFormControl(
+            '',
+            marker('Transformation title'),
+            marker('Transformation title description'),
+            '',
+            1,
+            {
+              optional: true,
+              validators:[TextareaFormControl.processValidator('result')],
+              dependsOn: () => [this.customControls.dataStep.collection],
+              onDependencyChange: (control: TextareaFormControl) => {
+                if (!this.collection || this.customControls.dataStep.collection.dirty) {
+                  control.setValue('');
+                }
+              }
+            }
+          ),
+          tooltipField: new SelectFormControl(
+            '',
+            marker('Tooltip field'),
+            marker('Tooltip field description'),
+            true,
+            toOptionsObs(collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES)),
+            {
+              optional: true,
+              dependsOn: () => [this.customControls.dataStep.collection],
+              onDependencyChange: (control: SelectFormControl) => {
+                if (!this.collection || this.customControls.dataStep.collection.dirty) {
+                  this.updateSelectFormControl(collectionService, control);
+                }
+              }
+            }
+          ),
+          tooltipFieldProcess: new TextareaFormControl(
+            '',
+            marker('Transformation tooltip'),
+            marker('Transformation tooltip description'),
+            '',
+            1,
+            {
+              optional: true,
+              validators:[TextareaFormControl.processValidator('result')],
+              dependsOn: () => [this.customControls.dataStep.collection],
+              onDependencyChange: (control: TextareaFormControl) => {
+                if (!this.collection || this.customControls.dataStep.collection.dirty) {
+                  control.setValue('');
+                }
+              }
+            }
+          ),
+          colorIdentifier: new SelectFormControl(
+            '',
+            marker('Color identifier'),
+            marker('Color identifier description'),
+            true,
+            toOptionsObs(collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD)),
+            {
+              optional: true,
+              dependsOn: () => [this.customControls.dataStep.collection],
+              onDependencyChange: (control: SelectFormControl) => {
+                if (!this.collection || this.customControls.dataStep.collection.dirty) {
+                  this.updateSelectFormControl(collectionService, control);
+                }
+              }
+            }
+          ),
+          thumbnailUrl: new FieldTemplateControl(
+            '',
+            marker('Thumbnail url'),
+            marker('Thumbnail url description'),
+            collectionService.getCollectionFields(collection),
+            false,
+            {
+              optional: true,
+              dependsOn: () => [this.customControls.dataStep.collection],
+              onDependencyChange: (control: FieldTemplateControl) => {
+                if (!this.collection || this.customControls.dataStep.collection.dirty) {
+                  this.updateFieldTemplateControl(collectionService, control);
+                }
+              }
+            }
+          ),
+          quicklookUrls: new FormArray([]),
+          // DataStep is needed because the collection is needed
+          quicklook: new ComponentFormControl(
+            EditResultlistQuicklookComponent,
+            {
+              collectionControl: () => this.customControls.dataStep.collection,
+              control: () => this.customControls.renderStep.quicklookUrls
+            }
+          )
+        }).withTabName(marker('Resultlist grid')),
+        sactionStep: new ConfigFormGroup({
           displayFilters: new SlideToggleFormControl(
             '',
             marker('Display filters'),
@@ -143,153 +267,8 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             marker('Activate geosort'),
             marker('Activate geosort')
           ),
-          cellBackgroundStyle: new SelectFormControl(
-            '',
-            marker('Background style of cells'),
-            marker('Background style of cells Description'),
-            false,
-            [
-              { label: marker('Filled'), value: 'filled' },
-              { label: marker('Outlined'), value: 'outlined' },
-            ],
-            {
-              optional: true,
-              dependsOn: () => [
-                this.customControls.dataStep.columns as any
-              ],
-              onDependencyChange: (control: ButtonFormControl) => {
-                const useColorService = this.customControls.dataStep.columns.controls
-                  .filter(c => c.get('useColorService').value === true).length > 0;
-                control.enableIf(useColorService);
-              }
-            }
-          ),
-          gridStep: new ConfigFormGroup({
-            isDefaultMode: new SlideToggleFormControl(
-              false,
-              marker('List default mode'),
-              marker('List default mode description')
-            ),
-            useHttpThumbnails: new SlideToggleFormControl(
-              false,
-              marker('Use http thumbnails'),
-              marker('Use http thumbnails description')
-            ),
-            useHttpQuicklooks: new SlideToggleFormControl(
-              false,
-              marker('Use http quicklooks'),
-              marker('Use http quicklooks description')
-            ),
-            tileLabelField: new SelectFormControl(
-              '',
-              marker('Tile label'),
-              marker('Tile label description'),
-              true,
-              toOptionsObs(collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES)),
-              {
-                optional: true,
-                dependsOn: () => [this.customControls.dataStep.collection],
-                onDependencyChange: (control: SelectFormControl) => {
-                  if (!this.collection || this.customControls.dataStep.collection.dirty) {
-                    this.updateSelectFormControl(collectionService, control);
-                  }
-                }
-              }
-            ),
-            tileLabelFieldProcess: new TextareaFormControl(
-              '',
-              marker('Transformation title'),
-              marker('Transformation title description'),
-              '',
-              1,
-              {
-                optional: true,
-                validators:[TextareaFormControl.processValidator('result')],
-                dependsOn: () => [this.customControls.dataStep.collection],
-                onDependencyChange: (control: TextareaFormControl) => {
-                  if (!this.collection || this.customControls.dataStep.collection.dirty) {
-                    control.setValue('');
-                  }
-                }
-              }
-            ),
-            tooltipField: new SelectFormControl(
-              '',
-              marker('Tooltip field'),
-              marker('Tooltip field description'),
-              true,
-              toOptionsObs(collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES)),
-              {
-                optional: true,
-                dependsOn: () => [this.customControls.dataStep.collection],
-                onDependencyChange: (control: SelectFormControl) => {
-                  if (!this.collection || this.customControls.dataStep.collection.dirty) {
-                    this.updateSelectFormControl(collectionService, control);
-                  }
-                }
-              }
-            ),
-            tooltipFieldProcess: new TextareaFormControl(
-              '',
-              marker('Transformation tooltip'),
-              marker('Transformation tooltip description'),
-              '',
-              1,
-              {
-                optional: true,
-                validators:[TextareaFormControl.processValidator('result')],
-                dependsOn: () => [this.customControls.dataStep.collection],
-                onDependencyChange: (control: TextareaFormControl) => {
-                  if (!this.collection || this.customControls.dataStep.collection.dirty) {
-                    control.setValue('');
-                  }
-                }
-              }
-            ),
-            colorIdentifier: new SelectFormControl(
-              '',
-              marker('Color identifier'),
-              marker('Color identifier description'),
-              true,
-              toOptionsObs(collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD)),
-              {
-                optional: true,
-                dependsOn: () => [this.customControls.dataStep.collection],
-                onDependencyChange: (control: SelectFormControl) => {
-                  if (!this.collection || this.customControls.dataStep.collection.dirty) {
-                    this.updateSelectFormControl(collectionService, control);
-                  }
-                }
-              }
-            ),
-            thumbnailUrl: new FieldTemplateControl(
-              '',
-              marker('Thumbnail url'),
-              marker('Thumbnail url description'),
-              collectionService.getCollectionFields(collection),
-              false,
-              {
-                optional: true,
-                dependsOn: () => [this.customControls.dataStep.collection],
-                onDependencyChange: (control: FieldTemplateControl) => {
-                  if (!this.collection || this.customControls.dataStep.collection.dirty) {
-                    this.updateFieldTemplateControl(collectionService, control);
-                  }
-                }
-              }
-            ),
-            quicklookUrls: new FormArray([]),
-            // DataStep is needed because the collection is needed
-            quicklook: new ComponentFormControl(
-              EditResultlistQuicklookComponent,
-              {
-                collectionControl: () => this.customControls.dataStep.collection,
-                control: () => this.customControls.renderStep.gridStep.quicklookUrls
-              }
-            )
-          }).withTitle(marker('Grid view'))
-        }).withTabName(marker('Render')),
-        zactionStep: new ConfigFormGroup({
+        }).withTabName(marker('Actions')),
+        settingsStep: new ConfigFormGroup({
           visualisationLink: new InputFormControl(
             '',
             marker('Visualisation url service title'),
@@ -312,7 +291,28 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
               dependsOn: () => [this.customControls.dataStep.collection]
             }
           ),
-        }).withTabName(marker('Actions')),
+          cellBackgroundStyle: new SelectFormControl(
+            '',
+            marker('Background style of cells'),
+            marker('Background style of cells Description'),
+            false,
+            [
+              { label: marker('Filled'), value: 'filled' },
+              { label: marker('Outlined'), value: 'outlined' },
+            ],
+            {
+              optional: true,
+              dependsOn: () => [
+                        this.customControls.dataStep.columns as any
+              ],
+              onDependencyChange: (control: ButtonFormControl) => {
+                const useColorService = this.customControls.dataStep.columns.controls
+                  .filter(c => c.get('useColorService').value === true).length > 0;
+                control.enableIf(useColorService);
+              }
+            }
+          ),
+        }).withTabName(marker('Resultlist settings')),
         unmanagedFields: new FormGroup({
           dataStep: new FormGroup({}),
           renderStep: new FormGroup({
@@ -336,7 +336,8 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
   public customGroups = {
     dataStep: this.get('dataStep') as ConfigFormGroup,
     renderStep: this.get('renderStep') as ConfigFormGroup,
-    zactionStep: this.get('zactionStep') as ConfigFormGroup
+    sactionStep: this.get('sactionStep') as ConfigFormGroup,
+    settingsStep: this.get('settingsStep') as ConfigFormGroup
   };
 
   public customControls = {
@@ -347,33 +348,31 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
     dataStep: {
       collection: this.get('dataStep.collection') as SelectFormControl,
       searchSize: this.get('dataStep.searchSize') as SliderFormControl,
-      visualisationLink: this.get('dataStep.visualisationLink') as InputFormControl,
-      downloadLink: this.get('dataStep.downloadLink') as InputFormControl,
       columns: this.get('dataStep.columns') as FormArray,
       detailsTitle: this.get('dataStep.detailsTitle') as HiddenFormControl,
       details: this.get('dataStep.details') as FormArray,
       idFieldName: this.get('dataStep.idFieldName') as HiddenFormControl,
     },
     renderStep: {
-      displayFilters: this.get('renderStep.displayFilters') as SlideToggleFormControl,
-      isGeoSortActived: this.get('renderStep.isGeoSortActived') as SlideToggleFormControl,
-      cellBackgroundStyle: this.get('renderStep.cellBackgroundStyle') as SelectFormControl,
-      gridStep: {
-        isDefaultMode: this.get('renderStep.gridStep.isDefaultMode') as SlideToggleFormControl,
-        useHttpThumbnails: this.get('renderStep.gridStep.useHttpThumbnails') as SlideToggleFormControl,
-        useHttpQuicklooks: this.get('renderStep.gridStep.useHttpQuicklooks') as SlideToggleFormControl,
-        tileLabelField: this.get('renderStep.gridStep.tileLabelField') as SelectFormControl,
-        tileLabelFieldProcess: this.get('renderStep.gridStep.tileLabelFieldProcess') as TextareaFormControl,
-        tooltipField: this.get('renderStep.gridStep.tooltipField') as SelectFormControl,
-        tooltipFieldProcess: this.get('renderStep.gridStep.tooltipFieldProcess') as TextareaFormControl,
-        thumbnailUrl: this.get('renderStep.gridStep.thumbnailUrl') as FieldTemplateControl,
-        colorIdentifier: this.get('renderStep.gridStep.colorIdentifier') as SelectFormControl,
-        quicklookUrls: this.get('renderStep.gridStep.quicklookUrls') as FormArray
-      }
+      isDefaultMode: this.get('renderStep.isDefaultMode') as SlideToggleFormControl,
+      useHttpThumbnails: this.get('renderStep.useHttpThumbnails') as SlideToggleFormControl,
+      useHttpQuicklooks: this.get('renderStep.useHttpQuicklooks') as SlideToggleFormControl,
+      tileLabelField: this.get('renderStep.tileLabelField') as SelectFormControl,
+      tileLabelFieldProcess: this.get('renderStep.tileLabelFieldProcess') as TextareaFormControl,
+      tooltipField: this.get('renderStep.tooltipField') as SelectFormControl,
+      tooltipFieldProcess: this.get('renderStep.tooltipFieldProcess') as TextareaFormControl,
+      thumbnailUrl: this.get('renderStep.thumbnailUrl') as FieldTemplateControl,
+      colorIdentifier: this.get('renderStep.colorIdentifier') as SelectFormControl,
+      quicklookUrls: this.get('renderStep.quicklookUrls') as FormArray
     },
-    zactionStep: {
-      visualisationLink: this.get('zactionStep.visualisationLink') as InputFormControl,
-      downloadLink: this.get('zactionStep.downloadLink') as InputFormControl
+    sactionStep: {
+      displayFilters: this.get('sactionStep.displayFilters') as SlideToggleFormControl,
+      isGeoSortActived: this.get('sactionStep.isGeoSortActived') as SlideToggleFormControl,
+    },
+    settingsStep:  {
+      visualisationLink: this.get('settingsStep.visualisationLink') as InputFormControl,
+      downloadLink: this.get('settingsStep.downloadLink') as InputFormControl,
+      cellBackgroundStyle: this.get('settingsStep.cellBackgroundStyle') as SelectFormControl
     },
     unmanagedFields: {
       dataStep: {},
@@ -391,7 +390,6 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
         globalActionEvent: this.get('unmanagedFields.renderStep.globalActionEvent')
       },
       zactionStep: {}
-
     }
   };
 

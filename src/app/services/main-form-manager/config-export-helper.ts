@@ -942,16 +942,16 @@ export class ConfigExportHelper {
         contrib.search_size = widgetData.dataStep.searchSize;
         const fieldsConfig: FieldsConfiguration = {
           idFieldName: widgetData.dataStep.idFieldName,
-          titleFieldNames: [{ fieldPath: widgetData.renderStep.gridStep.tileLabelField, process: '' }],
-          tooltipFieldNames: [{ fieldPath: widgetData.renderStep.gridStep.tooltipField, process: '' }],
+          titleFieldNames: [{ fieldPath: widgetData.renderStep.tileLabelField, process: '' }],
+          tooltipFieldNames: [{ fieldPath: widgetData.renderStep.tooltipField, process: '' }],
           icon: 'fiber_manual_record',
-          iconColorFieldName: widgetData.renderStep.gridStep.colorIdentifier
+          iconColorFieldName: widgetData.renderStep.colorIdentifier
         };
-        if (widgetData.renderStep.gridStep.thumbnailUrl) {
-          fieldsConfig.urlThumbnailTemplate = widgetData.renderStep.gridStep.thumbnailUrl;
+        if (widgetData.renderStep.thumbnailUrl) {
+          fieldsConfig.urlThumbnailTemplate = widgetData.renderStep.thumbnailUrl;
         }
-        if (widgetData.renderStep.gridStep.imageUrl) {
-          fieldsConfig.urlImageTemplate = widgetData.renderStep.gridStep.imageUrl;
+        if (widgetData.renderStep.imageUrl) {
+          fieldsConfig.urlImageTemplate = widgetData.renderStep.imageUrl;
         }
         if (widgetData.dataStep.detailsTitle) {
           fieldsConfig.detailsTitleTemplate = widgetData.dataStep.detailsTitle;
@@ -985,12 +985,12 @@ export class ConfigExportHelper {
         contrib.includeMetadata = [];
         const metadatas = new Set<string>();
         /** TODO :Grid steps contains, booleans, urls...; we need to filter those controls properly */
-        Object.keys(widgetData.renderStep.gridStep).forEach(v => {
-          if (!!widgetData.renderStep.gridStep[v] && v !== 'isDefaultMode') {
-            if (Array.isArray(widgetData.renderStep.gridStep[v])) {
-              (widgetData.renderStep.gridStep[v] as Array<string>).forEach(f => metadatas.add(f));
+        Object.keys(widgetData.renderStep).forEach(v => {
+          if (!!widgetData.renderStep[v] && v !== 'isDefaultMode') {
+            if (Array.isArray(widgetData.renderStep[v])) {
+              (widgetData.renderStep[v] as Array<string>).forEach(f => metadatas.add(f));
             } else {
-              metadatas.add(widgetData.renderStep.gridStep[v]);
+              metadatas.add(widgetData.renderStep[v]);
             }
           }
         });
@@ -1010,26 +1010,26 @@ export class ConfigExportHelper {
       const fieldsConfig: FieldsConfiguration = {
         idFieldName: list.dataStep.idFieldName,
         titleFieldNames: [{
-          fieldPath: list.renderStep.gridStep.tileLabelField,
-          process: list.renderStep.gridStep.tileLabelFieldProcess
+          fieldPath: list.renderStep.tileLabelField,
+          process: list.renderStep.tileLabelFieldProcess
         }],
         tooltipFieldNames: [{
-          fieldPath: list.renderStep.gridStep.tooltipField,
-          process: list.renderStep.gridStep.tooltipFieldProcess
+          fieldPath: list.renderStep.tooltipField,
+          process: list.renderStep.tooltipFieldProcess
         }],
-        iconColorFieldName: list.renderStep.gridStep.colorIdentifier,
-        useHttpQuicklooks: list.renderStep.gridStep.useHttpQuicklooks,
-        useHttpThumbnails: list.renderStep.gridStep.useHttpThumbnails
+        iconColorFieldName: list.renderStep.colorIdentifier,
+        useHttpQuicklooks: list.renderStep.useHttpQuicklooks,
+        useHttpThumbnails: list.renderStep.useHttpThumbnails
       };
       if (list.dataStep.detailsTitle) {
         fieldsConfig.detailsTitleTemplate = list.dataStep.detailsTitle;
       }
-      if (list.renderStep.gridStep.thumbnailUrl) {
-        fieldsConfig.urlThumbnailTemplate = list.renderStep.gridStep.thumbnailUrl;
+      if (list.renderStep.thumbnailUrl) {
+        fieldsConfig.urlThumbnailTemplate = list.renderStep.thumbnailUrl;
       }
 
-      if (list.renderStep.gridStep.quicklookUrls) {
-        fieldsConfig.urlImageTemplates = list.renderStep.gridStep.quicklookUrls.map(formValues => {
+      if (list.renderStep.quicklookUrls) {
+        fieldsConfig.urlImageTemplates = list.renderStep.quicklookUrls.map(formValues => {
           const quicklook: DescribedUrl = { url: formValues.url, description: formValues.description };
           if (formValues.filter.field !== '') {
             quicklook.filter = { field: formValues.filter.field, values: formValues.filter.values.map(v => v.value) };
@@ -1066,12 +1066,12 @@ export class ConfigExportHelper {
       contrib.includeMetadata = [];
       const metadatas = new Set<string>();
       /** TODO : Grid steps contains, booleans, urls...; we need to filter those controls properly */
-      Object.keys(list.renderStep.gridStep).forEach(v => {
-        if (!!list.renderStep.gridStep[v] && v !== 'isDefaultMode') {
-          if (Array.isArray(list.renderStep.gridStep[v])) {
-            (list.renderStep.gridStep[v] as Array<string>).forEach(f => metadatas.add(f));
+      Object.keys(list.renderStep).forEach(v => {
+        if (!!list.renderStep[v] && v !== 'isDefaultMode') {
+          if (Array.isArray(list.renderStep[v])) {
+            (list.renderStep[v] as Array<string>).forEach(f => metadatas.add(f));
           } else {
-            metadatas.add(list.renderStep.gridStep[v]);
+            metadatas.add(list.renderStep[v]);
           }
         }
       });
@@ -1364,21 +1364,21 @@ export class ConfigExportHelper {
           nLastLines: unmanagedRenderFields.nLastLines,
           detailedGridHeight: unmanagedRenderFields.detailedGridHeight,
           nbGridColumns: unmanagedRenderFields.nbGridColumns,
-          displayFilters: !!widgetData.renderStep.displayFilters,
-          hasGridMode: !!widgetData.renderStep.gridStep.thumbnailUrl,
-          defautMode: (!!widgetData.renderStep.gridStep.thumbnailUrl && !!widgetData.renderStep.gridStep.isDefaultMode) ?
+          displayFilters: !!widgetData.sactionStep.displayFilters,
+          hasGridMode: !!widgetData.renderStep.thumbnailUrl,
+          defautMode: (!!widgetData.renderStep.thumbnailUrl && !!widgetData.renderStep.isDefaultMode) ?
             'grid' : 'list',
-          visualisationLink: widgetData.zactionStep.visualisationLink,
-          downloadLink: widgetData.zactionStep.downloadLink,
+          visualisationLink: widgetData.settingsStep.visualisationLink,
+          downloadLink: widgetData.settingsStep.downloadLink,
           isBodyHidden: unmanagedRenderFields.isBodyHidden,
-          isGeoSortActived: !!widgetData.renderStep.isGeoSortActived,
+          isGeoSortActived: !!widgetData.sactionStep.isGeoSortActived,
           isAutoGeoSortActived: unmanagedRenderFields.isAutoGeoSortActived,
           selectedItemsEvent: unmanagedRenderFields.selectedItemsEvent,
           consultedItemEvent: unmanagedRenderFields.consultedItemEvent,
           actionOnItemEvent: unmanagedRenderFields.actionOnItemEvent,
           globalActionEvent: unmanagedRenderFields.globalActionEvent,
           useColorService: true,
-          cellBackgroundStyle: widgetData.renderStep.cellBackgroundStyle,
+          cellBackgroundStyle: widgetData.settingsStep.cellBackgroundStyle,
           options: {
             showActionsOnhover: 'true',
             showDetailIconName: 'keyboard_arrow_down',

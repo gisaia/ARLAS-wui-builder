@@ -910,5 +910,7 @@
 	"OWNER_GROUP_TITLE": "Collections appartenant à {{org}}",
 	"SHARED_GROUP_TITLE": "Collections partagées avec {{org}}",
 	"PUBLIC_GROUP_TITLE": "Collections publiques",
-	"COLLECTIONS_GROUP_TITLE": "Collections"
+	"COLLECTIONS_GROUP_TITLE": "Collections",
+	"Resultlist settings": "Configurations",
+	"Resultlist grid": "Grille"
 }

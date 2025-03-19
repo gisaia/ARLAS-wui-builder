@@ -57,8 +57,9 @@ export class ResultListImportService {
   private getResultlistWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
     const widgetData = this.resultlistFormBuilder.build(contributor.collection);
     const dataStep = widgetData.customControls.dataStep;
-    const renderStep = widgetData.customControls.renderStep;
-    const actionStep = widgetData.customControls.zactionStep;
+    const gridStep = widgetData.customControls?.renderStep;
+    const settingsStep = widgetData.customControls.settingsStep;
+    const actionStep = widgetData.customControls.sactionStep;
     const title = widgetData.customControls.title;
     const icon = widgetData.customControls.icon;
     const showName = widgetData.customControls.showName;
@@ -93,11 +94,11 @@ export class ResultListImportService {
       },
       {
         value: inputs.visualisationLink,
-        control: actionStep.visualisationLink
+        control: settingsStep.visualisationLink
       },
       {
         value: inputs.downloadLink,
-        control: actionStep.downloadLink
+        control: settingsStep.downloadLink
       },
       {
         value: contributor.fieldsConfiguration.idFieldName,
@@ -105,51 +106,51 @@ export class ResultListImportService {
       },
       {
         value: component.input.defautMode === 'grid',
-        control: renderStep.gridStep.isDefaultMode
+        control: gridStep.isDefaultMode
       },
       {
         value: contributor.fieldsConfiguration.useHttpThumbnails,
-        control: renderStep.gridStep.useHttpThumbnails
+        control: gridStep.useHttpThumbnails
       },
       {
         value: contributor.fieldsConfiguration.useHttpQuicklooks,
-        control: renderStep.gridStep.useHttpQuicklooks
+        control: gridStep.useHttpQuicklooks
       },
       {
         value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].fieldPath : '',
-        control: renderStep.gridStep.tileLabelField
+        control: gridStep.tileLabelField
       },
       {
         value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].process : '',
-        control: renderStep.gridStep.tileLabelFieldProcess
+        control: gridStep.tileLabelFieldProcess
       },
       {
         value: !!tooltipFieldNames && tooltipFieldNames.length > 0 ? tooltipFieldNames[0].fieldPath : '',
-        control: renderStep.gridStep.tooltipField
+        control: gridStep.tooltipField
       },
       {
         value: !!tooltipFieldNames && tooltipFieldNames.length > 0 ? tooltipFieldNames[0].process : '',
-        control: renderStep.gridStep.tooltipFieldProcess
+        control: gridStep.tooltipFieldProcess
       },
       {
         value: !!contributor.fieldsConfiguration.urlThumbnailTemplate ? contributor.fieldsConfiguration.urlThumbnailTemplate : '',
-        control: renderStep.gridStep.thumbnailUrl
+        control: gridStep.thumbnailUrl
       },
       {
         value: contributor.fieldsConfiguration.iconColorFieldName,
-        control: renderStep.gridStep.colorIdentifier
+        control: gridStep.colorIdentifier
       },
       {
         value: inputs.displayFilters,
-        control: renderStep.displayFilters
+        control: actionStep.displayFilters
       },
       {
         value: inputs.isGeoSortActived,
-        control: renderStep.isGeoSortActived
+        control: actionStep.isGeoSortActived
       },
       {
         value: inputs.cellBackgroundStyle,
-        control: renderStep.cellBackgroundStyle
+        control: settingsStep.cellBackgroundStyle
       }
     ]);
     if (contributor.fieldsConfiguration.urlImageTemplate) {
@@ -160,7 +161,7 @@ export class ResultListImportService {
           control: quicklook.customControls.url
         }
       ]);
-      widgetData.customControls.renderStep.gridStep.quicklookUrls.push(quicklook);
+      widgetData.customControls.renderStep.quicklookUrls.push(quicklook);
     }
 
     contributor.fieldsConfiguration.urlImageTemplates?.forEach(descUrl => {
@@ -198,7 +199,7 @@ export class ResultListImportService {
           });
       }
 
-      widgetData.customControls.renderStep.gridStep.quicklookUrls.push(quicklook);
+      widgetData.customControls.renderStep.quicklookUrls.push(quicklook);
     });
 
     contributor.columns.forEach(c => {
