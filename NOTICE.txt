@@ -1,0 +1,5 @@
+ARLAS-wui-builder
+Copyright 2017-2025 and onwards Gisaïa
+
+ARLAS-wui-builder embeds all the dependencies in the following link:
+https://github.com/gisaia/ARLAS-wui-builder/network/dependencies
