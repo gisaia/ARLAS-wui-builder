@@ -1010,26 +1010,26 @@ export class ConfigExportHelper {
       const fieldsConfig: FieldsConfiguration = {
         idFieldName: list.dataStep.idFieldName,
         titleFieldNames: [{
-          fieldPath: list.renderStep.tileLabelField,
-          process: list.renderStep.tileLabelFieldProcess
+          fieldPath: list.gridStep.tileLabelField,
+          process: list.gridStep.tileLabelFieldProcess
         }],
         tooltipFieldNames: [{
-          fieldPath: list.renderStep.tooltipField,
-          process: list.renderStep.tooltipFieldProcess
+          fieldPath: list.gridStep.tooltipField,
+          process: list.gridStep.tooltipFieldProcess
         }],
-        iconColorFieldName: list.renderStep.colorIdentifier,
-        useHttpQuicklooks: list.renderStep.useHttpQuicklooks,
-        useHttpThumbnails: list.renderStep.useHttpThumbnails
+        iconColorFieldName: list.gridStep.colorIdentifier,
+        useHttpQuicklooks: list.gridStep.useHttpQuicklooks,
+        useHttpThumbnails: list.gridStep.useHttpThumbnails
       };
       if (list.dataStep.detailsTitle) {
         fieldsConfig.detailsTitleTemplate = list.dataStep.detailsTitle;
       }
-      if (list.renderStep.thumbnailUrl) {
-        fieldsConfig.urlThumbnailTemplate = list.renderStep.thumbnailUrl;
+      if (list.gridStep.thumbnailUrl) {
+        fieldsConfig.urlThumbnailTemplate = list.gridStep.thumbnailUrl;
       }
 
-      if (list.renderStep.quicklookUrls) {
-        fieldsConfig.urlImageTemplates = list.renderStep.quicklookUrls.map(formValues => {
+      if (list.gridStep.quicklookUrls) {
+        fieldsConfig.urlImageTemplates = list.gridStep.quicklookUrls.map(formValues => {
           const quicklook: DescribedUrl = { url: formValues.url, description: formValues.description };
           if (formValues.filter.field !== '') {
             quicklook.filter = { field: formValues.filter.field, values: formValues.filter.values.map(v => v.value) };
@@ -1066,12 +1066,12 @@ export class ConfigExportHelper {
       contrib.includeMetadata = [];
       const metadatas = new Set<string>();
       /** TODO : Grid steps contains, booleans, urls...; we need to filter those controls properly */
-      Object.keys(list.renderStep).forEach(v => {
-        if (!!list.renderStep[v] && v !== 'isDefaultMode') {
-          if (Array.isArray(list.renderStep[v])) {
-            (list.renderStep[v] as Array<string>).forEach(f => metadatas.add(f));
+      Object.keys(list.gridStep).forEach(v => {
+        if (!!list.gridStep[v] && v !== 'isDefaultMode') {
+          if (Array.isArray(list.gridStep[v])) {
+            (list.gridStep[v] as Array<string>).forEach(f => metadatas.add(f));
           } else {
-            metadatas.add(list.renderStep[v]);
+            metadatas.add(list.gridStep[v]);
           }
         }
       });
@@ -1090,15 +1090,16 @@ export class ConfigExportHelper {
   }
 
   private static getWidgetContributor(widgetData: any, widgetType: any, icon: string) {
+    console.log(widgetData);
     return {
       identifier: this.getContributorId(widgetData, widgetType),
       name: widgetData.title,
       title: widgetData.title,
       collection: widgetData.dataStep.collection,
       icon,
-      ... !!widgetData.renderStep.chartType ?
+      ... !!widgetData.renderStep?.chartType ?
         {
-          charttype: widgetData.renderStep.chartType,
+          charttype: widgetData.renderStep?.chartType,
           isOneDimension: widgetData.unmanagedFields.dataStep.isOneDimension
         } : {}
     } as ContributorConfig;
@@ -1365,8 +1366,8 @@ export class ConfigExportHelper {
           detailedGridHeight: unmanagedRenderFields.detailedGridHeight,
           nbGridColumns: unmanagedRenderFields.nbGridColumns,
           displayFilters: !!widgetData.sactionStep.displayFilters,
-          hasGridMode: !!widgetData.renderStep.thumbnailUrl,
-          defautMode: (!!widgetData.renderStep.thumbnailUrl && !!widgetData.renderStep.isDefaultMode) ?
+          hasGridMode: !!widgetData.gridStep.thumbnailUrl,
+          defautMode: (!!widgetData.gridStep.thumbnailUrl && !!widgetData.gridStep.isDefaultMode) ?
             'grid' : 'list',
           visualisationLink: widgetData.settingsStep.visualisationLink,
           downloadLink: widgetData.settingsStep.downloadLink,

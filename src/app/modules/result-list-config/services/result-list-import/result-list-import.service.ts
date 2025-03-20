@@ -26,7 +26,11 @@ import {
   Config,
   ContributorConfig
 } from '@services/main-form-manager/models-config';
-import { importElements } from '@services/main-form-manager/tools';
+import {
+  importElements,
+  importResultListContributorDetail, importResultListQuickLook,
+  importResultListUnmanagedFields
+} from '@services/main-form-manager/tools';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ArlasColorService } from 'arlas-web-components';
 
@@ -57,7 +61,7 @@ export class ResultListImportService {
   private getResultlistWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
     const widgetData = this.resultlistFormBuilder.build(contributor.collection);
     const dataStep = widgetData.customControls.dataStep;
-    const gridStep = widgetData.customControls?.renderStep;
+    const gridStep = widgetData.customControls?.gridStep;
     const settingsStep = widgetData.customControls.settingsStep;
     const actionStep = widgetData.customControls.sactionStep;
     const title = widgetData.customControls.title;
@@ -161,46 +165,10 @@ export class ResultListImportService {
           control: quicklook.customControls.url
         }
       ]);
-      widgetData.customControls.renderStep.quicklookUrls.push(quicklook);
+      widgetData.customControls.gridStep.quicklookUrls.push(quicklook);
     }
 
-    contributor.fieldsConfiguration.urlImageTemplates?.forEach(descUrl => {
-      const quicklook = this.resultlistFormBuilder.buildQuicklook(contributor.collection);
-      importElements([
-        {
-          value: descUrl.url,
-          control: quicklook.customControls.url
-        },
-        {
-          value: descUrl.description,
-          control: quicklook.customControls.description
-        }
-      ]);
-      if (descUrl.filter) {
-        const selectedItems = descUrl.filter.values.map(
-          v => ({ value: v, label: v, color: this.colorService.getColor(v) }));
-
-        importElements([{
-          value: descUrl.filter.field,
-          control: quicklook.customControls.filter.field
-        },
-        {
-          value: selectedItems,
-          control: quicklook.customControls.filter.values
-        }]);
-
-        quicklook.customControls.filter.values.selectedMultipleItems = selectedItems;
-        quicklook.customControls.filter.values.savedItems = new Set(descUrl.filter.values);
-        this.collectionService.getTermAggregation(
-          contributor.collection,
-          quicklook.customControls.filter.field.value)
-          .then(keywords => {
-            quicklook.customControls.filter.values.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
-          });
-      }
-
-      widgetData.customControls.renderStep.quicklookUrls.push(quicklook);
-    });
+    importResultListQuickLook(widgetData, contributor, this.resultlistFormBuilder, this.colorService, this.collectionService);
 
     contributor.columns.forEach(c => {
       const column = this.resultlistFormBuilder.buildColumn(contributor.collection);
@@ -240,94 +208,10 @@ export class ResultListImportService {
       }
     ]);
 
-    (contributor.details || [])
-      .sort((d1, d2) => d1.order - d2.order)
-      .forEach(d => {
-
-        const detail = this.resultlistFormBuilder.buildDetail();
-        importElements([
-          {
-            value: d.name,
-            control: detail.customControls.name
-          }
-        ]);
-
-        d.fields.forEach(f => {
-          const field = this.resultlistFormBuilder.buildDetailField(contributor.collection);
-          importElements([
-            {
-              value: f.label,
-              control: field.customControls.label
-            },
-            {
-              value: f.path,
-              control: field.customControls.path
-            },
-            {
-              value: f.process,
-              control: field.customControls.process
-            },
-          ]);
-          detail.customControls.fields.push(field);
-        });
-
-        widgetData.customControls.dataStep.details.push(detail);
-      });
-
+    importResultListContributorDetail(widgetData, contributor, this.resultlistFormBuilder);
     // unmanaged fields
-    const componentInput = component.input;
     const unmanagedRenderFields = widgetData.customControls.unmanagedFields.renderStep;
-    importElements([
-      {
-        value: component.input.tableWidth,
-        control: unmanagedRenderFields.tableWidth
-      },
-      {
-        value: component.input.globalActionsList,
-        control: unmanagedRenderFields.globalActionsList
-      },
-      {
-        value: component.input.nLastLines,
-        control: unmanagedRenderFields.nLastLines
-      },
-      {
-        value: component.input.detailedGridHeight,
-        control: unmanagedRenderFields.detailedGridHeight
-      },
-      {
-        value: component.input.nbGridColumns,
-        control: unmanagedRenderFields.nbGridColumns
-      },
-      {
-        value: component.input.isBodyHidden,
-        control: unmanagedRenderFields.isBodyHidden
-      },
-      {
-        value: component.input.isAutoGeoSortActived,
-        control: unmanagedRenderFields.isAutoGeoSortActived
-      },
-      {
-        value: component.input.selectedItemsEvent,
-        control: unmanagedRenderFields.selectedItemsEvent
-      },
-      {
-        value: component.input.consultedItemEvent,
-        control: unmanagedRenderFields.consultedItemEvent
-      },
-      {
-        value: component.input.actionOnItemEvent,
-        control: unmanagedRenderFields.actionOnItemEvent
-      },
-      {
-        value: component.input.globalActionEvent,
-        control: unmanagedRenderFields.globalActionEvent
-      },
-      {
-        value: component.input.detailedGridHeight,
-        control: unmanagedRenderFields.globalActionEvent
-      }
-    ]);
-
+    importResultListUnmanagedFields(component,  unmanagedRenderFields);
     return widgetData;
   }
 }
