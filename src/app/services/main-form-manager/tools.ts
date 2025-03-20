@@ -16,8 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import {
+  ResultlistConfigForm, ResultlistFormBuilderService
+} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { AbstractControl } from '@angular/forms';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { AnalyticComponentConfig, ContributorConfig } from '@services/main-form-manager/models-config';
 import { Filter, Expression } from 'arlas-api';
+import { ArlasColorService } from 'arlas-web-components';
 export interface ImportElement {
   value: any;
   control: AbstractControl;

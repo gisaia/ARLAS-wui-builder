@@ -132,7 +132,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             }
           )
         }).withTabName(marker('Data')),
-        renderStep: new ConfigFormGroup({
+        gridStep: new ConfigFormGroup({
           isDefaultMode: new SlideToggleFormControl(
             false,
             marker('List default mode'),
@@ -252,7 +252,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             EditResultlistQuicklookComponent,
             {
               collectionControl: () => this.customControls.dataStep.collection,
-              control: () => this.customControls.renderStep.quicklookUrls
+              control: () => this.customControls.gridStep.quicklookUrls
             }
           )
         }).withTabName(marker('Resultlist grid')),
@@ -328,14 +328,14 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             actionOnItemEvent: new FormControl(),
             globalActionEvent: new FormControl()
           }),
-          zactionStep: new FormGroup({}),
+          sactionStep: new FormGroup({}),
         })
       });
   }
 
   public customGroups = {
     dataStep: this.get('dataStep') as ConfigFormGroup,
-    renderStep: this.get('renderStep') as ConfigFormGroup,
+    gridStep: this.get('gridStep') as ConfigFormGroup,
     sactionStep: this.get('sactionStep') as ConfigFormGroup,
     settingsStep: this.get('settingsStep') as ConfigFormGroup
   };
@@ -353,17 +353,17 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
       details: this.get('dataStep.details') as FormArray,
       idFieldName: this.get('dataStep.idFieldName') as HiddenFormControl,
     },
-    renderStep: {
-      isDefaultMode: this.get('renderStep.isDefaultMode') as SlideToggleFormControl,
-      useHttpThumbnails: this.get('renderStep.useHttpThumbnails') as SlideToggleFormControl,
-      useHttpQuicklooks: this.get('renderStep.useHttpQuicklooks') as SlideToggleFormControl,
-      tileLabelField: this.get('renderStep.tileLabelField') as SelectFormControl,
-      tileLabelFieldProcess: this.get('renderStep.tileLabelFieldProcess') as TextareaFormControl,
-      tooltipField: this.get('renderStep.tooltipField') as SelectFormControl,
-      tooltipFieldProcess: this.get('renderStep.tooltipFieldProcess') as TextareaFormControl,
-      thumbnailUrl: this.get('renderStep.thumbnailUrl') as FieldTemplateControl,
-      colorIdentifier: this.get('renderStep.colorIdentifier') as SelectFormControl,
-      quicklookUrls: this.get('renderStep.quicklookUrls') as FormArray
+    gridStep: {
+      isDefaultMode: this.get('gridStep.isDefaultMode') as SlideToggleFormControl,
+      useHttpThumbnails: this.get('gridStep.useHttpThumbnails') as SlideToggleFormControl,
+      useHttpQuicklooks: this.get('gridStep.useHttpQuicklooks') as SlideToggleFormControl,
+      tileLabelField: this.get('gridStep.tileLabelField') as SelectFormControl,
+      tileLabelFieldProcess: this.get('gridStep.tileLabelFieldProcess') as TextareaFormControl,
+      tooltipField: this.get('gridStep.tooltipField') as SelectFormControl,
+      tooltipFieldProcess: this.get('gridStep.tooltipFieldProcess') as TextareaFormControl,
+      thumbnailUrl: this.get('gridStep.thumbnailUrl') as FieldTemplateControl,
+      colorIdentifier: this.get('gridStep.colorIdentifier') as SelectFormControl,
+      quicklookUrls: this.get('gridStep.quicklookUrls') as FormArray
     },
     sactionStep: {
       displayFilters: this.get('sactionStep.displayFilters') as SlideToggleFormControl,
@@ -389,7 +389,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
         actionOnItemEvent: this.get('unmanagedFields.renderStep.actionOnItemEvent'),
         globalActionEvent: this.get('unmanagedFields.renderStep.globalActionEvent')
       },
-      zactionStep: {}
+      sactionStep: {}
     }
   };
 
