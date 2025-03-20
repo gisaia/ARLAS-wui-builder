@@ -1,5 +1,19 @@
 # Change Log
 
+## [v27.0.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.1) (2025-03-20)
+
+[Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v27.0.0...v27.0.1)
+
+**Fixed bugs:**
+
+- openid: looping calls to arlas-persistence when using keycloak [\#1047](https://github.com/gisaia/ARLAS-wui-builder/issues/1047)
+- Updating a widget should remove the collaboration of the former one [\#1004](https://github.com/gisaia/ARLAS-wui-builder/issues/1004)
+
+**Miscellaneous:**
+
+- Run the application on port 8080 instead of 80 [\#1045](https://github.com/gisaia/ARLAS-wui-builder/issues/1045)
+- Add send message on chat when release [\#1030](https://github.com/gisaia/ARLAS-wui-builder/issues/1030)
+
 ## [v27.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.0) (2025-02-11)
 
 [Full Changelog](https://github.com/gisaia/ARLAS-wui-builder/compare/v27.0.0-rc.2...v27.0.0)
