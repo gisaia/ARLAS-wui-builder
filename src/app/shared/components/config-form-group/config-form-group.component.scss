@@ -34,3 +34,9 @@
 .no-child-step-tabs-div{
    padding-bottom: 1px;
 }
+
+.no-overflow {
+   & .mat-mdc-tab-body-content {
+      overflow: hidden;
+   }
+}

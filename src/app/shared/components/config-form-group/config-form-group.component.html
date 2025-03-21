@@ -29,7 +29,7 @@
             <div *ngFor="let control of configFormGroup.controls | keyvalue">
                 <div *ngIf="control.value.enabled">
                     <div *ngIf="isFormGroup(control.value); let formGroup">
-                        <mat-tab #tab>
+                        <mat-tab #tab bodyClass="no-overflow">
                             <ng-template mat-tab-label>
                                 <span [class.tab-error]="formGroup.touched && formGroup.invalid && !tab.isActive">
                                     {{formGroup.tabName | translate}}
