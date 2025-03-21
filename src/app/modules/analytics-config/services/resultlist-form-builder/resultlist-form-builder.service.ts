@@ -144,7 +144,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             marker('Activate geosort')
           ),
           cellBackgroundStyle: new SelectFormControl(
-            '',
+            'filled',
             marker('Background style of cells'),
             marker('Background style of cells Description'),
             false,

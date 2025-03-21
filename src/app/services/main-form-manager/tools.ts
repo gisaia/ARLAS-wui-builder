@@ -25,7 +25,7 @@ export interface ImportElement {
 
 export function importElements(elements: Array<ImportElement>) {
   elements
-    .filter(e => e.value !== null)
+    .filter(e => e.value !== null && e.value !== undefined)
     .forEach(element => element.control.setValue(element.value));
 }
 
