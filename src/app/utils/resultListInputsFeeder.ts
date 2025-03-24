@@ -66,25 +66,25 @@ export class ResultListInputsFeeder {
   public importActionsSteps(){
     return this.imports([
       {
-        value: this.options.input.displayFilters,
-        control: this.sactionStep.displayFilters
+        value: this.options.input.downloadLink,
+        control: this.sactionStep.downloadLink
       },
       {
-        value: this.options.input.isGeoSortActived,
-        control: this.sactionStep.isGeoSortActived
-      }
+        value: this.options.input.visualisationLink,
+        control: this.sactionStep.visualisationLink
+      },
     ]);
   }
 
   public importSettingsSteps(){
     return this.imports([
       {
-        value: this.options.input.downloadLink,
-        control: this.settingsStep.downloadLink
+        value: this.options.input.displayFilters,
+        control: this.settingsStep.displayFilters
       },
       {
-        value: this.options.input.visualisationLink,
-        control: this.settingsStep.visualisationLink
+        value: this.options.input.isGeoSortActived,
+        control: this.settingsStep.isGeoSortActived
       },
       {
         value: this.options.input.cellBackgroundStyle,
@@ -136,19 +136,6 @@ export class ResultListInputsFeeder {
       }]);
   }
 
-  public importActionStep(){
-    return this.imports([
-      {
-        value: this.options.input.displayFilters,
-        control: this.sactionStep.displayFilters
-      },
-      {
-        value: this.options.input.isGeoSortActived,
-        control: this.sactionStep.isGeoSortActived
-      },
-    ]);
-  }
-
   public importDataSteps(){
     return this.imports([
       {
@@ -166,7 +153,7 @@ export class ResultListInputsFeeder {
     ]);
   }
 
-  // no present in analytics config that is why it is separate
+  // not present in analytics config that is why it is separate
   public importIcons(){
     this.imports(
       [

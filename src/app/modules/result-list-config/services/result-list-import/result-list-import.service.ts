@@ -75,7 +75,6 @@ export class ResultListImportService {
       .importActionsSteps()
       .importSettingsSteps()
       .importDataSteps()
-      .importActionStep()
       .importGridStep()
       .import(!!contributor.fieldsConfiguration.detailsTitleTemplate ?
         contributor.fieldsConfiguration.detailsTitleTemplate : '',

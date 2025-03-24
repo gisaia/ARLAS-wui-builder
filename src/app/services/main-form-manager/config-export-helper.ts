@@ -1090,7 +1090,6 @@ export class ConfigExportHelper {
   }
 
   private static getWidgetContributor(widgetData: any, widgetType: any, icon: string) {
-    console.log(widgetData);
     return {
       identifier: this.getContributorId(widgetData, widgetType),
       name: widgetData.title,
@@ -1365,14 +1364,14 @@ export class ConfigExportHelper {
           nLastLines: unmanagedRenderFields.nLastLines,
           detailedGridHeight: unmanagedRenderFields.detailedGridHeight,
           nbGridColumns: unmanagedRenderFields.nbGridColumns,
-          displayFilters: !!widgetData.sactionStep.displayFilters,
+          displayFilters: !!widgetData.settingsStep.displayFilters,
           hasGridMode: !!widgetData.gridStep.thumbnailUrl,
           defautMode: (!!widgetData.gridStep.thumbnailUrl && !!widgetData.gridStep.isDefaultMode) ?
             'grid' : 'list',
-          visualisationLink: widgetData.settingsStep.visualisationLink,
-          downloadLink: widgetData.settingsStep.downloadLink,
+          visualisationLink: widgetData.sactionStep.visualisationLink,
+          downloadLink: widgetData.sactionStep.downloadLink,
           isBodyHidden: unmanagedRenderFields.isBodyHidden,
-          isGeoSortActived: !!widgetData.sactionStep.isGeoSortActived,
+          isGeoSortActived: !!widgetData.settingsStep.isGeoSortActived,
           isAutoGeoSortActived: unmanagedRenderFields.isAutoGeoSortActived,
           selectedItemsEvent: unmanagedRenderFields.selectedItemsEvent,
           consultedItemEvent: unmanagedRenderFields.consultedItemEvent,

@@ -257,18 +257,6 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
           )
         }).withTabName(marker('Resultlist grid')),
         sactionStep: new ConfigFormGroup({
-          displayFilters: new SlideToggleFormControl(
-            '',
-            marker('Display filters'),
-            marker('Display filters description')
-          ),
-          isGeoSortActived: new SlideToggleFormControl(
-            '',
-            marker('Activate geosort'),
-            marker('Activate geosort')
-          ),
-        }).withTabName(marker('Actions')),
-        settingsStep: new ConfigFormGroup({
           visualisationLink: new InputFormControl(
             '',
             marker('Visualisation url service title'),
@@ -290,6 +278,18 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
               width: '100%',
               dependsOn: () => [this.customControls.dataStep.collection]
             }
+          )
+        }).withTabName(marker('Actions')),
+        settingsStep: new ConfigFormGroup({
+          displayFilters: new SlideToggleFormControl(
+            '',
+            marker('Display filters'),
+            marker('Display filters description')
+          ),
+          isGeoSortActived: new SlideToggleFormControl(
+            '',
+            marker('Activate geosort'),
+            marker('Activate geosort')
           ),
           cellBackgroundStyle: new SelectFormControl(
             '',
@@ -366,12 +366,12 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
       quicklookUrls: this.get('gridStep.quicklookUrls') as FormArray
     },
     sactionStep: {
-      displayFilters: this.get('sactionStep.displayFilters') as SlideToggleFormControl,
-      isGeoSortActived: this.get('sactionStep.isGeoSortActived') as SlideToggleFormControl,
+      visualisationLink: this.get('sactionStep.visualisationLink') as InputFormControl,
+      downloadLink: this.get('sactionStep.downloadLink') as InputFormControl,
     },
     settingsStep:  {
-      visualisationLink: this.get('settingsStep.visualisationLink') as InputFormControl,
-      downloadLink: this.get('settingsStep.downloadLink') as InputFormControl,
+      displayFilters: this.get('settingsStep.displayFilters') as SlideToggleFormControl,
+      isGeoSortActived: this.get('settingsStep.isGeoSortActived') as SlideToggleFormControl,
       cellBackgroundStyle: this.get('settingsStep.cellBackgroundStyle') as SelectFormControl
     },
     unmanagedFields: {
