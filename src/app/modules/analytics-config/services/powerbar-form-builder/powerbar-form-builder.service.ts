@@ -167,7 +167,7 @@ export class PowerbarConfigForm extends WidgetConfigFormGroup {
               ],
             }),
           useColorService: new HiddenFormControl(
-            '',
+            false,
             undefined,
             {
               optional: true,
@@ -184,7 +184,7 @@ export class PowerbarConfigForm extends WidgetConfigFormGroup {
             }
           ),
           useColorFromData: new HiddenFormControl(
-            '',
+            false,
             undefined,
             {
               optional: true,
@@ -272,17 +272,17 @@ export class PowerbarConfigForm extends WidgetConfigFormGroup {
               }
             }),
           displayFilter: new SlideToggleFormControl(
-            '',
+            false,
             marker('Display the filter'),
             marker('powerbar display filter description')
           ),
           scrollable: new SlideToggleFormControl(
-            '',
+            false,
             marker('Scrollable powerbar'),
             marker('Scrollable powerbar description')
           ),
           showExportCsv: new SlideToggleFormControl(
-            '',
+            false,
             marker('export csv powerbars'),
             marker('export csv powerbars description')
           ),

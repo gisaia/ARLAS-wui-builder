@@ -104,7 +104,7 @@ export class DonutConfigForm extends WidgetConfigFormGroup {
             0.1
           ),
           multiselectable: new SlideToggleFormControl(
-            '',
+            false,
             marker('Multiselectable'),
             marker('Donut multiselectable description')
           ),
@@ -160,7 +160,7 @@ export class DonutConfigForm extends WidgetConfigFormGroup {
               }
             }),
           showExportCsv: new SlideToggleFormControl(
-            '',
+            false,
             marker('export csv donut'),
             marker('export csv donut description')
           ),

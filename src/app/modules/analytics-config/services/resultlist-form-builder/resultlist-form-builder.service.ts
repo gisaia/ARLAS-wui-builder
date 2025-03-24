@@ -16,38 +16,50 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import {
+  EditResultlistQuicklookComponent
+} from '@analytics-config/components/edit-resultlist-quicklook/edit-resultlist-quicklook.component';
 import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
 import { Injectable } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionField } from '@services/collection-service/models';
 import {
   NUMERIC_OR_DATE_OR_KEYWORD,
-  NUMERIC_OR_DATE_OR_TEXT_TYPES, TEXT_OR_KEYWORD,
-  toNumericOrDateOrKeywordOrTextObs, toOptionsObs
+  NUMERIC_OR_DATE_OR_TEXT_TYPES,
+  TEXT_OR_KEYWORD,
+  toNumericOrDateOrKeywordOrTextObs,
+  toOptionsObs
 } from '@services/collection-service/tools';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
-  ButtonFormControl, ComponentFormControl, ConfigFormGroup, HiddenFormControl, InputFormControl,
+  ButtonFormControl,
+  ComponentFormControl,
+  ConfigFormGroup,
+  FieldTemplateControl,
+  HiddenFormControl,
+  InputFormControl,
   MultipleSelectFormControl,
-  SelectFormControl, SelectOption, SliderFormControl, SlideToggleFormControl, TextareaFormControl,
-  TitleInputFormControl, FieldTemplateControl
+  SelectFormControl,
+  SelectOption,
+  SliderFormControl,
+  SlideToggleFormControl,
+  TextareaFormControl,
+  TitleInputFormControl
 } from '@shared-models/config-form';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+import { ArlasColorService } from 'arlas-web-components';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
-import { ArlasColorService } from 'arlas-web-components';
-import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
-import { CollectionField } from '@services/collection-service/models';
-import { EditResultlistQuicklookComponent } from '@analytics-config/components/edit-resultlist-quicklook/edit-resultlist-quicklook.component';
-import { Router } from '@angular/router';
-import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
 
@@ -134,12 +146,12 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
         }).withTabName(marker('Data')),
         renderStep: new ConfigFormGroup({
           displayFilters: new SlideToggleFormControl(
-            '',
+            false,
             marker('Display filters'),
             marker('Display filters description')
           ),
           isGeoSortActived: new SlideToggleFormControl(
-            '',
+            false,
             marker('Activate geosort'),
             marker('Activate geosort')
           ),
@@ -463,7 +475,7 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
           }
         ),
         useColorService: new SlideToggleFormControl(
-          '',
+          false,
           marker('Colorize'),
           '',
           {

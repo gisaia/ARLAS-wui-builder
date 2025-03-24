@@ -134,7 +134,7 @@ export class HistogramFormGroup extends WidgetConfigFormGroup {
             )
           }).withTitle(marker('Labels and Units')),
           multiselectable: new SlideToggleFormControl(
-            '',
+            false,
             marker('Is multiselectable?'),
             marker('histogram multiselectable description')
           ),
@@ -164,7 +164,7 @@ export class HistogramFormGroup extends WidgetConfigFormGroup {
             }
           ),
           showExportCsv: new SlideToggleFormControl(
-            '',
+            false,
             marker('export csv histogram'),
             marker('export csv histogram description')
           ),
