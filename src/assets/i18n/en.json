@@ -911,5 +911,7 @@
 	"OWNER_GROUP_TITLE": "Collections of {{org}}",
 	"SHARED_GROUP_TITLE": "Collections shared with {{org}}",
 	"PUBLIC_GROUP_TITLE": "Public collections",
-	"COLLECTIONS_GROUP_TITLE": "Collections"
+	"COLLECTIONS_GROUP_TITLE": "Collections",
+	"Resultlist settings": "Settings",
+	"Resultlist grid": "Grid"
 }

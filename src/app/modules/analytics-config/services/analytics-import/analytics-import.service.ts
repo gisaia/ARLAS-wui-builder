@@ -19,30 +19,45 @@
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { Injectable } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
+import { CollectionService } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import {
-  AggregationModelConfig, AnalyticComponentConfig, AnalyticComponentHistogramInputConfig,
-  AnalyticComponentResultListInputConfig, AnalyticComponentSwimlaneInputConfig, Config, ContributorConfig
+  AggregationModelConfig,
+  AnalyticComponentConfig,
+  AnalyticComponentHistogramInputConfig,
+  AnalyticComponentResultListInputConfig,
+  AnalyticComponentSwimlaneInputConfig,
+  Config,
+  ContributorConfig
 } from '@services/main-form-manager/models-config';
 import { ImportElement, importElements } from '@services/main-form-manager/tools';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
+import { AnalyticsResultListInputsFeeder } from '@utils/resultListInputsFeeder';
+import { Aggregation } from 'arlas-api';
+import { ArlasColorService } from 'arlas-web-components';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
+import { v4 as uuidv4 } from 'uuid';
 import { AnalyticsInitService } from '../analytics-init/analytics-init.service';
-import { BucketsIntervalControls, BY_BUCKET_OR_INTERVAL } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
+import {
+  BucketsIntervalControls,
+  BY_BUCKET_OR_INTERVAL
+} from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
 import { DonutFormBuilderService } from '../donut-form-builder/donut-form-builder.service';
-import { HistogramFormBuilderService, HistogramFormGroup } from '../histogram-form-builder/histogram-form-builder.service';
-import { DEFAULT_METRIC_VALUE, MetricCollectControls } from '../metric-collect-form-builder/metric-collect-form-builder.service';
+import {
+  HistogramFormBuilderService,
+  HistogramFormGroup
+} from '../histogram-form-builder/histogram-form-builder.service';
+import {
+  DEFAULT_METRIC_VALUE,
+  MetricCollectControls
+} from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { MetricFormBuilderService } from '../metric-form-builder/metric-form-builder.service';
+import { MetricsTableFormBuilderService } from '../metrics-table-form-builder/metrics-table-form-builder.service';
 import { PowerbarFormBuilderService } from '../powerbar-form-builder/powerbar-form-builder.service';
 import { ResultlistFormBuilderService } from '../resultlist-form-builder/resultlist-form-builder.service';
-import { SwimlaneFormBuilderService, SwimlaneFormGroup } from '../swimlane-form-builder/swimlane-form-builder.service';
-import { Aggregation } from 'arlas-api';
-import { ArlasSettingsService } from 'arlas-wui-toolkit';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasColorService } from 'arlas-web-components';
-import { v4 as uuidv4 } from 'uuid';
 import { ShortcutsService } from '../shortcuts/shortcuts.service';
-import { MetricsTableFormBuilderService } from '../metrics-table-form-builder/metrics-table-form-builder.service';
+import { SwimlaneFormBuilderService, SwimlaneFormGroup } from '../swimlane-form-builder/swimlane-form-builder.service';
 
 
 @Injectable({
@@ -781,234 +796,23 @@ export class AnalyticsImportService {
 
   private getResultlistWidgetData(component: AnalyticComponentConfig, contributor: ContributorConfig) {
     const widgetData = this.resultlistFormBuilder.build(contributor.collection);
-    const dataStep = widgetData.customControls.dataStep;
-    const renderStep = widgetData.customControls.renderStep;
-    const title = widgetData.customControls.title;
-    const inputs = component.input as AnalyticComponentResultListInputConfig;
-    const titleFieldNames = contributor.fieldsConfiguration.titleFieldNames;
-    const tooltipFieldNames = contributor.fieldsConfiguration.tooltipFieldNames;
-    importElements([
-      {
-        value: contributor.name,
-        control: title
-      },
-      {
-        value: contributor.collection,
-        control: dataStep.collection
-      },
-      {
-        value: contributor.search_size,
-        control: dataStep.searchSize
-      },
-      {
-        value: contributor.fieldsConfiguration.idFieldName,
-        control: dataStep.idFieldName
-      },
-      {
-        value: component.input.defautMode === 'grid',
-        control: renderStep.gridStep.isDefaultMode
-      },
-      {
-        value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].fieldPath : '',
-        control: renderStep.gridStep.tileLabelField
-      },
-      {
-        value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].process : '',
-        control: renderStep.gridStep.tileLabelFieldProcess
-      },
-      {
-        value: !!tooltipFieldNames && tooltipFieldNames.length > 0 ? tooltipFieldNames[0].fieldPath : '',
-        control: renderStep.gridStep.tooltipField
-      },
-      {
-        value: !!tooltipFieldNames && tooltipFieldNames.length > 0 ? tooltipFieldNames[0].process : '',
-        control: renderStep.gridStep.tooltipFieldProcess
-      },
-      {
-        value: !!contributor.fieldsConfiguration.urlThumbnailTemplate ? contributor.fieldsConfiguration.urlThumbnailTemplate : '',
-        control: renderStep.gridStep.thumbnailUrl
-      },
-      {
-        value: contributor.fieldsConfiguration.iconColorFieldName,
-        control: renderStep.gridStep.colorIdentifier
-      },
-      {
-        value: inputs.displayFilters,
-        control: renderStep.displayFilters
-      },
-      {
-        value: inputs.isGeoSortActived,
-        control: renderStep.isGeoSortActived
-      },
-      {
-        value: inputs.cellBackgroundStyle,
-        control: renderStep.cellBackgroundStyle
-      }
-    ]);
-    if (contributor.fieldsConfiguration.urlImageTemplate) {
-      const quicklook = this.resultlistFormBuilder.buildQuicklook(contributor.collection);
-      importElements([
-        {
-          value: contributor.fieldsConfiguration.urlImageTemplate,
-          control: quicklook.customControls.url
-        }
-      ]);
-      widgetData.customControls.renderStep.gridStep.quicklookUrls.push(quicklook);
-    }
-
-    contributor.fieldsConfiguration.urlImageTemplates?.forEach(descUrl => {
-      const quicklook = this.resultlistFormBuilder.buildQuicklook(contributor.collection);
-      importElements([
-        {
-          value: descUrl.url,
-          control: quicklook.customControls.url
-        },
-        {
-          value: descUrl.description,
-          control: quicklook.customControls.description
-        }
-      ]);
-      if (descUrl.filter) {
-        const selectedItems = descUrl.filter.values.map(
-          v => ({ value: v, label: v, color: this.colorService.getColor(v) }));
-
-        importElements([{
-          value: descUrl.filter.field,
-          control: quicklook.customControls.filter.field
-        },
-        {
-          value: selectedItems,
-          control: quicklook.customControls.filter.values
-        }]);
-
-        quicklook.customControls.filter.values.selectedMultipleItems = selectedItems;
-        quicklook.customControls.filter.values.savedItems = new Set(descUrl.filter.values);
-        this.collectionService.getTermAggregation(
-          contributor.collection,
-          quicklook.customControls.filter.field.value)
-          .then(keywords => {
-            quicklook.customControls.filter.values.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
-          });
-      }
-
-      widgetData.customControls.renderStep.gridStep.quicklookUrls.push(quicklook);
-    });
-
-    contributor.columns.forEach(c => {
-      const column = this.resultlistFormBuilder.buildColumn(contributor.collection);
-      importElements([
-        {
-          value: c.columnName,
-          control: column.customControls.columnName
-        },
-        {
-          value: c.fieldName,
-          control: column.customControls.fieldName
-        },
-        {
-          value: c.dataType,
-          control: column.customControls.dataType
-        },
-        {
-          value: c.process,
-          control: column.customControls.process
-        },
-        {
-          value: c.useColorService,
-          control: column.customControls.useColorService
-        }
-      ]);
-      widgetData.customControls.dataStep.columns.push(column);
-    });
-
-    (contributor.details || [])
-      .sort((d1, d2) => d1.order - d2.order)
-      .forEach(d => {
-
-        const detail = this.resultlistFormBuilder.buildDetail();
-        importElements([
-          {
-            value: d.name,
-            control: detail.customControls.name
-          }
-        ]);
-
-        d.fields.forEach(f => {
-          const field = this.resultlistFormBuilder.buildDetailField(contributor.collection);
-          importElements([
-            {
-              value: f.label,
-              control: field.customControls.label
-            },
-            {
-              value: f.path,
-              control: field.customControls.path
-            },
-            {
-              value: f.process,
-              control: field.customControls.process
-            },
-          ]);
-          detail.customControls.fields.push(field);
-        });
-
-        widgetData.customControls.dataStep.details.push(detail);
-      });
-
-    // unmanaged fields
-    const componentInput = component.input;
-    const unmanagedRenderFields = widgetData.customControls.unmanagedFields.renderStep;
-    importElements([
-      {
-        value: component.input.tableWidth,
-        control: unmanagedRenderFields.tableWidth
-      },
-      {
-        value: component.input.globalActionsList,
-        control: unmanagedRenderFields.globalActionsList
-      },
-      {
-        value: component.input.nLastLines,
-        control: unmanagedRenderFields.nLastLines
-      },
-      {
-        value: component.input.detailedGridHeight,
-        control: unmanagedRenderFields.detailedGridHeight
-      },
-      {
-        value: component.input.nbGridColumns,
-        control: unmanagedRenderFields.nbGridColumns
-      },
-      {
-        value: component.input.isBodyHidden,
-        control: unmanagedRenderFields.isBodyHidden
-      },
-      {
-        value: component.input.isAutoGeoSortActived,
-        control: unmanagedRenderFields.isAutoGeoSortActived
-      },
-      {
-        value: component.input.selectedItemsEvent,
-        control: unmanagedRenderFields.selectedItemsEvent
-      },
-      {
-        value: component.input.consultedItemEvent,
-        control: unmanagedRenderFields.consultedItemEvent
-      },
-      {
-        value: component.input.actionOnItemEvent,
-        control: unmanagedRenderFields.actionOnItemEvent
-      },
-      {
-        value: component.input.globalActionEvent,
-        control: unmanagedRenderFields.globalActionEvent
-      },
-      {
-        value: component.input.detailedGridHeight,
-        control: unmanagedRenderFields.globalActionEvent
-      }
-    ]);
-
+    const input = component.input as AnalyticComponentResultListInputConfig;
+    const option = {
+      widgetData,
+      contributor,
+      input
+    };
+    const resultListInputsFeeder = new AnalyticsResultListInputsFeeder(option);
+    resultListInputsFeeder
+      .importTitle()
+      .importActionsSteps()
+      .importSettingsSteps()
+      .importDataSteps()
+      .importGridStep()
+      .importResultListQuickLook(this.resultlistFormBuilder, this.colorService, this.collectionService)
+      .importContributorColumns(this.resultlistFormBuilder)
+      .importResultListContributorDetail(this.resultlistFormBuilder)
+      .importUnmanagedFields();
     return widgetData;
   }
 

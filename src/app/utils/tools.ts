@@ -21,8 +21,12 @@ import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/for
 import { KeywordColor } from '@map-config/components/dialog-color-table/models';
 import { MaplibreSourceType } from 'arlas-maplibre';
 import {
-  AddLayerObject, CanvasSourceSpecification, GeoJSONSource,
-  RasterSourceSpecification, SourceSpecification, TypedStyleLayer
+  AddLayerObject,
+  CanvasSourceSpecification,
+  GeoJSONSource,
+  RasterSourceSpecification,
+  SourceSpecification,
+  TypedStyleLayer
 } from 'maplibre-gl';
 
 interface OPTIONAL {
