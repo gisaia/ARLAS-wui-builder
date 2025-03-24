@@ -916,5 +916,14 @@
 	"OWNER_GROUP_TITLE": "Collections of {{org}}",
 	"SHARED_GROUP_TITLE": "Collections shared with {{org}}",
 	"PUBLIC_GROUP_TITLE": "Public collections",
-	"COLLECTIONS_GROUP_TITLE": "Collections"
+	"COLLECTIONS_GROUP_TITLE": "Collections",
+	"View URL": "View URL",
+	"Protocol": "Protocol",
+	"Data group name": "Data group name",
+	"Add an item family": "Add an item family",
+	"Add a visualization configuration": "Add a visualization configuration",
+	"Add a visualization": "Add a visualization",
+	"Apply to": "Apply to",
+	"No results": "No results",
+	"Configure data eligible for visualisation": "Configure data eligible for {{name}} visualisation"
 }

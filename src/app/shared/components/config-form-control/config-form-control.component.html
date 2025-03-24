@@ -71,46 +71,10 @@
     </mat-form-field>
 </div>
 
-<div *ngIf="isMultipleSelect(); let typedControl"
-     [class]="typedControl.formFieldClass"
-     class="multi-select-form-control">
-    <div class="box-search" *ngIf="typedControl.searchable">
-        <input #searchInput type="text" [ngClass]="'pl-1'" (input)="debouncer.next(searchInput.value)"
-            placeholder="{{'Search...' | translate}}" />
-        <div class="box-search-icon" (click)="searchInput.value = ''; debouncer.next('')">
-            <button mat-icon-button class="search-button">
-                <mat-icon class="mat-24" aria-label="Search icon">clear</mat-icon>
-            </button>
-        </div>
-    </div>
-    <div style="max-height: 250px; overflow-y: auto;">
-        <mat-checkbox class="multiply-selected" *ngFor="let opt of typedControl.selectedMultipleItems;" [value]="opt"
-            (change)="onchangeMulitpleSelection($event)" [checked]="true"
-            [style.borderLeftColor]="opt.color">
-            <span class="label">{{opt.value | translate}}</span>
-            <span class="detail">{{opt.detail | translate }}</span>
-        </mat-checkbox>
-        <ng-container *ngFor="let opt of typedControl.syncOptions; trackBy: trackByFn">
-            <mat-checkbox class="multiply-to-select" [checked]="false"
-                *ngIf="!typedControl.savedItems.has(opt.value)" (change)="onchangeMulitpleSelection($event)"
-                [value]="opt" [style.borderLeftColor]="opt.color">
-
-                <span class="label">{{opt.label | translate}}</span>
-                <span class="detail">{{opt.detail | translate }}</span>
-
-            </mat-checkbox>
-        </ng-container>
-        <mat-select style="display: none;" [formControl]="typedControl" [required]="!typedControl.optional"
-            [(ngModel)]="typedControl.selectedMultipleItems"
-            [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? WARNING_MESSAGE : null"
-            [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
-            [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
-        </mat-select>
-        <div *ngIf="typedControl.syncOptions.length === 0 && typedControl.selectedMultipleItems.length === 0" class="empty-select">
-            {{'No choices available' | translate}}
-        </div>
-    </div>
-
+<div *ngIf="isMultipleSelect(); let typedControl" class="multi-select-form-control">
+    <arlas-multi-select-search
+            [control]="typedControl"
+    ></arlas-multi-select-search>
 </div>
 
 <div *ngIf="isCheckbox(); let typedControl" class="checkbox-form-control">

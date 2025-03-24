@@ -60,6 +60,10 @@ import { ArlasColorService } from 'arlas-web-components';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
+import {
+    EditResultlistVisualisationComponent
+} from '@analytics-config/components/edit-resultlist-visualisation/edit-resultlist-visualisation.component';
+
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
 
@@ -323,6 +327,16 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             }
           ),
         }).withTabName(marker('Resultlist settings')),
+        visualisationStep:new ConfigFormGroup({
+          visualisationsList: new FormArray([]),
+          visualisations:  new ComponentFormControl(
+            EditResultlistVisualisationComponent,
+            {
+              collectionControl: () => this.customControls.dataStep.collection,
+              control: () => this.customControls.visualisationStep.visualisationsList
+            }
+          )
+        }).withTabName('Visualisation'),
         unmanagedFields: new FormGroup({
           dataStep: new FormGroup({}),
           renderStep: new FormGroup({
@@ -347,7 +361,8 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
     dataStep: this.get('dataStep') as ConfigFormGroup,
     gridStep: this.get('gridStep') as ConfigFormGroup,
     sactionStep: this.get('sactionStep') as ConfigFormGroup,
-    settingsStep: this.get('settingsStep') as ConfigFormGroup
+    settingsStep: this.get('settingsStep') as ConfigFormGroup,
+    visualisationStep: this.get('visualisationStep') as ConfigFormGroup
   };
 
   public customControls = {
@@ -383,6 +398,10 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
       displayFilters: this.get('settingsStep.displayFilters') as SlideToggleFormControl,
       isGeoSortActived: this.get('settingsStep.isGeoSortActived') as SlideToggleFormControl,
       cellBackgroundStyle: this.get('settingsStep.cellBackgroundStyle') as SelectFormControl
+    },
+    visualisationStep: {
+      visualisationLink: this.get('visualisationStep.visualisationLink') as InputFormControl,
+      visualisationsList: this.get('visualisationStep.visualisationsList') as FormArray
     },
     unmanagedFields: {
       dataStep: {},
@@ -701,6 +720,119 @@ export class ResultlistQuicklookFormGroup extends FormGroup {
 }
 
 
+export class ResultListVisualisationsFormGroup extends FormGroup {
+  public constructor(fieldsObs?: Observable<Array<CollectionField>>, collection?: string, collectionService?: CollectionService) {
+    super({
+      name: new InputFormControl(
+        '',
+        marker('Name'),
+        marker('Name'),
+      ),
+      description: new InputFormControl(
+        '',
+        marker('Description'),
+        marker('Description'),
+      ),
+      itemsFamilies: new FormArray<ResultListVisualisationsItemFamily>([])
+    });
+  }
+
+  public customControls = {
+    name: this.get('name') as InputFormControl,
+    description: this.get('description') as TextareaFormControl,
+    dataGroups: this.get('dataGroups') as FormArray<ResultListVisualisationsItemFamily>
+  };
+}
+
+export class ResultListVisualisationsItemFamily extends FormGroup {
+  public constructor(fieldsObs?: Observable<Array<CollectionField>>, collection?: string, collectionService?: CollectionService) {
+    super({
+      dataGroups: new InputFormControl(
+        '',
+        marker('Data groups name'),
+        ''
+      ),
+      filter: new ConfigFormGroup({
+        field: new SelectFormControl(
+          '',
+          marker('Condition fields'),
+          marker('Condition fields'),
+          true,
+          toOptionsObs(fieldsObs),
+          {
+            optional: false
+          }
+        ),
+        values: new MultipleSelectFormControl(
+          // Mark as invalid if there is a value on filterField and not there
+          '',
+          marker('Condition values'),
+          marker('Condition values description'),
+          false,
+          [],
+          {
+            optional: false,
+            dependsOn: () => [this.customControls.filter.field],
+            onDependencyChange: (control: MultipleSelectFormControl) => {
+              if (!this.customControls.filter.field.touched && this.customControls.filter.field.value !== '') {
+                // Avoid to reset the imported configuration when first loading it
+              } else if (this.customControls.filter.field.value !== '' && !!this.customControls.filter.field.syncOptions
+                            && this.customControls.filter.field.syncOptions.map(f => f.value).includes(this.customControls.filter.field.value)) {
+                control.setSyncOptions([]);
+                collectionService.getTermAggregation(
+                  collection,
+                  this.customControls.filter.field.value)
+                  .then(keywords => {
+                    control.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
+                  });
+              } else {
+                control.setSyncOptions([]);
+                control.selectedMultipleItems = [];
+                control.patchValue([]);
+                control.savedItems = new Set<string>();
+              }
+              control.markAsUntouched();
+            }
+          },
+          false
+        )
+      }),
+      protocol: new SelectFormControl(
+        '',
+        marker('Protocol'),
+        marker('Protocol'),
+        false,
+        [
+          { label: marker('Titiler'), value: 'titiler' },
+          { label: marker('Other'), value: 'other' },
+        ],
+      ),
+      visualisationUrl: new InputFormControl(
+        '',
+        marker('View URL'),
+        '',
+        'text',
+        {
+          validators: [Validators.pattern('^(http|https)\:\/\/.*')]
+        }
+      ),
+    });
+  }
+
+  public customControls = {
+    dataGroups: this.get('dataGroups') as InputFormControl,
+    protocol: this.get('protocol') as SelectFormControl,
+    filter: {
+      field: this.get('filter.field') as SelectFormControl,
+      values: this.get('filter.values') as MultipleSelectFormControl
+    },
+    visualisationUrl: this.get('visualisationUrl') as InputFormControl
+  };
+}
+
+
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -773,6 +905,19 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
     const fieldObs = this.collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD);
     const control = new ResultlistQuicklookFormGroup(
       fieldObs,
+      collection,
+      this.collectionService);
+    ConfigFormGroupComponent.listenToAllControlsOnDependencyChange(control.get('filter') as ConfigFormGroup, []);
+    return control;
+  }
+
+  public buildVisualisation() {
+    return new ResultListVisualisationsFormGroup();
+  }
+
+  public buildVisualisationsItemFamily(collection: string) {
+    const fieldObs = this.collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD);
+    const control = new ResultListVisualisationsItemFamily(fieldObs,
       collection,
       this.collectionService);
     ConfigFormGroupComponent.listenToAllControlsOnDependencyChange(control.get('filter') as ConfigFormGroup, []);
