@@ -1,0 +1,18 @@
+<mat-form-field>
+    <mat-select [required]="!control?.optional" [formControl]="selectMultiFc" [multiple]="true"
+                [placeholder]="multiSelect.disabled ? 'No choices available' : control?.label " #multiSelect>
+        <mat-option>
+            <ngx-mat-select-search
+                    [formControl]="selectSearchFilterFc"
+                    [placeholderLabel]="'Search...' | translate"
+                    [noEntriesFoundLabel]="'No results' | translate"
+            ></ngx-mat-select-search>
+        </mat-option>
+        @for (option of filteredSyncOption | async; track option.value){
+            <mat-option [value]="option">
+                {{option?.label | translate}}
+            </mat-option>
+        }
+    </mat-select>
+</mat-form-field>
+
