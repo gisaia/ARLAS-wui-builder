@@ -1,0 +1,136 @@
+
+@if(manageViewIsOpened){
+    <arlas-manage-visualisation
+            @openClose
+            [visualisation]="currentVisualisation"
+            [isEdition]="isEdition()"
+            (validate)="manageVisualisationValidated($event)"
+            (cancel)="manageVisualisationCanceled($event)"
+    ></arlas-manage-visualisation>
+} @else {
+    <button mat-stroked-button color="primary" (click)="addVisualisation()">
+        <mat-icon>add</mat-icon>
+        {{'Add a visualization' | translate}}
+    </button>
+<section  class="table-container">
+    <table mat-table [dataSource]="visualisation"
+           class="columns"
+           cdkDropList [cdkDropListData]="visualisation" (cdkDropListDropped)="dropVisualisation($event)"
+           [cdkDropListDisabled]="dragDisabled" [cdkDropListLockAxis]="'y'"
+    >
+        <ng-container matColumnDef="drag"  >
+            <th mat-header-cell *matHeaderCellDef class="table-col-drag"></th>
+            <td mat-cell  *matCellDef="let element" class="table-col-drag">
+                <mat-icon class="drag" (mouseenter)="dragDisabled = false" (mouseup)="dragDisabled = true">drag_indicator</mat-icon>
+            </td>
+        </ng-container>
+        <!-- Position Column -->
+        <ng-container matColumnDef="name">
+            <th mat-header-cell class="table-col-name" *matHeaderCellDef>{{'Name' | translate}}</th>
+            <td mat-cell class="table-col-name" *matCellDef="let element">{{element?.controls.name?.value}}</td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>{{'Description' | translate}}</th>
+            <td mat-cell *matCellDef="let element">{{element?.controls.description?.value}}</td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="applyTo">
+            <th mat-header-cell *matHeaderCellDef>{{'Apply to' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+                <div>
+                </div>
+                <span>
+
+          </span>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef class="table-col-action"></th>
+            <td mat-cell  *matCellDef="let element; let i = index" class="table-col-action" >
+                <button mat-icon-button [matMenuTriggerFor]='actions' [matMenuTriggerData]="{index:i}"><mat-icon >more_vert</mat-icon></button>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+        <tr class="result-list-row" mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag
+            [cdkDragData]="row"
+        ></tr>
+    </table>
+</section>
+
+
+    <mat-menu #actions>
+        <ng-template matMenuContent let-index="index">
+            <button mat-menu-item (click)="openEdition(index)">
+                <mat-icon>edite</mat-icon>
+                <span>{{'Manage visualisation' | translate}}</span>
+            </button>
+            <button (click)="removeVisualisation(index)" mat-menu-item>
+                <mat-icon>delete</mat-icon>
+                <span>{{'Delete' | translate}}</span>
+            </button>
+        </ng-template>
+    </mat-menu>
+
+}
+
+
+
+
+<!--
+<div cdkDropList [cdkDropListData]="visualisation" (cdkDropListDropped)="dropVisualisation($event)"
+     [cdkDropListLockAxis]="'y'" [cdkDropListDisabled]="dragDisabled">
+    @for (visu of visualisation; track visu.value; let visualisationIndex = $index) {
+        <div   class="result-list-visualisation" cdkDrag [cdkDragData]="visu">
+            <div class="result-list-visualisation_main-meta">
+                <div class="main-meta">
+                    <arlas-config-form-control  [showLabel]="true" [control]="visu.controls.name"></arlas-config-form-control>
+                    <arlas-config-form-control class="main-meta_input-desc" [showLabel]="true" [control]="visu.controls.description"></arlas-config-form-control>
+                </div>
+                <div>
+                    <mat-icon class="drag" (mouseenter)="dragDisabled = false" (mouseup)="dragDisabled = true">drag_indicator</mat-icon>
+                    <button mat-icon-button (click)="removeVisualisation(visualisationIndex)" [matTooltip]="'Delete visualisation' | translate">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+            <div class="result-list-visualisation_item-family" cdkDropList
+                 [cdkDropListData]="(visu | castVisualisationItemFamily).controls"
+                 (cdkDropListDropped)="dropItemFamily($event, visualisationIndex)"
+                 [cdkDropListLockAxis]="'y'"
+                 [cdkDropListDisabled]="ItemFamilyDragDisabled"
+            >
+                @for (itemFamily of (visu | castVisualisationItemFamily).controls; track itemFamily; let itemIndex = $index) {
+                    <div cdkDrag [cdkDragData]="itemFamily" class="item-family" >
+                        <div class="item-family_header">
+                            <mat-icon class="drag"  (mouseenter)="ItemFamilyDragDisabled = false">drag_indicator</mat-icon>
+                            <button mat-icon-button (click)="removeItemFamily(visualisationIndex, itemIndex)" [matTooltip]="'Delete condition' | translate">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                        <div class="item-family_section">
+                            <arlas-config-form-control class="item-family_input" [showLabel]="true" [control]="itemFamily.controls.itemsFamily"></arlas-config-form-control>
+                        <div class="item-family_input"></div>
+                        </div>
+                        <div class="item-family_section">
+                            <arlas-config-form-control class="item-family_input" [showLabel]="true" [control]="(itemFamily.controls.filter | castToConfigFormGroup).controls.field"></arlas-config-form-control>
+                            <arlas-config-form-control class="item-family_input" [showLabel]="true" [control]="(itemFamily.controls.filter | castToConfigFormGroup).controls.values"></arlas-config-form-control>
+                        </div>
+
+                        <div class="item-family_section">
+                            <arlas-config-form-control class="item-family_input" [showLabel]="true" [control]="itemFamily.controls.protocol"></arlas-config-form-control>
+                            <arlas-config-form-control class="item-family_input" [showLabel]="true" [control]="itemFamily.controls.visualisationUrl"></arlas-config-form-control>
+                        </div>
+                    </div>
+
+                }
+                <div class="item-family_action" >
+                    <button mat-stroked-button (click)="addItemFamily(visualisationIndex)"> {{'Add an item family' | translate}}</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>-->

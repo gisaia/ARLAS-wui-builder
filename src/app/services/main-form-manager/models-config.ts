@@ -17,6 +17,9 @@
  * under the License.
  */
 
+import {
+  ResultListVisualisationsFormGroup
+} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { Aggregation } from 'arlas-api';
 import { VisualisationSetConfig, BasemapStyle } from 'arlas-map';
 import { FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
@@ -307,10 +310,24 @@ export interface AnalyticComponentInputConfig {
 }
 
 export interface AnalyticComponentResultListInputConfig extends AnalyticComponentInputConfig {
+  visualisationsList?: VisualisationListInputConfig[];
   options?: AnalyticComponentResultListInputOptions;
   detailWidth?: number;
   visualisationLink?: string;
   downloadLink?: string;
+}
+
+export interface VisualisationListInputConfig {
+  description: string;
+  name: string;
+  itemsFamilies: ItemsFamiliesInputConfig[];
+}
+
+export interface ItemsFamiliesInputConfig {
+  itemsFamily: string;
+  protocol: string;
+  visualisationUrl: string;
+  filter: { field: string; values: {value: string;color: string;detail: string;}[];};
 }
 
 export interface AnalyticComponentResultListInputOptions {

@@ -73,6 +73,7 @@ export class ResultListImportService {
         widgetData.customControls.showName)
       .importIcons()
       .importActionsSteps()
+      .importVisualisationStep(this.resultlistFormBuilder, this.colorService, this.collectionService)
       .importSettingsSteps()
       .importDataSteps()
       .importGridStep()

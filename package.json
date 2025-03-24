@@ -43,6 +43,7 @@
     "moment": "^2.29.4",
     "ngx-color-picker": "^17.0.0",
     "ngx-logger": "^5.0.12",
+    "ngx-mat-select-search": "^8.0.0",
     "ngx-spinner": "^17.0.0",
     "patch-package": "^6.4.7",
     "rxjs": "~7.4.0",

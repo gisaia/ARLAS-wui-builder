@@ -65,43 +65,14 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   public constructor(
     private resolver: ComponentFactoryResolver,
     private changeDetector: ChangeDetectorRef,
-    private colorService: ArlasColorService,
-    private collectionService: CollectionService,
-    private arlasIamService: ArlasIamService,
-    private cdr: ChangeDetectorRef
+    private arlasIamService: ArlasIamService
   ) {
     this.organisation = this.arlasIamService.getOrganisation();
   }
 
-  public onchangeMulitpleSelection(event, clear?: boolean) {
-
-    if (event.checked) {
-      (this.control as MultipleSelectFormControl).savedItems.add(event.source.value.value);
-    } else {
-      (this.control as MultipleSelectFormControl).savedItems.delete(event.source.value.value);
-    }
-
-    (this.control as MultipleSelectFormControl).selectedMultipleItems =
-      Array.from((this.control as MultipleSelectFormControl).savedItems)
-        .map(i => ({ value: i, color: this.colorService.getColor(i), detail: this.collectionService.getCollectionInterval(i) }));
-    this.changeDetector.detectChanges();
-    if (clear) {
-      this.debouncer.next('');
-    }
-  }
 
   public ngOnInit() {
     this.colorPreviewControl = this.isColorPreview();
-    this.debouncer.pipe(debounceTime(500)).subscribe(t => {
-      if (!!(this.control as MultipleSelectFormControl).selectedMultipleItems) {
-        (this.control as MultipleSelectFormControl).selectedMultipleItems
-          .forEach(i => (this.control as MultipleSelectFormControl).savedItems.add(i.value));
-      }
-      (this.control as MultipleSelectFormControl).selectedMultipleItems =
-        Array.from((this.control as MultipleSelectFormControl).savedItems)
-          .map(i => ({ value: i, color: this.colorService.getColor(i), detail: this.collectionService.getCollectionInterval(i) }));
-      this.updateSyncOptions.next(t);
-    });
   }
 
   public ngAfterViewInit() {
