@@ -1,6 +1,6 @@
 <mat-form-field>
     <mat-select [required]="!control?.optional" [formControl]="selectMultiFc" [multiple]="true"
-                [placeholder]="multiSelect.disabled ? 'No choices available' : control?.label " #multiSelect>
+                [placeholder]="control?.label " #multiSelect>
         <mat-option>
             <ngx-mat-select-search
                     [formControl]="selectSearchFilterFc"
