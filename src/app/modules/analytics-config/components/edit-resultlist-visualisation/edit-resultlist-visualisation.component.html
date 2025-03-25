@@ -4,6 +4,7 @@
             @openClose
             [visualisation]="currentVisualisation"
             [isEdition]="isEdition()"
+            [collectionControlName]="collectionControl.value"
             (validate)="manageVisualisationValidated($event)"
             (cancel)="manageVisualisationCanceled($event)"
     ></arlas-manage-visualisation>

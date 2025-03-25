@@ -100,7 +100,7 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
    * @param inputElement The input HTML element
    * @param selectControl The Angular control that holds the Input's value
    */
-  public clearAutoComplete(event: Event, inputElement: HTMLElement, selectControl: SelectFormControl) {
+  public clearAutoComplete(event: Event, inputElement: HTMLElement, selectControl: SelectFormControl | TypedSelectFormControl) {
     event.stopPropagation();
     selectControl.filteredOptions = selectControl.syncOptions;
     selectControl.setValue('');

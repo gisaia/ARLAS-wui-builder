@@ -17,14 +17,21 @@
  * under the License.
  */
 import {
-  ResultListVisualisationsFormGroup,
-  ResultListVisualisationsItemFamily
+  DataGroupEditionComponent
+} from '@analytics-config/components/edit-resultlist-visualisation/data-group-edition/data-group-edition.component';
+import {
+  ResultlistFormBuilderService,
+  ResultListVisualisationsDataGroup,
+  ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTable } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '@shared/shared.module';
+import { filter, first } from 'rxjs';
 
 @Component({
   selector: 'arlas-manage-visualisation',
@@ -40,13 +47,19 @@ import { SharedModule } from '@shared/shared.module';
 export class ManageVisualisationComponent {
   protected visualisation = input<ResultListVisualisationsFormGroup>();
   protected isEdition = input<boolean>();
+  protected collectionControlName = input<string>('');
+  @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
+  protected dialog = inject(MatDialog);
+  protected resultlistFormBuilderService = inject(ResultlistFormBuilderService);
   protected validate = output<boolean>();
   protected cancel = output<boolean>();
   protected displayedColumns = ['drag', 'dataGroup', 'protocol', 'visualisationUrl', 'conditions', 'actions'];
   public dragDisabled = true;
 
-  public get groupItem(): FormArray<ResultListVisualisationsItemFamily> | any[] {
-    return this.visualisation().customControls.dataGroups ?  this.visualisation().customControls.dataGroups.value  : [];
+  public get dataGroups(): FormArray<ResultListVisualisationsDataGroup> | any[] {
+    console.log(this.visualisation().get('dataGroups') );
+    console.log((<any>this.visualisation().get('dataGroups')).controls);
+    return this.visualisation().get('dataGroups')?.value.length > 0 ?  (<any>this.visualisation().get('dataGroups')).controls as FormArray  : [];
   }
 
   public validateVisualisation(){
@@ -62,14 +75,44 @@ export class ManageVisualisationComponent {
     this.ItemFamilyDragDisabled = true;*/
   }
 
-  public removeItemFamily(index: number, itemIndex: number) {
-    // (this.control.controls[index].get('itemsFamilies') as FormArray).removeAt(itemIndex);
+
+  public editDataGroup(itemIndex: number){
+    const dataGroup = (this.visualisation().get('dataGroups') as FormArray).at(itemIndex) as ResultListVisualisationsDataGroup;
+    this.openEditionDialog(dataGroup, true);
   }
 
-  public addItemFamily(index: number) {
-  /*  (this.control.controls[index].get('itemsFamilies') as FormArray).push(
-      this.resultlistFormBuilder.buildVisualisationsItemFamily(this.collectionControl.value)
-    );*/
+  public removeDataGroup(itemIndex: number) {
+    (this.visualisation().get('dataGroups') as FormArray).removeAt(itemIndex);
+    this.table.renderRows();
+  }
+
+  public openEditionDialog(dataGroup: ResultListVisualisationsDataGroup, edit = false){
+    return this.dialog.open(DataGroupEditionComponent,
+      {
+        width:'50vw',
+        height: '90vh',
+        data: {
+          edit,
+          dataGroup,
+          collectionControlName: this.collectionControlName()
+        }
+      }
+    );
+  }
+
+  public addDataGroup() {
+    const dataGroup = this.resultlistFormBuilderService.buildVisualisationsDataGroup();
+    const ref = this.openEditionDialog(dataGroup);
+
+    ref.afterClosed()
+      .pipe(
+        first(),
+        filter( (validate: boolean) => validate)
+      )
+      .subscribe(_ => {
+        (this.visualisation().get('dataGroups') as FormArray).push(dataGroup);
+        this.table.renderRows();
+      });
   }
 
 }

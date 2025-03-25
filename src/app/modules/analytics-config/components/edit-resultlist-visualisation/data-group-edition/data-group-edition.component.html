@@ -1,0 +1,83 @@
+@if (data.dataGroup; as dataGroup) {
+        <div class="data-group__container">
+            <div class="data-group__header">
+                <h3 class="title">{{ dataGroup.customControls.name.value }}</h3>
+                <span class="sub-title">{{ 'Manage data group' | translate }}</span>
+            </div>
+
+            <div class="data-group__inputs">
+                <arlas-config-form-control [showLabel]="true"
+                                           [control]="dataGroup.controls.name"></arlas-config-form-control>
+                <arlas-config-form-control [showLabel]="true"
+                                           [control]="dataGroup.controls.protocol"></arlas-config-form-control>
+                <arlas-config-form-control [showLabel]="true"
+                                           [control]="dataGroup.controls.visualisationUrl"></arlas-config-form-control>
+            </div>
+
+            <button mat-stroked-button color="tertiary" class="data-group__button"
+                    (click)="addCondition()">
+                <mat-icon>add</mat-icon>
+                {{ 'Add a condition' | translate }}
+            </button>
+
+            <section  class="table-container">
+            <table #table class="table" mat-table [dataSource]="filterConditions">
+                <!-- field Column -->
+                <ng-container matColumnDef="field">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'Data group field filter' | translate }}</th>
+                    <td mat-cell *matCellDef="let element; let i = index">
+                        <arlas-config-form-control [control]="element.controls.filterField"
+                        >
+                        </arlas-config-form-control>
+                    </td>
+                </ng-container>
+
+                <!-- operator Column -->
+                <ng-container matColumnDef="operator">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'Data group operator' | translate }}</th>
+                    <td mat-cell *matCellDef="let element; let i = index">
+                        <arlas-config-form-control [control]="element.controls.filterOperation"
+                                                   (updateSyncOptions)="updateList(
+                                                   {prefix: $event,}, i)">
+                        </arlas-config-form-control>
+                    </td>
+                </ng-container>
+
+                <!-- values Column -->
+                <ng-container matColumnDef="value">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'Data group field value' | translate }}</th>
+                    <td mat-cell *matCellDef="let element; let i = index">
+                        @for (valueControl of element.controls.filterValues.controls | objectvalues; track $index) {
+                            @if (valueControl.enabled){
+                            <arlas-config-form-control [control]="valueControl" (updateSyncOptions)="updateList(
+                                                   {prefix: $event}, i)">
+                            </arlas-config-form-control>
+                            }
+                        }
+                    </td>
+                </ng-container>
+                <!-- action Column -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef class="table-col-action"></th>
+                    <td mat-cell class="table-col-action" *matCellDef="let element; let i = index">
+                        <button mat-icon-button (click)="removeCondition(i)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            </section>
+            <mat-dialog-actions [align]="'end'">
+                @if(!data.edit) {
+                    <button [mat-dialog-close]="false" mat-stroked-button class="data-group__button">
+                        {{ 'Cancel' | translate }}
+                    </button>
+                }
+                <button [mat-dialog-close]="true" [disabled]="disabled()"  mat-stroked-button color="primary" class="data-group__button">
+                    {{ 'Validate' | translate }}
+                </button>
+            </mat-dialog-actions>
+        </div>
+}
