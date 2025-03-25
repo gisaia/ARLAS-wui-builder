@@ -18,16 +18,18 @@
  */
 
 :host {
-display: block;
-font-size: 0.875rem;
-  --ligh-grey: #efefef
+  display: block;
+  font-size: 0.875rem;
+  --ligh-grey: #efefef;
+  height: 100%;
 }
 
-.manage-visualisation{
+.data-group{
   &__container{
     display: flex;
     flex-direction: column;
-    padding: 16xp;
+    padding: 16px;
+    height: calc(100% - 16px);
   }
 
   &__header {
@@ -46,9 +48,9 @@ font-size: 0.875rem;
   }
 
   &__inputs {
+    margin-top: 16px;
     display: flex;
-    flex-direction: column;
-    margin: 12px 0;
+    gap: 16px
   }
 
   &__button {
@@ -73,6 +75,12 @@ font-size: 0.875rem;
   }
 }
 
+.table-container{
+  width: 100%;
+  height: 100%;
+  overflow-y:auto;
+}
+
 .title {
   margin: 0;
 }
@@ -83,19 +91,4 @@ font-size: 0.875rem;
 
 .body-text {
   margin-bottom: 6px;
-}
-
-.mat-column-drag{
-  width: 40px;
-}
-
-.mat-column-actions {
-  max-width: 100%;
-  & mat-icon:hover{
-    cursor: pointer;
-  }
-}
-
-.mat-column-protocol{
-  max-width: 100px;
 }

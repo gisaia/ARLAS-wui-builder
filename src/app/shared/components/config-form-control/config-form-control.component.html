@@ -137,7 +137,7 @@
             [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? WARNING_MESSAGE : null"
             [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
-        <button mat-button *ngIf="typedControl.value" matSuffix mat-icon-button
+        <button *ngIf="typedControl.value" matSuffix mat-icon-button
             (click)="clearAutoComplete($event, typedAutocompleteInput, typedControl)">
             <mat-icon>close</mat-icon>
         </button>

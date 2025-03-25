@@ -920,5 +920,7 @@
 	"Add a visualization": "Add a visualization",
 	"Apply to": "Apply to",
 	"No results": "No results",
-	"Configure data eligible for visualisation": "Configure data eligible for {{name}} visualisation"
+	"Data group field filter": "Field filter",
+	"Data group operator": "Operator",
+	"Data group field value": "Field value"
 }

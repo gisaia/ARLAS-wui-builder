@@ -84,7 +84,7 @@ export class EditResultlistVisualisationComponent {
    public addVisualisation() {
      this.manageViewIsOpened = true;
      const newVisualisation = this.resultlistFormBuilder.buildVisualisation();
-     newVisualisation.customControls.name.setValue('Name');
+     newVisualisation.customControls.name.setValue('{{Name}}');
      this.currentVisualisation = newVisualisation;
      // this.control.push(this.resultlistFormBuilder.buildVisualisation());
      // this.table.renderRows();
