@@ -927,5 +927,8 @@
 	"No results": "No results",
 	"Configure data eligible for visualisation": "Configure data eligible for {{name}} visualisation",
 	"Resultlist settings": "Settings",
-	"Resultlist grid": "Grid"
+	"Resultlist grid": "Grid",
+	"Data group field filter": "Field filter",
+	"Data group operator": "Operator",
+	"Data group field value": "Field value"
 }

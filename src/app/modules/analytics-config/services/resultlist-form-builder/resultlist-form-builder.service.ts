@@ -29,10 +29,12 @@ import { DialogColorTableComponent } from '@map-config/components/dialog-color-t
 import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
+import { FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
 import {
   NUMERIC_OR_DATE_OR_KEYWORD,
   NUMERIC_OR_DATE_OR_TEXT_TYPES,
   TEXT_OR_KEYWORD,
+    toNumericOrDateOrKeywordOrBooleanObs,
   toNumericOrDateOrKeywordOrTextObs,
   toOptionsObs
 } from '@services/collection-service/tools';
@@ -53,8 +55,13 @@ import {
   SliderFormControl,
   SlideToggleFormControl,
   TextareaFormControl,
-  TitleInputFormControl
+  TitleInputFormControl,
+    FieldTemplateControl,
+    ButtonToggleFormControl, TypedSelectFormControl,
+    ConfigFormControl
 } from '@shared-models/config-form';
+import { valuesToOptions } from '@utils/tools';
+
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { ArlasColorService } from 'arlas-web-components';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
@@ -63,7 +70,6 @@ import { WidgetFormBuilder } from '../widget-form-builder';
 import {
     EditResultlistVisualisationComponent
 } from '@analytics-config/components/edit-resultlist-visualisation/edit-resultlist-visualisation.component';
-
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
 
@@ -733,70 +739,26 @@ export class ResultListVisualisationsFormGroup extends FormGroup {
         marker('Description'),
         marker('Description'),
       ),
-      itemsFamilies: new FormArray<ResultListVisualisationsItemFamily>([])
+      dataGroups: new FormArray<ResultListVisualisationsDataGroup>([])
     });
   }
 
   public customControls = {
     name: this.get('name') as InputFormControl,
     description: this.get('description') as TextareaFormControl,
-    dataGroups: this.get('dataGroups') as FormArray<ResultListVisualisationsItemFamily>
+    dataGroups: this.get('dataGroups') as FormArray<ResultListVisualisationsDataGroup>
   };
 }
 
-export class ResultListVisualisationsItemFamily extends FormGroup {
-  public constructor(fieldsObs?: Observable<Array<CollectionField>>, collection?: string, collectionService?: CollectionService) {
+export class ResultListVisualisationsDataGroup extends FormGroup {
+  public constructor() {
     super({
-      dataGroups: new InputFormControl(
+      name: new InputFormControl(
         '',
         marker('Data groups name'),
         ''
       ),
-      filter: new ConfigFormGroup({
-        field: new SelectFormControl(
-          '',
-          marker('Condition fields'),
-          marker('Condition fields'),
-          true,
-          toOptionsObs(fieldsObs),
-          {
-            optional: false
-          }
-        ),
-        values: new MultipleSelectFormControl(
-          // Mark as invalid if there is a value on filterField and not there
-          '',
-          marker('Condition values'),
-          marker('Condition values description'),
-          false,
-          [],
-          {
-            optional: false,
-            dependsOn: () => [this.customControls.filter.field],
-            onDependencyChange: (control: MultipleSelectFormControl) => {
-              if (!this.customControls.filter.field.touched && this.customControls.filter.field.value !== '') {
-                // Avoid to reset the imported configuration when first loading it
-              } else if (this.customControls.filter.field.value !== '' && !!this.customControls.filter.field.syncOptions
-                            && this.customControls.filter.field.syncOptions.map(f => f.value).includes(this.customControls.filter.field.value)) {
-                control.setSyncOptions([]);
-                collectionService.getTermAggregation(
-                  collection,
-                  this.customControls.filter.field.value)
-                  .then(keywords => {
-                    control.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
-                  });
-              } else {
-                control.setSyncOptions([]);
-                control.selectedMultipleItems = [];
-                control.patchValue([]);
-                control.savedItems = new Set<string>();
-              }
-              control.markAsUntouched();
-            }
-          },
-          false
-        )
-      }),
+      filters: new FormArray<ResultListVisualisationsDataGroupFilter>([]),
       protocol: new SelectFormControl(
         '',
         marker('Protocol'),
@@ -820,13 +782,259 @@ export class ResultListVisualisationsItemFamily extends FormGroup {
   }
 
   public customControls = {
-    dataGroups: this.get('dataGroups') as InputFormControl,
+    name: this.get('name') as InputFormControl,
     protocol: this.get('protocol') as SelectFormControl,
-    filter: {
-      field: this.get('filter.field') as SelectFormControl,
-      values: this.get('filter.values') as MultipleSelectFormControl
-    },
+    filters:  this.get('filters') as FormArray<ResultListVisualisationsDataGroupFilter>,
     visualisationUrl: this.get('visualisationUrl') as InputFormControl
+  };
+}
+
+
+export class ResultListVisualisationsDataGroupFilter extends FormGroup {
+  public editing = false;
+  public editionInfo: { field: string; op: FILTER_OPERATION; };
+  public constructor(
+    collectionFields: Observable<Array<CollectionField>>,
+    filterOperations: Array<FILTER_OPERATION>,
+    collectionService: CollectionService,
+    collection: string) {
+    super({
+      filterField: new TypedSelectFormControl(
+        '',
+        marker('Condition fields'),
+        marker('Condition fields'),
+        true,
+        toNumericOrDateOrKeywordOrBooleanObs(collectionFields),
+        {
+          optional: false
+        }
+      ),
+      filterOperation: new SelectFormControl(
+        '',
+        marker('operation'),
+        marker('filter operation description'),
+        false,
+        valuesToOptions(filterOperations),
+        {
+          resetDependantsOnChange: true,
+          dependsOn: () => [this.customControls.filterField],
+          onDependencyChange: (control: SelectFormControl) => {
+            console.log(this.customControls.filterField.value.type);
+            if (!this.editing) {
+              /** update list of available ops according to field type */
+              if (this.customControls.filterField.value.type === 'KEYWORD') {
+                control.setSyncOptions([
+                  { value: FILTER_OPERATION.IN, label: FILTER_OPERATION.IN },
+                  { value: FILTER_OPERATION.NOT_IN, label: FILTER_OPERATION.NOT_IN }
+                ]);
+              } else if (this.customControls.filterField.value.type === 'BOOLEAN') {
+                control.setSyncOptions([
+                  { value: FILTER_OPERATION.IS, label: FILTER_OPERATION.IS }
+                ]);
+              } else {
+                control.setSyncOptions([
+                  { value: FILTER_OPERATION.EQUAL, label: FILTER_OPERATION.EQUAL },
+                  { value: FILTER_OPERATION.NOT_EQUAL, label: FILTER_OPERATION.NOT_EQUAL },
+                  { value: FILTER_OPERATION.RANGE, label: FILTER_OPERATION.RANGE },
+                  { value: FILTER_OPERATION.OUT_RANGE, label: FILTER_OPERATION.OUT_RANGE },
+                ]);
+              }
+              control.setValue(control.syncOptions[0].value);
+            } else {
+              // if we are editing an existing filter, keep the selected operation.
+              // otherwise there is no way to remember it
+              if ((this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
+                      this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN)) {
+                control.setSyncOptions([
+                  { value: FILTER_OPERATION.IN, label: FILTER_OPERATION.IN },
+                  { value: FILTER_OPERATION.NOT_IN, label: FILTER_OPERATION.NOT_IN }
+                ]);
+              } else if (this.customControls.filterOperation.value === FILTER_OPERATION.IS) {
+                control.setSyncOptions([
+                  { value: FILTER_OPERATION.IS, label: FILTER_OPERATION.IS }
+                ]);
+              } else {
+                control.setSyncOptions([
+                  { value: FILTER_OPERATION.EQUAL, label: FILTER_OPERATION.EQUAL },
+                  { value: FILTER_OPERATION.NOT_EQUAL, label: FILTER_OPERATION.NOT_EQUAL },
+                  { value: FILTER_OPERATION.RANGE, label: FILTER_OPERATION.RANGE },
+                  { value: FILTER_OPERATION.OUT_RANGE, label: FILTER_OPERATION.OUT_RANGE },
+                ]);
+              }
+              control.setValue(this.customControls.filterOperation.value);
+            }
+          }
+        }
+      ),
+      filterValues: new ConfigFormGroup({
+        operator: new HiddenFormControl(
+          '',
+          null,
+          {
+            optional: true,
+            resetDependantsOnChange: true,
+            dependsOn: () => [this.customControls.filterOperation],
+            onDependencyChange: (control: InputFormControl) => {
+              control.setValue(this.customControls.filterOperation.value);
+            }
+          }
+        ),
+        filterInValues: new MultipleSelectFormControl(
+          '',
+          marker('values'),
+          marker('filter in-values description'),
+          false,
+          [],
+          {
+            resetDependantsOnChange: true,
+            dependsOn: () => [this.customControls.filterField],
+            onDependencyChange: (control: MultipleSelectFormControl) => {
+              if (!!this.customControls.filterField.value && !!this.customControls.filterField.value.value ) {
+                if (this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
+                                this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN) {
+                  control.setSyncOptions([]);
+                  collectionService.getTermAggregation(
+                    collection,
+                    this.customControls.filterField.value.value)
+                    .then(keywords => {
+                      control.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
+                    });
+                } else {
+                  control.setSyncOptions([]);
+                }
+              } else {
+                control.setSyncOptions([]);
+              }
+              //  control.markAsUntouched();
+              if (this.editionInfo) {
+                // if we change the field/or operation, we are no longer in editing an existing filter but creating a new one
+                // we quit edition mode
+                if (this.customControls.filterField.value.value !== this.editionInfo.field ||
+                                this.customControls.filterOperation.value !== this.editionInfo.op
+                ) {
+                  this.editing = false;
+                }
+              }
+              // if we are editing an existing filter, keep the selected items.
+              // otherwise there is no way to remember them
+              if (!this.editing) {
+                control.savedItems = new Set();
+                control.selectedMultipleItems = [];
+              }
+              console.log(control.parent.status);
+              control.enableIf(this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
+                            this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN);
+            }
+          }
+        ),
+        filterEqualValues: new InputFormControl(
+          '',
+          marker('values'),
+          marker('filter equal description'),
+          'number',
+          {
+            resetDependantsOnChange: true,
+            dependsOn: () => [this.customControls.filterOperation, this.customControls.filterField],
+            onDependencyChange: (control: InputFormControl) => {
+              control.enableIf(this.customControls.filterOperation.value === FILTER_OPERATION.EQUAL ||
+                            this.customControls.filterOperation.value === FILTER_OPERATION.NOT_EQUAL);
+            }
+          }
+        ),
+        filterMinRangeValues: new InputFormControl(
+          '',
+          marker('Minimum range filter'),
+          marker('Minimum range filter description'),
+          'number',
+          {
+            resetDependantsOnChange: true,
+            dependsOn: () => [
+              this.customControls.filterOperation, this.customControls.filterField
+            ],
+            onDependencyChange: (control, isLoading) => {
+              const doRangeEnable = this.customControls.filterOperation.value === FILTER_OPERATION.RANGE ||
+                            this.customControls.filterOperation.value === FILTER_OPERATION.OUT_RANGE;
+              control.enableIf(doRangeEnable);
+              if (doRangeEnable && !isLoading) {
+                collectionService.getComputationMetric(
+                  collection,
+                  this.customControls.filterField.value.value,
+                  METRIC_TYPES.MIN)
+                  .then(min =>
+                    control.setValue(min));
+              }
+            }
+          },
+          () => this.customControls.filterValues.filterMaxRangeValues,
+          undefined
+        ),
+        filterMaxRangeValues: new InputFormControl(
+          '',
+          marker('Maximum range filter'),
+          marker('Maximum range filter description'),
+          'number',
+          {
+            resetDependantsOnChange: true,
+            dependsOn: () => [
+              this.customControls.filterOperation, this.customControls.filterField
+            ],
+            onDependencyChange: (control, isLoading) => {
+              const doRangeEnable = this.customControls.filterOperation.value === FILTER_OPERATION.RANGE ||
+                            this.customControls.filterOperation.value === FILTER_OPERATION.OUT_RANGE;
+              control.enableIf(doRangeEnable);
+              if (doRangeEnable && !isLoading) {
+                collectionService.getComputationMetric(
+                  collection,
+                  this.customControls.filterField.value.value,
+                  METRIC_TYPES.MAX)
+                  .then(max =>
+                    control.setValue(max));
+              }
+            }
+          },
+          undefined,
+          () => this.customControls.filterValues.filterMinRangeValues
+        ),
+        filterBoolean: new ButtonToggleFormControl(
+          true,
+          [
+            {
+              label: marker('activated'), value: true
+            },
+            {
+              label: marker('not activated'), value: false
+            }
+          ],
+          undefined,
+          {
+            resetDependantsOnChange: true,
+            dependsOn: () => [this.customControls.filterField],
+            onDependencyChange: (control: ButtonToggleFormControl) => {
+              control.enableIf(this.customControls.filterOperation.value === FILTER_OPERATION.IS);
+            }
+          })
+      }),
+      id: new HiddenFormControl(
+        '',
+        null,
+        {
+          optional: true
+        }
+      ),
+    });
+  }
+
+  public customControls = {
+    filterField: this.get('filterField') as TypedSelectFormControl,
+    filterOperation: this.get('filterOperation') as SelectFormControl,
+    filterValues: {
+      filterInValues: this.get('filterValues.filterInValues') as MultipleSelectFormControl,
+      filterEqualValues: this.get('filterValues.filterEqualValues') as InputFormControl,
+      filterMinRangeValues: this.get('filterValues.filterMinRangeValues') as InputFormControl,
+      filterMaxRangeValues: this.get('filterValues.filterMaxRangeValues') as InputFormControl,
+      filterBoolean: this.get('filterValues.filterBoolean') as ButtonToggleFormControl,
+    },
+    id: this.get('id') as HiddenFormControl
   };
 }
 
@@ -915,12 +1123,19 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
     return new ResultListVisualisationsFormGroup();
   }
 
-  public buildVisualisationsItemFamily(collection: string) {
-    const fieldObs = this.collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD);
-    const control = new ResultListVisualisationsItemFamily(fieldObs,
-      collection,
-      this.collectionService);
-    ConfigFormGroupComponent.listenToAllControlsOnDependencyChange(control.get('filter') as ConfigFormGroup, []);
+  public buildVisualisationsDataGroup() {
+    return  new ResultListVisualisationsDataGroup();
+  }
+
+  public buildVisualisationsDataGroupFilter(collection: string) {
+    const collectionFields = this.collectionService.getCollectionFields(collection);
+    const operators = [FILTER_OPERATION.IN, FILTER_OPERATION.RANGE, FILTER_OPERATION.EQUAL, FILTER_OPERATION.NOT_IN,
+      FILTER_OPERATION.IS, FILTER_OPERATION.OUT_RANGE, FILTER_OPERATION.NOT_EQUAL];
+    const control = new ResultListVisualisationsDataGroupFilter(collectionFields,
+      operators, this.collectionService, collection    );
+    ConfigFormGroupComponent.listenToOnDependencysChange(control.get('filterField') as ConfigFormControl, []);
+    ConfigFormGroupComponent.listenToOnDependencysChange(control.get('filterOperation') as ConfigFormControl, []);
+    ConfigFormGroupComponent.listenToAllControlsOnDependencyChange(control.get('filterValues') as ConfigFormGroup, []);
     return control;
   }
 

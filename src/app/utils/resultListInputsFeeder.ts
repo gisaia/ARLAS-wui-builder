@@ -192,7 +192,7 @@ export class ResultListInputsFeeder {
         if(visualisation?.itemsFamilies && visualisation.itemsFamilies.length > 0) {
           visualisation?.itemsFamilies.forEach(itemF => {
             const itemFamily = resultListFormBuilder
-              .buildVisualisationsItemFamily(this.options.contributor.collection);
+              .buildVisualisationsDataGroup();
             importElements([
               {
                 value: itemF.visualisationUrl,
@@ -200,14 +200,14 @@ export class ResultListInputsFeeder {
               },
               {
                 value: itemF.itemsFamily,
-                control: itemFamily.customControls.dataGroups
+                control: itemFamily.customControls.name
               },
               {
                 value: itemF.protocol,
                 control: itemFamily.customControls.protocol
               },
             ]);
-            if (itemF.filter) {
+            /* if (itemF.filter) {
               const selectedItems = itemF.filter.values.map(
                 v => ({ value: v.value, label: v.value, color: colorService.getColor(v.color) }));
 
@@ -226,10 +226,10 @@ export class ResultListInputsFeeder {
                 this.options.contributor.collection,
                 itemFamily.customControls.filter.field.value)
                 .then(keywords => {
-                  itemFamily.customControls.filter.values.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
+                  itemFamily.customControls.filters.values.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
                 });
             }
-            visualisationForm.customControls.dataGroups.push(itemFamily);
+            visualisationForm.customControls.dataGroups.push(itemFamily);*/
           });
         }
         this.visualisationStep.visualisationsList.push(visualisationForm);

@@ -13,33 +13,36 @@
     <div class="body-text">
         {{'Configure data eligible for visualisation' | translate: {name: (visualisation()?.customControls.name.value | lowercase) } }}
     </div>
-    <button mat-stroked-button color="primary" class="manage-visualisation__button">
+    <button mat-stroked-button color="primary"
+            class="manage-visualisation__button"
+            (click)="addDataGroup()"
+    >
         <mat-icon>add</mat-icon>
         {{ 'Add data group' | translate}}
     </button>
 
-    <table class="table" mat-table [dataSource]="groupItem" >
+    <table class="table" mat-table [dataSource]="dataGroups" >
         <!-- Drag Column -->
         <ng-container matColumnDef="drag"  >
             <th mat-header-cell *matHeaderCellDef class="table-col-drag"></th>
-            <td mat-cell class="table-col-drag">
+            <td mat-cell *matCellDef="let element" class="table-col-drag">
                 <mat-icon class="drag" (mouseenter)="dragDisabled = false" (mouseup)="dragDisabled = true">drag_indicator</mat-icon>
             </td>
         </ng-container>
         <!-- Data group Column -->
         <ng-container matColumnDef="dataGroup">
             <th mat-header-cell *matHeaderCellDef>{{'Data group name' | translate}}</th>
-            <td mat-cell *matCellDef="let element">{{element?.constrols.name.value}}</td>
+            <td mat-cell *matCellDef="let element">{{element?.controls?.name.value}}</td>
         </ng-container>
         <!-- Protocol Column -->
         <ng-container matColumnDef="protocol">
             <th mat-header-cell *matHeaderCellDef>{{'Protocol' | translate}}</th>
-            <td mat-cell *matCellDef="let element">{{element?.constrols.protocol.value}}</td>
+            <td mat-cell *matCellDef="let element">{{element?.controls?.protocol.value}}</td>
         </ng-container>
         <!-- VisualisationUrl Column -->
         <ng-container matColumnDef="visualisationUrl">
             <th mat-header-cell *matHeaderCellDef>{{'View URL' | translate}}</th>
-            <td mat-cell *matCellDef="let element">{{element?.constrols.visualisationUrl.value}}</td>
+            <td mat-cell *matCellDef="let element">{{element?.controls?.visualisationUrl.value}}</td>
         </ng-container>
         <!-- Condition Column -->
         <ng-container matColumnDef="conditions">
@@ -50,9 +53,9 @@
         <!-- Actions Column -->
         <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef class="table-col-action"></th>
-            <td mat-cell class="table-col-action">
-                <mat-icon>edit</mat-icon>
-                <mat-icon>delete</mat-icon>
+            <td mat-cell  *matCellDef="let element; let i = index" class="table-col-action">
+                <mat-icon (click)="editDataGroup(i)">edit</mat-icon>
+                <mat-icon (click)="removeDataGroup(i)">delete</mat-icon>
             </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

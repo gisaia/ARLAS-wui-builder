@@ -18,7 +18,7 @@
  */
 import { Pipe, PipeTransform } from '@angular/core';
 import {
-  ResultListVisualisationsFormGroup, ResultListVisualisationsItemFamily
+  ResultListVisualisationsFormGroup, ResultListVisualisationsDataGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { FormArray } from '@angular/forms';
 import { ConfigFormGroup } from '@shared-models/config-form';
@@ -30,7 +30,7 @@ import { ConfigFormGroup } from '@shared-models/config-form';
 export class CastVisualisationItemFamilyPipe implements PipeTransform {
 
   public transform(item: ResultListVisualisationsFormGroup) {
-    return item.get('itemsFamilies') as FormArray<ResultListVisualisationsItemFamily>;
+    return item.get('itemsFamilies') as FormArray<ResultListVisualisationsDataGroup>;
   }
 
 }

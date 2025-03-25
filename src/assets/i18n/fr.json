@@ -926,5 +926,9 @@
 	"No results": "Aucun résultat",
 	"Configure data eligible for visualisation": "Configurer les données éligibles à la visualisation {{name}}",
 	"Resultlist settings": "Configurations",
-	"Resultlist grid": "Grille"
+	"Resultlist grid": "Grille",
+	"Configure data eligible for visualisation": "Configurer les données éligibles à la visualisation {{name}}",
+	"Data group field filter": "Champ pour le filtre",
+	"Data group operator": "Opérateur",
+	"Data group field value": "Valeur de champ"
 }

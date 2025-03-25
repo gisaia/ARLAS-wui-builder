@@ -129,7 +129,6 @@ export abstract class ConfigFormControl extends FormControl {
       this.disable({ emitEvent: false });
     }
   }
-
 }
 
 export interface ControlOptionalParams {
