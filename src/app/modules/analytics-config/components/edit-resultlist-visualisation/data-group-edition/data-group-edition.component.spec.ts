@@ -10,7 +10,7 @@ describe('DataGroupEditionComponent', () => {
     await TestBed.configureTestingModule({
       imports: [DataGroupEditionComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(DataGroupEditionComponent);
     component = fixture.componentInstance;
