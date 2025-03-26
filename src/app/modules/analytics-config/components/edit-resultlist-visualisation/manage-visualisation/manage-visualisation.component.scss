@@ -30,12 +30,19 @@ font-size: 0.875rem;
     padding: 16xp;
   }
 
+  &__header-container {
+    display: flex;
+    gap: 6px;
+    padding-bottom: 6px;
+    border-bottom: solid 1px var(--ligh-grey);
+    flex: 1 1 auto;
+    align-items: center;
+  }
+
   &__header {
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
-    border-bottom: solid 1px var(--ligh-grey);
-    padding-bottom: 6px;
   }
 
   &__footer {
@@ -89,8 +96,12 @@ font-size: 0.875rem;
   width: 40px;
 }
 
+.mat-column-dataGroup{
+  width: 20%;
+}
+
 .mat-column-actions {
-  max-width: 100%;
+  width: 90px;
   & mat-icon:hover{
     cursor: pointer;
   }

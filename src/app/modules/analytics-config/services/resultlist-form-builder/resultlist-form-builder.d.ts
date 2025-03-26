@@ -392,7 +392,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
     },
     visualisationStep: {
       visualisationLink: this.get('visualisationStep.visualisationLink') as InputFormControl,
-      visualisationsList: this.get('visualisationStep.visualisationsList') as FormArray
+      visualisationsList: this.get('visualisationStep.visualisationsList') as FormArray<ResultListVisualisationsFormGroup>
     },
     unmanagedFields: {
       dataStep: {},
@@ -1117,7 +1117,6 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
     const collectionFields = this.collectionService.getCollectionFields(collection);
     const operators = [FILTER_OPERATION.IN, FILTER_OPERATION.RANGE, FILTER_OPERATION.EQUAL, FILTER_OPERATION.NOT_IN,
       FILTER_OPERATION.IS, FILTER_OPERATION.OUT_RANGE, FILTER_OPERATION.NOT_EQUAL];
-
     const control = new ResultListVisualisationsDataGroupFilter(collectionFields,
       operators, this.collectionService, collection    );
     ConfigFormGroupComponent.listenToOnDependencysChange(control.get('filterField') as ConfigFormControl, []);
