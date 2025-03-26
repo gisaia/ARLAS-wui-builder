@@ -24,7 +24,7 @@ import {
   ResultListVisualisationsDataGroup,
   ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, inject, input, output, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -69,10 +69,11 @@ export class ManageVisualisationComponent {
     this.cancel.emit(true);
   }
 
-  public dropItemFamily(event: CdkDragDrop<any[]>, index: number){
-  /*  const previousIndex = (this.control.controls[index].get('itemsFamilies') as FormArray).controls.findIndex(row => row === event.item.data);
-    moveItemInArray((this.control.controls[index].get('itemsFamilies') as FormArray).controls, previousIndex, event.currentIndex);
-    this.ItemFamilyDragDisabled = true;*/
+  public dropItemFamily(event: CdkDragDrop<any[]>){
+    const previousIndex = (this.visualisation().get('dataGroups') as FormArray).controls.findIndex(row => row === event.item.data);
+    moveItemInArray((this.visualisation().get('dataGroups') as FormArray).controls, previousIndex, event.currentIndex);
+    this.dragDisabled = true;
+    this.table.renderRows();
   }
 
 

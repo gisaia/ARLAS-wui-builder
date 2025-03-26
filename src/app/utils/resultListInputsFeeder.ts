@@ -17,13 +17,22 @@
  * under the License.
  */
 import {
+  ResultListVisualisationsDataGroup
+} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder';
+import {
   ResultlistConfigForm,
   ResultlistFormBuilderService
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, FormArray } from '@angular/forms';
+import { FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { AnalyticComponentResultListInputConfig, ContributorConfig } from '@services/main-form-manager/models-config';
+import {
+  AnalyticComponentResultListInputConfig,
+  ContributorConfig,
+  DataGroupInputConfig
+} from '@services/main-form-manager/models-config';
 import { ImportElement, importElements } from '@services/main-form-manager/tools';
+import { HiddenFormControl, InputFormControl } from '@shared-models/config-form';
 import { ArlasColorService } from 'arlas-web-components';
 
 interface ResultListConfigFeederOptions {
@@ -37,7 +46,7 @@ export class ResultListInputsFeeder {
   protected gridStep: any;
   protected settingsStep: any;
   protected sactionStep: any;
-  protected visualisationStep: any;
+  protected visualisationStep: {   visualisationLink: InputFormControl; visualisationsList: FormArray;};
   protected customControls: any;
   public constructor(protected options: ResultListConfigFeederOptions) {
     this.dataStep = options.widgetData.customControls.dataStep;
@@ -173,8 +182,7 @@ export class ResultListInputsFeeder {
     return this;
   }
 
-  public importVisualisationStep(resultListFormBuilder: ResultlistFormBuilderService,
-    colorService: ArlasColorService, collectionService: CollectionService){
+  public importVisualisationStep(resultListFormBuilder: ResultlistFormBuilderService){
     if(this.options.input.visualisationsList && this.options.input.visualisationsList.length > 0) {
       this.options.input.visualisationsList.forEach(visualisation => {
         const visualisationForm = resultListFormBuilder.buildVisualisation();
@@ -189,54 +197,93 @@ export class ResultListInputsFeeder {
           },
         ]);
 
-        if(visualisation?.itemsFamilies && visualisation.itemsFamilies.length > 0) {
-          visualisation?.itemsFamilies.forEach(itemF => {
-            const itemFamily = resultListFormBuilder
+        if(visualisation?.dataGroups && visualisation.dataGroups.length > 0) {
+          visualisation?.dataGroups.forEach(dataGroupConf => {
+            const dataGroupForm = resultListFormBuilder
               .buildVisualisationsDataGroup();
-            importElements([
+            this.imports([
               {
-                value: itemF.visualisationUrl,
-                control: itemFamily.customControls.visualisationUrl
+                value: dataGroupConf.visualisationUrl,
+                control: dataGroupForm.customControls.visualisationUrl
               },
               {
-                value: itemF.itemsFamily,
-                control: itemFamily.customControls.name
+                value: dataGroupConf.name,
+                control: dataGroupForm.customControls.name
               },
               {
-                value: itemF.protocol,
-                control: itemFamily.customControls.protocol
+                value: dataGroupConf.protocol,
+                control: dataGroupForm.customControls.protocol
               },
             ]);
-            /* if (itemF.filter) {
-              const selectedItems = itemF.filter.values.map(
-                v => ({ value: v.value, label: v.value, color: colorService.getColor(v.color) }));
-
-              importElements([{
-                value: itemF.filter.field,
-                control: itemFamily.customControls.filter.field
-              },
-              {
-                value: selectedItems,
-                control: itemFamily.customControls.filter.values
-              }]);
-
-              itemFamily.customControls.filter.values.selectedMultipleItems = selectedItems;
-              itemFamily.customControls.filter.values.savedItems = new Set(selectedItems.map(v => v.value));
-              collectionService.getTermAggregation(
-                this.options.contributor.collection,
-                itemFamily.customControls.filter.field.value)
-                .then(keywords => {
-                  itemFamily.customControls.filters.values.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
-                });
-            }
-            visualisationForm.customControls.dataGroups.push(itemFamily);*/
+            this.importDataGroupFilters(dataGroupForm, dataGroupConf, resultListFormBuilder);
+            (visualisationForm.get('dataGroups') as FormArray).push(dataGroupForm);
           });
         }
         this.visualisationStep.visualisationsList.push(visualisationForm);
       });
     }
-
     return this;
+  }
+
+  protected  importDataGroupFilters(dataGroupForm: ResultListVisualisationsDataGroup, dataGroupConf: DataGroupInputConfig, resultListFormBuilder: ResultlistFormBuilderService){
+    if(dataGroupConf.filters && dataGroupConf.filters.length > 0){
+      dataGroupConf.filters.forEach(filter => {
+        const groupFilterFrom = resultListFormBuilder.buildVisualisationsDataGroupFilter(this.options.contributor.collection);
+        this.imports([
+          {
+            value: { value: filter.field },
+            control: groupFilterFrom.customControls.filterField
+          },
+          {
+            value: filter.op,
+            control: groupFilterFrom.customControls.filterOperation
+          }
+        ]);
+
+        if (filter.op === FILTER_OPERATION.IN || filter.op === FILTER_OPERATION.NOT_IN) {
+          const  filterInValues = (filter.value as string[]);
+          this.imports([
+            {
+              value: filterInValues.map(v => ({ value: v })),
+              control: groupFilterFrom.customControls.filterValues.filterInValues
+            }
+          ]);
+
+          groupFilterFrom.customControls.filterValues.filterInValues.selectedMultipleItems = filterInValues.map(v => ({ value: v }));
+          groupFilterFrom.customControls.filterValues.filterInValues.savedItems = new Set(filterInValues);
+          groupFilterFrom.customControls.filterValues.filterEqualValues.disable();
+        } else if (filter.op === FILTER_OPERATION.EQUAL || filter.op=== FILTER_OPERATION.NOT_EQUAL) {
+          this.imports([
+            {
+              value: filter.value,
+              control:  groupFilterFrom.customControls.filterValues.filterEqualValues
+            }
+          ]);
+        } else if (filter.op === FILTER_OPERATION.RANGE || filter.op=== FILTER_OPERATION.OUT_RANGE) {
+          const min =  +(filter.value as string).split(';')[0];
+          const max =  +(filter.value as string).split(';')[1];
+          this.imports([
+            {
+              value: min,
+              control:  groupFilterFrom.customControls.filterValues.filterMinRangeValues
+            },
+            {
+              value: max,
+              control:  groupFilterFrom.customControls.filterValues.filterMaxRangeValues
+            }
+          ]);
+        } else if (filter.op=== FILTER_OPERATION.IS) {
+          this.imports([
+            {
+              value: filter.value,
+              control:  groupFilterFrom.customControls.filterValues.filterBoolean
+            }
+          ]);
+        }
+        (dataGroupForm.get('filters') as FormArray).push(groupFilterFrom);
+        console.log(dataGroupForm);
+      });
+    }
   }
 
   public importResultListQuickLook (resultListFormBuilder: ResultlistFormBuilderService,

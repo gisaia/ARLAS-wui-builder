@@ -19,6 +19,9 @@
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { BY_BUCKET_OR_INTERVAL } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
 import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
+import {
+  ResultListVisualisationsFormGroup
+} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { FormArray, FormGroup } from '@angular/forms';
 import {
@@ -58,13 +61,13 @@ import {
   AnalyticConfig,
   ChipSearchConfig,
   Config,
-  ContributorConfig,
+  ContributorConfig, DataGroupInputConfig,
   JSONPATH_COUNT,
   JSONPATH_METRIC,
   MapComponentInputConfig, MapComponentInputMapLayersConfig,
   MapglComponentConfig,
   SEARCH_TYPE,
-  SwimlaneConfig,
+  SwimlaneConfig, VisualisationListInputConfig,
   WebConfigOptions
 } from './models-config';
 import { hashCode, stringifyArlasFilter } from './tools';
@@ -1380,7 +1383,7 @@ export class ConfigExportHelper {
           globalActionEvent: unmanagedRenderFields.globalActionEvent,
           useColorService: true,
           cellBackgroundStyle: widgetData.settingsStep.cellBackgroundStyle,
-          visualisationsList: widgetData.visualisationStep.visualisationsList,
+          visualisationsList: ConfigExportHelper.getVisualisationList(widgetData.visualisationStep.visualisationsList),
           options: {
             showActionsOnhover: 'true',
             showDetailIconName: 'keyboard_arrow_down',
@@ -1397,6 +1400,55 @@ export class ConfigExportHelper {
     component.usage = usage;
     return component;
   }
+
+  public static getVisualisationList(visualisationList: any[]){
+    const visualisations = [];
+    visualisationList.forEach(visu => {
+      const visualisation: VisualisationListInputConfig =  {
+        name: visu.name,
+        description: visu.description,
+        dataGroups: []
+      };
+      visu.dataGroups.forEach(dataG => {
+        const dataGroup: DataGroupInputConfig = {
+          filters: [],
+          name: dataG.name,
+          protocol: dataG.protocol,
+          visualisationUrl: dataG.visualisationUrl
+        };
+        dataG.filters.forEach(f => {
+          if (f.filterOperation === FILTER_OPERATION.IN || f.filterOperation === FILTER_OPERATION.NOT_IN) {
+            dataGroup.filters.push({
+              field: f.filterField.value,
+              op: f.filterOperation,
+              value: f.filterValues.filterInValues.map(v => v.value)
+            });
+          } else if (f.filterOperation === FILTER_OPERATION.EQUAL || f.filterOperation === FILTER_OPERATION.NOT_EQUAL) {
+            dataGroup.filters.push({
+              field: f.filterField.value,
+              op: f.filterOperation,
+              value: f.filterValues.filterEqualValues
+            });
+          } else if (f.filterOperation === FILTER_OPERATION.RANGE || f.filterOperation === FILTER_OPERATION.OUT_RANGE) {
+            dataGroup.filters.push({
+              field: f.filterField.value, op: f.filterOperation,
+              value: f.filterValues.filterMinRangeValues + ';' + f.filterMaxRangeValues
+            });
+          } else if (f.filterOperation === FILTER_OPERATION.IS) {
+            dataGroup.filters.push({
+              field: f.filterField.value, op: f.filterOperation,
+              value: f.filterValues.filterBoolean
+            });
+          }
+        });
+        visualisation.dataGroups.push(dataGroup);
+      });
+      console.log('visualisation', visualisation);
+      visualisations.push(visualisation);
+    });
+    return visualisations;
+  }
+
 
   public static updateCollectionUnit(widgetData: any, lookAndFeelConfigGlobal: LookAndFeelGlobalFormGroup, com: AnalyticComponentConfig) {
     if (widgetData.dataStep.metric.metricCollectFunction === 'Count' &&
