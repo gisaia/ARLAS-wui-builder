@@ -176,7 +176,7 @@ export class ResultListInputsFeeder {
   public importVisualisationStep(resultListFormBuilder: ResultlistFormBuilderService,
     colorService: ArlasColorService, collectionService: CollectionService){
     if(this.options.input.visualisationsList && this.options.input.visualisationsList.length > 0) {
-      this.options.input.visualisationsList.forEach( visualisation => {
+      this.options.input.visualisationsList.forEach(visualisation => {
         const visualisationForm = resultListFormBuilder.buildVisualisation();
         this.imports([
           {
