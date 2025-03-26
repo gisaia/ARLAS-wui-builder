@@ -186,6 +186,7 @@ export interface GroupOptionalParams {
 
   validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null;
   asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null;
+  lazyLoadTab?: boolean;
 }
 
 export class ConfigFormGroup extends FormGroup {
@@ -196,6 +197,7 @@ export class ConfigFormGroup extends FormGroup {
   public title: string;
   public stepName: string;
   public tabName: string;
+  public lazyLoadTab  = false;
 
   public hide = false;
 
@@ -206,6 +208,7 @@ export class ConfigFormGroup extends FormGroup {
     private optionalParams: GroupOptionalParams = {}) {
 
     super(controls, optionalParams.validatorOrOpts, optionalParams.asyncValidator);
+    this.lazyLoadTab = !!optionalParams.lazyLoadTab;
   }
 
   public get dependsOn() {

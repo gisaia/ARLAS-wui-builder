@@ -930,5 +930,11 @@
 	"Configure data eligible for visualisation": "Configurer les données éligibles à la visualisation {{name}}",
 	"Data group field filter": "Champ pour le filtre",
 	"Data group operator": "Opérateur",
-	"Data group field value": "Valeur de champ"
+	"Data group field value": "Valeur de champ",
+	"Back to visualisation list": "Retour à la list des visualisations",
+	"Edit condition": "Editer la condtion",
+	"Delete condition": "Supprimer la condition",
+	"Manage data group": "Gérer le groupe de données",
+	"Manage visualisation": "Gérer la visualisation",
+	"Create a visualisation": "Créer une visualisation"
 }

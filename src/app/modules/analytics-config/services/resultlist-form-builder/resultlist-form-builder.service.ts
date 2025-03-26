@@ -341,7 +341,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
               collectionControl: () => this.customControls.dataStep.collection,
               control: () => this.customControls.visualisationStep.visualisationsList
             }
-          )
+          ),
         }).withTabName('Visualisation'),
         unmanagedFields: new FormGroup({
           dataStep: new FormGroup({}),
@@ -819,8 +819,7 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
           resetDependantsOnChange: true,
           dependsOn: () => [this.customControls.filterField],
           onDependencyChange: (control: SelectFormControl) => {
-            console.log(this.customControls.filterField.value.type);
-            if (!this.customControls.filterField) {
+            if (!this.editing) {
               /** update list of available ops according to field type */
               if (this.customControls.filterField.value.type === 'KEYWORD') {
                 control.setSyncOptions([
@@ -889,6 +888,7 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
             resetDependantsOnChange: true,
             dependsOn: () => [this.customControls.filterField],
             onDependencyChange: (control: MultipleSelectFormControl) => {
+              console.log(this.customControls.filterOperation.value);
               if (!!this.customControls.filterField.value && !!this.customControls.filterField.value.value ) {
                 if (this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
                                 this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN) {
@@ -907,7 +907,7 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
               }
               // if we are editing an existing filter, keep the selected items.
               // otherwise there is no way to remember them
-              if (!this.customControls.filterField) {
+              if (!this.editing) {
                 control.savedItems = new Set();
                 control.selectedMultipleItems = [];
               }
