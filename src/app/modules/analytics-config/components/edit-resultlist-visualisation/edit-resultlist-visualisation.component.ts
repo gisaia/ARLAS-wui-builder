@@ -89,7 +89,7 @@ export class EditResultlistVisualisationComponent {
 
   public manageVisualisationValidated($event: boolean) {
     this.manageViewIsOpened = false;
-    if(!this.isEdition){
+    if(!this.isEdition()){
       this.control.push(this.currentVisualisation);
       this.currentVisualisation = null;
       setTimeout(() => {
