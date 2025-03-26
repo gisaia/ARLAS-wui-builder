@@ -1,4 +1,7 @@
 import {
+  ResultListVisualisationsDataGroupFilter
+} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder';
+import {
   ResultListVisualisationsFormGroup,
   ResultListVisualisationsDataGroup, ResultlistFormBuilderService
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';

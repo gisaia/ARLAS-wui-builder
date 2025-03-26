@@ -252,6 +252,7 @@ export class ResultListInputsFeeder {
           groupFilterFrom.customControls.filterValues.filterInValues.selectedMultipleItems = filterInValues.map(v => ({ value: v }));
           groupFilterFrom.customControls.filterValues.filterInValues.savedItems = new Set(filterInValues);
           groupFilterFrom.customControls.filterValues.filterEqualValues.disable();
+          console.log(groupFilterFrom.customControls.filterValues.filterInValues);
         } else if (filter.op === FILTER_OPERATION.EQUAL || filter.op=== FILTER_OPERATION.NOT_EQUAL) {
           this.imports([
             {
