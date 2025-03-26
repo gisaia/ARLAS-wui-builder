@@ -1,7 +1,7 @@
 @if (data.dataGroup; as dataGroup) {
         <div class="data-group__container">
             <div class="data-group__header">
-                <h3 class="title">{{ dataGroup.customControls.name.value }}</h3>
+                <h3 class="title">{{ dataGroup.customControls.name.value | titlecase }}</h3>
                 <span class="sub-title">{{ 'Manage data group' | translate }}</span>
             </div>
 

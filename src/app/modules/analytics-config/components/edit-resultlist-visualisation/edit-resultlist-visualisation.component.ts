@@ -19,6 +19,7 @@
 import {
   ManageVisualisationComponent
 } from '@analytics-config/components/edit-resultlist-visualisation/manage-visualisation/manage-visualisation.component';
+
 import {
   ResultlistFormBuilderService,
   ResultListVisualisationsFormGroup
@@ -72,8 +73,7 @@ export class EditResultlistVisualisationComponent {
   public constructor() { }
 
   public dropVisualisation(event: CdkDragDrop<any[]>) {
-    const previousIndex = this.control.controls.findIndex(row => row === event.item.data);
-    moveItemInArray(this.control.controls, previousIndex, event.currentIndex);
+    moveItemInArray(this.control.controls, event.previousIndex, event.currentIndex);
     this.table.renderRows();
     this.dragDisabled = true;
   }
@@ -108,10 +108,9 @@ export class EditResultlistVisualisationComponent {
     this.table.renderRows();
   }
 
-  public openEdition(visualisationIndex: number) {
+  public openManageVisualisationView(visualisationIndex: any) {
     this.isEdition.set(true);
     this.manageViewIsOpened = true;
     this.currentVisualisation = this.control.at(visualisationIndex);
   }
-
 }

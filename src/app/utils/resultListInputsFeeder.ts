@@ -227,7 +227,9 @@ export class ResultListInputsFeeder {
     return this;
   }
 
-  protected  importDataGroupFilters(dataGroupForm: ResultListVisualisationsDataGroup, dataGroupConf: DataGroupInputConfig, resultListFormBuilder: ResultlistFormBuilderService){
+  protected  importDataGroupFilters(dataGroupForm: ResultListVisualisationsDataGroup,
+    dataGroupConf: DataGroupInputConfig,
+    resultListFormBuilder: ResultlistFormBuilderService){
     if(dataGroupConf.filters && dataGroupConf.filters.length > 0){
       dataGroupConf.filters.forEach(filter => {
         const groupFilterFrom = resultListFormBuilder.buildVisualisationsDataGroupFilter(this.options.contributor.collection);
