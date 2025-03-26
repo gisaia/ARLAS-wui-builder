@@ -186,8 +186,7 @@ export class ResultListInputsFeeder {
 
   public importVisualisationStep(resultListFormBuilder: ResultlistFormBuilderService){
     if(this.options.input.visualisationsList && this.options.input.visualisationsList.length > 0) {
-      this.options.input.visualisationsList.forEach( visualisation => {
-        console.log(visualisation);
+      this.options.input.visualisationsList.forEach(visualisation => {
         const visualisationForm = resultListFormBuilder.buildVisualisation();
         this.imports([
           {

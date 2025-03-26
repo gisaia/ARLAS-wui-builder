@@ -34,34 +34,35 @@
     <table class="table" mat-table [dataSource]="dataGroups"
            cdkDropList [cdkDropListData]="visualisation" (cdkDropListDropped)="dropItemFamily($event)"
            [cdkDropListDisabled]="dragDisabled" [cdkDropListLockAxis]="'y'">
+        <!-- Drag Column -->
         <ng-container matColumnDef="drag"  >
             <th mat-header-cell *matHeaderCellDef class="table-col-drag"></th>
             <td mat-cell *matCellDef="let element" class="table-col-drag">
                 <mat-icon class="drag" (mouseenter)="dragDisabled = false" (mouseup)="dragDisabled = true">drag_indicator</mat-icon>
             </td>
         </ng-container>
-        <!-- Position Column -->
+        <!-- Data group Column -->
         <ng-container matColumnDef="dataGroup">
             <th mat-header-cell *matHeaderCellDef>{{'Data group name' | translate}}</th>
             <td mat-cell *matCellDef="let element">{{element?.controls?.name.value}}</td>
         </ng-container>
-
-        <!-- Name Column -->
+        <!-- Protocol Column -->
         <ng-container matColumnDef="protocol">
             <th mat-header-cell *matHeaderCellDef>{{'Protocol' | translate}}</th>
             <td mat-cell *matCellDef="let element">{{element?.controls?.protocol.value}}</td>
         </ng-container>
-
-        <!-- Weight Column -->
+        <!-- VisualisationUrl Column -->
         <ng-container matColumnDef="visualisationUrl">
             <th mat-header-cell *matHeaderCellDef>{{'View URL' | translate}}</th>
             <td mat-cell *matCellDef="let element">{{element?.controls?.visualisationUrl.value}}</td>
         </ng-container>
+        <!-- Condition Column -->
         <ng-container matColumnDef="conditions">
             <th mat-header-cell *matHeaderCellDef>{{ 'Condition' }}</th>
             <td mat-cell *matCellDef="let element">
             </td>
         </ng-container>
+        <!-- Actions Column -->
         <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef class="table-col-action"></th>
             <td mat-cell  *matCellDef="let element; let i = index" class="table-col-action">
