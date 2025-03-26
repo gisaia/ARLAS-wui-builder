@@ -820,7 +820,7 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
           dependsOn: () => [this.customControls.filterField],
           onDependencyChange: (control: SelectFormControl) => {
             console.log(this.customControls.filterField.value.type);
-            if (!this.editing) {
+            if (!this.customControls.filterField) {
               /** update list of available ops according to field type */
               if (this.customControls.filterField.value.type === 'KEYWORD') {
                 control.setSyncOptions([
@@ -905,23 +905,12 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
               } else {
                 control.setSyncOptions([]);
               }
-              //  control.markAsUntouched();
-              if (this.editionInfo) {
-                // if we change the field/or operation, we are no longer in editing an existing filter but creating a new one
-                // we quit edition mode
-                if (this.customControls.filterField.value.value !== this.editionInfo.field ||
-                                this.customControls.filterOperation.value !== this.editionInfo.op
-                ) {
-                  this.editing = false;
-                }
-              }
               // if we are editing an existing filter, keep the selected items.
               // otherwise there is no way to remember them
-              if (!this.editing) {
+              if (!this.customControls.filterField) {
                 control.savedItems = new Set();
                 control.selectedMultipleItems = [];
               }
-              console.log(control.parent.status);
               control.enableIf(this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
                             this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN);
             }
