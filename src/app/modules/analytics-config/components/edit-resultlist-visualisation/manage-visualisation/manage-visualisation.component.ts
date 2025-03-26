@@ -60,8 +60,6 @@ export class ManageVisualisationComponent {
   public dragDisabled = true;
 
   public get dataGroups(): FormArray<ResultListVisualisationsDataGroup> | any[] {
-    console.log(this.visualisation().get('dataGroups') );
-    console.log((<any>this.visualisation().get('dataGroups')).controls);
     return this.visualisation().get('dataGroups')?.value.length > 0 ?  (<any>this.visualisation().get('dataGroups')).controls as FormArray  : [];
   }
 

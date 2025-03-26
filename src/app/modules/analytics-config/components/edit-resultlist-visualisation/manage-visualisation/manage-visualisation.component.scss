@@ -108,6 +108,7 @@ font-size: 0.875rem;
 
 .mat-column-dataGroup{
   width: 20%;
+  max-width: 150px;
 }
 
 .mat-column-actions {
@@ -119,6 +120,11 @@ font-size: 0.875rem;
 
 .mat-column-protocol{
   width: 100px;
+}
+
+.action-icon-wrapper{
+  display: flex;
+  gap: 6px;
 }
 
 
