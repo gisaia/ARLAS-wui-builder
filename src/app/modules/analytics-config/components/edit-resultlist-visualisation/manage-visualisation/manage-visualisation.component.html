@@ -1,0 +1,72 @@
+<div class="manage-visualisation__container">
+    <div class="manage-visualisation__header">
+        <span class="manage-visualisation__back-icon" (click)="cancelVisualisation()"> <mat-icon>chevron_left</mat-icon> back </span>
+        <h3 class="title">{{visualisation()?.customControls.name.value}}</h3>
+        <span class="sub-title">{{'Manage visualisation' | translate}}</span>
+    </div>
+
+    <div class="manage-visualisation__inputs">
+        <arlas-config-form-control  [showLabel]="true" [control]="visualisation()?.controls.name"></arlas-config-form-control>
+        <arlas-config-form-control class="main-meta_input-desc" [showLabel]="true" [control]="visualisation()?.controls.description"></arlas-config-form-control>
+    </div>
+
+    <div class="body-text">
+        {{'Configure data eligible for visualisation' | translate: {name: (visualisation()?.customControls.name.value | lowercase) } }}
+    </div>
+    <button mat-stroked-button color="primary" class="manage-visualisation__button">
+        <mat-icon>add</mat-icon>
+        {{ 'Add data group' | translate}}
+    </button>
+
+    <table class="table" mat-table [dataSource]="groupItem" >
+        <!-- Drag Column -->
+        <ng-container matColumnDef="drag"  >
+            <th mat-header-cell *matHeaderCellDef class="table-col-drag"></th>
+            <td mat-cell class="table-col-drag">
+                <mat-icon class="drag" (mouseenter)="dragDisabled = false" (mouseup)="dragDisabled = true">drag_indicator</mat-icon>
+            </td>
+        </ng-container>
+        <!-- Data group Column -->
+        <ng-container matColumnDef="dataGroup">
+            <th mat-header-cell *matHeaderCellDef>{{'Data group name' | translate}}</th>
+            <td mat-cell *matCellDef="let element">{{element?.constrols.name.value}}</td>
+        </ng-container>
+        <!-- Protocol Column -->
+        <ng-container matColumnDef="protocol">
+            <th mat-header-cell *matHeaderCellDef>{{'Protocol' | translate}}</th>
+            <td mat-cell *matCellDef="let element">{{element?.constrols.protocol.value}}</td>
+        </ng-container>
+        <!-- VisualisationUrl Column -->
+        <ng-container matColumnDef="visualisationUrl">
+            <th mat-header-cell *matHeaderCellDef>{{'View URL' | translate}}</th>
+            <td mat-cell *matCellDef="let element">{{element?.constrols.visualisationUrl.value}}</td>
+        </ng-container>
+        <!-- Condition Column -->
+        <ng-container matColumnDef="conditions">
+            <th mat-header-cell *matHeaderCellDef>{{ 'Condition' }}</th>
+            <td mat-cell *matCellDef="let element">
+            </td>
+        </ng-container>
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="table-col-action"></th>
+            <td mat-cell class="table-col-action">
+                <mat-icon>edit</mat-icon>
+                <mat-icon>delete</mat-icon>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    @if(!isEdition()) {
+        <div class="manage-visualisation__footer">
+            <button (click)="validateVisualisation()" mat-stroked-button color="primary" class="manage-visualisation__button">
+                {{ 'Cancel' | translate}}
+            </button>
+            <button [disabled]="visualisation().invalid" (click)="validateVisualisation()" mat-stroked-button color="primary" class="manage-visualisation__button">
+                {{ 'Validate' | translate}}
+            </button>
+        </div>
+    }
+
+</div>

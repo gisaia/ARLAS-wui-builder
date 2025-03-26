@@ -1379,6 +1379,7 @@ export class ConfigExportHelper {
           globalActionEvent: unmanagedRenderFields.globalActionEvent,
           useColorService: true,
           cellBackgroundStyle: widgetData.settingsStep.cellBackgroundStyle,
+          visualisationsList: widgetData.visualisationStep.visualisationsList,
           options: {
             showActionsOnhover: 'true',
             showDetailIconName: 'keyboard_arrow_down',

@@ -37,12 +37,14 @@ export class ResultListInputsFeeder {
   protected gridStep: any;
   protected settingsStep: any;
   protected sactionStep: any;
+  protected visualisationStep: any;
   protected customControls: any;
   public constructor(protected options: ResultListConfigFeederOptions) {
     this.dataStep = options.widgetData.customControls.dataStep;
     this.gridStep = options.widgetData.customControls.gridStep;
     this.settingsStep = options.widgetData.customControls.settingsStep;
     this.sactionStep = options.widgetData.customControls.sactionStep;
+    this.visualisationStep = options.widgetData.customControls.visualisationStep;
     this.customControls = options.widgetData.customControls;
   }
 
@@ -75,6 +77,7 @@ export class ResultListInputsFeeder {
       },
     ]);
   }
+
 
   public importSettingsSteps(){
     return this.imports([
@@ -167,6 +170,72 @@ export class ResultListInputsFeeder {
         },
       ]
     );
+    return this;
+  }
+
+  public importVisualisationStep(resultListFormBuilder: ResultlistFormBuilderService,
+    colorService: ArlasColorService, collectionService: CollectionService){
+    if(this.options.input.visualisationsList && this.options.input.visualisationsList.length > 0) {
+      this.options.input.visualisationsList.forEach(visualisation => {
+        const visualisationForm = resultListFormBuilder.buildVisualisation();
+        this.imports([
+          {
+            value: visualisation.description,
+            control: visualisationForm.customControls.description
+          },
+          {
+            value: visualisation.name,
+            control: visualisationForm.customControls.name
+          },
+        ]);
+
+        if(visualisation?.itemsFamilies && visualisation.itemsFamilies.length > 0) {
+          visualisation?.itemsFamilies.forEach(itemF => {
+            const itemFamily = resultListFormBuilder
+              .buildVisualisationsItemFamily(this.options.contributor.collection);
+            importElements([
+              {
+                value: itemF.visualisationUrl,
+                control: itemFamily.customControls.visualisationUrl
+              },
+              {
+                value: itemF.itemsFamily,
+                control: itemFamily.customControls.dataGroups
+              },
+              {
+                value: itemF.protocol,
+                control: itemFamily.customControls.protocol
+              },
+            ]);
+            if (itemF.filter) {
+              const selectedItems = itemF.filter.values.map(
+                v => ({ value: v.value, label: v.value, color: colorService.getColor(v.color) }));
+
+              importElements([{
+                value: itemF.filter.field,
+                control: itemFamily.customControls.filter.field
+              },
+              {
+                value: selectedItems,
+                control: itemFamily.customControls.filter.values
+              }]);
+
+              itemFamily.customControls.filter.values.selectedMultipleItems = selectedItems;
+              itemFamily.customControls.filter.values.savedItems = new Set(selectedItems.map(v => v.value));
+              collectionService.getTermAggregation(
+                this.options.contributor.collection,
+                itemFamily.customControls.filter.field.value)
+                .then(keywords => {
+                  itemFamily.customControls.filter.values.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
+                });
+            }
+            visualisationForm.customControls.dataGroups.push(itemFamily);
+          });
+        }
+        this.visualisationStep.visualisationsList.push(visualisationForm);
+      });
+    }
+
     return this;
   }
 
