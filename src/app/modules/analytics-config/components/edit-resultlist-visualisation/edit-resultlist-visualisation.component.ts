@@ -63,60 +63,57 @@ export class EditResultlistVisualisationComponent {
   public isEdition = signal(false);
   public currentVisualisation: ResultListVisualisationsFormGroup = null;
   public displayedColumns = ['drag', 'name', 'description', 'applyTo', 'action'];
-   @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
+  @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
 
-   public get visualisation(): ResultListVisualisationsFormGroup[] {
-     console.log(this.control.controls);
-     return this.control? this.control.controls as Array<ResultListVisualisationsFormGroup> : [];
-   }
+  public get visualisation(): ResultListVisualisationsFormGroup[] {
+    return this.control? this.control.controls as Array<ResultListVisualisationsFormGroup> : [];
+  }
 
-   public constructor() { }
+  public constructor() { }
 
-   public dropVisualisation(event: CdkDragDrop<any[]>) {
-     const previousIndex = this.control.controls.findIndex(row => row === event.item.data);
-     moveItemInArray(this.control.controls, previousIndex, event.currentIndex);
-     this.table.renderRows();
-     this.dragDisabled = true;
-   }
-
+  public dropVisualisation(event: CdkDragDrop<any[]>) {
+    const previousIndex = this.control.controls.findIndex(row => row === event.item.data);
+    moveItemInArray(this.control.controls, previousIndex, event.currentIndex);
+    this.table.renderRows();
+    this.dragDisabled = true;
+  }
 
 
-   public addVisualisation() {
-     this.manageViewIsOpened = true;
-     const newVisualisation = this.resultlistFormBuilder.buildVisualisation();
-     newVisualisation.customControls.name.setValue('Name');
-     this.currentVisualisation = newVisualisation;
-     // this.control.push(this.resultlistFormBuilder.buildVisualisation());
-     // this.table.renderRows();
-   }
 
-   public manageVisualisationValidated($event: boolean) {
-     this.manageViewIsOpened = false;
-     if(!this.isEdition){
-       this.control.push(this.currentVisualisation);
-       this.currentVisualisation = null;
-       setTimeout(() => {
-         this.table.renderRows();
-       }, 0);
+  public addVisualisation() {
+    this.manageViewIsOpened = true;
+    const newVisualisation = this.resultlistFormBuilder.buildVisualisation();
+    newVisualisation.customControls.name.setValue('Name');
+    this.currentVisualisation = newVisualisation;
+  }
 
-     }
-     this.isEdition.set(false);
-   }
-   public manageVisualisationCanceled($event: boolean) {
-     this.manageViewIsOpened = false;
-     this.isEdition.set(false);
-     this.currentVisualisation = null;
-   }
+  public manageVisualisationValidated($event: boolean) {
+    this.manageViewIsOpened = false;
+    if(!this.isEdition){
+      this.control.push(this.currentVisualisation);
+      this.currentVisualisation = null;
+      setTimeout(() => {
+        this.table.renderRows();
+      }, 0);
 
-   public removeVisualisation(visualisationIndex: number) {
-     this.control.removeAt(visualisationIndex);
-     this.table.renderRows();
-   }
+    }
+    this.isEdition.set(false);
+  }
+  public manageVisualisationCanceled($event: boolean) {
+    this.manageViewIsOpened = false;
+    this.isEdition.set(false);
+    this.currentVisualisation = null;
+  }
 
-   public openEdition(visualisationIndex: number) {
-     this.isEdition.set(true);
-     this.manageViewIsOpened = true;
-     this.currentVisualisation = this.control.at(visualisationIndex);
-   }
+  public removeVisualisation(visualisationIndex: number) {
+    this.control.removeAt(visualisationIndex);
+    this.table.renderRows();
+  }
+
+  public openEdition(visualisationIndex: number) {
+    this.isEdition.set(true);
+    this.manageViewIsOpened = true;
+    this.currentVisualisation = this.control.at(visualisationIndex);
+  }
 
 }
