@@ -20,6 +20,9 @@ import {
   DataGroupEditionComponent
 } from '@analytics-config/components/edit-resultlist-visualisation/data-group-edition/data-group-edition.component';
 import {
+  ResultListVisualisationsDataGroupFilter
+} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder';
+import {
   ResultlistFormBuilderService,
   ResultListVisualisationsDataGroup,
   ResultListVisualisationsFormGroup
