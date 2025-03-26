@@ -20,6 +20,13 @@
 import {
   ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
+import {
+  ButtonToggleFormControl,
+  InputFormControl,
+  MultipleSelectFormControl,
+  SelectFormControl,
+  TypedSelectFormControl
+} from '@shared-models/config-form';
 import { Aggregation } from 'arlas-api';
 import { VisualisationSetConfig, BasemapStyle } from 'arlas-map';
 import { FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
@@ -320,14 +327,20 @@ export interface AnalyticComponentResultListInputConfig extends AnalyticComponen
 export interface VisualisationListInputConfig {
   description: string;
   name: string;
-  itemsFamilies: ItemsFamiliesInputConfig[];
+  dataGroups: DataGroupInputConfig[];
 }
 
-export interface ItemsFamiliesInputConfig {
-  itemsFamily: string;
+export interface DataGroupInputConfig {
+  name: string;
   protocol: string;
   visualisationUrl: string;
-  filter: { field: string; values: {value: string;color: string;detail: string;}[];};
+  filters: DataGroupInputFilter[];
+}
+
+export interface DataGroupInputFilter {
+  field?: any;
+  op?: string;
+  value?: string | number | string[];
 }
 
 export interface AnalyticComponentResultListInputOptions {
