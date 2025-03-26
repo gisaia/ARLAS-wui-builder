@@ -49,15 +49,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 })
 export class MultiSelectSearchComponent implements OnInit, AfterViewInit {
   @Input() public control: MultipleSelectFormControl;
-    @Input() public defaultKey: string;
-    @Input() public warningMessage: string;
-    public selectSearchFilterFc = new FormControl();
-    public selectMultiFc = new FormControl();
-    private _destroyRef = inject(DestroyRef);
-    /** list of banks filtered by search keyword */
-    public filteredSyncOption = new ReplaySubject<any[]>(1);
-    private colorService = inject(ArlasColorService);
-    private collectionService = inject(CollectionService);
+  @Input() public defaultKey: string;
+  @Input() public warningMessage: string;
+  public selectSearchFilterFc = new FormControl();
+  public selectMultiFc = new FormControl();
+  private _destroyRef = inject(DestroyRef);
+  public filteredSyncOption = new ReplaySubject<any[]>(1);
+  private colorService = inject(ArlasColorService);
+  private collectionService = inject(CollectionService);
   @ViewChild('multiSelect', { static: true }) public multiSelect: MatSelect;
 
   public ngOnInit() {
@@ -118,7 +117,7 @@ export class MultiSelectSearchComponent implements OnInit, AfterViewInit {
 
   public updateFcValue(value: {value: string; label: string;}[]) {
     this.control.savedItems = new Set<string>(value.map(i => i.value));
-    this.control.selectedMultipleItems = Array.from( this.control.savedItems)
+    this.control.selectedMultipleItems = Array.from(this.control.savedItems)
       .filter(i =>  i !== undefined && i !== null)
       .map(i => ({ value: i, color: this.colorService.getColor(i), detail: this.collectionService.getCollectionInterval(i) }));
     this.control.setValue([...this.control.selectedMultipleItems]);
