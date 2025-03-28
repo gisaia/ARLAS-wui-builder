@@ -103,7 +103,7 @@ export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
           }
         ),
         aggregationBucketsNumber: new SliderFormControl(
-          '',
+          undefined,
           marker('Number of buckets'),
           marker(''),
           2,
@@ -119,7 +119,7 @@ export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
           }
         ),
         aggregationIntervalUnit: new SelectFormControl(
-          '',
+          undefined,
           marker('Interval unit'),
           marker(''),
           false,
