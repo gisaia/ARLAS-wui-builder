@@ -77,7 +77,7 @@ import {
 } from '@analytics-config/components/edit-resultlist-visualisation/edit-resultlist-visualisation.component';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
-
+  public tabsOrder: string[] =  ['dataStep', 'gridStep', 'visualisationStep','sactionStep', 'settingsStep'];
   public constructor(
     collection: string,
     collectionService: CollectionService,
