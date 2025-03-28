@@ -4,29 +4,27 @@
             <mat-icon>chevron_left</mat-icon>
         </button>
         <div class="manage-visualisation__header">
-            <h3 class="title">{{ visualisation()?.customControls.name.value | titlecase}}</h3>
+            <h3 class="title">{{ visualisation()?.customControls.name.value | titlecase }}</h3>
             <span class="sub-title">
                 @if (isEdition()) {
                     {{ 'Manage visualisation' | translate }}
                 } @else {
                     {{ 'Create a visualisation' | translate }}
                 }
-
             </span>
         </div>
-
     </div>
-
+    <!-- visualisation inputs -->
     <div class="manage-visualisation__inputs">
         <arlas-config-form-control [showLabel]="true"
                                    [control]="visualisation()?.controls.name"></arlas-config-form-control>
-        <arlas-config-form-control class="main-meta_input-desc" [showLabel]="true"
+        <arlas-config-form-control class="inputs-description" [showLabel]="true"
                                    [control]="visualisation()?.controls.description"></arlas-config-form-control>
     </div>
-
     <div class="body-text">
-        {{ 'Configure data eligible for visualisation' | translate: {name: (visualisation()?.customControls.name.value | lowercase)} }}
+        {{ 'Configure data eligible for visualisation' | translate: {name: (visualisation()?.value.name | lowercase)} }}
     </div>
+    <!-- add button -->
     <button mat-stroked-button color="primary"
             class="manage-visualisation__button"
             (click)="addDataGroup()"
@@ -34,7 +32,7 @@
         <mat-icon>add</mat-icon>
         {{ 'Add data group' | translate }}
     </button>
-
+   <!-- table -->
     <table class="table" mat-table [dataSource]="dataGroups"
            cdkDropList [cdkDropListData]="visualisation" (cdkDropListDropped)="dropItemFamily($event)"
            [cdkDropListDisabled]="dragDisabled" [cdkDropListLockAxis]="'y'">
@@ -67,12 +65,13 @@
             <th mat-header-cell *matHeaderCellDef>{{ 'Condition' }}</th>
             <td mat-cell *matCellDef="let element">
                 <ul class="manage-visualisation__condtions">
-                    @for (filter of element.value.filters; track $index) {
+                    @for (filter of element.value.filters; track $index; let last = $last) {
                         <li>
-                            <span class="condition">{{ filter.filterField.value | translate }}</span>
-                            <span class="condition">{{ filter.filterOperation | translate }}</span>
+                            <span class="condition-text">{{ filter.filterField.value | translate }}</span>
+                            <span class="condition-text">{{ filter.filterOperation | translate }}</span>
                             <span *ngTemplateOutlet="conditions;context:
                         {operation: filter.filterOperation, input: filter.filterValues}"></span>
+                            <span class="condition-text" [class.not-display]="last">{{ 'And' | translate | lowercase}}</span>
                         </li>
                     }
                 </ul>
@@ -81,12 +80,12 @@
         <!-- Actions Column -->
         <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element; let i = index" >
+            <td mat-cell *matCellDef="let element; let i = index">
                 <div class="action-icon-wrapper">
                     <mat-icon [matTooltip]="'Edit condition' | translate" (click)="editDataGroup(i)">edit</mat-icon>
-                    <mat-icon [matTooltip]="'Delete condition' | translate" (click)="removeDataGroup(i)">delete</mat-icon>
+                    <mat-icon [matTooltip]="'Delete condition' | translate" (click)="removeDataGroup(i)">delete
+                    </mat-icon>
                 </div>
-
             </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -104,7 +103,8 @@
                 {{ 'Validate' | translate }}
             </button>
         } @else {
-            <button [matTooltip]="'Back to visualisation list' | translate" (click)="cancelVisualisation()" mat-stroked-button color="secondary"
+            <button [matTooltip]="'Back to visualisation list' | translate" (click)="cancelVisualisation()"
+                    mat-stroked-button color="secondary"
                     class="manage-visualisation__button">
                 {{ 'Back' | translate }}
             </button>
@@ -114,7 +114,7 @@
 
 
 <ng-template #conditions let-operation="operation" let-input="input">
-    <span class="condition">
+    <span class="condition-text">
             <ng-container class="in-values-input" *ngIf="operation === 'IN' || operation === 'NOT_IN'"
                           style="padding-left: 15px;">
         ( <span *ngFor="let value of input.filterInValues"> {{ value.value }}</span> )
@@ -125,5 +125,4 @@
         , {{ input?.filterMaxRangeValues }}] </ng-container>
     <ng-container *ngIf="operation === 'IS'">{{ input?.filterBoolean.toString() | translate }} </ng-container>
     </span>
-
 </ng-template>

@@ -17,11 +17,8 @@
  * under the License.
  */
 import {
-  DataGroupEditionComponent
-} from '@analytics-config/components/edit-resultlist-visualisation/data-group-edition/data-group-edition.component';
-import {
-  ResultListVisualisationsDataGroupFilter
-} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder';
+  ManageDataGroupDialogComponent
+} from '@analytics-config/components/edit-resultlist-visualisation/data-group-edition/manage-data-group-dialog.component';
 import {
   ResultlistFormBuilderService,
   ResultListVisualisationsDataGroup,
@@ -51,23 +48,23 @@ export class ManageVisualisationComponent {
   protected visualisation = input<ResultListVisualisationsFormGroup>();
   protected isEdition = input<boolean>();
   protected collectionControlName = input<string>('');
-  @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
+  protected changeValidated = output<boolean>();
+  protected changeCanceled = output<boolean>();
   protected dialog = inject(MatDialog);
-  protected resultlistFormBuilderService = inject(ResultlistFormBuilderService);
-  protected validate = output<boolean>();
-  protected cancel = output<boolean>();
+  protected resultListFormBuilderService = inject(ResultlistFormBuilderService);
   protected displayedColumns = ['drag', 'dataGroup', 'protocol', 'visualisationUrl', 'conditions', 'actions'];
   public dragDisabled = true;
+  @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
 
   public get dataGroups(): FormArray<ResultListVisualisationsDataGroup> | any[] {
     return this.visualisation().get('dataGroups')?.value.length > 0 ?  (<any>this.visualisation().get('dataGroups')).controls as FormArray  : [];
   }
 
   public validateVisualisation(){
-    this.validate.emit(true);
+    this.changeValidated.emit(true);
   }
   public cancelVisualisation(){
-    this.cancel.emit(true);
+    this.changeCanceled.emit(true);
   }
 
   public dropItemFamily(event: CdkDragDrop<any[]>){
@@ -76,7 +73,6 @@ export class ManageVisualisationComponent {
     this.dragDisabled = true;
     this.table.renderRows();
   }
-
 
   public editDataGroup(itemIndex: number){
     const dataGroup = (this.visualisation().get('dataGroups') as FormArray).at(itemIndex) as ResultListVisualisationsDataGroup;
@@ -89,7 +85,7 @@ export class ManageVisualisationComponent {
   }
 
   public openEditionDialog(dataGroup: ResultListVisualisationsDataGroup, edit = false){
-    return this.dialog.open(DataGroupEditionComponent,
+    return this.dialog.open(ManageDataGroupDialogComponent,
       {
         width:'50vw',
         height: '90vh',
@@ -103,7 +99,7 @@ export class ManageVisualisationComponent {
   }
 
   public addDataGroup() {
-    const dataGroup = this.resultlistFormBuilderService.buildVisualisationsDataGroup();
+    const dataGroup = this.resultListFormBuilderService.buildVisualisationsDataGroup();
     const ref = this.openEditionDialog(dataGroup);
 
     ref.afterClosed()
@@ -116,5 +112,4 @@ export class ManageVisualisationComponent {
         this.table.renderRows();
       });
   }
-
 }

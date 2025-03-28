@@ -17,11 +17,8 @@
  * under the License.
  */
 import {
-  ResultListVisualisationsDataGroup
-} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder';
-import {
   ResultlistConfigForm,
-  ResultlistFormBuilderService
+  ResultlistFormBuilderService, ResultListVisualisationsDataGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { AbstractControl, FormArray } from '@angular/forms';
 import { FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
@@ -32,7 +29,7 @@ import {
   DataGroupInputConfig
 } from '@services/main-form-manager/models-config';
 import { ImportElement, importElements } from '@services/main-form-manager/tools';
-import { HiddenFormControl, InputFormControl } from '@shared-models/config-form';
+import { InputFormControl } from '@shared-models/config-form';
 import { ArlasColorService } from 'arlas-web-components';
 
 interface ResultListConfigFeederOptions {
@@ -256,7 +253,7 @@ export class ResultListInputsFeeder {
           groupFilterFrom.customControls.filterValues.filterInValues.selectedMultipleItems = filterInValues.map(v => ({ value: v }));
           groupFilterFrom.customControls.filterValues.filterInValues.savedItems = new Set(filterInValues);
           groupFilterFrom.customControls.filterValues.filterEqualValues.disable();
-          console.log(groupFilterFrom.customControls.filterValues.filterInValues);
+          groupFilterFrom.syncEditState();
         } else if (filter.op === FILTER_OPERATION.EQUAL || filter.op=== FILTER_OPERATION.NOT_EQUAL) {
           this.imports([
             {
@@ -286,7 +283,6 @@ export class ResultListInputsFeeder {
           ]);
         }
         (dataGroupForm.get('filters') as FormArray).push(groupFilterFrom);
-        console.log(dataGroupForm);
       });
     }
   }

@@ -45,8 +45,8 @@ import { SharedModule } from '@shared/shared.module';
     SharedModule,
     ManageVisualisationComponent
   ],
-  templateUrl: './edit-resultlist-visualisation.component.html',
-  styleUrl: './edit-resultlist-visualisation.component.scss',
+  templateUrl: './result-list-visualisation.component.html',
+  styleUrl: './result-list-visualisation.component.scss',
   animations: [
     trigger('openClose', [
       transition(':enter', [style({opacity: 0}), animate('200ms', style({opacity: 1}))]),
@@ -54,14 +54,18 @@ import { SharedModule } from '@shared/shared.module';
     ])
   ]
 })
-export class EditResultlistVisualisationComponent {
+export class ResultListVisualisationComponent {
 
   @Input() public collectionControl: SelectFormControl;
   @Input() public control: FormArray<ResultListVisualisationsFormGroup>;
-  private resultlistFormBuilder = inject(ResultlistFormBuilderService);
+  /** helper to create new form **/
+  private resultListFormBuilder = inject(ResultlistFormBuilderService);
+  /** disable drag when dropping an element **/
   public dragDisabled = true;
+  /** handle the switch between visualisation list and edit **/
   public manageViewIsOpened = false;
   public isEdition = signal(false);
+  /** store the current visualisation edited or created **/
   public currentVisualisation: ResultListVisualisationsFormGroup = null;
   public displayedColumns = ['drag', 'name', 'description', 'applyTo', 'action'];
   @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
@@ -69,8 +73,6 @@ export class EditResultlistVisualisationComponent {
   public get visualisation(): ResultListVisualisationsFormGroup[] {
     return this.control? this.control.controls as Array<ResultListVisualisationsFormGroup> : [];
   }
-
-  public constructor() { }
 
   public dropVisualisation(event: CdkDragDrop<any[]>) {
     moveItemInArray(this.control.controls, event.previousIndex, event.currentIndex);
@@ -80,11 +82,16 @@ export class EditResultlistVisualisationComponent {
 
   public addVisualisation() {
     this.manageViewIsOpened = true;
-    const newVisualisation = this.resultlistFormBuilder.buildVisualisation();
+    const newVisualisation = this.resultListFormBuilder.buildVisualisation();
     newVisualisation.customControls.name.setValue('New Visualisation name');
     this.currentVisualisation = newVisualisation;
   }
 
+  /**
+   * Launch when we create a new visualisation
+   * add the new visualisation the existing list
+   * @param {boolean} $event
+   */
   public manageVisualisationValidated($event: boolean) {
     this.manageViewIsOpened = false;
     if(!this.isEdition()){
@@ -97,6 +104,7 @@ export class EditResultlistVisualisationComponent {
     }
     this.isEdition.set(false);
   }
+
   public manageVisualisationCanceled($event: boolean) {
     this.manageViewIsOpened = false;
     this.isEdition.set(false);
@@ -108,7 +116,7 @@ export class EditResultlistVisualisationComponent {
     this.table.renderRows();
   }
 
-  public openManageVisualisationView(visualisationIndex: any) {
+  public openManageVisualisationForEdition(visualisationIndex: any) {
     this.isEdition.set(true);
     this.manageViewIsOpened = true;
     this.currentVisualisation = this.control.at(visualisationIndex);
