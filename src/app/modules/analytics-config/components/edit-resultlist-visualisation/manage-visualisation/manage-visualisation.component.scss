@@ -18,13 +18,20 @@
  */
 
 :host {
-display: block;
-font-size: 0.875rem;
-  --ligh-grey: #efefef
+  display: block;
+  font-size: 0.875rem;
+  --ligh-grey: #efefef;
+  ::ng-deep {
+    .inputs-description {
+      .textarea-form-control mat-form-field {
+        width: 40%;
+      }
+    }
+  }
 }
 
-.manage-visualisation{
-  &__container{
+.manage-visualisation {
+  &__container {
     display: flex;
     flex-direction: column;
     padding: 16px;
@@ -68,20 +75,20 @@ font-size: 0.875rem;
     display: flex;
     align-items: center;
     margin-left: -9px;
-    // font-weight: bold;
     margin-bottom: 6px;
+
     &:hover {
       cursor: pointer;
     }
+
     & mat-icon {
       margin-right: -5px;
     }
-
   }
 }
 
-.condition{
-  margin: 1px;
+.condition-text {
+  margin: 4px;
 }
 
 .drag {
@@ -90,11 +97,15 @@ font-size: 0.875rem;
   }
 }
 
+.not-display {
+  display: none;
+}
+
 .title {
   margin: 0;
 }
 
-.sub-title{
+.sub-title {
   color: #676666;
 }
 
@@ -102,27 +113,28 @@ font-size: 0.875rem;
   margin-bottom: 6px;
 }
 
-.mat-column-drag{
+.mat-column-drag {
   width: 40px;
 }
 
-.mat-column-dataGroup{
+.mat-column-dataGroup {
   width: 20%;
   max-width: 150px;
 }
 
 .mat-column-actions {
   width: 90px;
-  & mat-icon:hover{
+
+  & mat-icon:hover {
     cursor: pointer;
   }
 }
 
-.mat-column-protocol{
+.mat-column-protocol {
   width: 100px;
 }
 
-.action-icon-wrapper{
+.action-icon-wrapper {
   display: flex;
   gap: 6px;
 }
