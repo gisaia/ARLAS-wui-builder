@@ -19,6 +19,9 @@
 import {
   EditResultlistQuicklookComponent
 } from '@analytics-config/components/edit-resultlist-quicklook/edit-resultlist-quicklook.component';
+import {
+  ResultListVisualisationComponent
+} from '@analytics-config/components/edit-resultlist-visualisation/result-list-visualisation.component';
 import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
 import { Injectable } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -30,6 +33,8 @@ import { DialogColorTableData, KeywordColor } from '@map-config/components/dialo
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
 import { FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
+import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
+import { CollectionField } from '@services/collection-service/models';
 import {
   NUMERIC_OR_DATE_OR_KEYWORD,
   NUMERIC_OR_DATE_OR_TEXT_TYPES,
@@ -44,31 +49,31 @@ import { ConfigFormGroupComponent } from '@shared-components/config-form-group/c
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
   ButtonFormControl,
+    ButtonToggleFormControl,
   ComponentFormControl,
   ConfigFormGroup,
+    ConfigFormControl,
   FieldTemplateControl,
   HiddenFormControl,
   InputFormControl,
   MultipleSelectFormControl,
-  SelectFormControl,
-  SelectOption,
-  SliderFormControl,
-  SlideToggleFormControl,
-  TextareaFormControl,
-  TitleInputFormControl,
-    FieldTemplateControl,
-    ButtonToggleFormControl, TypedSelectFormControl,
-    ConfigFormControl
+  SelectFormControl, SelectOption, SliderFormControl, SlideToggleFormControl, TextareaFormControl,
+  TitleInputFormControl, FieldTemplateControl, ButtonToggleFormControl, TypedSelectFormControl, ConfigFormControl
 } from '@shared-models/config-form';
-import { valuesToOptions } from '@utils/tools';
-
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
-import { ArlasColorService } from 'arlas-web-components';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { valuesToOptions } from '@utils/tools';
 import { Observable } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
+import { ArlasColorService } from 'arlas-web-components';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+import { CollectionField } from '@services/collection-service/models';
+import { EditResultlistQuicklookComponent } from '@analytics-config/components/edit-resultlist-quicklook/edit-resultlist-quicklook.component';
+import { Router } from '@angular/router';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import {
-    EditResultlistVisualisationComponent
+  EditResultlistVisualisationComponent
 } from '@analytics-config/components/edit-resultlist-visualisation/edit-resultlist-visualisation.component';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
@@ -336,7 +341,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
         visualisationStep:new ConfigFormGroup({
           visualisationsList: new FormArray([]),
           visualisations:  new ComponentFormControl(
-            EditResultlistVisualisationComponent,
+            ResultListVisualisationComponent,
             {
               collectionControl: () => this.customControls.dataStep.collection,
               control: () => this.customControls.visualisationStep.visualisationsList
@@ -734,7 +739,7 @@ export class ResultListVisualisationsFormGroup extends FormGroup {
         marker('Name'),
         marker('Name'),
       ),
-      description: new InputFormControl(
+      description: new TextareaFormControl(
         '',
         marker('Description'),
         marker('Description'),
@@ -819,24 +824,15 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
           resetDependantsOnChange: true,
           dependsOn: () => [this.customControls.filterField],
           onDependencyChange: (control: SelectFormControl) => {
+            this.checkEditState();
             if (!this.editing) {
               /** update list of available ops according to field type */
               if (this.customControls.filterField.value.type === 'KEYWORD') {
-                control.setSyncOptions([
-                  { value: FILTER_OPERATION.IN, label: FILTER_OPERATION.IN },
-                  { value: FILTER_OPERATION.NOT_IN, label: FILTER_OPERATION.NOT_IN }
-                ]);
+                control.setSyncOptions(this.getKeywordOperatorList());
               } else if (this.customControls.filterField.value.type === 'BOOLEAN') {
-                control.setSyncOptions([
-                  { value: FILTER_OPERATION.IS, label: FILTER_OPERATION.IS }
-                ]);
+                control.setSyncOptions(this.getBooleanOperatorList());
               } else {
-                control.setSyncOptions([
-                  { value: FILTER_OPERATION.EQUAL, label: FILTER_OPERATION.EQUAL },
-                  { value: FILTER_OPERATION.NOT_EQUAL, label: FILTER_OPERATION.NOT_EQUAL },
-                  { value: FILTER_OPERATION.RANGE, label: FILTER_OPERATION.RANGE },
-                  { value: FILTER_OPERATION.OUT_RANGE, label: FILTER_OPERATION.OUT_RANGE },
-                ]);
+                control.setSyncOptions(this.getNumericalOperatorList());
               }
               control.setValue(control.syncOptions[0].value);
             } else {
@@ -844,21 +840,11 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
               // otherwise there is no way to remember it
               if ((this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
                       this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN)) {
-                control.setSyncOptions([
-                  { value: FILTER_OPERATION.IN, label: FILTER_OPERATION.IN },
-                  { value: FILTER_OPERATION.NOT_IN, label: FILTER_OPERATION.NOT_IN }
-                ]);
+                control.setSyncOptions(this.getKeywordOperatorList());
               } else if (this.customControls.filterOperation.value === FILTER_OPERATION.IS) {
-                control.setSyncOptions([
-                  { value: FILTER_OPERATION.IS, label: FILTER_OPERATION.IS }
-                ]);
+                control.setSyncOptions(this.getBooleanOperatorList());
               } else {
-                control.setSyncOptions([
-                  { value: FILTER_OPERATION.EQUAL, label: FILTER_OPERATION.EQUAL },
-                  { value: FILTER_OPERATION.NOT_EQUAL, label: FILTER_OPERATION.NOT_EQUAL },
-                  { value: FILTER_OPERATION.RANGE, label: FILTER_OPERATION.RANGE },
-                  { value: FILTER_OPERATION.OUT_RANGE, label: FILTER_OPERATION.OUT_RANGE },
-                ]);
+                control.setSyncOptions(this.getNumericalOperatorList());
               }
               control.setValue(this.customControls.filterOperation.value);
             }
@@ -888,7 +874,6 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
             resetDependantsOnChange: true,
             dependsOn: () => [this.customControls.filterField],
             onDependencyChange: (control: MultipleSelectFormControl) => {
-              console.log(this.customControls.filterOperation.value);
               if (!!this.customControls.filterField.value && !!this.customControls.filterField.value.value ) {
                 if (this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
                                 this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN) {
@@ -905,6 +890,8 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
               } else {
                 control.setSyncOptions([]);
               }
+              control.markAsUntouched();
+              this.checkEditState();
               // if we are editing an existing filter, keep the selected items.
               // otherwise there is no way to remember them
               if (!this.editing) {
@@ -1011,6 +998,52 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
         }
       ),
     });
+  }
+
+  protected getBooleanOperatorList(){
+    return [
+      { value: FILTER_OPERATION.IS, label: FILTER_OPERATION.IS }
+    ];
+  }
+
+  protected getKeywordOperatorList(){
+    return[
+      { value: FILTER_OPERATION.IN, label: FILTER_OPERATION.IN },
+      { value: FILTER_OPERATION.NOT_IN, label: FILTER_OPERATION.NOT_IN }
+    ];
+  }
+
+  protected getNumericalOperatorList(){
+    return [
+      { value: FILTER_OPERATION.EQUAL, label: FILTER_OPERATION.EQUAL },
+      { value: FILTER_OPERATION.NOT_EQUAL, label: FILTER_OPERATION.NOT_EQUAL },
+      { value: FILTER_OPERATION.RANGE, label: FILTER_OPERATION.RANGE },
+      { value: FILTER_OPERATION.OUT_RANGE, label: FILTER_OPERATION.OUT_RANGE },
+    ];
+  }
+
+  protected checkEditState(){
+    if (this.editionInfo) {
+      // if we change the field/or operation, we are no longer in editing an existing filter but creating a new one
+      // we quit edition mode
+      if (this.customControls.filterField.value.value !== this.editionInfo.field ||
+              this.customControls.filterOperation.value !== this.editionInfo.op
+      ) {
+        this.editing = false;
+      }
+    }
+  }
+
+  public syncEditState(){
+    this.editing = !!this.customControls.filterField.value.value && !!this.customControls.filterOperation.value;
+    if (this.editing) {
+      this.editionInfo = {
+        field: this.customControls.filterField.value.value,
+        op: this.customControls.filterOperation.value
+      };
+    } else{
+      this.editionInfo = null;
+    }
   }
 
   public customControls = {

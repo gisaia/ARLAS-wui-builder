@@ -19,17 +19,17 @@
 :host {
   display: block;
   height: 100%;
+
   ::ng-deep {
     .data-group__box .mdc-evolution-chip__text-label.mat-mdc-chip-action-label {
-        max-width: 130px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        display: inline-block;
+      max-width: 130px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: inline-block;
     }
   }
 }
-
 
 .drag {
   &:hover {
@@ -37,14 +37,12 @@
   }
 }
 
-.table-container{
+.table-container {
   width: 100%;
   height: 500px;
   margin-top: 16px;
-  overflow-y:auto;
+  overflow-y: auto;
 }
-
-
 
 .mat-column-drag, .mat-column-action {
   width: 40px;
@@ -66,25 +64,6 @@
 
 .visualisation-row {
   vertical-align: middle;
-}
-
-
-.data-group {
-  &__box {
-    max-width: 150px !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-    display: inline-block !important;
-
-    & .mdc-evolution-chip__text-label{
-      max-width: 150px !important;
-      overflow: hidden !important;
-      text-overflow: ellipsis !important;
-      white-space: nowrap !important;
-      display: inline-block !important;
-    }
-  }
 }
 
 .column-drag.cdk-drag-preview {

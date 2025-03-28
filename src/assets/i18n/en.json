@@ -931,10 +931,12 @@
 	"Data group field filter": "Field filter",
 	"Data group operator": "Operator",
 	"Data group field value": "Field value",
+	"Configure data eligible for visualisation": "Configure data eligible for {{name}} visualisation",
 	"Back to visualisation list": "Back to visualisation list",
 	"Edit condition": "Edit condition",
 	"Delete condition": "Delete condition",
 	"Manage data group": "Manage data group",
 	"Manage visualisation": "Manage visualisation",
-	"Create a visualisation": "Create a visualisation"
+	"Create a visualisation": "Create a visualisation",
+	"And": "And"
 }
