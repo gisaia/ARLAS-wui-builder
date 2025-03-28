@@ -89,7 +89,7 @@ export class ManageDataGroupDialogComponent implements OnInit {
     setTimeout(() => {
       this.disableButton.set(this.data.dataGroup.invalid);
     });
-    this.data.dataGroup.statusChanges.subscribe(s => {
+    this.data.dataGroup?.statusChanges.subscribe(s => {
       this.disableButton.set(s === 'INVALID');
     });
   }
