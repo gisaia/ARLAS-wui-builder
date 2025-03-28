@@ -924,5 +924,7 @@
 	"Add a visualization": "Ajouter une visualisation",
 	"Apply to": "Appliqué à",
 	"No results": "Aucun résultat",
-	"Configure data eligible for visualisation": "Configurer les données éligibles à la visualisation {{name}}"
+	"Configure data eligible for visualisation": "Configurer les données éligibles à la visualisation {{name}}",
+	"Resultlist settings": "Configurations",
+	"Resultlist grid": "Grille"
 }

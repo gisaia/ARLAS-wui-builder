@@ -925,5 +925,7 @@
 	"Add a visualization": "Add a visualization",
 	"Apply to": "Apply to",
 	"No results": "No results",
-	"Configure data eligible for visualisation": "Configure data eligible for {{name}} visualisation"
+	"Configure data eligible for visualisation": "Configure data eligible for {{name}} visualisation",
+	"Resultlist settings": "Settings",
+	"Resultlist grid": "Grid"
 }
