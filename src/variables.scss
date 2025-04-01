@@ -17,6 +17,7 @@
  * under the License.
  */
 
+@use 'sass:math';
 $arlasColor: #f63366;
 
 @mixin group-title() {
@@ -30,6 +31,8 @@ $arlasColor: #f63366;
 
 $default-spacing: 10px;
 $sm-margin: calc($default-spacing / 2);
+$xs-spacing: math.div($default-spacing, 4);
+$lg-spacing: $default-spacing * 2;
 
 $top-menu-height: 40px;
 $left-menu-width: 48px;

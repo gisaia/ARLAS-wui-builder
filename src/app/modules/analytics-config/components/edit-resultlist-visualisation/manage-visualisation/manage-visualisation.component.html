@@ -48,17 +48,17 @@
         <!-- Data group Column -->
         <ng-container matColumnDef="dataGroup">
             <th mat-header-cell *matHeaderCellDef>{{ 'Data group name' | translate }}</th>
-            <td mat-cell *matCellDef="let element">{{ element?.controls?.name.value }}</td>
+            <td mat-cell *matCellDef="let element">{{ element?.value?.name }}</td>
         </ng-container>
         <!-- Protocol Column -->
         <ng-container matColumnDef="protocol">
             <th mat-header-cell *matHeaderCellDef>{{ 'Protocol' | translate }}</th>
-            <td mat-cell *matCellDef="let element">{{ element?.controls?.protocol.value }}</td>
+            <td mat-cell *matCellDef="let element">{{ element?.value?.protocol }}</td>
         </ng-container>
         <!-- VisualisationUrl Column -->
         <ng-container matColumnDef="visualisationUrl">
             <th mat-header-cell *matHeaderCellDef>{{ 'View URL' | translate }}</th>
-            <td mat-cell *matCellDef="let element">{{ element?.controls?.visualisationUrl.value }}</td>
+            <td mat-cell *matCellDef="let element">{{ element?.value?.visualisationUrl }}</td>
         </ng-container>
         <!-- Condition Column -->
         <ng-container matColumnDef="conditions">
@@ -114,8 +114,7 @@
 
 <ng-template #conditions let-operation="operation" let-input="input">
     <span class="condition-text">
-            <ng-container class="in-values-input" *ngIf="operation === 'IN' || operation === 'NOT_IN'"
-                          style="padding-left: 15px;">
+            <ng-container class="in-values-input" *ngIf="operation === 'IN' || operation === 'NOT_IN'">
         ( <span *ngFor="let value of input.filterInValues"> {{ value.value }}</span> )
     </ng-container>
     <ng-container

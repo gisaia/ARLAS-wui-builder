@@ -739,13 +739,18 @@ export class ResultListVisualisationsFormGroup extends FormGroup {
     super({
       name: new InputFormControl(
         '',
-        marker('Name'),
+        marker('Visualisation name'),
         marker('Name'),
       ),
       description: new TextareaFormControl(
         '',
+        marker('Visualisation description'),
         marker('Description'),
-        marker('Description'),
+        '',
+        null,
+        {
+          optional: true,
+        }
       ),
       dataGroups: new FormArray<ResultListVisualisationsDataGroup>([])
     });
@@ -766,7 +771,7 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
         marker('Data groups name'),
         ''
       ),
-      filters: new FormArray<ResultListVisualisationsDataGroupFilter>([]),
+      filters: new FormArray<ResultListVisualisationsDataGroupCondition>([]),
       protocol: new SelectFormControl(
         '',
         marker('Protocol'),
@@ -792,13 +797,13 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
   public customControls = {
     name: this.get('name') as InputFormControl,
     protocol: this.get('protocol') as SelectFormControl,
-    filters:  this.get('filters') as FormArray<ResultListVisualisationsDataGroupFilter>,
+    filters:  this.get('filters') as FormArray<ResultListVisualisationsDataGroupCondition>,
     visualisationUrl: this.get('visualisationUrl') as InputFormControl
   };
 }
 
 
-export class ResultListVisualisationsDataGroupFilter extends FormGroup {
+export class ResultListVisualisationsDataGroupCondition extends FormGroup {
   public editing = false;
   public editionInfo: { field: string; op: FILTER_OPERATION; };
   public constructor(
@@ -934,6 +939,9 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
     });
   }
 
+  /**
+     *  update edit state to know if we reset or not fields
+     */
   public syncEditState(){
     this.editing = !!this.customControls.filterField.value.value && !!this.customControls.filterOperation.value;
     if (this.editing) {
@@ -1049,13 +1057,13 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
     return  new ResultListVisualisationsDataGroup();
   }
 
-  public buildVisualisationsDataGroupFilter(collection: string) {
+  public buildVisualisationsDataGroupCondition(collection: string) {
     const collectionFields = this.collectionService.getCollectionFields(collection);
     const operators = [FILTER_OPERATION.IN, FILTER_OPERATION.RANGE, FILTER_OPERATION.EQUAL, FILTER_OPERATION.NOT_IN,
       FILTER_OPERATION.IS, FILTER_OPERATION.OUT_RANGE, FILTER_OPERATION.NOT_EQUAL];
 
-    const control = new ResultListVisualisationsDataGroupFilter(collectionFields,
-      operators, this.collectionService, collection    );
+    const control = new ResultListVisualisationsDataGroupCondition(collectionFields,
+      operators, this.collectionService, collection);
     ConfigFormGroupComponent.listenToOnDependencysChange(control.get('filterField') as ConfigFormControl, []);
     ConfigFormGroupComponent.listenToOnDependencysChange(control.get('filterOperation') as ConfigFormControl, []);
     ConfigFormGroupComponent.listenToAllControlsOnDependencyChange(control.get('filterValues') as ConfigFormGroup, []);

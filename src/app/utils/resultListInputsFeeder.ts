@@ -212,7 +212,8 @@ export class ResultListInputsFeeder {
                 control: dataGroupForm.customControls.protocol
               },
             ]);
-            this.importDataGroupFilters(dataGroupForm, dataGroupConf, resultListFormBuilder);
+            const  conditionForm = this.importDataGroupFilters(dataGroupConf, resultListFormBuilder);
+            dataGroupForm.setControl('filters', conditionForm);
             (visualisationForm.get('dataGroups') as FormArray).push(dataGroupForm);
           });
         }
@@ -222,67 +223,69 @@ export class ResultListInputsFeeder {
     return this;
   }
 
-  protected  importDataGroupFilters(dataGroupForm: ResultListVisualisationsDataGroup,
+  protected  importDataGroupFilters(
     dataGroupConf: DataGroupInputConfig,
     resultListFormBuilder: ResultlistFormBuilderService){
+    const formArray = new FormArray([]);
     if(dataGroupConf.filters && dataGroupConf.filters.length > 0){
-      dataGroupConf.filters.forEach(filter => {
-        const groupFilterFrom = resultListFormBuilder.buildVisualisationsDataGroupFilter(this.options.contributor.collection);
+      dataGroupConf.filters.map((condition, i) => {
+        const conditionForm = resultListFormBuilder
+          .buildVisualisationsDataGroupCondition(this.options.contributor.collection);
         this.imports([
           {
-            value: { value: filter.field },
-            control: groupFilterFrom.customControls.filterField
+            value: { value: condition.field },
+            control: conditionForm.customControls.filterField
           },
           {
-            value: filter.op,
-            control: groupFilterFrom.customControls.filterOperation
+            value: condition.op as FILTER_OPERATION,
+            control: conditionForm.customControls.filterOperation
           }
         ]);
+        conditionForm.syncEditState();
 
-        if (filter.op === FILTER_OPERATION.IN || filter.op === FILTER_OPERATION.NOT_IN) {
-          const  filterInValues = (filter.value as string[]);
+        if (condition.op === FILTER_OPERATION.IN || condition.op === FILTER_OPERATION.NOT_IN) {
+          const  filterInValues = (condition.value as string[]);
           this.imports([
             {
               value: filterInValues.map(v => ({ value: v })),
-              control: groupFilterFrom.customControls.filterValues.filterInValues
+              control: conditionForm.customControls.filterValues.filterInValues
             }
           ]);
-
-          groupFilterFrom.customControls.filterValues.filterInValues.selectedMultipleItems = filterInValues.map(v => ({ value: v }));
-          groupFilterFrom.customControls.filterValues.filterInValues.savedItems = new Set(filterInValues);
-          groupFilterFrom.customControls.filterValues.filterEqualValues.disable();
-          groupFilterFrom.syncEditState();
-        } else if (filter.op === FILTER_OPERATION.EQUAL || filter.op=== FILTER_OPERATION.NOT_EQUAL) {
+          conditionForm.customControls.filterValues.filterInValues.selectedMultipleItems = filterInValues.map(v => ({ value: v }));
+          conditionForm.customControls.filterValues.filterInValues.savedItems = new Set(filterInValues);
+          conditionForm.customControls.filterValues.filterEqualValues.disable();
+        } else if (condition.op === FILTER_OPERATION.EQUAL || condition.op=== FILTER_OPERATION.NOT_EQUAL) {
           this.imports([
             {
-              value: filter.value,
-              control:  groupFilterFrom.customControls.filterValues.filterEqualValues
+              value: condition.value,
+              control:  conditionForm.customControls.filterValues.filterEqualValues
             }
           ]);
-        } else if (filter.op === FILTER_OPERATION.RANGE || filter.op=== FILTER_OPERATION.OUT_RANGE) {
-          const min =  +(filter.value as string).split(';')[0];
-          const max =  +(filter.value as string).split(';')[1];
+        } else if (condition.op === FILTER_OPERATION.RANGE || condition.op=== FILTER_OPERATION.OUT_RANGE) {
+          const min =  +(condition.value as string).split(';')[0];
+          const max =  +(condition.value as string).split(';')[1];
           this.imports([
             {
               value: min,
-              control:  groupFilterFrom.customControls.filterValues.filterMinRangeValues
+              control:  conditionForm.customControls.filterValues.filterMinRangeValues
             },
             {
               value: max,
-              control:  groupFilterFrom.customControls.filterValues.filterMaxRangeValues
+              control:  conditionForm.customControls.filterValues.filterMaxRangeValues
             }
           ]);
-        } else if (filter.op=== FILTER_OPERATION.IS) {
+        } else if (condition.op=== FILTER_OPERATION.IS) {
           this.imports([
             {
-              value: filter.value,
-              control:  groupFilterFrom.customControls.filterValues.filterBoolean
+              value: condition.value,
+              control:  conditionForm.customControls.filterValues.filterBoolean
             }
           ]);
         }
-        (dataGroupForm.get('filters') as FormArray).push(groupFilterFrom);
+        formArray.push(conditionForm);
       });
     }
+    return formArray;
   }
 
   public importResultListQuickLook (resultListFormBuilder: ResultlistFormBuilderService,

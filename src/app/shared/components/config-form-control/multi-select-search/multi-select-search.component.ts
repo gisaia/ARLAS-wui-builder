@@ -60,8 +60,7 @@ export class MultiSelectSearchComponent implements OnInit, AfterViewInit {
   @ViewChild('multiSelect', { static: true }) public multiSelect: MatSelect;
 
   public ngOnInit() {
-    // update input state. If there is value or not.
-    // when there is a linked input.
+    // updates the input if the value of another input with which it is linked changes
     this.control?.syncOptionsUpdated
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(_ => {
