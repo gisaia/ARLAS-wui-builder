@@ -228,7 +228,7 @@ export class ResultListInputsFeeder {
     resultListFormBuilder: ResultlistFormBuilderService){
     const formArray = new FormArray([]);
     if(dataGroupConf.filters && dataGroupConf.filters.length > 0){
-      dataGroupConf.filters.map((condition, i) => {
+      dataGroupConf.filters.forEach((condition, i) => {
         const conditionForm = resultListFormBuilder
           .buildVisualisationsDataGroupCondition(this.options.contributor.collection);
         this.imports([
