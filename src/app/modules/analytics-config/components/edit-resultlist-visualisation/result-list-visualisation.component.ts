@@ -89,7 +89,7 @@ export class ResultListVisualisationComponent {
 
   /**
    * Launch when we create a new visualisation
-   * add the new visualisation the existing list
+   * add the new visualisation to the existing list
    * @param {boolean} $event
    */
   public manageVisualisationValidated($event: boolean) {

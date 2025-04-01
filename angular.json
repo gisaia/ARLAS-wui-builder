@@ -21,6 +21,7 @@
       "prefix": "app",
       "architect": {
         "build": {
+
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
@@ -66,7 +67,12 @@
               "sourceMap": true,
               "namedChunks": true,
               "extractLicenses": false,
-              "budgets": []
+              "budgets": [],
+              "stylePreprocessorOptions": {
+                "includePaths": [
+                  "./src"
+                ]
+              }
             },
             "production": {
               "fileReplacements": [
