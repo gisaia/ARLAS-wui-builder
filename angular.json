@@ -21,7 +21,6 @@
       "prefix": "app",
       "architect": {
         "build": {
-
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
@@ -75,6 +74,11 @@
               }
             },
             "production": {
+              "stylePreprocessorOptions": {
+                "includePaths": [
+                  "./src"
+                ]
+              },
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
