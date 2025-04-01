@@ -23,6 +23,10 @@ import {
 import {
   DEFAULT_METRIC_VALUE
 } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
+import {
+  ResultListVisualisationDataGroupFormWidget,
+  ResultListVisualisationFormWidget
+} from '@analytics-config/services/resultlist-form-builder/models';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { FormArray, FormGroup } from '@angular/forms';
 import {
@@ -1413,51 +1417,51 @@ export class ConfigExportHelper {
     return component;
   }
 
-  public static getVisualisationList(visualisationList: any[]){
+  public static getVisualisationList(visualisationList: ResultListVisualisationFormWidget[]){
     const visualisations = [];
-    visualisationList.forEach(visu => {
+    visualisationList.forEach(visualisationWidgetConfig => {
       const visualisation: VisualisationListInputConfig =  {
-        name: visu.name,
-        description: visu.description,
+        name: visualisationWidgetConfig.name,
+        description: visualisationWidgetConfig.description,
         dataGroups: []
       };
-      visu.dataGroups.forEach(dataG => {
-        const dataGroup: DataGroupInputConfig = {
-          filters: [],
-          name: dataG.name,
-          protocol: dataG.protocol,
-          visualisationUrl: dataG.visualisationUrl
-        };
-        dataG.filters.forEach(f => {
-          if (f.filterOperation === FILTER_OPERATION.IN || f.filterOperation === FILTER_OPERATION.NOT_IN) {
-            dataGroup.filters.push({
-              field: f.filterField.value,
-              op: f.filterOperation,
-              value: f.filterValues.filterInValues.map(v => v.value)
-            });
-          } else if (f.filterOperation === FILTER_OPERATION.EQUAL || f.filterOperation === FILTER_OPERATION.NOT_EQUAL) {
-            dataGroup.filters.push({
-              field: f.filterField.value,
-              op: f.filterOperation,
-              value: f.filterValues.filterEqualValues
-            });
-          } else if (f.filterOperation === FILTER_OPERATION.RANGE || f.filterOperation === FILTER_OPERATION.OUT_RANGE) {
-            dataGroup.filters.push({
-              field: f.filterField.value, op: f.filterOperation,
-              value: f.filterValues.filterMinRangeValues + ';' + f.filterMaxRangeValues
-            });
-          } else if (f.filterOperation === FILTER_OPERATION.IS) {
-            dataGroup.filters.push({
-              field: f.filterField.value, op: f.filterOperation,
-              value: f.filterValues.filterBoolean
-            });
-          }
-        });
-        visualisation.dataGroups.push(dataGroup);
-      });
+      visualisation.dataGroups = this.buildDataGroups(visualisationWidgetConfig);
       visualisations.push(visualisation);
     });
     return visualisations;
+  }
+
+  public static buildDataGroups(visualisationWidgetConfig: ResultListVisualisationFormWidget){
+    return visualisationWidgetConfig.dataGroups.map(dataG => {
+      const dataGroup: DataGroupInputConfig = {
+        filters: [],
+        name: dataG.name,
+        protocol: dataG.protocol,
+        visualisationUrl: dataG.visualisationUrl
+      };
+      dataGroup.filters = this.buildDataGroupConditions(dataG);
+      return dataGroup;
+    });
+  }
+
+  protected static  buildDataGroupConditions(dataG: ResultListVisualisationDataGroupFormWidget) {
+    return dataG.filters.map(f => {
+      const condition = {
+        field: f.filterField.value,
+        op: f.filterOperation,
+        value: null
+      };
+      if (f.filterOperation === FILTER_OPERATION.IN || f.filterOperation === FILTER_OPERATION.NOT_IN) {
+        condition.value =  f.filterValues.filterInValues.map(v => v.value);
+      } else if (f.filterOperation === FILTER_OPERATION.EQUAL || f.filterOperation === FILTER_OPERATION.NOT_EQUAL) {
+        condition.value = f.filterValues.filterEqualValues;
+      } else if (f.filterOperation === FILTER_OPERATION.RANGE || f.filterOperation === FILTER_OPERATION.OUT_RANGE) {
+        condition.value =  f.filterValues.filterMinRangeValues + ';' + f.filterValues.filterMaxRangeValues;
+      } else if (f.filterOperation === FILTER_OPERATION.IS) {
+        condition.value = f.filterValues.filterBoolean;
+      }
+      return condition;
+    });
   }
 
 

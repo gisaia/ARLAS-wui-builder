@@ -938,5 +938,10 @@
 	"Manage data group": "Manage data group",
 	"Manage visualisation": "Manage visualisation",
 	"Create a visualisation": "Create a visualisation",
-	"And": "And"
+	"And": "And",
+    "Resultlist settings": "Settings",
+    "Resultlist grid": "Grid",
+	"Visualisation description": "Visualisation description",
+	"Visualisation name": "Visualisation name",
+	"Conditions will be evaluated in order" : "Conditions will be evaluated in order. The first condition to be true will be used for visualization."
 }

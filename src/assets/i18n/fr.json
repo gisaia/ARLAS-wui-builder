@@ -937,5 +937,10 @@
 	"Manage data group": "Gérer le groupe de données",
 	"Manage visualisation": "Gérer la visualisation",
 	"Create a visualisation": "Créer une visualisation",
-	"And": "Et"
+	"And": "Et",
+    "Resultlist settings": "Configurations",
+    "Resultlist grid": "Grille",
+    "Visualisation description": "Description de la visualisation",
+    "Visualisation name": "Nom de la visualisation",
+	"Conditions will be evaluated in order" : "Les conditions sont évaluées dans l'ordre. La première condition à être vraie sera utilisée pour la visualisation."
 }

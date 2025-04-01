@@ -24,7 +24,7 @@ import { FormArray } from '@angular/forms';
 import { ConfigFormGroup } from '@shared-models/config-form';
 
 @Pipe({
-  name: 'OrderConfigFormTabControls',
+  name: 'orderConfigFormTabControls',
   standalone: true
 })
 export class OrderConfigFormTabControlsPipe implements PipeTransform {

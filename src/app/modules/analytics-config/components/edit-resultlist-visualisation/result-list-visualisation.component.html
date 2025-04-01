@@ -1,11 +1,11 @@
 @if (manageViewIsOpened) {
     <arlas-manage-visualisation
-            @openClose
-            [visualisation]="currentVisualisation"
-            [isEdition]="isEdition()"
-            [collectionControlName]="collectionControl.value"
-            (changeValidated)="manageVisualisationValidated($event)"
-            (changeCanceled)="manageVisualisationCanceled($event)"
+        @openClose
+        [visualisation]="currentVisualisation"
+        [isEdition]="isEdition()"
+        [collectionControlName]="collectionControl.value"
+        (changeValidated)="manageVisualisationValidated($event)"
+        (changeCanceled)="manageVisualisationCanceled($event)"
     ></arlas-manage-visualisation>
 } @else {
     <button mat-stroked-button color="primary" (click)="addVisualisation()">

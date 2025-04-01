@@ -101,8 +101,8 @@ export class ManageDataGroupDialogComponent implements OnInit {
 
   public addCondition() {
     const filter = this.resultListFormBuilder
-      .buildVisualisationsDataGroupFilter(this.data.collectionControlName);
-    this.data.dataGroup.customControls.filters.insert(0, filter);
+      .buildVisualisationsDataGroupCondition(this.data.collectionControlName);
+    this.data.dataGroup.customControls.filters.push(filter);
     this.table.renderRows();
   }
 

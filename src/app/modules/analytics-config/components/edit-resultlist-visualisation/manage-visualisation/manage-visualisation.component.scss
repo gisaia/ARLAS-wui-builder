@@ -16,11 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+@import "variables";
 
 :host {
   display: block;
-  font-size: 0.875rem;
-  --ligh-grey: #efefef;
+  font-size: 14px;
+  --light-grey: #efefef;
   ::ng-deep {
     .inputs-description {
       .textarea-form-control mat-form-field {
@@ -41,7 +42,7 @@
     display: flex;
     gap: 6px;
     padding-bottom: 6px;
-    border-bottom: solid 1px var(--ligh-grey);
+    border-bottom: solid 1px var(--light-grey);
     flex: 1 1 auto;
     align-items: center;
   }
@@ -88,7 +89,7 @@
 }
 
 .condition-text {
-  margin: 4px;
+  padding: $xs-spacing;
 }
 
 .drag {
