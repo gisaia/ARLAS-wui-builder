@@ -33,7 +33,7 @@ import { DialogColorTableData, KeywordColor } from '@map-config/components/dialo
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
 import { FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
-import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
 import {
   NUMERIC_OR_DATE_OR_KEYWORD,
@@ -60,6 +60,7 @@ import {
   SelectFormControl, SelectOption, SliderFormControl, SlideToggleFormControl, TextareaFormControl,
   TitleInputFormControl, FieldTemplateControl, ButtonToggleFormControl, TypedSelectFormControl, ConfigFormControl
 } from '@shared-models/config-form';
+import { FilterInputsBuilder } from '@shared-models/filter-input-builder';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { valuesToOptions } from '@utils/tools';
 import { Observable } from 'rxjs';
@@ -824,30 +825,7 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
           resetDependantsOnChange: true,
           dependsOn: () => [this.customControls.filterField],
           onDependencyChange: (control: SelectFormControl) => {
-            this.checkEditState();
-            if (!this.editing) {
-              /** update list of available ops according to field type */
-              if (this.customControls.filterField.value.type === 'KEYWORD') {
-                control.setSyncOptions(this.getKeywordOperatorList());
-              } else if (this.customControls.filterField.value.type === 'BOOLEAN') {
-                control.setSyncOptions(this.getBooleanOperatorList());
-              } else {
-                control.setSyncOptions(this.getNumericalOperatorList());
-              }
-              control.setValue(control.syncOptions[0].value);
-            } else {
-              // if we are editing an existing filter, keep the selected operation.
-              // otherwise there is no way to remember it
-              if ((this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
-                      this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN)) {
-                control.setSyncOptions(this.getKeywordOperatorList());
-              } else if (this.customControls.filterOperation.value === FILTER_OPERATION.IS) {
-                control.setSyncOptions(this.getBooleanOperatorList());
-              } else {
-                control.setSyncOptions(this.getNumericalOperatorList());
-              }
-              control.setValue(this.customControls.filterOperation.value);
-            }
+            FilterInputsBuilder.operationFilter(this, control);
           }
         }
       ),
@@ -874,32 +852,7 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
             resetDependantsOnChange: true,
             dependsOn: () => [this.customControls.filterField],
             onDependencyChange: (control: MultipleSelectFormControl) => {
-              if (!!this.customControls.filterField.value && !!this.customControls.filterField.value.value ) {
-                if (this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
-                                this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN) {
-                  control.setSyncOptions([]);
-                  collectionService.getTermAggregation(
-                    collection,
-                    this.customControls.filterField.value.value)
-                    .then(keywords => {
-                      control.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
-                    });
-                } else {
-                  control.setSyncOptions([]);
-                }
-              } else {
-                control.setSyncOptions([]);
-              }
-              control.markAsUntouched();
-              this.checkEditState();
-              // if we are editing an existing filter, keep the selected items.
-              // otherwise there is no way to remember them
-              if (!this.editing) {
-                control.savedItems = new Set();
-                control.selectedMultipleItems = [];
-              }
-              control.enableIf(this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
-                            this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN);
+              FilterInputsBuilder.keywordsFilter(this, control, collectionService, collection);
             }
           }
         ),
@@ -912,8 +865,7 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
             resetDependantsOnChange: true,
             dependsOn: () => [this.customControls.filterOperation, this.customControls.filterField],
             onDependencyChange: (control: InputFormControl) => {
-              control.enableIf(this.customControls.filterOperation.value === FILTER_OPERATION.EQUAL ||
-                            this.customControls.filterOperation.value === FILTER_OPERATION.NOT_EQUAL);
+              FilterInputsBuilder.numberFilter(this, control);
             }
           }
         ),
@@ -928,17 +880,7 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
               this.customControls.filterOperation, this.customControls.filterField
             ],
             onDependencyChange: (control, isLoading) => {
-              const doRangeEnable = this.customControls.filterOperation.value === FILTER_OPERATION.RANGE ||
-                            this.customControls.filterOperation.value === FILTER_OPERATION.OUT_RANGE;
-              control.enableIf(doRangeEnable);
-              if (doRangeEnable && !isLoading) {
-                collectionService.getComputationMetric(
-                  collection,
-                  this.customControls.filterField.value.value,
-                  METRIC_TYPES.MIN)
-                  .then(min =>
-                    control.setValue(min));
-              }
+              FilterInputsBuilder.minRangeFilter(this, control, isLoading, collectionService, collection);
             }
           },
           () => this.customControls.filterValues.filterMaxRangeValues,
@@ -955,17 +897,7 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
               this.customControls.filterOperation, this.customControls.filterField
             ],
             onDependencyChange: (control, isLoading) => {
-              const doRangeEnable = this.customControls.filterOperation.value === FILTER_OPERATION.RANGE ||
-                            this.customControls.filterOperation.value === FILTER_OPERATION.OUT_RANGE;
-              control.enableIf(doRangeEnable);
-              if (doRangeEnable && !isLoading) {
-                collectionService.getComputationMetric(
-                  collection,
-                  this.customControls.filterField.value.value,
-                  METRIC_TYPES.MAX)
-                  .then(max =>
-                    control.setValue(max));
-              }
+              FilterInputsBuilder.maxRangeFilter(this, control, isLoading, collectionService, collection);
             }
           },
           undefined,
@@ -986,7 +918,7 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
             resetDependantsOnChange: true,
             dependsOn: () => [this.customControls.filterField],
             onDependencyChange: (control: ButtonToggleFormControl) => {
-              control.enableIf(this.customControls.filterOperation.value === FILTER_OPERATION.IS);
+              FilterInputsBuilder.booleanFilter(this, control);
             }
           })
       }),
@@ -998,40 +930,6 @@ export class ResultListVisualisationsDataGroupFilter extends FormGroup {
         }
       ),
     });
-  }
-
-  protected getBooleanOperatorList(){
-    return [
-      { value: FILTER_OPERATION.IS, label: FILTER_OPERATION.IS }
-    ];
-  }
-
-  protected getKeywordOperatorList(){
-    return[
-      { value: FILTER_OPERATION.IN, label: FILTER_OPERATION.IN },
-      { value: FILTER_OPERATION.NOT_IN, label: FILTER_OPERATION.NOT_IN }
-    ];
-  }
-
-  protected getNumericalOperatorList(){
-    return [
-      { value: FILTER_OPERATION.EQUAL, label: FILTER_OPERATION.EQUAL },
-      { value: FILTER_OPERATION.NOT_EQUAL, label: FILTER_OPERATION.NOT_EQUAL },
-      { value: FILTER_OPERATION.RANGE, label: FILTER_OPERATION.RANGE },
-      { value: FILTER_OPERATION.OUT_RANGE, label: FILTER_OPERATION.OUT_RANGE },
-    ];
-  }
-
-  protected checkEditState(){
-    if (this.editionInfo) {
-      // if we change the field/or operation, we are no longer in editing an existing filter but creating a new one
-      // we quit edition mode
-      if (this.customControls.filterField.value.value !== this.editionInfo.field ||
-              this.customControls.filterOperation.value !== this.editionInfo.op
-      ) {
-        this.editing = false;
-      }
-    }
   }
 
   public syncEditState(){
