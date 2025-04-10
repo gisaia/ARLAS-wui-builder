@@ -151,7 +151,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
           if (this.contentTypeValue) {
             this.contentTypeValue.push(result);
           }
-          const finalResult = this.contentTypeValue ? this.contentTypeValue : [result];
+          const finalResult = this.contentTypeValue ?? [result];
           this.formGroup.controls.contentType.setValue(finalResult);
           this.editWidget(this.contentTypeValue.length - 1, this.main.getMainCollection(), true);
         }
@@ -167,7 +167,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
             if (this.contentTypeValue) {
               this.contentTypeValue.push(type);
             }
-            const finalResult = this.contentTypeValue ? this.contentTypeValue : [type];
+            const finalResult = this.contentTypeValue ?? [type];
             this.formGroup.controls.contentType.setValue(finalResult);
             const widgetFg = this.analyticsImportService.importWidget(r, result[1])[0];
             widgetFg.patchValue(widgetFg.value);
@@ -196,7 +196,10 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
   public editWidget(widgetIndex: number, collection: string, newWidget?: boolean) {
     const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup<{widgetType: FormControl; widgetData: FormControl;}>;
-    const oldWidgetContributorId = ConfigExportHelper.getContributorId(widgetFg.value.widgetData, widgetFg.value.widgetType);
+    let oldWidgetContributorId: string;
+    if(!newWidget){
+      oldWidgetContributorId = ConfigExportHelper.getContributorId(widgetFg.value.widgetData, widgetFg.value.widgetType);
+    }
 
     this.afterClosedEditSub = this.dialog.open(EditWidgetDialogComponent, {
       data: {
@@ -214,7 +217,8 @@ export class EditGroupComponent implements OnInit, OnDestroy {
             this.formGroup.controls.icon.value
           );
           // If the new id of the contributor is different from the old one and it had a collaboration, remove it
-          if (contrib.identifier !== oldWidgetContributorId && this.collaborativeSearchService.collaborations.has(oldWidgetContributorId)) {
+          if (oldWidgetContributorId && contrib.identifier !== oldWidgetContributorId &&
+              this.collaborativeSearchService.collaborations.has(oldWidgetContributorId)) {
             this.collaborativeSearchService.collaborationBus.next({
               id: oldWidgetContributorId,
               operation: OperationEnum.remove,
