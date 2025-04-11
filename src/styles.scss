@@ -283,3 +283,8 @@ div.jsoneditor-value.jsoneditor-invalid {
     }
   }
 }
+
+// Overloads cdk class. Default behaviour creates a scroll when we open a dialog.
+.cdk-global-scrollblock{
+  overflow-y: auto;
+}
