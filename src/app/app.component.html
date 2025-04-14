@@ -14,7 +14,7 @@
   </arlas-top-menu>
 </div>
 <mat-sidenav-container [@.disabled]="true" class="container" autosize>
-  <mat-sidenav [opened]="displayLeftMenu"  #drawer class="sidenav" mode="side">
+  <mat-sidenav [opened]="displayLeftMenu"  #drawer class="sidenav" mode="side" [disableClose]="true">
     <arlas-left-menu></arlas-left-menu>
   </mat-sidenav>
 
