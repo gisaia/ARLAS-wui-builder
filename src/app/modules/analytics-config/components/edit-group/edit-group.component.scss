@@ -126,6 +126,10 @@
     padding: 0 !important;
 }
 
+::ng-deep  .mat-button-toggle .mat-pseudo-checkbox {
+    display: none;
+}
+
 ::ng-deep .ip-button-icon:hover {
     background-color: lightgray;
 }
