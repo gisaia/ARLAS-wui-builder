@@ -112,7 +112,7 @@ export class AddSubtableDialogComponent implements OnInit, OnDestroy {
   private setMetricCollectFieldValues(v: any, control: SelectFormControl) {
     if (v && v !== 'count') {
       control.enable();
-      const filterCallback = (field: CollectionField) => v === Metric.CollectFctEnum.CARDINALITY ?
+      const filterCallback = (field: CollectionField) => v === Metric.CollectFctEnum.CARDINALITY.toString().toLowerCase() ?
         field : NUMERIC_OR_DATE_TYPES.indexOf(field.type) >= 0;
       const sub = this.collectionService.getCollectionFields(this.collection).subscribe(
         fields => {
