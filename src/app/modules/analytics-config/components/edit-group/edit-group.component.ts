@@ -48,7 +48,7 @@ import { WIDGET_TYPE } from './models';
   styleUrls: ['./edit-group-add-widget.component.scss']
 })
 export class AddWidgetDialogComponent {
-  public widgetType: Array<string> = [];
+  public widgetType: string;
 
   public contentTypes: { label: WIDGET_TYPE; icon: string; iconType?: 'svg' | 'icon'; }[] = [
     { label: WIDGET_TYPE.histogram, icon: 'bar_chart', iconType: 'icon' },
@@ -121,7 +121,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.content = this.formGroup.controls.content;
-    this.itemPerLine = this.formGroup.value.itemPerLine;
+    this.itemPerLine = this.formGroup.value.itemPerLine !== null ? this.formGroup.value.itemPerLine : 1 ;
     this.resetWidgetsOnTypeChange();
   }
   /**
