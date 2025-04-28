@@ -144,11 +144,13 @@ git push origin v${VERSION}
 
 echo "==> Generate CHANGELOG"
 docker run --rm -v "$(pwd)":/usr/local/src/your-app gisaia/github-changelog-generator:latest github_changelog_generator \
-  -u gisaia -p ARLAS-wui-builder --token ${GITHUB_CHANGELOG_TOKEN} --no-pr-wo-labels --no-issues-wo-labels --no-unreleased \
+  -u gisaia -p ARLAS-wui-builder --token ${GITHUB_CHANGELOG_TOKEN} --no-pr-wo-labels --no-issues-wo-labels --no-compare-link --no-unreleased \
   --issue-line-labels conf,documentation,ANALYTICS,"LOOK AND FEEL",MAP,SEARCH,SIDE,TIMELINE,WIDGET \
   --exclude-labels type:duplicate,type:question,type:wontfix,type:invalid \
   --bug-labels type:bug --enhancement-labels type:enhancement --breaking-labels type:breaking \
-  --enhancement-label "**New stuff:**" --issues-label "**Miscellaneous:**"
+  --enhancement-label "**New stuff:**" --issues-label "**Miscellaneous:**" \
+  --exclude-tags-regex 'rc|beta' \
+  --since-tag v4.0.0
 
 echo "  -- Remove tag to add generated CHANGELOG"
 git tag -d v${VERSION}
