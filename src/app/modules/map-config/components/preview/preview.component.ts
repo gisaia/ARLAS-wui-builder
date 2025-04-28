@@ -26,7 +26,7 @@ import { ConfigExportHelper } from '@services/main-form-manager/config-export-he
 import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { StartupService, ZONE_PREVIEW } from '@services/startup/startup.service';
-import { FeatureCollection } from '@turf/helpers';
+import { FeatureCollection, Geometry } from '@turf/helpers';
 import { ArlasLayer, ArlasSource } from '@utils/tools';
 import { ArlasMapComponent, ArlasMapFrameworkService } from 'arlas-map';
 import { DataWithLinks } from 'arlas-persistence-api';
@@ -160,12 +160,12 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     this.mapglContributors.forEach(contrib => contrib.changeVisualisation(event));
   }
 
-  public onChangeAoi(event: FeatureCollection<GeoJSON.Geometry>) {
+  public onChangeAoi(event: FeatureCollection<Geometry>) {
     const configDebounceTime = this.configService.getValue('arlas.server.debounceCollaborationTime');
     const debounceDuration = configDebounceTime !== undefined ? configDebounceTime : 750;
     this.mapglContributors.forEach((contrib, i) => {
       setTimeout(() => {
-        contrib.onChangeAoi(event as FeatureCollection);
+        contrib.onChangeAoi(event);
       }, i * (debounceDuration + 100));
     });
   }
