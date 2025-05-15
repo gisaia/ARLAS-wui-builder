@@ -1,21 +1,34 @@
-<arlas-map #map [dataSources]="mapDataSources" [redrawSource]="mapRedrawSources"
-  [defaultBasemapStyle]="mapComponentConfig?.defaultBasemapStyle" [basemapStyles]="mapComponentConfig?.basemapStyles"
-  [margePanForLoad]="mapComponentConfig?.margePanForLoad" [margePanForTest]="mapComponentConfig?.margePanForTest"
-  [initCenter]="mapComponentConfig?.initCenter" [drawData]="$any(mainMapContributor?.geojsondraw)"
-  [initCenter]="mapComponentConfig?.initCenter" [initZoom]="mapComponentConfig?.initZoom"
-  [minZoom]="mapComponentConfig?.minZoom" [maxZoom]="mapComponentConfig?.maxZoom" [displayScale]="true"
-  [maxWidthScale]="mapComponentConfig?.maxWidthScale"
-  [mapLayers]="mapComponentConfig?.mapLayers" [mapSources]="mapComponentConfig?.mapSources" [drawButtonEnabled]="false"
-  [visualisationSetsConfig]="mapComponentConfig?.visualisations_sets" [legendUpdater]="mapLegendUpdater"
-  [visibilityUpdater]="mapVisibilityUpdater" [preserveDrawingBuffer]="true"
-  (visualisations)="changeVisualisation($event)" (onAoiChanged)="onChangeAoi($event)" (onMove)="onMove($event)">
+<arlas-map #map
+           [dataSources]="mapDataSources"
+           [redrawSource]="mapRedrawSources"
+           [defaultBasemapStyle]="mapComponentConfig?.defaultBasemapStyle"
+           [basemapStyles]="mapComponentConfig?.basemapStyles"
+           [margePanForLoad]="mapComponentConfig?.margePanForLoad"
+           [margePanForTest]="mapComponentConfig?.margePanForTest"
+           [initCenter]="mapComponentConfig?.initCenter"
+           [drawData]="$any(mainMapContributor?.geojsondraw)"
+           [initZoom]="mapComponentConfig?.initZoom"
+           [minZoom]="0"
+           [maxZoom]="22"
+           [displayScale]="true"
+           [maxWidthScale]="mapComponentConfig?.maxWidthScale"
+           [mapLayers]="mapComponentConfig?.mapLayers"
+           [mapSources]="mapComponentConfig?.mapSources"
+           [drawButtonEnabled]="false"
+           [visualisationSetsConfig]="mapComponentConfig?.visualisations_sets" [legendUpdater]="mapLegendUpdater"
+           [visibilityUpdater]="mapVisibilityUpdater"
+           [preserveDrawingBuffer]="true"
+           (visualisations)="changeVisualisation($event)"
+           (onAoiChanged)="onChangeAoi($event)"
+           (onMove)="onMove($event)">
 </arlas-map>
 
 <button class="preview" mat-raised-button (click)="savePreview()"
-  [matTooltip]="'Use the map view as a dashboard preview on the ARLAS Hub' | translate" matTooltipPosition="below">
-  {{'Save preview' | translate}}
+        [matTooltip]="'Use the map view as a dashboard preview on the ARLAS Hub' | translate"
+        matTooltipPosition="below">
+    {{ 'Save preview' | translate }}
 </button>
 
 <div class="basemaps" matTooltipPosition="left" matTooltip="{{'Basemaps' | translate}}">
-  <mat-icon style="width:22px;height:22px" (click)="mapComponent.showBasemapSwitcher()">public</mat-icon>
+    <mat-icon style="width:22px;height:22px" (click)="mapComponent.showBasemapSwitcher()">public</mat-icon>
 </div>
