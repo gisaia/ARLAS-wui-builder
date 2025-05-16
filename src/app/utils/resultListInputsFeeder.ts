@@ -149,7 +149,7 @@ export class ResultListInputsFeeder {
       {
         value: this.options.contributor.fieldsConfiguration.idFieldName,
         control: this.dataStep.idFieldName
-      },
+      }
     ]);
   }
 
@@ -251,8 +251,7 @@ export class ResultListInputsFeeder {
           ]);
           detail.customControls.fields.push(field);
         });
-
-        this.options.widgetData.customControls.dataStep.details.push(detail);
+        this.dataStep.details.push(detail);
       });
     return this;
   }
