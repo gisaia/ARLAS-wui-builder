@@ -21,10 +21,17 @@ import { FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { ImportLayerDialogComponent } from '@map-config/components/import-layer-dialog/import-layer-dialog.component';
+import {
+  MapGlobalFormBuilderService
+} from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { MapImportService } from '@map-config/services/map-import/map-import.service';
-import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import {
+  MapLayerFormBuilderService,
+  MapLayerFormGroup
+} from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import {
   MapVisualisationFormBuilderService
 } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
@@ -38,14 +45,17 @@ import { StartupService } from '@services/startup/startup.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { camelize } from '@utils/tools';
+import { LayerMetadata, LegendService, VisualisationSetConfig } from 'arlas-map';
 import { ArlasColorService } from 'arlas-web-components';
-import { LayerMetadata, LegendComponent, LegendService, VisualisationSetConfig } from 'arlas-map';
 import { MapContributor } from 'arlas-web-contributors';
-import { ArlasCollaborativesearchService, ArlasConfigService, ArlasSettingsService, ContributorBuilder } from 'arlas-wui-toolkit';
+import {
+  ArlasCollaborativesearchService,
+  ArlasConfigService,
+  ArlasSettingsService,
+  ContributorBuilder
+} from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { PreviewComponent } from '../preview/preview.component';
-import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
-import { marker } from '@colsen1991/ngx-translate-extract-marker';
 
 export interface Layer {
   id: string;
