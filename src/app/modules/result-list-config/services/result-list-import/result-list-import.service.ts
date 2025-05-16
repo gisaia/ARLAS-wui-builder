@@ -82,6 +82,7 @@ export class ResultListImportService {
       )
       .importResultListQuickLook(this.resultlistFormBuilder, this.colorService, this.collectionService)
       .importContributorColumns(this.resultlistFormBuilder)
+      .importResultListContributorDetail(this.resultlistFormBuilder)
       .importUnmanagedFields();
     return widgetData;
   }
