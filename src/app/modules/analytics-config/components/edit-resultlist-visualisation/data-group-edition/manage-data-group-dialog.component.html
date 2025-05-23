@@ -1,18 +1,20 @@
 @if (data.dataGroup; as dataGroup) {
     <div class="data-group__container">
         <div class="data-group__header">
-            <h3 class="title">{{ dataGroup.customControls.name.value | titlecase }}</h3>
+            <h3 class="title">{{ dataGroup.customControls.name.value }}</h3>
             <span class="sub-title">{{ 'Manage data group' | translate }}</span>
         </div>
-
         <div class="data-group__inputs">
-            <arlas-config-form-control [showLabel]="true"
-                                       [control]="dataGroup.controls.name"></arlas-config-form-control>
-            <arlas-config-form-control [showLabel]="true"
-                                       [control]="dataGroup.controls.protocol"></arlas-config-form-control>
-            <arlas-config-form-control [showLabel]="true"
-                                       [control]="dataGroup.controls.visualisationUrl"></arlas-config-form-control>
+        <arlas-config-form-control class="flex-1 inputs-100" [showLabel]="true"
+                                   [control]="dataGroup.controls.visualisationUrl">
+        </arlas-config-form-control>
         </div>
+        <div class="data-group__inputs">
+            <arlas-config-form-control class="flex-1 inputs-100" [showLabel]="true"
+                                       [control]="dataGroup.controls.name"></arlas-config-form-control>
+            <arlas-config-form-control class="flex-1 inputs-100" [showLabel]="true"
+                                       [control]="dataGroup.controls.protocol"></arlas-config-form-control>
+       </div>
 
         <div class="data-group__button-wrapper">
             <button mat-stroked-button color="tertiary" class="data-group__button"
@@ -21,7 +23,8 @@
                 {{ 'Add a condition' | translate }}
             </button>
 
-            <mat-icon [matTooltip]="'Conditions will be evaluated in order' |translate">info</mat-icon>
+            <mat-icon [matTooltip]="'Conditions will be evaluated in order' |translate"
+                      [matTooltipPosition]="'right'">info</mat-icon>
         </div>
 
 

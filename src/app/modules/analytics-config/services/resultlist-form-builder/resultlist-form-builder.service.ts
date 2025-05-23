@@ -24,7 +24,7 @@ import {
 } from '@analytics-config/components/edit-resultlist-visualisation/result-list-visualisation.component';
 import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
 import { Injectable } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, MinLengthValidator, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
@@ -32,14 +32,11 @@ import { DialogColorTableComponent } from '@map-config/components/dialog-color-t
 import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
-import { FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { CollectionField } from '@services/collection-service/models';
 import {
   NUMERIC_OR_DATE_OR_KEYWORD,
   NUMERIC_OR_DATE_OR_TEXT_TYPES,
   TEXT_OR_KEYWORD,
-    toNumericOrDateOrKeywordOrBooleanObs,
+  toNumericOrDateOrKeywordOrBooleanObs,
   toNumericOrDateOrKeywordOrTextObs,
   toOptionsObs
 } from '@services/collection-service/tools';
@@ -49,33 +46,29 @@ import { ConfigFormGroupComponent } from '@shared-components/config-form-group/c
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
   ButtonFormControl,
-    ButtonToggleFormControl,
+  ButtonToggleFormControl,
   ComponentFormControl,
+  ConfigFormControl,
   ConfigFormGroup,
-    ConfigFormControl,
   FieldTemplateControl,
   HiddenFormControl,
   InputFormControl,
   MultipleSelectFormControl,
-  SelectFormControl, SelectOption, SliderFormControl, SlideToggleFormControl, TextareaFormControl,
-  TitleInputFormControl, FieldTemplateControl, ButtonToggleFormControl, TypedSelectFormControl, ConfigFormControl
+  SelectFormControl,
+  SelectOption,
+  SliderFormControl,
+  SlideToggleFormControl,
+  TextareaFormControl,
+  TitleInputFormControl,
+  TypedSelectFormControl
 } from '@shared-models/config-form';
-import { FilterInputsBuilder } from '@shared-models/filter-input-builder';
+import { GeoFilterInputsBuilder } from '@shared-models/filter-input-builder';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
-import { valuesToOptions } from '@utils/tools';
+import { Expression } from 'arlas-api';
+import { ArlasColorService } from 'arlas-web-components';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
-import { ArlasColorService } from 'arlas-web-components';
-import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
-import { CollectionField } from '@services/collection-service/models';
-import { EditResultlistQuicklookComponent } from '@analytics-config/components/edit-resultlist-quicklook/edit-resultlist-quicklook.component';
-import { Router } from '@angular/router';
-import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-import { CollectionReferenceDescriptionProperty } from 'arlas-api';
-import {
-  EditResultlistVisualisationComponent
-} from '@analytics-config/components/edit-resultlist-visualisation/edit-resultlist-visualisation.component';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
   public tabsOrder: string[] =  ['dataStep', 'gridStep', 'visualisationStep','sactionStep', 'settingsStep'];
@@ -750,7 +743,7 @@ export class ResultListVisualisationsFormGroup extends FormGroup {
           optional: true,
         }
       ),
-      dataGroups: new FormArray<ResultListVisualisationsDataGroup>([])
+      dataGroups: new FormArray<ResultListVisualisationsDataGroup>([], [Validators.required, Validators.minLength(1)])
     });
   }
 
@@ -803,10 +796,10 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
 
 export class ResultListVisualisationsDataGroupCondition extends FormGroup {
   public editing = false;
-  public editionInfo: { field: string; op: FILTER_OPERATION; };
+  public editionInfo: { field: string; op: Expression.OpEnum; };
   public constructor(
     collectionFields: Observable<Array<CollectionField>>,
-    filterOperations: Array<FILTER_OPERATION>,
+    filterOperations: Array<Expression.OpEnum>,
     collectionService: CollectionService,
     collection: string) {
     super({
@@ -825,12 +818,15 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
         marker('operation'),
         marker('filter operation description'),
         false,
-        valuesToOptions(filterOperations),
+        filterOperations.map(op => ({
+          label: op,
+          value: op
+        })),
         {
           resetDependantsOnChange: true,
           dependsOn: () => [this.customControls.filterField],
           onDependencyChange: (control: SelectFormControl) => {
-            FilterInputsBuilder.operationFilter(this, control);
+            GeoFilterInputsBuilder.operationFilter(this, control);
           }
         }
       ),
@@ -857,7 +853,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
             resetDependantsOnChange: true,
             dependsOn: () => [this.customControls.filterField],
             onDependencyChange: (control: MultipleSelectFormControl) => {
-              FilterInputsBuilder.keywordsFilter(this, control, collectionService, collection);
+              GeoFilterInputsBuilder.keywordsFilter(this, control, collectionService, collection);
             }
           }
         ),
@@ -870,7 +866,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
             resetDependantsOnChange: true,
             dependsOn: () => [this.customControls.filterOperation, this.customControls.filterField],
             onDependencyChange: (control: InputFormControl) => {
-              FilterInputsBuilder.numberFilter(this, control);
+              GeoFilterInputsBuilder.numberFilter(this, control);
             }
           }
         ),
@@ -885,7 +881,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
               this.customControls.filterOperation, this.customControls.filterField
             ],
             onDependencyChange: (control, isLoading) => {
-              FilterInputsBuilder.minRangeFilter(this, control, isLoading, collectionService, collection);
+              GeoFilterInputsBuilder.minRangeFilter(this, control, isLoading, collectionService, collection);
             }
           },
           () => this.customControls.filterValues.filterMaxRangeValues,
@@ -902,7 +898,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
               this.customControls.filterOperation, this.customControls.filterField
             ],
             onDependencyChange: (control, isLoading) => {
-              FilterInputsBuilder.maxRangeFilter(this, control, isLoading, collectionService, collection);
+              GeoFilterInputsBuilder.maxRangeFilter(this, control, isLoading, collectionService, collection);
             }
           },
           undefined,
@@ -923,7 +919,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
             resetDependantsOnChange: true,
             dependsOn: () => [this.customControls.filterField],
             onDependencyChange: (control: ButtonToggleFormControl) => {
-              FilterInputsBuilder.booleanFilter(this, control);
+              GeoFilterInputsBuilder.booleanFilter(this, control);
             }
           })
       }),
@@ -1057,8 +1053,12 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
 
   public buildVisualisationsDataGroupCondition(collection: string) {
     const collectionFields = this.collectionService.getCollectionFields(collection);
-    const operators = [FILTER_OPERATION.IN, FILTER_OPERATION.RANGE, FILTER_OPERATION.EQUAL, FILTER_OPERATION.NOT_IN,
-      FILTER_OPERATION.IS, FILTER_OPERATION.OUT_RANGE, FILTER_OPERATION.NOT_EQUAL];
+    const operators = [ Expression.OpEnum.Range,
+      Expression.OpEnum.Eq, Expression.OpEnum.Like,
+      Expression.OpEnum.Lte,  Expression.OpEnum.Lt,
+      Expression.OpEnum.Gte,  Expression.OpEnum.Gt,
+      Expression.OpEnum.Ne
+    ];
 
     const control = new ResultListVisualisationsDataGroupCondition(collectionFields,
       operators, this.collectionService, collection);

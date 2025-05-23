@@ -41,6 +41,7 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { SharedModule } from '@shared/shared.module';
+import { Expression } from 'arlas-api';
 
 interface DataGroupDialogData {
     edit: boolean;
@@ -113,7 +114,7 @@ export class ManageDataGroupDialogComponent implements OnInit {
      */
   public updateList(event: { prefix: string; }, index: number) {
     const control = this.data.dataGroup.customControls.filters.at(index).customControls;
-    if (control.filterOperation.value === 'IN') {
+    if (control.filterOperation.value ===  Expression.OpEnum.Like) {
       control.filterValues.filterInValues.setSyncOptions([]);
       this.collectionService.getTermAggregation(
         this.data.collectionControlName,
