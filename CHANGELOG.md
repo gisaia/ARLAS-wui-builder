@@ -1,5 +1,13 @@
 # Change Log
 
+## [v27.0.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.3) (2025-05-23)
+
+**Fixed bugs:**
+
+- "Save preview" is not working [\#1077](https://github.com/gisaia/ARLAS-wui-builder/issues/1077) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Zoom in Map Preview not working [\#1076](https://github.com/gisaia/ARLAS-wui-builder/issues/1076) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Details configuration in result list is empty for existing configuration [\#1075](https://github.com/gisaia/ARLAS-wui-builder/issues/1075)
+
 ## [v27.0.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.2) (2025-04-28)
 
 **Fixed bugs:**
