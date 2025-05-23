@@ -24,6 +24,13 @@
   font-size: 14px;
   --light-grey: #efefef;
   height: 100%;
+  ::ng-deep {
+    .inputs-url {
+      .mat-mdc-form-field {
+        width: 40%!important;
+      }
+    }
+  }
 }
 
 .data-group{

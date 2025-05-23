@@ -30,8 +30,6 @@ import { Router } from '@angular/router';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { CollectionField } from '@services/collection-service/models';
 import { FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
@@ -39,7 +37,7 @@ import {
   NUMERIC_OR_DATE_OR_KEYWORD,
   NUMERIC_OR_DATE_OR_TEXT_TYPES,
   TEXT_OR_KEYWORD,
-    toNumericOrDateOrKeywordOrBooleanObs,
+  toNumericOrDateOrKeywordOrBooleanObs,
   toNumericOrDateOrKeywordOrTextObs,
   toOptionsObs
 } from '@services/collection-service/tools';
@@ -49,33 +47,29 @@ import { ConfigFormGroupComponent } from '@shared-components/config-form-group/c
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
   ButtonFormControl,
-    ButtonToggleFormControl,
+  ButtonToggleFormControl,
   ComponentFormControl,
+  ConfigFormControl,
   ConfigFormGroup,
-    ConfigFormControl,
   FieldTemplateControl,
   HiddenFormControl,
   InputFormControl,
   MultipleSelectFormControl,
-  SelectFormControl, SelectOption, SliderFormControl, SlideToggleFormControl, TextareaFormControl,
-  TitleInputFormControl, FieldTemplateControl, ButtonToggleFormControl, TypedSelectFormControl, ConfigFormControl
+  SelectFormControl,
+  SelectOption,
+  SliderFormControl,
+  SlideToggleFormControl,
+  TextareaFormControl,
+  TitleInputFormControl,
+  TypedSelectFormControl
 } from '@shared-models/config-form';
 import { FilterInputsBuilder } from '@shared-models/filter-input-builder';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { valuesToOptions } from '@utils/tools';
+import { ArlasColorService } from 'arlas-web-components';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
-import { ArlasColorService } from 'arlas-web-components';
-import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
-import { CollectionField } from '@services/collection-service/models';
-import { EditResultlistQuicklookComponent } from '@analytics-config/components/edit-resultlist-quicklook/edit-resultlist-quicklook.component';
-import { Router } from '@angular/router';
-import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-import { CollectionReferenceDescriptionProperty } from 'arlas-api';
-import {
-  EditResultlistVisualisationComponent
-} from '@analytics-config/components/edit-resultlist-visualisation/edit-resultlist-visualisation.component';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
   public tabsOrder: string[] =  ['dataStep', 'gridStep', 'visualisationStep','sactionStep', 'settingsStep'];

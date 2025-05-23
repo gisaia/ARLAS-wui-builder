@@ -29,7 +29,8 @@ import { Component, inject, input, output, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
-import { TranslateModule } from '@ngx-translate/core';
+import { ConfirmDialogComponent } from '@components/confirm-dialog/confirm-dialog.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedModule } from '@shared/shared.module';
 import { filter, first } from 'rxjs';
 
@@ -52,6 +53,7 @@ export class ManageVisualisationComponent {
   protected changeCanceled = output<boolean>();
   protected dialog = inject(MatDialog);
   protected resultListFormBuilderService = inject(ResultlistFormBuilderService);
+  protected translateService = inject(TranslateService);
   protected displayedColumns = ['drag', 'dataGroup', 'protocol', 'visualisationUrl', 'conditions', 'actions'];
   public dragDisabled = true;
   @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
@@ -64,7 +66,25 @@ export class ManageVisualisationComponent {
     this.changeValidated.emit(true);
   }
   public cancelVisualisation(){
-    this.changeCanceled.emit(true);
+    if(this.visualisation().dirty) {
+      const confirm = this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          message: 'Your data has been modified do you want to leave ?'
+        }
+      });
+
+      confirm
+        .afterClosed()
+        .pipe(
+          first(),
+          filter((response: boolean) => response)
+        )
+        .subscribe( response => {
+          this.changeCanceled.emit(response);
+        });
+    } else {
+      this.changeCanceled.emit(true);
+    }
   }
 
   public dropItemFamily(event: CdkDragDrop<any[]>){

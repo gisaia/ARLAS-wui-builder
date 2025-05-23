@@ -4,7 +4,7 @@
             <mat-icon>chevron_left</mat-icon>
         </button>
         <div class="manage-visualisation__header">
-            <h3 class="title">{{ visualisation()?.customControls.name.value | titlecase }}</h3>
+            <h3 class="title">{{ visualisation()?.customControls.name.value }}</h3>
             <span class="sub-title">
                 @if (isEdition()) {
                     {{ 'Manage visualisation' | translate }}
