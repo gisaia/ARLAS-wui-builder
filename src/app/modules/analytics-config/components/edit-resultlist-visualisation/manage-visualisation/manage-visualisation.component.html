@@ -4,7 +4,7 @@
             <mat-icon>chevron_left</mat-icon>
         </button>
         <div class="manage-visualisation__header">
-            <h3 class="title">{{ visualisation()?.customControls.name.value | titlecase }}</h3>
+            <h3 class="title">{{ visualisation()?.customControls.name.value }}</h3>
             <span class="sub-title">
                 @if (isEdition()) {
                     {{ 'Manage visualisation' | translate }}
@@ -65,13 +65,13 @@
             <th mat-header-cell *matHeaderCellDef>{{ 'Condition' }}</th>
             <td mat-cell *matCellDef="let element">
                 <ul class="manage-visualisation__condtions">
-                    @for (filter of element.value.filters; track $index; let last = $last) {
-                        <li>
+                    @for (filter of element.value.filters; track $index; let last = $last; let i = $index) {
+                        <li class="list-no-bullet">
                             <span class="condition-text">{{ filter.filterField.value | translate }}</span>
                             <span class="condition-text">{{ filter.filterOperation | translate }}</span>
                             <span *ngTemplateOutlet="conditions;context:
-                        {operation: filter.filterOperation, input: filter.filterValues}"></span>
-                            <span class="condition-text" [class.not-display]="last">{{ 'And' | translate | lowercase}}</span>
+                        {operation: filter.filterOperation, input: filter.filterValues, type:  filter.filterField.type}"></span>
+                            <span class="condition-text" [class.not-display]="last">{{'&'}}</span>
                         </li>
                     }
                 </ul>
@@ -112,15 +112,15 @@
 </div>
 
 
-<ng-template #conditions let-operation="operation" let-input="input">
+<ng-template #conditions let-operation="operation" let-input="input" let-type="type">
     <span class="condition-text">
-            <ng-container class="in-values-input" *ngIf="operation === 'IN' || operation === 'NOT_IN'">
+            <ng-container class="in-values-input" *ngIf="operation === 'like'">
         ( <span *ngFor="let value of input.filterInValues"> {{ value.value }}</span> )
     </ng-container>
     <ng-container
-            *ngIf="operation === 'EQUAL' || operation === 'NOT_EQUAL'">{{ input?.filterEqualValues }}</ng-container>
-    <ng-container *ngIf="operation === 'RANGE' || operation === 'OUT_RANGE'">[{{ input?.filterMinRangeValues }}
+            *ngIf="(operation === 'eq' || operation === 'ne') && type !== 'BOOLEAN'">{{ input?.filterEqualValues }}</ng-container>
+    <ng-container *ngIf="operation === 'range'">[{{ input?.filterMinRangeValues }}
         , {{ input?.filterMaxRangeValues }}] </ng-container>
-    <ng-container *ngIf="operation === 'IS'">{{ input?.filterBoolean.toString() | translate }} </ng-container>
+    <ng-container *ngIf="operation === 'eq' && type === 'BOOLEAN'">{{ input?.filterBoolean.toString() | translate }} </ng-container>
     </span>
 </ng-template>

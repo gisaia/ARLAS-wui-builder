@@ -25,11 +25,12 @@ import {
   ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, inject, input, output, ViewChild } from '@angular/core';
+import { Component, computed, inject, input, OnInit, output, signal, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
-import { TranslateModule } from '@ngx-translate/core';
+import { ConfirmDialogComponent } from '@components/confirm-dialog/confirm-dialog.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SharedModule } from '@shared/shared.module';
 import { filter, first } from 'rxjs';
 
@@ -64,7 +65,25 @@ export class ManageVisualisationComponent {
     this.changeValidated.emit(true);
   }
   public cancelVisualisation(){
-    this.changeCanceled.emit(true);
+    if(this.visualisation().dirty && !this.isEdition()) {
+      const confirm = this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          message: 'Your data has been modified do you want to leave ?'
+        }
+      });
+
+      confirm
+        .afterClosed()
+        .pipe(
+          first(),
+          filter((response: boolean) => response)
+        )
+        .subscribe( response => {
+          this.changeCanceled.emit(response);
+        });
+    } else {
+      this.changeCanceled.emit(true);
+    }
   }
 
   public dropItemFamily(event: CdkDragDrop<any[]>){
@@ -89,6 +108,7 @@ export class ManageVisualisationComponent {
       {
         width:'50vw',
         height: '90vh',
+        disableClose: true,
         data: {
           edit,
           dataGroup,

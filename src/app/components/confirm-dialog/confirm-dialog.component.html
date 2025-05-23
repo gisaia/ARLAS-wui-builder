@@ -1,0 +1,6 @@
+<mat-dialog-content>{{dialogData?.message  | translate}}</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>{{'No' | translate}}</button>
+    <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+    <button mat-button [mat-dialog-close]="true">{{'Yes' | translate}}</button>
+</mat-dialog-actions>
