@@ -134,7 +134,7 @@ npm --no-git-tag-version version ${VERSION}
 git add package.json
 
 echo "==> Build (the artifact will be stored in the 'dist' directory)"
-npm install
+npm install --ignore-scripts && npm run postinstall
 npm run lint
 npm run build
 
