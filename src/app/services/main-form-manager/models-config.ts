@@ -17,12 +17,13 @@
  * under the License.
  */
 
+import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
+import { FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
 import { Aggregation } from 'arlas-api';
-import { VisualisationSetConfig, BasemapStyle } from 'arlas-map';
+import { BasemapStyle, VisualisationSetConfig } from 'arlas-map';
 import { FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
 import { AnalyticsTabs, ZoomToDataStrategy } from 'arlas-wui-toolkit';
 import { Layer } from './models-map-config';
-import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 
 export const JSONPATH_COUNT = '$.count';
 export const JSONPATH_METRIC = '$.metrics[0].value';
@@ -307,10 +308,30 @@ export interface AnalyticComponentInputConfig {
 }
 
 export interface AnalyticComponentResultListInputConfig extends AnalyticComponentInputConfig {
+  visualisationsList?: VisualisationListInputConfig[];
   options?: AnalyticComponentResultListInputOptions;
   detailWidth?: number;
   visualisationLink?: string;
   downloadLink?: string;
+}
+
+export interface VisualisationListInputConfig {
+  description: string;
+  name: string;
+  dataGroups: DataGroupInputConfig[];
+}
+
+export interface DataGroupInputConfig {
+  name: string;
+  protocol: string;
+  visualisationUrl: string;
+  filters: DataGroupInputCondition[];
+}
+
+export interface DataGroupInputCondition {
+  field: any;
+  op: FILTER_OPERATION;
+  value: string | number | string[] | boolean;
 }
 
 export interface AnalyticComponentResultListInputOptions {
