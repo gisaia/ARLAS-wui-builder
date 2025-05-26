@@ -16,7 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
+import { Expression } from 'arlas-api';
+
+export type ArlasApiFilter = keyof typeof Expression.OpEnum;
+export const eqArlasApiFilter: ArlasApiFilter  = 'Eq';
+export const neArlasApiFilter: ArlasApiFilter  = 'Ne';
+export const gteArlasApiFilter: ArlasApiFilter  = 'Gte';
+export const gtArlasApiFilter: ArlasApiFilter  = 'Gt';
+export const ltArlasApiFilter: ArlasApiFilter  = 'Lt';
+export const lteArlasApiFilter: ArlasApiFilter  = 'Lte';
+export const likeArlasApiFilter: ArlasApiFilter  = 'Like';
+export const rangeArlasApiFilter: ArlasApiFilter  = 'Range';
 
 export interface ResultListVisualisationFormWidget {
     'name': string;
@@ -33,8 +43,8 @@ export interface ResultListVisualisationDataGroupFormWidget {
 }
 
 export  interface ResultListVisualisationConditionFormWidget {
-    filterField: {value: string;};
-    filterOperation: FILTER_OPERATION ;
+    filterField: {value: string;type: string;};
+    filterOperation: ArlasApiFilter ;
     filterValues: {
         filterInValues: any[];
         filterEqualValues: number;

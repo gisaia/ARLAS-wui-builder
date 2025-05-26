@@ -96,6 +96,13 @@ export function toNumericOrDateOrKeywordOrBooleanObs(collectionFieldsObs: Observ
         || f.type === typeEnum.BOOLEAN))));
 }
 
+export function toNumericOrKeywordOrBooleanObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
+  return toOptionsObs(collectionFieldsObs.pipe(map(
+    fields => fields
+      .filter(f => f.type === typeEnum.KEYWORD || NUMERIC_TYPES.indexOf(f.type) >= 0
+              || f.type === typeEnum.BOOLEAN))));
+}
+
 export function toNumericOrDateOrKeywordOrTextObs(collectionFieldsObs: Observable<Array<CollectionField>>) {
   return toOptionsObs(collectionFieldsObs.pipe(map(
     fields => fields

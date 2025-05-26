@@ -68,9 +68,9 @@
                     @for (filter of element.value.filters; track $index; let last = $last; let i = $index) {
                         <li class="list-no-bullet">
                             <span class="condition-text">{{ filter.filterField.value | translate }}</span>
-                            <span class="condition-text">{{ filter.filterOperation | translate }}</span>
+                            <span class="condition-text">{{ filter.filterOperation |lowercase | translate }}</span>
                             <span *ngTemplateOutlet="conditions;context:
-                        {operation: filter.filterOperation, input: filter.filterValues, type:  filter.filterField.type}"></span>
+                        {operation: filter.filterOperation | lowercase, input: filter.filterValues, type:  filter.filterField.type}"></span>
                             <span class="condition-text" [class.not-display]="last">{{'&'}}</span>
                         </li>
                     }
@@ -118,7 +118,7 @@
         ( <span *ngFor="let value of input.filterInValues"> {{ value.value }}</span> )
     </ng-container>
     <ng-container
-            *ngIf="(operation === 'eq' || operation === 'ne') && type !== 'BOOLEAN'">{{ input?.filterEqualValues }}</ng-container>
+            *ngIf=" type !== 'BOOLEAN'">{{ input?.filterEqualValues }}</ng-container>
     <ng-container *ngIf="operation === 'range'">[{{ input?.filterMinRangeValues }}
         , {{ input?.filterMaxRangeValues }}] </ng-container>
     <ng-container *ngIf="operation === 'eq' && type === 'BOOLEAN'">{{ input?.filterBoolean.toString() | translate }} </ng-container>
