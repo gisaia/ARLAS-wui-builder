@@ -17,6 +17,7 @@
  * under the License.
  */
 import { Component, ViewChild, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { LandingPageComponent } from '@components/landing-page/landing-page.component';
 import { INGXLoggerMetadata, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
 import { IconService } from '@services/icon-service/icon.service';
@@ -42,13 +43,14 @@ export class AppComponent implements OnInit {
 
   public constructor(
     private readonly logger: NGXLogger,
+    private snackbar: MatSnackBar,
     private readonly iconService: IconService,
     private readonly titleService: Title,
     private readonly arlasSettingsService: ArlasSettingsService,
     private readonly router: Router
   ) {
     this.logger.registerMonitor({
-      onLog(logObject: INGXLoggerMetadata): void {
+      onLog: (logObject: INGXLoggerMetadata) => {
         if (logObject.level >= NgxLoggerLevel.ERROR) {
           this.snackbar.open(logObject.message);
         }
