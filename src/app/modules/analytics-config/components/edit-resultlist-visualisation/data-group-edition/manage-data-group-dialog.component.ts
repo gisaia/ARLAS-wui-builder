@@ -96,14 +96,14 @@ export class ManageDataGroupDialogComponent implements OnInit {
   }
 
   public removeCondition(index: number) {
-    this.data.dataGroup.customControls.filters.removeAt(index);
+    (this.data.dataGroup.get('filters')  as FormArray).removeAt(index);
     this.table.renderRows();
   }
 
   public addCondition() {
     const filter = this.resultListFormBuilder
       .buildVisualisationsDataGroupCondition(this.data.collectionControlName);
-    this.data.dataGroup.customControls.filters.push(filter);
+    (this.data.dataGroup.get('filters')  as FormArray).push(filter);
     this.table.renderRows();
   }
 

@@ -16,6 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { Expression } from 'arlas-api';
+
 export enum GEOMETRY_TYPE {
   fill = 'fill',
   line = 'line',

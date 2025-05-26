@@ -24,6 +24,8 @@ import {
   DEFAULT_METRIC_VALUE
 } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
 import {
+  eqArlasApiFilter, lteArlasApiFilter, ArlasApiFilter, gteArlasApiFilter,
+  likeArlasApiFilter, ltArlasApiFilter, neArlasApiFilter, rangeArlasApiFilter, gtArlasApiFilter,
   ResultListVisualisationDataGroupFormWidget,
   ResultListVisualisationFormWidget
 } from '@analytics-config/services/resultlist-form-builder/models';
@@ -40,12 +42,15 @@ import {
 } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
-import { CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
+import {
+  CLUSTER_GEOMETRY_TYPE,
+  FILTER_OPERATION
+} from '@map-config/services/map-layer-form-builder/models';
 import {
   SearchGlobalFormGroup
 } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { titleCase } from '@services/collection-service/tools';
+import { NUMERIC_TYPES, titleCase } from '@services/collection-service/tools';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
 import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
@@ -56,7 +61,8 @@ import {
 import {
   TimelineGlobalFormGroup
 } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
-import { CollectionReferenceDescription } from 'arlas-api';
+import { CollectionReferenceDescription, Expression } from 'arlas-api';
+import { CollectionReferenceDescriptionProperty } from 'arlas-api/api';
 import { BasemapStyle, SCROLLABLE_ARLAS_ID, VisualisationSetConfig } from 'arlas-map';
 import { ArlasColorService } from 'arlas-web-components';
 import { DescribedUrl } from 'arlas-web-components/lib/components/results/utils/results.utils';
@@ -1449,15 +1455,24 @@ export class ConfigExportHelper {
       const condition = {
         field: f.filterField.value,
         op: f.filterOperation,
+        type: f.filterField.type,
         value: null
       };
-      if (f.filterOperation === FILTER_OPERATION.IN || f.filterOperation === FILTER_OPERATION.NOT_IN) {
+      if (f.filterOperation === likeArlasApiFilter) {
         condition.value =  f.filterValues.filterInValues.map(v => v.value);
-      } else if (f.filterOperation === FILTER_OPERATION.EQUAL || f.filterOperation === FILTER_OPERATION.NOT_EQUAL) {
+      } else if ((f.filterOperation === eqArlasApiFilter ||
+          f.filterOperation === neArlasApiFilter ||
+          f.filterOperation === eqArlasApiFilter ||
+          f.filterOperation === gteArlasApiFilter ||
+          f.filterOperation === gtArlasApiFilter ||
+          f.filterOperation === ltArlasApiFilter ||
+          f.filterOperation === lteArlasApiFilter) &&
+      NUMERIC_TYPES.includes(condition.type as unknown as CollectionReferenceDescriptionProperty.TypeEnum)
+      ) {
         condition.value = f.filterValues.filterEqualValues;
-      } else if (f.filterOperation === FILTER_OPERATION.RANGE || f.filterOperation === FILTER_OPERATION.OUT_RANGE) {
+      } else if (f.filterOperation === rangeArlasApiFilter) {
         condition.value =  f.filterValues.filterMinRangeValues + ';' + f.filterValues.filterMaxRangeValues;
-      } else if (f.filterOperation === FILTER_OPERATION.IS) {
+      } else if (f.filterOperation === eqArlasApiFilter) {
         condition.value = f.filterValues.filterBoolean;
       }
       return condition;

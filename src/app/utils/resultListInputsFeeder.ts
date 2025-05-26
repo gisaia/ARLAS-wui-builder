@@ -17,12 +17,22 @@
  * under the License.
  */
 import {
+  eqArlasApiFilter,
+  gtArlasApiFilter,
+  gteArlasApiFilter,
+  likeArlasApiFilter,
+  ltArlasApiFilter,
+  lteArlasApiFilter,
+  neArlasApiFilter,
+  rangeArlasApiFilter
+} from '@analytics-config/services/resultlist-form-builder/models';
+import {
   ResultlistConfigForm,
-  ResultlistFormBuilderService, ResultListVisualisationsDataGroup
+  ResultlistFormBuilderService, ResultListVisualisationsDataGroupCondition
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { AbstractControl, FormArray } from '@angular/forms';
-import { FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { NUMERIC_TYPES } from '@services/collection-service/tools';
 import {
   AnalyticComponentResultListInputConfig,
   ContributorConfig,
@@ -31,6 +41,7 @@ import {
 import { ImportElement, importElements } from '@services/main-form-manager/tools';
 import { InputFormControl } from '@shared-models/config-form';
 import { ArlasColorService } from 'arlas-web-components';
+import { firstValueFrom, map } from 'rxjs';
 
 interface ResultListConfigFeederOptions {
     widgetData: ResultlistConfigForm;
@@ -195,7 +206,7 @@ export class ResultListInputsFeeder {
         ]);
 
         if(visualisation?.dataGroups && visualisation.dataGroups.length > 0) {
-          visualisation?.dataGroups.forEach(dataGroupConf => {
+          visualisation?.dataGroups.forEach(async dataGroupConf => {
             const dataGroupForm = resultListFormBuilder
               .buildVisualisationsDataGroup();
             this.imports([
@@ -212,8 +223,9 @@ export class ResultListInputsFeeder {
                 control: dataGroupForm.customControls.protocol
               },
             ]);
-            const  conditionForm = this.importDataGroupFilters(dataGroupConf, resultListFormBuilder);
+            const conditionForm = this.importDataGroupFilters(dataGroupConf, resultListFormBuilder);
             dataGroupForm.setControl('filters', conditionForm);
+            dataGroupForm.customControls.filters = dataGroupForm.get('filters') as FormArray<ResultListVisualisationsDataGroupCondition>;
             (visualisationForm.get('dataGroups') as FormArray).push(dataGroupForm);
           });
         }
@@ -223,45 +235,54 @@ export class ResultListInputsFeeder {
     return this;
   }
 
-  protected  importDataGroupFilters(
+  protected importDataGroupFilters(
     dataGroupConf: DataGroupInputConfig,
     resultListFormBuilder: ResultlistFormBuilderService){
     const formArray = new FormArray([]);
     if(dataGroupConf.filters && dataGroupConf.filters.length > 0){
-      dataGroupConf.filters.forEach((condition, i) => {
+      dataGroupConf.filters.forEach(async (condition, i) => {
         const conditionForm = resultListFormBuilder
           .buildVisualisationsDataGroupCondition(this.options.contributor.collection);
+        const fields = await firstValueFrom(conditionForm.collectionFields);
+        const field = fields.find(file => file.name === condition.field);
         this.imports([
           {
-            value: { value: condition.field },
+            value: { value: condition.field, type: field.type },
             control: conditionForm.customControls.filterField
           },
           {
-            value: condition.op as FILTER_OPERATION,
+            value: condition.op,
             control: conditionForm.customControls.filterOperation
           }
         ]);
+
         conditionForm.syncEditState();
 
-        if (condition.op === FILTER_OPERATION.IN || condition.op === FILTER_OPERATION.NOT_IN) {
+        if (condition.op === likeArlasApiFilter) {
           const  filterInValues = (condition.value as string[]);
           this.imports([
             {
-              value: filterInValues.map(v => ({ value: v })),
+              value: filterInValues?.map(v => ({ value: v })),
               control: conditionForm.customControls.filterValues.filterInValues
             }
           ]);
           conditionForm.customControls.filterValues.filterInValues.selectedMultipleItems = filterInValues.map(v => ({ value: v }));
           conditionForm.customControls.filterValues.filterInValues.savedItems = new Set(filterInValues);
           conditionForm.customControls.filterValues.filterEqualValues.disable();
-        } else if (condition.op === FILTER_OPERATION.EQUAL || condition.op=== FILTER_OPERATION.NOT_EQUAL) {
+        } else if ( (condition.op  === eqArlasApiFilter||
+                condition.op  === neArlasApiFilter ||
+                condition.op  === gteArlasApiFilter ||
+                condition.op  === gtArlasApiFilter ||
+                condition.op  === ltArlasApiFilter||
+                condition.op  === lteArlasApiFilter) &&
+            NUMERIC_TYPES.includes(condition.type as any)) {
           this.imports([
             {
-              value: condition.value,
+              value: +condition.value,
               control:  conditionForm.customControls.filterValues.filterEqualValues
             }
           ]);
-        } else if (condition.op === FILTER_OPERATION.RANGE || condition.op=== FILTER_OPERATION.OUT_RANGE) {
+        } else if (condition.op === rangeArlasApiFilter) {
           const min =  +(condition.value as string).split(';')[0];
           const max =  +(condition.value as string).split(';')[1];
           this.imports([
@@ -274,7 +295,7 @@ export class ResultListInputsFeeder {
               control:  conditionForm.customControls.filterValues.filterMaxRangeValues
             }
           ]);
-        } else if (condition.op=== FILTER_OPERATION.IS) {
+        } else if (condition.op === eqArlasApiFilter) {
           this.imports([
             {
               value: condition.value,

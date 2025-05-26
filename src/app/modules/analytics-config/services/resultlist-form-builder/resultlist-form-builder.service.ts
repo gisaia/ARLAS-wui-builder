@@ -23,8 +23,27 @@ import {
   ResultListVisualisationComponent
 } from '@analytics-config/components/edit-resultlist-visualisation/result-list-visualisation.component';
 import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
+import {
+  ArlasApiFilter,
+  eqArlasApiFilter,
+  gtArlasApiFilter,
+  gteArlasApiFilter,
+  likeArlasApiFilter,
+  ltArlasApiFilter,
+  lteArlasApiFilter,
+  neArlasApiFilter,
+  rangeArlasApiFilter
+} from '@analytics-config/services/resultlist-form-builder/models';
 import { Injectable } from '@angular/core';
-import { FormArray, FormControl, FormGroup, MinLengthValidator, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
@@ -36,8 +55,8 @@ import {
   NUMERIC_OR_DATE_OR_KEYWORD,
   NUMERIC_OR_DATE_OR_TEXT_TYPES,
   TEXT_OR_KEYWORD,
-  toNumericOrDateOrKeywordOrBooleanObs,
   toNumericOrDateOrKeywordOrTextObs,
+  toNumericOrKeywordOrBooleanObs,
   toOptionsObs
 } from '@services/collection-service/tools';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
@@ -64,7 +83,6 @@ import {
 } from '@shared-models/config-form';
 import { GeoFilterInputsBuilder } from '@shared-models/filter-input-builder';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
-import { Expression } from 'arlas-api';
 import { ArlasColorService } from 'arlas-web-components';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
@@ -762,7 +780,11 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
         marker('Data groups name'),
         ''
       ),
-      filters: new FormArray<ResultListVisualisationsDataGroupCondition>([]),
+      filters: new FormArray<ResultListVisualisationsDataGroupCondition>([], (): ValidatorFn  => (control: AbstractControl): ValidationErrors | null => {
+        console.log(control.value);
+        const forbidden = false;
+        return forbidden ? {forbiddenName: {value: control.value}} : null;
+      }),
       protocol: new SelectFormControl(
         '',
         marker('Protocol'),
@@ -796,10 +818,10 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
 
 export class ResultListVisualisationsDataGroupCondition extends FormGroup {
   public editing = false;
-  public editionInfo: { field: string; op: Expression.OpEnum; };
+  public editionInfo: { field: string; op: ArlasApiFilter; };
   public constructor(
-    collectionFields: Observable<Array<CollectionField>>,
-    filterOperations: Array<Expression.OpEnum>,
+    public collectionFields: Observable<Array<CollectionField>>,
+    filterOperations: Array<ArlasApiFilter>,
     collectionService: CollectionService,
     collection: string) {
     super({
@@ -808,7 +830,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
         marker('Condition fields'),
         marker('Condition fields'),
         true,
-        toNumericOrDateOrKeywordOrBooleanObs(collectionFields),
+        toNumericOrKeywordOrBooleanObs(collectionFields),
         {
           optional: false
         }
@@ -1053,11 +1075,11 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
 
   public buildVisualisationsDataGroupCondition(collection: string) {
     const collectionFields = this.collectionService.getCollectionFields(collection);
-    const operators = [ Expression.OpEnum.Range,
-      Expression.OpEnum.Eq, Expression.OpEnum.Like,
-      Expression.OpEnum.Lte,  Expression.OpEnum.Lt,
-      Expression.OpEnum.Gte,  Expression.OpEnum.Gt,
-      Expression.OpEnum.Ne
+    const operators = [ rangeArlasApiFilter,
+      eqArlasApiFilter, likeArlasApiFilter,
+      lteArlasApiFilter,  ltArlasApiFilter,
+      gteArlasApiFilter,  gtArlasApiFilter,
+      neArlasApiFilter
     ];
 
     const control = new ResultListVisualisationsDataGroupCondition(collectionFields,

@@ -18,8 +18,8 @@
  */
 
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
-import { FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
-import { Aggregation } from 'arlas-api';
+import { ArlasApiFilter } from '@analytics-config/services/resultlist-form-builder/models';
+import { Aggregation, Expression } from 'arlas-api';
 import { BasemapStyle, VisualisationSetConfig } from 'arlas-map';
 import { FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
 import { AnalyticsTabs, ZoomToDataStrategy } from 'arlas-wui-toolkit';
@@ -330,7 +330,8 @@ export interface DataGroupInputConfig {
 
 export interface DataGroupInputCondition {
   field: any;
-  op: FILTER_OPERATION;
+  op: ArlasApiFilter;
+  type: string;
   value: string | number | string[] | boolean;
 }
 
