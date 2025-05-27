@@ -780,11 +780,8 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
         marker('Data groups name'),
         ''
       ),
-      filters: new FormArray<ResultListVisualisationsDataGroupCondition>([], (): ValidatorFn  => (control: AbstractControl): ValidationErrors | null => {
-        console.log(control.value);
-        const forbidden = false;
-        return forbidden ? {forbiddenName: {value: control.value}} : null;
-      }),
+      filters: new FormArray<ResultListVisualisationsDataGroupCondition>([], [Validators.required,
+        Validators.minLength(1)]),
       protocol: new SelectFormControl(
         '',
         marker('Protocol'),
