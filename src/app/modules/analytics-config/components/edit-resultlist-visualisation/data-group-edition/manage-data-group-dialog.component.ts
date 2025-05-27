@@ -81,8 +81,12 @@ export class ManageDataGroupDialogComponent implements OnInit {
   public disableButton = signal(true);
   @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
 
+  public get filters(){
+    return (this.data.dataGroup.get('filters')  as FormArray);
+  }
+
   public get filterConditions(): FormArray<ResultListVisualisationsDataGroup> | any[] {
-    return this.data.dataGroup.controls.filters ? (this.data.dataGroup.controls.filters as FormArray).controls : [];
+    return this.filters ? this.filters.controls : [];
   }
 
   public ngOnInit() {
@@ -103,7 +107,8 @@ export class ManageDataGroupDialogComponent implements OnInit {
   public addCondition() {
     const filter = this.resultListFormBuilder
       .buildVisualisationsDataGroupCondition(this.data.collectionControlName);
-    (this.data.dataGroup.get('filters')  as FormArray).push(filter);
+    this.filters?.push(filter);
+    this.filters?.setErrors({ 'new condition': true });
     this.table.renderRows();
   }
 
