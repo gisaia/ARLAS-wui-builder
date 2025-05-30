@@ -29,7 +29,7 @@
 
 
         <section class="table-container">
-            <table #table class="table" mat-table [dataSource]="filterConditions">
+            <mat-table class="table" [dataSource]="filterConditions">
                 <!-- field Column -->
                 <ng-container matColumnDef="field">
                     <th mat-header-cell *matHeaderCellDef>{{ 'Data group field filter' | translate }}</th>
@@ -75,7 +75,7 @@
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
+            </mat-table>
         </section>
         <mat-dialog-actions [align]="'end'">
             @if (!data.edit) {
