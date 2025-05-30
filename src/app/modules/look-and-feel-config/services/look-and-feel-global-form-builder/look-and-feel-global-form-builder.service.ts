@@ -90,7 +90,7 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
         spinnerColor: new SelectFormControl(
           '',
           marker('Spinners color'),
-          null,
+          marker('Spinners color description'),
           null,
           [
             { label: marker('Primary'), value: 'primary' },

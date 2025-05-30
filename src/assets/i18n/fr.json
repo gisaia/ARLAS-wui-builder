@@ -449,6 +449,7 @@
 	"Display spinners": "Cercle de chargement",
 	"Display spinners description": "Permet d'afficher un cercle animé lors du rechargement des widgets sur les données sélectionnées",
 	"Spinners color": "Couleur du cercle de chargement",
+	"Spinners color description": "Permet de choisir la couleur du cercle de chargement",
 	"Primary": "Primaire",
 	"Accent": "Secondaire",
 	"Spinner diameter": "Diamètre du cercle de chargement",

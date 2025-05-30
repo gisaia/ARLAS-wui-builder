@@ -32,7 +32,8 @@
 
     .form-fields {
       padding: 10px;
-
+      min-width: 25%;
+      max-width: 25%;
       ::ng-deep mat-label + mat-slider {
         margin-left: 20px;
       }
@@ -64,6 +65,7 @@
 
     .full-size {
       flex: 1;
+      max-width: unset;
     }
   }
 }

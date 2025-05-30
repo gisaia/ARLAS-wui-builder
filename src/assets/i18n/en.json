@@ -449,6 +449,7 @@
 	"Display spinners": "Display spinners",
 	"Display spinners description": "Allows to display a spinner while the widgets are reloading on the selected data",
 	"Spinners color": "Spinners colour",
+	"Spinners color description": "Allows to display a spinner colour",
 	"Primary": "Primary",
 	"Accent": "Accent",
 	"Spinner diameter": "Spinner diameter",
