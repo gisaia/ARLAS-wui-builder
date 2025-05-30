@@ -29,8 +29,8 @@ import { Component, computed, inject, input, OnInit, output, signal, ViewChild }
 import { FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
-import { ConfirmDialogComponent } from '@components/confirm-dialog/confirm-dialog.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { SharedModule } from '@shared/shared.module';
 import { filter, first } from 'rxjs';
 
@@ -66,7 +66,7 @@ export class ManageVisualisationComponent {
   }
   public cancelVisualisation(){
     if(this.visualisation().dirty && !this.isEdition()) {
-      const confirm = this.dialog.open(ConfirmDialogComponent, {
+      const confirm = this.dialog.open(ConfirmModalComponent, {
         data: {
           message: 'Your data has been modified do you want to leave ?'
         }
@@ -106,7 +106,7 @@ export class ManageVisualisationComponent {
   public openEditionDialog(dataGroup: ResultListVisualisationsDataGroup, edit = false){
     return this.dialog.open(ManageDataGroupDialogComponent,
       {
-        width:'50vw',
+        width:'65vw',
         height: '90vh',
         disableClose: true,
         data: {
