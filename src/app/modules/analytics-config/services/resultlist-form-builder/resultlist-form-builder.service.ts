@@ -35,15 +35,7 @@ import {
   rangeArlasApiFilter
 } from '@analytics-config/services/resultlist-form-builder/models';
 import { Injectable } from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators
-} from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
@@ -816,6 +808,7 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
 export class ResultListVisualisationsDataGroupCondition extends FormGroup {
   public editing = false;
   public editionInfo: { field: string; op: ArlasApiFilter; };
+  protected filter = new GeoFilterInputsBuilder();
   public constructor(
     public collectionFields: Observable<Array<CollectionField>>,
     filterOperations: Array<ArlasApiFilter>,
@@ -845,7 +838,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
           resetDependantsOnChange: true,
           dependsOn: () => [this.customControls.filterField],
           onDependencyChange: (control: SelectFormControl) => {
-            GeoFilterInputsBuilder.operationFilter(this, control);
+            this.filter.operationFilter(this, control);
           }
         }
       ),
@@ -872,7 +865,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
             resetDependantsOnChange: true,
             dependsOn: () => [this.customControls.filterField],
             onDependencyChange: (control: MultipleSelectFormControl) => {
-              GeoFilterInputsBuilder.keywordsFilter(this, control, collectionService, collection);
+              this.filter.keywordsFilter(this, control, collectionService, collection);
             }
           }
         ),
@@ -885,7 +878,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
             resetDependantsOnChange: true,
             dependsOn: () => [this.customControls.filterOperation, this.customControls.filterField],
             onDependencyChange: (control: InputFormControl) => {
-              GeoFilterInputsBuilder.numberFilter(this, control);
+              this.filter.numberFilter(this, control);
             }
           }
         ),
@@ -900,7 +893,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
               this.customControls.filterOperation, this.customControls.filterField
             ],
             onDependencyChange: (control, isLoading) => {
-              GeoFilterInputsBuilder.minRangeFilter(this, control, isLoading, collectionService, collection);
+              this.filter.minRangeFilter(this, control, isLoading, collectionService, collection);
             }
           },
           () => this.customControls.filterValues.filterMaxRangeValues,
@@ -917,7 +910,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
               this.customControls.filterOperation, this.customControls.filterField
             ],
             onDependencyChange: (control, isLoading) => {
-              GeoFilterInputsBuilder.maxRangeFilter(this, control, isLoading, collectionService, collection);
+              this.filter.maxRangeFilter(this, control, isLoading, collectionService, collection);
             }
           },
           undefined,
@@ -938,7 +931,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
             resetDependantsOnChange: true,
             dependsOn: () => [this.customControls.filterField],
             onDependencyChange: (control: ButtonToggleFormControl) => {
-              GeoFilterInputsBuilder.booleanFilter(this, control);
+              this.filter.booleanFilter(this, control);
             }
           })
       }),

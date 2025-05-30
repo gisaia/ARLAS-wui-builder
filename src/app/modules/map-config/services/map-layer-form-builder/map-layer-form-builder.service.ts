@@ -93,7 +93,6 @@ export const MAX_ZOOM = 23;
 export class MapLayerFormGroup extends ConfigFormGroup {
   private currentCollection;
   public clearFilters = new Subject<boolean>();
-
   public constructor(
     opt: MapLayerFormGroupConfig
   ) {
@@ -473,6 +472,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
 export class MapFilterFormGroup extends ConfigFormGroup {
   public editing = false;
   public editionInfo: { field: string; op: FILTER_OPERATION; };
+  protected  filter = new FilterInputsBuilder();
   public constructor(
     collectionFields: Observable<Array<CollectionField>>,
     filterOperations: Array<FILTER_OPERATION>,
@@ -499,7 +499,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
           resetDependantsOnChange: true,
           dependsOn: () => [this.customControls.filterField],
           onDependencyChange: (control: SelectFormControl) => {
-            FilterInputsBuilder.operationFilter(this, control);
+            this.filter.operationFilter(this, control);
           }
         }
       ),
@@ -513,7 +513,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
           resetDependantsOnChange: true,
           dependsOn: () => [this.customControls.filterField],
           onDependencyChange: (control: MultipleSelectFormControl) => {
-            FilterInputsBuilder.keywordsFilter(this, control, collectionService, collection);
+            this.filter.keywordsFilter(this, control, collectionService, collection);
           }
         }
       ),
@@ -526,7 +526,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
           resetDependantsOnChange: true,
           dependsOn: () => [this.customControls.filterOperation, this.customControls.filterField],
           onDependencyChange: (control: InputFormControl) => {
-            FilterInputsBuilder.numberFilter(this, control);
+            this.filter.numberFilter(this, control);
           }
         }
       ),
@@ -541,7 +541,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
             this.customControls.filterOperation, this.customControls.filterField
           ],
           onDependencyChange: (control, isLoading) => {
-            FilterInputsBuilder.minRangeFilter(this, control, isLoading, collectionService, collection);
+            this.filter.minRangeFilter(this, control, isLoading, collectionService, collection);
           }
         },
         () => this.customControls.filterMaxRangeValues,
@@ -558,7 +558,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
             this.customControls.filterOperation, this.customControls.filterField
           ],
           onDependencyChange: (control, isLoading) => {
-            FilterInputsBuilder.maxRangeFilter(this, control, isLoading, collectionService, collection);
+            this.filter.maxRangeFilter(this, control, isLoading, collectionService, collection);
           }
         },
         undefined,
@@ -579,7 +579,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
           resetDependantsOnChange: true,
           dependsOn: () => [this.customControls.filterField],
           onDependencyChange: (control: ButtonToggleFormControl) => {
-            FilterInputsBuilder.booleanFilter(this, control);
+            this.filter.booleanFilter(this, control);
           }
         }),
       id: new HiddenFormControl(
