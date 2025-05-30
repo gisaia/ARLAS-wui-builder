@@ -17,8 +17,18 @@
  * under the License.
  */
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
-import { BY_BUCKET_OR_INTERVAL } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
-import { DEFAULT_METRIC_VALUE } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
+import {
+  BY_BUCKET_OR_INTERVAL
+} from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
+import {
+  DEFAULT_METRIC_VALUE
+} from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
+import {
+  eqArlasApiFilter, lteArlasApiFilter, ArlasApiFilter, gteArlasApiFilter,
+  likeArlasApiFilter, ltArlasApiFilter, neArlasApiFilter, rangeArlasApiFilter, gtArlasApiFilter,
+  ResultListVisualisationDataGroupFormWidget,
+  ResultListVisualisationFormWidget
+} from '@analytics-config/services/resultlist-form-builder/models';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { FormArray, FormGroup } from '@angular/forms';
 import {
@@ -26,13 +36,21 @@ import {
   LookAndFeelGlobalFormGroup
 } from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
-import { BasemapFormGroup, MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
+import {
+  BasemapFormGroup,
+  MapBasemapFormGroup
+} from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
-import { CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
-import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
+import {
+  CLUSTER_GEOMETRY_TYPE,
+  FILTER_OPERATION
+} from '@map-config/services/map-layer-form-builder/models';
+import {
+  SearchGlobalFormGroup
+} from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { titleCase } from '@services/collection-service/tools';
+import { NUMERIC_TYPES, titleCase } from '@services/collection-service/tools';
 import { ARLAS_ID } from '@services/main-form/main-form.service';
 import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
@@ -40,8 +58,11 @@ import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-for
 import {
   SideModulesGlobalFormGroup
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
-import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
-import { CollectionReferenceDescription } from 'arlas-api';
+import {
+  TimelineGlobalFormGroup
+} from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
+import { CollectionReferenceDescription, Expression } from 'arlas-api';
+import { CollectionReferenceDescriptionProperty } from 'arlas-api/api';
 import { BasemapStyle, SCROLLABLE_ARLAS_ID, VisualisationSetConfig } from 'arlas-map';
 import { ArlasColorService } from 'arlas-web-components';
 import { DescribedUrl } from 'arlas-web-components/lib/components/results/utils/results.utils';
@@ -50,7 +71,8 @@ import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
 import {
   AggregationModelConfig,
-  AnalyticComponentConfig, AnalyticComponentHistogramInputConfig,
+  AnalyticComponentConfig,
+  AnalyticComponentHistogramInputConfig,
   AnalyticComponentInputConfig,
   AnalyticComponentResultListInputConfig,
   AnalyticComponentSwimlaneInputConfig,
@@ -59,12 +81,15 @@ import {
   ChipSearchConfig,
   Config,
   ContributorConfig,
+  DataGroupInputConfig,
   JSONPATH_COUNT,
   JSONPATH_METRIC,
-  MapComponentInputConfig, MapComponentInputMapLayersConfig,
+  MapComponentInputConfig,
+  MapComponentInputMapLayersConfig,
   MapglComponentConfig,
   SEARCH_TYPE,
   SwimlaneConfig,
+  VisualisationListInputConfig,
   WebConfigOptions
 } from './models-config';
 import { hashCode, stringifyArlasFilter } from './tools';
@@ -1379,6 +1404,7 @@ export class ConfigExportHelper {
           globalActionEvent: unmanagedRenderFields.globalActionEvent,
           useColorService: true,
           cellBackgroundStyle: widgetData.settingsStep.cellBackgroundStyle,
+          visualisationsList: ConfigExportHelper.getVisualisationList(widgetData.visualisationStep.visualisationsList),
           options: {
             showActionsOnhover: 'true',
             showDetailIconName: 'keyboard_arrow_down',
@@ -1395,6 +1421,63 @@ export class ConfigExportHelper {
     component.usage = usage;
     return component;
   }
+
+  public static getVisualisationList(visualisationList: ResultListVisualisationFormWidget[]){
+    const visualisations = [];
+    visualisationList.forEach(visualisationWidgetConfig => {
+      const visualisation: VisualisationListInputConfig =  {
+        name: visualisationWidgetConfig.name,
+        description: visualisationWidgetConfig.description,
+        dataGroups: []
+      };
+      visualisation.dataGroups = this.buildDataGroups(visualisationWidgetConfig);
+      visualisations.push(visualisation);
+    });
+    return visualisations;
+  }
+
+  public static buildDataGroups(visualisationWidgetConfig: ResultListVisualisationFormWidget){
+    return visualisationWidgetConfig.dataGroups.map(dataG => {
+      const dataGroup: DataGroupInputConfig = {
+        filters: [],
+        name: dataG.name,
+        protocol: dataG.protocol,
+        visualisationUrl: dataG.visualisationUrl
+      };
+      dataGroup.filters = this.buildDataGroupConditions(dataG);
+      return dataGroup;
+    });
+  }
+
+  protected static  buildDataGroupConditions(dataG: ResultListVisualisationDataGroupFormWidget) {
+    return dataG.filters.map(f => {
+      const condition = {
+        field: f.filterField.value,
+        op: f.filterOperation,
+        type: f.filterField.type,
+        value: null
+      };
+      if (f.filterOperation === likeArlasApiFilter) {
+        condition.value =  f.filterValues.filterInValues.map(v => v.value);
+      } else if ((f.filterOperation === eqArlasApiFilter ||
+          f.filterOperation === neArlasApiFilter ||
+          f.filterOperation === eqArlasApiFilter ||
+          f.filterOperation === gteArlasApiFilter ||
+          f.filterOperation === gtArlasApiFilter ||
+          f.filterOperation === ltArlasApiFilter ||
+          f.filterOperation === lteArlasApiFilter) &&
+      NUMERIC_TYPES.includes(condition.type as unknown as CollectionReferenceDescriptionProperty.TypeEnum)
+      ) {
+        condition.value = f.filterValues.filterEqualValues;
+      } else if (f.filterOperation === rangeArlasApiFilter) {
+        condition.value =  f.filterValues.filterMinRangeValues + ';' + f.filterValues.filterMaxRangeValues;
+      } else if (f.filterOperation === eqArlasApiFilter) {
+        condition.value = f.filterValues.filterBoolean;
+      }
+      return condition;
+    });
+  }
+
 
   public static updateCollectionUnit(widgetData: any, lookAndFeelConfigGlobal: LookAndFeelGlobalFormGroup, com: AnalyticComponentConfig) {
     if (widgetData.dataStep.metric.metricCollectFunction === 'Count' &&

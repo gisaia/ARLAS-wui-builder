@@ -53,6 +53,7 @@ import { FiltersComponent } from '@map-config/components/filters/filters.compone
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { StartupService } from '@services/startup/startup.service';
 import { CollectionsUnitsComponent } from '@shared-components/collections-units/collections-units.component';
+import { OrderConfigFormTabControlsPipe } from '@shared/pipes/order-config-form-tab.pipe';
 import { GetCollectionDisplayModule } from 'arlas-web-components';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
 import { ColorPickerModule } from 'ngx-color-picker';
@@ -70,6 +71,9 @@ import { ResetOnChangeDirective } from './directives/reset-on-change/reset-on-ch
 import { GroupCollectionPipe } from './pipes/group-collection.pipe';
 import { HistogramBucketPipe } from './pipes/histogram-buckets/histogram-buckets.pipe';
 import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
+import {
+  MultiSelectSearchComponent
+} from '@shared-components/config-form-control/multi-select-search/multi-select-search.component';
 
 
 @NgModule({
@@ -172,7 +176,9 @@ import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
     MatPaginatorModule,
     MatMenuModule,
     TranslateModule,
-    GetCollectionDisplayModule
+    GetCollectionDisplayModule,
+    MultiSelectSearchComponent,
+    OrderConfigFormTabControlsPipe
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi())
