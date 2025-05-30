@@ -62,6 +62,8 @@ export abstract class ConfigFormControl extends FormControl {
   // an initial value is used by app-reset-on-change, when resetting a form control (instead of a "default.json" value)
   public initialValue: any;
 
+  private defaultFormFieldClass = 'builder-config-form-control';
+
   public constructor(
     formState: any,
     public label: string,
@@ -88,8 +90,8 @@ export abstract class ConfigFormControl extends FormControl {
   public get optional() {
     return this.optionalParams.optional;
   }
-  public get width() {
-    return this.optionalParams.width;
+  public get formFieldClass() {
+    return this.optionalParams.formFieldClass ?? this.defaultFormFieldClass;
   }
   public get sourceData() {
     return this.optionalParams.sourceData;
@@ -165,7 +167,7 @@ export interface ControlOptionalParams {
 
   sourceData?: Observable<any>;
 
-  width?: string;
+  formFieldClass?: string;
 
   /** Used to properly display collection display names in selects */
   isCollectionSelect?: boolean;
