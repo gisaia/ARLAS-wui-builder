@@ -16,27 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 import { Expression } from 'arlas-api';
 
-export type ArlasApiFilter = keyof typeof Expression.OpEnum;
-export const eqArlasApiFilter: ArlasApiFilter  = 'Eq';
-export const neArlasApiFilter: ArlasApiFilter  = 'Ne';
-export const gteArlasApiFilter: ArlasApiFilter  = 'Gte';
-export const gtArlasApiFilter: ArlasApiFilter  = 'Gt';
-export const ltArlasApiFilter: ArlasApiFilter  = 'Lt';
-export const lteArlasApiFilter: ArlasApiFilter  = 'Lte';
-export const likeArlasApiFilter: ArlasApiFilter  = 'Like';
-export const rangeArlasApiFilter: ArlasApiFilter  = 'Range';
-
-export function isNumberOperator(filter: ArlasApiFilter){
-  return filter === eqArlasApiFilter ||
-        filter === neArlasApiFilter ||
-        filter === gteArlasApiFilter ||
-        filter === gtArlasApiFilter||
-        filter === ltArlasApiFilter ||
-        filter === lteArlasApiFilter;
+export function isNumberOperator(filter: Expression.OpEnum){
+  return filter === Expression.OpEnum['eq'] ||
+        filter === Expression.OpEnum['ne'] ||
+        filter === Expression.OpEnum['gte'] ||
+        filter === Expression.OpEnum['gt'] ||
+        filter === Expression.OpEnum['lt'] ||
+        filter === Expression.OpEnum['lte'];
 }
-
 
 export interface ResultListVisualisationFormWidget {
     'name': string;
@@ -54,7 +44,7 @@ export interface ResultListVisualisationDataGroupFormWidget {
 
 export  interface ResultListVisualisationConditionFormWidget {
     filterField: {value: string; type: string;};
-    filterOperation: ArlasApiFilter;
+    filterOperation: Expression.OpEnum;
     filterValues: {
         filterInValues: any[];
         filterEqualValues: number;

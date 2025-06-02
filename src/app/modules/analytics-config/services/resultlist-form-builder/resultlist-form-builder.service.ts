@@ -23,17 +23,6 @@ import {
   ResultListVisualisationComponent
 } from '@analytics-config/components/edit-resultlist-visualisation/result-list-visualisation.component';
 import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
-import {
-  ArlasApiFilter,
-  eqArlasApiFilter,
-  gtArlasApiFilter,
-  gteArlasApiFilter,
-  likeArlasApiFilter,
-  ltArlasApiFilter,
-  lteArlasApiFilter,
-  neArlasApiFilter,
-  rangeArlasApiFilter
-} from '@analytics-config/services/resultlist-form-builder/models';
 import { Injectable } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -75,6 +64,7 @@ import {
 } from '@shared-models/config-form';
 import { GeoFilterInputsBuilder } from '@shared-models/filter-input-builder';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+import { Expression } from 'arlas-api';
 import { ArlasColorService } from 'arlas-web-components';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
@@ -810,12 +800,12 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
 
 export class ResultListVisualisationsDataGroupCondition extends FormGroup {
   public editing = false;
-  public editionInfo: { field: string; op: ArlasApiFilter; };
+  public editionInfo: { field: string; op:  Expression.OpEnum; };
   protected filter = new GeoFilterInputsBuilder();
 
   public constructor(
         public collectionFields: Observable<Array<CollectionField>>,
-        filterOperations: Array<ArlasApiFilter>,
+        filterOperations: Array< Expression.OpEnum>,
         collectionService: CollectionService,
         collection: string) {
     super({
@@ -1067,11 +1057,11 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
 
   public buildVisualisationsDataGroupCriteria(collection: string) {
     const collectionFields = this.collectionService.getCollectionFields(collection);
-    const operators = [rangeArlasApiFilter,
-      eqArlasApiFilter, likeArlasApiFilter,
-      lteArlasApiFilter, ltArlasApiFilter,
-      gteArlasApiFilter, gtArlasApiFilter,
-      neArlasApiFilter
+    const operators = [ Expression.OpEnum.Range,
+      Expression.OpEnum.Eq,  Expression.OpEnum.Like,
+      Expression.OpEnum.Lte,  Expression.OpEnum.Lt,
+      Expression.OpEnum.Gte,  Expression.OpEnum.Gt,
+      Expression.OpEnum.Ne
     ];
 
     const control = new ResultListVisualisationsDataGroupCondition(collectionFields,

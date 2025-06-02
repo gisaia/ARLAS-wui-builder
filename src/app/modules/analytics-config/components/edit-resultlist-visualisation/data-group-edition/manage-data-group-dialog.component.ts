@@ -27,17 +27,7 @@ import { FormArray } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
-import {
-  MatCell,
-  MatCellDef,
-  MatColumnDef,
-  MatHeaderCell,
-  MatHeaderRow,
-  MatHeaderRowDef,
-  MatRow,
-  MatRowDef,
-  MatTable, MatTableModule
-} from '@angular/material/table';
+import { MatTable, MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { SharedModule } from '@shared/shared.module';
@@ -111,7 +101,7 @@ export class ManageDataGroupDialogComponent implements OnInit {
      */
   public updateList(event: { prefix: string; }, index: number) {
     const control = this.data.dataGroup.customControls.filters.at(index).customControls;
-    if (control.filterOperation.value ===  Expression.OpEnum.Like) {
+    if (control.filterOperation.value ===  Expression.OpEnum['like']) {
       control.filterValues.filterInValues.setSyncOptions([]);
       this.collectionService.getTermAggregation(
         this.data.collectionControlName,
