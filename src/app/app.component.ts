@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
 
   public constructor(
     private readonly logger: NGXLogger,
-    private snackbar: MatSnackBar,
+    private readonly snackbar: MatSnackBar,
     private readonly iconService: IconService,
     private readonly titleService: Title,
     private readonly arlasSettingsService: ArlasSettingsService,

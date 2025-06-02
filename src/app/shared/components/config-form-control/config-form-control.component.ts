@@ -18,27 +18,51 @@
  */
 import { KeyValue } from '@angular/common';
 import {
-  AfterViewChecked, AfterViewInit,
-  ChangeDetectorRef, Component, ComponentFactory, ComponentFactoryResolver,
-  Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ComponentFactory,
+  ComponentFactoryResolver,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewContainerRef
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
-import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionItem } from '@services/collection-service/models';
 import {
-  ButtonFormControl, ButtonToggleFormControl, CollectionsUnitsControl, ColorFormControl, ColorPreviewFormControl,
-  ComponentFormControl, ConfigFormControl, FieldTemplateControl, FieldWithSizeListFormControl, HiddenFormControl,
-  HuePaletteFormControl, IconFormControl, InputFormControl, MapFiltersControl, MetricWithFieldListFormControl,
-  MultipleSelectFormControl, OrderedSelectFormControl, RadioButtonFormControl, SelectFormControl,
-  SlideToggleFormControl,
+  ButtonFormControl,
+  ButtonToggleFormControl,
+  CollectionsUnitsControl,
+  ColorFormControl,
+  ColorPreviewFormControl,
+  ComponentFormControl,
+  ConfigFormControl,
+  FieldTemplateControl,
+  FieldWithSizeListFormControl,
+  HiddenFormControl,
+  HuePaletteFormControl,
+  IconFormControl,
+  InputFormControl,
+  MapFiltersControl,
+  MetricWithFieldListFormControl,
+  MultipleSelectFormControl,
+  OrderedSelectFormControl,
+  RadioButtonFormControl,
+  SelectFormControl,
   SliderFormControl,
-  TextareaFormControl, TitleInputFormControl, TypedSelectFormControl, VisualisationCheckboxFormControl
+  SlideToggleFormControl,
+  TextareaFormControl,
+  TitleInputFormControl,
+  TypedSelectFormControl,
+  VisualisationCheckboxFormControl
 } from '@shared-models/config-form';
-import { ArlasColorService } from 'arlas-web-components';
 import { ArlasIamService } from 'arlas-wui-toolkit';
 import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'arlas-config-form-control',
@@ -65,7 +89,7 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   public constructor(
     private resolver: ComponentFactoryResolver,
     private changeDetector: ChangeDetectorRef,
-    private arlasIamService: ArlasIamService
+    private readonly arlasIamService: ArlasIamService
   ) {
     this.organisation = this.arlasIamService.getOrganisation();
   }

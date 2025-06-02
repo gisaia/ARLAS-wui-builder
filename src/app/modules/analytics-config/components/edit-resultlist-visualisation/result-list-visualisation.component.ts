@@ -59,7 +59,7 @@ export class ResultListVisualisationComponent {
   @Input() public collectionControl: SelectFormControl;
   @Input() public control: FormArray<ResultListVisualisationsFormGroup>;
   /** helper to create new form **/
-  private resultListFormBuilder = inject(ResultlistFormBuilderService);
+  private readonly resultListFormBuilder = inject(ResultlistFormBuilderService);
   /** disable drag when dropping an element **/
   public dragDisabled = true;
   /** handle the switch between visualisation list and edit **/

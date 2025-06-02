@@ -25,11 +25,12 @@ import {
   ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, computed, inject, input, OnInit, output, signal, ViewChild } from '@angular/core';
+import { Component, inject, input, output, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { SharedModule } from '@shared/shared.module';
 import { filter, first } from 'rxjs';
@@ -46,14 +47,53 @@ import { filter, first } from 'rxjs';
 
 })
 export class ManageVisualisationComponent {
+  /**
+   * Represente a visualitation
+   * @type {InputSignal<ResultListVisualisationsFormGroup | undefined>}
+   * @protected
+   */
   protected visualisation = input<ResultListVisualisationsFormGroup>();
+  /**
+   * tell if its new visualisation or not.
+   * @type {InputSignal<boolean | undefined>}
+   * @protected
+   */
   protected isEdition = input<boolean>();
+  /**
+   *  collection name
+   * @type {InputSignal<string>}
+   * @protected
+   */
   protected collectionControlName = input<string>('');
+  /**
+   *  emite event to close the view
+   * @type {OutputEmitterRef<boolean>}
+   * @protected
+   */
   protected changeValidated = output<boolean>();
+  /**
+   * Emit event to close the view
+   * @type {OutputEmitterRef<boolean>}
+   * @protected
+   */
   protected changeCanceled = output<boolean>();
   protected dialog = inject(MatDialog);
+  /**
+   * Helper. Create right forms
+   * @type {ResultlistFormBuilderService}
+   * @protected
+   */
   protected resultListFormBuilderService = inject(ResultlistFormBuilderService);
+  /**
+   * table columns
+   * @type {string[]}
+   * @protected
+   */
   protected displayedColumns = ['drag', 'dataGroup', 'protocol', 'visualisationUrl', 'conditions', 'actions'];
+  /**
+   *  Enable or not drag and drop for column row
+   * @type {boolean}
+   */
   public dragDisabled = true;
   @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
 
@@ -68,7 +108,7 @@ export class ManageVisualisationComponent {
     if(this.visualisation().dirty && !this.isEdition()) {
       const confirm = this.dialog.open(ConfirmModalComponent, {
         data: {
-          message: 'Your data has been modified do you want to leave ?'
+          message: marker('Your data has been modified do you want to leave ?')
         }
       });
 
@@ -93,12 +133,18 @@ export class ManageVisualisationComponent {
     this.table.renderRows();
   }
 
-  public editDataGroup(itemIndex: number){
+  public editDataGroup(itemIndex: number, ev?: KeyboardEvent){
+    if(ev && ev.key !== 'Enter') {
+      return;
+    }
     const dataGroup = (this.visualisation().get('dataGroups') as FormArray).at(itemIndex) as ResultListVisualisationsDataGroup;
     this.openEditionDialog(dataGroup, true);
   }
 
-  public removeDataGroup(itemIndex: number) {
+  public removeDataGroup(itemIndex: number, ev?: KeyboardEvent) {
+    if(ev && ev.key !== 'Enter') {
+      return;
+    }
     (this.visualisation().get('dataGroups') as FormArray).removeAt(itemIndex);
     this.table.renderRows();
   }
