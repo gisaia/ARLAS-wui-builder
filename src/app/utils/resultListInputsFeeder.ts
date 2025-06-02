@@ -18,12 +18,8 @@
  */
 import {
   eqArlasApiFilter,
-  gtArlasApiFilter,
-  gteArlasApiFilter,
+  isNumberOperator,
   likeArlasApiFilter,
-  ltArlasApiFilter,
-  lteArlasApiFilter,
-  neArlasApiFilter,
   rangeArlasApiFilter
 } from '@analytics-config/services/resultlist-form-builder/models';
 import {
@@ -243,7 +239,7 @@ export class ResultListInputsFeeder {
     if(dataGroupConf.filters && dataGroupConf.filters.length > 0){
       dataGroupConf.filters.forEach(async (condition, i) => {
         const conditionForm = resultListFormBuilder
-          .buildVisualisationsDataGroupCondition(this.options.contributor.collection);
+          .buildVisualisationsDataGroupCriteria(this.options.contributor.collection);
         const fields = await firstValueFrom(conditionForm.collectionFields);
         const field = fields.find(file => file.name === condition.field);
         this.imports([
@@ -270,12 +266,7 @@ export class ResultListInputsFeeder {
           conditionForm.customControls.filterValues.filterInValues.selectedMultipleItems = filterInValues.map(v => ({ value: v }));
           conditionForm.customControls.filterValues.filterInValues.savedItems = new Set(filterInValues);
           conditionForm.customControls.filterValues.filterEqualValues.disable();
-        } else if ( (condition.op  === eqArlasApiFilter||
-                condition.op  === neArlasApiFilter ||
-                condition.op  === gteArlasApiFilter ||
-                condition.op  === gtArlasApiFilter ||
-                condition.op  === ltArlasApiFilter||
-                condition.op  === lteArlasApiFilter) &&
+        } else if ( isNumberOperator(condition.op) &&
             NUMERIC_TYPES.includes(condition.type as any)) {
           this.imports([
             {

@@ -81,7 +81,8 @@ import { Observable } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
-  public tabsOrder: string[] =  ['dataStep', 'gridStep', 'visualisationStep','sactionStep', 'settingsStep'];
+  public tabsOrder: string[] = ['dataStep', 'gridStep', 'visualisationStep', 'sactionStep', 'settingsStep'];
+
   public constructor(
     collection: string,
     collectionService: CollectionService,
@@ -203,7 +204,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             1,
             {
               optional: true,
-              validators:[TextareaFormControl.processValidator('result')],
+              validators: [TextareaFormControl.processValidator('result')],
               dependsOn: () => [this.customControls.dataStep.collection],
               onDependencyChange: (control: TextareaFormControl) => {
                 if (!this.collection || this.customControls.dataStep.collection.dirty) {
@@ -236,7 +237,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             1,
             {
               optional: true,
-              validators:[TextareaFormControl.processValidator('result')],
+              validators: [TextareaFormControl.processValidator('result')],
               dependsOn: () => [this.customControls.dataStep.collection],
               onDependencyChange: (control: TextareaFormControl) => {
                 if (!this.collection || this.customControls.dataStep.collection.dirty) {
@@ -326,13 +327,13 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             marker('Background style of cells Description'),
             false,
             [
-              { label: marker('Filled'), value: 'filled' },
-              { label: marker('Outlined'), value: 'outlined' },
+              {label: marker('Filled'), value: 'filled'},
+              {label: marker('Outlined'), value: 'outlined'},
             ],
             {
               optional: true,
               dependsOn: () => [
-                        this.customControls.dataStep.columns as any
+                                this.customControls.dataStep.columns as any
               ],
               onDependencyChange: (control: ButtonFormControl) => {
                 const useColorService = this.customControls.dataStep.columns.controls
@@ -342,9 +343,9 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             }
           ),
         }).withTabName(marker('Resultlist settings')),
-        visualisationStep:new ConfigFormGroup({
+        visualisationStep: new ConfigFormGroup({
           visualisationsList: new FormArray([]),
-          visualisations:  new ComponentFormControl(
+          visualisations: new ComponentFormControl(
             ResultListVisualisationComponent,
             {
               collectionControl: () => this.customControls.dataStep.collection,
@@ -409,7 +410,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
       visualisationLink: this.get('sactionStep.visualisationLink') as InputFormControl,
       downloadLink: this.get('sactionStep.downloadLink') as InputFormControl,
     },
-    settingsStep:  {
+    settingsStep: {
       displayFilters: this.get('settingsStep.displayFilters') as SlideToggleFormControl,
       isGeoSortActived: this.get('settingsStep.isGeoSortActived') as SlideToggleFormControl,
       cellBackgroundStyle: this.get('settingsStep.cellBackgroundStyle') as SelectFormControl
@@ -464,11 +465,11 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
   public constructor(
     fieldsObs: Observable<Array<SelectOption>>,
     collection: string,
-    private globalKeysToColortrl: FormArray,
-    defaultConfig: DefaultConfig,
-    dialog: MatDialog,
-    collectionService: CollectionService,
-    private colorService: ArlasColorService
+        private globalKeysToColortrl: FormArray,
+        defaultConfig: DefaultConfig,
+        dialog: MatDialog,
+        collectionService: CollectionService,
+        private colorService: ArlasColorService
   ) {
     super(collection,
       {
@@ -501,7 +502,7 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
           1,
           {
             optional: true,
-            validators:[TextareaFormControl.processValidator('result')],
+            validators: [TextareaFormControl.processValidator('result')],
           }
         ),
         useColorService: new SlideToggleFormControl(
@@ -581,6 +582,7 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
     useColorService: this.get('useColorService') as SlideToggleFormControl,
     sort: this.get('sort') as HiddenFormControl
   };
+
   private addToColorManualValuesCtrl(kc: KeywordColor, index?: number) {
     if (!Object.values(this.globalKeysToColortrl.controls)
       .find(keywordColorGrp => keywordColorGrp.get('keyword').value === kc.keyword)) {
@@ -640,7 +642,7 @@ export class ResultlistDetailFieldFormGroup extends FormGroup {
         1,
         {
           optional: true,
-          validators:[TextareaFormControl.processValidator('result')],
+          validators: [TextareaFormControl.processValidator('result')],
         }
       )
     });
@@ -657,9 +659,9 @@ export class ResultlistDetailFieldFormGroup extends FormGroup {
 export class ResultlistQuicklookFormGroup extends FormGroup {
 
   /** TODO:
-   * Put filter fields as optional
-   * Put filterValues only if filterField is set
-   */
+     * Put filter fields as optional
+     * Put filterValues only if filterField is set
+     */
   public constructor(fieldsObs: Observable<Array<CollectionField>>, collection: string, collectionService: CollectionService) {
     super({
       url: new FieldTemplateControl(
@@ -704,13 +706,14 @@ export class ResultlistQuicklookFormGroup extends FormGroup {
               if (!this.customControls.filter.field.touched) {
                 // Avoid to reset the imported configuration when first loading it
               } else if (this.customControls.filter.field.value !== '' && !!this.customControls.filter.field.syncOptions
-                && this.customControls.filter.field.syncOptions.map(f => f.value).includes(this.customControls.filter.field.value)) {
+                                && this.customControls.filter.field.syncOptions.map(f => f.value)
+                                  .includes(this.customControls.filter.field.value)) {
                 control.setSyncOptions([]);
                 collectionService.getTermAggregation(
                   collection,
                   this.customControls.filter.field.value)
                   .then(keywords => {
-                    control.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
+                    control.setSyncOptions(keywords.map(k => ({value: k, label: k})));
                   });
               } else {
                 control.setSyncOptions([]);
@@ -780,8 +783,8 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
         marker('Protocol'),
         false,
         [
-          { label: marker('Titiler'), value: 'titiler' },
-          { label: marker('Other'), value: 'other' },
+          {label: marker('Titiler'), value: 'titiler'},
+          {label: marker('Other'), value: 'other'},
         ],
       ),
       visualisationUrl: new InputFormControl(
@@ -799,7 +802,7 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
   public customControls = {
     name: this.get('name') as InputFormControl,
     protocol: this.get('protocol') as SelectFormControl,
-    filters:  this.get('filters') as FormArray<ResultListVisualisationsDataGroupCondition>,
+    filters: this.get('filters') as FormArray<ResultListVisualisationsDataGroupCondition>,
     visualisationUrl: this.get('visualisationUrl') as InputFormControl
   };
 }
@@ -809,16 +812,17 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
   public editing = false;
   public editionInfo: { field: string; op: ArlasApiFilter; };
   protected filter = new GeoFilterInputsBuilder();
+
   public constructor(
-    public collectionFields: Observable<Array<CollectionField>>,
-    filterOperations: Array<ArlasApiFilter>,
-    collectionService: CollectionService,
-    collection: string) {
+        public collectionFields: Observable<Array<CollectionField>>,
+        filterOperations: Array<ArlasApiFilter>,
+        collectionService: CollectionService,
+        collection: string) {
     super({
       filterField: new TypedSelectFormControl(
         '',
-        marker('Condition fields'),
-        marker('Condition fields'),
+        marker('Criteria\'s fields'),
+        marker('Criteria\'s fields'),
         true,
         toNumericOrKeywordOrBooleanObs(collectionFields),
         {
@@ -948,14 +952,14 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
   /**
      *  update edit state to know if we reset or not fields
      */
-  public syncEditState(){
+  public syncEditState() {
     this.editing = !!this.customControls.filterField.value.value && !!this.customControls.filterOperation.value;
     if (this.editing) {
       this.editionInfo = {
         field: this.customControls.filterField.value.value,
         op: this.customControls.filterOperation.value
       };
-    } else{
+    } else {
       this.editionInfo = null;
     }
   }
@@ -975,8 +979,6 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
 }
 
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -985,12 +987,12 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
   public defaultKey = 'analytics.widgets.resultlist';
 
   public constructor(
-    protected collectionService: CollectionService,
-    protected mainFormService: MainFormService,
-    private defaultValuesService: DefaultValuesService,
-    private dialog: MatDialog,
-    private colorService: ArlasColorService,
-    private router: Router,
+        protected collectionService: CollectionService,
+        protected mainFormService: MainFormService,
+        private defaultValuesService: DefaultValuesService,
+        private dialog: MatDialog,
+        private colorService: ArlasColorService,
+        private router: Router,
   ) {
     super(collectionService, mainFormService);
   }
@@ -1060,15 +1062,15 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
   }
 
   public buildVisualisationsDataGroup() {
-    return  new ResultListVisualisationsDataGroup();
+    return new ResultListVisualisationsDataGroup();
   }
 
-  public buildVisualisationsDataGroupCondition(collection: string) {
+  public buildVisualisationsDataGroupCriteria(collection: string) {
     const collectionFields = this.collectionService.getCollectionFields(collection);
-    const operators = [ rangeArlasApiFilter,
+    const operators = [rangeArlasApiFilter,
       eqArlasApiFilter, likeArlasApiFilter,
-      lteArlasApiFilter,  ltArlasApiFilter,
-      gteArlasApiFilter,  gtArlasApiFilter,
+      lteArlasApiFilter, ltArlasApiFilter,
+      gteArlasApiFilter, gtArlasApiFilter,
       neArlasApiFilter
     ];
 

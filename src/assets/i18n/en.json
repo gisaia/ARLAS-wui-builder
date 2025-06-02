@@ -931,11 +931,12 @@
 	"Add an item family": "Add an item family",
 	"Add a visualization configuration": "Add a visualization configuration",
 	"Add a visualization": "Add a visualization",
-	"Apply to": "Apply to",
+	"Add a criteria": "Add a criteria",
+	"Applied to": "Applied to",
 	"No results": "No results",
-	"Data group field filter": "Field filter",
-	"Data group operator": "Operator",
-	"Data group field value": "Field value",
+	"Criteria's field": "Field filter",
+	"Criteria's operation": "Criteria's operation",
+	"Criteria's value": "Criteria's value",
 	"Configure data eligible for visualisation": "Configure data eligible for {{name}} visualisation",
 	"Back to visualisation list": "Back to visualisation list",
 	"Edit condition": "Edit condition",
@@ -948,5 +949,5 @@
     "Resultlist grid": "Grid",
 	"Visualisation description": "Visualisation description",
 	"Visualisation name": "Visualisation name",
-	"Conditions will be evaluated in order" : "Conditions will be evaluated in order. The first condition to be true will be used for visualization."
+	"Criterias will be evaluated in order" : "Criterias will be evaluated in order. The first Criterias to be true will be used for visualization or to visualize the item."
 }

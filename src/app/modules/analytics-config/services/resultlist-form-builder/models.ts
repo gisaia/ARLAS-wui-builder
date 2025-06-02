@@ -28,10 +28,20 @@ export const lteArlasApiFilter: ArlasApiFilter  = 'Lte';
 export const likeArlasApiFilter: ArlasApiFilter  = 'Like';
 export const rangeArlasApiFilter: ArlasApiFilter  = 'Range';
 
+export function isNumberOperator(filter: ArlasApiFilter){
+  return filter === eqArlasApiFilter ||
+        filter === neArlasApiFilter ||
+        filter === gteArlasApiFilter ||
+        filter === gtArlasApiFilter||
+        filter === ltArlasApiFilter ||
+        filter === lteArlasApiFilter;
+}
+
+
 export interface ResultListVisualisationFormWidget {
     'name': string;
-        'description': string;
-        'dataGroups': ResultListVisualisationDataGroupFormWidget[];
+    'description': string;
+    'dataGroups': ResultListVisualisationDataGroupFormWidget[];
 }
 
 
@@ -43,8 +53,8 @@ export interface ResultListVisualisationDataGroupFormWidget {
 }
 
 export  interface ResultListVisualisationConditionFormWidget {
-    filterField: {value: string;type: string;};
-    filterOperation: ArlasApiFilter ;
+    filterField: {value: string; type: string;};
+    filterOperation: ArlasApiFilter;
     filterValues: {
         filterInValues: any[];
         filterEqualValues: number;

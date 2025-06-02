@@ -83,7 +83,7 @@ import {
   AnalyticConfig,
   ChipSearchConfig,
   Config,
-  ContributorConfig,
+  ContributorConfig, DataGroupInputCondition,
   DataGroupInputConfig,
   JSONPATH_COUNT,
   JSONPATH_METRIC,
@@ -1448,21 +1448,21 @@ export class ConfigExportHelper {
         protocol: dataG.protocol,
         visualisationUrl: dataG.visualisationUrl
       };
-      dataGroup.filters = this.buildDataGroupConditions(dataG);
+      dataGroup.filters = this.buildDataGroupCriteria(dataG);
       return dataGroup;
     });
   }
 
-  protected static  buildDataGroupConditions(dataG: ResultListVisualisationDataGroupFormWidget) {
+  protected static  buildDataGroupCriteria(dataG: ResultListVisualisationDataGroupFormWidget) {
     return dataG.filters.map(f => {
-      const condition = {
+      const criteria: DataGroupInputCondition = {
         field: f.filterField.value,
         op: f.filterOperation,
         type: f.filterField.type,
         value: null
       };
       if (f.filterOperation === likeArlasApiFilter) {
-        condition.value =  f.filterValues.filterInValues.map(v => v.value);
+        criteria.value =  f.filterValues.filterInValues.map(v => v.value);
       } else if ((f.filterOperation === eqArlasApiFilter ||
           f.filterOperation === neArlasApiFilter ||
           f.filterOperation === eqArlasApiFilter ||
@@ -1470,15 +1470,15 @@ export class ConfigExportHelper {
           f.filterOperation === gtArlasApiFilter ||
           f.filterOperation === ltArlasApiFilter ||
           f.filterOperation === lteArlasApiFilter) &&
-      NUMERIC_TYPES.includes(condition.type as unknown as CollectionReferenceDescriptionProperty.TypeEnum)
+      NUMERIC_TYPES.includes(criteria.type as unknown as CollectionReferenceDescriptionProperty.TypeEnum)
       ) {
-        condition.value = f.filterValues.filterEqualValues;
+        criteria.value = f.filterValues.filterEqualValues;
       } else if (f.filterOperation === rangeArlasApiFilter) {
-        condition.value =  f.filterValues.filterMinRangeValues + ';' + f.filterValues.filterMaxRangeValues;
+        criteria.value =  f.filterValues.filterMinRangeValues + ';' + f.filterValues.filterMaxRangeValues;
       } else if (f.filterOperation === eqArlasApiFilter) {
-        condition.value = f.filterValues.filterBoolean;
+        criteria.value = f.filterValues.filterBoolean;
       }
-      return condition;
+      return criteria;
     });
   }
 
