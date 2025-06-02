@@ -22,7 +22,16 @@ import {
   ResultListVisualisationsDataGroup,
   ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { ChangeDetectionStrategy, Component, inject, OnInit, output, signal, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  output,
+  signal,
+  ViewChild,
+  WritableSignal
+} from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -57,10 +66,10 @@ export class ManageDataGroupDialogComponent implements OnInit {
   protected validate = output<boolean>();
   protected cancel = output<boolean>();
   protected displayedColumns = ['field', 'operator', 'value', 'actions'];
-  private resultListFormBuilder = inject(ResultlistFormBuilderService);
+  private readonly resultListFormBuilder = inject(ResultlistFormBuilderService);
   public data = inject<DataGroupDialogData>(MAT_DIALOG_DATA);
   public collectionService = inject(CollectionService);
-  public disableButton = signal(true);
+  public disableButton: WritableSignal<boolean>;
   @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
 
   public get criteriaList(){
@@ -73,9 +82,8 @@ export class ManageDataGroupDialogComponent implements OnInit {
 
   public ngOnInit() {
     // init status of the button to avoid change detection errors
-    setTimeout(() => {
-      this.disableButton.set(this.data.dataGroup.invalid);
-    });
+
+    this.disableButton = signal(this.data.dataGroup?.invalid);
     this.data.dataGroup?.statusChanges.subscribe(s => {
       this.disableButton.set(s === 'INVALID');
     });

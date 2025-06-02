@@ -65,7 +65,7 @@ abstract class InputFilter<V, L> {
    */
   protected checkEditState(parentControl: ParentControl){
     if (parentControl.editionInfo) {
-      // if we change the field/or operation, we are no longer in editing an existing filter but creating a new one
+      // if we change the field/or operation, we are no longer editing an existing filter but creating a new one
       // we quit edition mode
       if (parentControl.customControls.filterField.value.value !== parentControl.editionInfo.field ||
           parentControl.customControls.filterOperation.value !== parentControl.editionInfo.op

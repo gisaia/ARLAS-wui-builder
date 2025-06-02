@@ -406,7 +406,6 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
       cellBackgroundStyle: this.get('settingsStep.cellBackgroundStyle') as SelectFormControl
     },
     visualisationStep: {
-      visualisationLink: this.get('visualisationStep.visualisationLink') as InputFormControl,
       visualisationsList: this.get('visualisationStep.visualisationsList') as FormArray
     },
     unmanagedFields: {
@@ -734,12 +733,12 @@ export class ResultListVisualisationsFormGroup extends FormGroup {
       name: new InputFormControl(
         '',
         marker('Visualisation name'),
-        marker('Name'),
+        marker('Visualisation name'),
       ),
       description: new TextareaFormControl(
         '',
         marker('Visualisation description'),
-        marker('Description'),
+        marker('Visualisation descriptio'),
         '',
         null,
         {
@@ -769,8 +768,8 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
         Validators.minLength(1)]),
       protocol: new SelectFormControl(
         '',
-        marker('Protocol'),
-        marker('Protocol'),
+        marker('Result list protocol'),
+        marker(''),
         false,
         [
           {label: marker('Titiler'), value: 'titiler'},
@@ -821,7 +820,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
       ),
       filterOperation: new SelectFormControl(
         '',
-        marker('operation'),
+        marker('Filter operation'),
         marker('filter operation description'),
         false,
         filterOperations.map(op => ({
@@ -851,7 +850,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
         ),
         filterInValues: new MultipleSelectFormControl(
           '',
-          marker('values'),
+          marker('Filter-in values'),
           marker('filter in-values description'),
           false,
           [],
@@ -865,7 +864,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
         ),
         filterEqualValues: new InputFormControl(
           '',
-          marker('values'),
+          marker('Filter-equal values'),
           marker('filter equal description'),
           'number',
           {
