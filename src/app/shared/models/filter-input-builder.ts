@@ -17,15 +17,7 @@
  * under the License.
  */
 import {
-  ArlasApiFilter,
-  eqArlasApiFilter,
-  gtArlasApiFilter,
-  gteArlasApiFilter, isNumberOperator,
-  likeArlasApiFilter,
-  ltArlasApiFilter,
-  lteArlasApiFilter,
-  neArlasApiFilter,
-  rangeArlasApiFilter
+  isNumberOperator
 } from '@analytics-config/services/resultlist-form-builder/models';
 import { FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
 import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
@@ -42,7 +34,7 @@ interface FilterFrom {
 interface ParentControl {
     editing?: boolean;
     customControls?: any;
-    editionInfo?: { op: string | ArlasApiFilter; field: any; };
+    editionInfo?: { op: string | Expression.OpEnum; field: any; };
 }
 
 abstract class InputFilter<V, L> {
@@ -309,35 +301,35 @@ export class FilterInputsBuilder extends InputFilter<FILTER_OPERATION, FILTER_OP
   }
 }
 
-export class GeoFilterInputsBuilder  extends InputFilter<ArlasApiFilter, Expression.OpEnum> {
+export class GeoFilterInputsBuilder  extends InputFilter<Expression.OpEnum, Expression.OpEnum | string> {
   protected  getBooleanOperatorList(){
     return [
-      { value: eqArlasApiFilter, label: Expression.OpEnum.Eq },
+      { value: Expression.OpEnum['eq'], label:'eq' },
     ];
   }
 
   protected  getKeywordOperatorList(){
     return[
-      { value: likeArlasApiFilter, label: Expression.OpEnum.Like }
+      { value: Expression.OpEnum['like'], label: 'like' }
     ];
   }
 
   protected  getNumericalOperatorList(){
     return [
-      { value: eqArlasApiFilter, label: Expression.OpEnum.Eq },
-      { value: neArlasApiFilter, label: Expression.OpEnum.Ne},
-      { value: gteArlasApiFilter, label: Expression.OpEnum.Gte },
-      { value: gtArlasApiFilter, label: Expression.OpEnum.Gt},
-      { value: ltArlasApiFilter, label: Expression.OpEnum.Lt },
-      { value: lteArlasApiFilter, label: Expression.OpEnum.Lte },
-      { value: rangeArlasApiFilter, label: Expression.OpEnum.Range }
+      { value: Expression.OpEnum['eq'], label: 'eq' },
+      { value: Expression.OpEnum['ne'], label: 'ne'},
+      { value: Expression.OpEnum['gte'], label: 'gte' },
+      { value: Expression.OpEnum['gt'], label: 'gt'},
+      { value: Expression.OpEnum['lt'], label: 'lt' },
+      { value: Expression.OpEnum['lte'], label: 'lte' },
+      { value: Expression.OpEnum['range'], label: 'range' }
     ];
   }
 
   public keywordsFilter(parentControl: any, control: any, collectionService: CollectionService, collection: string) {
     if (!!parentControl.customControls.filterField.value && !!parentControl.customControls.filterField.value.value &&
         parentControl.customControls.filterField.value.value !== '') {
-      if (parentControl.customControls.filterOperation.value === likeArlasApiFilter) {
+      if (parentControl.customControls.filterOperation.value === Expression.OpEnum['like']) {
         control.setSyncOptions([]);
         this.setKeywordsFilterWithTermAgg(parentControl, control, collectionService, collection);
       } else {
@@ -354,7 +346,7 @@ export class GeoFilterInputsBuilder  extends InputFilter<ArlasApiFilter, Express
       control.savedItems = new Set();
       control.selectedMultipleItems = [];
     }
-    control.enableIf(parentControl.customControls.filterOperation.value === likeArlasApiFilter);
+    control.enableIf(parentControl.customControls.filterOperation.value === Expression.OpEnum['like']);
   }
 
   public numberFilter<P extends  ParentControl, C extends FilterFrom>(parentControl: P, control: C) {
@@ -367,7 +359,7 @@ export class GeoFilterInputsBuilder  extends InputFilter<ArlasApiFilter, Express
   // eslint-disable-next-line max-len
   public buildInputRangeValues<P extends  ParentControl, C extends FilterFrom>(parentControl: P, control: C,
     isLoading: boolean, metricType: METRIC_TYPES,  collectionService: CollectionService, collection: string) {
-    const doRangeEnable = parentControl.customControls.filterOperation.value === rangeArlasApiFilter;
+    const doRangeEnable = parentControl.customControls.filterOperation.value === Expression.OpEnum['range'];
     control.enableIf(doRangeEnable);
     if (doRangeEnable && !isLoading) {
       this.setRangeControlWithComputationMetric(collectionService, collection, parentControl, control, metricType);
@@ -375,7 +367,7 @@ export class GeoFilterInputsBuilder  extends InputFilter<ArlasApiFilter, Express
   }
 
   public booleanFilter<P extends  ParentControl, C extends FilterFrom>(parentControl: P, control: C) {
-    control.enableIf(parentControl.customControls.filterOperation.value === eqArlasApiFilter &&
+    control.enableIf(parentControl.customControls.filterOperation.value === Expression.OpEnum['eq'] &&
         parentControl.customControls.filterField.value.type === 'BOOLEAN');
   }
 
@@ -383,9 +375,9 @@ export class GeoFilterInputsBuilder  extends InputFilter<ArlasApiFilter, Express
     // if we are editing an existing filter, keep the selected operation.
     // otherwise there is no way to remember it
     const operatorValue = parentControl.customControls.filterOperation.value;
-    if ((operatorValue === likeArlasApiFilter)) {
+    if ((operatorValue === Expression.OpEnum['like'])) {
       control.setSyncOptions(this.getKeywordOperatorList());
-    } else if (operatorValue === eqArlasApiFilter  &&
+    } else if (operatorValue === Expression.OpEnum['eq']  &&
         parentControl.customControls.filterField.value.type === 'BOOLEAN') {
       control.setSyncOptions(this.getBooleanOperatorList());
     } else {

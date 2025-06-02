@@ -24,14 +24,7 @@ import {
   DEFAULT_METRIC_VALUE
 } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
 import {
-  eqArlasApiFilter,
-  gtArlasApiFilter,
-  gteArlasApiFilter,
-  likeArlasApiFilter,
-  ltArlasApiFilter,
-  lteArlasApiFilter,
-  neArlasApiFilter,
-  rangeArlasApiFilter,
+  isNumberOperator,
   ResultListVisualisationDataGroupFormWidget,
   ResultListVisualisationFormWidget
 } from '@analytics-config/services/resultlist-form-builder/models';
@@ -64,7 +57,7 @@ import {
 import {
   TimelineGlobalFormGroup
 } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
-import { CollectionReferenceDescription } from 'arlas-api';
+import { CollectionReferenceDescription, Expression } from 'arlas-api';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api/api';
 import { BasemapStyle, SCROLLABLE_ARLAS_ID, VisualisationSetConfig } from 'arlas-map';
 import { ArlasColorService } from 'arlas-web-components';
@@ -83,7 +76,8 @@ import {
   AnalyticConfig,
   ChipSearchConfig,
   Config,
-  ContributorConfig, DataGroupInputCondition,
+  ContributorConfig,
+  DataGroupInputCondition,
   DataGroupInputConfig,
   JSONPATH_COUNT,
   JSONPATH_METRIC,
@@ -1461,21 +1455,15 @@ export class ConfigExportHelper {
         type: f.filterField.type,
         value: null
       };
-      if (f.filterOperation === likeArlasApiFilter) {
+      if (f.filterOperation === Expression.OpEnum['like']) {
         criteria.value =  f.filterValues.filterInValues.map(v => v.value);
-      } else if ((f.filterOperation === eqArlasApiFilter ||
-          f.filterOperation === neArlasApiFilter ||
-          f.filterOperation === eqArlasApiFilter ||
-          f.filterOperation === gteArlasApiFilter ||
-          f.filterOperation === gtArlasApiFilter ||
-          f.filterOperation === ltArlasApiFilter ||
-          f.filterOperation === lteArlasApiFilter) &&
+      } else if (isNumberOperator(f.filterOperation) &&
       NUMERIC_TYPES.includes(criteria.type as unknown as CollectionReferenceDescriptionProperty.TypeEnum)
       ) {
         criteria.value = f.filterValues.filterEqualValues;
-      } else if (f.filterOperation === rangeArlasApiFilter) {
+      } else if (f.filterOperation === Expression.OpEnum['range']) {
         criteria.value =  f.filterValues.filterMinRangeValues + ';' + f.filterValues.filterMaxRangeValues;
-      } else if (f.filterOperation === eqArlasApiFilter) {
+      } else if (f.filterOperation === Expression.OpEnum['eq']) {
         criteria.value = f.filterValues.filterBoolean;
       }
       return criteria;

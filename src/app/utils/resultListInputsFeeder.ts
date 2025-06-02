@@ -16,12 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import {
-  eqArlasApiFilter,
-  isNumberOperator,
-  likeArlasApiFilter,
-  rangeArlasApiFilter
-} from '@analytics-config/services/resultlist-form-builder/models';
+import { isNumberOperator } from '@analytics-config/services/resultlist-form-builder/models';
 import {
   ResultlistConfigForm,
   ResultlistFormBuilderService,
@@ -37,6 +32,7 @@ import {
 } from '@services/main-form-manager/models-config';
 import { ImportElement, importElements } from '@services/main-form-manager/tools';
 import { InputFormControl } from '@shared-models/config-form';
+import { Expression } from 'arlas-api';
 import { ArlasColorService } from 'arlas-web-components';
 import { firstValueFrom } from 'rxjs';
 
@@ -254,8 +250,8 @@ export class ResultListInputsFeeder {
         ]);
 
         conditionForm.syncEditState();
-
-        if (condition.op === likeArlasApiFilter) {
+        console.log(Expression.OpEnum['like']);
+        if (condition.op ===  Expression.OpEnum['like']) {
           const  filterInValues = (condition.value as string[]);
           this.imports([
             {
@@ -274,7 +270,7 @@ export class ResultListInputsFeeder {
               control:  conditionForm.customControls.filterValues.filterEqualValues
             }
           ]);
-        } else if (condition.op === rangeArlasApiFilter) {
+        } else if (condition.op === Expression.OpEnum['range']) {
           const min =  +(condition.value as string).split(';')[0];
           const max =  +(condition.value as string).split(';')[1];
           this.imports([
@@ -287,7 +283,7 @@ export class ResultListInputsFeeder {
               control:  conditionForm.customControls.filterValues.filterMaxRangeValues
             }
           ]);
-        } else if (condition.op === eqArlasApiFilter) {
+        } else if (condition.op === Expression.OpEnum['eq']) {
           this.imports([
             {
               value: condition.value,

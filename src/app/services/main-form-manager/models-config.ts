@@ -18,7 +18,6 @@
  */
 
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
-import { ArlasApiFilter } from '@analytics-config/services/resultlist-form-builder/models';
 import { Aggregation, Expression } from 'arlas-api';
 import { BasemapStyle, VisualisationSetConfig } from 'arlas-map';
 import { FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
@@ -330,7 +329,7 @@ export interface DataGroupInputConfig {
 
 export interface DataGroupInputCondition {
   field: string;
-  op: ArlasApiFilter;
+  op: Expression.OpEnum;
   type: string;
   value: string | number | string[] | boolean;
 }
