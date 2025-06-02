@@ -24,8 +24,14 @@ import {
   DEFAULT_METRIC_VALUE
 } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
 import {
-  eqArlasApiFilter, lteArlasApiFilter, ArlasApiFilter, gteArlasApiFilter,
-  likeArlasApiFilter, ltArlasApiFilter, neArlasApiFilter, rangeArlasApiFilter, gtArlasApiFilter,
+  eqArlasApiFilter,
+  gtArlasApiFilter,
+  gteArlasApiFilter,
+  likeArlasApiFilter,
+  ltArlasApiFilter,
+  lteArlasApiFilter,
+  neArlasApiFilter,
+  rangeArlasApiFilter,
   ResultListVisualisationDataGroupFormWidget,
   ResultListVisualisationFormWidget
 } from '@analytics-config/services/resultlist-form-builder/models';
@@ -42,10 +48,7 @@ import {
 } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
-import {
-  CLUSTER_GEOMETRY_TYPE,
-  FILTER_OPERATION
-} from '@map-config/services/map-layer-form-builder/models';
+import { CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
 import {
   SearchGlobalFormGroup
 } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
@@ -61,7 +64,7 @@ import {
 import {
   TimelineGlobalFormGroup
 } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
-import { CollectionReferenceDescription, Expression } from 'arlas-api';
+import { CollectionReferenceDescription } from 'arlas-api';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api/api';
 import { BasemapStyle, SCROLLABLE_ARLAS_ID, VisualisationSetConfig } from 'arlas-map';
 import { ArlasColorService } from 'arlas-web-components';

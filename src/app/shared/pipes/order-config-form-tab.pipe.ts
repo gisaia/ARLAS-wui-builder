@@ -17,10 +17,6 @@
  * under the License.
  */
 import { Pipe, PipeTransform } from '@angular/core';
-import {
-  ResultListVisualisationsFormGroup, ResultListVisualisationsDataGroup
-} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { FormArray } from '@angular/forms';
 import { ConfigFormGroup } from '@shared-models/config-form';
 
 @Pipe({

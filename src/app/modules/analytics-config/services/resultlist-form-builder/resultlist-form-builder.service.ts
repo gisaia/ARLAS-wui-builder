@@ -790,7 +790,7 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
         '',
         'text',
         {
-          validators: [Validators.pattern('^(http|https)\:\/\/.*')]
+          validators: [Validators.pattern('^(http|https)://.*')]
         }
       ),
     });

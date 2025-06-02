@@ -53,10 +53,10 @@ export class MultiSelectSearchComponent implements OnInit, AfterViewInit {
   @Input() public warningMessage: string;
   public selectSearchFilterFc = new FormControl();
   public selectMultiFc = new FormControl();
-  private _destroyRef = inject(DestroyRef);
+  private readonly _destroyRef = inject(DestroyRef);
   public filteredSyncOption = new ReplaySubject<any[]>(1);
-  private colorService = inject(ArlasColorService);
-  private collectionService = inject(CollectionService);
+  private readonly colorService = inject(ArlasColorService);
+  private readonly collectionService = inject(CollectionService);
   @ViewChild('multiSelect', { static: true }) public multiSelect: MatSelect;
 
   public ngOnInit() {

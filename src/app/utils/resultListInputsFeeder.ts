@@ -28,7 +28,8 @@ import {
 } from '@analytics-config/services/resultlist-form-builder/models';
 import {
   ResultlistConfigForm,
-  ResultlistFormBuilderService, ResultListVisualisationsDataGroupCondition
+  ResultlistFormBuilderService,
+  ResultListVisualisationsDataGroupCondition
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { AbstractControl, FormArray } from '@angular/forms';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -41,7 +42,7 @@ import {
 import { ImportElement, importElements } from '@services/main-form-manager/tools';
 import { InputFormControl } from '@shared-models/config-form';
 import { ArlasColorService } from 'arlas-web-components';
-import { firstValueFrom, map } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 interface ResultListConfigFeederOptions {
     widgetData: ResultlistConfigForm;

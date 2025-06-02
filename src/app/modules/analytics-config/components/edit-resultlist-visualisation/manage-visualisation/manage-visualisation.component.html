@@ -81,8 +81,8 @@
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let element; let i = index">
                 <div class="action-icon-wrapper">
-                    <mat-icon [matTooltip]="'Edit condition' | translate" (click)="editDataGroup(i)">edit</mat-icon>
-                    <mat-icon [matTooltip]="'Delete condition' | translate" (click)="removeDataGroup(i)">delete
+                    <mat-icon [matTooltip]="'Edit condition' | translate" (keydown)="editDataGroup(i)" (click)="editDataGroup(i)">edit</mat-icon>
+                    <mat-icon [matTooltip]="'Delete condition' | translate" (keydown)="removeDataGroup(i)" (click)="removeDataGroup(i)">delete
                     </mat-icon>
                 </div>
             </td>
