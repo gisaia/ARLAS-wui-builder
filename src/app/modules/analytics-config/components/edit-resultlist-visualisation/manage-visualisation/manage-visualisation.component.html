@@ -62,7 +62,7 @@
         </ng-container>
         <!-- Condition Column -->
         <ng-container matColumnDef="conditions">
-            <th mat-header-cell *matHeaderCellDef>{{ 'Condition' }}</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'Visualisation criteria' | translate }}</th>
             <td mat-cell *matCellDef="let element">
                 <ul class="manage-visualisation__condtions">
                     @for (filter of element.value.filters; track $index; let last = $last; let i = $index) {
@@ -81,8 +81,8 @@
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let element; let i = index">
                 <div class="action-icon-wrapper">
-                    <mat-icon [matTooltip]="'Edit condition' | translate" (keydown)="editDataGroup(i)" (click)="editDataGroup(i)">edit</mat-icon>
-                    <mat-icon [matTooltip]="'Delete condition' | translate" (keydown)="removeDataGroup(i)" (click)="removeDataGroup(i)">delete
+                    <mat-icon [matTooltip]="'Edit criteria' | translate" (keydown)="editDataGroup(i)" (click)="editDataGroup(i)">edit</mat-icon>
+                    <mat-icon [matTooltip]="'Delete criteria' | translate" (keydown)="removeDataGroup(i)" (click)="removeDataGroup(i)">delete
                     </mat-icon>
                 </div>
             </td>

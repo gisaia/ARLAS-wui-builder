@@ -31,7 +31,6 @@ import {
   DataGroupInputConfig
 } from '@services/main-form-manager/models-config';
 import { ImportElement, importElements } from '@services/main-form-manager/tools';
-import { InputFormControl } from '@shared-models/config-form';
 import { Expression } from 'arlas-api';
 import { ArlasColorService } from 'arlas-web-components';
 import { firstValueFrom } from 'rxjs';
@@ -47,7 +46,7 @@ export class ResultListInputsFeeder {
   protected gridStep: any;
   protected settingsStep: any;
   protected sactionStep: any;
-  protected visualisationStep: {   visualisationLink: InputFormControl; visualisationsList: FormArray;};
+  protected visualisationStep: {   visualisationsList: FormArray;};
   protected customControls: any;
   public constructor(protected options: ResultListConfigFeederOptions) {
     this.dataStep = options.widgetData.customControls.dataStep;
@@ -250,7 +249,6 @@ export class ResultListInputsFeeder {
         ]);
 
         conditionForm.syncEditState();
-        console.log(Expression.OpEnum['like']);
         if (condition.op ===  Expression.OpEnum['like']) {
           const  filterInValues = (condition.value as string[]);
           this.imports([

@@ -29,7 +29,7 @@
 
 
         <section class="table-container">
-            <mat-table class="table" [dataSource]="criteria">
+            <table mat-table class="table" [dataSource]="criteria">
                 <!-- criteria's field Column -->
                 <ng-container matColumnDef="field">
                     <th mat-header-cell *matHeaderCellDef>{{ 'Criteria\'s field' | translate }}</th>
@@ -75,7 +75,7 @@
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </mat-table>
+            </table>
         </section>
         <mat-dialog-actions [align]="'end'">
             @if (!data.edit) {
