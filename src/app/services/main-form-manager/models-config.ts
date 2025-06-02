@@ -329,7 +329,7 @@ export interface DataGroupInputConfig {
 }
 
 export interface DataGroupInputCondition {
-  field: any;
+  field: string;
   op: ArlasApiFilter;
   type: string;
   value: string | number | string[] | boolean;

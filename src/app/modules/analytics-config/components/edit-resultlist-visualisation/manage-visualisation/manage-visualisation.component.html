@@ -22,7 +22,7 @@
                                    [control]="visualisation()?.controls.description"></arlas-config-form-control>
     </div>
     <div class="body-text">
-        {{ 'Configure data eligible for visualisation' | translate: {name: (visualisation()?.value.name | lowercase)} }}
+        {{ 'Configure data eligible for visualisation' | translate: {name: visualisation()?.value.name} }}
     </div>
     <!-- add button -->
     <button mat-stroked-button color="primary"
@@ -68,7 +68,7 @@
                     @for (filter of element.value.filters; track $index; let last = $last; let i = $index) {
                         <li class="list-no-bullet">
                             <span class="condition-text">{{ filter.filterField.value | translate }}</span>
-                            <span class="condition-text">{{ filter.filterOperation |lowercase | translate }}</span>
+                            <span class="condition-text">{{ filter.filterOperation | lowercase | translate }}</span>
                             <span *ngTemplateOutlet="conditions;context:
                         {operation: filter.filterOperation | lowercase, input: filter.filterValues, type:  filter.filterField.type}"></span>
                             <span class="condition-text" [class.not-display]="last">{{'&'}}</span>

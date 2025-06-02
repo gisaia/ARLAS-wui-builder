@@ -36,7 +36,7 @@ import {
   MatHeaderRowDef,
   MatRow,
   MatRowDef,
-  MatTable
+  MatTable, MatTableModule
 } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -54,16 +54,8 @@ interface DataGroupDialogData {
   standalone: true,
   imports: [
     MatButton,
-    MatCell,
-    MatCellDef,
-    MatColumnDef,
-    MatHeaderCell,
-    MatHeaderRow,
-    MatHeaderRowDef,
+    MatTableModule,
     MatIcon,
-    MatRow,
-    MatRowDef,
-    MatTable,
     SharedModule,
     TranslateModule
   ],
@@ -81,12 +73,12 @@ export class ManageDataGroupDialogComponent implements OnInit {
   public disableButton = signal(true);
   @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
 
-  public get filters(){
+  public get criteriaList(){
     return (this.data.dataGroup.get('filters')  as FormArray);
   }
 
-  public get filterConditions(): FormArray<ResultListVisualisationsDataGroup> | any[] {
-    return this.filters ? this.filters.controls : [];
+  public get criteria(): FormArray<ResultListVisualisationsDataGroup> | any[] {
+    return this.criteriaList ? this.criteriaList.controls : [];
   }
 
   public ngOnInit() {
@@ -99,16 +91,16 @@ export class ManageDataGroupDialogComponent implements OnInit {
     });
   }
 
-  public removeCondition(index: number) {
+  public removeCriteria(index: number) {
     (this.data.dataGroup.get('filters')  as FormArray).removeAt(index);
     this.table.renderRows();
   }
 
-  public addCondition() {
-    const filter = this.resultListFormBuilder
-      .buildVisualisationsDataGroupCondition(this.data.collectionControlName);
-    this.filters?.push(filter);
-    this.filters?.setErrors({ 'new condition': true });
+  public addCriteria() {
+    const criteria = this.resultListFormBuilder
+      .buildVisualisationsDataGroupCriteria(this.data.collectionControlName);
+    this.criteriaList?.push(criteria);
+    this.criteriaList?.setErrors({ 'new condition': true });
     this.table.renderRows();
   }
 

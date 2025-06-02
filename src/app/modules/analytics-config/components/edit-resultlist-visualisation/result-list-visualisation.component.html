@@ -41,7 +41,7 @@
 
             <!-- Conditions Column -->
             <ng-container matColumnDef="applyTo">
-                <th mat-header-cell *matHeaderCellDef>{{ 'Apply to' | translate }}</th>
+                <th mat-header-cell *matHeaderCellDef>{{ 'Applied to' | translate }}</th>
                 <td mat-cell *matCellDef="let element">
                     <mat-chip-set>
                         @for (dataGroup of element.value.dataGroups; track dataGroup.name) {

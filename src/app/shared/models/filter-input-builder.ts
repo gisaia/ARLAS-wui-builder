@@ -20,7 +20,7 @@ import {
   ArlasApiFilter,
   eqArlasApiFilter,
   gtArlasApiFilter,
-  gteArlasApiFilter,
+  gteArlasApiFilter, isNumberOperator,
   likeArlasApiFilter,
   ltArlasApiFilter,
   lteArlasApiFilter,
@@ -67,7 +67,7 @@ abstract class InputFilter<V, L> {
   protected abstract  getNumericalOperatorList(): { value: V; label: L; }[];
 
   /**
-   * check if the inputs is in edit mode or not
+   * check if the inputs are in edit mode or not
    * @param {ParentControl} parentControl
    * @protected
    */
@@ -93,7 +93,7 @@ abstract class InputFilter<V, L> {
   public abstract keywordsFilter(parentControl: any, control: any, collectionService: CollectionService, collection: string);
 
   /**
-   * Enable inputs if the column type is numebr and if the operator match
+   * Enable inputs if the column type is number and if the operator match
    * @param {P} parentControl
    * @param {C} control
    */
@@ -125,7 +125,6 @@ abstract class InputFilter<V, L> {
     this.buildInputRangeValues(parentControl, control, isLoading, METRIC_TYPES.MIN, collectionService, collection);
   }
 
-  // eslint-disable-next-line max-len
   /**
    * Enable range inputs  if the column type is number
    * @param {P} parentControl
@@ -206,7 +205,7 @@ abstract class InputFilter<V, L> {
 
   public manageParentControlEditState<P extends  ParentControl>(parentControl: P){
     if (parentControl.editionInfo) {
-      // if we change the field/or operation, we are no longer in editing an existing filter but creating a new one
+      // if we change the field/or operation, we are no longer editing an existing filter but creating a new one
       // we quit edition mode
       if (parentControl.customControls.filterField.value.value !== parentControl.editionInfo.field ||
           parentControl.customControls.filterOperation.value !== parentControl.editionInfo.op
@@ -360,12 +359,7 @@ export class GeoFilterInputsBuilder  extends InputFilter<ArlasApiFilter, Express
 
   public numberFilter<P extends  ParentControl, C extends FilterFrom>(parentControl: P, control: C) {
     const inputValue = parentControl.customControls.filterOperation.value;
-    const enable = (inputValue === eqArlasApiFilter ||
-        inputValue === neArlasApiFilter ||
-    inputValue === gteArlasApiFilter ||
-    inputValue === gtArlasApiFilter||
-    inputValue === ltArlasApiFilter ||
-    inputValue === lteArlasApiFilter) &&
+    const enable = isNumberOperator(inputValue) &&
         NUMERIC_TYPES.includes(parentControl.customControls.filterField.value.type);
     control.enableIf(enable);
   }
