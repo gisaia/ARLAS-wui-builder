@@ -327,9 +327,10 @@ export interface DataGroupInputConfig {
   filters: DataGroupInputCondition[];
 }
 
+export type ArlasExpression = keyof typeof Expression.OpEnum;
 export interface DataGroupInputCondition {
   field: string;
-  op: Expression.OpEnum;
+  op: string;
   type: string;
   value: string | number | string[] | boolean;
 }

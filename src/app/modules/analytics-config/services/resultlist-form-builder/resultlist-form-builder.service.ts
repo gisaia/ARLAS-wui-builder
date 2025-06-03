@@ -342,7 +342,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
               control: () => this.customControls.visualisationStep.visualisationsList
             }
           ),
-        }).withTabName('Visualisation'),
+        }).withTabName( marker('Visualisation')),
         unmanagedFields: new FormGroup({
           dataStep: new FormGroup({}),
           renderStep: new FormGroup({
@@ -738,7 +738,7 @@ export class ResultListVisualisationsFormGroup extends FormGroup {
       description: new TextareaFormControl(
         '',
         marker('Visualisation description'),
-        marker('Visualisation descriptio'),
+        marker('Visualisation description'),
         '',
         null,
         {
@@ -769,7 +769,7 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
       protocol: new SelectFormControl(
         '',
         marker('Result list protocol'),
-        marker(''),
+        '',
         false,
         [
           {label: marker('Titiler'), value: 'titiler'},
@@ -811,7 +811,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
       filterField: new TypedSelectFormControl(
         '',
         marker('Criteria\'s fields'),
-        marker('Criteria\'s fields'),
+        '',
         true,
         toNumericOrKeywordOrBooleanObs(collectionFields),
         {
@@ -821,7 +821,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
       filterOperation: new SelectFormControl(
         '',
         marker('Filter operation'),
-        marker('filter operation description'),
+        '',
         false,
         filterOperations.map(op => ({
           label: op,
@@ -851,7 +851,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
         filterInValues: new MultipleSelectFormControl(
           '',
           marker('Filter-in values'),
-          marker('filter in-values description'),
+          '',
           false,
           [],
           {
@@ -865,7 +865,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
         filterEqualValues: new InputFormControl(
           '',
           marker('Filter-equal values'),
-          marker('filter equal description'),
+          '',
           'number',
           {
             resetDependantsOnChange: true,
@@ -878,7 +878,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
         filterMinRangeValues: new InputFormControl(
           '',
           marker('Minimum range filter'),
-          marker('Minimum range filter description'),
+          '',
           'number',
           {
             resetDependantsOnChange: true,
@@ -895,7 +895,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
         filterMaxRangeValues: new InputFormControl(
           '',
           marker('Maximum range filter'),
-          marker('Maximum range filter description'),
+          '',
           'number',
           {
             resetDependantsOnChange: true,
