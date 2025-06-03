@@ -1,6 +1,6 @@
 <mat-form-field [class]="control.formFieldClass">
     <mat-select [required]="!control?.optional" [formControl]="selectMultiFc" [multiple]="true"
-                [placeholder]="control?.label " #multiSelect>
+                [placeholder]="control?.label | translate" #multiSelect>
         <mat-option>
             <ngx-mat-select-search
                     [formControl]="selectSearchFilterFc"

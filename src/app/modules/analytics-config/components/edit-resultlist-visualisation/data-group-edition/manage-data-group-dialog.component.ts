@@ -109,7 +109,7 @@ export class ManageDataGroupDialogComponent implements OnInit {
      */
   public updateList(event: { prefix: string; }, index: number) {
     const control = this.data.dataGroup.customControls.filters.at(index).customControls;
-    if (control.filterOperation.value ===  Expression.OpEnum['like']) {
+    if (control.filterOperation.value ===  Expression.OpEnum.Like) {
       control.filterValues.filterInValues.setSyncOptions([]);
       this.collectionService.getTermAggregation(
         this.data.collectionControlName,

@@ -19,19 +19,20 @@
 
 import { Expression } from 'arlas-api';
 
-export function isNumberOperator(filter: Expression.OpEnum){
-  return filter === Expression.OpEnum['eq'] ||
-        filter === Expression.OpEnum['ne'] ||
-        filter === Expression.OpEnum['gte'] ||
-        filter === Expression.OpEnum['gt'] ||
-        filter === Expression.OpEnum['lt'] ||
-        filter === Expression.OpEnum['lte'];
+export function isNumberOperator(filter: Expression.OpEnum) {
+  return filter === Expression.OpEnum.Eq ||
+        filter === Expression.OpEnum.Like ||
+        filter === Expression.OpEnum.Ne ||
+        filter === Expression.OpEnum.Gte ||
+        filter === Expression.OpEnum.Gt ||
+        filter === Expression.OpEnum.Lt ||
+        filter === Expression.OpEnum.Lte;
 }
 
 export interface ResultListVisualisationFormWidget {
-    'name': string;
-    'description': string;
-    'dataGroups': ResultListVisualisationDataGroupFormWidget[];
+    name: string;
+    description: string;
+    dataGroups: ResultListVisualisationDataGroupFormWidget[];
 }
 
 
@@ -42,8 +43,8 @@ export interface ResultListVisualisationDataGroupFormWidget {
     filters: ResultListVisualisationConditionFormWidget[];
 }
 
-export  interface ResultListVisualisationConditionFormWidget {
-    filterField: {value: string; type: string;};
+export interface ResultListVisualisationConditionFormWidget {
+    filterField: { value: string; type: string; };
     filterOperation: Expression.OpEnum;
     filterValues: {
         filterInValues: any[];

@@ -48,25 +48,25 @@ import { filter, first } from 'rxjs';
 })
 export class ManageVisualisationComponent {
   /**
-   * Represente a visualitation
+   * Represent a visualitation
    * @type {InputSignal<ResultListVisualisationsFormGroup | undefined>}
    * @protected
    */
   protected visualisation = input<ResultListVisualisationsFormGroup>();
   /**
-   * tell if its new visualisation or not.
+   * Whether it is a new visualisation or not.
    * @type {InputSignal<boolean | undefined>}
    * @protected
    */
   protected isEdition = input<boolean>();
   /**
-   *  collection name
+   *  Collection name
    * @type {InputSignal<string>}
    * @protected
    */
   protected collectionControlName = input<string>('');
   /**
-   *  emite event to close the view
+   *  Emit event to close the view
    * @type {OutputEmitterRef<boolean>}
    * @protected
    */
@@ -85,13 +85,13 @@ export class ManageVisualisationComponent {
    */
   protected resultListFormBuilderService = inject(ResultlistFormBuilderService);
   /**
-   * table columns
+   * Table columns
    * @type {string[]}
    * @protected
    */
   protected displayedColumns = ['drag', 'dataGroup', 'protocol', 'visualisationUrl', 'conditions', 'actions'];
   /**
-   *  Enable or not drag and drop for column row
+   *  Whether to enable drag and drop for rows
    * @type {boolean}
    */
   public dragDisabled = true;

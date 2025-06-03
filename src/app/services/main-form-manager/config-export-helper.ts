@@ -73,7 +73,7 @@ import {
   AnalyticComponentResultListInputConfig,
   AnalyticComponentSwimlaneInputConfig,
   AnalyticComponentSwimlaneInputOptionsConfig,
-  AnalyticConfig,
+  AnalyticConfig, ArlasExpression,
   ChipSearchConfig,
   Config,
   ContributorConfig,
@@ -1449,21 +1449,26 @@ export class ConfigExportHelper {
 
   protected static  buildDataGroupCriteria(dataG: ResultListVisualisationDataGroupFormWidget) {
     return dataG.filters.map(f => {
+      // return a lowercase string
+      const op = Expression.OpEnum[f.filterOperation];
+      // convert in upper case for arlas api
+      const opArlas = (op.charAt(0).toUpperCase() + op.slice(1)) as ArlasExpression;
       const criteria: DataGroupInputCondition = {
         field: f.filterField.value,
-        op: f.filterOperation,
+        op: opArlas,
         type: f.filterField.type,
         value: null
       };
-      if (f.filterOperation === Expression.OpEnum['like']) {
+
+      if (f.filterOperation === Expression.OpEnum.Like) {
         criteria.value =  f.filterValues.filterInValues.map(v => v.value);
       } else if (isNumberOperator(f.filterOperation) &&
       NUMERIC_TYPES.includes(criteria.type as unknown as CollectionReferenceDescriptionProperty.TypeEnum)
       ) {
         criteria.value = f.filterValues.filterEqualValues;
-      } else if (f.filterOperation === Expression.OpEnum['range']) {
+      } else if (f.filterOperation === Expression.OpEnum.Range) {
         criteria.value =  f.filterValues.filterMinRangeValues + ';' + f.filterValues.filterMaxRangeValues;
-      } else if (f.filterOperation === Expression.OpEnum['eq']) {
+      } else if (f.filterOperation === Expression.OpEnum.Eq) {
         criteria.value = f.filterValues.filterBoolean;
       }
       return criteria;

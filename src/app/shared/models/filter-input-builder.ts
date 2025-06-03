@@ -304,32 +304,32 @@ export class FilterInputsBuilder extends InputFilter<FILTER_OPERATION, FILTER_OP
 export class GeoFilterInputsBuilder  extends InputFilter<Expression.OpEnum, Expression.OpEnum | string> {
   protected  getBooleanOperatorList(){
     return [
-      { value: Expression.OpEnum['eq'], label:'eq' },
+      { value: Expression.OpEnum.Eq, label:'eq' },
     ];
   }
 
   protected  getKeywordOperatorList(){
     return[
-      { value: Expression.OpEnum['like'], label: 'like' }
+      { value: Expression.OpEnum.Like, label: 'like' }
     ];
   }
 
   protected  getNumericalOperatorList(){
     return [
-      { value: Expression.OpEnum['eq'], label: 'eq' },
-      { value: Expression.OpEnum['ne'], label: 'ne'},
-      { value: Expression.OpEnum['gte'], label: 'gte' },
-      { value: Expression.OpEnum['gt'], label: 'gt'},
-      { value: Expression.OpEnum['lt'], label: 'lt' },
-      { value: Expression.OpEnum['lte'], label: 'lte' },
-      { value: Expression.OpEnum['range'], label: 'range' }
+      { value: Expression.OpEnum.Eq, label: 'eq' },
+      { value: Expression.OpEnum.Ne, label: 'ne'},
+      { value: Expression.OpEnum.Gte, label: 'gte' },
+      { value: Expression.OpEnum.Gt, label: 'gt'},
+      { value: Expression.OpEnum.Lt, label: 'lt' },
+      { value: Expression.OpEnum.Lte, label: 'lte' },
+      { value: Expression.OpEnum.Range, label: 'range' }
     ];
   }
 
   public keywordsFilter(parentControl: any, control: any, collectionService: CollectionService, collection: string) {
     if (!!parentControl.customControls.filterField.value && !!parentControl.customControls.filterField.value.value &&
         parentControl.customControls.filterField.value.value !== '') {
-      if (parentControl.customControls.filterOperation.value === Expression.OpEnum['like']) {
+      if (parentControl.customControls.filterOperation.value === Expression.OpEnum.Like) {
         control.setSyncOptions([]);
         this.setKeywordsFilterWithTermAgg(parentControl, control, collectionService, collection);
       } else {
@@ -346,7 +346,7 @@ export class GeoFilterInputsBuilder  extends InputFilter<Expression.OpEnum, Expr
       control.savedItems = new Set();
       control.selectedMultipleItems = [];
     }
-    control.enableIf(parentControl.customControls.filterOperation.value === Expression.OpEnum['like']);
+    control.enableIf(parentControl.customControls.filterOperation.value === Expression.OpEnum.Like);
   }
 
   public numberFilter<P extends  ParentControl, C extends FilterFrom>(parentControl: P, control: C) {
@@ -359,7 +359,7 @@ export class GeoFilterInputsBuilder  extends InputFilter<Expression.OpEnum, Expr
   // eslint-disable-next-line max-len
   public buildInputRangeValues<P extends  ParentControl, C extends FilterFrom>(parentControl: P, control: C,
     isLoading: boolean, metricType: METRIC_TYPES,  collectionService: CollectionService, collection: string) {
-    const doRangeEnable = parentControl.customControls.filterOperation.value === Expression.OpEnum['range'];
+    const doRangeEnable = parentControl.customControls.filterOperation.value === Expression.OpEnum.Range;
     control.enableIf(doRangeEnable);
     if (doRangeEnable && !isLoading) {
       this.setRangeControlWithComputationMetric(collectionService, collection, parentControl, control, metricType);
@@ -367,7 +367,7 @@ export class GeoFilterInputsBuilder  extends InputFilter<Expression.OpEnum, Expr
   }
 
   public booleanFilter<P extends  ParentControl, C extends FilterFrom>(parentControl: P, control: C) {
-    control.enableIf(parentControl.customControls.filterOperation.value === Expression.OpEnum['eq'] &&
+    control.enableIf(parentControl.customControls.filterOperation.value === Expression.OpEnum.Eq &&
         parentControl.customControls.filterField.value.type === 'BOOLEAN');
   }
 
@@ -375,9 +375,9 @@ export class GeoFilterInputsBuilder  extends InputFilter<Expression.OpEnum, Expr
     // if we are editing an existing filter, keep the selected operation.
     // otherwise there is no way to remember it
     const operatorValue = parentControl.customControls.filterOperation.value;
-    if ((operatorValue === Expression.OpEnum['like'])) {
+    if ((operatorValue === Expression.OpEnum.Like)) {
       control.setSyncOptions(this.getKeywordOperatorList());
-    } else if (operatorValue === Expression.OpEnum['eq']  &&
+    } else if (operatorValue === Expression.OpEnum.Eq  &&
         parentControl.customControls.filterField.value.type === 'BOOLEAN') {
       control.setSyncOptions(this.getBooleanOperatorList());
     } else {

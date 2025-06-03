@@ -949,7 +949,7 @@
     "Resultlist grid": "Grid",
 	"Visualisation description": "Visualisation description",
 	"Visualisation name": "Visualisation name",
-	"Criterias will be evaluated in order" : "Criteria will be evaluated in order. The first Criteria to be true will be used for visualization or to visualize the item.",
+	"Criterias will be evaluated in order" : "Criteria will be evaluated in order. The first Criteria to be true will be used for visualization.",
 	"Filter-in values": "Values",
 	"Filter-equal values": "Values",
 	"Filter operation": "Operation",

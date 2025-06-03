@@ -949,7 +949,7 @@
 	"And": "Et",
     "Visualisation description": "Description de la visualisation",
     "Visualisation name": "Nom de la visualisation",
-	"Criterias will be evaluated in order" : "Les critères sont évaluées dans l'ordre. Le premier critère à être vraie sera utilisée pour la visualisation ou pour visualiser l'item.",
+	"Criterias will be evaluated in order" : "Les critères sont évalués dans l'ordre. Le premier critère à être vrai sera utilisée pour la visualisation.",
 	"Filter-in values": "Valeurs",
 	"Filter-equal values": "Valeurs",
 	"Filter operation": "Opération",
