@@ -16,33 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { Pipe, PipeTransform } from '@angular/core';
+import { ConfigFormGroup } from '@shared-models/config-form';
 
-@use 'sass:math';
-$arlasColor: #f63366;
-
-@mixin group-title() {
-   font-weight: 300;
-   font-size: 24px;
-   line-height: 32px;
-   margin: 5px 10px;
-   padding-bottom: 3px;
-
+@Pipe({
+  name: 'orderConfigFormTabControls',
+  standalone: true
+})
+export class OrderConfigFormTabControlsPipe implements PipeTransform {
+  public transform(config: ConfigFormGroup) {
+    if(config.tabsOrder && config.tabsOrder.length > 0) {
+      return config.tabsOrder
+        .map((item, index) => ({key:item, value: config.controls[item]}));
+    } else {
+      return Object.entries(config.controls)
+        .map(([key, control]) => ({key, value: control}));
+    }
+  }
 }
-
-$default-spacing: 10px;
-$sm-margin: calc($default-spacing / 2);
-$xs-spacing: math.div($default-spacing, 4);
-$lg-spacing: $default-spacing * 2;
-
-$top-menu-height: 40px;
-$left-menu-width: 48px;
-$menu-border: solid 1px rgba(0, 0, 0, 0.12);
-$default-font-size: 20px;
-$text-input-disabled: rgba(26, 27, 31, .38);
-$input-background-disabled: rgba(26, 27, 31, .04);
-
-$config-element-description-border-color: rgba(41, 98, 255, .4);
-$config-element-description-background: #fafafa;
-$config-element-description-text-color: #455a6499;
-
-$error-color: #f44336;

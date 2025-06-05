@@ -26,7 +26,7 @@
 
     <div *ngIf="hasChildTabs()">
         <mat-tab-group mat-stretch-tabs>
-            <div *ngFor="let control of configFormGroup.controls | keyvalue">
+            <div *ngFor="let control of configFormGroup | orderConfigFormTabControls">
                 <div *ngIf="control.value.enabled">
                     <div *ngIf="isFormGroup(control.value); let formGroup">
                         <mat-tab #tab bodyClass="no-overflow">

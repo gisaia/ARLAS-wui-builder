@@ -18,27 +18,51 @@
  */
 import { KeyValue } from '@angular/common';
 import {
-  AfterViewChecked, AfterViewInit,
-  ChangeDetectorRef, Component, ComponentFactory, ComponentFactoryResolver,
-  Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ComponentFactory,
+  ComponentFactoryResolver,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewContainerRef
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
-import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionItem } from '@services/collection-service/models';
 import {
-  ButtonFormControl, ButtonToggleFormControl, CollectionsUnitsControl, ColorFormControl, ColorPreviewFormControl,
-  ComponentFormControl, ConfigFormControl, FieldTemplateControl, FieldWithSizeListFormControl, HiddenFormControl,
-  HuePaletteFormControl, IconFormControl, InputFormControl, MapFiltersControl, MetricWithFieldListFormControl,
-  MultipleSelectFormControl, OrderedSelectFormControl, RadioButtonFormControl, SelectFormControl,
-  SlideToggleFormControl,
+  ButtonFormControl,
+  ButtonToggleFormControl,
+  CollectionsUnitsControl,
+  ColorFormControl,
+  ColorPreviewFormControl,
+  ComponentFormControl,
+  ConfigFormControl,
+  FieldTemplateControl,
+  FieldWithSizeListFormControl,
+  HiddenFormControl,
+  HuePaletteFormControl,
+  IconFormControl,
+  InputFormControl,
+  MapFiltersControl,
+  MetricWithFieldListFormControl,
+  MultipleSelectFormControl,
+  OrderedSelectFormControl,
+  RadioButtonFormControl,
+  SelectFormControl,
   SliderFormControl,
-  TextareaFormControl, TitleInputFormControl, TypedSelectFormControl, VisualisationCheckboxFormControl
+  SlideToggleFormControl,
+  TextareaFormControl,
+  TitleInputFormControl,
+  TypedSelectFormControl,
+  VisualisationCheckboxFormControl
 } from '@shared-models/config-form';
-import { ArlasColorService } from 'arlas-web-components';
 import { ArlasIamService } from 'arlas-wui-toolkit';
 import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'arlas-config-form-control',
@@ -65,43 +89,14 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   public constructor(
     private resolver: ComponentFactoryResolver,
     private changeDetector: ChangeDetectorRef,
-    private colorService: ArlasColorService,
-    private collectionService: CollectionService,
-    private arlasIamService: ArlasIamService,
-    private cdr: ChangeDetectorRef
+    private readonly arlasIamService: ArlasIamService
   ) {
     this.organisation = this.arlasIamService.getOrganisation();
   }
 
-  public onchangeMulitpleSelection(event, clear?: boolean) {
-
-    if (event.checked) {
-      (this.control as MultipleSelectFormControl).savedItems.add(event.source.value.value);
-    } else {
-      (this.control as MultipleSelectFormControl).savedItems.delete(event.source.value.value);
-    }
-
-    (this.control as MultipleSelectFormControl).selectedMultipleItems =
-      Array.from((this.control as MultipleSelectFormControl).savedItems)
-        .map(i => ({ value: i, color: this.colorService.getColor(i), detail: this.collectionService.getCollectionInterval(i) }));
-    this.changeDetector.detectChanges();
-    if (clear) {
-      this.debouncer.next('');
-    }
-  }
 
   public ngOnInit() {
     this.colorPreviewControl = this.isColorPreview();
-    this.debouncer.pipe(debounceTime(500)).subscribe(t => {
-      if (!!(this.control as MultipleSelectFormControl).selectedMultipleItems) {
-        (this.control as MultipleSelectFormControl).selectedMultipleItems
-          .forEach(i => (this.control as MultipleSelectFormControl).savedItems.add(i.value));
-      }
-      (this.control as MultipleSelectFormControl).selectedMultipleItems =
-        Array.from((this.control as MultipleSelectFormControl).savedItems)
-          .map(i => ({ value: i, color: this.colorService.getColor(i), detail: this.collectionService.getCollectionInterval(i) }));
-      this.updateSyncOptions.next(t);
-    });
   }
 
   public ngAfterViewInit() {
@@ -129,7 +124,7 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
    * @param inputElement The input HTML element
    * @param selectControl The Angular control that holds the Input's value
    */
-  public clearAutoComplete(event: Event, inputElement: HTMLElement, selectControl: SelectFormControl) {
+  public clearAutoComplete(event: Event, inputElement: HTMLElement, selectControl: SelectFormControl | TypedSelectFormControl) {
     event.stopPropagation();
     selectControl.filteredOptions = selectControl.syncOptions;
     selectControl.setValue('');
