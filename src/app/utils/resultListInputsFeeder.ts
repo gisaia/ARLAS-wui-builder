@@ -23,6 +23,8 @@ import {
   ResultListVisualisationsDataGroupCondition
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { AbstractControl, FormArray } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { NUMERIC_TYPES } from '@services/collection-service/tools';
 import {
@@ -33,7 +35,7 @@ import {
 import { ImportElement, importElements } from '@services/main-form-manager/tools';
 import { Expression } from 'arlas-api';
 import { ArlasColorService } from 'arlas-web-components';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, takeLast } from 'rxjs';
 
 interface ResultListConfigFeederOptions {
     widgetData: ResultlistConfigForm;
@@ -48,7 +50,8 @@ export class ResultListInputsFeeder {
   protected sactionStep: any;
   protected visualisationStep: {   visualisationsList: FormArray;};
   protected customControls: any;
-  public constructor(protected options: ResultListConfigFeederOptions) {
+  public constructor(protected options: ResultListConfigFeederOptions, protected  messageService?: MatSnackBar,
+                     protected translate?: TranslateService) {
     this.dataStep = options.widgetData.customControls.dataStep;
     this.gridStep = options.widgetData.customControls.gridStep;
     this.settingsStep = options.widgetData.customControls.settingsStep;
@@ -79,11 +82,7 @@ export class ResultListInputsFeeder {
       {
         value: this.options.input.downloadLink,
         control: this.sactionStep.downloadLink
-      },
-      {
-        value: this.options.input.visualisationLink,
-        control: this.sactionStep.visualisationLink
-      },
+      }
     ]);
   }
 
@@ -182,6 +181,35 @@ export class ResultListInputsFeeder {
     return this;
   }
 
+  /**
+   * Methode to transform a visualisation link into a data group
+   * @private
+   */
+  private interopCode(resultListFormBuilder: ResultlistFormBuilderService) {
+    if(this.options.input.visualisationLink) {
+      const visualisationForm = resultListFormBuilder.buildVisualisation();
+      visualisationForm.customControls.name.setValue(' Visualisation Link');
+      const dataGroupForm = resultListFormBuilder
+        .buildVisualisationsDataGroup();
+      this.imports([
+        {
+          value: this.options.input.visualisationLink,
+          control: dataGroupForm.customControls.visualisationUrl
+        }
+      ]);
+      dataGroupForm.customControls.name.setValue('Visualisation Link');
+      dataGroupForm.customControls.protocol.setValue('other');
+      visualisationForm.customControls.dataGroups.push(dataGroupForm);
+
+      const key = 'Your visualisation link config has been moved';
+      if(this.messageService){
+        this.messageService.open(this.translate?.instant(key) ?? key, null, {duration: 7000});
+      }
+      return visualisationForm;
+    }
+    return null;
+  }
+
   public importVisualisationStep(resultListFormBuilder: ResultlistFormBuilderService){
     if(this.options.input.visualisationsList && this.options.input.visualisationsList.length > 0) {
       this.options.input.visualisationsList.forEach(visualisation => {
@@ -223,6 +251,12 @@ export class ResultListInputsFeeder {
         }
         this.visualisationStep.visualisationsList.push(visualisationForm);
       });
+    }
+
+    // interop code to migrate.
+    const interopVisualisationForm = this.interopCode(resultListFormBuilder);
+    if(interopVisualisationForm) {
+      this.visualisationStep.visualisationsList.push(interopVisualisationForm);
     }
     return this;
   }
