@@ -734,6 +734,10 @@ export class MapImportService {
       {
         value: mapgl.input.displayCurrentCoordinates,
         control: mapGlobalForm.customControls.displayCurrentCoordinates
+      },
+      {
+        value: mapgl.input.enableGlobe,
+        control: mapGlobalForm.customControls.enableGlobe
       }
     ]);
 

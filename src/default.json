@@ -18,6 +18,7 @@
       "initCenterLon": 0,
       "displayScale": true,
       "displayCurrentCoordinates": false,
+      "enableGlobe": false,
       "unmanagedFields": {
         "icon": "check_box_outline_blank",
         "nbVerticesLimit": 100,

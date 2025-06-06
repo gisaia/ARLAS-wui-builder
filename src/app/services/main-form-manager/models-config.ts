@@ -356,6 +356,7 @@ export interface MapComponentInputConfig {
   initCenter: [number, number];
   displayScale: boolean;
   displayCurrentCoordinates: boolean;
+  enableGlobe: boolean;
   idFeatureField: string;
   mapLayers: MapComponentInputMapLayersConfig;
   visualisations_sets: Array<VisualisationSetConfig>;
