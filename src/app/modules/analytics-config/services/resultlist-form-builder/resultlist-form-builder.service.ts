@@ -279,16 +279,6 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
           )
         }).withTabName(marker('Resultlist grid')),
         sactionStep: new ConfigFormGroup({
-          visualisationLink: new InputFormControl(
-            '',
-            marker('Visualisation url service title'),
-            marker('Visualisation url service description'),
-            'text',
-            {
-              optional: true,
-              dependsOn: () => [this.customControls.dataStep.collection]
-            }
-          ),
           downloadLink: new InputFormControl(
             '',
             marker('Download url service title'),
@@ -764,8 +754,7 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
         marker('Data groups name'),
         ''
       ),
-      filters: new FormArray<ResultListVisualisationsDataGroupCondition>([], [Validators.required,
-        Validators.minLength(1)]),
+      filters: new FormArray<ResultListVisualisationsDataGroupCondition>([]),
       protocol: new SelectFormControl(
         '',
         marker('Result list protocol'),
@@ -775,6 +764,9 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
           {label: marker('Titiler'), value: 'titiler'},
           {label: marker('Other'), value: 'other'},
         ],
+        {
+          validators: [ Validators.required]
+        }
       ),
       visualisationUrl: new InputFormControl(
         '',
@@ -782,7 +774,7 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
         '',
         'text',
         {
-          validators: [Validators.pattern('^(http|https)://.*')]
+          validators: [Validators.required]
         }
       ),
     });

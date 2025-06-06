@@ -954,5 +954,6 @@
 	"Filter-equal values": "Valeurs",
 	"Filter operation": "Opération",
 	"Result list protocol": "Protocol",
-	"Visualisation criteria": "Critères"
+	"Visualisation criteria": "Critères",
+	"Your visualisation link config has been moved": "La configuration de votre lien de visualisation a été déplacée vers Tableau de données > Visualisation. Pensez à sauvegarder."
 }

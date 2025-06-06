@@ -21,6 +21,8 @@ import {
   ResultlistFormBuilderService
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import {
   AnalyticComponentConfig,
@@ -42,7 +44,9 @@ export class ResultListImportService {
     private mainFormService: MainFormService,
     private resultlistFormBuilder: ResultlistFormBuilderService,
     private colorService: ArlasColorService,
-    private collectionService: CollectionService
+    private collectionService: CollectionService,
+    private messageService: MatSnackBar,
+    private translateService: TranslateService,
   ) { }
 
   public doImport(config: Config) {
@@ -65,7 +69,7 @@ export class ResultListImportService {
       contributor,
       input
     };
-    const resultListInputsFeeder = new ResultListInputsFeeder(option);
+    const resultListInputsFeeder = new ResultListInputsFeeder(option, this.messageService, this.translateService);
     resultListInputsFeeder
       .importTitle()
       .import(
