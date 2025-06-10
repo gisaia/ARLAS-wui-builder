@@ -61,7 +61,8 @@
   }
 
   &__button {
-    width: 160px;
+    min-width: 160px;
+    max-width: 200px;
     margin: 6px 0;
   }
 

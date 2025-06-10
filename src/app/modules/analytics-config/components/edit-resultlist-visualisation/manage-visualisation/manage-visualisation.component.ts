@@ -33,6 +33,7 @@ import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { SharedModule } from '@shared/shared.module';
+import { GetFieldDisplayModule } from 'arlas-web-components';
 import { filter, first } from 'rxjs';
 
 @Component({
@@ -40,7 +41,8 @@ import { filter, first } from 'rxjs';
   standalone: true,
   imports: [
     TranslateModule,
-    SharedModule
+    SharedModule,
+    GetFieldDisplayModule
   ],
   templateUrl: './manage-visualisation.component.html',
   styleUrl: './manage-visualisation.component.scss',
@@ -98,6 +100,7 @@ export class ManageVisualisationComponent {
   @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
 
   public get dataGroups(): FormArray<ResultListVisualisationsDataGroup> | any[] {
+    console.log((<any>this.visualisation().get('dataGroups')).controls );
     return this.visualisation().get('dataGroups')?.value.length > 0 ?  (<any>this.visualisation().get('dataGroups')).controls as FormArray  : [];
   }
 

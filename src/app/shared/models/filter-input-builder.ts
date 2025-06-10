@@ -310,7 +310,7 @@ export class GeoFilterInputsBuilder  extends InputFilter<Expression.OpEnum, Expr
 
   protected  getKeywordOperatorList(){
     return[
-      { value: Expression.OpEnum.Like, label: 'like' }
+      { value: Expression.OpEnum.Like, label: 'is one of' }
     ];
   }
 

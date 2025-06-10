@@ -751,7 +751,7 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
     super({
       name: new InputFormControl(
         '',
-        marker('Data groups name'),
+        marker('Data group name'),
         ''
       ),
       filters: new FormArray<ResultListVisualisationsDataGroupCondition>([]),

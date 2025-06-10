@@ -115,7 +115,7 @@
 <ng-template #conditions let-operation="operation" let-input="input" let-type="type">
     <span class="condition-text">
             <ng-container class="in-values-input" *ngIf="operation === 'like'">
-        ( <span *ngFor="let value of input.filterInValues"> {{ value.value }}</span> )
+        ( <span *ngFor="let value of input.filterInValues"> {{ value.value | getFieldDisplayName | translate  }}</span> )
     </ng-container>
     <ng-container
             *ngIf=" type !== 'BOOLEAN'">{{ input?.filterEqualValues }}</ng-container>
