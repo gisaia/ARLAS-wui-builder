@@ -19,6 +19,9 @@
 import {
   EditResultlistQuicklookComponent
 } from '@analytics-config/components/edit-resultlist-quicklook/edit-resultlist-quicklook.component';
+import {
+  ResultListVisualisationComponent
+} from '@analytics-config/components/edit-resultlist-visualisation/result-list-visualisation.component';
 import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
 import { Injectable } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -34,6 +37,7 @@ import {
   NUMERIC_OR_DATE_OR_TEXT_TYPES,
   TEXT_OR_KEYWORD,
   toNumericOrDateOrKeywordOrTextObs,
+  toNumericOrKeywordOrBooleanObs,
   toOptionsObs
 } from '@services/collection-service/tools';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
@@ -42,7 +46,9 @@ import { ConfigFormGroupComponent } from '@shared-components/config-form-group/c
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
   ButtonFormControl,
+  ButtonToggleFormControl,
   ComponentFormControl,
+  ConfigFormControl,
   ConfigFormGroup,
   FieldTemplateControl,
   HiddenFormControl,
@@ -53,15 +59,19 @@ import {
   SliderFormControl,
   SlideToggleFormControl,
   TextareaFormControl,
-  TitleInputFormControl
+  TitleInputFormControl,
+  TypedSelectFormControl
 } from '@shared-models/config-form';
+import { GeoFilterInputsBuilder } from '@shared-models/filter-input-builder';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+import { Expression } from 'arlas-api';
 import { ArlasColorService } from 'arlas-web-components';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
+  public tabsOrder: string[] = ['dataStep', 'gridStep', 'visualisationStep', 'sactionStep', 'settingsStep'];
 
   public constructor(
     collection: string,
@@ -184,7 +194,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             1,
             {
               optional: true,
-              validators:[TextareaFormControl.processValidator('result')],
+              validators: [TextareaFormControl.processValidator('result')],
               dependsOn: () => [this.customControls.dataStep.collection],
               onDependencyChange: (control: TextareaFormControl) => {
                 if (!this.collection || this.customControls.dataStep.collection.dirty) {
@@ -217,7 +227,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             1,
             {
               optional: true,
-              validators:[TextareaFormControl.processValidator('result')],
+              validators: [TextareaFormControl.processValidator('result')],
               dependsOn: () => [this.customControls.dataStep.collection],
               onDependencyChange: (control: TextareaFormControl) => {
                 if (!this.collection || this.customControls.dataStep.collection.dirty) {
@@ -269,16 +279,6 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
           )
         }).withTabName(marker('Resultlist grid')),
         sactionStep: new ConfigFormGroup({
-          visualisationLink: new InputFormControl(
-            '',
-            marker('Visualisation url service title'),
-            marker('Visualisation url service description'),
-            'text',
-            {
-              optional: true,
-              dependsOn: () => [this.customControls.dataStep.collection]
-            }
-          ),
           downloadLink: new InputFormControl(
             '',
             marker('Download url service title'),
@@ -307,13 +307,13 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             marker('Background style of cells Description'),
             false,
             [
-              { label: marker('Filled'), value: 'filled' },
-              { label: marker('Outlined'), value: 'outlined' },
+              {label: marker('Filled'), value: 'filled'},
+              {label: marker('Outlined'), value: 'outlined'},
             ],
             {
               optional: true,
               dependsOn: () => [
-                        this.customControls.dataStep.columns as any
+                                this.customControls.dataStep.columns as any
               ],
               onDependencyChange: (control: ButtonFormControl) => {
                 const useColorService = this.customControls.dataStep.columns.controls
@@ -323,6 +323,16 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             }
           ),
         }).withTabName(marker('Resultlist settings')),
+        visualisationStep: new ConfigFormGroup({
+          visualisationsList: new FormArray([]),
+          visualisations: new ComponentFormControl(
+            ResultListVisualisationComponent,
+            {
+              collectionControl: () => this.customControls.dataStep.collection,
+              control: () => this.customControls.visualisationStep.visualisationsList
+            }
+          ),
+        }).withTabName( marker('Visualisation')),
         unmanagedFields: new FormGroup({
           dataStep: new FormGroup({}),
           renderStep: new FormGroup({
@@ -347,7 +357,8 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
     dataStep: this.get('dataStep') as ConfigFormGroup,
     gridStep: this.get('gridStep') as ConfigFormGroup,
     sactionStep: this.get('sactionStep') as ConfigFormGroup,
-    settingsStep: this.get('settingsStep') as ConfigFormGroup
+    settingsStep: this.get('settingsStep') as ConfigFormGroup,
+    visualisationStep: this.get('visualisationStep') as ConfigFormGroup
   };
 
   public customControls = {
@@ -379,10 +390,13 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
       visualisationLink: this.get('sactionStep.visualisationLink') as InputFormControl,
       downloadLink: this.get('sactionStep.downloadLink') as InputFormControl,
     },
-    settingsStep:  {
+    settingsStep: {
       displayFilters: this.get('settingsStep.displayFilters') as SlideToggleFormControl,
       isGeoSortActived: this.get('settingsStep.isGeoSortActived') as SlideToggleFormControl,
       cellBackgroundStyle: this.get('settingsStep.cellBackgroundStyle') as SelectFormControl
+    },
+    visualisationStep: {
+      visualisationsList: this.get('visualisationStep.visualisationsList') as FormArray
     },
     unmanagedFields: {
       dataStep: {},
@@ -430,11 +444,11 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
   public constructor(
     fieldsObs: Observable<Array<SelectOption>>,
     collection: string,
-    private globalKeysToColortrl: FormArray,
-    defaultConfig: DefaultConfig,
-    dialog: MatDialog,
-    collectionService: CollectionService,
-    private colorService: ArlasColorService
+        private globalKeysToColortrl: FormArray,
+        defaultConfig: DefaultConfig,
+        dialog: MatDialog,
+        collectionService: CollectionService,
+        private colorService: ArlasColorService
   ) {
     super(collection,
       {
@@ -467,7 +481,7 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
           1,
           {
             optional: true,
-            validators:[TextareaFormControl.processValidator('result')],
+            validators: [TextareaFormControl.processValidator('result')],
           }
         ),
         useColorService: new SlideToggleFormControl(
@@ -547,6 +561,7 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
     useColorService: this.get('useColorService') as SlideToggleFormControl,
     sort: this.get('sort') as HiddenFormControl
   };
+
   private addToColorManualValuesCtrl(kc: KeywordColor, index?: number) {
     if (!Object.values(this.globalKeysToColortrl.controls)
       .find(keywordColorGrp => keywordColorGrp.get('keyword').value === kc.keyword)) {
@@ -606,7 +621,7 @@ export class ResultlistDetailFieldFormGroup extends FormGroup {
         1,
         {
           optional: true,
-          validators:[TextareaFormControl.processValidator('result')],
+          validators: [TextareaFormControl.processValidator('result')],
         }
       )
     });
@@ -623,9 +638,9 @@ export class ResultlistDetailFieldFormGroup extends FormGroup {
 export class ResultlistQuicklookFormGroup extends FormGroup {
 
   /** TODO:
-   * Put filter fields as optional
-   * Put filterValues only if filterField is set
-   */
+     * Put filter fields as optional
+     * Put filterValues only if filterField is set
+     */
   public constructor(fieldsObs: Observable<Array<CollectionField>>, collection: string, collectionService: CollectionService) {
     super({
       url: new FieldTemplateControl(
@@ -670,13 +685,14 @@ export class ResultlistQuicklookFormGroup extends FormGroup {
               if (!this.customControls.filter.field.touched) {
                 // Avoid to reset the imported configuration when first loading it
               } else if (this.customControls.filter.field.value !== '' && !!this.customControls.filter.field.syncOptions
-                && this.customControls.filter.field.syncOptions.map(f => f.value).includes(this.customControls.filter.field.value)) {
+                                && this.customControls.filter.field.syncOptions.map(f => f.value)
+                                  .includes(this.customControls.filter.field.value)) {
                 control.setSyncOptions([]);
                 collectionService.getTermAggregation(
                   collection,
                   this.customControls.filter.field.value)
                   .then(keywords => {
-                    control.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
+                    control.setSyncOptions(keywords.map(k => ({value: k, label: k})));
                   });
               } else {
                 control.setSyncOptions([]);
@@ -701,6 +717,249 @@ export class ResultlistQuicklookFormGroup extends FormGroup {
 }
 
 
+export class ResultListVisualisationsFormGroup extends FormGroup {
+  public constructor(fieldsObs?: Observable<Array<CollectionField>>, collection?: string, collectionService?: CollectionService) {
+    super({
+      name: new InputFormControl(
+        '',
+        marker('Visualisation name'),
+        marker('Visualisation name'),
+      ),
+      description: new TextareaFormControl(
+        '',
+        marker('Visualisation description'),
+        marker('Visualisation description'),
+        '',
+        null,
+        {
+          optional: true,
+        }
+      ),
+      dataGroups: new FormArray<ResultListVisualisationsDataGroup>([], [Validators.required, Validators.minLength(1)])
+    });
+  }
+
+  public customControls = {
+    name: this.get('name') as InputFormControl,
+    description: this.get('description') as TextareaFormControl,
+    dataGroups: this.get('dataGroups') as FormArray<ResultListVisualisationsDataGroup>
+  };
+}
+
+export class ResultListVisualisationsDataGroup extends FormGroup {
+  public constructor() {
+    super({
+      name: new InputFormControl(
+        '',
+        marker('Data group name'),
+        ''
+      ),
+      filters: new FormArray<ResultListVisualisationsDataGroupCondition>([]),
+      protocol: new SelectFormControl(
+        '',
+        marker('Result list protocol'),
+        '',
+        false,
+        [
+          {label: marker('Titiler'), value: 'titiler'},
+          {label: marker('Other'), value: 'other'},
+        ],
+        {
+          validators: [ Validators.required]
+        }
+      ),
+      visualisationUrl: new InputFormControl(
+        '',
+        marker('View URL'),
+        '',
+        'text',
+        {
+          validators: [Validators.required]
+        }
+      ),
+    });
+  }
+
+  public customControls = {
+    name: this.get('name') as InputFormControl,
+    protocol: this.get('protocol') as SelectFormControl,
+    filters: this.get('filters') as FormArray<ResultListVisualisationsDataGroupCondition>,
+    visualisationUrl: this.get('visualisationUrl') as InputFormControl
+  };
+}
+
+
+export class ResultListVisualisationsDataGroupCondition extends FormGroup {
+  public editing = false;
+  public editionInfo: { field: string; op:  Expression.OpEnum; };
+  protected filter = new GeoFilterInputsBuilder();
+
+  public constructor(
+        public collectionFields: Observable<Array<CollectionField>>,
+        filterOperations: Array< Expression.OpEnum>,
+        collectionService: CollectionService,
+        collection: string) {
+    super({
+      filterField: new TypedSelectFormControl(
+        '',
+        marker('Criteria\'s fields'),
+        '',
+        true,
+        toNumericOrKeywordOrBooleanObs(collectionFields),
+        {
+          optional: false
+        }
+      ),
+      filterOperation: new SelectFormControl(
+        '',
+        marker('Filter operation'),
+        '',
+        false,
+        filterOperations.map(op => ({
+          label: op,
+          value: op
+        })),
+        {
+          resetDependantsOnChange: true,
+          dependsOn: () => [this.customControls.filterField],
+          onDependencyChange: (control: SelectFormControl) => {
+            this.filter.operationFilter(this, control);
+          }
+        }
+      ),
+      filterValues: new ConfigFormGroup({
+        operator: new HiddenFormControl(
+          '',
+          null,
+          {
+            optional: true,
+            resetDependantsOnChange: true,
+            dependsOn: () => [this.customControls.filterOperation],
+            onDependencyChange: (control: InputFormControl) => {
+              control.setValue(this.customControls.filterOperation.value);
+            }
+          }
+        ),
+        filterInValues: new MultipleSelectFormControl(
+          '',
+          marker('Filter-in values'),
+          '',
+          false,
+          [],
+          {
+            resetDependantsOnChange: true,
+            dependsOn: () => [this.customControls.filterField],
+            onDependencyChange: (control: MultipleSelectFormControl) => {
+              this.filter.keywordsFilter(this, control, collectionService, collection);
+            }
+          }
+        ),
+        filterEqualValues: new InputFormControl(
+          '',
+          marker('Filter-equal values'),
+          '',
+          'number',
+          {
+            resetDependantsOnChange: true,
+            dependsOn: () => [this.customControls.filterOperation, this.customControls.filterField],
+            onDependencyChange: (control: InputFormControl) => {
+              this.filter.numberFilter(this, control);
+            }
+          }
+        ),
+        filterMinRangeValues: new InputFormControl(
+          '',
+          marker('Minimum range filter'),
+          '',
+          'number',
+          {
+            resetDependantsOnChange: true,
+            dependsOn: () => [
+              this.customControls.filterOperation, this.customControls.filterField
+            ],
+            onDependencyChange: (control, isLoading) => {
+              this.filter.minRangeFilter(this, control, isLoading, collectionService, collection);
+            }
+          },
+          () => this.customControls.filterValues.filterMaxRangeValues,
+          undefined
+        ),
+        filterMaxRangeValues: new InputFormControl(
+          '',
+          marker('Maximum range filter'),
+          '',
+          'number',
+          {
+            resetDependantsOnChange: true,
+            dependsOn: () => [
+              this.customControls.filterOperation, this.customControls.filterField
+            ],
+            onDependencyChange: (control, isLoading) => {
+              this.filter.maxRangeFilter(this, control, isLoading, collectionService, collection);
+            }
+          },
+          undefined,
+          () => this.customControls.filterValues.filterMinRangeValues
+        ),
+        filterBoolean: new ButtonToggleFormControl(
+          true,
+          [
+            {
+              label: marker('activated'), value: true
+            },
+            {
+              label: marker('not activated'), value: false
+            }
+          ],
+          undefined,
+          {
+            resetDependantsOnChange: true,
+            dependsOn: () => [this.customControls.filterField],
+            onDependencyChange: (control: ButtonToggleFormControl) => {
+              this.filter.booleanFilter(this, control);
+            }
+          })
+      }),
+      id: new HiddenFormControl(
+        '',
+        null,
+        {
+          optional: true
+        }
+      ),
+    });
+  }
+
+  /**
+     *  update edit state to know if we reset or not fields
+     */
+  public syncEditState() {
+    this.editing = !!this.customControls.filterField.value.value && !!this.customControls.filterOperation.value;
+    if (this.editing) {
+      this.editionInfo = {
+        field: this.customControls.filterField.value.value,
+        op: this.customControls.filterOperation.value
+      };
+    } else {
+      this.editionInfo = null;
+    }
+  }
+
+  public customControls = {
+    filterField: this.get('filterField') as TypedSelectFormControl,
+    filterOperation: this.get('filterOperation') as SelectFormControl,
+    filterValues: {
+      filterInValues: this.get('filterValues.filterInValues') as MultipleSelectFormControl,
+      filterEqualValues: this.get('filterValues.filterEqualValues') as InputFormControl,
+      filterMinRangeValues: this.get('filterValues.filterMinRangeValues') as InputFormControl,
+      filterMaxRangeValues: this.get('filterValues.filterMaxRangeValues') as InputFormControl,
+      filterBoolean: this.get('filterValues.filterBoolean') as ButtonToggleFormControl,
+    },
+    id: this.get('id') as HiddenFormControl
+  };
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -709,12 +968,12 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
   public defaultKey = 'analytics.widgets.resultlist';
 
   public constructor(
-    protected collectionService: CollectionService,
-    protected mainFormService: MainFormService,
-    private defaultValuesService: DefaultValuesService,
-    private dialog: MatDialog,
-    private colorService: ArlasColorService,
-    private router: Router,
+        protected collectionService: CollectionService,
+        protected mainFormService: MainFormService,
+        private defaultValuesService: DefaultValuesService,
+        private dialog: MatDialog,
+        private colorService: ArlasColorService,
+        private router: Router,
   ) {
     super(collectionService, mainFormService);
   }
@@ -776,6 +1035,31 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
       collection,
       this.collectionService);
     ConfigFormGroupComponent.listenToAllControlsOnDependencyChange(control.get('filter') as ConfigFormGroup, []);
+    return control;
+  }
+
+  public buildVisualisation() {
+    return new ResultListVisualisationsFormGroup();
+  }
+
+  public buildVisualisationsDataGroup() {
+    return new ResultListVisualisationsDataGroup();
+  }
+
+  public buildVisualisationsDataGroupCriteria(collection: string) {
+    const collectionFields = this.collectionService.getCollectionFields(collection);
+    const operators = [ Expression.OpEnum.Range,
+      Expression.OpEnum.Eq,  Expression.OpEnum.Like,
+      Expression.OpEnum.Lte,  Expression.OpEnum.Lt,
+      Expression.OpEnum.Gte,  Expression.OpEnum.Gt,
+      Expression.OpEnum.Ne
+    ];
+
+    const control = new ResultListVisualisationsDataGroupCondition(collectionFields,
+      operators, this.collectionService, collection);
+    ConfigFormGroupComponent.listenToOnDependencysChange(control.get('filterField') as ConfigFormControl, []);
+    ConfigFormGroupComponent.listenToOnDependencysChange(control.get('filterOperation') as ConfigFormControl, []);
+    ConfigFormGroupComponent.listenToAllControlsOnDependencyChange(control.get('filterValues') as ConfigFormGroup, []);
     return control;
   }
 

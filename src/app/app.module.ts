@@ -22,6 +22,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { LandingPageDialogComponent } from '@components/landing-page/landing-page-dialog.component';
 import { LandingPageComponent, } from '@components/landing-page/landing-page.component';
 import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
@@ -198,7 +199,8 @@ export class CustomTranslateLoader implements TranslateLoader {
       provide: MatPaginatorIntl,
       deps: [TranslateService],
       useFactory: (translateService: TranslateService) => new PaginatorI18n(translateService)
-    }
+    },
+    provideAnimationsAsync()
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 

@@ -22,36 +22,58 @@ import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 // The licence of this library is MIT.
 import tilebelt from '@mapbox/tilebelt';
-import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
 import {
-  toAllButGeoOptionsObs, toGeoOptionsObs, toGeoPointOptionsObs, toKeywordOptionsObs, toNumericOrDateOptionsObs,
-  toNumericOrDateOrKeywordObs, toNumericOrDateOrKeywordOrBooleanObs, toTextOrKeywordOptionsObs
+  toAllButGeoOptionsObs,
+  toGeoOptionsObs,
+  toGeoPointOptionsObs,
+  toKeywordOptionsObs,
+  toNumericOrDateOptionsObs,
+  toNumericOrDateOrKeywordOrBooleanObs,
+  toTextOrKeywordOptionsObs
 } from '@services/collection-service/tools';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
-  ConfigFormGroup, HiddenFormControl,
-  InputFormControl, MapFiltersControl, MultipleSelectFormControl, OrderedSelectFormControl, SelectFormControl,
-  SelectOption, SliderFormControl, SlideToggleFormControl, TypedSelectFormControl,
-  VisualisationCheckboxFormControl, VisualisationCheckboxOption
+  ButtonToggleFormControl,
+  ConfigFormGroup,
+  HiddenFormControl,
+  InputFormControl,
+  MapFiltersControl,
+  MultipleSelectFormControl,
+  OrderedSelectFormControl,
+  SelectFormControl,
+  SelectOption,
+  SliderFormControl,
+  SlideToggleFormControl,
+  TypedSelectFormControl,
+  VisualisationCheckboxFormControl,
+  VisualisationCheckboxOption
 } from '@shared-models/config-form';
+import { FilterInputsBuilder } from '@shared-models/filter-input-builder';
 import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
 import {
-  PropertySelectorFormBuilderService, PropertySelectorFormGroup
+  PropertySelectorFormBuilderService,
+  PropertySelectorFormGroup
 } from '@shared/services/property-selector-form-builder/property-selector-form-builder.service';
 import { valuesToOptions } from '@utils/tools';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { ClusterAggType, FeatureRenderMode, Granularity } from 'arlas-web-contributors/models/models';
+import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
-import {
-  AGGREGATE_GEOMETRY_TYPE, CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION,
-  GEOMETRY_TYPE, LINE_TYPE, LABEL_ALIGNMENT, LABEL_PLACEMENT, MAP_LAYER_TYPE
-} from './models';
-import { ButtonToggleFormControl } from '@shared-models/config-form';
 import { toNumericOptionsObs } from '../../../../services/collection-service/tools';
-import { ArlasSettingsService } from 'arlas-wui-toolkit';
+import {
+  AGGREGATE_GEOMETRY_TYPE,
+  CLUSTER_GEOMETRY_TYPE,
+  FILTER_OPERATION,
+  GEOMETRY_TYPE,
+  LABEL_ALIGNMENT,
+  LABEL_PLACEMENT,
+  LINE_TYPE,
+  MAP_LAYER_TYPE
+} from './models';
 
 export interface MapLayerFormGroupConfig {
     featuresFg: MapLayerTypeFeaturesFormGroup;
@@ -71,7 +93,6 @@ export const MAX_ZOOM = 23;
 export class MapLayerFormGroup extends ConfigFormGroup {
   private currentCollection;
   public clearFilters = new Subject<boolean>();
-
   public constructor(
     opt: MapLayerFormGroupConfig
   ) {
@@ -451,6 +472,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
 export class MapFilterFormGroup extends ConfigFormGroup {
   public editing = false;
   public editionInfo: { field: string; op: FILTER_OPERATION; };
+  protected  filter = new FilterInputsBuilder();
   public constructor(
     collectionFields: Observable<Array<CollectionField>>,
     filterOperations: Array<FILTER_OPERATION>,
@@ -477,59 +499,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
           resetDependantsOnChange: true,
           dependsOn: () => [this.customControls.filterField],
           onDependencyChange: (control: SelectFormControl) => {
-            if (this.editionInfo) {
-              // if we change the field/or operation, we are no longer in editing an existing filter but creating a new one
-              // we quit edition mode
-              if (this.customControls.filterField.value.value !== this.editionInfo.field ||
-                this.customControls.filterOperation.value !== this.editionInfo.op
-              ) {
-                this.editing = false;
-              }
-
-            }
-            if (!this.editing) {
-              /** update list of available ops according to field type */
-              if (this.customControls.filterField.value.type === 'KEYWORD') {
-                control.setSyncOptions([
-                  { value: FILTER_OPERATION.IN, label: FILTER_OPERATION.IN },
-                  { value: FILTER_OPERATION.NOT_IN, label: FILTER_OPERATION.NOT_IN }
-                ]);
-              } else if (this.customControls.filterField.value.type === 'BOOLEAN') {
-                control.setSyncOptions([
-                  { value: FILTER_OPERATION.IS, label: FILTER_OPERATION.IS }
-                ]);
-              } else {
-                control.setSyncOptions([
-                  { value: FILTER_OPERATION.EQUAL, label: FILTER_OPERATION.EQUAL },
-                  { value: FILTER_OPERATION.NOT_EQUAL, label: FILTER_OPERATION.NOT_EQUAL },
-                  { value: FILTER_OPERATION.RANGE, label: FILTER_OPERATION.RANGE },
-                  { value: FILTER_OPERATION.OUT_RANGE, label: FILTER_OPERATION.OUT_RANGE },
-                ]);
-              }
-              control.setValue(control.syncOptions[0].value);
-            } else {
-              // if we are editing an existing filter, keep the selected operation.
-              // otherwise there is no way to remember it
-              if ((this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
-                this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN)) {
-                control.setSyncOptions([
-                  { value: FILTER_OPERATION.IN, label: FILTER_OPERATION.IN },
-                  { value: FILTER_OPERATION.NOT_IN, label: FILTER_OPERATION.NOT_IN }
-                ]);
-              } else if (this.customControls.filterOperation.value === FILTER_OPERATION.IS) {
-                control.setSyncOptions([
-                  { value: FILTER_OPERATION.IS, label: FILTER_OPERATION.IS }
-                ]);
-              } else {
-                control.setSyncOptions([
-                  { value: FILTER_OPERATION.EQUAL, label: FILTER_OPERATION.EQUAL },
-                  { value: FILTER_OPERATION.NOT_EQUAL, label: FILTER_OPERATION.NOT_EQUAL },
-                  { value: FILTER_OPERATION.RANGE, label: FILTER_OPERATION.RANGE },
-                  { value: FILTER_OPERATION.OUT_RANGE, label: FILTER_OPERATION.OUT_RANGE },
-                ]);
-              }
-              control.setValue(this.customControls.filterOperation.value);
-            }
+            this.filter.operationFilter(this, control);
           }
         }
       ),
@@ -543,41 +513,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
           resetDependantsOnChange: true,
           dependsOn: () => [this.customControls.filterField],
           onDependencyChange: (control: MultipleSelectFormControl) => {
-            if (!!this.customControls.filterField.value && !!this.customControls.filterField.value.value &&
-              this.customControls.filterField.value.value !== '') {
-              if (this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
-                this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN) {
-                control.setSyncOptions([]);
-                collectionService.getTermAggregation(
-                  collection,
-                  this.customControls.filterField.value.value)
-                  .then(keywords => {
-                    control.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
-                  });
-              } else {
-                control.setSyncOptions([]);
-              }
-            } else {
-              control.setSyncOptions([]);
-            }
-            control.markAsUntouched();
-            if (this.editionInfo) {
-              // if we change the field/or operation, we are no longer in editing an existing filter but creating a new one
-              // we quit edition mode
-              if (this.customControls.filterField.value.value !== this.editionInfo.field ||
-                this.customControls.filterOperation.value !== this.editionInfo.op
-              ) {
-                this.editing = false;
-              }
-            }
-            // if we are editing an existing filter, keep the selected items.
-            // otherwise there is no way to remember them
-            if (!this.editing) {
-              control.savedItems = new Set();
-              control.selectedMultipleItems = [];
-            }
-            control.enableIf(this.customControls.filterOperation.value === FILTER_OPERATION.IN ||
-              this.customControls.filterOperation.value === FILTER_OPERATION.NOT_IN);
+            this.filter.keywordsFilter(this, control, collectionService, collection);
           }
         }
       ),
@@ -590,8 +526,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
           resetDependantsOnChange: true,
           dependsOn: () => [this.customControls.filterOperation, this.customControls.filterField],
           onDependencyChange: (control: InputFormControl) => {
-            control.enableIf(this.customControls.filterOperation.value === FILTER_OPERATION.EQUAL ||
-              this.customControls.filterOperation.value === FILTER_OPERATION.NOT_EQUAL);
+            this.filter.numberFilter(this, control);
           }
         }
       ),
@@ -606,17 +541,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
             this.customControls.filterOperation, this.customControls.filterField
           ],
           onDependencyChange: (control, isLoading) => {
-            const doRangeEnable = this.customControls.filterOperation.value === FILTER_OPERATION.RANGE ||
-              this.customControls.filterOperation.value === FILTER_OPERATION.OUT_RANGE;
-            control.enableIf(doRangeEnable);
-            if (doRangeEnable && !isLoading) {
-              collectionService.getComputationMetric(
-                collection,
-                this.customControls.filterField.value.value,
-                METRIC_TYPES.MIN)
-                .then(min =>
-                  control.setValue(min));
-            }
+            this.filter.minRangeFilter(this, control, isLoading, collectionService, collection);
           }
         },
         () => this.customControls.filterMaxRangeValues,
@@ -633,17 +558,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
             this.customControls.filterOperation, this.customControls.filterField
           ],
           onDependencyChange: (control, isLoading) => {
-            const doRangeEnable = this.customControls.filterOperation.value === FILTER_OPERATION.RANGE ||
-              this.customControls.filterOperation.value === FILTER_OPERATION.OUT_RANGE;
-            control.enableIf(doRangeEnable);
-            if (doRangeEnable && !isLoading) {
-              collectionService.getComputationMetric(
-                collection,
-                this.customControls.filterField.value.value,
-                METRIC_TYPES.MAX)
-                .then(max =>
-                  control.setValue(max));
-            }
+            this.filter.maxRangeFilter(this, control, isLoading, collectionService, collection);
           }
         },
         undefined,
@@ -664,7 +579,7 @@ export class MapFilterFormGroup extends ConfigFormGroup {
           resetDependantsOnChange: true,
           dependsOn: () => [this.customControls.filterField],
           onDependencyChange: (control: ButtonToggleFormControl) => {
-            control.enableIf(this.customControls.filterOperation.value === FILTER_OPERATION.IS);
+            this.filter.booleanFilter(this, control);
           }
         }),
       id: new HiddenFormControl(

@@ -1,0 +1,127 @@
+/*
+ * Licensed to Gisaïa under one or more contributor
+ * license agreements. See the NOTICE.txt file distributed with
+ * this work for additional information regarding copyright
+ * ownership. Gisaïa licenses this file to you under
+ * the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+@import 'variables';
+
+:host {
+  display: block;
+  font-size: 14px;
+  --light-grey: #efefef;
+  height: 100%;
+  ::ng-deep {
+    .inputs-100 {
+      .mat-mdc-form-field {
+        width: 100%!important;
+      }
+    }
+  }
+}
+
+.data-group{
+  &__container{
+    display: flex;
+    flex-direction: column;
+    padding: $default-spacing;
+    height: calc(100% - $default-spacing);
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    border-bottom: solid 1px var(--light-grey);
+    padding-bottom: 6px;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: end;
+    gap: 6px;
+    margin:  $default-spacing 0;
+  }
+
+  &__inputs {
+    margin-top:  $default-spacing;
+    display: flex;
+    gap:  $default-spacing;
+    width: 100%;
+  }
+
+  &__button-wrapper{
+    display: flex;
+    align-items: center;
+    gap: $default-spacing;
+  }
+
+  &__button {
+    width: 160px;
+    margin: 6px 0;
+  }
+
+  &__back-icon {
+    text-decoration: underline;
+    display: flex;
+    align-items: center;
+    margin-left: -9px;
+    margin-bottom: 6px;
+    &:hover {
+      cursor: pointer;
+    }
+    & mat-icon {
+      margin-right: -5px;
+    }
+
+  }
+}
+
+.flex-1{
+  flex:1;
+}
+
+.table-container{
+  width: 100%;
+  height: 100%;
+  overflow-y:auto;
+  min-height: 150px;
+}
+
+.title {
+  margin: 0;
+}
+
+.sub-title{
+  color: #676666;
+}
+
+.body-text {
+  margin-bottom: 6px;
+}
+
+.mat-column-field, .mat-column-action {
+  width: 30%;
+}
+
+.mat-mdc-header-operator, .mat-column-name {
+  width: 30%;
+  max-width: 150px;
+}
+
+.mat-mdc-header-value, .mat-column-description {
+  width: 30%;
+}
