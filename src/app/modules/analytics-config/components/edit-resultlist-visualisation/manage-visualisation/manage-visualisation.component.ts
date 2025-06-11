@@ -169,6 +169,7 @@ export class ManageVisualisationComponent {
 
   public addDataGroup() {
     const dataGroup = this.resultListFormBuilderService.buildVisualisationsDataGroup();
+    dataGroup.get('name').setValue('New data group');
     const ref = this.openEditionDialog(dataGroup);
 
     ref.afterClosed()
