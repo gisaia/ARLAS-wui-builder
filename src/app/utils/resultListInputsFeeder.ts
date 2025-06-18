@@ -24,6 +24,7 @@ import {
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { AbstractControl, FormArray } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { NUMERIC_TYPES } from '@services/collection-service/tools';
@@ -187,8 +188,8 @@ export class ResultListInputsFeeder {
    */
   private interopCode(resultListFormBuilder: ResultlistFormBuilderService) {
     if(this.options.input.visualisationLink) {
-      const visualisationForm = resultListFormBuilder.buildVisualisation();
-      visualisationForm.customControls.name.setValue(' Visualisation Link');
+      const visualisationForm= resultListFormBuilder.buildVisualisation();
+      visualisationForm.customControls.name.setValue(this.translate?.instant('Visualisation Link'));
       const dataGroupForm = resultListFormBuilder
         .buildVisualisationsDataGroup();
       this.imports([
@@ -197,11 +198,11 @@ export class ResultListInputsFeeder {
           control: dataGroupForm.customControls.visualisationUrl
         }
       ]);
-      dataGroupForm.customControls.name.setValue('Visualisation Link');
+      dataGroupForm.customControls.name.setValue(this.translate?.instant('Visualisation Link'));
       dataGroupForm.customControls.protocol.setValue('other');
       visualisationForm.customControls.dataGroups.push(dataGroupForm);
 
-      const key = 'Your visualisation link config has been moved';
+      const key = marker('Your visualisation link config has been moved');
       if(this.messageService){
         this.messageService.open(this.translate?.instant(key) ?? key, null, {duration: 7000});
       }

@@ -19,6 +19,7 @@
 import {
   isNumberOperator
 } from '@analytics-config/services/resultlist-form-builder/models';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
 import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
 import { NUMERIC_TYPES } from '@services/collection-service/tools';
@@ -304,25 +305,25 @@ export class FilterInputsBuilder extends InputFilter<FILTER_OPERATION, FILTER_OP
 export class GeoFilterInputsBuilder  extends InputFilter<Expression.OpEnum, Expression.OpEnum | string> {
   protected  getBooleanOperatorList(){
     return [
-      { value: Expression.OpEnum.Eq, label:'eq' },
+      { value: Expression.OpEnum.Eq, label: marker('eq') },
     ];
   }
 
   protected  getKeywordOperatorList(){
     return[
-      { value: Expression.OpEnum.Like, label: 'is one of' }
+      { value: Expression.OpEnum.Like, label: marker('is one of') }
     ];
   }
 
   protected  getNumericalOperatorList(){
     return [
-      { value: Expression.OpEnum.Eq, label: 'eq' },
-      { value: Expression.OpEnum.Ne, label: 'ne'},
-      { value: Expression.OpEnum.Gte, label: 'gte' },
-      { value: Expression.OpEnum.Gt, label: 'gt'},
-      { value: Expression.OpEnum.Lt, label: 'lt' },
-      { value: Expression.OpEnum.Lte, label: 'lte' },
-      { value: Expression.OpEnum.Range, label: 'range' }
+      { value: Expression.OpEnum.Eq, label: marker('eq') },
+      { value: Expression.OpEnum.Ne, label: marker('ne')},
+      { value: Expression.OpEnum.Gte, label: marker('gte' )},
+      { value: Expression.OpEnum.Gt, label: marker('gt')},
+      { value: Expression.OpEnum.Lt, label: marker('lt')},
+      { value: Expression.OpEnum.Lte, label: marker('lte') },
+      { value: Expression.OpEnum.Range, label: marker('range') }
     ];
   }
 

@@ -60,7 +60,7 @@ export class ManageVisualisationComponent {
    * @type {InputSignal<boolean | undefined>}
    * @protected
    */
-  protected isEdition = input<boolean>();
+  protected isEdition = input<boolean>(false);
   /**
    *  Collection name
    * @type {InputSignal<string>}
@@ -169,7 +169,7 @@ export class ManageVisualisationComponent {
 
   public addDataGroup() {
     const dataGroup = this.resultListFormBuilderService.buildVisualisationsDataGroup();
-    dataGroup.get('name').setValue('New data group');
+    dataGroup.get('name').setValue(marker('New data group'));
     const ref = this.openEditionDialog(dataGroup);
 
     ref.afterClosed()

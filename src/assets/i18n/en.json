@@ -141,8 +141,8 @@
 	"Protocol": "Protocol",
 	"View URL": "View URL",
 	"Visualisation criteria": "Criteria",
-	"Edit criteria": "Edit criteria",
-	"Delete criteria": "Delete criteria",
+	"Edit criterion": "Edit criterion",
+	"Delete criterion": "Delete criterion",
 	"Manage data group": "Manage data group",
 	"Add a criteria": "Add a criteria",
 	"Criterias will be evaluated in order": "Criteria will be evaluated in order. The first Criteria to be true will be used for visualization.",
@@ -961,5 +961,7 @@
 	"Add an item family": "Add an item family",
 	"Add a visualization configuration": "Add a visualization configuration",
 	"And": "And",
-	"Your visualisation link config has been moved": "Your visualisation link config has been moved to Data table > Visualisation. Remember to save."
+	"Your visualisation link config has been moved": "Your visualisation link config has been moved to Data table > Visualisation. Remember to save.",
+	"Visualisation Link": "Visualisation Link",
+	"New data group": "New data group"
 }

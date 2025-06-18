@@ -71,7 +71,7 @@
                             <span class="condition-text">{{ filter.filterOperation | lowercase | translate }}</span>
                             <span *ngTemplateOutlet="conditions;context:
                         {operation: filter.filterOperation | lowercase, input: filter.filterValues, type:  filter.filterField.type}"></span>
-                            <span class="condition-text" [class.not-display]="last">{{'&'}}</span>
+                            <span class="condition-text" [class.hidden]="last">{{'&'}}</span>
                         </li>
                     }
                 </ul>
@@ -81,8 +81,8 @@
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let element; let i = index">
                 <div class="action-icon-wrapper">
-                    <mat-icon [matTooltip]="'Edit criteria' | translate" (keydown)="editDataGroup(i)" (click)="editDataGroup(i)">edit</mat-icon>
-                    <mat-icon [matTooltip]="'Delete criteria' | translate" (keydown)="removeDataGroup(i)" (click)="removeDataGroup(i)">delete
+                    <mat-icon [matTooltip]="'Edit criterion' | translate" (keydown)="editDataGroup(i)" (click)="editDataGroup(i)">edit</mat-icon>
+                    <mat-icon [matTooltip]="'Delete criterion' | translate" (keydown)="removeDataGroup(i)" (click)="removeDataGroup(i)">delete
                     </mat-icon>
                 </div>
             </td>
@@ -121,6 +121,6 @@
             *ngIf=" type !== 'BOOLEAN'">{{ input?.filterEqualValues }}</ng-container>
     <ng-container *ngIf="operation === 'range'">[{{ input?.filterMinRangeValues }}
         , {{ input?.filterMaxRangeValues }}] </ng-container>
-    <ng-container *ngIf="operation === 'eq' && type === 'BOOLEAN'">{{ input?.filterBoolean.toString() | translate }} </ng-container>
+    <ng-container *ngIf="operation === 'eq' && type === 'BOOLEAN'">{{ input?.filterBoolean | translate }} </ng-container>
     </span>
 </ng-template>
