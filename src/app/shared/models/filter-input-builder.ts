@@ -35,7 +35,7 @@ interface FilterFrom {
 interface ParentControl {
     editing?: boolean;
     customControls?: any;
-    editionInfo?: { op: string | Expression.OpEnum; field: any; };
+    editionInfo?: { op: string | Expression.OpEnum; field: string; };
 }
 
 abstract class InputFilter<V, L> {
