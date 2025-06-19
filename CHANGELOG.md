@@ -1,9 +1,14 @@
 # Change Log
 
-## [v27.0.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.4) (2025-06-06)
+## [v27.0.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.4) (2025-06-19)
+
+**New stuff:**
+
+- Add toggle to enable globe mode [\#1087](https://github.com/gisaia/ARLAS-wui-builder/issues/1087) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
 
 **Fixed bugs:**
 
+- Loading a dashboard with the builder with histogram changes `interval-1` into `interval-1hour` [\#1090](https://github.com/gisaia/ARLAS-wui-builder/issues/1090)
 - Handle textare size in forms [\#1085](https://github.com/gisaia/ARLAS-wui-builder/issues/1085)
 
 ## [v27.0.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.3) (2025-05-23)
