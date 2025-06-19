@@ -16,15 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { isNumberOperator } from '@analytics-config/services/resultlist-form-builder/models';
 import {
   ResultlistConfigForm,
-  ResultlistFormBuilderService
+  ResultlistFormBuilderService,
+  ResultListVisualisationsDataGroupCondition
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, FormArray } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { AnalyticComponentResultListInputConfig, ContributorConfig } from '@services/main-form-manager/models-config';
+import { NUMERIC_TYPES } from '@services/collection-service/tools';
+import {
+  AnalyticComponentResultListInputConfig,
+  ContributorConfig,
+  DataGroupInputConfig
+} from '@services/main-form-manager/models-config';
 import { ImportElement, importElements } from '@services/main-form-manager/tools';
+import { Expression } from 'arlas-api';
 import { ArlasColorService } from 'arlas-web-components';
+import { firstValueFrom, takeLast } from 'rxjs';
 
 interface ResultListConfigFeederOptions {
     widgetData: ResultlistConfigForm;
@@ -37,12 +49,15 @@ export class ResultListInputsFeeder {
   protected gridStep: any;
   protected settingsStep: any;
   protected sactionStep: any;
+  protected visualisationStep: {   visualisationsList: FormArray;};
   protected customControls: any;
-  public constructor(protected options: ResultListConfigFeederOptions) {
+  public constructor(protected options: ResultListConfigFeederOptions, protected  messageService?: MatSnackBar,
+                     protected translate?: TranslateService) {
     this.dataStep = options.widgetData.customControls.dataStep;
     this.gridStep = options.widgetData.customControls.gridStep;
     this.settingsStep = options.widgetData.customControls.settingsStep;
     this.sactionStep = options.widgetData.customControls.sactionStep;
+    this.visualisationStep = options.widgetData.customControls.visualisationStep;
     this.customControls = options.widgetData.customControls;
   }
 
@@ -68,13 +83,10 @@ export class ResultListInputsFeeder {
       {
         value: this.options.input.downloadLink,
         control: this.sactionStep.downloadLink
-      },
-      {
-        value: this.options.input.visualisationLink,
-        control: this.sactionStep.visualisationLink
-      },
+      }
     ]);
   }
+
 
   public importSettingsSteps(){
     return this.imports([
@@ -168,6 +180,156 @@ export class ResultListInputsFeeder {
       ]
     );
     return this;
+  }
+
+  /**
+   * Methode to transform a visualisation link into a data group
+   * @private
+   */
+  private interopCode(resultListFormBuilder: ResultlistFormBuilderService) {
+    if(this.options.input.visualisationLink) {
+      const visualisationForm= resultListFormBuilder.buildVisualisation();
+      visualisationForm.customControls.name.setValue(this.translate?.instant('Visualisation Link'));
+      const dataGroupForm = resultListFormBuilder
+        .buildVisualisationsDataGroup();
+      this.imports([
+        {
+          value: this.options.input.visualisationLink,
+          control: dataGroupForm.customControls.visualisationUrl
+        }
+      ]);
+      dataGroupForm.customControls.name.setValue(this.translate?.instant('Visualisation Link'));
+      dataGroupForm.customControls.protocol.setValue('other');
+      visualisationForm.customControls.dataGroups.push(dataGroupForm);
+
+      const key = marker('Your visualisation link config has been moved');
+      if(this.messageService){
+        this.messageService.open(this.translate?.instant(key) ?? key, null, {duration: 7000});
+      }
+      return visualisationForm;
+    }
+    return null;
+  }
+
+  public importVisualisationStep(resultListFormBuilder: ResultlistFormBuilderService){
+    if(this.options.input.visualisationsList && this.options.input.visualisationsList.length > 0) {
+      this.options.input.visualisationsList.forEach(visualisation => {
+        const visualisationForm = resultListFormBuilder.buildVisualisation();
+        this.imports([
+          {
+            value: visualisation.description,
+            control: visualisationForm.customControls.description
+          },
+          {
+            value: visualisation.name,
+            control: visualisationForm.customControls.name
+          },
+        ]);
+
+        if(visualisation?.dataGroups && visualisation.dataGroups.length > 0) {
+          visualisation?.dataGroups.forEach(async dataGroupConf => {
+            const dataGroupForm = resultListFormBuilder
+              .buildVisualisationsDataGroup();
+            this.imports([
+              {
+                value: dataGroupConf.visualisationUrl,
+                control: dataGroupForm.customControls.visualisationUrl
+              },
+              {
+                value: dataGroupConf.name,
+                control: dataGroupForm.customControls.name
+              },
+              {
+                value: dataGroupConf.protocol,
+                control: dataGroupForm.customControls.protocol
+              },
+            ]);
+            const conditionForm = this.importDataGroupFilters(dataGroupConf, resultListFormBuilder);
+            dataGroupForm.setControl('filters', conditionForm);
+            dataGroupForm.customControls.filters = dataGroupForm.get('filters') as FormArray<ResultListVisualisationsDataGroupCondition>;
+            (visualisationForm.get('dataGroups') as FormArray).push(dataGroupForm);
+          });
+        }
+        this.visualisationStep.visualisationsList.push(visualisationForm);
+      });
+    }
+
+    // interop code to migrate.
+    const interopVisualisationForm = this.interopCode(resultListFormBuilder);
+    if(interopVisualisationForm) {
+      this.visualisationStep.visualisationsList.push(interopVisualisationForm);
+    }
+    return this;
+  }
+
+  protected importDataGroupFilters(
+    dataGroupConf: DataGroupInputConfig,
+    resultListFormBuilder: ResultlistFormBuilderService){
+    const formArray = new FormArray([]);
+    if(dataGroupConf.filters && dataGroupConf.filters.length > 0){
+      dataGroupConf.filters.forEach(async (condition, i) => {
+        // operator arrive here in First letter upper case. We have to transform them to lowercase to match
+        // Exp Openum. We ensure consistency by converting the result in lowerCase
+        const op = (Expression.OpEnum[(condition.op as string)].toLowerCase()) as Expression.OpEnum;
+        const conditionForm = resultListFormBuilder
+          .buildVisualisationsDataGroupCriteria(this.options.contributor.collection);
+        const fields = await firstValueFrom(conditionForm.collectionFields);
+        const field = fields.find(file => file.name === condition.field);
+        this.imports([
+          {
+            value: { value: condition.field, type: field.type },
+            control: conditionForm.customControls.filterField
+          },
+          {
+            value: op,
+            control: conditionForm.customControls.filterOperation
+          }
+        ]);
+        conditionForm.syncEditState();
+        if (op ===  Expression.OpEnum.Like) {
+          const  filterInValues = (condition.value as string[]);
+          this.imports([
+            {
+              value: filterInValues?.map(v => ({ value: v })),
+              control: conditionForm.customControls.filterValues.filterInValues
+            }
+          ]);
+          conditionForm.customControls.filterValues.filterInValues.selectedMultipleItems = filterInValues.map(v => ({ value: v }));
+          conditionForm.customControls.filterValues.filterInValues.savedItems = new Set(filterInValues);
+          conditionForm.customControls.filterValues.filterEqualValues.disable();
+        } else if ( isNumberOperator(op) &&
+            NUMERIC_TYPES.includes(condition.type as any)) {
+          this.imports([
+            {
+              value: +condition.value,
+              control:  conditionForm.customControls.filterValues.filterEqualValues
+            }
+          ]);
+        } else if (op === Expression.OpEnum.Range) {
+          const min =  +(condition.value as string).split(';')[0];
+          const max =  +(condition.value as string).split(';')[1];
+          this.imports([
+            {
+              value: min,
+              control:  conditionForm.customControls.filterValues.filterMinRangeValues
+            },
+            {
+              value: max,
+              control:  conditionForm.customControls.filterValues.filterMaxRangeValues
+            }
+          ]);
+        } else if (op === Expression.OpEnum.Eq) {
+          this.imports([
+            {
+              value: condition.value,
+              control:  conditionForm.customControls.filterValues.filterBoolean
+            }
+          ]);
+        }
+        formArray.push(conditionForm);
+      });
+    }
+    return formArray;
   }
 
   public importResultListQuickLook (resultListFormBuilder: ResultlistFormBuilderService,

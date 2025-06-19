@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 export enum GEOMETRY_TYPE {
   fill = 'fill',
   line = 'line',

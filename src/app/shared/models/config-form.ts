@@ -20,7 +20,7 @@ import {
   FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators, FormArray,
   ValidationErrors
 } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HistogramUtils } from 'arlas-d3';
 import { CollectionField, GroupCollectionItem } from '@services/collection-service/models';
 import { METRIC_TYPES } from '@services/collection-service/collection.service';
@@ -129,7 +129,6 @@ export abstract class ConfigFormControl extends FormControl {
       this.disable({ emitEvent: false });
     }
   }
-
 }
 
 export interface ControlOptionalParams {
@@ -197,6 +196,8 @@ export class ConfigFormGroup extends FormGroup {
   public title: string;
   public stepName: string;
   public tabName: string;
+  /** used to order  first level of table if needed **/
+  public tabsOrder: string[] ;
 
   public hide = false;
 
@@ -205,7 +206,6 @@ export class ConfigFormGroup extends FormGroup {
       [key: string]: AbstractControl;
     },
     private optionalParams: GroupOptionalParams = {}) {
-
     super(controls, optionalParams.validatorOrOpts, optionalParams.asyncValidator);
   }
 
@@ -442,6 +442,7 @@ export class SelectFormControl extends ConfigFormControl {
       optionalParams);
 
     if (options instanceof Observable) {
+
       options.subscribe(opts => {
         this.setSyncOptions(opts);
         this.updateValueAndValidity({ emitEvent: true });
@@ -477,6 +478,7 @@ export class MultipleSelectFormControl extends ConfigFormControl {
   // used only for autocomplete: list of filtered options
   public filteredOptions: Array<SelectOption>;
   public syncOptions: Array<SelectOption> = [];
+  public syncOptionsUpdated = new BehaviorSubject<Array<SelectOption>>([]);
   public selectedMultipleItems: Array<{ value: any; color?: string; detail?: string; }> = [];
   public savedItems = new Set<string>();
   public searchable = true;
@@ -521,6 +523,7 @@ export class MultipleSelectFormControl extends ConfigFormControl {
   public setSyncOptions(newOptions: Array<SelectOption>) {
     this.syncOptions = newOptions;
     this.filteredOptions = newOptions;
+    this.syncOptionsUpdated.next(newOptions);
   }
 }
 

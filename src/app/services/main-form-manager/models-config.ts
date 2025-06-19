@@ -17,12 +17,12 @@
  * under the License.
  */
 
-import { Aggregation } from 'arlas-api';
-import { VisualisationSetConfig, BasemapStyle } from 'arlas-map';
+import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
+import { Aggregation, Expression } from 'arlas-api';
+import { BasemapStyle, VisualisationSetConfig } from 'arlas-map';
 import { FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
 import { AnalyticsTabs, ZoomToDataStrategy } from 'arlas-wui-toolkit';
 import { Layer } from './models-map-config';
-import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 
 export const JSONPATH_COUNT = '$.count';
 export const JSONPATH_METRIC = '$.metrics[0].value';
@@ -307,10 +307,32 @@ export interface AnalyticComponentInputConfig {
 }
 
 export interface AnalyticComponentResultListInputConfig extends AnalyticComponentInputConfig {
+  visualisationsList?: VisualisationListInputConfig[];
   options?: AnalyticComponentResultListInputOptions;
   detailWidth?: number;
   visualisationLink?: string;
   downloadLink?: string;
+}
+
+export interface VisualisationListInputConfig {
+  description: string;
+  name: string;
+  dataGroups: DataGroupInputConfig[];
+}
+
+export interface DataGroupInputConfig {
+  name: string;
+  protocol: string;
+  visualisationUrl: string;
+  filters: DataGroupInputCondition[];
+}
+
+export type ArlasExpression = keyof typeof Expression.OpEnum;
+export interface DataGroupInputCondition {
+  field: string;
+  op: string;
+  type: string;
+  value: string | number | string[] | boolean;
 }
 
 export interface AnalyticComponentResultListInputOptions {
