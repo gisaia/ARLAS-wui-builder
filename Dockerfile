@@ -19,7 +19,7 @@ RUN npm run build
 
 ### STAGE 2: Setup ###
 
-FROM nginx:1.23.3-alpine
+FROM nginx:1.28.0-alpine3.21-slim
 
 RUN apk update && apk upgrade && apk add --no-cache bash jq netcat-openbsd curl && rm -rf /var/cache/apk/*
 
