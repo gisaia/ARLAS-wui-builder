@@ -209,6 +209,7 @@ export class AnalyticsImportService {
     const uuid = widgetData.customControls.uuid;
     const usage = widgetData.customControls.usage;
     const contribAggregationModel = contributor.aggregationmodels[0];
+
     importElements([
       {
         value: component.uuid,
@@ -230,7 +231,7 @@ export class AnalyticsImportService {
         contributor,
         dataStep.aggregation.customControls,
         contribAggregationModel,
-        component.input.dataType,),
+        component.input.dataType),
       ,
       ...this.getMetricImportElements(
         contribAggregationModel,
@@ -850,7 +851,7 @@ export class AnalyticsImportService {
     {
       value: !!contribAggregationModel.interval ? contribAggregationModel.interval.unit : null,
       control: aggregationControls.aggregationIntervalUnit
-    }] as Array<ImportElement>;
+    }];
   }
 
   private getMetricImportElements(
@@ -873,11 +874,6 @@ export class AnalyticsImportService {
         value: contribAggregationModel.order ? contribAggregationModel.order : Aggregation.OrderEnum.Desc,
         control: metricControls.sortOrder
       }
-    ] as Array<ImportElement>;
+    ];
   };
-
-  private capitalize(s) {
-    return s[0].toUpperCase() + s.slice(1);
-  }
-
 }

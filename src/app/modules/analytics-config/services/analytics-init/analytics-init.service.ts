@@ -21,7 +21,7 @@ import { Injectable } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { OperationEnum } from 'arlas-web-core';
+import { Contributor, OperationEnum } from 'arlas-web-core';
 import {
   ArlasCollaborativesearchService, ArlasConfigService, ArlasStartupService,
   ContributorBuilder, ArlasSettingsService
@@ -131,7 +131,7 @@ export class AnalyticsInitService {
 
     // TODO do something more robust
     const contribType = [WIDGET_TYPE.powerbars.toString(), WIDGET_TYPE.donut.toString()].indexOf(widgetType) >= 0 ? 'tree' : widgetType;
-    const contributor = ContributorBuilder.buildContributor(
+    const contributor: Contributor = ContributorBuilder.buildContributor(
       contribType,
       contribConfig.identifier,
       this.configService,
