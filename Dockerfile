@@ -21,7 +21,7 @@ RUN npm run build
 
 FROM nginx:1.23.3-alpine
 
-RUN apk update && apk upgrade && apk add  bash jq netcat-openbsd curl && rm -rf /var/cache/apk/*
+RUN apk update && apk upgrade && apk add --no-cache bash jq netcat-openbsd curl && rm -rf /var/cache/apk/*
 
 ## Copy our default nginx config
 COPY nginx/default.conf /etc/nginx/conf.d/
