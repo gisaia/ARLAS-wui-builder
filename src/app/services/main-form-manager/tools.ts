@@ -16,14 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import {
-  ResultlistConfigForm, ResultlistFormBuilderService
-} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { AbstractControl } from '@angular/forms';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { AnalyticComponentConfig, ContributorConfig } from '@services/main-form-manager/models-config';
-import { Filter, Expression } from 'arlas-api';
-import { ArlasColorService } from 'arlas-web-components';
+import { Expression, Filter } from 'arlas-api';
+
 export interface ImportElement {
   value: any;
   control: AbstractControl;
@@ -31,8 +26,8 @@ export interface ImportElement {
 
 export function importElements(elements: Array<ImportElement>) {
   elements
-    .filter(e => e.value !== null && e.value !== undefined)
-    .forEach(element => element.control.setValue(element.value));
+    .filter(e => e.value !== null)  // Let undefined go through as it allows to properly set fields from imported configuration
+    .forEach(e => e.control.setValue(e.value));
 }
 
 export function stringifyArlasFilter(filter: Filter): string {
