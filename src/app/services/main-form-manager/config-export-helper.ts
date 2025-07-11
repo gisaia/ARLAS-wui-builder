@@ -200,9 +200,9 @@ export class ConfigExportHelper {
         },
         server: {
           url: startingConfig.customControls.serverUrl.value,
-          max_age_cache: +sideModulesGlobal.customControls.cache.maxAgeCache.value,
+          max_age_cache: +sideModulesGlobal.customControls.server.maxAgeCache.value,
           collection: {
-            name: startingConfig.customControls.collection.value,
+            name: sideModulesGlobal.customControls.server.mainCollection.value,
           }
         }
       },

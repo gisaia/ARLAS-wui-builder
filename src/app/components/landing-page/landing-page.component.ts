@@ -141,7 +141,6 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
     if (this.authentMode === 'openid') {
-      const claims = this.authService.identityClaims as any;
       this.subscription = this.authService.canActivateProtectedRoutes.subscribe(isAuthenticated => {
         this.isAuthenticated = isAuthenticated;
         if (this.persistenceService.isAvailable) {

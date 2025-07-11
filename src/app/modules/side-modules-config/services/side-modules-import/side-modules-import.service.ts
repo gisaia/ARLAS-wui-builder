@@ -56,8 +56,12 @@ export class SideModulesImportService {
       },
       {
         value: config.arlas.server.max_age_cache !== undefined ? config.arlas.server.max_age_cache : 120,
-        control: sideModulesGlobal.cache.maxAgeCache
+        control: sideModulesGlobal.server.maxAgeCache
       },
+      {
+        value: config.arlas.server.collection.name,
+        control: sideModulesGlobal.server.mainCollection
+      }
     ]);
 
     importElements([

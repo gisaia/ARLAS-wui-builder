@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -29,18 +29,31 @@ import {
   SlideToggleFormControl
 } from '@shared-models/config-form';
 import { urlValidator } from '@utils/validators';
+import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 
 export class SideModulesGlobalFormGroup extends ConfigFormGroup {
 
-  public constructor(collectionService: CollectionService,) {
+  public constructor(collectionService: CollectionService, arlasCss: ArlasCollaborativesearchService) {
     super({
-      cache: new ConfigFormGroup({
+      server: new ConfigFormGroup({
         maxAgeCache: new InputFormControl(
           '',
           marker('maxAgeCache'),
           marker('maxAgeCache description'),
           'number'
         ),
+        mainCollection: new SelectFormControl(
+          arlasCss.defaultCollection,
+          marker('Main collection'),
+          marker('Main collection of the dashboard. Corresponds to the collection proposed by default.'),
+          false,
+          [],
+          {
+            optional: false,
+            isCollectionSelect: true
+          },
+          collectionService.getGroupCollectionItems()
+        )
       }).withTitle(marker('ARLAS server')),
       useShare: new SlideToggleFormControl(
         '',
@@ -107,7 +120,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
             true,
             [],
             {
-              optional:false,
+              optional: false,
               isCollectionSelect: true
             },
             collectionService.getGroupCollectionItems()
@@ -125,8 +138,9 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
   }
 
   public customControls = {
-    cache: {
-      maxAgeCache: this.get('cache.maxAgeCache') as InputFormControl
+    server: {
+      maxAgeCache: this.get('server.maxAgeCache') as InputFormControl,
+      mainCollection: this.get('server.mainCollection') as SelectFormControl
     },
     useShare: this.get('useShare') as SlideToggleFormControl,
     useDownload: this.get('useDownload') as SlideToggleFormControl,
@@ -147,7 +161,7 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
   public customGroups = {
     share: this.get('share') as ConfigFormGroup,
     tagger: this.get('tagger') as ConfigFormGroup,
-    cache: this.get('cache') as ConfigFormGroup
+    server: this.get('server') as ConfigFormGroup
   };
 
 }
@@ -156,14 +170,12 @@ export class SideModulesGlobalFormGroup extends ConfigFormGroup {
   providedIn: 'root'
 })
 export class SideModulesGlobalFormBuilderService {
-
-  public constructor(
-    private defaultValuesService: DefaultValuesService,
-    private collectionService: CollectionService,
-  ) { }
+  private readonly defaultValuesService = inject(DefaultValuesService);
+  private readonly collectionService = inject(CollectionService);
+  private readonly arlasCss = inject(ArlasCollaborativesearchService);
 
   public build() {
-    const globalFg = new SideModulesGlobalFormGroup(this.collectionService);
+    const globalFg = new SideModulesGlobalFormGroup(this.collectionService, this.arlasCss);
 
     this.defaultValuesService.setDefaultValueRecursively('sideModules.global', globalFg);
     return globalFg;
