@@ -47,7 +47,7 @@ import {
 } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { NUMERIC_TYPES, titleCase } from '@services/collection-service/tools';
-import { ARLAS_ID } from '@services/main-form/main-form.service';
+import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
 import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
@@ -174,7 +174,8 @@ export class ConfigExportHelper {
     externalNode: FormGroup,
     colorService: ArlasColorService,
     collectionService: CollectionService,
-    shortcutsService: ShortcutsService
+    shortcutsService: ShortcutsService,
+    mainFormService: MainFormService
   ): Config {
     const chipssearch: ChipSearchConfig = {
       name: searchConfigGlobal.customControls.name.value,
@@ -212,7 +213,7 @@ export class ConfigExportHelper {
             components: {
               chipssearch
             },
-            name: startingConfig.customControls.unmanagedFields.appName.value,
+            name: mainFormService.configurationName,
             units: (lookAndFeelConfigGlobal.customControls.units.value as FormArray)
               .controls.map((c: CollectionUnitFormGroup) => ({
                 collection: c.customControls.collection.value,
