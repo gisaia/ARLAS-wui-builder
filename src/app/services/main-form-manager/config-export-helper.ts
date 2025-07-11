@@ -109,7 +109,7 @@ export class ConfigExportHelper {
     resultLists: FormArray,
     collectionService: CollectionService
   ): string[] {
-    let mainCollection;
+    let mainCollection: string;
     const collectionFormControl = startingConfig.customControls.collection;
     if (!!startingConfig && !!collectionFormControl) {
       mainCollection = collectionFormControl.value;
@@ -146,6 +146,7 @@ export class ConfigExportHelper {
       });
     }
     const collections = new Set<string>();
+    collections.add(mainCollection);
     contributors.forEach(c => {
       if (c.collection) {
         collections.add(c.collection);
@@ -158,6 +159,7 @@ export class ConfigExportHelper {
     });
     return Array.from(collections);
   }
+
   public static process(
     startingConfig: StartingConfigFormGroup,
     resourcesConfig: ResourcesConfigFormGroup,

@@ -18,19 +18,21 @@
  */
 import { Injectable } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
-import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
-import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 import {
   LookAndFeelGlobalFormGroup
 } from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
+import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
+import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
+import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
+import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
+import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import {
   SideModulesGlobalFormGroup
 } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
-import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
+import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 import { Subject } from 'rxjs/internal/Subject';
-import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
-import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
+import { CollectionService } from '../collection-service/collection.service';
+import { ConfigExportHelper } from '../main-form-manager/config-export-helper';
 
 
 enum MAIN_FORM_KEYS {
@@ -221,4 +223,31 @@ export class MainFormService {
     return '';
   }
 
+  /**
+   * Gets all the collections configured in this dashboard
+   */
+  public getAllCollections(collectionService: CollectionService) {
+    const startingConfig = this.startingConfig.getFg();
+    const mapConfigGlobal = this.mapConfig.getGlobalFg();
+    const mapConfigLayers = this.mapConfig.getLayersFa();
+    const timelineConfigGlobal = this.timelineConfig.getGlobalFg();
+    const searchConfigGlobal = this.searchConfig.getGlobalFg();
+    const analyticsConfigList = this.analyticsConfig.getListFa();
+    const resultLists = this.resultListConfig.getResultListsFa();
+    if (startingConfig.customControls && mapConfigGlobal.customControls && timelineConfigGlobal.customControls
+        && searchConfigGlobal.customControls) {
+      return ConfigExportHelper.getConfiguredCollections(
+        startingConfig,
+        mapConfigGlobal,
+        mapConfigLayers,
+        searchConfigGlobal,
+        timelineConfigGlobal,
+        analyticsConfigList,
+        resultLists,
+        collectionService
+      );
+    }
+
+    return [];
+  }
 }

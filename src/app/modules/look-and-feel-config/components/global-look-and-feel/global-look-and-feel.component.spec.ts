@@ -1,16 +1,14 @@
-
-
-import { GlobalLookAndFeelComponent } from './global-look-and-feel.component';
-import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
-import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
-import { MockComponent } from 'ng-mocks';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
-import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
-import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
+import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
+import { MockComponent } from 'ng-mocks';
 import { of } from 'rxjs';
+import { LookAndFeelGlobalFormGroup } from '../../services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
+import { GlobalLookAndFeelComponent } from './global-look-and-feel.component';
 
 describe('GlobalLookAndFeelComponent', () => {
   let spectator: Spectator<GlobalLookAndFeelComponent>;
@@ -27,35 +25,9 @@ describe('GlobalLookAndFeelComponent', () => {
       mockProvider(ArlasCollaborativesearchService),
       mockProvider(AnalyticsInitService),
       mockProvider(MainFormService, {
+        getAllCollections: (collectionService: CollectionService) => [],
         lookAndFeelConfig: {
-          getGlobalFg: () => new FormGroup({
-            dragAndDrop: new FormControl(null),
-            zoomToDataStrategy: new FormControl(null),
-            indicators: new FormControl(null),
-            spinner: new FormControl(null),
-            spinnerColor: new FormControl(null),
-            spinnerDiameter: new FormControl(null)
-          })
-        },
-        startingConfig: {
-          getFg: () => new FormGroup({})
-        },
-        mapConfig: {
-          getGlobalFg: () => new FormGroup({}),
-          getLayersFa: () => new FormArray([])
-        },
-        searchConfig: {
-          getGlobalFg: () => new FormGroup({})
-        },
-
-        timelineConfig: {
-          getGlobalFg: () => new FormGroup({}),
-        },
-        resultListConfig: {
-          getResultListsFa: () => new FormArray([])
-        },
-        analyticsConfig: {
-          getListFa: () => new FormArray([]),
+          getGlobalFg: () => new LookAndFeelGlobalFormGroup({} as any, {} as any)
         }
       })
     ]

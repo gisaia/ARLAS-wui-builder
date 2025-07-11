@@ -17,12 +17,13 @@
  * under the License.
  */
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionReferenceDescription, CollectionReferenceDescriptionProperty } from 'arlas-api';
-import { ArlasCollaborativesearchService, getFieldProperties } from 'arlas-wui-toolkit';
-import { Subscription } from 'rxjs';
+import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
+import { CollectionService } from '../../services/collection-service/collection.service';
 
 interface FlatDescription {
   expandable: boolean;
@@ -48,7 +49,6 @@ const typeEnum = CollectionReferenceDescriptionProperty.TypeEnum;
 })
 export class CollectionComponent implements OnInit, OnDestroy {
 
-  public getFieldProperties = getFieldProperties;
   public TypeEnum = typeEnum;
 
   public collectionsDef: {
@@ -56,10 +56,6 @@ export class CollectionComponent implements OnInit, OnDestroy {
     fields: any;
     treeControl: FlatTreeControl<FlatDescription>;
   }[] = [];
-
-  public dataSource;
-  public treeFlattener;
-  private collectionSubscription: Subscription;
 
   public hasChild = (_: number, node: FlatDescription) => node.expandable;
 
@@ -71,24 +67,26 @@ export class CollectionComponent implements OnInit, OnDestroy {
     level
   });
 
-  public constructor(
-    private arlasCss: ArlasCollaborativesearchService,
-    private mainService: MainFormService
-  ) {
-    this.treeFlattener = new MatTreeFlattener(this.transformer, node => node.level, node => node.expandable, node => node.properties);
-  }
+  public treeFlattener = new MatTreeFlattener(this.transformer, node => node.level, node => node.expandable, node => node.properties);
+
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly arlasCss = inject(ArlasCollaborativesearchService);
+  private readonly mainService = inject(MainFormService);
+  private readonly collectionService = inject(CollectionService);
 
   public ngOnInit() {
-    const collection = this.mainService.getMainCollection();
-    if (!!collection && collection !== '') {
-      this.collectionSubscription = this.arlasCss.describe(collection)
+    const collections = this.mainService.getAllCollections(this.collectionService);
+
+    collections.forEach((c, i) => {
+      this.arlasCss.describe(c)
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(collectionRef => {
           const treeControl = new FlatTreeControl<FlatDescription>(node => node.level, node => node.expandable);
           const dataSource = new MatTreeFlatDataSource(treeControl, this.treeFlattener);
           dataSource.data = this.transform(collectionRef.properties);
           this.collectionsDef.push({ collection: collectionRef, fields: dataSource, treeControl });
         });
-    }
+    });
   }
 
   public transform(objects: {
@@ -127,9 +125,6 @@ export class CollectionComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    if (this.collectionSubscription) {
-      this.collectionSubscription.unsubscribe();
-    }
     this.collectionsDef = [];
   }
 }
