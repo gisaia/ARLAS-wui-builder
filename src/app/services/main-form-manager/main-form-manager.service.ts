@@ -44,6 +44,7 @@ import { ConfigFormControl, ConfigFormGroup } from '@shared-models/config-form';
 import { TimelineImportService } from '@timeline-config/services/timeline-import/timeline-import.service';
 import { TimelineInitService } from '@timeline-config/services/timeline-init/timeline-init.service';
 import { updateValueAndValidity } from '@utils/tools';
+import { ArlasColorService } from 'arlas-web-components';
 import { ArlasColorGeneratorLoader, ArlasStartupService, PersistenceService } from 'arlas-wui-toolkit';
 import * as FileSaver from 'file-saver';
 import { NGXLogger } from 'ngx-logger';
@@ -52,15 +53,13 @@ import { ConfigMapExportHelper } from './config-map-export-helper';
 import { Config } from './models-config';
 import { MapConfig } from './models-map-config';
 import { importElements } from './tools';
-import { ArlasColorService } from 'arlas-web-components';
 
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
-import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
-import { Observable, catchError, map, of, tap } from 'rxjs';
-import { DataWithLinks } from 'arlas-persistence-api';
-import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
+import { DataWithLinks } from 'arlas-persistence-api';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Observable, catchError, map, of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -68,35 +67,35 @@ import { marker } from '@colsen1991/ngx-translate-extract-marker';
 export class MainFormManagerService {
 
   public constructor(
-    private logger: NGXLogger,
-    private mainFormService: MainFormService,
-    private analyticsImportService: AnalyticsImportService,
-    private analyticsInitService: AnalyticsInitService,
-    private searchInitService: SearchInitService,
-    private searchImportService: SearchImportService,
-    private sideModulesInitService: SideModulesInitService,
-    private sideModulesImportService: SideModulesImportService,
-    private lookAndFeelInitService: LookAndFeelInitService,
-    private lookAndFeelImportService: LookAndFeelImportService,
-    private timelineInitService: TimelineInitService,
-    private timelineImportService: TimelineImportService,
-    private resultListImportService: ResultListImportService,
-    private resultListInitService: ResultListInitService,
-    private externalNodeInitService: ExternalNodeInitService,
-    private externalNodeImportService: ExternalNodeImportService,
-    private persistenceService: PersistenceService,
-    private snackbar: MatSnackBar,
-    private translate: TranslateService,
-    private mapInitService: MapInitService,
-    private mapImportService: MapImportService,
-    private dialog: MatDialog,
-    private startupService: StartupService,
-    private collectionService: CollectionService,
-    private colorService: ArlasColorService,
-    private router: Router,
-    private arlasStartupService: ArlasStartupService,
-    private shortcutsService: ShortcutsService,
-    private spinner: NgxSpinnerService,
+    private readonly logger: NGXLogger,
+    private readonly mainFormService: MainFormService,
+    private readonly analyticsImportService: AnalyticsImportService,
+    private readonly analyticsInitService: AnalyticsInitService,
+    private readonly searchInitService: SearchInitService,
+    private readonly searchImportService: SearchImportService,
+    private readonly sideModulesInitService: SideModulesInitService,
+    private readonly sideModulesImportService: SideModulesImportService,
+    private readonly lookAndFeelInitService: LookAndFeelInitService,
+    private readonly lookAndFeelImportService: LookAndFeelImportService,
+    private readonly timelineInitService: TimelineInitService,
+    private readonly timelineImportService: TimelineImportService,
+    private readonly resultListImportService: ResultListImportService,
+    private readonly resultListInitService: ResultListInitService,
+    private readonly externalNodeInitService: ExternalNodeInitService,
+    private readonly externalNodeImportService: ExternalNodeImportService,
+    private readonly persistenceService: PersistenceService,
+    private readonly snackbar: MatSnackBar,
+    private readonly translate: TranslateService,
+    private readonly mapInitService: MapInitService,
+    private readonly mapImportService: MapImportService,
+    private readonly dialog: MatDialog,
+    private readonly startupService: StartupService,
+    private readonly collectionService: CollectionService,
+    private readonly colorService: ArlasColorService,
+    private readonly router: Router,
+    private readonly arlasStartupService: ArlasStartupService,
+    private readonly shortcutsService: ShortcutsService,
+    private readonly spinner: NgxSpinnerService,
   ) { }
 
   /**
@@ -144,7 +143,6 @@ export class MainFormManagerService {
     const sideModulesConfigGlobal = this.mainFormService.sideModulesConfig.getGlobalFg();
     const lookAndFeelConfigGlobal = this.mainFormService.lookAndFeelConfig.getGlobalFg();
     const resultLists = this.mainFormService.resultListConfig.getResultListsFa();
-    const keysToColorList = this.mainFormService.commonConfig.getKeysToColorFa();
     const externalNodeGlobal = this.mainFormService.externalNodeConfig.getExternalNodeFg();
     const generatedConfig = ConfigExportHelper.process(
       startingConfig,
@@ -162,7 +160,8 @@ export class MainFormManagerService {
       externalNodeGlobal,
       this.colorService,
       this.collectionService,
-      this.shortcutsService
+      this.shortcutsService,
+      this.mainFormService
     );
 
     const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFieldsMap);
