@@ -1,8 +1,9 @@
-import { CollectionComponent } from './collection.component';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
+import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
-import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+import { CollectionService } from '../../services/collection-service/collection.service';
+import { CollectionComponent } from './collection.component';
 
 describe('CollectionComponent', () => {
   let spectator: Spectator<CollectionComponent>;
@@ -12,7 +13,8 @@ describe('CollectionComponent', () => {
     providers: [
       mockProvider(MainFormManagerService),
       mockProvider(MainFormService, {
-        getMainCollection: () => ''
+        getMainCollection: () => '',
+        getAllCollections: (collectionService: CollectionService) => []
       }),
       mockProvider(ArlasCollaborativesearchService)
     ]
