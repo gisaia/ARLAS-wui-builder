@@ -579,7 +579,7 @@
       "useShare": true,
       "useDownload": true,
       "useTagger": false,
-      "cache": {
+      "server": {
         "maxAgeCache": 120
       },
       "share": {
