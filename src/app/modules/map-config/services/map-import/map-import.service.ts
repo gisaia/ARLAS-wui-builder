@@ -660,7 +660,7 @@ export class MapImportService {
         mapGlobalForm.collectionGeoFiltersMap.set(mc.collection, {
           geoField: mc.geo_query_field,
           geoOp: mc.geo_query_op.toLowerCase(),
-          windowExtentGeometry: mc.window_extent_geometry.toLowerCase()
+          windowExtentGeometry: (mc.window_extent_geometry ?? ExtentFilterGeometry.geometry_path).toLowerCase()
         });
       }
     });

@@ -462,7 +462,7 @@
 	"MargePanForTest description": "Marge [0->100] entourant la fenêtre courante sur laquelle les données sont comptées (respect des limites d'affichage)",
 	"Geographical operator": "Type de sélection géographique",
 	"Geographical field": "Champ géographique",
-	"Extent checks features on map based on:": "Les features sont sur la carte selon leurs :",
+	"Extent checks features on map based on:": "Features visibles si l'étendue courante intersecte leurs :",
 	"Do you really want to delete the visualisation set?": "Voulez-vous vraiment supprimer cet espace de visualisation ?",
 	"Preview saved !": "Aperçu sauvegardé !",
 	"Preview saved temporarily. Save the dashboard to validate the preview too.": "L'aperçu est sauvegardé temporairement. Sauvegarder le dashboard pour valider également l'aperçu.",

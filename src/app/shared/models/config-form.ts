@@ -170,6 +170,9 @@ export interface ControlOptionalParams {
 
   /** Used to properly display collection display names in selects */
   isCollectionSelect?: boolean;
+
+  /** Whether the displayed form needs to be large */
+  large?: boolean;
 }
 
 export interface GroupOptionalParams {

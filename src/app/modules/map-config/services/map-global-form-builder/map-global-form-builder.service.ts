@@ -229,7 +229,7 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
     geoOp: Expression.OpEnum | string,
     windowExtentGeometry: ExtentFilterGeometry | string,
     collectionFields: Observable<Array<CollectionField>>,
-    collectionService: CollectionService,
+    collectionService: CollectionService
   ) {
     super({
       collection: new SelectFormControl(
@@ -278,7 +278,10 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
         ].map(op => ({
           label: op,
           value: op
-        }))
+        })),
+        {
+          large: true
+        }
       )
     });
     this.customControls.collection.disable();
