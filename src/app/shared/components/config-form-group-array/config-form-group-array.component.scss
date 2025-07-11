@@ -22,10 +22,7 @@ div .form-group-form-fields {
     display: flex;
     flex-direction: row;
     align-items: center;
-
-    .single-form-field {
-        margin-right: 20px;
-    }
+    gap: 40px;
 }
 
 .array_header {
@@ -34,7 +31,7 @@ div .form-group-form-fields {
     .form-control-title {
         @include group-title();
         font-size: 22px;
-        margin: 10px 0 0 10px;
+        margin: 10px 0 10px 10px;
     }
     .icon {
         cursor: pointer;

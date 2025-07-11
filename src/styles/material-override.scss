@@ -22,6 +22,9 @@
   // Remove 8px from padding bottom and min height
   padding-bottom: 0 !important;
   min-height: 48px !important;
+
+  // Increase the width to allow for more text to be displayed
+  width: 250px !important;
 }
 
 // Avoid whitesmoke background of input

@@ -47,7 +47,7 @@ import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-
 import { camelize } from '@utils/tools';
 import { LayerMetadata, LegendService, VisualisationSetConfig } from 'arlas-map';
 import { ArlasColorService } from 'arlas-web-components';
-import { MapContributor } from 'arlas-web-contributors';
+import { ExtentFilterGeometry, MapContributor } from 'arlas-web-contributors';
 import {
   ArlasCollaborativesearchService,
   ArlasConfigService,
@@ -260,7 +260,8 @@ export class LayersComponent implements OnInit, OnDestroy {
           mapGlobalFg.addGeoFilter(c, this.mapGlobalFormBuilder.buildRequestGeometry(
             c,
             collectionGeoFilter.geoField,
-            collectionGeoFilter.geoOp
+            collectionGeoFilter.geoOp,
+            collectionGeoFilter.windowExtentGeometry
           ));
         });
       }
@@ -470,7 +471,8 @@ export class LayersComponent implements OnInit, OnDestroy {
         const requestGeometryFg = this.mapGlobalFormBuilder.buildRequestGeometry(
           collection,
           collectionParams.params.centroid_path,
-          'intersects'
+          'intersects',
+          ExtentFilterGeometry.geometry_path
         );
         const mapGlobalFg = this.mainFormService.mapConfig.getGlobalFg();
         mapGlobalFg.addGeoFilter(collection, requestGeometryFg);
