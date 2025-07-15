@@ -32,8 +32,8 @@
 
     .form-fields {
       padding: 10px;
-      min-width: 25%;
-      max-width: 25%;
+      min-width: 35%;
+      max-width: 35%;
       ::ng-deep mat-label + mat-slider {
         margin-left: 20px;
       }
@@ -59,7 +59,6 @@
     }
 
     .description:not(:empty) {
-      margin-left: 36px;
       padding: 10px;
     }
 

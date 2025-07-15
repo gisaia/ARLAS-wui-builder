@@ -62,7 +62,7 @@ import { CollectionReferenceDescriptionProperty } from 'arlas-api/api';
 import { BasemapStyle, SCROLLABLE_ARLAS_ID, VisualisationSetConfig } from 'arlas-map';
 import { ArlasColorService } from 'arlas-web-components';
 import { DescribedUrl } from 'arlas-web-components/lib/components/results/utils/results.utils';
-import { ColorConfig, FieldsConfiguration, getSourceName, LayerSourceConfig } from 'arlas-web-contributors';
+import { ColorConfig, ExtentFilterGeometry, FieldsConfiguration, getSourceName, LayerSourceConfig } from 'arlas-web-contributors';
 import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
 import {
@@ -462,6 +462,7 @@ export class ConfigExportHelper {
     mapConfigLayers: FormArray,
     mainCollection: string,
     collectionService: CollectionService): ContributorConfig[] {
+
     const contributorsCollectionsMap = new Map<string, ContributorConfig>();
     mapConfigLayers.controls.forEach((layerFg: MapLayerFormGroup) => {
       const collection = layerFg.customControls.collection.value;
@@ -470,10 +471,12 @@ export class ConfigExportHelper {
         const requestGeometry = mapConfigGlobal.getRawValue().requestGeometries.find(rg => rg.collection === collection);
         let geoQueryField = collectionService.collectionParamsMap.get(collection).params.centroid_path;
         let geoQueryOp = 'Intersects';
+        let windowExtentGeometry = ExtentFilterGeometry.geometry_path;
 
         if (requestGeometry) {
           geoQueryField = requestGeometry.requestGeom;
           geoQueryOp = requestGeometry.geographicalOperator;
+          windowExtentGeometry = requestGeometry.windowExtentGeometry;
         }
         mapContributor = {
           type: 'map',
@@ -482,6 +485,7 @@ export class ConfigExportHelper {
           collection,
           geo_query_op: titleCase(geoQueryOp),
           geo_query_field: geoQueryField,
+          window_extent_geometry: windowExtentGeometry,
           icon: mapConfigGlobal.customControls.unmanagedFields.icon.value,
           layers_sources: []
         };

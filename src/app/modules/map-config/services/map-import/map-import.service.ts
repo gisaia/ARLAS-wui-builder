@@ -20,6 +20,14 @@ import { Injectable } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { KeywordColor, OTHER_KEYWORD } from '@map-config/components/dialog-color-table/models';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
+import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
+import {
+  MapLayerFormBuilderService, MapLayerFormGroup, MAX_ZOOM
+} from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import {
+  CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LABEL_ALIGNMENT, LABEL_PLACEMENT, LINE_TYPE, LINE_TYPE_VALUES
+} from '@map-config/services/map-layer-form-builder/models';
+import { MapVisualisationFormBuilderService } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { NORMALIZED, VISIBILITY } from '@services/main-form-manager/config-map-export-helper';
 import { Config, ContributorConfig, MapglComponentConfig, NormalizationFieldConfig } from '@services/main-form-manager/models-config';
 import { isTechnicalArlasLayer, Layer, MapConfig } from '@services/main-form-manager/models-map-config';
@@ -27,17 +35,10 @@ import { importElements } from '@services/main-form-manager/tools';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
 import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { BasemapStyle, LayerMetadata, VisualisationSetConfig } from 'arlas-map';
-import { ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, LayerSourceConfig, MetricConfig } from 'arlas-web-contributors';
-import { ClusterAggType, FeatureRenderMode } from 'arlas-web-contributors/models/models';
-import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
-import { MapLayerFormBuilderService, MapLayerFormGroup, MAX_ZOOM }
-  from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import {
-  CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION, GEOMETRY_TYPE, LINE_TYPE, LINE_TYPE_VALUES,
-  LABEL_ALIGNMENT,
-  LABEL_PLACEMENT
-} from '@map-config/services/map-layer-form-builder/models';
-import { MapVisualisationFormBuilderService } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
+  ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, ExtentFilterGeometry, FeatureRenderMode, LayerSourceConfig, MetricConfig
+} from 'arlas-web-contributors';
+import { ClusterAggType } from 'arlas-web-contributors/models/models';
 import { BasemapFormGroup } from '../map-basemap-form-builder/map-basemap-form-builder.service';
 
 @Injectable({
@@ -638,6 +639,7 @@ export class MapImportService {
         collection: defaultCollection,
         geo_query_op: 'Intersects',
         geo_query_field: '',
+        window_extent_geometry: ExtentFilterGeometry.geometry_path,
         icon: 'check_box_outline_blank',
         layers_sources: []
       };
@@ -651,12 +653,14 @@ export class MapImportService {
         mapGlobalForm.addGeoFilter(mc.collection, this.mapGlobalFormBuilder.buildRequestGeometry(
           mc.collection,
           mc.geo_query_field,
-          mc.geo_query_op.toLowerCase()
+          mc.geo_query_op.toLowerCase(),
+          (mc.window_extent_geometry ?? ExtentFilterGeometry.geometry_path).toLowerCase()
         ));
       } else {
         mapGlobalForm.collectionGeoFiltersMap.set(mc.collection, {
           geoField: mc.geo_query_field,
-          geoOp: mc.geo_query_op.toLowerCase()
+          geoOp: mc.geo_query_op.toLowerCase(),
+          windowExtentGeometry: (mc.window_extent_geometry ?? ExtentFilterGeometry.geometry_path).toLowerCase()
         });
       }
     });

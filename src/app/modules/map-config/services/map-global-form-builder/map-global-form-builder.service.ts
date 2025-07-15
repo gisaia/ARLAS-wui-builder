@@ -23,16 +23,18 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { CollectionField } from '@services/collection-service/models';
 import { toGeoOptionsObs } from '@services/collection-service/tools';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { MainFormService } from '@services/main-form/main-form.service';
 import {
-  ConfigFormGroup, ConfigFormGroupArray, HiddenFormControl, InputFormControl, SelectFormControl, SliderFormControl, SlideToggleFormControl
+  ConfigFormGroup, ConfigFormGroupArray,
+  InputFormControl, SelectFormControl, SliderFormControl, SlideToggleFormControl
 } from '@shared-models/config-form';
 import { Expression } from 'arlas-api';
+import { ExtentFilterGeometry } from 'arlas-web-contributors';
 import { Observable, of } from 'rxjs';
 
 export interface GeoFilter {
   geoOp: string | Expression.OpEnum;
   geoField: string;
+  windowExtentGeometry: ExtentFilterGeometry | string;
 };
 
 export class MapGlobalFormGroup extends ConfigFormGroup {
@@ -159,7 +161,8 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
         (this.customControls.requestGeometries.at(index) as MapGlobalRequestGeometryFormGroup);
       this.collectionGeoFiltersMap.set(collection, {
         geoField: geoFilterToReturn.customControls.requestGeom.value,
-        geoOp: geoFilterToReturn.customControls.geographicalOperator.value
+        geoOp: geoFilterToReturn.customControls.geographicalOperator.value,
+        windowExtentGeometry: geoFilterToReturn.customControls.windowExtentGeometry.value
       });
       return geoFilterToReturn;
     }
@@ -176,7 +179,8 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
       } else {
         this.collectionGeoFiltersMap.set(collection, {
           geoField: requestGeometryFg.customControls.requestGeom.value,
-          geoOp: requestGeometryFg.customControls.geographicalOperator.value
+          geoOp: requestGeometryFg.customControls.geographicalOperator.value,
+          windowExtentGeometry: requestGeometryFg.customControls.windowExtentGeometry.value
         });
       }
       /** insert geofilter according to collection alphabetical order */
@@ -197,7 +201,8 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
         (this.customControls.requestGeometries.at(index) as MapGlobalRequestGeometryFormGroup);
       this.collectionGeoFiltersMap.set(collection, {
         geoField: geoFilterToRemove.customControls.requestGeom.value,
-        geoOp: geoFilterToRemove.customControls.geographicalOperator.value
+        geoOp: geoFilterToRemove.customControls.geographicalOperator.value,
+        windowExtentGeometry: geoFilterToRemove.customControls.windowExtentGeometry.value
       });
       this.customControls.requestGeometries.removeAt(index);
     }
@@ -210,6 +215,7 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
       currentGeoFiltersMap.set(gf.collection, {
         geoField: gf.requestGeom,
         geoOp: gf.geographicalOperator,
+        windowExtentGeometry: gf.windowExtentGeometry
       });
     });
     return currentGeoFiltersMap;
@@ -221,6 +227,7 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
     collection: string,
     geometryPath: string,
     geoOp: Expression.OpEnum | string,
+    windowExtentGeometry: ExtentFilterGeometry | string,
     collectionFields: Observable<Array<CollectionField>>,
     collectionService: CollectionService
   ) {
@@ -251,10 +258,7 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
         ].map(op => ({
           label: op,
           value: op
-        })),
-        {
-          title: marker('Querying data on the map')
-        }
+        }))
       ),
       requestGeom: new SelectFormControl(
         geometryPath,
@@ -262,6 +266,22 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
         undefined,
         true,
         toGeoOptionsObs(collectionFields),
+      ),
+      windowExtentGeometry: new SelectFormControl(
+        windowExtentGeometry,
+        marker('Extent checks features on map based on:'),
+        undefined,
+        false,
+        [
+          ExtentFilterGeometry.centroid_path,
+          ExtentFilterGeometry.geometry_path
+        ].map(op => ({
+          label: op,
+          value: op
+        })),
+        {
+          large: true
+        }
       )
     });
     this.customControls.collection.disable();
@@ -270,7 +290,8 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
   public customControls = {
     collection: this.get('collection') as SelectFormControl,
     requestGeom: this.get('requestGeom') as SelectFormControl,
-    geographicalOperator: this.get('geographicalOperator') as SelectFormControl
+    geographicalOperator: this.get('geographicalOperator') as SelectFormControl,
+    windowExtentGeometry: this.get('windowExtentGeometry') as SelectFormControl
   };
 }
 
@@ -291,7 +312,9 @@ export class MapGlobalFormBuilderService {
     return mapGlobalFormGroup;
   }
 
-  public buildRequestGeometry(collection: string, geometryPath: string, geoOp: Expression.OpEnum | string) {
+  public buildRequestGeometry(collection: string, geometryPath: string,
+    geoOp: Expression.OpEnum | string, windowExtentGeometry: ExtentFilterGeometry | string) {
+
     if (!geometryPath) {
       collection = undefined;
     }
@@ -301,7 +324,7 @@ export class MapGlobalFormBuilderService {
         collection
       );
     }
-    return new MapGlobalRequestGeometryFormGroup(collection, geometryPath, geoOp, collectionFields, this.collectionService);
+    return new MapGlobalRequestGeometryFormGroup(collection, geometryPath, geoOp, windowExtentGeometry, collectionFields, this.collectionService);
   }
 
 }

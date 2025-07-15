@@ -130,6 +130,7 @@ export interface ContributorConfig {
   collection: string;
   geo_query_op?: string;
   geo_query_field?: string;
+  window_extent_geometry?: string;
   layers_sources?: Array<LayerSourceConfig>;
   name: string;
   title?: string;

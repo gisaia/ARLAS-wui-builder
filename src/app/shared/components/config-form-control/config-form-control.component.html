@@ -42,7 +42,7 @@
     </mat-card>
 </div>
 
-<div *ngIf="isSelect(); let typedControl" class="select-form-control">
+<div *ngIf="isSelect(); let typedControl" class="select-form-control" [class.select-form-control--large]="typedControl.optionalParams.large">
     <mat-form-field  [class]="typedControl.formFieldClass">
         <mat-label>{{ typedControl.label | translate}}</mat-label>
         <mat-select [formControl]="typedControl" [required]="!typedControl.optional"

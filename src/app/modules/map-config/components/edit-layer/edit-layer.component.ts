@@ -20,18 +20,19 @@ import { AfterContentChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, V
 import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
+import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import {
   MapVisualisationFormBuilderService
 } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
+import { CollectionService } from '@services/collection-service/collection.service';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { ExtentFilterGeometry } from 'arlas-web-contributors';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { KeywordColor } from '../dialog-color-table/models';
 import { LAYER_MODE } from './models';
-import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
-import { CollectionService } from '@services/collection-service/collection.service';
 
 @Component({
   selector: 'arlas-edit-layer',
@@ -219,7 +220,8 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
     const requestGeometryFg = this.mapGlobalFormBuilder.buildRequestGeometry(
       collection,
       collectionParams.params.centroid_path,
-      'intersects'
+      'intersects',
+      ExtentFilterGeometry.geometry_path
     );
     const mapGlobalFg = this.mainFormService.mapConfig.getGlobalFg();
     mapGlobalFg.addGeoFilter(collection, requestGeometryFg);

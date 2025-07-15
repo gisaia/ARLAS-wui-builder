@@ -314,7 +314,10 @@ mat-option {
   }
 }
 
-
-.builder-config-form-control {
-  width: 70%;
+.select-form-control {
+  &--large {
+    ::ng-deep .mat-mdc-form-field-infix {
+      width: 350px !important;
+    }
+  }
 }
