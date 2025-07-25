@@ -21,7 +21,6 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { SearchCollectionComponent } from '@search-config/components/search-collection/search-collection.component';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { CollectionField } from '@services/collection-service/models';
 import { toKeywordOptionsObs, toTextOptionsObs } from '@services/collection-service/tools';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';

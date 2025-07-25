@@ -57,12 +57,11 @@ import {
 import enToolkit from 'arlas-wui-toolkit/assets/i18n/en.json';
 import frToolkit from 'arlas-wui-toolkit/assets/i18n/fr.json';
 import { environment } from 'environments/environment';
-import { LoggerModule, TOKEN_LOGGER_CONFIG } from 'ngx-logger';
+import { LoggerModule } from 'ngx-logger';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CollectionComponent } from './components/collection/collection.component';
 import { StatusComponent } from './components/status/status.component';
 import { AnalyticsConfigModule } from './modules/analytics-config/analytics-config.module';
 import { ResultListConfigModule } from './modules/result-list-config/result-list-config.module';
@@ -115,8 +114,7 @@ export class CustomTranslateLoader implements TranslateLoader {
     LeftMenuComponent,
     LandingPageComponent,
     LandingPageDialogComponent,
-    StatusComponent,
-    CollectionComponent,
+    StatusComponent
   ],
   imports: [
     BrowserModule,
