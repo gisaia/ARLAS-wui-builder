@@ -20,7 +20,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { LandingPageComponent } from '@components/landing-page/landing-page.component';
 import { MainFormInitializedGuard } from '@guards/main-form-initialized/main-form-initialized.guard';
-import { CollectionComponent } from '@components/collection/collection.component';
 import { ForgotComponent, LoginComponent, RegisterComponent, ResetComponent, VerifyComponent } from 'arlas-wui-toolkit';
 
 
@@ -34,9 +33,6 @@ const routes: Routes = [
     ]
   },
   { path: 'callback', redirectTo: '' },
-  {
-    path: 'collection', component: CollectionComponent, canActivate: [MainFormInitializedGuard]
-  },
   {
     path: 'map-config',
     loadChildren: () => import('./modules/map-config/map-config.module').then(m => m.MapConfigModule),
