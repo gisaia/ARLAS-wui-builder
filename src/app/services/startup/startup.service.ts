@@ -17,13 +17,12 @@
  * under the License.
  */
 import { LOCATION_INITIALIZED } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Configuration } from 'arlas-api';
 import {
-  ArlasCollaborativesearchService, ArlasConfigService, ArlasExploreApi,
-  ArlasStartupService, ArlasSettings, AuthentificationService, AuthentSetting, ArlasIamService
+  ArlasCollaborativesearchService, ArlasConfigService, ArlasExploreApi, ArlasIamService,
+  ArlasSettings, ArlasStartupService, AuthentificationService, AuthentSetting
 } from 'arlas-wui-toolkit';
 import fetchIntercept from 'fetch-intercept';
 import { map, Observable } from 'rxjs';
@@ -93,6 +92,8 @@ export class StartupService {
         window.fetch
       );
       this.arlasCss.setExploreApi(arlasExploreApi);
+      // Once a server has been chosen, get the collections data for the display
+      this.arlasStartupService.getCollections(data);
       resolve(data);
     });
   }

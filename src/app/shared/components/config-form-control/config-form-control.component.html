@@ -50,15 +50,7 @@
             [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
             [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
 
-            <ng-container *ngIf="!typedControl.optionalParams.isCollectionSelect">
-                <mat-option *ngIf="typedControl.optional"></mat-option>
-                <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value"
-                    [ngClass]="'option-color-' + opt.value" [disabled]="opt.enabled === false">
-                        {{opt.label | translate}}
-                </mat-option>
-            </ng-container>
-
-            <ng-container *ngIf="typedControl.optionalParams.isCollectionSelect">
+            @if (typedControl.optionalParams.isCollectionSelect) {
                 @for (group of typedControl.groups | keyvalue:orderCollectionGroup; track group.key) {
                     <mat-optgroup [label]="group.key | groupCollection:organisation | translate" *ngIf="group.value.length > 0">
                         <mat-option *ngFor="let collection of group.value" [value]="collection.name">
@@ -66,7 +58,13 @@
                         </mat-option>
                     </mat-optgroup>
                 }
-            </ng-container>
+            } @else {
+                <mat-option *ngIf="typedControl.optional"></mat-option>
+                <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value"
+                    [ngClass]="'option-color-' + opt.value" [disabled]="opt.enabled === false">
+                        {{opt.label | translate}}
+                </mat-option>
+            }
         </mat-select>
     </mat-form-field>
 </div>
