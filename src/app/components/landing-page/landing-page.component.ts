@@ -22,26 +22,26 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatSelectChange } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { InitialChoice, LandingPageService } from '@services/landing-page/landing-page.service';
 import { Config } from '@services/main-form-manager/models-config';
 import { MapConfig } from '@services/main-form-manager/models-map-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { MenuService } from '@services/menu/menu.service';
+import { ResourcesConfigFormBuilderService } from '@services/resources-form-builder/resources-config-form-builder.service';
 import { StartingConfigFormBuilderService } from '@services/starting-config-form-builder/starting-config-form-builder.service';
 import { StartupService, ZONE_WUI_BUILDER } from '@services/startup/startup.service';
 import { UserOrgData } from 'arlas-iam-api';
+import { Resource } from 'arlas-permissions-api';
 import { DataWithLinks } from 'arlas-persistence-api';
 import {
-  ArlasAuthentificationService, ArlasCollectionService, ArlasIamService, ArlasSettingsService, AuthentificationService, ConfigAction,
+  ArlasAuthentificationService,
+  ArlasIamService, ArlasSettingsService, AuthentificationService, ConfigAction,
   ConfigActionEnum, ErrorService, PermissionService, PersistenceService, UserInfosComponent
 } from 'arlas-wui-toolkit';
-import { Resource } from 'arlas-permissions-api';
 import { NGXLogger } from 'ngx-logger';
-import { Subscription, zip } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { LandingPageDialogComponent } from './landing-page-dialog.component';
-import { InitialChoice, LandingPageService } from '@services/landing-page/landing-page.service';
-import { ResourcesConfigFormBuilderService } from '@services/resources-form-builder/resources-config-form-builder.service';
-import { CollectionService } from '@services/collection-service/collection.service';
 
 export interface Configuration {
   name: string;
@@ -83,25 +83,22 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   public constructor(
     public startupService: StartupService,
     public persistenceService: PersistenceService,
-    private permissionService: PermissionService,
+    private readonly permissionService: PermissionService,
     public mainFormService: MainFormService,
-    private startingConfigFormBuilder: StartingConfigFormBuilderService,
-    private resourcesConfigFormBuilder: ResourcesConfigFormBuilderService,
-    private arlasAuthentService: ArlasAuthentificationService,
-    private dialog: MatDialog,
-    private authService: AuthentificationService,
-    private errorService: ErrorService,
-    private settingsService: ArlasSettingsService,
-    private arlasIamService: ArlasIamService,
-    private logger: NGXLogger,
-    private router: Router,
-    private translate: TranslateService,
-    private activatedRoute: ActivatedRoute,
-    private menu: MenuService,
-    private collectionService: CollectionService,
-    private arlasCollectionService: ArlasCollectionService,
-
-    private landingPageService: LandingPageService) {
+    private readonly startingConfigFormBuilder: StartingConfigFormBuilderService,
+    private readonly resourcesConfigFormBuilder: ResourcesConfigFormBuilderService,
+    private readonly arlasAuthentService: ArlasAuthentificationService,
+    private readonly dialog: MatDialog,
+    private readonly authService: AuthentificationService,
+    private readonly errorService: ErrorService,
+    private readonly settingsService: ArlasSettingsService,
+    private readonly arlasIamService: ArlasIamService,
+    private readonly logger: NGXLogger,
+    private readonly router: Router,
+    private readonly translate: TranslateService,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly menu: MenuService,
+    private readonly landingPageService: LandingPageService) {
 
     this.authentMode = !!this.settingsService.getAuthentSettings() ? this.settingsService.getAuthentSettings().auth_mode : undefined;
     this.isAuthentActivated = !!this.settingsService.getAuthentSettings() && !!this.settingsService.getAuthentSettings().use_authent;
@@ -190,7 +187,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.configChoice = configChoice;
     if (configChoice) {
       this.dialogRef = this.dialog.open(LandingPageDialogComponent, {
-        disableClose: true, data:
+        disableClose: true, width:'70vw', data:
           { message: this.confId, configChoice, authentMode: this.authentMode,
             currentOrga: this.currentOrga, isAuthentActivated: this.isAuthentActivated }
       });
