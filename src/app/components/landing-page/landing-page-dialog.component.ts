@@ -86,6 +86,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
         this.configChoice = InitialChoice.none;
       }
     }
+    this.checkUrl();
 
     this.subscription = this.landingPageService.startEvent$.subscribe((b) => {
       this.dialogRef.close();
@@ -120,48 +121,60 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  private resolveServerUrl(serverUrl, baseUrl) {
+    try {
+      return new URL(serverUrl, baseUrl).toString();
+    } catch {
+      // fallback in case of a malformed input
+      return serverUrl;
+    }
+  }
+
   public checkUrl() {
     this.spinner.show('connectServer');
-    const url = this.mainFormService.startingConfig.getFg().get('serverUrl').value;
-    this.urlSubscription = this.http.get(url + '/openapi.json').subscribe(
-      () => {
-        this.landingPageService.getServerCollections(url).then(
-          () => {
-            this.urlCollectionsSubscription = this.collectionService.getCollectionsReferenceDescription().subscribe(
-              cdrs => {
-                const collectionsItems: Array<CollectionItem> = cdrs
-                  .filter(c => {
-                    // If there is no authentication, then we want all the collections
-                    if (this.includePublicCollection || !this.data?.isAuthentActivated) {
-                      return true;
-                    } else {
-                      return (c.params.organisations as any)?.public === false;
-                    }
-                  })
-                  .map(c => ({
-                    name: c.collection_name,
-                    isPublic: !this.data.isAuthentActivated ? true : (c.params.organisations as any)?.public === true,
-                    sharedWith: c.params.organisations?.shared,
-                    owner: c.params.organisations?.owner
-                  }));
-                this.availableCollections = this.collectionService.buildGroupCollectionItems(collectionsItems, this.data.currentOrga);
-                this.collectionService.setGroupCollectionItems(this.availableCollections);
-                this.collectionService.setCollections(collectionsItems.map(c => c.name));
-                this.collectionService.setCollectionsRef(cdrs);
-              },
-              error => {
-                this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
-                this.spinner.hide('connectServer');
-              },
-              () => this.spinner.hide('connectServer')
-            );
-            this.isServerReady = true;
-          });
-      },
-      () => {
-        this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
-        this.isServerReady = false;
-        this.spinner.hide('connectServer');
+    const serverUrl = this.mainFormService.startingConfig.getFg().get('serverUrl').value;
+    const resolvedServerUrl = this.resolveServerUrl(serverUrl, window.location.origin);
+    this.urlSubscription = this.http.get(resolvedServerUrl + '/openapi.json').subscribe(
+      {
+        next: () => {
+          this.landingPageService.getServerCollections(resolvedServerUrl).then(
+            () => {
+              this.urlCollectionsSubscription = this.collectionService.getCollectionsReferenceDescription().subscribe(
+                cdrs => {
+                  const collectionsItems: Array<CollectionItem> = cdrs
+                    .filter(c => {
+                      // If there is no authentication, then we want all the collections
+                      if (this.includePublicCollection || !this.data?.isAuthentActivated) {
+                        return true;
+                      } else {
+                        return (c.params.organisations as any)?.public === false;
+                      }
+                    })
+                    .map(c => ({
+                      name: c.collection_name,
+                      isPublic: !this.data.isAuthentActivated ? true : (c.params.organisations as any)?.public === true,
+                      sharedWith: c.params.organisations?.shared,
+                      owner: c.params.organisations?.owner
+                    }));
+                  this.availableCollections = this.collectionService.buildGroupCollectionItems(collectionsItems, this.data.currentOrga);
+                  this.collectionService.setGroupCollectionItems(this.availableCollections);
+                  this.collectionService.setCollections(collectionsItems.map(c => c.name));
+                  this.collectionService.setCollectionsRef(cdrs);
+                },
+                error => {
+                  this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
+                  this.spinner.hide('connectServer');
+                },
+                () => this.spinner.hide('connectServer')
+              );
+              this.isServerReady = true;
+            });
+        },
+        error: () => {
+          this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
+          this.isServerReady = false;
+          this.spinner.hide('connectServer');
+        }
       }
     );
   }

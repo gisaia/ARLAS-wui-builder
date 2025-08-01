@@ -193,7 +193,7 @@
 	"Import from file": "Importer depuis un fichier",
 	"Connect to ARLAS Server...": "Connexion à ARLAS Server...",
 	"Server URL": "Adresse du serveur",
-	"Show collections": "Choix des collections",
+	"Reload collections": "Recharger les collections",
 	"Include public collections": "Inclure les collections publics",
 	"Main collection": "Collection principale",
 	"Choose main collection": "Choisir la collection de données principale du dashboard.",
