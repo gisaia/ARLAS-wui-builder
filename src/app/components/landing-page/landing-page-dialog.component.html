@@ -8,19 +8,14 @@
         <div [formGroup]="mainFormService.startingConfig.getFg()">
             <arlas-config-element [fullSize]="true">
                 <div form-fields class="server-url">
-                    <mat-form-field>
-                        <mat-label>{{'Server URL' | translate}}</mat-label>
-                        <input matInput (keyup)="onKeyUp($event)"
-                            (change)="mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
-                            formControlName="serverUrl" type="url">
-                    </mat-form-field>
-                    <button
-                        (click)="mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
-                        [disabled]="mainFormService.startingConfig.getFg().get('serverUrl').invalid"
-                        mat-stroked-button color="accent">{{'Show collections' | translate}}</button>
                     <mat-checkbox [disabled]="mainFormService.startingConfig.getFg().get('serverUrl').invalid"
                             *ngIf="data.isAuthentActivated && data.authentMode === 'iam'" (change)="toggleDisplayPublic($event)" class="include-public">
                         {{'Include public collections' | translate}}</mat-checkbox>
+                    <button
+                        (click)="mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
+                        [disabled]="mainFormService.startingConfig.getFg().get('serverUrl').invalid"
+                        mat-stroked-button color="accent">{{'Reload collections' | translate}}</button>
+                    
                 </div>
             </arlas-config-element>
             <arlas-config-element *ngIf="isServerReady">

@@ -84,7 +84,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly startupService: StartupService,
     public persistenceService: PersistenceService,
     private readonly permissionService: PermissionService,
-    private readonly mainFormService: MainFormService,
+    public mainFormService: MainFormService,
     private readonly startingConfigFormBuilder: StartingConfigFormBuilderService,
     private readonly resourcesConfigFormBuilder: ResourcesConfigFormBuilderService,
     private readonly arlasAuthentService: ArlasAuthentificationService,
@@ -98,8 +98,8 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly translate: TranslateService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly menu: MenuService,
-    private readonly landingPageService: LandingPageService
-  ) {
+    private readonly landingPageService: LandingPageService) {
+
     this.authentMode = !!this.settingsService.getAuthentSettings() ? this.settingsService.getAuthentSettings().auth_mode : undefined;
     this.isAuthentActivated = !!this.settingsService.getAuthentSettings() && !!this.settingsService.getAuthentSettings().use_authent;
     if (this.isAuthentActivated && !this.authentMode) {
@@ -186,7 +186,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.configChoice = configChoice;
     if (configChoice) {
       this.dialogRef = this.dialog.open(LandingPageDialogComponent, {
-        disableClose: true, data:
+        disableClose: true, width:'70vw', data:
           { message: this.confId, configChoice, authentMode: this.authentMode,
             currentOrga: this.currentOrga, isAuthentActivated: this.isAuthentActivated }
       });

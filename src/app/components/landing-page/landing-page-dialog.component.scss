@@ -32,7 +32,8 @@
 
 .import-content,
 .new-config-content {
-  padding-top: 15px;
+  padding-top: 15px !important;
+  padding-left: 0 !important;
 }
 
 .import-content {
@@ -84,5 +85,5 @@
 }
 
 .include-public{
-  padding-left: 10px;
+  padding-right: 10px;
 }
