@@ -173,7 +173,7 @@
 	"Import from file": "Import from file",
 	"Connect to ARLAS Server...": "Connect to ARLAS Server...",
 	"Server URL": "Server URL",
-	"Show collections": "Show collections",
+	"Reload collections": "Reload collections",
 	"Include public collections": "Include public collections",
 	"Main collection": "Main collection",
 	"Choose main collection": "Choose the main collection of the dashboard.",
