@@ -82,6 +82,11 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
         marker('Display coordinates'),
         marker('Display coordinates description'),
       ),
+      enableGlobe: new SlideToggleFormControl(
+        '',
+        marker('Enable globe'),
+        marker('Enable globe description')
+      ),
       requestGeometries: (new ConfigFormGroupArray([]))
         .addTitle(marker('Querying data on the map'))
         .addDescription(marker('geofilters description'))
@@ -124,6 +129,7 @@ export class MapGlobalFormGroup extends ConfigFormGroup {
     allowMapExtend: this.get('allowMapExtend') as SlideToggleFormControl,
     displayScale: this.get('displayScale') as SlideToggleFormControl,
     displayCurrentCoordinates: this.get('displayCurrentCoordinates') as SlideToggleFormControl,
+    enableGlobe: this.get('enableGlobe') as SlideToggleFormControl,
     margePanForLoad: this.get('margePanForLoad') as InputFormControl,
     margePanForTest: this.get('margePanForTest') as InputFormControl,
     unmanagedFields: {

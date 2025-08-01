@@ -276,7 +276,6 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             'text',
             {
               optional: true,
-              width: '100%',
               dependsOn: () => [this.customControls.dataStep.collection]
             }
           ),
@@ -287,7 +286,6 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             'text',
             {
               optional: true,
-              width: '100%',
               dependsOn: () => [this.customControls.dataStep.collection]
             }
           )

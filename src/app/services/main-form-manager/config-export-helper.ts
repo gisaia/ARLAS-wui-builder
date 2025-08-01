@@ -566,6 +566,7 @@ export class ConfigExportHelper {
         ],
         displayScale: customControls.displayScale.value,
         displayCurrentCoordinates: customControls.displayCurrentCoordinates.value,
+        enableGlobe: customControls.enableGlobe.value,
         idFeatureField: 'deprecated, to be removed',
         mapLayers: {
           layers: [],

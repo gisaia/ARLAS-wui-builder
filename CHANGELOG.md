@@ -1,5 +1,11 @@
 # Change Log
 
+## [v27.0.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.4) (2025-06-06)
+
+**Fixed bugs:**
+
+- Handle textare size in forms [\#1085](https://github.com/gisaia/ARLAS-wui-builder/issues/1085)
+
 ## [v27.0.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.3) (2025-05-23)
 
 **Fixed bugs:**
