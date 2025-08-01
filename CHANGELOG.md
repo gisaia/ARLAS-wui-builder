@@ -1,9 +1,30 @@
 # Change Log
 
-## [v27.0.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.4) (2025-06-06)
+## [v27.0.5](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.5) (2025-08-01)
+
+**New stuff:**
+
+- \[MAP CONFIGURATION\] Allow configuring the The geometry used to check features on the screen extent [\#1096](https://github.com/gisaia/ARLAS-wui-builder/issues/1096)
+- all collections used in the dashboard should be displayed [\#1062](https://github.com/gisaia/ARLAS-wui-builder/issues/1062)
+- Allow for dashboard main collection change [\#1049](https://github.com/gisaia/ARLAS-wui-builder/issues/1049)
 
 **Fixed bugs:**
 
+- Use the dashboard name in config.json on save  [\#934](https://github.com/gisaia/ARLAS-wui-builder/issues/934)
+
+**Miscellaneous:**
+
+- Remove the collection module as it is replaced by the Collection's view in ARLAS-hub [\#1100](https://github.com/gisaia/ARLAS-wui-builder/issues/1100)
+
+## [v27.0.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.4) (2025-06-19)
+
+**New stuff:**
+
+- Add toggle to enable globe mode [\#1087](https://github.com/gisaia/ARLAS-wui-builder/issues/1087) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
+**Fixed bugs:**
+
+- Loading a dashboard with the builder with histogram changes `interval-1` into `interval-1hour` [\#1090](https://github.com/gisaia/ARLAS-wui-builder/issues/1090)
 - Handle textare size in forms [\#1085](https://github.com/gisaia/ARLAS-wui-builder/issues/1085)
 
 ## [v27.0.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.3) (2025-05-23)
@@ -380,9 +401,9 @@
 
 - Add the possibility to display a timeline for each collection on the same graph [\#568](https://github.com/gisaia/ARLAS-wui-builder/issues/568)
 
-## [v17.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.3) (2021-06-30)
-
 ## [v17.2.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.4) (2021-06-30)
+
+## [v17.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.3) (2021-06-30)
 
 ## [v17.2.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.2) (2021-06-30)
 
