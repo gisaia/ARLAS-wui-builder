@@ -1022,10 +1022,8 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             dependsOn: () => [this.networkFetchingLevel],
             onDependencyChange: () => {
               this.zoomMin.min = Math.max(this.networkFetchingLevel.value - PRECISION_TOLERATED_DIFFERENCE, 0);
-              this.zoomMax.min = Math.min(MAX_ZOOM, Math.max(this.networkFetchingLevel.value - PRECISION_TOLERATED_DIFFERENCE) + 1);
-              if (this.networkFetchingLevel.dirty) {
-                MapLayerFormGroup.adjustZoomVisibilityTonetworkFetchingLevel(this.networkFetchingLevel, this.zoomMin, this.zoomMax);
-              }
+              this.zoomMax.min = Math.min(MAX_ZOOM, Math.max(this.networkFetchingLevel.value - PRECISION_TOLERATED_DIFFERENCE, 0) + 1);
+              MapLayerFormGroup.adjustZoomVisibilityTonetworkFetchingLevel(this.networkFetchingLevel, this.zoomMin, this.zoomMax);
             }
           }
         ),
