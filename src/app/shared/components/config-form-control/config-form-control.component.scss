@@ -258,6 +258,15 @@ mat-option {
   }
 }
 
+.checkbox-form-control {
+  .checkbox {
+    ::ng-deep .mat-mdc-checkbox-touch-target {
+      height: 24px;
+      width: 24px;
+    }
+  }
+}
+
 ::-webkit-scrollbar {
   width: 3px !important;
   background-color: #f5f5f5;
