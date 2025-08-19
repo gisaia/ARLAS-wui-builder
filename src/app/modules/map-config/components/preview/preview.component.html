@@ -27,6 +27,6 @@
     {{ 'Save preview' | translate }}
 </button>
 
-<div class="basemaps" matTooltipPosition="left" matTooltip="{{'Basemaps' | translate}}">
-    <mat-icon style="width:22px;height:22px" (click)="mapComponent.showBasemapSwitcher()">public</mat-icon>
-</div>
+<button class="basemaps" matTooltipPosition="left" [matTooltip]="'Basemaps' | translate" (click)="mapComponent.showBasemapSwitcher()">
+    <mat-icon>public</mat-icon>
+</button>
