@@ -16,6 +16,7 @@
            [visualisationSetsConfig]="mapComponentConfig?.visualisations_sets" [legendUpdater]="mapLegendUpdater"
            [visibilityUpdater]="mapVisibilityUpdater"
            [preserveDrawingBuffer]="true"
+           [enableGlobe]="mapComponentConfig?.enableGlobe"
            (visualisations)="changeVisualisation($event)"
            (onAoiChanged)="onChangeAoi($event)"
            (onMove)="onMove($event)">
