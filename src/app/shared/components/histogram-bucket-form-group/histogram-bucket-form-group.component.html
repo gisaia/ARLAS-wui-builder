@@ -73,31 +73,31 @@
                         </tr>
                         <tr class="cell">
                             <td>
-                            <div class="interval">
-                                <mat-form-field class="size">
-                                    <input matInput [formControl]="preferredIntervalSize"
-                                        [type]="preferredIntervalSize.inputType"
-                                        [required]="!preferredIntervalSize.optional"
-                                        [arlasResetOnChange]="preferredIntervalSize.resetDependantsOnChange && preferredIntervalSize.dependantControls ? defaultKey : null"
-                                        [dependants]="preferredIntervalSize.resetDependantsOnChange && preferredIntervalSize.dependantControls ? preferredIntervalSize.dependantControls : null"
-                                        (change)="preferredIntervalSize.ensureLessThan ? preferredIntervalSize.checkLessThan(+$event.target.value) : null;
-                                        preferredIntervalSize.ensureGeaterThan ? preferredIntervalSize.checkGreaterThan(+$event.target.value) : null">
-                                </mat-form-field>
-                                <mat-form-field class="unit" *ngIf="aggregationFieldTypeControl.value === 'time'">
-                                    <mat-select [formControl]="preferredIntervalUnit"
-                                        [required]="!preferredIntervalUnit.optional"
-                                        [arlasAlertOnChange]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? WARNING_MESSAGE : null"
-                                        [arlasResetOnChange]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? defaultKey : null"
-                                        [dependants]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? preferredIntervalUnit.dependantControls : null">
-                                        <mat-option *ngIf="preferredIntervalUnit.optional"></mat-option>
-                                        <mat-option *ngFor="let opt of preferredIntervalUnit.syncOptions"
-                                            [value]="opt.value" [ngClass]="'option-color-' + opt.value"
-                                            [matTooltip]="opt.label | translate" [disabled]="opt.enabled === false">
-                                            {{opt.label | translate}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
+                                <div class="interval">
+                                    <mat-form-field class="size">
+                                        <input matInput [formControl]="preferredIntervalSize"
+                                            [type]="preferredIntervalSize.inputType"
+                                            [required]="!preferredIntervalSize.optional"
+                                            [arlasResetOnChange]="preferredIntervalSize.resetDependantsOnChange && preferredIntervalSize.dependantControls ? defaultKey : null"
+                                            [dependants]="preferredIntervalSize.resetDependantsOnChange && preferredIntervalSize.dependantControls ? preferredIntervalSize.dependantControls : null"
+                                            (change)="preferredIntervalSize.ensureLessThan ? preferredIntervalSize.checkLessThan(+$event.target.value) : null;
+                                            preferredIntervalSize.ensureGeaterThan ? preferredIntervalSize.checkGreaterThan(+$event.target.value) : null">
+                                    </mat-form-field>
+                                    <mat-form-field class="unit" *ngIf="aggregationFieldTypeControl.value === 'time'">
+                                        <mat-select [formControl]="preferredIntervalUnit"
+                                            [required]="!preferredIntervalUnit.optional"
+                                            [arlasAlertOnChange]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? WARNING_MESSAGE : null"
+                                            [arlasResetOnChange]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? defaultKey : null"
+                                            [dependants]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? preferredIntervalUnit.dependantControls : null">
+                                            <mat-option *ngIf="preferredIntervalUnit.optional"></mat-option>
+                                            <mat-option *ngFor="let opt of preferredIntervalUnit.syncOptions"
+                                                [value]="opt.value" [ngClass]="'option-color-' + opt.value"
+                                                [matTooltip]="opt.label | translate" [disabled]="opt.enabled === false">
+                                                {{opt.label | translate}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
                            </td>
                         </tr>
                     </tbody>

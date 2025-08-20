@@ -60,6 +60,10 @@
                 display: none;
             }
         }
+
+        mat-radio-button .mdc-label {
+            min-width: 100px;
+        }
     }
 }
 
