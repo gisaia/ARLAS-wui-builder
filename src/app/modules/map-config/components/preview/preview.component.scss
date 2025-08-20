@@ -49,7 +49,8 @@ arlas-map {
     }
 
     ::ng-deep.maplibregl-ctrl-group-addgeobox,
-    ::ng-deep.maplibregl-ctrl-group-removeaois {
+    ::ng-deep.maplibregl-ctrl-group-removeaois,
+    ::ng-deep.maplibregl-ctrl-group-pitch {
         display: none;
     }
 }
