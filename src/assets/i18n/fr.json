@@ -391,7 +391,7 @@
 	"Visible": "Visible",
 	"Whether the layer is visible or not": "Visibilité de la couche au démarrage de l'application",
 	"Network Fetching Level": "Récupération des données",
-	"Network Fetching Level description": "Les données Network Analytics sont récupérées sur la carte selon une grille X.Y.Z. Choisir le niveau de zoom Z correspondant aux tuiles X.Y.Z",
+	"Network Fetching Level description": "Les données Network Analytics sont récupérées sur la carte selon une grille X.Y.Z. Choisir le niveau de zoom Z correspondant aux tuiles X.Y.Z.\nSi ce niveau de zoom est élevé, des objets distants avec la même valeur d'identifiant pour le réseau ne seront pas agrégés ensemble.",
 	"Zoom min": "Zoom minimal",
 	"zoom min description": "Niveau de zoom minimal pour visualiser la couche dans l'application. Par exemple, un zoom minimal configuré à 3 rendra votre couche visible à partir de l'échelle continentale. Avant ce seuil, elle ne sera pas visible.",
 	"Zoom max": "Zoom maximal",
