@@ -20,6 +20,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Inject, Input, OnDestroy, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
@@ -200,16 +201,24 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     this.mapComponent.map.resize();
     const resourcesConfig = this.mainFormService.resourcesConfig.getFg();
     const previewId = resourcesConfig.customControls.resources.previewId.value;
-    if (!!this.mainFormService.configurationId) {
+
+    if (this.mainFormService.configurationId) {
       this.persistenceService.get(this.mainFormService.configurationId).pipe(
         map((currentConfig: DataWithLinks) => {
           const name = this.mainFormService.configurationName.concat('_preview');
+          const alreadySaved = !!JSON.parse(currentConfig.doc_value).resources?.previewId;
           const pGroups = this.persistenceService.dashboardToResourcesGroups(currentConfig.doc_readers, currentConfig.doc_writers);
           return this.previewExists$(previewId)
             .pipe(
               map(exists => this.createOrUpdatePreview$(exists, previewId, jsonifiedImg, name, pGroups.readers, pGroups.writers)))
             .subscribe({
-              complete: () => this.snackbar.open(this.translate.instant('Preview saved !'))
+              complete: () => {
+                if (alreadySaved) {
+                  this.snackbar.open(this.translate.instant('Preview saved !'));
+                } else {
+                  this.snackbar.open(this.translate.instant('Preview saved temporarily. Save the dashboard to validate the preview too.'));
+                }
+              }
             });
         })
       ).subscribe();
@@ -221,31 +230,35 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private previewExists$(previewId): Observable<boolean> {
-    if (!previewId || previewId === '') {
+  private previewExists$(previewId: string): Observable<boolean> {
+    if (!previewId) {
       return of(false);
     } else {
       return this.persistenceService.exists(previewId).pipe(map(r => r.exists));
     }
   }
 
-  private createOrUpdatePreview$(previewExists: boolean, previewId: string, img, name: string, previewReaders?, previewWriters?) {
+  private createOrUpdatePreview$(previewExists: boolean, previewId: string, img: string,
+    name: string, previewReaders: string[], previewWriters: string[]
+  ) {
     const resourcesConfig = this.mainFormService.resourcesConfig.getFg();
     resourcesConfig.customControls.resources.previewValue.setValue(img);
     if (previewExists) {
       this.persistenceService.updateResource(previewId, previewReaders, previewWriters, img);
       resourcesConfig.customControls.resources.previewId.setValue(previewId);
+      resourcesConfig.customControls.resources.previewValue.setValue(img);
     } else {
       this.persistenceService.create(ZONE_PREVIEW, name, img, previewReaders, previewWriters)
         .pipe(map((p: DataWithLinks) => {
           resourcesConfig.customControls.resources.previewId.setValue(p.id);
+          resourcesConfig.customControls.resources.previewValue.setValue(img);
           return p;
         }))
-        .pipe(catchError((err) => this.catchPreviewError(err, 'Cannot update the preview'))).subscribe();
+        .pipe(catchError((err) => this.catchPreviewError(err, marker('Cannot update the preview')))).subscribe();
     }
   }
 
-  private catchPreviewError(err, msg) {
+  private catchPreviewError(err, msg: string) {
     this.snackbar.open(
       this.translate.instant(msg)
     );
