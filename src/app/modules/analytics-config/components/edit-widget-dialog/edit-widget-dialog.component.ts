@@ -89,9 +89,7 @@ export class EditWidgetDialogComponent implements OnInit {
   }
 
   public ngOnInit() {
-
     this.dialogRef.disableClose = true;
-    this.dialogRef.updateSize('1200px');
   }
 
   public save() {
