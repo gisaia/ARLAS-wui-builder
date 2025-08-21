@@ -1,5 +1,17 @@
 # Change Log
 
+## [v27.0.6](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.6) (2025-08-21)
+
+**Fixed bugs:**
+
+- \[GLOBE\] Globe button doesn't appear in preview, instead there is the 3D button [\#1111](https://github.com/gisaia/ARLAS-wui-builder/issues/1111) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Display error in analytics tab icons [\#1082](https://github.com/gisaia/ARLAS-wui-builder/issues/1082) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- \[PREVIEW\] Saving a preview does not work and prompt an non authorization error [\#1113](https://github.com/gisaia/ARLAS-wui-builder/issues/1113) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- \[PREVIEW\] Basemap is never displayed [\#1112](https://github.com/gisaia/ARLAS-wui-builder/issues/1112) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- \[PRIORITY\] The javascript transformation in the resultlist doesn't wok anymore [\#1109](https://github.com/gisaia/ARLAS-wui-builder/issues/1109)
+- Checking visualisation sets in the builder are buggy [\#1107](https://github.com/gisaia/ARLAS-wui-builder/issues/1107) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- Superposition of text in Histogram configuration [\#1106](https://github.com/gisaia/ARLAS-wui-builder/issues/1106)
+
 ## [v27.0.5](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.5) (2025-08-01)
 
 **New stuff:**
