@@ -88,7 +88,7 @@ export class ConfigMapExportHelper {
             collection: layer.metadata.collection,
             collectionDisplayName: layer.metadata.collectionDisplayName,
             isScrollableLayer: false,
-            aggType:layer.metadata?.aggType
+            cellShape: layer.metadata?.cellShape
           },
           filter: layer.filter,
           layout: {
@@ -170,7 +170,7 @@ export class ConfigMapExportHelper {
     const metadata: LayerMetadata = {
       collection,
       collectionDisplayName,
-      aggType: modeValues.geometryStep?.aggType ?? null
+      cellShape: (modeValues.geometryStep?.aggType === 'h3') ? 'hexagonal' : 'square'
     };
 
     if (metadata && metadata.hasOwnProperty('hiddenProps')) {

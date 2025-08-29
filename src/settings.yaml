@@ -3,7 +3,7 @@
 ########################################################
 authentication:
   use_authent: true
-  auth_mode: openid
+  auth_mode: iam
   url: 'https://localhost/arlas_iam_server'
   force_connect: true
   use_discovery: true
@@ -67,4 +67,4 @@ histogram:
   max_buckets: 100
   export_nb_buckets: 1000
 use_time_filter: true
-enable_advanced_features: false
+enable_advanced_features: true./
