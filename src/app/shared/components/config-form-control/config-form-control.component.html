@@ -127,34 +127,13 @@
     </mat-form-field>
   </div>
 } @else if (isAutocomplete(); as typedControl) {
-  <div class="autocomplete-input-form-control">
-    <mat-form-field  [class]="typedControl.formFieldClass">
-      @if (showLabel) {
-        <mat-label>{{ label }}</mat-label>
-      }
-      <input type="text" matInput [formControl]="typedControl" [matAutocomplete]="auto" #autocompleteInput
-        [required]="!typedControl.optional"
-        [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? WARNING_MESSAGE : null"
-        [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
-        [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
-      @if (typedControl.value) {
-        <button matSuffix mat-icon-button (click)="clearAutoComplete($event, autocompleteInput, typedControl)">
-          <mat-icon>close</mat-icon>
-        </button>
-      }
-      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-        @if (typedControl.optional) {
-          <mat-option></mat-option>
-        }
-        @for (opt of typedControl.filteredOptions; track opt) {
-          <mat-option [value]="opt.value"
-            [disabled]="opt.enabled === false">
-            {{opt.label | translate}}
-          </mat-option>
-        }
-      </mat-autocomplete>
-    </mat-form-field>
-  </div>
+    <arlas-auto-complete-select-form
+            [control]="typedControl"
+            [showLabel]="showLabel"
+            [warningMessage]="WARNING_MESSAGE"
+            [defaultKey]="defaultKey"
+    >
+    </arlas-auto-complete-select-form>
 } @else if (isTypedAutocomplete(); as typedControl) {
   <div class="typed-autocomplete-input-form-control">
     <mat-form-field  [class]="typedControl.formFieldClass">
@@ -187,47 +166,7 @@
     </mat-form-field>
   </div>
 } @else if (isOrderedSelect(); as typedControl) {
-  <div class="order-select-form-control">
-    <div class="order-select-form-control__container">
-      <input matInput [formControl]="typedControl" [hidden]="true" [required]="!typedControl.optional">
-      <mat-form-field  [class]="typedControl.formFieldClass">
-        <mat-label>{{ label }}</mat-label>
-        <mat-select #selectSort [required]="!typedControl.optional">
-          @if (typedControl.optional) {
-            <mat-option></mat-option>
-          }
-          @for (opt of typedControl.syncOptions; track opt) {
-            <mat-option [value]="opt.value" [disabled]="opt.enabled === false">
-              {{opt.label | translate}}
-            </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      <mat-radio-group [(ngModel)]="typedControl.sortDirection">
-        <mat-radio-button value="+">{{ 'ASC' | translate}}</mat-radio-button>
-        <mat-radio-button value="-">{{ 'DESC' | translate}}</mat-radio-button>
-      </mat-radio-group>
-      <button type="button" matButton="outlined" color="primary" [disabled]="!typedControl.sortDirection || !selectSort.value"
-          (click)="typedControl.addSort(typedControl.sortDirection + selectSort.value, $event)">
-        <mat-icon>add</mat-icon>
-        {{ 'Add' | translate}}
-      </button>
-      <mat-chip-listbox #chipSortList>
-        @for (sort of typedControl.sorts; track sort) {
-          <mat-chip-option [selectable]="false" [removable]="true"
-            (removed)="typedControl.removeSort(sort)">
-            {{sort}}
-            <mat-icon matChipRemove>cancel</mat-icon>
-          </mat-chip-option>
-        }
-      </mat-chip-listbox>
-    </div>
-    @if (typedControl.touched && typedControl.invalid && typedControl?.errors?.required) {
-      <mat-error>
-        {{ 'At least one ' | translate}} {{typedControl.label | lowercase | translate}} {{ 'is required' | translate}}
-      </mat-error>
-    }
-  </div>
+    <arlas-ordered-select [showLabel]="showLabel" [control]="typedControl"></arlas-ordered-select>
 } @else if (isMetricWithFieldList(); as typedControl) {
   <div class="metric-field-form-control">
     <div>

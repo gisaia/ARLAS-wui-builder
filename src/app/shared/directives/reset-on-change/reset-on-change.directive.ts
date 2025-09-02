@@ -30,7 +30,8 @@ import { DefaultValuesService } from '../../../services/default-values/default-v
  * WARNING: currently only for mat-select and mat-slide-toggle
  */
 @Directive({
-  selector: '[arlasResetOnChange]'
+  selector: '[arlasResetOnChange]',
+  standalone: true
 })
 export class ResetOnChangeDirective implements OnInit, OnDestroy {
 

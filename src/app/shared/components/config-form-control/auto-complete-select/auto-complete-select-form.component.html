@@ -1,0 +1,35 @@
+<mat-form-field  [class]="control().formFieldClass">
+    @if(showLabel()) {
+        <mat-label>{{ control().label | translate}}</mat-label>
+    }
+    @let arlasAlert = control().resetDependantsOnChange && control().dependantControls ? warningMessage() : null;
+    @let arlasReset = control().resetDependantsOnChange && control().dependantControls ? defaultKey() : null;
+    @let dependants = control().resetDependantsOnChange && control().dependantControls ? control().dependantControls : null;
+    <input type="text" matInput [formControl]="bindControl() ? control() : defaultAutoCompleteFormControl" [matAutocomplete]="auto" #autocompleteInput
+           [required]="!control().optional"
+           [arlasAlertOnChange]="arlasAlert"
+           [arlasResetOnChange]="arlasReset"
+           [dependants]="dependants">
+
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+    (optionSelected)="autoCompleteSelectionChange.emit($event)">
+        @if(control().optional) {
+            <mat-option></mat-option>
+        }
+        @let options = bindControl() ? control().filteredOptions : defaultAutoCompleteFilter();
+        @for (opt of options; track $index) {
+            <mat-option  [value]="opt.value"
+                        [disabled]="opt.enabled === false">
+                {{opt.label | translate}}
+            </mat-option>
+        }
+    </mat-autocomplete>
+
+    @let displayClear = bindControl() ? control().value : defaultAutoCompleteFormControl.value;
+    @if(displayClear){
+        <button matSuffix mat-icon-button
+                (click)="clearAutoComplete($event, autocompleteInput)">
+            <mat-icon>close</mat-icon>
+        </button>
+    }
+</mat-form-field>

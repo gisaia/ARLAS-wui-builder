@@ -25,7 +25,7 @@ import { updateValueAndValidity } from '@utils/tools';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { HistogramUtils } from 'arlas-d3';
 import { ComputeConfig, validProcess } from 'arlas-web-contributors';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { METRIC_TYPES } from '../../services/collection-service/collection.service';
 import { CollectionField, GroupCollectionItem } from '../../services/collection-service/models';
 import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toNumericOrDateOrKeywordOrTextObs } from '../../services/collection-service/tools';
@@ -431,6 +431,11 @@ export class SelectFormControl extends ConfigFormControl {
   public filteredOptions: Array<SelectOption>;
   public syncOptions: Array<SelectOption> = [];
   public groups: GroupCollectionItem;
+  /**
+   * Usefull to knwo when sync otpions are set. Cause ifwe do not use
+   * @type {Subject<boolean>}
+   */
+  public syncOptionsSet$ = new Subject<boolean>();
 
   public constructor(
     formState: any,
@@ -477,6 +482,7 @@ export class SelectFormControl extends ConfigFormControl {
   public setSyncOptions(newOptions: Array<SelectOption>) {
     this.syncOptions = newOptions;
     this.filteredOptions = newOptions;
+    this.syncOptionsSet$.next(true);
   }
 }
 
