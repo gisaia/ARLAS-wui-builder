@@ -3,7 +3,7 @@
 ########################################################
 authentication:
   use_authent: true
-  auth_mode: openid
+  auth_mode: iam
   url: 'https://localhost/arlas_iam_server'
   force_connect: true
   use_discovery: true
