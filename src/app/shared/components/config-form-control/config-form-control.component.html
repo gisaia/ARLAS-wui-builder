@@ -108,28 +108,17 @@
 </div>
 
 <div *ngIf="isAutocomplete(); let typedControl" class="autocomplete-input-form-control">
-    <mat-form-field  [class]="typedControl.formFieldClass">
-        <mat-label *ngIf="showLabel">{{ typedControl.label | translate}}</mat-label>
-        <input type="text" matInput [formControl]="typedControl" [matAutocomplete]="auto" #autocompleteInput
-            [required]="!typedControl.optional"
-            [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? WARNING_MESSAGE : null"
-            [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
-            [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
-        <button *ngIf="typedControl.value" matSuffix mat-icon-button
-            (click)="clearAutoComplete($event, autocompleteInput, typedControl)">
-            <mat-icon>close</mat-icon>
-        </button>
-        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-            <mat-option *ngIf="typedControl.optional"></mat-option>
-            <mat-option *ngFor="let opt of typedControl.filteredOptions" [value]="opt.value"
-                [disabled]="opt.enabled === false">
-                {{opt.label | translate}}
-            </mat-option>
-        </mat-autocomplete>
-    </mat-form-field>
+    <arlas-auto-complete-select-form
+    [control]="typedControl"
+    [showLabel]="showLabel"
+    [warningMessage]="WARNING_MESSAGE"
+    [defaultKey]="defaultKey"
+    >
+    </arlas-auto-complete-select-form>
 </div>
 
 <div *ngIf="isTypedAutocomplete(); let typedControl" class="typed-autocomplete-input-form-control">
+
     <mat-form-field  [class]="typedControl.formFieldClass">
         <mat-label *ngIf="showLabel">{{ typedControl.label | translate}}</mat-label>
         <input type="text" matInput [formControl]="typedControl" [matAutocomplete]="autotyped" #typedAutocompleteInput
@@ -153,35 +142,7 @@
 </div>
 
 <div *ngIf="isOrderedSelect(); let typedControl" class="order-select-form-control">
-    <div>
-        <input matInput [formControl]="typedControl" [hidden]="true" [required]="!typedControl.optional">
-        <mat-form-field  [class]="typedControl.formFieldClass">
-            <mat-label>{{ typedControl.label | translate}}</mat-label>
-            <mat-select #selectSort [required]="!typedControl.optional">
-                <mat-option *ngIf="typedControl.optional"></mat-option>
-                <mat-option *ngFor="let opt of typedControl.syncOptions" [value]="opt.value" [disabled]="opt.enabled === false">
-                    {{opt.label | translate}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-radio-group [(ngModel)]="typedControl.sortDirection">
-            <mat-radio-button value="+">{{ 'ASC' | translate}}</mat-radio-button>
-            <mat-radio-button value="-">{{ 'DESC' | translate}}</mat-radio-button>
-        </mat-radio-group>
-        <button type="button" mat-stroked-button [disabled]="!typedControl.sortDirection || !selectSort.value"
-            (click)="typedControl.addSort(typedControl.sortDirection + selectSort.value, $event)">{{ 'Add' |
-            translate}}</button>
-        <mat-chip-listbox #chipSortList>
-            <mat-chip-option *ngFor="let sort of typedControl.sorts" [selectable]="false" [removable]="true"
-                (removed)="typedControl.removeSort(sort)">
-                {{sort}}
-                <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip-option>
-        </mat-chip-listbox>
-    </div>
-    <mat-error *ngIf="typedControl.touched && typedControl.invalid && typedControl?.errors?.required">
-        {{ 'At least one ' | translate}} {{typedControl.label | lowercase | translate}} {{ 'is required' | translate}}
-    </mat-error>
+    <arlas-ordered-select [showLabel]="showLabel" [control]="typedControl"></arlas-ordered-select>
 </div>
 
 <div *ngIf="isMetricWithFieldList(); let typedControl" class="metric-field-form-control">

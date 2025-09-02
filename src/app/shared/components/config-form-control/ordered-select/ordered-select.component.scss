@@ -1,0 +1,7 @@
+@import "variables.scss";
+
+.form-body {
+  display: flex;
+  align-items: center;
+  gap:$sm-margin;
+}
