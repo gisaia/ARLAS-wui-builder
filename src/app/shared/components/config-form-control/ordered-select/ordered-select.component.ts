@@ -1,5 +1,23 @@
-import { LowerCasePipe, NgForOf, NgIf } from '@angular/common';
-import { Component, computed, input, OnInit, signal, viewChild } from '@angular/core';
+/*
+ * Licensed to Gisaïa under one or more contributor
+ * license agreements. See the NOTICE.txt file distributed with
+ * this work for additional information regarding copyright
+ * ownership. Gisaïa licenses this file to you under
+ * the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import { LowerCasePipe, NgIf } from '@angular/common';
+import { Component, computed, input, OnInit, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatButton } from '@angular/material/button';
@@ -35,7 +53,6 @@ import { first } from 'rxjs';
     MatRadioButton,
     MatRadioGroup,
     MatSelect,
-    NgForOf,
     NgIf,
     ReactiveFormsModule,
     TranslateModule,
