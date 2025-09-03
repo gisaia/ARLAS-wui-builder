@@ -69,12 +69,6 @@ export class OrderedSelectComponent implements OnInit {
    */
   public control = input.required<OrderedSelectFormControl>();
   /**
-   * When in auto mode, do not link the autocompletion component with the current control.
-   * Otherwise, there will be display issues.
-   * @type {Signal<boolean>}
-   */
-  public bindCurrentControl = computed(() => !this.control().isAutocomplete);
-  /**
    *  Whether we  display a label
    * @type {InputSignal<boolean | undefined>}
    */
@@ -121,7 +115,6 @@ export class OrderedSelectComponent implements OnInit {
    */
   protected addSort($event) {
     this.control().addSort(`${this.control().sortDirection}${this.formValue()}`, $event);
-    // this.resetFilter();
   }
 
   /**

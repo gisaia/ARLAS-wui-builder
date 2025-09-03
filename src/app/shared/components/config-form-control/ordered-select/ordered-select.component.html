@@ -1,55 +1,54 @@
 <div class="form-body">
-    <input matInput [formControl]="control()" [hidden]="true" [required]="!control().optional">
-    @if(control().isAutocomplete){
-        <arlas-auto-complete-select-form [bindControl]="bindCurrentControl()"
+    <input [formControl]="control()" [hidden]="true" [required]="!control().optional" matInput>
+    @if (control().isAutocomplete) {
+        <arlas-auto-complete-select-form [setControlWithAutocompleteValue]="false"
                                          [defaultAutoCompleteFilter]="filteredOptions()"
-                                         [showLabel]="showLabel()" [control]="control()"
-        (autoCompleteValueChange)="updateFilter($event)"
-        (autoCompleteSelectionChange)="updateAutoCompleteValue($event)"
-                                         (autoCompleteSelectionCleared)="resetFilter()"
-        >
+                                         [showLabel]="showLabel()"
+                                         [control]="control()"
+                                         (autoCompleteValueChange)="updateFilter($event)"
+                                         (autoCompleteSelectionChange)="updateAutoCompleteValue($event)"
+                                         (autoCompleteSelectionCleared)="resetFilter()">
         </arlas-auto-complete-select-form>
     } @else {
-        <mat-form-field  [class]="control().formFieldClass">
-            @if (showLabel()){
-                <mat-label>{{ control().label | translate}}</mat-label>
+        <mat-form-field [class]="control().formFieldClass">
+            @if (showLabel()) {
+                <mat-label>{{ control().label | translate }}</mat-label>
             }
-            <mat-select  [required]="!control().optional"
-                        (selectionChange)="selectSelectionChange($event)"
-            >
-                @if (control().optional){
+            <mat-select [required]="!control().optional"
+                        (selectionChange)="selectSelectionChange($event)">
+                @if (control().optional) {
                     <mat-option></mat-option>
                 }
-                @for (opt of control().syncOptions; track $index){
+                @for (opt of control().syncOptions; track $index) {
                     <mat-option [value]="opt.value" [disabled]="!opt.enabled">
-                        {{opt.label | translate}}
+                        {{ opt.label | translate }}
                     </mat-option>
                 }
             </mat-select>
         </mat-form-field>
     }
     <mat-radio-group (change)="updateSortDirection($event)">
-        <mat-radio-button value="+">{{ 'ASC' | translate}}</mat-radio-button>
-        <mat-radio-button value="-">{{ 'DESC' | translate}}</mat-radio-button>
+        <mat-radio-button value="+">{{ 'ASC' | translate }}</mat-radio-button>
+        <mat-radio-button value="-">{{ 'DESC' | translate }}</mat-radio-button>
     </mat-radio-group>
-    <button type="button" mat-stroked-button [disabled]="!control().sortDirection || !formValue()"
-            (click)="addSort($event)">{{ 'Add' |
-        translate}}</button>
+    <button (click)="addSort($event)" [disabled]="!control().sortDirection || !formValue()" mat-stroked-button
+            type="button">{{
+            'Add' |
+                translate
+        }}
+    </button>
 </div>
 <div>
     <mat-chip-listbox>
-        @for(sort of control().sorts; track $index) {
+        @for (sort of control().sorts; track $index) {
             <mat-chip-option [selectable]="false" [removable]="true"
                              (removed)="control().removeSort(sort)">
-                {{sort}}
+                {{ sort }}
                 <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip-option>
         }
     </mat-chip-listbox>
 </div>
 <mat-error *ngIf="control().touched && control().invalid && control()?.errors?.required">
-    {{ 'At least one ' | translate}} {{control().label | lowercase | translate}} {{ 'is required' | translate}}
+    {{ 'At least one ' | translate }} {{ control().label | lowercase | translate }} {{ 'is required' | translate }}
 </mat-error>
-
-
-<!-- Fragment -->

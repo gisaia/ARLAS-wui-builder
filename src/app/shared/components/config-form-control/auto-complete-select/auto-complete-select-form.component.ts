@@ -69,12 +69,13 @@ export class AutoCompleteSelectFormComponent implements OnInit {
    * Used when this component is used into another form components eg: Ordered select
    * @type {FormControl<any>}
    */
-  public defaultAutoCompleteFormControl  = new FormControl('');
+  public autoCompleteControl  = new FormControl('');
   /**
-   * Whether we should link current control to the form control input.
+   * If we need to assign the autocomplete value to the current control.
+   * In some cases, we want to decouple the value entered the input from the one typed in the filter.
    * @type {InputSignal<boolean>}
    */
-  public bindControl  = input(true);
+  public setControlWithAutocompleteValue  = input(true);
   /**
    * Warning message to display
    * @type {InputSignal<string | undefined>}
@@ -121,14 +122,13 @@ export class AutoCompleteSelectFormComponent implements OnInit {
    */
   public clearAutoComplete(event: Event, inputElement: HTMLElement) {
     event.stopPropagation();
-    if(this.bindControl()) {
+    if(this.setControlWithAutocompleteValue()) {
       this.control().filteredOptions = this.control().syncOptions;
       this.control().setValue('');
     } else {
-      this.defaultAutoCompleteFormControl.setValue('');
-      this.autoCompleteSelectionCleared.emit(true);
+      this.autoCompleteControl.setValue('');
     }
-
+    this.autoCompleteSelectionCleared.emit(true);
     inputElement.nodeValue = '';
     inputElement.focus();
   }
@@ -137,8 +137,8 @@ export class AutoCompleteSelectFormComponent implements OnInit {
    * Whether control is not bind emit an event when value change
    */
   public emitValueOnChange() {
-    if(!this.bindControl()) {
-      this.defaultAutoCompleteFormControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+    if(!this.setControlWithAutocompleteValue()) {
+      this.autoCompleteControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(value => {
           this.autoCompleteValueChange.emit(value);
         });
