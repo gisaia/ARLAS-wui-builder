@@ -5,7 +5,7 @@
     @let arlasAlert = control().resetDependantsOnChange && control().dependantControls ? warningMessage() : null;
     @let arlasReset = control().resetDependantsOnChange && control().dependantControls ? defaultKey() : null;
     @let dependants = control().resetDependantsOnChange && control().dependantControls ? control().dependantControls : null;
-    <input type="text" matInput [formControl]="bindControl() ? control() : defaultAutoCompleteFormControl" [matAutocomplete]="auto" #autocompleteInput
+    <input type="text" matInput [formControl]="setControlWithAutocompleteValue() ? control() : autoCompleteControl" [matAutocomplete]="auto" #autocompleteInput
            [required]="!control().optional"
            [arlasAlertOnChange]="arlasAlert"
            [arlasResetOnChange]="arlasReset"
@@ -16,7 +16,7 @@
         @if(control().optional) {
             <mat-option></mat-option>
         }
-        @let options = bindControl() ? control().filteredOptions : defaultAutoCompleteFilter();
+        @let options = setControlWithAutocompleteValue() ? control().filteredOptions : defaultAutoCompleteFilter();
         @for (opt of options; track $index) {
             <mat-option  [value]="opt.value"
                         [disabled]="opt.enabled === false">
@@ -25,7 +25,7 @@
         }
     </mat-autocomplete>
 
-    @let displayClear = bindControl() ? control().value : defaultAutoCompleteFormControl.value;
+    @let displayClear = setControlWithAutocompleteValue() ? control().value : autoCompleteControl.value;
     @if(displayClear){
         <button matSuffix mat-icon-button
                 (click)="clearAutoComplete($event, autocompleteInput)">
