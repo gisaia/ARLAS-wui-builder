@@ -26,7 +26,7 @@ import {
   GeoJSONSource,
   RasterSourceSpecification,
   SourceSpecification,
-  TypedStyleLayer
+  StyleLayer,
 } from 'maplibre-gl';
 
 interface OPTIONAL {
@@ -34,7 +34,7 @@ interface OPTIONAL {
   value?: any;
 }
 
-export type ArlasLayer = TypedStyleLayer | AddLayerObject;
+export type ArlasLayer = StyleLayer | AddLayerObject;
 export type ArlasSource = MaplibreSourceType | GeoJSONSource | RasterSourceSpecification | SourceSpecification | CanvasSourceSpecification;
 
 
