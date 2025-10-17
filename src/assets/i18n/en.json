@@ -355,6 +355,8 @@
 	"Dashed": "Dashed",
 	"Dotted": "Dotted",
     "Input fixed extrusionValue": "Filling height",
+    "Fixed extrusionValue": "Filling height",
+    "Slider fixed value description extrusionValue": "",
     "Generated extrusionValue field": "Filling height",
     "Input fixed value description extrusionValue": "Filling height in meters",
     "ExtrusionValue": "Filling height",

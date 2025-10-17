@@ -699,27 +699,6 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.line)
           }
         ),
-        enableExtrusion: new SlideToggleFormControl(
-          false,
-          marker('Enable extrusion'),
-          marker('Display geographic features with a fill extrusion.'),
-          {
-            optional: true,
-            dependsOn: () => [this.geometryType],
-            onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.fill)
-          }
-        ),
-        extrusionValue: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.number,
-          'extrusionValue',
-          [
-            PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.generated
-          ],
-          isAggregated,
-          collection,
-          marker('property extrusionValue description')
-        ).withDependsOn(() => [this.enableExtrusion])
-          .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value )),
         filter: new FormControl(),
         labelContentFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.text,
@@ -785,7 +764,50 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withDependsOn(() => [this.geometryType])
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle
             || this.geometryType.value === GEOMETRY_TYPE.heatmap)),
-
+        enableExtrusion: new SlideToggleFormControl(
+          false,
+          marker('Enable extrusion'),
+          marker('Display geographic features with a fill extrusion.'),
+          {
+            optional: true,
+            dependsOn: () => [this.geometryType],
+            onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.fill)
+          }
+        ),
+        extrusionValue: propertySelectorFormBuilder.build(
+          PROPERTY_TYPE.number,
+          'extrusionValue',
+          [
+            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.generated
+          ],
+          isAggregated,
+          collection,
+          marker('property extrusionValue description')
+        ).withDependsOn(() => [this.enableExtrusion])
+          .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value ))
+          .withTitle(marker('Extrusion')),
+        extrusionOpacity: propertySelectorFormBuilder.build(
+          PROPERTY_TYPE.number,
+          'opacity',
+          [
+            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
+          ],
+          isAggregated,
+          collection,
+          marker('opacity description'),
+        ).withDependsOn(() => [this.enableExtrusion])
+          .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value )),
+        extrusionColor: propertySelectorFormBuilder.build(
+          PROPERTY_TYPE.color,
+          'color',
+          [
+            PROPERTY_SELECTOR_SOURCE.fix_color, PROPERTY_SELECTOR_SOURCE.interpolated
+          ],
+          isAggregated,
+          collection,
+          marker('property color extrusionColor description')
+        ).withDependsOn(() => [this.enableExtrusion])
+          .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value )),
         strokeColorFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.color,
           'strokeColor',
@@ -1110,6 +1132,12 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   }
   public get extrusionValue() {
     return this.styleStep.get('extrusionValue') as SlideToggleFormControl;
+  }
+  public get extrusionColor() {
+    return this.styleStep.get('extrusionColor') as SlideToggleFormControl;
+  }
+  public get extrusionOpacity() {
+    return this.styleStep.get('extrusionOpacity') as SlideToggleFormControl;
   }
   public get opacity() {
     return this.styleStep.get('opacity') as PropertySelectorFormGroup;

@@ -472,6 +472,21 @@ export class MapImportService {
         values.styleStep.strokeOpacityFg = {};
         this.importPropertySelector((layer.metadata as LayerMetadata).stroke.opacity, values.styleStep.strokeOpacityFg,
           PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+      }
+
+      if(!!layer.metadata && !!(layer.metadata as LayerMetadata).extrusion) {
+        values.styleStep.enableExtrusion = true;
+        values.styleStep.extrusionValue = {};
+        this.importPropertySelector((layer.metadata as LayerMetadata).extrusion.height, values.styleStep.extrusionValue,
+          PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+
+        values.styleStep.extrusionColor = {};
+        this.importPropertySelector((layer.metadata as LayerMetadata).extrusion.color, values.styleStep.extrusionColor,
+          PROPERTY_SELECTOR_SOURCE.fix_color, isAggregated, layerSource);
+
+        values.styleStep.extrusionOpacity = {};
+        this.importPropertySelector((layer.metadata as LayerMetadata).extrusion.opacity, values.styleStep.extrusionOpacity,
+          PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
       }
     }
