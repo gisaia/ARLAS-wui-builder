@@ -680,8 +680,6 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
                     sub.unsubscribe();
                   });
               }
-
-
             }
           }
         ),
@@ -701,6 +699,27 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.line)
           }
         ),
+        enableExtrusion: new SlideToggleFormControl(
+          false,
+          marker('Enable extrusion'),
+          marker('Display geographic features with a fill extrusion.'),
+          {
+            optional: true,
+            dependsOn: () => [this.geometryType],
+            onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.fill)
+          }
+        ),
+        extrusionValue: propertySelectorFormBuilder.build(
+          PROPERTY_TYPE.number,
+          'extrusionValue',
+          [
+            PROPERTY_SELECTOR_SOURCE.fix_input, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.generated
+          ],
+          isAggregated,
+          collection,
+          marker('property extrusionValue description')
+        ).withDependsOn(() => [this.enableExtrusion])
+          .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value )),
         filter: new FormControl(),
         labelContentFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.text,
@@ -740,7 +759,6 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           marker('property color ' + (type === MAP_LAYER_TYPE.CLUSTER ? type : '') + ' description'),
           geometryTypes.indexOf(GEOMETRY_TYPE.heatmap) >= 0 ? () => this.geometryType : undefined
         ),
-
         widthFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
           'width',
@@ -1086,6 +1104,12 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   }
   public get geometryType() {
     return this.styleStep.get('geometryType') as SelectFormControl;
+  }
+  public get enableExtrusion() {
+    return this.styleStep.get('enableExtrusion') as SlideToggleFormControl;
+  }
+  public get extrusionValue() {
+    return this.styleStep.get('extrusionValue') as SlideToggleFormControl;
   }
   public get opacity() {
     return this.styleStep.get('opacity') as PropertySelectorFormGroup;
