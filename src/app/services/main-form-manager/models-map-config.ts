@@ -59,7 +59,8 @@ export interface Layout {
   'circle-sort-key'?: PaintValue;
 }
 
-export type PaintValue = Array<string | Array<string> | number> | PaintColor | string | number;
+export type PaintValue = ExpressionValue | PaintColor;
+export type ExpressionValue =  Array<string | Array<string> | number>  | string | number;
 export interface Paint {
   'fill-color'?: PaintValue;
   'fill-opacity'?: number;
@@ -82,6 +83,9 @@ export interface Paint {
   'text-halo-blur'?: PaintValue;
   'text-halo-width'?: PaintValue;
   'text-halo-color'?: PaintValue;
+  'fill-extrusion-opacity'?: number;
+  'fill-extrusion-color'?: PaintValue;
+  'fill-extrusion-height'?: ExpressionValue;
   'text-translate'?: [number, number];
 
 }
@@ -96,6 +100,7 @@ export interface PaintColor {
 export const HOVER_LAYER_PREFIX = 'arlas-hover-';
 export const SELECT_LAYER_PREFIX = 'arlas-select-';
 export const FILLSTROKE_LAYER_PREFIX = 'arlas-fill_stroke-';
+export const EXTRUSION_LAYER_PREFIX = 'arlas-extrusion-';
 export const ARLAS_ID = 'arlas_id:';
 
 

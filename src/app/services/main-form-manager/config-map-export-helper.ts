@@ -32,15 +32,17 @@ import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
 import { ConfigExportHelper } from './config-export-helper';
 import {
-  ExternalEvent,
+  ExternalEvent, EXTRUSION_LAYER_PREFIX,
   FILLSTROKE_LAYER_PREFIX,
   HOVER_LAYER_PREFIX,
   Layer,
   Layout,
   MapConfig,
-  Paint, PaintValue,
+  Paint,
+  PaintValue,
   SELECT_LAYER_PREFIX
 } from './models-map-config';
+
 export enum VISIBILITY {
   visible = 'visible',
   none = 'none'
@@ -53,6 +55,7 @@ export class ConfigMapExportHelper {
     taggableFieldsMap?: Map<string, Set<string>>) {
     const fillStrokeLayers = [];
     const scrollableLayers = [];
+    const extrusionLayers = [];
     const labelLayers = [];
     const layers: Array<[Layer, LAYER_MODE]> = mapConfigLayers.controls.map((layerFg: MapLayerFormGroup) => {
       const taggableFields = taggableFieldsMap.get(layerFg.customControls.collection.value);
@@ -75,6 +78,10 @@ export class ConfigMapExportHelper {
           }
         };
         fillStrokeLayers.push([fillStrokeLayer, layerFg.value.mode as LAYER_MODE]);
+      }
+
+      if(layer.type === GEOMETRY_TYPE.fill.toString() && layer.metadata.extrusion){
+        extrusionLayers.push(this.createExtrusionLayerFromLayer(layer));
       }
 
       if (!!layer.metadata && !!layer.metadata.isScrollableLayer) {
@@ -150,9 +157,17 @@ export class ConfigMapExportHelper {
 
         return [layer, l[1]];
       });
+
+
     const mapConfig: MapConfig = {
-      layers: Array.from(new Set(layers.map(l => l[0]).concat(layersSelect.map(l => l[0])).concat(layersHover.map(l => l[0]))
-        .concat(fillStrokeLayers.map(l => l[0])).concat(scrollableLayers.map(l => l[0])))).concat(labelLayers.map(l => l[0])),
+      layers: Array.from(new Set(
+        layers.map(l => l[0])
+          .concat(layersSelect.map(l => l[0]))
+          .concat(layersHover.map(l => l[0]))
+          .concat(fillStrokeLayers.map(l => l[0]))
+          .concat(extrusionLayers)
+          .concat(scrollableLayers.map(l => l[0]))))
+        .concat(labelLayers.map(l => l[0])),
       externalEventLayers: Array.from(new Set(layersHover.map(lh => ({
         id: lh[0].id,
         on: ExternalEvent.hover
@@ -190,6 +205,15 @@ export class ConfigMapExportHelper {
       };
       metadata.stroke = fillStroke;
     }
+
+    if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.fill.toString() && modeValues.styleStep.enableExtrusion) {
+      metadata.extrusion = {
+        height: this.getMapProperty(modeValues.styleStep.extrusionValue, mode, colorService, taggableFields),
+        color: this.getMapProperty(modeValues.styleStep.extrusionColor, mode, colorService, taggableFields),
+        opacity: this.getMapProperty(modeValues.styleStep.extrusionOpacity, mode, colorService, taggableFields)
+      };
+    }
+
     if (mode === LAYER_MODE.features) {
       metadata.isScrollableLayer = modeValues.visibilityStep.renderMode === FeatureRenderMode.window;
     }
@@ -248,6 +272,18 @@ export class ConfigMapExportHelper {
     return layer;
   }
 
+  public static createExtrusionLayerFromLayer(layer: Layer): Layer {
+    return  {
+      ...layer,
+      id: layer.id.replace(ARLAS_ID, EXTRUSION_LAYER_PREFIX),
+      type: 'fill-extrusion',
+      paint: {
+        'fill-extrusion-color': layer.metadata.extrusion.color ?? layer.paint['fill-color'],
+        'fill-extrusion-opacity': layer.metadata.extrusion.opacity,
+        'fill-extrusion-height': layer.metadata.extrusion.height
+      }
+    };
+  }
   /**
    * set the correct layer type before we save it.
    * @param geometryType
