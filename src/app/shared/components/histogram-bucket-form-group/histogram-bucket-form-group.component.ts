@@ -17,15 +17,14 @@
  * under the License.
  */
 
-import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { ConfigFormGroupComponent } from '../config-form-group/config-form-group.component';
+
 @Component({
-  // tslint:disable-next-line: component-selector
   selector: 'arlas-histogram-bucket-form-group',
   templateUrl: './histogram-bucket-form-group.component.html',
   styleUrls: ['./histogram-bucket-form-group.component.scss'],
-
   encapsulation: ViewEncapsulation.None
 })
 export class HistogramBucketFormGroupComponent extends ConfigFormGroupComponent implements OnInit, OnDestroy {
