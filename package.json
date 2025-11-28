@@ -94,6 +94,7 @@
     "esbuild": "~0.25.1",
     "vite": "~5.4.15",
     "webpack-dev-server": "~5.2.2",
-    "tmp": "~0.2.5"
+    "tmp": "~0.2.5",
+    "@maplibre/vt-pbf": "4.0.3"
   }
 }
