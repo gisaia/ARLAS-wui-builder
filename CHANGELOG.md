@@ -1,5 +1,7 @@
 # Change Log
 
+## [v27.1.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.1.2) (2025-11-28)
+
 ## [v27.1.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.1.1) (2025-10-21)
 
 ## [v27.1.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.1.0) (2025-09-08)
@@ -39,8 +41,8 @@
 
 **Fixed bugs:**
 
-- Loading a dashboard with the builder with histogram changes `interval-1` into `interval-1hour` [\#1090](https://github.com/gisaia/ARLAS-wui-builder/issues/1090)
 - Handle textare size in forms [\#1085](https://github.com/gisaia/ARLAS-wui-builder/issues/1085)
+- Loading a dashboard with the builder with histogram changes `interval-1` into `interval-1hour` [\#1090](https://github.com/gisaia/ARLAS-wui-builder/issues/1090)
 
 ## [v27.0.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.0.3) (2025-05-23)
 
