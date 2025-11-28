@@ -3,7 +3,7 @@
   "version": "27.2.0-dev",
   "scripts": {
     "ng": "ng",
-    "postinstall": "patch-package --patch-dir ./node_modules/arlas-web-core/patches && patch-package --patch-dir ./node_modules/arlas-d3/patches",
+    "postinstall": "patch-package --patch-dir ./patches && patch-package --patch-dir ./node_modules/arlas-web-core/patches && patch-package --patch-dir ./node_modules/arlas-d3/patches",
     "start": "ng serve",
     "start:iam": "ng serve --ssl --ssl-cert=$EXPLO_SSL_CERT --ssl-key=$EXPLO_SSL_KEY",
     "build": "ng build --configuration production --aot --base-href='$ARLAS_BUILDER_BASE_HREF/'",
@@ -18,16 +18,16 @@
     "i18n:extract": "ngx-translate-extract --input ./src/app --output ./src/assets/i18n/{en,fr}.json --format json"
   },
   "dependencies": {
-    "@angular/animations": "^18.2.13",
+    "@angular/animations": "^18.2.14",
     "@angular/cdk": "^18.2.14",
-    "@angular/common": "^18.2.13",
-    "@angular/compiler": "^18.2.13",
-    "@angular/core": "^18.2.13",
-    "@angular/forms": "^18.2.13",
+    "@angular/common": "^18.2.14",
+    "@angular/compiler": "^18.2.14",
+    "@angular/core": "^18.2.14",
+    "@angular/forms": "^18.2.14",
     "@angular/material": "^18.2.14",
-    "@angular/platform-browser": "^18.2.13",
-    "@angular/platform-browser-dynamic": "^18.2.13",
-    "@angular/router": "^18.2.13",
+    "@angular/platform-browser": "^18.2.14",
+    "@angular/platform-browser-dynamic": "^18.2.14",
+    "@angular/router": "^18.2.14",
     "@gisaia-team/ngx-icon-picker": "18.0.1",
     "@mapbox/tilebelt": "^1.0.2",
     "@ngx-translate/core": "^15.0.0",
@@ -36,8 +36,8 @@
     "ajv": "8.8.2",
     "ajv-keywords": "5.1.0",
     "ang-jsoneditor": "3.1.0",
-    "arlas-wui-toolkit": "~27.1.1",
-    "arlas-maplibre": "~27.1.1",
+    "arlas-wui-toolkit": "~27.1.2",
+    "arlas-maplibre": "~27.1.2",
     "file-saver": "^2.0.2",
     "jsoneditor": "9.10.2",
     "moment": "^2.29.4",
@@ -52,15 +52,15 @@
     "zone.js": "^0.14.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^18.2.12",
+    "@angular-devkit/build-angular": "^18.2.14",
     "@angular-eslint/builder": "18.4.3",
     "@angular-eslint/eslint-plugin": "18.4.3",
     "@angular-eslint/eslint-plugin-template": "18.4.3",
     "@angular-eslint/schematics": "18.4.3",
     "@angular-eslint/template-parser": "18.4.3",
-    "@angular/cli": "^18.2.12",
-    "@angular/compiler-cli": "^18.2.13",
-    "@angular/language-service": "^18.2.13",
+    "@angular/cli": "^18.2.14",
+    "@angular/compiler-cli": "^18.2.14",
+    "@angular/language-service": "^18.2.14",
     "@colsen1991/ngx-translate-extract-marker": "^3.0.1",
     "@vendure/ngx-translate-extract": "^9.3.0",
     "@ngneat/spectator": "~9.0.0",
@@ -93,6 +93,7 @@
   "overrides": {
     "esbuild": "~0.25.1",
     "vite": "~5.4.15",
-    "webpack-dev-server": "~5.2.2"
+    "webpack-dev-server": "~5.2.2",
+    "tmp": "~0.2.5"
   }
 }
