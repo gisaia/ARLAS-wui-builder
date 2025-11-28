@@ -4,6 +4,7 @@
 FROM node:18.20.5 AS builder
 
 COPY package.json package-lock.json ./
+COPY ./patches/ ./patches/
 
 ## Storing node modules on a separate layer will prevent unnecessary npm installs at each build
 RUN npm i --ignore-scripts && npm run postinstall && mkdir /ng-app && cp -R ./node_modules ./ng-app
