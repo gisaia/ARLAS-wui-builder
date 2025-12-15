@@ -37,7 +37,6 @@
               "src/favicon.ico",
               "src/assets",
               "src/default.json",
-              "src/config.json",
               "src/settings.yaml",
               "src/silent-refresh.html",
               {
@@ -92,7 +91,6 @@
                   "glob": "*.yaml"
                 },
                 "src/assets",
-                "src/config.json",
                 "src/silent-refresh.html",
                 "src/default.json",
                 "src/favicon.ico",
@@ -155,7 +153,6 @@
               "src/favicon.ico",
               "src/assets",
               "src/default.json",
-              "src/config.json",
               "src/settings.yaml",
               "src/silent-refresh.html",
               {
