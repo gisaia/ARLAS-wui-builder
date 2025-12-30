@@ -166,8 +166,8 @@ export class ConfigMapExportHelper {
           .concat(layersHover.map(l => l[0]))
           .concat(fillStrokeLayers.map(l => l[0]))
           .concat(extrusionLayers)
-          .concat(scrollableLayers.map(l => l[0]))))
-        .concat(labelLayers.map(l => l[0])),
+          .concat(scrollableLayers.map(l => l[0]))
+          .concat(labelLayers.map(l => l[0])))),
       externalEventLayers: Array.from(new Set(layersHover.map(lh => ({
         id: lh[0].id,
         on: ExternalEvent.hover
