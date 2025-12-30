@@ -32,8 +32,7 @@ import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
 import { ConfigExportHelper } from './config-export-helper';
 import {
-  ExternalEvent, EXTRUSION_LAYER_PREFIX,
-  FILLSTROKE_LAYER_PREFIX,
+  ExternalEvent,  FILLSTROKE_LAYER_PREFIX,
   HOVER_LAYER_PREFIX,
   Layer,
   Layout,
@@ -42,6 +41,8 @@ import {
   PaintValue,
   SELECT_LAYER_PREFIX
 } from './models-map-config';
+
+import {EXTRUSION_LAYER_PREFIX} from 'arlas-map';
 
 export enum VISIBILITY {
   visible = 'visible',
@@ -209,7 +210,7 @@ export class ConfigMapExportHelper {
     if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.fill.toString() && modeValues.styleStep.enableExtrusion) {
       metadata.extrusion = {
         height: this.getMapProperty(modeValues.styleStep.extrusionValue, mode, colorService, taggableFields),
-        color: this.getMapProperty(modeValues.styleStep.extrusionColor, mode, colorService, taggableFields),
+        color: this.getMapProperty(modeValues.styleStep.colorFg, mode, colorService, taggableFields),
         opacity: this.getMapProperty(modeValues.styleStep.extrusionOpacity, mode, colorService, taggableFields)
       };
     }
@@ -278,7 +279,7 @@ export class ConfigMapExportHelper {
       id: layer.id.replace(ARLAS_ID, EXTRUSION_LAYER_PREFIX),
       type: 'fill-extrusion',
       paint: {
-        'fill-extrusion-color': layer.metadata.extrusion.color ?? layer.paint['fill-color'],
+        'fill-extrusion-color':  layer.paint['fill-color'],
         'fill-extrusion-opacity': layer.metadata.extrusion.opacity,
         'fill-extrusion-height': layer.metadata.extrusion.height
       }
