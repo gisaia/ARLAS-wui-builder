@@ -33,17 +33,18 @@ import { BucketsIntervalFormGroup } from '@analytics-config/services/buckets-int
  * this may be grouped into a sigle listener if multiple controls depend on a same one.
  */
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'arlas-config-form-group',
-  templateUrl: './config-form-group.component.html',
-  styleUrls: ['./config-form-group.component.scss'],
-  providers: [
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { showError: true }
-    }
-  ],
-  encapsulation: ViewEncapsulation.None
+    // tslint:disable-next-line: component-selector
+    selector: 'arlas-config-form-group',
+    templateUrl: './config-form-group.component.html',
+    styleUrls: ['./config-form-group.component.scss'],
+    providers: [
+        {
+            provide: STEPPER_GLOBAL_OPTIONS,
+            useValue: { showError: true }
+        }
+    ],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class ConfigFormGroupComponent implements OnInit, OnDestroy {
 

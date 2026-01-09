@@ -17,7 +17,10 @@ import {
 import { CollectionService } from '@services/collection-service/collection.service';
 import { of } from 'rxjs';
 
-@Component({ template: '' }) class DummyComponent { }
+@Component({
+    template: '',
+    standalone: false
+}) class DummyComponent { }
 
 describe('EditLayerComponent', () => {
   let spectator: Spectator<EditLayerComponent>;

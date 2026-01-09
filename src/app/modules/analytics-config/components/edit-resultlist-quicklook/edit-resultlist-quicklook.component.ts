@@ -27,9 +27,10 @@ import { SelectFormControl } from '@shared-models/config-form';
 
 
 @Component({
-  selector: 'arlas-edit-resultlist-quicklook',
-  templateUrl: './edit-resultlist-quicklook.component.html',
-  styleUrls: ['./edit-resultlist-quicklook.component.scss']
+    selector: 'arlas-edit-resultlist-quicklook',
+    templateUrl: './edit-resultlist-quicklook.component.html',
+    styleUrls: ['./edit-resultlist-quicklook.component.scss'],
+    standalone: false
 })
 export class EditResultlistQuicklookComponent implements OnInit {
 

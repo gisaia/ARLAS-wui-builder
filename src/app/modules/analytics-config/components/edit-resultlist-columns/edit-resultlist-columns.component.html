@@ -1,6 +1,6 @@
 <div class="columns-wrapper">
-    <table #columnTable mat-table [dataSource]="this.control.controls" class="columns" cdkDropList
-        [cdkDropListData]="this.control.controls" (cdkDropListDropped)="drop($event)"
+    <table #columnTable mat-table [dataSource]="control.controls" class="columns" cdkDropList
+        [cdkDropListData]="control.controls" (cdkDropListDropped)="drop($event)"
         [cdkDropListDisabled]="dragDisabled" [cdkDropListLockAxis]="'y'">
 
         <ng-container matColumnDef="action">
@@ -13,7 +13,7 @@
                     </button>
                     <mat-icon *ngIf="column.controls.sort.value !== ''" class="sort" [matTooltip]="column.controls.sort.value | translate" (click)="setSort(i, column.controls.sort.value)" [class.reversed]="column.controls.sort.value === 'desc'" >north</mat-icon>
                     <mat-icon *ngIf="column.controls.sort.value === ''" class="sort-disabled" (click)="setSort(i, column.controls.sort.value)" [matTooltip]="'Not sorted' | translate" >sync_alt</mat-icon>
-                </div> 
+                </div>
             </td>
         </ng-container>
         <ng-container matColumnDef="name">

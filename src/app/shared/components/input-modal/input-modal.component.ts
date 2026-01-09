@@ -31,9 +31,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'arlas-input-modal',
-  templateUrl: './input-modal.component.html',
-  styleUrls: ['./input-modal.component.scss']
+    selector: 'arlas-input-modal',
+    templateUrl: './input-modal.component.html',
+    styleUrls: ['./input-modal.component.scss'],
+    standalone: false
 })
 export class InputModalComponent {
 

@@ -28,9 +28,10 @@ import { DialogColorTableData } from './models';
 import { ArlasColorService } from 'arlas-web-components';
 
 @Component({
-  selector: 'arlas-dialog-color-table',
-  templateUrl: './dialog-color-table.component.html',
-  styleUrls: ['./dialog-color-table.component.scss']
+    selector: 'arlas-dialog-color-table',
+    templateUrl: './dialog-color-table.component.html',
+    styleUrls: ['./dialog-color-table.component.scss'],
+    standalone: false
 })
 export class DialogColorTableComponent implements OnInit {
 

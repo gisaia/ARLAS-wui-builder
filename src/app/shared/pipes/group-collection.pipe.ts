@@ -20,7 +20,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Pipe({
-  name: 'groupCollection'
+    name: 'groupCollection',
+    standalone: false
 })
 export class GroupCollectionPipe implements PipeTransform {
 

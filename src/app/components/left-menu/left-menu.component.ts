@@ -27,9 +27,10 @@ import {
 import { MenuService } from '@services/menu/menu.service';
 
 @Component({
-  selector: 'arlas-left-menu',
-  templateUrl: './left-menu.component.html',
-  styleUrls: ['./left-menu.component.scss']
+    selector: 'arlas-left-menu',
+    templateUrl: './left-menu.component.html',
+    styleUrls: ['./left-menu.component.scss'],
+    standalone: false
 })
 export class LeftMenuComponent implements OnInit {
 

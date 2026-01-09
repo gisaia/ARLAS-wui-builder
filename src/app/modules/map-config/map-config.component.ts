@@ -31,9 +31,10 @@ interface Tab {
 }
 
 @Component({
-  selector: 'arlas-map-config',
-  templateUrl: './map-config.component.html',
-  styleUrls: ['./map-config.component.scss']
+    selector: 'arlas-map-config',
+    templateUrl: './map-config.component.html',
+    styleUrls: ['./map-config.component.scss'],
+    standalone: false
 })
 export class MapConfigComponent implements OnInit, OnDestroy {
 

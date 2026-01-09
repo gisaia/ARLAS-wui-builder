@@ -35,9 +35,10 @@ import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 
 @Component({
-  selector: 'arlas-tabs',
-  templateUrl: './tabs.component.html',
-  styleUrls: ['./tabs.component.scss']
+    selector: 'arlas-tabs',
+    templateUrl: './tabs.component.html',
+    styleUrls: ['./tabs.component.scss'],
+    standalone: false
 })
 export class TabsComponent implements OnDestroy {
 

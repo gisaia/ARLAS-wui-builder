@@ -43,9 +43,10 @@ import { ImportWidgetDialogComponent } from '../import-widget-dialog/import-widg
 import { WIDGET_TYPE } from './models';
 
 @Component({
-  selector: 'arlas-add-widget-dialog',
-  templateUrl: './edit-group-add-widget.component.html',
-  styleUrls: ['./edit-group-add-widget.component.scss']
+    selector: 'arlas-add-widget-dialog',
+    templateUrl: './edit-group-add-widget.component.html',
+    styleUrls: ['./edit-group-add-widget.component.scss'],
+    standalone: false
 })
 export class AddWidgetDialogComponent {
   public widgetType: string;
@@ -75,9 +76,10 @@ export class AddWidgetDialogComponent {
 }
 
 @Component({
-  selector: 'arlas-edit-group',
-  templateUrl: './edit-group.component.html',
-  styleUrls: ['./edit-group.component.scss']
+    selector: 'arlas-edit-group',
+    templateUrl: './edit-group.component.html',
+    styleUrls: ['./edit-group.component.scss'],
+    standalone: false
 })
 export class EditGroupComponent implements OnInit, OnDestroy {
 

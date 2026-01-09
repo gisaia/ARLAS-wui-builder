@@ -22,10 +22,11 @@ import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { ConfigFormGroupComponent } from '../config-form-group/config-form-group.component';
 
 @Component({
-  selector: 'arlas-histogram-bucket-form-group',
-  templateUrl: './histogram-bucket-form-group.component.html',
-  styleUrls: ['./histogram-bucket-form-group.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'arlas-histogram-bucket-form-group',
+    templateUrl: './histogram-bucket-form-group.component.html',
+    styleUrls: ['./histogram-bucket-form-group.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class HistogramBucketFormGroupComponent extends ConfigFormGroupComponent implements OnInit, OnDestroy {
 

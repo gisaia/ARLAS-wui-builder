@@ -6,7 +6,7 @@ describe('ResultListInitService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: ResultListInitService = TestBed.get(ResultListInitService);
+    const service: ResultListInitService = TestBed.inject(ResultListInitService);
     expect(service).toBeTruthy();
   });
 });

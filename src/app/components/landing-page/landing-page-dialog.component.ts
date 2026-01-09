@@ -40,8 +40,9 @@ import { Subscription } from 'rxjs';
 
 
 @Component({
-  templateUrl: './landing-page-dialog.component.html',
-  styleUrls: ['./landing-page-dialog.component.scss']
+    templateUrl: './landing-page-dialog.component.html',
+    styleUrls: ['./landing-page-dialog.component.scss'],
+    standalone: false
 })
 export class LandingPageDialogComponent implements OnInit, OnDestroy {
 

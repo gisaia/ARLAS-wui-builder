@@ -64,9 +64,10 @@ export interface Layer {
 }
 
 @Component({
-  selector: 'arlas-layers',
-  templateUrl: './layers.component.html',
-  styleUrls: ['./layers.component.scss']
+    selector: 'arlas-layers',
+    templateUrl: './layers.component.html',
+    styleUrls: ['./layers.component.scss'],
+    standalone: false
 })
 export class LayersComponent implements OnInit, OnDestroy {
 

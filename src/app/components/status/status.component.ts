@@ -20,9 +20,10 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 
 @Component({
-  selector: 'arlas-status',
-  templateUrl: './status.component.html',
-  styleUrls: ['./status.component.scss']
+    selector: 'arlas-status',
+    templateUrl: './status.component.html',
+    styleUrls: ['./status.component.scss'],
+    standalone: false
 })
 export class StatusComponent implements OnInit {
 

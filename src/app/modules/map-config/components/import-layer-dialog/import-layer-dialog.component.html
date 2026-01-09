@@ -8,7 +8,7 @@
             <mat-option *ngFor="let conf of configs" [value]="conf">{{conf.doc_key}}</mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field *ngIf="this.importLayerFormGroup.get('dashboard').valid && layers?.length > 0">
+    <mat-form-field *ngIf="importLayerFormGroup.get('dashboard').valid && layers?.length > 0">
         <mat-label>{{'Layer' | translate}}</mat-label>
         <mat-select formControlName="layer">
             <mat-option *ngFor="let layer of layers" [value]="layer">{{layer.id | layerIdToName}}</mat-option>
@@ -21,5 +21,5 @@
 
 <div mat-dialog-actions>
     <button mat-button mat-dialog-close>{{ 'Cancel' | translate}}</button>
-    <button mat-button [mat-dialog-close]="[this.importLayerFormGroup.get('layer').value, this.dashboardConfigJson]" [disabled]="!this.importLayerFormGroup.valid" mat-raised-button color="primary">{{ 'Import' | translate}}</button>
+    <button mat-button [mat-dialog-close]="[importLayerFormGroup.get('layer').value, dashboardConfigJson]" [disabled]="!importLayerFormGroup.valid" mat-raised-button color="primary">{{ 'Import' | translate}}</button>
 </div>

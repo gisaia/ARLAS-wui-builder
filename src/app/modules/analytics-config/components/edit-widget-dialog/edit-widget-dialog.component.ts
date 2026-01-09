@@ -32,9 +32,10 @@ import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts
 import { MetricsTableFormBuilderService } from '@analytics-config/services/metrics-table-form-builder/metrics-table-form-builder.service';
 
 @Component({
-  selector: 'arlas-edit-widget-dialog',
-  templateUrl: './edit-widget-dialog.component.html',
-  styleUrls: ['./edit-widget-dialog.component.scss'],
+    selector: 'arlas-edit-widget-dialog',
+    templateUrl: './edit-widget-dialog.component.html',
+    styleUrls: ['./edit-widget-dialog.component.scss'],
+    standalone: false
 })
 export class EditWidgetDialogComponent implements OnInit {
 

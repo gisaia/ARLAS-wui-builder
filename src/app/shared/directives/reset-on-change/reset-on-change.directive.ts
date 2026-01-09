@@ -31,7 +31,8 @@ import { Subscription } from 'rxjs';
  * WARNING: currently only for mat-select and mat-slide-toggle
  */
 @Directive({
-  selector: '[arlasResetOnChange]'
+    selector: '[arlasResetOnChange]',
+    standalone: false
 })
 export class ResetOnChangeDirective implements OnInit, OnDestroy {
 

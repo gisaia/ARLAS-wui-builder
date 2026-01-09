@@ -9,7 +9,7 @@
         </mat-select>
     </mat-form-field>
 
-    <div *ngIf="this.importWidgetFormGroup.get('dashboard').valid">
+    <div *ngIf="importWidgetFormGroup.get('dashboard').valid">
         <div mat-dialog-title class="import__widgets"> {{'Choose of the following widgets' | translate}}</div>
             <div *ngFor="let tab of analytics | keyvalue">
                 <div class="tab">{{tab.key}}</div>
@@ -43,7 +43,7 @@
             </div>
 
     </div>
-    <mat-form-field style="display: none;" *ngIf="this.importWidgetFormGroup.get('dashboard').valid">
+    <mat-form-field style="display: none;" *ngIf="importWidgetFormGroup.get('dashboard').valid">
         <mat-select formControlName="componentConfig" style="display: none;"  [required]="true"
             [(ngModel)]="selectedWidgets" >
         </mat-select>
@@ -52,5 +52,5 @@
 
 <div mat-dialog-actions>
     <button mat-button mat-dialog-close>{{ 'Cancel' | translate}}</button>
-    <button mat-button [mat-dialog-close]="[this.importWidgetFormGroup.get('componentConfig').value, this.dashboardConfigJson]" [disabled]="!this.importWidgetFormGroup.valid" mat-raised-button color="primary">{{ 'Import' | translate}}</button>
+    <button mat-button [mat-dialog-close]="[importWidgetFormGroup.get('componentConfig').value, dashboardConfigJson]" [disabled]="!importWidgetFormGroup.valid" mat-raised-button color="primary">{{ 'Import' | translate}}</button>
 </div>

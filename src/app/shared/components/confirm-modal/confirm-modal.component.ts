@@ -24,9 +24,10 @@ export interface ModalData {
 }
 
 @Component({
-  selector: 'arlas-confirm-modal',
-  templateUrl: './confirm-modal.component.html',
-  styleUrls: ['./confirm-modal.component.scss']
+    selector: 'arlas-confirm-modal',
+    templateUrl: './confirm-modal.component.html',
+    styleUrls: ['./confirm-modal.component.scss'],
+    standalone: false
 })
 export class ConfirmModalComponent implements OnInit {
 

@@ -17,7 +17,7 @@
  * under the License.
  */
 import { HttpClient } from '@angular/common/http';
-import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, forwardRef, NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, forwardRef, NgModule, inject, provideAppInitializer } from '@angular/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
@@ -147,18 +147,14 @@ export class CustomTranslateLoader implements TranslateLoader {
   providers: [
     forwardRef(() => ArlasConfigurationDescriptor),
     forwardRef(() => ArlasStartupService),
-    {
-      provide: APP_INITIALIZER,
-      useFactory: loadServiceFactory,
-      deps: [DefaultValuesService],
-      multi: true
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: startupServiceFactory,
-      deps: [StartupService],
-      multi: true
-    },
+    provideAppInitializer(() => {
+        const initializerFn = (loadServiceFactory)(inject(DefaultValuesService));
+        return initializerFn();
+      }),
+    provideAppInitializer(() => {
+        const initializerFn = (startupServiceFactory)(inject(StartupService));
+        return initializerFn();
+      }),
     {
       provide: 'AuthentificationService',
       useFactory: auhtentServiceFactory,

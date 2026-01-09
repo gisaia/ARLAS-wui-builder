@@ -27,9 +27,10 @@ import { ConfigFormGroup, HiddenFormControl } from '@shared-models/config-form';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 @Component({
-  selector: 'arlas-basemaps',
-  templateUrl: './basemaps.component.html',
-  styleUrls: ['./basemaps.component.scss']
+    selector: 'arlas-basemaps',
+    templateUrl: './basemaps.component.html',
+    styleUrls: ['./basemaps.component.scss'],
+    standalone: false
 })
 export class BasemapsComponent implements OnInit {
 

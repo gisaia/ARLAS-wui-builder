@@ -49,18 +49,17 @@ interface DataGroupDialogData {
 }
 
 @Component({
-  selector: 'arlas-manage-data-group-dialog',
-  standalone: true,
-  imports: [
-    MatButton,
-    MatTableModule,
-    MatIcon,
-    SharedModule,
-    TranslateModule
-  ],
-  templateUrl: './manage-data-group-dialog.component.html',
-  styleUrl: './manage-data-group-dialog.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'arlas-manage-data-group-dialog',
+    imports: [
+        MatButton,
+        MatTableModule,
+        MatIcon,
+        SharedModule,
+        TranslateModule
+    ],
+    templateUrl: './manage-data-group-dialog.component.html',
+    styleUrl: './manage-data-group-dialog.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ManageDataGroupDialogComponent implements OnInit {
   protected validate = output<boolean>();

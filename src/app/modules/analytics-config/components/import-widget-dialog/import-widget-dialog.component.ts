@@ -27,9 +27,10 @@ import { DataResource, DataWithLinks } from 'arlas-persistence-api';
 import { PersistenceService } from 'arlas-wui-toolkit';
 
 @Component({
-  selector: 'arlas-import-widget-dialog',
-  templateUrl: './import-widget-dialog.component.html',
-  styleUrls: ['./import-widget-dialog.component.scss']
+    selector: 'arlas-import-widget-dialog',
+    templateUrl: './import-widget-dialog.component.html',
+    styleUrls: ['./import-widget-dialog.component.scss'],
+    standalone: false
 })
 export class ImportWidgetDialogComponent implements OnInit {
 

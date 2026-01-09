@@ -26,9 +26,10 @@ import { SelectFormControl } from '@shared-models/config-form';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 
 @Component({
-  selector: 'arlas-edit-resultlist-details',
-  templateUrl: './edit-resultlist-details.component.html',
-  styleUrls: ['./edit-resultlist-details.component.scss']
+    selector: 'arlas-edit-resultlist-details',
+    templateUrl: './edit-resultlist-details.component.html',
+    styleUrls: ['./edit-resultlist-details.component.scss'],
+    standalone: false
 })
 export class EditResultlistDetailsComponent implements OnInit {
 

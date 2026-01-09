@@ -27,9 +27,10 @@ import { DataResource, DataWithLinks } from 'arlas-persistence-api';
 import { PersistenceService } from 'arlas-wui-toolkit';
 
 @Component({
-  selector: 'arlas-import-layer-dialog',
-  templateUrl: './import-layer-dialog.component.html',
-  styleUrls: ['./import-layer-dialog.component.scss']
+    selector: 'arlas-import-layer-dialog',
+    templateUrl: './import-layer-dialog.component.html',
+    styleUrls: ['./import-layer-dialog.component.scss'],
+    standalone: false
 })
 export class ImportLayerDialogComponent implements OnInit {
 

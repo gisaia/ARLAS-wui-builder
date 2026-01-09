@@ -15,7 +15,7 @@
                         (click)="mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
                         [disabled]="mainFormService.startingConfig.getFg().get('serverUrl').invalid"
                         mat-stroked-button color="accent">{{'Reload collections' | translate}}</button>
-                    
+
                 </div>
             </arlas-config-element>
             <arlas-config-element *ngIf="isServerReady">
@@ -41,7 +41,7 @@
     </mat-dialog-content>
     <mat-dialog-actions>
         <button mat-button (click)="configChoice = InitialChoice.none; cancel()">{{'Back' | translate}}</button>
-        <button (click)="saveConfig()" [disabled]="this.mainFormService.startingConfig.getFg().invalid"
+        <button (click)="saveConfig()" [disabled]="mainFormService.startingConfig.getFg().invalid"
             mat-raised-button color="primary">{{'Start' | translate}}</button>
     </mat-dialog-actions>
 </ng-container>
