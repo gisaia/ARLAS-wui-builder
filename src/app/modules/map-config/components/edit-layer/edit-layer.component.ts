@@ -35,9 +35,10 @@ import { KeywordColor } from '../dialog-color-table/models';
 import { LAYER_MODE } from './models';
 
 @Component({
-  selector: 'arlas-edit-layer',
-  templateUrl: './edit-layer.component.html',
-  styleUrls: ['./edit-layer.component.scss']
+    selector: 'arlas-edit-layer',
+    templateUrl: './edit-layer.component.html',
+    styleUrls: ['./edit-layer.component.scss'],
+    standalone: false
 })
 export class EditLayerComponent implements OnInit, CanComponentExit, AfterContentChecked, OnDestroy {
 

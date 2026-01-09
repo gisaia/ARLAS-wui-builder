@@ -22,7 +22,8 @@ import { Directive, ElementRef, Input, AfterContentInit, OnDestroy } from '@angu
  * Autofocus on a field once it is inserted into the DOM (it can be from a "*ngIf")
  */
 @Directive({
-  selector: '[arlasAutoFocus]'
+    selector: '[arlasAutoFocus]',
+    standalone: false
 })
 export class AutoFocusDirective implements AfterContentInit, OnDestroy {
 

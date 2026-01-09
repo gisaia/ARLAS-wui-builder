@@ -37,9 +37,10 @@ import { marker } from '@colsen1991/ngx-translate-extract-marker';
 
 
 @Component({
-  selector: 'arlas-groups',
-  templateUrl: './groups.component.html',
-  styleUrls: ['./groups.component.scss']
+    selector: 'arlas-groups',
+    templateUrl: './groups.component.html',
+    styleUrls: ['./groups.component.scss'],
+    standalone: false
 })
 export class GroupsComponent implements OnInit, OnDestroy {
 

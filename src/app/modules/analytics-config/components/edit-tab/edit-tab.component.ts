@@ -29,9 +29,10 @@ export enum TAB_DISPLAY_MODE {
 }
 
 @Component({
-  selector: 'arlas-edit-tab',
-  templateUrl: './edit-tab.component.html',
-  styleUrls: ['./edit-tab.component.scss']
+    selector: 'arlas-edit-tab',
+    templateUrl: './edit-tab.component.html',
+    styleUrls: ['./edit-tab.component.scss'],
+    standalone: false
 })
 export class EditTabComponent implements OnInit {
 

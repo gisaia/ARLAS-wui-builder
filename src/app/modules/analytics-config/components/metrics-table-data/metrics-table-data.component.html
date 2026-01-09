@@ -9,8 +9,8 @@
     </mat-expansion-panel>
 </mat-accordion>
 <div class="sub-tables-wrapper">
-    <table #subTables mat-table [dataSource]="this.control.controls" class="sub-tables" cdkDropList
-        [cdkDropListData]="this.control.controls" (cdkDropListDropped)="drop($event)"
+    <table #subTables mat-table [dataSource]="control.controls" class="sub-tables" cdkDropList
+        [cdkDropListData]="control.controls" (cdkDropListDropped)="drop($event)"
         [cdkDropListDisabled]="dragDisabled" [cdkDropListLockAxis]="'y'">
         <ng-container matColumnDef="drag">
             <th class="drag" mat-header-cell *matHeaderCellDef></th>

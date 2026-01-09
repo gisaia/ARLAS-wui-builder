@@ -34,9 +34,10 @@ import { Metric } from 'arlas-api';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'arlas-add-subtable-dialog',
-  templateUrl: './add-subtable-dialog.component.html',
-  styleUrls: ['./add-subtable-dialog.component.scss']
+    selector: 'arlas-add-subtable-dialog',
+    templateUrl: './add-subtable-dialog.component.html',
+    styleUrls: ['./add-subtable-dialog.component.scss'],
+    standalone: false
 })
 export class AddSubtableDialogComponent implements OnInit, OnDestroy {
   public formGroup: SubTableFormGroup;

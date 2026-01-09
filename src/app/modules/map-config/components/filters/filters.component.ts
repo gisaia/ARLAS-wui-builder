@@ -40,9 +40,10 @@ export interface Layer {
 }
 
 @Component({
-  selector: 'arlas-layer-filters',
-  templateUrl: './filters.component.html',
-  styleUrls: ['./filters.component.scss']
+    selector: 'arlas-layer-filters',
+    templateUrl: './filters.component.html',
+    styleUrls: ['./filters.component.scss'],
+    standalone: false
 })
 export class FiltersComponent implements OnInit, OnDestroy {
   @Input() public layerFg: MapLayerFormGroup;

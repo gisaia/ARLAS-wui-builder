@@ -26,9 +26,10 @@ import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { MapBasemapFormGroup, BasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 
 @Component({
-  selector: 'arlas-basemaps',
-  templateUrl: './basemaps.component.html',
-  styleUrls: ['./basemaps.component.scss']
+    selector: 'arlas-basemaps',
+    templateUrl: './basemaps.component.html',
+    styleUrls: ['./basemaps.component.scss'],
+    standalone: false
 })
 export class BasemapsComponent implements OnInit {
 

@@ -19,7 +19,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'objectvalues'
+    name: 'objectvalues',
+    standalone: false
 })
 export class ObjectvaluesPipe implements PipeTransform {
 

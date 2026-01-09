@@ -24,7 +24,7 @@
       </ng-container>
       <mat-divider></mat-divider>
       <mat-list-item matTooltip="{{'Save' | translate}}" (click)="save($event)" matTooltipPosition="right"
-        [class.disabled-item]="!this.persistenceService.isAvailable">
+        [class.disabled-item]="!persistenceService.isAvailable">
         <button mat-icon-button>
           <mat-icon>save</mat-icon>
         </button>

@@ -23,9 +23,10 @@ import { FormControl } from '@angular/forms';
 import { CollectionService } from '@services/collection-service/collection.service';
 
 @Component({
-  selector: 'arlas-filter',
-  templateUrl: './dialog-filter.component.html',
-  styleUrls: ['./dialog-filter.component.scss']
+    selector: 'arlas-filter',
+    templateUrl: './dialog-filter.component.html',
+    styleUrls: ['./dialog-filter.component.scss'],
+    standalone: false
 })
 export class DialogFilterComponent implements OnInit {
 

@@ -26,9 +26,10 @@ import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'arlas-resultlist-data',
-  templateUrl: './resultlist-data.component.html',
-  styleUrls: ['./resultlist-data.component.scss']
+    selector: 'arlas-resultlist-data',
+    templateUrl: './resultlist-data.component.html',
+    styleUrls: ['./resultlist-data.component.scss'],
+    standalone: false
 })
 export class ResultlistDataComponent implements OnInit, OnDestroy {
 

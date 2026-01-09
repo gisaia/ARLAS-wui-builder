@@ -25,9 +25,10 @@ import { WidgetUsage } from '@services/main-form-manager/models-config';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 
 @Component({
-  selector: 'arlas-widget-edition',
-  templateUrl: './widget-edition.component.html',
-  styleUrls: ['./widget-edition.component.scss']
+    selector: 'arlas-widget-edition',
+    templateUrl: './widget-edition.component.html',
+    styleUrls: ['./widget-edition.component.scss'],
+    standalone: false
 })
 export class WidgetEditionComponent implements OnInit, OnChanges {
   @Input() public widgetControls: { widgetType: FormControl<WIDGET_TYPE>; widgetData: WidgetConfigFormGroup; };

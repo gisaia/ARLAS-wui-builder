@@ -35,9 +35,10 @@ import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
-  selector: 'arlas-global-result-list',
-  templateUrl: './global-result-list.component.html',
-  styleUrls: ['./global-result-list.component.scss']
+    selector: 'arlas-global-result-list',
+    templateUrl: './global-result-list.component.html',
+    styleUrls: ['./global-result-list.component.scss'],
+    standalone: false
 })
 export class GlobalResultListComponent implements OnDestroy {
 

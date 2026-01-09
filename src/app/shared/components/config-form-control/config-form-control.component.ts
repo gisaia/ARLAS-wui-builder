@@ -65,9 +65,10 @@ import { ArlasIamService } from 'arlas-wui-toolkit';
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'arlas-config-form-control',
-  templateUrl: './config-form-control.component.html',
-  styleUrls: ['./config-form-control.component.scss']
+    selector: 'arlas-config-form-control',
+    templateUrl: './config-form-control.component.html',
+    styleUrls: ['./config-form-control.component.scss'],
+    standalone: false
 })
 export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
 

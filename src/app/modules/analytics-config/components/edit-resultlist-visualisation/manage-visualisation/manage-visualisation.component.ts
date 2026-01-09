@@ -37,16 +37,14 @@ import { GetFieldDisplayModule } from 'arlas-web-components';
 import { filter, first } from 'rxjs';
 
 @Component({
-  selector: 'arlas-manage-visualisation',
-  standalone: true,
-  imports: [
-    TranslateModule,
-    SharedModule,
-    GetFieldDisplayModule
-  ],
-  templateUrl: './manage-visualisation.component.html',
-  styleUrl: './manage-visualisation.component.scss',
-
+    selector: 'arlas-manage-visualisation',
+    imports: [
+        TranslateModule,
+        SharedModule,
+        GetFieldDisplayModule
+    ],
+    templateUrl: './manage-visualisation.component.html',
+    styleUrl: './manage-visualisation.component.scss'
 })
 export class ManageVisualisationComponent {
   /**

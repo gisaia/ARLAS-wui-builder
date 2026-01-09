@@ -22,9 +22,10 @@ import { CdkDragDrop, CdkDragEnter, CdkDragMove, moveItemInArray } from '@angula
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'arlas-shortcuts',
-  templateUrl: './shortcuts.component.html',
-  styleUrls: ['./shortcuts.component.scss']
+    selector: 'arlas-shortcuts',
+    templateUrl: './shortcuts.component.html',
+    styleUrls: ['./shortcuts.component.scss'],
+    standalone: false
 })
 export class ShortcutsComponent {
   public dropListReceiverElement?: HTMLElement;

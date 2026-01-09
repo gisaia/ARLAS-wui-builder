@@ -20,9 +20,10 @@ import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angu
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 @Component({
-  selector: 'arlas-color-picker-wrapper',
-  templateUrl: './color-picker-wrapper.component.html',
-  styleUrls: ['./color-picker-wrapper.component.scss']
+    selector: 'arlas-color-picker-wrapper',
+    templateUrl: './color-picker-wrapper.component.html',
+    styleUrls: ['./color-picker-wrapper.component.scss'],
+    standalone: false
 })
 export class ColorPickerWrapperComponent implements OnInit, OnDestroy {
 

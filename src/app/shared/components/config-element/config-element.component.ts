@@ -20,9 +20,10 @@ import { Component, ContentChild, Input, OnInit, OnDestroy } from '@angular/core
 import { FormControlName, FormGroupDirective } from '@angular/forms';
 
 @Component({
-  selector: 'arlas-config-element',
-  templateUrl: './config-element.component.html',
-  styleUrls: ['./config-element.component.scss']
+    selector: 'arlas-config-element',
+    templateUrl: './config-element.component.html',
+    styleUrls: ['./config-element.component.scss'],
+    standalone: false
 })
 export class ConfigElementComponent implements OnInit, OnDestroy {
 

@@ -9,8 +9,8 @@
     </div>
     <div class="icon">
       <mat-icon style="cursor: pointer;" (click)="iconInput.click();">
-        {{this.tabForm.get('icon').value}}</mat-icon>
-      <input class="icon-picker-icon" #iconInput matInput [iconPicker]="this.tabForm.get('icon').value" [ipIconPack]="['mat']"
+        {{tabForm.get('icon').value}}</mat-icon>
+      <input class="icon-picker-icon" #iconInput matInput [iconPicker]="tabForm.get('icon').value" [ipIconPack]="['mat']"
         [ipFallbackIcon]="'short_text'" [ipPosition]="'right'" [ipButtonStyleClass]="'mat-raised-button'"
         [ipMaxHeight]="'250px'" [ipWidth]="'307px'" (iconPickerSelect)="onIconPickerSelect($event)" />
     </div>
@@ -28,6 +28,6 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button [mat-dialog-close]>{{'Cancel' | translate}}</button>
-  <button cdkFocusInitial [mat-dialog-close]="this.tabForm.value" mat-raised-button color="primary">{{'Validate' |
+  <button cdkFocusInitial [mat-dialog-close]="tabForm.value" mat-raised-button color="primary">{{'Validate' |
     translate}}</button>
 </div>

@@ -21,9 +21,10 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 
 @Component({
-  selector: 'arlas-global',
-  templateUrl: './global-map.component.html',
-  styleUrls: ['./global-map.component.scss']
+    selector: 'arlas-global',
+    templateUrl: './global-map.component.html',
+    styleUrls: ['./global-map.component.scss'],
+    standalone: false
 })
 export class GlobalMapComponent implements OnInit {
 

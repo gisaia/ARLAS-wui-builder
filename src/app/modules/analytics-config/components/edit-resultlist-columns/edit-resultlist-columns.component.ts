@@ -25,9 +25,10 @@ import { FormArray } from '@angular/forms';
 import { SelectFormControl } from '@shared-models/config-form';
 
 @Component({
-  selector: 'arlas-edit-resultlist-columns',
-  templateUrl: './edit-resultlist-columns.component.html',
-  styleUrls: ['./edit-resultlist-columns.component.scss']
+    selector: 'arlas-edit-resultlist-columns',
+    templateUrl: './edit-resultlist-columns.component.html',
+    styleUrls: ['./edit-resultlist-columns.component.scss'],
+    standalone: false
 })
 export class EditResultlistColumnsComponent implements OnInit {
 

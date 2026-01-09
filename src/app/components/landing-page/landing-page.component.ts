@@ -50,9 +50,10 @@ export interface Configuration {
 }
 
 @Component({
-  selector: 'arlas-landing-page',
-  templateUrl: './landing-page.component.html',
-  styleUrls: ['./landing-page.component.scss']
+    selector: 'arlas-landing-page',
+    templateUrl: './landing-page.component.html',
+    styleUrls: ['./landing-page.component.scss'],
+    standalone: false
 })
 export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
 

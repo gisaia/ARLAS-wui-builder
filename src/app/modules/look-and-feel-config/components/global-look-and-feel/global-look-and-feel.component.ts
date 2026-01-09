@@ -26,9 +26,10 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { MainFormService } from '@services/main-form/main-form.service';
 
 @Component({
-  selector: 'arlas-global-look-and-feel',
-  templateUrl: './global-look-and-feel.component.html',
-  styleUrls: ['./global-look-and-feel.component.scss']
+    selector: 'arlas-global-look-and-feel',
+    templateUrl: './global-look-and-feel.component.html',
+    styleUrls: ['./global-look-and-feel.component.scss'],
+    standalone: false
 })
 export class GlobalLookAndFeelComponent implements OnInit {
 

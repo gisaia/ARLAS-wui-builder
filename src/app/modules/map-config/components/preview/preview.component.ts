@@ -49,9 +49,10 @@ export interface MapglComponentInput {
 }
 
 @Component({
-  selector: 'arlas-preview',
-  templateUrl: './preview.component.html',
-  styleUrls: ['./preview.component.scss']
+    selector: 'arlas-preview',
+    templateUrl: './preview.component.html',
+    styleUrls: ['./preview.component.scss'],
+    standalone: false
 })
 export class PreviewComponent implements AfterViewInit, OnDestroy {
 

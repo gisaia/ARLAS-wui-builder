@@ -21,9 +21,10 @@ import { SearchGlobalFormGroup } from '@search-config/services/search-global-for
 import { MainFormService } from '@services/main-form/main-form.service';
 
 @Component({
-  selector: 'arlas-global-search',
-  templateUrl: './global-search.component.html',
-  styleUrls: ['./global-search.component.scss']
+    selector: 'arlas-global-search',
+    templateUrl: './global-search.component.html',
+    styleUrls: ['./global-search.component.scss'],
+    standalone: false
 })
 export class GlobalSearchComponent {
 

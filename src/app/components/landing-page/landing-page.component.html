@@ -42,7 +42,7 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let config; columns: displayedColumns;"></tr>
         </table>
-        <mat-paginator [pageIndex]="this.configPageNumber" [pageSize]="this.configPageSize"
+        <mat-paginator [pageIndex]="configPageNumber" [pageSize]="configPageSize"
             [length]="configurationsLength" [showFirstLastButtons]=true (page)="pageChange($event)">
         </mat-paginator>
     </ng-container>

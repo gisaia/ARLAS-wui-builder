@@ -25,10 +25,11 @@ import * as d3i from 'd3-interpolate';
 import { DialogPaletteSelectorData } from './model';
 
 @Component({
-  selector: 'arlas-dialog-palette',
-  templateUrl: './dialog-palette-selector.component.html',
-  styleUrls: ['./dialog-palette-selector.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'arlas-dialog-palette',
+    templateUrl: './dialog-palette-selector.component.html',
+    styleUrls: ['./dialog-palette-selector.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class DialogPaletteSelectorComponent implements OnInit {
 

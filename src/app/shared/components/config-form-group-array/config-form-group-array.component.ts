@@ -20,9 +20,10 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ConfigFormGroup, ConfigFormGroupArray } from '@shared-models/config-form';
 
 @Component({
-  selector: 'arlas-config-form-group-array',
-  templateUrl: './config-form-group-array.component.html',
-  styleUrls: ['./config-form-group-array.component.scss']
+    selector: 'arlas-config-form-group-array',
+    templateUrl: './config-form-group-array.component.html',
+    styleUrls: ['./config-form-group-array.component.scss'],
+    standalone: false
 })
 export class ConfigFormGroupArrayComponent implements OnInit, OnDestroy {
 

@@ -23,9 +23,10 @@ import { SearchCollectionFormGroup, SearchGlobalFormBuilderService }
   from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
 
 @Component({
-  selector: 'arlas-search-collection',
-  templateUrl: './search-collection.component.html',
-  styleUrls: ['./search-collection.component.scss']
+    selector: 'arlas-search-collection',
+    templateUrl: './search-collection.component.html',
+    styleUrls: ['./search-collection.component.scss'],
+    standalone: false
 })
 export class SearchCollectionComponent implements OnInit {
 

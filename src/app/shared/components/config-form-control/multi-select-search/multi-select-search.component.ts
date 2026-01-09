@@ -31,21 +31,19 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
-  selector: 'arlas-multi-select-search',
-  standalone: true,
-  imports: [
-    MatFormField,
-    MatSelect,
-    MatOption,
-    ReactiveFormsModule,
-    TranslateModule,
-    NgxMatSelectSearchModule,
-    AsyncPipe,
-    MatToolbarModule
-
-  ],
-  templateUrl: './multi-select-search.component.html',
-  styleUrl: './multi-select-search.component.scss'
+    selector: 'arlas-multi-select-search',
+    imports: [
+        MatFormField,
+        MatSelect,
+        MatOption,
+        ReactiveFormsModule,
+        TranslateModule,
+        NgxMatSelectSearchModule,
+        AsyncPipe,
+        MatToolbarModule
+    ],
+    templateUrl: './multi-select-search.component.html',
+    styleUrl: './multi-select-search.component.scss'
 })
 export class MultiSelectSearchComponent implements OnInit, AfterViewInit {
   @Input() public control: MultipleSelectFormControl;
