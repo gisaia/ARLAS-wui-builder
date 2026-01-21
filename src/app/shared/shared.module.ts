@@ -53,6 +53,10 @@ import { FiltersComponent } from '@map-config/components/filters/filters.compone
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { StartupService } from '@services/startup/startup.service';
 import { CollectionsUnitsComponent } from '@shared-components/collections-units/collections-units.component';
+import {
+  AutoCompleteSelectFormComponent
+} from '@shared-components/config-form-control/auto-complete-select/auto-complete-select-form.component';
+import { OrderedSelectComponent } from '@shared-components/config-form-control/ordered-select/ordered-select.component';
 import { OrderConfigFormTabControlsPipe } from '@shared/pipes/order-config-form-tab.pipe';
 import { GetCollectionDisplayModule } from 'arlas-web-components';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
@@ -80,9 +84,7 @@ import {
   declarations: [
     ConfigElementComponent,
     ConfirmModalComponent,
-    AlertOnChangeDirective,
     ColorPickerWrapperComponent,
-    ResetOnChangeDirective,
     ObjectvaluesPipe,
     HistogramBucketPipe,
     AutoFocusDirective,
@@ -178,7 +180,11 @@ import {
     TranslateModule,
     GetCollectionDisplayModule,
     MultiSelectSearchComponent,
-    OrderConfigFormTabControlsPipe
+    OrderConfigFormTabControlsPipe,
+    AutoCompleteSelectFormComponent,
+    ResetOnChangeDirective,
+    AlertOnChangeDirective,
+    OrderedSelectComponent,
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi())

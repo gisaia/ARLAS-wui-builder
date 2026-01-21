@@ -20,7 +20,7 @@ import {
   FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators, FormArray,
   ValidationErrors
 } from '@angular/forms';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { HistogramUtils } from 'arlas-d3';
 import { CollectionField, GroupCollectionItem } from '@services/collection-service/models';
 import { METRIC_TYPES } from '@services/collection-service/collection.service';
@@ -428,6 +428,11 @@ export class SelectFormControl extends ConfigFormControl {
   public filteredOptions: Array<SelectOption>;
   public syncOptions: Array<SelectOption> = [];
   public groups: GroupCollectionItem;
+  /**
+   * Usefull to knwo when sync otpions are set. Cause ifwe do not use
+   * @type {Subject<boolean>}
+   */
+  public syncOptionsSet$ = new Subject<boolean>();
 
   public constructor(
     formState: any,
@@ -472,6 +477,7 @@ export class SelectFormControl extends ConfigFormControl {
   public setSyncOptions(newOptions: Array<SelectOption>) {
     this.syncOptions = newOptions;
     this.filteredOptions = newOptions;
+    this.syncOptionsSet$.next(true);
   }
 }
 
