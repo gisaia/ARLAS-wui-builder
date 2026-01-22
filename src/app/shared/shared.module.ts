@@ -49,17 +49,17 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
-import { FiltersComponent } from '@map-config/components/filters/filters.component';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { StartupService } from '@services/startup/startup.service';
-import { CollectionsUnitsComponent } from '@shared-components/collections-units/collections-units.component';
-import { OrderConfigFormTabControlsPipe } from '@shared/pipes/order-config-form-tab.pipe';
-import { GetCollectionDisplayModule } from 'arlas-web-components';
+import { TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { LayerFiltersComponent } from '@shared-components/layer-filters/filters.component';
+import { GetCollectionDisplayNamePipe } from 'arlas-web-components';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
-import { ColorPickerModule } from 'ngx-color-picker';
+import { ColorPickerDirective } from 'ngx-color-picker';
+import { StartupService } from '../services/startup/startup.service';
+import { CollectionsUnitsComponent } from './components/collections-units/collections-units.component';
 import { ColorPickerWrapperComponent } from './components/color-picker-wrapper/color-picker-wrapper.component';
 import { ConfigElementComponent } from './components/config-element/config-element.component';
 import { ConfigFormControlComponent } from './components/config-form-control/config-form-control.component';
+import { MultiSelectSearchComponent } from './components/config-form-control/multi-select-search/multi-select-search.component';
 import { ConfigFormGroupArrayComponent } from './components/config-form-group-array/config-form-group-array.component';
 import { ConfigFormGroupComponent } from './components/config-form-group/config-form-group.component';
 import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
@@ -71,9 +71,7 @@ import { ResetOnChangeDirective } from './directives/reset-on-change/reset-on-ch
 import { GroupCollectionPipe } from './pipes/group-collection.pipe';
 import { HistogramBucketPipe } from './pipes/histogram-buckets/histogram-buckets.pipe';
 import { ObjectvaluesPipe } from './pipes/objectvalues.pipe';
-import {
-  MultiSelectSearchComponent
-} from '@shared-components/config-form-control/multi-select-search/multi-select-search.component';
+import { OrderConfigFormTabControlsPipe } from './pipes/order-config-form-tab.pipe';
 
 
 @NgModule({
@@ -81,26 +79,24 @@ import {
     ConfigElementComponent,
     ConfirmModalComponent,
     AlertOnChangeDirective,
-    ColorPickerWrapperComponent,
     ResetOnChangeDirective,
     ObjectvaluesPipe,
     HistogramBucketPipe,
     AutoFocusDirective,
     ConfigFormGroupComponent,
-    HistogramBucketFormGroupComponent,
     ConfigFormControlComponent,
-    InputModalComponent,
     ConfigFormGroupArrayComponent,
-    FiltersComponent,
     CollectionsUnitsComponent,
-    GroupCollectionPipe
+    GroupCollectionPipe,
+    InputModalComponent,
+    HistogramBucketFormGroupComponent,
+    LayerFiltersComponent,
+    ColorPickerWrapperComponent
   ],
   exports: [
     ConfigElementComponent,
     ConfirmModalComponent,
-    InputModalComponent,
     AlertOnChangeDirective,
-    ColorPickerWrapperComponent,
     ResetOnChangeDirective,
     ObjectvaluesPipe,
     HistogramBucketPipe,
@@ -122,7 +118,6 @@ import {
     MatInputModule,
     MatSliderModule,
     MatIconModule,
-    ColorPickerModule,
     MatTabsModule,
     MatTableModule,
     MatStepperModule,
@@ -140,7 +135,15 @@ import {
     MatCheckboxModule,
     MatTreeModule,
     TranslateModule,
-    MatSortModule
+    MatSortModule,
+    LayerFiltersComponent,
+
+    // Standalone
+    MultiSelectSearchComponent,
+    OrderConfigFormTabControlsPipe,
+    GetCollectionDisplayNamePipe,
+    HistogramBucketFormGroupComponent,
+    ColorPickerWrapperComponent
   ],
   imports: [
     ArlasToolkitSharedModule,
@@ -150,7 +153,6 @@ import {
     MatButtonModule,
     MatFormFieldModule,
     MatCheckboxModule,
-    ColorPickerModule,
     MatSelectModule,
     MatSlideToggleModule,
     ReactiveFormsModule,
@@ -175,10 +177,11 @@ import {
     MatButtonToggleModule,
     MatPaginatorModule,
     MatMenuModule,
-    TranslateModule,
-    GetCollectionDisplayModule,
     MultiSelectSearchComponent,
-    OrderConfigFormTabControlsPipe
+    OrderConfigFormTabControlsPipe,
+    GetCollectionDisplayNamePipe,
+    TranslatePipe,
+    ColorPickerDirective
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi())

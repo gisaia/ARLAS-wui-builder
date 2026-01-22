@@ -21,9 +21,9 @@ import {
 } from '@analytics-config/services/resultlist-form-builder/models';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
-import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
-import { NUMERIC_TYPES } from '@services/collection-service/tools';
 import { Expression } from 'arlas-api';
+import { CollectionService, METRIC_TYPES } from '../../services/collection-service/collection.service';
+import { NUMERIC_TYPES } from '../../services/collection-service/tools';
 
 interface FilterFrom {
     setSyncOptions?: (value: any) => void;

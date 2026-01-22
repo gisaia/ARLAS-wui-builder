@@ -25,11 +25,6 @@ import { DialogColorTableData, KeywordColor } from '@map-config/components/dialo
 import { DialogPaletteSelectorComponent } from '@map-config/components/dialog-palette-selector/dialog-palette-selector.component';
 import { DialogPaletteSelectorData } from '@map-config/components/dialog-palette-selector/model';
 import { GEOMETRY_TYPE } from '@map-config/services/map-layer-form-builder/models';
-import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
-import { CollectionField } from '@services/collection-service/models';
-import { toAllButGeoOptionsObs, toKeywordOptionsObs, toNumericOrDateOptionsObs,
-  toTextOrKeywordOptionsObs } from '@services/collection-service/tools';
-import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
   ButtonFormControl, ButtonToggleFormControl, ColorFormControl, ColorPreviewFormControl,
@@ -38,10 +33,16 @@ import {
 } from '@shared-models/config-form';
 import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
 import { valuesToOptions } from '@utils/tools';
-import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
-import { ArlasColorService } from 'arlas-web-components';
-import { Observable } from 'rxjs';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
+import { ArlasColorService } from 'arlas-web-components';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { Observable } from 'rxjs';
+import { CollectionService, METRIC_TYPES } from '../../../services/collection-service/collection.service';
+import { CollectionField } from '../../../services/collection-service/models';
+import {
+  toAllButGeoOptionsObs, toKeywordOptionsObs, toNumericOrDateOptionsObs, toTextOrKeywordOptionsObs
+} from '../../../services/collection-service/tools';
+import { DefaultConfig, DefaultValuesService } from '../../../services/default-values/default-values.service';
 
 export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
   public constructor(

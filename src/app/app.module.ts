@@ -28,7 +28,7 @@ import { LandingPageComponent, } from '@components/landing-page/landing-page.com
 import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
 import { LookAndFeelConfigModule } from '@look-and-feel-config/look-and-feel-config.module';
 import { MapConfigModule } from '@map-config/map-config.module';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { SearchConfigModule } from '@search-config/search-config.module';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { StartupService } from '@services/startup/startup.service';
@@ -36,7 +36,7 @@ import { WalkthroughService } from '@services/walkthrough/walkthrough.service';
 import { SharedModule } from '@shared/shared.module';
 import { TimelineConfigModule } from '@timeline-config/timeline-config.module';
 import { OAuthModule } from 'angular-oauth2-oidc';
-import { GetCollectionDisplayModule } from 'arlas-web-components';
+import { GetCollectionDisplayNamePipe } from 'arlas-web-components';
 import enComponents from 'arlas-web-components/assets/i18n/en.json';
 import frComponents from 'arlas-web-components/assets/i18n/fr.json';
 import {
@@ -65,6 +65,10 @@ import { AppComponent } from './app.component';
 import { StatusComponent } from './components/status/status.component';
 import { AnalyticsConfigModule } from './modules/analytics-config/analytics-config.module';
 import { ResultListConfigModule } from './modules/result-list-config/result-list-config.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
 
 
 export function loadServiceFactory(defaultValuesService: DefaultValuesService) {
@@ -142,7 +146,7 @@ export class CustomTranslateLoader implements TranslateLoader {
     AnalyticsConfigModule,
     OAuthModule.forRoot(),
     ArlasToolkitSharedModule,
-    GetCollectionDisplayModule
+    GetCollectionDisplayNamePipe
   ],
   providers: [
     forwardRef(() => ArlasConfigurationDescriptor),

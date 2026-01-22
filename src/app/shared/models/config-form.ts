@@ -17,19 +17,18 @@
  * under the License.
  */
 import {
-  FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, FormControl, AbstractControl, Validators, FormArray,
-  ValidationErrors
+  AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators
 } from '@angular/forms';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { HistogramUtils } from 'arlas-d3';
-import { CollectionField, GroupCollectionItem } from '@services/collection-service/models';
-import { METRIC_TYPES } from '@services/collection-service/collection.service';
-import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toNumericOrDateOrKeywordOrTextObs } from '@services/collection-service/tools';
-import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { CollectionReferenceDescriptionProperty } from 'arlas-api';
+import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { updateValueAndValidity } from '@utils/tools';
+import { CollectionReferenceDescriptionProperty } from 'arlas-api';
+import { HistogramUtils } from 'arlas-d3';
 import { ComputeConfig, validProcess } from 'arlas-web-contributors';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { METRIC_TYPES } from '../../services/collection-service/collection.service';
+import { CollectionField, GroupCollectionItem } from '../../services/collection-service/models';
+import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toNumericOrDateOrKeywordOrTextObs } from '../../services/collection-service/tools';
 /**
  * These are wrappers above existing FormGroup and FormControl in order to add a custom behavior.
  * The goal is to have a full model-driven form without putting (or duplicating) the logic

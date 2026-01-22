@@ -16,10 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 import { AbstractControl } from '@angular/forms';
-import { ConfigFormGroup, ConfigFormControl, ControlOptionalParams } from '@shared/models/config-form';
+import { ConfigFormControl, ConfigFormGroup, ControlOptionalParams } from '@shared/models/config-form';
 import { Observable } from 'rxjs';
-import { CollectionField } from '@services/collection-service/models';
+import { CollectionField } from '../../services/collection-service/models';
+
 export class CollectionConfigFormGroup extends ConfigFormGroup {
   public collection: string;
   public collectionFieldsObs: Observable<Array<CollectionField>>;

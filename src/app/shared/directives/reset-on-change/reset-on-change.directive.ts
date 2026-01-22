@@ -16,15 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Directive, ElementRef, Input, OnInit, Optional, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, Input, OnDestroy, OnInit, Optional } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatSelect } from '@angular/material/select';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { NGXLogger } from 'ngx-logger';
 import { ConfigFormControl } from '@shared-models/config-form';
-import { MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
+import { DefaultValuesService } from '../../../services/default-values/default-values.service';
 
 /**
  * Reset the dependants fields when the directive component value changes

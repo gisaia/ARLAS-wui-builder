@@ -16,19 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { AsyncPipe } from '@angular/common';
 import { AfterViewInit, Component, DestroyRef, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormField } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
-import { MultipleSelectFormControl } from '@shared-models/config-form';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ReplaySubject, take } from 'rxjs';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { AsyncPipe } from '@angular/common';
-import { ArlasColorService } from 'arlas-web-components';
-import { CollectionService } from '@services/collection-service/collection.service';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { TranslateModule } from '@ngx-translate/core';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { MultipleSelectFormControl, SelectOption } from '@shared-models/config-form';
+import { ArlasColorService } from 'arlas-web-components';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { ReplaySubject, take } from 'rxjs';
 
 @Component({
     selector: 'arlas-multi-select-search',
@@ -52,7 +52,7 @@ export class MultiSelectSearchComponent implements OnInit, AfterViewInit {
   public selectSearchFilterFc = new FormControl();
   public selectMultiFc = new FormControl();
   private readonly _destroyRef = inject(DestroyRef);
-  public filteredSyncOption = new ReplaySubject<any[]>(1);
+  public filteredSyncOption = new ReplaySubject<SelectOption[]>(1);
   private readonly colorService = inject(ArlasColorService);
   private readonly collectionService = inject(CollectionService);
   @ViewChild('multiSelect', { static: true }) public multiSelect: MatSelect;
