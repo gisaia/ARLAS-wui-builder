@@ -16,8 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { DefaultValuesService } from '../../../services/default-values/default-values.service';
 
 @Component({
     selector: 'arlas-color-picker-wrapper',
@@ -25,7 +25,7 @@ import { DefaultValuesService } from '@services/default-values/default-values.se
     styleUrls: ['./color-picker-wrapper.component.scss'],
     standalone: false
 })
-export class ColorPickerWrapperComponent implements OnInit, OnDestroy {
+export class ColorPickerWrapperComponent implements OnDestroy {
 
   @Input() public value: string;
   @Output() private setValue = new EventEmitter<string>();
@@ -33,9 +33,6 @@ export class ColorPickerWrapperComponent implements OnInit, OnDestroy {
   public constructor(
     private defaultValuService: DefaultValuesService
   ) { }
-
-  public ngOnInit() {
-  }
 
   public ngOnDestroy() {
     this.value = null;

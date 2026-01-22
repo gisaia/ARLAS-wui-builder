@@ -33,7 +33,7 @@ import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { SharedModule } from '@shared/shared.module';
-import { GetFieldDisplayModule } from 'arlas-web-components';
+import { GetFieldDisplayNamePipe } from 'arlas-web-components';
 import { filter, first } from 'rxjs';
 
 @Component({
@@ -41,7 +41,7 @@ import { filter, first } from 'rxjs';
     imports: [
         TranslateModule,
         SharedModule,
-        GetFieldDisplayModule
+        GetFieldDisplayNamePipe
     ],
     templateUrl: './manage-visualisation.component.html',
     styleUrl: './manage-visualisation.component.scss'

@@ -26,17 +26,17 @@ import { AbstractControl, FormArray } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { TranslateService } from '@ngx-translate/core';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { NUMERIC_TYPES } from '@services/collection-service/tools';
+import { Expression } from 'arlas-api';
+import { ArlasColorService } from 'arlas-web-components';
+import { firstValueFrom } from 'rxjs';
+import { CollectionService } from '../services/collection-service/collection.service';
+import { NUMERIC_TYPES } from '../services/collection-service/tools';
 import {
   AnalyticComponentResultListInputConfig,
   ContributorConfig,
   DataGroupInputConfig
-} from '@services/main-form-manager/models-config';
-import { ImportElement, importElements } from '@services/main-form-manager/tools';
-import { Expression } from 'arlas-api';
-import { ArlasColorService } from 'arlas-web-components';
-import { firstValueFrom, takeLast } from 'rxjs';
+} from '../services/main-form-manager/models-config';
+import { ImportElement, importElements } from '../services/main-form-manager/tools';
 
 interface ResultListConfigFeederOptions {
     widgetData: ResultlistConfigForm;

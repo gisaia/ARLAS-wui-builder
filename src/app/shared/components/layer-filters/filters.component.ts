@@ -19,6 +19,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import {
   MapFilterFormGroup, MapLayerFormBuilderService, MapLayerFormGroup
 } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
@@ -26,11 +27,10 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { ConfigFormGroup } from '@shared-models/config-form';
 import { camelize } from '@utils/tools';
-import { Subscription } from 'rxjs';
-import { DialogFilterComponent } from '../dialog-filter/dialog-filter.component';
-import { LAYER_MODE } from '../edit-layer/models';
-import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { LegendService } from 'arlas-map';
+import { Subscription } from 'rxjs';
+import { DialogFilterComponent } from '../../../modules/map-config/components/dialog-filter/dialog-filter.component';
+import { LAYER_MODE } from '../../../modules/map-config/components/edit-layer/models';
 
 
 export interface Layer {
@@ -45,7 +45,7 @@ export interface Layer {
     styleUrls: ['./filters.component.scss'],
     standalone: false
 })
-export class FiltersComponent implements OnInit, OnDestroy {
+export class LayerFiltersComponent implements OnInit, OnDestroy {
   @Input() public layerFg: MapLayerFormGroup;
 
   public filtersFa: FormArray;
@@ -56,8 +56,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
   public constructor(
     public dialog: MatDialog,
     private readonly mainFormService: MainFormService,
-    private readonly mapLayerFormBuilder: MapLayerFormBuilderService,
-    private readonly legendService: LegendService
+    private readonly mapLayerFormBuilder: MapLayerFormBuilderService
   ) { }
 
   public ngOnInit() {

@@ -3,7 +3,7 @@
   "version": "27.2.0-dev",
   "scripts": {
     "ng": "ng",
-    "postinstall": "patch-package --patch-dir ./patches && patch-package --patch-dir ./node_modules/arlas-web-core/patches && patch-package --patch-dir ./node_modules/arlas-d3/patches",
+    "postinstall": "patch-package --patch-dir ./node_modules/arlas-web-core/patches && patch-package --patch-dir ./node_modules/arlas-d3/patches",
     "start": "ng serve",
     "start:iam": "ng serve --ssl --ssl-cert=$EXPLO_SSL_CERT --ssl-key=$EXPLO_SSL_KEY",
     "build": "ng build --configuration production --aot --base-href='$ARLAS_BUILDER_BASE_HREF/'",
@@ -44,9 +44,9 @@
     "ngx-color-picker": "^20.1.1",
     "ngx-logger": "^5.0.12",
     "ngx-mat-select-search": "^8.0.0",
-    "ngx-spinner": "^17.0.0",
+    "ngx-spinner": "^19.0.0",
     "patch-package": "^6.4.7",
-    "rxjs": "~7.4.0",
+    "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "uuid": "^9.0.0",
     "zone.js": "^0.15.1"
@@ -62,7 +62,7 @@
     "@angular/compiler-cli": "^20.3.16",
     "@angular/language-service": "^20.3.16",
     "@colsen1991/ngx-translate-extract-marker": "^3.0.1",
-    "@vendure/ngx-translate-extract": "^9.3.0",
+    "@vendure/ngx-translate-extract": "^10.1.2",
     "@ngneat/spectator": "~9.0.0",
     "@stylistic/eslint-plugin": "^5.6.1",
     "@types/jasmine": "~3.10.0",
@@ -87,8 +87,5 @@
     "ts-node": "~10.4.0",
     "typescript": "5.9.3",
     "webpack-bundle-analyzer": "^4.6.1"
-  },
-  "resolutions": {
-    "@babel/preset-env": "7.5.5"
   }
 }

@@ -18,17 +18,16 @@
  */
 import { NgModule } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
 import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
+import { TranslatePipe } from '@ngx-translate/core';
+import { PaletteGradientPipe } from '@shared/pipes/palette-gradien.pipe';
 import { SharedModule } from '@shared/shared.module';
 import {
-  AbstractArlasMapService,
-  ArlasMapFrameworkService,
-  ArlasMapModule,
-  BasemapService,
-  LegendService
+  AbstractArlasMapService, ArlasMapFrameworkService, ArlasMapModule, BasemapService, LayerIdToName, LegendService
 } from 'arlas-map';
-
-import { GetCollectionDisplayModule } from 'arlas-web-components';
+import { ArlasMaplibreService, ArlasMapService, MaplibreBasemapService, MaplibreLegendService } from 'arlas-maplibre';
+import { GetCollectionDisplayNamePipe } from 'arlas-web-components';
 import { BasemapsComponent } from './components/basemaps/basemaps.component';
 import { DialogColorTableComponent } from './components/dialog-color-table/dialog-color-table.component';
 import { DialogFilterComponent } from './components/dialog-filter/dialog-filter.component';
@@ -42,8 +41,6 @@ import { PreviewComponent } from './components/preview/preview.component';
 import { VisualisationsComponent } from './components/visualisations/visualisations.component';
 import { MapConfigRoutingModule } from './map-config-routing.module';
 import { MapConfigComponent } from './map-config.component';
-import { ArlasMaplibreService, ArlasMapService, MaplibreBasemapService, MaplibreLegendService } from 'arlas-maplibre';
-import { PaletteGradientPipe } from '@shared/pipes/palette-gradien.pipe';
 
 @NgModule({
   declarations: [
@@ -64,8 +61,11 @@ import { PaletteGradientPipe } from '@shared/pipes/palette-gradien.pipe';
     MapConfigRoutingModule,
     ArlasMapModule,
     SharedModule,
-    GetCollectionDisplayModule,
-    PaletteGradientPipe
+    GetCollectionDisplayNamePipe,
+    PaletteGradientPipe,
+    LayerIdToName,
+    MatTableModule,
+    TranslatePipe
   ],
   providers: [
     ConfirmExitGuard,

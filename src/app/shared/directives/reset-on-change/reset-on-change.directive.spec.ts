@@ -1,6 +1,6 @@
+import { SpectatorDirective, createDirectiveFactory } from '@ngneat/spectator';
+import { DefaultValuesService } from '../../../services/default-values/default-values.service';
 import { ResetOnChangeDirective } from './reset-on-change.directive';
-import { SpectatorDirective, createDirectiveFactory, mockProvider } from '@ngneat/spectator';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 describe('ResetOnChangeDirective', () => {
   let spectator: SpectatorDirective<ResetOnChangeDirective>;

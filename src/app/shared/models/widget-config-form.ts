@@ -21,7 +21,7 @@ import { AbstractControl } from '@angular/forms';
 import { HiddenFormControl } from './config-form';
 import { CollectionConfigFormGroup } from './collection-config-form';
 import { v4 as uuidv4 } from 'uuid';
-import { ShortcutsConfig, WidgetUsage } from '@services/main-form-manager/models-config';
+import { ShortcutsConfig, WidgetUsage } from '../../services/main-form-manager/models-config';
 
 export class WidgetConfigFormGroup extends CollectionConfigFormGroup {
   public usage: WidgetUsage = 'analytics';

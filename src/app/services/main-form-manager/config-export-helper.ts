@@ -60,8 +60,7 @@ import {
 import { CollectionReferenceDescription, Expression } from 'arlas-api';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api/api';
 import { BasemapStyle, SCROLLABLE_ARLAS_ID, VisualisationSetConfig } from 'arlas-map';
-import { ArlasColorService } from 'arlas-web-components';
-import { DescribedUrl } from 'arlas-web-components/lib/components/results/utils/results.utils';
+import { ArlasColorService, DescribedUrl } from 'arlas-web-components';
 import { ColorConfig, ExtentFilterGeometry, FieldsConfiguration, getSourceName, LayerSourceConfig } from 'arlas-web-contributors';
 import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
