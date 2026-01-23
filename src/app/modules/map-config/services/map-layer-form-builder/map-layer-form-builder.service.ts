@@ -786,6 +786,17 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         ).withDependsOn(() => [this.enableExtrusion])
           .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value ))
           .withTitle(marker('Extrusion')),
+        extrusionPonderation: propertySelectorFormBuilder.build(
+          PROPERTY_TYPE.number,
+          'extrusionPonderation',
+          [
+            PROPERTY_SELECTOR_SOURCE.fix_slider
+          ],
+          isAggregated,
+          collection,
+          marker('ponderation'),
+        ).withDependsOn(() => [this.enableExtrusion])
+          .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value )),
         extrusionOpacity: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
           'opacity',
@@ -1122,6 +1133,11 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   public get extrusionValue() {
     return this.styleStep.get('extrusionValue') as SlideToggleFormControl;
   }
+
+  public get extrusionPonderation(){
+    return this.styleStep.get('extrusionPonderation') as SlideToggleFormControl;
+  }
+
   public get extrusionOpacity() {
     return this.styleStep.get('extrusionOpacity') as SlideToggleFormControl;
   }

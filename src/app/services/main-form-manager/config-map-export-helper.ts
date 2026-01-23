@@ -32,7 +32,8 @@ import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
 import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
 import { ConfigExportHelper } from './config-export-helper';
 import {
-  ExternalEvent,  FILLSTROKE_LAYER_PREFIX,
+  ExpressionValue,
+  ExternalEvent, FILLSTROKE_LAYER_PREFIX,
   HOVER_LAYER_PREFIX,
   Layer,
   Layout,
@@ -208,8 +209,10 @@ export class ConfigMapExportHelper {
     }
 
     if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.fill.toString() && modeValues.styleStep.enableExtrusion) {
+      const heightExpression =  this.getMapProperty(modeValues.styleStep.extrusionValue, mode, colorService, taggableFields);
+      const height = this.applyPonderationValue(heightExpression, modeValues.styleStep.extrusionPonderation);
       metadata.extrusion = {
-        height: this.getMapProperty(modeValues.styleStep.extrusionValue, mode, colorService, taggableFields),
+        height: height,
         color: this.getMapProperty(modeValues.styleStep.colorFg, mode, colorService, taggableFields),
         opacity: this.getMapProperty(modeValues.styleStep.extrusionOpacity, mode, colorService, taggableFields)
       };
@@ -443,6 +446,19 @@ export class ConfigMapExportHelper {
       }
     }
     return filterLayer;
+  }
+
+  /**
+   * Add a ponderation value to an style expression.
+   * @param value
+   * @param fgValues
+   */
+  public static applyPonderationValue(value: ExpressionValue, fgValues: any){
+    const ponderation = +fgValues.propertyFixSlider;
+    if(ponderation > 0){
+      return ['*', value, ponderation] as ExpressionValue;
+    }
+    return value;
   }
 
   public static getMapProperty(fgValues: any, mode: LAYER_MODE, colorService: ArlasColorService, taggableFields?: Set<string>) {

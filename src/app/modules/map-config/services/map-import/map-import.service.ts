@@ -72,6 +72,7 @@ export class MapImportService {
     } else if (inputValues instanceof Array) {
       if (inputValues.length === 2) {
         let field = (inputValues as Array<string>)[1];
+        console.log(field);
         // To deal with old arlas15 config
         if (!field.endsWith('_arlas__color') && field.endsWith('_color')) {
           if (layerSource.provided_fields.filter((pf: ColorConfig) => pf.color.replace(/\./g, '_') === field).length === 1) {
@@ -477,8 +478,16 @@ export class MapImportService {
       if(!!layer.metadata && !!(layer.metadata as LayerMetadata).extrusion) {
         values.styleStep.enableExtrusion = true;
         values.styleStep.extrusionValue = {};
-        this.importPropertySelector((layer.metadata as LayerMetadata).extrusion.height, values.styleStep.extrusionValue,
+
+        const {extrusionHeightValue, ponderation} = this.extractPonderation(layer);
+        this.importPropertySelector(extrusionHeightValue, values.styleStep.extrusionValue,
           PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+
+        values.styleStep.extrusionPonderation = {};
+        if(ponderation !== undefined){
+          this.importPropertySelector(ponderation, values.styleStep.extrusionPonderation,
+            PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+        }
 
         values.styleStep.extrusionOpacity = {};
         this.importPropertySelector((layer.metadata as LayerMetadata).extrusion.opacity, values.styleStep.extrusionOpacity,
@@ -558,6 +567,24 @@ export class MapImportService {
 
 
     return layerFg;
+  }
+
+  /**
+   * Extract a ponderation expression from a style expression
+   * @param layer
+   * @private
+   */
+  private static extractPonderation(layer){
+    let extrusionHeightValue = (layer.metadata as LayerMetadata).extrusion.height;
+    let ponderation: number;
+    const expression = (layer.metadata as LayerMetadata).extrusion.height as Array<string | Array<string> | number>;
+    const isPonderationExpression = Array.isArray(extrusionHeightValue) &&
+      expression[0] === '*' && typeof expression[expression.length -1] === 'number';
+    if(isPonderationExpression) {
+      extrusionHeightValue = expression[1];
+      ponderation = expression[expression.length -1] as number;
+    }
+    return {extrusionHeightValue, ponderation};
   }
 
 
