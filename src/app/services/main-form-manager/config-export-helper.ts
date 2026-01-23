@@ -421,6 +421,14 @@ export class ConfigExportHelper {
       this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.radiusFg, layerValues.mode);
     }
 
+    if (!!modeValues.styleStep.extrusionOpacity) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.extrusionOpacity, layerValues.mode);
+    }
+
+    if (!!modeValues.styleStep.extrusionValue) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.extrusionValue, layerValues.mode);
+    }
+
     if (!!modeValues.styleStep.strokeColorFg) {
       this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.strokeColorFg, layerValues.mode);
     }
@@ -613,6 +621,13 @@ export class ConfigExportHelper {
     return mapComponent;
   }
 
+  /**
+   * Metadata to be added if it is used in the layers for display. In this case, this field is added to the call made to ARLAS.s
+   * @param layerSource
+   * @param layerValues
+   * @param mode
+   * @private
+   */
   private static declareFieldsToLayerSource(layerSource: LayerSourceConfig, layerValues: any, mode: LAYER_MODE) {
     switch (layerValues.propertySource) {
       case PROPERTY_SELECTOR_SOURCE.fix_color:
