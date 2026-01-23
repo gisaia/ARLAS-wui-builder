@@ -72,7 +72,6 @@ export class MapImportService {
     } else if (inputValues instanceof Array) {
       if (inputValues.length === 2) {
         let field = (inputValues as Array<string>)[1];
-        console.log(field);
         // To deal with old arlas15 config
         if (!field.endsWith('_arlas__color') && field.endsWith('_color')) {
           if (layerSource.provided_fields.filter((pf: ColorConfig) => pf.color.replace(/\./g, '_') === field).length === 1) {
@@ -475,22 +474,22 @@ export class MapImportService {
           PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
       }
 
-      if(!!layer.metadata && !!(layer.metadata as LayerMetadata).extrusion) {
+      if(!!layer.metadata && !!layer.metadata.extrusion) {
         values.styleStep.enableExtrusion = true;
         values.styleStep.extrusionValue = {};
 
-        const {extrusionHeightValue, ponderation} = this.extractPonderation(layer);
+        const {extrusionHeightValue, exaggeration} = this.extractExaggeration(layer);
         this.importPropertySelector(extrusionHeightValue, values.styleStep.extrusionValue,
           PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
-        values.styleStep.extrusionPonderation = {};
-        if(ponderation !== undefined){
-          this.importPropertySelector(ponderation, values.styleStep.extrusionPonderation,
+        values.styleStep.extrusionExaggeration = {};
+        if(exaggeration !== undefined){
+          this.importPropertySelector(exaggeration, values.styleStep.extrusionExaggeration,
             PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
         }
 
         values.styleStep.extrusionOpacity = {};
-        this.importPropertySelector((layer.metadata as LayerMetadata).extrusion.opacity, values.styleStep.extrusionOpacity,
+        this.importPropertySelector(layer.metadata.extrusion.opacity, values.styleStep.extrusionOpacity,
           PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
       }
@@ -570,21 +569,21 @@ export class MapImportService {
   }
 
   /**
-   * Extract a ponderation expression from a style expression
+   * Extract an exaggeration expression from a style expression
    * @param layer
    * @private
    */
-  private static extractPonderation(layer){
+  private static extractExaggeration(layer){
     let extrusionHeightValue = (layer.metadata as LayerMetadata).extrusion.height;
-    let ponderation: number;
+    let exaggeration = 1;
     const expression = (layer.metadata as LayerMetadata).extrusion.height as Array<string | Array<string> | number>;
-    const isPonderationExpression = Array.isArray(extrusionHeightValue) &&
-      expression[0] === '*' && typeof expression[expression.length -1] === 'number';
-    if(isPonderationExpression) {
-      extrusionHeightValue = expression[1];
-      ponderation = expression[expression.length -1] as number;
+    const isExaggerationExpression = Array.isArray(extrusionHeightValue) &&
+      expression.at(0) === '*' && typeof expression.at(-1) === 'number';
+    if(isExaggerationExpression) {
+      extrusionHeightValue = expression.at(1);
+      exaggeration = (expression.at( -1)) as number;
     }
-    return {extrusionHeightValue, ponderation};
+    return {extrusionHeightValue, exaggeration};
   }
 
 

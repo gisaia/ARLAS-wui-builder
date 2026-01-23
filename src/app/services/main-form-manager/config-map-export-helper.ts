@@ -25,7 +25,7 @@ import { ARLAS_ID } from '@services/main-form/main-form.service';
 import { CIRCLE_HEATMAP_RADIUS_GRANULARITY } from '@shared-models/circle-heat-map-radius-granularity';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { InterpolatedProperty, ModesValues } from '@shared/interfaces/config-map.interfaces';
-import { FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID } from 'arlas-map';
+import { FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID, EXTRUSION_LAYER_PREFIX} from 'arlas-map';
 import { ArlasColorService } from 'arlas-web-components';
 import { LayerSourceConfig } from 'arlas-web-contributors';
 import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
@@ -42,9 +42,6 @@ import {
   PaintValue,
   SELECT_LAYER_PREFIX
 } from './models-map-config';
-
-import {EXTRUSION_LAYER_PREFIX} from 'arlas-map';
-
 export enum VISIBILITY {
   visible = 'visible',
   none = 'none'
@@ -159,8 +156,6 @@ export class ConfigMapExportHelper {
 
         return [layer, l[1]];
       });
-
-
     const mapConfig: MapConfig = {
       layers: Array.from(new Set(
         layers.map(l => l[0])
@@ -210,7 +205,7 @@ export class ConfigMapExportHelper {
 
     if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.fill.toString() && modeValues.styleStep.enableExtrusion) {
       const heightExpression =  this.getMapProperty(modeValues.styleStep.extrusionValue, mode, colorService, taggableFields);
-      const height = this.applyPonderationValue(heightExpression, modeValues.styleStep.extrusionPonderation);
+      const height = this.applyExaggeration(heightExpression, modeValues.styleStep.extrusionExaggeration);
       metadata.extrusion = {
         height: height,
         color: this.getMapProperty(modeValues.styleStep.colorFg, mode, colorService, taggableFields),
@@ -449,14 +444,14 @@ export class ConfigMapExportHelper {
   }
 
   /**
-   * Add a ponderation value to an style expression.
+   * Add a exaggeration value to an style expression.
    * @param value
    * @param fgValues
    */
-  public static applyPonderationValue(value: ExpressionValue, fgValues: any){
-    const ponderation = +fgValues.propertyFixSlider;
-    if(ponderation > 0){
-      return ['*', value, ponderation] as ExpressionValue;
+  public static applyExaggeration(value: ExpressionValue, fgValues: any){
+    const exaggeration = +fgValues.propertyFixSlider;
+    if(exaggeration > 0){
+      return ['*', value, exaggeration] as ExpressionValue;
     }
     return value;
   }
