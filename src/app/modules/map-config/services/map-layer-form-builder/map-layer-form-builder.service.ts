@@ -778,7 +778,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           PROPERTY_TYPE.number,
           'extrusionValue',
           [
-            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.generated
+            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.provided_field_for_feature
           ],
           isAggregated,
           collection,
@@ -805,7 +805,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           ],
           isAggregated,
           collection,
-          marker('opacity description'),
+          marker('extrusion opacity description'),
         ).withDependsOn(() => [this.enableExtrusion])
           .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value )),
         strokeColorFg: propertySelectorFormBuilder.build(
