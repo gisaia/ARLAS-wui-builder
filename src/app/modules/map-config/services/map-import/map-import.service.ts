@@ -696,6 +696,7 @@ export class MapImportService {
     }
 
     this.importBasemap(defaultBasemap);
+    this.importTerrain(mapgl);
   }
 
 
@@ -778,9 +779,36 @@ export class MapImportService {
       {
         value: defaultBasemap.name,
         control: basemapFg.customControls.default
-      }
+      },
     ]);
     return basemapFg;
+  }
+
+  private importTerrain(mapgl: MapglComponentConfig) {
+    const basemapFg = this.mainFormService.mapConfig.getBasemapsFg();
+
+    if (mapgl.input.terrain) {
+      importElements([
+        {
+          value: mapgl.input.terrain.enable,
+          control: basemapFg.customControls.terrain.enable
+        },
+        {
+          value: mapgl.input.terrain.exaggeration ?? 1,
+          control: basemapFg.customControls.terrain.exaggeration
+        }
+      ]);
+
+      // Import the terrain source only if there is one defined to not override the settings one
+      if (mapgl.input.terrain.source) {
+        importElements([
+          {
+            value: mapgl.input.terrain.source,
+            control: basemapFg.customControls.terrain.source
+          }
+        ]);
+      }
+    }
   }
 
   private importVisualisations(visualisationSet: VisualisationSetConfig, visuId: number) {

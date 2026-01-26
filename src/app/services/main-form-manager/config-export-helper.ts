@@ -81,8 +81,6 @@ import {
   DataGroupInputConfig,
   JSONPATH_COUNT,
   JSONPATH_METRIC,
-  MapComponentInputConfig,
-  MapComponentInputMapLayersConfig,
   MapglComponentConfig,
   SEARCH_TYPE,
   SwimlaneConfig,
@@ -457,6 +455,7 @@ export class ConfigExportHelper {
     layerSource.source = getSourceName(layerSource) + '-' + layerFg.value.collection;
     return layerSource;
   }
+
   public static getMapContributors(
     mapConfigGlobal: MapGlobalFormGroup,
     mapConfigLayers: FormArray,
@@ -522,7 +521,7 @@ export class ConfigExportHelper {
     mapConfigLayers: FormArray,
     mapConfigVisualisations: FormArray,
     mapConfigBasemaps: MapBasemapFormGroup,
-    arlasId?,
+    arlasId?: string,
     enableByDefault?: boolean): MapglComponentConfig {
 
     const customControls = mapConfigGlobal.customControls;
@@ -580,12 +579,25 @@ export class ConfigExportHelper {
     if (!defaultBasemap) {
       defaultBasemap = basemaps[0];
     }
+
+    let terrainSource; let terrainExaggeration;
+    const terrainEnabled = mapConfigBasemaps.customControls.terrain.enable.value;
+    if (terrainEnabled) {
+      terrainSource = mapConfigBasemaps.customControls.terrain.source.value;
+      terrainExaggeration = +mapConfigBasemaps.customControls.terrain.exaggeration.value;
+    }
+
     const mapComponent: MapglComponentConfig = {
       allowMapExtend: customControls.allowMapExtend.value,
       nbVerticesLimit: customControls.unmanagedFields.nbVerticesLimit.value,
       input: {
         defaultBasemapStyle: defaultBasemap,
         basemapStyles: basemaps,
+        terrain: {
+          enable: mapConfigBasemaps.customControls.terrain.enable.value,
+          source: terrainSource,
+          exaggeration: terrainExaggeration
+        },
         margePanForLoad: +customControls.margePanForLoad.value,
         margePanForTest: +customControls.margePanForTest.value,
         initZoom: customControls.initZoom.value,
@@ -605,9 +617,9 @@ export class ConfigExportHelper {
             onHover: layersHoverIds,
           },
           externalEventLayers: new Array<{ id: string; on: string; }>()
-        } as MapComponentInputMapLayersConfig,
+        },
         visualisations_sets: visualisationsSets
-      } as MapComponentInputConfig
+      }
     };
 
     return mapComponent;

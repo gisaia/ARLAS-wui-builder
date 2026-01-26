@@ -383,6 +383,12 @@ export interface MapComponentInputConfig {
   idFeatureField: string;
   mapLayers: MapComponentInputMapLayersConfig;
   visualisations_sets: Array<VisualisationSetConfig>;
+  /** Configuration to display terrain elevation */
+  terrain: {
+    enable: boolean;
+    source?: maplibregl.RasterDEMSourceSpecification;
+    exaggeration?: number;
+  };
 }
 
 export interface MapComponentInputMapLayersConfig {

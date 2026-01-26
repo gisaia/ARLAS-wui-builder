@@ -56,6 +56,13 @@ basemaps: [
     {"name":"Light Protomaps","url":"https://storage.googleapis.com/gisaia-public/protomaps/styles/light.json","image":"https://storage.googleapis.com/gisaia-public/protomaps/quicklooks/light.png", "type": "protomap"},
     {"name":"Dark Protomaps","url":"https://storage.googleapis.com/gisaia-public/protomaps/styles/dark.json","image":"https://storage.googleapis.com/gisaia-public/protomaps/quicklooks/dark.png", "type": "protomap"}
   ]
+
+terrain:
+  type: 'raster-dem'
+  tiles: ['https://tiles.mapterhorn.com/{z}/{x}/{y}.webp']
+  encoding: terrarium
+  tileSize: 512
+
 tab_name: "ARLAS-wui-builder Dev"
 external_node_page: true
 external_node_schemas:
