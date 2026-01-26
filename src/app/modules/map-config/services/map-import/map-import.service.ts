@@ -84,13 +84,18 @@ export class MapImportService {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.generated;
           propertySelectorValues.propertyGeneratedFieldCtrl = layerSource.colors_from_fields
             .find(f => f.replace(/\./g, '_') === this.removeLastcolor(field));
-        } else {
+        } else if(layerSource.provided_fields.length > 0) {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_color;
           const colorProvidedField = layerSource.provided_fields.find((pf: ColorConfig) => pf.color.replace(/\./g, '_') === field);
           propertySelectorValues.propertyProvidedColorFieldCtrl = colorProvidedField.color;
           if (inputValues.length === 2) {
             propertySelectorValues.propertyProvidedColorLabelCtrl = colorProvidedField.label;
           }
+        }  else {
+          propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_field_for_feature;
+          propertySelectorValues.propertyProvidedFieldFeatureFg = {};
+          propertySelectorValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl = field;
+
         }
       } else if (inputValues[0] === 'match') {
         this.importPropertySelectorManual(inputValues, propertySelectorValues, layerSource);
