@@ -1,25 +1,24 @@
 <arlas-map #map
-           [dataSources]="mapDataSources"
-           [redrawSource]="mapRedrawSources"
-           [defaultBasemapStyle]="mapComponentConfig?.defaultBasemapStyle"
-           [basemapStyles]="mapComponentConfig?.basemapStyles"
-           [margePanForLoad]="mapComponentConfig?.margePanForLoad"
-           [margePanForTest]="mapComponentConfig?.margePanForTest"
-           [initCenter]="mapComponentConfig?.initCenter"
-           [drawData]="$any(mainMapContributor?.geojsondraw)"
-           [initZoom]="mapComponentConfig?.initZoom"
-           [displayScale]="true"
-           [maxWidthScale]="mapComponentConfig?.maxWidthScale"
-           [mapLayers]="mapComponentConfig?.mapLayers"
-           [mapSources]="mapComponentConfig?.mapSources"
-           [drawButtonEnabled]="false"
-           [visualisationSetsConfig]="mapComponentConfig?.visualisations_sets" [legendUpdater]="mapLegendUpdater"
-           [visibilityUpdater]="mapVisibilityUpdater"
-           [preserveDrawingBuffer]="true"
-           [enableGlobe]="mapComponentConfig?.enableGlobe"
-           (visualisations)="changeVisualisation($event)"
-           (onAoiChanged)="onChangeAoi($event)"
-           (onMove)="onMove($event)">
+    [dataSources]="mapDataSources"
+    [redrawSource]="mapRedrawSources"
+    [defaultBasemapStyle]="mapComponentConfig?.defaultBasemapStyle"
+    [basemapStyles]="mapComponentConfig?.basemapStyles"
+    [margePanForLoad]="mapComponentConfig?.margePanForLoad"
+    [margePanForTest]="mapComponentConfig?.margePanForTest"
+    [initCenter]="mapComponentConfig?.initCenter"
+    [drawData]="$any(mainMapContributor?.geojsondraw)"
+    [initZoom]="mapComponentConfig?.initZoom"
+    [displayScale]="true"
+    [mapLayers]="mapComponentConfig?.mapLayers"
+    [drawButtonEnabled]="false"
+    [visualisationSetsConfig]="mapComponentConfig?.visualisations_sets" [legendUpdater]="mapLegendUpdater"
+    [visibilityUpdater]="mapVisibilityUpdater"
+    [preserveDrawingBuffer]="true"
+    [enableGlobe]="mapComponentConfig?.enableGlobe"
+    [terrain]="mapComponentConfig?.terrain"
+    (visualisations)="changeVisualisation($event)"
+    (onAoiChanged)="onChangeAoi($event)"
+    (onMove)="onMove($event)">
 </arlas-map>
 
 <button class="preview" mat-raised-button (click)="savePreview()"
@@ -31,3 +30,10 @@
 <button class="basemaps" matTooltipPosition="left" [matTooltip]="'Basemaps' | translate" (click)="mapComponent.showBasemapSwitcher()">
     <mat-icon>public</mat-icon>
 </button>
+
+@if (mapComponentConfig?.terrain?.enable) {
+    <button mat-icon-button class="terrain" matTooltipPosition="left"
+            [matTooltip]="(map.hasTerrain() ? 'Hide terrain' : 'Display terrain') | translate" (click)="map.toggleTerrain()">
+        <mat-icon>terrain</mat-icon>
+    </button>
+}

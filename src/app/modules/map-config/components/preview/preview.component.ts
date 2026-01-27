@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import { AfterViewInit, ChangeDetectorRef, Component, Inject, Input, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, computed, Inject, input, Input, OnDestroy, signal, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
@@ -25,6 +25,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
+import { MapComponentInputConfig } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { StartupService, ZONE_PREVIEW } from '@services/startup/startup.service';
 import { FeatureCollection, Geometry } from '@turf/helpers';
@@ -55,7 +56,7 @@ export interface MapglComponentInput {
 })
 export class PreviewComponent implements AfterViewInit, OnDestroy {
 
-  @Input() public mapComponentConfig: any;
+  @Input() public mapComponentConfig: MapComponentInputConfig;
   @Input() public mapglContributors: MapContributor[] = [];
   @ViewChild('map', { static: false }) public mapComponent: ArlasMapComponent<ArlasLayer, ArlasSource, MapOptions>;
 

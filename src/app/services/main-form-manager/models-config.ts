@@ -19,7 +19,7 @@
 
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { Aggregation, Expression } from 'arlas-api';
-import { BasemapStyle, VisualisationSetConfig } from 'arlas-map';
+import { BasemapStyle, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
 import { FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
 import { AnalyticsTabs, ZoomToDataStrategy } from 'arlas-wui-toolkit';
 import { Layer } from './models-map-config';
@@ -384,11 +384,7 @@ export interface MapComponentInputConfig {
   mapLayers: MapComponentInputMapLayersConfig;
   visualisations_sets: Array<VisualisationSetConfig>;
   /** Configuration to display terrain elevation */
-  terrain: {
-    enable: boolean;
-    source?: maplibregl.RasterDEMSourceSpecification;
-    exaggeration?: number;
-  };
+  terrain: TerrainConfiguration<maplibregl.RasterDEMSourceSpecification>;
 }
 
 export interface MapComponentInputMapLayersConfig {

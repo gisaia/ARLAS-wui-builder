@@ -62,7 +62,8 @@ arlas-map {
     top: 10px;
 }
 
-.basemaps {
+.basemaps,
+.terrain {
     border-radius: 4px;
     background-color: #fff;
     width: 30px;
@@ -73,7 +74,14 @@ arlas-map {
     cursor: pointer;
     position: absolute;
     right: 9px;
-    top: 250px;
     padding: 0;
     border-width: 0;
+}
+
+.basemaps {
+    top: 250px;
+}
+
+.terrain {
+    top: calc(250px + 40px);
 }
