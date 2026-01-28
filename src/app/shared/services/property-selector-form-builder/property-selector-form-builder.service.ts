@@ -367,8 +367,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
         ),
         propertyGeneratedFieldCtrl: new SelectFormControl(
           '',
-          marker(`Generated ${propertyName === 'extrusionValue' ? propertyName : 'color'} field`),
-          marker(`Generated ${propertyName === 'extrusionValue' ? propertyName : 'color'} source field description`),
+          marker(`Generated color field`),
+          marker(`Generated color source field description`),
           true,
           toKeywordOptionsObs(collectionFieldsObs),
           {
