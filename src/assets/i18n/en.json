@@ -355,7 +355,6 @@
 	"Dashed": "Dashed",
 	"Dotted": "Dotted",
 	"Interpolated source field description opacity": "",
-	"extrusionExaggeration" : "Exaggeration",
 	"ExtrusionExaggeration": "Exaggeration",
 	"property extrusionValue description provided field feature" : "Field",
 	"property extrusionValue description provided field feature description" : "The field that contains the extrusion values.",
