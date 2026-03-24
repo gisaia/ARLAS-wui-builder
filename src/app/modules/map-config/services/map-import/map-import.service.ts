@@ -84,13 +84,18 @@ export class MapImportService {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.generated;
           propertySelectorValues.propertyGeneratedFieldCtrl = layerSource.colors_from_fields
             .find(f => f.replace(/\./g, '_') === this.removeLastcolor(field));
-        } else {
+        } else if(layerSource.provided_fields.length > 0) {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_color;
           const colorProvidedField = layerSource.provided_fields.find((pf: ColorConfig) => pf.color.replace(/\./g, '_') === field);
           propertySelectorValues.propertyProvidedColorFieldCtrl = colorProvidedField.color;
           if (inputValues.length === 2) {
             propertySelectorValues.propertyProvidedColorLabelCtrl = colorProvidedField.label;
           }
+        }  else {
+          propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_field_for_feature;
+          propertySelectorValues.propertyProvidedFieldFeatureFg = {};
+          propertySelectorValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl = field;
+
         }
       } else if (inputValues[0] === 'match') {
         this.importPropertySelectorManual(inputValues, propertySelectorValues, layerSource);
@@ -472,6 +477,25 @@ export class MapImportService {
         values.styleStep.strokeOpacityFg = {};
         this.importPropertySelector((layer.metadata as LayerMetadata).stroke.opacity, values.styleStep.strokeOpacityFg,
           PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+      }
+
+      if(!!layer.metadata && !!layer.metadata.extrusion) {
+        values.styleStep.enableExtrusion = true;
+        values.styleStep.extrusionValue = {};
+
+        const {extrusionHeightValue, exaggeration} = this.extractExaggeration(layer);
+        this.importPropertySelector(extrusionHeightValue, values.styleStep.extrusionValue,
+          PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+
+        values.styleStep.extrusionExaggeration = {};
+        if(exaggeration !== undefined){
+          this.importPropertySelector(exaggeration, values.styleStep.extrusionExaggeration,
+            PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+        }
+
+        values.styleStep.extrusionOpacity = {};
+        this.importPropertySelector(layer.metadata.extrusion.opacity, values.styleStep.extrusionOpacity,
+          PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
       }
     }
@@ -547,6 +571,24 @@ export class MapImportService {
 
 
     return layerFg;
+  }
+
+  /**
+   * Extract an exaggeration expression from a style expression
+   * @param layer
+   * @private
+   */
+  private static extractExaggeration(layer){
+    let extrusionHeightValue = (layer.metadata as LayerMetadata).extrusion.height;
+    let exaggeration = 1;
+    const expression = (layer.metadata as LayerMetadata).extrusion.height as Array<string | Array<string> | number>;
+    const isExaggerationExpression = Array.isArray(extrusionHeightValue) &&
+      expression.at(0) === '*' && typeof expression.at(-1) === 'number';
+    if(isExaggerationExpression) {
+      extrusionHeightValue = expression.at(1);
+      exaggeration = (expression.at( -1)) as number;
+    }
+    return {extrusionHeightValue, exaggeration};
   }
 
 
