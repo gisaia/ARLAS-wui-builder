@@ -1,6 +1,6 @@
 # Change Log
 
-## [v27.1.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.1.3) (2025-12-16)
+## [v27.1.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.1.3) (2025-12-19)
 
 **New stuff:**
 
