@@ -112,7 +112,7 @@ body {
     right: calc(10% + 9px + 30px + 5px) !important;
   }
   .terrain {
-    top: calc(195px + 40px) !important;
+    top: calc(/** Basemap position */ 195px + /** Basemap icon + spacing */ 40px) !important;
   }
 
   .preview {

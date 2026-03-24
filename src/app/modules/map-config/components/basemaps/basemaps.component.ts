@@ -42,8 +42,8 @@ export class BasemapsComponent implements OnInit {
   public terrainFg: ConfigFormGroup;
 
   public constructor(
-    private settingsService: ArlasSettingsService,
-    private mainformService: MainFormService
+    private readonly settingsService: ArlasSettingsService,
+    private readonly mainformService: MainFormService
   ) {
     this.hasTerrain = !!(this.settingsService.getSettings() as ArlasBuilderSettings).terrain;
   }
@@ -61,7 +61,7 @@ export class BasemapsComponent implements OnInit {
     // Init list of basemap with a default if not defined
     let basemaps: Basemap[] = [];
     const settings: ArlasBuilderSettings = this.settingsService.settings;
-    if (!!settings.basemaps) {
+    if (settings.basemaps) {
       basemaps = settings.basemaps;
     } else {
       basemaps.push({
@@ -95,7 +95,7 @@ export class BasemapsComponent implements OnInit {
   }
 
   public toggleBasemap(event: MatCheckboxChange) {
-    this.basemaps.map(basemap => {
+    this.basemaps.forEach(basemap => {
       if (basemap.name === event.source.value) {
         basemap.checked = event.checked;
       }
@@ -103,7 +103,7 @@ export class BasemapsComponent implements OnInit {
     this.basemapFa.clear();
     const selectedBasemaps = this.basemaps.filter(b => b.checked === true);
     if (selectedBasemaps.length > 0) {
-      selectedBasemaps.map(b => this.basemapFa.push(
+      selectedBasemaps.forEach(b => this.basemapFa.push(
         new BasemapFormGroup(b.name, b.url, b.image, b.type)
       ));
     } else {
@@ -115,7 +115,7 @@ export class BasemapsComponent implements OnInit {
   }
 
   public setDefaultBasemap(event: MatRadioChange) {
-    this.basemaps.map(basemap => {
+    this.basemaps.forEach(basemap => {
       basemap.default = (basemap.name === event.value);
     });
     this.defaultBasemapFc.setValue(event.value);

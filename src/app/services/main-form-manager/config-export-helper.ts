@@ -59,7 +59,7 @@ import {
 } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 import { CollectionReferenceDescription, Expression } from 'arlas-api';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api/api';
-import { BasemapStyle, SCROLLABLE_ARLAS_ID, VisualisationSetConfig } from 'arlas-map';
+import { BasemapStyle, SCROLLABLE_ARLAS_ID, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
 import { ArlasColorService } from 'arlas-web-components';
 import { DescribedUrl } from 'arlas-web-components/lib/components/results/utils/results.utils';
 import { ColorConfig, ExtentFilterGeometry, FieldsConfiguration, getSourceName, LayerSourceConfig } from 'arlas-web-contributors';
@@ -580,11 +580,12 @@ export class ConfigExportHelper {
       defaultBasemap = basemaps[0];
     }
 
-    let terrainSource; let terrainExaggeration;
-    const terrainEnabled = mapConfigBasemaps.customControls.terrain.enable.value;
-    if (terrainEnabled) {
-      terrainSource = mapConfigBasemaps.customControls.terrain.source.value;
-      terrainExaggeration = +mapConfigBasemaps.customControls.terrain.exaggeration.value;
+    const terrain: TerrainConfiguration<maplibregl.RasterDEMSourceSpecification> = {
+      enable: mapConfigBasemaps.customControls.terrain.enable.value
+    };
+    if (terrain.enable) {
+      terrain.source = mapConfigBasemaps.customControls.terrain.source.value;
+      terrain.exaggeration = +mapConfigBasemaps.customControls.terrain.exaggeration.value;
     }
 
     const mapComponent: MapglComponentConfig = {
@@ -593,11 +594,7 @@ export class ConfigExportHelper {
       input: {
         defaultBasemapStyle: defaultBasemap,
         basemapStyles: basemaps,
-        terrain: {
-          enable: mapConfigBasemaps.customControls.terrain.enable.value,
-          source: terrainSource,
-          exaggeration: terrainExaggeration
-        },
+        terrain: terrain,
         margePanForLoad: +customControls.margePanForLoad.value,
         margePanForTest: +customControls.margePanForTest.value,
         initZoom: customControls.initZoom.value,

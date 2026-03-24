@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import { AfterViewInit, ChangeDetectorRef, Component, computed, Inject, input, Input, OnDestroy, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, Input, OnDestroy, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
