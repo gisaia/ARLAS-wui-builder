@@ -114,6 +114,7 @@ set_default_env_variable ARLAS_ENABLE_ADVANCED_FEATURES "false"
 set_default_env_variable ARLAS_BUILDER_APP_PATH ""
 set_default_env_variable ARLAS_BUILDER_BASE_HREF ""
 set_default_env_variable ARLAS_TAB_NAME "ARLAS-wui-builder"
+set_default_env_variable ARLAS_TERRAIN "{}"
 
 # All variables that need to be substituted in settings.yaml
 SETTINGS_VARS="ARLAS_BASEMAPS
@@ -155,7 +156,8 @@ SETTINGS_VARS="ARLAS_BASEMAPS
   ARLAS_EXTERNAL_NODE_SCHEMAS
   ARLAS_USE_TIME_FILTER
   ARLAS_ENABLE_ADVANCED_FEATURES
-  ARLAS_TAB_NAME"
+  ARLAS_TAB_NAME
+  ARLAS_TERRAIN"
 
 SETTINGS_SUBST=$(printf '$%s ' $SETTINGS_VARS)
 envsubst "$SETTINGS_SUBST" < /usr/share/nginx/html/settings.yaml > /usr/share/nginx/html/settings.yaml.tmp

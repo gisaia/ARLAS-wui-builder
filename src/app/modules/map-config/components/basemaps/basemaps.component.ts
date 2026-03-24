@@ -20,10 +20,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatRadioChange } from '@angular/material/radio';
+import { BasemapFormGroup, MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { HiddenFormControl } from '@shared-models/config-form';
+import { ArlasBuilderSettings, Basemap } from '@services/startup/startup.service';
+import { ConfigFormGroup, HiddenFormControl } from '@shared-models/config-form';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
-import { MapBasemapFormGroup, BasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 
 @Component({
   selector: 'arlas-basemaps',
@@ -36,14 +37,21 @@ export class BasemapsComponent implements OnInit {
   public basemaps: Basemap[] = [];
   public defaultBasemapFc: HiddenFormControl;
 
+  /** Whether to allow the user to display terrain */
+  public hasTerrain: boolean;
+  public terrainFg: ConfigFormGroup;
+
   public constructor(
-    private settingsService: ArlasSettingsService,
-    private mainformService: MainFormService
-  ) { }
+    private readonly settingsService: ArlasSettingsService,
+    private readonly mainformService: MainFormService
+  ) {
+    this.hasTerrain = !!(this.settingsService.getSettings() as ArlasBuilderSettings).terrain;
+  }
 
   public ngOnInit() {
     const mapBasemapFg = this.mainformService.mapConfig.getBasemapsFg();
     this.initBasemaps(mapBasemapFg);
+    this.terrainFg = mapBasemapFg.get('terrain') as ConfigFormGroup;
   }
 
   public initBasemaps(mapBasemapFg: MapBasemapFormGroup) {
@@ -52,8 +60,9 @@ export class BasemapsComponent implements OnInit {
     const basemapsFromConfig = new Set(this.basemapFa.controls.map((fg: FormGroup) => fg.value.name));
     // Init list of basemap with a default if not defined
     let basemaps: Basemap[] = [];
-    if (!!(this.settingsService.settings as any).basemaps) {
-      basemaps = (this.settingsService.settings as any).basemaps;
+    const settings: ArlasBuilderSettings = this.settingsService.settings;
+    if (settings.basemaps) {
+      basemaps = settings.basemaps;
     } else {
       basemaps.push({
         name: 'Positron',
@@ -86,8 +95,7 @@ export class BasemapsComponent implements OnInit {
   }
 
   public toggleBasemap(event: MatCheckboxChange) {
-
-    this.basemaps.map(basemap => {
+    this.basemaps.forEach(basemap => {
       if (basemap.name === event.source.value) {
         basemap.checked = event.checked;
       }
@@ -95,7 +103,7 @@ export class BasemapsComponent implements OnInit {
     this.basemapFa.clear();
     const selectedBasemaps = this.basemaps.filter(b => b.checked === true);
     if (selectedBasemaps.length > 0) {
-      selectedBasemaps.map(b => this.basemapFa.push(
+      selectedBasemaps.forEach(b => this.basemapFa.push(
         new BasemapFormGroup(b.name, b.url, b.image, b.type)
       ));
     } else {
@@ -107,18 +115,9 @@ export class BasemapsComponent implements OnInit {
   }
 
   public setDefaultBasemap(event: MatRadioChange) {
-    this.basemaps.map(basemap => {
+    this.basemaps.forEach(basemap => {
       basemap.default = (basemap.name === event.value);
     });
     this.defaultBasemapFc.setValue(event.value);
   }
-}
-
-export interface Basemap {
-  name: string;
-  url: string;
-  image: string;
-  checked: boolean;
-  default: boolean;
-  type: string;
 }

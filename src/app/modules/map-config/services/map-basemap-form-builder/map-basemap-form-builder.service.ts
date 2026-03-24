@@ -18,26 +18,51 @@
  */
 import { Injectable } from '@angular/core';
 import { FormArray, FormControl } from '@angular/forms';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { ConfigFormGroup, HiddenFormControl } from '@shared-models/config-form';
+import { ArlasBuilderSettings } from '@services/startup/startup.service';
+import { ConfigFormGroup, HiddenFormControl, InputFormControl, SlideToggleFormControl } from '@shared-models/config-form';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 export class MapBasemapFormGroup extends ConfigFormGroup {
-  public constructor() {
+  public constructor(settingsService: ArlasSettingsService) {
     super({
       basemaps: new FormArray<BasemapFormGroup>([]),
       default: new HiddenFormControl('', null),
+      terrain: new ConfigFormGroup({
+        enable: new SlideToggleFormControl(
+          false,
+          marker('Enable terrain'),
+          marker('Enable terrain description')
+        ),
+        exaggeration: new InputFormControl(
+          1,
+          marker('Terrain exaggeration'),
+          marker('Terrain exaggeration descritpion'),
+          'number',
+          {
+            dependsOn: () => [this.customControls.terrain.enable],
+            onDependencyChange: (control) => control.enableIf(!!this.customControls.terrain.enable.value)
+          }
+        ),
+        source: new HiddenFormControl((settingsService.getSettings() as ArlasBuilderSettings).terrain)
+      }).withTitle(marker('Terrain'))
     });
   }
 
   public customControls = {
     default: this.get('default') as HiddenFormControl,
-    basemaps: this.get('basemaps') as FormArray<BasemapFormGroup>
+    basemaps: this.get('basemaps') as FormArray<BasemapFormGroup>,
+    terrain: {
+      enable: this.get('terrain').get('enable') as SlideToggleFormControl,
+      exaggeration: this.get('terrain').get('exaggeration') as InputFormControl,
+      source: this.get('terrain').get('source') as HiddenFormControl
+    }
   };
 }
 
 export class BasemapFormGroup extends ConfigFormGroup {
-  public constructor(name, url, image, type?: string) {
+  public constructor(name: string, url: string, image: string, type?: string) {
     super({
       name: new FormControl(name),
       url: new FormControl(url),
@@ -66,7 +91,7 @@ export class MapBasemapFormBuilderService {
   ) { }
 
   public build() {
-    const mapBasemapFormGroup = new MapBasemapFormGroup();
+    const mapBasemapFormGroup = new MapBasemapFormGroup(this.settingsService);
     this.defaultValuesService.setDefaultValueRecursively('map.basemap', mapBasemapFormGroup);
     return mapBasemapFormGroup;
   }

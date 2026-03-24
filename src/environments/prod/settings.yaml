@@ -58,3 +58,4 @@ histogram:
   export_nb_buckets: ${ARLAS_EXPORT_HISTOGRAMS_NB_BUCKETS}
 use_time_filter: ${ARLAS_USE_TIME_FILTER}
 enable_advanced_features: ${ARLAS_ENABLE_ADVANCED_FEATURES}
+terrain: ${ARLAS_TERRAIN}

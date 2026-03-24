@@ -18,9 +18,9 @@
  */
 import { Injectable } from '@angular/core';
 import { FormArray } from '@angular/forms';
-import { Basemap } from '@map-config/components/basemaps/basemaps.component';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { Basemap } from '@services/startup/startup.service';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { MapBasemapFormBuilderService } from '../map-basemap-form-builder/map-basemap-form-builder.service';
 import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-global-form-builder.service';

@@ -59,7 +59,7 @@ import {
 } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 import { CollectionReferenceDescription, Expression } from 'arlas-api';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api/api';
-import { BasemapStyle, SCROLLABLE_ARLAS_ID, VisualisationSetConfig } from 'arlas-map';
+import { BasemapStyle, SCROLLABLE_ARLAS_ID, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
 import { ArlasColorService } from 'arlas-web-components';
 import { DescribedUrl } from 'arlas-web-components/lib/components/results/utils/results.utils';
 import { ColorConfig, ExtentFilterGeometry, FieldsConfiguration, getSourceName, LayerSourceConfig } from 'arlas-web-contributors';
@@ -81,8 +81,6 @@ import {
   DataGroupInputConfig,
   JSONPATH_COUNT,
   JSONPATH_METRIC,
-  MapComponentInputConfig,
-  MapComponentInputMapLayersConfig,
   MapglComponentConfig,
   SEARCH_TYPE,
   SwimlaneConfig,
@@ -457,6 +455,7 @@ export class ConfigExportHelper {
     layerSource.source = getSourceName(layerSource) + '-' + layerFg.value.collection;
     return layerSource;
   }
+
   public static getMapContributors(
     mapConfigGlobal: MapGlobalFormGroup,
     mapConfigLayers: FormArray,
@@ -522,7 +521,7 @@ export class ConfigExportHelper {
     mapConfigLayers: FormArray,
     mapConfigVisualisations: FormArray,
     mapConfigBasemaps: MapBasemapFormGroup,
-    arlasId?,
+    arlasId?: string,
     enableByDefault?: boolean): MapglComponentConfig {
 
     const customControls = mapConfigGlobal.customControls;
@@ -580,12 +579,22 @@ export class ConfigExportHelper {
     if (!defaultBasemap) {
       defaultBasemap = basemaps[0];
     }
+
+    const terrain: TerrainConfiguration<maplibregl.RasterDEMSourceSpecification> = {
+      enable: mapConfigBasemaps.customControls.terrain.enable.value
+    };
+    if (terrain.enable) {
+      terrain.source = mapConfigBasemaps.customControls.terrain.source.value;
+      terrain.exaggeration = +mapConfigBasemaps.customControls.terrain.exaggeration.value;
+    }
+
     const mapComponent: MapglComponentConfig = {
       allowMapExtend: customControls.allowMapExtend.value,
       nbVerticesLimit: customControls.unmanagedFields.nbVerticesLimit.value,
       input: {
         defaultBasemapStyle: defaultBasemap,
         basemapStyles: basemaps,
+        terrain: terrain,
         margePanForLoad: +customControls.margePanForLoad.value,
         margePanForTest: +customControls.margePanForTest.value,
         initZoom: customControls.initZoom.value,
@@ -605,9 +614,9 @@ export class ConfigExportHelper {
             onHover: layersHoverIds,
           },
           externalEventLayers: new Array<{ id: string; on: string; }>()
-        } as MapComponentInputMapLayersConfig,
+        },
         visualisations_sets: visualisationsSets
-      } as MapComponentInputConfig
+      }
     };
 
     return mapComponent;

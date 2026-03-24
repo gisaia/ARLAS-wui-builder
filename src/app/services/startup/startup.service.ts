@@ -30,6 +30,22 @@ import { map, Observable } from 'rxjs';
 export const ZONE_WUI_BUILDER = 'config.json';
 export const ZONE_PREVIEW = 'preview';
 
+export interface Basemap {
+  name: string;
+  url: string;
+  image: string;
+  checked: boolean;
+  default: boolean;
+  type: string;
+}
+
+/** Settings for Arlas Builder */
+export interface ArlasBuilderSettings extends ArlasSettings {
+  basemaps?: Basemap[];
+  /** Configuration for the terrain. If present allows the user to add a terrain with a toggle */
+  terrain?: maplibregl.RasterDEMSourceSpecification;
+}
+
 @Injectable({
   providedIn: 'root'
 })
