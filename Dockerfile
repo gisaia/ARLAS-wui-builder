@@ -1,7 +1,7 @@
 ### STAGE 1: Build ###
 
 # We label our stage as 'builder'
-FROM node:18.20.5 AS builder
+FROM node:24.2.0-slim AS builder
 
 COPY package.json package-lock.json ./
 
