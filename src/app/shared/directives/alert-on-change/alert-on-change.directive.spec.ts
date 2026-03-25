@@ -1,16 +1,38 @@
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSelectModule } from '@angular/material/select';
+import { By } from '@angular/platform-browser';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { AlertOnChangeDirective } from './alert-on-change.directive';
-import { SpectatorDirective, createDirectiveFactory } from '@ngneat/spectator';
+
+@Component({
+  imports: [AlertOnChangeDirective, MatSelectModule],
+  template: `
+    <mat-select arlasAlertOnChange>AlertOnChangeDirective</mat-select>
+  `,
+})
+class Test {}
 
 describe('AlertOnChangeDirective', () => {
-
-  let spectator: SpectatorDirective<AlertOnChangeDirective>;
-  const createDirective = createDirectiveFactory(AlertOnChangeDirective);
+  let fixture: ComponentFixture<Test>;
 
   beforeEach(() => {
-    spectator = createDirective(`<mat-select arlasAlertOnChange>AlertOnChangeDirective</mat-select>`);
+    TestBed.configureTestingModule({
+      imports: [
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: TranslateNoOpLoader
+          }
+        })
+      ]
+    });
+    fixture = TestBed.createComponent(Test);
+    fixture.detectChanges();
   });
 
   it('should create an instance', () => {
-    expect(spectator.directive).toBeTruthy();
+    const elements = fixture.debugElement.queryAll(By.directive(AlertOnChangeDirective));
+    expect(elements.length).toEqual(1);
   });
 });

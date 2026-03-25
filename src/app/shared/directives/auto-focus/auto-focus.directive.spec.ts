@@ -1,15 +1,26 @@
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { AutoFocusDirective } from './auto-focus.directive';
-import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator';
+
+@Component({
+  imports: [AutoFocusDirective],
+  template: `
+    <input arlasAutoFocus>
+  `,
+})
+class Test {}
 
 describe('AutoFocusDirective', () => {
-  let spectator: SpectatorDirective<AutoFocusDirective>;
-  const createDirective = createDirectiveFactory(AutoFocusDirective);
+  let fixture: ComponentFixture<Test>;
 
   beforeEach(() => {
-    spectator = createDirective(`<input arlasAutoFocus>`);
+    fixture = TestBed.createComponent(Test);
+    fixture.detectChanges();
   });
 
   it('should create an instance', () => {
-    expect(spectator.directive).toBeTruthy();
+    const elements = fixture.debugElement.queryAll(By.directive(AutoFocusDirective));
+    expect(elements.length).toEqual(1);
   });
 });

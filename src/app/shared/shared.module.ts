@@ -78,11 +78,8 @@ import { OrderConfigFormTabControlsPipe } from './pipes/order-config-form-tab.pi
   declarations: [
     ConfigElementComponent,
     ConfirmModalComponent,
-    AlertOnChangeDirective,
-    ResetOnChangeDirective,
     ObjectvaluesPipe,
     HistogramBucketPipe,
-    AutoFocusDirective,
     ConfigFormGroupComponent,
     ConfigFormControlComponent,
     ConfigFormGroupArrayComponent,
@@ -101,7 +98,6 @@ import { OrderConfigFormTabControlsPipe } from './pipes/order-config-form-tab.pi
     ObjectvaluesPipe,
     HistogramBucketPipe,
     GroupCollectionPipe,
-    AutoFocusDirective,
     ConfigFormGroupComponent,
     ConfigFormControlComponent,
     HistogramBucketFormGroupComponent,
@@ -143,7 +139,7 @@ import { OrderConfigFormTabControlsPipe } from './pipes/order-config-form-tab.pi
     OrderConfigFormTabControlsPipe,
     GetCollectionDisplayNamePipe,
     HistogramBucketFormGroupComponent,
-    ColorPickerWrapperComponent
+    ColorPickerWrapperComponent,
   ],
   imports: [
     ArlasToolkitSharedModule,
@@ -181,7 +177,10 @@ import { OrderConfigFormTabControlsPipe } from './pipes/order-config-form-tab.pi
     OrderConfigFormTabControlsPipe,
     GetCollectionDisplayNamePipe,
     TranslatePipe,
-    ColorPickerDirective
+    ColorPickerDirective,
+    AlertOnChangeDirective,
+    ResetOnChangeDirective,
+    AutoFocusDirective
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi())

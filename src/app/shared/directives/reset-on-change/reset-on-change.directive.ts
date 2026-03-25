@@ -22,7 +22,6 @@ import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatSelect } from '@angular/material/select';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ConfigFormControl } from '@shared-models/config-form';
-import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { DefaultValuesService } from '../../../services/default-values/default-values.service';
 
@@ -31,8 +30,7 @@ import { DefaultValuesService } from '../../../services/default-values/default-v
  * WARNING: currently only for mat-select and mat-slide-toggle
  */
 @Directive({
-    selector: '[arlasResetOnChange]',
-    standalone: false
+  selector: '[arlasResetOnChange]'
 })
 export class ResetOnChangeDirective implements OnInit, OnDestroy {
 
@@ -44,12 +42,11 @@ export class ResetOnChangeDirective implements OnInit, OnDestroy {
   private matButtonChangeSub: Subscription;
 
   public constructor(
-    private elementRef: ElementRef<HTMLInputElement>,
-    @Optional() private matSelect: MatSelect,
-    @Optional() private matSlideToggle: MatSlideToggle,
-    @Optional() private matButtonToggle: MatButtonToggleGroup,
-    private logger: NGXLogger,
-    private defaultValueService: DefaultValuesService) { }
+    private readonly elementRef: ElementRef<HTMLInputElement>,
+    @Optional() private readonly matSelect: MatSelect,
+    @Optional() private readonly matSlideToggle: MatSlideToggle,
+    @Optional() private readonly matButtonToggle: MatButtonToggleGroup,
+    private readonly defaultValueService: DefaultValuesService) { }
 
   public ngOnInit(): void {
     if (!this.defaultValuePrefix) {
@@ -79,8 +76,8 @@ export class ResetOnChangeDirective implements OnInit, OnDestroy {
     if (this.matSlideChangeSub) {
       this.matSlideChangeSub.unsubscribe();
     }
-    if (this.matSlideChangeSub) {
-      this.matSlideChangeSub.unsubscribe();
+    if (this.matButtonChangeSub) {
+      this.matButtonChangeSub.unsubscribe();
     }
   }
 
