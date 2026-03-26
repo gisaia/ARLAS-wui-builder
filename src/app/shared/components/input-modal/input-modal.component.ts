@@ -36,10 +36,17 @@ export interface DialogData {
 }
 
 @Component({
-    selector: 'arlas-input-modal',
-    templateUrl: './input-modal.component.html',
-    styleUrls: ['./input-modal.component.scss'],
-    standalone: false
+  selector: 'arlas-input-modal',
+  templateUrl: './input-modal.component.html',
+  styleUrls: ['./input-modal.component.scss'],
+  imports: [
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    FormsModule,
+    TranslatePipe,
+    MatInputModule
+  ]
 })
 export class InputModalComponent {
 
@@ -49,7 +56,7 @@ export class InputModalComponent {
     public dialogRef: MatDialogRef<InputModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
-    this.textName = (data || {}).initialValue || '';
+    this.textName = data?.initialValue || '';
 
     if (data && !!data.noCancel) {
       dialogRef.disableClose = true;

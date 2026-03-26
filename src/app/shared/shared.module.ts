@@ -85,7 +85,6 @@ import { OrderConfigFormTabControlsPipe } from './pipes/order-config-form-tab.pi
     ConfigFormGroupArrayComponent,
     CollectionsUnitsComponent,
     GroupCollectionPipe,
-    InputModalComponent,
     HistogramBucketFormGroupComponent,
     LayerFiltersComponent,
     ColorPickerWrapperComponent
@@ -180,7 +179,8 @@ import { OrderConfigFormTabControlsPipe } from './pipes/order-config-form-tab.pi
     ColorPickerDirective,
     AlertOnChangeDirective,
     ResetOnChangeDirective,
-    AutoFocusDirective
+    AutoFocusDirective,
+    InputModalComponent,
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi())
