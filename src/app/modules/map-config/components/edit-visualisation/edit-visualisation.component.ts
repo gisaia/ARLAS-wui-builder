@@ -29,9 +29,10 @@ import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'arlas-edit-visualisation',
-  templateUrl: './edit-visualisation.component.html',
-  styleUrls: ['./edit-visualisation.component.scss']
+    selector: 'arlas-edit-visualisation',
+    templateUrl: './edit-visualisation.component.html',
+    styleUrls: ['./edit-visualisation.component.scss'],
+    standalone: false
 })
 export class EditVisualisationComponent implements OnInit, CanComponentExit, OnDestroy {
 

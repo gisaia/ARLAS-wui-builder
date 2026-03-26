@@ -17,7 +17,12 @@
  * under the License.
  */
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { TranslatePipe } from '@ngx-translate/core';
 
 export interface DialogData {
   title?: string;
@@ -33,7 +38,15 @@ export interface DialogData {
 @Component({
   selector: 'arlas-input-modal',
   templateUrl: './input-modal.component.html',
-  styleUrls: ['./input-modal.component.scss']
+  styleUrls: ['./input-modal.component.scss'],
+  imports: [
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    FormsModule,
+    TranslatePipe,
+    MatInputModule
+  ]
 })
 export class InputModalComponent {
 
@@ -43,7 +56,7 @@ export class InputModalComponent {
     public dialogRef: MatDialogRef<InputModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
-    this.textName = (data || {}).initialValue || '';
+    this.textName = data?.initialValue || '';
 
     if (data && !!data.noCancel) {
       dialogRef.disableClose = true;

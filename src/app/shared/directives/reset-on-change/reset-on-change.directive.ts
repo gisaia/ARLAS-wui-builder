@@ -16,15 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Directive, ElementRef, Input, OnInit, Optional, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, Input, OnDestroy, OnInit, Optional } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatSelect } from '@angular/material/select';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { NGXLogger } from 'ngx-logger';
 import { ConfigFormControl } from '@shared-models/config-form';
-import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { Subscription } from 'rxjs';
+import { DefaultValuesService } from '../../../services/default-values/default-values.service';
 
 /**
  * Reset the dependants fields when the directive component value changes
@@ -43,12 +42,11 @@ export class ResetOnChangeDirective implements OnInit, OnDestroy {
   private matButtonChangeSub: Subscription;
 
   public constructor(
-    private elementRef: ElementRef<HTMLInputElement>,
-    @Optional() private matSelect: MatSelect,
-    @Optional() private matSlideToggle: MatSlideToggle,
-    @Optional() private matButtonToggle: MatButtonToggleGroup,
-    private logger: NGXLogger,
-    private defaultValueService: DefaultValuesService) { }
+    private readonly elementRef: ElementRef<HTMLInputElement>,
+    @Optional() private readonly matSelect: MatSelect,
+    @Optional() private readonly matSlideToggle: MatSlideToggle,
+    @Optional() private readonly matButtonToggle: MatButtonToggleGroup,
+    private readonly defaultValueService: DefaultValuesService) { }
 
   public ngOnInit(): void {
     if (!this.defaultValuePrefix) {
@@ -78,8 +76,8 @@ export class ResetOnChangeDirective implements OnInit, OnDestroy {
     if (this.matSlideChangeSub) {
       this.matSlideChangeSub.unsubscribe();
     }
-    if (this.matSlideChangeSub) {
-      this.matSlideChangeSub.unsubscribe();
+    if (this.matButtonChangeSub) {
+      this.matButtonChangeSub.unsubscribe();
     }
   }
 

@@ -37,7 +37,7 @@ import { EditHistogramLabelComponent } from './components/edit-histogram-label/e
 import { MetricsTableDataComponent } from './components/metrics-table-data/metrics-table-data.component';
 import { AddSubtableDialogComponent } from './components/add-subtable-dialog/add-subtable-dialog.component';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { GetCollectionDisplayModule, GetFieldDisplayModule } from 'arlas-web-components';
+import { GetCollectionDisplayNamePipe, GetFieldDisplayNamePipe } from 'arlas-web-components';
 
 @NgModule({
   declarations: [
@@ -64,8 +64,8 @@ import { GetCollectionDisplayModule, GetFieldDisplayModule } from 'arlas-web-com
     AnalyticsConfigRoutingModule,
     IconPickerModule,
     MatExpansionModule,
-    GetCollectionDisplayModule,
-    GetFieldDisplayModule
+    GetCollectionDisplayNamePipe,
+    GetFieldDisplayNamePipe
   ]
 })
 export class AnalyticsConfigModule { }

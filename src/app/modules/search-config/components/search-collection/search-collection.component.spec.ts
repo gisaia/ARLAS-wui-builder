@@ -1,7 +1,7 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { mockProvider } from '@ngneat/spectator';
-import { TranslateModule, TranslateLoader, TranslateFakeLoader } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { SearchCollectionComponent } from './search-collection.component';
@@ -17,7 +17,7 @@ describe('SearchCollectionComponent', () => {
       imports: [TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,
-          useClass: TranslateFakeLoader
+          useClass: TranslateNoOpLoader
         }
       })],
       providers: [

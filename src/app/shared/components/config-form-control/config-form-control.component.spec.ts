@@ -6,7 +6,7 @@ import { MockComponent } from 'ng-mocks';
 import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { FiltersComponent } from '@map-config/components/filters/filters.component';
+import { LayerFiltersComponent } from '@shared-components/layer-filters/filters.component';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionsUnitsComponent } from '@shared-components/collections-units/collections-units.component';
 import { ArlasColorService } from 'arlas-web-components';
@@ -23,7 +23,7 @@ describe('ConfigFormControlComponent', () => {
       ResetOnChangeDirective,
       AlertOnChangeDirective,
       MockComponent(ColorPickerWrapperComponent),
-      MockComponent(FiltersComponent),
+      MockComponent(LayerFiltersComponent),
       MockComponent(CollectionsUnitsComponent)
     ],
     providers: [

@@ -18,6 +18,7 @@
  */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { getObject } from '@utils/tools';
 import Ajv from 'ajv';
 import ajvKeywords from 'ajv-keywords';
@@ -25,7 +26,6 @@ import * as draftSchema from 'ajv/lib/refs/json-schema-draft-06.json';
 import { NGXLogger } from 'ngx-logger';
 import { mergeMap } from 'rxjs/operators';
 import * as defaultValuesSchema from './defaultValues.schema.json';
-import { AbstractControl, FormGroup, FormArray } from '@angular/forms';
 
 export interface DefaultConfig {
   aggregationTermSize: number;
@@ -51,8 +51,8 @@ export class DefaultValuesService {
   private config: any;
 
   public constructor(
-    private http: HttpClient,
-    private logger: NGXLogger
+    private readonly http: HttpClient,
+    private readonly logger: NGXLogger
   ) { }
 
   public validateConfiguration(data) {

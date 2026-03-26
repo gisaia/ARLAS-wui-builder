@@ -34,9 +34,10 @@ interface LabelConfig {
 }
 
 @Component({
-  selector: 'arlas-edit-histogram-label',
-  templateUrl: './edit-histogram-label.component.html',
-  styleUrls: ['./edit-histogram-label.component.scss']
+    selector: 'arlas-edit-histogram-label',
+    templateUrl: './edit-histogram-label.component.html',
+    styleUrls: ['./edit-histogram-label.component.scss'],
+    standalone: false
 })
 export class EditHistogramLabelComponent implements OnInit, OnDestroy {
     /**

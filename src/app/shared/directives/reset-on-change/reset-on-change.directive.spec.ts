@@ -1,21 +1,35 @@
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSelectModule } from '@angular/material/select';
+import { By } from '@angular/platform-browser';
+import { mockProvider } from '@ngneat/spectator';
+import { NGXLogger } from 'ngx-logger';
 import { ResetOnChangeDirective } from './reset-on-change.directive';
-import { SpectatorDirective, createDirectiveFactory, mockProvider } from '@ngneat/spectator';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
+
+@Component({
+  imports: [ResetOnChangeDirective, MatSelectModule],
+  template: `
+    <mat-select arlasResetOnChange>ResetOnChangeDirective</mat-select>
+  `,
+})
+class Test {}
 
 describe('ResetOnChangeDirective', () => {
-  let spectator: SpectatorDirective<ResetOnChangeDirective>;
-  const createDirective = createDirectiveFactory({
-    directive: ResetOnChangeDirective,
-    mocks: [
-      DefaultValuesService
-    ]
-  });
+  let fixture: ComponentFixture<Test>;
 
   beforeEach(() => {
-    spectator = createDirective(`<mat-select arlasResetOnChange>ResetOnChangeDirective</mat-select>`);
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(withInterceptorsFromDi()),
+        mockProvider(NGXLogger)
+      ]
+    });
+    fixture = TestBed.createComponent(Test);
+    fixture.detectChanges();
   });
 
   it('should create an instance', () => {
-    expect(spectator.directive).toBeTruthy();
+    expect(fixture.debugElement.queryAll(By.directive(ResetOnChangeDirective)).length).toEqual(1);
   });
 });

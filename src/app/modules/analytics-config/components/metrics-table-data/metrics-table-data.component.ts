@@ -26,9 +26,10 @@ import { MetricsTableSortConfig } from '@services/main-form-manager/models-confi
 import { MainFormService } from '@services/main-form/main-form.service';
 
 @Component({
-  selector: 'arlas-metrics-table-data',
-  templateUrl: './metrics-table-data.component.html',
-  styleUrls: ['./metrics-table-data.component.scss']
+    selector: 'arlas-metrics-table-data',
+    templateUrl: './metrics-table-data.component.html',
+    styleUrls: ['./metrics-table-data.component.scss'],
+    standalone: false
 })
 export class MetricsTableDataComponent implements OnInit {
 

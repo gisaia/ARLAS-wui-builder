@@ -274,7 +274,6 @@
 	"Use UTC time Zone to display date description": "Whether displaying date in UTC time Zone or in the local time zone of the browser.",
 	"Timeline collection description": "Choose the main data collection for the timeline",
 	"Number of buckets": "Number of buckets",
-	"": "",
 	"Detailed timeline": "Detailed timeline",
 	"Additional collections": "Additional collections",
 	"Additional collections description": "Choose additional collections to display in timeline",

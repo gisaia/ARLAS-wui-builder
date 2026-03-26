@@ -1,5 +1,5 @@
 import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/spectator';
-import { TranslateFakeLoader, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 import { SearchGlobalFormBuilderService } from './search-global-form-builder.service';
@@ -17,7 +17,7 @@ describe('SearchGlobalFormBuilderService', () => {
       TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,
-          useClass: TranslateFakeLoader
+          useClass: TranslateNoOpLoader
         }
       })
     ]

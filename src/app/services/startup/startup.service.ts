@@ -51,19 +51,19 @@ export interface ArlasBuilderSettings extends ArlasSettings {
 })
 export class StartupService {
 
-  public contributorRegistry: Map<string, any> = new Map<string, any>();
-  public interceptorRegistry: Map<string, any> = new Map<string, any>();
+  public contributorRegistry = new Map<string, any>();
+  public interceptorRegistry = new Map<string, any>();
 
-  public static translationLoaded(translateService: TranslateService, injector) {
+  public static translationLoaded(translateService: TranslateService, injector: Injector) {
     return new Promise<any>((resolve: any) => {
-      const url = window.location.href;
+      const url = globalThis.location.href;
       const paramLangage = 'lg';
       // Set default language to current browser language
       let langToSet = navigator.language.slice(0, 2);
       const regex = new RegExp('[?&]' + paramLangage + '(=([^&#]*)|&|#|$)');
       const results = regex.exec(url);
-      if (results && results[2]) {
-        langToSet = decodeURIComponent(results[2].replace(/\+/g, ' '));
+      if (results?.[2]) {
+        langToSet = decodeURIComponent(results[2].replaceAll('+', ' '));
       }
       const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
       locationInitialized.then(() => {
@@ -80,11 +80,11 @@ export class StartupService {
   }
 
   public constructor(
-    private configService: ArlasConfigService,
-    private arlasCss: ArlasCollaborativesearchService,
-    private arlasStartupService: ArlasStartupService,
-    private injector: Injector,
-    private translateService: TranslateService) { }
+    private readonly configService: ArlasConfigService,
+    private readonly arlasCss: ArlasCollaborativesearchService,
+    private readonly arlasStartupService: ArlasStartupService,
+    private readonly injector: Injector,
+    private readonly translateService: TranslateService) { }
 
   public init(): Promise<string> {
     return this.arlasStartupService.applyAppSettings()

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Directive, ElementRef, HostListener, Input, OnInit, Optional, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, OnDestroy, OnInit, Optional } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { MatSelect } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -31,10 +31,10 @@ import { TranslateService } from '@ngx-translate/core';
 export class AlertOnChangeDirective implements OnInit, OnDestroy {
 
   public constructor(
-    @Optional() private select: MatSelect,
-    private elementRef: ElementRef<HTMLInputElement>,
-    private snackBar: MatSnackBar,
-    private translate: TranslateService) { }
+    @Optional() private readonly select: MatSelect,
+    private readonly elementRef: ElementRef<HTMLInputElement>,
+    private readonly snackBar: MatSnackBar,
+    private readonly translate: TranslateService) { }
 
   @Input('arlasAlertOnChange') private alertMessage: string;
   @Input() private dependants: AbstractControl[];

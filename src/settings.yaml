@@ -2,10 +2,10 @@
 ############   AUTHENTICATION SETTINGS   ###############
 ########################################################
 authentication:
-  use_authent: false
+  use_authent: true
   auth_mode: iam
   url: 'https://localhost/arlas_iam_server'
-  force_connect: true
+  force_connect: false
   use_discovery: true
   threshold: 60000
   issuer: https://localhost:9443/auth/realms/arlas

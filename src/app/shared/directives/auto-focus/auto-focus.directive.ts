@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Directive, ElementRef, Input, AfterContentInit, OnDestroy } from '@angular/core';
+import { AfterContentInit, Directive, ElementRef, Input, OnDestroy } from '@angular/core';
 
 /**
  * Autofocus on a field once it is inserted into the DOM (it can be from a "*ngIf")
@@ -27,7 +27,7 @@ import { Directive, ElementRef, Input, AfterContentInit, OnDestroy } from '@angu
 export class AutoFocusDirective implements AfterContentInit, OnDestroy {
 
   @Input() public arlasAutoFocus: boolean;
-  public constructor(private el: ElementRef) {
+  public constructor(private readonly el: ElementRef) {
   }
 
   public ngAfterContentInit() {

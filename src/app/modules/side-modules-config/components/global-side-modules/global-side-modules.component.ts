@@ -21,9 +21,10 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { SideModulesGlobalFormGroup } from '../../services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 
 @Component({
-  selector: 'arlas-global-side-modules',
-  templateUrl: './global-side-modules.component.html',
-  styleUrls: ['./global-side-modules.component.scss']
+    selector: 'arlas-global-side-modules',
+    templateUrl: './global-side-modules.component.html',
+    styleUrls: ['./global-side-modules.component.scss'],
+    standalone: false
 })
 export class GlobalSideModulesComponent implements OnInit {
 

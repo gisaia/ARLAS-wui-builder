@@ -1,4 +1,4 @@
-<div *ngIf="!this.selectedPalette">
+<div *ngIf="!selectedPalette">
     <h1 mat-dialog-title>{{ 'Select a template palette' | translate}}</h1>
     <div mat-dialog-content>
         <div *ngFor="let palette of defaultPalettes; let i = index"

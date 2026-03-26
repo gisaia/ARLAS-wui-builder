@@ -26,9 +26,10 @@ import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 
 @Component({
-  selector: 'arlas-global-external-node',
-  templateUrl: './global-external-node.component.html',
-  styleUrls: ['./global-external-node.component.scss']
+    selector: 'arlas-global-external-node',
+    templateUrl: './global-external-node.component.html',
+    styleUrls: ['./global-external-node.component.scss'],
+    standalone: false
 })
 export class GlobalExternalNodeComponent implements OnInit {
   public externalNodeForm;

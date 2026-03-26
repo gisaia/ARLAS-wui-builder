@@ -1,11 +1,25 @@
 
 import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
-import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
+import { createComponentFactory, Spectator } from '@ngneat/spectator';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { MockComponent } from 'ng-mocks';
 import { BasemapsComponent } from './basemaps.component';
+
+const settings = {
+  basemaps: [{
+    name: 'name',
+    url: 'url',
+    image: 'image',
+    checked: true,
+    default: true
+  }]
+};
+const mockArlasSettingsService = {
+  settings,
+  getSettings: () => settings
+};
 
 describe('BasemapsComponent', () => {
 
@@ -16,22 +30,18 @@ describe('BasemapsComponent', () => {
       MockComponent(ConfigFormGroupComponent)
     ],
     providers: [
-      mockProvider(MainFormService, {
-        mapConfig: {
-          getBasemapsFg: () => new MapBasemapFormGroup()
+      {
+        provide: MainFormService,
+        useValue: {
+          mapConfig: {
+            getBasemapsFg: () => new MapBasemapFormGroup(mockArlasSettingsService as any)
+          }
         }
-      }),
-      mockProvider(ArlasSettingsService, {
-        settings: {
-          basemaps: [{
-            name: 'name',
-            url: 'url',
-            image: 'image',
-            checked: true,
-            default: true
-          }]
-        }
-      })
+      },
+      {
+        provide: ArlasSettingsService,
+        useValue: mockArlasSettingsService
+      }
     ]
   });
 

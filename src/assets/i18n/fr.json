@@ -274,7 +274,6 @@
 	"Use UTC time Zone to display date description": "Que la date soit affichée dans le fuseau horaire UTC ou dans le fuseau horaire local du navigateur.",
 	"Timeline collection description": "Choisir la collection de données principale pour la frise temporelle",
 	"Number of buckets": "Nombre de cases",
-	"": "",
 	"Detailed timeline": "Frise temporelle détaillée",
 	"Additional collections": "Collections supplémentaires",
 	"Additional collections description": "Choisir les collections supplémentaires à afficher dans la frise temporelle",

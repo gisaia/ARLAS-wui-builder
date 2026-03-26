@@ -34,9 +34,10 @@ export interface Layer {
 }
 
 @Component({
-  selector: 'arlas-visualisations',
-  templateUrl: './visualisations.component.html',
-  styleUrls: ['./visualisations.component.scss']
+    selector: 'arlas-visualisations',
+    templateUrl: './visualisations.component.html',
+    styleUrls: ['./visualisations.component.scss'],
+    standalone: false
 })
 export class VisualisationsComponent implements OnInit, AfterViewChecked, OnDestroy {
 

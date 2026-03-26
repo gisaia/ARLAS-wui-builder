@@ -34,8 +34,8 @@ import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@ang
 import { RouterTestingModule } from '@angular/router/testing';
 import { IconPickerModule } from '@gisaia-team/ngx-icon-picker';
 import { defineGlobalsInjections, mockProvider } from '@ngneat/spectator';
-import { TranslateFakeLoader, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ColorPickerModule } from 'ngx-color-picker';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { ColorPickerService } from 'ngx-color-picker';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import 'zone.js/testing';
@@ -67,10 +67,9 @@ defineGlobalsInjections({
     MatSlideToggleModule,
     MatSliderModule,
     MatSortModule,
-    ColorPickerModule,
     NgxSpinnerModule,
     MatAutocompleteModule,
-    TranslateModule.forRoot({ loader: { provide: TranslateLoader, useClass: TranslateFakeLoader } }),
+    TranslateModule.forRoot({ loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader } }),
     MatBadgeModule,
     DragDropModule,
     MatButtonToggleModule,
@@ -81,8 +80,8 @@ defineGlobalsInjections({
   ],
   providers: [
     mockProvider(NGXLogger),
-    TranslateService,
-    provideHttpClient(withInterceptorsFromDi())
+    provideHttpClient(withInterceptorsFromDi()),
+    ColorPickerService
   ]
 });
 

@@ -29,9 +29,10 @@ import { environment } from '../environments/environment';
 
 
 @Component({
-  selector: 'arlas-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'arlas-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent implements OnInit {
 

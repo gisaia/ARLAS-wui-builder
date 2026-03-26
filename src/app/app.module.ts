@@ -17,7 +17,7 @@
  * under the License.
  */
 import { HttpClient } from '@angular/common/http';
-import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, forwardRef, NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, forwardRef, inject, NgModule, provideAppInitializer } from '@angular/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
@@ -36,7 +36,7 @@ import { WalkthroughService } from '@services/walkthrough/walkthrough.service';
 import { SharedModule } from '@shared/shared.module';
 import { TimelineConfigModule } from '@timeline-config/timeline-config.module';
 import { OAuthModule } from 'angular-oauth2-oidc';
-import { GetCollectionDisplayModule } from 'arlas-web-components';
+import { GetCollectionDisplayNamePipe } from 'arlas-web-components';
 import enComponents from 'arlas-web-components/assets/i18n/en.json';
 import frComponents from 'arlas-web-components/assets/i18n/fr.json';
 import {
@@ -82,7 +82,7 @@ export function auhtentServiceFactory(service: AuthentificationService) {
 
 export class CustomTranslateLoader implements TranslateLoader {
 
-  public constructor(private http: HttpClient) { }
+  public constructor(private readonly http: HttpClient) { }
 
   public getTranslation(lang: string): Observable<any> {
     const apiAddress = 'assets/i18n/' + lang + '.json?' + Date.now();
@@ -142,23 +142,19 @@ export class CustomTranslateLoader implements TranslateLoader {
     AnalyticsConfigModule,
     OAuthModule.forRoot(),
     ArlasToolkitSharedModule,
-    GetCollectionDisplayModule
+    GetCollectionDisplayNamePipe
   ],
   providers: [
     forwardRef(() => ArlasConfigurationDescriptor),
     forwardRef(() => ArlasStartupService),
-    {
-      provide: APP_INITIALIZER,
-      useFactory: loadServiceFactory,
-      deps: [DefaultValuesService],
-      multi: true
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: startupServiceFactory,
-      deps: [StartupService],
-      multi: true
-    },
+    provideAppInitializer(() => {
+        const initializerFn = (loadServiceFactory)(inject(DefaultValuesService));
+        return initializerFn();
+      }),
+    provideAppInitializer(() => {
+        const initializerFn = (startupServiceFactory)(inject(StartupService));
+        return initializerFn();
+      }),
     {
       provide: 'AuthentificationService',
       useFactory: auhtentServiceFactory,

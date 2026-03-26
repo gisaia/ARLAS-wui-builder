@@ -21,9 +21,9 @@ import {
 } from '@analytics-config/services/resultlist-form-builder/models';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
-import { CollectionService, METRIC_TYPES } from '@services/collection-service/collection.service';
-import { NUMERIC_TYPES } from '@services/collection-service/tools';
 import { Expression } from 'arlas-api';
+import { CollectionService, METRIC_TYPES } from '../../services/collection-service/collection.service';
+import { NUMERIC_TYPES } from '../../services/collection-service/tools';
 
 interface FilterFrom {
     setSyncOptions?: (value: any) => void;
@@ -273,7 +273,6 @@ export class FilterInputsBuilder extends InputFilter<FILTER_OPERATION, FILTER_OP
     this.buildInputRangeValues(parentControl, control, isLoading, METRIC_TYPES.MIN, collectionService, collection);
   }
 
-  // eslint-disable-next-line max-len
   public buildInputRangeValues<P extends  ParentControl, C extends FilterFrom>(parentControl: P, control: C,
     isLoading: boolean, metricType: METRIC_TYPES,  collectionService: CollectionService, collection: string) {
     const doRangeEnable = parentControl.customControls.filterOperation.value === FILTER_OPERATION.RANGE ||
@@ -357,7 +356,6 @@ export class GeoFilterInputsBuilder  extends InputFilter<Expression.OpEnum, Expr
     control.enableIf(enable);
   }
 
-  // eslint-disable-next-line max-len
   public buildInputRangeValues<P extends  ParentControl, C extends FilterFrom>(parentControl: P, control: C,
     isLoading: boolean, metricType: METRIC_TYPES,  collectionService: CollectionService, collection: string) {
     const doRangeEnable = parentControl.customControls.filterOperation.value === Expression.OpEnum.Range;

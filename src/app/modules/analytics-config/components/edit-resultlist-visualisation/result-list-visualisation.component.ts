@@ -36,23 +36,22 @@ import { SelectFormControl } from '@shared-models/config-form';
 import { SharedModule } from '@shared/shared.module';
 
 @Component({
-  selector: 'arlas-edit-resultlist-visualisation',
-  standalone: true,
-  imports: [
-    TranslateModule,
-    MatButton,
-    MatIcon,
-    SharedModule,
-    ManageVisualisationComponent
-  ],
-  templateUrl: './result-list-visualisation.component.html',
-  styleUrl: './result-list-visualisation.component.scss',
-  animations: [
-    trigger('openClose', [
-      transition(':enter', [style({opacity: 0}), animate('200ms', style({opacity: 1}))]),
-      transition(':leave', [animate('200ms', style({opacity: 0}))]),
-    ])
-  ]
+    selector: 'arlas-edit-resultlist-visualisation',
+    imports: [
+        TranslateModule,
+        MatButton,
+        MatIcon,
+        SharedModule,
+        ManageVisualisationComponent
+    ],
+    templateUrl: './result-list-visualisation.component.html',
+    styleUrl: './result-list-visualisation.component.scss',
+    animations: [
+        trigger('openClose', [
+            transition(':enter', [style({ opacity: 0 }), animate('200ms', style({ opacity: 1 }))]),
+            transition(':leave', [animate('200ms', style({ opacity: 0 }))]),
+        ])
+    ]
 })
 export class ResultListVisualisationComponent {
 

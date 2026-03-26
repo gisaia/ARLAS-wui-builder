@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { EditHistogramLabelComponent } from './edit-histogram-label.component';
-import { TranslateFakeLoader, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 describe('EditHistogramLabelComponent', () => {
   let component: EditHistogramLabelComponent;
@@ -13,7 +12,7 @@ describe('EditHistogramLabelComponent', () => {
       imports: [TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,
-          useClass: TranslateFakeLoader
+          useClass: TranslateNoOpLoader
         }
       })]
     })

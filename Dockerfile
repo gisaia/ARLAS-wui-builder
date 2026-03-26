@@ -1,10 +1,9 @@
 ### STAGE 1: Build ###
 
 # We label our stage as 'builder'
-FROM node:18.20.5 AS builder
+FROM node:24.2.0-slim AS builder
 
 COPY package.json package-lock.json ./
-COPY ./patches/ ./patches/
 
 ## Storing node modules on a separate layer will prevent unnecessary npm installs at each build
 RUN npm i --ignore-scripts && npm run postinstall && mkdir /ng-app && cp -R ./node_modules ./ng-app
@@ -20,9 +19,10 @@ RUN npm run build
 
 ### STAGE 2: Setup ###
 
-FROM nginx:1.29-alpine3.22-slim
+FROM nginx:1.29-alpine3.23-slim
 
-RUN apk update && apk upgrade && apk add --no-cache bash curl jq netcat-openbsd && rm -rf /var/cache/apk/*
+RUN apk update && apk upgrade && apk add --no-cache bash curl jq netcat-openbsd && \
+    rm -rf /var/cache/apk/* && apk add --no-cache 'zlib==1.3.2-r0'
 
 ## Copy our default nginx config
 COPY nginx/default.conf /etc/nginx/conf.d/
