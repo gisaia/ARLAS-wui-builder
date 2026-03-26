@@ -19,9 +19,10 @@ RUN npm run build
 
 ### STAGE 2: Setup ###
 
-FROM nginx:1.29-alpine3.22-slim
+FROM nginx:1.29-alpine3.23-slim
 
-RUN apk update && apk upgrade && apk add --no-cache bash curl jq netcat-openbsd && rm -rf /var/cache/apk/*
+RUN apk update && apk upgrade && apk add --no-cache bash curl jq netcat-openbsd && \
+    rm -rf /var/cache/apk/* && apk add --no-cache 'zlib==1.3.2-r0'
 
 ## Copy our default nginx config
 COPY nginx/default.conf /etc/nginx/conf.d/
