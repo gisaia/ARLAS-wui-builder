@@ -85,6 +85,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
       this.routerSub = this.route.paramMap.subscribe(params => {
         const layerId = params.get('id');
         if (!layerId) {
+          console.log('hellooo');
           this.layerFg = this.mapLayerFormBuilder.buildLayer(this.mainFormService.getMainCollection(), false);
         } else {
           // there we are editing an existing layer

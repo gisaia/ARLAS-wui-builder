@@ -1,48 +1,39 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { mockMainFormService } from '@app/test/main-form.service.mock';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
-import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
-import { SideModulesGlobalFormGroup } from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
-import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
-import { MockComponent } from 'ng-mocks';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { GlobalSideModulesComponent } from './global-side-modules.component';
 
 describe('GlobalSideModulesComponent', () => {
-    let spectator: Spectator<GlobalSideModulesComponent>;
+    let component: GlobalSideModulesComponent;
+    let fixture: ComponentFixture<GlobalSideModulesComponent>;
 
-    const mockCollectionService = {
-        getGroupCollectionItems: vi.fn().mockName("CollectionService.getGroupCollectionItems"),
-        getCollections: vi.fn().mockName("CollectionService.getCollections")
-    };
-    mockCollectionService.getGroupCollectionItems.mockReturnValue({});
-    mockCollectionService.getCollections.mockReturnValue([]);
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                GlobalSideModulesComponent,
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+                LoggerModule.forRoot(null)
+            ],
+            providers: [
+                {
+                    provide: MainFormService,
+                    useValue: mockMainFormService
+                }
+            ]
+        })
+        .compileComponents();
 
-    const mockArlasCSS = {
-        defaultCollection: vi.fn().mockName("ArlasCollaborativesearchService.defaultCollection")
-    };
-    mockArlasCSS.defaultCollection = 'main';
-
-    const createComponent = createComponentFactory({
-        component: GlobalSideModulesComponent,
-        declarations: [
-            MockComponent(ConfigFormControlComponent),
-            MockComponent(ConfigFormGroupComponent)
-        ],
-        providers: [
-            mockProvider(MainFormService, {
-                sideModulesConfig: {
-                    getGlobalFg: () => new SideModulesGlobalFormGroup(mockCollectionService, mockArlasCSS)
-                },
-                getMainCollection: () => ''
-            })
-        ]
+        fixture = TestBed.createComponent(GlobalSideModulesComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
     });
-
-    beforeEach(() => spectator = createComponent());
 
     it('should create', () => {
-        expect(spectator.component).toBeTruthy();
+        expect(component).toBeTruthy();
     });
-
 });

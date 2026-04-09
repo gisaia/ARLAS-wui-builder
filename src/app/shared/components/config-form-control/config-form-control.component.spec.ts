@@ -1,47 +1,31 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { IconFormControl } from '@shared-models/config-form';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { ConfigFormControlComponent } from './config-form-control.component';
-import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
-import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
-import { SlideToggleFormControl } from '@shared-models/config-form';
-import { MockComponent } from 'ng-mocks';
-import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
-import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { LayerFiltersComponent } from '@shared-components/layer-filters/filters.component';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { CollectionsUnitsComponent } from '@shared-components/collections-units/collections-units.component';
-import { ArlasColorService } from 'arlas-web-components';
 
 describe('ConfigFormControlComponent', () => {
-    let spectator: Spectator<ConfigFormControlComponent>;
+    let component: ConfigFormControlComponent;
+    let fixture: ComponentFixture<ConfigFormControlComponent>;
 
-    const createComponent = createComponentFactory({
-        component: ConfigFormControlComponent,
-        imports: [
-            MatCheckboxModule
-        ],
-        declarations: [
-            ResetOnChangeDirective,
-            AlertOnChangeDirective,
-            MockComponent(ColorPickerWrapperComponent),
-            MockComponent(LayerFiltersComponent),
-            MockComponent(CollectionsUnitsComponent)
-        ],
-        providers: [
-            mockProvider(ArlasColorService),
-            mockProvider(CollectionService)
-        ]
-    });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                ConfigFormControlComponent,
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ]
+        })
+        .compileComponents();
 
-    beforeEach(() => {
-        spectator = createComponent({
-            props: {
-                control: new SlideToggleFormControl('', '', '')
-            }
-        });
+        fixture = TestBed.createComponent(ConfigFormControlComponent);
+        component = fixture.componentInstance;
+        fixture.componentRef.setInput('control', new IconFormControl('', '', ''));
+        fixture.detectChanges();
     });
 
     it('should create', () => {
-        expect(spectator.component).toBeTruthy();
+        expect(component).toBeTruthy();
     });
 });

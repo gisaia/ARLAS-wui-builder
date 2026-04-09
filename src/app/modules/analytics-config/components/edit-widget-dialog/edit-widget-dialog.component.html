@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>{{dialogData.widgetType | translate | titlecase }}</h1>
+<h1 mat-dialog-title>{{ dialogData.widgetType | translate | titlecase }}</h1>
 @if (formGroup.controls['title']) {
   <arlas-config-form-control [control]="$any(formGroup.controls['title'])"></arlas-config-form-control>
 }

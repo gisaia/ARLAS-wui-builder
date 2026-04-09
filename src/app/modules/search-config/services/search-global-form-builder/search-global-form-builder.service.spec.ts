@@ -1,34 +1,26 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/spectator';
+import { TestBed } from '@angular/core/testing';
 import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { SearchGlobalFormBuilderService } from './search-global-form-builder.service';
 
-describe('SearchGlobalFormBuilderService', () => {
-    let spectator: SpectatorService<SearchGlobalFormBuilderService>;
-
-    const createService = createServiceFactory({
-        service: SearchGlobalFormBuilderService,
-        providers: [
-            mockProvider(CollectionService),
-            mockProvider(ArlasCollaborativesearchService)
-        ],
-        imports: [
-            TranslateModule.forRoot({
-                loader: {
-                    provide: TranslateLoader,
-                    useClass: TranslateNoOpLoader
-                }
-            })
-        ]
-    });
+describe('ResultListImportService', () => {
+    let service: SearchGlobalFormBuilderService;
 
     beforeEach(() => {
-        spectator = createService();
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ]
+        });
+
+        service = TestBed.inject(SearchGlobalFormBuilderService);
     });
 
     it('should create', () => {
-        expect(spectator.service).toBeTruthy();
+        expect(service).toBeTruthy();
     });
 });

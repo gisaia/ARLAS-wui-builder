@@ -1,33 +1,39 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { GlobalMapComponent } from './global-map.component';
-import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
-import { MockComponent } from 'ng-mocks';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { mockMainFormService } from '@app/test/main-form.service.mock';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
-import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { GlobalMapComponent } from './global-map.component';
 
 describe('GlobalMapComponent', () => {
+    let component: GlobalMapComponent;
+    let fixture: ComponentFixture<GlobalMapComponent>;
 
-    let spectator: Spectator<GlobalMapComponent>;
-    const createComponent = createComponentFactory({
-        component: GlobalMapComponent,
-        declarations: [
-            MockComponent(ConfigFormGroupComponent)
-        ],
-        providers: [
-            mockProvider(MainFormService, {
-                mapConfig: {
-                    getGlobalFg: () => new MapGlobalFormGroup()
-                },
-                getMainCollection: () => ''
-            }),
-        ]
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                GlobalMapComponent,
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+                LoggerModule.forRoot(null)
+            ],
+            providers: [
+                {
+                    provide: MainFormService,
+                    useValue: mockMainFormService
+                }
+            ]
+        })
+        .compileComponents();
+
+        fixture = TestBed.createComponent(GlobalMapComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
     });
-
-    beforeEach(() => spectator = createComponent());
 
     it('should create', () => {
-        expect(spectator.component).toBeTruthy();
+        expect(component).toBeTruthy();
     });
-
 });

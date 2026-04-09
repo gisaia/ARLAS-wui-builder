@@ -1,25 +1,33 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { TestBed } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { MapLayerFormBuilderService } from './map-layer-form-builder.service';
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasColorService } from 'arlas-web-components';
 
 describe('MapLayerFormBuilderService', () => {
-    let spectator: SpectatorService<MapLayerFormBuilderService>;
-
-    const createService = createServiceFactory({
-        service: MapLayerFormBuilderService,
-        providers: [
-            mockProvider(CollectionService),
-            mockProvider(ArlasColorService),
-        ]
-    });
+    let service: MapLayerFormBuilderService;
 
     beforeEach(() => {
-        spectator = createService();
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+                ColorGeneratorModule.forRoot({
+                    loader: {
+                        provide: ColorGeneratorLoader,
+                        useClass: AwcColorGeneratorLoader
+                    }
+                }),
+            ]
+        });
+
+        service = TestBed.inject(MapLayerFormBuilderService);
     });
 
     it('should create', () => {
-        expect(spectator.service).toBeTruthy();
+        expect(service).toBeTruthy();
     });
 });

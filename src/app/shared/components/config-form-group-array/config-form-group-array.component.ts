@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, forwardRef, Input, OnDestroy } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -32,8 +32,8 @@ import { ConfigFormGroup, ConfigFormGroupArray } from '@shared-models/config-for
     MatIconModule,
     MatTooltipModule,
     TranslatePipe,
-    ConfigElementComponent,
-    ConfigFormControlComponent
+    forwardRef(() => ConfigElementComponent),
+    forwardRef(() => ConfigFormControlComponent)
   ]
 })
 export class ConfigFormGroupArrayComponent implements OnDestroy {

@@ -1,11 +1,10 @@
-import { beforeEach, describe, expect, it } from "vitest";
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSelectModule } from '@angular/material/select';
 import { By } from '@angular/platform-browser';
-import { mockProvider } from '@ngneat/spectator';
-import { NGXLogger } from 'ngx-logger';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { ResetOnChangeDirective } from './reset-on-change.directive';
 
 @Component({
@@ -23,8 +22,10 @@ describe('ResetOnChangeDirective', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                provideHttpClient(withInterceptorsFromDi()),
-                mockProvider(NGXLogger)
+                provideHttpClient(withInterceptorsFromDi())
+            ],
+            imports: [
+                LoggerModule.forRoot(null)
             ]
         });
         fixture = TestBed.createComponent(Test);

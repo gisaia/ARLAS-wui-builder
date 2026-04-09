@@ -272,7 +272,7 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
     return event.value;
   }
 
-  public isTitleInput(): InputFormControl | null {
+  public isTitleInput(): TitleInputFormControl | null {
     return Object.getPrototypeOf(this.control) === TitleInputFormControl.prototype ? this.control as TitleInputFormControl : null;
   }
 

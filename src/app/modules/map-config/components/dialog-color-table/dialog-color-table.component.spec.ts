@@ -1,44 +1,54 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { mockDialogRef } from '@app/test/mat-dialog-ref.mock';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { DialogColorTableComponent } from './dialog-color-table.component';
-import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MockComponent } from 'ng-mocks';
-import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
-import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasColorService } from 'arlas-web-components';
 
 describe('DialogColorTableComponent', () => {
-    let spectator: Spectator<DialogColorTableComponent>;
+    let component: DialogColorTableComponent;
+    let fixture: ComponentFixture<DialogColorTableComponent>;
 
-    const createComponent = createComponentFactory({
-        component: DialogColorTableComponent,
-        providers: [
-            {
-                provide: MAT_DIALOG_DATA, useValue: {
-                    collection: '',
-                    sourceField: '',
-                    keywordColors: []
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                DialogColorTableComponent,
+                ColorGeneratorModule.forRoot({
+                    loader: {
+                        provide: ColorGeneratorLoader,
+                        useClass: AwcColorGeneratorLoader
+                    }
+                }),
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ],
+            providers: [
+                {
+                    provide: MatDialogRef,
+                    useValue: mockDialogRef
+                },
+                {
+                    provide: MAT_DIALOG_DATA,
+                    useValue: {
+                        collection: 'Test',
+                        sourceField: 'Test',
+                        keywordColors: []
+                    }
                 }
-            },
-            mockProvider(ArlasColorService)
-        ],
-        declarations: [
-            MockComponent(ColorPickerWrapperComponent)
-        ],
-        mocks: [
-            MatDialogRef,
-            ArlasCollaborativesearchService,
-            ArlasColorService,
-            CollectionService,
-        ]
-    });
+            ]
+        })
+        .compileComponents();
 
-    beforeEach(() => {
-        spectator = createComponent();
+        fixture = TestBed.createComponent(DialogColorTableComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
     });
 
     it('should create', () => {
-        expect(spectator.component).toBeTruthy();
+        expect(component).toBeTruthy();
     });
 });

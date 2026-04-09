@@ -1,33 +1,40 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { EditResultlistColumnsComponent } from './edit-resultlist-columns.component';
-import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
-import { MockComponent } from 'ng-mocks';
-import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormArray } from '@angular/forms';
-import { ResultlistFormBuilderService } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { EditResultlistColumnsComponent } from './edit-resultlist-columns.component';
 
 describe('EditResultlistColumnsComponent', () => {
-    let spectator: Spectator<EditResultlistColumnsComponent>;
+    let component: EditResultlistColumnsComponent;
+    let fixture: ComponentFixture<EditResultlistColumnsComponent>;
 
-    const createComponent = createComponentFactory({
-        component: EditResultlistColumnsComponent,
-        declarations: [
-            MockComponent(ConfigFormControlComponent)
-        ],
-        providers: [
-            mockProvider(ResultlistFormBuilderService)
-        ]
-    });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                EditResultlistColumnsComponent,
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+                ColorGeneratorModule.forRoot({
+                    loader: {
+                        provide: ColorGeneratorLoader,
+                        useClass: AwcColorGeneratorLoader
+                    }
+                }),
+            ]
+        })
+        .compileComponents();
 
-    beforeEach(() => {
-        spectator = createComponent({
-            props: {
-                control: new FormArray([])
-            }
-        });
+        fixture = TestBed.createComponent(EditResultlistColumnsComponent);
+        component = fixture.componentInstance;
+        fixture.componentRef.setInput('control', new FormArray([]));
+        fixture.detectChanges();
     });
 
     it('should create', () => {
-        expect(spectator.component).toBeTruthy();
+        expect(component).toBeTruthy();
     });
 });

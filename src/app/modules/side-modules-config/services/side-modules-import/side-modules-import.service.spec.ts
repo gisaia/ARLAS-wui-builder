@@ -1,19 +1,17 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { TestBed } from '@angular/core/testing';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { SideModulesImportService } from './side-modules-import.service';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 
 describe('SideModulesImportService', () => {
-    let spectator: SpectatorService<SideModulesImportService>;
-
-    const createService = createServiceFactory({
-        service: SideModulesImportService,
-    });
+    let service: SideModulesImportService;
 
     beforeEach(() => {
-        spectator = createService();
+        TestBed.configureTestingModule({});
+
+        service = TestBed.inject(SideModulesImportService);
     });
 
     it('should create', () => {
-        expect(spectator.service).toBeTruthy();
+        expect(service).toBeTruthy();
     });
 });

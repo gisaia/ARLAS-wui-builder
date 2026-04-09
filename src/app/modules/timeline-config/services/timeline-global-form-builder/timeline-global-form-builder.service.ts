@@ -46,7 +46,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
     startupService: StartupService,
     mainFormService: MainFormService,
     settingsService: ArlasSettingsService,
-    timelineBucketsIntervalFg?: BucketsIntervalFormGroup,
+    timelineBucketsIntervalFg: BucketsIntervalFormGroup,
     colorService?: ArlasColorService,
   ) {
     super(

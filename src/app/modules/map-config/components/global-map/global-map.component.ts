@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
@@ -29,18 +29,12 @@ import { ConfigFormGroupComponent } from '@shared-components/config-form-group/c
     ConfigFormGroupComponent
   ]
 })
-export class GlobalMapComponent implements OnInit {
-
-
+export class GlobalMapComponent {
   public globalFg: MapGlobalFormGroup;
 
   public constructor(
-    public mainFormService: MainFormService,
+    private readonly mainFormService: MainFormService,
   ) {
     this.globalFg = this.mainFormService.mapConfig.getGlobalFg();
   }
-
-  public ngOnInit() {
-  }
-
 }

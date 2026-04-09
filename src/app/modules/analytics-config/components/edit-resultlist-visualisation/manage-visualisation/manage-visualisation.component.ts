@@ -23,24 +23,35 @@ import {
   ResultListVisualisationsDataGroup,
   ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { LowerCasePipe, NgTemplateOutlet } from '@angular/common';
 import { Component, inject, input, output, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTable } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTable, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
-import { SharedModule } from '@shared/shared.module';
 import { GetFieldDisplayNamePipe } from 'arlas-web-components';
 import { filter, first } from 'rxjs';
 
 @Component({
   selector: 'arlas-manage-visualisation',
   imports: [
-    TranslateModule,
-    SharedModule,
-    GetFieldDisplayNamePipe
+    TranslatePipe,
+    GetFieldDisplayNamePipe,
+    MatTooltipModule,
+    MatIconModule,
+    MatButtonModule,
+    ConfigFormControlComponent,
+    MatTableModule,
+    DragDropModule,
+    LowerCasePipe,
+    NgTemplateOutlet
   ],
   templateUrl: './manage-visualisation.component.html',
   styleUrl: './manage-visualisation.component.scss'

@@ -1,27 +1,43 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { ResultlistFormBuilderService } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
+import { ResultListVisualisationsDataGroup } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { mockProvider } from '@ngneat/spectator';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { TOKEN_LOGGER_CONFIG } from 'ngx-logger';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { ManageDataGroupDialogComponent } from './manage-data-group-dialog.component';
 
-describe('DataGroupEditionComponent', () => {
+describe('ManageDataGroupDialogComponent', () => {
     let component: ManageDataGroupDialogComponent;
     let fixture: ComponentFixture<ManageDataGroupDialogComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ManageDataGroupDialogComponent],
+            imports: [
+                ManageDataGroupDialogComponent,
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+                ColorGeneratorModule.forRoot({
+                    loader: {
+                        provide: ColorGeneratorLoader,
+                        useClass: AwcColorGeneratorLoader
+                    }
+                }),
+            ],
             providers: [
-                { provide: MAT_DIALOG_DATA, useValue: {} },
-                { provide: TOKEN_LOGGER_CONFIG, useValue: {} },
-                mockProvider(ResultlistFormBuilderService),
-                mockProvider(CollectionService)
+                {
+                    provide: MAT_DIALOG_DATA,
+                    useValue: {
+                        edit: true,
+                        dataGroup: new ResultListVisualisationsDataGroup(),
+                        collectionControlName: 'collection'
+                    }
+                }
             ]
         })
-            .compileComponents();
+        .compileComponents();
 
         fixture = TestBed.createComponent(ManageDataGroupDialogComponent);
         component = fixture.componentInstance;

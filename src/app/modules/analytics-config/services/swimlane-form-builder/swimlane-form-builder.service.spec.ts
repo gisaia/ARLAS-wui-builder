@@ -1,36 +1,26 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { TestBed } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { SwimlaneFormBuilderService } from './swimlane-form-builder.service';
-import { createServiceFactory, SpectatorService, mockProvider } from '@ngneat/spectator';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { BucketsIntervalFormBuilderService } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
-import { MetricCollectFormBuilderService } from '../metric-collect-form-builder/metric-collect-form-builder.service';
-import { of } from 'rxjs';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 describe('SwimlaneFormBuilderService', () => {
-    let spectator: SpectatorService<SwimlaneFormBuilderService>;
-
-    const createService = createServiceFactory({
-        service: SwimlaneFormBuilderService,
-        providers: [
-            BucketsIntervalFormBuilderService,
-            MetricCollectFormBuilderService,
-            mockProvider(CollectionService, {
-                getCollectionFields: () => of([])
-            }),
-            mockProvider(DefaultValuesService, {
-                getDefaultConfig: () => ({
-                    huePalettes: []
-                })
-            })
-        ]
-    });
+    let service: SwimlaneFormBuilderService;
 
     beforeEach(() => {
-        spectator = createService({});
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ]
+        });
+
+        service = TestBed.inject(SwimlaneFormBuilderService);
     });
 
     it('should create', () => {
-        expect(spectator.service).toBeTruthy();
+        expect(service).toBeTruthy();
     });
 });

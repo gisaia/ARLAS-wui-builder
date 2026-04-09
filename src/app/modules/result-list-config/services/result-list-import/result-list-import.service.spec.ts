@@ -1,28 +1,33 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/spectator';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasCollaborativesearchService, ArlasStartupService } from 'arlas-wui-toolkit';
-import { ArlasColorService } from 'arlas-web-components';
+import { TestBed } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { ResultListImportService } from './result-list-import.service';
 
 describe('ResultListImportService', () => {
-    let spectator: SpectatorService<ResultListImportService>;
-
-    const createService = createServiceFactory({
-        service: ResultListImportService,
-        providers: [
-            mockProvider(CollectionService),
-            mockProvider(ArlasStartupService),
-            mockProvider(ArlasCollaborativesearchService),
-            mockProvider(ArlasColorService),
-        ]
-    });
+    let service: ResultListImportService;
 
     beforeEach(() => {
-        spectator = createService();
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+                ColorGeneratorModule.forRoot({
+                    loader: {
+                        provide: ColorGeneratorLoader,
+                        useClass: AwcColorGeneratorLoader
+                    }
+                }),
+            ]
+        });
+
+        service = TestBed.inject(ResultListImportService);
     });
 
     it('should create', () => {
-        expect(spectator.service).toBeTruthy();
+        expect(service).toBeTruthy();
     });
 });

@@ -1,29 +1,37 @@
-import { beforeEach, describe, expect, it } from "vitest";
-
-import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { mockMainFormService } from '@app/test/main-form.service.mock';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { MetricsTableDataComponent } from './metrics-table-data.component';
-import { MatDialogModule } from '@angular/material/dialog';
 
 describe('MetricsTableDataComponent', () => {
-    let spectator: Spectator<MetricsTableDataComponent>;
+    let component: MetricsTableDataComponent;
+    let fixture: ComponentFixture<MetricsTableDataComponent>;
 
-    const createComponent = createComponentFactory({
-        component: MetricsTableDataComponent,
-        declarations: [],
-        imports: [
-            MatDialogModule
-        ],
-    });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                MetricsTableDataComponent,
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ],
+            providers: [
+                {
+                    provide: MainFormService,
+                    useValue: mockMainFormService
+                }
+            ]
+        })
+        .compileComponents();
 
-    beforeEach(() => {
-        spectator = createComponent({
-            props: {
-                collection: 'test'
-            }
-        });
+        fixture = TestBed.createComponent(MetricsTableDataComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
     });
 
     it('should create', () => {
-        expect(spectator.component).toBeTruthy();
+        expect(component).toBeTruthy();
     });
 });

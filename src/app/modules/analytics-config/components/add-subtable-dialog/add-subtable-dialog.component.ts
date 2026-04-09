@@ -22,13 +22,13 @@ import {
   SubTableFormGroup
 } from '@analytics-config/services/metrics-table-form-builder/metrics-table-form-builder.service';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormArray } from '@angular/forms';
+import { Component, forwardRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatError } from '@angular/material/select';
-import { MatTableModule } from '@angular/material/table';
+import { MatTable, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -47,12 +47,12 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./add-subtable-dialog.component.scss'],
   imports: [
     TranslatePipe,
-    ConfigFormGroupComponent,
+    forwardRef(() => ConfigFormGroupComponent),
     MatTableModule,
     DragDropModule,
     MatIconModule,
     MatButtonModule,
-    ConfigFormControlComponent,
+    forwardRef(() => ConfigFormControlComponent),
     MatError,
     MatDialogModule,
     MatTooltipModule
@@ -61,7 +61,7 @@ import { Subscription } from 'rxjs';
 export class AddSubtableDialogComponent implements OnInit, OnDestroy {
   public formGroup: SubTableFormGroup;
   public defaultKey: string;
-  @ViewChild('columnTable', { static: true }) public columnTable;
+  @ViewChild('columnTable', { static: true }) public columnTable: MatTable<AbstractControl>;
   public dragDisabled = true;
   public displayedColumns: string[] = ['action', 'metric', 'field'];
   public title: string = marker('Add a sub table');
@@ -75,7 +75,7 @@ export class AddSubtableDialogComponent implements OnInit, OnDestroy {
       subTable: SubTableFormGroup;
       collection: string;
     },
-    public dialogRef: MatDialogRef<AddSubtableDialogComponent>,
+    private dialogRef: MatDialogRef<AddSubtableDialogComponent>,
     private metricsTableFormBuilder: MetricsTableFormBuilderService,
     private collectionService: CollectionService
   ) { }

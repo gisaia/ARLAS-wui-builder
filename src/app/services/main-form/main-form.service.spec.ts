@@ -1,16 +1,17 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { TestBed } from '@angular/core/testing';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { MainFormService } from './main-form.service';
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 
 describe('MainFormService', () => {
-    let spectator: SpectatorService<MainFormService>;
-    const createService = createServiceFactory({
-        service: MainFormService,
+    let service: MainFormService;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+
+        service = TestBed.inject(MainFormService);
     });
 
-    beforeEach(() => spectator = createService());
-
-    it('should be defined', () => {
-        expect(spectator.service).toBeDefined();
+    it('should create', () => {
+        expect(service).toBeTruthy();
     });
 });

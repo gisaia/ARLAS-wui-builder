@@ -1,53 +1,61 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { IconPickerComponent } from '@gisaia-team/ngx-icon-picker';
-import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
-import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
-import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
-import { ArlasColorService } from 'arlas-web-components';
-import { AnalyticsBoardComponent, ArlasCollaborativesearchService, ArlasConfigService, ArlasConfigurationUpdaterService, ArlasStartupService, CONFIG_UPDATER } from 'arlas-wui-toolkit';
-import { MockComponent } from 'ng-mocks';
+import { mockArlasStartupService } from '@app/test/arlas-startup.service.mock';
+import { mockCollectionService } from '@app/test/collection.service.mock';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
+import { ArlasStartupService } from 'arlas-wui-toolkit';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { EditGroupComponent } from './edit-group.component';
-import { WIDGET_TYPE } from './models';
-import { AnalyticConfig } from '@services/main-form-manager/models-config';
 
 describe('EditGroupComponent', () => {
-    let spectator: Spectator<EditGroupComponent>;
+    let component: EditGroupComponent;
+    let fixture: ComponentFixture<EditGroupComponent>;
 
-    const createComponent = createComponentFactory({
-        component: EditGroupComponent,
-        declarations: [
-            AlertOnChangeDirective,
-            ResetOnChangeDirective,
-            MockComponent(AnalyticsBoardComponent),
-            MockComponent(IconPickerComponent),
-        ],
-        providers: [
-            mockProvider(ArlasConfigService),
-            mockProvider(ArlasStartupService),
-            mockProvider(ArlasCollaborativesearchService),
-            mockProvider(ArlasColorService),
-            mockProvider(ArlasConfigurationUpdaterService),
-            { provide: CONFIG_UPDATER, useValue: {} }
-        ]
-    });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                EditGroupComponent,
+                LoggerModule.forRoot(null),
+                ColorGeneratorModule.forRoot({
+                    loader: {
+                        provide: ColorGeneratorLoader,
+                        useClass: AwcColorGeneratorLoader
+                    }
+                }),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ],
+            providers: [
+                {
+                    provide: ArlasStartupService,
+                    useValue: mockArlasStartupService
+                },
+                {
+                    provide: CollectionService,
+                    useValue: mockCollectionService
+                }
+            ]
+        })
+        .compileComponents();
 
-    beforeEach(() => {
-        spectator = createComponent({
-            props: {
-                formGroup: new FormGroup({
-                    icon: new FormControl(''),
-                    title: new FormControl(''),
-                    itemPerLine: new FormControl(0),
-                    contentType: new FormControl(new Array<WIDGET_TYPE>()),
-                    content: new FormArray([]),
-                    preview: new FormControl({} as AnalyticConfig)
-                })
-            }
-        });
+        fixture = TestBed.createComponent(EditGroupComponent);
+        component = fixture.componentInstance;
+        fixture.componentRef.setInput('formGroup', new FormGroup({
+            content: new FormArray([]),
+            contentType: new FormControl(),
+            icon: new FormControl(),
+            itemPerLine: new FormControl(),
+            preview: new FormControl(),
+            title: new FormControl()
+        }));
+        fixture.detectChanges();
     });
 
     it('should create', () => {
-        expect(spectator.component).toBeTruthy();
+        expect(component).toBeTruthy();
     });
 });

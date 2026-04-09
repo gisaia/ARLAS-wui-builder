@@ -1,23 +1,26 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { TestBed } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { MetricFormBuilderService } from './metric-form-builder.service';
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
-import { CollectionService } from '@services/collection-service/collection.service';
 
 describe('MetricFormBuilderService', () => {
-    let spectator: SpectatorService<MetricFormBuilderService>;
-
-    const createService = createServiceFactory({
-        service: MetricFormBuilderService,
-        providers: [
-            mockProvider(CollectionService)
-        ]
-    });
+    let service: MetricFormBuilderService;
 
     beforeEach(() => {
-        spectator = createService({});
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ]
+        });
+
+        service = TestBed.inject(MetricFormBuilderService);
     });
 
     it('should create', () => {
-        expect(spectator.service).toBeTruthy();
+        expect(service).toBeTruthy();
     });
 });

@@ -1,63 +1,64 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { FormGroup } from '@angular/forms';
-import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
-import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { MenuService } from '@services/menu/menu.service';
-import { AuthentificationService, getOptionsFactory, GET_OPTIONS, ArlasSettingsService, PersistenceService } from 'arlas-wui-toolkit';
-import { Subject } from 'rxjs/internal/Subject';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterModule } from '@angular/router';
+import { mockArlasSettingsService } from '@app/test/arlas-settings.service.mock';
+import { mockArlasStartupService } from '@app/test/arlas-startup.service.mock';
+import { mockCollectionService } from '@app/test/collection.service.mock';
+import { mockPersistenceService } from '@app/test/persistence.service.mock';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
+import { ArlasSettingsService, ArlasStartupService, PersistenceService } from 'arlas-wui-toolkit';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { LeftMenuComponent } from './left-menu.component';
 
 describe('LeftMenuComponent', () => {
-    let spectator: Spectator<LeftMenuComponent>;
+    let component: LeftMenuComponent;
+    let fixture: ComponentFixture<LeftMenuComponent>;
 
-    const createComponent = createComponentFactory({
-        component: LeftMenuComponent,
-        providers: [
-            mockProvider(MainFormService, {
-                mapConfig: {
-                    control: new FormGroup({})
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                LeftMenuComponent,
+                LoggerModule.forRoot(null),
+                ColorGeneratorModule.forRoot({
+                    loader: {
+                        provide: ColorGeneratorLoader,
+                        useClass: AwcColorGeneratorLoader
+                    }
+                }),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+                RouterModule.forRoot([])
+            ],
+            providers: [
+                {
+                    provide: ArlasStartupService,
+                    useValue: mockArlasStartupService
                 },
-                searchConfig: {
-                    control: new FormGroup({})
+                {
+                    provide: CollectionService,
+                    useValue: mockCollectionService
                 },
-                lookAndFeelConfig: {
-                    control: new FormGroup({})
+                {
+                    provide: PersistenceService,
+                    useValue: mockPersistenceService
                 },
-                timelineConfig: {
-                    control: new FormGroup({})
-                },
-                analyticsConfig: {
-                    control: new FormGroup({})
-                },
-                sideModulesConfig: {
-                    control: new FormGroup({})
-                },
-                mainForm: new FormGroup({})
-            }),
-            mockProvider(MainFormManagerService),
-            mockProvider(MenuService),
-            mockProvider(PersistenceService),
-            mockProvider(AuthentificationService, {
-                canActivateProtectedRoutes: new Subject()
-            }),
-            mockProvider(ArlasSettingsService, {
-                getAuthentSettings: () => undefined
-            }),
-            {
-                provide: GET_OPTIONS,
-                useFactory: getOptionsFactory,
-                deps: [AuthentificationService]
-            }
-        ]
-    });
+                {
+                    provide: ArlasSettingsService,
+                    useValue: mockArlasSettingsService
+                }
+            ]
+        })
+        .compileComponents();
 
-    beforeEach(() => {
-        spectator = createComponent();
+        fixture = TestBed.createComponent(LeftMenuComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
     });
 
     it('should create', () => {
-        expect(spectator.component).toBeTruthy();
+        expect(component).toBeTruthy();
     });
-
 });

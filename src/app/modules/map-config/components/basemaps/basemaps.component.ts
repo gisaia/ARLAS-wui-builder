@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, OnInit } from '@angular/core';
+import { Component, forwardRef, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
@@ -35,7 +35,7 @@ import { ArlasSettingsService } from 'arlas-wui-toolkit';
   imports: [
     MatCheckboxModule,
     MatRadioModule,
-    ConfigFormGroupComponent,
+    forwardRef(() => ConfigFormGroupComponent),
     TranslatePipe
   ]
 })

@@ -28,7 +28,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
-import { MapComponentInputConfig } from '@services/main-form-manager/models-config';
+import { MapComponentInputConfig, MapglComponentConfig } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { StartupService, ZONE_PREVIEW } from '@services/startup/startup.service';
 import { FeatureCollection, Geometry } from '@turf/helpers';
@@ -49,7 +49,7 @@ import { catchError, map, merge, Observable, of, Subscription, throwError } from
 
 export interface MapglComponentInput {
   mapglContributors: MapContributor[];
-  mapComponentConfig: any;
+  mapComponentConfig: MapglComponentConfig;
 }
 
 @Component({

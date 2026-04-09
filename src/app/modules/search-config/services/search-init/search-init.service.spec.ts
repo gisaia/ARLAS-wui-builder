@@ -1,24 +1,26 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { SearchInitService } from './search-init.service';
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
-import { MainFormService } from '@services/main-form/main-form.service';
+import { TestBed } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { SearchGlobalFormBuilderService } from '../search-global-form-builder/search-global-form-builder.service';
 
-describe('SearchInitService', () => {
-    let spectator: SpectatorService<SearchInitService>;
-
-    const createService = createServiceFactory({
-        service: SearchInitService,
-        providers: [
-            mockProvider(SearchGlobalFormBuilderService)
-        ]
-    });
+describe('SearchGlobalFormBuilderService', () => {
+    let service: SearchGlobalFormBuilderService;
 
     beforeEach(() => {
-        spectator = createService();
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ]
+        });
+
+        service = TestBed.inject(SearchGlobalFormBuilderService);
     });
 
     it('should create', () => {
-        expect(spectator.service).toBeTruthy();
+        expect(service).toBeTruthy();
     });
 });

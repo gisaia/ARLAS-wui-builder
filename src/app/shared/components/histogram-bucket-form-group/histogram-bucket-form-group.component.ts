@@ -18,7 +18,7 @@
  */
 
 import { NgClass } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, forwardRef, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -41,8 +41,8 @@ import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset
   encapsulation: ViewEncapsulation.None,
   imports: [
     TranslatePipe,
-    ConfigElementComponent,
-    ConfigFormControlComponent,
+    forwardRef(() => ConfigElementComponent),
+    forwardRef(() => ConfigFormControlComponent),
     MatRadioModule,
     ResetOnChangeDirective,
     ReactiveFormsModule,

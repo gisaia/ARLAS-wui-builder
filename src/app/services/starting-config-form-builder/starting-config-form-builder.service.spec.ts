@@ -1,16 +1,22 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { TestBed } from '@angular/core/testing';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { StartingConfigFormBuilderService } from './starting-config-form-builder.service';
-import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
 
 describe('StartingConfigFormBuilderService', () => {
-    let spectator: SpectatorService<StartingConfigFormBuilderService>;
-    const createService = createServiceFactory({
-        service: StartingConfigFormBuilderService,
+    let service: StartingConfigFormBuilderService;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null)
+            ]
+        });
+
+        service = TestBed.inject(StartingConfigFormBuilderService);
     });
 
-    beforeEach(() => spectator = createService());
-
-    it('should be defined', () => {
-        expect(spectator.service).toBeDefined();
+    it('should create', () => {
+        expect(service).toBeTruthy();
     });
 });

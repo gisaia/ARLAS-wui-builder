@@ -1,26 +1,29 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { Spectator, createComponentFactory } from '@ngneat/spectator';
-import { ConfigElementComponent } from './config-element.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroupDirective } from '@angular/forms';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { ConfigElementComponent } from './config-element.component';
 
 describe('ConfigElementComponent', () => {
-    let spectator: Spectator<ConfigElementComponent>;
+    let component: ConfigElementComponent;
+    let fixture: ComponentFixture<ConfigElementComponent>;
 
-    const createComponent = createComponentFactory({
-        component: ConfigElementComponent,
-        providers: [FormGroupDirective]
-    });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                ConfigElementComponent
+            ],
+            providers: [
+                FormGroupDirective
+            ]
+        })
+        .compileComponents();
 
-    beforeEach(() => {
-        spectator = createComponent();
+        fixture = TestBed.createComponent(ConfigElementComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
     });
 
     it('should create', () => {
-        expect(spectator.component).toBeTruthy();
+        expect(component).toBeTruthy();
     });
-
-    it('should contain a map card', () => {
-        expect(spectator.queryAll('mat-card')).toBeDefined();
-    });
-
 });

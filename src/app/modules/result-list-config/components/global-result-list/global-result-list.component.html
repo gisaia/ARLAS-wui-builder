@@ -12,10 +12,10 @@
           }
           @if (matTab.isActive) {
             <mat-icon class="settings" (click)="$event.stopPropagation(); configTab(i)"
-            [matTooltip]="'Configure tab' | translate">settings</mat-icon>
+              [matTooltip]="'Configure tab' | translate">settings</mat-icon>
           }
           <mat-icon class="close" (click)="$event.stopPropagation(); removeTab(i)"
-          [matTooltip]="'Delete tab' | translate">close</mat-icon>
+            [matTooltip]="'Delete tab' | translate">close</mat-icon>
         </div>
       </ng-template>
       <arlas-config-form-group [configFormGroup]="listFg" defaultKey="resultlists"></arlas-config-form-group>

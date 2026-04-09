@@ -1,34 +1,31 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterModule } from '@angular/router';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { MapConfigComponent } from './map-config.component';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
-import { FormGroup, FormArray } from '@angular/forms';
 
 describe('MapConfigComponent', () => {
-    let spectator: Spectator<MapConfigComponent>;
+    let component: MapConfigComponent;
+    let fixture: ComponentFixture<MapConfigComponent>;
 
-    const createComponent = createComponentFactory({
-        component: MapConfigComponent,
-        providers: [
-            mockProvider(MainFormManagerService),
-            mockProvider(MainFormService, {
-                mapConfig: {
-                    getGlobalFg: () => new FormGroup({}),
-                    getLayersFa: () => new FormArray([]),
-                    getVisualisationsFa: () => new FormArray([]),
-                    getBasemapsFg: () => new FormGroup({})
-                }
-            })
-        ]
-    });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                MapConfigComponent,
+                RouterModule.forRoot([]),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ]
+        })
+        .compileComponents();
 
-    beforeEach(() => {
-        spectator = createComponent();
+        fixture = TestBed.createComponent(MapConfigComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
     });
 
     it('should create', () => {
-        expect(spectator.component).toBeTruthy();
+        expect(component).toBeTruthy();
     });
-
 });

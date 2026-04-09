@@ -1,23 +1,32 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/spectator';
+import { TestBed } from '@angular/core/testing';
+import { mockArlasSettingsService } from '@app/test/arlas-settings.service.mock';
+import { mockMainFormService } from '@app/test/main-form.service.mock';
+import { MainFormService } from '@services/main-form/main-form.service';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { MenuService } from './menu.service';
 
-
 describe('MenuService', () => {
-    let spectator: SpectatorService<MenuService>;
-    const createService = createServiceFactory({
-        service: MenuService,
-        providers: [
-            mockProvider(ArlasSettingsService, {
-                settings: {}
-            })
-        ]
+    let service: MenuService;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [
+                {
+                    provide: MainFormService,
+                    useValue: mockMainFormService
+                },
+                {
+                    provide: ArlasSettingsService,
+                    useValue: mockArlasSettingsService
+                }
+            ]
+        });
+
+        service = TestBed.inject(MenuService);
     });
 
-    beforeEach(() => spectator = createService());
-
-    it('should be defined', () => {
-        expect(spectator.service).toBeDefined();
+    it('should create', () => {
+        expect(service).toBeTruthy();
     });
 });

@@ -33,13 +33,15 @@ import {
   WritableSignal
 } from '@angular/core';
 import { AbstractControl, FormArray } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatIcon } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatTable, MatTableModule } from '@angular/material/table';
-import { TranslateModule } from '@ngx-translate/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { SharedModule } from '@shared/shared.module';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
+import { ObjectvaluesPipe } from '@shared/pipes/objectvalues.pipe';
 import { Expression } from 'arlas-api';
 
 interface DataGroupDialogData {
@@ -49,17 +51,20 @@ interface DataGroupDialogData {
 }
 
 @Component({
-    selector: 'arlas-manage-data-group-dialog',
-    imports: [
-        MatButton,
-        MatTableModule,
-        MatIcon,
-        SharedModule,
-        TranslateModule
-    ],
-    templateUrl: './manage-data-group-dialog.component.html',
-    styleUrl: './manage-data-group-dialog.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'arlas-manage-data-group-dialog',
+  imports: [
+    MatButtonModule,
+    MatTableModule,
+    MatIconModule,
+    TranslatePipe,
+    ConfigFormControlComponent,
+    MatTooltipModule,
+    ObjectvaluesPipe,
+    MatDialogModule
+  ],
+  templateUrl: './manage-data-group-dialog.component.html',
+  styleUrl: './manage-data-group-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ManageDataGroupDialogComponent implements OnInit {
   protected validate = output<boolean>();

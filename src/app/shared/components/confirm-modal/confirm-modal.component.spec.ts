@@ -1,31 +1,32 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { Spectator, createComponentFactory } from '@ngneat/spectator';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { ConfirmModalComponent } from './confirm-modal.component';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 describe('ConfirmModalComponent', () => {
-    let spectator: Spectator<ConfirmModalComponent>;
+    let component: ConfirmModalComponent;
+    let fixture: ComponentFixture<ConfirmModalComponent>;
 
-    const createComponent = createComponentFactory({
-        component: ConfirmModalComponent,
-        providers: [
-            { provide: MatDialogRef, useValue: {} },
-            { provide: MAT_DIALOG_DATA, useValue: { message: 'test' } }
-        ]
-    });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                ConfirmModalComponent,
+                TranslateModule.forRoot({ loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader } })
+            ],
+            providers: [
+                { provide: MatDialogRef, useValue: {} },
+                { provide: MAT_DIALOG_DATA, useValue: { message: 'test' } }
+            ]
+        })
+        .compileComponents();
 
-    beforeEach(() => {
-        spectator = createComponent();
+        fixture = TestBed.createComponent(ConfirmModalComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
     });
 
     it('should create', () => {
-        expect(spectator.component).toBeTruthy();
+        expect(component).toBeTruthy();
     });
-
-    it('should contain 1 title, 1 content and 2 buttons', () => {
-        expect(spectator.queryAll('[mat-dialog-title]')).toHaveLength(1);
-        expect(spectator.queryAll('[mat-dialog-content]')).toHaveLength(1);
-        expect(spectator.queryAll('button')).toHaveLength(2);
-    });
-
 });

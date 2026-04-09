@@ -1,31 +1,27 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { ConfigFormGroupArrayComponent } from './config-form-group-array.component';
-import { createComponentFactory, Spectator } from '@ngneat/spectator';
-import { MockComponent } from 'ng-mocks';
-import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
-import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfigFormGroupArray } from '@shared-models/config-form';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { ConfigFormGroupArrayComponent } from './config-form-group-array.component';
 
 describe('ConfigFormGroupArrayComponent', () => {
-    let spectator: Spectator<ConfigFormGroupArrayComponent>;
+    let component: ConfigFormGroupArrayComponent;
+    let fixture: ComponentFixture<ConfigFormGroupArrayComponent>;
 
-    const createComponent = createComponentFactory({
-        component: ConfigFormGroupArrayComponent,
-        declarations: [
-            MockComponent(ConfigFormControlComponent),
-            MockComponent(ConfigElementComponent),
-        ]
-    });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                ConfigFormGroupArrayComponent
+            ]
+        })
+        .compileComponents();
 
-    beforeEach(() => {
-        spectator = createComponent({
-            props: {
-                configFormGroupArray: new ConfigFormGroupArray([])
-            }
-        });
+        fixture = TestBed.createComponent(ConfigFormGroupArrayComponent);
+        component = fixture.componentInstance;
+        fixture.componentRef.setInput('configFormGroupArray', new ConfigFormGroupArray([]));
+        fixture.detectChanges();
     });
 
     it('should create', () => {
-        expect(spectator.component).toBeTruthy();
+        expect(component).toBeTruthy();
     });
 });

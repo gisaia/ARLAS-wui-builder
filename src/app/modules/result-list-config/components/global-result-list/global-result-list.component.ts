@@ -21,7 +21,7 @@ import { EditTabComponent } from '@analytics-config/components/edit-tab/edit-tab
 import {
   ResultlistConfigForm
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, forwardRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -49,7 +49,7 @@ import { Subscription } from 'rxjs';
     MatIconModule,
     MatTooltipModule,
     TranslatePipe,
-    ConfigFormGroupComponent,
+    forwardRef(() => ConfigFormGroupComponent),
     MatButtonModule
   ]
 })

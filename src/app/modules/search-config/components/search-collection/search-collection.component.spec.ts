@@ -1,12 +1,10 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { mockProvider } from '@ngneat/spectator';
+import { mockCollectionService } from '@app/test/collection.service.mock';
 import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
-import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
-import { NGXLogger } from 'ngx-logger';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { SearchCollectionComponent } from './search-collection.component';
-
 
 describe('SearchCollectionComponent', () => {
     let component: SearchCollectionComponent;
@@ -14,19 +12,21 @@ describe('SearchCollectionComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [TranslateModule.forRoot({
-                    loader: {
-                        provide: TranslateLoader,
-                        useClass: TranslateNoOpLoader
-                    }
-                }), SearchCollectionComponent],
+            imports: [
+                SearchCollectionComponent,
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ],
             providers: [
-                mockProvider(NGXLogger),
-                mockProvider(ArlasCollaborativesearchService),
-                provideHttpClient(withInterceptorsFromDi())
+                {
+                    provide: CollectionService,
+                    useValue: mockCollectionService
+                }
             ]
         })
-            .compileComponents();
+        .compileComponents();
 
         fixture = TestBed.createComponent(SearchCollectionComponent);
         component = fixture.componentInstance;

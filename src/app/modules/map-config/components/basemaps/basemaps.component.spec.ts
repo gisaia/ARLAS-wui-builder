@@ -1,55 +1,45 @@
-import { beforeEach, describe, expect, it } from "vitest";
-
-import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
-import { createComponentFactory, Spectator } from '@ngneat/spectator';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { mockArlasSettingsService } from '@app/test/arlas-settings.service.mock';
+import { mockMainFormService } from '@app/test/main-form.service.mock';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
-import { MockComponent } from 'ng-mocks';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { BasemapsComponent } from './basemaps.component';
 
-const settings = {
-    basemaps: [{
-            name: 'name',
-            url: 'url',
-            image: 'image',
-            checked: true,
-            default: true
-        }]
-};
-const mockArlasSettingsService = {
-    settings,
-    getSettings: () => settings
-};
-
 describe('BasemapsComponent', () => {
+    let component: BasemapsComponent;
+    let fixture: ComponentFixture<BasemapsComponent>;
 
-    let spectator: Spectator<BasemapsComponent>;
-    const createComponent = createComponentFactory({
-        component: BasemapsComponent,
-        declarations: [
-            MockComponent(ConfigFormGroupComponent)
-        ],
-        providers: [
-            {
-                provide: MainFormService,
-                useValue: {
-                    mapConfig: {
-                        getBasemapsFg: () => new MapBasemapFormGroup(mockArlasSettingsService as any)
-                    }
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                BasemapsComponent,
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+                LoggerModule.forRoot(null)
+            ],
+            providers: [
+                {
+                    provide: ArlasSettingsService,
+                    useValue: mockArlasSettingsService
+                },
+                {
+                    provide: MainFormService,
+                    useValue: mockMainFormService
                 }
-            },
-            {
-                provide: ArlasSettingsService,
-                useValue: mockArlasSettingsService
-            }
-        ]
-    });
+            ]
+        })
+        .compileComponents();
 
-    beforeEach(() => spectator = createComponent());
+        fixture = TestBed.createComponent(BasemapsComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
     it('should create', () => {
-        expect(spectator.component).toBeTruthy();
+        expect(component).toBeTruthy();
     });
-
 });

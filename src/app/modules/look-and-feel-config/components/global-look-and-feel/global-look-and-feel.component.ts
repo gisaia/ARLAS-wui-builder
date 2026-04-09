@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, OnInit } from '@angular/core';
+import { Component, forwardRef, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { LookAndFeelGlobalFormGroup } from '@look-and-feel-config/services/look-and-feel-global-form-builder/form-group';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -29,7 +29,7 @@ import { CollectionUnitFormGroup } from '@shared-models/collection-unit-form-gro
   templateUrl: './global-look-and-feel.component.html',
   styleUrls: ['./global-look-and-feel.component.scss'],
   imports: [
-    ConfigFormGroupComponent
+    forwardRef(() => ConfigFormGroupComponent)
   ]
 })
 export class GlobalLookAndFeelComponent implements OnInit {

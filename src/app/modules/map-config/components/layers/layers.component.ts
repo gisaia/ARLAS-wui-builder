@@ -106,7 +106,7 @@ export class LayersComponent implements OnInit, OnDestroy {
 
   public constructor(
     protected mainFormService: MainFormService,
-    public dialog: MatDialog,
+    private readonly dialog: MatDialog,
     private readonly collaborativesearchService: ArlasCollaborativesearchService,
     private readonly configService: ArlasConfigService,
     private readonly startupService: StartupService,
@@ -116,8 +116,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     private readonly mapLayerFormBuilder: MapLayerFormBuilderService,
     private readonly mapGlobalFormBuilder: MapGlobalFormBuilderService,
     protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
-    private readonly settingsService: ArlasSettingsService,
-    private readonly legendService: LegendService
+    private readonly settingsService: ArlasSettingsService
   ) {
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
     this.visualisationSetFa = this.mainFormService.mapConfig.getVisualisationsFa();

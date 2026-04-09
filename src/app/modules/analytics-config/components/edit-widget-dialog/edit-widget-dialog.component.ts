@@ -23,7 +23,7 @@ import { PowerbarFormBuilderService } from '@analytics-config/services/powerbar-
 import { ResultlistFormBuilderService } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { TitleCasePipe } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, forwardRef, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -43,10 +43,10 @@ import { EditWidgetDialogData } from './models';
   imports: [
     TranslatePipe,
     TitleCasePipe,
-    ConfigFormControlComponent,
+    forwardRef(() => ConfigFormControlComponent),
     MatButtonModule,
     MatDialogModule,
-    ConfigFormGroupComponent
+    forwardRef(() => ConfigFormGroupComponent)
   ]
 })
 export class EditWidgetDialogComponent implements OnInit {
@@ -67,7 +67,6 @@ export class EditWidgetDialogComponent implements OnInit {
     private resultlistFormBuilder: ResultlistFormBuilderService,
     private shortcutsService: ShortcutsService
   ) {
-
     this.initFormGroup();
   }
 
@@ -99,6 +98,7 @@ export class EditWidgetDialogComponent implements OnInit {
 
     this.formGroup = formBuilder.buildWithValues(this.dialogData.formData, this.dialogData.collection);
     this.defaultKey = formBuilder.defaultKey;
+    console.log(this.formGroup);
   }
 
   public ngOnInit() {

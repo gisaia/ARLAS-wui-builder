@@ -32,7 +32,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
 import { ArlasColorService } from 'arlas-web-components';
-import { NGXLogger } from 'ngx-logger';
 import { from, Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { DialogColorTableData } from './models';
@@ -70,7 +69,6 @@ export class DialogColorTableComponent implements OnInit {
   public constructor(
     public dialogRef: MatDialogRef<DialogColorTableComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogColorTableData,
-    private logger: NGXLogger,
     private formBuilder: FormBuilder,
     private colorService: ArlasColorService,
     private collectionService: CollectionService

@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it } from "vitest";
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { EditHistogramLabelComponent } from './edit-histogram-label.component';
 
 describe('EditHistogramLabelComponent', () => {
@@ -9,12 +9,15 @@ describe('EditHistogramLabelComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [TranslateModule.forRoot({
+            imports: [
+                TranslateModule.forRoot({
                     loader: {
                         provide: TranslateLoader,
                         useClass: TranslateNoOpLoader
                     }
-                }), EditHistogramLabelComponent]
+                }),
+                EditHistogramLabelComponent
+            ]
         })
             .compileComponents();
 

@@ -79,7 +79,6 @@ export class TabsComponent implements OnDestroy {
     private mainFormService: MainFormService,
     private analyticsInitService: AnalyticsInitService,
     private dialog: MatDialog,
-    private translate: TranslateService,
     private shortcutsService: ShortcutsService,
   ) {
 

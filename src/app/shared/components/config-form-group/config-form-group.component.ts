@@ -57,13 +57,12 @@ import { AsbtractConfigFormControl } from './abstract-config-form-group';
     TranslatePipe,
     MatStepperModule,
     ObjectvaluesPipe,
-    ConfigFormGroupComponent,
     MatTabsModule,
     OrderConfigFormTabControlsPipe,
-    ConfigElementComponent,
-    ConfigFormControlComponent,
-    HistogramBucketFormGroupComponent,
-    ConfigFormGroupArrayComponent
+    forwardRef(() => ConfigElementComponent),
+    forwardRef(() => ConfigFormControlComponent),
+    forwardRef(() => HistogramBucketFormGroupComponent),
+    forwardRef(() => ConfigFormGroupArrayComponent)
   ]
 })
 export class ConfigFormGroupComponent extends AsbtractConfigFormControl implements OnInit, OnDestroy {

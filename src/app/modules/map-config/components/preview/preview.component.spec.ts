@@ -1,45 +1,78 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { HttpClient } from '@angular/common/http';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { mockArlasStartupService } from '@app/test/arlas-startup.service.mock';
+import { mockCollectionService } from '@app/test/collection.service.mock';
+import { mockPersistenceService } from '@app/test/persistence.service.mock';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasCollaborativesearchService, ArlasConfigurationUpdaterService, ArlasStartupService, PersistenceService } from 'arlas-wui-toolkit';
-import { MockComponent } from 'ng-mocks';
+import { BasemapService } from 'arlas-map';
+import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
+import { ArlasStartupService, PersistenceService } from 'arlas-wui-toolkit';
+import { of } from 'rxjs';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { PreviewComponent } from './preview.component';
-import { ArlasColorService } from 'arlas-web-components';
-import { ArlasMapComponent } from 'arlas-map';
 
 describe('PreviewComponent', () => {
+    let component: PreviewComponent;
+    let fixture: ComponentFixture<PreviewComponent>;
 
-    let spectator: Spectator<PreviewComponent>;
-    const createComponent = createComponentFactory({
-        declarations: [
-            MockComponent(ArlasMapComponent)
-        ],
-        providers: [
-            mockProvider(HttpClient),
-            mockProvider(ArlasCollaborativesearchService),
-            mockProvider(ArlasConfigurationUpdaterService),
-            mockProvider(ArlasColorService),
-            mockProvider(ArlasStartupService),
-            mockProvider(CollectionService),
-            mockProvider(PersistenceService),
-            { provide: MatDialogRef, useValue: {} },
-            {
-                provide: MAT_DIALOG_DATA, useValue: {
-                    mapglContributor: null,
-                    mapComponentConfig: {
-                        input: {}
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                PreviewComponent,
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+                ColorGeneratorModule.forRoot({
+                    loader: {
+                        provide: ColorGeneratorLoader,
+                        useClass: AwcColorGeneratorLoader
+                    }
+                }),
+            ],
+            providers: [
+                {
+                    provide: ArlasStartupService,
+                    useValue: mockArlasStartupService
+                },
+                {
+                    provide: CollectionService,
+                    useValue: mockCollectionService
+                },
+                {
+                    provide: PersistenceService,
+                    useValue: mockPersistenceService
+                },
+                {
+                    provide: MAT_DIALOG_DATA,
+                    useValue: {
+                        mapglContributors: [],
+                        mapComponentConfig: {
+                            allowMapExtend: true,
+                            input: {
+                                basemapStyles: []
+                            }
+                        }
+                    }
+                },
+                {
+                    provide: BasemapService,
+                    useValue: {
+                        protomapBasemapAdded$: of(),
+                        setBasemaps: vi.fn(() => {}),
+                        fetchSources$: vi.fn(() => of([]))
                     }
                 }
-            }
-        ],
-        component: PreviewComponent,
+            ]
+        })
+        .compileComponents();
+
+        fixture = TestBed.createComponent(PreviewComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
     });
 
-    beforeEach(() => spectator = createComponent());
-
     it('should create', () => {
-        expect(spectator.component).toBeTruthy();
+        expect(component).toBeTruthy();
     });
 });
