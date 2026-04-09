@@ -24,8 +24,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { MapFilterFormGroup } from '@map-config/services/map-layer-form-builder/form-group';
 import {
-  MapFilterFormGroup, MapLayerFormBuilderService, MapLayerFormGroup
+  MapLayerFormBuilderService, MapLayerFormGroup
 } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';

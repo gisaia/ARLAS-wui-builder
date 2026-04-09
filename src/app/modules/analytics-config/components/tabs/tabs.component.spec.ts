@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { TabsComponent as TabsComponent } from './tabs.component';
 import { createComponentFactory, Spectator, mockProvider } from '@ngneat/spectator';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
@@ -9,33 +10,33 @@ import { FormArray } from '@angular/forms';
 import { ArlasStartupService, ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 
 describe('TabsComponent', () => {
-  let spectator: Spectator<TabsComponent>;
+    let spectator: Spectator<TabsComponent>;
 
-  const createComponent = createComponentFactory({
-    component: TabsComponent,
-    providers: [
-      mockProvider(DefaultValuesService, {
-        getValue: () => 'aValue'
-      }),
-      mockProvider(MainFormManagerService),
-      mockProvider(MainFormService, {
-        analyticsConfig: {
-          getListFa: () => new FormArray([])
-        }
-      }),
-      mockProvider(ArlasStartupService),
-      mockProvider(ArlasCollaborativesearchService),
-    ],
-    declarations: [
-      MockComponent(GroupsComponent)
-    ]
-  });
+    const createComponent = createComponentFactory({
+        component: TabsComponent,
+        providers: [
+            mockProvider(DefaultValuesService, {
+                getValue: () => 'aValue'
+            }),
+            mockProvider(MainFormManagerService),
+            mockProvider(MainFormService, {
+                analyticsConfig: {
+                    getListFa: () => new FormArray([])
+                }
+            }),
+            mockProvider(ArlasStartupService),
+            mockProvider(ArlasCollaborativesearchService),
+        ],
+        declarations: [
+            MockComponent(GroupsComponent)
+        ]
+    });
 
-  beforeEach(() => {
-    spectator = createComponent();
-  });
+    beforeEach(() => {
+        spectator = createComponent();
+    });
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.component).toBeTruthy();
+    });
 });

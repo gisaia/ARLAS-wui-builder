@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -11,32 +12,31 @@ import { LookAndFeelGlobalFormGroup } from '../../services/look-and-feel-global-
 import { GlobalLookAndFeelComponent } from './global-look-and-feel.component';
 
 describe('GlobalLookAndFeelComponent', () => {
-  let spectator: Spectator<GlobalLookAndFeelComponent>;
-  const createComponent = createComponentFactory({
-    component: GlobalLookAndFeelComponent,
-    declarations: [
-      MockComponent(ConfigElementComponent),
-      MockComponent(ConfigFormGroupComponent)
-    ],
-    providers: [
-      mockProvider(CollectionService, {
-        getCollectionFields: () => of([])
-      }),
-      mockProvider(ArlasCollaborativesearchService),
-      mockProvider(AnalyticsInitService),
-      mockProvider(MainFormService, {
-        getAllCollections: (collectionService: CollectionService) => [],
-        lookAndFeelConfig: {
-          getGlobalFg: () => new LookAndFeelGlobalFormGroup({} as any, {} as any)
-        }
-      })
-    ]
-  });
+    let spectator: Spectator<GlobalLookAndFeelComponent>;
+    const createComponent = createComponentFactory({
+        component: GlobalLookAndFeelComponent,
+        declarations: [
+            MockComponent(ConfigElementComponent),
+            MockComponent(ConfigFormGroupComponent)
+        ],
+        providers: [
+            mockProvider(CollectionService, {
+                getCollectionFields: () => of([])
+            }),
+            mockProvider(ArlasCollaborativesearchService),
+            mockProvider(AnalyticsInitService),
+            mockProvider(MainFormService, {
+                getAllCollections: (collectionService: CollectionService) => [],
+                lookAndFeelConfig: {
+                    getGlobalFg: () => new LookAndFeelGlobalFormGroup({} as any, {} as any)
+                }
+            })
+        ]
+    });
 
-  beforeEach(() => spectator = createComponent());
+    beforeEach(() => spectator = createComponent());
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.component).toBeTruthy();
+    });
 });
-

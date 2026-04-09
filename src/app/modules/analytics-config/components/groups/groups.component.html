@@ -5,7 +5,7 @@
     </mat-error>
   }
   <div class="bloc">
-    <div formArrayName="groupsFa" cdkDropList (cdkDropListDropped)="drop($event)">
+    <div [formArray]="groupsFa" cdkDropList (cdkDropListDropped)="drop($event)">
       @for (group of groupsFa.controls; track group; let gi = $index) {
         <div [formGroupName]="gi" cdkDrag class="group">
           <div class="placeholder" *cdkDragPlaceholder></div>

@@ -20,7 +20,6 @@ import {
   ManageDataGroupDialogComponent
 } from '@analytics-config/components/edit-resultlist-visualisation/data-group-edition/manage-data-group-dialog.component';
 import {
-  ResultlistFormBuilderService,
   ResultListVisualisationsDataGroup,
   ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
@@ -37,14 +36,14 @@ import { GetFieldDisplayNamePipe } from 'arlas-web-components';
 import { filter, first } from 'rxjs';
 
 @Component({
-    selector: 'arlas-manage-visualisation',
-    imports: [
-        TranslateModule,
-        SharedModule,
-        GetFieldDisplayNamePipe
-    ],
-    templateUrl: './manage-visualisation.component.html',
-    styleUrl: './manage-visualisation.component.scss'
+  selector: 'arlas-manage-visualisation',
+  imports: [
+    TranslateModule,
+    SharedModule,
+    GetFieldDisplayNamePipe
+  ],
+  templateUrl: './manage-visualisation.component.html',
+  styleUrl: './manage-visualisation.component.scss'
 })
 export class ManageVisualisationComponent {
   /**
@@ -78,12 +77,6 @@ export class ManageVisualisationComponent {
    */
   protected changeCanceled = output<boolean>();
   protected dialog = inject(MatDialog);
-  /**
-   * Helper. Create right forms
-   * @type {ResultlistFormBuilderService}
-   * @protected
-   */
-  protected resultListFormBuilderService = inject(ResultlistFormBuilderService);
   /**
    * Table columns
    * @type {string[]}
@@ -166,7 +159,7 @@ export class ManageVisualisationComponent {
   }
 
   public addDataGroup() {
-    const dataGroup = this.resultListFormBuilderService.buildVisualisationsDataGroup();
+    const dataGroup = new ResultListVisualisationsDataGroup();
     dataGroup.get('name').setValue(marker('New data group'));
     const ref = this.openEditionDialog(dataGroup);
 

@@ -25,6 +25,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -53,7 +54,8 @@ import { DialogColorTableData } from './models';
     ColorPickerWrapperComponent,
     MatTooltipModule,
     MatAutocompleteModule,
-    AsyncPipe
+    AsyncPipe,
+    MatInputModule
   ]
 })
 export class DialogColorTableComponent implements OnInit {

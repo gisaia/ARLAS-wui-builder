@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { ResultlistDataConfigForm } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
+import { ResultlistDataConfigForm } from '@analytics-config/services/resultlist-form-builder/form-group';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';

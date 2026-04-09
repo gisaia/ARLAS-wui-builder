@@ -30,10 +30,7 @@ import {
 } from '@analytics-config/services/resultlist-form-builder/models';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { FormArray, FormGroup } from '@angular/forms';
-import {
-  CollectionUnitFormGroup,
-  LookAndFeelGlobalFormGroup
-} from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
+import { LookAndFeelGlobalFormGroup } from '@look-and-feel-config/services/look-and-feel-global-form-builder/form-group';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import {
   BasemapFormGroup,
@@ -42,14 +39,13 @@ import {
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { CLUSTER_GEOMETRY_TYPE, FILTER_OPERATION } from '@map-config/services/map-layer-form-builder/models';
-import {
-  SearchGlobalFormGroup
-} from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
+import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/form-group';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { NUMERIC_TYPES, titleCase } from '@services/collection-service/tools';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
 import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
+import { CollectionUnitFormGroup } from '@shared-models/collection-unit-form-group';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
 import {
   SideModulesGlobalFormGroup
@@ -59,7 +55,7 @@ import {
 } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 import { CollectionReferenceDescription, Expression } from 'arlas-api';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api/api';
-import { BasemapStyle, SCROLLABLE_ARLAS_ID, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
+import { BasemapStyle, ExternalEventLayer, SCROLLABLE_ARLAS_ID, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
 import { ArlasColorService, DescribedUrl } from 'arlas-web-components';
 import { ColorConfig, ExtentFilterGeometry, FieldsConfiguration, getSourceName, LayerSourceConfig } from 'arlas-web-contributors';
 import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
@@ -617,10 +613,10 @@ export class ConfigExportHelper {
           layers: [],
           events: {
             zoomOnClick: customControls.unmanagedFields.mapLayers.events.zoomOnClick.value,
-            emitOnClick: layersHoverIds,
-            onHover: layersHoverIds,
+            emitOnClick: new Set(layersHoverIds),
+            onHover: new Set(layersHoverIds),
           },
-          externalEventLayers: new Array<{ id: string; on: string; }>()
+          externalEventLayers: new Array<ExternalEventLayer>()
         },
         visualisations_sets: visualisationsSets
       }

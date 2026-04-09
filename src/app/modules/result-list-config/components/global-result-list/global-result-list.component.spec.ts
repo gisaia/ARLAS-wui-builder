@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { FormArray } from '@angular/forms';
 import { createComponentFactory, createServiceFactory, mockProvider, Spectator, SpectatorService } from '@ngneat/spectator';
@@ -11,52 +12,52 @@ import { of } from 'rxjs';
 import { GlobalResultListComponent } from './global-result-list.component';
 
 describe('GlobalResultListComponent', () => {
-  let spectator: Spectator<GlobalResultListComponent>;
-  let collectionServiceSpectator: SpectatorService<CollectionService>;
-  const collectionService = createServiceFactory(CollectionService);
-  const createComponent = createComponentFactory({
-    component: GlobalResultListComponent,
-    declarations: [
-      MockComponent(ConfigFormGroupComponent),
-      MockComponent(ConfigFormControlComponent)
-    ],
-    providers: [
-      mockProvider(CollectionService, {
-        getCollectionFieldsNames: () => of([])
-      }),
-      mockProvider(MainFormService, {
-        getMainCollection: () => '',
-        resultListConfig: {
-          getResultListsFa: () => new FormArray([])
-        }
-      })
-    ]
-  });
+    let spectator: Spectator<GlobalResultListComponent>;
+    let collectionServiceSpectator: SpectatorService<CollectionService>;
+    const collectionService = createServiceFactory(CollectionService);
+    const createComponent = createComponentFactory({
+        component: GlobalResultListComponent,
+        declarations: [
+            MockComponent(ConfigFormGroupComponent),
+            MockComponent(ConfigFormControlComponent)
+        ],
+        providers: [
+            mockProvider(CollectionService, {
+                getCollectionFieldsNames: () => of([])
+            }),
+            mockProvider(MainFormService, {
+                getMainCollection: () => '',
+                resultListConfig: {
+                    getResultListsFa: () => new FormArray([])
+                }
+            })
+        ]
+    });
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-    imports: [GlobalResultListComponent],
-    providers: [
-        mockProvider(CollectionService, {
-            getCollectionFieldsNames: () => of([])
-        }),
-        mockProvider(MainFormService, {
-            getMainCollection: () => '',
-            resultListConfig: {
-                getResultListsFa: () => new FormArray([])
-            }
+    beforeEach(waitForAsync(() => {
+        TestBed.configureTestingModule({
+            imports: [GlobalResultListComponent],
+            providers: [
+                mockProvider(CollectionService, {
+                    getCollectionFieldsNames: () => of([])
+                }),
+                mockProvider(MainFormService, {
+                    getMainCollection: () => '',
+                    resultListConfig: {
+                        getResultListsFa: () => new FormArray([])
+                    }
+                })
+            ]
         })
-    ]
-})
-      .compileComponents();
-  }));
+            .compileComponents();
+    }));
 
-  beforeEach(() => {
-    spectator = createComponent();
-    collectionServiceSpectator = collectionService();
-  });
+    beforeEach(() => {
+        spectator = createComponent();
+        collectionServiceSpectator = collectionService();
+    });
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.component).toBeTruthy();
+    });
 });

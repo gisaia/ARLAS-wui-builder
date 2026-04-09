@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
@@ -11,56 +12,56 @@ import { MainFormService } from '@services/main-form/main-form.service';
 
 
 describe('LookAndFeelGlobalFormBuilderService', () => {
-  let spectator: SpectatorService<LookAndFeelGlobalFormBuilderService>;
+    let spectator: SpectatorService<LookAndFeelGlobalFormBuilderService>;
 
-  const createService = createServiceFactory({
-    service: LookAndFeelGlobalFormBuilderService,
-    providers: [
-      mockProvider(CollectionService, {
-        getCollectionFields: () => of([])
-      }),
-      mockProvider(ArlasCollaborativesearchService),
-      mockProvider(AnalyticsInitService),
-      mockProvider(MainFormService, {
-        lookAndFeelConfig: {
-          getGlobalFg: () => new FormGroup({
-            dragAndDrop: new FormControl(null),
-            zoomToDataStrategy: new FormControl(null),
-            indicators: new FormControl(null),
-            spinner: new FormControl(null),
-            spinnerColor: new FormControl(null),
-            spinnerDiameter: new FormControl(null)
-          })
-        },
-        startingConfig: {
-          getFg: () => new FormGroup({})
-        },
-        mapConfig: {
-          getGlobalFg: () => new FormGroup({}),
-          getLayersFa: () => new FormArray([])
-        },
-        searchConfig: {
-          getGlobalFg: () => new FormGroup({})
-        },
+    const createService = createServiceFactory({
+        service: LookAndFeelGlobalFormBuilderService,
+        providers: [
+            mockProvider(CollectionService, {
+                getCollectionFields: () => of([])
+            }),
+            mockProvider(ArlasCollaborativesearchService),
+            mockProvider(AnalyticsInitService),
+            mockProvider(MainFormService, {
+                lookAndFeelConfig: {
+                    getGlobalFg: () => new FormGroup({
+                        dragAndDrop: new FormControl(null),
+                        zoomToDataStrategy: new FormControl(null),
+                        indicators: new FormControl(null),
+                        spinner: new FormControl(null),
+                        spinnerColor: new FormControl(null),
+                        spinnerDiameter: new FormControl(null)
+                    })
+                },
+                startingConfig: {
+                    getFg: () => new FormGroup({})
+                },
+                mapConfig: {
+                    getGlobalFg: () => new FormGroup({}),
+                    getLayersFa: () => new FormArray([])
+                },
+                searchConfig: {
+                    getGlobalFg: () => new FormGroup({})
+                },
 
-        timelineConfig: {
-          getGlobalFg: () => new FormGroup({}),
-        },
-        resultListConfig: {
-          getResultListsFa: () => new FormArray([])
-        },
-        analyticsConfig: {
-          getListFa: () => new FormArray([]),
-        }
-      })
-    ]
-  });
+                timelineConfig: {
+                    getGlobalFg: () => new FormGroup({}),
+                },
+                resultListConfig: {
+                    getResultListsFa: () => new FormArray([])
+                },
+                analyticsConfig: {
+                    getListFa: () => new FormArray([]),
+                }
+            })
+        ]
+    });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+    beforeEach(() => {
+        spectator = createService();
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.service).toBeTruthy();
+    });
 });

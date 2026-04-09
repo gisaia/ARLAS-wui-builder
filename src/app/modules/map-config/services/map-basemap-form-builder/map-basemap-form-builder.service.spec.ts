@@ -1,22 +1,23 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { createServiceFactory, SpectatorService, mockProvider } from '@ngneat/spectator';
 import { MapBasemapFormBuilderService } from './map-basemap-form-builder.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 describe('MapBasemapFormBuilderService', () => {
-  let spectator: SpectatorService<MapBasemapFormBuilderService>;
+    let spectator: SpectatorService<MapBasemapFormBuilderService>;
 
-  const createService = createServiceFactory({
-    service: MapBasemapFormBuilderService,
-    providers: [
-      mockProvider(DefaultValuesService)
-    ]
-  });
+    const createService = createServiceFactory({
+        service: MapBasemapFormBuilderService,
+        providers: [
+            mockProvider(DefaultValuesService)
+        ]
+    });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+    beforeEach(() => {
+        spectator = createService();
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.service).toBeTruthy();
+    });
 });

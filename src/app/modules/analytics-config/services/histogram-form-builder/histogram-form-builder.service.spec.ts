@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { HistogramFormBuilderService } from './histogram-form-builder.service';
 import { createServiceFactory, SpectatorService, mockProvider } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -6,24 +7,24 @@ import { BucketsIntervalFormBuilderService } from '../buckets-interval-form-buil
 import { of } from 'rxjs';
 
 describe('HistogramFormBuilderService', () => {
-  let spectator: SpectatorService<HistogramFormBuilderService>;
+    let spectator: SpectatorService<HistogramFormBuilderService>;
 
-  const createService = createServiceFactory({
-    service: HistogramFormBuilderService,
-    providers: [
-      BucketsIntervalFormBuilderService,
-      MetricCollectFormBuilderService,
-      mockProvider(CollectionService, {
-        getCollectionFields: () => of([])
-      })
-    ]
-  });
+    const createService = createServiceFactory({
+        service: HistogramFormBuilderService,
+        providers: [
+            BucketsIntervalFormBuilderService,
+            MetricCollectFormBuilderService,
+            mockProvider(CollectionService, {
+                getCollectionFields: () => of([])
+            })
+        ]
+    });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+    beforeEach(() => {
+        spectator = createService();
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.service).toBeTruthy();
+    });
 });

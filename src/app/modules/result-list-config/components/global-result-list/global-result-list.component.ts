@@ -23,6 +23,7 @@ import {
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabGroup, MatTabsModule } from '@angular/material/tabs';
@@ -48,7 +49,8 @@ import { Subscription } from 'rxjs';
     MatIconModule,
     MatTooltipModule,
     TranslatePipe,
-    ConfigFormGroupComponent
+    ConfigFormGroupComponent,
+    MatButtonModule
   ]
 })
 export class GlobalResultListComponent implements OnDestroy {

@@ -30,6 +30,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
@@ -107,7 +108,9 @@ export class AddWidgetDialogComponent {
     MatTooltipModule,
     I18nPluralPipe,
     DragDropModule,
-    WidgetEditionComponent
+    WidgetEditionComponent,
+    MatInputModule,
+    MatButtonModule
   ]
 })
 export class EditGroupComponent implements OnInit, OnDestroy {

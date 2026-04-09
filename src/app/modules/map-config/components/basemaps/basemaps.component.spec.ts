@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 
 import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 import { createComponentFactory, Spectator } from '@ngneat/spectator';
@@ -8,47 +9,47 @@ import { MockComponent } from 'ng-mocks';
 import { BasemapsComponent } from './basemaps.component';
 
 const settings = {
-  basemaps: [{
-    name: 'name',
-    url: 'url',
-    image: 'image',
-    checked: true,
-    default: true
-  }]
+    basemaps: [{
+            name: 'name',
+            url: 'url',
+            image: 'image',
+            checked: true,
+            default: true
+        }]
 };
 const mockArlasSettingsService = {
-  settings,
-  getSettings: () => settings
+    settings,
+    getSettings: () => settings
 };
 
 describe('BasemapsComponent', () => {
 
-  let spectator: Spectator<BasemapsComponent>;
-  const createComponent = createComponentFactory({
-    component: BasemapsComponent,
-    declarations: [
-      MockComponent(ConfigFormGroupComponent)
-    ],
-    providers: [
-      {
-        provide: MainFormService,
-        useValue: {
-          mapConfig: {
-            getBasemapsFg: () => new MapBasemapFormGroup(mockArlasSettingsService as any)
-          }
-        }
-      },
-      {
-        provide: ArlasSettingsService,
-        useValue: mockArlasSettingsService
-      }
-    ]
-  });
+    let spectator: Spectator<BasemapsComponent>;
+    const createComponent = createComponentFactory({
+        component: BasemapsComponent,
+        declarations: [
+            MockComponent(ConfigFormGroupComponent)
+        ],
+        providers: [
+            {
+                provide: MainFormService,
+                useValue: {
+                    mapConfig: {
+                        getBasemapsFg: () => new MapBasemapFormGroup(mockArlasSettingsService as any)
+                    }
+                }
+            },
+            {
+                provide: ArlasSettingsService,
+                useValue: mockArlasSettingsService
+            }
+        ]
+    });
 
-  beforeEach(() => spectator = createComponent());
+    beforeEach(() => spectator = createComponent());
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.component).toBeTruthy();
+    });
 
 });

@@ -15,7 +15,8 @@
     "license-add": "license-check-and-add add -f license-check-and-add.json",
     "analyze": "webpack-bundle-analyzer dist/ARLAS-wui-builder/stats-es2015.json",
     "i18n:init": "ngx-translate-extract --input ./src/app --output ./src/assets/i18n/template.json --key-as-default-value --replace --format json",
-    "i18n:extract": "ngx-translate-extract --input ./src/app --output ./src/assets/i18n/{en,fr}.json --format json"
+    "i18n:extract": "ngx-translate-extract --input ./src/app --output ./src/assets/i18n/{en,fr}.json --format json",
+    "circular-dependency": "madge --circular --ts-config tsconfig.json --extensions ts src"
   },
   "dependencies": {
     "@angular/animations": "^21.2.7",
@@ -35,8 +36,8 @@
     "@ngx-translate/http-loader": "^17.0.0",
     "@types/file-saver": "^2.0.1",
     "ang-jsoneditor": "3.1.0",
-    "arlas-wui-toolkit": "28.0.0-beta.4",
     "arlas-maplibre": "28.0.0-beta.6",
+    "arlas-wui-toolkit": "28.0.0-beta.4",
     "file-saver": "^2.0.2",
     "jsoneditor": "9.10.2",
     "moment": "^2.29.4",
@@ -60,33 +61,25 @@
     "@angular/cli": "^21.2.6",
     "@angular/compiler-cli": "^21.2.7",
     "@angular/language-service": "^21.2.7",
-    "@vendure/ngx-translate-extract": "^10.1.2",
-    "@ngneat/spectator": "~9.0.0",
     "@stylistic/eslint-plugin": "^5.6.1",
-    "@types/jasmine": "~3.10.0",
-    "@types/jasminewd2": "~2.0.2",
     "@types/node": "^24.10.1",
     "@typescript-eslint/eslint-plugin": "^8.48.1",
     "@typescript-eslint/parser": "^8.48.1",
+    "@vendure/ngx-translate-extract": "^10.1.2",
     "eslint": "^9.39.1",
-    "jasmine-core": "~3.10.0",
-    "jasmine-spec-reporter": "~4.2.1",
-    "karma": "~6.4.0",
-    "karma-chrome-launcher": "~3.1.0",
-    "karma-coverage": "~2.0.3",
-    "karma-coverage-istanbul-reporter": "~3.0.3",
-    "karma-jasmine": "~4.0.0",
-    "karma-jasmine-html-reporter": "~1.7.0",
+    "jsdom": "^29.0.2",
     "license-check-and-add": "^4.0.5",
-    "ng-mocks": "~14.13.1",
+    "madge": "^8.0.0",
     "ng-packagr": "^21.2.2",
     "node": "^24.10.1",
     "patch-package": "^6.4.7",
     "ts-node": "~10.4.0",
     "typescript": "5.9.3",
+    "vitest": "^4.1.4",
     "webpack-bundle-analyzer": "^4.6.1"
   },
   "overrides": {
-    "underscore": "^1.13.8"
+    "underscore": "^1.13.8",
+    "shpjs": "^6.0.2"
   }
 }

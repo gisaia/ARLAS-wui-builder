@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { GlobalTimelineComponent } from './global-timeline.component';
 import { Spectator, createComponentFactory, mockProvider, createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -7,47 +8,43 @@ import { MockComponent } from 'ng-mocks';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 import { BucketsIntervalFormGroup } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
-import {  ArlasCollaborativesearchService, ArlasSettingsService } from 'arlas-wui-toolkit';
+import { ArlasCollaborativesearchService, ArlasSettingsService } from 'arlas-wui-toolkit';
 import { StartupService } from '@services/startup/startup.service';
 
 describe('GlobalTimelineComponent', () => {
-  let spectator: Spectator<GlobalTimelineComponent>;
-  const mockCollectionService = jasmine.createSpyObj('CollectionService', ['getGroupCollectionItems', 'getCollections']);
-  mockCollectionService.getGroupCollectionItems.and.returnValue({});
-  mockCollectionService.getCollections.and.returnValue([]);
-  const createComponent = createComponentFactory({
-    component: GlobalTimelineComponent,
-    declarations: [
-      MockComponent(ConfigFormGroupComponent),
-      MockComponent(ConfigFormControlComponent)
-    ],
-    providers: [
-      {
-        provide: CollectionService,
-        useValue: mockCollectionService
-      },
-      mockProvider(ArlasCollaborativesearchService),
-      mockProvider(MainFormService, {
-        timelineConfig: {
-          getGlobalFg: () => new TimelineGlobalFormGroup(
-            'collection',
-            mockCollectionService,
-            new StartupService(null, null, null, null, null),
-            new MainFormService(),
-            new ArlasSettingsService(),
-            new BucketsIntervalFormGroup(undefined, undefined, undefined)
-          )
-        },
-        getMainCollection: () => ''
-      })
-    ]
-  });
+    let spectator: Spectator<GlobalTimelineComponent>;
+    const mockCollectionService = {
+        getGroupCollectionItems: vi.fn().mockName("CollectionService.getGroupCollectionItems"),
+        getCollections: vi.fn().mockName("CollectionService.getCollections")
+    };
+    mockCollectionService.getGroupCollectionItems.mockReturnValue({});
+    mockCollectionService.getCollections.mockReturnValue([]);
+    const createComponent = createComponentFactory({
+        component: GlobalTimelineComponent,
+        declarations: [
+            MockComponent(ConfigFormGroupComponent),
+            MockComponent(ConfigFormControlComponent)
+        ],
+        providers: [
+            {
+                provide: CollectionService,
+                useValue: mockCollectionService
+            },
+            mockProvider(ArlasCollaborativesearchService),
+            mockProvider(MainFormService, {
+                timelineConfig: {
+                    getGlobalFg: () => new TimelineGlobalFormGroup('collection', mockCollectionService, new StartupService(null, null, null, null, null), new MainFormService(), new ArlasSettingsService(), new BucketsIntervalFormGroup(undefined, undefined, undefined))
+                },
+                getMainCollection: () => ''
+            })
+        ]
+    });
 
-  beforeEach(() => {
-    spectator = createComponent();
-  });
+    beforeEach(() => {
+        spectator = createComponent();
+    });
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.component).toBeTruthy();
+    });
 });

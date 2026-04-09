@@ -17,7 +17,7 @@
  * under the License.
  */
 import { Component } from '@angular/core';
-import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
+import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/form-group';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 

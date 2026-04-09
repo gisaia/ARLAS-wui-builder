@@ -1,15 +1,16 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { IconService } from './icon.service';
 import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
 
 describe('IconService', () => {
-  let spectator: SpectatorService<IconService>;
-  const createService = createServiceFactory({
-    service: IconService
-  });
+    let spectator: SpectatorService<IconService>;
+    const createService = createServiceFactory({
+        service: IconService
+    });
 
-  beforeEach(() => spectator = createService());
+    beforeEach(() => spectator = createService());
 
-  it('should be defined', () => {
-    expect(spectator.service).toBeDefined();
-  });
+    it('should be defined', () => {
+        expect(spectator.service).toBeDefined();
+    });
 });

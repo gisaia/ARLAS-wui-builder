@@ -19,6 +19,7 @@
 import { KeyValuePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { MatOptionModule } from '@angular/material/core';
@@ -47,7 +48,8 @@ import { PersistenceService } from 'arlas-wui-toolkit';
     MatCardModule,
     MatIconModule,
     MatCheckboxModule,
-    MatSelectModule
+    MatSelectModule,
+    MatButtonModule
   ]
 })
 export class ImportWidgetDialogComponent implements OnInit {

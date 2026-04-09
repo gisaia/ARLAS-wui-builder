@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { DialogColorTableComponent } from './dialog-color-table.component';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -8,36 +9,36 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { ArlasColorService } from 'arlas-web-components';
 
 describe('DialogColorTableComponent', () => {
-  let spectator: Spectator<DialogColorTableComponent>;
+    let spectator: Spectator<DialogColorTableComponent>;
 
-  const createComponent = createComponentFactory({
-    component: DialogColorTableComponent,
-    providers: [
-      {
-        provide: MAT_DIALOG_DATA, useValue: {
-          collection: '',
-          sourceField: '',
-          keywordColors: []
-        }
-      },
-      mockProvider(ArlasColorService)
-    ],
-    declarations: [
-      MockComponent(ColorPickerWrapperComponent)
-    ],
-    mocks: [
-      MatDialogRef,
-      ArlasCollaborativesearchService,
-      ArlasColorService,
-      CollectionService,
-    ]
-  });
+    const createComponent = createComponentFactory({
+        component: DialogColorTableComponent,
+        providers: [
+            {
+                provide: MAT_DIALOG_DATA, useValue: {
+                    collection: '',
+                    sourceField: '',
+                    keywordColors: []
+                }
+            },
+            mockProvider(ArlasColorService)
+        ],
+        declarations: [
+            MockComponent(ColorPickerWrapperComponent)
+        ],
+        mocks: [
+            MatDialogRef,
+            ArlasCollaborativesearchService,
+            ArlasColorService,
+            CollectionService,
+        ]
+    });
 
-  beforeEach(() => {
-    spectator = createComponent();
-  });
+    beforeEach(() => {
+        spectator = createComponent();
+    });
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.component).toBeTruthy();
+    });
 });

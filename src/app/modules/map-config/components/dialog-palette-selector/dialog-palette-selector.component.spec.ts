@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { DialogPaletteSelectorComponent } from './dialog-palette-selector.component';
 import { MockComponent } from 'ng-mocks';
@@ -5,24 +6,24 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
 
 describe('DialogPaletteSelectorComponent', () => {
-  let spectator: Spectator<DialogPaletteSelectorComponent>;
+    let spectator: Spectator<DialogPaletteSelectorComponent>;
 
-  const createComponent = createComponentFactory({
-    component: DialogPaletteSelectorComponent,
-    providers: [
-      mockProvider(MatDialogRef),
-      { provide: MAT_DIALOG_DATA, useValue: { defaultPalettes: [], selectedPalette: '' } }
-    ],
-    declarations: [
-      MockComponent(ColorPickerWrapperComponent)
-    ]
-  });
+    const createComponent = createComponentFactory({
+        component: DialogPaletteSelectorComponent,
+        providers: [
+            mockProvider(MatDialogRef),
+            { provide: MAT_DIALOG_DATA, useValue: { defaultPalettes: [], selectedPalette: '' } }
+        ],
+        declarations: [
+            MockComponent(ColorPickerWrapperComponent)
+        ]
+    });
 
-  beforeEach(() => {
-    spectator = createComponent();
-  });
+    beforeEach(() => {
+        spectator = createComponent();
+    });
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.component).toBeTruthy();
+    });
 });

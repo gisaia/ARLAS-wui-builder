@@ -23,7 +23,6 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { CollectionField } from '@services/collection-service/models';
 import { NUMERIC_OR_DATE_TYPES, toIntegerOrDateFieldsObs, toKeywordOptionsObs, toOptionsObs } from '@services/collection-service/tools';
 import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
-import { MainFormService } from '@services/main-form/main-form.service';
 import {
   ButtonToggleFormControl, ConfigFormGroup, HiddenFormControl, HuePaletteFormControl, SelectFormControl, SelectOption, SliderFormControl,
   SlideToggleFormControl, TitleInputFormControl
@@ -307,13 +306,12 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
   public widgetFormGroup: FormGroup;
 
   public constructor(
-    protected collectionService: CollectionService,
-    protected mainFormService: MainFormService,
+    private collectionService: CollectionService,
     private defaultValuesService: DefaultValuesService,
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
     private metricBuilderService: MetricCollectFormBuilderService,
   ) {
-    super(collectionService, mainFormService);
+    super();
   }
 
   public build(collection: string) {

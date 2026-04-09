@@ -812,7 +812,7 @@ export class AnalyticsImportService {
       .importGridStep()
       .importResultListQuickLook(this.resultlistFormBuilder, this.colorService, this.collectionService)
       .importContributorColumns(this.resultlistFormBuilder)
-      .importResultListContributorDetail(this.resultlistFormBuilder)
+      .importResultListContributorDetail(this.collectionService)
       .importUnmanagedFields();
     return widgetData;
   }

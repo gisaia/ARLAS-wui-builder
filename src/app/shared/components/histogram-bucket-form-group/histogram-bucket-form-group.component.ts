@@ -30,9 +30,9 @@ import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
 import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
+import { AsbtractConfigFormControl } from '@shared-components/config-form-group/abstract-config-form-group';
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
 import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
-import { ConfigFormGroupComponent } from '../config-form-group/config-form-group.component';
 
 @Component({
   selector: 'arlas-histogram-bucket-form-group',
@@ -56,9 +56,7 @@ import { ConfigFormGroupComponent } from '../config-form-group/config-form-group
     NgClass
   ]
 })
-export class HistogramBucketFormGroupComponent extends ConfigFormGroupComponent implements OnInit, OnDestroy {
-
-
+export class HistogramBucketFormGroupComponent extends AsbtractConfigFormControl implements OnInit, OnDestroy {
   public aggregationFieldControl;
   public aggregationFieldTypeControl;
   public bucketTypeControl;

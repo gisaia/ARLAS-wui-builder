@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { MapImportService } from './map-import.service';
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { MapLayerFormBuilderService } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
@@ -7,24 +8,24 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 
 describe('MapImportService', () => {
-  let spectator: SpectatorService<MapImportService>;
+    let spectator: SpectatorService<MapImportService>;
 
-  const createService = createServiceFactory({
-    service: MapImportService,
-    providers: [
-      mockProvider(MapLayerFormBuilderService),
-      mockProvider(MapVisualisationFormBuilderService),
-      mockProvider(MapGlobalFormBuilderService),
-      mockProvider(MainFormService),
-      mockProvider(CollectionService)
-    ]
-  });
+    const createService = createServiceFactory({
+        service: MapImportService,
+        providers: [
+            mockProvider(MapLayerFormBuilderService),
+            mockProvider(MapVisualisationFormBuilderService),
+            mockProvider(MapGlobalFormBuilderService),
+            mockProvider(MainFormService),
+            mockProvider(CollectionService)
+        ]
+    });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+    beforeEach(() => {
+        spectator = createService();
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.service).toBeTruthy();
+    });
 });

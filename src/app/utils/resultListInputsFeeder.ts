@@ -16,12 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { ResultlistDetailFormGroup } from '@analytics-config/services/resultlist-form-builder/form-group';
 import { isNumberOperator } from '@analytics-config/services/resultlist-form-builder/models';
 import {
   ResultlistConfigForm,
   ResultlistFormBuilderService,
-  ResultListVisualisationsDataGroupCondition
+  ResultListVisualisationsDataGroup,
+  ResultListVisualisationsDataGroupCondition,
+  ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
+import { buildDetailField } from '@analytics-config/services/resultlist-form-builder/utils';
 import { AbstractControl, FormArray } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
@@ -186,12 +190,11 @@ export class ResultListInputsFeeder {
    * Methode to transform a visualisation link into a data group
    * @private
    */
-  private interopCode(resultListFormBuilder: ResultlistFormBuilderService) {
+  private interopCode() {
     if(this.options.input.visualisationLink) {
-      const visualisationForm= resultListFormBuilder.buildVisualisation();
+      const visualisationForm = new ResultListVisualisationsFormGroup();
       visualisationForm.customControls.name.setValue(this.translate?.instant('Visualisation Link'));
-      const dataGroupForm = resultListFormBuilder
-        .buildVisualisationsDataGroup();
+      const dataGroupForm = new ResultListVisualisationsDataGroup();
       this.imports([
         {
           value: this.options.input.visualisationLink,
@@ -214,7 +217,7 @@ export class ResultListInputsFeeder {
   public importVisualisationStep(resultListFormBuilder: ResultlistFormBuilderService){
     if(this.options.input.visualisationsList && this.options.input.visualisationsList.length > 0) {
       this.options.input.visualisationsList.forEach(visualisation => {
-        const visualisationForm = resultListFormBuilder.buildVisualisation();
+        const visualisationForm = new ResultListVisualisationsFormGroup();
         this.imports([
           {
             value: visualisation.description,
@@ -228,8 +231,7 @@ export class ResultListInputsFeeder {
 
         if(visualisation?.dataGroups && visualisation.dataGroups.length > 0) {
           visualisation?.dataGroups.forEach(async dataGroupConf => {
-            const dataGroupForm = resultListFormBuilder
-              .buildVisualisationsDataGroup();
+            const dataGroupForm = new ResultListVisualisationsDataGroup();
             this.imports([
               {
                 value: dataGroupConf.visualisationUrl,
@@ -255,7 +257,7 @@ export class ResultListInputsFeeder {
     }
 
     // interop code to migrate.
-    const interopVisualisationForm = this.interopCode(resultListFormBuilder);
+    const interopVisualisationForm = this.interopCode();
     if(interopVisualisationForm) {
       this.visualisationStep.visualisationsList.push(interopVisualisationForm);
     }
@@ -381,13 +383,12 @@ export class ResultListInputsFeeder {
     return this;
   }
 
-  public importResultListContributorDetail(
-    resultListFormBuilder: ResultlistFormBuilderService){
+  public importResultListContributorDetail(collectionService: CollectionService){
     (this.options.contributor.details || [])
       .sort((d1, d2) => d1.order - d2.order)
       .forEach(d => {
 
-        const detail = resultListFormBuilder.buildDetail();
+        const detail = new ResultlistDetailFormGroup();
         importElements([
           {
             value: d.name,
@@ -396,7 +397,7 @@ export class ResultListInputsFeeder {
         ]);
 
         d.fields.forEach(f => {
-          const field = resultListFormBuilder.buildDetailField(this.options.contributor.collection);
+          const field = buildDetailField(collectionService, this.options.contributor.collection);
           importElements([
             {
               value: f.label,

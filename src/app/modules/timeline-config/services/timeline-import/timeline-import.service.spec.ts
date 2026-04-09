@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { TimelineImportService } from './timeline-import.service';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
@@ -6,23 +7,23 @@ import { StartupService } from '@services/startup/startup.service';
 import { ArlasColorService } from 'arlas-web-components';
 
 describe('TimelineImportService', () => {
-  let spectator: SpectatorService<TimelineImportService>;
+    let spectator: SpectatorService<TimelineImportService>;
 
-  const createService = createServiceFactory({
-    service: TimelineImportService,
-    imports: [ArlasToolkitSharedModule],
-    providers: [
-      mockProvider(ArlasColorService),
-      mockProvider(CollectionService),
-      mockProvider(StartupService)
-    ]
-  });
+    const createService = createServiceFactory({
+        service: TimelineImportService,
+        imports: [ArlasToolkitSharedModule],
+        providers: [
+            mockProvider(ArlasColorService),
+            mockProvider(CollectionService),
+            mockProvider(StartupService)
+        ]
+    });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+    beforeEach(() => {
+        spectator = createService();
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.service).toBeTruthy();
+    });
 });

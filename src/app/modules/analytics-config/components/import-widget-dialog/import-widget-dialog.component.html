@@ -40,14 +40,17 @@
                     </div>
                   </mat-checkbox>
                 </div>
-              }
-              @if (analytic.components?.length === 0) {
+              } @empty {
                 <div class="not-importable">
                   {{'This Tab doesn\'t contain an importable widget' | translate}}
                 </div>
               }
             </mat-card>
           }
+        </div>
+      } @empty {
+        <div class="not-importable">
+          {{'This dashboard has no analytics tabs' | translate}}
         </div>
       }
     </div>

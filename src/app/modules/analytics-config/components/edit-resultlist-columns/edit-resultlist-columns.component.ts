@@ -32,19 +32,19 @@ import { ConfigFormControlComponent } from '@shared-components/config-form-contr
 import { SelectFormControl } from '@shared-models/config-form';
 
 @Component({
-    selector: 'arlas-edit-resultlist-columns',
-    templateUrl: './edit-resultlist-columns.component.html',
-    styleUrls: ['./edit-resultlist-columns.component.scss'],
-    imports: [
-      MatTableModule,
-      DragDropModule,
-      MatIconModule,
-      MatButtonModule,
-      MatTooltipModule,
-      ConfigFormControlComponent,
-      TranslatePipe,
-      MatError
-    ]
+  selector: 'arlas-edit-resultlist-columns',
+  templateUrl: './edit-resultlist-columns.component.html',
+  styleUrls: ['./edit-resultlist-columns.component.scss'],
+  imports: [
+    MatTableModule,
+    DragDropModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
+    ConfigFormControlComponent,
+    TranslatePipe,
+    MatError
+  ]
 })
 export class EditResultlistColumnsComponent implements OnInit {
 

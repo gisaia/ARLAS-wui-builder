@@ -18,13 +18,11 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
-import {
-  CollectionUnitFormGroup,
-  LookAndFeelGlobalFormGroup
-} from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
+import { LookAndFeelGlobalFormGroup } from '@look-and-feel-config/services/look-and-feel-global-form-builder/form-group';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { CollectionUnitFormGroup } from '@shared-models/collection-unit-form-group';
 
 @Component({
   selector: 'arlas-global-look-and-feel',

@@ -31,10 +31,10 @@ import {
   ButtonFormControl, ConfigFormGroup, FieldWithSizeListFormControl, HiddenFormControl, SelectFormControl,
   SliderFormControl, SlideToggleFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
+import { ArlasColorService } from 'arlas-web-components';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable, Subscription } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
-import { ArlasColorService } from 'arlas-web-components';
 
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { addToColorManualValuesCtrl } from '@utils/tools';
@@ -207,13 +207,13 @@ export class DonutFormBuilderService extends WidgetFormBuilder {
   public defaultKey = 'analytics.widgets.donut';
 
   public constructor(
-    protected collectionService: CollectionService,
-    protected mainFormService: MainFormService,
+    private collectionService: CollectionService,
+    private mainFormService: MainFormService,
     private defaultValuesService: DefaultValuesService,
     private dialog: MatDialog,
     private colorService: ArlasColorService
   ) {
-    super(collectionService, mainFormService);
+    super();
   }
 
   public build(collection: string) {

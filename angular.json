@@ -28,9 +28,6 @@
               "browser": ""
             },
             "index": "src/index.html",
-            "polyfills": [
-              "src/polyfills.ts"
-            ],
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": [
@@ -143,34 +140,10 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets",
-              "src/default.json",
-              "src/settings.yaml",
-              "src/silent-refresh.html",
-              {
-                "glob": "**/*",
-                "input": "./node_modules/arlas-map/assets/icons/resize",
-                "output": "/assets/icons/resize/"
-              },
-              {
-                "glob": "**/*",
-                "input": "./node_modules/arlas-map/assets/icons/rotate",
-                "output": "/assets/icons/rotate/"
-              }
-            ],
-            "styles": [
-              "src/theme.scss",
-              "src/styles.scss"
-            ],
-            "scripts": []
+            "watch": false
           }
         },
         "lint": {

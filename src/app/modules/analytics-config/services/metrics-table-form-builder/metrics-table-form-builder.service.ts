@@ -16,25 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { MetricsTableDataComponent } from '@analytics-config/components/metrics-table-data/metrics-table-data.component';
 import { Injectable } from '@angular/core';
+import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionField } from '@services/collection-service/models';
+import { titleCase, toKeywordOptionsObs } from '@services/collection-service/tools';
+import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
-  ButtonToggleFormControl,
-  ComponentFormControl, ConfigFormGroup,
+  ButtonToggleFormControl, ComponentFormControl, ConfigFormGroup,
   HiddenFormControl, InputFormControl, SelectFormControl, SliderFormControl, SlideToggleFormControl
 } from '@shared-models/config-form';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
-import { WidgetFormBuilder } from '../widget-form-builder';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { FormArray, FormGroup, Validators } from '@angular/forms';
-import { MetricsTableDataComponent } from '@analytics-config/components/metrics-table-data/metrics-table-data.component';
-import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
-import { titleCase, toKeywordOptionsObs } from '@services/collection-service/tools';
-import { Observable } from 'rxjs';
-import { CollectionField } from '@services/collection-service/models';
 import { Metric } from 'arlas-api';
+import { Observable } from 'rxjs';
+import { WidgetFormBuilder } from '../widget-form-builder';
 
 export class MetricsTableFormGroup extends WidgetConfigFormGroup {
   public constructor(
@@ -243,11 +241,10 @@ export class MetricsTableFormBuilderService extends WidgetFormBuilder {
   public defaultKey = 'analytics.widgets.metricstable';
 
   public constructor(
-    protected mainFormService: MainFormService,
-    protected collectionService: CollectionService,
+    private collectionService: CollectionService,
     private defaultValuesService: DefaultValuesService
   ) {
-    super(collectionService, mainFormService);
+    super();
   }
 
   public build(collection: string): MetricsTableFormGroup {

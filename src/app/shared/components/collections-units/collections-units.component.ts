@@ -19,14 +19,13 @@
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input } from '@angular/core';
 import { FormArray, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {
-  CollectionUnitFormGroup
-} from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
 import { TranslatePipe } from '@ngx-translate/core';
+import { CollectionUnitFormGroup } from '@shared-models/collection-unit-form-group';
 import { SlideToggleFormControl } from '@shared-models/config-form';
 import { GetCollectionDisplayNamePipe } from 'arlas-web-components';
 
@@ -42,7 +41,8 @@ import { GetCollectionDisplayNamePipe } from 'arlas-web-components';
     ReactiveFormsModule,
     TranslatePipe,
     MatTooltipModule,
-    DragDropModule
+    DragDropModule,
+    MatButtonModule
   ]
 })
 export class CollectionsUnitsComponent {

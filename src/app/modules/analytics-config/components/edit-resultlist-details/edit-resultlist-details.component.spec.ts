@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { EditResultlistDetailsComponent } from './edit-resultlist-details.component';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
@@ -6,27 +7,27 @@ import { ResultlistFormBuilderService } from '@analytics-config/services/resultl
 import { FormArray } from '@angular/forms';
 
 describe('EditResultlistDetailsComponent', () => {
-  let spectator: Spectator<EditResultlistDetailsComponent>;
+    let spectator: Spectator<EditResultlistDetailsComponent>;
 
-  const createComponent = createComponentFactory({
-    component: EditResultlistDetailsComponent,
-    declarations: [
-      MockComponent(ConfigFormControlComponent)
-    ],
-    providers: [
-      mockProvider(ResultlistFormBuilderService)
-    ]
-  });
-
-  beforeEach(() => {
-    spectator = createComponent({
-      props: {
-        control: new FormArray([])
-      }
+    const createComponent = createComponentFactory({
+        component: EditResultlistDetailsComponent,
+        declarations: [
+            MockComponent(ConfigFormControlComponent)
+        ],
+        providers: [
+            mockProvider(ResultlistFormBuilderService)
+        ]
     });
-  });
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    beforeEach(() => {
+        spectator = createComponent({
+            props: {
+                control: new FormArray([])
+            }
+        });
+    });
+
+    it('should create', () => {
+        expect(spectator.component).toBeTruthy();
+    });
 });

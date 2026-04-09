@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { FormControl, FormGroup } from '@angular/forms';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -8,33 +9,33 @@ import { EditResultlistDetailsComponent } from '../edit-resultlist-details/edit-
 import { ResultlistDataComponent } from './resultlist-data.component';
 
 describe('ResultlistDataComponent', () => {
-  let spectator: Spectator<ResultlistDataComponent>;
+    let spectator: Spectator<ResultlistDataComponent>;
 
-  const createComponent = createComponentFactory({
-    component: ResultlistDataComponent,
-    declarations: [
-      MockComponent(EditResultlistColumnsComponent),
-      MockComponent(EditResultlistDetailsComponent),
-    ],
-    providers: [
-      mockProvider(CollectionService, {
-        getCollectionFields: () => of([])
-      }),
-    ]
-  });
-
-  beforeEach(() => {
-    spectator = createComponent({
-      props: {
-        control: new FormGroup({
-          columns: new FormControl(''),
-          details: new FormControl(''),
-        })
-      }
+    const createComponent = createComponentFactory({
+        component: ResultlistDataComponent,
+        declarations: [
+            MockComponent(EditResultlistColumnsComponent),
+            MockComponent(EditResultlistDetailsComponent),
+        ],
+        providers: [
+            mockProvider(CollectionService, {
+                getCollectionFields: () => of([])
+            }),
+        ]
     });
-  });
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    beforeEach(() => {
+        spectator = createComponent({
+            props: {
+                control: new FormGroup({
+                    columns: new FormControl(''),
+                    details: new FormControl(''),
+                })
+            }
+        });
+    });
+
+    it('should create', () => {
+        expect(spectator.component).toBeTruthy();
+    });
 });

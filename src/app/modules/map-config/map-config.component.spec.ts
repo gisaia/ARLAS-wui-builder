@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { MapConfigComponent } from './map-config.component';
 import { MainFormService } from '@services/main-form/main-form.service';
@@ -5,29 +6,29 @@ import { MainFormManagerService } from '@services/main-form-manager/main-form-ma
 import { FormGroup, FormArray } from '@angular/forms';
 
 describe('MapConfigComponent', () => {
-  let spectator: Spectator<MapConfigComponent>;
+    let spectator: Spectator<MapConfigComponent>;
 
-  const createComponent = createComponentFactory({
-    component: MapConfigComponent,
-    providers: [
-      mockProvider(MainFormManagerService),
-      mockProvider(MainFormService, {
-        mapConfig: {
-          getGlobalFg: () => new FormGroup({}),
-          getLayersFa: () => new FormArray([]),
-          getVisualisationsFa: () => new FormArray([]),
-          getBasemapsFg: () => new FormGroup({})
-        }
-      })
-    ]
-  });
+    const createComponent = createComponentFactory({
+        component: MapConfigComponent,
+        providers: [
+            mockProvider(MainFormManagerService),
+            mockProvider(MainFormService, {
+                mapConfig: {
+                    getGlobalFg: () => new FormGroup({}),
+                    getLayersFa: () => new FormArray([]),
+                    getVisualisationsFa: () => new FormArray([]),
+                    getBasemapsFg: () => new FormGroup({})
+                }
+            })
+        ]
+    });
 
-  beforeEach(() => {
-    spectator = createComponent();
-  });
+    beforeEach(() => {
+        spectator = createComponent();
+    });
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.component).toBeTruthy();
+    });
 
 });

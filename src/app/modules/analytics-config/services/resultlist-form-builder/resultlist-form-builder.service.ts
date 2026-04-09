@@ -26,7 +26,6 @@ import { ResultlistDataComponent } from '@analytics-config/components/resultlist
 import { Injectable } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
@@ -69,15 +68,8 @@ import { ArlasColorService } from 'arlas-web-components';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
-
-export type ResultlistDataConfigForm = FormGroup<{
-  collection: SelectFormControl;
-  searchSize: SliderFormControl;
-  columns: FormArray;
-  detailsTitle: HiddenFormControl;
-  details: FormArray;
-  idFieldName: HiddenFormControl;
-}>;
+import { ResultlistDataConfigForm, ResultlistDetailFormGroup } from './form-group';
+import { buildDetailField } from './utils';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
   public tabsOrder: string[] = ['dataStep', 'gridStep', 'visualisationStep', 'sactionStep', 'settingsStep'];
@@ -587,62 +579,6 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
   }
 }
 
-export class ResultlistDetailFormGroup extends FormGroup {
-
-  public constructor() {
-    super({
-      name: new InputFormControl(
-        '',
-        marker('Section'),
-        ''
-      ),
-      fields: new FormArray([], Validators.required)
-    });
-  }
-
-  public customControls = {
-    name: this.get('name') as InputFormControl,
-    fields: this.get('fields') as FormArray<ResultlistDetailFieldFormGroup>,
-  };
-}
-
-export class ResultlistDetailFieldFormGroup extends FormGroup {
-
-  public constructor(fieldsObs: Observable<Array<SelectOption>>) {
-    super({
-      label: new InputFormControl(
-        '',
-        marker('Detail label'),
-        ''
-      ),
-      path: new SelectFormControl(
-        '',
-        marker('Detail field'),
-        '',
-        true,
-        fieldsObs
-      ),
-      process: new TextareaFormControl(
-        '',
-        marker('Apply a calculation in javascript'),
-        '',
-        marker('e.g : result+\'$\''),
-        1,
-        {
-          optional: true,
-          validators: [TextareaFormControl.processValidator('result')],
-        }
-      )
-    });
-  }
-
-  public customControls = {
-    label: this.get('label') as InputFormControl,
-    path: this.get('path') as SelectFormControl,
-    process: this.get('process') as TextareaFormControl,
-  };
-}
-
 
 export class ResultlistQuicklookFormGroup extends FormGroup {
 
@@ -977,14 +913,13 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
   public defaultKey = 'analytics.widgets.resultlist';
 
   public constructor(
-        protected collectionService: CollectionService,
-        protected mainFormService: MainFormService,
-        private defaultValuesService: DefaultValuesService,
-        private dialog: MatDialog,
-        private colorService: ArlasColorService,
-        private router: Router,
+    private collectionService: CollectionService,
+    private mainFormService: MainFormService,
+    private defaultValuesService: DefaultValuesService,
+    private dialog: MatDialog,
+    private colorService: ArlasColorService
   ) {
-    super(collectionService, mainFormService);
+    super();
   }
 
   public build(collection: string) {
@@ -1003,8 +938,8 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
     // same for the details, and the fields within
     const details = (value.dataStep || {}).details || [];
     details.forEach(d => {
-      const detail = this.buildDetail();
-      d.fields.forEach(f => detail.customControls.fields.push(this.buildDetailField(collection)));
+      const detail = new ResultlistDetailFormGroup();
+      d.fields.forEach(f => detail.customControls.fields.push(buildDetailField(this.collectionService, collection)));
       formGroup.customControls.dataStep.details.push(detail);
     });
 
@@ -1026,17 +961,6 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
     );
   }
 
-  public buildDetail() {
-    return new ResultlistDetailFormGroup();
-  }
-
-  public buildDetailField(collection: string) {
-    return new ResultlistDetailFieldFormGroup(
-      toOptionsObs(
-        this.collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES))
-    );
-  }
-
   public buildQuicklook(collection: string) {
     const fieldObs = this.collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD);
     const control = new ResultlistQuicklookFormGroup(
@@ -1045,14 +969,6 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
       this.collectionService);
     ConfigFormGroupComponent.listenToAllControlsOnDependencyChange(control.get('filter') as ConfigFormGroup, []);
     return control;
-  }
-
-  public buildVisualisation() {
-    return new ResultListVisualisationsFormGroup();
-  }
-
-  public buildVisualisationsDataGroup() {
-    return new ResultListVisualisationsDataGroup();
   }
 
   public buildVisualisationsDataGroupCriteria(collection: string) {

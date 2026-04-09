@@ -16,11 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, forwardRef, Inject, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MapFilterFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { MapFilterFormGroup } from '@map-config/services/map-layer-form-builder/form-group';
 import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
@@ -30,7 +30,7 @@ import { ConfigFormGroupComponent } from '@shared-components/config-form-group/c
   templateUrl: './dialog-filter.component.html',
   styleUrls: ['./dialog-filter.component.scss'],
   imports: [
-    ConfigFormGroupComponent,
+    forwardRef(() => ConfigFormGroupComponent),
     MatDialogModule,
     MatButtonModule,
     TranslatePipe

@@ -45,7 +45,7 @@
         }
       </div>
       <div class="edit-widgets" #dropListContainer cdkDropListGroup>
-        @for (comp of contentTypeValue; track comp; let ci = $index) {
+        @for (comp of contentTypeValue; track $index; let ci = $index) {
           <div class="container" mat-raised-button
               [id]="'widget-' + groupIndex + '-' + ci"
               cdkDropList [cdkDropListData]="ci">

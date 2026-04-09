@@ -21,12 +21,11 @@ import {
 } from '@analytics-config/components/edit-resultlist-visualisation/manage-visualisation/manage-visualisation.component';
 
 import {
-  ResultlistFormBuilderService,
   ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, inject, Input, signal, ViewChild } from '@angular/core';
+import { Component, Input, signal, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -57,8 +56,6 @@ export class ResultListVisualisationComponent {
 
   @Input() public collectionControl: SelectFormControl;
   @Input() public control: FormArray<ResultListVisualisationsFormGroup>;
-  /** helper to create new form **/
-  private readonly resultListFormBuilder = inject(ResultlistFormBuilderService);
   /** disable drag when dropping an element **/
   public dragDisabled = true;
   /** handle the switch between visualisation list and edit **/
@@ -81,7 +78,7 @@ export class ResultListVisualisationComponent {
 
   public addVisualisation() {
     this.manageViewIsOpened = true;
-    const newVisualisation = this.resultListFormBuilder.buildVisualisation();
+    const newVisualisation = new ResultListVisualisationsFormGroup();
     newVisualisation.customControls.name.setValue('New Visualisation name');
     this.currentVisualisation = newVisualisation;
   }

@@ -1,16 +1,17 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { ConfirmExitGuard } from './confirm-exit.guard';
 
 describe('ConfirmExitGuard', () => {
-  let spectator: SpectatorService<ConfirmExitGuard>;
-  const createComponent = createServiceFactory({
-    service: ConfirmExitGuard
-  });
+    let spectator: SpectatorService<ConfirmExitGuard>;
+    const createComponent = createServiceFactory({
+        service: ConfirmExitGuard
+    });
 
-  beforeEach(() => spectator = createComponent());
+    beforeEach(() => spectator = createComponent());
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.service).toBeTruthy();
+    });
 
 });

@@ -30,7 +30,6 @@ import {
   toGeoPointOptionsObs,
   toKeywordOptionsObs,
   toNumericOrDateOptionsObs,
-  toNumericOrDateOrKeywordOrBooleanObs,
   toTextOrKeywordOptionsObs
 } from '@services/collection-service/tools';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
@@ -41,17 +40,14 @@ import {
   HiddenFormControl,
   InputFormControl,
   MapFiltersControl,
-  MultipleSelectFormControl,
   OrderedSelectFormControl,
   SelectFormControl,
   SelectOption,
   SliderFormControl,
   SlideToggleFormControl,
-  TypedSelectFormControl,
   VisualisationCheckboxFormControl,
   VisualisationCheckboxOption
 } from '@shared-models/config-form';
-import { FilterInputsBuilder } from '@shared-models/filter-input-builder';
 import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
 import {
   PropertySelectorFormBuilderService,
@@ -64,6 +60,7 @@ import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { toNumericOptionsObs } from '../../../../services/collection-service/tools';
+import { MapFilterFormGroup } from './form-group';
 import {
   AGGREGATE_GEOMETRY_TYPE,
   CLUSTER_GEOMETRY_TYPE,
@@ -468,142 +465,6 @@ export class MapLayerFormGroup extends ConfigFormGroup {
   }
 }
 
-
-export class MapFilterFormGroup extends ConfigFormGroup {
-  public editing = false;
-  public editionInfo: { field: string; op: FILTER_OPERATION; };
-  protected  filter = new FilterInputsBuilder();
-  public constructor(
-    collectionFields: Observable<Array<CollectionField>>,
-    filterOperations: Array<FILTER_OPERATION>,
-    collectionService: CollectionService,
-    collection: string
-  ) {
-    super({
-      filterField: new TypedSelectFormControl(
-        '',
-        marker('Filter Field'),
-        marker('Filter field description'),
-        true,
-        toNumericOrDateOrKeywordOrBooleanObs(collectionFields),
-        {
-        }
-      ),
-      filterOperation: new SelectFormControl(
-        '',
-        marker('operation'),
-        marker('filter operation description'),
-        false,
-        valuesToOptions(filterOperations),
-        {
-          resetDependantsOnChange: true,
-          dependsOn: () => [this.customControls.filterField],
-          onDependencyChange: (control: SelectFormControl) => {
-            this.filter.operationFilter(this, control);
-          }
-        }
-      ),
-      filterInValues: new MultipleSelectFormControl(
-        '',
-        marker('values'),
-        marker('filter in-values description'),
-        false,
-        [],
-        {
-          resetDependantsOnChange: true,
-          dependsOn: () => [this.customControls.filterField],
-          onDependencyChange: (control: MultipleSelectFormControl) => {
-            this.filter.keywordsFilter(this, control, collectionService, collection);
-          }
-        }
-      ),
-      filterEqualValues: new InputFormControl(
-        '',
-        marker('values'),
-        marker('filter equal description'),
-        'number',
-        {
-          resetDependantsOnChange: true,
-          dependsOn: () => [this.customControls.filterOperation, this.customControls.filterField],
-          onDependencyChange: (control: InputFormControl) => {
-            this.filter.numberFilter(this, control);
-          }
-        }
-      ),
-      filterMinRangeValues: new InputFormControl(
-        '',
-        marker('Minimum range filter'),
-        marker('Minimum range filter description'),
-        'number',
-        {
-          resetDependantsOnChange: true,
-          dependsOn: () => [
-            this.customControls.filterOperation, this.customControls.filterField
-          ],
-          onDependencyChange: (control, isLoading) => {
-            this.filter.minRangeFilter(this, control, isLoading, collectionService, collection);
-          }
-        },
-        () => this.customControls.filterMaxRangeValues,
-        undefined
-      ),
-      filterMaxRangeValues: new InputFormControl(
-        '',
-        marker('Maximum range filter'),
-        marker('Maximum range filter description'),
-        'number',
-        {
-          resetDependantsOnChange: true,
-          dependsOn: () => [
-            this.customControls.filterOperation, this.customControls.filterField
-          ],
-          onDependencyChange: (control, isLoading) => {
-            this.filter.maxRangeFilter(this, control, isLoading, collectionService, collection);
-          }
-        },
-        undefined,
-        () => this.customControls.filterMinRangeValues
-      ),
-      filterBoolean: new ButtonToggleFormControl(
-        true,
-        [
-          {
-            label: marker('activated'), value: true
-          },
-          {
-            label: marker('not activated'), value: false
-          }
-        ],
-        undefined,
-        {
-          resetDependantsOnChange: true,
-          dependsOn: () => [this.customControls.filterField],
-          onDependencyChange: (control: ButtonToggleFormControl) => {
-            this.filter.booleanFilter(this, control);
-          }
-        }),
-      id: new HiddenFormControl(
-        '',
-        null,
-        {
-          optional: true
-        }
-      ),
-    });
-  }
-
-  public customControls = {
-    filterField: this.get('filterField') as TypedSelectFormControl,
-    filterOperation: this.get('filterOperation') as SelectFormControl,
-    filterInValues: this.get('filterInValues') as MultipleSelectFormControl,
-    filterEqualValues: this.get('filterEqualValues') as InputFormControl,
-    filterMinRangeValues: this.get('filterMinRangeValues') as InputFormControl,
-    filterMaxRangeValues: this.get('filterMaxRangeValues') as InputFormControl,
-    filterBoolean: this.get('filterBoolean') as ButtonToggleFormControl,
-    id: this.get('id') as HiddenFormControl
-  };
-
-}
 export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
   public constructor(

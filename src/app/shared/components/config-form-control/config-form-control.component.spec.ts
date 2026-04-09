@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { ConfigFormControlComponent } from './config-form-control.component';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
@@ -12,35 +13,35 @@ import { CollectionsUnitsComponent } from '@shared-components/collections-units/
 import { ArlasColorService } from 'arlas-web-components';
 
 describe('ConfigFormControlComponent', () => {
-  let spectator: Spectator<ConfigFormControlComponent>;
+    let spectator: Spectator<ConfigFormControlComponent>;
 
-  const createComponent = createComponentFactory({
-    component: ConfigFormControlComponent,
-    imports: [
-      MatCheckboxModule
-    ],
-    declarations: [
-      ResetOnChangeDirective,
-      AlertOnChangeDirective,
-      MockComponent(ColorPickerWrapperComponent),
-      MockComponent(LayerFiltersComponent),
-      MockComponent(CollectionsUnitsComponent)
-    ],
-    providers: [
-      mockProvider(ArlasColorService),
-      mockProvider(CollectionService)
-    ]
-  });
-
-  beforeEach(() => {
-    spectator = createComponent({
-      props: {
-        control: new SlideToggleFormControl('', '', '')
-      }
+    const createComponent = createComponentFactory({
+        component: ConfigFormControlComponent,
+        imports: [
+            MatCheckboxModule
+        ],
+        declarations: [
+            ResetOnChangeDirective,
+            AlertOnChangeDirective,
+            MockComponent(ColorPickerWrapperComponent),
+            MockComponent(LayerFiltersComponent),
+            MockComponent(CollectionsUnitsComponent)
+        ],
+        providers: [
+            mockProvider(ArlasColorService),
+            mockProvider(CollectionService)
+        ]
     });
-  });
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    beforeEach(() => {
+        spectator = createComponent({
+            props: {
+                control: new SlideToggleFormControl('', '', '')
+            }
+        });
+    });
+
+    it('should create', () => {
+        expect(spectator.component).toBeTruthy();
+    });
 });

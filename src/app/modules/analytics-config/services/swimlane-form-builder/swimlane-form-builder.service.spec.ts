@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { SwimlaneFormBuilderService } from './swimlane-form-builder.service';
 import { createServiceFactory, SpectatorService, mockProvider } from '@ngneat/spectator';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -7,29 +8,29 @@ import { of } from 'rxjs';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 describe('SwimlaneFormBuilderService', () => {
-  let spectator: SpectatorService<SwimlaneFormBuilderService>;
+    let spectator: SpectatorService<SwimlaneFormBuilderService>;
 
-  const createService = createServiceFactory({
-    service: SwimlaneFormBuilderService,
-    providers: [
-      BucketsIntervalFormBuilderService,
-      MetricCollectFormBuilderService,
-      mockProvider(CollectionService, {
-        getCollectionFields: () => of([])
-      }),
-      mockProvider(DefaultValuesService, {
-        getDefaultConfig: () => ({
-          huePalettes: []
-        })
-      })
-    ]
-  });
+    const createService = createServiceFactory({
+        service: SwimlaneFormBuilderService,
+        providers: [
+            BucketsIntervalFormBuilderService,
+            MetricCollectFormBuilderService,
+            mockProvider(CollectionService, {
+                getCollectionFields: () => of([])
+            }),
+            mockProvider(DefaultValuesService, {
+                getDefaultConfig: () => ({
+                    huePalettes: []
+                })
+            })
+        ]
+    });
 
-  beforeEach(() => {
-    spectator = createService({});
-  });
+    beforeEach(() => {
+        spectator = createService({});
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.service).toBeTruthy();
+    });
 });

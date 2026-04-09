@@ -1,23 +1,24 @@
+import { beforeEach, describe, expect, it } from "vitest";
 
 import { ResultlistFormBuilderService } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { EditResultlistQuicklookComponent } from './edit-resultlist-quicklook.component';
 
 describe('EditResultlistQuicklookComponent', () => {
-  let spectator: Spectator<EditResultlistQuicklookComponent>;
+    let spectator: Spectator<EditResultlistQuicklookComponent>;
 
-  const createComponent = createComponentFactory({
-    component: EditResultlistQuicklookComponent,
-    providers: [
-      mockProvider(ResultlistFormBuilderService)
-    ]
-  });
+    const createComponent = createComponentFactory({
+        component: EditResultlistQuicklookComponent,
+        providers: [
+            mockProvider(ResultlistFormBuilderService)
+        ]
+    });
 
-  beforeEach(() => {
-    spectator = createComponent();
-  });
+    beforeEach(() => {
+        spectator = createComponent();
+    });
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.component).toBeTruthy();
+    });
 });

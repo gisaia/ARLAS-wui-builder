@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { GlobalMapComponent } from './global-map.component';
 import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
 import { MockComponent } from 'ng-mocks';
@@ -7,26 +8,26 @@ import { ConfigFormGroupComponent } from '@shared-components/config-form-group/c
 
 describe('GlobalMapComponent', () => {
 
-  let spectator: Spectator<GlobalMapComponent>;
-  const createComponent = createComponentFactory({
-    component: GlobalMapComponent,
-    declarations: [
-      MockComponent(ConfigFormGroupComponent)
-    ],
-    providers: [
-      mockProvider(MainFormService, {
-        mapConfig: {
-          getGlobalFg: () => new MapGlobalFormGroup()
-        },
-        getMainCollection: () => ''
-      }),
-    ]
-  });
+    let spectator: Spectator<GlobalMapComponent>;
+    const createComponent = createComponentFactory({
+        component: GlobalMapComponent,
+        declarations: [
+            MockComponent(ConfigFormGroupComponent)
+        ],
+        providers: [
+            mockProvider(MainFormService, {
+                mapConfig: {
+                    getGlobalFg: () => new MapGlobalFormGroup()
+                },
+                getMainCollection: () => ''
+            }),
+        ]
+    });
 
-  beforeEach(() => spectator = createComponent());
+    beforeEach(() => spectator = createComponent());
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.component).toBeTruthy();
+    });
 
 });

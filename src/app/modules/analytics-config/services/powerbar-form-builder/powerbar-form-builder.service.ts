@@ -17,7 +17,7 @@
  * under the License.
  */
 import { Injectable } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
@@ -33,6 +33,7 @@ import {
 } from '@shared-models/config-form';
 import { PROPERTY_SELECTOR_SOURCE } from '@shared-services/property-selector-form-builder/models';
 import { Metric } from 'arlas-api';
+import { ArlasColorService } from 'arlas-web-components';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { HiddenFormControl } from '../../../../shared/models/config-form';
@@ -41,7 +42,6 @@ import {
 } from '../metric-collect-form-builder/metric-collect-form-builder.service';
 import { METRIC_TYPE } from '../metric-collect-form-builder/models';
 import { WidgetFormBuilder } from '../widget-form-builder';
-import { ArlasColorService } from 'arlas-web-components';
 
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { addToColorManualValuesCtrl } from '@utils/tools';
@@ -330,14 +330,14 @@ export class PowerbarFormBuilderService extends WidgetFormBuilder {
   public defaultKey = 'analytics.widgets.powerbar';
 
   public constructor(
-    protected collectionService: CollectionService,
-    protected mainFormService: MainFormService,
+    private collectionService: CollectionService,
+    private mainFormService: MainFormService,
     private dialog: MatDialog,
     private colorService: ArlasColorService,
     private defaultValuesService: DefaultValuesService,
     private metricBuilderService: MetricCollectFormBuilderService,
   ) {
-    super(collectionService, mainFormService);
+    super();
   }
 
   public build(collection: string): PowerbarConfigForm {

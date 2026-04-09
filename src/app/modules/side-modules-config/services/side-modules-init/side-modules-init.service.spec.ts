@@ -1,22 +1,23 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { SideModulesInitService } from './side-modules-init.service';
 import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
 import { SideModulesGlobalFormBuilderService } from '../side-modules-global-form-builder/side-modules-global-form-builder.service';
 
 describe('SideModulesInitService', () => {
-  let spectator: SpectatorService<SideModulesInitService>;
+    let spectator: SpectatorService<SideModulesInitService>;
 
-  const createService = createServiceFactory({
-    service: SideModulesInitService,
-    providers: [
-      mockProvider(SideModulesGlobalFormBuilderService)
-    ]
-  });
+    const createService = createServiceFactory({
+        service: SideModulesInitService,
+        providers: [
+            mockProvider(SideModulesGlobalFormBuilderService)
+        ]
+    });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+    beforeEach(() => {
+        spectator = createService();
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.service).toBeTruthy();
+    });
 });

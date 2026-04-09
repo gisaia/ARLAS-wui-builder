@@ -16,18 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { CollectionService } from '@services/collection-service/collection.service';
-import { MainFormService } from '@services/main-form/main-form.service';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 
 export abstract class WidgetFormBuilder {
 
     public abstract defaultKey: string;
-
-    public constructor(
-        protected collectionService: CollectionService,
-        protected mainFormService: MainFormService
-    ) { }
 
     /**
      * Must return a FormGroup with controls "dataStep" and "renderStep"

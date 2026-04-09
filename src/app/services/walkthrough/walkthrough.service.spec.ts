@@ -1,16 +1,16 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { WalkthroughService } from './walkthrough.service';
 import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
 
 describe('WalkthroughService', () => {
-  let spectator: SpectatorService<WalkthroughService>;
-  const createService = createServiceFactory({
-    service: WalkthroughService
-  });
+    let spectator: SpectatorService<WalkthroughService>;
+    const createService = createServiceFactory({
+        service: WalkthroughService
+    });
 
-  beforeEach(() => spectator = createService());
+    beforeEach(() => spectator = createService());
 
-  it('should be defined', () => {
-    expect(spectator.service).toBeDefined();
-  });
+    it('should be defined', () => {
+        expect(spectator.service).toBeDefined();
+    });
 });
-

@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSelectModule } from '@angular/material/select';
@@ -6,33 +7,34 @@ import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-tran
 import { AlertOnChangeDirective } from './alert-on-change.directive';
 
 @Component({
-  imports: [AlertOnChangeDirective, MatSelectModule],
-  template: `
+    imports: [AlertOnChangeDirective, MatSelectModule],
+    template: `
     <mat-select arlasAlertOnChange>AlertOnChangeDirective</mat-select>
   `,
 })
-class Test {}
+class Test {
+}
 
 describe('AlertOnChangeDirective', () => {
-  let fixture: ComponentFixture<Test>;
+    let fixture: ComponentFixture<Test>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: TranslateNoOpLoader
-          }
-        })
-      ]
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                TranslateModule.forRoot({
+                    loader: {
+                        provide: TranslateLoader,
+                        useClass: TranslateNoOpLoader
+                    }
+                })
+            ]
+        });
+        fixture = TestBed.createComponent(Test);
+        fixture.detectChanges();
     });
-    fixture = TestBed.createComponent(Test);
-    fixture.detectChanges();
-  });
 
-  it('should create an instance', () => {
-    const elements = fixture.debugElement.queryAll(By.directive(AlertOnChangeDirective));
-    expect(elements.length).toEqual(1);
-  });
+    it('should create an instance', () => {
+        const elements = fixture.debugElement.queryAll(By.directive(AlertOnChangeDirective));
+        expect(elements.length).toEqual(1);
+    });
 });

@@ -18,6 +18,7 @@
  */
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -54,21 +55,22 @@ export interface Configuration {
 }
 
 @Component({
-    selector: 'arlas-landing-page',
-    templateUrl: './landing-page.component.html',
-    styleUrls: ['./landing-page.component.scss'],
-    imports: [
-      NgxSpinnerComponent,
-      TranslatePipe,
-      MatFormFieldModule,
-      MatSelectModule,
-      MatDialogModule,
-      MatTableModule,
-      DatePipe,
-      ConfigMenuComponent,
-      MatPaginatorModule,
-      MatTooltipModule
-    ]
+  selector: 'arlas-landing-page',
+  templateUrl: './landing-page.component.html',
+  styleUrls: ['./landing-page.component.scss'],
+  imports: [
+    NgxSpinnerComponent,
+    TranslatePipe,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatTableModule,
+    DatePipe,
+    ConfigMenuComponent,
+    MatPaginatorModule,
+    MatTooltipModule,
+    MatButtonModule
+  ]
 })
 export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
 

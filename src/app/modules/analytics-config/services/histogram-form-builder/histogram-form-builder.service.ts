@@ -26,7 +26,6 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { CollectionField } from '@services/collection-service/models';
 import { NUMERIC_OR_DATE_TYPES, toNumericOrDateFieldsObs, toOptionsObs } from '@services/collection-service/tools';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { MainFormService } from '@services/main-form/main-form.service';
 import {
   ComponentFormControl,
   ConfigFormGroup,
@@ -265,13 +264,12 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
   public widgetFormGroup: FormGroup;
 
   public constructor(
-    protected collectionService: CollectionService,
-    protected mainFormService: MainFormService,
+    private collectionService: CollectionService,
     private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
     private defaultValuesService: DefaultValuesService,
     private metricBuilderService: MetricCollectFormBuilderService
   ) {
-    super(collectionService, mainFormService);
+    super();
   }
 
   public build(collection: string): HistogramFormGroup {

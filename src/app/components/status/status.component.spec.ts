@@ -1,18 +1,19 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { StatusComponent } from './status.component';
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 
 describe('StatusComponent', () => {
-  let spectator: Spectator<StatusComponent>;
+    let spectator: Spectator<StatusComponent>;
 
-  const createComponent = createComponentFactory({
-    component: StatusComponent
-  });
+    const createComponent = createComponentFactory({
+        component: StatusComponent
+    });
 
-  beforeEach(() => {
-    spectator = createComponent();
-  });
+    beforeEach(() => {
+        spectator = createComponent();
+    });
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(spectator.component).toBeTruthy();
+    });
 });

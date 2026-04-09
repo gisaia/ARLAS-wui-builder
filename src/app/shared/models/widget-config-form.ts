@@ -17,10 +17,11 @@
  * under the License.
  */
 
+import { AbstractControl } from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
 import { ShortcutsConfig, WidgetUsage } from '../../services/main-form-manager/models-config';
 import { CollectionConfigFormGroup } from './collection-config-form';
-import { ConfigFormControl, HiddenFormControl } from './config-form';
+import { HiddenFormControl } from './config-form';
 
 export class WidgetConfigFormGroup extends CollectionConfigFormGroup {
   public usage: WidgetUsage = 'analytics';
@@ -28,7 +29,7 @@ export class WidgetConfigFormGroup extends CollectionConfigFormGroup {
   public constructor(
     collection: string,
     controls: {
-      [key: string]: ConfigFormControl;
+      [key: string]: AbstractControl;
     }) {
     controls['uuid'] = new HiddenFormControl(
       uuidv4(),

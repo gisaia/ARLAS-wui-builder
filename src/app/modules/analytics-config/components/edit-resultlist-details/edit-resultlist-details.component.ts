@@ -16,11 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import {
-  ResultlistDetailFormGroup, ResultlistFormBuilderService
-} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
+import { ResultlistDetailFormGroup } from '@analytics-config/services/resultlist-form-builder/form-group';
+import { buildDetailField } from '@analytics-config/services/resultlist-form-builder/utils';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -28,6 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatError } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
+import { CollectionService } from '@services/collection-service/collection.service';
 import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
 import { SelectFormControl } from '@shared-models/config-form';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
@@ -48,13 +48,10 @@ import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
     ]
 })
 export class EditResultlistDetailsComponent implements OnInit {
+  private readonly collectionService = inject(CollectionService);
 
   @Input() public control: FormArray;
   @Input() public collection: SelectFormControl;
-
-  public constructor(
-    private resultlistFormBuilder: ResultlistFormBuilderService
-  ) { }
 
   public ngOnInit() {
     if (!!this.collection) {
@@ -65,7 +62,7 @@ export class EditResultlistDetailsComponent implements OnInit {
   }
 
   public addDetail() {
-    this.control.push(this.resultlistFormBuilder.buildDetail());
+    this.control.push(new ResultlistDetailFormGroup());
   }
 
   public deleteDetail(detailIndex: number) {
@@ -78,7 +75,7 @@ export class EditResultlistDetailsComponent implements OnInit {
 
   public addField(detailIndex: number) {
     this.getDetail(detailIndex).customControls.fields.push(
-      this.resultlistFormBuilder.buildDetailField(this.collection.value));
+      buildDetailField(this.collectionService, this.collection.value));
   }
 
   public get details() {

@@ -16,43 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { enableProdMode, provideZoneChangeDetection, forwardRef, provideAppInitializer, inject, importProvidersFrom } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { loadServiceFactory, startupServiceFactory, auhtentServiceFactory, CustomTranslateLoader } from './app/app.module';
-import { environment } from './environments/environment';
-import { ArlasConfigurationDescriptor, ArlasStartupService, AuthentificationService, iamServiceFactory, ArlasIamService, GET_OPTIONS, getOptionsFactory, ArlasSettingsService, ArlasWalkthroughService, ArlasConfigurationUpdaterService, FETCH_OPTIONS, CONFIG_UPDATER, configUpdaterFactory, PaginatorI18n, ConfigMenuModule, ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
+import { HttpClient } from '@angular/common/http';
+import { enableProdMode, forwardRef, importProvidersFrom, inject, provideAppInitializer } from '@angular/core';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { StartupService } from '@services/startup/startup.service';
 import { WalkthroughService } from '@services/walkthrough/walkthrough.service';
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
-import { MatPaginatorIntl } from '@angular/material/paginator';
-import { TranslateService, TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
-import { AppRoutingModule } from './app/app-routing.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MapConfigModule } from '@map-config/map-config.module';
-import { ResultListConfigModule } from './app/modules/result-list-config/result-list-config.module';
-import { SearchConfigModule } from '@search-config/search-config.module';
-import { LookAndFeelConfigModule } from '@look-and-feel-config/look-and-feel-config.module';
-import { SharedModule } from '@shared/shared.module';
-import { TimelineConfigModule } from '@timeline-config/timeline-config.module';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { LoggerModule } from 'ngx-logger';
-import { environment as environment_1 } from 'environments/environment';
-import { NgxSpinnerModule } from 'ngx-spinner';
-import { AnalyticsConfigModule } from './app/modules/analytics-config/analytics-config.module';
 import { OAuthModule } from 'angular-oauth2-oidc';
-import { GetCollectionDisplayNamePipe } from 'arlas-web-components';
+import {
+    ArlasConfigurationDescriptor, ArlasConfigurationUpdaterService, ArlasIamService, ArlasSettingsService,
+    ArlasStartupService, ArlasToolkitSharedModule, ArlasWalkthroughService, AuthentificationService, CONFIG_UPDATER,
+    configUpdaterFactory, FETCH_OPTIONS, GET_OPTIONS, getOptionsFactory, iamServiceFactory, PaginatorI18n
+} from 'arlas-wui-toolkit';
+import { LoggerModule } from 'ngx-logger';
+import { AppRoutingModule } from './app/app-routing.module';
 import { AppComponent } from './app/app.component';
-
-const load = () => defaultValuesService.load('default.json?' + Date.now());
-const init = () => startupService.init();
-const apiAddress = 'assets/i18n/' + lang + '.json?' + Date.now();
-let merged = res;
-
-
+import { auhtentServiceFactory, CustomTranslateLoader, loadServiceFactory, startupServiceFactory } from './app/app.module';
+import { environment } from './environments/environment';
 
 if (environment.production) {
   enableProdMode();
@@ -60,16 +44,22 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
     providers: [
-        importProvidersFrom(BrowserModule, AppRoutingModule, BrowserAnimationsModule, MapConfigModule, ResultListConfigModule, SearchConfigModule, LookAndFeelConfigModule, ConfigMenuModule, SharedModule, TimelineConfigModule, TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useClass: CustomTranslateLoader,
-                deps: [HttpClient]
-            }
-        }), LoggerModule.forRoot({
-            level: environment.logLevel,
-            disableConsoleLogging: false
-        }), NgxSpinnerModule, AnalyticsConfigModule, OAuthModule.forRoot(), ArlasToolkitSharedModule, GetCollectionDisplayNamePipe),
+        importProvidersFrom(
+            AppRoutingModule,
+            TranslateModule.forRoot({
+                loader: {
+                    provide: TranslateLoader,
+                    useClass: CustomTranslateLoader,
+                    deps: [HttpClient]
+                }
+            }),
+            LoggerModule.forRoot({
+                level: environment.logLevel,
+                disableConsoleLogging: false
+            }),
+            OAuthModule.forRoot(),
+            ArlasToolkitSharedModule
+        ),
         forwardRef(() => ArlasConfigurationDescriptor),
         forwardRef(() => ArlasStartupService),
         provideAppInitializer(() => {
