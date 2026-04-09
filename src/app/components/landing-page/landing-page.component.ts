@@ -16,12 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { MatSelectChange } from '@angular/material/select';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { InitialChoice, LandingPageService } from '@services/landing-page/landing-page.service';
 import { Config } from '@services/main-form-manager/models-config';
 import { MapConfig } from '@services/main-form-manager/models-map-config';
@@ -36,11 +40,11 @@ import { DataWithLinks } from 'arlas-persistence-api';
 import {
   ArlasAuthentificationService,
   ArlasIamService, ArlasSettingsService, AuthentificationService, ConfigAction,
-  ConfigActionEnum, ErrorService, PermissionService, PersistenceService, UserInfosComponent
+  ConfigActionEnum, ConfigMenuComponent, ErrorService, PermissionService, PersistenceService, UserInfosComponent
 } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
-import { Subscription } from 'rxjs';
-import { map } from 'rxjs/internal/operators/map';
+import { NgxSpinnerComponent } from 'ngx-spinner';
+import { map, Subscription } from 'rxjs';
 import { LandingPageDialogComponent } from './landing-page-dialog.component';
 
 export interface Configuration {
@@ -53,7 +57,18 @@ export interface Configuration {
     selector: 'arlas-landing-page',
     templateUrl: './landing-page.component.html',
     styleUrls: ['./landing-page.component.scss'],
-    standalone: false
+    imports: [
+      NgxSpinnerComponent,
+      TranslatePipe,
+      MatFormFieldModule,
+      MatSelectModule,
+      MatDialogModule,
+      MatTableModule,
+      DatePipe,
+      ConfigMenuComponent,
+      MatPaginatorModule,
+      MatTooltipModule
+    ]
 })
 export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
 

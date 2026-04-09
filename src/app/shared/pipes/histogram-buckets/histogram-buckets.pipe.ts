@@ -20,10 +20,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { ConfigFormGroup } from '@shared-models/config-form';
-@Pipe({
-    name: 'isHistogramBucketFormGroup',
-    standalone: false
-})
+@Pipe({ name: 'isHistogramBucketFormGroup' })
 export class HistogramBucketPipe implements PipeTransform {
   public transform(control: AbstractControl, args?: any): any {
     return control instanceof ConfigFormGroup;

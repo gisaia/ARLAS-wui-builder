@@ -26,13 +26,13 @@ import { ExternalNodeConfigRoutingModule } from './external-node-confid-routing.
 
 
 @NgModule({
-  declarations: [GlobalExternalNodeComponent],
-  imports: [
-    ArlasToolkitSharedModule,
-    ExternalNodeConfigRoutingModule,
-    NgJsonEditorModule,
-    SharedModule
-  ]
+    imports: [
+        ArlasToolkitSharedModule,
+        ExternalNodeConfigRoutingModule,
+        NgJsonEditorModule,
+        SharedModule,
+        GlobalExternalNodeComponent
+    ]
 })
 export class ExternalNodeConfigModule { }
 

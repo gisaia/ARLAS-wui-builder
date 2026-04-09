@@ -97,8 +97,9 @@ export class ManageVisualisationComponent {
   public dragDisabled = true;
   @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
 
-  public get dataGroups(): FormArray<ResultListVisualisationsDataGroup> | any[] {
-    return this.visualisation().get('dataGroups')?.value.length > 0 ?  (<any>this.visualisation().get('dataGroups')).controls as FormArray  : [];
+  public get dataGroups() {
+    const dataGroups = this.visualisation()?.customControls.dataGroups;
+    return dataGroups?.value.length > 0 ?  dataGroups.controls  : [];
   }
 
   public validateVisualisation(){
@@ -126,7 +127,7 @@ export class ManageVisualisationComponent {
     }
   }
 
-  public dropItemFamily(event: CdkDragDrop<any[]>){
+  public dropItemFamily(event: CdkDragDrop<any>){
     const previousIndex = (this.visualisation().get('dataGroups') as FormArray).controls.findIndex(row => row === event.item.data);
     moveItemInArray((this.visualisation().get('dataGroups') as FormArray).controls, previousIndex, event.currentIndex);
     this.dragDisabled = true;

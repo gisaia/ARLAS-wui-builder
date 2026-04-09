@@ -17,17 +17,20 @@
  * under the License.
  */
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { ColorPickerDirective } from 'ngx-color-picker';
 import { DefaultValuesService } from '../../../services/default-values/default-values.service';
 
 @Component({
-    selector: 'arlas-color-picker-wrapper',
-    templateUrl: './color-picker-wrapper.component.html',
-    styleUrls: ['./color-picker-wrapper.component.scss'],
-    standalone: false
+  selector: 'arlas-color-picker-wrapper',
+  templateUrl: './color-picker-wrapper.component.html',
+  styleUrls: ['./color-picker-wrapper.component.scss'],
+  imports: [
+    ColorPickerDirective
+  ]
 })
 export class ColorPickerWrapperComponent implements OnDestroy {
 
-  @Input() public value: string;
+  @Input() public value: string | number;
   @Output() private setValue = new EventEmitter<string>();
 
   public constructor(

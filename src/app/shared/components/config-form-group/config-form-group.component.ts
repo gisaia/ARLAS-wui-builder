@@ -16,16 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import {
-  Component, OnInit, Input, OnDestroy, ViewChild, ViewChildren, ViewEncapsulation, QueryList, ChangeDetectorRef, Output, forwardRef
-} from '@angular/core';
-import { ConfigFormGroup, ConfigFormControl, ConfigFormGroupArray } from '@shared-models/config-form';
-import { Subscription, Subject } from 'rxjs';
-import { DomSanitizer } from '@angular/platform-browser';
-import { MatStepper } from '@angular/material/stepper';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { AbstractControl, FormControl } from '@angular/forms';
 import { BucketsIntervalFormGroup } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import {
+  Component, Input, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren, ViewEncapsulation, forwardRef
+} from '@angular/core';
+import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { MatTabsModule } from '@angular/material/tabs';
+import { DomSanitizer } from '@angular/platform-browser';
+import { TranslatePipe } from '@ngx-translate/core';
+import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
+import { ConfigFormGroupArrayComponent } from '@shared-components/config-form-group-array/config-form-group-array.component';
+import { HistogramBucketFormGroupComponent } from '@shared-components/histogram-bucket-form-group/histogram-bucket-form-group.component';
+import { ConfigFormControl, ConfigFormGroup, ConfigFormGroupArray } from '@shared-models/config-form';
+import { ObjectvaluesPipe } from '@shared/pipes/objectvalues.pipe';
+import { OrderConfigFormTabControlsPipe } from '@shared/pipes/order-config-form-tab.pipe';
+import { Subject, Subscription } from 'rxjs';
 
 /**
  * TODO this class can probably be optimized.
@@ -33,18 +41,29 @@ import { BucketsIntervalFormGroup } from '@analytics-config/services/buckets-int
  * this may be grouped into a sigle listener if multiple controls depend on a same one.
  */
 @Component({
-    // tslint:disable-next-line: component-selector
-    selector: 'arlas-config-form-group',
-    templateUrl: './config-form-group.component.html',
-    styleUrls: ['./config-form-group.component.scss'],
-    providers: [
-        {
-            provide: STEPPER_GLOBAL_OPTIONS,
-            useValue: { showError: true }
-        }
-    ],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'arlas-config-form-group',
+  templateUrl: './config-form-group.component.html',
+  styleUrls: ['./config-form-group.component.scss'],
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { showError: true }
+    }
+  ],
+  encapsulation: ViewEncapsulation.None,
+  imports: [
+    ReactiveFormsModule,
+    TranslatePipe,
+    MatStepperModule,
+    ObjectvaluesPipe,
+    ConfigFormGroupComponent,
+    MatTabsModule,
+    OrderConfigFormTabControlsPipe,
+    ConfigElementComponent,
+    ConfigFormControlComponent,
+    HistogramBucketFormGroupComponent,
+    ConfigFormGroupArrayComponent
+  ]
 })
 export class ConfigFormGroupComponent implements OnInit, OnDestroy {
 
@@ -55,7 +74,6 @@ export class ConfigFormGroupComponent implements OnInit, OnDestroy {
   @ViewChild(MatStepper, { static: false }) private stepper: MatStepper;
   @ViewChildren(forwardRef(() => ConfigFormGroupComponent)) private subConfigFormGroups: QueryList<ConfigFormGroupComponent>;
   @Output() public updateSyncOptions: Subject<{ prefix: string; control: FormControl; }> = new Subject();
-
 
   public toUnsubscribe: Array<Subscription> = [];
 

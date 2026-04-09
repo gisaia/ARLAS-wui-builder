@@ -35,19 +35,19 @@ describe('GlobalResultListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [GlobalResultListComponent],
-      providers: [
+    imports: [GlobalResultListComponent],
+    providers: [
         mockProvider(CollectionService, {
-          getCollectionFieldsNames: () => of([])
+            getCollectionFieldsNames: () => of([])
         }),
         mockProvider(MainFormService, {
-          getMainCollection: () => '',
-          resultListConfig: {
-            getResultListsFa: () => new FormArray([])
-          }
+            getMainCollection: () => '',
+            resultListConfig: {
+                getResultListsFa: () => new FormArray([])
+            }
         })
-      ]
-    })
+    ]
+})
       .compileComponents();
   }));
 

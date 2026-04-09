@@ -16,27 +16,39 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Input, OnInit } from '@angular/core';
-import { FormArray } from '@angular/forms';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Component, Input } from '@angular/core';
+import { FormArray, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import {
+  CollectionUnitFormGroup
+} from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
+import { TranslatePipe } from '@ngx-translate/core';
 import { SlideToggleFormControl } from '@shared-models/config-form';
+import { GetCollectionDisplayNamePipe } from 'arlas-web-components';
 
 @Component({
-    selector: 'arlas-collections-units',
-    templateUrl: './collections-units.component.html',
-    styleUrls: ['./collections-units.component.scss'],
-    standalone: false
+  selector: 'arlas-collections-units',
+  templateUrl: './collections-units.component.html',
+  styleUrls: ['./collections-units.component.scss'],
+  imports: [
+    MatIconModule,
+    GetCollectionDisplayNamePipe,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    TranslatePipe,
+    MatTooltipModule,
+    DragDropModule
+  ]
 })
-export class CollectionsUnitsComponent implements OnInit {
+export class CollectionsUnitsComponent {
 
   @Input() public collections: string[];
-  @Input() public unitsArray: FormArray;
-
-  public constructor() { }
-
-  public ngOnInit() {
-
-  }
+  @Input() public unitsArray: FormArray<CollectionUnitFormGroup>;
 
   public drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.unitsArray.value, event.previousIndex, event.currentIndex);

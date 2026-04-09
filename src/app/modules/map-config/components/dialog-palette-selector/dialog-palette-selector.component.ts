@@ -16,20 +16,45 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
+import { NgStyle } from '@angular/common';
 import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
+import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
 import { ProportionedValues } from '@shared-services/property-selector-form-builder/models';
+import { PaletteGradientPipe } from '@shared/pipes/palette-gradien.pipe';
 import * as d3c from 'd3-color';
 import * as d3i from 'd3-interpolate';
 import { DialogPaletteSelectorData } from './model';
 
 @Component({
-    selector: 'arlas-dialog-palette',
-    templateUrl: './dialog-palette-selector.component.html',
-    styleUrls: ['./dialog-palette-selector.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'arlas-dialog-palette',
+  templateUrl: './dialog-palette-selector.component.html',
+  styleUrls: ['./dialog-palette-selector.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  imports: [
+    TranslatePipe,
+    NgStyle,
+    PaletteGradientPipe,
+    MatTooltipModule,
+    MatIconModule,
+    MatButtonModule,
+    ColorPickerWrapperComponent,
+    DragDropModule,
+    MatInputModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatSliderModule,
+    MatDialogModule
+  ]
 })
 export class DialogPaletteSelectorComponent implements OnInit {
 

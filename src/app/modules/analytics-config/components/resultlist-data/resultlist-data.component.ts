@@ -16,24 +16,37 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { ResultlistDataConfigForm } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { MatTabsModule } from '@angular/material/tabs';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { toKeywordOptionsObs } from '@services/collection-service/tools';
+import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
 import { FieldTemplateControl } from '@shared-models/config-form';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { Subject, takeUntil } from 'rxjs';
+import { EditResultlistColumnsComponent } from '../edit-resultlist-columns/edit-resultlist-columns.component';
+import { EditResultlistDetailsComponent } from '../edit-resultlist-details/edit-resultlist-details.component';
 
 @Component({
-    selector: 'arlas-resultlist-data',
-    templateUrl: './resultlist-data.component.html',
-    styleUrls: ['./resultlist-data.component.scss'],
-    standalone: false
+  selector: 'arlas-resultlist-data',
+  templateUrl: './resultlist-data.component.html',
+  styleUrls: ['./resultlist-data.component.scss'],
+  imports: [
+    MatTabsModule,
+    TranslatePipe,
+    EditResultlistColumnsComponent,
+    ConfigElementComponent,
+    ConfigFormControlComponent,
+    EditResultlistDetailsComponent
+  ]
 })
 export class ResultlistDataComponent implements OnInit, OnDestroy {
 
-  @Input() public control: FormGroup;
+  @Input() public control: ResultlistDataConfigForm;
   public detailsTitleControl: FieldTemplateControl;
 
   private onDestroy$ = new Subject<boolean>();

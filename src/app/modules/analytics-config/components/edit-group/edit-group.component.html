@@ -1,81 +1,78 @@
 <div class="group-wrapper" [formGroup]="formGroup">
-    <div class="edit-group">
-        <div class="edit-group-form">
-            <div class="fields">
-                <div class="icon">
-                    <mat-icon matPrefix style="cursor: pointer;" (click)="iconInput.click()">
-                        {{formGroup.controls.icon.value}}</mat-icon>
-                    <input class="icon-picker-input" #iconInput matInput formControlName="icon" [iconPicker]="formGroup.controls.icon.value"
-                        [ipIconPack]="['mat']" [ipFallbackIcon]="'poll'" [ipPosition]="'right'" [ipIconSize]="'24px'"
-                        [ipButtonStyleClass]="'mat-raised-button'" [ipMaxHeight]="'300px'" [ipWidth]="'467px'"
-                        (iconPickerSelect)="onIconPickerSelect($event)" />
-                </div>
-                <div>
-                    <mat-form-field>
-                        <mat-label>{{'Title' | translate}}</mat-label>
-                        <input matInput formControlName="title" (change)="updatePreview()">
-                    </mat-form-field>
-                </div>
-                <div>
-                    <mat-button-toggle-group (change)="updatePreview()" #group="matButtonToggleGroup"
-                        formControlName="itemPerLine">
-                        <mat-button-toggle value="1" matTooltip="{{'One per line' | translate}}"
-                            [checked]="itemPerLine + '' === '1'">
-                            <mat-icon>view_agenda</mat-icon>
-                        </mat-button-toggle>
-                        <mat-button-toggle value="2" matTooltip="{{'Two columns' | translate}}"
-                            [checked]="itemPerLine + '' === '2'">
-                            <mat-icon style="transform: rotate(90deg);">view_agenda</mat-icon>
-                        </mat-button-toggle>
-                        <mat-button-toggle value="3" matTooltip="{{'Three columns' | translate}}"
-                            [checked]="itemPerLine + '' === '3'">
-                            <mat-icon>view_week</mat-icon>
-                        </mat-button-toggle>
-                    </mat-button-toggle-group>
-                </div>
-                <div *ngIf="formGroup.controls.content.touched && formGroup.controls.content.invalid">
-                    <mat-error>
-                        {{ contentTypeValue.length | i18nPlural:{
-                        '=1': 'The widget within isn\'t valid' | translate,
-                        'other': 'The widgets within aren\'t valid' | translate
-                        } }}
-                    </mat-error>
-                </div>
-            </div>
-            <div class="edit-widgets" #dropListContainer cdkDropListGroup>
-                <div class="container"
-                    *ngFor="let comp of contentTypeValue; index as ci;"
-                    mat-raised-button
-                    [id]="'widget-' + groupIndex + '-' + ci"
-                    cdkDropList
-                    [cdkDropListData]="ci"
-                    >
-                    <div cdkDrag
-                        [cdkDragData]="ci"
-                        (cdkDragEntered)="dragEntered($event)"
-                        (cdkDragMoved)="dragMoved($event)"
-                        (cdkDragDropped)="dragDropped($event)">
-                        <arlas-widget-edition
-                            [isValid]="content?.controls[ci]?.valid"
-                            [widgetControls]="content?.controls[ci]?.controls"
-                            (edit)="editWidget(ci, content?.controls[ci].value.widgetData?.dataStep?.collection)"
-                            (delete)="deleteWidget(ci)"
-                        ></arlas-widget-edition>
-                        <div class="placeholder" *cdkDragPlaceholder></div>
-                    </div>
-                </div>
-                <div class="add">
-                    <button mat-stroked-button color="primary" [matTooltip]="'Add a widget' | translate"
-                        (click)="addWidget()">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                    <button class="import" mat-stroked-button color="primary"
-                        [matTooltip]="'Import a widget' | translate" (click)="importWidget()">
-                        <mat-icon>file_upload</mat-icon>
-                    </button>
-                </div>
-            </div>
+  <div class="edit-group">
+    <div class="edit-group-form">
+      <div class="fields">
+        <div class="icon">
+          <mat-icon matPrefix style="cursor: pointer;" (click)="iconInput.click()">
+            {{formGroup.controls.icon.value}}</mat-icon>
+          <input class="icon-picker-input" #iconInput matInput formControlName="icon" [iconPicker]="formGroup.controls.icon.value"
+            [ipIconPack]="['mat']" [ipFallbackIcon]="'poll'" [ipPosition]="'right'" [ipIconSize]="'24px'"
+            [ipButtonStyleClass]="'mat-raised-button'" [ipMaxHeight]="'300px'" [ipWidth]="'467px'"
+            (iconPickerSelect)="onIconPickerSelect($event)" />
         </div>
+        <div>
+          <mat-form-field>
+            <mat-label>{{'Title' | translate}}</mat-label>
+            <input matInput formControlName="title" (change)="updatePreview()">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-button-toggle-group (change)="updatePreview()" #group="matButtonToggleGroup"
+            formControlName="itemPerLine">
+            <mat-button-toggle value="1" matTooltip="{{'One per line' | translate}}"
+              [checked]="itemPerLine + '' === '1'">
+              <mat-icon>view_agenda</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle value="2" matTooltip="{{'Two columns' | translate}}"
+              [checked]="itemPerLine + '' === '2'">
+              <mat-icon style="transform: rotate(90deg);">view_agenda</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle value="3" matTooltip="{{'Three columns' | translate}}"
+              [checked]="itemPerLine + '' === '3'">
+              <mat-icon>view_week</mat-icon>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        @if (formGroup.controls.content.touched && formGroup.controls.content.invalid) {
+          <div>
+            <mat-error>
+              {{ contentTypeValue.length | i18nPlural:{
+                '=1': 'The widget within isn\'t valid' | translate,
+                'other': 'The widgets within aren\'t valid' | translate
+              } }}
+            </mat-error>
+          </div>
+        }
+      </div>
+      <div class="edit-widgets" #dropListContainer cdkDropListGroup>
+        @for (comp of contentTypeValue; track comp; let ci = $index) {
+          <div class="container" mat-raised-button
+              [id]="'widget-' + groupIndex + '-' + ci"
+              cdkDropList [cdkDropListData]="ci">
+            <div cdkDrag [cdkDragData]="ci" (cdkDragEntered)="dragEntered($event)"
+                (cdkDragMoved)="dragMoved($event)" (cdkDragDropped)="dragDropped($event)">
+              <arlas-widget-edition
+                [isValid]="content?.controls[ci]?.valid"
+                [widgetControls]="content?.controls[ci]?.controls"
+                (edit)="editWidget(ci, content?.controls[ci].value.widgetData?.dataStep?.collection)"
+                (delete)="deleteWidget(ci)"
+              ></arlas-widget-edition>
+              <div class="placeholder" *cdkDragPlaceholder></div>
+            </div>
+          </div>
+        }
+        <div class="add">
+          <button mat-stroked-button color="primary" [matTooltip]="'Add a widget' | translate"
+              (click)="addWidget()">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button class="import" mat-stroked-button color="primary"
+              [matTooltip]="'Import a widget' | translate" (click)="importWidget()">
+            <mat-icon>file_upload</mat-icon>
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 
 </div>

@@ -1,29 +1,45 @@
 <!-- Displaying a control according to its enabled state is not yet supported -->
 <div class="array_header">
-    <h3 *ngIf="configFormGroupArray.title" class="form-control-title">{{configFormGroupArray.title | translate}}</h3>
-    <mat-icon *ngIf="configFormGroupArray.description" class="icon" matTooltip="{{configFormGroupArray.description | translate}}" matTooltipPosition="right">info_outline</mat-icon>
+  @if (configFormGroupArray.title) {
+    <h3 class="form-control-title">{{configFormGroupArray.title | translate}}</h3>
+  }
+  @if (configFormGroupArray.description) {
+    <mat-icon class="icon" matTooltip="{{configFormGroupArray.description | translate}}" matTooltipPosition="right">info_outline</mat-icon>
+  }
 </div>
-<div class="note" *ngIf="configFormGroupArray.note">
+@if (configFormGroupArray.note) {
+  <div class="note">
     {{configFormGroupArray.note | translate}}
-</div>
-<div *ngFor="let formGroup of formGroups">
+  </div>
+}
+@for (formGroup of formGroups; track formGroup) {
+  <div>
     <arlas-config-element>
-        <div form-fields>
-            <div class="form-group-form-fields">
-                <div *ngFor="let control of formGroup.configFormControls" class="single-form-field">
-                    <!-- Handle only form controls by now, feel free to support other types if necessary -->
-                    <arlas-config-form-control [control]="control" [defaultKey]="defaultKey"></arlas-config-form-control>
-                </div>
+      <div form-fields>
+        <div class="form-group-form-fields">
+          @for (control of formGroup.configFormControls; track control) {
+            <div class="single-form-field">
+              <!-- Handle only form controls by now, feel free to support other types if necessary -->
+              <arlas-config-form-control [control]="control" [defaultKey]="defaultKey"></arlas-config-form-control>
             </div>
+          }
         </div>
-        <div description *ngIf="formGroup.description">
-            <div *ngFor="let control of formGroup.configFormControls ">
-                {{control.description | translate}}
+      </div>
+      @if (formGroup.description) {
+        <div description>
+          @for (control of formGroup.configFormControls ; track control) {
+            <div>
+              {{control.description | translate}}
             </div>
+          }
         </div>
+      }
     </arlas-config-element>
-</div>
+  </div>
+}
 
-<div class="emptylist_note" *ngIf="configFormGroupArray.emptylistNote && formGroups.length === 0">
+@if (configFormGroupArray.emptylistNote && formGroups.length === 0) {
+  <div class="emptylist_note">
     {{configFormGroupArray.emptylistNote | translate}}
-</div>
+  </div>
+}

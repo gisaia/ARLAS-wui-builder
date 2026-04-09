@@ -24,25 +24,36 @@ import {
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTabGroup, MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
+import { ConfigFormGroup } from '@shared-models/config-form';
 import { Subscription } from 'rxjs';
-import { marker } from '@colsen1991/ngx-translate-extract-marker';
-import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
-    selector: 'arlas-global-result-list',
-    templateUrl: './global-result-list.component.html',
-    styleUrls: ['./global-result-list.component.scss'],
-    standalone: false
+  selector: 'arlas-global-result-list',
+  templateUrl: './global-result-list.component.html',
+  styleUrls: ['./global-result-list.component.scss'],
+  imports: [
+    MatTabsModule,
+    MatIconModule,
+    MatTooltipModule,
+    TranslatePipe,
+    ConfigFormGroupComponent
+  ]
 })
 export class GlobalResultListComponent implements OnDestroy {
 
-  public listsFa: FormArray;
+  public listsFa: FormArray<ConfigFormGroup>;
   private newAfterClosedSub: Subscription;
 
   private removeAfterClosedSub: Subscription;

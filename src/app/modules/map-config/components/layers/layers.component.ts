@@ -18,9 +18,16 @@
  */
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 import { ImportLayerDialogComponent } from '@map-config/components/import-layer-dialog/import-layer-dialog.component';
@@ -35,6 +42,7 @@ import {
 import {
   MapVisualisationFormBuilderService
 } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
+import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
@@ -45,14 +53,11 @@ import { StartupService } from '@services/startup/startup.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { camelize } from '@utils/tools';
-import { LayerMetadata, LegendService, VisualisationSetConfig } from 'arlas-map';
-import { ArlasColorService } from 'arlas-web-components';
+import { ArlasDataLayer, LayerIconComponent, LayerMetadata, LegendService, VisualisationSetConfig } from 'arlas-map';
+import { ArlasColorService, GetCollectionDisplayNamePipe } from 'arlas-web-components';
 import { ExtentFilterGeometry, MapContributor } from 'arlas-web-contributors';
 import {
-  ArlasCollaborativesearchService,
-  ArlasConfigService,
-  ArlasSettingsService,
-  ContributorBuilder
+  ArlasCollaborativesearchService, ArlasConfigService, ArlasSettingsService, ContributorBuilder
 } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { PreviewComponent } from '../preview/preview.component';
@@ -64,10 +69,22 @@ export interface Layer {
 }
 
 @Component({
-    selector: 'arlas-layers',
-    templateUrl: './layers.component.html',
-    styleUrls: ['./layers.component.scss'],
-    standalone: false
+  selector: 'arlas-layers',
+  templateUrl: './layers.component.html',
+  styleUrls: ['./layers.component.scss'],
+  imports: [
+    MatButtonModule,
+    MatTooltipModule,
+    TranslatePipe,
+    RouterLink,
+    MatFormFieldModule,
+    MatTableModule,
+    MatIconModule,
+    MatInputModule,
+    LayerIconComponent,
+    MatMenuModule,
+    GetCollectionDisplayNamePipe
+  ]
 })
 export class LayersComponent implements OnInit, OnDestroy {
 
@@ -374,7 +391,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     });
     const mapComponentConfigValue = ConfigExportHelper.getMapComponent(mapConfigGlobal, mapConfigLayers,
       mapConfigVisualisations, mapConfigBasemaps, arlasId, true);
-    mapComponentConfigValue.input.mapLayers.layers = configMap.layers;
+    mapComponentConfigValue.input.mapLayers.layers = configMap.layers as ArlasDataLayer[];
     const dialogRef = this.dialog.open(PreviewComponent, {
       panelClass: 'map-preview',
       width: '80%',

@@ -17,14 +17,17 @@
  * under the License.
  */
 import { Component, OnInit } from '@angular/core';
-import { MainFormService } from '@services/main-form/main-form.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 
 @Component({
-    selector: 'arlas-global',
-    templateUrl: './global-map.component.html',
-    styleUrls: ['./global-map.component.scss'],
-    standalone: false
+  selector: 'arlas-global',
+  templateUrl: './global-map.component.html',
+  styleUrls: ['./global-map.component.scss'],
+  imports: [
+    ConfigFormGroupComponent
+  ]
 })
 export class GlobalMapComponent implements OnInit {
 

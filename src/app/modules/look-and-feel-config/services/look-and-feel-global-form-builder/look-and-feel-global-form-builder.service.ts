@@ -29,7 +29,6 @@ import {
 } from '@shared-models/config-form';
 import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
 
-
 export class CollectionUnitFormGroup extends ConfigFormGroup {
   public constructor() {
     super({
@@ -55,6 +54,7 @@ export class CollectionUnitFormGroup extends ConfigFormGroup {
     ignored: this.get('ignored') as SlideToggleFormControl
   };
 }
+
 export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
 
   public constructor(
@@ -146,7 +146,7 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
   public collectionIgnoredMap = new Map();
   public ignoredCollections = new Map();
 
-  public buildUnits(collections): FormArray {
+  public buildUnits(collections: string[]): FormArray {
     const collectionsUnits = new FormArray([]);
     const values = this.customControls.units.value as FormArray;
     if (!!values && values.controls) {

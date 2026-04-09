@@ -1,33 +1,33 @@
 <mat-tab-group mat-stretch-tabs class="mat-elevation-z1">
-    <mat-tab #columns>
-        <ng-template mat-tab-label>
-            <span
-                [class.tab-error]="control.get('columns').touched && control.get('columns').invalid && !columns.isActive">
-                {{'Columns' | translate}}
-            </span>
-        </ng-template>
-        <arlas-edit-resultlist-columns [control]="control.get('columns')" [collection]="control.get('collection')">
-        </arlas-edit-resultlist-columns>
-    </mat-tab>
-    <mat-tab #details>
-        <ng-template mat-tab-label>
-            <span
-                [class.tab-error]="control.get('details').touched && control.get('details').invalid && !details.isActive">
-                {{'Details' | translate}}
-            </span>
-        </ng-template>
+  <mat-tab #columns>
+    <ng-template mat-tab-label>
+      <span [class.tab-error]="control.controls.columns.touched && control.controls.columns.invalid && !columns.isActive">
+        {{'Columns' | translate}}
+      </span>
+    </ng-template>
+    <arlas-edit-resultlist-columns [control]="control.controls.columns" [collection]="control.controls.collection">
+    </arlas-edit-resultlist-columns>
+  </mat-tab>
+  <mat-tab #details>
+    <ng-template mat-tab-label>
+      <span [class.tab-error]="control.controls.details.touched && control.controls.details.invalid && !details.isActive">
+        {{'Details' | translate}}
+      </span>
+    </ng-template>
 
-        <div class="details-title">
-            <arlas-config-element [fullSize]="!detailsTitleControl.description">
-                <div form-fields>
-                    <arlas-config-form-control [control]="detailsTitleControl"></arlas-config-form-control>
-                </div>
-                <div description *ngIf="detailsTitleControl.description">
-                    {{ detailsTitleControl.description | translate}}
-                </div>
-            </arlas-config-element>
+    <div class="details-title">
+      <arlas-config-element [fullSize]="!detailsTitleControl.description">
+        <div form-fields>
+          <arlas-config-form-control [control]="detailsTitleControl"></arlas-config-form-control>
         </div>
-        <arlas-edit-resultlist-details [control]="control.get('details')" [collection]="control.get('collection')">
-        </arlas-edit-resultlist-details>
-    </mat-tab>
+        @if (detailsTitleControl.description) {
+          <div description>
+            {{ detailsTitleControl.description | translate}}
+          </div>
+        }
+      </arlas-config-element>
+    </div>
+    <arlas-edit-resultlist-details [control]="control.controls.details" [collection]="control.controls.collection">
+    </arlas-edit-resultlist-details>
+  </mat-tab>
 </mat-tab-group>

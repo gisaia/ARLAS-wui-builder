@@ -21,23 +21,42 @@ import {
   SubTableColumnFormGroup,
   SubTableFormGroup
 } from '@analytics-config/services/metrics-table-form-builder/metrics-table-form-builder.service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatError } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionField } from '@services/collection-service/models';
 import { NUMERIC_OR_DATE_TYPES } from '@services/collection-service/tools';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { SelectFormControl } from '@shared-models/config-form';
 import { Metric } from 'arlas-api';
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'arlas-add-subtable-dialog',
-    templateUrl: './add-subtable-dialog.component.html',
-    styleUrls: ['./add-subtable-dialog.component.scss'],
-    standalone: false
+  selector: 'arlas-add-subtable-dialog',
+  templateUrl: './add-subtable-dialog.component.html',
+  styleUrls: ['./add-subtable-dialog.component.scss'],
+  imports: [
+    TranslatePipe,
+    ConfigFormGroupComponent,
+    MatTableModule,
+    DragDropModule,
+    MatIconModule,
+    MatButtonModule,
+    ConfigFormControlComponent,
+    MatError,
+    MatDialogModule,
+    MatTooltipModule
+  ]
 })
 export class AddSubtableDialogComponent implements OnInit, OnDestroy {
   public formGroup: SubTableFormGroup;

@@ -13,19 +13,18 @@ describe('SearchCollectionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SearchCollectionComponent],
-      imports: [TranslateModule.forRoot({
-        loader: {
-          provide: TranslateLoader,
-          useClass: TranslateNoOpLoader
-        }
-      })],
-      providers: [
+    imports: [TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useClass: TranslateNoOpLoader
+            }
+        }), SearchCollectionComponent],
+    providers: [
         mockProvider(NGXLogger),
         mockProvider(ArlasCollaborativesearchService),
         provideHttpClient(withInterceptorsFromDi())
-      ]
-    })
+    ]
+})
       .compileComponents();
 
     fixture = TestBed.createComponent(SearchCollectionComponent);

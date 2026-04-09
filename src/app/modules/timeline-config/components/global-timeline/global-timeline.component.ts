@@ -18,13 +18,18 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 
 @Component({
-    selector: 'arlas-global-timeline',
-    templateUrl: './global-timeline.component.html',
-    styleUrls: ['./global-timeline.component.scss'],
-    standalone: false
+  selector: 'arlas-global-timeline',
+  templateUrl: './global-timeline.component.html',
+  styleUrls: ['./global-timeline.component.scss'],
+  imports: [
+    ConfigFormControlComponent,
+    ConfigFormGroupComponent
+  ]
 })
 export class GlobalTimelineComponent implements OnInit {
 

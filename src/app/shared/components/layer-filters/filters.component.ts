@@ -18,11 +18,16 @@
  */
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import {
   MapFilterFormGroup, MapLayerFormBuilderService, MapLayerFormGroup
 } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { ConfigFormGroup } from '@shared-models/config-form';
@@ -40,10 +45,16 @@ export interface Layer {
 }
 
 @Component({
-    selector: 'arlas-layer-filters',
-    templateUrl: './filters.component.html',
-    styleUrls: ['./filters.component.scss'],
-    standalone: false
+  selector: 'arlas-layer-filters',
+  templateUrl: './filters.component.html',
+  styleUrls: ['./filters.component.scss'],
+  imports: [
+    MatTableModule,
+    TranslatePipe,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule
+  ]
 })
 export class LayerFiltersComponent implements OnInit, OnDestroy {
   @Input() public layerFg: MapLayerFormGroup;
@@ -54,7 +65,7 @@ export class LayerFiltersComponent implements OnInit, OnDestroy {
   private confirmDeleteSub: Subscription;
 
   public constructor(
-    public dialog: MatDialog,
+    private readonly dialog: MatDialog,
     private readonly mainFormService: MainFormService,
     private readonly mapLayerFormBuilder: MapLayerFormBuilderService
   ) { }

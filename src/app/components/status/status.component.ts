@@ -16,14 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 
 @Component({
-    selector: 'arlas-status',
-    templateUrl: './status.component.html',
-    styleUrls: ['./status.component.scss'],
-    standalone: false
+  selector: 'arlas-status',
+  templateUrl: './status.component.html',
+  styleUrls: ['./status.component.scss'],
+  imports: [
+    TranslatePipe,
+    FormsModule,
+    MatTooltipModule,
+    MatButtonModule,
+    MatIconModule
+  ]
 })
 export class StatusComponent implements OnInit {
 

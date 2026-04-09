@@ -17,16 +17,44 @@
  * under the License.
  */
 
+import { NgClass } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { TranslatePipe } from '@ngx-translate/core';
+import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
+import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
+import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
 import { ConfigFormGroupComponent } from '../config-form-group/config-form-group.component';
 
 @Component({
-    selector: 'arlas-histogram-bucket-form-group',
-    templateUrl: './histogram-bucket-form-group.component.html',
-    styleUrls: ['./histogram-bucket-form-group.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'arlas-histogram-bucket-form-group',
+  templateUrl: './histogram-bucket-form-group.component.html',
+  styleUrls: ['./histogram-bucket-form-group.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  imports: [
+    TranslatePipe,
+    ConfigElementComponent,
+    ConfigFormControlComponent,
+    MatRadioModule,
+    ResetOnChangeDirective,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatSliderModule,
+    AlertOnChangeDirective,
+    MatSelectModule,
+    MatTooltipModule,
+    NgClass
+  ]
 })
 export class HistogramBucketFormGroupComponent extends ConfigFormGroupComponent implements OnInit, OnDestroy {
 

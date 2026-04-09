@@ -67,7 +67,7 @@ export abstract class ConfigFormControl extends FormControl {
     formState: any,
     public label: string,
     public description: string,
-    private optionalParams: ControlOptionalParams = {}) {
+    public readonly optionalParams: ControlOptionalParams = {}) {
 
     super(formState);
     this.initialValue = formState;
@@ -198,8 +198,9 @@ export class ConfigFormGroup extends FormGroup {
   public title: string;
   public stepName: string;
   public tabName: string;
+  public description: string;
   /** used to order  first level of table if needed **/
-  public tabsOrder: string[] ;
+  public tabsOrder: string[];
 
   public hide = false;
 
@@ -248,6 +249,11 @@ export class ConfigFormGroup extends FormGroup {
 
   public withTitle(title: string) {
     this.title = title;
+    return this;
+  }
+
+  public withDescription(desc: string): this {
+    this.description = desc;
     return this;
   }
 

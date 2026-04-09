@@ -1,119 +1,127 @@
 <h3 class="form-control-title">{{'x-Axis' | translate}}</h3>
 
-<ng-container *ngIf="aggregationFieldControl.enabled">
-    <ng-container>
-        <h3 *ngIf="aggregationFieldControl.title" class="form-control-title">{{aggregationFieldControl.title |
-            translate}}</h3>
-        <arlas-config-element [fullSize]="!aggregationFieldControl.description">
-            <div form-fields>
-                <arlas-config-form-control [control]="aggregationFieldControl" [parentFormGroup]="parentConfigFormGroup"
-                    [defaultKey]="defaultKey"
-                    (updateSyncOptions)="updateSyncOptions.next({prefix: $event, control: aggregationFieldControl})">
-                </arlas-config-form-control>
-
+@if (aggregationFieldControl.enabled) {
+  <ng-container>
+    @if (aggregationFieldControl.title) {
+      <h3 class="form-control-title">{{aggregationFieldControl.title | translate}}</h3>
+    }
+    <arlas-config-element [fullSize]="!aggregationFieldControl.description">
+      <div form-fields>
+        <arlas-config-form-control [control]="aggregationFieldControl" [parentFormGroup]="parentConfigFormGroup"
+          [defaultKey]="defaultKey"
+          (updateSyncOptions)="updateSyncOptions.next({prefix: $event, control: aggregationFieldControl})">
+        </arlas-config-form-control>
+      </div>
+      @if (aggregationFieldControl.description) {
+        <div description>
+          @if (aggregationFieldControl.isDescriptionHtml) {
+            <div
+              [innerHtml]="trustHtml(aggregationFieldControl.description)">
             </div>
-            <div description *ngIf="aggregationFieldControl.description">
-                <div *ngIf="aggregationFieldControl.isDescriptionHtml"
-                    [innerHtml]="trustHtml(aggregationFieldControl.description)">
-                </div>
-                <div *ngIf="!aggregationFieldControl.isDescriptionHtml">
-                    {{ aggregationFieldControl.description | translate}}
-                </div>
+          }
+          @if (!aggregationFieldControl.isDescriptionHtml) {
+            <div>
+              {{ aggregationFieldControl.description | translate}}
             </div>
-        </arlas-config-element>
-    </ng-container>
-</ng-container>
+          }
+        </div>
+      }
+    </arlas-config-element>
+  </ng-container>
+}
 
 
-<ng-container *ngIf="bucketTypeControl.enabled">
-    <ng-container>
-        <h3 *ngIf="bucketTypeControl.title" class="form-control-title">{{bucketTypeControl.title |
-            translate}}</h3>
-        <arlas-config-element [fullSize]="!bucketTypeControl.description">
-            <div form-fields>
-                <table class="table">
-                    <tbody >
-                        <mat-radio-group [formControl]="bucketTypeControl"
-                            [arlasResetOnChange]="bucketTypeControl.resetDependantsOnChange && bucketTypeControl.dependantControls ? defaultKey : null"
-                            [dependants]="bucketTypeControl.resetDependantsOnChange && bucketTypeControl.dependantControls ? bucketTypeControl.dependantControls : null">
-                            <tr class="cell">
-                                <td>
-                                    <mat-radio-button [value]="'bucket'">{{'Preferred N° of buckets' | translate}}</mat-radio-button>
-                                </td>
-                            </tr>
-                            <tr class="cell">
-                                <td>
-                                    <mat-radio-button [value]="'interval'">{{'Preferred bucket\'s interval' | translate}}</mat-radio-button>
-                                </td>
-
-                            </tr>
-                        </mat-radio-group>
-
-                    </tbody>
-                    <tbody class="table-body-right">
-                        <tr class="cell">
-                            <td class="slider-form-control">
-                                <div class="slider-container">
-                                    <mat-form-field class="slider-input" appearance="outline" [subscriptSizing]="'dynamic'">
-                                        <input matInput type="number"
-                                            [step]="preferredBucketsNumber.step"
-                                            [formControl]="preferredBucketsNumber"
-                                            [min]="preferredBucketsNumber.min"
-                                            [max]="preferredBucketsNumber.max"
-                                            [(ngModel)]="preferredBucketsNumber.value"
-                                        >
-                                    </mat-form-field>
-                                    <mat-slider [min]="preferredBucketsNumber.min" [max]="preferredBucketsNumber.max" [step]="preferredBucketsNumber.step" #ngSlider>
-                                        <input matSliderThumb (input)="preferredBucketsNumber.ensureLessThan ? preferredBucketsNumber.checkLessThan(ngSliderThumb.value) : null;
-                                            preferredBucketsNumber.ensureGeaterThan ? preferredBucketsNumber.checkGreaterThan(ngSliderThumb.value) : null" #ngSliderThumb="matSliderThumb"
-                                            [(ngModel)]="preferredBucketsNumber.value"/>
-                                    </mat-slider>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="cell">
-                            <td>
-                                <div class="interval">
-                                    <mat-form-field class="size">
-                                        <input matInput [formControl]="preferredIntervalSize"
-                                            [type]="preferredIntervalSize.inputType"
-                                            [required]="!preferredIntervalSize.optional"
-                                            [arlasResetOnChange]="preferredIntervalSize.resetDependantsOnChange && preferredIntervalSize.dependantControls ? defaultKey : null"
-                                            [dependants]="preferredIntervalSize.resetDependantsOnChange && preferredIntervalSize.dependantControls ? preferredIntervalSize.dependantControls : null"
-                                            (change)="preferredIntervalSize.ensureLessThan ? preferredIntervalSize.checkLessThan(+$event.target.value) : null;
-                                            preferredIntervalSize.ensureGeaterThan ? preferredIntervalSize.checkGreaterThan(+$event.target.value) : null">
-                                    </mat-form-field>
-                                    <mat-form-field class="unit" *ngIf="aggregationFieldTypeControl.value === 'time'">
-                                        <mat-select [formControl]="preferredIntervalUnit"
-                                            [required]="!preferredIntervalUnit.optional"
-                                            [arlasAlertOnChange]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? WARNING_MESSAGE : null"
-                                            [arlasResetOnChange]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? defaultKey : null"
-                                            [dependants]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? preferredIntervalUnit.dependantControls : null">
-                                            <mat-option *ngIf="preferredIntervalUnit.optional"></mat-option>
-                                            <mat-option *ngFor="let opt of preferredIntervalUnit.syncOptions"
-                                                [value]="opt.value" [ngClass]="'option-color-' + opt.value"
-                                                [matTooltip]="opt.label | translate" [disabled]="opt.enabled === false">
-                                                {{opt.label | translate}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-                           </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-
-            </div>
-            <div description *ngIf="bucketTypeControl.description">
-                <div *ngIf="bucketTypeControl.isDescriptionHtml" [innerHtml]="trustHtml(bucketTypeControl.description)">
+@if (bucketTypeControl.enabled) {
+  <ng-container>
+    @if (bucketTypeControl.title) {
+      <h3 class="form-control-title">{{bucketTypeControl.title |
+      translate}}</h3>
+    }
+    <arlas-config-element [fullSize]="!bucketTypeControl.description">
+      <div form-fields>
+        <table class="table">
+          <tbody>
+            <mat-radio-group [formControl]="bucketTypeControl"
+              [arlasResetOnChange]="bucketTypeControl.resetDependantsOnChange && bucketTypeControl.dependantControls ? defaultKey : null"
+              [dependants]="bucketTypeControl.resetDependantsOnChange && bucketTypeControl.dependantControls ? bucketTypeControl.dependantControls : null">
+              <tr class="cell">
+                <td>
+                  <mat-radio-button [value]="'bucket'">{{'Preferred N° of buckets' | translate}}</mat-radio-button>
+                </td>
+              </tr>
+              <tr class="cell">
+                <td>
+                  <mat-radio-button [value]="'interval'">{{'Preferred bucket\'s interval' | translate}}</mat-radio-button>
+                </td>
+              </tr>
+            </mat-radio-group>
+          </tbody>
+          <tbody class="table-body-right">
+            <tr class="cell">
+              <td class="slider-form-control">
+                <div class="slider-container">
+                  <mat-form-field class="slider-input" appearance="outline" [subscriptSizing]="'dynamic'">
+                    <input matInput type="number" [step]="preferredBucketsNumber.step"
+                      [formControl]="preferredBucketsNumber" [min]="preferredBucketsNumber.min"
+                      [max]="preferredBucketsNumber.max" [(ngModel)]="preferredBucketsNumber.value">
+                  </mat-form-field>
+                  <mat-slider [min]="preferredBucketsNumber.min" [max]="preferredBucketsNumber.max" [step]="preferredBucketsNumber.step" #ngSlider>
+                    <input matSliderThumb (input)="preferredBucketsNumber.ensureLessThan ? preferredBucketsNumber.checkLessThan(ngSliderThumb.value) : null;
+                      preferredBucketsNumber.ensureGeaterThan ? preferredBucketsNumber.checkGreaterThan(ngSliderThumb.value) : null" #ngSliderThumb="matSliderThumb"
+                      [(ngModel)]="preferredBucketsNumber.value"/>
+                  </mat-slider>
                 </div>
-                <div *ngIf="!bucketTypeControl.isDescriptionHtml">
-                    <ng-container *ngFor="let d of bucketTypeControl.description.split('DESC_SPLITER')">
-                        {{ d | translate}}
-                    </ng-container>
+              </td>
+            </tr>
+            <tr class="cell">
+              <td>
+                <div class="interval">
+                  <mat-form-field class="size">
+                    <input matInput [formControl]="preferredIntervalSize"
+                      [type]="preferredIntervalSize.inputType" [required]="!preferredIntervalSize.optional"
+                      [arlasResetOnChange]="preferredIntervalSize.resetDependantsOnChange && preferredIntervalSize.dependantControls ? defaultKey : null"
+                      [dependants]="preferredIntervalSize.resetDependantsOnChange && preferredIntervalSize.dependantControls ? preferredIntervalSize.dependantControls : null"
+                      (change)="preferredIntervalSize.ensureLessThan ? preferredIntervalSize.checkLessThan(+$event.target.value) : null;
+                                preferredIntervalSize.ensureGeaterThan ? preferredIntervalSize.checkGreaterThan(+$event.target.value) : null">
+                  </mat-form-field>
+                  @if (aggregationFieldTypeControl.value === 'time') {
+                    <mat-form-field class="unit">
+                      <mat-select [formControl]="preferredIntervalUnit" [required]="!preferredIntervalUnit.optional"
+                        [arlasAlertOnChange]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? WARNING_MESSAGE : null"
+                        [arlasResetOnChange]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? defaultKey : null"
+                        [dependants]="preferredIntervalUnit.resetDependantsOnChange && preferredIntervalUnit.dependantControls ? preferredIntervalUnit.dependantControls : null">
+                        @if (preferredIntervalUnit.optional) {
+                          <mat-option></mat-option>
+                        }
+                        @for (opt of preferredIntervalUnit.syncOptions; track opt) {
+                          <mat-option [value]="opt.value" [ngClass]="'option-color-' + opt.value"
+                              [matTooltip]="opt.label | translate" [disabled]="opt.enabled === false">
+                            {{opt.label | translate}}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                  }
                 </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      @if (bucketTypeControl.description) {
+        <div description>
+          @if (bucketTypeControl.isDescriptionHtml) {
+            <div [innerHtml]="trustHtml(bucketTypeControl.description)">
             </div>
-        </arlas-config-element>
-    </ng-container>
-</ng-container>
+          } @else {
+            <div>
+              @for (d of bucketTypeControl.description.split('DESC_SPLITER'); track d) {
+                {{ d | translate}}
+              }
+            </div>
+          }
+        </div>
+      }
+    </arlas-config-element>
+  </ng-container>
+}

@@ -18,13 +18,15 @@
  */
 import { AfterContentChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
 import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import {
   MapVisualisationFormBuilderService
 } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
+import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
@@ -35,10 +37,15 @@ import { KeywordColor } from '../dialog-color-table/models';
 import { LAYER_MODE } from './models';
 
 @Component({
-    selector: 'arlas-edit-layer',
-    templateUrl: './edit-layer.component.html',
-    styleUrls: ['./edit-layer.component.scss'],
-    standalone: false
+  selector: 'arlas-edit-layer',
+  templateUrl: './edit-layer.component.html',
+  styleUrls: ['./edit-layer.component.scss'],
+  imports: [
+    TranslatePipe,
+    ConfigFormGroupComponent,
+    RouterLink,
+    MatButtonModule
+  ]
 })
 export class EditLayerComponent implements OnInit, CanComponentExit, AfterContentChecked, OnDestroy {
 

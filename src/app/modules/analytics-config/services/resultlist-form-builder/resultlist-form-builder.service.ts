@@ -70,6 +70,15 @@ import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
 
+export type ResultlistDataConfigForm = FormGroup<{
+  collection: SelectFormControl;
+  searchSize: SliderFormControl;
+  columns: FormArray;
+  detailsTitle: HiddenFormControl;
+  details: FormArray;
+  idFieldName: HiddenFormControl;
+}>;
+
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
   public tabsOrder: string[] = ['dataStep', 'gridStep', 'visualisationStep', 'sactionStep', 'settingsStep'];
 
@@ -354,7 +363,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
   }
 
   public customGroups = {
-    dataStep: this.get('dataStep') as ConfigFormGroup,
+    dataStep: this.get('dataStep') as ResultlistDataConfigForm,
     gridStep: this.get('gridStep') as ConfigFormGroup,
     sactionStep: this.get('sactionStep') as ConfigFormGroup,
     settingsStep: this.get('settingsStep') as ConfigFormGroup,
@@ -593,7 +602,7 @@ export class ResultlistDetailFormGroup extends FormGroup {
 
   public customControls = {
     name: this.get('name') as InputFormControl,
-    fields: this.get('fields') as FormArray,
+    fields: this.get('fields') as FormArray<ResultlistDetailFieldFormGroup>,
   };
 }
 

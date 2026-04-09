@@ -19,9 +19,16 @@
 import {
   ResultlistDetailFormGroup, ResultlistFormBuilderService
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatError } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
 import { SelectFormControl } from '@shared-models/config-form';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 
@@ -29,7 +36,16 @@ import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
     selector: 'arlas-edit-resultlist-details',
     templateUrl: './edit-resultlist-details.component.html',
     styleUrls: ['./edit-resultlist-details.component.scss'],
-    standalone: false
+    imports: [
+      MatCardModule,
+      ConfigFormControlComponent,
+      MatIconModule,
+      MatButtonModule,
+      MatError,
+      MatTooltipModule,
+      TranslatePipe,
+      DragDropModule
+    ]
 })
 export class EditResultlistDetailsComponent implements OnInit {
 
@@ -70,7 +86,7 @@ export class EditResultlistDetailsComponent implements OnInit {
   }
 
   public getDetail = (detailIndex: number) => this.control.at(detailIndex) as ResultlistDetailFormGroup;
-  public getFields = (detailIndex: number) => this.getDetail(detailIndex).customControls.fields.controls as Array<FormGroup>;
+  public getFields = (detailIndex: number) => this.getDetail(detailIndex).customControls.fields.controls;
 
   public drop = (event: CdkDragDrop<string[]>) => moveItemInFormArray(event.previousIndex, event.currentIndex, this.control);
 

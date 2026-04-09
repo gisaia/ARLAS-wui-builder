@@ -17,12 +17,18 @@
  * under the License.
  */
 
-import { KeyValue } from '@angular/common';
+import { KeyValue, KeyValuePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatOptionModule } from '@angular/material/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { CollectionItem, GroupCollectionItem } from '@services/collection-service/models';
 import { InitialChoice, LandingPageService } from '@services/landing-page/landing-page.service';
@@ -32,17 +38,33 @@ import { MapConfig } from '@services/main-form-manager/models-map-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { MenuService } from '@services/menu/menu.service';
 import { StartupService } from '@services/startup/startup.service';
+import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
 import { DialogData } from '@shared-components/input-modal/input-modal.component';
+import { GroupCollectionPipe } from '@shared/pipes/group-collection.pipe';
+import { GetCollectionDisplayNamePipe } from 'arlas-web-components';
 import { PersistenceService, UserInfosComponent } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 
-
 @Component({
-    templateUrl: './landing-page-dialog.component.html',
-    styleUrls: ['./landing-page-dialog.component.scss'],
-    standalone: false
+  templateUrl: './landing-page-dialog.component.html',
+  styleUrls: ['./landing-page-dialog.component.scss'],
+  imports: [
+    NgxSpinnerComponent,
+    MatDialogModule,
+    TranslatePipe,
+    ReactiveFormsModule,
+    ConfigElementComponent,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    KeyValuePipe,
+    GroupCollectionPipe,
+    MatIconModule,
+    MatButtonModule,
+    GetCollectionDisplayNamePipe
+  ]
 })
 export class LandingPageDialogComponent implements OnInit, OnDestroy {
 

@@ -16,23 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, ContentChild, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, ContentChild, Input, OnDestroy } from '@angular/core';
 import { FormControlName, FormGroupDirective } from '@angular/forms';
+import { MatError } from '@angular/material/select';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-    selector: 'arlas-config-element',
-    templateUrl: './config-element.component.html',
-    styleUrls: ['./config-element.component.scss'],
-    standalone: false
+  selector: 'arlas-config-element',
+  templateUrl: './config-element.component.html',
+  styleUrls: ['./config-element.component.scss'],
+  imports: [
+    MatError,
+    TranslatePipe
+  ]
 })
-export class ConfigElementComponent implements OnInit, OnDestroy {
+export class ConfigElementComponent implements OnDestroy {
 
   @ContentChild(FormControlName, { static: true }) public formControl: FormControlName;
   @Input() public fullSize = false;
 
   public constructor(public formGroupDirective: FormGroupDirective) { }
-
-  public ngOnInit() { }
 
   public ngOnDestroy() {
     this.formControl = null;

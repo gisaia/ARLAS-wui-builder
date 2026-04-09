@@ -25,7 +25,7 @@ import { ARLAS_ID } from '@services/main-form/main-form.service';
 import { CIRCLE_HEATMAP_RADIUS_GRANULARITY } from '@shared-models/circle-heat-map-radius-granularity';
 import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
 import { InterpolatedProperty, ModesValues } from '@shared/interfaces/config-map.interfaces';
-import { FillStroke, LayerMetadata, SCROLLABLE_ARLAS_ID, EXTRUSION_LAYER_PREFIX} from 'arlas-map';
+import { EXTRUSION_LAYER_PREFIX, FillStroke, LayerMetadata, MapLayers, SCROLLABLE_ARLAS_ID } from 'arlas-map';
 import { ArlasColorService } from 'arlas-web-components';
 import { LayerSourceConfig } from 'arlas-web-contributors';
 import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
@@ -37,7 +37,6 @@ import {
   HOVER_LAYER_PREFIX,
   Layer,
   Layout,
-  MapConfig,
   Paint,
   PaintValue,
   SELECT_LAYER_PREFIX
@@ -156,7 +155,7 @@ export class ConfigMapExportHelper {
 
         return [layer, l[1]];
       });
-    const mapConfig: MapConfig = {
+    const mapConfig: MapLayers<Layer> = {
       layers: Array.from(new Set(
         layers.map(l => l[0])
           .concat(layersSelect.map(l => l[0]))
@@ -171,7 +170,8 @@ export class ConfigMapExportHelper {
       })).concat(layersSelect.map(lh => ({
         id: lh[0].id,
         on: ExternalEvent.select
-      })))))
+      }))))),
+      events: {onHover: new Set(), emitOnClick: new Set(), zoomOnClick: new Set()}
     };
     return mapConfig;
   }

@@ -17,20 +17,36 @@
  * under the License.
  */
 import { Component, OnInit } from '@angular/core';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { EXPORT_TYPE } from '@services/main-form-manager/config-export-helper';
 import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { MenuService } from '@services/menu/menu.service';
 import { getNbErrorsInControl, isFullyTouched, Page } from '@utils/tools';
 import {
   ArlasSettingsService, LinkSettings, PersistenceService
 } from 'arlas-wui-toolkit';
-import { MenuService } from '@services/menu/menu.service';
 
 @Component({
-    selector: 'arlas-left-menu',
-    templateUrl: './left-menu.component.html',
-    styleUrls: ['./left-menu.component.scss'],
-    standalone: false
+  selector: 'arlas-left-menu',
+  templateUrl: './left-menu.component.html',
+  styleUrls: ['./left-menu.component.scss'],
+  imports: [
+    MatListModule,
+    MatTooltipModule,
+    RouterLinkActive,
+    TranslatePipe,
+    MatIconModule,
+    MatButtonModule,
+    MatBadgeModule,
+    RouterLink
+  ]
 })
 export class LeftMenuComponent implements OnInit {
 

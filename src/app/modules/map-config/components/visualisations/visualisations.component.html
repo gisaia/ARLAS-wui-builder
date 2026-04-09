@@ -1,56 +1,60 @@
 <div style="display: flex; margin: 10px 0">
-    <button mat-stroked-button color="primary" class="add-visu" [routerLink]="['add']" queryParamsHandling="preserve">
-        {{'Add visualisation' | translate}}
-    </button>
-    <div class="description">
-        {{'visualisation set description' | translate}}
-    </div>
+  <button mat-stroked-button color="primary" class="add-visu" [routerLink]="['add']" queryParamsHandling="preserve">
+    {{'Add visualisation' | translate}}
+  </button>
+  <div class="description">
+    {{'visualisation set description' | translate}}
+  </div>
 </div>
 
 <table mat-table [dataSource]="visualisationsFa.value" class="mat-elevation-z1" cdkDropList
-(cdkDropListDropped)="drop($event)">
+  (cdkDropListDropped)="drop($event)">
 
-    <ng-container matColumnDef="name">
-        <th class="th-name" mat-header-cell *matHeaderCellDef>{{'Name' | translate}}</th>
-        <td class="td-name" mat-cell *matCellDef="let element"> {{element.name}}
-            <mat-icon cdkDragHandle class="td-draghandle" >drag_indicator</mat-icon>
-        </td>
-    </ng-container>
+  <ng-container matColumnDef="name">
+    <th class="th-name" mat-header-cell *matHeaderCellDef>{{'Name' | translate}}</th>
+    <td class="td-name" mat-cell *matCellDef="let element"> {{element.name}}
+      <mat-icon cdkDragHandle class="td-draghandle">drag_indicator</mat-icon>
+    </td>
+  </ng-container>
 
-    <ng-container matColumnDef="layers">
-        <th class="th-layers" mat-header-cell *matHeaderCellDef>{{'Layers' | translate}}</th>
-        <td class="td-layers" mat-cell *matCellDef="let element">
-            <div style="display: flex;">
-                <span class="layer" *ngFor="let l of element.layers"> • {{l | layerIdToName}}</span>
-            </div>
-        </td>
-    </ng-container>
+  <ng-container matColumnDef="layers">
+    <th class="th-layers" mat-header-cell *matHeaderCellDef>{{'Layers' | translate}}</th>
+    <td class="td-layers" mat-cell *matCellDef="let element">
+      <div style="display: flex;">
+        @for (l of element.layers; track l) {
+          <span class="layer"> • {{l | layerIdToName}}</span>
+        }
+      </div>
+    </td>
+  </ng-container>
 
-    <ng-container matColumnDef="displayed">
-        <th class="th-display" mat-header-cell *matHeaderCellDef>{{'Displayed by default' | translate}}</th>
-        <td class="td-display" mat-cell *matCellDef="let element">
-            <mat-icon *ngIf="element.displayed">done</mat-icon>
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="action">
-        <th class="th-action" mat-header-cell *matHeaderCellDef>{{'Actions' | translate}}</th>
-        <td class="td-action" mat-cell *matCellDef="let element">
-            <button mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-                <button mat-menu-item [routerLink]="['edit', element.id]" queryParamsHandling="preserve">
-                    <mat-icon>edit</mat-icon>
-                    <span>{{'Edit' | translate}}</span>
-                </button>
-                <button mat-menu-item (click)="confirmDelete(element.id, element.name)">
-                    <mat-icon>delete</mat-icon>
-                    <span>{{'Delete' | translate}}</span>
-                </button>
-            </mat-menu>
-        </td>
-    </ng-container>
+  <ng-container matColumnDef="displayed">
+    <th class="th-display" mat-header-cell *matHeaderCellDef>{{'Displayed by default' | translate}}</th>
+    <td class="td-display" mat-cell *matCellDef="let element">
+      @if (element.displayed) {
+        <mat-icon>done</mat-icon>
+      }
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="action">
+    <th class="th-action" mat-header-cell *matHeaderCellDef>{{'Actions' | translate}}</th>
+    <td class="td-action" mat-cell *matCellDef="let element">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item [routerLink]="['edit', element.id]" queryParamsHandling="preserve">
+          <mat-icon>edit</mat-icon>
+          <span>{{'Edit' | translate}}</span>
+        </button>
+        <button mat-menu-item (click)="confirmDelete(element.id, element.name)">
+          <mat-icon>delete</mat-icon>
+          <span>{{'Delete' | translate}}</span>
+        </button>
+      </mat-menu>
+    </td>
+  </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr cdkDragLockAxis="y" cdkDrag mat-row *matRowDef="let row; columns: displayedColumns;" class="tr-visualisation"></tr>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+  <tr cdkDragLockAxis="y" cdkDrag mat-row *matRowDef="let row; columns: displayedColumns;" class="tr-visualisation"></tr>
 </table>

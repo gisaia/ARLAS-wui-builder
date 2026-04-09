@@ -18,19 +18,26 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatRadioChange } from '@angular/material/radio';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
 import { BasemapFormGroup, MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ArlasBuilderSettings, Basemap } from '@services/startup/startup.service';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfigFormGroup, HiddenFormControl } from '@shared-models/config-form';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 @Component({
-    selector: 'arlas-basemaps',
-    templateUrl: './basemaps.component.html',
-    styleUrls: ['./basemaps.component.scss'],
-    standalone: false
+  selector: 'arlas-basemaps',
+  templateUrl: './basemaps.component.html',
+  styleUrls: ['./basemaps.component.scss'],
+  imports: [
+    MatCheckboxModule,
+    MatRadioModule,
+    ConfigFormGroupComponent,
+    TranslatePipe
+  ]
 })
 export class BasemapsComponent implements OnInit {
 

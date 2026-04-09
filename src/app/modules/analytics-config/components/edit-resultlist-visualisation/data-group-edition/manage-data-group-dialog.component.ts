@@ -32,7 +32,7 @@ import {
   ViewChild,
   WritableSignal
 } from '@angular/core';
-import { FormArray } from '@angular/forms';
+import { AbstractControl, FormArray } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
@@ -75,7 +75,7 @@ export class ManageDataGroupDialogComponent implements OnInit {
     return (this.data.dataGroup.get('filters')  as FormArray);
   }
 
-  public get criteria(): FormArray<ResultListVisualisationsDataGroup> | any[] {
+  public get criteria(): AbstractControl[] {
     return this.criteriaList ? this.criteriaList.controls : [];
   }
 

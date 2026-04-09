@@ -65,7 +65,8 @@ export class AlertOnChangeDirective implements OnInit, OnDestroy {
     this.dependants = null;
   }
 
-  @HostListener('openedChange', ['$event']) public openedChange(selectedHasBeenOpen: boolean) {
+  @HostListener('openedChange', ['$event'])
+  public openedChange(selectedHasBeenOpen: boolean) {
     if (!this.alertMessage) {
       return;
     }

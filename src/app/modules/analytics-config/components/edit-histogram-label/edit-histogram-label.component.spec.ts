@@ -8,14 +8,13 @@ describe('EditHistogramLabelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditHistogramLabelComponent ],
-      imports: [TranslateModule.forRoot({
-        loader: {
-          provide: TranslateLoader,
-          useClass: TranslateNoOpLoader
-        }
-      })]
-    })
+    imports: [TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useClass: TranslateNoOpLoader
+            }
+        }), EditHistogramLabelComponent]
+})
       .compileComponents();
 
     fixture = TestBed.createComponent(EditHistogramLabelComponent);

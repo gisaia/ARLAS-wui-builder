@@ -16,16 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Pipe, PipeTransform } from '@angular/core';
 import {
-  ResultListVisualisationsFormGroup, ResultListVisualisationsDataGroup
+  ResultListVisualisationsDataGroup,
+  ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
+import { Pipe, PipeTransform } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { ConfigFormGroup } from '@shared-models/config-form';
 
 @Pipe({
-  name: 'castVisualisationItemFamily',
-  standalone: true
+  name: 'castVisualisationItemFamily'
 })
 export class CastVisualisationItemFamilyPipe implements PipeTransform {
 
@@ -36,8 +36,7 @@ export class CastVisualisationItemFamilyPipe implements PipeTransform {
 }
 
 @Pipe({
-  name: 'castToConfigFormGroup',
-  standalone: true
+  name: 'castToConfigFormGroup'
 })
 export class CastToConfigFormGroupPipe implements PipeTransform {
 

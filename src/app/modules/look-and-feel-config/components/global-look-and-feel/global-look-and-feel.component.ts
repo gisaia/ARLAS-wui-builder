@@ -24,12 +24,15 @@ import {
 } from '@look-and-feel-config/services/look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 
 @Component({
-    selector: 'arlas-global-look-and-feel',
-    templateUrl: './global-look-and-feel.component.html',
-    styleUrls: ['./global-look-and-feel.component.scss'],
-    standalone: false
+  selector: 'arlas-global-look-and-feel',
+  templateUrl: './global-look-and-feel.component.html',
+  styleUrls: ['./global-look-and-feel.component.scss'],
+  imports: [
+    ConfigFormGroupComponent
+  ]
 })
 export class GlobalLookAndFeelComponent implements OnInit {
 

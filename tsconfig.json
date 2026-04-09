@@ -12,7 +12,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "importHelpers": true,
-    "target": "ES2022",
+    "target": "esnext",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -83,10 +83,7 @@
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
-    "skipTemplateCodegen": true,
-    "strictMetadataEmit": true,
-    "enableResourceInlining": true,
-    "fullTemplateTypeCheck": true,
+    "strictTemplates": true,
     "strictInjectionParameters": true,
 
   }

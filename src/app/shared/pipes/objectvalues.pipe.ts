@@ -18,10 +18,7 @@
  */
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({
-    name: 'objectvalues',
-    standalone: false
-})
+@Pipe({ name: 'objectvalues' })
 export class ObjectvaluesPipe implements PipeTransform {
 
   public transform(input: any): any {

@@ -19,13 +19,22 @@
 import { AnalyticsImportService } from '@analytics-config/services/analytics-import/analytics-import.service';
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
-import { CdkDragDrop, CdkDragEnter, CdkDragMove } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragEnter, CdkDragMove, DragDropModule } from '@angular/cdk/drag-drop';
+import { I18nPluralPipe } from '@angular/common';
 import {
   ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild
 } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { IconPickerModule } from '@gisaia-team/ngx-icon-picker';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { AnalyticConfig } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
@@ -40,13 +49,22 @@ import { Subject, Subscription } from 'rxjs';
 import { EditWidgetDialogComponent } from '../edit-widget-dialog/edit-widget-dialog.component';
 import { EditWidgetDialogData } from '../edit-widget-dialog/models';
 import { ImportWidgetDialogComponent } from '../import-widget-dialog/import-widget-dialog.component';
+import { WidgetEditionComponent } from '../widget-edition/widget-edition.component';
 import { WIDGET_TYPE } from './models';
 
 @Component({
-    selector: 'arlas-add-widget-dialog',
-    templateUrl: './edit-group-add-widget.component.html',
-    styleUrls: ['./edit-group-add-widget.component.scss'],
-    standalone: false
+  selector: 'arlas-add-widget-dialog',
+  templateUrl: './edit-group-add-widget.component.html',
+  styleUrls: ['./edit-group-add-widget.component.scss'],
+  imports: [
+    TranslatePipe,
+    MatRadioModule,
+    MatTooltipModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDialogModule,
+    FormsModule
+  ]
 })
 export class AddWidgetDialogComponent {
   public widgetType: string;
@@ -76,15 +94,26 @@ export class AddWidgetDialogComponent {
 }
 
 @Component({
-    selector: 'arlas-edit-group',
-    templateUrl: './edit-group.component.html',
-    styleUrls: ['./edit-group.component.scss'],
-    standalone: false
+  selector: 'arlas-edit-group',
+  templateUrl: './edit-group.component.html',
+  styleUrls: ['./edit-group.component.scss'],
+  imports: [
+    ReactiveFormsModule,
+    MatIconModule,
+    IconPickerModule,
+    MatFormFieldModule,
+    TranslatePipe,
+    MatButtonToggleModule,
+    MatTooltipModule,
+    I18nPluralPipe,
+    DragDropModule,
+    WidgetEditionComponent
+  ]
 })
 export class EditGroupComponent implements OnInit, OnDestroy {
 
   @Input() public formGroup: FormGroup<{
-    content: FormArray<FormGroup<{widgetType: FormControl<WIDGET_TYPE>; widgetData: FormGroup;}>>;
+    content: FormArray<FormGroup<{widgetType: FormControl<WIDGET_TYPE>; widgetData: WidgetConfigFormGroup;}>>;
     contentType: FormControl<Array<WIDGET_TYPE>>;
     icon: FormControl<string>;
     itemPerLine: FormControl<number>;
@@ -101,7 +130,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     dragIndex: number;
     dropIndex: number;
   };
-  public content: FormArray<FormGroup<{widgetType: FormControl<WIDGET_TYPE>; widgetData: FormGroup;}>>;
+  public content: FormArray<FormGroup<{widgetType: FormControl<WIDGET_TYPE>; widgetData: WidgetConfigFormGroup;}>>;
   public itemPerLine: number;
   public toUnsubscribe: Array<Subscription> = [];
 

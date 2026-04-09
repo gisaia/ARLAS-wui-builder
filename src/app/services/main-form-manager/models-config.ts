@@ -19,10 +19,9 @@
 
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { Aggregation, Expression } from 'arlas-api';
-import { BasemapStyle, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
+import { ArlasDataLayer, BasemapStyle, MapLayers, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
 import { FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
 import { AnalyticsTabs, ZoomToDataStrategy } from 'arlas-wui-toolkit';
-import { Layer } from './models-map-config';
 
 export const JSONPATH_COUNT = '$.count';
 export const JSONPATH_METRIC = '$.metrics[0].value';
@@ -381,22 +380,10 @@ export interface MapComponentInputConfig {
   displayCurrentCoordinates: boolean;
   enableGlobe: boolean;
   idFeatureField: string;
-  mapLayers: MapComponentInputMapLayersConfig;
+  mapLayers: MapLayers<ArlasDataLayer>;
   visualisations_sets: Array<VisualisationSetConfig>;
   /** Configuration to display terrain elevation */
   terrain: TerrainConfiguration<maplibregl.RasterDEMSourceSpecification>;
-}
-
-export interface MapComponentInputMapLayersConfig {
-  layers: Array<Layer>;
-  events: MapComponentInputMapLayersEventsConfig;
-  externalEventLayers: Array<{ id: string; on: string; }>;
-}
-
-export interface MapComponentInputMapLayersEventsConfig {
-  zoomOnClick: Array<string>;
-  emitOnClick: Array<string>;
-  onHover: Array<string>;
 }
 
 export interface AggregationModelConfig {

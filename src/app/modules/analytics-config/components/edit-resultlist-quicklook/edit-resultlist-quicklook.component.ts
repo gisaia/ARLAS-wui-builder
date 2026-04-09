@@ -20,17 +20,31 @@
 import {
   ResultlistFormBuilderService, ResultlistQuicklookFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
 import { SelectFormControl } from '@shared-models/config-form';
 
 
 @Component({
-    selector: 'arlas-edit-resultlist-quicklook',
-    templateUrl: './edit-resultlist-quicklook.component.html',
-    styleUrls: ['./edit-resultlist-quicklook.component.scss'],
-    standalone: false
+  selector: 'arlas-edit-resultlist-quicklook',
+  templateUrl: './edit-resultlist-quicklook.component.html',
+  styleUrls: ['./edit-resultlist-quicklook.component.scss'],
+  imports: [
+    DragDropModule,
+    MatTableModule,
+    MatIconModule,
+    MatButtonModule,
+    TranslatePipe,
+    ConfigFormControlComponent,
+    MatTooltipModule
+  ]
 })
 export class EditResultlistQuicklookComponent implements OnInit {
 

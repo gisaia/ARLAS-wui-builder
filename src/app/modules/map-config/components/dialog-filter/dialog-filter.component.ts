@@ -17,16 +17,24 @@
  * under the License.
  */
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MapFilterFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import { FormControl } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MapFilterFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 
 @Component({
-    selector: 'arlas-filter',
-    templateUrl: './dialog-filter.component.html',
-    styleUrls: ['./dialog-filter.component.scss'],
-    standalone: false
+  selector: 'arlas-filter',
+  templateUrl: './dialog-filter.component.html',
+  styleUrls: ['./dialog-filter.component.scss'],
+  imports: [
+    ConfigFormGroupComponent,
+    MatDialogModule,
+    MatButtonModule,
+    TranslatePipe
+  ]
 })
 export class DialogFilterComponent implements OnInit {
 

@@ -1,12 +1,14 @@
 <h1 mat-dialog-title>{{dialogData.widgetType | translate | titlecase }}</h1>
-<arlas-config-form-control *ngIf="formGroup.controls['title']" [control]="formGroup.controls['title']"></arlas-config-form-control>
-<div mat-dialog-content>
+@if (formGroup.controls['title']) {
+  <arlas-config-form-control [control]="$any(formGroup.controls['title'])"></arlas-config-form-control>
+}
 
-    <arlas-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey">
-    </arlas-config-form-group>
+<div mat-dialog-content>
+  <arlas-config-form-group [configFormGroup]="formGroup" [defaultKey]="defaultKey">
+  </arlas-config-form-group>
 </div>
 
 <div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]>{{'Cancel' | translate}}</button>
-    <button cdkFocusInitial (click)="save()" mat-raised-button color="primary">{{'Validate' | translate}}</button>
+  <button mat-button [mat-dialog-close]>{{'Cancel' | translate}}</button>
+  <button cdkFocusInitial (click)="save()" mat-raised-button color="primary">{{'Validate' | translate}}</button>
 </div>

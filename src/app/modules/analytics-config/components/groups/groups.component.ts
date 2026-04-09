@@ -18,29 +18,43 @@
  */
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { TranslateService } from '@ngx-translate/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatError } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
-import { ArlasColorService } from 'arlas-web-components';
 import { AnalyticsBoardComponent, AnalyticsService } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
 import { debounceTime } from 'rxjs/operators';
-import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { EditGroupComponent } from '../edit-group/edit-group.component';
 
 
 @Component({
-    selector: 'arlas-groups',
-    templateUrl: './groups.component.html',
-    styleUrls: ['./groups.component.scss'],
-    standalone: false
+  selector: 'arlas-groups',
+  templateUrl: './groups.component.html',
+  styleUrls: ['./groups.component.scss'],
+  imports: [
+    ReactiveFormsModule,
+    MatError,
+    TranslatePipe,
+    DragDropModule,
+    MatTooltipModule,
+    MatIconModule,
+    MatButtonModule,
+    EditGroupComponent,
+    AnalyticsBoardComponent
+  ]
 })
 export class GroupsComponent implements OnInit, OnDestroy {
 
@@ -62,7 +76,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
     private analyticsInitService: AnalyticsInitService,
     private translate: TranslateService,
     private cdr: ChangeDetectorRef,
-    private cs: ArlasColorService,
     private shortcutsService: ShortcutsService,
     protected mainFormService: MainFormService,
     private analyticsService: AnalyticsService
@@ -106,7 +119,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   public get groupsFa() {
-    return !!this.contentFg ? this.contentFg.get('groupsFa') as FormArray : null;
+    return !!this.contentFg ? this.contentFg.get('groupsFa') as FormArray<FormGroup> : null;
   }
 
   public updateAnalytics() {

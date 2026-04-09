@@ -17,17 +17,23 @@
  * under the License.
  */
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { TranslatePipe } from '@ngx-translate/core';
 
 export interface ModalData {
   message: string;
 }
 
 @Component({
-    selector: 'arlas-confirm-modal',
-    templateUrl: './confirm-modal.component.html',
-    styleUrls: ['./confirm-modal.component.scss'],
-    standalone: false
+  selector: 'arlas-confirm-modal',
+  templateUrl: './confirm-modal.component.html',
+  styleUrls: ['./confirm-modal.component.scss'],
+  imports: [
+    TranslatePipe,
+    MatDialogModule,
+    MatButtonModule
+  ]
 })
 export class ConfirmModalComponent implements OnInit {
 

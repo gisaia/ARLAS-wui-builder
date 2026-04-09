@@ -1,85 +1,94 @@
-<ng-container *ngIf="configChoice === InitialChoice.setup">
-    <ngx-spinner [name]="'connectServer'" bdOpacity="0.2" bdColor="rgba(51,51,51,0.6)" size="medium" color="#fff"
-        type="ball-clip-rotate-pulse">
-        <p style="color: white"> {{'Connect to ARLAS Server...' | translate }} </p>
-    </ngx-spinner>
-    <h2 mat-dialog-title>{{'New dashboard' | translate}}</h2>
-    <mat-dialog-content class="new-config-content">
-        <div [formGroup]="mainFormService.startingConfig.getFg()">
-            <arlas-config-element [fullSize]="true">
-                <div form-fields class="server-url">
-                    <mat-checkbox [disabled]="mainFormService.startingConfig.getFg().get('serverUrl').invalid"
-                            *ngIf="data.isAuthentActivated && data.authentMode === 'iam'" (change)="toggleDisplayPublic($event)" class="include-public">
-                        {{'Include public collections' | translate}}</mat-checkbox>
-                    <button
-                        (click)="mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
-                        [disabled]="mainFormService.startingConfig.getFg().get('serverUrl').invalid"
-                        mat-stroked-button color="accent">{{'Reload collections' | translate}}</button>
-
-                </div>
-            </arlas-config-element>
-            <arlas-config-element *ngIf="isServerReady">
-                <div form-fields class="collection">
-                    <mat-form-field>
-                        <mat-label>{{'Main collection' | translate}}</mat-label>
-                        <mat-select formControlName="collection">
-                            @for (group of availableCollections | keyvalue:orderCollectionGroup; track group.key) {
-                                <mat-optgroup [label]="group.key | groupCollection:data.currentOrga" *ngIf="group.value.length > 0">
-                                    <mat-option *ngFor="let collection of group.value" [value]="collection.name">
-                                        {{ collection.name | getCollectionDisplayName | translate }}
-                                    </mat-option>
-                                </mat-optgroup>
-                            }
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div description>
-                    {{'Choose main collection' | translate}}
-                </div>
-            </arlas-config-element>
+@if (configChoice === InitialChoice.setup) {
+  <ngx-spinner [name]="'connectServer'" bdOpacity="0.2" bdColor="rgba(51,51,51,0.6)" size="medium" color="#fff"
+    type="ball-clip-rotate-pulse">
+    <p style="color: white"> {{'Connect to ARLAS Server...' | translate }} </p>
+  </ngx-spinner>
+  <h2 mat-dialog-title>{{'New dashboard' | translate}}</h2>
+  <mat-dialog-content class="new-config-content">
+    <div [formGroup]="mainFormService.startingConfig.getFg()">
+      <arlas-config-element [fullSize]="true">
+        <div form-fields class="server-url">
+          @if (data.isAuthentActivated && data.authentMode === 'iam') {
+            <mat-checkbox [disabled]="mainFormService.startingConfig.getFg().get('serverUrl').invalid"
+              (change)="toggleDisplayPublic($event)" class="include-public">
+            {{'Include public collections' | translate}}</mat-checkbox>
+          }
+          <button
+            (click)="mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
+            [disabled]="mainFormService.startingConfig.getFg().get('serverUrl').invalid"
+          mat-stroked-button color="accent">{{'Reload collections' | translate}}</button>
         </div>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-        <button mat-button (click)="configChoice = InitialChoice.none; cancel()">{{'Back' | translate}}</button>
-        <button (click)="saveConfig()" [disabled]="mainFormService.startingConfig.getFg().invalid"
-            mat-raised-button color="primary">{{'Start' | translate}}</button>
-    </mat-dialog-actions>
-</ng-container>
+      </arlas-config-element>
+      @if (isServerReady) {
+        <arlas-config-element>
+          <div form-fields class="collection">
+            <mat-form-field>
+              <mat-label>{{'Main collection' | translate}}</mat-label>
+              <mat-select formControlName="collection">
+                @for (group of availableCollections | keyvalue:orderCollectionGroup; track group.key) {
+                  @if (group.value.length > 0) {
+                    <mat-optgroup [label]="group.key | groupCollection:data.currentOrga">
+                      @for (collection of group.value; track collection) {
+                        <mat-option [value]="collection.name">
+                          {{ collection.name | getCollectionDisplayName | translate }}
+                        </mat-option>
+                      }
+                    </mat-optgroup>
+                  }
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div description>
+            {{'Choose main collection' | translate}}
+          </div>
+        </arlas-config-element>
+      }
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button (click)="configChoice = InitialChoice.none; cancel()">{{'Back' | translate}}</button>
+    <button (click)="saveConfig()" [disabled]="mainFormService.startingConfig.getFg().invalid"
+      mat-raised-button color="primary">{{'Start' | translate}}</button>
+  </mat-dialog-actions>
+}
 
-<ng-container *ngIf="configChoice === InitialChoice.load">
-    <h2 mat-dialog-title>{{'Import a file' | translate}}</h2>
-    <mat-dialog-content class="import-content">
-        <div class="upload-files">
-            <div class="upload-single-files">
-                <!-- No material file input exists, so we hide the basic input behind a material button -->
-                <button type="button" mat-stroked-button color="accent" (click)="confFileInput.click()">
-                    {{ 'Select a config.json file' | translate }}
-                    <span *ngIf="confFileInput.files.length" class="upload-check">
-                        <mat-icon>check</mat-icon>
-                    </span>
-                </button>
-                <!-- (change), even empty, needed to refresh the UI -->
-                <input hidden (change)="null" #confFileInput type="file">
-            </div>
-            <div class="upload-single-files">
-                <!-- No material file input exists, so we hide the basic input behind a material button -->
-                <button type="button" mat-stroked-button color="accent" (click)="mapFileInput.click()">
-                    {{ 'Select a config.map.json file' | translate }}
-                    <span *ngIf="mapFileInput.files.length" class="upload-check">
-                        <mat-icon>check</mat-icon>
-                    </span>
-                </button>
-                <!-- (change), even empty, needed to refresh the UI -->
-                <input hidden (change)="null" #mapFileInput type="file">
-            </div>
-        </div>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-        <button mat-button (click)="configChoice = InitialChoice.none;cancel()">{{'Back' | translate}}</button>
-        <button (click)="upload(confFileInput.files[0], mapFileInput.files[0]);"
-            [disabled]="!confFileInput.files.length || !mapFileInput.files.length" mat-raised-button color="primary">
-
-            {{'Start' | translate}}</button>
-    </mat-dialog-actions>
-
-</ng-container>
+@if (configChoice === InitialChoice.load) {
+  <h2 mat-dialog-title>{{'Import a file' | translate}}</h2>
+  <mat-dialog-content class="import-content">
+    <div class="upload-files">
+      <div class="upload-single-files">
+        <!-- No material file input exists, so we hide the basic input behind a material button -->
+        <button type="button" mat-stroked-button color="accent" (click)="confFileInput.click()">
+          {{ 'Select a config.json file' | translate }}
+          @if (confFileInput.files.length) {
+            <span class="upload-check">
+              <mat-icon>check</mat-icon>
+            </span>
+          }
+        </button>
+        <!-- (change), even empty, needed to refresh the UI -->
+        <input hidden (change)="null" #confFileInput type="file">
+      </div>
+      <div class="upload-single-files">
+        <!-- No material file input exists, so we hide the basic input behind a material button -->
+        <button type="button" mat-stroked-button color="accent" (click)="mapFileInput.click()">
+          {{ 'Select a config.map.json file' | translate }}
+          @if (mapFileInput.files.length) {
+            <span class="upload-check">
+              <mat-icon>check</mat-icon>
+            </span>
+          }
+        </button>
+        <!-- (change), even empty, needed to refresh the UI -->
+        <input hidden (change)="null" #mapFileInput type="file">
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button (click)="configChoice = InitialChoice.none;cancel()">{{'Back' | translate}}</button>
+    <button (click)="upload(confFileInput.files[0], mapFileInput.files[0]);"
+        [disabled]="!confFileInput.files.length || !mapFileInput.files.length" mat-raised-button color="primary">
+      {{'Start' | translate}}</button>
+  </mat-dialog-actions>
+}

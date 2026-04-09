@@ -17,7 +17,9 @@
  * under the License.
  */
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { MatTabsModule } from '@angular/material/tabs';
+import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { isFullyTouched } from '@utils/tools';
 import { Subscription } from 'rxjs';
@@ -31,10 +33,15 @@ interface Tab {
 }
 
 @Component({
-    selector: 'arlas-map-config',
-    templateUrl: './map-config.component.html',
-    styleUrls: ['./map-config.component.scss'],
-    standalone: false
+  selector: 'arlas-map-config',
+  templateUrl: './map-config.component.html',
+  styleUrls: ['./map-config.component.scss'],
+  imports: [
+    MatTabsModule,
+    RouterLink,
+    TranslatePipe,
+    RouterOutlet
+  ]
 })
 export class MapConfigComponent implements OnInit, OnDestroy {
 

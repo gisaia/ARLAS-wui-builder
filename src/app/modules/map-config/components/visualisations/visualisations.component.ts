@@ -16,16 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { RouterLink } from '@angular/router';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { camelize } from '@utils/tools';
+import { LayerIdToName } from 'arlas-map';
 import { Subscription } from 'rxjs';
-import { marker } from '@colsen1991/ngx-translate-extract-marker';
-
 
 export interface Layer {
   id: string;
@@ -34,10 +40,19 @@ export interface Layer {
 }
 
 @Component({
-    selector: 'arlas-visualisations',
-    templateUrl: './visualisations.component.html',
-    styleUrls: ['./visualisations.component.scss'],
-    standalone: false
+  selector: 'arlas-visualisations',
+  templateUrl: './visualisations.component.html',
+  styleUrls: ['./visualisations.component.scss'],
+  imports: [
+    MatButtonModule,
+    RouterLink,
+    TranslatePipe,
+    MatTableModule,
+    DragDropModule,
+    MatIconModule,
+    LayerIdToName,
+    MatMenuModule
+  ]
 })
 export class VisualisationsComponent implements OnInit, AfterViewChecked, OnDestroy {
 
