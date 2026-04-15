@@ -125,15 +125,13 @@ export class GroupsComponent implements OnInit, OnDestroy {
   public updateAnalytics() {
     const analytics = [];
     this.groupsPreview = [];
-    this.cdr.detectChanges();
     this.groupsFa?.value.forEach(group => {
       analytics.push(group.preview);
     });
     this.analyticsService.initializeGroups(analytics);
     this.groupsPreview = analytics;
     this.analyticsService.selectTab(0);
-
-
+    this.cdr.detectChanges();
   }
 
   public drop(event: CdkDragDrop<string[]>) {

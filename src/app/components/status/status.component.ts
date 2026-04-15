@@ -41,9 +41,10 @@ export class StatusComponent implements OnInit {
   public displayCurrentConfig = false;
   public editingConfigName = false;
   public editingName: string;
+
   public constructor(
-    public mainService: MainFormService,
-    private cdr: ChangeDetectorRef
+    protected mainService: MainFormService,
+    private readonly cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit() {

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, Output } from '@angular/core';
 import { ColorPickerDirective } from 'ngx-color-picker';
 import { DefaultValuesService } from '../../../services/default-values/default-values.service';
 
@@ -29,13 +29,10 @@ import { DefaultValuesService } from '../../../services/default-values/default-v
   ]
 })
 export class ColorPickerWrapperComponent implements OnDestroy {
+  private readonly defaultValuService = inject(DefaultValuesService);
 
   @Input() public value: string | number;
   @Output() private setValue = new EventEmitter<string>();
-
-  public constructor(
-    private defaultValuService: DefaultValuesService
-  ) { }
 
   public ngOnDestroy() {
     this.value = null;
@@ -49,5 +46,4 @@ export class ColorPickerWrapperComponent implements OnDestroy {
   public getColorPresets() {
     return this.defaultValuService.getDefaultConfig().colorPickerPresets;
   }
-
 }

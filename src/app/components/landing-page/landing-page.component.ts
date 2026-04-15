@@ -17,7 +17,7 @@
  * under the License.
  */
 import { DatePipe } from '@angular/common';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -73,6 +73,7 @@ export interface Configuration {
   ]
 })
 export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly cdr = inject(ChangeDetectorRef);
 
   public dialogRef: MatDialogRef<LandingPageDialogComponent>;
   public displayedColumns: string[] = ['id', 'creation', 'detail'];
@@ -163,6 +164,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
             next: (resources: Resource[]) => {
               this.canCreateForCurrentOrg = resources.filter(r => r.verb === 'POST').length > 0;
               this.getConfigList();
+              this.cdr.detectChanges();
             }
           });
         }
@@ -308,6 +310,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
               );
             }
           });
+          this.cdr.detectChanges();
         },
         error: (msg) => {
           this.configurations = [];
@@ -369,7 +372,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public checkUserRightsForOrg(org: string) {
+  private checkUserRightsForOrg(org: string) {
     const iamHeader = {
       Authorization: 'Bearer ' + this.arlasIamService.getAccessToken(),
       'arlas-org-filter': org
@@ -381,6 +384,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
       next: (resources: Resource[]) => {
         this.canCreateForCurrentOrg = resources.filter(r => r.verb === 'POST').length > 0;
         this.getConfigList();
+        this.cdr.detectChanges();
       }
     });
   }
