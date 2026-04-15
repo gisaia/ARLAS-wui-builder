@@ -109,7 +109,20 @@
             "dy": "0"
           },
           "labelPlacementCtrl": "point",
-          "labelAlignmentCtrl": "center"
+          "labelAlignmentCtrl": "center",
+          "enableExtrusion": false,
+          "extrusionValue": {
+            "propertySource": "Fix slider",
+            "propertyFixSlider": 1
+          },
+          "extrusionExaggeration": {
+            "propertySource": "Fix slider",
+            "propertyFixSlider": 1
+          },
+          "extrusionOpacity": {
+            "propertySource": "Fix slider",
+            "propertyFixSlider": 1
+          }
         }
       },
       "featureMetricFg": {
@@ -184,7 +197,20 @@
             "dy": "0"
           },
           "labelPlacementCtrl": "point",
-          "labelAlignmentCtrl": "center"
+          "labelAlignmentCtrl": "center",
+          "enableExtrusion": false,
+          "extrusionValue": {
+            "propertySource": "Fix slider",
+            "propertyFixSlider": 1
+          },
+          "extrusionExaggeration": {
+            "propertySource": "Fix slider",
+            "propertyFixSlider": 1
+          },
+          "extrusionOpacity": {
+            "propertySource": "Fix slider",
+            "propertyFixSlider": 1
+          }
         }
       },
       "clusterFg": {
@@ -266,7 +292,20 @@
             "dy": "0"
           },
           "labelPlacementCtrl": "point",
-          "labelAlignmentCtrl": "center"
+          "labelAlignmentCtrl": "center",
+          "enableExtrusion": false,
+          "extrusionValue": {
+            "propertySource": "Fix slider",
+            "propertyFixSlider": 1
+          },
+          "extrusionExaggeration": {
+            "propertySource": "Fix slider",
+            "propertyFixSlider": 1
+          },
+          "extrusionOpacity": {
+            "propertySource": "Fix slider",
+            "propertyFixSlider": 1
+          }
         }
       }
     }
@@ -755,6 +794,9 @@
     "labelHaloBlurStep": 0.1,
     "swimlaneZeroColor": "#D6D6D6",
     "swimlaneNanColor": "#D6D6D6",
-    "swimlaneRepresentation": "global"
+    "swimlaneRepresentation": "global",
+    "extrusionValueMin": 0,
+    "extrusionValueMax": 10000,
+    "extrusionValueStep": 1
   }
 }

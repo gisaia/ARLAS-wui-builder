@@ -28,7 +28,7 @@ export interface InterpolatedValueString extends InterpolatedValue {
     value: string;
 }
 
-export interface Propriety {
+export interface Property {
     propertySource: string;
     propertyFixColor?: string;
     propertyFixSlider?: string;
@@ -77,10 +77,10 @@ export interface StyleStep {
         propertySource: string;
         propertyInterpolatedFg?: InterpolatedProperty | any;
     };
-    radiusFg?: Propriety;
-    strokeColorFg?: Propriety;
-    strokeWidthFg?: Propriety;
-    strokeOpacityFg?: Propriety;
+    radiusFg?: Property;
+    strokeColorFg?: Property;
+    strokeWidthFg?: Property;
+    strokeOpacityFg?: Property;
 }
 
 type interpolatedValues = InterpolatedValueString | InterpolatedValueNumber;
