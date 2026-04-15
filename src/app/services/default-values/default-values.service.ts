@@ -24,25 +24,34 @@ import Ajv from 'ajv';
 import ajvKeywords from 'ajv-keywords';
 import * as draftSchema from 'ajv/lib/refs/json-schema-draft-06.json';
 import { NGXLogger } from 'ngx-logger';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs';
 import * as defaultValuesSchema from './defaultValues.schema.json';
+
+/**
+ * Configuration of the slider of a PropertySelectorFormGroup
+ */
+export interface SliderDefaultConfig {
+  min: number;
+  max: number;
+  step: number;
+}
 
 export interface DefaultConfig {
   aggregationTermSize: number;
   palettes: Array<Array<string>>;
   colorPickerPresets: Array<string>;
   otherColor: string;
-  widthMin: number;
-  widthMax: number;
-  widthStep: number;
-  radiusMin: number;
-  radiusMax: number;
-  radiusStep: number;
+  /**
+   * Configuration of all the sliders of the builder's PropertySelectorFormGroup.
+   * For each property, an entry is necessary in the default.json or an error will be thrown when loading a dashboard
+   */
+  sliders: Record<string, SliderDefaultConfig>;
   huePalettes: Array<[number, number] | string>;
   swimlaneZeroColor: string;
   swimlaneNanColor: string;
   swimlaneRepresentation: string;
 }
+
 @Injectable({
   providedIn: 'root'
 })

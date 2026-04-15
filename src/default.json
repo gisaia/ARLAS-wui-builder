@@ -759,44 +759,75 @@
       "black"
     ],
     "otherColor": "#9d9ca9",
-    "opacityMin": 0,
-    "opacityMax": 1,
-    "opacityStep": 0.1,
-    "strokeOpacityMin": 0,
-    "strokeOpacityMax": 1,
-    "strokeOpacityStep": 0.1,
-    "strokeWidthMin": 0,
-    "strokeWidthMax": 10,
-    "strokeWidthStep": 0.5,
-    "widthMin": 0,
-    "widthMax": 15,
-    "widthStep": 0.5,
-    "weightMin": 0,
-    "weightMax": 100,
-    "weightStep": 1,
-    "radiusMin": 0,
-    "radiusMax": 200,
-    "radiusStep": 1,
-    "intensityMin": 0,
-    "intensityMax": 10,
-    "intensityStep": 0.5,
-    "labelSizeMin": 1,
-    "labelSizeMax": 50,
-    "labelSizeStep": 1,
-    "labelRotationMin": 0,
-    "labelRotationMax": 360,
-    "labelRotationStep": 5,
-    "labelHaloWidthMin": 0,
-    "labelHaloWidthMax": 5,
-    "labelHaloWidthStep": 0.1,
-    "labelHaloBlurMin": 0,
-    "labelHaloBlurMax": 5,
-    "labelHaloBlurStep": 0.1,
     "swimlaneZeroColor": "#D6D6D6",
     "swimlaneNanColor": "#D6D6D6",
     "swimlaneRepresentation": "global",
-    "extrusionValueMin": 0,
-    "extrusionValueMax": 10000,
-    "extrusionValueStep": 1
+    "sliders": {
+      "opacity": {
+        "min": 0,
+        "max": 1,
+        "step": 0.1
+      },
+      "strokeOpacity": {
+        "min": 0,
+        "max": 1,
+        "step": 0.1
+      },
+      "strokeWidth": {
+        "min": 0,
+        "max": 10,
+        "step": 0.5
+      },
+      "strokeColor": {},
+      "width": {
+        "min": 0,
+        "max": 15,
+        "step": 0.5
+      },
+      "weight": {
+        "min": 0,
+        "max": 100,
+        "step": 1
+      },
+      "radius": {
+        "min": 0,
+        "max": 200,
+        "step": 1
+      },
+      "intensity": {
+        "min": 0,
+        "max": 10,
+        "step": 0.5
+      },
+      "color": {},
+      "labelSize": {
+        "min": 1,
+        "max": 50,
+        "step": 1
+      },
+      "labelRotation": {
+        "min": 0,
+        "max": 360,
+        "step": 5
+      },
+      "labelHaloWidth": {
+        "min": 0,
+        "max": 5,
+        "step": 0.1
+      },
+      "labelHaloBlur": {
+        "min": 0,
+        "max": 5,
+        "step": 0.1
+      },
+      "labelHaloColor": {},
+      "labelContent": {},
+      "extrusionValue": {
+        "min": 0,
+        "max": 10000,
+        "step": 1
+      },
+      "extrusionExaggeration": {}
+    }
   }
 }
