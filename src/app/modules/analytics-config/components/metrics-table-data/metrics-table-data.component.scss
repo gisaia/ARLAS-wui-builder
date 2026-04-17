@@ -47,16 +47,20 @@
                 cursor: pointer;
             }
             .sort {
-                cursor: pointer;
-
                 &.reversed {
                     transform: rotate(180deg);
                 }
             }
-            .sort-disabled{
-                cursor: pointer;
+            .sort-disabled {
                 color: lightgray;
                 transform: rotate(90deg);
+            }
+
+            .sort,
+            .sort-disabled {
+                --mat-icon-button-state-layer-size: 24px;
+                --mat-icon-button-touch-target-size: 24px;
+                padding: 0;
             }
         }
 

@@ -299,7 +299,7 @@
             </div>
             <div class="description">
               {{'arlas filter description' | translate}}
-              <a target="_blank" href="https://docs.arlas.io/arlas-api-exploration/#f-parameter-syntax">{{'here' | translate}}</a>
+              <a target="_blank" href="https://docs.arlas.io/external_docs/ARLAS-server/arlas-api-exploration/#f-parameter-syntax">{{'here' | translate}}</a>
             </div>
           </mat-expansion-panel>
         </mat-accordion>
@@ -307,8 +307,8 @@
       <div class="chips-container">
         <mat-chip-listbox #chipSortList>
           @for (opt of typedControl.value; track opt; let indexOfelement = $index) {
-            <mat-chip-option class="filter-chip"
-              (click)="typedControl.onClickFilterChip($event, opt)" [selectable]="true"
+            <mat-chip-option class="filter-chip" [selectable]="true"
+              (click)="typedControl.onClickFilterChip($event, opt)" (keydown)="typedControl.onClickFilterChip($event, opt)"
               [removable]="true" (removed)="typedControl.removeMetric(opt)"
               [matTooltip]="opt.filter | json" matTooltipPosition="above">
               m[{{indexOfelement}}] : {{opt.field}} ({{opt.metric}}) ({{ (opt.filter | json) === '{}' ? ('no filter'| translate) : ('with filter'| translate) }})

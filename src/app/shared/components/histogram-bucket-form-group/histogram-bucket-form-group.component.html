@@ -14,16 +14,9 @@
       </div>
       @if (aggregationFieldControl.description) {
         <div description>
-          @if (aggregationFieldControl.isDescriptionHtml) {
-            <div
-              [innerHtml]="trustHtml(aggregationFieldControl.description)">
-            </div>
-          }
-          @if (!aggregationFieldControl.isDescriptionHtml) {
-            <div>
-              {{ aggregationFieldControl.description | translate}}
-            </div>
-          }
+          <div>
+            {{ aggregationFieldControl.description | translate}}
+          </div>
         </div>
       }
     </arlas-config-element>
@@ -110,16 +103,11 @@
       </div>
       @if (bucketTypeControl.description) {
         <div description>
-          @if (bucketTypeControl.isDescriptionHtml) {
-            <div [innerHtml]="trustHtml(bucketTypeControl.description)">
-            </div>
-          } @else {
-            <div>
-              @for (d of bucketTypeControl.description.split('DESC_SPLITER'); track d) {
-                {{ d | translate}}
-              }
-            </div>
-          }
+          <div>
+            @for (d of bucketTypeControl.description.split('DESC_SPLITER'); track d) {
+              {{ d | translate}}
+            }
+          </div>
         </div>
       }
     </arlas-config-element>

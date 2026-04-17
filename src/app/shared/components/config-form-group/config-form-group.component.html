@@ -73,15 +73,9 @@
                 </div>
                 @if (control.description) {
                   <div description>
-                    @if (control.isDescriptionHtml) {
-                      <div [innerHtml]="trustHtml(control.description)">
-                      </div>
-                    }
-                    @if (!control.isDescriptionHtml) {
-                      <div>
-                        {{ control.description | translate}}
-                      </div>
-                    }
+                    <div>
+                      {{ control.description | translate}}
+                    </div>
                     @for (child of formControl.childs(); track child) {
                       @if (child.enabled) {
                         <div>

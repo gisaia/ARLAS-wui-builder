@@ -75,3 +75,5 @@ histogram:
   export_nb_buckets: 1000
 use_time_filter: true
 enable_advanced_features: false
+
+whitelistedUrls: []

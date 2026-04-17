@@ -8,14 +8,18 @@
       <td class="action" class="action" mat-cell *matCellDef="let column; let i = index">
         <div class="action-wrapper">
           <mat-icon class="drag" (mousedown)="dragDisabled = false">drag_indicator</mat-icon>
-          <button mat-icon-button (click)="deleteColumn(i)">
+          <button mat-icon-button class="delete" (click)="deleteColumn(i)">
             <mat-icon>delete</mat-icon>
           </button>
-          @if (column.controls.sort.value !== '') {
-            <mat-icon class="sort" [matTooltip]="column.controls.sort.value | translate" (click)="setSort(i, column.controls.sort.value)" [class.reversed]="column.controls.sort.value === 'desc'" >north</mat-icon>
-          }
           @if (column.controls.sort.value === '') {
-            <mat-icon class="sort-disabled" (click)="setSort(i, column.controls.sort.value)" [matTooltip]="'Not sorted' | translate" >sync_alt</mat-icon>
+            <button mat-icon-button class="sort-disabled" (click)="setSort(i, column.controls.sort.value)" [matTooltip]="'Not sorted' | translate">
+              <mat-icon>sync_alt</mat-icon>
+            </button>
+          } @else {
+            <button mat-icon-button class="sort" [class.reversed]="column.controls.sort.value === 'desc'"
+                [matTooltip]="column.controls.sort.value | translate" (click)="setSort(i, column.controls.sort.value)">
+              <mat-icon>north</mat-icon>
+            </button>
           }
         </div>
       </td>

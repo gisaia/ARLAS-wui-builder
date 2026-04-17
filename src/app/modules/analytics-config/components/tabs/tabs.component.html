@@ -30,11 +30,15 @@
                   </span>
                 }
                 @if (matTab.isActive) {
-                  <mat-icon class="settings" (click)="$event.stopPropagation(); configTab(index)"
-                    [matTooltip]="'Configure tab' | translate">settings</mat-icon>
+                  <button mat-icon-button class="settings" [matTooltip]="'Configure tab' | translate"
+                      (click)="$event.stopPropagation(); configTab(index)">
+                    <mat-icon>settings</mat-icon>
+                  </button>
                 }
-                <mat-icon class="close" (click)="$event.stopPropagation(); removeTab(index)"
-                  [matTooltip]="'Delete tab' | translate">close</mat-icon>
+                <button mat-icon-button class="close" [matTooltip]="'Delete tab' | translate"
+                    (click)="$event.stopPropagation(); removeTab(index)">
+                  <mat-icon>close</mat-icon>
+                </button>
               </div>
             </div>
           </ng-template>

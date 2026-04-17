@@ -39,13 +39,15 @@
               <div class="action-wrapper">
                 @let sort = c.get('sort').value;
                 @if (sort === '') {
-                  <mat-icon class="sort-disabled"
-                    (click)="setSort(c, sort, subTable.controls.collection.value, subTable.controls.aggregationField.value, c.get('metricCollectFunction').value, c.get('metricCollectField').value)"
-                    [matTooltip]="'Not sorted' | translate">sync_alt</mat-icon>
+                  <button mat-icon-button class="sort-disabled" [matTooltip]="'Not sorted' | translate"
+                      (click)="setSort(c, sort, subTable.controls.collection.value, subTable.controls.aggregationField.value, c.get('metricCollectFunction').value, c.get('metricCollectField').value)">
+                    <mat-icon>sync_alt</mat-icon>
+                  </button>
                 } @else {
-                  <mat-icon class="sort" [matTooltip]="sort | translate"
-                    (click)="setSort(c, sort, subTable.controls.collection.value, subTable.controls.aggregationField.value, c.get('metricCollectFunction').value, c.get('metricCollectField').value)"
-                    [class.reversed]="sort === 'desc'">north</mat-icon>
+                  <button mat-icon-button class="sort" [class.reversed]="sort === 'desc'" [matTooltip]="sort | translate"
+                      (click)="setSort(c, sort, subTable.controls.collection.value, subTable.controls.aggregationField.value, c.get('metricCollectFunction').value, c.get('metricCollectField').value)">
+                    <mat-icon>north</mat-icon>
+                  </button>
                 }
 
                 @let metricCollectField = c.get('metricCollectField').value;

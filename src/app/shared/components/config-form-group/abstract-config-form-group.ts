@@ -17,9 +17,8 @@
  * under the License.
  */
 
-import { Component, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ConfigFormControl, ConfigFormGroup } from '@shared-models/config-form';
 import { Subject, Subscription } from 'rxjs';
 import { ConfigFormGroupComponent } from './config-form-group.component';
@@ -28,8 +27,6 @@ import { ConfigFormGroupComponent } from './config-form-group.component';
   template: ''
 })
 export abstract class AsbtractConfigFormControl implements OnInit, OnDestroy {
-  private readonly sanitizer = inject(DomSanitizer);
-
   @Input() public configFormGroup: ConfigFormGroup;
   @Input() public parentConfigFormGroup: ConfigFormGroup;
   @Input() public isSubGroup: boolean;
@@ -69,7 +66,7 @@ export abstract class AsbtractConfigFormControl implements OnInit, OnDestroy {
         (c: ConfigFormControl | ConfigFormGroup) => {
           c.dependsOn().forEach(d => {
             d.dependantControls = d.dependantControls || [];
-            if (d.dependantControls.indexOf(c) < 0) {
+            if (!d.dependantControls.includes(c)) {
               d.dependantControls.push(c);
             }
           });
@@ -89,8 +86,6 @@ export abstract class AsbtractConfigFormControl implements OnInit, OnDestroy {
         c.childs().forEach((child: ConfigFormControl) =>
           child.isChild = true));
   }
-
-  public trustHtml = (html) => this.sanitizer.bypassSecurityTrustHtml(html);
 
   public ngOnDestroy(): void {
     this.toUnsubscribe.forEach(u => u.unsubscribe());

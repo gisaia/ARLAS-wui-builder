@@ -11,11 +11,15 @@
             <span class="tab-name"> {{listFg.value.title}}</span>
           }
           @if (matTab.isActive) {
-            <mat-icon class="settings" (click)="$event.stopPropagation(); configTab(i)"
-              [matTooltip]="'Configure tab' | translate">settings</mat-icon>
+            <button mat-icon-button class="settings" [matTooltip]="'Configure tab' | translate"
+                (click)="$event.stopPropagation(); configTab(i)">
+              <mat-icon>settings</mat-icon>
+            </button>
           }
-          <mat-icon class="close" (click)="$event.stopPropagation(); removeTab(i)"
-            [matTooltip]="'Delete tab' | translate">close</mat-icon>
+          <button mat-icon-button class="close" [matTooltip]="'Delete tab' | translate"
+              (click)="$event.stopPropagation(); removeTab(i)">
+            <mat-icon>close</mat-icon>
+          </button>
         </div>
       </ng-template>
       <arlas-config-form-group [configFormGroup]="listFg" defaultKey="resultlists"></arlas-config-form-group>

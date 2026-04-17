@@ -78,8 +78,7 @@ export abstract class ConfigFormControl extends FormControl {
         validators: [],
         dependsOn: () => [],
         onDependencyChange: () => null,
-        childs: () => [],
-        isDescriptionHtml: false
+        childs: () => []
       },
       ...this.optionalParams
     };
@@ -103,9 +102,6 @@ export abstract class ConfigFormControl extends FormControl {
   }
   public get childs() {
     return this.optionalParams.childs;
-  }
-  public get isDescriptionHtml() {
-    return this.optionalParams.isDescriptionHtml;
   }
   public get resetDependantsOnChange() {
     return this.optionalParams.resetDependantsOnChange || false;
@@ -154,10 +150,6 @@ export interface ControlOptionalParams {
 
   // getter of child components
   childs?: () => Array<ConfigFormControl>;
-
-  // is the description in regular HTML. In this case, the caller
-  // is responsable of translating its content
-  isDescriptionHtml?: boolean;
 
   // a title that is displayed before the field.
   // TODO remove the title from ConfigFormGroup and move it to fields

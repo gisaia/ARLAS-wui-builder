@@ -3,7 +3,7 @@
     <h1 mat-dialog-title>{{ 'Select a template palette' | translate}}</h1>
     <div mat-dialog-content>
       @for (palette of defaultPalettes; track palette; let i = $index) {
-        <div onKeyDown="selectPalette(i);" (click)="selectPalette(i)" class="palette-selector"
+        <div (keydown)="selectPalette(i)" (click)="selectPalette(i)" class="palette-selector"
           [ngStyle]="{'background': palette.length > 1 ? 'linear-gradient(to right, ' + (palette | paletteGradient:data.min:data.max) + ')' : palette[0].value}">
         </div>
       }

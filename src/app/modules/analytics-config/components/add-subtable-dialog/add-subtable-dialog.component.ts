@@ -22,7 +22,8 @@ import {
   SubTableFormGroup
 } from '@analytics-config/services/metrics-table-form-builder/metrics-table-form-builder.service';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, forwardRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, forwardRef, inject, Inject, OnInit, ViewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -39,7 +40,6 @@ import { ConfigFormControlComponent } from '@shared-components/config-form-contr
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { SelectFormControl } from '@shared-models/config-form';
 import { Metric } from 'arlas-api';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'arlas-add-subtable-dialog',
@@ -58,7 +58,9 @@ import { Subscription } from 'rxjs';
     MatTooltipModule
   ]
 })
-export class AddSubtableDialogComponent implements OnInit, OnDestroy {
+export class AddSubtableDialogComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   public formGroup: SubTableFormGroup;
   public defaultKey: string;
   @ViewChild('columnTable', { static: true }) public columnTable: MatTable<AbstractControl>;
@@ -67,17 +69,14 @@ export class AddSubtableDialogComponent implements OnInit, OnDestroy {
   public title: string = marker('Add a sub table');
   public buttonLabel: string = marker('Add');
 
-  private metricCollectFunctionValuesChangeSub: Subscription;
-  private collectionValuesChangeSub: Subscription;
-
   public constructor(
     @Inject(MAT_DIALOG_DATA) public dialogData: {
       subTable: SubTableFormGroup;
       collection: string;
     },
-    private dialogRef: MatDialogRef<AddSubtableDialogComponent>,
-    private metricsTableFormBuilder: MetricsTableFormBuilderService,
-    private collectionService: CollectionService
+    private readonly dialogRef: MatDialogRef<AddSubtableDialogComponent>,
+    private readonly metricsTableFormBuilder: MetricsTableFormBuilderService,
+    private readonly collectionService: CollectionService
   ) { }
 
   public ngOnInit(): void {
@@ -123,10 +122,11 @@ export class AddSubtableDialogComponent implements OnInit, OnDestroy {
       control.enable();
       this.setMetricCollectFieldValues(control.value, control);
     }
-    this.metricCollectFunctionValuesChangeSub = subTableColumn.get('metricCollectFunction').valueChanges.subscribe(v => {
-      this.setMetricCollectFieldValues(v, control);
-
-    });
+    subTableColumn.get('metricCollectFunction').valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(v => {
+        this.setMetricCollectFieldValues(v, control);
+      });
   }
 
   private setMetricCollectFieldValues(v: any, control: SelectFormControl) {
@@ -173,14 +173,5 @@ export class AddSubtableDialogComponent implements OnInit, OnDestroy {
 
   public dragStarted(event) {
     this.dragDisabled = true;
-  }
-
-  public ngOnDestroy(): void {
-    if (!!this.metricCollectFunctionValuesChangeSub) {
-      this.metricCollectFunctionValuesChangeSub.unsubscribe();
-    }
-    if (!!this.collectionValuesChangeSub) {
-      this.collectionValuesChangeSub.unsubscribe();
-    }
   }
 }
