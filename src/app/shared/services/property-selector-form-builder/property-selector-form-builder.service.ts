@@ -110,16 +110,16 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           '',
           marker('Fixed') + ' ' + propertyName,
           marker('Slider fixed value description') + ' ' + propertyName,
-          defaultConfig[propertyName + 'Min'],
-          defaultConfig[propertyName + 'Max'],
-          defaultConfig[propertyName + 'Step'],
+          defaultConfig.sliders[propertyName].min,
+          defaultConfig.sliders[propertyName].max,
+          defaultConfig.sliders[propertyName].step,
           undefined,
           undefined,
           {
             dependsOn: () => [this.customControls.propertySource],
             onDependencyChange: (control) => {
-              if (!control.value && !control.touched && defaultConfig[propertyName + 'Min'] !== undefined) {
-                control.setValue(defaultConfig[propertyName + 'Min']);
+              if (!control.value && !control.touched && defaultConfig.sliders[propertyName].min !== undefined) {
+                control.setValue(defaultConfig.sliders[propertyName].min);
               }
               control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix_slider);
             }
@@ -809,9 +809,9 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             '',
             marker('Start') + ' ' + propertyName,
             null,
-            defaultConfig[propertyName + 'Min'],
-            defaultConfig[propertyName + 'Max'],
-            defaultConfig[propertyName + 'Step'],
+            defaultConfig.sliders[propertyName].min,
+            defaultConfig.sliders[propertyName].max,
+            defaultConfig.sliders[propertyName].step,
             undefined,
             undefined,
             {
@@ -824,8 +824,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                   propertyType === PROPERTY_TYPE.number && (
                     !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value ||
                     this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT));
-                if (!control.value && !control.touched && defaultConfig[propertyName + 'Min'] !== undefined) {
-                  control.setValue(defaultConfig[propertyName + 'Min']);
+                if (!control.value && !control.touched && defaultConfig.sliders[propertyName].min !== undefined) {
+                  control.setValue(defaultConfig.sliders[propertyName].min);
                 }
               }
 
@@ -835,9 +835,9 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             '',
             marker('End') + ' ' + propertyName,
             null,
-            defaultConfig[propertyName + 'Min'],
-            defaultConfig[propertyName + 'Max'],
-            defaultConfig[propertyName + 'Step'],
+            defaultConfig.sliders[propertyName].min,
+            defaultConfig.sliders[propertyName].max,
+            defaultConfig.sliders[propertyName].step,
             undefined,
             undefined,
             {
@@ -850,8 +850,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                   propertyType === PROPERTY_TYPE.number && (
                     !!this.customControls.propertyInterpolatedFg.propertyInterpolatedFieldCtrl.value ||
                     this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.COUNT));
-                if (!control.value && !control.touched && defaultConfig[propertyName + 'Max'] !== undefined) {
-                  control.setValue(defaultConfig[propertyName + 'Max']);
+                if (!control.value && !control.touched && defaultConfig.sliders[propertyName].max !== undefined) {
+                  control.setValue(defaultConfig.sliders[propertyName].max);
                 }
               }
             }
