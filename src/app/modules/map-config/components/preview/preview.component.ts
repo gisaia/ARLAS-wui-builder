@@ -31,17 +31,18 @@ import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-ex
 import { MapComponentInputConfig, MapglComponentConfig } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { StartupService, ZONE_PREVIEW } from '@services/startup/startup.service';
-import { FeatureCollection, Geometry } from '@turf/helpers';
 import { ArlasLayer, ArlasSource } from '@utils/tools';
 import { ArlasDataLayer, ArlasMapComponent, ArlasMapFrameworkService } from 'arlas-map';
 import { DataWithLinks } from 'arlas-persistence-api';
 import { ArlasColorService } from 'arlas-web-components';
 import { MapContributor } from 'arlas-web-contributors';
+import { ArlasGeometry } from 'arlas-web-contributors/contributors/MapContributor';
 import { OnMoveResult } from 'arlas-web-contributors/models/models';
 import {
   ArlasCollaborativesearchService, ArlasConfigService,
   ArlasSettingsService, ContributorBuilder, PersistenceService
 } from 'arlas-wui-toolkit';
+import { FeatureCollection, Geometry } from 'geojson';
 import {
   MapOptions
 } from 'maplibre-gl';
@@ -177,7 +178,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     const debounceDuration = configDebounceTime !== undefined ? configDebounceTime : 750;
     this.mapglContributors.forEach((contrib, i) => {
       setTimeout(() => {
-        contrib.onChangeAoi(event);
+        contrib.onChangeAoi(event as FeatureCollection<ArlasGeometry>);
       }, i * (debounceDuration + 100));
     });
   }
