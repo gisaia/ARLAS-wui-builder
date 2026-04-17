@@ -27,9 +27,23 @@ import { of } from 'rxjs';
 import { vi } from 'vitest';
 import { mockCollectionService } from './collection.service.mock';
 
+const mockDefaultConfig: DefaultConfig = {
+    aggregationTermSize: 10,
+    palettes: [],
+    colorPickerPresets: [],
+    otherColor: '',
+    huePalettes: [],
+    swimlaneZeroColor: '',
+    swimlaneNanColor: '',
+    swimlaneRepresentation: '',
+    sliders: {
+        opacity: { min: 0, max: 1, step: 0.1 }
+    }
+};
+
 export const mockPropertySelectorBuilderService = {
     build: vi.fn(() => new PropertySelectorFormGroup(
-        {} as DefaultConfig, {} as MatDialog,
+        mockDefaultConfig, {} as MatDialog,
         mockCollectionService as unknown as CollectionService,
-        {} as ArlasColorService, '', of([]), PROPERTY_TYPE.color, '', [], false))
+        {} as ArlasColorService, '', of([]), PROPERTY_TYPE.color, 'opacity', [], false))
 };
