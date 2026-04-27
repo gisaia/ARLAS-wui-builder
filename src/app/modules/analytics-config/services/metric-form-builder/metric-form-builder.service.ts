@@ -164,8 +164,8 @@ export class MetricFormBuilderService extends WidgetFormBuilder {
   public defaultKey = 'analytics.widgets.metric';
 
   public constructor(
-    private collectionService: CollectionService,
-    private defaultValuesService: DefaultValuesService,
+    private readonly collectionService: CollectionService,
+    private readonly defaultValuesService: DefaultValuesService,
   ) {
     super();
   }

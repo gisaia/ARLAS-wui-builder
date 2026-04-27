@@ -306,10 +306,10 @@ export class SwimlaneFormBuilderService extends WidgetFormBuilder {
   public widgetFormGroup: FormGroup;
 
   public constructor(
-    private collectionService: CollectionService,
-    private defaultValuesService: DefaultValuesService,
-    private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
-    private metricBuilderService: MetricCollectFormBuilderService,
+    private readonly  collectionService: CollectionService,
+    private readonly  defaultValuesService: DefaultValuesService,
+    private readonly  bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
+    private readonly  metricBuilderService: MetricCollectFormBuilderService,
   ) {
     super();
   }

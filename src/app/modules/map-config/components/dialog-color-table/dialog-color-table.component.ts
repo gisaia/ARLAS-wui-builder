@@ -69,9 +69,9 @@ export class DialogColorTableComponent implements OnInit {
   public constructor(
     public dialogRef: MatDialogRef<DialogColorTableComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogColorTableData,
-    private formBuilder: FormBuilder,
-    private colorService: ArlasColorService,
-    private collectionService: CollectionService
+    private readonly  formBuilder: FormBuilder,
+    private readonly  colorService: ArlasColorService,
+    private readonly  collectionService: CollectionService
   ) { }
 
   public ngOnInit() {

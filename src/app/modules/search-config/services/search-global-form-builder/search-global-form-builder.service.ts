@@ -82,9 +82,9 @@ export class SearchCollectionFormGroup extends CollectionConfigFormGroup {
 export class SearchGlobalFormBuilderService {
 
   public constructor(
-    private defaultValuesService: DefaultValuesService,
-    private collectionService: CollectionService,
-    private mainFormService: MainFormService,
+    private readonly  defaultValuesService: DefaultValuesService,
+    private readonly  collectionService: CollectionService,
+    private readonly  mainFormService: MainFormService,
   ) { }
 
   public buildSearchMainCollection() {

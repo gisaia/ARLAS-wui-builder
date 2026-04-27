@@ -38,8 +38,8 @@ export abstract class AsbtractConfigFormControl implements OnInit, OnDestroy {
 
   /**
    * The root ConfigFormGroup is responsible of all its sub-controls.
-   * At loading, it browses all the sub-controls to manage there state.
-   * At first, we didn't have a notion or root / subgroup, we just used
+   * At loading, it browses all the sub-controls to manage their state.
+   * At first, we didn't have a notion of root / subgroup, we just used
    * to initialize the sub-controls of a group when displaying it; however
    * some field in a not-displayed (ia not initialized) subgroup may
    * depend on a displayed field, this was not managed.

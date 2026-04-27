@@ -63,13 +63,13 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
   public constructor(
     protected mapLayerFormBuilder: MapLayerFormBuilderService,
     protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
-    private mainFormService: MainFormService,
-    private mapGlobalFormBuilder: MapGlobalFormBuilderService,
-    private collectionService: CollectionService,
-    private route: ActivatedRoute,
-    private cdref: ChangeDetectorRef,
-    private router: Router,
-    private logger: NGXLogger) {
+    private readonly  mainFormService: MainFormService,
+    private readonly  mapGlobalFormBuilder: MapGlobalFormBuilderService,
+    private readonly  collectionService: CollectionService,
+    private readonly  route: ActivatedRoute,
+    private readonly  cdref: ChangeDetectorRef,
+    private readonly  router: Router,
+    private readonly  logger: NGXLogger) {
   }
 
   public ngOnInit() {
@@ -85,7 +85,6 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
       this.routerSub = this.route.paramMap.subscribe(params => {
         const layerId = params.get('id');
         if (!layerId) {
-          console.log('hellooo');
           this.layerFg = this.mapLayerFormBuilder.buildLayer(this.mainFormService.getMainCollection(), false);
         } else {
           // there we are editing an existing layer

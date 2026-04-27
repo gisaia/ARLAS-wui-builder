@@ -308,13 +308,13 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             marker('Background style of cells Description'),
             false,
             [
-              {label: marker('Filled'), value: 'filled'},
-              {label: marker('Outlined'), value: 'outlined'},
+              { label: marker('Filled'), value: 'filled' },
+              { label: marker('Outlined'), value: 'outlined' },
             ],
             {
               optional: true,
               dependsOn: () => [
-                                this.customControls.dataStep.columns as any
+                this.customControls.dataStep.columns as any
               ],
               onDependencyChange: (control: ButtonFormControl) => {
                 const useColorService = this.customControls.dataStep.columns.controls
@@ -333,7 +333,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
               control: () => this.customControls.visualisationStep.visualisationsList
             }
           ),
-        }).withTabName( marker('Visualisation')),
+        }).withTabName(marker('Visualisation')),
         unmanagedFields: new FormGroup({
           dataStep: new FormGroup({}),
           renderStep: new FormGroup({
@@ -445,11 +445,11 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
   public constructor(
     fieldsObs: Observable<Array<SelectOption>>,
     collection: string,
-        private globalKeysToColortrl: FormArray,
-        defaultConfig: DefaultConfig,
-        dialog: MatDialog,
-        collectionService: CollectionService,
-        private colorService: ArlasColorService
+    private readonly globalKeysToColortrl: FormArray,
+    defaultConfig: DefaultConfig,
+    dialog: MatDialog,
+    collectionService: CollectionService,
+    private readonly colorService: ArlasColorService
   ) {
     super(collection,
       {
@@ -630,14 +630,14 @@ export class ResultlistQuicklookFormGroup extends FormGroup {
               if (!this.customControls.filter.field.touched) {
                 // Avoid to reset the imported configuration when first loading it
               } else if (this.customControls.filter.field.value !== '' && !!this.customControls.filter.field.syncOptions
-                                && this.customControls.filter.field.syncOptions.map(f => f.value)
-                                  .includes(this.customControls.filter.field.value)) {
+                && this.customControls.filter.field.syncOptions.map(f => f.value)
+                  .includes(this.customControls.filter.field.value)) {
                 control.setSyncOptions([]);
                 collectionService.getTermAggregation(
                   collection,
                   this.customControls.filter.field.value)
                   .then(keywords => {
-                    control.setSyncOptions(keywords.map(k => ({value: k, label: k})));
+                    control.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
                   });
               } else {
                 control.setSyncOptions([]);
@@ -706,11 +706,11 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
         '',
         false,
         [
-          {label: marker('Titiler'), value: 'titiler'},
-          {label: marker('Other'), value: 'other'},
+          { label: marker('Titiler'), value: 'titiler' },
+          { label: marker('Other'), value: 'other' },
         ],
         {
-          validators: [ Validators.required]
+          validators: [Validators.required]
         }
       ),
       visualisationUrl: new InputFormControl(
@@ -736,14 +736,14 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
 
 export class ResultListVisualisationsDataGroupCondition extends FormGroup {
   public editing = false;
-  public editionInfo: { field: string; op:  Expression.OpEnum; };
+  public editionInfo: { field: string; op: Expression.OpEnum; };
   protected filter = new GeoFilterInputsBuilder();
 
   public constructor(
-        public collectionFields: Observable<Array<CollectionField>>,
-        filterOperations: Array< Expression.OpEnum>,
-        collectionService: CollectionService,
-        collection: string) {
+    public collectionFields: Observable<Array<CollectionField>>,
+    filterOperations: Array<Expression.OpEnum>,
+    collectionService: CollectionService,
+    collection: string) {
     super({
       filterField: new TypedSelectFormControl(
         '',
@@ -913,11 +913,11 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
   public defaultKey = 'analytics.widgets.resultlist';
 
   public constructor(
-    private collectionService: CollectionService,
-    private mainFormService: MainFormService,
-    private defaultValuesService: DefaultValuesService,
-    private dialog: MatDialog,
-    private colorService: ArlasColorService
+    private readonly collectionService: CollectionService,
+    private readonly mainFormService: MainFormService,
+    private readonly defaultValuesService: DefaultValuesService,
+    private readonly dialog: MatDialog,
+    private readonly colorService: ArlasColorService
   ) {
     super();
   }
@@ -973,11 +973,11 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
 
   public buildVisualisationsDataGroupCriteria(collection: string) {
     const collectionFields = this.collectionService.getCollectionFields(collection);
-    const operators = [ Expression.OpEnum.Range,
-      Expression.OpEnum.Eq,  Expression.OpEnum.Like,
-      Expression.OpEnum.Lte,  Expression.OpEnum.Lt,
-      Expression.OpEnum.Gte,  Expression.OpEnum.Gt,
-      Expression.OpEnum.Ne
+    const operators = [Expression.OpEnum.Range,
+    Expression.OpEnum.Eq, Expression.OpEnum.Like,
+    Expression.OpEnum.Lte, Expression.OpEnum.Lt,
+    Expression.OpEnum.Gte, Expression.OpEnum.Gt,
+    Expression.OpEnum.Ne
     ];
 
     const control = new ResultListVisualisationsDataGroupCondition(collectionFields,

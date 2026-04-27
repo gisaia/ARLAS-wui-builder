@@ -55,8 +55,8 @@ export class ImportLayerDialogComponent implements OnInit {
   public importLayerFormGroup: FormGroup;
 
   public constructor(
-    private persistenceService: PersistenceService,
-    private collectionService: CollectionService
+    private readonly  persistenceService: PersistenceService,
+    private readonly  collectionService: CollectionService
   ) { }
 
   public ngOnInit() {

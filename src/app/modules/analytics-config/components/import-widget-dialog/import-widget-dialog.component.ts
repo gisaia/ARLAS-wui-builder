@@ -64,9 +64,9 @@ export class ImportWidgetDialogComponent implements OnInit {
   public selectedWidgetsSet: Set<AnalyticComponentConfig> = new Set();
 
   public constructor(
-    private persistenceService: PersistenceService,
-    private collectionService: CollectionService,
-    private cdr: ChangeDetectorRef
+    private readonly persistenceService: PersistenceService,
+    private readonly collectionService: CollectionService,
+    private readonly cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit() {

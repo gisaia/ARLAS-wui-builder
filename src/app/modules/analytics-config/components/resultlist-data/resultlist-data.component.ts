@@ -49,10 +49,10 @@ export class ResultlistDataComponent implements OnInit, OnDestroy {
   @Input() public control: ResultlistDataConfigForm;
   public detailsTitleControl: FieldTemplateControl;
 
-  private onDestroy$ = new Subject<boolean>();
+  private readonly onDestroy$ = new Subject<boolean>();
 
   public constructor(
-    private collectionService: CollectionService
+    private readonly collectionService: CollectionService
   ) { }
 
   public ngOnDestroy() {

@@ -264,10 +264,10 @@ export class HistogramFormBuilderService extends WidgetFormBuilder {
   public widgetFormGroup: FormGroup;
 
   public constructor(
-    private collectionService: CollectionService,
-    private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
-    private defaultValuesService: DefaultValuesService,
-    private metricBuilderService: MetricCollectFormBuilderService
+    private readonly collectionService: CollectionService,
+    private readonly bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
+    private readonly defaultValuesService: DefaultValuesService,
+    private readonly metricBuilderService: MetricCollectFormBuilderService
   ) {
     super();
   }

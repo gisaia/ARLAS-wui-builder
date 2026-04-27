@@ -44,11 +44,11 @@ export class DonutConfigForm extends WidgetConfigFormGroup {
   public constructor(
     collection: string,
     collectionFields: Observable<Array<CollectionField>>,
-    private globalKeysToColortrl: FormArray,
+    private readonly globalKeysToColortrl: FormArray,
     defaultConfig: DefaultConfig,
     dialog: MatDialog,
     collectionService: CollectionService,
-    private colorService: ArlasColorService
+    private readonly colorService: ArlasColorService
   ) {
     super(
       collection,
@@ -207,11 +207,11 @@ export class DonutFormBuilderService extends WidgetFormBuilder {
   public defaultKey = 'analytics.widgets.donut';
 
   public constructor(
-    private collectionService: CollectionService,
-    private mainFormService: MainFormService,
-    private defaultValuesService: DefaultValuesService,
-    private dialog: MatDialog,
-    private colorService: ArlasColorService
+    private readonly collectionService: CollectionService,
+    private readonly mainFormService: MainFormService,
+    private readonly defaultValuesService: DefaultValuesService,
+    private readonly dialog: MatDialog,
+    private readonly colorService: ArlasColorService
   ) {
     super();
   }

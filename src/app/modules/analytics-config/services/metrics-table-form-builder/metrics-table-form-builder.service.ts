@@ -241,8 +241,8 @@ export class MetricsTableFormBuilderService extends WidgetFormBuilder {
   public defaultKey = 'analytics.widgets.metricstable';
 
   public constructor(
-    private collectionService: CollectionService,
-    private defaultValuesService: DefaultValuesService
+    private readonly collectionService: CollectionService,
+    private readonly defaultValuesService: DefaultValuesService
   ) {
     super();
   }

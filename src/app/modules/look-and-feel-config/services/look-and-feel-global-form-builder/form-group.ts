@@ -30,8 +30,8 @@ import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
 export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
 
   public constructor(
-    private mainFormService: MainFormService,
-    private collectionService: CollectionService
+    private readonly  mainFormService: MainFormService,
+    private readonly  collectionService: CollectionService
   ) {
     super(
       {

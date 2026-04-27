@@ -28,9 +28,9 @@ import { LookAndFeelGlobalFormGroup } from './form-group';
 export class LookAndFeelGlobalFormBuilderService {
 
   public constructor(
-    private defaultValuesService: DefaultValuesService,
-    private mainFormService: MainFormService,
-    private collectionService: CollectionService
+    private readonly  defaultValuesService: DefaultValuesService,
+    private readonly  mainFormService: MainFormService,
+    private readonly  collectionService: CollectionService
   ) { }
 
   public build() {

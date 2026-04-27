@@ -65,23 +65,23 @@ import { SwimlaneFormBuilderService, SwimlaneFormGroup } from '../swimlane-form-
 })
 export class AnalyticsImportService {
 
-  private analyticsBoardWidth = 445;
+  private readonly analyticsBoardWidth = 445;
 
   public constructor(
-    private mainFormService: MainFormService,
-    private defaultValuesService: DefaultValuesService,
-    private analyticsInitService: AnalyticsInitService,
-    private histogramFormBuilder: HistogramFormBuilderService,
-    private swimlaneFormBuilder: SwimlaneFormBuilderService,
-    private metricFormBuilder: MetricFormBuilderService,
-    private metricsTableFormBuilder: MetricsTableFormBuilderService,
-    private powerbarFormBuilder: PowerbarFormBuilderService,
-    private donutFormBuilder: DonutFormBuilderService,
-    private resultlistFormBuilder: ResultlistFormBuilderService,
-    private settingsService: ArlasSettingsService,
-    private colorService: ArlasColorService,
-    private collectionService: CollectionService,
-    private shortcutService: ShortcutsService
+    private readonly mainFormService: MainFormService,
+    private readonly defaultValuesService: DefaultValuesService,
+    private readonly analyticsInitService: AnalyticsInitService,
+    private readonly histogramFormBuilder: HistogramFormBuilderService,
+    private readonly swimlaneFormBuilder: SwimlaneFormBuilderService,
+    private readonly metricFormBuilder: MetricFormBuilderService,
+    private readonly metricsTableFormBuilder: MetricsTableFormBuilderService,
+    private readonly powerbarFormBuilder: PowerbarFormBuilderService,
+    private readonly donutFormBuilder: DonutFormBuilderService,
+    private readonly resultlistFormBuilder: ResultlistFormBuilderService,
+    private readonly settingsService: ArlasSettingsService,
+    private readonly colorService: ArlasColorService,
+    private readonly collectionService: CollectionService,
+    private readonly shortcutService: ShortcutsService
   ) { }
 
   public doImport(config: Config) {
@@ -89,7 +89,7 @@ export class AnalyticsImportService {
     const tabs: Map<string, FormGroup> = new Map();
 
     if (!!config.arlas.web.analytics) {
-      if (!!config.arlas.web.options.tabs) {
+      if (!!config.arlas.web.options && !!config.arlas.web.options.tabs) {
         config.arlas.web.options.tabs.forEach(tab => {
           tabs.set(tab.name, this.analyticsInitService.initNewTab(tab.name, tab.icon, tab.showName, tab.showIcon));
         });

@@ -27,9 +27,9 @@ import { TimelineGlobalFormBuilderService } from '../timeline-global-form-builde
 export class TimelineInitService {
 
   public constructor(
-    private mainFormService: MainFormService,
-    private timelineGlobalFormBuilder: TimelineGlobalFormBuilderService,
-    private collectionService: CollectionService
+    private readonly  mainFormService: MainFormService,
+    private readonly  timelineGlobalFormBuilder: TimelineGlobalFormBuilderService,
+    private readonly  collectionService: CollectionService
   ) { }
 
   public initModule(initCollectionTimepath: boolean) {

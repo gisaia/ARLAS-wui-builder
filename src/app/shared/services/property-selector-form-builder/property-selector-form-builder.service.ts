@@ -52,7 +52,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
     colorService: ArlasColorService,
     collection: string,
     collectionFieldsObs: Observable<Array<CollectionField>>,
-    private propertyType: PROPERTY_TYPE,
+    private readonly  propertyType: PROPERTY_TYPE,
     propertyName: string,
     sources: Array<PROPERTY_SELECTOR_SOURCE>,
     isAggregated: boolean,
@@ -979,10 +979,10 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
 export class PropertySelectorFormBuilderService {
 
   public constructor(
-    private defaultValuesService: DefaultValuesService,
-    private dialog: MatDialog,
-    private collectionService: CollectionService,
-    private colorService: ArlasColorService
+    private readonly  defaultValuesService: DefaultValuesService,
+    private readonly  dialog: MatDialog,
+    private readonly  collectionService: CollectionService,
+    private readonly  colorService: ArlasColorService
   ) { }
 
   public build(

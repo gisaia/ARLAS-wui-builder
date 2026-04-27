@@ -51,11 +51,11 @@ export class PowerbarConfigForm extends WidgetConfigFormGroup {
   public constructor(
     collection: string,
     collectionFields: Observable<Array<CollectionField>>,
-    private globalKeysToColortrl: FormArray,
+    private readonly globalKeysToColortrl: FormArray,
     defaultConfig: DefaultConfig,
     dialog: MatDialog,
     collectionService: CollectionService,
-    private colorService: ArlasColorService,
+    private readonly colorService: ArlasColorService,
     metricFg: MetricCollectFormGroup
   ) {
     super(
@@ -330,12 +330,12 @@ export class PowerbarFormBuilderService extends WidgetFormBuilder {
   public defaultKey = 'analytics.widgets.powerbar';
 
   public constructor(
-    private collectionService: CollectionService,
-    private mainFormService: MainFormService,
-    private dialog: MatDialog,
-    private colorService: ArlasColorService,
-    private defaultValuesService: DefaultValuesService,
-    private metricBuilderService: MetricCollectFormBuilderService,
+    private readonly collectionService: CollectionService,
+    private readonly mainFormService: MainFormService,
+    private readonly dialog: MatDialog,
+    private readonly colorService: ArlasColorService,
+    private readonly defaultValuesService: DefaultValuesService,
+    private readonly metricBuilderService: MetricCollectFormBuilderService,
   ) {
     super();
   }

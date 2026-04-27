@@ -85,18 +85,18 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialogRef: MatDialogRef<LandingPageDialogComponent>,
     public mainFormService: MainFormService,
-    private http: HttpClient,
-    private logger: NGXLogger,
+    private readonly http: HttpClient,
+    private readonly logger: NGXLogger,
     public startupService: StartupService,
-    private translate: TranslateService,
-    private mainFormManager: MainFormManagerService,
-    private collectionService: CollectionService,
+    private readonly translate: TranslateService,
+    private readonly mainFormManager: MainFormManagerService,
+    private readonly collectionService: CollectionService,
     public persistenceService: PersistenceService,
-    private dialog: MatDialog,
-    private spinner: NgxSpinnerService,
-    private router: Router,
-    private menu: MenuService,
-    private landingPageService: LandingPageService
+    private readonly dialog: MatDialog,
+    private readonly spinner: NgxSpinnerService,
+    private readonly router: Router,
+    private readonly menu: MenuService,
+    private readonly landingPageService: LandingPageService
   ) { }
 
   public ngOnInit(): void {

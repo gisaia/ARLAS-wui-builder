@@ -165,7 +165,7 @@ export class MetricCollectFormBuilderService {
 
   public formGroup: ConfigFormGroup;
 
-  public constructor(private collectionService: CollectionService) { }
+  public constructor(private readonly collectionService: CollectionService) { }
 
   public build(collection: string, type: METRIC_TYPE, sortable = false) {
     return new MetricCollectFormGroup(collection, this.collectionService, type, sortable);

@@ -1440,11 +1440,11 @@ export class MapLayerTypeClusterFormGroup extends MapLayerAllTypesFormGroup {
 export class MapLayerFormBuilderService {
 
   public constructor(
-    private defaultValuesService: DefaultValuesService,
-    private propertySelectorFormBuilder: PropertySelectorFormBuilderService,
-    private mainFormService: MainFormService,
-    private collectionService: CollectionService,
-    private settigsService: ArlasSettingsService
+    private readonly  defaultValuesService: DefaultValuesService,
+    private readonly  propertySelectorFormBuilder: PropertySelectorFormBuilderService,
+    private readonly  mainFormService: MainFormService,
+    private readonly  collectionService: CollectionService,
+    private readonly  settigsService: ArlasSettingsService
   ) { }
 
   public buildLayer(collection: string, edit?: boolean) {

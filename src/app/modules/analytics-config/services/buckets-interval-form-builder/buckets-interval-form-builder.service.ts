@@ -134,7 +134,7 @@ export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
               const sub: Subscription = bucketsFieldsObs.subscribe(fields => {
                 if (this.customControls.aggregationBucketOrInterval.value === BY_BUCKET_OR_INTERVAL.INTERVAL &&
                   // eslint-disable-next-line max-len
-                  fields.find(f => f.name === this.customControls.aggregationField.value).type === CollectionReferenceDescriptionProperty.TypeEnum.DATE) {
+                  fields?.find(f => f.name === this.customControls.aggregationField.value)?.type === CollectionReferenceDescriptionProperty.TypeEnum.DATE) {
                   control.enable();
                 } else {
                   control.disable();
@@ -207,7 +207,7 @@ export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
 })
 export class BucketsIntervalFormBuilderService {
 
-  public constructor(private collectionService: CollectionService, private settingsService: ArlasSettingsService) { }
+  public constructor(private readonly collectionService: CollectionService, private readonly settingsService: ArlasSettingsService) { }
 
   public build(collection: string, bucketType: BUCKET_TYPE) {
     return new BucketsIntervalFormGroup(collection, this.collectionService, this.settingsService.getHistogramMaxBucket(), bucketType);

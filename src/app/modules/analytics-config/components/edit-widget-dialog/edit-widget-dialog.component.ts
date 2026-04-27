@@ -58,14 +58,14 @@ export class EditWidgetDialogComponent implements OnInit {
   public constructor(
     public dialogRef: MatDialogRef<EditWidgetDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: EditWidgetDialogData,
-    private histogramBuilder: HistogramFormBuilderService,
-    private swimlaneBuilder: SwimlaneFormBuilderService,
-    private metricBuilder: MetricFormBuilderService,
-    private metricsTableFormBuilder: MetricsTableFormBuilderService,
-    private powerFormBuilder: PowerbarFormBuilderService,
-    private donutFormBuilder: DonutFormBuilderService,
-    private resultlistFormBuilder: ResultlistFormBuilderService,
-    private shortcutsService: ShortcutsService
+    private readonly histogramBuilder: HistogramFormBuilderService,
+    private readonly swimlaneBuilder: SwimlaneFormBuilderService,
+    private readonly metricBuilder: MetricFormBuilderService,
+    private readonly metricsTableFormBuilder: MetricsTableFormBuilderService,
+    private readonly powerFormBuilder: PowerbarFormBuilderService,
+    private readonly donutFormBuilder: DonutFormBuilderService,
+    private readonly resultlistFormBuilder: ResultlistFormBuilderService,
+    private readonly shortcutsService: ShortcutsService
   ) {
     this.initFormGroup();
   }
@@ -98,7 +98,6 @@ export class EditWidgetDialogComponent implements OnInit {
 
     this.formGroup = formBuilder.buildWithValues(this.dialogData.formData, this.dialogData.collection);
     this.defaultKey = formBuilder.defaultKey;
-    console.log(this.formGroup);
   }
 
   public ngOnInit() {
