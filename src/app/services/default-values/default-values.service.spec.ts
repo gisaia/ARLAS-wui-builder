@@ -1,15 +1,20 @@
+import { TestBed } from '@angular/core/testing';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { DefaultValuesService } from './default-values.service';
-import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
 
 describe('DefaultValuesService', () => {
-  let spectator: SpectatorService<DefaultValuesService>;
-  const createService = createServiceFactory({
-    service: DefaultValuesService
-  });
+    let service: DefaultValuesService;
 
-  beforeEach(() => spectator = createService());
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [LoggerModule.forRoot(null)]
+        });
 
-  it('should be defined', () => {
-    expect(spectator.service).toBeDefined();
-  });
+        service = TestBed.inject(DefaultValuesService);
+    });
+
+    it('should create', () => {
+        expect(service).toBeTruthy();
+    });
 });

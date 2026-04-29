@@ -1,28 +1,45 @@
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
-import { TimelineImportService } from './timeline-import.service';
-import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
+import { TestBed } from '@angular/core/testing';
+import { mockArlasStartupService } from '@app/test/arlas-startup.service.mock';
+import { mockCollectionService } from '@app/test/collection.service.mock';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { StartupService } from '@services/startup/startup.service';
-import { ArlasColorService } from 'arlas-web-components';
+import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
+import { ArlasStartupService } from 'arlas-wui-toolkit';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { TimelineImportService } from './timeline-import.service';
 
 describe('TimelineImportService', () => {
-  let spectator: SpectatorService<TimelineImportService>;
+    let service: TimelineImportService;
 
-  const createService = createServiceFactory({
-    service: TimelineImportService,
-    imports: [ArlasToolkitSharedModule],
-    providers: [
-      mockProvider(ArlasColorService),
-      mockProvider(CollectionService),
-      mockProvider(StartupService)
-    ]
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                ColorGeneratorModule.forRoot({
+                    loader: {
+                        provide: ColorGeneratorLoader,
+                        useClass: AwcColorGeneratorLoader
+                    }
+                }),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ],
+            providers: [
+                {
+                    provide: ArlasStartupService,
+                    useValue: mockArlasStartupService
+                },
+                {
+                    provide: CollectionService,
+                    useValue: mockCollectionService
+                }
+            ]
+        });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+        service = TestBed.inject(TimelineImportService);
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(service).toBeTruthy();
+    });
 });

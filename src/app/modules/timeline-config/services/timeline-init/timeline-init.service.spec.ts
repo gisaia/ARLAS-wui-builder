@@ -1,24 +1,47 @@
-import { TimelineInitService } from './timeline-init.service';
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
-import { TimelineGlobalFormBuilderService } from '../timeline-global-form-builder/timeline-global-form-builder.service';
+import { TestBed } from '@angular/core/testing';
+import { mockArlasStartupService } from '@app/test/arlas-startup.service.mock';
+import { mockCollectionService } from '@app/test/collection.service.mock';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
+import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
+import { ArlasStartupService } from 'arlas-wui-toolkit';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { TimelineInitService } from './timeline-init.service';
 
 describe('TimelineInitService', () => {
-  let spectator: SpectatorService<TimelineInitService>;
+    let service: TimelineInitService;
 
-  const createService = createServiceFactory({
-    service: TimelineInitService,
-    providers: [
-      mockProvider(TimelineGlobalFormBuilderService),
-      mockProvider(CollectionService)
-    ]
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null),
+                ColorGeneratorModule.forRoot({
+                    loader: {
+                        provide: ColorGeneratorLoader,
+                        useClass: AwcColorGeneratorLoader
+                    }
+                }),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ],
+            providers: [
+                {
+                    provide: ArlasStartupService,
+                    useValue: mockArlasStartupService
+                },
+                {
+                    provide: CollectionService,
+                    useValue: mockCollectionService
+                }
+            ]
+        });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+        service = TestBed.inject(TimelineInitService);
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(service).toBeTruthy();
+    });
 });

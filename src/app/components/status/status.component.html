@@ -1,28 +1,33 @@
-<div class="status-container" *ngIf="mainService.configurationName && displayCurrentConfig">
-
+@if (mainService.configurationName && displayCurrentConfig) {
+  <div class="status-container">
     <div class="inner" >
-        {{ 'Editing dashboard' | translate}} :
-        <span *ngIf="!editingConfigName" class="inner" tabindex="-1"
-            (focus)="startEditConfigName($event)">
-            {{mainService.configurationName}}
-        </span>
-        <span *ngIf="editingConfigName" class="edit-name">
-            <!-- keydown stopPropagation needed to allow spaces -->
-            <input class="edit-name__input" matInput [(ngModel)]="editingName"  arlasAutoFocus autocomplete="off"
-                (focusout)="finishEditConfigName()" (keydown)="$event.stopPropagation();"
-                (keydown.enter)="finishEditConfigName()">
-        </span>
-        <span class="edit-name-button">        
-            <button mat-icon-button (click)="$event.stopPropagation(); startEditConfigName($event)"
-                [matTooltip]="'Rename' | translate" matTooltipPosition="right">
-                <mat-icon>edit</mat-icon>
-            </button>
-        </span>
+      {{ 'Editing dashboard' | translate}} :
 
+      @if (editingConfigName) {
+        <span class="edit-name">
+          <!-- keydown stopPropagation needed to allow spaces -->
+          <input class="edit-name__input" matInput [(ngModel)]="editingName"  arlasAutoFocus autocomplete="off"
+            (focusout)="finishEditConfigName()" (keydown)="$event.stopPropagation();"
+            (keydown.enter)="finishEditConfigName()">
+        </span>
+      } @else {
+        <span class="inner" tabindex="-1" (focus)="startEditConfigName($event)">
+          {{mainService.configurationName}}
+        </span>
+      }
+      <span class="edit-name-button">
+        <button mat-icon-button (click)="$event.stopPropagation(); startEditConfigName($event)"
+            [matTooltip]="'Rename' | translate" matTooltipPosition="right">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </span>
     </div>
-</div>
-<div class="status-container" *ngIf="!mainService.configurationName && displayCurrentConfig">
+  </div>
+}
+@if (!mainService.configurationName && displayCurrentConfig) {
+  <div class="status-container">
     <div class="inner">
-        {{ 'Create dashboard' | translate}}
+      {{ 'Create dashboard' | translate}}
     </div>
-</div>
+  </div>
+}

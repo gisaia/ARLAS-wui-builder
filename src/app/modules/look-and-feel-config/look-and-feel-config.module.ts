@@ -22,12 +22,10 @@ import { GlobalLookAndFeelComponent } from './components/global-look-and-feel/gl
 import { LookAndFeelConfigRoutingModule } from './look-and-feel-config-routing.module';
 
 @NgModule({
-  declarations: [
-    GlobalLookAndFeelComponent
-  ],
-  imports: [
-    LookAndFeelConfigRoutingModule,
-    SharedModule
-  ]
+    imports: [
+        LookAndFeelConfigRoutingModule,
+        SharedModule,
+        GlobalLookAndFeelComponent
+    ]
 })
 export class LookAndFeelConfigModule { }

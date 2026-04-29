@@ -18,27 +18,31 @@
  */
 
 import { AfterViewInit, ChangeDetectorRef, Component, Inject, Input, OnDestroy, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
-import { MapComponentInputConfig } from '@services/main-form-manager/models-config';
+import { MapComponentInputConfig, MapglComponentConfig } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { StartupService, ZONE_PREVIEW } from '@services/startup/startup.service';
-import { FeatureCollection, Geometry } from '@turf/helpers';
 import { ArlasLayer, ArlasSource } from '@utils/tools';
-import { ArlasMapComponent, ArlasMapFrameworkService } from 'arlas-map';
+import { ArlasDataLayer, ArlasMapComponent, ArlasMapFrameworkService } from 'arlas-map';
 import { DataWithLinks } from 'arlas-persistence-api';
 import { ArlasColorService } from 'arlas-web-components';
 import { MapContributor } from 'arlas-web-contributors';
+import { ArlasGeometry } from 'arlas-web-contributors/contributors/MapContributor';
 import { OnMoveResult } from 'arlas-web-contributors/models/models';
 import {
   ArlasCollaborativesearchService, ArlasConfigService,
   ArlasSettingsService, ContributorBuilder, PersistenceService
 } from 'arlas-wui-toolkit';
+import { FeatureCollection, Geometry } from 'geojson';
 import {
   MapOptions
 } from 'maplibre-gl';
@@ -46,14 +50,20 @@ import { catchError, map, merge, Observable, of, Subscription, throwError } from
 
 export interface MapglComponentInput {
   mapglContributors: MapContributor[];
-  mapComponentConfig: any;
+  mapComponentConfig: MapglComponentConfig;
 }
 
 @Component({
-    selector: 'arlas-preview',
-    templateUrl: './preview.component.html',
-    styleUrls: ['./preview.component.scss'],
-    standalone: false
+  selector: 'arlas-preview',
+  templateUrl: './preview.component.html',
+  styleUrls: ['./preview.component.scss'],
+  imports: [
+    ArlasMapComponent,
+    MatButtonModule,
+    MatTooltipModule,
+    TranslatePipe,
+    MatIconModule
+  ]
 })
 export class PreviewComponent implements AfterViewInit, OnDestroy {
 
@@ -122,7 +132,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
         mapConfigVisualisations,
         mapConfigBasemaps
       );
-      mapComponentConfig.input.mapLayers.layers = configMap.layers;
+      mapComponentConfig.input.mapLayers.layers = configMap.layers as ArlasDataLayer[];
 
       this.mapglContributors = contributors;
       this.mapComponentConfig = mapComponentConfig.input;
@@ -168,7 +178,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     const debounceDuration = configDebounceTime !== undefined ? configDebounceTime : 750;
     this.mapglContributors.forEach((contrib, i) => {
       setTimeout(() => {
-        contrib.onChangeAoi(event);
+        contrib.onChangeAoi(event as FeatureCollection<ArlasGeometry>);
       }, i * (debounceDuration + 100));
     });
   }

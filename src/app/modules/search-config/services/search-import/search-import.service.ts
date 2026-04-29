@@ -21,7 +21,8 @@ import { FormArray } from '@angular/forms';
 import { CHIPSEARCH_TYPE, Config, SEARCH_TYPE } from '@services/main-form-manager/models-config';
 import { importElements } from '@services/main-form-manager/tools';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { SearchGlobalFormBuilderService, SearchGlobalFormGroup } from '../search-global-form-builder/search-global-form-builder.service';
+import { SearchGlobalFormGroup } from '../search-global-form-builder/form-group';
+import { SearchGlobalFormBuilderService } from '../search-global-form-builder/search-global-form-builder.service';
 
 @Injectable({
   providedIn: 'root'

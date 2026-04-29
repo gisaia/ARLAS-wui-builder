@@ -23,13 +23,11 @@ import { SearchConfigRoutingModule } from './search-config-routing.module';
 import { SearchCollectionComponent } from './components/search-collection/search-collection.component';
 
 @NgModule({
-  declarations: [
-    GlobalSearchComponent,
-    SearchCollectionComponent
-  ],
-  imports: [
-    SearchConfigRoutingModule,
-    SharedModule
-  ]
+    imports: [
+        SearchConfigRoutingModule,
+        SharedModule,
+        GlobalSearchComponent,
+        SearchCollectionComponent
+    ]
 })
 export class SearchConfigModule { }

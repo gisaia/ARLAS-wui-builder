@@ -1,30 +1,33 @@
+import { TestBed } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { MapImportService } from './map-import.service';
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
-import { MapLayerFormBuilderService } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
-import { MapVisualisationFormBuilderService } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
-import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { CollectionService } from '@services/collection-service/collection.service';
 
 describe('MapImportService', () => {
-  let spectator: SpectatorService<MapImportService>;
+    let service: MapImportService;
 
-  const createService = createServiceFactory({
-    service: MapImportService,
-    providers: [
-      mockProvider(MapLayerFormBuilderService),
-      mockProvider(MapVisualisationFormBuilderService),
-      mockProvider(MapGlobalFormBuilderService),
-      mockProvider(MainFormService),
-      mockProvider(CollectionService)
-    ]
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+                ColorGeneratorModule.forRoot({
+                    loader: {
+                        provide: ColorGeneratorLoader,
+                        useClass: AwcColorGeneratorLoader
+                    }
+                }),
+            ]
+        });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+        service = TestBed.inject(MapImportService);
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(service).toBeTruthy();
+    });
 });

@@ -1,28 +1,33 @@
+import { TestBed } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { ResultlistFormBuilderService } from './resultlist-form-builder.service';
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { of } from 'rxjs';
-import { ArlasColorService } from 'arlas-web-components';
 
 describe('ResultlistFormBuilderService', () => {
-  let spectator: SpectatorService<ResultlistFormBuilderService>;
+    let service: ResultlistFormBuilderService;
 
-  const createService = createServiceFactory({
-    service: ResultlistFormBuilderService,
-    providers: [
-      mockProvider(CollectionService, {
-        getCollectionFields: () => of([])
-      }),
-      mockProvider(CollectionService),
-      mockProvider(ArlasColorService),
-    ]
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+                ColorGeneratorModule.forRoot({
+                    loader: {
+                        provide: ColorGeneratorLoader,
+                        useClass: AwcColorGeneratorLoader
+                    }
+                }),
+            ]
+        });
 
-  beforeEach(() => {
-    spectator = createService({});
-  });
+        service = TestBed.inject(ResultlistFormBuilderService);
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(service).toBeTruthy();
+    });
 });

@@ -1,22 +1,22 @@
-import { createServiceFactory, SpectatorService, mockProvider } from '@ngneat/spectator';
+import { TestBed } from '@angular/core/testing';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { MapBasemapFormBuilderService } from './map-basemap-form-builder.service';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
 
 describe('MapBasemapFormBuilderService', () => {
-  let spectator: SpectatorService<MapBasemapFormBuilderService>;
+    let service: MapBasemapFormBuilderService;
 
-  const createService = createServiceFactory({
-    service: MapBasemapFormBuilderService,
-    providers: [
-      mockProvider(DefaultValuesService)
-    ]
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null)
+            ]
+        });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+        service = TestBed.inject(MapBasemapFormBuilderService);
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(service).toBeTruthy();
+    });
 });

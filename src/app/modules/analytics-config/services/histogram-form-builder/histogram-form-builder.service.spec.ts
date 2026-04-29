@@ -1,29 +1,26 @@
+import { TestBed } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { HistogramFormBuilderService } from './histogram-form-builder.service';
-import { createServiceFactory, SpectatorService, mockProvider } from '@ngneat/spectator';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { MetricCollectFormBuilderService } from '../metric-collect-form-builder/metric-collect-form-builder.service';
-import { BucketsIntervalFormBuilderService } from '../buckets-interval-form-builder/buckets-interval-form-builder.service';
-import { of } from 'rxjs';
 
 describe('HistogramFormBuilderService', () => {
-  let spectator: SpectatorService<HistogramFormBuilderService>;
+    let service: HistogramFormBuilderService;
 
-  const createService = createServiceFactory({
-    service: HistogramFormBuilderService,
-    providers: [
-      BucketsIntervalFormBuilderService,
-      MetricCollectFormBuilderService,
-      mockProvider(CollectionService, {
-        getCollectionFields: () => of([])
-      })
-    ]
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ]
+        });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+        service = TestBed.inject(HistogramFormBuilderService);
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(service).toBeTruthy();
+    });
 });

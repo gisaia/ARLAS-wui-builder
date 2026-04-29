@@ -1,25 +1,29 @@
 <div id="externalNode">
-	<h3 class="form-control-title">{{"Custom configuration" | translate}}</h3>
-	<div class="config-element" *ngIf="schemas && schemas.length>0">
-		<div class="config-element-container" >
-			<div class="form-fields">
-				<div form-fields class="schemas">
-					<mat-form-field>
-						<mat-label>{{'External Node schema' | translate}}</mat-label>
-						<mat-select (selectionChange)="updateSchema($event)">
-							<mat-option *ngFor="let schema of schemas" value="{{schema.url}}">
-								{{schema.name}}
-							</mat-option>
-						</mat-select>
-					</mat-form-field>
-				</div>
-			</div>
-			<div class="description">
-				{{'External Node schema description' | translate}}
-			</div>
-		</div>
-	</div>
-	<form [formGroup]="externalNodeForm" style="height: 80vh; margin:10px">
-		<json-editor [options]="editorOptions" formControlName="externalNode" #editor></json-editor>
-	</form>
+  <h3 class="form-control-title">{{"Custom configuration" | translate}}</h3>
+  @if (schemas && schemas.length>0) {
+    <div class="config-element">
+      <div class="config-element-container" >
+        <div class="form-fields">
+          <div form-fields class="schemas">
+            <mat-form-field>
+              <mat-label>{{'External Node schema' | translate}}</mat-label>
+              <mat-select (selectionChange)="updateSchema($event)">
+                @for (schema of schemas; track schema) {
+                  <mat-option value="{{schema.url}}">
+                    {{schema.name}}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="description">
+          {{'External Node schema description' | translate}}
+        </div>
+      </div>
+    </div>
+  }
+  <form [formGroup]="externalNodeForm" style="height: 80vh; margin:10px">
+    <json-editor [options]="editorOptions" formControlName="externalNode" #editor></json-editor>
+  </form>
 </div>

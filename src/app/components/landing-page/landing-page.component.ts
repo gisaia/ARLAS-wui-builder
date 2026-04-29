@@ -16,12 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { MatSelectChange } from '@angular/material/select';
+import { DatePipe } from '@angular/common';
+import { AfterViewInit, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { InitialChoice, LandingPageService } from '@services/landing-page/landing-page.service';
 import { Config } from '@services/main-form-manager/models-config';
 import { MapConfig } from '@services/main-form-manager/models-map-config';
@@ -36,11 +41,11 @@ import { DataWithLinks } from 'arlas-persistence-api';
 import {
   ArlasAuthentificationService,
   ArlasIamService, ArlasSettingsService, AuthentificationService, ConfigAction,
-  ConfigActionEnum, ErrorService, PermissionService, PersistenceService, UserInfosComponent
+  ConfigActionEnum, ConfigMenuComponent, ErrorService, PermissionService, PersistenceService, UserInfosComponent
 } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
-import { Subscription } from 'rxjs';
-import { map } from 'rxjs/internal/operators/map';
+import { NgxSpinnerComponent } from 'ngx-spinner';
+import { map, Subscription } from 'rxjs';
 import { LandingPageDialogComponent } from './landing-page-dialog.component';
 
 export interface Configuration {
@@ -50,12 +55,25 @@ export interface Configuration {
 }
 
 @Component({
-    selector: 'arlas-landing-page',
-    templateUrl: './landing-page.component.html',
-    styleUrls: ['./landing-page.component.scss'],
-    standalone: false
+  selector: 'arlas-landing-page',
+  templateUrl: './landing-page.component.html',
+  styleUrls: ['./landing-page.component.scss'],
+  imports: [
+    NgxSpinnerComponent,
+    TranslatePipe,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatTableModule,
+    DatePipe,
+    ConfigMenuComponent,
+    MatPaginatorModule,
+    MatTooltipModule,
+    MatButtonModule
+  ]
 })
 export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly cdr = inject(ChangeDetectorRef);
 
   public dialogRef: MatDialogRef<LandingPageDialogComponent>;
   public displayedColumns: string[] = ['id', 'creation', 'detail'];
@@ -146,6 +164,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
             next: (resources: Resource[]) => {
               this.canCreateForCurrentOrg = resources.filter(r => r.verb === 'POST').length > 0;
               this.getConfigList();
+              this.cdr.detectChanges();
             }
           });
         }
@@ -291,6 +310,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
               );
             }
           });
+          this.cdr.detectChanges();
         },
         error: (msg) => {
           this.configurations = [];
@@ -352,7 +372,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public checkUserRightsForOrg(org: string) {
+  private checkUserRightsForOrg(org: string) {
     const iamHeader = {
       Authorization: 'Bearer ' + this.arlasIamService.getAccessToken(),
       'arlas-org-filter': org
@@ -364,6 +384,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
       next: (resources: Resource[]) => {
         this.canCreateForCurrentOrg = resources.filter(r => r.verb === 'POST').length > 0;
         this.getConfigList();
+        this.cdr.detectChanges();
       }
     });
   }

@@ -302,8 +302,8 @@ export class MapGlobalFormBuilderService {
 
 
   public constructor(
-    private defaultValuesService: DefaultValuesService,
-    private collectionService: CollectionService
+    private readonly  defaultValuesService: DefaultValuesService,
+    private readonly  collectionService: CollectionService
   ) { }
 
   public build() {

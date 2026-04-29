@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { KeyValue } from '@angular/common';
+import { JsonPipe, KeyValue, KeyValuePipe, LowerCasePipe, NgClass, NgStyle, TitleCasePipe } from '@angular/common';
 import {
   AfterViewChecked,
   AfterViewInit,
@@ -31,9 +31,30 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionItem } from '@services/collection-service/models';
+import { CollectionsUnitsComponent } from '@shared-components/collections-units/collections-units.component';
+import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
+import { LayerFiltersComponent } from '@shared-components/layer-filters/filters.component';
+import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
+import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
 import {
   ButtonFormControl,
   ButtonToggleFormControl,
@@ -61,14 +82,50 @@ import {
   TypedSelectFormControl,
   VisualisationCheckboxFormControl
 } from '@shared-models/config-form';
+import { GroupCollectionPipe } from '@shared/pipes/group-collection.pipe';
+import { GetCollectionDisplayNamePipe } from 'arlas-web-components';
 import { ArlasIamService } from 'arlas-wui-toolkit';
 import { Subject } from 'rxjs';
+import { MultiSelectSearchComponent } from './multi-select-search/multi-select-search.component';
 
 @Component({
-    selector: 'arlas-config-form-control',
-    templateUrl: './config-form-control.component.html',
-    styleUrls: ['./config-form-control.component.scss'],
-    standalone: false
+  selector: 'arlas-config-form-control',
+  templateUrl: './config-form-control.component.html',
+  styleUrls: ['./config-form-control.component.scss'],
+  imports: [
+    ReactiveFormsModule,
+    MatSlideToggleModule,
+    TranslatePipe,
+    ResetOnChangeDirective,
+    MatButtonToggleModule,
+    MatRadioModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSliderModule,
+    FormsModule,
+    MatCardModule,
+    AlertOnChangeDirective,
+    KeyValuePipe,
+    MatSelectModule,
+    GroupCollectionPipe,
+    GetCollectionDisplayNamePipe,
+    NgClass,
+    MultiSelectSearchComponent,
+    MatCheckboxModule,
+    NgStyle,
+    MatTooltipModule,
+    MatButtonModule,
+    MatIconModule,
+    MatAutocompleteModule,
+    MatChipsModule,
+    LowerCasePipe,
+    TitleCasePipe,
+    MatExpansionModule,
+    JsonPipe,
+    ColorPickerWrapperComponent,
+    LayerFiltersComponent,
+    CollectionsUnitsComponent
+  ]
 })
 export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
 
@@ -215,7 +272,7 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
     return event.value;
   }
 
-  public isTitleInput(): InputFormControl | null {
+  public isTitleInput(): TitleInputFormControl | null {
     return Object.getPrototypeOf(this.control) === TitleInputFormControl.prototype ? this.control as TitleInputFormControl : null;
   }
 

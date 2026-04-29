@@ -1,41 +1,45 @@
-import { TabsComponent as TabsComponent } from './tabs.component';
-import { createComponentFactory, Spectator, mockProvider } from '@ngneat/spectator';
-import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { GroupsComponent } from '../groups/groups.component';
-import { MockComponent } from 'ng-mocks';
-import { MainFormManagerService } from '@services/main-form-manager/main-form-manager.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { mockArlasStartupService } from '@app/test/arlas-startup.service.mock';
+import { mockMainFormService } from '@app/test/main-form.service.mock';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { FormArray } from '@angular/forms';
-import { ArlasStartupService, ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
+import { ArlasStartupService } from 'arlas-wui-toolkit';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { TabsComponent } from './tabs.component';
 
 describe('TabsComponent', () => {
-  let spectator: Spectator<TabsComponent>;
+    let component: TabsComponent;
+    let fixture: ComponentFixture<TabsComponent>;
 
-  const createComponent = createComponentFactory({
-    component: TabsComponent,
-    providers: [
-      mockProvider(DefaultValuesService, {
-        getValue: () => 'aValue'
-      }),
-      mockProvider(MainFormManagerService),
-      mockProvider(MainFormService, {
-        analyticsConfig: {
-          getListFa: () => new FormArray([])
-        }
-      }),
-      mockProvider(ArlasStartupService),
-      mockProvider(ArlasCollaborativesearchService),
-    ],
-    declarations: [
-      MockComponent(GroupsComponent)
-    ]
-  });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                TabsComponent,
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ],
+            providers: [
+                {
+                    provide: ArlasStartupService,
+                    useValue: mockArlasStartupService
+                },
+                {
+                    provide: MainFormService,
+                    useValue: mockMainFormService
+                }
+            ]
+        })
+        .compileComponents();
 
-  beforeEach(() => {
-    spectator = createComponent();
-  });
+        fixture = TestBed.createComponent(TabsComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

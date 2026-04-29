@@ -1,28 +1,26 @@
-import { createServiceFactory, mockProvider, SpectatorService } from '@ngneat/spectator';
-import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasCollaborativesearchService, ArlasConfigurationDescriptor } from 'arlas-wui-toolkit';
-import { of } from 'rxjs';
+import { TestBed } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { SideModulesGlobalFormBuilderService } from './side-modules-global-form-builder.service';
 
 describe('SideModulesGlobalFormBuilderService', () => {
-  let spectator: SpectatorService<SideModulesGlobalFormBuilderService>;
+    let service: SideModulesGlobalFormBuilderService;
 
-  const createService = createServiceFactory({
-    service: SideModulesGlobalFormBuilderService,
-    providers: [
-      mockProvider(ArlasConfigurationDescriptor),
-      mockProvider(ArlasCollaborativesearchService),
-      mockProvider(CollectionService, {
-        getGroupCollectionItems: () => of()
-      })
-    ]
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ]
+        });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+        service = TestBed.inject(SideModulesGlobalFormBuilderService);
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(service).toBeTruthy();
+    });
 });

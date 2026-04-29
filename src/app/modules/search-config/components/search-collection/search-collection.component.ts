@@ -17,26 +17,34 @@
  * under the License.
  */
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormArray } from '@angular/forms';
-import { SearchCollectionFormGroup, SearchGlobalFormBuilderService }
-  from '@search-config/services/search-global-form-builder/search-global-form-builder.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import {
+  SearchCollectionFormGroup, SearchGlobalFormBuilderService
+} from '../../services/search-global-form-builder/search-global-form-builder.service';
 
 @Component({
-    selector: 'arlas-search-collection',
-    templateUrl: './search-collection.component.html',
-    styleUrls: ['./search-collection.component.scss'],
-    standalone: false
+  selector: 'arlas-search-collection',
+  templateUrl: './search-collection.component.html',
+  styleUrls: ['./search-collection.component.scss'],
+  imports: [
+    ConfigFormGroupComponent,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
+    TranslatePipe
+  ]
 })
-export class SearchCollectionComponent implements OnInit {
+export class SearchCollectionComponent {
 
   @Input() public searchConfigurations: FormArray<SearchCollectionFormGroup>;
 
   public constructor(private searchGlobalFormBuilderService: SearchGlobalFormBuilderService) { }
-
-  public ngOnInit(): void {
-
-  }
 
   public addSearchConfiguration(): void {
     const searchConfiguration = this.searchGlobalFormBuilderService.buildSearchMainCollection();

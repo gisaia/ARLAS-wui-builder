@@ -16,21 +16,41 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { KeyValuePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSelectChange } from '@angular/material/select';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatOptionModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { AnalyticComponentConfig, AnalyticConfig, Config, ContributorConfig } from '@services/main-form-manager/models-config';
-import { MainFormService } from '@services/main-form/main-form.service';
 import { ZONE_WUI_BUILDER } from '@services/startup/startup.service';
 import { DataResource, DataWithLinks } from 'arlas-persistence-api';
 import { PersistenceService } from 'arlas-wui-toolkit';
 
 @Component({
-    selector: 'arlas-import-widget-dialog',
-    templateUrl: './import-widget-dialog.component.html',
-    styleUrls: ['./import-widget-dialog.component.scss'],
-    standalone: false
+  selector: 'arlas-import-widget-dialog',
+  templateUrl: './import-widget-dialog.component.html',
+  styleUrls: ['./import-widget-dialog.component.scss'],
+  imports: [
+    MatDialogModule,
+    TranslatePipe,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    KeyValuePipe,
+    MatCardModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    MatButtonModule
+  ]
 })
 export class ImportWidgetDialogComponent implements OnInit {
 
@@ -44,10 +64,9 @@ export class ImportWidgetDialogComponent implements OnInit {
   public selectedWidgetsSet: Set<AnalyticComponentConfig> = new Set();
 
   public constructor(
-    private persistenceService: PersistenceService,
-    private collectionService: CollectionService,
-    private mainformService: MainFormService,
-    private cdr: ChangeDetectorRef
+    private readonly persistenceService: PersistenceService,
+    private readonly collectionService: CollectionService,
+    private readonly cdr: ChangeDetectorRef
   ) { }
 
   public ngOnInit() {
@@ -77,11 +96,11 @@ export class ImportWidgetDialogComponent implements OnInit {
     }
   }
 
-  public onChange(event) {
+  public onChange(event: MatCheckboxChange, comp: AnalyticComponentConfig) {
     if (event.checked) {
-      this.selectedWidgetsSet.add(event.source.value);
+      this.selectedWidgetsSet.add(comp);
     } else {
-      this.selectedWidgetsSet.delete(event.source.value);
+      this.selectedWidgetsSet.delete(comp);
     }
     this.selectedWidgets = Array.from(this.selectedWidgetsSet);
     this.cdr.detectChanges();

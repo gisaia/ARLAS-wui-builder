@@ -18,22 +18,30 @@
  */
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
+import { JsonEditorComponent, JsonEditorOptions, NgJsonEditorModule } from 'ang-jsoneditor';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 
 @Component({
-    selector: 'arlas-global-external-node',
-    templateUrl: './global-external-node.component.html',
-    styleUrls: ['./global-external-node.component.scss'],
-    standalone: false
+  selector: 'arlas-global-external-node',
+  templateUrl: './global-external-node.component.html',
+  styleUrls: ['./global-external-node.component.scss'],
+  imports: [
+    TranslatePipe,
+    MatFormFieldModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    NgJsonEditorModule
+  ]
 })
 export class GlobalExternalNodeComponent implements OnInit {
   public externalNodeForm;
-  public schemas: Array<string>;
+  public schemas: Array<{ name: string; url: string; }>;
   public selectedSchema: string;
   public editorOptions = new JsonEditorOptions();
   @ViewChild('editor', { static: false }) public editor: JsonEditorComponent;

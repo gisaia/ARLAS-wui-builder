@@ -16,29 +16,48 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { EditTabComponent } from '@analytics-config/components/edit-tab/edit-tab.component';
+import { AnalyticsInitService, TabConfigFormGroup } from '@analytics-config/services/analytics-init/analytics-init.service';
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
+import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { Component, OnDestroy, ViewChild } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup, FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatTabGroup } from '@angular/material/tabs';
-import { TranslateService } from '@ngx-translate/core';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatError } from '@angular/material/select';
+import { MatTabGroup, MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { InputModalComponent } from '@shared-components/input-modal/input-modal.component';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { isFullyTouched, moveInFormArray } from '@utils/tools';
 import { Subscription } from 'rxjs';
-import { EditTabComponent } from '@analytics-config/components/edit-tab/edit-tab.component';
-import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
-import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
-import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { GroupsComponent } from '../groups/groups.component';
+import { ShortcutsComponent } from '../shortcuts/shortcuts.component';
 
 @Component({
-    selector: 'arlas-tabs',
-    templateUrl: './tabs.component.html',
-    styleUrls: ['./tabs.component.scss'],
-    standalone: false
+  selector: 'arlas-tabs',
+  templateUrl: './tabs.component.html',
+  styleUrls: ['./tabs.component.scss'],
+  imports: [
+    ShortcutsComponent,
+    MatDividerModule,
+    MatTabsModule,
+    DragDropModule,
+    MatIconModule,
+    FormsModule,
+    MatTooltipModule,
+    TranslatePipe,
+    GroupsComponent,
+    MatButtonModule,
+    MatError
+  ]
 })
 export class TabsComponent implements OnDestroy {
 
@@ -60,7 +79,6 @@ export class TabsComponent implements OnDestroy {
     private mainFormService: MainFormService,
     private analyticsInitService: AnalyticsInitService,
     private dialog: MatDialog,
-    private translate: TranslateService,
     private shortcutsService: ShortcutsService,
   ) {
 
@@ -71,7 +89,7 @@ export class TabsComponent implements OnDestroy {
     return this.tabsFa.controls.map(fg => fg.value.tabName);
   }
 
-  public getTab = (index: number) => this.tabsFa.at(index) as FormGroup;
+  public getTab = (index: number) => this.tabsFa.at(index) as TabConfigFormGroup;
 
   public newTab() {
     const dialogRef = this.dialog.open(InputModalComponent, {data: {title: marker('Tab name')}});

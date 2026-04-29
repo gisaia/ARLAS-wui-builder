@@ -1,29 +1,32 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { EditHistogramLabelComponent } from './edit-histogram-label.component';
 
 describe('EditHistogramLabelComponent', () => {
-  let component: EditHistogramLabelComponent;
-  let fixture: ComponentFixture<EditHistogramLabelComponent>;
+    let component: EditHistogramLabelComponent;
+    let fixture: ComponentFixture<EditHistogramLabelComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ EditHistogramLabelComponent ],
-      imports: [TranslateModule.forRoot({
-        loader: {
-          provide: TranslateLoader,
-          useClass: TranslateNoOpLoader
-        }
-      })]
-    })
-      .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                TranslateModule.forRoot({
+                    loader: {
+                        provide: TranslateLoader,
+                        useClass: TranslateNoOpLoader
+                    }
+                }),
+                EditHistogramLabelComponent
+            ]
+        })
+            .compileComponents();
 
-    fixture = TestBed.createComponent(EditHistogramLabelComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(EditHistogramLabelComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

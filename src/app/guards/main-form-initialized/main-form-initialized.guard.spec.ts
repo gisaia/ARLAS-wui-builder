@@ -1,19 +1,17 @@
+import { TestBed } from '@angular/core/testing';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { MainFormInitializedGuard } from './main-form-initialized.guard';
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
-import { MainFormService } from '@services/main-form/main-form.service';
 
 describe('MainFormInitializedGuard', () => {
-  let spectator: SpectatorService<MainFormInitializedGuard>;
-  const createComponent = createServiceFactory({
-    service: MainFormInitializedGuard,
-    providers: [
-      mockProvider(MainFormService)
-    ]
-  });
+    let guard: MainFormInitializedGuard;
 
-  beforeEach(() => spectator = createComponent());
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+        guard = TestBed.inject(MainFormInitializedGuard);
+    });
+
+    it('should create', () => {
+        expect(guard).toBeTruthy();
+    });
 });

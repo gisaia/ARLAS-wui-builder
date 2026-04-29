@@ -17,14 +17,27 @@
  * under the License.
  */
 import { Component, OnInit } from '@angular/core';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { SideModulesGlobalFormGroup } from '../../services/side-modules-global-form-builder/side-modules-global-form-builder.service';
 
 @Component({
-    selector: 'arlas-global-side-modules',
-    templateUrl: './global-side-modules.component.html',
-    styleUrls: ['./global-side-modules.component.scss'],
-    standalone: false
+  selector: 'arlas-global-side-modules',
+  templateUrl: './global-side-modules.component.html',
+  styleUrls: ['./global-side-modules.component.scss'],
+  imports: [
+    ConfigFormGroupComponent,
+    ConfigFormControlComponent,
+    MatIconModule,
+    MatTooltipModule,
+    MatDividerModule,
+    TranslatePipe
+  ]
 })
 export class GlobalSideModulesComponent implements OnInit {
 

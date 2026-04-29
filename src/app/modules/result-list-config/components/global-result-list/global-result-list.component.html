@@ -1,24 +1,35 @@
 <mat-tab-group #matTabGroup disableRipple="true" mat-stretch-tabs="false" mat-align-tabs="start"
-    class="list-tab-group">
-    <mat-tab #matTab *ngFor="let listFg of listsFa.controls;let i = index">
-        <ng-template mat-tab-label>
-            <div class="content">
-                <mat-icon class="icon" *ngIf="listFg.value.showIcon">{{listFg.value.icon}}</mat-icon>
-                <span class="tab-name" *ngIf="listFg.value.showName"> {{listFg.value.title}}</span>
-                <mat-icon class="settings" *ngIf="matTab.isActive" (click)="$event.stopPropagation(); configTab(i)"
-                    [matTooltip]="'Configure tab' | translate">settings</mat-icon>
-                <mat-icon class="close" (click)="$event.stopPropagation(); removeTab(i)"
-                    [matTooltip]="'Delete tab' | translate">close</mat-icon>
-            </div>
-
-        </ng-template>
-        <arlas-config-form-group [configFormGroup]="listFg" defaultKey="resultlists"></arlas-config-form-group>
-    </mat-tab>
-    <mat-tab labelClass="last-tab">
-        <ng-template mat-tab-label>
-            <button mat-icon-button matTooltip="{{'Add a data table' | translate}}" matTooltipPosition="right" (click)="addResultList()">
-                <mat-icon>add</mat-icon>
+  class="list-tab-group">
+  @for (listFg of listsFa.controls; track listFg; let i = $index) {
+    <mat-tab #matTab>
+      <ng-template mat-tab-label>
+        <div class="content">
+          @if (listFg.value.showIcon) {
+            <mat-icon class="icon">{{listFg.value.icon}}</mat-icon>
+          }
+          @if (listFg.value.showName) {
+            <span class="tab-name"> {{listFg.value.title}}</span>
+          }
+          @if (matTab.isActive) {
+            <button mat-icon-button class="settings" [matTooltip]="'Configure tab' | translate"
+                (click)="$event.stopPropagation(); configTab(i)">
+              <mat-icon>settings</mat-icon>
             </button>
-        </ng-template>
+          }
+          <button mat-icon-button class="close" [matTooltip]="'Delete tab' | translate"
+              (click)="$event.stopPropagation(); removeTab(i)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </ng-template>
+      <arlas-config-form-group [configFormGroup]="listFg" defaultKey="resultlists"></arlas-config-form-group>
     </mat-tab>
+  }
+  <mat-tab labelClass="last-tab">
+    <ng-template mat-tab-label>
+      <button mat-icon-button matTooltip="{{'Add a data table' | translate}}" matTooltipPosition="right" (click)="addResultList()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </ng-template>
+  </mat-tab>
 </mat-tab-group>

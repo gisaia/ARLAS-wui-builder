@@ -21,13 +21,12 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
-import { MainFormService } from '@services/main-form/main-form.service';
 import {
   ConfigFormGroup, HiddenFormControl, InputFormControl, MetricWithFieldListFormControl, SelectFormControl,
   SlideToggleFormControl, TextareaFormControl, TitleInputFormControl
 } from '@shared-models/config-form';
-import { WidgetFormBuilder } from '../widget-form-builder';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+import { WidgetFormBuilder } from '../widget-form-builder';
 
 export class MetricFormGroup extends WidgetConfigFormGroup {
 
@@ -165,11 +164,10 @@ export class MetricFormBuilderService extends WidgetFormBuilder {
   public defaultKey = 'analytics.widgets.metric';
 
   public constructor(
-    protected mainFormService: MainFormService,
-    protected collectionService: CollectionService,
-    private defaultValuesService: DefaultValuesService,
+    private readonly collectionService: CollectionService,
+    private readonly defaultValuesService: DefaultValuesService,
   ) {
-    super(collectionService, mainFormService);
+    super();
   }
 
   public build(collection: string) {

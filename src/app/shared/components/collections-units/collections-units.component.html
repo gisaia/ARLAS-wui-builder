@@ -1,46 +1,55 @@
-<div class="collections-list" *ngIf="!!unitsArray">
+@if (!!unitsArray) {
+  <div class="collections-list">
     <div class="collections-container" cdkDropList (cdkDropListDropped)="drop($event)">
-      <div cdkDrag  *ngFor="let c of unitsArray.controls">
-        <div class="collection-line" cdkDragHandle *ngIf="!c.controls.ignored.value">
-          <div class="draghandle">
-            <mat-icon>drag_indicator</mat-icon>
-            <div class="collection">
-              {{ c.controls.collection.value | getCollectionDisplayName | translate }}
+      @for (c of unitsArray.controls; track c) {
+        <div cdkDrag >
+          @if (!c.controls.ignored.value) {
+            <div class="collection-line" cdkDragHandle>
+              <div class="draghandle">
+                <mat-icon>drag_indicator</mat-icon>
+                <div class="collection">
+                  {{ c.controls.collection.value | getCollectionDisplayName | translate }}
+                </div>
+              </div>
+              <div class="unit">
+                <mat-form-field>
+                  <input matInput [formControl]="c.customControls.unit" [placeholder]="c.customControls.unit.label | translate"
+                    [type]="c.customControls.unit.inputType" [required]="!c.customControls.unit.optional">
+                </mat-form-field>
+                <button mat-icon-button (click)="hide(c.customControls.ignored)" [matTooltip]="'Hide collection' | translate" matTooltipPosition="right">
+                  <mat-icon class="mat-icon-rtl-mirror">
+                    south
+                  </mat-icon>
+                </button>
+              </div>
             </div>
-          </div>
-          <div class="unit">
-            <mat-form-field>
-              <input matInput [formControl]="c.controls.unit" [placeholder]="c.controls.unit.label | translate"
-                  [type]="c.controls.unit.inputType" [required]="!c.controls.unit.optional">
-            </mat-form-field>
-            <button mat-icon-button (click)="hide(c.controls.ignored)" [matTooltip]="'Hide collection' | translate" matTooltipPosition="right">
-              <mat-icon class="mat-icon-rtl-mirror">
-                south
-              </mat-icon>
-            </button>
-          </div>
+          }
         </div>
-      </div>
+      }
     </div>
-
     <div class="collections-container" cdkDropList (cdkDropListDropped)="drop($event)">
       <div class="title">{{'Ignored collections' | translate}}</div>
-      <div cdkDrag  *ngFor="let c of unitsArray.controls">
-        <div class="collection-line" cdkDragHandle *ngIf="c.controls.ignored.value">
-          <div class="draghandle">
-            <mat-icon>drag_indicator</mat-icon>
-            <div class="collection">
-              {{ c.controls.collection.value | getCollectionDisplayName | translate }}
+      @for (c of unitsArray.controls; track c) {
+        <div cdkDrag >
+          @if (c.controls.ignored.value) {
+            <div class="collection-line" cdkDragHandle>
+              <div class="draghandle">
+                <mat-icon>drag_indicator</mat-icon>
+                <div class="collection">
+                  {{ c.controls.collection.value | getCollectionDisplayName | translate }}
+                </div>
+              </div>
+              <div class="unit">
+                <button mat-icon-button (click)="display(c.customControls.ignored)" [matTooltip]="'Display collection' | translate" matTooltipPosition="right">
+                  <mat-icon class="mat-icon-rtl-mirror">
+                    north
+                  </mat-icon>
+                </button>
+              </div>
             </div>
-          </div>
-          <div class="unit">
-            <button mat-icon-button (click)="display(c.controls.ignored)" [matTooltip]="'Display collection' | translate" matTooltipPosition="right">
-              <mat-icon class="mat-icon-rtl-mirror">
-                north
-              </mat-icon>
-            </button>
-          </div>
+          }
         </div>
-      </div>
+      }
     </div>
-</div>
+  </div>
+}

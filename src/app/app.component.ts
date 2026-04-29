@@ -17,22 +17,42 @@
  * under the License.
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Title } from '@angular/platform-browser';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { LandingPageComponent } from '@components/landing-page/landing-page.component';
+import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
+import { StatusComponent } from '@components/status/status.component';
+import { TranslatePipe } from '@ngx-translate/core';
 import { IconService } from '@services/icon-service/icon.service';
-import { ArlasSettingsService } from 'arlas-wui-toolkit';
+import { ArlasSettingsService, TopMenuComponent } from 'arlas-wui-toolkit';
 import { INGXLoggerMetadata, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { filter } from 'rxjs';
 import { environment } from '../environments/environment';
 
 
 @Component({
-    selector: 'arlas-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: false
+  selector: 'arlas-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  imports: [
+    TopMenuComponent,
+    MatTooltipModule,
+    MatIconModule,
+    RouterLink,
+    TranslatePipe,
+    StatusComponent,
+    MatDividerModule,
+    MatSidenavModule,
+    LeftMenuComponent,
+    RouterOutlet,
+    NgxSpinnerModule
+  ]
 })
 export class AppComponent implements OnInit {
 

@@ -1,25 +1,33 @@
 <div mat-dialog-title>
-    {{'Import a layer' | translate}}
+  {{'Import a layer' | translate}}
 </div>
 <div mat-dialog-content [formGroup]="importLayerFormGroup" class="import">
+  <mat-form-field>
+    <mat-label>{{'Dashboard' | translate}}</mat-label>
+    <mat-select formControlName="dashboard" (selectionChange)="getLayers($event)">
+      @for (conf of configs; track conf) {
+        <mat-option [value]="conf">{{conf.doc_key}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  @if (importLayerFormGroup.get('dashboard').valid && layers?.length > 0) {
     <mat-form-field>
-        <mat-label>{{'Dashboard' | translate}}</mat-label>
-        <mat-select formControlName="dashboard" (selectionChange)="getLayers($event)">
-            <mat-option *ngFor="let conf of configs" [value]="conf">{{conf.doc_key}}</mat-option>
-        </mat-select>
+      <mat-label>{{'Layer' | translate}}</mat-label>
+      <mat-select formControlName="layer">
+        @for (layer of layers; track layer) {
+          <mat-option [value]="layer">{{layer.id | layerIdToName}}</mat-option>
+        }
+      </mat-select>
     </mat-form-field>
-    <mat-form-field *ngIf="importLayerFormGroup.get('dashboard').valid && layers?.length > 0">
-        <mat-label>{{'Layer' | translate}}</mat-label>
-        <mat-select formControlName="layer">
-            <mat-option *ngFor="let layer of layers" [value]="layer">{{layer.id | layerIdToName}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <div *ngIf="layers?.length === 0" class="not-importable">
-        {{'This dashboard doesn\'t contain an importable layer' | translate}}
+  }
+  @if (layers?.length === 0) {
+    <div class="not-importable">
+      {{'This dashboard doesn\'t contain an importable layer' | translate}}
     </div>
+  }
 </div>
 
 <div mat-dialog-actions>
-    <button mat-button mat-dialog-close>{{ 'Cancel' | translate}}</button>
-    <button mat-button [mat-dialog-close]="[importLayerFormGroup.get('layer').value, dashboardConfigJson]" [disabled]="!importLayerFormGroup.valid" mat-raised-button color="primary">{{ 'Import' | translate}}</button>
+  <button mat-button mat-dialog-close>{{ 'Cancel' | translate}}</button>
+  <button mat-button [mat-dialog-close]="[importLayerFormGroup.get('layer').value, dashboardConfigJson]" [disabled]="!importLayerFormGroup.valid" mat-raised-button color="primary">{{ 'Import' | translate}}</button>
 </div>

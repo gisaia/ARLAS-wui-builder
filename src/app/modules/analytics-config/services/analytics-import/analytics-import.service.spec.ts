@@ -1,27 +1,43 @@
-import { AnalyticsImportService } from './analytics-import.service';
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
+import { TestBed } from '@angular/core/testing';
+import { mockArlasStartupService } from '@app/test/arlas-startup.service.mock';
+import { mockCollectionService } from '@app/test/collection.service.mock';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { ArlasStartupService, ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
-import { ArlasColorService } from 'arlas-web-components';
+import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
+import { ArlasStartupService } from 'arlas-wui-toolkit';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { AnalyticsImportService } from './analytics-import.service';
 
 describe('AnalyticsImportService', () => {
-  let spectator: SpectatorService<AnalyticsImportService>;
+    let service: AnalyticsImportService;
 
-  const createService = createServiceFactory({
-    service: AnalyticsImportService,
-    providers: [
-      mockProvider(CollectionService),
-      mockProvider(ArlasStartupService),
-      mockProvider(ArlasCollaborativesearchService),
-      mockProvider(ArlasColorService),
-    ]
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null),
+                ColorGeneratorModule.forRoot({
+                    loader: {
+                        provide: ColorGeneratorLoader,
+                        useClass: AwcColorGeneratorLoader
+                    }
+                }),
+            ],
+            providers: [
+                {
+                    provide: ArlasStartupService,
+                    useValue: mockArlasStartupService
+                },
+                {
+                    provide: CollectionService,
+                    useValue: mockCollectionService
+                }
+            ]
+        });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+        service = TestBed.inject(AnalyticsImportService);
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(service).toBeTruthy();
+    });
 });

@@ -41,12 +41,12 @@ import { ArlasColorService } from 'arlas-web-components';
 export class ResultListImportService {
 
   public constructor(
-    private mainFormService: MainFormService,
-    private resultlistFormBuilder: ResultlistFormBuilderService,
-    private colorService: ArlasColorService,
-    private collectionService: CollectionService,
-    private messageService: MatSnackBar,
-    private translateService: TranslateService,
+    private readonly  mainFormService: MainFormService,
+    private readonly  resultlistFormBuilder: ResultlistFormBuilderService,
+    private readonly  colorService: ArlasColorService,
+    private readonly  collectionService: CollectionService,
+    private readonly  messageService: MatSnackBar,
+    private readonly  translateService: TranslateService,
   ) { }
 
   public doImport(config: Config) {
@@ -87,7 +87,7 @@ export class ResultListImportService {
       )
       .importResultListQuickLook(this.resultlistFormBuilder, this.colorService, this.collectionService)
       .importContributorColumns(this.resultlistFormBuilder)
-      .importResultListContributorDetail(this.resultlistFormBuilder)
+      .importResultListContributorDetail(this.collectionService)
       .importUnmanagedFields();
     return widgetData;
   }

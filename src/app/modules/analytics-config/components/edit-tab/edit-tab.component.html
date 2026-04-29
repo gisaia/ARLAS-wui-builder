@@ -1,12 +1,10 @@
 <div mat-dialog-title>{{'Update tab' | translate}}</div>
 <div mat-dialog-content [formGroup]="tabForm">
   <div class="edit-tab-top">
-    <div>
-      <mat-form-field>
-        <mat-label>{{'Name' | translate}}</mat-label>
-        <input matInput formControlName="name">
-      </mat-form-field>
-    </div>
+    <mat-form-field>
+      <mat-label>{{'Name' | translate}}</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
     <div class="icon">
       <mat-icon style="cursor: pointer;" (click)="iconInput.click();">
         {{tabForm.get('icon').value}}</mat-icon>

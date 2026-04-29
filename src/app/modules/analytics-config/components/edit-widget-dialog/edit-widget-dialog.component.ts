@@ -18,24 +18,36 @@
  */
 import { DonutFormBuilderService } from '@analytics-config/services/donut-form-builder/donut-form-builder.service';
 import { MetricFormBuilderService } from '@analytics-config/services/metric-form-builder/metric-form-builder.service';
+import { MetricsTableFormBuilderService } from '@analytics-config/services/metrics-table-form-builder/metrics-table-form-builder.service';
 import { PowerbarFormBuilderService } from '@analytics-config/services/powerbar-form-builder/powerbar-form-builder.service';
 import { ResultlistFormBuilderService } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
+import { TitleCasePipe } from '@angular/common';
+import { Component, forwardRef, Inject, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { TranslatePipe } from '@ngx-translate/core';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { HistogramFormBuilderService } from '../../services/histogram-form-builder/histogram-form-builder.service';
 import { SwimlaneFormBuilderService } from '../../services/swimlane-form-builder/swimlane-form-builder.service';
 import { WidgetFormBuilder } from '../../services/widget-form-builder';
 import { WIDGET_TYPE } from '../edit-group/models';
 import { EditWidgetDialogData } from './models';
-import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
-import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
-import { MetricsTableFormBuilderService } from '@analytics-config/services/metrics-table-form-builder/metrics-table-form-builder.service';
 
 @Component({
-    selector: 'arlas-edit-widget-dialog',
-    templateUrl: './edit-widget-dialog.component.html',
-    styleUrls: ['./edit-widget-dialog.component.scss'],
-    standalone: false
+  selector: 'arlas-edit-widget-dialog',
+  templateUrl: './edit-widget-dialog.component.html',
+  styleUrls: ['./edit-widget-dialog.component.scss'],
+  imports: [
+    TranslatePipe,
+    TitleCasePipe,
+    forwardRef(() => ConfigFormControlComponent),
+    MatButtonModule,
+    MatDialogModule,
+    forwardRef(() => ConfigFormGroupComponent)
+  ]
 })
 export class EditWidgetDialogComponent implements OnInit {
 
@@ -46,16 +58,15 @@ export class EditWidgetDialogComponent implements OnInit {
   public constructor(
     public dialogRef: MatDialogRef<EditWidgetDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: EditWidgetDialogData,
-    private histogramBuilder: HistogramFormBuilderService,
-    private swimlaneBuilder: SwimlaneFormBuilderService,
-    private metricBuilder: MetricFormBuilderService,
-    private metricsTableFormBuilder: MetricsTableFormBuilderService,
-    private powerFormBuilder: PowerbarFormBuilderService,
-    private donutFormBuilder: DonutFormBuilderService,
-    private resultlistFormBuilder: ResultlistFormBuilderService,
-    private shortcutsService: ShortcutsService
+    private readonly histogramBuilder: HistogramFormBuilderService,
+    private readonly swimlaneBuilder: SwimlaneFormBuilderService,
+    private readonly metricBuilder: MetricFormBuilderService,
+    private readonly metricsTableFormBuilder: MetricsTableFormBuilderService,
+    private readonly powerFormBuilder: PowerbarFormBuilderService,
+    private readonly donutFormBuilder: DonutFormBuilderService,
+    private readonly resultlistFormBuilder: ResultlistFormBuilderService,
+    private readonly shortcutsService: ShortcutsService
   ) {
-
     this.initFormGroup();
   }
 

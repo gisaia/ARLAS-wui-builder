@@ -31,11 +31,11 @@ import { MapGlobalFormBuilderService } from '../map-global-form-builder/map-glob
 export class MapInitService {
 
   public constructor(
-    private mainFormService: MainFormService,
-    private mapGlobalFormBuilder: MapGlobalFormBuilderService,
-    private mapBasemapFormBuilder: MapBasemapFormBuilderService,
-    private collectionService: CollectionService,
-    private settingsService: ArlasSettingsService
+    private readonly  mainFormService: MainFormService,
+    private readonly  mapGlobalFormBuilder: MapGlobalFormBuilderService,
+    private readonly  mapBasemapFormBuilder: MapBasemapFormBuilderService,
+    private readonly  collectionService: CollectionService,
+    private readonly  settingsService: ArlasSettingsService
   ) { }
 
   public initModule(initCollectionFields: boolean) {

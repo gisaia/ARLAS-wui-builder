@@ -17,18 +17,29 @@
  * under the License.
  */
 
+import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
+import { WidgetUsage } from '@services/main-form-manager/models-config';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { WIDGET_TYPE } from '../edit-group/models';
-import { WidgetUsage } from '@services/main-form-manager/models-config';
-import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 
 @Component({
-    selector: 'arlas-widget-edition',
-    templateUrl: './widget-edition.component.html',
-    styleUrls: ['./widget-edition.component.scss'],
-    standalone: false
+  selector: 'arlas-widget-edition',
+  templateUrl: './widget-edition.component.html',
+  styleUrls: ['./widget-edition.component.scss'],
+  imports: [
+    MatTooltipModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatIconModule,
+    TranslatePipe
+  ]
 })
 export class WidgetEditionComponent implements OnInit, OnChanges {
   @Input() public widgetControls: { widgetType: FormControl<WIDGET_TYPE>; widgetData: WidgetConfigFormGroup; };

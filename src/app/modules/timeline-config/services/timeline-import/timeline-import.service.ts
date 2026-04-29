@@ -35,11 +35,11 @@ import { ArlasColorService } from 'arlas-web-components';
 export class TimelineImportService {
 
   public constructor(
-    private mainFormService: MainFormService,
-    private colorService: ArlasColorService,
-    private collectionService: CollectionService,
-    private settingsService: ArlasSettingsService,
-    private startupService: StartupService
+    private readonly  mainFormService: MainFormService,
+    private readonly  colorService: ArlasColorService,
+    private readonly  collectionService: CollectionService,
+    private readonly  settingsService: ArlasSettingsService,
+    private readonly  startupService: StartupService
 
   ) { }
 

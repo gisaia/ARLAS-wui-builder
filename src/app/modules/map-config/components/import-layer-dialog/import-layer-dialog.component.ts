@@ -17,20 +17,35 @@
  * under the License.
  */
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSelectChange } from '@angular/material/select';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatOptionModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { Config } from '@services/main-form-manager/models-config';
 import { isTechnicalArlasLayer, Layer, MapConfig } from '@services/main-form-manager/models-map-config';
 import { ZONE_WUI_BUILDER } from '@services/startup/startup.service';
+import { LayerIdToName } from 'arlas-map';
 import { DataResource, DataWithLinks } from 'arlas-persistence-api';
 import { PersistenceService } from 'arlas-wui-toolkit';
 
 @Component({
-    selector: 'arlas-import-layer-dialog',
-    templateUrl: './import-layer-dialog.component.html',
-    styleUrls: ['./import-layer-dialog.component.scss'],
-    standalone: false
+  selector: 'arlas-import-layer-dialog',
+  templateUrl: './import-layer-dialog.component.html',
+  styleUrls: ['./import-layer-dialog.component.scss'],
+  imports: [
+    TranslatePipe,
+    MatDialogModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatOptionModule,
+    LayerIdToName,
+    MatSelectModule,
+    MatButtonModule
+  ]
 })
 export class ImportLayerDialogComponent implements OnInit {
 
@@ -40,8 +55,8 @@ export class ImportLayerDialogComponent implements OnInit {
   public importLayerFormGroup: FormGroup;
 
   public constructor(
-    private persistenceService: PersistenceService,
-    private collectionService: CollectionService
+    private readonly  persistenceService: PersistenceService,
+    private readonly  collectionService: CollectionService
   ) { }
 
   public ngOnInit() {

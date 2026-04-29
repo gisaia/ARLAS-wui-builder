@@ -19,46 +19,48 @@
 import {
   ManageVisualisationComponent
 } from '@analytics-config/components/edit-resultlist-visualisation/manage-visualisation/manage-visualisation.component';
-
 import {
-  ResultlistFormBuilderService,
   ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, inject, Input, signal, ViewChild } from '@angular/core';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Component, Input, signal, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatTable } from '@angular/material/table';
-import { TranslateModule } from '@ngx-translate/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTable, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 import { SelectFormControl } from '@shared-models/config-form';
-import { SharedModule } from '@shared/shared.module';
 
 @Component({
-    selector: 'arlas-edit-resultlist-visualisation',
-    imports: [
-        TranslateModule,
-        MatButton,
-        MatIcon,
-        SharedModule,
-        ManageVisualisationComponent
-    ],
-    templateUrl: './result-list-visualisation.component.html',
-    styleUrl: './result-list-visualisation.component.scss',
-    animations: [
-        trigger('openClose', [
-            transition(':enter', [style({ opacity: 0 }), animate('200ms', style({ opacity: 1 }))]),
-            transition(':leave', [animate('200ms', style({ opacity: 0 }))]),
-        ])
-    ]
+  selector: 'arlas-edit-resultlist-visualisation',
+  imports: [
+    TranslatePipe,
+    MatButtonModule,
+    MatIconModule,
+    ManageVisualisationComponent,
+    MatTableModule,
+    DragDropModule,
+    MatChipsModule,
+    MatTooltipModule,
+    MatMenuModule
+  ],
+  templateUrl: './result-list-visualisation.component.html',
+  styleUrl: './result-list-visualisation.component.scss',
+  animations: [
+    trigger('openClose', [
+      transition(':enter', [style({ opacity: 0 }), animate('200ms', style({ opacity: 1 }))]),
+      transition(':leave', [animate('200ms', style({ opacity: 0 }))]),
+    ])
+  ]
 })
 export class ResultListVisualisationComponent {
 
   @Input() public collectionControl: SelectFormControl;
   @Input() public control: FormArray<ResultListVisualisationsFormGroup>;
-  /** helper to create new form **/
-  private readonly resultListFormBuilder = inject(ResultlistFormBuilderService);
   /** disable drag when dropping an element **/
   public dragDisabled = true;
   /** handle the switch between visualisation list and edit **/
@@ -81,7 +83,7 @@ export class ResultListVisualisationComponent {
 
   public addVisualisation() {
     this.manageViewIsOpened = true;
-    const newVisualisation = this.resultListFormBuilder.buildVisualisation();
+    const newVisualisation = new ResultListVisualisationsFormGroup();
     newVisualisation.customControls.name.setValue('New Visualisation name');
     this.currentVisualisation = newVisualisation;
   }

@@ -1,29 +1,43 @@
 <div class="config-element">
-    <div class="config-element-container">
-        <div class="form-fields" [class.full-size]="fullSize">
-            <ng-content select="[form-fields]"></ng-content>
-        </div>
-        <div class="description" *ngIf="!fullSize">
-            <ng-content select="[description]"></ng-content>
-        </div>
+  <div class="config-element-container">
+    <div class="form-fields" [class.full-size]="fullSize">
+      <ng-content select="[form-fields]"></ng-content>
     </div>
+    @if (!fullSize) {
+      <div class="description">
+        <ng-content select="[description]"></ng-content>
+      </div>
+    }
+  </div>
 
-    <div class="errors-container">
-        <div *ngIf="formControl?.invalid && (formControl?.touched || formGroupDirective.submitted)">
-            <mat-error *ngIf="formControl?.errors.required">
-                {{'The field is mandatory.' | translate}}
-            </mat-error>
-            <mat-error *ngIf="formControl?.errors.max">
-                The value {{formControl?.errors.max.actual}} is above allowed value {{formControl?.errors.max.max}}.
-            </mat-error>
-            <mat-error *ngIf="formControl?.errors.min">
-                The value {{formControl?.errors.min.actual}} is below allowed value {{formControl?.errors.min.min}}.
-            </mat-error>
-            <mat-error *ngIf="formControl?.errors.maxlength">
-                The allowed size is {{formControl?.errors.maxlength.requiredLength}}. Currently is
-                {{formControl?.errors.maxlength.actualLength}}
-            </mat-error>
-        </div>
-    </div>
+  <div class="errors-container">
+    @if (formControl?.invalid && (formControl?.touched || formGroupDirective.submitted)) {
+      <div>
+        @if (formControl?.errors.required) {
+          <mat-error>
+            {{'The field is mandatory.' | translate}}
+          </mat-error>
+        }
+        @let max = formControl?.errors.max;
+        @if (max) {
+          <mat-error>
+            {{ 'The value ##value## is above the allowed value ##max##.' | translate:{ value: max.actual, max: max.max } }}
+          </mat-error>
+        }
+        @let min = formControl?.errors.min;
+        @if (min) {
+          <mat-error>
+            {{ 'The value ##value## is below the allowed value ##min##.' | translate:{ value: min.actual, min: min.min } }}
+          </mat-error>
+        }
+        @let maxlength = formControl?.errors.maxlength;
+        @if (maxlength) {
+          <mat-error>
+            {{ 'The allowed size is ##max##. Currently is ##value##.' | translate:{max: maxlength.requiredLength, value: maxlength.actualLength } }}
+          </mat-error>
+        }
+      </div>
+    }
+  </div>
 
 </div>

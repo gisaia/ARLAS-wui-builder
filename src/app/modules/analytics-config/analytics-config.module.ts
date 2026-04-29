@@ -40,32 +40,30 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { GetCollectionDisplayNamePipe, GetFieldDisplayNamePipe } from 'arlas-web-components';
 
 @NgModule({
-  declarations: [
-    TabsComponent,
-    GroupsComponent,
-    ShortcutsComponent,
-    EditGroupComponent,
-    WidgetEditionComponent,
-    EditWidgetDialogComponent,
-    AddWidgetDialogComponent,
-    EditResultlistColumnsComponent,
-    EditResultlistDetailsComponent,
-    ResultlistDataComponent,
-    ImportWidgetDialogComponent,
-    EditTabComponent,
-    EditResultlistQuicklookComponent,
-    EditHistogramLabelComponent,
-    MetricsTableDataComponent,
-    AddSubtableDialogComponent
-  ],
-  imports: [
-    ArlasToolkitSharedModule,
-    SharedModule,
-    AnalyticsConfigRoutingModule,
-    IconPickerModule,
-    MatExpansionModule,
-    GetCollectionDisplayNamePipe,
-    GetFieldDisplayNamePipe
-  ]
+    imports: [
+        ArlasToolkitSharedModule,
+        SharedModule,
+        AnalyticsConfigRoutingModule,
+        IconPickerModule,
+        MatExpansionModule,
+        GetCollectionDisplayNamePipe,
+        GetFieldDisplayNamePipe,
+        TabsComponent,
+        GroupsComponent,
+        ShortcutsComponent,
+        EditGroupComponent,
+        WidgetEditionComponent,
+        EditWidgetDialogComponent,
+        AddWidgetDialogComponent,
+        EditResultlistColumnsComponent,
+        EditResultlistDetailsComponent,
+        ResultlistDataComponent,
+        ImportWidgetDialogComponent,
+        EditTabComponent,
+        EditResultlistQuicklookComponent,
+        EditHistogramLabelComponent,
+        MetricsTableDataComponent,
+        AddSubtableDialogComponent
+    ]
 })
 export class AnalyticsConfigModule { }

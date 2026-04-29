@@ -47,16 +47,16 @@ export class LandingPageService implements OnDestroy {
 
   public constructor(
     public startupService: StartupService,
-    private spinner: NgxSpinnerService,
-    private logger: NGXLogger,
-    private translate: TranslateService,
-    private configService: ArlasConfigService,
-    private defaultValuesService: DefaultValuesService,
-    private collectionService: CollectionService,
-    private arlasSettingsService: ArlasSettingsService,
-    private mainFormManager: MainFormManagerService,
+    private readonly  spinner: NgxSpinnerService,
+    private readonly  logger: NGXLogger,
+    private readonly  translate: TranslateService,
+    private readonly  configService: ArlasConfigService,
+    private readonly  defaultValuesService: DefaultValuesService,
+    private readonly  collectionService: CollectionService,
+    private readonly  arlasSettingsService: ArlasSettingsService,
+    private readonly  mainFormManager: MainFormManagerService,
     public mainFormService: MainFormService,
-    private arlasIamService: ArlasIamService
+    private readonly  arlasIamService: ArlasIamService
   ) {
     this.isAuthentActivated = !!this.arlasSettingsService.getAuthentSettings()?.use_authent === true;
   }

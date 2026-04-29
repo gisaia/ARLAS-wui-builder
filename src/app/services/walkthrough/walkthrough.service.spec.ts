@@ -1,16 +1,17 @@
+import { TestBed } from '@angular/core/testing';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { WalkthroughService } from './walkthrough.service';
-import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
 
 describe('WalkthroughService', () => {
-  let spectator: SpectatorService<WalkthroughService>;
-  const createService = createServiceFactory({
-    service: WalkthroughService
-  });
+    let service: WalkthroughService;
 
-  beforeEach(() => spectator = createService());
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
 
-  it('should be defined', () => {
-    expect(spectator.service).toBeDefined();
-  });
+        service = TestBed.inject(WalkthroughService);
+    });
+
+    it('should create', () => {
+        expect(service).toBeTruthy();
+    });
 });
-

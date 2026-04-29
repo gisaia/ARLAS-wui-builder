@@ -67,7 +67,7 @@ export abstract class ConfigFormControl extends FormControl {
     formState: any,
     public label: string,
     public description: string,
-    private optionalParams: ControlOptionalParams = {}) {
+    public readonly optionalParams: ControlOptionalParams = {}) {
 
     super(formState);
     this.initialValue = formState;
@@ -78,8 +78,7 @@ export abstract class ConfigFormControl extends FormControl {
         validators: [],
         dependsOn: () => [],
         onDependencyChange: () => null,
-        childs: () => [],
-        isDescriptionHtml: false
+        childs: () => []
       },
       ...this.optionalParams
     };
@@ -103,9 +102,6 @@ export abstract class ConfigFormControl extends FormControl {
   }
   public get childs() {
     return this.optionalParams.childs;
-  }
-  public get isDescriptionHtml() {
-    return this.optionalParams.isDescriptionHtml;
   }
   public get resetDependantsOnChange() {
     return this.optionalParams.resetDependantsOnChange || false;
@@ -155,10 +151,6 @@ export interface ControlOptionalParams {
   // getter of child components
   childs?: () => Array<ConfigFormControl>;
 
-  // is the description in regular HTML. In this case, the caller
-  // is responsable of translating its content
-  isDescriptionHtml?: boolean;
-
   // a title that is displayed before the field.
   // TODO remove the title from ConfigFormGroup and move it to fields
   title?: string;
@@ -198,8 +190,9 @@ export class ConfigFormGroup extends FormGroup {
   public title: string;
   public stepName: string;
   public tabName: string;
+  public description: string;
   /** used to order  first level of table if needed **/
-  public tabsOrder: string[] ;
+  public tabsOrder: string[];
 
   public hide = false;
 
@@ -248,6 +241,11 @@ export class ConfigFormGroup extends FormGroup {
 
   public withTitle(title: string) {
     this.title = title;
+    return this;
+  }
+
+  public withDescription(desc: string): this {
+    this.description = desc;
     return this;
   }
 

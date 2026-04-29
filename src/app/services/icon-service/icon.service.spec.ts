@@ -1,15 +1,17 @@
+import { TestBed } from '@angular/core/testing';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { IconService } from './icon.service';
-import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
 
 describe('IconService', () => {
-  let spectator: SpectatorService<IconService>;
-  const createService = createServiceFactory({
-    service: IconService
-  });
+    let service: IconService;
 
-  beforeEach(() => spectator = createService());
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
 
-  it('should be defined', () => {
-    expect(spectator.service).toBeDefined();
-  });
+        service = TestBed.inject(IconService);
+    });
+
+    it('should create', () => {
+        expect(service).toBeTruthy();
+    });
 });

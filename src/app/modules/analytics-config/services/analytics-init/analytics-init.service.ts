@@ -21,11 +21,22 @@ import { Injectable } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { Contributor, OperationEnum } from 'arlas-web-core';
 import {
-  ArlasCollaborativesearchService, ArlasConfigService, ArlasStartupService,
-  ContributorBuilder, ArlasSettingsService
+  ArlasCollaborativesearchService, ArlasConfigService,
+  ArlasSettingsService,
+  ArlasStartupService,
+  ContributorBuilder
 } from 'arlas-wui-toolkit';
+
+export type TabConfigFormGroup = FormGroup<{
+  tabName: FormControl<string>;
+  tabIcon: FormControl<string>;
+  showName: FormControl<boolean>;
+  showIcon: FormControl<boolean>;
+  contentFg: FormGroup;
+}>;
 
 @Injectable({
   providedIn: 'root'
@@ -35,14 +46,13 @@ export class AnalyticsInitService {
   public groupIndex = 0;
 
   public constructor(
-        private formBuilder: FormBuilder,
-        private mainFormService: MainFormService,
-        private arlasStartupService: ArlasStartupService,
-        private collaborativesearchService: ArlasCollaborativesearchService,
-        private configService: ArlasConfigService,
-        private settingsService: ArlasSettingsService
-  ) {
-  }
+    private formBuilder: FormBuilder,
+    private mainFormService: MainFormService,
+    private arlasStartupService: ArlasStartupService,
+    private collaborativesearchService: ArlasCollaborativesearchService,
+    private configService: ArlasConfigService,
+    private settingsService: ArlasSettingsService
+  ) { }
 
   public initModule() {
     this.mainFormService.analyticsConfig.initListFa(this.initTabsList([]));
@@ -52,7 +62,7 @@ export class AnalyticsInitService {
     return this.formBuilder.array(tabsList);
   }
 
-  public initNewTab(name: string, icon = 'short_text', showName = true, showIcon = true) {
+  public initNewTab(name: string, icon = 'short_text', showName = true, showIcon = true): TabConfigFormGroup {
     return this.formBuilder.group({
       tabName: [name, Validators.required],
       tabIcon: [icon, Validators.required],
@@ -90,9 +100,9 @@ export class AnalyticsInitService {
 
   public initNewWidget(type: WIDGET_TYPE) {
     return this.formBuilder.group({
-      widgetType: [type],
+      widgetType: new FormControl(type),
       widgetData: new FormGroup({}, (fg: FormGroup) => ({validateWidget: {valid: !!fg.controls.length}}))
-    });
+    }) as unknown as FormGroup<{widgetType: FormControl<WIDGET_TYPE>; widgetData: WidgetConfigFormGroup;}>;
   }
 
   public createPreviewContributor(groupFg: FormGroup, widgetFg: FormGroup) {

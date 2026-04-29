@@ -16,10 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { AsyncPipe } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
 interface LabelConfig {
@@ -37,7 +43,14 @@ interface LabelConfig {
     selector: 'arlas-edit-histogram-label',
     templateUrl: './edit-histogram-label.component.html',
     styleUrls: ['./edit-histogram-label.component.scss'],
-    standalone: false
+    imports: [
+      MatTableModule,
+      TranslatePipe,
+      ConfigFormControlComponent,
+      AsyncPipe,
+      MatIconModule,
+      MatTooltipModule
+    ]
 })
 export class EditHistogramLabelComponent implements OnInit, OnDestroy {
     /**

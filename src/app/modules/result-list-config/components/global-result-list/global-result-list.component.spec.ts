@@ -1,62 +1,39 @@
-import { TestBed, waitForAsync } from '@angular/core/testing';
-import { FormArray } from '@angular/forms';
-import { createComponentFactory, createServiceFactory, mockProvider, Spectator, SpectatorService } from '@ngneat/spectator';
-import { CollectionService } from '@services/collection-service/collection.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { mockMainFormService } from '@app/test/main-form.service.mock';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
-import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
-import { MockComponent } from 'ng-mocks';
-import { of } from 'rxjs';
-
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { GlobalResultListComponent } from './global-result-list.component';
 
 describe('GlobalResultListComponent', () => {
-  let spectator: Spectator<GlobalResultListComponent>;
-  let collectionServiceSpectator: SpectatorService<CollectionService>;
-  const collectionService = createServiceFactory(CollectionService);
-  const createComponent = createComponentFactory({
-    component: GlobalResultListComponent,
-    declarations: [
-      MockComponent(ConfigFormGroupComponent),
-      MockComponent(ConfigFormControlComponent)
-    ],
-    providers: [
-      mockProvider(CollectionService, {
-        getCollectionFieldsNames: () => of([])
-      }),
-      mockProvider(MainFormService, {
-        getMainCollection: () => '',
-        resultListConfig: {
-          getResultListsFa: () => new FormArray([])
-        }
-      })
-    ]
-  });
+    let component: GlobalResultListComponent;
+    let fixture: ComponentFixture<GlobalResultListComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [GlobalResultListComponent],
-      providers: [
-        mockProvider(CollectionService, {
-          getCollectionFieldsNames: () => of([])
-        }),
-        mockProvider(MainFormService, {
-          getMainCollection: () => '',
-          resultListConfig: {
-            getResultListsFa: () => new FormArray([])
-          }
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                GlobalResultListComponent,
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ],
+            providers: [
+                {
+                    provide: MainFormService,
+                    useValue: mockMainFormService
+                }
+            ]
         })
-      ]
-    })
-      .compileComponents();
-  }));
+        .compileComponents();
 
-  beforeEach(() => {
-    spectator = createComponent();
-    collectionServiceSpectator = collectionService();
-  });
+        fixture = TestBed.createComponent(GlobalResultListComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

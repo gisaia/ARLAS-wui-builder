@@ -17,20 +17,46 @@
  * under the License.
  */
 
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { Component, forwardRef, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
-import { ConfigFormGroupComponent } from '../config-form-group/config-form-group.component';
+import { TranslatePipe } from '@ngx-translate/core';
+import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
+import { AsbtractConfigFormControl } from '@shared-components/config-form-group/abstract-config-form-group';
+import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
+import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
 
 @Component({
-    selector: 'arlas-histogram-bucket-form-group',
-    templateUrl: './histogram-bucket-form-group.component.html',
-    styleUrls: ['./histogram-bucket-form-group.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'arlas-histogram-bucket-form-group',
+  templateUrl: './histogram-bucket-form-group.component.html',
+  styleUrls: ['./histogram-bucket-form-group.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  imports: [
+    TranslatePipe,
+    forwardRef(() => ConfigElementComponent),
+    forwardRef(() => ConfigFormControlComponent),
+    MatRadioModule,
+    ResetOnChangeDirective,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatSliderModule,
+    AlertOnChangeDirective,
+    MatSelectModule,
+    MatTooltipModule,
+    NgClass
+  ]
 })
-export class HistogramBucketFormGroupComponent extends ConfigFormGroupComponent implements OnInit, OnDestroy {
-
-
+export class HistogramBucketFormGroupComponent extends AsbtractConfigFormControl implements OnInit, OnDestroy {
   public aggregationFieldControl;
   public aggregationFieldTypeControl;
   public bucketTypeControl;

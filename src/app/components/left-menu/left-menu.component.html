@@ -1,27 +1,31 @@
 <div class="menu_container">
   <mat-nav-list>
-    <mat-list-item *ngFor="let page of pages" [matTooltip]="page?.tooltip | translate" matTooltipPosition="right" [routerLink]="page.enabled ? page?.link : null"
-      [routerLinkActive]="page.enabled ? 'active-menu' : 'inactive-menu'" queryParamsHandling="preserve">
-      <button mat-icon-button [disabled]="!page?.enabled" [routerLinkActive]="page.enabled ? 'mat-accent' : ''">
-        <mat-icon [matBadge]="nbErrorsByPage.get(page.name)" [matBadgeHidden]="!nbErrorsByPage.get(page.name)"
-          matBadgePosition="above before" matBadgeColor="warn">
+    @for (page of pages; track page) {
+      <mat-list-item [matTooltip]="page?.tooltip | translate" matTooltipPosition="right" [routerLink]="page.enabled ? page?.link : null"
+        [routerLinkActive]="page.enabled ? 'active-menu' : 'inactive-menu'" queryParamsHandling="preserve">
+        <button mat-icon-button [disabled]="!page?.enabled" [routerLinkActive]="page.enabled ? 'mat-accent' : ''">
+          <mat-icon [matBadge]="nbErrorsByPage.get(page.name)" [matBadgeHidden]="!nbErrorsByPage.get(page.name)"
+            matBadgePosition="above before" matBadgeColor="warn">
           {{ page?.icon }}</mat-icon>
-      </button>
-    </mat-list-item>
+        </button>
+      </mat-list-item>
+    }
   </mat-nav-list>
 
   <div class="action-list">
     <mat-nav-list>
-      <ng-container *ngIf="!!links && links.length > 0">
+      @if (!!links && links.length > 0) {
         <mat-divider></mat-divider>
         <mat-nav-list>
-          <mat-list-item *ngFor="let link of links">
-            <button matTooltip="{{ link.name | translate}}" mat-icon-button (click)="navigateTo(link.url)" [matTooltipPosition]="'right'">
-              <mat-icon>{{link.icon}}</mat-icon>
-            </button>
-          </mat-list-item>
+          @for (link of links; track link) {
+            <mat-list-item>
+              <button matTooltip="{{ link.name | translate}}" mat-icon-button (click)="navigateTo(link.url)" [matTooltipPosition]="'right'">
+                <mat-icon>{{link.icon}}</mat-icon>
+              </button>
+            </mat-list-item>
+          }
         </mat-nav-list>
-      </ng-container>
+      }
       <mat-divider></mat-divider>
       <mat-list-item matTooltip="{{'Save' | translate}}" (click)="save($event)" matTooltipPosition="right"
         [class.disabled-item]="!persistenceService.isAvailable">

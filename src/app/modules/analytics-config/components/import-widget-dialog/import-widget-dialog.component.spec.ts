@@ -1,43 +1,38 @@
-import { HttpClient } from '@angular/common/http';
-import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { StartupService } from '@services/startup/startup.service';
-import {
-  ArlasCollaborativesearchService, ArlasConfigService, ArlasConfigurationDescriptor, ArlasStartupService,
-  AuthentificationService, getOptionsFactory, GET_OPTIONS, PersistenceService
-} from 'arlas-wui-toolkit';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { GET_OPTIONS } from 'arlas-wui-toolkit';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { ImportWidgetDialogComponent } from './import-widget-dialog.component';
 
-describe('ImportLayerDialogComponent', () => {
+describe('ImportWidgetDialogComponent', () => {
+    let component: ImportWidgetDialogComponent;
+    let fixture: ComponentFixture<ImportWidgetDialogComponent>;
 
-  let spectator: Spectator<ImportWidgetDialogComponent>;
-  const createComponent = createComponentFactory({
-    component: ImportWidgetDialogComponent,
-    declarations: [
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                ImportWidgetDialogComponent,
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ],
+            providers: [
+                {
+                    provide: GET_OPTIONS,
+                    useValue: () => {}
+                }
+            ]
+        })
+        .compileComponents();
 
-    ],
-    providers: [
-      mockProvider(MainFormService),
-      mockProvider(ArlasConfigService),
-      mockProvider(ArlasCollaborativesearchService),
-      mockProvider(StartupService),
-      mockProvider(ArlasStartupService),
-      mockProvider(AuthentificationService),
-      mockProvider(ArlasConfigurationDescriptor),
-      mockProvider(PersistenceService),
-      mockProvider(HttpClient),
-      {
-        provide: GET_OPTIONS,
-        useFactory: getOptionsFactory,
-        deps: [AuthentificationService]
-      }
-    ]
-  });
+        fixture = TestBed.createComponent(ImportWidgetDialogComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  beforeEach(() => spectator = createComponent());
-
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
-
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

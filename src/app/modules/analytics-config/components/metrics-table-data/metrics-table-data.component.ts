@@ -16,20 +16,42 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { AddSubtableDialogComponent } from '../add-subtable-dialog/add-subtable-dialog.component';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatError } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MetricsTableSortConfig } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { GetCollectionDisplayNamePipe, GetFieldDisplayNamePipe } from 'arlas-web-components';
+import { Subject } from 'rxjs';
+import { AddSubtableDialogComponent } from '../add-subtable-dialog/add-subtable-dialog.component';
 
 @Component({
-    selector: 'arlas-metrics-table-data',
-    templateUrl: './metrics-table-data.component.html',
-    styleUrls: ['./metrics-table-data.component.scss'],
-    standalone: false
+  selector: 'arlas-metrics-table-data',
+  templateUrl: './metrics-table-data.component.html',
+  styleUrls: ['./metrics-table-data.component.scss'],
+  imports: [
+    MatAccordion,
+    MatExpansionModule,
+    TranslatePipe,
+    MatTableModule,
+    DragDropModule,
+    MatIconModule,
+    GetCollectionDisplayNamePipe,
+    MatTooltipModule,
+    GetFieldDisplayNamePipe,
+    MatMenuModule,
+    MatError,
+    MatButtonModule
+  ]
 })
 export class MetricsTableDataComponent implements OnInit {
 

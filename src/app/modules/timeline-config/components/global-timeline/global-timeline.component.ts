@@ -16,27 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, OnInit } from '@angular/core';
+import { Component, forwardRef, inject } from '@angular/core';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { TimelineGlobalFormGroup } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
 
 @Component({
-    selector: 'arlas-global-timeline',
-    templateUrl: './global-timeline.component.html',
-    styleUrls: ['./global-timeline.component.scss'],
-    standalone: false
+  selector: 'arlas-global-timeline',
+  templateUrl: './global-timeline.component.html',
+  styleUrls: ['./global-timeline.component.scss'],
+  imports: [
+    forwardRef(() => ConfigFormControlComponent),
+    forwardRef(() => ConfigFormGroupComponent)
+  ]
 })
-export class GlobalTimelineComponent implements OnInit {
+export class GlobalTimelineComponent {
+  private readonly mainFormService = inject(MainFormService);
 
-  public globalFg: TimelineGlobalFormGroup;
-
-  public constructor(
-    protected mainFormService: MainFormService,
-  ) {
-    this.globalFg = mainFormService.timelineConfig.getGlobalFg();
-  }
-
-  public ngOnInit() {
-  }
-
+  public globalFg: TimelineGlobalFormGroup = this.mainFormService.timelineConfig.getGlobalFg();
 }

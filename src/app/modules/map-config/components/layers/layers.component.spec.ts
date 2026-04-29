@@ -1,46 +1,60 @@
-import { FormArray } from '@angular/forms';
-import { createComponentFactory, mockProvider, Spectator } from '@ngneat/spectator';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterModule } from '@angular/router';
+import { mockArlasStartupService } from '@app/test/arlas-startup.service.mock';
+import { mockCollectionService } from '@app/test/collection.service.mock';
+import { mockMainFormService } from '@app/test/main-form.service.mock';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ArlasColorService } from 'arlas-web-components';
-import { LegendComponent, LayerIconComponent } from 'arlas-map';
-import {
-  ArlasCollaborativesearchService, ArlasConfigService, ArlasConfigurationUpdaterService,
-  ArlasStartupService, CONFIG_UPDATER
-} from 'arlas-wui-toolkit';
+import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
+import { ArlasStartupService } from 'arlas-wui-toolkit';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { LayersComponent } from './layers.component';
 
 describe('LayersComponent', () => {
-  let spectator: Spectator<LayersComponent>;
-  const createComponent = createComponentFactory({
-    declarations: [
-      LegendComponent, LayerIconComponent
-    ],
-    providers: [
-      mockProvider(ArlasConfigService),
-      mockProvider(ArlasStartupService),
-      mockProvider(ArlasCollaborativesearchService),
-      mockProvider(ArlasColorService),
-      mockProvider(ArlasConfigurationUpdaterService),
-      mockProvider(CollectionService),
-      { provide: CONFIG_UPDATER, useValue: {} },
-      mockProvider(MainFormService, {
-        mapConfig: {
-          getLayersFa: () => new FormArray([]),
-          getVisualisationsFa: () => new FormArray([])
-        }
-      })
-    ],
-    component: LayersComponent,
-  });
+    let component: LayersComponent;
+    let fixture: ComponentFixture<LayersComponent>;
 
-  beforeEach(() => spectator = createComponent());
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                LayersComponent,
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+                LoggerModule.forRoot(null),
+                ColorGeneratorModule.forRoot({
+                    loader: {
+                        provide: ColorGeneratorLoader,
+                        useClass: AwcColorGeneratorLoader
+                    }
+                }),
+                RouterModule.forRoot([])
+            ],
+            providers: [
+                {
+                    provide: ArlasStartupService,
+                    useValue: mockArlasStartupService
+                },
+                {
+                    provide: CollectionService,
+                    useValue: mockCollectionService
+                },
+                {
+                    provide: MainFormService,
+                    useValue: mockMainFormService
+                }
+            ]
+        })
+        .compileComponents();
 
-  it('should be loaded successfully', () => {
-    expect(spectator.component).toBeTruthy();
-  });
+        fixture = TestBed.createComponent(LayersComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should contain a table', () => {
-    expect(spectator.queryAll('table')).toBeDefined();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

@@ -18,16 +18,12 @@
  */
 import { NgModule } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatTableModule } from '@angular/material/table';
 import { ConfirmExitGuard } from '@guards/confirm-exit/confirm-exit.guard';
-import { TranslatePipe } from '@ngx-translate/core';
-import { PaletteGradientPipe } from '@shared/pipes/palette-gradien.pipe';
 import { SharedModule } from '@shared/shared.module';
 import {
-  AbstractArlasMapService, ArlasMapFrameworkService, ArlasMapModule, BasemapService, LayerIdToName, LegendService
+  AbstractArlasMapService, ArlasMapFrameworkService, BasemapService, LegendService
 } from 'arlas-map';
 import { ArlasMaplibreService, ArlasMapService, MaplibreBasemapService, MaplibreLegendService } from 'arlas-maplibre';
-import { GetCollectionDisplayNamePipe } from 'arlas-web-components';
 import { BasemapsComponent } from './components/basemaps/basemaps.component';
 import { DialogColorTableComponent } from './components/dialog-color-table/dialog-color-table.component';
 import { DialogFilterComponent } from './components/dialog-filter/dialog-filter.component';
@@ -42,30 +38,26 @@ import { VisualisationsComponent } from './components/visualisations/visualisati
 import { MapConfigRoutingModule } from './map-config-routing.module';
 import { MapConfigComponent } from './map-config.component';
 
+const COMPONENTS = [
+  MapConfigComponent,
+  GlobalMapComponent,
+  LayersComponent,
+  EditLayerComponent,
+  EditVisualisationComponent,
+  DialogColorTableComponent,
+  DialogFilterComponent,
+  DialogPaletteSelectorComponent,
+  PreviewComponent,
+  VisualisationsComponent,
+  BasemapsComponent,
+  ImportLayerDialogComponent
+];
+
 @NgModule({
-  declarations: [
-    MapConfigComponent,
-    GlobalMapComponent,
-    LayersComponent,
-    EditLayerComponent,
-    EditVisualisationComponent,
-    DialogColorTableComponent,
-    DialogFilterComponent,
-    DialogPaletteSelectorComponent,
-    PreviewComponent,
-    VisualisationsComponent,
-    BasemapsComponent,
-    ImportLayerDialogComponent
-  ],
   imports: [
     MapConfigRoutingModule,
-    ArlasMapModule,
     SharedModule,
-    GetCollectionDisplayNamePipe,
-    PaletteGradientPipe,
-    LayerIdToName,
-    MatTableModule,
-    TranslatePipe
+    ...COMPONENTS
   ],
   providers: [
     ConfirmExitGuard,

@@ -20,31 +20,41 @@ import {
   ManageDataGroupDialogComponent
 } from '@analytics-config/components/edit-resultlist-visualisation/data-group-edition/manage-data-group-dialog.component';
 import {
-  ResultlistFormBuilderService,
   ResultListVisualisationsDataGroup,
   ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { LowerCasePipe, NgTemplateOutlet } from '@angular/common';
 import { Component, inject, input, output, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTable } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTable, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
-import { SharedModule } from '@shared/shared.module';
 import { GetFieldDisplayNamePipe } from 'arlas-web-components';
 import { filter, first } from 'rxjs';
 
 @Component({
-    selector: 'arlas-manage-visualisation',
-    imports: [
-        TranslateModule,
-        SharedModule,
-        GetFieldDisplayNamePipe
-    ],
-    templateUrl: './manage-visualisation.component.html',
-    styleUrl: './manage-visualisation.component.scss'
+  selector: 'arlas-manage-visualisation',
+  imports: [
+    TranslatePipe,
+    GetFieldDisplayNamePipe,
+    MatTooltipModule,
+    MatIconModule,
+    MatButtonModule,
+    ConfigFormControlComponent,
+    MatTableModule,
+    DragDropModule,
+    LowerCasePipe,
+    NgTemplateOutlet
+  ],
+  templateUrl: './manage-visualisation.component.html',
+  styleUrl: './manage-visualisation.component.scss'
 })
 export class ManageVisualisationComponent {
   /**
@@ -79,12 +89,6 @@ export class ManageVisualisationComponent {
   protected changeCanceled = output<boolean>();
   protected dialog = inject(MatDialog);
   /**
-   * Helper. Create right forms
-   * @type {ResultlistFormBuilderService}
-   * @protected
-   */
-  protected resultListFormBuilderService = inject(ResultlistFormBuilderService);
-  /**
    * Table columns
    * @type {string[]}
    * @protected
@@ -97,8 +101,9 @@ export class ManageVisualisationComponent {
   public dragDisabled = true;
   @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
 
-  public get dataGroups(): FormArray<ResultListVisualisationsDataGroup> | any[] {
-    return this.visualisation().get('dataGroups')?.value.length > 0 ?  (<any>this.visualisation().get('dataGroups')).controls as FormArray  : [];
+  public get dataGroups() {
+    const dataGroups = this.visualisation()?.customControls.dataGroups;
+    return dataGroups?.value.length > 0 ?  dataGroups.controls  : [];
   }
 
   public validateVisualisation(){
@@ -126,7 +131,7 @@ export class ManageVisualisationComponent {
     }
   }
 
-  public dropItemFamily(event: CdkDragDrop<any[]>){
+  public dropItemFamily(event: CdkDragDrop<any>){
     const previousIndex = (this.visualisation().get('dataGroups') as FormArray).controls.findIndex(row => row === event.item.data);
     moveItemInArray((this.visualisation().get('dataGroups') as FormArray).controls, previousIndex, event.currentIndex);
     this.dragDisabled = true;
@@ -165,7 +170,7 @@ export class ManageVisualisationComponent {
   }
 
   public addDataGroup() {
-    const dataGroup = this.resultListFormBuilderService.buildVisualisationsDataGroup();
+    const dataGroup = new ResultListVisualisationsDataGroup();
     dataGroup.get('name').setValue(marker('New data group'));
     const ref = this.openEditionDialog(dataGroup);
 

@@ -23,7 +23,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormField } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MultipleSelectFormControl, SelectOption } from '@shared-models/config-form';
 import { ArlasColorService } from 'arlas-web-components';
@@ -31,19 +31,19 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { ReplaySubject, take } from 'rxjs';
 
 @Component({
-    selector: 'arlas-multi-select-search',
-    imports: [
-        MatFormField,
-        MatSelect,
-        MatOption,
-        ReactiveFormsModule,
-        TranslateModule,
-        NgxMatSelectSearchModule,
-        AsyncPipe,
-        MatToolbarModule
-    ],
-    templateUrl: './multi-select-search.component.html',
-    styleUrl: './multi-select-search.component.scss'
+  selector: 'arlas-multi-select-search',
+  imports: [
+    MatFormField,
+    MatSelect,
+    MatOption,
+    ReactiveFormsModule,
+    TranslatePipe,
+    NgxMatSelectSearchModule,
+    AsyncPipe,
+    MatToolbarModule
+  ],
+  templateUrl: './multi-select-search.component.html',
+  styleUrl: './multi-select-search.component.scss'
 })
 export class MultiSelectSearchComponent implements OnInit, AfterViewInit {
   @Input() public control: MultipleSelectFormControl;

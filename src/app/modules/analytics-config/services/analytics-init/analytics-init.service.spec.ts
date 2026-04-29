@@ -1,23 +1,26 @@
+import { TestBed } from '@angular/core/testing';
+import { mockArlasStartupService } from '@app/test/arlas-startup.service.mock';
+import { ArlasStartupService } from 'arlas-wui-toolkit';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { AnalyticsInitService } from './analytics-init.service';
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
-import { ArlasStartupService, ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
 
 describe('AnalyticsInitService', () => {
-  let spectator: SpectatorService<AnalyticsInitService>;
+    let service: AnalyticsInitService;
 
-  const createService = createServiceFactory({
-    service: AnalyticsInitService,
-    providers: [
-      mockProvider(ArlasStartupService),
-      mockProvider(ArlasCollaborativesearchService),
-    ]
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [
+                {
+                    provide: ArlasStartupService,
+                    useValue: mockArlasStartupService
+                }
+            ]
+        });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+        service = TestBed.inject(AnalyticsInitService);
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(service).toBeTruthy();
+    });
 });

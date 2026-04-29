@@ -1,22 +1,26 @@
+import { TestBed } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { BucketsIntervalFormBuilderService } from './buckets-interval-form-builder.service';
-import { createServiceFactory, SpectatorService, mockProvider } from '@ngneat/spectator';
-import { CollectionService } from '@services/collection-service/collection.service';
 
 describe('BucketsIntervalFormBuilderService', () => {
-  let spectator: SpectatorService<BucketsIntervalFormBuilderService>;
+    let service: BucketsIntervalFormBuilderService;
 
-  const createService = createServiceFactory({
-    service: BucketsIntervalFormBuilderService,
-    providers: [
-      mockProvider(CollectionService),
-    ]
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ]
+        });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+        service = TestBed.inject(BucketsIntervalFormBuilderService);
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(service).toBeTruthy();
+    });
 });

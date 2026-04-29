@@ -20,8 +20,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { ConfigFormGroup } from '@shared-models/config-form';
 
 @Pipe({
-  name: 'orderConfigFormTabControls',
-  standalone: true
+  name: 'orderConfigFormTabControls'
 })
 export class OrderConfigFormTabControlsPipe implements PipeTransform {
   public transform(config: ConfigFormGroup) {

@@ -16,23 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
 import {
   MapVisualisationFormBuilderService, MapVisualisationFormGroup
 } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { LayerIdToName } from 'arlas-map';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'arlas-edit-visualisation',
-    templateUrl: './edit-visualisation.component.html',
-    styleUrls: ['./edit-visualisation.component.scss'],
-    standalone: false
+  selector: 'arlas-edit-visualisation',
+  templateUrl: './edit-visualisation.component.html',
+  styleUrls: ['./edit-visualisation.component.scss'],
+  imports: [
+    ConfigFormGroupComponent,
+    TranslatePipe,
+    DragDropModule,
+    MatIconModule,
+    LayerIdToName,
+    MatButtonModule,
+    RouterLink
+  ]
 })
 export class EditVisualisationComponent implements OnInit, CanComponentExit, OnDestroy {
 

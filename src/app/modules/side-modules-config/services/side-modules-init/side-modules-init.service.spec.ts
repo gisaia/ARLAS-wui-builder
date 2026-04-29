@@ -1,22 +1,26 @@
-import { SideModulesInitService } from './side-modules-init.service';
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
+import { TestBed } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { SideModulesGlobalFormBuilderService } from '../side-modules-global-form-builder/side-modules-global-form-builder.service';
 
-describe('SideModulesInitService', () => {
-  let spectator: SpectatorService<SideModulesInitService>;
+describe('SideModulesGlobalFormBuilderService', () => {
+    let service: SideModulesGlobalFormBuilderService;
 
-  const createService = createServiceFactory({
-    service: SideModulesInitService,
-    providers: [
-      mockProvider(SideModulesGlobalFormBuilderService)
-    ]
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ]
+        });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+        service = TestBed.inject(SideModulesGlobalFormBuilderService);
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(service).toBeTruthy();
+    });
 });

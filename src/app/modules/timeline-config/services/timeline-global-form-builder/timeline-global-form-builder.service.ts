@@ -46,7 +46,7 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
     startupService: StartupService,
     mainFormService: MainFormService,
     settingsService: ArlasSettingsService,
-    timelineBucketsIntervalFg?: BucketsIntervalFormGroup,
+    timelineBucketsIntervalFg: BucketsIntervalFormGroup,
     colorService?: ArlasColorService,
   ) {
     super(
@@ -462,13 +462,13 @@ export class TimelineGlobalFormGroup extends ConfigFormGroup {
 export class TimelineGlobalFormBuilderService {
 
   public constructor(
-    private defaultValuesService: DefaultValuesService,
-    private bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
-    private collectionService: CollectionService,
-    private mainFormService: MainFormService,
-    private colorService: ArlasColorService,
-    private startupService: StartupService,
-    private settingsService: ArlasSettingsService,
+    private readonly  defaultValuesService: DefaultValuesService,
+    private readonly  bucketsIntervalBuilderService: BucketsIntervalFormBuilderService,
+    private readonly  collectionService: CollectionService,
+    private readonly  mainFormService: MainFormService,
+    private readonly  colorService: ArlasColorService,
+    private readonly  startupService: StartupService,
+    private readonly  settingsService: ArlasSettingsService,
 
   ) { }
 

@@ -9,7 +9,9 @@
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button class="modal_button" color="primary" [mat-dialog-close]="textName" [disabled]="!textName"
-    tabindex="2">{{ 'OK' | translate }}</button>
-  <button *ngIf="!data?.noCancel" mat-raised-button class="modal_button" (click)="cancel()"
+  tabindex="2">{{ 'OK' | translate }}</button>
+  @if (!data?.noCancel) {
+    <button mat-raised-button class="modal_button" (click)="cancel()"
     tabindex="-1">{{ 'Cancel' | translate }}</button>
+  }
 </div>

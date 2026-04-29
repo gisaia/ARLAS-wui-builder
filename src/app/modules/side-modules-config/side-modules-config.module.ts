@@ -22,10 +22,10 @@ import { GlobalSideModulesComponent } from './components/global-side-modules/glo
 import { SideModulesConfigRoutingModule } from './side-modules-config-routing.module';
 
 @NgModule({
-  declarations: [GlobalSideModulesComponent],
-  imports: [
-    SharedModule,
-    SideModulesConfigRoutingModule
-  ]
+    imports: [
+        SharedModule,
+        SideModulesConfigRoutingModule,
+        GlobalSideModulesComponent
+    ]
 })
 export class SideModulesConfigModule { }

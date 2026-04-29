@@ -1,24 +1,26 @@
-import { SpectatorService, createServiceFactory, mockProvider } from '@ngneat/spectator';
+import { TestBed } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { LookAndFeelInitService } from './look-and-feel-init.service';
-import { MainFormService } from '@services/main-form/main-form.service';
-import { LookAndFeelGlobalFormBuilderService } from '../look-and-feel-global-form-builder/look-and-feel-global-form-builder.service';
 
 describe('LookAndFeelInitService', () => {
-  let spectator: SpectatorService<LookAndFeelInitService>;
+    let service: LookAndFeelInitService;
 
-  const createService = createServiceFactory({
-    service: LookAndFeelInitService,
-    providers: [
-      mockProvider(MainFormService),
-      mockProvider(LookAndFeelGlobalFormBuilderService)
-    ]
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                LoggerModule.forRoot(null),
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+            ]
+        });
 
-  beforeEach(() => {
-    spectator = createService();
-  });
+        service = TestBed.inject(LookAndFeelInitService);
+    });
 
-  it('should create', () => {
-    expect(spectator.service).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(service).toBeTruthy();
+    });
 });

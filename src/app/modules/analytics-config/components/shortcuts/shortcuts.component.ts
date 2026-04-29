@@ -18,14 +18,20 @@
  */
 
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
-import { CdkDragDrop, CdkDragEnter, CdkDragMove, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragEnter, CdkDragMove, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
-    selector: 'arlas-shortcuts',
-    templateUrl: './shortcuts.component.html',
-    styleUrls: ['./shortcuts.component.scss'],
-    standalone: false
+  selector: 'arlas-shortcuts',
+  templateUrl: './shortcuts.component.html',
+  styleUrls: ['./shortcuts.component.scss'],
+  imports: [
+    TranslatePipe,
+    DragDropModule,
+    MatIconModule
+  ]
 })
 export class ShortcutsComponent {
   public dropListReceiverElement?: HTMLElement;

@@ -16,24 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, OnDestroy } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
+import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
 import { ConfigFormGroup, ConfigFormGroupArray } from '@shared-models/config-form';
 
 @Component({
-    selector: 'arlas-config-form-group-array',
-    templateUrl: './config-form-group-array.component.html',
-    styleUrls: ['./config-form-group-array.component.scss'],
-    standalone: false
+  selector: 'arlas-config-form-group-array',
+  templateUrl: './config-form-group-array.component.html',
+  styleUrls: ['./config-form-group-array.component.scss'],
+  imports: [
+    MatIconModule,
+    MatTooltipModule,
+    TranslatePipe,
+    forwardRef(() => ConfigElementComponent),
+    forwardRef(() => ConfigFormControlComponent)
+  ]
 })
-export class ConfigFormGroupArrayComponent implements OnInit, OnDestroy {
+export class ConfigFormGroupArrayComponent implements OnDestroy {
 
   @Input() public configFormGroupArray: ConfigFormGroupArray;
   @Input() public defaultKey: string;
-
-  public constructor() { }
-
-  public ngOnInit() {
-  }
 
   public ngOnDestroy() {
     this.configFormGroupArray = null;

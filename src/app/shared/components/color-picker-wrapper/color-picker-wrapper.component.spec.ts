@@ -1,28 +1,36 @@
-import { ColorPickerWrapperComponent } from './color-picker-wrapper.component';
-import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ColorPickerWrapperComponent } from './color-picker-wrapper.component';
 
-describe('ColorPickerComponent', () => {
-  let spectator: Spectator<ColorPickerWrapperComponent>;
+describe('ColorPickerWrapperComponent', () => {
+    let component: ColorPickerWrapperComponent;
+    let fixture: ComponentFixture<ColorPickerWrapperComponent>;
 
-  const createComponent = createComponentFactory({
-    component: ColorPickerWrapperComponent,
-    providers: [
-      mockProvider(DefaultValuesService, {
-        getDefaultConfig: () => ({ config: { colorPickerPresets: [] } })
-      })
-    ]
-  });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                ColorPickerWrapperComponent,
+                LoggerModule.forRoot(null)
+            ],
+            providers: [
+                {
+                    provide: DefaultValuesService,
+                    useValue: {
+                        getDefaultConfig: vi.fn(() => ({ colorPickerPresets: []}))
+                    }
+                }
+            ]
+        })
+        .compileComponents();
 
-  beforeEach(() => {
-    spectator = createComponent();
-  });
+        fixture = TestBed.createComponent(ColorPickerWrapperComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
-
-  it('should contain a color picker input', () => {
-    expect(spectator.queryAll('ngx-color-picker')).toBeDefined();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

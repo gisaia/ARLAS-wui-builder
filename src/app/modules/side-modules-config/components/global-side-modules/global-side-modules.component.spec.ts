@@ -1,44 +1,39 @@
-import { Spectator, createComponentFactory, mockProvider } from '@ngneat/spectator';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { mockMainFormService } from '@app/test/main-form.service.mock';
+import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
-import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
-import {
-  SideModulesGlobalFormGroup
-} from '@side-modules-config/services/side-modules-global-form-builder/side-modules-global-form-builder.service';
-import { ArlasCollaborativesearchService } from 'arlas-wui-toolkit';
-import { MockComponent } from 'ng-mocks';
+import { LoggerModule } from 'ngx-logger';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { GlobalSideModulesComponent } from './global-side-modules.component';
 
 describe('GlobalSideModulesComponent', () => {
-  let spectator: Spectator<GlobalSideModulesComponent>;
+    let component: GlobalSideModulesComponent;
+    let fixture: ComponentFixture<GlobalSideModulesComponent>;
 
-  const mockCollectionService = jasmine.createSpyObj('CollectionService', ['getGroupCollectionItems', 'getCollections']);
-  mockCollectionService.getGroupCollectionItems.and.returnValue({});
-  mockCollectionService.getCollections.and.returnValue([]);
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [
+                GlobalSideModulesComponent,
+                TranslateModule.forRoot({
+                    loader: { provide: TranslateLoader, useClass: TranslateNoOpLoader }
+                }),
+                LoggerModule.forRoot(null)
+            ],
+            providers: [
+                {
+                    provide: MainFormService,
+                    useValue: mockMainFormService
+                }
+            ]
+        })
+        .compileComponents();
 
-  const mockArlasCSS = jasmine.createSpyObj<ArlasCollaborativesearchService>('ArlasCollaborativesearchService', ['defaultCollection']);
-  mockArlasCSS.defaultCollection = 'main';
+        fixture = TestBed.createComponent(GlobalSideModulesComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  const createComponent = createComponentFactory({
-    component: GlobalSideModulesComponent,
-    declarations: [
-      MockComponent(ConfigFormControlComponent),
-      MockComponent(ConfigFormGroupComponent)
-    ],
-    providers: [
-      mockProvider(MainFormService, {
-        sideModulesConfig: {
-          getGlobalFg: () => new SideModulesGlobalFormGroup(mockCollectionService, mockArlasCSS)
-        },
-        getMainCollection: () => ''
-      })
-    ]
-  });
-
-  beforeEach(() => spectator = createComponent());
-
-  it('should create', () => {
-    expect(spectator.component).toBeTruthy();
-  });
-
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

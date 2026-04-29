@@ -22,12 +22,10 @@ import { GlobalTimelineComponent } from './components/global-timeline/global-tim
 import { TimelineConfigRoutingModule } from './timeline-config-routing.module';
 
 @NgModule({
-  declarations: [
-    GlobalTimelineComponent
-  ],
-  imports: [
-    TimelineConfigRoutingModule,
-    SharedModule
-  ]
+    imports: [
+        TimelineConfigRoutingModule,
+        SharedModule,
+        GlobalTimelineComponent
+    ]
 })
 export class TimelineConfigModule { }

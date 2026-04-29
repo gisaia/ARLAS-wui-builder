@@ -17,10 +17,16 @@
  * under the License.
  */
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { IconPickerModule } from '@gisaia-team/ngx-icon-picker';
+import { TranslatePipe } from '@ngx-translate/core';
 import { AnalyticsTabs } from 'arlas-wui-toolkit';
-import { MatSelectChange } from '@angular/material/select';
 
 export enum TAB_DISPLAY_MODE {
   BOTH = 'both',
@@ -29,10 +35,20 @@ export enum TAB_DISPLAY_MODE {
 }
 
 @Component({
-    selector: 'arlas-edit-tab',
-    templateUrl: './edit-tab.component.html',
-    styleUrls: ['./edit-tab.component.scss'],
-    standalone: false
+  selector: 'arlas-edit-tab',
+  templateUrl: './edit-tab.component.html',
+  styleUrls: ['./edit-tab.component.scss'],
+  imports: [
+    TranslatePipe,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    IconPickerModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatButtonModule
+  ]
 })
 export class EditTabComponent implements OnInit {
 

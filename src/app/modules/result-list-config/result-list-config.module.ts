@@ -24,13 +24,11 @@ import { GlobalResultListComponent } from './components/global-result-list/globa
 import { ResultListConfigRoutingModule } from './result-list-config-routing.module';
 
 @NgModule({
-  declarations: [
-    GlobalResultListComponent
-  ],
-  imports: [
-    ArlasToolkitSharedModule,
-    ResultListConfigRoutingModule,
-    SharedModule
-  ]
+    imports: [
+        ArlasToolkitSharedModule,
+        ResultListConfigRoutingModule,
+        SharedModule,
+        GlobalResultListComponent
+    ]
 })
 export class ResultListConfigModule { }

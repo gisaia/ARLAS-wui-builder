@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Directive, ElementRef, HostListener, Input, OnDestroy, OnInit, Optional } from '@angular/core';
+import { Directive, ElementRef, Input, OnDestroy, OnInit, Optional } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { MatSelect } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -39,19 +39,22 @@ export class AlertOnChangeDirective implements OnInit, OnDestroy {
   @Input('arlasAlertOnChange') private alertMessage: string;
   @Input() private dependants: AbstractControl[];
 
-  // 2 cases are managed in different ways:
-  // - host is a regular html input, then we can simply use the native element
-  // to attach a listener and get the current value
-  // - host is a MatSelect: this is a pure angular component, this is handled through angular
-
+  /**
+   * The directive is used in two different cases:
+   * - host is a regular html input, then we can simply use the native element to attach a listener and get the current value
+   * - host is a MatSelect: this is a pure angular component, this is handled through angular
+   */
   public ngOnInit(): void {
     if (!this.alertMessage) {
       return;
     }
     let elem = this.elementRef;
-    if (!this.select) {
+    if (this.select) {
+      this.select.openedChange.asObservable()
+        .subscribe(e => this.openedChange(e));
+    } else {
       elem.nativeElement.onfocus = (e: Event) => {
-        const anyDependantDirty = this.dependants == null || this.dependants.filter(d => d.dirty).length > 0;
+        const anyDependantDirty = this.dependants == null || this.dependants.some(d => d.dirty);
         if (anyDependantDirty && !!elem.nativeElement.value) {
           this.snackBar.open(this.translate.instant('Careful!') + ' ' + this.translate.instant(this.alertMessage));
         }
@@ -65,12 +68,12 @@ export class AlertOnChangeDirective implements OnInit, OnDestroy {
     this.dependants = null;
   }
 
-  @HostListener('openedChange', ['$event']) public openedChange(selectedHasBeenOpen: boolean) {
+  private openedChange(selectedHasBeenOpen: boolean) {
     if (!this.alertMessage) {
       return;
     }
     // display a snack on opening if a dependant has a value
-    const anyDependantHasValue = this.dependants == null || this.dependants.filter(d => d.value !== null).length > 0;
+    const anyDependantHasValue = this.dependants == null || this.dependants.some(d => d.value !== null);
     // display the warning only if a value is already set AND if any dependency has been changed
     if (anyDependantHasValue && selectedHasBeenOpen && !this.select.empty) {
       this.snackBar.open(this.translate.instant('Careful!') + ' ' + this.translate.instant(this.alertMessage));
