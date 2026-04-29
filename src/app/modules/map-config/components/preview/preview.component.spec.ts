@@ -59,13 +59,15 @@ describe('PreviewComponent', () => {
                     provide: BasemapService,
                     useValue: {
                         protomapBasemapAdded$: of(),
-                        setBasemaps: vi.fn(() => {}),
-                        fetchSources$: vi.fn(() => of([]))
+                        setBasemaps: vi.fn(() => { }),
+                        fetchSources$: vi.fn(() => of([])),
+                        basemapChanged$: of()
+
                     }
                 }
             ]
         })
-        .compileComponents();
+            .compileComponents();
 
         fixture = TestBed.createComponent(PreviewComponent);
         component = fixture.componentInstance;
