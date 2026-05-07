@@ -25,11 +25,7 @@
     {{ 'Configure data eligible for visualisation' | translate: {name: visualisation()?.value.name} }}
   </div>
   <!-- add button -->
-  <button mat-stroked-button color="primary"
-    class="manage-visualisation__button"
-    (click)="addDataGroup()"
-    >
-    <mat-icon>add</mat-icon>
+  <button mat-stroked-button color="primary" class="manage-visualisation__button" (click)="addDataGroup()">
     {{ 'Add data group' | translate }}
   </button>
   <!-- table -->

@@ -14,12 +14,10 @@
                   [defaultKey]="defaultKey" [isSubGroup]="true"></arlas-config-form-group>
                 <div>
                   @if (!isFirstControl(formGroup)) {
-                    <button mat-button matStepperPrevious
-                    >{{ 'Back' | translate}}</button>
+                    <button mat-button matStepperPrevious>{{ 'Back' | translate}}</button>
                   }
                   @if (!isLastControl(formGroup)) {
-                    <button mat-button matStepperNext type="button"
-                    >{{ 'Next' | translate}}</button>
+                    <button mat-button matStepperNext type="button">{{ 'Next' | translate}}</button>
                   }
                 </div>
               </mat-step>
