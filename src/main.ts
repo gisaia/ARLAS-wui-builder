@@ -17,7 +17,7 @@
  * under the License.
  */
 import { HttpClient } from '@angular/common/http';
-import { enableProdMode, forwardRef, importProvidersFrom, inject, provideAppInitializer } from '@angular/core';
+import { enableProdMode, forwardRef, importProvidersFrom, inject, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -109,7 +109,8 @@ bootstrapApplication(AppComponent, {
             deps: [TranslateService],
             useFactory: (translateService: TranslateService) => new PaginatorI18n(translateService)
         },
-        provideAnimationsAsync()
+        provideAnimationsAsync(),
+        provideZoneChangeDetection()
     ]
 })
   .catch(err => console.error(err));
