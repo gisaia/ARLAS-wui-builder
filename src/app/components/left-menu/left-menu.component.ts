@@ -29,9 +29,7 @@ import { MainFormManagerService } from '@services/main-form-manager/main-form-ma
 import { MainFormService } from '@services/main-form/main-form.service';
 import { MenuService } from '@services/menu/menu.service';
 import { getNbErrorsInControl, isFullyTouched, Page } from '@utils/tools';
-import {
-  ArlasSettingsService, LinkSettings, PersistenceService
-} from 'arlas-wui-toolkit';
+import { PersistenceService } from 'arlas-wui-toolkit';
 
 @Component({
   selector: 'arlas-left-menu',
@@ -54,21 +52,18 @@ export class LeftMenuComponent implements OnInit {
   public nbErrorsByPage: Map<string, number> = new Map();
 
   public pages: Page[] = [];
-  public links: LinkSettings[] = [];
 
   public constructor(
-    private mainFormService: MainFormService,
-    private mainFormManager: MainFormManagerService,
-    public persistenceService: PersistenceService,
-    private settings: ArlasSettingsService,
-    private menu: MenuService
+    private readonly mainFormService: MainFormService,
+    private readonly mainFormManager: MainFormManagerService,
+    public readonly persistenceService: PersistenceService,
+    private readonly menu: MenuService
   ) {
     // recompute nberrors of each page anytime the mainform validity changes
     this.mainFormService.mainForm.statusChanges.subscribe(st => this.updateNbErrors());
   }
 
   public ngOnInit() {
-    this.links = this.settings.getLinksSettings();
     this.pages = this.menu.pages;
   }
 

@@ -14,18 +14,6 @@
 
   <div class="action-list">
     <mat-nav-list>
-      @if (!!links && links.length > 0) {
-        <mat-divider></mat-divider>
-        <mat-nav-list>
-          @for (link of links; track link) {
-            <mat-list-item>
-              <button matTooltip="{{ link.name | translate}}" mat-icon-button (click)="navigateTo(link.url)" [matTooltipPosition]="'right'">
-                <mat-icon>{{link.icon}}</mat-icon>
-              </button>
-            </mat-list-item>
-          }
-        </mat-nav-list>
-      }
       <mat-divider></mat-divider>
       <mat-list-item matTooltip="{{'Save' | translate}}" (click)="save($event)" matTooltipPosition="right"
         [class.disabled-item]="!persistenceService.isAvailable">
@@ -38,7 +26,6 @@
           <mat-icon>save_alt</mat-icon>
         </button>
       </mat-list-item>
-      <mat-divider></mat-divider>
     </mat-nav-list>
   </div>
 </div>
