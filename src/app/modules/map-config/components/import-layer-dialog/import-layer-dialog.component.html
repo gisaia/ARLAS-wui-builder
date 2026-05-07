@@ -28,6 +28,7 @@
 </div>
 
 <div mat-dialog-actions>
-  <button mat-button mat-dialog-close>{{ 'Cancel' | translate}}</button>
-  <button mat-button [mat-dialog-close]="[importLayerFormGroup.get('layer').value, dashboardConfigJson]" [disabled]="!importLayerFormGroup.valid" mat-raised-button color="primary">{{ 'Import' | translate}}</button>
+  <button matButton="outlined" mat-dialog-close>{{ 'Cancel' | translate}}</button>
+  <button matButton="filled" color="primary" [mat-dialog-close]="[importLayerFormGroup.get('layer').value, dashboardConfigJson]"
+    [disabled]="!importLayerFormGroup.valid">{{ 'Import' | translate}}</button>
 </div>

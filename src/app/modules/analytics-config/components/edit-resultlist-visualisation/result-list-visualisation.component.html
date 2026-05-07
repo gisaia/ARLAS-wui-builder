@@ -8,7 +8,7 @@
         (changeCanceled)="manageVisualisationCanceled($event)"
     ></arlas-manage-visualisation>
 } @else {
-    <button mat-stroked-button color="primary" (click)="addVisualisation()">
+    <button matButton="outlined" color="primary" (click)="addVisualisation()">
         <mat-icon>add</mat-icon>
         {{ 'Add a visualization' | translate }}
     </button>

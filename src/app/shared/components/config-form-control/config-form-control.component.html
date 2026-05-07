@@ -187,7 +187,7 @@
   </div>
 } @else if (isOrderedSelect(); as typedControl) {
   <div class="order-select-form-control">
-    <div>
+    <div class="order-select-form-control__container">
       <input matInput [formControl]="typedControl" [hidden]="true" [required]="!typedControl.optional">
       <mat-form-field  [class]="typedControl.formFieldClass">
         <mat-label>{{ typedControl.label | translate}}</mat-label>
@@ -206,8 +206,11 @@
         <mat-radio-button value="+">{{ 'ASC' | translate}}</mat-radio-button>
         <mat-radio-button value="-">{{ 'DESC' | translate}}</mat-radio-button>
       </mat-radio-group>
-      <button type="button" mat-stroked-button [disabled]="!typedControl.sortDirection || !selectSort.value"
-        (click)="typedControl.addSort(typedControl.sortDirection + selectSort.value, $event)">{{ 'Add' | translate}}</button>
+      <button type="button" matButton="outlined" color="primary" [disabled]="!typedControl.sortDirection || !selectSort.value"
+          (click)="typedControl.addSort(typedControl.sortDirection + selectSort.value, $event)">
+        <mat-icon>add</mat-icon>
+        {{ 'Add' | translate}}
+      </button>
       <mat-chip-listbox #chipSortList>
         @for (sort of typedControl.sorts; track sort) {
           <mat-chip-option [selectable]="false" [removable]="true"
@@ -255,22 +258,23 @@
               </mat-form-field>
             </div>
           }
-          @if (!typedControl.isUpdateState) {
-            <div class="add-container">
-              <button type="button" mat-stroked-button
-                [disabled]="typedControl.metricCtrl.invalid || typedControl.fieldCtrl.invalid || typedControl.arlasFilterCtrl.invalid"
-                (click)="typedControl.addMetric()">{{ 'Add' | translate}}
-              </button>
-            </div>
-          }
+
           @if (typedControl.isUpdateState) {
             <div class="add-container">
-              <button type="button" mat-stroked-button
-                [disabled]="typedControl.metricCtrl.invalid || typedControl.fieldCtrl.invalid || typedControl.arlasFilterCtrl.invalid"
-                (click)="typedControl.updateMetric()">{{ 'Update' | translate}}
-              </button>
-              <button type="button" mat-stroked-button (click)="typedControl.cancelUpdateMetric()">{{ 'Cancel' |
-                translate}}
+              <button type="button" matButton="outlined" color="primary"
+                  [disabled]="typedControl.metricCtrl.invalid || typedControl.fieldCtrl.invalid || typedControl.arlasFilterCtrl.invalid"
+                  (click)="typedControl.updateMetric()">
+                {{ 'Update' | translate}}</button>
+              <button type="button" matButton="outlined" (click)="typedControl.cancelUpdateMetric()">
+                {{ 'Cancel' | translate}}</button>
+            </div>
+          } @else {
+            <div class="add-container">
+              <button type="button" matButton="outlined" color="primary"
+                  [disabled]="typedControl.metricCtrl.invalid || typedControl.fieldCtrl.invalid || typedControl.arlasFilterCtrl.invalid"
+                  (click)="typedControl.addMetric()">
+                <mat-icon>add</mat-icon>
+                {{ 'Add' | translate}}
               </button>
             </div>
           }
@@ -358,9 +362,12 @@
             </mat-form-field>
           </div>
           <div class="add-container">
-            <button type="button" mat-stroked-button
-              [disabled]="typedControl.sizeCtrl.invalid || typedControl.fieldCtrl.invalid"
-            (click)="typedControl.add()">{{ 'Add' | translate}}</button>
+            <button type="button" matButton="outlined" color="primary"
+                [disabled]="typedControl.sizeCtrl.invalid || typedControl.fieldCtrl.invalid"
+                (click)="typedControl.add()">
+              <mat-icon>add</mat-icon>
+              {{ 'Add' | translate}}
+            </button>
           </div>
         </div>
       </div>
@@ -414,19 +421,16 @@
           }
           <div class="insert-container">
             @if (typedControl?.showInsertButton) {
-              <button type="button" mat-stroked-button
+              <button type="button" matButton="outlined" color="primary"
                 (click)="typedControl.showInsertButton = false" [matTooltip]="'Insert field tooltip' | translate" matTooltipPosition="right">
                 {{ 'Insert field' | translate}}
               </button>
-            }
-            @if (!typedControl?.showInsertButton) {
-              <button type="button" mat-stroked-button class="insert"
+            } @else {
+              <button type="button" matButton="outlined" color="primary" class="insert"
                 [disabled]="typedControl.fieldCtrl.invalid" (click)="typedControl.add()">
                 {{ 'Insert' | translate}}
               </button>
-            }
-            @if (!typedControl?.showInsertButton) {
-              <button type="button" mat-stroked-button
+              <button type="button" matButton="outlined"
                 (click)="typedControl.showInsertButton = true">
                 {{ 'Cancel' | translate}}
               </button>
@@ -491,7 +495,7 @@
   </div>
 } @else if (isButton(); as typedControl) {
   <div class="button-form-control">
-    <button type="button" mat-stroked-button color="primary" (click)="typedControl.callback()"
+    <button type="button" matButton="outlined" color="primary" (click)="typedControl.callback()"
       [disabled]="typedControl.disabledButton">
       {{typedControl.label | translate}}
     </button>

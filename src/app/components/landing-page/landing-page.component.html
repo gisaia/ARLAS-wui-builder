@@ -52,9 +52,9 @@
 
 @if (canCreateForCurrentOrg) {
   <div class="buttons">
-    <button mat-stroked-button color="primary" class="new_dashboard" (click)="openChoice(InitialChoice.setup)">{{'New dashboard' |
-    translate}}</button>
-    <button mat-stroked-button color="primary" (click)="openChoice(InitialChoice.load)">{{'Import from file'
-    | translate}}</button>
+    <button matButton="outlined" color="primary" class="new_dashboard" (click)="openChoice(InitialChoice.setup)">
+      {{'New dashboard' | translate}}</button>
+    <button matButton="outlined" color="primary" (click)="openChoice(InitialChoice.load)">
+      {{'Import from file' | translate}}</button>
   </div>
 }

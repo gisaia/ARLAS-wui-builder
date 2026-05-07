@@ -57,8 +57,10 @@
         @if (tabs.length === 0) {
           <div class="no-tabs">
             {{ 'Analytics board is empty.' | translate}}
-            <button mat-stroked-button color="primary" (click)="newTab()">
-            {{ 'Create a new tab.' | translate}}</button>
+            <button matButton="outlined" color="primary" (click)="newTab()">
+              <mat-icon>add</mat-icon>
+              {{ 'Create a new tab.' | translate}}
+            </button>
           </div>
         }
       </mat-tab>

@@ -20,7 +20,7 @@
   </mat-radio-group>
 </div>
 <div mat-dialog-actions>
-  <button mat-raised-button class="modal_button" color="primary" [mat-dialog-close]="widgetType"
+  <button matButton="filled" class="modal_button" color="primary" [mat-dialog-close]="widgetType"
   [disabled]="!widgetType" tabindex="2">{{ 'Add' | translate }}</button>
-  <button mat-raised-button class="modal_button" (click)="cancel()" tabindex="-1">{{ 'Cancel' | translate }}</button>
+  <button matButton="outlined" class="modal_button" (click)="cancel()" tabindex="-1">{{ 'Cancel' | translate }}</button>
 </div>

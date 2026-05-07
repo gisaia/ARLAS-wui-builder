@@ -127,13 +127,6 @@ export class ConfigFormGroupComponent extends AsbtractConfigFormControl implemen
     .filter(c => (c instanceof ConfigFormGroup && !!c.tabName))
     .length > 0;
 
-
-  public isFirstControl = (control: AbstractControl) =>
-    Object.values(this.configFormGroup.controls)[0] === control;
-
-  public isLastControl = (control: AbstractControl) =>
-    Object.values(this.configFormGroup.controls).pop() === control;
-
   /**
    * Propagate the submission to sub config form groups
    * Usefull to update the stepper's state (if there is any)

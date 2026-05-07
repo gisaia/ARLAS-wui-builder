@@ -15,8 +15,8 @@
   </div>
 }
 <div class="action-buttons">
-  <button mat-raised-button color="primary" type="submit" (click)="submit()">{{ 'Save' | translate}} </button>
-  <button class="cancel-button" mat-raised-button (click)="forceCanExit = true"
+  <button class="cancel-button" matButton="outlined" (click)="forceCanExit = true"
     [routerLink]="['', 'map-config', 'visualisations']" queryParamsHandling="preserve">{{ 'Cancel' | translate}}
   </button>
+  <button matButton="filled" color="primary" type="submit" (click)="submit()">{{ 'Save' | translate}} </button>
 </div>

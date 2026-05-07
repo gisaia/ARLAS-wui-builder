@@ -5,19 +5,20 @@
 
   @if (hasChildSteps()) {
     <mat-horizontal-stepper #stepper class="stepper-for-config-element">
-      @for (control of configFormGroup.controls | objectvalues; track control) {
+      @let controlValues = configFormGroup.controls | objectvalues;
+      @for (control of controlValues; track control) {
         @if (control.enabled) {
           @if (isFormGroup(control); as formGroup) {
             @if (!formGroup.hide) {
               <mat-step label="{{formGroup.stepName | translate}}" [stepControl]="formGroup">
                 <arlas-config-form-group [configFormGroup]="formGroup" [parentConfigFormGroup]="parentConfigFormGroup"
                   [defaultKey]="defaultKey" [isSubGroup]="true"></arlas-config-form-group>
-                <div>
-                  @if (!isFirstControl(formGroup)) {
-                    <button mat-button matStepperPrevious>{{ 'Back' | translate}}</button>
+                <div class="stepper-for-config-element__nav">
+                  @if ($index > 0) {
+                    <button matButton="outlined" matStepperPrevious>{{ 'Back' | translate}}</button>
                   }
-                  @if (!isLastControl(formGroup)) {
-                    <button mat-button matStepperNext type="button">{{ 'Next' | translate}}</button>
+                  @if ($index !== controlValues.length - 1) {
+                    <button matButton="filled" color="primary" matStepperNext type="button">{{ 'Next' | translate}}</button>
                   }
                 </div>
               </mat-step>

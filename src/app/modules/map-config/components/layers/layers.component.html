@@ -1,11 +1,11 @@
 <div style="display: flex; margin: 10px 0">
-  <button mat-stroked-button color="primary" [disabled]="!enableAddLayer" class="add-layer"
-    [matTooltip]="enableAddLayer ? ('Add layer' | translate) : ('No collection with geometries is available in the server' | translate)"
-    matTooltipPosition="below" [routerLink]="['add']" queryParamsHandling="preserve">
+  <button matButton="outlined" color="primary" [disabled]="!enableAddLayer" class="add-layer"
+      [matTooltip]="enableAddLayer ? ('Add layer' | translate) : ('No collection with geometries is available in the server' | translate)"
+      matTooltipPosition="below" [routerLink]="['add']" queryParamsHandling="preserve">
+    <mat-icon>add</mat-icon>
     {{'Add layer' | translate}}
   </button>
-  <button mat-stroked-button color="primary" class="import-layer" (click)="importLayer()"
-    queryParamsHandling="preserve">
+  <button matButton="outlined" color="primary" class="import-layer" (click)="importLayer()" queryParamsHandling="preserve">
     {{'Import layer' | translate}}
   </button>
   <div class="description">

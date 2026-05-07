@@ -3,6 +3,6 @@
     <p>{{ data.message | translate }}</p>
 </div>
 <div mat-dialog-actions>
-    <button mat-button cdkFocusInitial [mat-dialog-close]="false">{{'Cancel' | translate}}</button>
-    <button mat-button [mat-dialog-close]="true">{{ 'Yes' | translate}}</button>
+    <button matButton="outlined" color="warn" cdkFocusInitial [mat-dialog-close]="false">{{'Cancel' | translate}}</button>
+    <button matButton="filled" color="primary" [mat-dialog-close]="true">{{ 'Yes' | translate}}</button>
 </div>

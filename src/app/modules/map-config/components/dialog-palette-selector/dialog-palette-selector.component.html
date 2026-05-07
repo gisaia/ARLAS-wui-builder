@@ -82,15 +82,10 @@
 }
 
 <div mat-dialog-actions class="action-buttons-palette" [align]="'end'">
-  <div>
-    <button mat-button [mat-dialog-close]="undefined">{{ 'Cancel' | translate}}</button>
-    @if (selectedPalette) {
-      <button mat-button (click)="selectedPalette = null"
-      >{{ 'Back to palettes' | translate}}</button>
-    }
-    @if (selectedPalette) {
-      <button mat-button color="primary" mat-raise [mat-dialog-close]="selectedPalette"
+  <button matButton="outlined" [mat-dialog-close]="undefined">{{ 'Cancel' | translate}}</button>
+  @if (selectedPalette) {
+    <button matButton="outlined" (click)="selectedPalette = null">{{ 'Back to palettes' | translate}}</button>
+    <button matButton="filled" color="primary" [mat-dialog-close]="selectedPalette"
       [disabled]="!isValid()">{{ 'Save' | translate}}</button>
-    }
-  </div>
+  }
 </div>

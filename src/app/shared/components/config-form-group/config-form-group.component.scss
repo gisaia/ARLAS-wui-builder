@@ -39,3 +39,11 @@
       overflow: hidden;
    }
 }
+
+.stepper-for-config-element {
+   &__nav {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+   }
+}

@@ -16,7 +16,7 @@
           <button
             (click)="mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
             [disabled]="mainFormService.startingConfig.getFg().get('serverUrl').invalid"
-          mat-stroked-button color="accent">{{'Reload collections' | translate}}</button>
+            matButton="outlined" color="primary">{{'Reload collections' | translate}}</button>
         </div>
       </arlas-config-element>
       @if (isServerReady) {
@@ -47,9 +47,9 @@
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-button (click)="configChoice = InitialChoice.none; cancel()">{{'Back' | translate}}</button>
+    <button matButton="outlined" (click)="configChoice = InitialChoice.none; cancel()">{{'Back' | translate}}</button>
     <button (click)="saveConfig()" [disabled]="mainFormService.startingConfig.getFg().invalid"
-      mat-raised-button color="primary">{{'Start' | translate}}</button>
+      matButton="filled" color="primary">{{'Start' | translate}}</button>
   </mat-dialog-actions>
 }
 
@@ -59,7 +59,7 @@
     <div class="upload-files">
       <div class="upload-single-files">
         <!-- No material file input exists, so we hide the basic input behind a material button -->
-        <button type="button" mat-stroked-button color="accent" (click)="confFileInput.click()">
+        <button type="button" matButton="outlined" color="primary" (click)="confFileInput.click()">
           {{ 'Select a config.json file' | translate }}
           @if (confFileInput.files.length) {
             <span class="upload-check">
@@ -72,7 +72,7 @@
       </div>
       <div class="upload-single-files">
         <!-- No material file input exists, so we hide the basic input behind a material button -->
-        <button type="button" mat-stroked-button color="accent" (click)="mapFileInput.click()">
+        <button type="button" matButton="outlined" color="primary" (click)="mapFileInput.click()">
           {{ 'Select a config.map.json file' | translate }}
           @if (mapFileInput.files.length) {
             <span class="upload-check">
@@ -86,9 +86,9 @@
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-button (click)="configChoice = InitialChoice.none;cancel()">{{'Back' | translate}}</button>
+    <button matButton="outlined" (click)="configChoice = InitialChoice.none;cancel()">{{'Back' | translate}}</button>
     <button (click)="upload(confFileInput.files[0], mapFileInput.files[0]);"
-        [disabled]="!confFileInput.files.length || !mapFileInput.files.length" mat-raised-button color="primary">
+        [disabled]="!confFileInput.files.length || !mapFileInput.files.length" matButton="filled" color="primary">
       {{'Start' | translate}}</button>
   </mat-dialog-actions>
 }
