@@ -426,9 +426,9 @@
 
 - Add the possibility to display a timeline for each collection on the same graph [\#568](https://github.com/gisaia/ARLAS-wui-builder/issues/568)
 
-## [v17.2.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.4) (2021-06-30)
-
 ## [v17.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.3) (2021-06-30)
+
+## [v17.2.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.4) (2021-06-30)
 
 ## [v17.2.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.2) (2021-06-30)
 
@@ -716,6 +716,7 @@
 **New stuff:**
 
 - Add layer preview in map config [\#79](https://github.com/gisaia/ARLAS-wui-builder/issues/79)
+- Add global map preview [\#215](https://github.com/gisaia/ARLAS-wui-builder/pull/215) ([mbarbet](https://github.com/mbarbet))
 
 **Fixed bugs:**
 
