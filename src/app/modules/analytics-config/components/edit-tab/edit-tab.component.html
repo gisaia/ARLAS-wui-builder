@@ -25,7 +25,7 @@
   </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]>{{'Cancel' | translate}}</button>
-  <button cdkFocusInitial [mat-dialog-close]="tabForm.value" mat-raised-button color="primary">{{'Validate' |
-    translate}}</button>
+  <button matButton="outlined" [mat-dialog-close]>{{'Cancel' | translate}}</button>
+  <button cdkFocusInitial [mat-dialog-close]="tabForm.value" matButton="filled" color="primary">
+    {{'Validate' | translate}}</button>
 </div>

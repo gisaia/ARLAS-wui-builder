@@ -65,6 +65,7 @@
 </div>
 
 <div mat-dialog-actions>
-  <button mat-button mat-dialog-close>{{ 'Cancel' | translate}}</button>
-  <button mat-button [mat-dialog-close]="[importWidgetFormGroup.get('componentConfig').value, dashboardConfigJson]" [disabled]="!importWidgetFormGroup.valid" mat-raised-button color="primary">{{ 'Import' | translate}}</button>
+  <button matButton="outlined" mat-dialog-close>{{ 'Cancel' | translate}}</button>
+  <button matButton="filled" color="primary" [mat-dialog-close]="[importWidgetFormGroup.get('componentConfig').value, dashboardConfigJson]"
+    [disabled]="!importWidgetFormGroup.valid">{{ 'Import' | translate}}</button>
 </div>

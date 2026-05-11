@@ -25,10 +25,7 @@
     {{ 'Configure data eligible for visualisation' | translate: {name: visualisation()?.value.name} }}
   </div>
   <!-- add button -->
-  <button mat-stroked-button color="primary"
-    class="manage-visualisation__button"
-    (click)="addDataGroup()"
-    >
+  <button matButton="outlined" color="primary" class="manage-visualisation__button" (click)="addDataGroup()">
     <mat-icon>add</mat-icon>
     {{ 'Add data group' | translate }}
   </button>
@@ -93,18 +90,16 @@
   </table>
   <div class="manage-visualisation__footer">
     @if (!isEdition()) {
-      <button (click)="cancelVisualisation()" mat-stroked-button color="secondary"
-        class="manage-visualisation__button">
+      <button (click)="cancelVisualisation()" matButton="outlined" class="manage-visualisation__button">
         {{ 'Cancel' | translate }}
       </button>
-      <button [disabled]="visualisation().invalid" (click)="validateVisualisation()" mat-stroked-button
-        color="primary" class="manage-visualisation__button">
+      <button [disabled]="visualisation().invalid" (click)="validateVisualisation()" matButton="filled"
+          color="primary" class="manage-visualisation__button">
         {{ 'Validate' | translate }}
       </button>
     } @else {
       <button [matTooltip]="'Back to visualisation list' | translate" (click)="cancelVisualisation()"
-        mat-stroked-button color="secondary"
-        class="manage-visualisation__button">
+          matButton="outlined" class="manage-visualisation__button">
         {{ 'Back' | translate }}
       </button>
     }

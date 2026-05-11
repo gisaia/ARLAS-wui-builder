@@ -72,6 +72,11 @@ mat-option {
 }
 
 .order-select-form-control {
+  &__container {
+    display: flex;
+    align-items: center;
+  }
+
   mat-form-field {
     width: fit-content;
     &.sort-list {
@@ -80,6 +85,8 @@ mat-option {
   }
 
   mat-radio-group {
+    display: flex;
+    gap: 10px;
     padding: 0 10px;
     --mat-radio-state-layer-size: 24px;
 

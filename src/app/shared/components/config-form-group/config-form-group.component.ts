@@ -23,6 +23,7 @@ import {
   ViewChildren, ViewEncapsulation, forwardRef
 } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -59,6 +60,7 @@ import { AsbtractConfigFormControl } from './abstract-config-form-group';
     ObjectvaluesPipe,
     MatTabsModule,
     OrderConfigFormTabControlsPipe,
+    MatButtonModule,
     forwardRef(() => ConfigElementComponent),
     forwardRef(() => ConfigFormControlComponent),
     forwardRef(() => HistogramBucketFormGroupComponent),
@@ -124,13 +126,6 @@ export class ConfigFormGroupComponent extends AsbtractConfigFormControl implemen
   public hasChildTabs = () => Object.values(this.configFormGroup.controls)
     .filter(c => (c instanceof ConfigFormGroup && !!c.tabName))
     .length > 0;
-
-
-  public isFirstControl = (control: AbstractControl) =>
-    Object.values(this.configFormGroup.controls)[0] === control;
-
-  public isLastControl = (control: AbstractControl) =>
-    Object.values(this.configFormGroup.controls).pop() === control;
 
   /**
    * Propagate the submission to sub config form groups

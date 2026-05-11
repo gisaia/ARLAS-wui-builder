@@ -17,7 +17,7 @@
        </div>
 
         <div class="data-group__button-wrapper">
-            <button mat-stroked-button color="tertiary" class="data-group__button"
+            <button matButton="outlined" color="primary" class="data-group__button"
                     (click)="addCriteria()">
                 <mat-icon>add</mat-icon>
                 {{ 'Add a criteria' | translate }}
@@ -78,12 +78,10 @@
             </table>
         </section>
         <mat-dialog-actions [align]="'end'">
-            @if (!data.edit) {
-                <button [mat-dialog-close]="false" mat-stroked-button class="data-group__button">
-                    {{ 'Cancel' | translate }}
-                </button>
-            }
-            <button [mat-dialog-close]="true" [disabled]="disableButton()" mat-stroked-button color="primary"
+            <button [mat-dialog-close]="false" matButton="outlined" class="data-group__button">
+                {{ 'Cancel' | translate }}
+            </button>
+            <button [mat-dialog-close]="true" [disabled]="disableButton()" matButton="filled" color="primary"
                     class="data-group__button">
                 {{ 'Validate' | translate }}
             </button>

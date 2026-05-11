@@ -16,34 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import "variables.scss";
 
-.form-control-title {
-   @include group-title();
-   font-size: 22px;
-}
+/** *************************************************************************************************
+ * Zone JS is required by default for Angular itself.
+ */
+import 'zone.js'; // Included with Angular CLI.
 
-.tab-error {
-   color: $error-color;
-}
 
-.main-form-group-div {
-   padding-bottom: 5px;
-}
-.no-child-step-tabs-div{
-   padding-bottom: 1px;
-}
 
-.no-overflow {
-   & .mat-mdc-tab-body-content {
-      overflow: hidden;
-   }
-}
-
-.stepper-for-config-element {
-   &__nav {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-   }
-}
+/** *************************************************************************************************
+ * APPLICATION IMPORTS
+ */

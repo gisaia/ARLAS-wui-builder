@@ -57,7 +57,8 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 
-<button type="button" mat-stroked-button color="primary" (click)="open()" class="add-filter">
+<button type="button" matButton="outlined" color="primary" (click)="open()" class="add-filter">
+  <mat-icon>add</mat-icon>
   {{'Add filterField' | translate}}
 </button>
 

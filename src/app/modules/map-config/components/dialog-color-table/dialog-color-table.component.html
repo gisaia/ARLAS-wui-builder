@@ -17,8 +17,11 @@
                 }
               </mat-autocomplete>
             </mat-form-field>
-            <button class="add-button" mat-button mat-stroked-button color="primary" (click)="addKeyword()"
-            [disabled]="!newKeywordCtrl.value || alreadyHasNewKeyword()">{{ 'Add' | translate}}</button>
+            <button class="add-button" matButton="outlined" color="primary" (click)="addKeyword()"
+                [disabled]="!newKeywordCtrl.value || alreadyHasNewKeyword()">
+              <mat-icon>add</mat-icon>
+              {{ 'Add' | translate}}
+            </button>
           </div>
           <mat-divider></mat-divider>
         </mat-header-cell>
@@ -31,7 +34,7 @@
             <input matInput [(ngModel)]="filter" (ngModelChange)="applyFilter()"
               [ngModelOptions]="{standalone: true}">
             @if (filter) {
-              <button mat-button matSuffix mat-icon-button (click)="filter=''; applyFilter()">
+              <button matSuffix mat-icon-button (click)="filter=''; applyFilter()">
                 <mat-icon>close</mat-icon>
               </button>
             }
@@ -65,6 +68,6 @@
 </div>
 
 <div mat-dialog-actions>
-  <button mat-button (click)="onCancel()">{{ 'Cancel' | translate}}</button>
-  <button mat-button [mat-dialog-close]="keywordColorsForm.value" mat-raised-button color="primary">{{ 'Validate' | translate}}</button>
+  <button matButton="outlined" (click)="onCancel()">{{ 'Cancel' | translate}}</button>
+  <button matButton="filled" color="primary" [mat-dialog-close]="keywordColorsForm.value">{{ 'Validate' | translate}}</button>
 </div>
