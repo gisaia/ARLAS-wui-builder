@@ -20,11 +20,11 @@
 @import "styles/material-override.scss";
 
 @font-face {
-  font-family: "Material Icons";
+  font-family: 'Material Symbols Outlined';
+  font-display: auto;
   font-style: normal;
   font-weight: 400;
-  src: local("Material Icons"), local("MaterialIcons-Regular"),
-    url("./assets/fonts/material-icons.woff2") format("woff2");
+  src: url('./assets/fonts/material-symbols-outlined.woff2') format('woff2')
 }
 
 body {
@@ -33,13 +33,13 @@ body {
   min-height: 100%;
   overflow: hidden;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", Arial;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 1rem;
   line-height: 1.5;
 }
 
 .material-icons {
-  font-family: "Material Icons";
+  font-family: 'Material Symbols Outlined', "Roboto", "Helvetica Neue", sans-serif;
   font-weight: normal;
   font-style: normal;
   font-size: 24px; /* Preferred icon size */
@@ -290,4 +290,33 @@ div.jsoneditor-value.jsoneditor-invalid {
 // Overloads cdk class. Default behaviour creates a scroll when we open a dialog.
 .cdk-global-scrollblock{
   overflow-y: auto;
+}
+
+// Icon picker
+icon-picker {
+  .icon-search {
+    input {
+      width: 95%;
+      padding: 5px;
+    }
+  }
+
+  .ip-button-icon {
+    background-color: white;
+    border-width: 1px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+    cursor: pointer;
+
+    &:hover {
+      background-color: lightgray;
+    }
+
+    span {
+      font-size: 20px !important;
+    }
+  }
 }

@@ -31,23 +31,5 @@
       padding: 0;
       border: 0;
     }
-
-    ::ng-deep .icon-picker {
-      .icon-search {
-        input {
-          width: 95%;
-          padding: 5px;
-        }
-      }
-    }
-  }
-
-  ::ng-deep .ip-button-icon {
-    min-width: -webkit-fill-available;
-    padding: 0 !important;
-  }
-
-  ::ng-deep .ip-button-icon:hover {
-    background-color: lightgray;
   }
 }
