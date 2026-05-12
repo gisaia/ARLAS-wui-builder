@@ -19,7 +19,8 @@
 
 import { KeyValue, KeyValuePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -27,6 +28,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 import { Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -45,7 +47,6 @@ import { GetCollectionDisplayNamePipe } from 'arlas-web-components';
 import { PersistenceService, UserInfosComponent } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner';
-import { Subscription } from 'rxjs';
 
 @Component({
   templateUrl: './landing-page-dialog.component.html',
@@ -63,10 +64,11 @@ import { Subscription } from 'rxjs';
     GroupCollectionPipe,
     MatIconModule,
     MatButtonModule,
-    GetCollectionDisplayNamePipe
+    GetCollectionDisplayNamePipe,
+    MatSelectModule
   ]
 })
-export class LandingPageDialogComponent implements OnInit, OnDestroy {
+export class LandingPageDialogComponent implements OnInit {
 
   public configChoice = InitialChoice.none;
   public isServerReady = false;
@@ -76,10 +78,7 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
   public displayedColumns: string[] = ['id', 'creation', 'detail'];
   public includePublicCollection = false;
 
-  private subscription: Subscription;
-  private urlSubscription: Subscription;
-  private urlCollectionsSubscription: Subscription;
-  private collectionsSubscription: Subscription;
+  private readonly destroyRef = inject(DestroyRef);
 
   public constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -111,25 +110,11 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     }
     this.checkUrl();
 
-    this.subscription = this.landingPageService.startEvent$.subscribe((b) => {
-      this.dialogRef.close();
-    });
-  }
-
-  public ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-    if (this.urlSubscription) {
-      this.urlSubscription.unsubscribe();
-    }
-    if (this.urlCollectionsSubscription) {
-      this.urlCollectionsSubscription.unsubscribe();
-    }
-    if (this.collectionsSubscription) {
-      this.collectionsSubscription.unsubscribe();
-    }
-
+    this.landingPageService.startEvent$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((b) => {
+        this.dialogRef.close();
+      });
   }
 
   public cancel(): void {
@@ -157,38 +142,41 @@ export class LandingPageDialogComponent implements OnInit, OnDestroy {
     this.spinner.show('connectServer');
     const serverUrl = this.mainFormService.startingConfig.getFg().get('serverUrl').value;
     const resolvedServerUrl = this.resolveServerUrl(serverUrl, window.location.origin);
-    this.urlSubscription = this.http.get(resolvedServerUrl + '/openapi.json').subscribe(
-      {
+    this.http.get(resolvedServerUrl + '/openapi.json')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
         next: () => {
           this.landingPageService.getServerCollections(resolvedServerUrl).then(
             () => {
-              this.urlCollectionsSubscription = this.collectionService.getCollectionsReferenceDescription().subscribe(
-                cdrs => {
-                  const collectionsItems: Array<CollectionItem> = cdrs
-                    .filter(c => {
-                      // If there is no authentication, then we want all the collections
-                      if (this.includePublicCollection || !this.data?.isAuthentActivated) {
-                        return true;
-                      } else {
-                        return (c.params.organisations as any)?.public === false;
-                      }
-                    })
-                    .map(c => ({
-                      name: c.collection_name,
-                      isPublic: !this.data.isAuthentActivated ? true : (c.params.organisations as any)?.public === true,
-                      sharedWith: c.params.organisations?.shared,
-                      owner: c.params.organisations?.owner
-                    }));
-                  this.availableCollections = this.collectionService.buildGroupCollectionItems(collectionsItems, this.data.currentOrga);
-                  this.collectionService.setGroupCollectionItems(this.availableCollections);
-                  this.collectionService.setCollections(collectionsItems.map(c => c.name));
-                  this.collectionService.setCollectionsRef(cdrs);
-                },
-                error => {
-                  this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
-                  this.spinner.hide('connectServer');
-                },
-                () => this.spinner.hide('connectServer')
+              this.collectionService.getCollectionsReferenceDescription()
+                .pipe(takeUntilDestroyed(this.destroyRef))
+                .subscribe(
+                  cdrs => {
+                    const collectionsItems: Array<CollectionItem> = cdrs
+                      .filter(c => {
+                        // If there is no authentication, then we want all the collections
+                        if (this.includePublicCollection || !this.data?.isAuthentActivated) {
+                          return true;
+                        } else {
+                          return (c.params.organisations as any)?.public === false;
+                        }
+                      })
+                      .map(c => ({
+                        name: c.collection_name,
+                        isPublic: !this.data.isAuthentActivated ? true : (c.params.organisations as any)?.public === true,
+                        sharedWith: c.params.organisations?.shared,
+                        owner: c.params.organisations?.owner
+                      }));
+                    this.availableCollections = this.collectionService.buildGroupCollectionItems(collectionsItems, this.data.currentOrga);
+                    this.collectionService.setGroupCollectionItems(this.availableCollections);
+                    this.collectionService.setCollections(collectionsItems.map(c => c.name));
+                    this.collectionService.setCollectionsRef(cdrs);
+                  },
+                  error => {
+                    this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
+                    this.spinner.hide('connectServer');
+                  },
+                  () => this.spinner.hide('connectServer')
               );
               this.isServerReady = true;
             });
