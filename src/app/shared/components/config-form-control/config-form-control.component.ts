@@ -86,6 +86,7 @@ import { GroupCollectionPipe } from '@shared/pipes/group-collection.pipe';
 import { GetCollectionDisplayNamePipe } from 'arlas-web-components';
 import { ArlasIamService } from 'arlas-wui-toolkit';
 import { Subject } from 'rxjs';
+import { StepGradientPipe } from '../../pipes/step-gradient.pipe';
 import { MultiSelectSearchComponent } from './multi-select-search/multi-select-search.component';
 
 @Component({
@@ -124,8 +125,9 @@ import { MultiSelectSearchComponent } from './multi-select-search/multi-select-s
     JsonPipe,
     ColorPickerWrapperComponent,
     LayerFiltersComponent,
-    CollectionsUnitsComponent
-  ]
+    CollectionsUnitsComponent,
+    StepGradientPipe
+]
 })
 export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
 
