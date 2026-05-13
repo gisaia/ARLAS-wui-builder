@@ -747,16 +747,27 @@
     ],
     "huePalettes": [
       [
-        100,
-        200
-      ],
-      [
         330,
         170
       ],
-      "red",
+      "black",
+      "blue",
+      "brown",
+      "burlywood",
+      "chocolate",
+      "crimson",
+      "darkcyan",
+      "darkslategrey",
+      "darkviolet",
+      "deeppink",
       "green",
-      "black"
+      "indigo",
+      "midnightblue",
+      "orange",
+      "red",
+      "sienna",
+      "tomato",
+      "teal"
     ],
     "otherColor": "#9d9ca9",
     "swimlaneZeroColor": "#D6D6D6",
