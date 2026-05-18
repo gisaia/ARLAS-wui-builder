@@ -17,7 +17,7 @@
  * under the License.
  */
 
-@import "variables.scss";
+@use "../../../../../variables.scss" as var;
 
 :host ::ng-deep {
   .mat-mdc-form-field-infix {
@@ -59,5 +59,5 @@
 }
 
 .text-hint{
-  color:$text-input-disabled
+  color: var.$text-input-disabled;
 }

@@ -17,10 +17,10 @@
  * under the License.
  */
 
-@import "variables.scss";
+@use "../../../variables.scss" as var;
 
 .tab-error {
-  color: $error-color;
+  color: var.$error-color;
 }
 
 .map-container{

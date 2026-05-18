@@ -18,18 +18,18 @@
  */
 
 @use "@angular/material" as mat;
-@import "variables.scss";
-@import "styles/theme-variables.scss";
+@use "../../../variables.scss" as var;
+@use "../../../styles/theme-variables.scss" as theme;
 
 .menu_container {
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: $left-menu-width;
+  width: var.$left-menu-width;
 
   .active-menu{
-    background-color: rgba(mat.m2-get-color-from-palette($app-accent), 0.2);
+    background-color: rgba(mat.m2-get-color-from-palette(theme.$app-accent), 0.2);
   }
 
   .action-list {

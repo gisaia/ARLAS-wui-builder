@@ -17,11 +17,8 @@
  * under the License.
  */
 
-@import "variables.scss";
+@use "../../../../../variables.scss" as var;
 
 .tab-error {
-  color: $error-color;
-}
-
-.toggle-detailed-timeline {
+  color: var.$error-color;
 }

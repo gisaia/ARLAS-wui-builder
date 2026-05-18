@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import "variables.scss";
+@use "../../../../../variables.scss" as var;
 
 :host ::ng-deep {
   .last-tab {
@@ -48,7 +48,7 @@
       gap: 0 10px;
 
       .tab-error {
-        color: $error-color;
+        color: var.$error-color;
       }
 
       .edit-tab-name {
