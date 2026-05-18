@@ -5,7 +5,7 @@
         [routerLinkActive]="page.enabled ? 'active-menu' : 'inactive-menu'" queryParamsHandling="preserve">
         <button mat-icon-button [disabled]="!page?.enabled" [routerLinkActive]="page.enabled ? 'mat-accent' : ''">
           <mat-icon [matBadge]="nbErrorsByPage.get(page.name)" [matBadgeHidden]="!nbErrorsByPage.get(page.name)"
-            matBadgePosition="above before" matBadgeColor="warn">
+            matBadgePosition="above before" matBadgeColor="warn" aria-hidden="false">
           {{ page?.icon }}</mat-icon>
         </button>
       </mat-list-item>

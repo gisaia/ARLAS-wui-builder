@@ -45,15 +45,15 @@
         }
       </div>
       <div class="edit-widgets" #dropListContainer cdkDropListGroup>
-        @for (comp of contentTypeValue; track $index; let ci = $index) {
+        @for (control of content?.controls; track $index; let ci = $index) {
           <div class="container" [id]="'widget-' + groupIndex + '-' + ci"
               cdkDropList [cdkDropListData]="ci">
             <div cdkDrag [cdkDragData]="ci" (cdkDragEntered)="dragEntered($event)"
                 (cdkDragMoved)="dragMoved($event)" (cdkDragDropped)="dragDropped($event)">
               <arlas-widget-edition
-                [isValid]="content?.controls[ci]?.valid"
-                [widgetControls]="content?.controls[ci]?.controls"
-                (edit)="editWidget(ci, content?.controls[ci].value.widgetData?.dataStep?.collection)"
+                [isValid]="control.valid"
+                [widgetControls]="control.controls"
+                (edit)="editWidget(ci, control.value.widgetData?.dataStep?.collection)"
                 (delete)="deleteWidget(ci)"
               ></arlas-widget-edition>
               <div class="placeholder" *cdkDragPlaceholder></div>
