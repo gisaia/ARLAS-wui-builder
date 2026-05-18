@@ -98,8 +98,6 @@ mat-option {
 
 .metric-field-form-control {
   .action-container {
-    .metric-toggle {
-    }
     .field-add-container {
       display: flex;
 
@@ -336,4 +334,10 @@ mat-option {
       width: 350px !important;
     }
   }
+}
+
+.control-hue-palette__option {
+  // Align width on the input width
+  width: var(--arlas-builder-input-width);
+  padding: 0;
 }

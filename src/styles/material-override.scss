@@ -24,7 +24,7 @@
   min-height: 48px !important;
 
   // Increase the width to allow for more text to be displayed
-  width: 220px !important;
+  width: var(--arlas-builder-input-width) !important;
 }
 
 // Avoid whitesmoke background of input

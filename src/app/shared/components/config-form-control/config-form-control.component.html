@@ -112,13 +112,13 @@
     <mat-form-field  [class]="typedControl.formFieldClass">
       <mat-label>{{ typedControl.label | translate}}</mat-label>
       <mat-select [formControl]="typedControl" [required]="!typedControl.optional"
-          [ngStyle]="{'backgroundImage': typedControl.value ? 'linear-gradient(to left, ' + typedControl.getCurrentOption().label + ')' : null}">
+          [ngStyle]="{'backgroundImage': typedControl.value ? (typedControl.getCurrentOption().value | stepGradient) : null}">
         @if (typedControl.optional) {
           <mat-option></mat-option>
         }
         @for (opt of typedControl.syncOptions; track opt) {
-          <mat-option [value]="opt.value"
-            [ngStyle]="{'backgroundImage': 'linear-gradient(to left, ' + opt.label + ')'}"
+          <mat-option class="control-hue-palette__option" [value]="opt.value"
+            [ngStyle]="{'backgroundImage': opt.value | stepGradient}"
             [matTooltip]="opt.label | translate" matTooltipPosition="right" [disabled]="opt.enabled === false">
           </mat-option>
         }
