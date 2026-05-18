@@ -18,7 +18,7 @@
  */
 
 @use "@angular/material" as mat;
-@import "styles/theme-variables.scss";
+@use "styles/theme-variables.scss" as theme;
 
 .group {
    display: flex;
@@ -41,8 +41,8 @@
       }
       &.mat-mdc-radio-checked {
          color: white;
-         border-color: mat.m2-get-color-from-palette($app-accent);
-         background-color: rgba(mat.m2-get-color-from-palette($app-accent), 0.6);
+         border-color: mat.m2-get-color-from-palette(theme.$app-accent);
+         background-color: rgba(mat.m2-get-color-from-palette(theme.$app-accent), 0.6);
 
          svg path {
             fill: white !important;
@@ -50,11 +50,11 @@
       }
 
       &:hover {
-         background-color: rgba(mat.m2-get-color-from-palette($app-accent), 0.2);
-         border-color: mat.m2-get-color-from-palette($app-accent);
-         color: mat.m2-get-color-from-palette($app-accent);
+         background-color: rgba(mat.m2-get-color-from-palette(theme.$app-accent), 0.2);
+         border-color: mat.m2-get-color-from-palette(theme.$app-accent);
+         color: mat.m2-get-color-from-palette(theme.$app-accent);
          svg path {
-            fill: mat.m2-get-color-from-palette($app-accent) !important;
+            fill: mat.m2-get-color-from-palette(theme.$app-accent) !important;
          }
       }
 

@@ -16,15 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import "variables.scss";
+@use "variables.scss" as var;
 
 .status-container {
     .inner {
         color: #000;
-        font-size: $default-font-size;
+        font-size: var.$default-font-size;
         display: flex;
         align-items: center;
-        margin-left: $sm-margin;
+        margin-left: var.$sm-margin;
     }
 
     .edit-name {
@@ -34,8 +34,5 @@
         &__input {
             height: 24px;
         }
-    }
-
-    .edit-name-button {
     }
 }

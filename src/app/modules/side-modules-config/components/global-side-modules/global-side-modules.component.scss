@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import "variables.scss";
+@use "variables.scss" as var;
 
 .module {
    margin-bottom: 15px;
@@ -26,7 +26,7 @@
    }
    .title-container {
       .title {
-         @include group-title();
+         @include var.group-title();
          line-height: 0;
       }
       display: flex;

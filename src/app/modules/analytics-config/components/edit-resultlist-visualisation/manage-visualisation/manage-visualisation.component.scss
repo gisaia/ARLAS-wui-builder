@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import "variables";
+@use "variables.scss" as var;
 
 :host {
   display: block;
@@ -83,7 +83,7 @@
 }
 
 .condition-text {
-  padding: $xs-spacing;
+  padding: var.$xs-spacing;
 }
 
 .drag {

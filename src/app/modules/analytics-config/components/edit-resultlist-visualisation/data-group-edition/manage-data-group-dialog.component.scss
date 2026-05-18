@@ -17,7 +17,7 @@
  * under the License.
  */
 
-@import 'variables';
+@use "variables.scss" as var;
 
 :host {
   display: block;
@@ -37,8 +37,8 @@
   &__container{
     display: flex;
     flex-direction: column;
-    padding: $default-spacing;
-    height: calc(100% - $default-spacing);
+    padding: var.$default-spacing;
+    height: calc(100% - var.$default-spacing);
   }
 
   &__header {
@@ -53,20 +53,20 @@
     display: flex;
     justify-content: end;
     gap: 6px;
-    margin:  $default-spacing 0;
+    margin:  var.$default-spacing 0;
   }
 
   &__inputs {
-    margin-top:  $default-spacing;
+    margin-top:  var.$default-spacing;
     display: flex;
-    gap:  $default-spacing;
+    gap:  var.$default-spacing;
     width: 100%;
   }
 
   &__button-wrapper{
     display: flex;
     align-items: center;
-    gap: $default-spacing;
+    gap: var.$default-spacing;
   }
 
   &__button {

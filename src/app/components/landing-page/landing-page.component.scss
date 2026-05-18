@@ -16,8 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import "variables.scss";
-@import "theme.scss";
+@use "variables.scss" as var;
 
 .landing-title {
    display: flex;
@@ -73,11 +72,11 @@
 }
 
 .buttons {
-   margin-top: calc(2 * $sm-margin);
+   margin-top: calc(2 * var.$sm-margin);
    display: flex;
    justify-content: center;
 
    .new_dashboard {
-      margin-right: $sm-margin ;
+      margin-right: var.$sm-margin ;
    }
 }

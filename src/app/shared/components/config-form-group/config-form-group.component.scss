@@ -16,15 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import "variables.scss";
+@use "variables.scss" as var;
 
 .form-control-title {
-   @include group-title();
+   @include var.group-title();
    font-size: 22px;
 }
 
 .tab-error {
-   color: $error-color;
+   color: var.$error-color;
 }
 
 .main-form-group-div {

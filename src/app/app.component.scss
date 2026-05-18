@@ -17,16 +17,16 @@
  * under the License.
  */
 
-@import "../variables.scss";
+@use "variables.scss" as var;
 
 .container {
-  height: calc(100vh - $top-menu-height);
+  height: calc(100vh - var.$top-menu-height);
 }
 
 .content {
-  margin: 0 $default-spacing;
+  margin: 0 var.$default-spacing;
   margin-top: 0;
-  height: calc(100vh - $top-menu-height - ($default-spacing * 2));
+  height: calc(100vh - var.$top-menu-height - (var.$default-spacing * 2));
 }
 
 ::ng-deep .top-menu {
@@ -36,19 +36,19 @@
 .top-left-menu {
   display: flex;
   align-items: center;
-  height: $top-menu-height;
+  height: var.$top-menu-height;
   .logo {
     text-align: center;
-    width: min($left-menu-width, $top-menu-height);
-    margin: 0 calc(($left-menu-width - min($left-menu-width, $top-menu-height)) / 2);
+    width: min(var.$left-menu-width, var.$top-menu-height);
+    margin: 0 calc((var.$left-menu-width - min(var.$left-menu-width, var.$top-menu-height)) / 2);
     a {
       display: flex;
     }
     .icon {
-      color: $arlasColor;
-      height: min($left-menu-width, $top-menu-height);;
-      width: min($left-menu-width, $top-menu-height);
-      font-size: min($left-menu-width, $top-menu-height);
+      color: var.$arlasColor;
+      height: min(var.$left-menu-width, var.$top-menu-height);;
+      width: min(var.$left-menu-width, var.$top-menu-height);
+      font-size: min(var.$left-menu-width, var.$top-menu-height);
     }
   }
 }

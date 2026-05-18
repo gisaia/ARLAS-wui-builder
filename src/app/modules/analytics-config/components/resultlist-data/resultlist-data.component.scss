@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import "variables.scss";
+@use "variables.scss" as var;
 
 .tab-error {
-   color: $error-color;
+   color: var.$error-color;
 }
 
 .details-title {

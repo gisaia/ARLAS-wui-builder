@@ -16,8 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import "./variables.scss";
-@import "styles/material-override.scss";
+@use "styles/material-override.scss" as *;
 
 @font-face {
   font-family: 'Material Symbols Outlined';

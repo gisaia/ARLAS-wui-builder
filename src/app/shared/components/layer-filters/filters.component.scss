@@ -16,15 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@import "variables.scss";
+@use "variables.scss" as var;
 
 .description {
     align-self: center;
     width: fit-content;
     font-size: 14px;
-    color: $config-element-description-text-color;
+    color: var.$config-element-description-text-color;
     line-height: 1.6;
-    border-left: 0.2rem solid $config-element-description-border-color;
+    border-left: 0.2rem solid var.$config-element-description-border-color;
     background-color: white;
     border-radius: 4px;
     display: inline-block;
