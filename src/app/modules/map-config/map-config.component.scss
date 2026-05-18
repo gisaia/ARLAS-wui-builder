@@ -17,7 +17,7 @@
  * under the License.
  */
 
-@use "../../../variables.scss" as var;
+@use "variables.scss" as var;
 
 .tab-error {
   color: var.$error-color;

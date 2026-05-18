@@ -18,8 +18,8 @@
  */
 
 @use "@angular/material" as mat;
-@use "../../../variables.scss" as var;
-@use "../../../styles/theme-variables.scss" as theme;
+@use "variables.scss" as var;
+@use "styles/theme-variables.scss" as theme;
 
 .menu_container {
   height: 100%;

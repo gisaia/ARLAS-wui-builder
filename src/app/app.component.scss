@@ -17,7 +17,7 @@
  * under the License.
  */
 
-@use "../variables.scss" as var;
+@use "variables.scss" as var;
 
 .container {
   height: calc(100vh - var.$top-menu-height);
