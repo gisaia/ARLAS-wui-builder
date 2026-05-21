@@ -1,5 +1,27 @@
 # Change Log
 
+## [v28.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v28.0.0) (2026-05-21)
+
+**New stuff:**
+
+- Use material symbols instead of material icons [\#1129](https://github.com/gisaia/ARLAS-wui-builder/issues/1129)
+
+**Fixed bugs:**
+
+- ARLAS Builder/Multiline Chart:  incoherence between color palette configuration and displayed [\#1168](https://github.com/gisaia/ARLAS-wui-builder/issues/1168) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Unable to create a dashboard from the hub [\#1166](https://github.com/gisaia/ARLAS-wui-builder/issues/1166)
+- Imported dashboard scrollable layers can be misconfigured [\#1162](https://github.com/gisaia/ARLAS-wui-builder/issues/1162)
+- Builder: custom action list duplicated [\#1160](https://github.com/gisaia/ARLAS-wui-builder/issues/1160)
+- Builder: New data group in COG configuration: no cancel button [\#1158](https://github.com/gisaia/ARLAS-wui-builder/issues/1158)
+- Button too small in builder [\#1161](https://github.com/gisaia/ARLAS-wui-builder/issues/1161)
+- arlas builder: button styling [\#1159](https://github.com/gisaia/ARLAS-wui-builder/issues/1159)
+- Colors modifications are not taken into account in widgets preview [\#1083](https://github.com/gisaia/ARLAS-wui-builder/issues/1083) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+
+**Miscellaneous:**
+
+- Uniformize buttons [\#1163](https://github.com/gisaia/ARLAS-wui-builder/issues/1163)
+- Set default values for extrusion controls [\#1154](https://github.com/gisaia/ARLAS-wui-builder/issues/1154) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
 ## [v27.1.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.1.4) (2026-04-13)
 
 ## [v27.1.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v27.1.3) (2025-12-19)
