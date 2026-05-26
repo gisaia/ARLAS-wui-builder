@@ -70,15 +70,15 @@
                     }
                   }
                 </div>
-                @if (control.description) {
+                @if (formControl.description) {
                   <div description>
                     <div>
-                      {{ control.description | translate}}
+                      {{ formControl.description | translate }}
                     </div>
                     @for (child of formControl.childs(); track child) {
                       @if (child.enabled) {
                         <div>
-                          {{ child.description | translate}}
+                          {{ child.description | translate }}
                         </div>
                       }
                     }

@@ -632,7 +632,8 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           {
             optional: true,
             dependsOn: () => [this.geometryType],
-            onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.fill)
+            onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.fill),
+            title: marker('Extrusion')
           }
         ),
         extrusionValue: propertySelectorFormBuilder.build(
@@ -645,8 +646,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           collection,
           marker('property extrusionValue description')
         ).withDependsOn(() => [this.enableExtrusion])
-          .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value))
-          .withTitle(marker('Extrusion')),
+          .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value)),
         extrusionExaggeration: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
           'extrusionExaggeration',

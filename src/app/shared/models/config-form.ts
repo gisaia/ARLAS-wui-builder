@@ -61,25 +61,24 @@ export abstract class ConfigFormControl extends FormControl {
   // an initial value is used by app-reset-on-change, when resetting a form control (instead of a "default.json" value)
   public initialValue: any;
 
-  private defaultFormFieldClass = 'builder-config-form-control';
+  private readonly defaultFormFieldClass = 'builder-config-form-control';
 
   public constructor(
     formState: any,
     public label: string,
     public description: string,
-    public readonly optionalParams: ControlOptionalParams = {}) {
+    public readonly optionalParams: ControlOptionalParams = {}
+  ) {
 
     super(formState);
     this.initialValue = formState;
     // add default values to missing attributes
     this.optionalParams = {
-      ...{
-        optional: false,
-        validators: [],
-        dependsOn: () => [],
-        onDependencyChange: () => null,
-        childs: () => []
-      },
+      optional: false,
+      validators: [],
+      dependsOn: () => [],
+      onDependencyChange: () => null,
+      childs: () => [],
       ...this.optionalParams
     };
     this.initValidators();

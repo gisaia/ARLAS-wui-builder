@@ -992,5 +992,6 @@
 	"Add a visualization configuration": "Add a visualization configuration",
 	"And": "And",
 	"centroid_path": "Centroids",
-	"geometry_path": "Geometries"
+	"geometry_path": "Geometries",
+	"Interpolated extrusionValue description": "Height of the entity is linearly interpolated according to the Hits count or a metric."
 }

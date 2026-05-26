@@ -991,5 +991,6 @@
 	"Add a visualization configuration": "Ajouter une configuration de visualisation",
 	"And": "Et",
 	"centroid_path": "Centroïdes",
-	"geometry_path": "Géometries"
+	"geometry_path": "Géometries",
+	"Interpolated extrusionValue description": "La hauteur de l'entité est interpolée de manière linéaire en en fonction du nombre d'éléments/la métrique d'un champ."
 }
