@@ -73,12 +73,12 @@
                 @if (formControl.description) {
                   <div description>
                     <div>
-                      {{ formControl.description | translate }}
+                      {{ formControl.description | translate:{ property: formControl.propertyName | translate } | upperFirst }}
                     </div>
                     @for (child of formControl.childs(); track child) {
                       @if (child.enabled) {
                         <div>
-                          {{ child.description | translate }}
+                          {{ child.description | translate:{ property: child.propertyName | translate } | upperFirst }}
                         </div>
                       }
                     }

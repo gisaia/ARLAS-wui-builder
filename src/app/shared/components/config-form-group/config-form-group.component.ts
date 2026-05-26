@@ -35,6 +35,7 @@ import { ConfigFormControl, ConfigFormGroup, ConfigFormGroupArray } from '@share
 import { ObjectvaluesPipe } from '@shared/pipes/objectvalues.pipe';
 import { OrderConfigFormTabControlsPipe } from '@shared/pipes/order-config-form-tab.pipe';
 import { Subscription } from 'rxjs';
+import { UpperFirstPipe } from '../../pipes/upper-first.pipe';
 import { AsbtractConfigFormControl } from './abstract-config-form-group';
 
 /**
@@ -64,8 +65,9 @@ import { AsbtractConfigFormControl } from './abstract-config-form-group';
     forwardRef(() => ConfigElementComponent),
     forwardRef(() => ConfigFormControlComponent),
     forwardRef(() => HistogramBucketFormGroupComponent),
-    forwardRef(() => ConfigFormGroupArrayComponent)
-  ]
+    forwardRef(() => ConfigFormGroupArrayComponent),
+    UpperFirstPipe
+]
 })
 export class ConfigFormGroupComponent extends AsbtractConfigFormControl implements OnInit, OnDestroy {
   @ViewChild(MatStepper, { static: false }) private stepper: MatStepper;

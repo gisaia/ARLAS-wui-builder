@@ -67,7 +67,8 @@ export abstract class ConfigFormControl extends FormControl {
     formState: any,
     public label: string,
     public description: string,
-    public readonly optionalParams: ControlOptionalParams = {}
+    public readonly optionalParams: ControlOptionalParams = {},
+    public propertyName = ''
   ) {
 
     super(formState);
@@ -323,10 +324,11 @@ export class SlideToggleFormControl extends ConfigFormControl {
     formState: any,
     label: string,
     description: string,
-    optionalParams?: ControlOptionalParams
+    optionalParams?: ControlOptionalParams,
+    propertyName?: string
   ) {
 
-    super(formState, label, description, { ...optionalParams, ... { optional: true } });
+    super(formState, label, description, { ...optionalParams, ... { optional: true } }, propertyName);
   }
 }
 
@@ -339,10 +341,11 @@ export class VisualisationCheckboxFormControl extends ConfigFormControl {
     label: string,
     description: string,
     options: Array<VisualisationCheckboxOption> | Observable<Array<VisualisationCheckboxOption>>,
-    optionalParams?: ControlOptionalParams
+    optionalParams?: ControlOptionalParams,
+    propertyName?: string
   ) {
 
-    super(formState, label, description, { ...optionalParams, ... { optional: true } });
+    super(formState, label, description, { ...optionalParams, optional: true  }, propertyName);
     if (options instanceof Observable) {
       options.subscribe(opts => this.setSyncOptions(opts));
     } else if (options instanceof Array) {
@@ -377,27 +380,31 @@ export class ButtonToggleFormControl extends ConfigFormControl {
     formState: any,
     public options: Array<{ label: string; value: any; }>,
     description: string,
-    optionalParams?: ControlOptionalParams
+    optionalParams?: ControlOptionalParams,
+    propertyName?: string
   ) {
 
     super(
       !!formState ? formState : !!options.length ? options[0].value : null,
       null,
       description,
-      optionalParams);
+      optionalParams,
+      propertyName);
   }
 }
 export class RadioButtonFormControl extends ConfigFormControl {
   public constructor(
     public options: Array<{ label: string; value: any; }>,
     description: string,
-    optionalParams?: ControlOptionalParams
+    optionalParams?: ControlOptionalParams,
+    propertyName?: string
   ) {
     super(
       !!options.length ? options[0].value : null,
       null,
       description,
-      optionalParams);
+      optionalParams,
+      propertyName);
   }
 }
 
@@ -432,13 +439,15 @@ export class SelectFormControl extends ConfigFormControl {
     public isAutocomplete: boolean,
     options: Array<SelectOption> | Observable<Array<SelectOption>>,
     optionalParams?: ControlOptionalParams,
-    groups?: GroupCollectionItem) {
+    groups?: GroupCollectionItem,
+    propertyName?: string) {
 
     super(
       formState,
       label,
       description,
-      optionalParams);
+      optionalParams,
+      propertyName);
 
     if (options instanceof Observable) {
 
@@ -489,13 +498,15 @@ export class MultipleSelectFormControl extends ConfigFormControl {
     options: Array<SelectOption> | Observable<Array<SelectOption>>,
     optionalParams?: ControlOptionalParams,
     searchable?: boolean,
+    propertyName?: string
   ) {
 
     super(
       formState,
       label,
       description,
-      optionalParams);
+      optionalParams,
+      propertyName);
 
     if (options instanceof Observable) {
       options.subscribe(opts => this.setSyncOptions(opts));
@@ -538,13 +549,15 @@ export class TypedSelectFormControl extends ConfigFormControl {
     description: string,
     public isAutocomplete: boolean,
     options: Array<SelectOption> | Observable<Array<SelectOption>>,
-    optionalParams?: ControlOptionalParams) {
+    optionalParams?: ControlOptionalParams,
+    propertyName?: string) {
 
     super(
       formState,
       label,
       description,
-      optionalParams);
+      optionalParams,
+      propertyName);
 
     if (options instanceof Observable) {
       options.subscribe(opts => this.setSyncOptions(opts));
@@ -637,9 +650,10 @@ export class MetricWithFieldListFormControl extends ConfigFormControl {
     label: string,
     description: string,
     public collectionFields: Observable<Array<CollectionField>>,
-    optionalParams?: ControlOptionalParams
+    optionalParams?: ControlOptionalParams,
+    propertyName?: string
   ) {
-    super(formState, label, description, optionalParams);
+    super(formState, label, description, optionalParams, propertyName);
     if (!this.optional) {
       // as the value is a set, if the control is required, an empty set should also be an error
       this.setValidators([
@@ -789,9 +803,10 @@ export class FieldWithSizeListFormControl extends ConfigFormControl {
     label: string,
     description: string,
     collectionFields: Observable<Array<CollectionField>>,
-    optionalParams?: ControlOptionalParams
+    optionalParams?: ControlOptionalParams,
+    propertyName?: string
   ) {
-    super(formState, label, description, optionalParams);
+    super(formState, label, description, optionalParams, propertyName);
     toKeywordOptionsObs(collectionFields).subscribe(fields => {
       this.fields = fields;
       this.filterAutocomplete();
@@ -833,15 +848,19 @@ export class HuePaletteFormControl extends SelectFormControl {
     formState: any,
     label: string,
     description: string,
-    private hueOptions: Array<[number, number] | string>,
-    optionalParams?: ControlOptionalParams) {
+    hueOptions: Array<[number, number] | string>,
+    optionalParams?: ControlOptionalParams,
+    propertyName?: string
+  ) {
     super(
       formState,
       label,
       description,
       false,
       HuePaletteFormControl.toHslOptions(hueOptions),
-      optionalParams);
+      optionalParams,
+      undefined,
+      propertyName);
   }
 
   public static toHslOptions(hues: Array<[number, number] | string>): Array<SelectOption> {
@@ -884,9 +903,10 @@ export class SliderFormControl extends ConfigFormControl {
     public step: number,
     public ensureLessThan?: () => ConfigFormControl,
     public ensureGeaterThan?: () => ConfigFormControl,
-    optionalParams?: ControlOptionalParams) {
+    optionalParams?: ControlOptionalParams,
+    propertyName?: string) {
 
-    super(formState, label, description, optionalParams);
+    super(formState, label, description, optionalParams, propertyName);
   }
 
   public checkLessThan(newValue: number) {
@@ -909,7 +929,8 @@ export class MapFiltersControl extends ConfigFormControl {
     public formState: any,
     label: string,
     description: string,
-    optionalParams?: ControlOptionalParams) {
+    optionalParams?: ControlOptionalParams
+  ) {
     super(formState, label, description, optionalParams || { optional: true });
   }
 }
@@ -919,7 +940,8 @@ export class CollectionsUnitsControl extends ConfigFormControl {
     public formState: any,
     label: string,
     description: string,
-    optionalParams?: ControlOptionalParams) {
+    optionalParams?: ControlOptionalParams
+  ) {
     super(formState, label, description, optionalParams || { optional: true });
   }
 
@@ -951,8 +973,10 @@ export class InputFormControl extends ConfigFormControl {
     public inputType: string = 'text',
     optionalParams?: ControlOptionalParams,
     public ensureLessThan?: () => ConfigFormControl,
-    public ensureGeaterThan?: () => ConfigFormControl) {
-    super(formState, label, description, optionalParams);
+    public ensureGeaterThan?: () => ConfigFormControl,
+    propertyName?: string
+  ) {
+    super(formState, label, description, optionalParams, propertyName);
   }
 
   public checkLessThan(newValue: number) {
@@ -977,8 +1001,10 @@ export class TitleInputFormControl extends InputFormControl {
     label: string,
     description: string,
     public inputType: string = 'text',
-    optionalParams?: ControlOptionalParams) {
-    super(formState, label, description, 'text', optionalParams);
+    optionalParams?: ControlOptionalParams,
+    propertyName?: string
+  ) {
+    super(formState, label, description, 'text', optionalParams, undefined, undefined, propertyName);
   }
 }
 
@@ -1025,8 +1051,10 @@ export class ButtonFormControl extends ConfigFormControl {
     description: string,
     public callback: () => void,
     public disabledButtonMessage?: string,
-    optionalParams?: ControlOptionalParams) {
-    super(formState, label, description, optionalParams || { optional: true });
+    optionalParams?: ControlOptionalParams,
+    propertyName?: string
+  ) {
+    super(formState, label, description, optionalParams || { optional: true }, propertyName);
   }
 }
 
@@ -1038,9 +1066,10 @@ export class TextareaFormControl extends ConfigFormControl {
     description: string,
     public placeHolder: string = '',
     public nbRows?: number,
-    optionalParams?: ControlOptionalParams
+    optionalParams?: ControlOptionalParams,
+    propertyName?: string
   ) {
-    super(formState, label, description, optionalParams);
+    super(formState, label, description, optionalParams, propertyName);
   }
 
   public static processValidator(variableName: string): ValidatorFn {
@@ -1072,9 +1101,10 @@ export class FieldTemplateControl extends ConfigFormControl {
     description: string,
     collectionFields: Observable<Array<CollectionField>>,
     flat: boolean,
-    optionalParams?: ControlOptionalParams
+    optionalParams?: ControlOptionalParams,
+    propertyName?: string
   ) {
-    super(formState, label, description, optionalParams);
+    super(formState, label, description, optionalParams, propertyName);
     toNumericOrDateOrKeywordOrTextObs(collectionFields).subscribe(fields => {
       this.fields = fields;
       this.filterAutocomplete();

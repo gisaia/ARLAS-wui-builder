@@ -563,7 +563,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         filter: new FormControl(),
         labelContentFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.text,
-          'labelContent',
+          marker('map.layer.label.content'),
           labelSources,
           isAggregated,
           collection,
@@ -582,7 +582,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         ),
         opacity: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
-          'opacity',
+          marker('map.layer.opacity'),
           [
             PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
@@ -592,7 +592,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         ),
         colorFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.color,
-          'color',
+          marker('map.layer.color'),
           colorSources,
           isAggregated,
           collection,
@@ -601,7 +601,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         ),
         widthFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
-          'width',
+          marker('map.layer.width'),
           [
             PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
@@ -614,7 +614,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
         radiusFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
-          'radius',
+          marker('map.layer.radius'),
           [
             PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
@@ -638,7 +638,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
         ),
         extrusionValue: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
-          'extrusionValue',
+          marker('map.layer.extrusion.value'),
           [
             PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.provided_field_for_feature
           ],
@@ -649,7 +649,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value)),
         extrusionExaggeration: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
-          'extrusionExaggeration',
+          marker('map.layer.extrusion.exaggeration'),
           [
             PROPERTY_SELECTOR_SOURCE.fix_slider
           ],
@@ -660,7 +660,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value)),
         extrusionOpacity: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
-          'opacity',
+          marker('map.layer.extrusion.opacity'),
           [
             PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
@@ -671,7 +671,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value )),
         strokeColorFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.color,
-          'strokeColor',
+          marker('map.layer.stroke.color'),
           colorSources,
           isAggregated,
           collection,
@@ -682,7 +682,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
         strokeWidthFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
-          'strokeWidth',
+          marker('map.layer.stroke.width'),
           [
             PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
@@ -694,7 +694,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
         strokeOpacityFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
-          'strokeOpacity',
+          marker('map.layer.stroke.opacity'),
           [
             PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
@@ -706,7 +706,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
         weightFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
-          'weight',
+          marker('map.layer.heatmap.weight'),
           [
             PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
@@ -719,7 +719,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
         intensityFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
-          'intensity',
+          marker('map.layer.heatmap.intensity'),
           [
             PROPERTY_SELECTOR_SOURCE.fix_slider
           ],
@@ -731,7 +731,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.heatmap)),
         labelSizeFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
-          'labelSize',
+          marker('map.layer.label.size'),
           [
             PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
@@ -744,7 +744,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withTitle(marker('size rotation offset')),
         labelRotationFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
-          'labelRotation',
+          marker('map.layer.label.rotation'),
           labelRotationSources,
           isAggregated,
           collection,
@@ -758,9 +758,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             { label: marker('point'), value: LABEL_PLACEMENT.point },
             { label: marker('line'), value: LABEL_PLACEMENT.line },
             { label: marker('line-center'), value: LABEL_PLACEMENT.line_center },
-
-          ]
-          ,
+          ],
           marker('label placement description'),
           {
             optional: true,
@@ -817,8 +815,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             { label: marker('center'), value: LABEL_ALIGNMENT.center },
             { label: marker('left'), value: LABEL_ALIGNMENT.left },
 
-          ]
-          ,
+          ],
           marker('label alignment description'),
           {
             optional: true,
@@ -851,7 +848,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
         labelHaloColorFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.color,
-          'labelHaloColor',
+          marker('map.layer.label.halo.color'),
           colorSources,
           isAggregated,
           collection,
@@ -862,7 +859,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withTitle(marker('Halo title')),
         labelHaloWidthFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
-          'labelHaloWidth',
+          marker('map.layer.label.halo.width'),
           [
             PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],
@@ -874,7 +871,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
         labelHaloBlurFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
-          'labelHaloBlur',
+          marker('map.layer.label.halo.blur'),
           [
             PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
           ],

@@ -83,6 +83,7 @@ import {
   VisualisationCheckboxFormControl
 } from '@shared-models/config-form';
 import { GroupCollectionPipe } from '@shared/pipes/group-collection.pipe';
+import { UpperFirstPipe } from '@shared/pipes/upper-first.pipe';
 import { GetCollectionDisplayNamePipe } from 'arlas-web-components';
 import { ArlasIamService } from 'arlas-wui-toolkit';
 import { Subject } from 'rxjs';
@@ -126,7 +127,8 @@ import { MultiSelectSearchComponent } from './multi-select-search/multi-select-s
     ColorPickerWrapperComponent,
     LayerFiltersComponent,
     CollectionsUnitsComponent,
-    StepGradientPipe
+    StepGradientPipe,
+    UpperFirstPipe
 ]
 })
 export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {

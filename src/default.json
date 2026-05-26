@@ -774,71 +774,76 @@
     "swimlaneNanColor": "#D6D6D6",
     "swimlaneRepresentation": "global",
     "sliders": {
-      "opacity": {
+      "map.layer.opacity": {
         "min": 0,
         "max": 1,
         "step": 0.1
       },
-      "strokeOpacity": {
+      "map.layer.stroke.opacity": {
         "min": 0,
         "max": 1,
         "step": 0.1
       },
-      "strokeWidth": {
+      "map.layer.stroke.width": {
         "min": 0,
         "max": 10,
         "step": 0.5
       },
-      "strokeColor": {},
-      "width": {
+      "map.layer.stroke.color": {},
+      "map.layer.width": {
         "min": 0,
         "max": 15,
         "step": 0.5
       },
-      "weight": {
+      "map.layer.heatmap.weight": {
         "min": 0,
         "max": 100,
         "step": 1
       },
-      "radius": {
+      "map.layer.radius": {
         "min": 0,
         "max": 200,
         "step": 1
       },
-      "intensity": {
+      "map.layer.heatmap.intensity": {
         "min": 0,
         "max": 10,
         "step": 0.5
       },
-      "color": {},
-      "labelSize": {
+      "map.layer.color": {},
+      "map.layer.label.size": {
         "min": 1,
         "max": 50,
         "step": 1
       },
-      "labelRotation": {
+      "map.layer.label.rotation": {
         "min": 0,
         "max": 360,
         "step": 5
       },
-      "labelHaloWidth": {
+      "map.layer.label.halo.width": {
         "min": 0,
         "max": 5,
         "step": 0.1
       },
-      "labelHaloBlur": {
+      "map.layer.label.halo.blur": {
         "min": 0,
         "max": 5,
         "step": 0.1
       },
-      "labelHaloColor": {},
-      "labelContent": {},
-      "extrusionValue": {
+      "map.layer.label.halo.color": {},
+      "map.layer.label.content": {},
+      "map.layer.extrusion.value": {
         "min": 0,
         "max": 10000,
         "step": 1
       },
-      "extrusionExaggeration": {}
+      "map.layer.extrusion.exaggeration": {},
+      "map.layer.extrusion.opacity": {
+        "min": 0,
+        "max": 1,
+        "step": 0.1
+      }
     }
   }
 }
