@@ -33,7 +33,7 @@ import {
   AutoCompleteSelectFormComponent
 } from '@shared-components/config-form-control/auto-complete-select/auto-complete-select-form.component';
 import { OrderedSelectFormControl, SelectOption } from '@shared-models/config-form';
-import { first } from 'rxjs';
+import {first, startWith, take} from 'rxjs';
 
 @Component({
   selector: 'arlas-ordered-select',
@@ -53,7 +53,6 @@ import { first } from 'rxjs';
     MatRadioButton,
     MatRadioGroup,
     MatSelect,
-    NgIf,
     ReactiveFormsModule,
     TranslateModule,
     FormsModule,
@@ -102,7 +101,7 @@ export class OrderedSelectComponent implements OnInit {
       if (!!filter) {
         update = this.control().syncOptions.filter(o => o.label.indexOf(filter) >= 0);
       } else {
-        update = this.control().syncOptions;
+        update = this.control().syncOptions.map(s => s);
       }
       this.filteredOptions.update(() => update);
     }
@@ -132,7 +131,9 @@ export class OrderedSelectComponent implements OnInit {
    */
   private setDefaultFiltersOptions() {
     if (this.control().isAutocomplete) {
-      this.control().syncOptionsSet$.pipe(first()).subscribe(() => {
+      this.control().syncOptionsSet$.pipe(
+          startWith(null),
+          take(2)).subscribe(() => {
         this.filteredOptions.update(() => this.control().syncOptions.slice());
       });
     }

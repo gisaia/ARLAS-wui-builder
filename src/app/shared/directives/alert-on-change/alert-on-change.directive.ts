@@ -26,8 +26,7 @@ import { TranslateService } from '@ngx-translate/core';
  * Shows a toast of the value of mat-select changes (and was previously set).
  */
 @Directive({
-  selector: '[arlasAlertOnChange]',
-  standalone: true
+  selector: '[arlasAlertOnChange]'
 })
 export class AlertOnChangeDirective implements OnInit, OnDestroy {
 

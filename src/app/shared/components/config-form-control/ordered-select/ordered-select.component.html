@@ -49,6 +49,9 @@
         }
     </mat-chip-listbox>
 </div>
-<mat-error *ngIf="control().touched && control().invalid && control()?.errors?.required">
-    {{ 'At least one ' | translate }} {{ control().label | lowercase | translate }} {{ 'is required' | translate }}
-</mat-error>
+@if(control().touched && control().invalid && control()?.errors?.required){
+    <mat-error >
+        {{ 'At least one ' | translate }} {{ control().label | lowercase | translate }} {{ 'is required' | translate }}
+    </mat-error>
+}
+
