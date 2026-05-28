@@ -1,10 +1,12 @@
+@let label = control.label | translate:{ property: control.propertyName | translate } | upperFirst:true;
+
 @if (isSlideToggle(); as typedControl) {
   <div class="slider-toggle-form-control">
     <mat-slide-toggle [formControl]="typedControl" labelPosition="before"
       [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
       [dependants]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? typedControl.dependantControls : null">
       @if (showLabel) {
-        {{ typedControl.label | translate}}
+        {{ label }}
       }
     </mat-slide-toggle>
   </div>
@@ -31,8 +33,7 @@
   </div>
 } @else if (isSlider(); as typedControl) {
   <div class="slider-form-control">
-    <mat-label [class.control-error]="typedControl.touched && typedControl.invalid">{{ typedControl.label | translate}}
-    {{typedControl.optional ? '' : '*'}}</mat-label>
+    <mat-label [class.control-error]="typedControl.touched && typedControl.invalid">{{ label + (control.optional ? '' : '*') }}</mat-label>
     <div class="slider-container">
       <mat-form-field class="slider-input" appearance="outline" [subscriptSizing]="'dynamic'" >
         <input matInput type="number" [step]="typedControl.step" [formControl]="typedControl" [min]="typedControl.min" [max]="typedControl.max" [(ngModel)]="typedControl.value">
@@ -52,7 +53,7 @@
 } @else if (isSelect(); as typedControl) {
   <div class="select-form-control" [class.select-form-control--large]="typedControl.optionalParams.large">
     <mat-form-field  [class]="typedControl.formFieldClass">
-      <mat-label>{{ typedControl.label | translate}}</mat-label>
+      <mat-label>{{ label }}</mat-label>
       <mat-select [formControl]="typedControl" [required]="!typedControl.optional"
         [arlasAlertOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? WARNING_MESSAGE : null"
         [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
@@ -88,7 +89,7 @@
   </div>
 } @else if (isCheckbox(); as typedControl) {
   <div class="checkbox-form-control">
-    <mat-label>{{ typedControl.label | translate}}</mat-label>
+    <mat-label>{{ label }}</mat-label>
     @if (!typedControl.syncOptions || typedControl.syncOptions.length == 0) {
       <div>
         <mat-checkbox class="checkbox" (change)="typedControl.addLayer($event, 'All layers')">
@@ -110,7 +111,7 @@
 } @else if (isHuePalette(); as typedControl) {
   <div class="control-hue-palette">
     <mat-form-field  [class]="typedControl.formFieldClass">
-      <mat-label>{{ typedControl.label | translate}}</mat-label>
+      <mat-label>{{ label }}</mat-label>
       <mat-select [formControl]="typedControl" [required]="!typedControl.optional"
           [ngStyle]="{'backgroundImage': typedControl.value ? (typedControl.getCurrentOption().value | stepGradient) : null}">
         @if (typedControl.optional) {
@@ -129,7 +130,7 @@
   <div class="autocomplete-input-form-control">
     <mat-form-field  [class]="typedControl.formFieldClass">
       @if (showLabel) {
-        <mat-label>{{ typedControl.label | translate}}</mat-label>
+        <mat-label>{{ label }}</mat-label>
       }
       <input type="text" matInput [formControl]="typedControl" [matAutocomplete]="auto" #autocompleteInput
         [required]="!typedControl.optional"
@@ -158,7 +159,7 @@
   <div class="typed-autocomplete-input-form-control">
     <mat-form-field  [class]="typedControl.formFieldClass">
       @if (showLabel) {
-        <mat-label>{{ typedControl.label | translate}}</mat-label>
+        <mat-label>{{ label }}</mat-label>
       }
       <input type="text" matInput [formControl]="typedControl" [matAutocomplete]="autotyped" #typedAutocompleteInput
         [required]="!typedControl.optional"
@@ -190,7 +191,7 @@
     <div class="order-select-form-control__container">
       <input matInput [formControl]="typedControl" [hidden]="true" [required]="!typedControl.optional">
       <mat-form-field  [class]="typedControl.formFieldClass">
-        <mat-label>{{ typedControl.label | translate}}</mat-label>
+        <mat-label>{{ label }}</mat-label>
         <mat-select #selectSort [required]="!typedControl.optional">
           @if (typedControl.optional) {
             <mat-option></mat-option>
@@ -395,7 +396,7 @@
       <div class="action-container">
         <mat-form-field [class]="typedControl.formFieldClass">
           @if (showLabel) {
-            <mat-label>{{ typedControl.label | translate }}</mat-label>
+            <mat-label>{{ label }}</mat-label>
           }
           <input matInput [formControl]="typedControl" [type]="'text'" [required]="!typedControl.optional"
             [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
@@ -449,7 +450,7 @@
   <div class="input-field-form-control">
     <mat-form-field [class]="typedControl.formFieldClass">
       @if (showLabel) {
-        <mat-label>{{ typedControl.label | translate}}</mat-label>
+        <mat-label>{{ label }}</mat-label>
       }
       <input matInput [readonly]="readonly" [formControl]="typedControl" [type]="typedControl.inputType" [required]="!typedControl.optional"
         [arlasResetOnChange]="typedControl.resetDependantsOnChange && typedControl.dependantControls ? defaultKey : null"
@@ -471,7 +472,7 @@
   <div class="icon-form-control">
     <mat-form-field [class]="typedControl.formFieldClass">
       @if (showLabel) {
-        <mat-label>{{ typedControl.label | translate}}</mat-label>
+        <mat-label>{{ label }}</mat-label>
       }
       <input matInput [formControl]="typedControl" type="text" [required]="!typedControl.optional">
     </mat-form-field>
@@ -480,7 +481,8 @@
 } @else if (isColor(); as typedControl) {
   <div>
     <div [class.control-error]="typedControl.touched && typedControl.invalid">
-    {{ typedControl.label | translate}} {{typedControl.optional ? '' : '*'}}</div>
+      {{ label }} {{typedControl.optional ? '' : '*'}}
+    </div>
     <arlas-color-picker-wrapper [value]="typedControl.value" (setValue)="typedControl.setValue($event)">
     </arlas-color-picker-wrapper>
   </div>
@@ -517,7 +519,7 @@
   <div class="textarea-form-control">
     <mat-form-field [class]="typedControl.formFieldClass">
       @if (showLabel) {
-        <mat-label>{{ typedControl.label | translate}}</mat-label>
+        <mat-label>{{ label }}</mat-label>
       }
       <textarea matInput [formControl]="typedControl" [required]="!typedControl.optional"
         [placeholder]="typedControl.placeHolder | translate"
@@ -538,7 +540,7 @@
 @if (colorPreviewControl) {
   <div class="color-preview-form-control">
     @if (colorPreviewControl.label) {
-      <mat-label>{{ colorPreviewControl.label | translate}}</mat-label>
+      <mat-label>{{ label }}</mat-label>
     }
     <div class="color-preview"
       [ngStyle]="{'background': colorPreviewControl.isMultiColors() ? 'linear-gradient(to right, ' + colorPreviewControl.getPaletteGradients() + ')' : colorPreviewControl.value}">

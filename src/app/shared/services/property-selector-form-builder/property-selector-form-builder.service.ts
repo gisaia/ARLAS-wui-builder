@@ -64,8 +64,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
       {
         propertySource: new SelectFormControl(
           '',
-          propertyName.charAt(0).toUpperCase() + propertyName.slice(1),
-          marker(description),
+          propertyName,
+          description,
           false,
           valuesToOptions(sources),
           {
@@ -108,7 +108,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
         ),
         propertyFixSlider: new SliderFormControl(
           '',
-          marker('Fixed') + ' ' + propertyName,
+          marker('property.fix.slider.label'),
           marker('Slider fixed value description') + ' ' + propertyName,
           defaultConfig.sliders[propertyName].min,
           defaultConfig.sliders[propertyName].max,
@@ -123,21 +123,23 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
               }
               control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix_slider);
             }
-          }
+          },
+          propertyName
         ),
         propertyFixColor: new ColorFormControl(
           '',
-          marker('Fixed') + ' ' + propertyName,
+          marker('property.fix.color.label'),
           marker('Color fixed description'),
           {
             dependsOn: () => [this.customControls.propertySource],
             onDependencyChange: (control) =>
               control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix_color)
-          }
+          },
+          propertyName
         ),
         propertyFixInput: new InputFormControl(
           '',
-          marker('Input fixed') + ' ' + propertyName,
+          marker('property.fix.input.label'),
           marker('Input fixed value description') + ' ' + propertyName,
           'text',
           {
@@ -146,7 +148,10 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             onDependencyChange: (control) => {
               control.enableIf(this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.fix_input);
             }
-          }
+          },
+          undefined,
+          undefined,
+          propertyName
         ),
         propertyProvidedFieldAggFg: new ConfigFormGroup({
           propertyProvidedFieldAggCtrl: new SelectFormControl(
@@ -217,8 +222,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
         propertyProvidedFieldFeatureFg: new ConfigFormGroup({
           propertyProvidedFieldFeatureCtrl: new SelectFormControl(
             '',
-            marker(description + ' provided field feature'),
-            marker(description + ' provided field feature description'),
+            marker('property.provided.field.feature'),
+            marker('property.provided.field.feature.description'),
             true,
             toAllButGeoOptionsObs(collectionFieldsObs),
             {
@@ -226,7 +231,9 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
               onDependencyChange: (control) => control.enableIf(this.customControls.propertySource.value
                 === PROPERTY_SELECTOR_SOURCE.provided_field_for_feature ||
                 this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.provided_numeric_field_for_feature)
-            }
+            },
+            undefined,
+            propertyName
           ),
           propertyShortFormatCtrl: new SlideToggleFormControl(
             false,
@@ -271,7 +278,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
               { label: marker('Count'), value: COUNT_OR_METRIC.COUNT },
               { label: marker('Metric'), value: COUNT_OR_METRIC.METRIC }
             ],
-            'Metric or count ' + propertyName + ' description',
+            marker('property.countormetric'),
             {
               resetDependantsOnChange: true,
               optional: false,
@@ -280,7 +287,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                 isAggregated &&
                 (this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.displayable_metric_on_field
                   || this.customControls.propertySource.value === PROPERTY_SELECTOR_SOURCE.metric_on_field))
-            }
+            },
+            propertyName
           ),
           propertyMetricCtrl: new SelectFormControl(
             '',
@@ -454,13 +462,14 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
               { label: marker('Count'), value: COUNT_OR_METRIC.COUNT },
               { label: marker('Metric'), value: COUNT_OR_METRIC.METRIC }
             ],
-            'Interpolated ' + propertyName + ' description',
+            marker('property.interpolated.countormetric'),
             {
               resetDependantsOnChange: false,
               dependsOn: () => [this.customControls.propertySource],
               onDependencyChange: (control) => control.enableIf(
                 this.customControls.propertySource.value !== PROPERTY_SELECTOR_SOURCE.heatmap_density && isAggregated)
-            }
+            },
+            propertyName
           ),
           propertyInterpolatedCountNormalizeCtrl: new SlideToggleFormControl(
             '',
@@ -530,7 +539,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           propertyInterpolatedFieldCtrl: new SelectFormControl(
             '',
             marker('Interpolation field'),
-            isAggregated ? '' : marker('Interpolated source field description') + ' ' + propertyName,
+            isAggregated ? '' : marker('property.interpolated.field'),
             true,
             toNumericOrDateOptionsObs(collectionFieldsObs),
             {
@@ -545,7 +554,9 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                   || this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl.value === COUNT_OR_METRIC.METRIC &&
                   !!this.customControls.propertyInterpolatedFg.propertyInterpolatedMetricCtrl.value);
               }
-            }
+            },
+            undefined,
+            propertyName
           ),
           propertyInterpolatedNormalizeCtrl: new SlideToggleFormControl(
             '',
@@ -598,7 +609,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           ),
           propertyInterpolatedMinFieldValueCtrl: new InputFormControl(
             '',
-            marker('Minimum value'),
+            marker('property.interpolated.field.min'),
             '',
             'number',
             {
@@ -637,11 +648,14 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                   }
                 }
               }
-            }
+            },
+            undefined,
+            undefined,
+            propertyName
           ),
           propertyInterpolatedMaxFieldValueCtrl: new InputFormControl(
             '',
-            marker('Maximum value'),
+            marker('property.interpolated.field.max'),
             '',
             'number',
             {
@@ -682,7 +696,10 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                   }
                 }
               }
-            }
+            },
+            undefined,
+            undefined,
+            propertyName
           ),
           propertyInterpolatedValuesCtrl: new HiddenFormControl(
             '',
@@ -807,7 +824,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
           ),
           propertyInterpolatedMinValueCtrl: new SliderFormControl(
             '',
-            marker('Start') + ' ' + propertyName,
+            marker('property.interpolated.min'),
             null,
             defaultConfig.sliders[propertyName].min,
             defaultConfig.sliders[propertyName].max,
@@ -828,12 +845,12 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                   control.setValue(defaultConfig.sliders[propertyName].min);
                 }
               }
-
-            }
+            },
+            propertyName
           ),
           propertyInterpolatedMaxValueCtrl: new SliderFormControl(
             '',
-            marker('End') + ' ' + propertyName,
+            marker('property.interpolated.max'),
             null,
             defaultConfig.sliders[propertyName].min,
             defaultConfig.sliders[propertyName].max,
@@ -854,7 +871,8 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
                   control.setValue(defaultConfig.sliders[propertyName].max);
                 }
               }
-            }
+            },
+            propertyName
           ),
         },
         {

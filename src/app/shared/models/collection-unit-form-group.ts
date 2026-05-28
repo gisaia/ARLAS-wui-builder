@@ -33,7 +33,8 @@ export class CollectionUnitFormGroup extends ConfigFormGroup {
         marker('collection'),
         marker('collection desc')
       ),
-      ignored: new SlideToggleFormControl(false,
+      ignored: new SlideToggleFormControl(
+        false,
         '',
         '')
     });

@@ -17,7 +17,7 @@
  * under the License.
  */
 import { Injectable } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { HiddenFormControl } from '@shared-models/config-form';
 
@@ -25,8 +25,8 @@ export class ResourcesConfigFormGroup extends FormGroup {
   public constructor() {
     super({
       resources: new FormGroup({
-        previewId: new HiddenFormControl(''),
-        previewValue: new HiddenFormControl('')
+        previewId: new HiddenFormControl('', null),
+        previewValue: new HiddenFormControl('', null)
       })
     });
   }
