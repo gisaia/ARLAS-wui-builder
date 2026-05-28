@@ -392,9 +392,10 @@ export class MapImportService {
           null;
     const isAggregated = layerMode !== LAYER_MODE.features;
     typeFg.enable();
-    const minzoom = !!layer.minzoom ? layer.minzoom : (!!layerSource.minzoom ? layerSource.minzoom : 0);
-    const maxzoom = !!layer.maxzoom ? layer.maxzoom : (!!layerSource.maxzoom ? layerSource.maxzoom : MAX_ZOOM);
-    const renderMode = !!layerSource.render_mode ? layerSource.render_mode : FeatureRenderMode.wide;
+    const minzoom = Math.max(layer.minzoom ?? layerSource.minzoom ?? 0, 0);
+    const maxzoom = Math.min(layer.maxzoom ?? layerSource.maxzoom ?? MAX_ZOOM, MAX_ZOOM);
+    const renderMode = layerSource.render_mode ?? FeatureRenderMode.wide;
+
     const values: any = {
       geometryStep: {
       },
