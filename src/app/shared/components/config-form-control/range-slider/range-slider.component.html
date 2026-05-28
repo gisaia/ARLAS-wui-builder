@@ -1,0 +1,87 @@
+<div class="range-slider-wrapper">
+
+    <!-- Titre optional -->
+    @if (control().label) {
+        <mat-label [class.control-error]="control().touched && control().invalid">{{ control().label | translate }}
+            {{ control().optional ? '' : '*' }}
+        </mat-label>
+    }
+
+    <!-- ── Slider Material double thumb ── -->
+    <mat-slider
+            [max]="control().max"
+            [min]="control().min"
+            [step]="control().step"
+            discrete
+    >
+        <!---->
+        <input
+                #ngSliderLeft="matSliderRangeThumb"
+                (input)="control().ensureLessThan ? control().checkLessThan(ngSliderLeft.value) : null"
+                (valueChange)="onSliderMinChange($event)"
+
+                [value]="control().minFc.value"
+                matSliderStartThumb
+        />
+        <!-- Thumb MAX -->
+        <input
+                #ngSliderRight="matSliderRangeThumb"
+                (input)="control().ensureGeaterThan ? control().checkGreaterThan(ngSliderRight.value) : null"
+                (valueChange)="onSliderMaxChange($event)"
+                [value]="control().maxFc.value"
+                matSliderEndThumb
+        />
+    </mat-slider>
+    <!-- ── Inputs MIN / MAX ── -->
+    <div class="inputs-row">
+
+        <!-- Input MIN -->
+        <div class="input-field">
+            <label class="field-label" for="input-min">{{ control().labels.left | translate }}</label>
+            <div class="field-control">
+                @if (control().unit) {
+                    <span class="unit">{{ control().unit }}</span>
+                }
+                <mat-form-field appearance="outline">
+                    <input
+                            [formControl]="control().minFc"
+                            [max]="control().maxFc.value - 1"
+                            [min]="control().min"
+                            id="input-min"
+                            matInput
+                            type="number"
+                    />
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!-- Séparateur -->
+        <span class="separator">—</span>
+
+        <!-- Input MAX -->
+        <div class="input-field input-field--right">
+            <label class="field-label" for="input-max">{{ control().labels.right | translate }}</label>
+            <div class="field-control">
+                @if (control().unit) {
+                    <span class="unit">{{ control().unit }}</span>
+                }
+                <mat-form-field appearance="outline">
+                    <input
+                            [formControl]="control().maxFc"
+                            [max]="control().max"
+                            [min]="control().minFc.value + 1"
+                            id="input-max"
+                            matInput
+                            type="number"
+                    />
+                </mat-form-field>
+
+            </div>
+        </div>
+    </div>
+    @if (control().hasWarning) {
+        <mat-card appearance="outlined" class="empty_visulisation">
+            {{ control().warningMessage | translate }}
+        </mat-card>
+    }
+</div>

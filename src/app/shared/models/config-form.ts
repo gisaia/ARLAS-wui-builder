@@ -912,6 +912,8 @@ export class SliderFormControl extends ConfigFormControl {
     super(formState, label, description, optionalParams, propertyName);
   }
 
+
+
   public checkLessThan(newValue: number) {
     const other = this.ensureLessThan();
     if (newValue > other.value) {
@@ -924,6 +926,45 @@ export class SliderFormControl extends ConfigFormControl {
     if (newValue < other.value) {
       other.setValue(newValue);
     }
+  }
+}
+
+// Check visibility props
+export interface SliderRange {
+  min: number; max: number;
+}
+
+export class SliderRangeFormControl extends SliderFormControl {
+  public override value: SliderRange;
+  public minFc = new FormControl();
+  public maxFc = new FormControl();
+
+  public constructor(
+      formState: any,
+      label,
+      public labels: { left?: string; right?: string; },
+      description: string,
+      public min: number,
+      public max: number,
+      public step: number,
+      public ensureLessThan?: () => ConfigFormControl,
+      public ensureGeaterThan?: () => ConfigFormControl,
+      public unit?: string,
+      optionalParams?: ControlOptionalParams) {
+    super(formState, label, description, min, max, step,ensureLessThan, ensureGeaterThan, optionalParams);
+
+    this.minFc.setValue(min);
+    this.maxFc.setValue(max);
+  }
+
+  public setMinRange(value: number){
+    this.minFc.setValue(value);
+    this.value.min = value;
+  }
+
+  public setMaxRange(value: number){
+    this.maxFc.setValue(value);
+    this.value.max = value;
   }
 }
 

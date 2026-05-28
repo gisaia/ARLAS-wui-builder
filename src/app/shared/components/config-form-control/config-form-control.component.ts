@@ -75,7 +75,7 @@ import {
   OrderedSelectFormControl,
   RadioButtonFormControl,
   SelectFormControl,
-  SliderFormControl,
+  SliderFormControl, SliderRangeFormControl,
   SlideToggleFormControl,
   TextareaFormControl,
   TitleInputFormControl,
@@ -93,6 +93,7 @@ import {
   AutoCompleteSelectFormComponent
 } from '@shared-components/config-form-control/auto-complete-select/auto-complete-select-form.component';
 import {OrderedSelectComponent} from '@shared-components/config-form-control/ordered-select/ordered-select.component';
+import {RangeSliderComponent} from '@shared-components/config-form-control/range-slider/range-slider.component';
 
 @Component({
   selector: 'arlas-config-form-control',
@@ -134,7 +135,8 @@ import {OrderedSelectComponent} from '@shared-components/config-form-control/ord
     StepGradientPipe,
     UpperFirstPipe,
     AutoCompleteSelectFormComponent,
-    OrderedSelectComponent
+    OrderedSelectComponent,
+    RangeSliderComponent
   ]
 })
 export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
@@ -231,6 +233,10 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
 
   public isSlider(): SliderFormControl | null {
     return Object.getPrototypeOf(this.control) === SliderFormControl.prototype ? this.control as SliderFormControl : null;
+  }
+
+  public isRangeSlider(): SliderRangeFormControl | null {
+    return (this.control instanceof SliderRangeFormControl) ? this.control as SliderRangeFormControl : null;
   }
 
   public isCheckbox(): VisualisationCheckboxFormControl | null {

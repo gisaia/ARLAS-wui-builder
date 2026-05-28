@@ -50,6 +50,8 @@
       </mat-card>
     }
   </div>
+} @else if (isRangeSlider(); as typedControl) {
+    <app-range-slider [control]="typedControl"></app-range-slider>
 } @else if (isSelect(); as typedControl) {
   <div class="select-form-control" [class.select-form-control--large]="typedControl.optionalParams.large">
     <mat-form-field  [class]="typedControl.formFieldClass">

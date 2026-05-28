@@ -406,6 +406,7 @@
 	"Network Fetching Level": "Récupération des données",
 	"Network Fetching Level description": "Les données Network Analytics sont récupérées sur la carte selon une grille X.Y.Z. Choisir le niveau de zoom Z correspondant aux tuiles X.Y.Z.\nSi ce niveau de zoom est élevé, des objets distants avec la même valeur d'identifiant pour le réseau ne seront pas agrégés ensemble.",
 	"Zoom min": "Zoom minimal",
+	"zoom description": "Plage de niveaux de zoom pour l'affichage du calque. Définissez un niveau de zoom minimum et un niveau de zoom maximum pour contrôler les échelles auxquelles votre calque est visible. Par exemple, en définissant un minimum de 3 et un maximum de 15, votre calque s'affichera de l'échelle continentale jusqu'à l'échelle des bâtiments ; en dehors de cette plage, il ne sera pas visible.",
 	"zoom min description": "Niveau de zoom minimal pour visualiser la couche dans l'application. Par exemple, un zoom minimal configuré à 3 rendra votre couche visible à partir de l'échelle continentale. Avant ce seuil, elle ne sera pas visible.",
 	"Zoom max": "Zoom maximal",
 	"zoom max description": "Niveau de zoom maximal pour visualiser la couche dans l'application. Par exemple, un zoom maximal configuré à 15 rendra votre couche visible jusqu'à l'échelle du bâtiment. Au-delà de ce seuil, elle ne sera plus visible.",

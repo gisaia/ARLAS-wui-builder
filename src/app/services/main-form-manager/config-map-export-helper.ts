@@ -226,12 +226,13 @@ export class ConfigMapExportHelper {
     const paint = this.getLayerPaint(modeValues, mode, colorService, taggableFields);
     const layout = this.getLayerLayout(modeValues, mode, colorService, taggableFields);
     const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
+    console.log(modeValues.visibilityStep);
     const layer: Layer = {
       id: layerFg.value.arlasId,
       type: this.getLayerType(modeValues.styleStep.geometryType),
       source: layerSource.source,
-      minzoom: modeValues.visibilityStep.zoomMin,
-      maxzoom: modeValues.visibilityStep.zoomMax,
+      minzoom: modeValues.visibilityStep.zoom.min,
+      maxzoom: modeValues.visibilityStep.zoom.max,
       layout,
       paint,
       metadata: this.getLayerMetadata(layerFg.customControls.collection.value,
