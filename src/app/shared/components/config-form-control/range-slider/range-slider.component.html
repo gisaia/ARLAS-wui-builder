@@ -26,7 +26,7 @@
         <!-- Thumb MAX -->
         <input
                 #ngSliderRight="matSliderRangeThumb"
-                (input)="control().ensureGeaterThan ? control().checkGreaterThan(ngSliderRight.value) : null"
+                (input)="control().ensureGreaterThan ? control().checkGreaterThan(ngSliderRight.value) : null"
                 (valueChange)="onSliderMaxChange($event)"
                 [value]="control().maxFc.value"
                 matSliderEndThumb

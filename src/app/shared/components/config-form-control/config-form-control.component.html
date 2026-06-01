@@ -40,8 +40,8 @@
       </mat-form-field>
       <mat-slider #ngSlider [min]="typedControl.min" [max]="typedControl.max" [step]="typedControl.step">
             <input matSliderThumb (input)="typedControl.ensureLessThan ? typedControl.checkLessThan(ngSliderThumb.value) : null;
-                typedControl.ensureGeaterThan ? typedControl.checkGreaterThan(ngSliderThumb.value) : null" #ngSliderThumb="matSliderThumb"
-                [(ngModel)]="typedControl.value" />
+                typedControl.ensureGreaterThan ? typedControl.checkGreaterThan(ngSliderThumb.value) : null" #ngSliderThumb="matSliderThumb"
+                   [(ngModel)]="typedControl.value" />
       </mat-slider>
     </div>
     @if (typedControl.hasWarning) {

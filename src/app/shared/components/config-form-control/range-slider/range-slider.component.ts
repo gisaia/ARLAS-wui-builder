@@ -56,12 +56,12 @@ export class RangeSliderComponent {
         }
     }
 
-    public notSameValueValidatorRight() {
-        return (c) => c.value !== this.ctrl.minFc.value ? null : ERROR;
+    public notSameValueValidatorMax() {
+        return (c) => c.value <= this.ctrl.minFc.value ? null : ERROR;
     }
 
-    public notSameValueValidatorLeft() {
-        return (c) => c.value !== this.ctrl.maxFc.value ? null : ERROR;
+    public notSameValueValidatorMin() {
+        return (c) => c.value >= this.ctrl.maxFc.value ? null : ERROR;
     }
 
     /** Called when the slider's MIN thumb changes */
@@ -84,6 +84,7 @@ export class RangeSliderComponent {
         ctrl.minFc.setValue(ctrl.value.min, {emitEvent: false});
         ctrl.maxFc.setValue(ctrl.value.max, {emitEvent: false});
 
+        // Listen for changes to update main control.
         ctrl.minFc.valueChanges.pipe(
             distinctUntilChanged(),
             takeUntilDestroyed(this.destroyRef)
@@ -100,7 +101,7 @@ export class RangeSliderComponent {
             this.setErrors();
         });
 
-        ctrl.minFc.setValidators(this.notSameValueValidatorLeft());
-        ctrl.maxFc.setValidators(this.notSameValueValidatorRight());
+        ctrl.minFc.setValidators(this.notSameValueValidatorMin());
+        ctrl.maxFc.setValidators(this.notSameValueValidatorMax());
     }
 }
