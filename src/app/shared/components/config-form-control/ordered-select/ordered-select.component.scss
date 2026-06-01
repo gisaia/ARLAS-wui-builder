@@ -17,10 +17,10 @@
  * under the License.
  */
 
-@import "variables.scss";
+@use "variables.scss" as var;
 
 .form-body {
   display: flex;
   align-items: center;
-  gap:$sm-margin;
+  gap: var.$sm-margin;
 }

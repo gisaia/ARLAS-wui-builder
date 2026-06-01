@@ -26,6 +26,7 @@
 	"Add": "Add",
 	"At least one ": "At least one ",
 	"is required": "is required",
+	"At least one ### is required": "At least one one {{value}} is required",
 	"metric field": "metric field",
 	"Update": "Update",
 	"metric filter": "Apply an ARLAS filter to the metric (optional)",

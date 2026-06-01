@@ -26,6 +26,7 @@
 	"Add": "Ajouter",
 	"At least one ": "Au moins un?",
 	"is required": "est nécessaire",
+	"At least one ### is required": "Au moins un? {{value}} est nécessaire",
 	"metric field": "Champs utilisé",
 	"Update": "Modifier",
 	"metric filter": "Ajout d'un filtre ARLAS à la métrique (Optionnel)",

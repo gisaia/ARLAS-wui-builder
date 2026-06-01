@@ -1,7 +1,7 @@
 <div class="form-body">
     <input [formControl]="control()" [hidden]="true" [required]="!control().optional" matInput>
     @if (control().isAutocomplete) {
-        <arlas-auto-complete-select-form [setControlWithAutocompleteValue]="false"
+        <arlas-auto-complete-select-form [assignAutocompleteValueToControl]="false"
                                          [defaultAutoCompleteFilter]="filteredOptions()"
                                          [showLabel]="showLabel()"
                                          [control]="control()"
@@ -15,7 +15,7 @@
                 <mat-label>{{ control().label | translate }}</mat-label>
             }
             <mat-select [required]="!control().optional"
-                        (selectionChange)="selectSelectionChange($event)">
+                        (selectionChange)="selectionChange($event)">
                 @if (control().optional) {
                     <mat-option></mat-option>
                 }
@@ -32,26 +32,23 @@
         <mat-radio-button value="-">{{ 'DESC' | translate }}</mat-radio-button>
     </mat-radio-group>
     <button (click)="addSort($event)" [disabled]="!control().sortDirection || !formValue()" mat-stroked-button
-            type="button">{{
-            'Add' |
-                translate
-        }}
+            type="button">{{'Add' | translate }}
     </button>
 </div>
-<div>
-    <mat-chip-listbox>
-        @for (sort of control().sorts; track $index) {
-            <mat-chip-option [selectable]="false" [removable]="true"
-                             (removed)="control().removeSort(sort)">
-                {{ sort }}
-                <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip-option>
-        }
-    </mat-chip-listbox>
-</div>
+
+<mat-chip-listbox>
+    @for (sort of control().sorts; track $index) {
+        <mat-chip-option [selectable]="false" [removable]="true"
+                         (removed)="control().removeSort(sort)">
+            {{ sort | translate }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip-option>
+    }
+</mat-chip-listbox>
+
 @if(control().touched && control().invalid && control()?.errors?.required){
     <mat-error >
-        {{ 'At least one ' | translate }} {{ control().label | lowercase | translate }} {{ 'is required' | translate }}
+        {{ 'At least one ### is required ' | translate: {value: (control().label | lowercase | translate) } }}
     </mat-error>
 }
 

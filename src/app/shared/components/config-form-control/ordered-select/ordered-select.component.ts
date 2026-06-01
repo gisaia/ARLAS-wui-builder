@@ -16,28 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { LowerCasePipe, NgIf } from '@angular/common';
-import { Component, computed, input, OnInit, signal } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatButton } from '@angular/material/button';
-import { MatChipListbox, MatChipOption, MatChipRemove } from '@angular/material/chips';
-import { MatOption } from '@angular/material/core';
-import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
-import { MatInput } from '@angular/material/input';
-import { MatRadioButton, MatRadioChange, MatRadioGroup } from '@angular/material/radio';
-import { MatSelect, MatSelectChange } from '@angular/material/select';
-import { TranslateModule } from '@ngx-translate/core';
+import {LowerCasePipe} from '@angular/common';
+import {Component, input, OnInit, signal} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatButton} from '@angular/material/button';
+import {MatChipListbox, MatChipOption, MatChipRemove} from '@angular/material/chips';
+import {MatOption} from '@angular/material/core';
+import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatIcon} from '@angular/material/icon';
+import {MatInput} from '@angular/material/input';
+import {MatRadioButton, MatRadioChange, MatRadioGroup} from '@angular/material/radio';
+import {MatSelect, MatSelectChange} from '@angular/material/select';
+import {TranslateModule} from '@ngx-translate/core';
 import {
   AutoCompleteSelectFormComponent
 } from '@shared-components/config-form-control/auto-complete-select/auto-complete-select-form.component';
-import { OrderedSelectFormControl, SelectOption } from '@shared-models/config-form';
-import {first, startWith, take} from 'rxjs';
+import {OrderedSelectFormControl, SelectOption} from '@shared-models/config-form';
+import {startWith, take} from 'rxjs';
 
 @Component({
   selector: 'arlas-ordered-select',
-  standalone: true,
   imports: [
     LowerCasePipe,
     MatButton,
@@ -68,7 +67,7 @@ export class OrderedSelectComponent implements OnInit {
    */
   public control = input.required<OrderedSelectFormControl>();
   /**
-   *  Whether we  display a label
+   *  Whether to  display a label
    * @type {InputSignal<boolean | undefined>}
    */
   public showLabel = input<boolean>();
@@ -99,7 +98,7 @@ export class OrderedSelectComponent implements OnInit {
     if (this.control().isAutocomplete) {
       let update;
       if (!!filter) {
-        update = this.control().syncOptions.filter(o => o.label.indexOf(filter) >= 0);
+        update = this.control().syncOptions.filter(o => o.label.includes(filter));
       } else {
         update = this.control().syncOptions.map(s => s);
       }
@@ -133,6 +132,8 @@ export class OrderedSelectComponent implements OnInit {
     if (this.control().isAutocomplete) {
       this.control().syncOptionsSet$.pipe(
           startWith(null),
+          // Why two? Because the first value sent is “null.”
+          // This allows the values to be initialized once and then handles any subsequent delayed data loading.
           take(2)).subscribe(() => {
         this.filteredOptions.update(() => this.control().syncOptions.slice());
       });
@@ -146,11 +147,12 @@ export class OrderedSelectComponent implements OnInit {
   protected resetFilter(){
     if (this.control().isAutocomplete) {
       this.filteredOptions.update(() => this.control().syncOptions.slice());
+      this.formValue.set(null);
     }
   }
 
 
-  public selectSelectionChange($event: MatSelectChange) {
+  public selectionChange($event: MatSelectChange) {
     if(!this.control().isAutocomplete) {
       this.formValue.set($event.value);
     }
