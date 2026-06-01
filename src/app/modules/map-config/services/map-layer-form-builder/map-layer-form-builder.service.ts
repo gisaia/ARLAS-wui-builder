@@ -327,12 +327,13 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         if (sliderRangeCtrl.value.min < Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0)) {
             sliderRangeCtrl.setMinRange(Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0));
             sliderRangeCtrl.hasWarning = true;
-            sliderRangeCtrl.warningMessage = marker('Network Analytics Fetching Precision is') + ' ' + networkFetchingLevelControl.value +
-                '. ' + marker('Therefore; minimum zoom level of the layer should be greater than or equal to') + ' ' +sliderRangeCtrl.value.min + '.';
+            sliderRangeCtrl.warningMessage = `${marker('Network Analytics Fetching Precision is')} ${networkFetchingLevelControl.value}. 
+             ${marker('Therefore; minimum zoom level of the layer should be greater than or equal to')} ${sliderRangeCtrl.value.min} .`;
             if (sliderRangeCtrl.value.max <= sliderRangeCtrl.value.min ) {
                 sliderRangeCtrl.setMaxRange(Math.min(MAX_ZOOM, sliderRangeCtrl.value.min + 1));
                 sliderRangeCtrl.hasWarning = true;
-                sliderRangeCtrl.warningMessage = marker('Maximum zoom level of the layer should be greater than') + ' ' + sliderRangeCtrl.value.min + '.';
+                sliderRangeCtrl.warningMessage = `${marker('Maximum zoom level of the layer should be greater than')} 
+                ${sliderRangeCtrl.value.min}.`;
             } else {
                 sliderRangeCtrl.hasWarning = false;
             }
