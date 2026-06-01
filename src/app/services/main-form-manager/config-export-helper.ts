@@ -853,6 +853,8 @@ export class ConfigExportHelper {
         dataType: 'time',
         isHistogramSelectable: unmanagedFields.isHistogramSelectable.value,
         ticksDateFormat: timelineConfigGlobal.customControls.tabsContainer.renderStep.timeline.dateFormat.value,
+        // valuesDateFormat is used by arlas-d3 to display the date value if the timeline has only one element
+        valuesDateFormat: timelineConfigGlobal.customControls.tabsContainer.renderStep.timeline.dateFormat.value,
         chartType: renderStep.chartType.value,
         chartHeight: unmanagedFields.chartHeight.value,
         chartWidth: unmanagedFields.chartWidth.value,
@@ -1297,6 +1299,7 @@ export class ConfigExportHelper {
           component.componentType = WIDGET_TYPE.histogram;
           component.showExportCsv = widgetData.renderStep.showExportCsv;
           component.input.ticksDateFormat = widgetData.renderStep.ticksDateFormat;
+          component.input.valuesDateFormat = widgetData.renderStep.ticksDateFormat;
           component.input.customizedCssClass = widgetData.dataStep.aggregation.aggregationFieldType === 'numeric' ?
             'arlas-histogram-analytics' : 'arlas-timeline-analytics';
           (component.input as AnalyticComponentHistogramInputConfig).isSmoothedCurve = unmanagedRenderFields.isSmoothedCurve;
