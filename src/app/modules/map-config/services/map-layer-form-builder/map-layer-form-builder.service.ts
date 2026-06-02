@@ -907,7 +907,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           }
         ),
           zoom: new RangeSliderFormControl(
-              0,
+              {min: 0, max: MAX_ZOOM},
               marker('Zoom'),
               {min: marker('zoomMin'), max: marker('zoomMax')},
               marker('zoom description'),

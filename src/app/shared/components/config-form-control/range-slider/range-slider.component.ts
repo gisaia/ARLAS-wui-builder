@@ -13,6 +13,8 @@ import {marker} from '@colsen1991/ngx-translate-extract-marker';
 
 // Error when min max range is not respected
 const ERROR = {'notSameValue': {}};
+const DEFAULT_MIN = 0;
+const DEFAULT_MAX = 1;
 
 @Component({
     selector: 'app-range-slider',
@@ -57,11 +59,11 @@ export class RangeSliderComponent {
     }
 
     public notSameValueValidatorMax() {
-        return (c) => c.value <= this.ctrl.minFc.value ? null : ERROR;
+        return (c) => c.value <= this.ctrl.minFc.value ? ERROR : null;
     }
 
     public notSameValueValidatorMin() {
-        return (c) => c.value >= this.ctrl.maxFc.value ? null : ERROR;
+        return (c) => c.value >= this.ctrl.maxFc.value ? ERROR :null ;
     }
 
     /** Called when the slider's MIN thumb changes */
@@ -81,9 +83,8 @@ export class RangeSliderComponent {
     }
 
     private syncInternalControls(ctrl: RangeSliderFormControl) {
-        ctrl.minFc.setValue(ctrl.value.min, {emitEvent: false});
-        ctrl.maxFc.setValue(ctrl.value.max, {emitEvent: false});
-
+        ctrl.minFc.setValue(this.initMin(ctrl) ?? DEFAULT_MIN, {emitEvent: false});
+        ctrl.maxFc.setValue(this.initMax(ctrl) ?? DEFAULT_MAX, {emitEvent: false});
         // Listen for changes to update main control.
         ctrl.minFc.valueChanges.pipe(
             distinctUntilChanged(),
@@ -103,5 +104,13 @@ export class RangeSliderComponent {
 
         ctrl.minFc.setValidators(this.notSameValueValidatorMin());
         ctrl.maxFc.setValidators(this.notSameValueValidatorMax());
+    }
+
+    private initMin(ctrl: RangeSliderFormControl){
+       return  ctrl.value.min < ctrl.min ? ctrl.min : ctrl.value.min;
+    }
+
+    private initMax(ctrl: RangeSliderFormControl){
+        return  ctrl.value.max > ctrl.max ? ctrl.max : ctrl.value.max;
     }
 }
