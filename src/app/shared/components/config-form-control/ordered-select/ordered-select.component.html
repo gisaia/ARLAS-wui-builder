@@ -48,7 +48,7 @@
 
 @if(control().touched && control().invalid && control()?.errors?.required){
     <mat-error >
-        {{ 'At least one ### is required ' | translate: {value: (control().label | lowercase | translate) } }}
+        {{ 'At least one ##value## is required' | translate: {value: (control().label | lowercase | translate) } }}
     </mat-error>
 }
 
