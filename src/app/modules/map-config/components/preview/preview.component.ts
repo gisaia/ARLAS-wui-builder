@@ -188,27 +188,8 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   }
 
   public savePreview() {
-    let img;
     const mapCanvas = this.mapFrameworkService.getCanvas(this.mapComponent.map);
-    const maxWidth = 300;
-    const maxHeight = 150;
-    const widthScale = maxWidth / mapCanvas.width;
-    const heightScale = maxHeight / mapCanvas.height;
-
-    if (widthScale > 1 && heightScale > 1) {
-      img = mapCanvas.toDataURL('image/png');
-    } else {
-      const rescaledCanvas = document.createElement('canvas');
-      const context = rescaledCanvas.getContext('2d');
-      const scale = Math.min(widthScale, heightScale);
-      rescaledCanvas.width = mapCanvas.width * scale;
-      rescaledCanvas.height = mapCanvas.height * scale;
-      rescaledCanvas.style.width = '100%';
-      rescaledCanvas.style.height = '100%';
-      context.scale(scale, scale);
-      context.drawImage(mapCanvas, 0, 0);
-      img = rescaledCanvas.toDataURL('image/png');
-    }
+    const img = this.exportPreviewWithProgressiveDownscale(mapCanvas, 484, 150, 2);
     const jsonifiedImg = JSON.stringify({ img });
     this.mapComponent.map.resize();
     const resourcesConfig = this.mainFormService.resourcesConfig.getFg();
@@ -275,6 +256,122 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       this.translate.instant(msg)
     );
     return throwError(() => new Error(err));
+  }
+
+  private exportPreviewWithProgressiveDownscale(
+    mapCanvas: HTMLCanvasElement,
+    // 484 is the max width size of an image in css of the hub
+    targetCssWidth = 484,
+    // 150 is the height size of an image in css of the hub
+    targetCssHeight = 150,
+    // enhance resolution by factor 2
+    pixelRatio = 2
+  ): string {
+    // Final exported size
+    const finalWidth = Math.round(targetCssWidth * pixelRatio);
+    const finalHeight = Math.round(targetCssHeight * pixelRatio);
+    // Source canvas size
+    const srcWidth = mapCanvas.width;
+    const srcHeight = mapCanvas.height;
+    // Compare source ratio with destination ratio
+    const srcRatio = srcWidth / srcHeight;
+    const dstRatio = finalWidth / finalHeight;
+    // Crop the source canvas so it matches the preview ratio exactly
+    // A perfect match between ratios allows to remove object-fit css rule in hub (This can make the image blurry. )
+    let sx = 0;
+    let sy = 0;
+    let sw = srcWidth;
+    let sh = srcHeight;
+    if (srcRatio > dstRatio) {
+      // Source is wider than destination ratio:
+      // crop left and right sides
+      sw = Math.round(srcHeight * dstRatio);
+      sx = Math.round((srcWidth - sw) / 2);
+    } else if (srcRatio < dstRatio) {
+      // Source is taller than destination ratio:
+      // crop top and bottom
+      sh = Math.round(srcWidth / dstRatio);
+      sy = Math.round((srcHeight - sh) / 2);
+    }
+    // Draw the cropped area into an intermediate canvas
+    const croppedCanvas = document.createElement('canvas');
+    croppedCanvas.width = sw;
+    croppedCanvas.height = sh;
+    const croppedCtx = croppedCanvas.getContext('2d');
+    if (!croppedCtx) {
+      throw new Error('Canvas 2D context unavailable');
+    }
+    croppedCtx.imageSmoothingEnabled = true;
+    croppedCtx.imageSmoothingQuality = 'high';
+    croppedCtx.drawImage(
+      mapCanvas,
+      sx, sy, sw, sh,
+      0, 0, sw, sh
+    );
+    // Downscale progressively for better quality on image
+    const resizedCanvas = this.downscaleCanvasProgressively(croppedCanvas, finalWidth, finalHeight);
+    // Export to PNG data url
+    return resizedCanvas.toDataURL('image/png');
+  }
+
+  private downscaleCanvasProgressively(
+    sourceCanvas: HTMLCanvasElement,
+    targetWidth: number,
+    targetHeight: number
+  ): HTMLCanvasElement {
+    // Copy the source canvas
+    let currentCanvas = document.createElement('canvas');
+    currentCanvas.width = sourceCanvas.width;
+    currentCanvas.height = sourceCanvas.height;
+    const initialCtx = currentCanvas.getContext('2d');
+    if (!initialCtx) {
+      throw new Error('Canvas 2D context unavailable');
+    }
+    initialCtx.imageSmoothingEnabled = true;
+    initialCtx.imageSmoothingQuality = 'high';
+    initialCtx.drawImage(sourceCanvas, 0, 0);
+    // Reduce the image by half repeatedly until we get close to the target size.
+    // This usually gives a better result than one single large resize.
+    while (
+      currentCanvas.width / 2 > targetWidth &&
+      currentCanvas.height / 2 > targetHeight
+    ) {
+      const nextCanvas = document.createElement('canvas');
+      nextCanvas.width = Math.max(targetWidth, Math.round(currentCanvas.width / 2));
+      nextCanvas.height = Math.max(targetHeight, Math.round(currentCanvas.height / 2));
+      const nextCtx = nextCanvas.getContext('2d');
+      if (!nextCtx) {
+        throw new Error('Canvas 2D context unavailable');
+      }
+      nextCtx.imageSmoothingEnabled = true;
+      nextCtx.imageSmoothingQuality = 'high';
+      nextCtx.drawImage(
+        currentCanvas,
+        0, 0, currentCanvas.width, currentCanvas.height,
+        0, 0, nextCanvas.width, nextCanvas.height
+      );
+
+      currentCanvas = nextCanvas;
+    }
+    // Final resize to the exact requested output size
+    if (currentCanvas.width !== targetWidth || currentCanvas.height !== targetHeight) {
+      const finalCanvas = document.createElement('canvas');
+      finalCanvas.width = targetWidth;
+      finalCanvas.height = targetHeight;
+      const finalCtx = finalCanvas.getContext('2d');
+      if (!finalCtx) {
+        throw new Error('Canvas 2D context unavailable');
+      }
+      finalCtx.imageSmoothingEnabled = true;
+      finalCtx.imageSmoothingQuality = 'high';
+      finalCtx.drawImage(
+        currentCanvas,
+        0, 0, currentCanvas.width, currentCanvas.height,
+        0, 0, targetWidth, targetHeight
+      );
+      return finalCanvas;
+    }
+    return currentCanvas;
   }
 
 }
