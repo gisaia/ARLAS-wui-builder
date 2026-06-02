@@ -314,7 +314,6 @@ export class ConfigExportHelper {
     const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
       (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
     const filters = !!modeValues.visibilityStep.filters ? modeValues.visibilityStep.filters.value : undefined;
-    console.log(modeValues.visibilityStep.zoom);
     const layerSource: LayerSourceConfig = {
       id: layerValues.arlasId,
       name: layerValues.name,

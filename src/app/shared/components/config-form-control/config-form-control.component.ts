@@ -75,7 +75,7 @@ import {
   OrderedSelectFormControl,
   RadioButtonFormControl,
   SelectFormControl,
-  SliderFormControl, SliderRangeFormControl,
+  SliderFormControl, RangeSliderFormControl,
   SlideToggleFormControl,
   TextareaFormControl,
   TitleInputFormControl,
@@ -235,8 +235,8 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
     return Object.getPrototypeOf(this.control) === SliderFormControl.prototype ? this.control as SliderFormControl : null;
   }
 
-  public isRangeSlider(): SliderRangeFormControl | null {
-    return (this.control instanceof SliderRangeFormControl) ? this.control as SliderRangeFormControl : null;
+  public isRangeSlider(): RangeSliderFormControl | null {
+    return (this.control instanceof RangeSliderFormControl) ? this.control as RangeSliderFormControl : null;
   }
 
   public isCheckbox(): VisualisationCheckboxFormControl | null {

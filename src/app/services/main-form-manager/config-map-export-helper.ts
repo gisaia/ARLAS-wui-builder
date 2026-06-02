@@ -226,7 +226,7 @@ export class ConfigMapExportHelper {
     const paint = this.getLayerPaint(modeValues, mode, colorService, taggableFields);
     const layout = this.getLayerLayout(modeValues, mode, colorService, taggableFields);
     const layerSource: LayerSourceConfig = ConfigExportHelper.getLayerSourceConfig(layerFg);
-    console.log(modeValues.visibilityStep);
+
     const layer: Layer = {
       id: layerFg.value.arlasId,
       type: this.getLayerType(modeValues.styleStep.geometryType),

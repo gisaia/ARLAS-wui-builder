@@ -43,7 +43,7 @@ import {
     OrderedSelectFormControl,
     SelectFormControl,
     SelectOption,
-    SliderFormControl, SliderRangeFormControl,
+    SliderFormControl, RangeSliderFormControl,
     SlideToggleFormControl,
     VisualisationCheckboxFormControl,
     VisualisationCheckboxOption
@@ -322,24 +322,24 @@ export class MapLayerFormGroup extends ConfigFormGroup {
   };
 
     public static adjustZoomVisibilityTonetworkFetchingLevelRange(networkFetchingLevelControl: SliderFormControl,
-                                                             sliderRangeCtrl: SliderRangeFormControl): void {
-        sliderRangeCtrl.min = Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0);
-        if (sliderRangeCtrl.value.min < Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0)) {
-            sliderRangeCtrl.setMinRange(Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0));
-            sliderRangeCtrl.hasWarning = true;
-            sliderRangeCtrl.warningMessage = `${marker('Network Analytics Fetching Precision is')} ${networkFetchingLevelControl.value}. 
-             ${marker('Therefore; minimum zoom level of the layer should be greater than or equal to')} ${sliderRangeCtrl.value.min} .`;
-            if (sliderRangeCtrl.value.max <= sliderRangeCtrl.value.min ) {
-                sliderRangeCtrl.setMaxRange(Math.min(MAX_ZOOM, sliderRangeCtrl.value.min + 1));
-                sliderRangeCtrl.hasWarning = true;
-                sliderRangeCtrl.warningMessage = `${marker('Maximum zoom level of the layer should be greater than')} 
-                ${sliderRangeCtrl.value.min}.`;
+                                                             zoomRangeSliderCtrll: RangeSliderFormControl): void {
+        zoomRangeSliderCtrll.min = Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0);
+        if (zoomRangeSliderCtrll.value.min < Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0)) {
+            zoomRangeSliderCtrll.setMinRange(Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0));
+            zoomRangeSliderCtrll.hasWarning = true;
+            zoomRangeSliderCtrll.warningMessage = `${marker('Network Analytics Fetching Precision is')} ${networkFetchingLevelControl.value}. 
+             ${marker('Therefore; minimum zoom level of the layer should be greater than or equal to')} ${zoomRangeSliderCtrll.value.min} .`;
+            if (zoomRangeSliderCtrll.value.max <= zoomRangeSliderCtrll.value.min ) {
+                zoomRangeSliderCtrll.setMaxRange(Math.min(MAX_ZOOM, zoomRangeSliderCtrll.value.min + 1));
+                zoomRangeSliderCtrll.hasWarning = true;
+                zoomRangeSliderCtrll.warningMessage = `${marker('Maximum zoom level of the layer should be greater than')} 
+                ${zoomRangeSliderCtrll.value.min}.`;
             } else {
-                sliderRangeCtrl.hasWarning = false;
+                zoomRangeSliderCtrll.hasWarning = false;
             }
         } else {
-            sliderRangeCtrl.hasWarning = false;
-            sliderRangeCtrl.hasWarning = false;
+            zoomRangeSliderCtrll.hasWarning = false;
+            zoomRangeSliderCtrll.hasWarning = false;
         }
     }
 
@@ -442,7 +442,7 @@ export class MapLayerFormGroup extends ConfigFormGroup {
   }
   private calculatenetworkFetchingLevel(collection: string, collectionService: CollectionService,
     networkFetchingLevelControl: SliderFormControl,
-    zoom: SliderRangeFormControl) {
+    zoom: RangeSliderFormControl) {
     collectionService.computeBbox(collection).subscribe({
       next: (cr) => {
         const coordinates = (cr.geometry as any).coordinates[0];
@@ -906,10 +906,10 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             }
           }
         ),
-          zoom: new SliderRangeFormControl(
+          zoom: new RangeSliderFormControl(
               0,
               marker('Zoom'),
-              {left: marker('min'), right: marker('max')},
+              {min: marker('zoomMin'), max: marker('zoomMax')},
               marker('zoom description'),
               0,
               MAX_ZOOM,
@@ -962,14 +962,14 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
   }
 
   public get zoom() {
-    return this.visibilityStep.get('zoom') as SliderRangeFormControl;
+    return this.visibilityStep.get('zoom') as RangeSliderFormControl;
   }
 
   public get zoomMin() {
-    return this.visibilityStep.get('zoomMin') as SliderFormControl;
+    return (this.visibilityStep.get('zoom') as RangeSliderFormControl).value.min;
   }
   public get zoomMax() {
-    return this.visibilityStep.get('zoomMax') as SliderFormControl;
+    return (this.visibilityStep.get('zoom') as RangeSliderFormControl).value.max;
   }
   public get geometryType() {
     return this.styleStep.get('geometryType') as SelectFormControl;

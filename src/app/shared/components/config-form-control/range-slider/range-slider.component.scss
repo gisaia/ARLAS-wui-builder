@@ -1,13 +1,10 @@
 // ─── Tokens ──────────────────────────────────────────────────────────────────
-$color-primary:   #1a1a2e;
-$color-accent:    #e94560;
-$color-track:     #e0e0e6;
-$color-text:      #1a1a2e;
-$color-muted:     #9a9aaf;
-$color-surface:   #ffffff;
-$color-border:    #e0e0e6;
+:host {
+  --range-slider-color-track: #e0e0e6;
+  --range-slider-color-text: #e0e0e6;
+  --range-slider-color-muted: #e0e0e6;
+}
 $radius-input:    6px;
-$font-main:       'DM Sans', sans-serif;
 
 // ─── Wrapper ─────────────────────────────────────────────────────────────────
 .range-slider-wrapper {
@@ -16,17 +13,17 @@ $font-main:       'DM Sans', sans-serif;
   width: 100%;
   max-width: 480px;
 }
-// ─── Titre ───────────────────────────────────────────────────────────────────
+// ─── Title ───────────────────────────────────────────────────────────────────
 .range-label {
   margin: 0 0 20px;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: $color-muted;
+  color: var(--range-slider-color-muted);
 }
 
-// ─── Ligne des inputs ─────────────────────────────────────────────────────────
+// ─── Input line ─────────────────────────────────────────────────────────
 .inputs-row {
   display: flex;
   align-items: center;
@@ -35,13 +32,13 @@ $font-main:       'DM Sans', sans-serif;
 }
 
 .separator {
-  color: $color-muted;
+  color: var(--range-slider-color-muted);
   font-size: 16px;
   flex-shrink: 0;
   margin-top: 18px; // align with input baseline
 }
 
-// ─── Champ individuel ────────────────────────────────────────────────────────
+// ─── Individual field ────────────────────────────────────────────────────────
 .input-field {
   display: flex;
   flex-direction: column;
@@ -62,7 +59,7 @@ $font-main:       'DM Sans', sans-serif;
   font-weight: 600;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: $color-muted;
+  color: var(--range-slider-color-muted);
   line-height: 1;
 }
 
@@ -74,7 +71,7 @@ $font-main:       'DM Sans', sans-serif;
 .unit {
   font-size: 14px;
   font-weight: 500;
-  color: $color-muted;
+  color: var(--range-slider-color-muted);
   transition: color 0.2s;
   line-height: 1;
   user-select: none;
@@ -84,10 +81,9 @@ input[type='number'] {
   border: none;
   outline: none;
   background: transparent;
-  font-family: $font-main;
   font-size: 16px;
   font-weight: 500;
-  color: $color-text;
+  color: var(--range-slider-color-text);
   width: 100%;
   padding: 0;
   -moz-appearance: textfield;

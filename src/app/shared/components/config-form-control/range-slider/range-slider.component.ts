@@ -4,7 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {SliderRangeFormControl} from '@shared-models/config-form';
+import {RangeSliderFormControl} from '@shared-models/config-form';
 import {TranslatePipe} from '@ngx-translate/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {MatCard} from '@angular/material/card';
@@ -31,10 +31,10 @@ const ERROR = {'notSameValue': {}};
     styleUrls: ['./range-slider.component.scss'],
 })
 export class RangeSliderComponent {
-    public control = input.required<SliderRangeFormControl>();
+    public control = input.required<RangeSliderFormControl>();
     private readonly destroyRef = inject(DestroyRef);
 
-    private get ctrl(): SliderRangeFormControl {
+    private get ctrl(): RangeSliderFormControl {
         const c = this.control();
         if (!c) {
             throw new Error(marker('RangeSliderComponent: control input is required'));
@@ -80,7 +80,7 @@ export class RangeSliderComponent {
         this.ctrl.maxFc.setValue(value);
     }
 
-    private syncInternalControls(ctrl: SliderRangeFormControl) {
+    private syncInternalControls(ctrl: RangeSliderFormControl) {
         ctrl.minFc.setValue(ctrl.value.min, {emitEvent: false});
         ctrl.maxFc.setValue(ctrl.value.max, {emitEvent: false});
 

@@ -14,12 +14,10 @@
             [step]="control().step"
             discrete
     >
-        <!---->
         <input
                 #ngSliderLeft="matSliderRangeThumb"
                 (input)="control().ensureLessThan ? control().checkLessThan(ngSliderLeft.value) : null"
                 (valueChange)="onSliderMinChange($event)"
-
                 [value]="control().minFc.value"
                 matSliderStartThumb
         />
@@ -37,7 +35,7 @@
 
         <!-- Input MIN -->
         <div class="input-field">
-            <label class="field-label" for="input-min">{{ control().labels.left | translate }}</label>
+            <label class="field-label" for="input-min">{{ control().labels.min | translate }}</label>
             <div class="field-control">
                 @if (control().unit) {
                     <span class="unit">{{ control().unit }}</span>
@@ -60,7 +58,7 @@
 
         <!-- Input MAX -->
         <div class="input-field input-field--right">
-            <label class="field-label" for="input-max">{{ control().labels.right | translate }}</label>
+            <label class="field-label" for="input-max">{{ control().labels.max | translate }}</label>
             <div class="field-control">
                 @if (control().unit) {
                     <span class="unit">{{ control().unit }}</span>

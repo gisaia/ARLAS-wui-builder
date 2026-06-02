@@ -929,19 +929,19 @@ export class SliderFormControl extends ConfigFormControl {
   }
 }
 
-export interface SliderRange {
+export interface RangeSlider {
   min: number; max: number;
 }
 
-export class SliderRangeFormControl extends SliderFormControl {
-  public override value: SliderRange;
+export class RangeSliderFormControl extends SliderFormControl {
+  public override value: RangeSlider;
   public minFc = new FormControl();
   public maxFc = new FormControl();
 
   public constructor(
       formState: any,
       label,
-      public labels: { left?: string; right?: string; },
+      public labels: { min?: string; max?: string; },
       description: string,
       public min: number,
       public max: number,
