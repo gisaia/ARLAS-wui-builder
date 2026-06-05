@@ -89,6 +89,10 @@ import { ArlasIamService } from 'arlas-wui-toolkit';
 import { Subject } from 'rxjs';
 import { StepGradientPipe } from '../../pipes/step-gradient.pipe';
 import { MultiSelectSearchComponent } from './multi-select-search/multi-select-search.component';
+import {
+  AutoCompleteSelectFormComponent
+} from '@shared-components/config-form-control/auto-complete-select/auto-complete-select-form.component';
+import {OrderedSelectComponent} from '@shared-components/config-form-control/ordered-select/ordered-select.component';
 
 @Component({
   selector: 'arlas-config-form-control',
@@ -128,8 +132,10 @@ import { MultiSelectSearchComponent } from './multi-select-search/multi-select-s
     LayerFiltersComponent,
     CollectionsUnitsComponent,
     StepGradientPipe,
-    UpperFirstPipe
-]
+    UpperFirstPipe,
+    AutoCompleteSelectFormComponent,
+    OrderedSelectComponent
+  ]
 })
 export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
 

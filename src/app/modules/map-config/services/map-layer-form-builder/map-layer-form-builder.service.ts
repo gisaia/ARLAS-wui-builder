@@ -1219,7 +1219,7 @@ export class MapLayerTypeFeatureMetricFormGroup extends MapLayerTypeFeaturesForm
           '',
           marker('Order field'),
           marker('Order field feature metric description'),
-          false,
+          true,
           toAllButGeoOptionsObs(collectionFields),
           {
             optional: true,
