@@ -322,24 +322,24 @@ export class MapLayerFormGroup extends ConfigFormGroup {
   };
 
     public static adjustZoomVisibilityTonetworkFetchingLevelRange(networkFetchingLevelControl: SliderFormControl,
-                                                             zoomRangeSliderCtrll: RangeSliderFormControl): void {
-        zoomRangeSliderCtrll.min = Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0);
-        if (zoomRangeSliderCtrll.value.min < Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0)) {
-            zoomRangeSliderCtrll.setMinRange(Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0));
-            zoomRangeSliderCtrll.hasWarning = true;
-            zoomRangeSliderCtrll.warningMessage = `${marker('Network Analytics Fetching Precision is')} ${networkFetchingLevelControl.value}. 
-             ${marker('Therefore; minimum zoom level of the layer should be greater than or equal to')} ${zoomRangeSliderCtrll.value.min} .`;
-            if (zoomRangeSliderCtrll.value.max <= zoomRangeSliderCtrll.value.min ) {
-                zoomRangeSliderCtrll.setMaxRange(Math.min(MAX_ZOOM, zoomRangeSliderCtrll.value.min + 1));
-                zoomRangeSliderCtrll.hasWarning = true;
-                zoomRangeSliderCtrll.warningMessage = `${marker('Maximum zoom level of the layer should be greater than')} 
-                ${zoomRangeSliderCtrll.value.min}.`;
+                                                             zoomRangeSliderCtrl: RangeSliderFormControl): void {
+        zoomRangeSliderCtrl.min = Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0);
+        if (zoomRangeSliderCtrl.value.min < Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0)) {
+            zoomRangeSliderCtrl.setMinRange(Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0));
+            zoomRangeSliderCtrl.hasWarning = true;
+            zoomRangeSliderCtrl.warningMessage = `${marker('Network Analytics Fetching Precision is')} ${networkFetchingLevelControl.value}. 
+             ${marker('Therefore; minimum zoom level of the layer should be greater than or equal to')} ${zoomRangeSliderCtrl.value.min} .`;
+            if (zoomRangeSliderCtrl.value.max <= zoomRangeSliderCtrl.value.min ) {
+                zoomRangeSliderCtrl.setMaxRange(Math.min(MAX_ZOOM, zoomRangeSliderCtrl.value.min + 1));
+                zoomRangeSliderCtrl.hasWarning = true;
+                zoomRangeSliderCtrl.warningMessage = `${marker('Maximum zoom level of the layer should be greater than')} 
+                ${zoomRangeSliderCtrl.value.min}.`;
             } else {
-                zoomRangeSliderCtrll.hasWarning = false;
+                zoomRangeSliderCtrl.hasWarning = false;
             }
         } else {
-            zoomRangeSliderCtrll.hasWarning = false;
-            zoomRangeSliderCtrll.hasWarning = false;
+            zoomRangeSliderCtrl.hasWarning = false;
+            zoomRangeSliderCtrl.hasWarning = false;
         }
     }
 

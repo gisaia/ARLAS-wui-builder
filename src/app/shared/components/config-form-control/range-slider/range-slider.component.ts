@@ -108,6 +108,7 @@ export class RangeSliderComponent {
             takeUntilDestroyed(this.destroyRef)
         ).subscribe(v => {
             ctrl.setValue({...ctrl.value, min: v}, {emitEvent: false});
+            ctrl.maxFc.updateValueAndValidity({ emitEvent: false });
             this.setErrors();
         });
 
@@ -116,6 +117,7 @@ export class RangeSliderComponent {
             takeUntilDestroyed(this.destroyRef)
         ).subscribe(v => {
             ctrl.setValue({...ctrl.value, max: v}, {emitEvent: false});
+            ctrl.minFc.updateValueAndValidity({ emitEvent: false });
             this.setErrors();
         });
 

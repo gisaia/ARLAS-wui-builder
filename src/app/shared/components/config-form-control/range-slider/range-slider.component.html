@@ -43,7 +43,6 @@
                 <mat-form-field appearance="outline">
                     <input
                             [formControl]="control().minFc"
-                            [max]="control().maxFc.value - 1"
                             [min]="control().min"
                             id="input-min"
                             matInput
@@ -66,7 +65,6 @@
                     <input
                             [formControl]="control().maxFc"
                             [max]="control().max"
-                            [min]="control().minFc.value + 1"
                             id="input-max"
                             matInput
                             type="number"
