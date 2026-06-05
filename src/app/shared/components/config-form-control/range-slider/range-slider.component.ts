@@ -36,7 +36,6 @@ const DEFAULT_MAX = 1;
 
 @Component({
     selector: 'app-range-slider',
-    standalone: true,
     imports: [
         CommonModule,
         FormsModule,
@@ -125,10 +124,10 @@ export class RangeSliderComponent {
     }
 
     private initMin(ctrl: RangeSliderFormControl){
-       return  ctrl.value.min < ctrl.min ? ctrl.min : ctrl.value.min;
+       return  Math.max(ctrl.value.min, ctrl.min);
     }
 
     private initMax(ctrl: RangeSliderFormControl){
-        return  ctrl.value.max > ctrl.max ? ctrl.max : ctrl.value.max;
+        return  Math.min(ctrl.value.max, ctrl.max);
     }
 }

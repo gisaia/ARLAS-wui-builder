@@ -1,9 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { RangeSliderComponent } from './range-slider.component';
-import { beforeEach, describe, expect, it } from 'vitest';
+import {RangeSliderComponent} from './range-slider.component';
+import {beforeEach, describe, expect, it} from 'vitest';
 import {TranslateLoader, TranslateModule, TranslateNoOpLoader} from '@ngx-translate/core';
-import {IconFormControl, RangeSliderFormControl} from '@shared-models/config-form';
+import {RangeSliderFormControl} from '@shared-models/config-form';
+
 describe('RangeSliderComponent', () => {
   let component: RangeSliderComponent;
   let fixture: ComponentFixture<RangeSliderComponent>;
