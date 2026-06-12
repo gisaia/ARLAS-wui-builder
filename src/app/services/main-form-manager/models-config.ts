@@ -239,6 +239,7 @@ export interface AnalyticComponentInputConfig {
   dataType?: string;
   isHistogramSelectable?: boolean;
   ticksDateFormat?: string;
+  valuesDateFormat?: string;
   multiselectable?: boolean;
   topOffsetRemoveInterval?: number;
   leftOffsetRemoveInterval?: number;
