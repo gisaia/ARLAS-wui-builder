@@ -1,5 +1,17 @@
 # Change Log
 
+## [v28.0.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v28.0.1) (2026-06-12)
+
+**Fixed bugs:**
+
+- ARLAS Builder/ Visibility: Zoom maximal is at 24 and it is marked as incorrect value. [\#1175](https://github.com/gisaia/ARLAS-wui-builder/issues/1175)
+- Ordrer by field control has an not working autocomplete option [\#755](https://github.com/gisaia/ARLAS-wui-builder/issues/755)
+
+**Miscellaneous:**
+
+- Map extrusion - Missing documentation for interpolated extrusion [\#1173](https://github.com/gisaia/ARLAS-wui-builder/issues/1173) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+- enhance resolution of previews [\#1152](https://github.com/gisaia/ARLAS-wui-builder/issues/1152) [[MAP](https://github.com/gisaia/ARLAS-wui-builder/labels/MAP)]
+
 ## [v28.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v28.0.0) (2026-05-21)
 
 **New stuff:**
@@ -448,9 +460,9 @@
 
 - Add the possibility to display a timeline for each collection on the same graph [\#568](https://github.com/gisaia/ARLAS-wui-builder/issues/568)
 
-## [v17.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.3) (2021-06-30)
-
 ## [v17.2.4](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.4) (2021-06-30)
+
+## [v17.2.3](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.3) (2021-06-30)
 
 ## [v17.2.2](https://github.com/gisaia/ARLAS-wui-builder/tree/v17.2.2) (2021-06-30)
 
