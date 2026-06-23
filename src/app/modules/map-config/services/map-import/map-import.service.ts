@@ -402,8 +402,7 @@ export class MapImportService {
       visibilityStep: {
         visible: (!!layer.layout && !!layer.layout.visibility) ? layer.layout.visibility === VISIBILITY.visible : true,
         renderMode,
-        zoomMin: minzoom,
-        zoomMax: maxzoom,
+        zoom: {min: minzoom, max: maxzoom},
         filters: new FormArray([])
       },
       styleStep: {

@@ -314,13 +314,12 @@ export class ConfigExportHelper {
     const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
       (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
     const filters = !!modeValues.visibilityStep.filters ? modeValues.visibilityStep.filters.value : undefined;
-
     const layerSource: LayerSourceConfig = {
       id: layerValues.arlasId,
       name: layerValues.name,
       source: '',
-      minzoom: modeValues.visibilityStep.zoomMin,
-      maxzoom: modeValues.visibilityStep.zoomMax,
+      minzoom: modeValues.visibilityStep.zoom.min,
+      maxzoom: modeValues.visibilityStep.zoom.max,
       include_fields: [],
       short_form_fields: [],
       colors_from_fields: [],

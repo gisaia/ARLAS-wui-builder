@@ -150,7 +150,7 @@ export class LayersComponent implements OnInit, OnDestroy {
       });
 
       this.layerVs.set(layer.arlasId, includeIn);
-      layer.zoom = '[ ' + modeValues.visibilityStep.zoomMin + ' - ' + modeValues.visibilityStep.zoomMax + ' ]';
+      layer.zoom = '[ ' + modeValues.visibilityStep.zoom.min + ' - ' + modeValues.visibilityStep.zoom.max + ' ]';
     });
     this.initDataSource();
   }
@@ -206,8 +206,8 @@ export class LayersComponent implements OnInit, OnDestroy {
       id: layerFg.arlasId,
       type: modeValues.styleStep.geometryType,
       source: sourceName,
-      minzoom: modeValues.visibilityStep.zoomMin,
-      maxzoom: modeValues.visibilityStep.zoomMax,
+      minzoom: modeValues.visibilityStep.zoom.min,
+      maxzoom: modeValues.visibilityStep.zoom.max,
       layout,
       paint,
       filter: modeValues.styleStep.filter,

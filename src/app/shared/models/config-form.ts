@@ -905,12 +905,14 @@ export class SliderFormControl extends ConfigFormControl {
     public max: number,
     public step: number,
     public ensureLessThan?: () => ConfigFormControl,
-    public ensureGeaterThan?: () => ConfigFormControl,
+    public ensureGreaterThan?: () => ConfigFormControl,
     optionalParams?: ControlOptionalParams,
     propertyName?: string) {
 
     super(formState, label, description, optionalParams, propertyName);
   }
+
+
 
   public checkLessThan(newValue: number) {
     const other = this.ensureLessThan();
@@ -920,10 +922,48 @@ export class SliderFormControl extends ConfigFormControl {
   }
 
   public checkGreaterThan(newValue: number) {
-    const other = this.ensureGeaterThan();
+    const other = this.ensureGreaterThan();
     if (newValue < other.value) {
       other.setValue(newValue);
     }
+  }
+}
+
+export interface RangeSlider {
+  min: number; max: number;
+}
+
+export class RangeSliderFormControl extends SliderFormControl {
+  public override value: RangeSlider;
+  public minFc = new FormControl();
+  public maxFc = new FormControl();
+
+  public constructor(
+      formState: any,
+      label,
+      public labels: { min?: string; max?: string; },
+      description: string,
+      public min: number,
+      public max: number,
+      public step: number,
+      public ensureLessThan?: () => ConfigFormControl,
+      public ensureGreaterThan?: () => ConfigFormControl,
+      public unit?: string,
+      optionalParams?: ControlOptionalParams) {
+    super(formState, label, description, min, max, step,ensureLessThan, ensureGreaterThan, optionalParams);
+
+    this.minFc.setValue(min);
+    this.maxFc.setValue(max);
+  }
+
+  public setMinRange(value: number){
+    this.minFc.setValue(value);
+    this.value.min = value;
+  }
+
+  public setMaxRange(value: number){
+    this.maxFc.setValue(value);
+    this.value.max = value;
   }
 }
 
