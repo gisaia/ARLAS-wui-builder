@@ -1,0 +1,90 @@
+<div class="columns-wrapper">
+  <table #columnTable mat-table [dataSource]="control.controls" class="columns" cdkDropList
+    [cdkDropListData]="control.controls" (cdkDropListDropped)="drop($event)"
+    [cdkDropListDisabled]="dragDisabled" [cdkDropListLockAxis]="'y'">
+
+    <ng-container matColumnDef="action">
+      <th class="action" mat-header-cell *matHeaderCellDef></th>
+      <td class="action" class="action" mat-cell *matCellDef="let column; let i = index">
+        <div class="action-wrapper">
+          <mat-icon class="drag" (mousedown)="dragDisabled = false">drag_indicator</mat-icon>
+          <button mat-icon-button class="delete" (click)="deleteColumn(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          @if (column.controls.sort.value === '') {
+            <button mat-icon-button class="sort-disabled" (click)="setSort(i, column.controls.sort.value)" [matTooltip]="'Not sorted' | translate">
+              <mat-icon>sync_alt</mat-icon>
+            </button>
+          } @else {
+            <button mat-icon-button class="sort" [class.reversed]="column.controls.sort.value === 'desc'"
+                [matTooltip]="column.controls.sort.value | translate" (click)="setSort(i, column.controls.sort.value)">
+              <mat-icon>north</mat-icon>
+            </button>
+          }
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>{{'Column name' | translate}}</th>
+      <td class="name" mat-cell *matCellDef="let column">
+        <arlas-config-form-control [showLabel]="false" [control]="column.controls.columnName">
+        </arlas-config-form-control>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="field">
+      <th mat-header-cell *matHeaderCellDef>{{'Column field' | translate}}</th>
+      <td class="field" mat-cell *matCellDef="let column">
+        <arlas-config-form-control [showLabel]="false" [control]="column.controls.fieldName">
+        </arlas-config-form-control>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="unit">
+      <th class="unit" mat-header-cell *matHeaderCellDef>{{'Unit of the column' | translate}}</th>
+      <td class="unit" mat-cell *matCellDef="let column">
+        <arlas-config-form-control [showLabel]="false" [control]="column.controls.dataType">
+        </arlas-config-form-control>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="process">
+      <th class="process" mat-header-cell *matHeaderCellDef class="transformation">{{'Transformation' | translate}}</th>
+      <td class="process" mat-cell *matCellDef="let column">
+        <arlas-config-form-control [showLabel]="false" [control]="column.controls.process">
+        </arlas-config-form-control>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="title">
+      <th class="color-service" mat-header-cell *matHeaderCellDef>{{'Title' | translate}}</th>
+      <td class="color-service" mat-cell *matCellDef="let column">
+        <div class="color-service-wrapper">
+            <arlas-config-form-control [showLabel]="false" [control]="column.controls.title">
+            </arlas-config-form-control>
+        </div>
+      </td>
+    </ng-container>
+      <ng-container matColumnDef="icon">
+          <th class="color-service" mat-header-cell *matHeaderCellDef>{{'Icon' | translate}}</th>
+          <td class="color-service" mat-cell *matCellDef="let column">
+              <div class="color-service-wrapper">
+                  <arlas-config-form-control [showLabel]="false" [control]="column.controls.icon">
+                  </arlas-config-form-control>
+              </div>
+          </td>
+      </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (cdkDragStarted)="dragStarted($event)" cdkDrag
+    [cdkDragData]="row" class="column-drag"></tr>
+  </table>
+</div>
+
+@if (control.touched && control?.hasError('required')) {
+  <mat-error>{{'At least one column is required' | translate}}
+  </mat-error>
+}
+<div class="button-wrapper">
+  <button matButton="outlined" color="primary" (click)="addColumn(collection.value)"
+    [matTooltip]="'Add a field' | translate" type="button">
+    <mat-icon>add</mat-icon>
+    {{'Add a column' | translate}}
+  </button>
+</div>

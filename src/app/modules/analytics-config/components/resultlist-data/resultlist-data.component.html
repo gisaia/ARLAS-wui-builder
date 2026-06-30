@@ -8,6 +8,15 @@
     <arlas-edit-resultlist-columns [control]="control.controls.columns" [collection]="control.controls.collection">
     </arlas-edit-resultlist-columns>
   </mat-tab>
+    <mat-tab #hybrid>
+        <ng-template mat-tab-label>
+      <span [class.tab-error]="control.controls.hybrid.touched && control.controls.hybrid.invalid && !columns.isActive">
+        {{'Hybrid list' | translate}}
+      </span>
+        </ng-template>
+        <arlas-edit-hybrid-resultlist-columns [control]="control.controls.hybrid" [collection]="control.controls.collection">
+        </arlas-edit-hybrid-resultlist-columns>
+    </mat-tab>
   <mat-tab #details>
     <ng-template mat-tab-label>
       <span [class.tab-error]="control.controls.details.touched && control.controls.details.invalid && !details.isActive">

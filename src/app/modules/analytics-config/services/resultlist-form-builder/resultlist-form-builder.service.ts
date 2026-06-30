@@ -44,22 +44,22 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
-  ButtonFormControl,
-  ButtonToggleFormControl,
-  ComponentFormControl,
-  ConfigFormControl,
-  ConfigFormGroup,
-  FieldTemplateControl,
-  HiddenFormControl,
-  InputFormControl,
-  MultipleSelectFormControl,
-  SelectFormControl,
-  SelectOption,
-  SliderFormControl,
-  SlideToggleFormControl,
-  TextareaFormControl,
-  TitleInputFormControl,
-  TypedSelectFormControl
+    ButtonFormControl,
+    ButtonToggleFormControl,
+    ComponentFormControl,
+    ConfigFormControl,
+    ConfigFormGroup,
+    FieldTemplateControl,
+    HiddenFormControl, IconFormControl,
+    InputFormControl,
+    MultipleSelectFormControl,
+    SelectFormControl,
+    SelectOption,
+    SliderFormControl,
+    SlideToggleFormControl,
+    TextareaFormControl,
+    TitleInputFormControl,
+    TypedSelectFormControl
 } from '@shared-models/config-form';
 import { GeoFilterInputsBuilder } from '@shared-models/filter-input-builder';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
@@ -127,6 +127,9 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
           columns: (new FormArray([], {
             validators: Validators.required,
           })),
+            hybrid: (new FormArray([], {
+                validators: Validators.required,
+            })),
           details: new FormArray([]),
           detailsTitle: new HiddenFormControl(
             '',
@@ -371,6 +374,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
       collection: this.get('dataStep.collection') as SelectFormControl,
       searchSize: this.get('dataStep.searchSize') as SliderFormControl,
       columns: this.get('dataStep.columns') as FormArray,
+      hybrid: this.get('dataStep.hybrid') as FormArray,
       detailsTitle: this.get('dataStep.detailsTitle') as HiddenFormControl,
       details: this.get('dataStep.details') as FormArray,
       idFieldName: this.get('dataStep.idFieldName') as HiddenFormControl,
@@ -577,6 +581,105 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
       }
     }
   }
+}
+
+export class ResultlistHybridColumnFormGroup extends CollectionConfigFormGroup {
+
+    public constructor(
+        fieldsObs: Observable<Array<SelectOption>>,
+        collection: string,
+        private readonly globalKeysToColortrl: FormArray,
+        defaultConfig: DefaultConfig,
+        dialog: MatDialog,
+        collectionService: CollectionService,
+        private readonly colorService: ArlasColorService
+    ) {
+        super(collection,
+            {
+                columnName: new InputFormControl(
+                    '',
+                    marker('Column name'),
+                    ''
+                ),
+                fieldName: new SelectFormControl(
+                    '',
+                    marker('Column field'),
+                    '',
+                    true,
+                    fieldsObs
+                ),
+                dataType: new InputFormControl(
+                    '',
+                    marker('Unit of the column'),
+                    '',
+                    undefined,
+                    {
+                        optional: true
+                    }
+                ),
+                process: new TextareaFormControl(
+                    '',
+                    marker('Transformation'),
+                    '',
+                    '',
+                    1,
+                    {
+                        optional: true,
+                        validators: [TextareaFormControl.processValidator('result')],
+                    }
+                ),
+                title: new SlideToggleFormControl(
+                    false,
+                    marker('Colorize'),
+                    '',
+                    {
+                        optional: true
+
+                    }
+                ),
+                sort: new HiddenFormControl(
+                    '',
+                    '',
+                    {
+                        optional: true
+
+                    }
+                ),
+                icon: new IconFormControl(
+                    '',
+                    marker('Icon'),
+                    '',
+                    {
+                        optional: true
+
+                    }
+                ),
+            });
+    }
+
+    public customControls = {
+        columnName: this.get('columnName') as InputFormControl,
+        fieldName: this.get('fieldName') as SelectFormControl,
+        dataType: this.get('dataType') as InputFormControl,
+        process: this.get('process') as TextareaFormControl,
+        title: this.get('title') as SlideToggleFormControl,
+        sort: this.get('sort') as HiddenFormControl
+    };
+
+    private addToColorManualValuesCtrl(kc: KeywordColor, index?: number) {
+        if (!Object.values(this.globalKeysToColortrl.controls)
+            .find(keywordColorGrp => keywordColorGrp.get('keyword').value === kc.keyword)) {
+            const keywordColorGrp = new FormGroup({
+                keyword: new FormControl(kc.keyword),
+                color: new FormControl(kc.color)
+            });
+            if (index !== undefined) {
+                this.globalKeysToColortrl.insert(index, keywordColorGrp);
+            } else {
+                this.globalKeysToColortrl.push(keywordColorGrp);
+            }
+        }
+    }
 }
 
 
@@ -935,6 +1038,11 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
     columns.forEach(c => formGroup.customControls.dataStep.columns
       .push(this.buildColumn(collection)));
 
+      // for each hybrid, the related FormGroup must be created before setting its values
+      const hybrid = (value.dataStep || {}).hybrid || [];
+      hybrid.forEach(c => formGroup.customControls.dataStep.hybrid
+          .push(this.buildHybridColumn(collection)));
+
     // same for the details, and the fields within
     const details = (value.dataStep || {}).details || [];
     details.forEach(d => {
@@ -960,6 +1068,18 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
       this.colorService
     );
   }
+    public buildHybridColumn(collection: string) {
+        const fieldObs = toOptionsObs(this.collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_KEYWORD));
+        return new ResultlistHybridColumnFormGroup(
+            fieldObs,
+            collection,
+            this.mainFormService.commonConfig.getKeysToColorFa(),
+            this.defaultValuesService.getDefaultConfig(),
+            this.dialog,
+            this.collectionService,
+            this.colorService
+        );
+    }
 
   public buildQuicklook(collection: string) {
     const fieldObs = this.collectionService.getCollectionFields(collection, TEXT_OR_KEYWORD);

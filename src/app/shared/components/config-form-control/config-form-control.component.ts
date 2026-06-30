@@ -94,6 +94,7 @@ import {
 } from '@shared-components/config-form-control/auto-complete-select/auto-complete-select-form.component';
 import {OrderedSelectComponent} from '@shared-components/config-form-control/ordered-select/ordered-select.component';
 import {RangeSliderComponent} from '@shared-components/config-form-control/range-slider/range-slider.component';
+import {IconPickerDirective, IconPickerModule} from '@gisaia-team/ngx-icon-picker';
 
 @Component({
   selector: 'arlas-config-form-control',
@@ -136,7 +137,8 @@ import {RangeSliderComponent} from '@shared-components/config-form-control/range
     UpperFirstPipe,
     AutoCompleteSelectFormComponent,
     OrderedSelectComponent,
-    RangeSliderComponent
+    RangeSliderComponent,
+    IconPickerModule
   ]
 })
 export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {

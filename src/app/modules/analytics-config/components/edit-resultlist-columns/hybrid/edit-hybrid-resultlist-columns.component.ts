@@ -16,26 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import {
-  ResultlistColumnFormGroup, ResultlistFormBuilderService
-} from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormArray } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatError } from '@angular/material/select';
-import { MatTableModule } from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslatePipe } from '@ngx-translate/core';
-import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
-import { SelectFormControl } from '@shared-models/config-form';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {FormArray} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {MatError} from '@angular/material/select';
+import {MatTableModule} from '@angular/material/table';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {TranslatePipe} from '@ngx-translate/core';
+import {ConfigFormControlComponent} from '@shared-components/config-form-control/config-form-control.component';
+import {SelectFormControl} from '@shared-models/config-form';
 import {EditResultListComponent} from '@analytics-config/components/edit-resultlist-columns/edit-result-list-abstract';
 
 @Component({
-  selector: 'arlas-edit-resultlist-columns',
-  templateUrl: './edit-resultlist-columns.component.html',
-  styleUrls: ['./edit-resultlist-columns.component.scss'],
+  selector: 'arlas-edit-hybrid-resultlist-columns',
+  templateUrl: './edit-hybrid-resultlist-columns.component.html',
+  styleUrls: ['./edit-hybrid-resultlist-columns.component.scss'],
   imports: [
     MatTableModule,
     DragDropModule,
@@ -47,15 +44,14 @@ import {EditResultListComponent} from '@analytics-config/components/edit-resultl
     MatError
   ]
 })
-export class EditResultlistColumnsComponent extends EditResultListComponent implements OnInit {
-
+export class EditHybridResultlistColumnsComponent extends EditResultListComponent implements OnInit {
   @Input() public control: FormArray;
   @Input() public collection: SelectFormControl;
   @ViewChild('columnTable', { static: true }) public columnTable;
-  public displayedColumns: string[] = ['action', 'name', 'field', 'unit', 'process', 'colorService'];
+  public displayedColumns: string[] = ['action', 'name', 'field', 'unit', 'process', 'title', 'icon'];
 
   public addColumn(collection: string) {
-    this.control.push(this.resultlistFormBuilder.buildColumn(collection));
+    this.control.push(this.resultlistFormBuilder.buildHybridColumn(collection));
     this.columnTable.renderRows();
   }
 }

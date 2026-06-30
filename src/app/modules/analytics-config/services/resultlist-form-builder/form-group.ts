@@ -28,13 +28,13 @@ export type ResultlistDataConfigForm = FormGroup<{
   collection: SelectFormControl;
   searchSize: SliderFormControl;
   columns: FormArray;
+  hybrid: FormArray;
   detailsTitle: HiddenFormControl;
   details: FormArray;
   idFieldName: HiddenFormControl;
 }>;
 
 export class ResultlistDetailFormGroup extends FormGroup {
-
   public constructor() {
     super({
       name: new InputFormControl(

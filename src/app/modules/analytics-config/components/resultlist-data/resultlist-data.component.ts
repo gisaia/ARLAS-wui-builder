@@ -30,6 +30,9 @@ import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { Subject, takeUntil } from 'rxjs';
 import { EditResultlistColumnsComponent } from '../edit-resultlist-columns/edit-resultlist-columns.component';
 import { EditResultlistDetailsComponent } from '../edit-resultlist-details/edit-resultlist-details.component';
+import {
+  EditHybridResultlistColumnsComponent
+} from '@analytics-config/components/edit-resultlist-columns/hybrid/edit-hybrid-resultlist-columns.component';
 
 @Component({
   selector: 'arlas-resultlist-data',
@@ -41,7 +44,8 @@ import { EditResultlistDetailsComponent } from '../edit-resultlist-details/edit-
     EditResultlistColumnsComponent,
     ConfigElementComponent,
     ConfigFormControlComponent,
-    EditResultlistDetailsComponent
+    EditResultlistDetailsComponent,
+    EditHybridResultlistColumnsComponent
   ]
 })
 export class ResultlistDataComponent implements OnInit, OnDestroy {
@@ -61,6 +65,7 @@ export class ResultlistDataComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    console.log(this.control);
     const collectionControl = this.control.get('collection');
     this.detailsTitleControl = new FieldTemplateControl(
       '',

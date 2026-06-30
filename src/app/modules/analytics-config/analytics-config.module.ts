@@ -25,7 +25,6 @@ import { EditGroupComponent, AddWidgetDialogComponent } from './components/edit-
 import { EditWidgetDialogComponent } from './components/edit-widget-dialog/edit-widget-dialog.component';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
 import { IconPickerModule } from '@gisaia-team/ngx-icon-picker';
-import { EditResultlistColumnsComponent } from './components/edit-resultlist-columns/edit-resultlist-columns.component';
 import { EditResultlistDetailsComponent } from './components/edit-resultlist-details/edit-resultlist-details.component';
 import { ResultlistDataComponent } from './components/resultlist-data/resultlist-data.component';
 import { ImportWidgetDialogComponent } from './components/import-widget-dialog/import-widget-dialog.component';
@@ -55,7 +54,6 @@ import { GetCollectionDisplayNamePipe, GetFieldDisplayNamePipe } from 'arlas-web
         WidgetEditionComponent,
         EditWidgetDialogComponent,
         AddWidgetDialogComponent,
-        EditResultlistColumnsComponent,
         EditResultlistDetailsComponent,
         ResultlistDataComponent,
         ImportWidgetDialogComponent,

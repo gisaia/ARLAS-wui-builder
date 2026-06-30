@@ -1,4 +1,5 @@
-@let label = control.label | translate:{ property: control.propertyName | translate } | upperFirst:true;
+@let label = showLabel && control.label  ?
+    (control.label | translate:{ property: control.propertyName | translate } | upperFirst:true ): '';
 
 @if (isSlideToggle(); as typedControl) {
   <div class="slider-toggle-form-control">
@@ -415,7 +416,11 @@
       @if (showLabel) {
         <mat-label>{{ label }}</mat-label>
       }
-      <input matInput [formControl]="typedControl" type="text" [required]="!typedControl.optional">
+            <input matInput [formControl]="typedControl" [iconPicker]="typedControl.value"
+                   [ipIconPack]="['mat']" [ipFallbackIcon]="'poll'" [ipPosition]="'right'" [ipIconSize]="'24px'"
+                   [ipButtonStyleClass]="'mat-raised-button'" [ipMaxHeight]="'300px'" [ipWidth]="'467px'"
+                   [required]="!typedControl.optional"
+                   />
     </mat-form-field>
     <mat-icon>{{ typedControl.value }}</mat-icon>
   </div>
