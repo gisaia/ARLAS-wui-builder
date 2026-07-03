@@ -894,6 +894,8 @@ export class HiddenFormControl extends ConfigFormControl {
   }
 }
 
+export class HiddenConfigFromGroup extends ConfigFormGroup {}
+
 export class SliderFormControl extends ConfigFormControl {
   public hasWarning = false;
   public warningMessage = '';

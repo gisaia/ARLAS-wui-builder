@@ -16,7 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { ResultlistDetailFormGroup } from '@analytics-config/services/resultlist-form-builder/form-group';
+import {
+  ResultlistDataConfigForm,
+  ResultlistDetailFormGroup
+} from '@analytics-config/services/resultlist-form-builder/form-group';
 import { isNumberOperator } from '@analytics-config/services/resultlist-form-builder/models';
 import {
   ResultlistConfigForm,
@@ -41,6 +44,7 @@ import {
   DataGroupInputConfig
 } from '../services/main-form-manager/models-config';
 import { ImportElement, importElements } from '../services/main-form-manager/tools';
+import {ConfigFormGroup} from '@shared-models/config-form';
 
 interface ResultListConfigFeederOptions {
     widgetData: ResultlistConfigForm;
@@ -49,16 +53,14 @@ interface ResultListConfigFeederOptions {
 }
 
 export class ResultListInputsFeeder {
-  protected dataStep: any;
-  protected gridStep: any;
+  protected dataStep;
   protected settingsStep: any;
   protected sactionStep: any;
-  protected visualisationStep: {   visualisationsList: FormArray;};
+  protected visualisationStep: {   visualisationsList: FormArray; thumbnailAndQuicklook: ConfigFormGroup; visualisations: ConfigFormGroup;};
   protected customControls: any;
   public constructor(protected options: ResultListConfigFeederOptions, protected  messageService?: MatSnackBar,
                      protected translate?: TranslateService) {
-    this.dataStep = options.widgetData.customControls.dataStep;
-    this.gridStep = options.widgetData.customControls.gridStep;
+    this.dataStep = options.widgetData.customControls.dataStep ;
     this.settingsStep = options.widgetData.customControls.settingsStep;
     this.sactionStep = options.widgetData.customControls.sactionStep;
     this.visualisationStep = options.widgetData.customControls.visualisationStep;
@@ -95,6 +97,10 @@ export class ResultListInputsFeeder {
   public importSettingsSteps(){
     return this.imports([
       {
+        value: this.options.contributor.search_size >= 50 ? this.options.contributor.search_size : 50,
+        control: this.settingsStep.searchSize
+      },
+      {
         value: this.options.input.displayFilters,
         control: this.settingsStep.displayFilters
       },
@@ -109,47 +115,31 @@ export class ResultListInputsFeeder {
     ]);
   }
 
-  public importGridStep(){
+  public importGridFromDataTabs(){
     const  titleFieldNames = this.options.contributor.fieldsConfiguration.titleFieldNames;
     const tooltipFieldNames = this.options.contributor.fieldsConfiguration.tooltipFieldNames;
     return this.imports([
       {
-        value: !!this.options.contributor.fieldsConfiguration.urlThumbnailTemplate ?
-          this.options.contributor.fieldsConfiguration.urlThumbnailTemplate : '',
-        control: this.gridStep.thumbnailUrl
-      },
-      {
-        value: this.options.input.defautMode === 'grid',
-        control:  this.gridStep.isDefaultMode
-      },
-      {
-        value:  this.options.contributor.fieldsConfiguration.useHttpThumbnails,
-        control:  this.gridStep.useHttpThumbnails
-      },
-      {
-        value:  this.options.contributor.fieldsConfiguration.useHttpQuicklooks,
-        control:  this.gridStep.useHttpQuicklooks
-      },
-      {
         value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].fieldPath : '',
-        control:  this.gridStep.tileLabelField
+        control:  this.dataStep.grid.controls.aTitle.controls.tileLabelField
       },
       {
         value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].process : '',
-        control:  this.gridStep.tileLabelFieldProcess
+        control:  this.dataStep.grid.controls.aTitle.controls.tileLabelFieldProcess
       },
       {
         value: !!tooltipFieldNames && tooltipFieldNames.length > 0 ? tooltipFieldNames[0].fieldPath : '',
-        control:  this.gridStep.tooltipField
+        control:  this.dataStep.grid.controls.bTooltip.controls.tooltipField
       },
       {
         value: !!tooltipFieldNames && tooltipFieldNames.length > 0 ? tooltipFieldNames[0].process : '',
-        control:  this.gridStep.tooltipFieldProcess
+        control:  this.dataStep.grid.controls.bTooltip.controls.tooltipFieldProcess
       },
       {
         value:  this.options.contributor.fieldsConfiguration.iconColorFieldName,
-        control: this.gridStep.colorIdentifier
-      }]);
+        control: this.dataStep.grid.controls.color.controls.colorIdentifier
+      }
+    ]);
   }
 
   public importDataSteps(){
@@ -159,12 +149,16 @@ export class ResultListInputsFeeder {
         control: this.dataStep.collection
       },
       {
-        value: this.options.contributor.search_size >= 50 ? this.options.contributor.search_size : 50,
-        control: this.dataStep.searchSize
-      },
-      {
         value: this.options.contributor.fieldsConfiguration.idFieldName,
         control: this.dataStep.idFieldName
+      },
+      {
+        value: this.options.input?.defaultMode ?? (this.options.input as any)?.defautMode, // Backward compat du to typo error
+        control:  this.dataStep.defaultMode
+      },
+      {
+        value: this.options.input.hasGridView || /** retro compatibility code **/ ((this.options.input as any)?.defautMode === 'grid'),
+        control:  this.dataStep.hasGridView
       }
     ]);
   }
@@ -215,6 +209,23 @@ export class ResultListInputsFeeder {
   }
 
   public importVisualisationStep(resultListFormBuilder: ResultlistFormBuilderService){
+
+    this.imports([
+      {
+        value: !!this.options.contributor.fieldsConfiguration.urlThumbnailTemplate ?
+            this.options.contributor.fieldsConfiguration.urlThumbnailTemplate : '',
+        control: this.visualisationStep.thumbnailAndQuicklook.controls.thumbnailUrl
+      },
+      {
+        value:  this.options.contributor.fieldsConfiguration.useHttpThumbnails,
+        control:  this.visualisationStep.thumbnailAndQuicklook.controls.useHttpThumbnails
+      },
+      {
+        value:  this.options.contributor.fieldsConfiguration.useHttpQuicklooks,
+        control:  this.visualisationStep.thumbnailAndQuicklook.controls.useHttpQuicklooks
+      }
+    ]);
+
     if(this.options.input.visualisationsList && this.options.input.visualisationsList.length > 0) {
       this.options.input.visualisationsList.forEach(visualisation => {
         const visualisationForm = new ResultListVisualisationsFormGroup();
@@ -335,12 +346,11 @@ export class ResultListInputsFeeder {
   }
 
   public importResultListQuickLook (resultListFormBuilder: ResultlistFormBuilderService,
-    colorService: ArlasColorService, collectionService: CollectionService){
-
+                                    colorService: ArlasColorService, collectionService: CollectionService){
     if (this.options.contributor.fieldsConfiguration.urlImageTemplate) {
       const quicklook = resultListFormBuilder.buildQuicklook(this.options.contributor.collection);
       this.import(this.options.contributor.fieldsConfiguration.urlImageTemplate, quicklook.customControls.url);
-      this.gridStep.quicklookUrls.push(quicklook);
+      (this.visualisationStep.thumbnailAndQuicklook.controls as any).quicklookUrls.push(quicklook);
     }
 
     this.options.contributor.fieldsConfiguration.urlImageTemplates?.forEach(descUrl => {
@@ -357,28 +367,27 @@ export class ResultListInputsFeeder {
       ]);
       if (descUrl.filter) {
         const selectedItems = descUrl.filter.values.map(
-          v => ({ value: v, label: v, color: colorService.getColor(v) }));
+            v => ({ value: v, label: v, color: colorService.getColor(v) }));
 
         this.imports([{
           value: descUrl.filter.field,
           control: quicklook.customControls.filter.field
         },
-        {
-          value: selectedItems,
-          control: quicklook.customControls.filter.values
-        }]);
+          {
+            value: selectedItems,
+            control: quicklook.customControls.filter.values
+          }]);
 
         quicklook.customControls.filter.values.selectedMultipleItems = selectedItems;
         quicklook.customControls.filter.values.savedItems = new Set(descUrl.filter.values);
         collectionService.getTermAggregation(
-          this.options.contributor.collection,
-          quicklook.customControls.filter.field.value)
-          .then(keywords => {
-            quicklook.customControls.filter.values.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
-          });
+            this.options.contributor.collection,
+            quicklook.customControls.filter.field.value)
+            .then(keywords => {
+              quicklook.customControls.filter.values.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
+            });
       }
-
-      this.options.widgetData.customControls.gridStep.quicklookUrls.push(quicklook);
+      (this.options.widgetData.customControls.visualisationStep.thumbnailAndQuicklook.controls as any).quicklookUrls.push(quicklook);
     });
     return this;
   }
@@ -517,7 +526,7 @@ export class AnalyticsResultListInputsFeeder extends ResultListInputsFeeder {
     },
     {
       value: this.options.contributor.search_size,
-      control:  this.dataStep.searchSize
+      control:  this.settingsStep.searchSize
     },
     {
       value: this.options.contributor.fieldsConfiguration.idFieldName,
@@ -528,17 +537,17 @@ export class AnalyticsResultListInputsFeeder extends ResultListInputsFeeder {
   public importGridStep(){
     return this.imports([
       {
-        value: this.options.input.defautMode === 'grid',
-        control:  this.gridStep.isDefaultMode
+        value: this.options.input?.defaultMode ?? (this.options.input as any)?.defautMode, // Backward compat du to typo error,
+        control:  this.dataStep.defaultMode
       },
       {
         value: !!this.options.contributor.fieldsConfiguration.urlThumbnailTemplate ?
-          this.options.contributor.fieldsConfiguration.urlThumbnailTemplate : '',
-        control:  this.gridStep.thumbnailUrl
+            this.options.contributor.fieldsConfiguration.urlThumbnailTemplate : '',
+        control: this.visualisationStep.thumbnailAndQuicklook.controls.thumbnailUrl
       },
       {
         value: this.options.contributor.fieldsConfiguration.iconColorFieldName,
-        control:  this.gridStep.colorIdentifier
+        control: this.dataStep.grid.controls.color.controls.colorIdentifier
       },
     ]);
   }

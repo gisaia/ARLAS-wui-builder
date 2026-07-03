@@ -990,7 +990,7 @@ export class ConfigExportHelper {
       }
       case WIDGET_TYPE.resultlist: {
         contrib.type = 'resultlist';
-        contrib.search_size = widgetData.dataStep.searchSize;
+        contrib.search_size = widgetData.settingsStep.searchSize;
         const fieldsConfig: FieldsConfiguration = {
           idFieldName: widgetData.dataStep.idFieldName,
           titleFieldNames: [{ fieldPath: widgetData.renderStep.tileLabelField, process: '' }],
@@ -1057,30 +1057,30 @@ export class ConfigExportHelper {
     resultLists.value.forEach(list => {
       const contrib = this.getWidgetContributor(list, WIDGET_TYPE.resultlist, 'table_chart');
       contrib.type = 'resultlist';
-      contrib.search_size = list.dataStep.searchSize;
+      contrib.search_size = list.settingsStep.searchSize;
       const fieldsConfig: FieldsConfiguration = {
         idFieldName: list.dataStep.idFieldName,
         titleFieldNames: [{
-          fieldPath: list.gridStep.tileLabelField,
-          process: list.gridStep.tileLabelFieldProcess
+          fieldPath: list.dataStep.grid.aTitle.tileLabelField,
+          process: list.dataStep.grid.aTitle.tileLabelFieldProcess
         }],
         tooltipFieldNames: [{
-          fieldPath: list.gridStep.tooltipField,
-          process: list.gridStep.tooltipFieldProcess
+          fieldPath: list.dataStep.grid.bTooltip.tooltipField,
+          process: list.dataStep.grid.bTooltip.tooltipFieldProcess
         }],
-        iconColorFieldName: list.gridStep.colorIdentifier,
-        useHttpQuicklooks: list.gridStep.useHttpQuicklooks,
-        useHttpThumbnails: list.gridStep.useHttpThumbnails
+        iconColorFieldName: list.dataStep.grid.color.colorIdentifier,
+        useHttpQuicklooks: list.visualisationStep.thumbnailAndQuicklook.useHttpQuicklooks,
+        useHttpThumbnails: list.visualisationStep.thumbnailAndQuicklook.useHttpThumbnails
       };
       if (list.dataStep.detailsTitle) {
         fieldsConfig.detailsTitleTemplate = list.dataStep.detailsTitle;
       }
-      if (list.gridStep.thumbnailUrl) {
-        fieldsConfig.urlThumbnailTemplate = list.gridStep.thumbnailUrl;
+      if (list.visualisationStep.thumbnailAndQuicklook.thumbnailUrl) {
+        fieldsConfig.urlThumbnailTemplate = list.visualisationStep.thumbnailAndQuicklook.thumbnailUrl;
       }
 
-      if (list.gridStep.quicklookUrls) {
-        fieldsConfig.urlImageTemplates = list.gridStep.quicklookUrls.map(formValues => {
+      if (list.visualisationStep.thumbnailAndQuicklook.quicklookUrls) {
+        fieldsConfig.urlImageTemplates = list.visualisationStep.thumbnailAndQuicklook.quicklookUrls.map(formValues => {
           const quicklook: DescribedUrl = { url: formValues.url, description: formValues.description };
           if (formValues.filter.field !== '') {
             quicklook.filter = { field: formValues.filter.field, values: formValues.filter.values.map(v => v.value) };
@@ -1117,7 +1117,7 @@ export class ConfigExportHelper {
       contrib.includeMetadata = [];
       const metadatas = new Set<string>();
       /** TODO : Grid steps contains, booleans, urls...; we need to filter those controls properly */
-      Object.keys(list.gridStep).forEach(v => {
+      /* Object.keys(list.gridStep).forEach(v => {
         if (!!list.gridStep[v] && v !== 'isDefaultMode') {
           if (Array.isArray(list.gridStep[v])) {
             (list.gridStep[v] as Array<string>).forEach(f => metadatas.add(f));
@@ -1125,7 +1125,7 @@ export class ConfigExportHelper {
             metadatas.add(list.gridStep[v]);
           }
         }
-      });
+      });*/
       contribs.push(contrib);
     });
     return contribs;
@@ -1233,7 +1233,7 @@ export class ConfigExportHelper {
         idString += am.field + '-' + am.size + '-';
       });
     } else if (widgetType === WIDGET_TYPE.resultlist) {
-      idString += widgetData.dataStep.idFieldName + '-' + widgetData.dataStep.searchSize + '-';
+      idString += widgetData.dataStep.idFieldName + '-' + widgetData.settingsStep.searchSize + '-';
       if (!!widgetData.dataStep.columns) {
         widgetData.dataStep.columns.forEach(c => idString += c.columnName + '-');
       }
@@ -1405,6 +1405,7 @@ export class ConfigExportHelper {
       } as AnalyticComponentConfig;
 
     } else if (widgetType === WIDGET_TYPE.resultlist) {
+      /** update Result List **/
       component = {
         componentType: WIDGET_TYPE.resultlist,
         input: {
@@ -1412,14 +1413,17 @@ export class ConfigExportHelper {
           tableWidth: !!itemPerLine && +itemPerLine !== 1 ?
             Math.ceil(analyticsBoardWidth / itemPerLine) - 6 : analyticsBoardWidth, // 6 => margin and padding left/right
           globalActionsList: unmanagedRenderFields.globalActionsList,
-          searchSize: widgetData.dataStep.searchSize,
+          searchSize: widgetData.settingsStep.searchSize,
           nLastLines: unmanagedRenderFields.nLastLines,
           detailedGridHeight: unmanagedRenderFields.detailedGridHeight,
           nbGridColumns: unmanagedRenderFields.nbGridColumns,
           displayFilters: !!widgetData.settingsStep.displayFilters,
-          hasGridMode: !!widgetData.gridStep.thumbnailUrl,
-          defautMode: (!!widgetData.gridStep.thumbnailUrl && !!widgetData.gridStep.isDefaultMode) ?
-            'grid' : 'list',
+          hasGridMode: !!widgetData.visualisationStep.thumbnailAndQuicklook.thumbnailUrl &&
+              widgetData.dataStep.hasGridView, // Both has to be configured to be displayed ? Or do we remove the check on thumbnail ?
+          hasCardView: false, // TODO: to be implemanted do we do the same for Has grid mode ?
+          hasListView: widgetData.dataStep?.columns.length > 0,
+          hasGridView: widgetData.dataStep.hasGridView,
+          defaultMode: widgetData.dataStep.defaultMode,
           visualisationLink: widgetData.sactionStep.visualisationLink,
           downloadLink: widgetData.sactionStep.downloadLink,
           isBodyHidden: unmanagedRenderFields.isBodyHidden,

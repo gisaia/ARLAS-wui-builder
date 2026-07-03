@@ -29,7 +29,6 @@ import { HistogramUtils } from 'arlas-d3';
 export class StepGradientPipe implements PipeTransform {
 
   public transform(paletteColors: string | [number, number]): string {
-    console.log(paletteColors);
     const gradients = new Array<string>();
     for (let i = 0; i <= 11; i += 1) {
       const color = HistogramUtils.getColor(i / 11, paletteColors).toHexString();

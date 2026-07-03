@@ -1,33 +1,48 @@
-<mat-tab-group mat-stretch-tabs class="mat-elevation-z1">
-  <mat-tab #columns>
-    <ng-template mat-tab-label>
+<mat-tab-group class="mat-elevation-z1" mat-stretch-tabs>
+    <mat-tab #columns>
+        <ng-template mat-tab-label>
       <span [class.tab-error]="control.controls.columns.touched && control.controls.columns.invalid && !columns.isActive">
-        {{'Columns' | translate}}
+        {{ 'Table' | translate }}
       </span>
-    </ng-template>
-    <arlas-edit-resultlist-columns [control]="control.controls.columns" [collection]="control.controls.collection">
-    </arlas-edit-resultlist-columns>
-  </mat-tab>
-  <mat-tab #details>
-    <ng-template mat-tab-label>
-      <span [class.tab-error]="control.controls.details.touched && control.controls.details.invalid && !details.isActive">
-        {{'Details' | translate}}
-      </span>
-    </ng-template>
+        </ng-template>
+            <arlas-edit-resultlist-columns [collection]="control.controls.collection"
+                                           [control]="control.controls.columns">
+            </arlas-edit-resultlist-columns>
 
-    <div class="details-title">
-      <arlas-config-element [fullSize]="!detailsTitleControl.description">
-        <div form-fields>
-          <arlas-config-form-control [control]="detailsTitleControl"></arlas-config-form-control>
+    </mat-tab>
+   <mat-tab #grid>
+        <ng-template mat-tab-label>
+      <span [class.tab-error]="control.controls.grid.touched && control.controls.grid.invalid && !grid.isActive">
+        {{ 'Resultlist grid' | translate }}
+      </span>
+        </ng-template>
+       @for (formGroup of control.controls.grid.controls | keyvalue; track $index){
+           <arlas-config-form-group [configFormGroup]="$any(formGroup.value)">
+           </arlas-config-form-group>
+       }
+
+
+    </mat-tab>
+    <mat-tab #details>
+        <ng-template mat-tab-label>
+      <span [class.tab-error]="control.controls.details.touched && control.controls.details.invalid && !details.isActive">
+        {{ 'Details' | translate }}
+      </span>
+        </ng-template>
+
+        <div class="details-title">
+            <arlas-config-element [fullSize]="!detailsTitleControl.description">
+                <div form-fields>
+                    <arlas-config-form-control [control]="detailsTitleControl"></arlas-config-form-control>
+                </div>
+                @if (detailsTitleControl.description) {
+                    <div description>
+                        {{ detailsTitleControl.description | translate }}
+                    </div>
+                }
+            </arlas-config-element>
         </div>
-        @if (detailsTitleControl.description) {
-          <div description>
-            {{ detailsTitleControl.description | translate}}
-          </div>
-        }
-      </arlas-config-element>
-    </div>
-    <arlas-edit-resultlist-details [control]="control.controls.details" [collection]="control.controls.collection">
-    </arlas-edit-resultlist-details>
-  </mat-tab>
+        <arlas-edit-resultlist-details [collection]="control.controls.collection" [control]="control.controls.details">
+        </arlas-edit-resultlist-details>
+    </mat-tab>
 </mat-tab-group>

@@ -30,6 +30,8 @@ import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { Subject, takeUntil } from 'rxjs';
 import { EditResultlistColumnsComponent } from '../edit-resultlist-columns/edit-resultlist-columns.component';
 import { EditResultlistDetailsComponent } from '../edit-resultlist-details/edit-resultlist-details.component';
+import {ConfigFormGroupComponent} from '@shared-components/config-form-group/config-form-group.component';
+import {KeyValuePipe} from '@angular/common';
 
 @Component({
   selector: 'arlas-resultlist-data',
@@ -41,7 +43,9 @@ import { EditResultlistDetailsComponent } from '../edit-resultlist-details/edit-
     EditResultlistColumnsComponent,
     ConfigElementComponent,
     ConfigFormControlComponent,
-    EditResultlistDetailsComponent
+    EditResultlistDetailsComponent,
+    ConfigFormGroupComponent,
+    KeyValuePipe
   ]
 })
 export class ResultlistDataComponent implements OnInit, OnDestroy {

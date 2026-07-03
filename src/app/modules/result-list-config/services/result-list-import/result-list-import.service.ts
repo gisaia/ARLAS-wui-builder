@@ -80,7 +80,7 @@ export class ResultListImportService {
       .importVisualisationStep(this.resultlistFormBuilder)
       .importSettingsSteps()
       .importDataSteps()
-      .importGridStep()
+      .importGridFromDataTabs()
       .import(!!contributor.fieldsConfiguration.detailsTitleTemplate ?
         contributor.fieldsConfiguration.detailsTitleTemplate : '',
       dataStep.detailsTitle
