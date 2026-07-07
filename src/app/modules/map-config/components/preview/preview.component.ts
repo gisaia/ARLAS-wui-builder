@@ -36,13 +36,12 @@ import { ArlasDataLayer, ArlasMapComponent, ArlasMapFrameworkService } from 'arl
 import { DataWithLinks } from 'arlas-persistence-api';
 import { ArlasColorService } from 'arlas-web-components';
 import { MapContributor } from 'arlas-web-contributors';
-import { ArlasGeometry } from 'arlas-web-contributors/contributors/MapContributor';
 import { OnMoveResult } from 'arlas-web-contributors/models/models';
 import {
   ArlasCollaborativesearchService, ArlasConfigService,
   ArlasSettingsService, ContributorBuilder, PersistenceService
 } from 'arlas-wui-toolkit';
-import { FeatureCollection, Geometry } from 'geojson';
+import { FeatureCollection, Geometry, Polygon } from 'geojson';
 import {
   MapOptions
 } from 'maplibre-gl';
@@ -153,7 +152,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   public ngAfterViewInit() {
     this.onMapLoadSub = this.mapComponent.onMapLoaded.subscribe(isLoaded => {
       if (isLoaded && !!this.mapglContributors) {
-        this.mapComponent.map.resize();
+        this.mapComponent.map().resize();
         this.mapglContributors.forEach(mapglContributor => {
           mapglContributor.updateData = true;
           mapglContributor.fetchData(null);
@@ -178,20 +177,20 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     const debounceDuration = configDebounceTime !== undefined ? configDebounceTime : 750;
     this.mapglContributors.forEach((contrib, i) => {
       setTimeout(() => {
-        contrib.onChangeAoi(event as FeatureCollection<ArlasGeometry>);
+        contrib.onChangeAoi(event as FeatureCollection<Polygon>);
       }, i * (debounceDuration + 100));
     });
   }
 
   public onMove(event: OnMoveResult) {
-    this.mapglContributors.forEach(contrib => contrib.onMove(event, true));
+    this.mapglContributors.forEach(contrib => contrib.onMapMoved(event, true));
   }
 
   public savePreview() {
-    const mapCanvas = this.mapFrameworkService.getCanvas(this.mapComponent.map);
+    const mapCanvas = this.mapFrameworkService.getCanvas(this.mapComponent.map());
     const img = this.exportPreviewWithProgressiveDownscale(mapCanvas, 484, 150, 2);
     const jsonifiedImg = JSON.stringify({ img });
-    this.mapComponent.map.resize();
+    this.mapComponent.map().resize();
     const resourcesConfig = this.mainFormService.resourcesConfig.getFg();
     const previewId = resourcesConfig.customControls.resources.previewId.value;
 

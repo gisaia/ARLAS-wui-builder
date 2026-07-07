@@ -29,7 +29,7 @@ import {
 } from '@map-config/services/map-layer-form-builder/models';
 import { MapVisualisationFormBuilderService } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { NORMALIZED, VISIBILITY } from '@services/main-form-manager/config-map-export-helper';
-import { Config, ContributorConfig, MapglComponentConfig, NormalizationFieldConfig } from '@services/main-form-manager/models-config';
+import { Config, ContributorConfig, MapglComponentConfig } from '@services/main-form-manager/models-config';
 import { isTechnicalArlasLayer, Layer, MapConfig } from '@services/main-form-manager/models-map-config';
 import { importElements } from '@services/main-form-manager/tools';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
@@ -38,7 +38,7 @@ import { BasemapStyle, LayerMetadata, VisualisationSetConfig } from 'arlas-map';
 import {
   ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, ExtentFilterGeometry, FeatureRenderMode, LayerSourceConfig, MetricConfig
 } from 'arlas-web-contributors';
-import { ClusterAggType } from 'arlas-web-contributors/models/models';
+import { ClusterAggType, ClusterLayerCourceConfig, FeatureLayerSourceConfig, TopologyLayerSourceConfig } from 'arlas-web-contributors/models/models';
 import { BasemapFormGroup } from '../map-basemap-form-builder/map-basemap-form-builder.service';
 
 @Injectable({
@@ -70,11 +70,12 @@ export class MapImportService {
       }
 
     } else if (inputValues instanceof Array) {
+      layerSource = layerSource as FeatureLayerSourceConfig;
       if (inputValues.length === 2) {
         let field = (inputValues as Array<string>)[1];
         // To deal with old arlas15 config
         if (!field.endsWith('_arlas__color') && field.endsWith('_color')) {
-          if (layerSource.provided_fields.filter((pf: ColorConfig) => pf.color.replace(/\./g, '_') === field).length === 1) {
+          if (layerSource.provided_fields?.filter((pf: ColorConfig) => pf.color.replace(/\./g, '_') === field).length === 1) {
 
           } else {
             field = field.replace('_color', '_arlas__color');
@@ -84,12 +85,12 @@ export class MapImportService {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.generated;
           propertySelectorValues.propertyGeneratedFieldCtrl = layerSource.colors_from_fields
             .find(f => f.replace(/\./g, '_') === this.removeLastcolor(field));
-        } else if(layerSource.provided_fields.length > 0) {
+        } else if (layerSource.provided_fields && layerSource.provided_fields.length > 0) {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_color;
           const colorProvidedField = layerSource.provided_fields.find((pf: ColorConfig) => pf.color.replace(/\./g, '_') === field);
-          propertySelectorValues.propertyProvidedColorFieldCtrl = colorProvidedField.color;
+          propertySelectorValues.propertyProvidedColorFieldCtrl = colorProvidedField?.color;
           if (inputValues.length === 2) {
-            propertySelectorValues.propertyProvidedColorLabelCtrl = colorProvidedField.label;
+            propertySelectorValues.propertyProvidedColorLabelCtrl = colorProvidedField?.label;
           }
         }  else {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_field_for_feature;
@@ -98,7 +99,7 @@ export class MapImportService {
 
         }
       } else if (inputValues[0] === 'match') {
-        this.importPropertySelectorManual(inputValues, propertySelectorValues, layerSource);
+        this.importPropertySelectorManual(inputValues, propertySelectorValues, layerSource as FeatureLayerSourceConfig);
       } else if (inputValues[0] === 'interpolate') {
         this.importPropertySelectorInterpolated(inputValues, propertySelectorValues, isAggregated, layerSource);
       }
@@ -125,19 +126,20 @@ export class MapImportService {
       if (inputValues.length === 2) {
         const flatField = (inputValues as Array<string>)[1];
         if (isAggregated) {
+          layerSource = layerSource as ClusterLayerCourceConfig;
           const isFetchedHits = !!layerSource.fetched_hits && !!layerSource.fetched_hits.fields
             && layerSource.fetched_hits.fields.length > 0;
           const hasMetricForLabels = !!layerSource.metrics && layerSource.metrics.filter(m => m.short_format !== undefined).length > 0;
           if (isFetchedHits) {
-            const providedField = layerSource.fetched_hits.fields.find(f => f.replace(/\./g, '_') === flatField ||
+            const providedField = layerSource.fetched_hits?.fields?.find(f => f.replace(/\./g, '_') === flatField ||
               (f.replace(/\./g, '_') + ':_arlas__short_format') === flatField);
             propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_field_for_agg;
             if (providedField) {
               propertySelectorValues.propertyProvidedFieldAggFg = {
                 propertyProvidedFieldAggCtrl: providedField,
-                propertyProvidedFieldSortCtrl: layerSource.fetched_hits.sorts.join(',')
+                propertyProvidedFieldSortCtrl: layerSource.fetched_hits?.sorts?.join(',')
               };
-              if (flatField.includes(':_arlas__short_format') && !!layerSource.fetched_hits.short_form_fields) {
+              if (flatField.includes(':_arlas__short_format') && !!layerSource.fetched_hits?.short_form_fields) {
                 propertySelectorValues.propertyProvidedFieldAggFg.propertyShortFormatCtrl = true;
 
               }
@@ -174,6 +176,7 @@ export class MapImportService {
             }
           }
         } else {
+          layerSource = layerSource as FeatureLayerSourceConfig;
           const providedField = layerSource.include_fields.find(f => f.replace(/\./g, '_') === flatField ||
             (f.replace(/\./g, '_') + ':_arlas__short_format') === flatField);
           propertySelectorValues.propertySource = numeric ? PROPERTY_SELECTOR_SOURCE.provided_numeric_field_for_feature :
@@ -192,15 +195,15 @@ export class MapImportService {
     }
   }
 
-  public static importPropertySelectorManual(inputValues: any, propertySelectorValues: any, layerSource: LayerSourceConfig) {
+  public static importPropertySelectorManual(inputValues: any, propertySelectorValues: any, layerSource: FeatureLayerSourceConfig) {
     propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.manual;
     const keywordsAndColors = (inputValues.slice(2) as Array<string>);
-    let manualField = '';
+    let manualField: string | undefined;
     if (layerSource.include_fields) {
       manualField = layerSource.include_fields.find(f => inputValues[1][1].includes(f.replace(/\./g, '_')));
       if (!manualField && layerSource.provided_fields) {
         const providedField = layerSource.provided_fields
-          .filter(f => f.label).find(f => inputValues[1][1].includes(f.label.replace(/\./g, '_')));
+          .filter(f => f.label).find(f => inputValues[1][1].includes(f.label?.replace(/\./g, '_')));
         if (providedField) {
           manualField = providedField.label;
         } else {
@@ -210,7 +213,7 @@ export class MapImportService {
     } else {
       if (layerSource.provided_fields) {
         const providedField = layerSource.provided_fields
-          .filter(f => f.label).find(f => inputValues[1][1].includes(f.label.replace(/\./g, '_')));
+          .filter(f => f.label).find(f => inputValues[1][1].includes(f.label?.replace(/\./g, '_')));
         if (providedField) {
           manualField = providedField.label;
         } else {
@@ -264,6 +267,7 @@ export class MapImportService {
           propertyInterpolatedNormalizeByKeyCtrl: isNormalize ? getValue.split(':').length === 3 : null,
         };
         if (isAggregated) {
+          layerSource = layerSource as ClusterLayerCourceConfig;
           propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl = COUNT_OR_METRIC.METRIC;
           const findMetric = layerSource.metrics.find(m => {
             let flatMetric = m.field.replace(/\./g, '_') + '_' + m.metric.toString().toLowerCase() + '_';
@@ -277,18 +281,19 @@ export class MapImportService {
             propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = findMetric.field;
           }
         } else {
+          layerSource = layerSource as FeatureLayerSourceConfig;
           let field;
           if (isNormalize) {
             field = layerSource.normalization_fields
-              .find((nf: NormalizationFieldConfig) => nf.on.replace(/\./g, '_') === getValue.split(':')[0]).on;
+              ?.find(nf => nf.on.replace(/\./g, '_') === getValue.split(':')[0])?.on;
             if (getValue.split(':').length > 2) {
               const perfield = layerSource.normalization_fields
-                .find((nf: NormalizationFieldConfig) => !!nf.per && nf.per.replace(/\./g, '_') === getValue.split(':')[2]).per;
+                ?.find(nf => !!nf.per && nf.per.replace(/\./g, '_') === getValue.split(':')[2])?.per;
               propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedNormalizeLocalFieldCtrl = perfield;
 
             }
           } else {
-            field = layerSource.include_fields.find(f => f.replace(/\./g, '_') === getValue);
+            field = layerSource.include_fields?.find(f => f.replace(/\./g, '_') === getValue);
           }
           propertySelectorValues.propertyInterpolatedFg.propertyInterpolatedFieldCtrl = field;
         }
@@ -391,10 +396,10 @@ export class MapImportService {
         layerMode === LAYER_MODE.cluster ? layerFg.customControls.clusterFg :
           null;
     const isAggregated = layerMode !== LAYER_MODE.features;
-    typeFg.enable();
+    typeFg?.enable();
     const minzoom = Math.max(layer.minzoom ?? layerSource.minzoom ?? 0, 0);
     const maxzoom = Math.min(layer.maxzoom ?? layerSource.maxzoom ?? MAX_ZOOM, MAX_ZOOM);
-    const renderMode = layerSource.render_mode ?? FeatureRenderMode.wide;
+    const renderMode = (layerSource as FeatureLayerSourceConfig).render_mode ?? FeatureRenderMode.wide;
 
     const values: any = {
       geometryStep: {
@@ -554,11 +559,11 @@ export class MapImportService {
 
 
     if (layerMode === LAYER_MODE.features) {
-      this.importLayerFeatures(values, layer, layerSource);
+      this.importLayerFeatures(values, layer, layerSource as FeatureLayerSourceConfig);
     } else if (layerMode === LAYER_MODE.featureMetric) {
-      this.importLayerFeaturesMetric(values, layer, layerSource);
+      this.importLayerFeaturesMetric(values, layer, layerSource as TopologyLayerSourceConfig);
     } else if (layerMode === LAYER_MODE.cluster) {
-      this.importLayerCluster(values, layer, layerSource);
+      this.importLayerCluster(values, layer, layerSource as ClusterLayerCourceConfig);
     }
 
 
@@ -595,10 +600,9 @@ export class MapImportService {
   public static importLayerFeatures(
     values: any,
     layer: Layer,
-    layerSource: LayerSourceConfig
+    layerSource: FeatureLayerSourceConfig | TopologyLayerSourceConfig
   ) {
-
-    values.geometryStep.geometry = layerSource.returned_geometry;
+    values.geometryStep.geometry = (layerSource as FeatureLayerSourceConfig).returned_geometry;
     values.visibilityStep.featuresMax = layerSource.maxfeatures;
     values.styleStep.geometryType = layer.type;
     values.styleStep.filter = layer.filter;
@@ -607,7 +611,7 @@ export class MapImportService {
   public static importLayerFeaturesMetric(
     values: any,
     layer: Layer,
-    layerSource: LayerSourceConfig
+    layerSource: TopologyLayerSourceConfig
   ) {
     this.importLayerFeatures(values, layer, layerSource);
     /** retro compatibility code : migrate from [geometry_support] to [raw_geometry] */
@@ -626,7 +630,7 @@ export class MapImportService {
   public static importLayerCluster(
     values: any,
     layer: Layer,
-    layerSource: LayerSourceConfig
+    layerSource: ClusterLayerCourceConfig
   ) {
     values.geometryStep.aggGeometry = layerSource.agg_geo_field;
     values.geometryStep.granularity = layerSource.granularity;
@@ -637,16 +641,16 @@ export class MapImportService {
       isGeometryTypeRaw ? CLUSTER_GEOMETRY_TYPE.raw_geometry : CLUSTER_GEOMETRY_TYPE.aggregated_geometry;
     // To Import old dashboard before ARLAS 17
     if (!!layerSource.aggregated_geometry) {
-      if (layerSource.aggregated_geometry === 'geohash') {
-        layerSource.aggregated_geometry = 'cell';
+      if (layerSource.aggregated_geometry.toString() === 'geohash') {
+        layerSource.aggregated_geometry = 'cell' as any;
       }
-      if (layerSource.aggregated_geometry === 'geohash_center') {
-        layerSource.aggregated_geometry = 'cell_center';
+      if (layerSource.aggregated_geometry.toString() === 'geohash_center') {
+        layerSource.aggregated_geometry = 'cell_center' as any;
       }
     }
     values.geometryStep.aggregatedGeometry = !isGeometryTypeRaw ? layerSource.aggregated_geometry : null;
-    values.geometryStep.rawGeometry = isGeometryTypeRaw ? layerSource.raw_geometry.geometry : null;
-    values.geometryStep.clusterSort = isGeometryTypeRaw ? layerSource.raw_geometry.sort : null;
+    values.geometryStep.rawGeometry = isGeometryTypeRaw ? layerSource.raw_geometry?.geometry : null;
+    values.geometryStep.clusterSort = isGeometryTypeRaw ? layerSource.raw_geometry?.sort : null;
     values.visibilityStep.featuresMin = layerSource.minfeatures;
     // to display the correct geom type when editing a circle-heat layer
     if(layer.metadata && layer.metadata.hiddenProps && layer.metadata.hiddenProps.geomType === GEOMETRY_TYPE.circleHeat) {

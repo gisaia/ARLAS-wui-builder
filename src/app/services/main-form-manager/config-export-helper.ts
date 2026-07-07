@@ -58,7 +58,7 @@ import { CollectionReferenceDescriptionProperty } from 'arlas-api/api';
 import { BasemapStyle, ExternalEventLayer, SCROLLABLE_ARLAS_ID, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
 import { ArlasColorService, DescribedUrl } from 'arlas-web-components';
 import { ColorConfig, ExtentFilterGeometry, FieldsConfiguration, getSourceName, LayerSourceConfig } from 'arlas-web-contributors';
-import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
+import { ClusterLayerCourceConfig, CoreLayerSourceConfig, FeatureLayerSourceConfig, FeatureRenderMode, TopologyLayerSourceConfig } from 'arlas-web-contributors/models/models';
 import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
 import {
   AggregationModelConfig,
@@ -314,84 +314,81 @@ export class ConfigExportHelper {
     const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
       (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
     const filters = !!modeValues.visibilityStep.filters ? modeValues.visibilityStep.filters.value : undefined;
-    const layerSource: LayerSourceConfig = {
+    const coreLayerSource: CoreLayerSourceConfig = {
       id: layerValues.arlasId,
       name: layerValues.name,
       source: '',
       minzoom: modeValues.visibilityStep.zoom.min,
-      maxzoom: modeValues.visibilityStep.zoom.max,
-      include_fields: [],
-      short_form_fields: [],
-      colors_from_fields: [],
-      provided_fields: [],
-      normalization_fields: [],
-      metrics: []
+      maxzoom: modeValues.visibilityStep.zoom.max
     };
 
     if (!!filters) {
       filters.forEach((f) => {
-        if (!layerSource.filters) {
-          layerSource.filters = [];
+        if (!coreLayerSource.filters) {
+          coreLayerSource.filters = [];
         }
         if (f.filterOperation === FILTER_OPERATION.IN || f.filterOperation === FILTER_OPERATION.NOT_IN) {
-          layerSource.filters.push({
+          coreLayerSource.filters.push({
             field: f.filterField.value,
             op: f.filterOperation,
             value: f.filterInValues.map(v => v.value)
           });
         } else if (f.filterOperation === FILTER_OPERATION.EQUAL || f.filterOperation === FILTER_OPERATION.NOT_EQUAL) {
-          layerSource.filters.push({
+          coreLayerSource.filters.push({
             field: f.filterField.value,
             op: f.filterOperation,
             value: f.filterEqualValues
           });
         } else if (f.filterOperation === FILTER_OPERATION.RANGE || f.filterOperation === FILTER_OPERATION.OUT_RANGE) {
-          layerSource.filters.push({
+          coreLayerSource.filters.push({
             field: f.filterField.value, op: f.filterOperation,
             value: f.filterMinRangeValues + ';' + f.filterMaxRangeValues
           });
         } else if (f.filterOperation === FILTER_OPERATION.IS) {
-          layerSource.filters.push({
+          coreLayerSource.filters.push({
             field: f.filterField.value, op: f.filterOperation,
             value: f.filterBoolean
           });
         }
-        if (!layerSource.include_fields) {
-          layerSource.include_fields = [];
-        }
-        const includeFieldsSet = new Set(layerSource.include_fields);
+
+        const featureLayerSource = coreLayerSource as FeatureLayerSourceConfig;
+        featureLayerSource.include_fields ??= [];
+        const includeFieldsSet = new Set(featureLayerSource.include_fields);
         includeFieldsSet.add(f.filterField.value);
-        layerSource.include_fields = Array.from(includeFieldsSet);
+        featureLayerSource.include_fields = Array.from(includeFieldsSet);
       });
 
     }
 
     switch (layerValues.mode) {
       case LAYER_MODE.features: {
-        layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
-        layerSource.returned_geometry = modeValues.geometryStep.geometry;
-        layerSource.render_mode = modeValues.visibilityStep.renderMode;
+        const featureLayerSource = coreLayerSource as FeatureLayerSourceConfig;
+        featureLayerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
+        featureLayerSource.returned_geometry = modeValues.geometryStep.geometry;
+        featureLayerSource.render_mode = modeValues.visibilityStep.renderMode;
         break;
       }
       case LAYER_MODE.featureMetric: {
-        layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
-        layerSource.raw_geometry = {
+        const topologyLayerSource = coreLayerSource as TopologyLayerSourceConfig;
+        topologyLayerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
+        topologyLayerSource.raw_geometry = {
           geometry: modeValues.geometryStep.geometry,
           sort: !!modeValues.geometryStep.featureMetricSort ? modeValues.geometryStep.featureMetricSort : ''
         };
-        layerSource.geometry_id = modeValues.geometryStep.geometryId;
-        layerSource.network_fetching_level = +modeValues.visibilityStep.networkFetchingLevel;
+        topologyLayerSource.geometry_id = modeValues.geometryStep.geometryId;
+        topologyLayerSource.network_fetching_level = +modeValues.visibilityStep.networkFetchingLevel;
         break;
       }
       case LAYER_MODE.cluster: {
-        layerSource.agg_geo_field = modeValues.geometryStep.aggGeometry;
-        layerSource.aggType = modeValues.geometryStep.aggType;
-        layerSource.granularity = modeValues.geometryStep.granularity;
-        layerSource.minfeatures = modeValues.visibilityStep.featuresMin;
+        const clusterLayerSource = coreLayerSource as ClusterLayerCourceConfig;
+        clusterLayerSource.agg_geo_field = modeValues.geometryStep.aggGeometry;
+        clusterLayerSource.aggType = modeValues.geometryStep.aggType;
+        clusterLayerSource.granularity = modeValues.geometryStep.granularity;
+        clusterLayerSource.minfeatures = modeValues.visibilityStep.featuresMin;
         if (modeValues.geometryStep.clusterGeometryType === CLUSTER_GEOMETRY_TYPE.aggregated_geometry) {
-          layerSource.aggregated_geometry = modeValues.geometryStep.aggregatedGeometry;
+          clusterLayerSource.aggregated_geometry = modeValues.geometryStep.aggregatedGeometry;
         } else {
-          layerSource.raw_geometry = {
+          clusterLayerSource.raw_geometry = {
             geometry: modeValues.geometryStep.rawGeometry,
             sort: !!modeValues.geometryStep.clusterSort ? modeValues.geometryStep.clusterSort : ''
           };
@@ -399,6 +396,7 @@ export class ConfigExportHelper {
       }
     }
 
+    const layerSource = coreLayerSource as LayerSourceConfig;
     this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.colorFg, layerValues.mode);
 
     if (!!modeValues.styleStep.opacity) {
@@ -532,7 +530,7 @@ export class ConfigExportHelper {
     const layersHoverIds: Array<string> = new Array<string>();
     mapConfigLayers.controls.forEach((layerFg: MapLayerFormGroup) => {
       layers.push(layerFg.value.name);
-      if (this.getLayerSourceConfig(layerFg).render_mode === FeatureRenderMode.window) {
+      if ((this.getLayerSourceConfig(layerFg) as FeatureLayerSourceConfig).render_mode === FeatureRenderMode.window) {
         layersHoverIds.push(layerFg.value.arlasId);
         layersHoverIds.push(layerFg.value.arlasId.replace(ARLAS_ID, SCROLLABLE_ARLAS_ID));
       }
@@ -645,11 +643,14 @@ export class ConfigExportHelper {
         if (!!layerValues.propertyProvidedColorLabelCtrl) {
           colorConfig.label = layerValues.propertyProvidedColorLabelCtrl;
         }
+        layerSource = layerSource as FeatureLayerSourceConfig;
+        layerSource.provided_fields ??= [];
         layerSource.provided_fields.push(colorConfig);
         break;
       }
       case PROPERTY_SELECTOR_SOURCE.provided_field_for_agg: {
-        let sorts = [];
+        layerSource = layerSource as ClusterLayerCourceConfig;
+        let sorts = new Array<string>();
         if (!layerSource.fetched_hits) {
           layerSource.fetched_hits = {
             sorts,
@@ -675,14 +676,18 @@ export class ConfigExportHelper {
       }
       case PROPERTY_SELECTOR_SOURCE.provided_field_for_feature:
       case PROPERTY_SELECTOR_SOURCE.provided_numeric_field_for_feature: {
+        layerSource = layerSource as FeatureLayerSourceConfig;
+        layerSource.include_fields ??= [];
         layerSource.include_fields.push(layerValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl);
         if (layerValues.propertyProvidedFieldFeatureFg.propertyShortFormatCtrl) {
+          layerSource.short_form_fields ??= [];
           layerSource.short_form_fields.push(layerValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl);
         }
         break;
       }
       case PROPERTY_SELECTOR_SOURCE.displayable_metric_on_field:
       case PROPERTY_SELECTOR_SOURCE.metric_on_field: {
+        layerSource = layerSource as ClusterLayerCourceConfig;
         const countMetricFg = layerValues.propertyCountOrMetricFg;
         if (countMetricFg.propertyCountOrMetricCtrl === 'count') {
           layerSource.metrics.push({
@@ -702,26 +707,35 @@ export class ConfigExportHelper {
         break;
       }
       case PROPERTY_SELECTOR_SOURCE.generated: {
+        layerSource = layerSource as FeatureLayerSourceConfig;
+        layerSource.colors_from_fields ??= [];
         layerSource.colors_from_fields.push(layerValues.propertyGeneratedFieldCtrl);
         break;
       }
       case PROPERTY_SELECTOR_SOURCE.manual: {
+        layerSource = layerSource as FeatureLayerSourceConfig;
+        layerSource.include_fields ??= [];
         layerSource.include_fields.push(layerValues.propertyManualFg.propertyManualFieldCtrl);
         break;
       }
       case PROPERTY_SELECTOR_SOURCE.interpolated: {
         const interpolatedValues = layerValues.propertyInterpolatedFg;
         if (mode === LAYER_MODE.features) {
+          layerSource = layerSource as FeatureLayerSourceConfig;
           if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
+            layerSource.normalization_fields ??= [];
             layerSource.normalization_fields.push(
               {
                 on: interpolatedValues.propertyInterpolatedFieldCtrl,
                 per: interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl
               });
           } else {
+            layerSource.include_fields ??= [];
             layerSource.include_fields.push(interpolatedValues.propertyInterpolatedFieldCtrl);
           }
         } else {
+          layerSource = layerSource as ClusterLayerCourceConfig;
+          layerSource.metrics ??= [];
           if (interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'count') {
             layerSource.metrics.push({
               field: '',
