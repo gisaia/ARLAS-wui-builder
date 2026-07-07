@@ -29,6 +29,7 @@ import {BehaviorSubject, Observable, Subject, Subscription} from 'rxjs';
 import { METRIC_TYPES } from '../../services/collection-service/collection.service';
 import { CollectionField, GroupCollectionItem } from '../../services/collection-service/models';
 import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toNumericOrDateOrKeywordOrTextObs } from '../../services/collection-service/tools';
+import {ResultListDefaultMode} from '@analytics-config/services/resultlist-form-builder/utils';
 /**
  * These are wrappers above existing FormGroup and FormControl in order to add a custom behavior.
  * The goal is to have a full model-driven form without putting (or duplicating) the logic
@@ -70,7 +71,6 @@ export abstract class ConfigFormControl extends FormControl {
     public readonly optionalParams: ControlOptionalParams = {},
     public propertyName = ''
   ) {
-
     super(formState);
     this.initialValue = formState;
     // add default values to missing attributes
@@ -378,7 +378,7 @@ export class VisualisationCheckboxFormControl extends ConfigFormControl {
 export class ButtonToggleFormControl extends ConfigFormControl {
   public constructor(
     formState: any,
-    public options: Array<{ label: string; value: any; }>,
+    public options: Array<{ label: string; value: any; disabled?: boolean; }>,
     description: string,
     optionalParams?: ControlOptionalParams,
     propertyName?: string
@@ -390,6 +390,20 @@ export class ButtonToggleFormControl extends ConfigFormControl {
       description,
       optionalParams,
       propertyName);
+  }
+
+  public disableOption(name: string){
+    const opt = this.options.find(o => o.value === name);
+    if(opt){
+      opt.disabled = true;
+    }
+  }
+
+  public enableOption(name: string){
+    const opt = this.options.find(o => o.value === name);
+    if(opt){
+      opt.disabled = false;
+    }
   }
 }
 export class RadioButtonFormControl extends ConfigFormControl {

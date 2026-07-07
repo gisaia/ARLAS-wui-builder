@@ -42,16 +42,11 @@ export enum ResultListDefaultMode {
  */
 export const resultModeDefaultList = [
   {label: marker('List mode'), value: ResultListDefaultMode.list},
+  {label: marker('Grid mode'), value: ResultListDefaultMode.grid}
 ];
 
-/**
- * Returns a list of result list modes depending on whether grid mode is enabled
- * @param isGridEnabled
- */
-export function getDefaultModeList(isGridEnabled: boolean){
-  if(isGridEnabled){
-    return  [...resultModeDefaultList, {label: marker('Grid mode'), value: ResultListDefaultMode.grid}];
-  } else {
-    return resultModeDefaultList;
-  }
+
+export enum CellBackgroundEnum {
+  filled = 'filled',
+  outlined = 'outlined'
 }

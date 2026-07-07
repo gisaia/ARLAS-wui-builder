@@ -70,7 +70,7 @@ import {ArlasColorGeneratorLoader} from 'arlas-wui-toolkit';
 import {Observable} from 'rxjs';
 import {WidgetFormBuilder} from '../widget-form-builder';
 import {ResultlistDataConfigForm, ResultlistDetailFormGroup} from './form-group';
-import {buildDetailField, getDefaultModeList, ResultListDefaultMode, resultModeDefaultList} from './utils';
+import {buildDetailField, CellBackgroundEnum, ResultListDefaultMode, resultModeDefaultList} from './utils';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
     public tabsOrder: string[] = ['dataStep', 'visualisationStep', 'sactionStep', 'settingsStep'];
@@ -185,13 +185,15 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                             resetDependantsOnChange: true,
                             dependsOn: () => [this.customControls.dataStep.hasGridView],
                             onDependencyChange: (control: ButtonToggleFormControl) => {
-                                this.customControls.dataStep.defaultMode.options =
-                                    getDefaultModeList(this.customControls.dataStep.hasGridView.value);
+                                const hasValueGridAndHaseGridFalse = !this.customControls.dataStep.hasGridView.value &&
+                                    this.customControls.dataStep.defaultMode.value === ResultListDefaultMode.grid;
 
                                 // if value was grid and grid is disabled set value to false
-                                if(!this.customControls.dataStep.hasGridView.value &&
-                                    this.customControls.dataStep.defaultMode.value === ResultListDefaultMode.grid) {
+                                if(hasValueGridAndHaseGridFalse) {
+                                    control.disableOption(ResultListDefaultMode.grid);
                                     this.customControls.dataStep.defaultMode.setValue(ResultListDefaultMode.list.toString());
+                                } else {
+                                    control.enableOption(ResultListDefaultMode.grid);
                                 }
                             }
                         }),
@@ -200,7 +202,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                     })),
                     grid: new HiddenConfigFromGroup({
                         aTitle: new ConfigFormGroup({
-                            tileLabelField: new SelectFormControl(
+                            titleLabelField: new SelectFormControl(
                                 '',
                                 marker('Tile label'),
                                 marker('Tile label description'),
@@ -216,7 +218,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                                     }
                                 }
                             ),
-                            tileLabelFieldProcess: new TextareaFormControl(
+                            titleLabelFieldProcess: new TextareaFormControl(
                                 '',
                                 marker('Transformation title'),
                                 marker('Transformation title description'),
@@ -350,13 +352,13 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                         marker('Activate geosort')
                     ),
                     cellBackgroundStyle: new SelectFormControl(
-                        'filled',
+                        CellBackgroundEnum.filled,
                         marker('Background style of cells'),
                         marker('Background style of cells Description'),
                         false,
                         [
-                            {label: marker('Filled'), value: 'filled'},
-                            {label: marker('Outlined'), value: 'outlined'},
+                            {label: marker('Filled'), value: CellBackgroundEnum.filled},
+                            {label: marker('Outlined'), value: CellBackgroundEnum.outlined},
                         ],
                         {
                             optional: true,
@@ -401,7 +403,6 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                             }
                         ),
                         quicklookUrls: new FormArray([]),
-                        // DataStep is needed because the collection is needed
                         quicklook: new ComponentFormControl(
                             EditResultlistQuicklookComponent,
                             {
@@ -696,12 +697,12 @@ export class ResultListVisualisationsFormGroup extends FormGroup {
             name: new InputFormControl(
                 '',
                 marker('Visualisation name'),
-                marker('Visualisation name'),
+                '',
             ),
             description: new TextareaFormControl(
                 '',
                 marker('Visualisation description'),
-                marker('Visualisation description'),
+                '',
                 '',
                 null,
                 {

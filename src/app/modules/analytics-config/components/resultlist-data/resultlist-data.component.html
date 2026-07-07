@@ -13,7 +13,7 @@
    <mat-tab #grid>
         <ng-template mat-tab-label>
       <span [class.tab-error]="control.controls.grid.touched && control.controls.grid.invalid && !grid.isActive">
-        {{ 'Resultlist grid' | translate }}
+        {{ 'Grid' | translate }}
       </span>
         </ng-template>
        @for (formGroup of control.controls.grid.controls | keyvalue; track $index){

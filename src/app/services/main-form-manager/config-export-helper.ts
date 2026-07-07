@@ -993,7 +993,7 @@ export class ConfigExportHelper {
         contrib.search_size = widgetData.settingsStep.searchSize;
         const fieldsConfig: FieldsConfiguration = {
           idFieldName: widgetData.dataStep.idFieldName,
-          titleFieldNames: [{ fieldPath: widgetData.renderStep.tileLabelField, process: '' }],
+          titleFieldNames: [{ fieldPath: widgetData.renderStep.titleLabelField, process: '' }],
           tooltipFieldNames: [{ fieldPath: widgetData.renderStep.tooltipField, process: '' }],
           icon: 'fiber_manual_record',
           iconColorFieldName: widgetData.renderStep.colorIdentifier
@@ -1061,8 +1061,8 @@ export class ConfigExportHelper {
       const fieldsConfig: FieldsConfiguration = {
         idFieldName: list.dataStep.idFieldName,
         titleFieldNames: [{
-          fieldPath: list.dataStep.grid.aTitle.tileLabelField,
-          process: list.dataStep.grid.aTitle.tileLabelFieldProcess
+          fieldPath: list.dataStep.grid.aTitle.titleLabelField,
+          process: list.dataStep.grid.aTitle.titleLabelFieldProcess
         }],
         tooltipFieldNames: [{
           fieldPath: list.dataStep.grid.bTooltip.tooltipField,
@@ -1115,17 +1115,6 @@ export class ConfigExportHelper {
         });
       });
       contrib.includeMetadata = [];
-      const metadatas = new Set<string>();
-      /** TODO : Grid steps contains, booleans, urls...; we need to filter those controls properly */
-      /* Object.keys(list.gridStep).forEach(v => {
-        if (!!list.gridStep[v] && v !== 'isDefaultMode') {
-          if (Array.isArray(list.gridStep[v])) {
-            (list.gridStep[v] as Array<string>).forEach(f => metadatas.add(f));
-          } else {
-            metadatas.add(list.gridStep[v]);
-          }
-        }
-      });*/
       contribs.push(contrib);
     });
     return contribs;
@@ -1418,9 +1407,6 @@ export class ConfigExportHelper {
           detailedGridHeight: unmanagedRenderFields.detailedGridHeight,
           nbGridColumns: unmanagedRenderFields.nbGridColumns,
           displayFilters: !!widgetData.settingsStep.displayFilters,
-          hasGridMode: !!widgetData.visualisationStep.thumbnailAndQuicklook.thumbnailUrl &&
-              widgetData.dataStep.hasGridView, // Both has to be configured to be displayed ? Or do we remove the check on thumbnail ?
-          hasCardView: false, // TODO: to be implemanted do we do the same for Has grid mode ?
           hasListView: widgetData.dataStep?.columns.length > 0,
           hasGridView: widgetData.dataStep.hasGridView,
           defaultMode: widgetData.dataStep.defaultMode,

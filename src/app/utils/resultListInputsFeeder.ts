@@ -58,6 +58,7 @@ export class ResultListInputsFeeder {
   protected sactionStep: any;
   protected visualisationStep: {   visualisationsList: FormArray; thumbnailAndQuicklook: ConfigFormGroup; visualisations: ConfigFormGroup;};
   protected customControls: any;
+  public readonly MIN_SEARCH_SIZE = 50;
   public constructor(protected options: ResultListConfigFeederOptions, protected  messageService?: MatSnackBar,
                      protected translate?: TranslateService) {
     this.dataStep = options.widgetData.customControls.dataStep ;
@@ -97,7 +98,7 @@ export class ResultListInputsFeeder {
   public importSettingsSteps(){
     return this.imports([
       {
-        value: this.options.contributor.search_size >= 50 ? this.options.contributor.search_size : 50,
+        value: this.options.contributor.search_size >= this.MIN_SEARCH_SIZE ? this.options.contributor.search_size : this.MIN_SEARCH_SIZE,
         control: this.settingsStep.searchSize
       },
       {
@@ -121,11 +122,11 @@ export class ResultListInputsFeeder {
     return this.imports([
       {
         value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].fieldPath : '',
-        control:  this.dataStep.grid.controls.aTitle.controls.tileLabelField
+        control:  this.dataStep.grid.controls.aTitle.controls.titleLabelField
       },
       {
         value: !!titleFieldNames && titleFieldNames.length > 0 ? titleFieldNames[0].process : '',
-        control:  this.dataStep.grid.controls.aTitle.controls.tileLabelFieldProcess
+        control:  this.dataStep.grid.controls.aTitle.controls.titleLabelFieldProcess
       },
       {
         value: !!tooltipFieldNames && tooltipFieldNames.length > 0 ? tooltipFieldNames[0].fieldPath : '',
@@ -152,13 +153,13 @@ export class ResultListInputsFeeder {
         value: this.options.contributor.fieldsConfiguration.idFieldName,
         control: this.dataStep.idFieldName
       },
+      { // Order matter. Should be init before default mode
+        value: this.options.input.hasGridView || /** retro compatibility code **/ ((this.options.input as any)?.defautMode === 'grid'),
+        control:  this.dataStep.hasGridView
+      },
       {
         value: this.options.input?.defaultMode ?? (this.options.input as any)?.defautMode, // Backward compat du to typo error
         control:  this.dataStep.defaultMode
-      },
-      {
-        value: this.options.input.hasGridView || /** retro compatibility code **/ ((this.options.input as any)?.defautMode === 'grid'),
-        control:  this.dataStep.hasGridView
       }
     ]);
   }
@@ -212,8 +213,7 @@ export class ResultListInputsFeeder {
 
     this.imports([
       {
-        value: !!this.options.contributor.fieldsConfiguration.urlThumbnailTemplate ?
-            this.options.contributor.fieldsConfiguration.urlThumbnailTemplate : '',
+        value: this.options.contributor.fieldsConfiguration.urlThumbnailTemplate ?? '',
         control: this.visualisationStep.thumbnailAndQuicklook.controls.thumbnailUrl
       },
       {
@@ -541,8 +541,7 @@ export class AnalyticsResultListInputsFeeder extends ResultListInputsFeeder {
         control:  this.dataStep.defaultMode
       },
       {
-        value: !!this.options.contributor.fieldsConfiguration.urlThumbnailTemplate ?
-            this.options.contributor.fieldsConfiguration.urlThumbnailTemplate : '',
+        value: this.options.contributor.fieldsConfiguration.urlThumbnailTemplate ?? '',
         control: this.visualisationStep.thumbnailAndQuicklook.controls.thumbnailUrl
       },
       {
