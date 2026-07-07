@@ -16,8 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import {ResultlistDetailFormGroup} from '@analytics-config/services/resultlist-form-builder/form-group';
-import {isNumberOperator} from '@analytics-config/services/resultlist-form-builder/models';
+import {
+  ResultListCardLineFormGroup,
+  ResultlistDataConfigForm,
+  ResultlistDetailFormGroup
+} from '@analytics-config/services/resultlist-form-builder/form-group';
+import { isNumberOperator } from '@analytics-config/services/resultlist-form-builder/models';
 import {
     ResultlistConfigForm,
     ResultlistFormBuilderService,
@@ -25,7 +29,7 @@ import {
     ResultListVisualisationsDataGroupCondition,
     ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import {buildDetailField} from '@analytics-config/services/resultlist-form-builder/utils';
+import { buildCardViewProperties, buildDetailField} from '@analytics-config/services/resultlist-form-builder/utils';
 import {AbstractControl, FormArray} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {marker} from '@colsen1991/ngx-translate-extract-marker';
@@ -36,9 +40,10 @@ import {firstValueFrom} from 'rxjs';
 import {CollectionService} from '../services/collection-service/collection.service';
 import {NUMERIC_TYPES} from '../services/collection-service/tools';
 import {
-    AnalyticComponentResultListInputConfig,
-    ContributorConfig,
-    DataGroupInputConfig
+  AnalyticComponentResultListInputConfig,
+    CardViewProperties,
+  ContributorConfig,
+  DataGroupInputConfig
 } from '../services/main-form-manager/models-config';
 import {ImportElement, importElements} from '../services/main-form-manager/tools';
 import {
@@ -373,6 +378,43 @@ export class ResultListInputsFeeder {
         return this;
     }
 
+  public importResultListContributorCards(collectionService: CollectionService){
+    let cardsLine = new ResultListCardLineFormGroup();
+    const sortedCards =  [...(this.options.contributor.cardViewProperties || [])]
+        .sort((d1, d2) => d1.lineNumber - d2.lineNumber);
+
+    sortedCards.forEach((curr, i) => {
+          const prev: CardViewProperties = sortedCards[i - 1];
+
+          if(prev && prev.lineNumber !== curr.lineNumber){
+            this.dataStep.cardViewProperties.push(cardsLine);
+            cardsLine = new ResultListCardLineFormGroup();
+          }
+          const field = buildCardViewProperties (collectionService, this.options.contributor.collection);
+
+          const keyList = Object.keys(curr).map(key => {
+            if(!field.customControls[key]){
+              console.warn('Properties not found when creating cards');
+              return null;
+            }
+
+            return {
+              value: curr[key],
+              control: field.customControls[key]
+            };
+          });
+
+          importElements(keyList.filter(key => key !== null));
+          cardsLine.customControls.fields.push(field);
+
+          // push the final group once we've processed the last item
+          if (i === sortedCards.length - 1) {
+            this.dataStep.cardViewProperties.push(cardsLine);
+          }
+        });
+    return this;
+  }
+
     public importContributorColumns(resultlistFormBuilder) {
         this.options.contributor.columns.forEach(c => {
             const column = resultlistFormBuilder.buildColumn(this.options.contributor.collection);
@@ -407,153 +449,55 @@ export class ResultListInputsFeeder {
         return this;
     }
 
-    public importUnmanagedFields() {
-        const unmanagedRenderFields = this.customControls.unmanagedFields.renderStep;
-        return this.imports([
-            {
-                value: this.options.input.tableWidth,
-                control: unmanagedRenderFields.tableWidth
-            },
-            {
-                value: this.options.input.globalActionsList,
-                control: unmanagedRenderFields.globalActionsList
-            },
-            {
-                value: this.options.input.nLastLines,
-                control: unmanagedRenderFields.nLastLines
-            },
-            {
-                value: this.options.input.detailedGridHeight,
-                control: unmanagedRenderFields.detailedGridHeight
-            },
-            {
-                value: this.options.input.nbGridColumns,
-                control: unmanagedRenderFields.nbGridColumns
-            },
-            {
-                value: this.options.input.isBodyHidden,
-                control: unmanagedRenderFields.isBodyHidden
-            },
-            {
-                value: this.options.input.isAutoGeoSortActived,
-                control: unmanagedRenderFields.isAutoGeoSortActived
-            },
-            {
-                value: this.options.input.selectedItemsEvent,
-                control: unmanagedRenderFields.selectedItemsEvent
-            },
-            {
-                value: this.options.input.consultedItemEvent,
-                control: unmanagedRenderFields.consultedItemEvent
-            },
-            {
-                value: this.options.input.actionOnItemEvent,
-                control: unmanagedRenderFields.actionOnItemEvent
-            },
-            {
-                value: this.options.input.globalActionEvent,
-                control: unmanagedRenderFields.globalActionEvent
-            }
-        ]);
-    }
-
-    protected importDataGroupFilters(
-        dataGroupConf: DataGroupInputConfig,
-        resultListFormBuilder: ResultlistFormBuilderService) {
-        const formArray = new FormArray([]);
-        if (dataGroupConf.filters && dataGroupConf.filters.length > 0) {
-            dataGroupConf.filters.forEach(async (condition, i) => {
-                // operator arrive here in First letter upper case. We have to transform them to lowercase to match
-                // Exp Openum. We ensure consistency by converting the result in lowerCase
-                const op = (Expression.OpEnum[(condition.op as string)].toLowerCase()) as Expression.OpEnum;
-                const conditionForm = resultListFormBuilder
-                    .buildVisualisationsDataGroupCriteria(this.options.contributor.collection);
-                const fields = await firstValueFrom(conditionForm.collectionFields);
-                const field = fields.find(file => file.name === condition.field);
-                this.imports([
-                    {
-                        value: {value: condition.field, type: field.type},
-                        control: conditionForm.customControls.filterField
-                    },
-                    {
-                        value: op,
-                        control: conditionForm.customControls.filterOperation
-                    }
-                ]);
-                conditionForm.syncEditState();
-                if (op === Expression.OpEnum.Like) {
-                    const filterInValues = (condition.value as string[]);
-                    this.imports([
-                        {
-                            value: filterInValues?.map(v => ({value: v})),
-                            control: conditionForm.customControls.filterValues.filterInValues
-                        }
-                    ]);
-                    conditionForm.customControls.filterValues.filterInValues.selectedMultipleItems = filterInValues.map(v => ({value: v}));
-                    conditionForm.customControls.filterValues.filterInValues.savedItems = new Set(filterInValues);
-                    conditionForm.customControls.filterValues.filterEqualValues.disable();
-                } else if (isNumberOperator(op) &&
-                    NUMERIC_TYPES.includes(condition.type as any)) {
-                    this.imports([
-                        {
-                            value: +condition.value,
-                            control: conditionForm.customControls.filterValues.filterEqualValues
-                        }
-                    ]);
-                } else if (op === Expression.OpEnum.Range) {
-                    const min = +(condition.value as string).split(';')[0];
-                    const max = +(condition.value as string).split(';')[1];
-                    this.imports([
-                        {
-                            value: min,
-                            control: conditionForm.customControls.filterValues.filterMinRangeValues
-                        },
-                        {
-                            value: max,
-                            control: conditionForm.customControls.filterValues.filterMaxRangeValues
-                        }
-                    ]);
-                } else if (op === Expression.OpEnum.Eq) {
-                    this.imports([
-                        {
-                            value: condition.value,
-                            control: conditionForm.customControls.filterValues.filterBoolean
-                        }
-                    ]);
-                }
-                formArray.push(conditionForm);
-            });
-        }
-        return formArray;
-    }
-
-    /**
-     * Methode to transform a visualisation link into a data group
-     * @private
-     */
-    private interopCode() {
-        if (this.options.input.visualisationLink) {
-            const visualisationForm = new ResultListVisualisationsFormGroup();
-            visualisationForm.customControls.name.setValue(this.translate?.instant('Visualisation Link'));
-            const dataGroupForm = new ResultListVisualisationsDataGroup();
-            this.imports([
-                {
-                    value: this.options.input.visualisationLink,
-                    control: dataGroupForm.customControls.visualisationUrl
-                }
-            ]);
-            dataGroupForm.customControls.name.setValue(this.translate?.instant('Visualisation Link'));
-            dataGroupForm.customControls.protocol.setValue('other');
-            visualisationForm.customControls.dataGroups.push(dataGroupForm);
-
-            const key = marker('Your visualisation link config has been moved');
-            if (this.messageService) {
-                this.messageService.open(this.translate?.instant(key) ?? key, null, {duration: 7000});
-            }
-            return visualisationForm;
-        }
-        return null;
-    }
+  public importUnmanagedFields(){
+    const unmanagedRenderFields = this.customControls.unmanagedFields.renderStep;
+    return this.imports([
+      {
+        value: this.options.input.tableWidth,
+        control: unmanagedRenderFields.tableWidth
+      },
+      {
+        value: this.options.input.globalActionsList,
+        control: unmanagedRenderFields.globalActionsList
+      },
+      {
+        value: this.options.input.nLastLines,
+        control: unmanagedRenderFields.nLastLines
+      },
+      {
+        value: this.options.input.detailedGridHeight,
+        control: unmanagedRenderFields.detailedGridHeight
+      },
+      {
+        value: this.options.input.nbGridColumns,
+        control: unmanagedRenderFields.nbGridColumns
+      },
+      {
+        value: this.options.input.isBodyHidden,
+        control: unmanagedRenderFields.isBodyHidden
+      },
+      {
+        value: this.options.input.isAutoGeoSortActived,
+        control: unmanagedRenderFields.isAutoGeoSortActived
+      },
+      {
+        value: this.options.input.selectedItemsEvent,
+        control: unmanagedRenderFields.selectedItemsEvent
+      },
+      {
+        value: this.options.input.consultedItemEvent,
+        control: unmanagedRenderFields.consultedItemEvent
+      },
+      {
+        value: this.options.input.actionOnItemEvent,
+        control: unmanagedRenderFields.actionOnItemEvent
+      },
+      {
+        value: this.options.input.globalActionEvent,
+        control: unmanagedRenderFields.globalActionEvent
+      }
+    ]);
+  }
 }
 
 

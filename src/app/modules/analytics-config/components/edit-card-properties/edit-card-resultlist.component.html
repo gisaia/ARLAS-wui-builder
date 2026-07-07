@@ -1,0 +1,119 @@
+<div cdkDropListGroup>
+@for (lineFc of cards; track $index; let lineIndex = $index) {
+    <mat-card class="card-wrapper" appearance="outlined">
+            <table #lineTable
+                   (cdkDropListDropped)="drop($event, lineTable, lineIndex)"
+                   [cdkDropListData]="lineFc.customControls.fields.controls"
+                   [cdkDropListDisabled]="dragDisabled"
+                   [cdkDropListLockAxis]="'y'"
+                   [dataSource]="lineFc.customControls.fields.controls" cdkDropList
+                   class="card" mat-table>
+                <ng-container matColumnDef="action">
+                    <th *matHeaderCellDef class="action" mat-header-cell>
+                        <div class="badge">{{$index + 1}}</div>
+                    </th>
+                    <td *matCellDef="let field; let i = index" class="action" mat-cell>
+                        <div class="action-wrapper">
+                            <mat-icon (mousedown)="dragDisabled = false" class="drag">drag_indicator</mat-icon>
+                            <button (click)="deleteField(lineIndex, i, lineTable)" class="delete" mat-icon-button>
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            @if (field.controls.sort.value === '') {
+                                <button (click)="setSort(lineIndex, i, field.controls.sort.value)" [matTooltip]="'Not sorted' | translate"
+                                        class="sort-disabled"
+                                        mat-icon-button>
+                                    <mat-icon>sync_alt</mat-icon>
+                                </button>
+                            } @else {
+                                <button (click)="setSort(lineIndex, i, field.controls.sort.value)" [class.reversed]="field.controls.sort.value === 'desc'"
+                                        [matTooltip]="field.controls.sort.value | translate"
+                                        class="sort"
+                                        mat-icon-button>
+                                    <mat-icon>north</mat-icon>
+                                </button>
+                            }
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="name">
+                    <th *matHeaderCellDef mat-header-cell>{{ 'Pretty name' | translate }}</th>
+                    <td *matCellDef="let field" class="name" mat-cell>
+                        <arlas-config-form-control [control]="field.controls.prettyName" [showLabel]="false">
+                        </arlas-config-form-control>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="field">
+                    <th *matHeaderCellDef mat-header-cell>{{ 'Field name' | translate }}</th>
+                    <td *matCellDef="let field" class="field" mat-cell>
+                        <arlas-config-form-control [control]="field.controls.fieldName" [showLabel]="false">
+                        </arlas-config-form-control>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="unit">
+                    <th *matHeaderCellDef class="unit" mat-header-cell>{{ 'Unit of the column' | translate }}</th>
+                    <td *matCellDef="let field" class="unit" mat-cell>
+                        <arlas-config-form-control [control]="field.controls.dataType" [showLabel]="false">
+                        </arlas-config-form-control>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="process">
+                    <th *matHeaderCellDef class="process transformation"
+                        mat-header-cell>{{ 'Transformation' | translate }}
+                    </th>
+                    <td *matCellDef="let field" class="process" mat-cell>
+                        <arlas-config-form-control [control]="field.controls.process" [showLabel]="false">
+                        </arlas-config-form-control>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="title">
+                    <th *matHeaderCellDef class="color-service" mat-header-cell>{{ 'Title' | translate }}</th>
+                    <td *matCellDef="let field" class="color-service" mat-cell>
+                        <div class="color-service-wrapper">
+                            <arlas-config-form-control [control]="field.controls.isTitle" [showLabel]="false">
+                            </arlas-config-form-control>
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="icon">
+                    <th *matHeaderCellDef class="color-service" mat-header-cell>{{ 'Icon' | translate }}</th>
+                    <td *matCellDef="let field" class="color-service" mat-cell>
+                        <div class="color-service-wrapper">
+                            <arlas-config-form-control [control]="field.controls.icon" [showLabel]="false">
+                            </arlas-config-form-control>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="delete">
+                    <th *matHeaderCellDef mat-header-cell><button class="delete__btn" mat-icon-button (click)="deleteLine(lineIndex)"><mat-icon [matTooltip]="'Delete line' | translate">delete</mat-icon></button></th>
+                    <td *matCellDef="let field" class="name" mat-cell>
+                    </td>
+                </ng-container>
+
+                <tr *matHeaderRowDef="displayedColumns; sticky: true" mat-header-row></tr>
+                <tr (cdkDragStarted)="dragStarted($event, lineTable)" *matRowDef="let row; columns: displayedColumns;let rowIndex = index"
+                    cdkDrag
+                    class="column-drag" mat-row></tr>
+            </table>
+
+        @if (lineFc.touched && lineFc?.invalid) {
+            <mat-error>{{ 'At least one field is required' | translate }}
+            </mat-error>
+        }
+        <div class="button-wrapper">
+            <button (click)="addField(lineIndex,lineTable)" [matTooltip]="'Add a field' | translate" color="primary"
+                    matButton="outlined" type="button">
+                <mat-icon>add</mat-icon>
+                {{ 'Add a field' | translate }}
+            </button>
+        </div>
+    </mat-card>
+}
+</div>
+<div class="add-line-button-wrapper">
+    <button matButton="outlined" color="primary" [disabled]="cards.length === maxLine" (click)="addLine()"
+            [matTooltip]="'Add a line' | translate" type="button">
+        <mat-icon>add</mat-icon>
+        {{'Add a line' | translate}}
+    </button>
+</div>

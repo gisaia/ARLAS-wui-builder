@@ -33,6 +33,9 @@ import { EditResultlistDetailsComponent } from '../edit-resultlist-details/edit-
 import {ConfigFormGroupComponent} from '@shared-components/config-form-group/config-form-group.component';
 import {KeyValuePipe} from '@angular/common';
 import {IsConfigFormControlPipe} from '@shared/pipes/is-form-control.pipe';
+import {
+  EditCardResultListComponent
+} from '@analytics-config/components/edit-card-properties/edit-card-resultlist.component';
 
 @Component({
   selector: 'arlas-resultlist-data',
@@ -47,7 +50,8 @@ import {IsConfigFormControlPipe} from '@shared/pipes/is-form-control.pipe';
     EditResultlistDetailsComponent,
     ConfigFormGroupComponent,
     KeyValuePipe,
-    IsConfigFormControlPipe
+    IsConfigFormControlPipe,
+    EditCardResultListComponent
   ]
 })
 export class ResultlistDataComponent implements OnInit, OnDestroy {

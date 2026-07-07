@@ -5,12 +5,22 @@
         {{ 'Table' | translate }}
       </span>
         </ng-template>
-            <arlas-edit-resultlist-columns [collection]="control.controls.collection"
-                                           [control]="control.controls.columns">
-            </arlas-edit-resultlist-columns>
+        <arlas-edit-resultlist-columns [collection]="control.controls.collection"
+                                       [control]="control.controls.columns">
+        </arlas-edit-resultlist-columns>
 
     </mat-tab>
-   <mat-tab #grid>
+    <mat-tab #cards>
+        <ng-template mat-tab-label>
+      <span [class.tab-error]="control.controls.cardViewProperties.touched && control.controls.cardViewProperties.invalid && !cards.isActive">
+        {{ 'Card list' | translate }}
+      </span>
+        </ng-template>
+        <arlas-edit-card-resultlist-columns [collection]="control.controls.collection"
+                                            [control]="control.controls.cardViewProperties">
+        </arlas-edit-card-resultlist-columns>
+    </mat-tab>
+    <mat-tab #grid>
         <ng-template mat-tab-label>
       <span [class.tab-error]="control.controls.grid.touched && control.controls.grid.invalid && !grid.isActive">
         {{ 'Grid' | translate }}
@@ -32,11 +42,10 @@
     </mat-tab>
     <mat-tab #details>
         <ng-template mat-tab-label>
-      <span [class.tab-error]="control.controls.details.touched && control.controls.details.invalid && !details.isActive">
-        {{ 'Details' | translate }}
-      </span>
+          <span [class.tab-error]="control.controls.details.touched && control.controls.details.invalid && !details.isActive">
+            {{ 'Details' | translate }}
+          </span>
         </ng-template>
-
         <div class="details-title">
             <arlas-config-element [fullSize]="!detailsTitleControl.description">
                 <div form-fields>

@@ -52,6 +52,7 @@ import {
     FieldTemplateControl,
     HiddenConfigFromGroup,
     HiddenFormControl,
+    IconFormControl,
     InputFormControl,
     MultipleSelectFormControl,
     SelectFormControl,
@@ -69,8 +70,20 @@ import {ArlasColorService} from 'arlas-web-components';
 import {ArlasColorGeneratorLoader} from 'arlas-wui-toolkit';
 import {Observable} from 'rxjs';
 import {WidgetFormBuilder} from '../widget-form-builder';
-import {ResultlistDataConfigForm, ResultlistDetailFormGroup} from './form-group';
-import {buildDetailField, CellBackgroundEnum, ResultListDefaultMode, resultModeDefaultList} from './utils';
+import {
+    ResultListCardFieldsFormGroup,
+    ResultListCardLineFormGroup,
+    CellBackgroundEnum,
+    ResultlistDataConfigForm,
+    ResultlistDetailFormGroup
+} from './form-group';
+import {
+    buildCardViewProperties,
+    buildDetailField,
+    getDefaultModeList,
+    ResultListDefaultMode,
+    resultModeDefaultList
+} from './utils';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
     public tabsOrder: string[] = ['dataStep', 'visualisationStep', 'sactionStep', 'settingsStep'];
@@ -103,6 +116,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                     colorIdentifier: this.get('dataStep.grid.color.colorIdentifier') as SelectFormControl
                 }
             },
+            cardViewProperties: this.get('dataStep.cardViewProperties') as FormArray,
             detailsTitle: this.get('dataStep.detailsTitle') as HiddenFormControl,
             details: this.get('dataStep.details') as FormArray,
             idFieldName: this.get('dataStep.idFieldName') as HiddenFormControl,
@@ -310,6 +324,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                         }).withTitle(marker('Color configuration')),
                     }),
                     details: new FormArray([]),
+                    cardViewProperties: new FormArray([]),
 
                     detailsTitle: new HiddenFormControl(
                         '',
@@ -974,6 +989,13 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
         const columns = (value.dataStep || {}).columns || [];
         columns.forEach(c => formGroup.customControls.dataStep.columns
             .push(this.buildColumn(collection)));
+
+        const cardsProp =  (value.dataStep || {}).cardViewProperties || [];
+        cardsProp.forEach( resultListCard => {
+            const line = new ResultListCardLineFormGroup();
+            resultListCard.line.forEach(_ => line.customControls.fields.push(buildCardViewProperties(this.collectionService, collection)));
+            formGroup.customControls.dataStep.cardViewProperties.push(line);
+        });
 
         // same for the details, and the fields within
         const details = (value.dataStep || {}).details || [];

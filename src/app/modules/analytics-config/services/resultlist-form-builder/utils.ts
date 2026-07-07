@@ -18,8 +18,12 @@
  */
 
 import { CollectionService } from '@services/collection-service/collection.service';
-import { NUMERIC_OR_DATE_OR_TEXT_TYPES, toOptionsObs } from '@services/collection-service/tools';
-import { ResultlistDetailFieldFormGroup } from './form-group';
+import {
+  NUMERIC_OR_DATE_OR_KEYWORD,
+  NUMERIC_OR_DATE_OR_TEXT_TYPES,
+  toOptionsObs
+} from '@services/collection-service/tools';
+import {ResultListCardFieldsFormGroup, ResultlistDetailFieldFormGroup} from './form-group';
 import {marker} from '@colsen1991/ngx-translate-extract-marker';
 
 export function buildDetailField(collectionService: CollectionService, collection: string) {
@@ -29,12 +33,22 @@ export function buildDetailField(collectionService: CollectionService, collectio
   );
 }
 
+/** Builds a card field form group with options fetched from the given collection. */
+export function buildCardViewProperties(collectionService: CollectionService, collection: string) {
+  const fieldObs = toOptionsObs(collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_KEYWORD));
+  return new ResultListCardFieldsFormGroup(
+      fieldObs,
+      collection
+  );
+}
+
 /**
  * Result mode enum
  */
 export enum ResultListDefaultMode {
   grid = 'grid',
   list = 'list',
+  card = 'card'
 }
 
 /**
@@ -42,6 +56,7 @@ export enum ResultListDefaultMode {
  */
 export const resultModeDefaultList = [
   {label: marker('List mode'), value: ResultListDefaultMode.list},
+  {label: marker('Card mode'), value: ResultListDefaultMode.card},
   {label: marker('Grid mode'), value: ResultListDefaultMode.grid}
 ];
 
