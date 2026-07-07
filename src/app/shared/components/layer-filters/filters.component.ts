@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -28,7 +28,7 @@ import { MapFilterFormGroup } from '@map-config/services/map-layer-form-builder/
 import {
   MapLayerFormBuilderService, MapLayerFormGroup
 } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { ConfigFormGroup } from '@shared-models/config-form';
@@ -65,6 +65,7 @@ export class LayerFiltersComponent implements OnInit, OnDestroy {
 
   private confirmDeleteSub: Subscription;
 
+  private readonly translate = inject(TranslateService);
   public constructor(
     private readonly dialog: MatDialog,
     private readonly mainFormService: MainFormService,
@@ -146,7 +147,7 @@ export class LayerFiltersComponent implements OnInit, OnDestroy {
 
   public getColorLegend(paint) {
     const styleColor = paint['circle-color'] || paint['heatmap-color'] || paint['fill-color'] || paint['line-color'];
-    const colorLegend = LegendService.buildColorLegend(styleColor, true, null);
+    const colorLegend = LegendService.buildColorLegend(styleColor, true, new Map(), [], this.translate);
     return colorLegend[0];
   }
 

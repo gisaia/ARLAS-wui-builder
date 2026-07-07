@@ -151,7 +151,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       if (
         this.persistenceService.isAvailable
-        && (!this.arlasAuthentService.authConfigValue || !this.arlasAuthentService.authConfigValue.use_authent)
+        && (!this.arlasAuthentService.authSettings?.use_authent)
       ) {
         this.getConfigList();
       }

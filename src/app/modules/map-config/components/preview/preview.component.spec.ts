@@ -62,7 +62,6 @@ describe('PreviewComponent', () => {
                         setBasemaps: vi.fn(() => { }),
                         fetchSources$: vi.fn(() => of([])),
                         basemapChanged$: of()
-
                     }
                 }
             ]
@@ -71,6 +70,19 @@ describe('PreviewComponent', () => {
 
         fixture = TestBed.createComponent(PreviewComponent);
         component = fixture.componentInstance;
+        fixture.componentRef.setInput('mapComponentConfig', {
+            basemapStyles: [],
+            mapLayers: {
+                layers: [],
+                externalEventLayers: [],
+                events: {
+                    onHover: new Set(),
+                    emitOnClick: new Set(),
+                    zoomOnClick: new Set()
+                }
+            },
+            visualisations_sets: []
+        });
         fixture.detectChanges();
     });
 

@@ -37,7 +37,7 @@ import {
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { DateFormats } from '@shared/models/enum';
 import { Metric } from 'arlas-api';
-import { ChartType } from 'arlas-web-components';
+import { ChartType } from 'arlas-d3';
 import {
   BucketsIntervalFormBuilderService,
   BucketsIntervalFormGroup
