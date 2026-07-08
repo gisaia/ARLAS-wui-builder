@@ -20,7 +20,7 @@
 import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import {
-  ConfigFormControl, ConfigFormGroup,
+  ConfigFormGroup,
   HiddenFormControl, InputFormControl, SelectFormControl, SelectOption, SliderFormControl, TextareaFormControl
 } from '@shared-models/config-form';
 import { Observable } from 'rxjs';

@@ -25,14 +25,13 @@ import { CollectionService } from '@services/collection-service/collection.servi
 import { toKeywordOptionsObs } from '@services/collection-service/tools';
 import { ConfigElementComponent } from '@shared-components/config-element/config-element.component';
 import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
-import {ConfigFormControl, FieldTemplateControl} from '@shared-models/config-form';
+import { FieldTemplateControl} from '@shared-models/config-form';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { Subject, takeUntil } from 'rxjs';
 import { EditResultlistColumnsComponent } from '../edit-resultlist-columns/edit-resultlist-columns.component';
 import { EditResultlistDetailsComponent } from '../edit-resultlist-details/edit-resultlist-details.component';
 import {ConfigFormGroupComponent} from '@shared-components/config-form-group/config-form-group.component';
 import {KeyValuePipe} from '@angular/common';
-import {AbstractControl} from '@angular/forms';
 import {IsConfigFormControlPipe} from '@shared/pipes/is-form-control.pipe';
 
 @Component({
