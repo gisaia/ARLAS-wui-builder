@@ -272,7 +272,7 @@ export class ResultListInputsFeeder {
                         dataGroupForm.setControl('filters', conditionForm);
                         dataGroupForm.customControls.filters =
                             dataGroupForm.get('filters') as FormArray<ResultListVisualisationsDataGroupCondition>;
-                        (visualisationForm.get('dataGroups') as FormArray).push(dataGroupForm);
+                        visualisationForm.customControls.dataGroups.push(dataGroupForm);
                     });
                 }
                 this.visualisationStep.visualisationsList.push(visualisationForm);
@@ -314,7 +314,7 @@ export class ResultListInputsFeeder {
                 this.imports([{
                     value: descUrl.filter.field,
                     control: quicklook.customControls.filter.field
-                },
+                    },
                     {
                         value: selectedItems,
                         control: quicklook.customControls.filter.values
@@ -576,12 +576,8 @@ export class AnalyticsResultListInputsFeeder extends ResultListInputsFeeder {
     public importGridStep() {
         return this.imports([
             {
-                value: this.options.input?.defaultMode ?? (this.options.input as any)?.defautMode, // Backward compat du to typo error,
+                value: this.options.input?.defaultMode ?? (this.options.input as any)?.defautMode, // Backward compat due to typo error,
                 control: this.dataStep.defaultMode
-            },
-            {
-                value: this.options.contributor.fieldsConfiguration.urlThumbnailTemplate ?? '',
-                control: this.visualisationStep.thumbnailAndQuicklook.thumbnailUrl
             },
             {
                 value: this.options.contributor.fieldsConfiguration.iconColorFieldName,
