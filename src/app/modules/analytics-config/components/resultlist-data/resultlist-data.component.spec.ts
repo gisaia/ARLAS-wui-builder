@@ -43,6 +43,7 @@ describe('ResultlistDataComponent', () => {
             collection: new FormControl(),
             columns: new FormArray([]),
             details: new FormArray([]),
+            cardViewProperties: new FormArray([]),
             grid: new FormGroup({})
         }));
         fixture.detectChanges();
