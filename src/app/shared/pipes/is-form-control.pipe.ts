@@ -16,16 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@use "variables.scss" as var;
+import {Pipe, PipeTransform} from '@angular/core';
+import {ConfigFormControl} from '@shared-models/config-form';
 
-.tab-error {
-   color: var.$error-color;
-}
+@Pipe({
+  name: 'isConfigFormControl',
+})
+export class IsConfigFormControlPipe implements PipeTransform {
 
-.details-title {
-   margin: 10px;
-}
+  public transform(value: unknown) {
+    return value instanceof ConfigFormControl;
+  }
 
-.grid-form-control{
-   margin: 30px 10px
 }

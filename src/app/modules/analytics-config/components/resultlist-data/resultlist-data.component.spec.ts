@@ -42,7 +42,8 @@ describe('ResultlistDataComponent', () => {
         fixture.componentRef.setInput('control', new FormGroup({
             collection: new FormControl(),
             columns: new FormArray([]),
-            details: new FormArray([])
+            details: new FormArray([]),
+            grid: new FormGroup({})
         }));
         fixture.detectChanges();
     });

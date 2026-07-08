@@ -993,13 +993,13 @@ export class ConfigExportHelper {
         contrib.search_size = widgetData.settingsStep.searchSize;
         const fieldsConfig: FieldsConfiguration = {
           idFieldName: widgetData.dataStep.idFieldName,
-          titleFieldNames: [{ fieldPath: widgetData.renderStep.titleLabelField, process: '' }],
-          tooltipFieldNames: [{ fieldPath: widgetData.renderStep.tooltipField, process: '' }],
+          titleFieldNames: [{ fieldPath: widgetData.dataStep.grid.aTitle.titleLabelField, process: '' }],
+          tooltipFieldNames: [{ fieldPath: widgetData.dataStep.grid.bTooltip.tooltipField, process: '' }],
           icon: 'fiber_manual_record',
-          iconColorFieldName: widgetData.renderStep.colorIdentifier
+          iconColorFieldName: widgetData.dataStep.grid.color.colorIdentifier
         };
-        if (widgetData.renderStep.thumbnailUrl) {
-          fieldsConfig.urlThumbnailTemplate = widgetData.renderStep.thumbnailUrl;
+        if (widgetData.visualisationStep.thumbnailAndQuicklook.thumbnailUrl) {
+          fieldsConfig.urlThumbnailTemplate =  widgetData.visualisationStep.thumbnailAndQuicklook.thumbnailUrl;
         }
         if (widgetData.renderStep.imageUrl) {
           fieldsConfig.urlImageTemplate = widgetData.renderStep.imageUrl;
@@ -1408,7 +1408,7 @@ export class ConfigExportHelper {
           nbGridColumns: unmanagedRenderFields.nbGridColumns,
           displayFilters: !!widgetData.settingsStep.displayFilters,
           hasListView: widgetData.dataStep?.columns.length > 0,
-          hasGridView: widgetData.dataStep.hasGridView,
+          hasGridView: widgetData.dataStep.grid.aHasGridView,
           defaultMode: widgetData.dataStep.defaultMode,
           visualisationLink: widgetData.sactionStep.visualisationLink,
           downloadLink: widgetData.sactionStep.downloadLink,

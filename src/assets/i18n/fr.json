@@ -42,7 +42,7 @@
 	" is not valid": " n'est pas valide",
 	"ASC": "Asc",
 	"DESC": "Desc",
-	"At least one ##value## is required": "Au moins un? {{value}} est nécessaire",
+	"At least one ##value## is required": "Au moins un(e) {{value}} est nécessaire",
 	"Search...": "Rechercher...",
 	"No results": "Aucun résultat",
 	"The field is mandatory.": "Le champ est obligatoire",

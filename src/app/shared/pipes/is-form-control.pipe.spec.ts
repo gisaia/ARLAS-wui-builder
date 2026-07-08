@@ -16,16 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@use "variables.scss" as var;
+import { describe, expect, it } from 'vitest';
+import { IsConfigFormControlPipe } from './is-form-control.pipe';
 
-.tab-error {
-   color: var.$error-color;
-}
-
-.details-title {
-   margin: 10px;
-}
-
-.grid-form-control{
-   margin: 30px 10px
-}
+describe('IsFormControlPipe', () => {
+  it('create an instance', () => {
+    const pipe = new IsConfigFormControlPipe();
+    expect(pipe).toBeTruthy();
+  });
+});

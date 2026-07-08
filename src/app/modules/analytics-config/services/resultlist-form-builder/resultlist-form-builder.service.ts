@@ -87,10 +87,22 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
         showIcon: this.get('showIcon') as HiddenFormControl,
         dataStep: {
             collection: this.get('dataStep.collection') as SelectFormControl,
-            hasGridView: this.get('dataStep.hasGridView') as SlideToggleFormControl,
             defaultMode: this.get('dataStep.defaultMode') as ButtonToggleFormControl,
             columns: this.get('dataStep.columns') as FormArray,
-            grid: this.get('dataStep.grid') as HiddenConfigFromGroup,
+            grid: {
+                aHasGridView: this.get('dataStep.grid.aHasGridView') as SlideToggleFormControl,
+                aTitle: {
+                    titleLabelField: this.get('dataStep.grid.aTitle.titleLabelField') as SelectFormControl,
+                    titleLabelFieldProcess: this.get('dataStep.grid.aTitle.titleLabelFieldProcess') as TextareaFormControl,
+                },
+                bTooltip:{
+                    tooltipField: this.get('dataStep.grid.bTooltip.tooltipField') as SelectFormControl,
+                    tooltipFieldProcess: this.get('dataStep.grid.bTooltip.tooltipFieldProcess') as TextareaFormControl,
+                },
+                color: {
+                    colorIdentifier: this.get('dataStep.grid.color.colorIdentifier') as SelectFormControl
+                }
+            },
             detailsTitle: this.get('dataStep.detailsTitle') as HiddenFormControl,
             details: this.get('dataStep.details') as FormArray,
             idFieldName: this.get('dataStep.idFieldName') as HiddenFormControl,
@@ -107,7 +119,12 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
         },
         visualisationStep: {
             visualisationsList: this.get('visualisationStep.visualisationsList') as FormArray,
-            thumbnailAndQuicklook: this.get('visualisationStep.thumbnailAndQuicklook') as ConfigFormGroup,
+            thumbnailAndQuicklook: {
+                useHttpThumbnails: this.get('visualisationStep.thumbnailAndQuicklook.useHttpThumbnails') as SlideToggleFormControl,
+                useHttpQuicklooks: this.get('visualisationStep.thumbnailAndQuicklook.useHttpQuicklooks') as SlideToggleFormControl,
+                thumbnailUrl: this.get('visualisationStep.thumbnailAndQuicklook.thumbnailUrl') as FieldTemplateControl,
+                quicklookUrls: this.get('visualisationStep.thumbnailAndQuicklook.quicklookUrls') as FormArray,
+            },
             visualisations: this.get('visualisationStep.visualisations') as ConfigFormGroup,
         },
         unmanagedFields: {
@@ -171,11 +188,6 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                         },
                         collectionService.getGroupCollectionItems()
                     ),
-                    hasGridView: new SlideToggleFormControl(
-                        false,
-                        marker('Enable grid view'),
-                        marker('Enable grid view description')
-                    ),
                     defaultMode: new ButtonToggleFormControl(
                         '',
                         resultModeDefaultList
@@ -183,9 +195,9 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                         marker('List default mode description'),
                         {
                             resetDependantsOnChange: true,
-                            dependsOn: () => [this.customControls.dataStep.hasGridView],
+                            dependsOn: () => [this.customControls.dataStep.grid.aHasGridView],
                             onDependencyChange: (control: ButtonToggleFormControl) => {
-                                const hasValueGridAndHaseGridFalse = !this.customControls.dataStep.hasGridView.value &&
+                                const hasValueGridAndHaseGridFalse = !this.customControls.dataStep.grid.aHasGridView.value &&
                                     this.customControls.dataStep.defaultMode.value === ResultListDefaultMode.grid;
 
                                 // if value was grid and grid is disabled set value to false
@@ -201,7 +213,13 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                         validators: Validators.required,
                     })),
                     grid: new HiddenConfigFromGroup({
+                        aHasGridView: new SlideToggleFormControl(
+                            false,
+                            marker('Enable grid view'),
+                            marker('Enable grid view description')
+                        ),
                         aTitle: new ConfigFormGroup({
+
                             titleLabelField: new SelectFormControl(
                                 '',
                                 marker('Tile label'),
@@ -407,7 +425,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                             EditResultlistQuicklookComponent,
                             {
                                 collectionControl: () => this.customControls.dataStep.collection,
-                                control: () => this.customControls.visualisationStep.thumbnailAndQuicklook.controls.quicklookUrls
+                                control: () => this.customControls.visualisationStep.thumbnailAndQuicklook.quicklookUrls
                             }
                         )
                     }).withTitle(marker('Thumbnail and Quicklook')),

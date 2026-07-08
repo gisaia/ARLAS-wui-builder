@@ -17,8 +17,15 @@
       </span>
         </ng-template>
        @for (formGroup of control.controls.grid.controls | keyvalue; track $index){
-           <arlas-config-form-group [configFormGroup]="$any(formGroup.value)">
-           </arlas-config-form-group>
+           @if(formGroup.value | isConfigFormControl){
+               <div class="grid-form-control">
+                   <arlas-config-form-control [control]="formGroup.value"></arlas-config-form-control>
+               </div>
+
+           } @else {
+               <arlas-config-form-group [configFormGroup]="$any(formGroup.value)">
+               </arlas-config-form-group>
+           }
        }
 
 
