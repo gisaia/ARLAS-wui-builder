@@ -1408,6 +1408,7 @@ export class ConfigExportHelper {
           nbGridColumns: unmanagedRenderFields.nbGridColumns,
           displayFilters: !!widgetData.settingsStep.displayFilters,
           hasListView: widgetData.dataStep?.columns.length > 0,
+          hasGridMode: widgetData.dataStep.grid.aHasGridView, // Retro-compat code
           hasGridView: widgetData.dataStep.grid.aHasGridView,
           defaultMode: widgetData.dataStep.defaultMode,
           visualisationLink: widgetData.sactionStep.visualisationLink,
