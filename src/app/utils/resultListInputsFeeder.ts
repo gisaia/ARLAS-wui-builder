@@ -64,6 +64,7 @@ interface ResultListConfigFeederOptions {
 interface DataStep {
     collection: SelectFormControl;
     defaultMode: ButtonToggleFormControl;
+    cardViewProperties: FormArray;
     columns: FormArray;
     grid: {
         aHasGridView: SlideToggleFormControl;
@@ -225,6 +226,34 @@ export class ResultListInputsFeeder {
         return this;
     }
 
+    /**
+     * Methode to transform a visualisation link into a data group
+     * @private
+     */
+    private interopCode() {
+        if(this.options.input.visualisationLink) {
+            const visualisationForm = new ResultListVisualisationsFormGroup();
+            visualisationForm.customControls.name.setValue(this.translate?.instant('Visualisation Link'));
+            const dataGroupForm = new ResultListVisualisationsDataGroup();
+            this.imports([
+                {
+                    value: this.options.input.visualisationLink,
+                    control: dataGroupForm.customControls.visualisationUrl
+                }
+            ]);
+            dataGroupForm.customControls.name.setValue(this.translate?.instant('Visualisation Link'));
+            dataGroupForm.customControls.protocol.setValue('other');
+            visualisationForm.customControls.dataGroups.push(dataGroupForm);
+
+            const key = marker('Your visualisation link config has been moved');
+            if(this.messageService){
+                this.messageService.open(this.translate?.instant(key) ?? key, null, {duration: 7000});
+            }
+            return visualisationForm;
+        }
+        return null;
+    }
+
     public importVisualisationStep(resultListFormBuilder: ResultlistFormBuilderService) {
 
         this.imports([
@@ -290,6 +319,76 @@ export class ResultListInputsFeeder {
             this.visualisationStep.visualisationsList.push(interopVisualisationForm);
         }
         return this;
+    }
+
+    protected importDataGroupFilters(
+        dataGroupConf: DataGroupInputConfig,
+        resultListFormBuilder: ResultlistFormBuilderService){
+        const formArray = new FormArray([]);
+        if(dataGroupConf.filters && dataGroupConf.filters.length > 0){
+            dataGroupConf.filters.forEach(async (condition, i) => {
+                // operator arrive here in First letter upper case. We have to transform them to lowercase to match
+                // Exp Openum. We ensure consistency by converting the result in lowerCase
+                const op = (Expression.OpEnum[(condition.op as string)].toLowerCase()) as Expression.OpEnum;
+                const conditionForm = resultListFormBuilder
+                    .buildVisualisationsDataGroupCriteria(this.options.contributor.collection);
+                const fields = await firstValueFrom(conditionForm.collectionFields);
+                const field = fields.find(file => file.name === condition.field);
+                this.imports([
+                    {
+                        value: { value: condition.field, type: field.type },
+                        control: conditionForm.customControls.filterField
+                    },
+                    {
+                        value: op,
+                        control: conditionForm.customControls.filterOperation
+                    }
+                ]);
+                conditionForm.syncEditState();
+                if (op ===  Expression.OpEnum.Like) {
+                    const  filterInValues = (condition.value as string[]);
+                    this.imports([
+                        {
+                            value: filterInValues?.map(v => ({ value: v })),
+                            control: conditionForm.customControls.filterValues.filterInValues
+                        }
+                    ]);
+                    conditionForm.customControls.filterValues.filterInValues.selectedMultipleItems = filterInValues.map(v => ({ value: v }));
+                    conditionForm.customControls.filterValues.filterInValues.savedItems = new Set(filterInValues);
+                    conditionForm.customControls.filterValues.filterEqualValues.disable();
+                } else if ( isNumberOperator(op) &&
+                    NUMERIC_TYPES.includes(condition.type as any)) {
+                    this.imports([
+                        {
+                            value: +condition.value,
+                            control:  conditionForm.customControls.filterValues.filterEqualValues
+                        }
+                    ]);
+                } else if (op === Expression.OpEnum.Range) {
+                    const min =  +(condition.value as string).split(';')[0];
+                    const max =  +(condition.value as string).split(';')[1];
+                    this.imports([
+                        {
+                            value: min,
+                            control:  conditionForm.customControls.filterValues.filterMinRangeValues
+                        },
+                        {
+                            value: max,
+                            control:  conditionForm.customControls.filterValues.filterMaxRangeValues
+                        }
+                    ]);
+                } else if (op === Expression.OpEnum.Eq) {
+                    this.imports([
+                        {
+                            value: condition.value,
+                            control:  conditionForm.customControls.filterValues.filterBoolean
+                        }
+                    ]);
+                }
+                formArray.push(conditionForm);
+            });
+        }
+        return formArray;
     }
 
     public importResultListQuickLook(resultListFormBuilder: ResultlistFormBuilderService,

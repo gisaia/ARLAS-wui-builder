@@ -129,12 +129,12 @@ export class EditCardResultListComponent implements OnInit {
     /** Adds a new empty card line if the limit has not been reached. */
     protected addLine() {
         if (this.cards.length < this.maxLine) {
-            this.cards.push(new ResultListCardLineFormGroup());
+            this.control.push(new ResultListCardLineFormGroup());
         }
     }
 
     /** Removes the card line at the given index. */
     protected deleteLine(lineIndex: number) {
-        this.cards.splice(lineIndex, 1);
+        this.control.removeAt(lineIndex);
     }
 }

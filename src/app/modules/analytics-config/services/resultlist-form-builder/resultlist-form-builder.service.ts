@@ -52,7 +52,6 @@ import {
     FieldTemplateControl,
     HiddenConfigFromGroup,
     HiddenFormControl,
-    IconFormControl,
     InputFormControl,
     MultipleSelectFormControl,
     SelectFormControl,
@@ -70,17 +69,11 @@ import {ArlasColorService} from 'arlas-web-components';
 import {ArlasColorGeneratorLoader} from 'arlas-wui-toolkit';
 import {Observable} from 'rxjs';
 import {WidgetFormBuilder} from '../widget-form-builder';
-import {
-    ResultListCardFieldsFormGroup,
-    ResultListCardLineFormGroup,
-    CellBackgroundEnum,
-    ResultlistDataConfigForm,
-    ResultlistDetailFormGroup
-} from './form-group';
+import {ResultListCardLineFormGroup, ResultlistDataConfigForm, ResultlistDetailFormGroup} from './form-group';
 import {
     buildCardViewProperties,
     buildDetailField,
-    getDefaultModeList,
+    CellBackgroundEnum,
     ResultListDefaultMode,
     resultModeDefaultList
 } from './utils';
@@ -204,22 +197,30 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                     ),
                     defaultMode: new ButtonToggleFormControl(
                         '',
-                        resultModeDefaultList
-                        ,
+                        resultModeDefaultList.map(o => ({...o})),
                         marker('List default mode description'),
                         {
                             resetDependantsOnChange: true,
-                            dependsOn: () => [this.customControls.dataStep.grid.aHasGridView],
+                            dependsOn: () => [this.customControls.dataStep.grid.aHasGridView,
+                                this.customControls.dataStep.cardViewProperties as any],
                             onDependencyChange: (control: ButtonToggleFormControl) => {
-                                const hasValueGridAndHaseGridFalse = !this.customControls.dataStep.grid.aHasGridView.value &&
-                                    this.customControls.dataStep.defaultMode.value === ResultListDefaultMode.grid;
-
                                 // if value was grid and grid is disabled set value to false
-                                if(hasValueGridAndHaseGridFalse) {
-                                    control.disableOption(ResultListDefaultMode.grid);
-                                    this.customControls.dataStep.defaultMode.setValue(ResultListDefaultMode.list.toString());
+                                if(!this.customControls.dataStep.grid.aHasGridView.value) {
+                                    this.customControls.dataStep.defaultMode.disableOption(ResultListDefaultMode.grid);
+                                    if(this.customControls.dataStep.defaultMode.value === ResultListDefaultMode.grid){
+                                        this.customControls.dataStep.defaultMode.setValue(ResultListDefaultMode.list.toString());
+                                    }
                                 } else {
-                                    control.enableOption(ResultListDefaultMode.grid);
+                                    this.customControls.dataStep.defaultMode.enableOption(ResultListDefaultMode.grid);
+                                }
+
+                                if(this.customControls.dataStep.cardViewProperties.length === 0){
+                                    this.customControls.dataStep.defaultMode.disableOption(ResultListDefaultMode.card);
+                                    if(this.customControls.dataStep.defaultMode.value === ResultListDefaultMode.card){
+                                        this.customControls.dataStep.defaultMode.setValue(ResultListDefaultMode.list.toString());
+                                    }
+                                } else {
+                                    this.customControls.dataStep.defaultMode.enableOption(ResultListDefaultMode.card);
                                 }
                             }
                         }),

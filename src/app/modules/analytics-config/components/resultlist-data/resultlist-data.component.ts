@@ -36,6 +36,7 @@ import {IsConfigFormControlPipe} from '@shared/pipes/is-form-control.pipe';
 import {
   EditCardResultListComponent
 } from '@analytics-config/components/edit-card-properties/edit-card-resultlist.component';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'arlas-resultlist-data',
@@ -51,7 +52,8 @@ import {
     ConfigFormGroupComponent,
     KeyValuePipe,
     IsConfigFormControlPipe,
-    EditCardResultListComponent
+    EditCardResultListComponent,
+    MatIcon
   ]
 })
 export class ResultlistDataComponent implements OnInit, OnDestroy {

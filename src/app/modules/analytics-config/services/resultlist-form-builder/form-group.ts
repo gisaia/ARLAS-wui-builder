@@ -17,20 +17,20 @@
  * under the License.
  */
 
-import { FormArray, FormGroup, Validators } from '@angular/forms';
-import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import {FormArray, FormGroup, Validators} from '@angular/forms';
+import {marker} from '@colsen1991/ngx-translate-extract-marker';
 import {
-  ConfigFormGroup, FieldTemplateControl,
-  HiddenFormControl, IconFormControl, InputFormControl,
-  MultipleSelectFormControl, SelectFormControl, SelectOption, SliderFormControl,
-  SlideToggleFormControl, TextareaFormControl
-  ConfigFormGroup,
-  HiddenFormControl, InputFormControl, SelectFormControl, SelectOption, SliderFormControl, TextareaFormControl
+    ConfigFormGroup,
+    HiddenFormControl,
+    IconFormControl,
+    InputFormControl,
+    SelectFormControl,
+    SelectOption,
+    SliderFormControl,
+    SlideToggleFormControl,
+    TextareaFormControl
 } from '@shared-models/config-form';
-import { Observable } from 'rxjs';
-import {CollectionField} from '@services/collection-service/models';
-import {CollectionService} from '@services/collection-service/collection.service';
-import {toOptionsObs} from '@services/collection-service/tools';
+import {Observable} from 'rxjs';
 import {CollectionConfigFormGroup} from '@shared-models/collection-config-form';
 
 export type ResultlistDataConfigForm = FormGroup<{
