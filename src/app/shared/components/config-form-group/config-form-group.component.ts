@@ -31,7 +31,12 @@ import { ConfigElementComponent } from '@shared-components/config-element/config
 import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
 import { ConfigFormGroupArrayComponent } from '@shared-components/config-form-group-array/config-form-group-array.component';
 import { HistogramBucketFormGroupComponent } from '@shared-components/histogram-bucket-form-group/histogram-bucket-form-group.component';
-import { ConfigFormControl, ConfigFormGroup, ConfigFormGroupArray } from '@shared-models/config-form';
+import {
+  ConfigFormControl,
+  ConfigFormGroup,
+  ConfigFormGroupArray,
+  HiddenConfigFromGroup
+} from '@shared-models/config-form';
 import { ObjectvaluesPipe } from '@shared/pipes/objectvalues.pipe';
 import { OrderConfigFormTabControlsPipe } from '@shared/pipes/order-config-form-tab.pipe';
 import { Subscription } from 'rxjs';
@@ -110,7 +115,8 @@ export class ConfigFormGroupComponent extends AsbtractConfigFormControl implemen
   }
 
   public isFormGroup(control: AbstractControl): ConfigFormGroup | null {
-    return !this.isHistogramBucketFormGroup(control) && control instanceof ConfigFormGroup ? control : null;
+    return !this.isHistogramBucketFormGroup(control) && control instanceof ConfigFormGroup &&
+    !(control instanceof HiddenConfigFromGroup)  ? control : null;
   }
 
   public isHistogramBucketFormGroup(control: AbstractControl): BucketsIntervalFormGroup | null {

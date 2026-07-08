@@ -588,7 +588,7 @@
         }
       },
       "resultlist": {
-        "dataStep": {
+        "settingsStep": {
           "searchSize": 100
         },
         "renderStep": {

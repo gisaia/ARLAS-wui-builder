@@ -20,10 +20,33 @@
 import { CollectionService } from '@services/collection-service/collection.service';
 import { NUMERIC_OR_DATE_OR_TEXT_TYPES, toOptionsObs } from '@services/collection-service/tools';
 import { ResultlistDetailFieldFormGroup } from './form-group';
+import {marker} from '@colsen1991/ngx-translate-extract-marker';
 
 export function buildDetailField(collectionService: CollectionService, collection: string) {
   return new ResultlistDetailFieldFormGroup(
     toOptionsObs(
       collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_TEXT_TYPES))
   );
+}
+
+/**
+ * Result mode enum
+ */
+export enum ResultListDefaultMode {
+  grid = 'grid',
+  list = 'list',
+}
+
+/**
+ *  Default result mode selection
+ */
+export const resultModeDefaultList = [
+  {label: marker('List mode'), value: ResultListDefaultMode.list},
+  {label: marker('Grid mode'), value: ResultListDefaultMode.grid}
+];
+
+
+export enum CellBackgroundEnum {
+  filled = 'filled',
+  outlined = 'outlined'
 }

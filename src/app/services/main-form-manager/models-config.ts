@@ -289,7 +289,7 @@ export interface AnalyticComponentInputConfig {
   nLastLines?: number;
   detailedGridHeight?: number;
   nbGridColumns?: number;
-  defautMode?: string;
+  defaultMode?: string;
   displayFilters?: boolean;
   isBodyHidden?: boolean;
   isGeoSortActived?: boolean;
@@ -313,6 +313,7 @@ export interface AnalyticComponentResultListInputConfig extends AnalyticComponen
   detailWidth?: number;
   visualisationLink?: string;
   downloadLink?: string;
+  hasGridView?: boolean;
 }
 
 export interface VisualisationListInputConfig {

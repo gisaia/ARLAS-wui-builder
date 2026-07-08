@@ -70,7 +70,6 @@ export abstract class ConfigFormControl extends FormControl {
     public readonly optionalParams: ControlOptionalParams = {},
     public propertyName = ''
   ) {
-
     super(formState);
     this.initialValue = formState;
     // add default values to missing attributes
@@ -378,7 +377,7 @@ export class VisualisationCheckboxFormControl extends ConfigFormControl {
 export class ButtonToggleFormControl extends ConfigFormControl {
   public constructor(
     formState: any,
-    public options: Array<{ label: string; value: any; }>,
+    public options: Array<{ label: string; value: any; disabled?: boolean; }>,
     description: string,
     optionalParams?: ControlOptionalParams,
     propertyName?: string
@@ -390,6 +389,20 @@ export class ButtonToggleFormControl extends ConfigFormControl {
       description,
       optionalParams,
       propertyName);
+  }
+
+  public disableOption(name: string){
+    const opt = this.options.find(o => o.value === name);
+    if(opt){
+      opt.disabled = true;
+    }
+  }
+
+  public enableOption(name: string){
+    const opt = this.options.find(o => o.value === name);
+    if(opt){
+      opt.disabled = false;
+    }
   }
 }
 export class RadioButtonFormControl extends ConfigFormControl {
@@ -893,6 +906,8 @@ export class HiddenFormControl extends ConfigFormControl {
     this.data = options;
   }
 }
+
+export class HiddenConfigFromGroup extends ConfigFormGroup {}
 
 export class SliderFormControl extends ConfigFormControl {
   public hasWarning = false;

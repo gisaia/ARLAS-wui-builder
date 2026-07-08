@@ -16,26 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import {Pipe, PipeTransform} from '@angular/core';
+import {ConfigFormControl} from '@shared-models/config-form';
 
-import { Pipe, PipeTransform } from '@angular/core';
-import { HistogramUtils } from 'arlas-d3';
-
-/**
- * Creates a step gradient based on the given palette
- */
 @Pipe({
-  name: 'stepGradient',
+  name: 'isConfigFormControl',
 })
-export class StepGradientPipe implements PipeTransform {
+export class IsConfigFormControlPipe implements PipeTransform {
 
-  public transform(paletteColors: string | [number, number]): string {
-    const gradients = new Array<string>();
-    for (let i = 0; i <= 11; i += 1) {
-      const color = HistogramUtils.getColor(i / 11, paletteColors).toHexString();
-      gradients.push(`${color} ${i * 100 / 11}%, ${color} ${(i + 1) * 100 / 11}%`);
-    }
-
-    return `linear-gradient(to right, ${gradients.join(', ')})`;
+  public transform(value: unknown) {
+    return value instanceof ConfigFormControl;
   }
 
 }

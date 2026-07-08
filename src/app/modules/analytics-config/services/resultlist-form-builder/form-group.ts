@@ -20,7 +20,8 @@
 import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import {
-    HiddenFormControl, InputFormControl, SelectFormControl, SelectOption, SliderFormControl, TextareaFormControl
+  ConfigFormGroup,
+  HiddenFormControl, InputFormControl, SelectFormControl, SelectOption, SliderFormControl, TextareaFormControl
 } from '@shared-models/config-form';
 import { Observable } from 'rxjs';
 
@@ -28,6 +29,7 @@ export type ResultlistDataConfigForm = FormGroup<{
   collection: SelectFormControl;
   searchSize: SliderFormControl;
   columns: FormArray;
+  grid: ConfigFormGroup;
   detailsTitle: HiddenFormControl;
   details: FormArray;
   idFieldName: HiddenFormControl;
