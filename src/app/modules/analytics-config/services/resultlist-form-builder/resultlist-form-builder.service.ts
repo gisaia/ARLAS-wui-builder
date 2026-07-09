@@ -208,7 +208,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                                 if(!this.customControls.dataStep.grid.aHasGridView.value) {
                                     this.customControls.dataStep.defaultMode.disableOption(ResultListDefaultMode.grid);
                                     if(this.customControls.dataStep.defaultMode.value === ResultListDefaultMode.grid){
-                                        this.customControls.dataStep.defaultMode.setValue(ResultListDefaultMode.list.toString());
+                                        this.customControls.dataStep.defaultMode.setValue(ResultListDefaultMode.list);
                                     }
                                 } else {
                                     this.customControls.dataStep.defaultMode.enableOption(ResultListDefaultMode.grid);
@@ -217,7 +217,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                                 if(this.customControls.dataStep.cardViewProperties.length === 0){
                                     this.customControls.dataStep.defaultMode.disableOption(ResultListDefaultMode.card);
                                     if(this.customControls.dataStep.defaultMode.value === ResultListDefaultMode.card){
-                                        this.customControls.dataStep.defaultMode.setValue(ResultListDefaultMode.list.toString());
+                                        this.customControls.dataStep.defaultMode.setValue(ResultListDefaultMode.list);
                                     }
                                 } else {
                                     this.customControls.dataStep.defaultMode.enableOption(ResultListDefaultMode.card);

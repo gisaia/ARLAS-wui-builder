@@ -38,7 +38,7 @@ export type ResultlistDataConfigForm = FormGroup<{
   searchSize: SliderFormControl;
   columns: FormArray;
   grid: ConfigFormGroup;
-  cardViewProperties: FormArray;
+  cardViewProperties: FormArray<ResultListCardLineFormGroup>;
   detailsTitle: HiddenFormControl;
   details: FormArray;
   idFieldName: HiddenFormControl;
@@ -135,7 +135,6 @@ export class ResultListCardFieldsFormGroup extends CollectionConfigFormGroup {
               '',
               {
                 optional: true
-
               }
           ),
           fieldName: new SelectFormControl(
@@ -179,14 +178,12 @@ export class ResultListCardFieldsFormGroup extends CollectionConfigFormGroup {
               '',
               {
                 optional: true
-
               }
           ),
           lineNumber: new HiddenFormControl(0,
               '',
               {
                 optional: true
-
               })
         });
   }

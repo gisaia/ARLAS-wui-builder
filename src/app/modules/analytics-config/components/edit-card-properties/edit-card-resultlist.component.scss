@@ -20,15 +20,15 @@
 @use "variables.scss" as var;
 
 :host {
-    --badge-background-color: #2196f3;
-    --bagde-text-color: white;
+    --badge-number-background-color: #2196f3;
+    --badge-number-text-color: white;
 
     .mat-column-unit, .mat-column-action {
         max-width: 100px;
     }
 
     .mat-column-icon {
-        max-width: 80px;
+        max-width: 170px;
     }
 
     .mat-column-delete {
@@ -44,8 +44,8 @@
     height: 20px;
     width: 20px;
     border-radius: 4px;
-    background: var(--badge-background-color);
-    color: var(--bagde-text-color);
+    background: var(--badge-number-background-color);
+    color: var(--badge-number-text-color);
     text-align: center;
 }
 
@@ -171,10 +171,6 @@
     opacity: 0;
 }
 
-.cdk-drag-animating {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.cdk-drop-list-dragging .mat-mdc-row:not(.cdk-drag-placeholder) {
+.cdk-drop-list-dragging .mat-mdc-row:not(.cdk-drag-placeholder), .cdk-drag-animating {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }

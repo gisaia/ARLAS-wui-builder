@@ -44,11 +44,12 @@ export function buildCardViewProperties(collectionService: CollectionService, co
 
 /**
  * Result mode enum
+ * To be iso with the web-component Enum
  */
 export enum ResultListDefaultMode {
-  grid = 'grid',
-  list = 'list',
-  card = 'card'
+  list,
+  grid,
+  card
 }
 
 /**

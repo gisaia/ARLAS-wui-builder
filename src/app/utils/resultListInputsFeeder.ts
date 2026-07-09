@@ -18,7 +18,6 @@
  */
 import {
   ResultListCardLineFormGroup,
-  ResultlistDataConfigForm,
   ResultlistDetailFormGroup
 } from '@analytics-config/services/resultlist-form-builder/form-group';
 import { isNumberOperator } from '@analytics-config/services/resultlist-form-builder/models';
@@ -29,7 +28,11 @@ import {
     ResultListVisualisationsDataGroupCondition,
     ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { buildCardViewProperties, buildDetailField} from '@analytics-config/services/resultlist-form-builder/utils';
+import {
+    buildCardViewProperties,
+    buildDetailField,
+    ResultListDefaultMode
+} from '@analytics-config/services/resultlist-form-builder/utils';
 import {AbstractControl, FormArray} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {marker} from '@colsen1991/ngx-translate-extract-marker';
@@ -64,7 +67,7 @@ interface ResultListConfigFeederOptions {
 interface DataStep {
     collection: SelectFormControl;
     defaultMode: ButtonToggleFormControl;
-    cardViewProperties: FormArray;
+    cardViewProperties: FormArray<ResultListCardLineFormGroup>;
     columns: FormArray;
     grid: {
         aHasGridView: SlideToggleFormControl;
@@ -203,10 +206,33 @@ export class ResultListInputsFeeder {
                 control: this.dataStep.grid.aHasGridView
             },
             {
-                value: this.options.input?.defaultMode ?? (this.options.input as any)?.defautMode, // Backward compat du to typo error
+                value: this.interopEnum(this.options.input?.defaultMode ??
+                    (this.options.input as any)?.defautMode), // Backward compat du to typo error
                 control: this.dataStep.defaultMode
             }
         ]);
+    }
+
+    // For retro compatibility; In previous conf the value passed to defaultMode was grid or list.
+    // But the value stand for an enum.
+    protected interopEnum(value: string){
+        const isNumeric = !Number.isNaN(Number(value)) && (''+value).trim() !== '';
+        if(isNumeric){
+            return value as unknown as ResultListDefaultMode;
+        }
+
+        switch (value) {
+            case 'grid' :
+                return ResultListDefaultMode.grid;
+
+            case 'list' :
+                return ResultListDefaultMode.list;
+
+            case 'card' :
+                return ResultListDefaultMode.card;
+            default:
+                return  ResultListDefaultMode.list;
+        }
     }
 
     // not present in analytics config that is why it is separate
@@ -227,7 +253,7 @@ export class ResultListInputsFeeder {
     }
 
     /**
-     * Methode to transform a visualisation link into a data group
+     * Method to transform a visualisation link into a data group
      * @private
      */
     private interopCode() {
@@ -613,20 +639,17 @@ export class AnalyticsResultListInputsFeeder extends ResultListInputsFeeder {
             {
                 value: this.options.contributor.fieldsConfiguration.idFieldName,
                 control: this.dataStep.idFieldName
-            }]);
-    }
-
-    public importGridStep() {
-        return this.imports([
+            },
             {
-                value: this.options.input?.defaultMode ?? (this.options.input as any)?.defautMode, // Backward compat due to typo error,
+                value:  this.interopEnum(this.options.input?.defaultMode
+                    ?? (this.options.input as any)?.defautMode), // Backward compat due to typo error,
                 control: this.dataStep.defaultMode
             },
             {
                 value: this.options.contributor.fieldsConfiguration.iconColorFieldName,
                 control: this.dataStep.grid.color.colorIdentifier
             },
-        ]);
+            ]);
     }
 
     public importContributorColumns(resultlistFormBuilder) {

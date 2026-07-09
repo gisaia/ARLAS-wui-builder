@@ -61,7 +61,7 @@ export class EditCardResultListComponent implements OnInit {
 
     /** Returns the list of card line form groups. */
     public get cards() {
-        return this.control.controls as Array<ResultListCardLineFormGroup>;
+        return this.control.controls ;
     }
 
     public ngOnInit() {

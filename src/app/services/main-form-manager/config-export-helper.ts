@@ -1036,7 +1036,7 @@ export class ConfigExportHelper {
 
         contrib.cardViewProperties = [];
         if(widgetData.dataStep?.cardViewProperties) {
-          (widgetData.dataStep.cardViewProperties).forEach((line) => {
+          widgetData.dataStep.cardViewProperties.forEach((line) => {
             line.fields.forEach(el => {
               contrib.cardViewProperties.push({
                 ...el
@@ -1130,7 +1130,7 @@ export class ConfigExportHelper {
 
       contrib.cardViewProperties = [];
       if(list.dataStep?.cardViewProperties){
-        (list.dataStep.cardViewProperties).forEach((line, index) => {
+        list.dataStep.cardViewProperties.forEach((line, index) => {
           line.fields.forEach(el => {
             contrib.cardViewProperties.push({
               ...el
@@ -1435,7 +1435,7 @@ export class ConfigExportHelper {
           hasListView: widgetData.dataStep?.columns.length > 0,
             hasCardView:  widgetData.dataStep?.cardViewProperties.length > 0,
           hasGridView: widgetData.dataStep.grid.aHasGridView,
-          defaultMode: widgetData.dataStep.defaultMode,
+          defaultMode: widgetData.dataStep.defaultMode.toString(),
           visualisationLink: widgetData.sactionStep.visualisationLink,
           downloadLink: widgetData.sactionStep.downloadLink,
           isBodyHidden: unmanagedRenderFields.isBodyHidden,

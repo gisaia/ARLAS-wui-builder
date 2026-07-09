@@ -1,6 +1,6 @@
 <div cdkDropListGroup>
-@for (lineFc of cards; track $index; let lineIndex = $index) {
-    <mat-card class="card-wrapper" appearance="outlined">
+    @for (lineFc of cards; track $index; let lineIndex = $index) {
+        <mat-card appearance="outlined" class="card-wrapper">
             <table #lineTable
                    (cdkDropListDropped)="drop($event, lineTable, lineIndex)"
                    [cdkDropListData]="lineFc.customControls.fields.controls"
@@ -10,7 +10,7 @@
                    class="card" mat-table>
                 <ng-container matColumnDef="action">
                     <th *matHeaderCellDef class="action" mat-header-cell>
-                        <div class="badge">{{$index + 1}}</div>
+                        <div class="badge">{{ $index + 1 }}</div>
                     </th>
                     <td *matCellDef="let field; let i = index" class="action" mat-cell>
                         <div class="action-wrapper">
@@ -19,13 +19,15 @@
                                 <mat-icon>delete</mat-icon>
                             </button>
                             @if (field.controls.sort.value === '') {
-                                <button (click)="setSort(lineIndex, i, field.controls.sort.value)" [matTooltip]="'Not sorted' | translate"
+                                <button (click)="setSort(lineIndex, i, field.controls.sort.value)"
+                                        [matTooltip]="'Not sorted' | translate"
                                         class="sort-disabled"
                                         mat-icon-button>
                                     <mat-icon>sync_alt</mat-icon>
                                 </button>
                             } @else {
-                                <button (click)="setSort(lineIndex, i, field.controls.sort.value)" [class.reversed]="field.controls.sort.value === 'desc'"
+                                <button (click)="setSort(lineIndex, i, field.controls.sort.value)"
+                                        [class.reversed]="field.controls.sort.value === 'desc'"
                                         [matTooltip]="field.controls.sort.value | translate"
                                         class="sort"
                                         mat-icon-button>
@@ -85,35 +87,44 @@
                 </ng-container>
 
                 <ng-container matColumnDef="delete">
-                    <th *matHeaderCellDef mat-header-cell><button class="delete__btn" mat-icon-button (click)="deleteLine(lineIndex)"><mat-icon [matTooltip]="'Delete line' | translate">delete</mat-icon></button></th>
+                    <th *matHeaderCellDef mat-header-cell>
+                        <button (click)="deleteLine(lineIndex)" class="delete__btn" mat-icon-button>
+                            <mat-icon [matTooltip]="'Delete line' | translate">delete</mat-icon>
+                        </button>
+                    </th>
                     <td *matCellDef="let field" class="name" mat-cell>
                     </td>
                 </ng-container>
 
                 <tr *matHeaderRowDef="displayedColumns; sticky: true" mat-header-row></tr>
-                <tr (cdkDragStarted)="dragStarted($event, lineTable)" *matRowDef="let row; columns: displayedColumns;let rowIndex = index"
+                <tr (cdkDragStarted)="dragStarted($event, lineTable)"
+                    *matRowDef="let row; columns: displayedColumns;let rowIndex = index"
                     cdkDrag
                     class="column-drag" mat-row></tr>
             </table>
 
-        @if (lineFc.touched && lineFc?.invalid) {
-            <mat-error>{{ 'At least one field is required' | translate }}
-            </mat-error>
-        }
-        <div class="button-wrapper">
-            <button (click)="addField(lineIndex,lineTable)" [matTooltip]="'Add a field' | translate" color="primary"
-                    matButton="outlined" type="button">
-                <mat-icon>add</mat-icon>
-                {{ 'Add a field' | translate }}
-            </button>
-        </div>
-    </mat-card>
-}
+            @if (lineFc.touched && lineFc?.invalid && lineFc.customControls.fields.length === 0) {
+                <mat-error>{{ 'At least one field is required' | translate }}
+                </mat-error>
+            }
+            @if (lineFc.touched && lineFc?.invalid && lineFc.customControls.fields.length > 0) {
+                <mat-error>{{ 'Required fields must be filled out' | translate }}
+                </mat-error>
+            }
+            <div class="button-wrapper">
+                <button (click)="addField(lineIndex,lineTable)" [matTooltip]="'Add a field' | translate" color="primary"
+                        matButton="outlined" type="button">
+                    <mat-icon>add</mat-icon>
+                    {{ 'Add a field' | translate }}
+                </button>
+            </div>
+        </mat-card>
+    }
 </div>
 <div class="add-line-button-wrapper">
-    <button matButton="outlined" color="primary" [disabled]="cards.length === maxLine" (click)="addLine()"
-            [matTooltip]="'Add a line' | translate" type="button">
+    <button (click)="addLine()" [disabled]="cards.length === maxLine" [matTooltip]="'Add a line' | translate" color="primary"
+            matButton="outlined" type="button">
         <mat-icon>add</mat-icon>
-        {{'Add a line' | translate}}
+        {{ 'Add a line' | translate }}
     </button>
 </div>
