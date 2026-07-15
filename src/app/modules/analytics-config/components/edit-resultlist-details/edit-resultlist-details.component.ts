@@ -19,7 +19,7 @@
 import { ResultlistDetailFormGroup } from '@analytics-config/services/resultlist-form-builder/form-group';
 import { buildDetailField } from '@analytics-config/services/resultlist-form-builder/utils';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -50,23 +50,21 @@ import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 export class EditResultlistDetailsComponent implements OnInit {
   private readonly collectionService = inject(CollectionService);
 
-  @Input() public control: FormArray;
-  @Input() public collection: SelectFormControl;
+  public control = input.required<FormArray<ResultlistDetailFormGroup>>();
+  public collection = input.required<SelectFormControl>();
 
   public ngOnInit() {
-    if (!!this.collection) {
-      this.collection.valueChanges.subscribe(c => {
-        (this.control as FormArray).clear();
-      });
-    }
+    this.collection().valueChanges.subscribe(c => {
+      this.control().clear();
+    });
   }
 
   public addDetail() {
-    this.control.push(new ResultlistDetailFormGroup());
+    this.control().push(new ResultlistDetailFormGroup());
   }
 
   public deleteDetail(detailIndex: number) {
-    this.control.removeAt(detailIndex);
+    this.control().removeAt(detailIndex);
   }
 
   public deleteField(detailIndex: number, fieldIndex: number) {
@@ -75,16 +73,16 @@ export class EditResultlistDetailsComponent implements OnInit {
 
   public addField(detailIndex: number) {
     this.getDetail(detailIndex).customControls.fields.push(
-      buildDetailField(this.collectionService, this.collection.value));
+      buildDetailField(this.collectionService, this.collection().value));
   }
 
   public get details() {
-    return this.control.controls as Array<ResultlistDetailFormGroup>;
+    return this.control().controls;
   }
 
-  public getDetail = (detailIndex: number) => this.control.at(detailIndex) as ResultlistDetailFormGroup;
+  public getDetail = (detailIndex: number) => this.control().at(detailIndex);
   public getFields = (detailIndex: number) => this.getDetail(detailIndex).customControls.fields.controls;
 
-  public drop = (event: CdkDragDrop<string[]>) => moveItemInFormArray(event.previousIndex, event.currentIndex, this.control);
+  public drop = (event: CdkDragDrop<string[]>) => moveItemInFormArray(event.previousIndex, event.currentIndex, this.control());
 
 }

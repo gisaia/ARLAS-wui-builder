@@ -1,0 +1,13 @@
+diff --git a/node_modules/arlas-wui-toolkit/fesm2022/arlas-wui-toolkit.mjs b/node_modules/arlas-wui-toolkit/fesm2022/arlas-wui-toolkit.mjs
+index d669699..02cac10 100644
+--- a/node_modules/arlas-wui-toolkit/fesm2022/arlas-wui-toolkit.mjs
++++ b/node_modules/arlas-wui-toolkit/fesm2022/arlas-wui-toolkit.mjs
+@@ -47,7 +47,7 @@ import * as i2$1 from 'arlas-iam-api';
+ import { DefaultApi, Configuration as Configuration$3 } from 'arlas-iam-api';
+ import { ArlasMapComponent, ARLAS_VSET, LayerIdToName, GeoQueryOperator } from 'arlas-map';
+ import * as i1$7 from 'arlas-web-components';
+-import { HistogramComponent, PowerbarsComponent, DonutComponent, MetricComponent, MetricsTableComponent, BaseCollectionService, FormatNumberPipe, GetCollectionUnitPipe, Position, DataType, ChartType, CellBackgroundStyleEnum, ResultListComponent, CalendarTimelineComponent, GetCollectionDisplayNamePipe, ColorGeneratorLoader, CollectionModule, ColorGeneratorModule, ShortenNumberPipe, PROTECTED_REQUEST_HEADER } from 'arlas-web-components';
++import { HistogramComponent, PowerbarsComponent, DonutComponent, MetricComponent, MetricsTableComponent, BaseCollectionService, FormatNumberPipe, GetCollectionUnitPipe, CellBackgroundStyleEnum, ResultListComponent, CalendarTimelineComponent, GetCollectionDisplayNamePipe, ColorGeneratorLoader, CollectionModule, ColorGeneratorModule, ShortenNumberPipe, PROTECTED_REQUEST_HEADER } from 'arlas-web-components';
+ import * as rootContributorConfSchema from 'arlas-web-contributors/jsonSchemas/rootContributorConf.schema.json' with { type: 'json' };
+ import YAML from 'js-yaml';
+ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';

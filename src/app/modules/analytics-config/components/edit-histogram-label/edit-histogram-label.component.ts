@@ -16,9 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { BucketsIntervalFormGroup } from '@analytics-config/services/buckets-interval-form-builder/buckets-interval-form-builder.service';
+import { MetricCollectFormGroup } from '@analytics-config/services/metric-collect-form-builder/metric-collect-form-builder.service';
 import { AsyncPipe } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { Component, computed, input, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, FormArray, FormControl } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -26,6 +28,7 @@ import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
+import { SelectFormControl } from '@shared-models/config-form';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
 interface LabelConfig {
@@ -53,60 +56,56 @@ interface LabelConfig {
     ]
 })
 export class EditHistogramLabelComponent implements OnInit, OnDestroy {
-    /**
-     * field from parent form control
-     */
-    @Input() public dataStep: { aggregation: FormGroup; metric: FormGroup; collection: FormControl; };
-    /**
-     * field from parent form control
-     */
-    @Input() public unmanagedFieldRenderStep: {
+
+    public dataStep = input.required<{ aggregation: BucketsIntervalFormGroup; metric: MetricCollectFormGroup; collection: SelectFormControl; }>();
+
+    public unmanagedFieldRenderStep = input.required<{
         chartXLabel: FormControl;
         chartYLabel: FormControl;
         xUnit: FormControl;
         yUnit: FormControl;
-    };
-    @Input() public data: LabelConfig[];
+    }>();
+
+    public data: LabelConfig[] = [];
+
     public displayedColumns = ['recap', 'fieldLabel', 'fieldColumn', 'fieldUnits'];
     /**
      *  X axis config
      * @protected
      */
-    protected xAxisConfig: LabelConfig;
+    protected xAxisConfig!: LabelConfig;
     /**
      *  Y axis config
      * @protected
      */
-    protected yAxisConfig: LabelConfig;
+    protected yAxisConfig!: LabelConfig;
     /**
      * Get lookAndField value to listen collection unit change
      * @protected
      */
-    protected lookAndFeelFormControl: AbstractControl<any>;
+    protected lookAndFeelFormControl?: AbstractControl<any>;
     /**
      * Comparing value
      * @protected
      */
-    protected currentCollectionName: string;
+    protected currentCollectionName = computed(() => this.dataStep().collection.value);
 
-    private _destroyed$ = new Subject();
+    private readonly _destroyed$ = new Subject();
 
-    public constructor(private mainFromService: MainFormService) {
+    public constructor(private readonly mainFromService: MainFormService) {
     }
 
     public ngOnInit(): void {
-      if (!this.dataStep && !this.unmanagedFieldRenderStep) {
+      if (!this.dataStep() && !this.unmanagedFieldRenderStep()) {
         console.error('no config found');
         return;
       }
 
-      this.currentCollectionName = this.dataStep.collection.value;
-
       this.xAxisConfig = {
         title: marker('x-Axis'),
-        dataFieldValue: this.dataStep.aggregation.get('aggregationField'),
-        labelControl: this.unmanagedFieldRenderStep.chartXLabel,
-        unitControl: this.unmanagedFieldRenderStep.xUnit,
+        dataFieldValue: this.dataStep().aggregation.customControls.aggregationField,
+        labelControl: this.unmanagedFieldRenderStep().chartXLabel,
+        unitControl: this.unmanagedFieldRenderStep().xUnit,
         hint: new BehaviorSubject(''),
         infoMessage: new BehaviorSubject(''),
         displayUnitControl: new BehaviorSubject(true)
@@ -114,10 +113,10 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
 
       this.yAxisConfig = {
         title: marker('y-Axis'),
-        dataFieldValue: this.dataStep.metric.get('metricCollectField'),
-        dataFieldFunction: this.dataStep.metric.get('metricCollectFunction'),
-        labelControl: this.unmanagedFieldRenderStep.chartYLabel,
-        unitControl: this.unmanagedFieldRenderStep.yUnit,
+        dataFieldValue: this.dataStep().metric.customControls.metricCollectField,
+        dataFieldFunction: this.dataStep().metric.customControls.metricCollectFunction,
+        labelControl: this.unmanagedFieldRenderStep().chartYLabel,
+        unitControl: this.unmanagedFieldRenderStep().yUnit,
         hint: new BehaviorSubject(''),
         infoMessage: new BehaviorSubject(''),
         displayUnitControl: new BehaviorSubject(true)
@@ -142,7 +141,7 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
      */
     private listenChanges() {
       combineLatest([
-        this.dataStep.aggregation.get('aggregationFieldType').valueChanges,
+        this.dataStep().aggregation.customControls.aggregationFieldType.valueChanges,
         this.xAxisConfig.dataFieldValue.valueChanges
       ])
         .pipe(
@@ -156,9 +155,10 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
             this.enableXUnitField();
           }
         });
+
       combineLatest([
         this.yAxisConfig.dataFieldValue.valueChanges,
-        this.yAxisConfig.dataFieldFunction.valueChanges
+        this.yAxisConfig.dataFieldFunction?.valueChanges
       ])
         .pipe(
           takeUntil(this._destroyed$),
@@ -174,7 +174,7 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
           }
         });
 
-      this.dataStep.collection.valueChanges
+      this.dataStep().collection.valueChanges
         .pipe(
           takeUntil(this._destroyed$),
           distinctUntilChanged()
@@ -188,28 +188,28 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
     }
 
     private getLookAndFeelControl() {
-      if (!this.lookAndFeelFormControl || this.currentCollectionName !== this.dataStep.collection.value) {
-        this.currentCollectionName = this.dataStep.collection.value;
+      if (!this.lookAndFeelFormControl || this.currentCollectionName !== this.dataStep().collection.value) {
+        this.currentCollectionName = this.dataStep().collection.value;
         const globalFormGroup = this.mainFromService.lookAndFeelConfig.getGlobalFg();
         const lookAndFeelFormControl = (<FormArray>globalFormGroup.customControls.units.value).controls
-          .filter(c => c.value.collection === this.dataStep.collection.value);
+          .filter(c => c.value.collection === this.dataStep().collection.value);
         this.lookAndFeelFormControl = lookAndFeelFormControl[0] ?? null;
       }
     }
 
     private xFieldIsDate() {
-      return this.dataStep.aggregation.get('aggregationFieldType').value === 'time';
+      return this.dataStep().aggregation.customControls.aggregationFieldType.value === 'time';
     }
 
     private metricCollectionIsCount() {
-      return this.yAxisConfig.dataFieldFunction.value === 'Count';
+      return this.yAxisConfig.dataFieldFunction?.value === 'Count';
     }
 
     private disableXUnitField() {
-      this.xAxisConfig.displayUnitControl.next(false);
+      this.xAxisConfig.displayUnitControl?.next(false);
       this.xAxisConfig.unitControl.disable();
-      this.xAxisConfig.hint.next(marker('Managed by ARLAS'));
-      this.xAxisConfig.infoMessage.next(marker('Filled by ARLAS'));
+      this.xAxisConfig.hint?.next(marker('Managed by ARLAS'));
+      this.xAxisConfig.infoMessage?.next(marker('Filled by ARLAS'));
     }
 
     private enableXUnitField() {
@@ -218,7 +218,7 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
 
     private disableYUnitField() {
       this.yAxisConfig.unitControl.disable();
-      this.yAxisConfig.infoMessage.next(marker('Field set by unit collection in look and feel'));
+      this.yAxisConfig.infoMessage?.next(marker('Field set by unit collection in look and feel'));
     }
 
     private enableYUnitField() {
@@ -227,15 +227,15 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
 
     private setYUnitFieldWithCollectionUnit() {
       this.getLookAndFeelControl();
-      const collectionUnit = this.lookAndFeelFormControl?.value.unit ?? this.dataStep.collection.value;
+      const collectionUnit = this.lookAndFeelFormControl?.value.unit ?? this.dataStep().collection.value;
       this.yAxisConfig.unitControl.setValue(collectionUnit);
     }
 
     private resetXAxisConfig(value?: string) {
-      this.xAxisConfig.displayUnitControl.next(true);
+      this.xAxisConfig.displayUnitControl?.next(true);
       this.xAxisConfig.labelControl.setValue('');
-      this.xAxisConfig.infoMessage.next('');
-      this.xAxisConfig.hint.next('');
+      this.xAxisConfig.infoMessage?.next('');
+      this.xAxisConfig.hint?.next('');
       if (value) {
         this.xAxisConfig.unitControl.setValue(value);
       } else {
@@ -244,10 +244,10 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
     }
 
     private resetYAxisConfig(value?: string) {
-      this.yAxisConfig.displayUnitControl.next(true);
+      this.yAxisConfig.displayUnitControl?.next(true);
       this.yAxisConfig.labelControl.setValue('');
-      this.yAxisConfig.infoMessage.next('');
-      this.yAxisConfig.hint.next('');
+      this.yAxisConfig.infoMessage?.next('');
+      this.yAxisConfig.hint?.next('');
       if (value) {
         this.yAxisConfig.unitControl.setValue(value);
       } else {

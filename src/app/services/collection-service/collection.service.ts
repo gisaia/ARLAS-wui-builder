@@ -281,7 +281,7 @@ export class CollectionService {
     ).finally(() => this.spinner.hide()));
   }
 
-  public buildGroupCollectionItems(items: CollectionItem[], currentOrg: string): GroupCollectionItem {
+  public buildGroupCollectionItems(items: CollectionItem[], currentOrg: string | undefined): GroupCollectionItem {
     const groupCollection = items.reduce((acc, item) => {
       if (!!currentOrg && currentOrg.length > 0) {
         if (item.isPublic && item.owner !== currentOrg) {

@@ -5,17 +5,17 @@
   </ngx-spinner>
   <h2 mat-dialog-title>{{'New dashboard' | translate}}</h2>
   <mat-dialog-content class="new-config-content">
-    <div [formGroup]="mainFormService.startingConfig.getFg()">
+    <div [formGroup]="startForm">
       <arlas-config-element [fullSize]="true">
         <div form-fields class="server-url">
           @if (data.isAuthentActivated && data.authentMode === 'iam') {
-            <mat-checkbox [disabled]="mainFormService.startingConfig.getFg().get('serverUrl').invalid"
+            <mat-checkbox [disabled]="startForm.customControls.serverUrl?.invalid"
               (change)="toggleDisplayPublic($event)" class="include-public">
             {{'Include public collections' | translate}}</mat-checkbox>
           }
           <button
-            (click)="mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
-            [disabled]="mainFormService.startingConfig.getFg().get('serverUrl').invalid"
+            (click)="startForm.customControls.serverUrl?.valid ? checkUrl() : false"
+            [disabled]="startForm.customControls.serverUrl?.invalid"
             matButton="outlined" color="primary">{{'Reload collections' | translate}}</button>
         </div>
       </arlas-config-element>
@@ -48,7 +48,7 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button matButton="outlined" (click)="configChoice = InitialChoice.none; cancel()">{{'Back' | translate}}</button>
-    <button (click)="saveConfig()" [disabled]="mainFormService.startingConfig.getFg().invalid"
+    <button (click)="saveConfig()" [disabled]="startForm.invalid"
       matButton="filled" color="primary">{{'Start' | translate}}</button>
   </mat-dialog-actions>
 }
@@ -61,7 +61,7 @@
         <!-- No material file input exists, so we hide the basic input behind a material button -->
         <button type="button" matButton="outlined" color="primary" (click)="confFileInput.click()">
           {{ 'Select a config.json file' | translate }}
-          @if (confFileInput.files.length) {
+          @if (confFileInput.files && confFileInput.files.length > 0) {
             <span class="upload-check">
               <mat-icon>check</mat-icon>
             </span>
@@ -74,7 +74,7 @@
         <!-- No material file input exists, so we hide the basic input behind a material button -->
         <button type="button" matButton="outlined" color="primary" (click)="mapFileInput.click()">
           {{ 'Select a config.map.json file' | translate }}
-          @if (mapFileInput.files.length) {
+          @if (mapFileInput.files && mapFileInput.files.length > 0) {
             <span class="upload-check">
               <mat-icon>check</mat-icon>
             </span>
@@ -87,8 +87,8 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button matButton="outlined" (click)="configChoice = InitialChoice.none;cancel()">{{'Back' | translate}}</button>
-    <button (click)="upload(confFileInput.files[0], mapFileInput.files[0]);"
-        [disabled]="!confFileInput.files.length || !mapFileInput.files.length" matButton="filled" color="primary">
+    <button (click)="upload(confFileInput.files?.[0], mapFileInput.files?.[0]);"
+        [disabled]="!confFileInput.files?.length || !mapFileInput.files?.length" matButton="filled" color="primary">
       {{'Start' | translate}}</button>
   </mat-dialog-actions>
 }

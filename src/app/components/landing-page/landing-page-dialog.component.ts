@@ -23,7 +23,7 @@ import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { MatOptionModule } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -72,18 +72,20 @@ export class LandingPageDialogComponent implements OnInit {
 
   public configChoice = InitialChoice.none;
   public isServerReady = false;
-  public availableCollections: GroupCollectionItem;
+  public availableCollections?: GroupCollectionItem;
   public InitialChoice = InitialChoice;
 
   public displayedColumns: string[] = ['id', 'creation', 'detail'];
   public includePublicCollection = false;
+
+  protected readonly startForm = this.mainFormService.startingConfig.getFg();
 
   private readonly destroyRef = inject(DestroyRef);
 
   public constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialogRef: MatDialogRef<LandingPageDialogComponent>,
-    public mainFormService: MainFormService,
+    private readonly mainFormService: MainFormService,
     private readonly http: HttpClient,
     private readonly logger: NGXLogger,
     public startupService: StartupService,
@@ -129,7 +131,7 @@ export class LandingPageDialogComponent implements OnInit {
     }
   }
 
-  private resolveServerUrl(serverUrl, baseUrl) {
+  private resolveServerUrl(serverUrl: string, baseUrl: string) {
     try {
       return new URL(serverUrl, baseUrl).toString();
     } catch {
@@ -140,7 +142,7 @@ export class LandingPageDialogComponent implements OnInit {
 
   public checkUrl() {
     this.spinner.show('connectServer');
-    const serverUrl = this.mainFormService.startingConfig.getFg().get('serverUrl').value;
+    const serverUrl = this.mainFormService.startingConfig.getFg().customControls.serverUrl?.value;
     const resolvedServerUrl = this.resolveServerUrl(serverUrl, window.location.origin);
     this.http.get(resolvedServerUrl + '/openapi.json')
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -164,8 +166,8 @@ export class LandingPageDialogComponent implements OnInit {
                       .map(c => ({
                         name: c.collection_name,
                         isPublic: !this.data.isAuthentActivated ? true : (c.params.organisations as any)?.public === true,
-                        sharedWith: c.params.organisations?.shared,
-                        owner: c.params.organisations?.owner
+                        sharedWith: c.params.organisations?.shared ?? [],
+                        owner: c.params.organisations?.owner as string
                       }));
                     this.availableCollections = this.collectionService.buildGroupCollectionItems(collectionsItems, this.data.currentOrga);
                     this.collectionService.setGroupCollectionItems(this.availableCollections);
@@ -191,20 +193,23 @@ export class LandingPageDialogComponent implements OnInit {
   }
 
   public saveConfig() {
-    const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().customControls.collection.value;
+    const collection = this.dialogRef.componentInstance.mainFormService.startingConfig.getFg().customControls.collection?.value;
     this.startupService.setDefaultCollection(collection);
     this.mainFormManager.initMainModulesForms(true);
-    setTimeout(() => this.landingPageService.startingEvent(null), 100);
+    setTimeout(() => this.landingPageService.startingEvent(false), 100);
   }
 
 
-  public upload(configFile: File, mapConfigFile: File) {
+  public upload(configFile: File | undefined, mapConfigFile: File | undefined) {
+    if (!configFile || !mapConfigFile) {
+      return;
+    }
 
     const readAndParsePromise = (file: File) => new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.onload = (e) => {
         try {
-          resolve(JSON.parse(fileReader.result.toString()));
+          resolve(JSON.parse((fileReader.result ?? '').toString()));
         } catch (excp) {
           reject(excp);
         }
@@ -233,15 +238,7 @@ export class LandingPageDialogComponent implements OnInit {
     this.router.navigate(['/collection']);
   }
 
-  public openPersistenceManagement(event) {
-    if (this.persistenceService.isAvailable) {
-      this.configChoice = InitialChoice.load;
-    } else {
-      event.stopPropagation();
-    }
-  }
-
-  public toggleDisplayPublic(event) {
+  public toggleDisplayPublic(event: MatCheckboxChange) {
     this.includePublicCollection = event.checked;
     this.checkUrl();
   }
@@ -259,6 +256,6 @@ export class LandingPageDialogComponent implements OnInit {
     mapKeyToOrder.set('shared', 1);
     mapKeyToOrder.set('public', 2);
     mapKeyToOrder.set('collections', 3);
-    return mapKeyToOrder.get(a.key) - mapKeyToOrder.get(b.key) > 0 ? 1 : -1;
+    return <number>mapKeyToOrder.get(a.key) - <number>mapKeyToOrder.get(b.key) > 0 ? 1 : -1;
   };
 }

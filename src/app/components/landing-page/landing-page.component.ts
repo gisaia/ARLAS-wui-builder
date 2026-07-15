@@ -19,7 +19,7 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
@@ -75,7 +75,6 @@ export interface Configuration {
 export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly cdr = inject(ChangeDetectorRef);
 
-  public dialogRef: MatDialogRef<LandingPageDialogComponent>;
   public displayedColumns: string[] = ['id', 'creation', 'detail'];
 
   private confId = '-1';
@@ -84,11 +83,11 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
   public configurationsLength = 0;
   public configPageNumber = 0;
   public configPageSize = 5;
-  public configChoice;
-  public availablesCollections: string[];
+  public configChoice?: InitialChoice;
+  public availablesCollections: string[] = [];
   public InitialChoice = InitialChoice;
 
-  public authentMode = 'false';
+  public authentMode?: 'openid' | 'iam';
 
   public isAuthenticated = false;
   public isAuthentActivated = false;
@@ -97,8 +96,9 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public canCreateForCurrentOrg = false; // Whether the buttons to CREATE / IMPORT a dashboard are displayed
 
-  private subscription: Subscription;
-  private refreshSubscription: Subscription;
+  private subscription?: Subscription;
+  private refreshSubscription?: Subscription;
+
   public constructor(
     private readonly startupService: StartupService,
     public persistenceService: PersistenceService,
@@ -133,7 +133,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     // Reset current config id
     this.mainFormService.configurationId = undefined;
     if (this.mainFormService.configChange) {
-      this.mainFormService.configChange.next({ id: undefined, name: undefined });
+      this.mainFormService.configChange.next(null);
     }
 
     this.mainFormService.startingConfig?.init(
@@ -142,8 +142,9 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mainFormService.resourcesConfig?.init(
       this.resourcesConfigFormBuilder.build()
     );
-    if (this.activatedRoute.snapshot.paramMap.has('id')) {
-      this.confId = this.activatedRoute.snapshot.paramMap.get('id');
+    const routeId = this.activatedRoute.snapshot.paramMap.get('id');
+    if (routeId) {
+      this.confId = routeId;
       this.loadConfig(this.confId);
     } else if (!!this.activatedRoute.snapshot.routeConfig && this.activatedRoute.snapshot.routeConfig.path === 'import') {
       this.configChoice = InitialChoice.load;
@@ -175,10 +176,10 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
           if (!!loginData) {
 
             this.isAuthenticated = true;
-            this.orgs = loginData.user.organisations.map(org => {
-              org.displayName = org.name === loginData.user.id ? loginData.user.email.split('@')[0] : org.name;
+            this.orgs = loginData.user?.organisations?.map(org => {
+              org.displayName = org.name === loginData.user?.id ? loginData.user?.email?.split('@')[0] : org.name;
               return org;
-            });
+            }) ?? [];
             this.currentOrga = this.arlasIamService.getOrganisation();
           } else {
             this.isAuthenticated = false;
@@ -202,10 +203,10 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  public openChoice(configChoice?) {
+  public openChoice(configChoice?: InitialChoice) {
     this.configChoice = configChoice;
     if (configChoice) {
-      this.dialogRef = this.dialog.open(LandingPageDialogComponent, {
+      this.dialog.open(LandingPageDialogComponent, {
         disableClose: true, width:'70vw', data:
           { message: this.confId, configChoice, authentMode: this.authentMode,
             currentOrga: this.currentOrga, isAuthentActivated: this.isAuthentActivated }
@@ -233,8 +234,8 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
       id: data.id,
       name: data.doc_key,
       value: data.doc_value,
-      readers: data.doc_readers,
-      writers: data.doc_writers,
+      readers: data.doc_readers ?? [],
+      writers: data.doc_writers ?? [],
       lastUpdate: +data.last_update_date,
       zone: data.doc_zone,
       org: this.arlasIamService.getOrganisation(),
@@ -328,14 +329,6 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.configPageNumber = pageEvent.pageIndex;
     this.configPageSize = pageEvent.pageSize;
     this.getConfigList();
-  }
-
-  public openPersistenceManagement(event) {
-    if (this.persistenceService.isAvailable) {
-      this.configChoice = InitialChoice.load;
-    } else {
-      event.stopPropagation();
-    }
   }
 
   public loadConfig(id: string) {

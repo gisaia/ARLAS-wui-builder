@@ -27,7 +27,7 @@ export class GroupCollectionPipe implements PipeTransform {
   public constructor(private translate: TranslateService,
   ) { }
 
-  public transform(group: 'owner' | 'shared' | 'public' | 'collections', org: string): string {
-    return this.translate.instant(group.toUpperCase().concat('_GROUP_TITLE'),{org});
+  public transform(group: 'owner' | 'shared' | 'public' | 'collections', org: string | undefined): string {
+    return this.translate.instant(group.toUpperCase().concat('_GROUP_TITLE'), {org});
   }
 }

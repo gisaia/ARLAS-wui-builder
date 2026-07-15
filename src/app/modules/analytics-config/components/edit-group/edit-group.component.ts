@@ -22,7 +22,7 @@ import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts
 import { CdkDragDrop, CdkDragEnter, CdkDragMove, DragDropModule } from '@angular/cdk/drag-drop';
 import { I18nPluralPipe } from '@angular/common';
 import {
-  ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild
+  ChangeDetectorRef, Component, computed, ElementRef, EventEmitter, input, Input, OnDestroy, OnInit, Output, ViewChild
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,7 +37,7 @@ import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { IconPickerModule } from '@gisaia-team/ngx-icon-picker';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
-import { AnalyticConfig } from '@services/main-form-manager/models-config';
+import { AnalyticComponentConfig, AnalyticConfig } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
@@ -68,7 +68,7 @@ import { WIDGET_TYPE } from './models';
   ]
 })
 export class AddWidgetDialogComponent {
-  public widgetType: string;
+  public widgetType?: string;
 
   public contentTypes: { label: WIDGET_TYPE; icon: string; iconType?: 'svg' | 'icon'; }[] = [
     { label: WIDGET_TYPE.histogram, icon: 'bar_chart', iconType: 'icon' },
@@ -115,15 +115,16 @@ export class AddWidgetDialogComponent {
 })
 export class EditGroupComponent implements OnInit, OnDestroy {
 
-  @Input() public formGroup: FormGroup<{
+  public formGroup = input.required<FormGroup<{
     content: FormArray<FormGroup<{widgetType: FormControl<WIDGET_TYPE>; widgetData: WidgetConfigFormGroup;}>>;
     contentType: FormControl<Array<WIDGET_TYPE>>;
     icon: FormControl<string>;
     itemPerLine: FormControl<number>;
     preview: FormControl<AnalyticConfig>;
     title: FormControl<string>;
-  }>;
-  @Input() public groupIndex: number;
+  }>>();
+
+  public groupIndex = input.required<number>();
   @Input() public updateDisplay: Subject<any> = new Subject();
   @Output() public remove = new EventEmitter();
   @ViewChild('dropListContainer') public dropListContainer?: ElementRef;
@@ -133,15 +134,15 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     dragIndex: number;
     dropIndex: number;
   };
-  public content: FormArray<FormGroup<{widgetType: FormControl<WIDGET_TYPE>; widgetData: WidgetConfigFormGroup;}>>;
-  public itemPerLine: number;
+  public content = computed(() => this.formGroup().controls.content);
+  public itemPerLine = computed(() => this.formGroup().value.itemPerLine ?? 1);
   public toUnsubscribe: Array<Subscription> = [];
 
 
-  private valuesChangesSub: Subscription;
-  private afterClosedAddSub: Subscription;
-  private afterClosedEditSub: Subscription;
-  private afterClosedconfirmSub: Subscription;
+  private valuesChangesSub?: Subscription;
+  private afterClosedAddSub?: Subscription;
+  private afterClosedEditSub?: Subscription;
+  private afterClosedconfirmSub?: Subscription;
 
   public constructor(
     private readonly dialog: MatDialog,
@@ -154,8 +155,6 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit() {
-    this.content = this.formGroup.controls.content;
-    this.itemPerLine = this.formGroup.value.itemPerLine !== null ? this.formGroup.value.itemPerLine : 1 ;
     this.resetWidgetsOnTypeChange();
   }
   /**
@@ -165,12 +164,12 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     this.valuesChangesSub = this.contentType.valueChanges.subscribe(values => {
       // if a widget is removed
       if (this.contentTypeValue.length < this.content.length) {
-        this.content.removeAt(this.content.length - 1);
+        this.content().removeAt(this.content.length - 1);
       } else {
         // if a new widget is added
         values.forEach((v, i) => {
           if (i === this.content.length) {
-            this.content.push(this.analyticsInitService.initNewWidget(v));
+            this.content().push(this.analyticsInitService.initNewWidget(v));
           }
         });
       }
@@ -186,7 +185,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
             this.contentTypeValue.push(result);
           }
           const finalResult = this.contentTypeValue ?? [result];
-          this.formGroup.controls.contentType.setValue(finalResult);
+          this.formGroup().controls.contentType.setValue(finalResult);
           this.editWidget(this.contentTypeValue.length - 1, this.main.getMainCollection(), true);
         }
       });
@@ -196,24 +195,24 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     this.dialog.open(ImportWidgetDialogComponent, { width: '550px' })
       .afterClosed().subscribe(result => {
         if (result) {
-          result[0].forEach(r => {
+          result[0].forEach((r: AnalyticComponentConfig) => {
             const type = r.componentType;
             if (this.contentTypeValue) {
               this.contentTypeValue.push(type);
             }
             const finalResult = this.contentTypeValue ?? [type];
-            this.formGroup.controls.contentType.setValue(finalResult);
+            this.formGroup().controls.contentType.setValue(finalResult);
             const widgetFg = this.analyticsImportService.importWidget(r, result[1])[0];
             widgetFg.patchValue(widgetFg.value);
             widgetFg.markAsPristine();
             widgetFg.markAllAsTouched();
             ConfigFormGroupComponent.listenToAllControlsOnDependencyChange(widgetFg.controls.widgetData as ConfigFormGroup,
               this.toUnsubscribe);
-            this.content.setControl(this.contentTypeValue.length - 1, widgetFg);
+            this.content().setControl(this.contentTypeValue.length - 1, widgetFg);
             const contrib = this.analyticsInitService.createContributor(
               widgetFg.value.widgetType,
               widgetFg.value.widgetData,
-              this.formGroup.controls.icon.value
+              this.formGroup().controls.icon.value
             );
 
             contrib.updateFromCollaboration({
@@ -229,7 +228,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   }
 
   public editWidget(widgetIndex: number, collection: string, newWidget?: boolean) {
-    const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup<{widgetType: FormControl; widgetData: FormControl;}>;
+    const widgetFg = this.content().get(widgetIndex.toString()) as FormGroup<{widgetType: FormControl; widgetData: FormControl;}>;
     let oldWidgetContributorId: string;
     if(!newWidget){
       oldWidgetContributorId = ConfigExportHelper.getContributorId(widgetFg.value.widgetData, widgetFg.value.widgetType);
@@ -249,7 +248,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
           const contrib = this.analyticsInitService.createContributor(
             widgetFg.value.widgetType,
             widgetFg.value.widgetData,
-            this.formGroup.controls.icon.value
+            this.formGroup().controls.icon.value
           );
           // If the new id of the contributor is different from the old one and it had a collaboration, remove it
           if (oldWidgetContributorId && contrib.identifier !== oldWidgetContributorId &&
@@ -269,9 +268,9 @@ export class EditGroupComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges();
         } else if (newWidget) {
           // delete a new created widget after clicking on cancel
-          this.content.removeAt(this.content.length - 1);
+          this.content().removeAt(this.content.length - 1);
           this.contentTypeValue.pop();
-          this.formGroup.controls.contentType.setValue(this.contentTypeValue);
+          this.formGroup().controls.contentType.setValue(this.contentTypeValue);
         }
       });
   }
@@ -285,7 +284,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     this.afterClosedconfirmSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // If it had a collaboration, remove it
-        const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup<{widgetType: FormControl; widgetData: FormControl;}>;
+        const widgetFg = this.content().get(widgetIndex.toString()) as FormGroup<{widgetType: FormControl; widgetData: FormControl;}>;
         const oldWidgetContributorId = ConfigExportHelper.getContributorId(widgetFg.value.widgetData, widgetFg.value.widgetType);
         if (this.collaborativeSearchService.collaborations.has(oldWidgetContributorId)) {
           this.collaborativeSearchService.collaborationBus.next({
@@ -296,24 +295,23 @@ export class EditGroupComponent implements OnInit, OnDestroy {
         }
 
         this.removeShortcut(widgetIndex);
-        this.content.removeAt(widgetIndex);
+        this.content().removeAt(widgetIndex);
         this.contentTypeValue.splice(widgetIndex, 1);
-        this.formGroup.controls.contentType.setValue(this.contentTypeValue);
+        this.formGroup().controls.contentType.setValue(this.contentTypeValue);
         this.updatePreview();
       }
     });
   }
 
   public onIconPickerSelect(icon: string): void {
-    this.formGroup.controls.icon.setValue(icon);
+    this.formGroup().controls.icon.setValue(icon);
     this.updatePreview();
   }
 
   public updatePreview() {
-    this.formGroup.controls.preview.setValue(null);
-    this.formGroup.controls.preview.setValue(
+    this.formGroup().controls.preview.setValue(
       ConfigExportHelper.getAnalyticsGroup('preview',
-        this.formGroup.value,
+        this.formGroup().value,
         this.analyticsInitService.groupIndex++,
         this.main.lookAndFeelConfig.getGlobalFg())
     );
@@ -337,7 +335,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getOtherWidgetIds(widgetIndex) {
+  public getOtherWidgetIds(widgetIndex: number) {
     return this.contentTypeValue
       .map((tab, i) => i)
       .filter(i => i !== widgetIndex)
@@ -345,16 +343,16 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
   }
   public drop(event: CdkDragDrop<string[]>) {
-    moveInFormArray(event.previousIndex, event.currentIndex, this.content);
+    moveInFormArray(event.previousIndex, event.currentIndex, this.content());
     this.updatePreview();
   }
 
   public get contentType() {
-    return this.formGroup.controls.contentType;
+    return this.formGroup().controls.contentType;
   }
 
   public get contentTypeValue() {
-    return this.formGroup.controls.contentType.value;
+    return this.formGroup().controls.contentType.value;
   }
 
   public dragEntered(event: CdkDragEnter<number>) {
@@ -404,7 +402,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
 
   public dragDropped(event: CdkDragDrop<number>) {
     if (!!this.dragDropInfo && this.dragDropInfo.dragIndex !== undefined && this.dragDropInfo.dropIndex !== undefined) {
-      moveInFormArray(this.dragDropInfo.dragIndex, this.dragDropInfo.dropIndex, this.content);
+      moveInFormArray(this.dragDropInfo.dragIndex, this.dragDropInfo.dropIndex, this.content());
       this.updatePreview();
     }
     if (!this.dropListReceiverElement) {
@@ -416,7 +414,7 @@ export class EditGroupComponent implements OnInit, OnDestroy {
   }
 
   private removeShortcut(widgetIndex: number) {
-    const widgetFg = this.content.get(widgetIndex.toString()) as FormGroup;
+    const widgetFg = this.content().get(widgetIndex.toString()) as FormGroup;
     const widgetConfigFg = widgetFg.controls.widgetData as WidgetConfigFormGroup;
     this.shortcutsService.removeShortcut(widgetConfigFg.uuidControl.value);
   }

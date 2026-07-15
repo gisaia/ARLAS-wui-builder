@@ -69,11 +69,11 @@ export const ARLAS_ID = 'arlas_id:';
 })
 export class MainFormService {
 
-  public configurationId: string;
+  public configurationId?: string;
 
-  public configurationName: string;
+  public configurationName?: string;
 
-  public configChange: Subject<{ id: string; name: string; }> = new Subject<{ id: string; name: string; }>();
+  public configChange = new Subject<{ id: string; name: string; } | null>();
 
   public mainForm = new FormGroup({
     [MAIN_FORM_KEYS.STARTING_CONFIG]: new FormGroup({}),

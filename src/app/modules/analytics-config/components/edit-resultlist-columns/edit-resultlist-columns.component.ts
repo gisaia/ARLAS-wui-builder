@@ -20,12 +20,12 @@ import {
   ResultlistColumnFormGroup, ResultlistFormBuilderService
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, input, OnInit, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatError } from '@angular/material/select';
-import { MatTableModule } from '@angular/material/table';
+import { MatTable, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
@@ -48,59 +48,57 @@ import { SelectFormControl } from '@shared-models/config-form';
 })
 export class EditResultlistColumnsComponent implements OnInit {
 
-  @Input() public control: FormArray;
-  @Input() public collection: SelectFormControl;
-  @ViewChild('columnTable', { static: true }) public columnTable;
+  public control = input.required<FormArray<ResultlistColumnFormGroup>>();
+  public collection = input.required<SelectFormControl>();
+  @ViewChild('columnTable', { static: true }) public columnTable?: MatTable<any>;
 
   public dragDisabled = true;
 
   public displayedColumns: string[] = ['action', 'name', 'field', 'unit', 'process', 'colorService'];
 
   public constructor(
-    private resultlistFormBuilder: ResultlistFormBuilderService
+    private readonly resultlistFormBuilder: ResultlistFormBuilderService
   ) {
   }
 
   public ngOnInit() {
-    if (!!this.collection) {
-      this.collection.valueChanges.subscribe(c => {
-        (this.control as FormArray).clear();
-      });
-    }
+    this.collection().valueChanges.subscribe(c => {
+      this.control().clear();
+    });
   }
 
   public addColumn(collection: string) {
-    this.control.push(this.resultlistFormBuilder.buildColumn(collection));
-    this.columnTable.renderRows();
+    this.control().push(this.resultlistFormBuilder.buildColumn(collection));
+    this.columnTable?.renderRows();
   }
 
   public deleteColumn(colIndex: number) {
-    this.control.removeAt(colIndex);
-    this.columnTable.renderRows();
+    this.control().removeAt(colIndex);
+    this.columnTable?.renderRows();
   }
 
   public get columns() {
-    return this.control.controls as Array<ResultlistColumnFormGroup>;
+    return this.control().controls;
   }
 
   public drop(event: CdkDragDrop<any[]>) {
-    const previousIndex = this.control.controls.findIndex(row => row === event.item.data);
-    moveItemInArray(this.control.controls, previousIndex, event.currentIndex);
-    this.columnTable.renderRows();
+    const previousIndex = this.control().controls.findIndex(row => row === event.item.data);
+    moveItemInArray(this.control().controls, previousIndex, event.currentIndex);
+    this.columnTable?.renderRows();
   }
 
-  public dragStarted(event) {
+  public dragStarted() {
     this.dragDisabled = true;
   }
 
-  public setSort(index, sort: string) {
-    this.control.controls.forEach( c => c.get('sort').setValue(''));
+  public setSort(index: number, sort: string) {
+    this.control().controls.forEach(c => c.customControls.sort.setValue(''));
     if (sort === '') {
-      this.control.controls[index].get('sort').setValue('asc');
+      this.control().controls[index].customControls.sort.setValue('asc');
     } else if (sort === 'asc') {
-      this.control.controls[index].get('sort').setValue('desc');
+      this.control().controls[index].customControls.sort.setValue('desc');
     } else {
-      this.control.controls[index].get('sort').setValue('');
+      this.control().controls[index].customControls.sort.setValue('');
     }
   }
 }

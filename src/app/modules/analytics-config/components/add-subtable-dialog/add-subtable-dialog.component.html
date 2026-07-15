@@ -34,11 +34,11 @@
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (cdkDragStarted)="dragStarted($event)" cdkDrag
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (cdkDragStarted)="dragStarted()" cdkDrag
       [cdkDragData]="row" class="column-drag"></tr>
     </table>
   </div>
-  @if (columns.touched && columns?.hasError('required')) {
+  @if (columns.touched && columns.hasError('required')) {
     <mat-error>{{'At least one column is required' | translate}}</mat-error>
   }
   <div class="button-wrapper">

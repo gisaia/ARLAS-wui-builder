@@ -1,6 +1,6 @@
 <div class="columns-wrapper">
-  <table #columnTable mat-table [dataSource]="control.controls" class="columns" cdkDropList
-    [cdkDropListData]="control.controls" (cdkDropListDropped)="drop($event)"
+  <table #columnTable mat-table [dataSource]="control().controls" class="columns" cdkDropList
+    [cdkDropListData]="control().controls" (cdkDropListDropped)="drop($event)"
     [cdkDropListDisabled]="dragDisabled" [cdkDropListLockAxis]="'y'">
 
     <ng-container matColumnDef="action">
@@ -66,17 +66,17 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (cdkDragStarted)="dragStarted($event)" cdkDrag
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (cdkDragStarted)="dragStarted()" cdkDrag
     [cdkDragData]="row" class="column-drag"></tr>
   </table>
 </div>
 
-@if (control.touched && control?.hasError('required')) {
+@if (control().touched && control().hasError('required')) {
   <mat-error>{{'At least one column is required' | translate}}
   </mat-error>
 }
 <div class="button-wrapper">
-  <button matButton="outlined" color="primary" (click)="addColumn(collection.value)"
+  <button matButton="outlined" color="primary" (click)="addColumn(collection().value)"
     [matTooltip]="'Add a column' | translate" type="button">
     <mat-icon>add</mat-icon>
     {{'Add a column' | translate}}

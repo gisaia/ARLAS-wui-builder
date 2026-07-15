@@ -17,6 +17,7 @@
  * under the License.
  */
 import { Component, OnInit } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -76,11 +77,11 @@ export class LeftMenuComponent implements OnInit {
     this.pages
       .filter(p => !!p.control && p.control.invalid && isFullyTouched(p.control))
       .forEach(p =>
-        this.nbErrorsByPage.set(p.name, getNbErrorsInControl(p.control))
+        this.nbErrorsByPage.set(p.name, getNbErrorsInControl(p.control as AbstractControl))
       );
   }
 
-  public save(event) {
+  public save(event: Event) {
     if (this.persistenceService.isAvailable) {
       this.mainFormManager.attemptExport(EXPORT_TYPE.persistence);
       this.updateNbErrors();

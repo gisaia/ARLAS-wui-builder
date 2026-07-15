@@ -18,7 +18,7 @@
         </div>
       </div>
       <div class="fields-wrapper">
-        @if (getDetail(di)?.get('fields').touched && getDetail(di)?.get('fields')?.hasError('required')) {
+        @if (getDetail(di).customControls.fields.touched && getDetail(di).customControls.fields.hasError('required')) {
           <mat-error>
             {{'At least one field is required within a detail' | translate}}
           </mat-error>

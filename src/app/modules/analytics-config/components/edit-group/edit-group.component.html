@@ -1,11 +1,11 @@
-<div class="group-wrapper" [formGroup]="formGroup">
+<div class="group-wrapper" [formGroup]="formGroup()">
   <div class="edit-group">
     <div class="edit-group-form">
       <div class="fields">
         <div class="icon">
           <mat-icon matPrefix style="cursor: pointer;" (click)="iconInput.click()">
-            {{formGroup.controls.icon.value}}</mat-icon>
-          <input class="icon-picker-input" #iconInput matInput formControlName="icon" [iconPicker]="formGroup.controls.icon.value"
+            {{formGroup().controls.icon.value}}</mat-icon>
+          <input class="icon-picker-input" #iconInput matInput formControlName="icon" [iconPicker]="formGroup().controls.icon.value"
             [ipIconPack]="['mat']" [ipFallbackIcon]="'poll'" [ipPosition]="'right'" [ipIconSize]="'24px'"
             [ipButtonStyleClass]="'mat-raised-button'" [ipMaxHeight]="'300px'" [ipWidth]="'467px'"
             (iconPickerSelect)="onIconPickerSelect($event)" />
@@ -33,7 +33,7 @@
             </mat-button-toggle>
           </mat-button-toggle-group>
         </div>
-        @if (formGroup.controls.content.touched && formGroup.controls.content.invalid) {
+        @if (formGroup().controls.content.touched && formGroup().controls.content.invalid) {
           <div>
             <mat-error>
               {{ contentTypeValue.length | i18nPlural:{
@@ -45,7 +45,7 @@
         }
       </div>
       <div class="edit-widgets" #dropListContainer cdkDropListGroup>
-        @for (control of content?.controls; track $index; let ci = $index) {
+        @for (control of content().controls; track $index; let ci = $index) {
           <div class="container" [id]="'widget-' + groupIndex + '-' + ci"
               cdkDropList [cdkDropListData]="ci">
             <div cdkDrag [cdkDragData]="ci" (cdkDragEntered)="dragEntered($event)"

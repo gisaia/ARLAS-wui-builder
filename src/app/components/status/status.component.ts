@@ -40,7 +40,7 @@ export class StatusComponent implements OnInit {
 
   public displayCurrentConfig = false;
   public editingConfigName = false;
-  public editingName: string;
+  public editingName?: string;
 
   public constructor(
     protected mainService: MainFormService,
@@ -49,7 +49,7 @@ export class StatusComponent implements OnInit {
 
   public ngOnInit() {
     this.mainService.configChange.subscribe(config => {
-      this.mainService.configurationName = config.name;
+      this.mainService.configurationName = config?.name;
       this.displayCurrentConfig = true;
       this.cdr.detectChanges();
     });
@@ -60,9 +60,8 @@ export class StatusComponent implements OnInit {
     this.editingConfigName = false;
   }
 
-  public startEditConfigName(event) {
+  public startEditConfigName() {
     this.editingConfigName = true;
     this.editingName = this.mainService.configurationName;
   }
-
 }

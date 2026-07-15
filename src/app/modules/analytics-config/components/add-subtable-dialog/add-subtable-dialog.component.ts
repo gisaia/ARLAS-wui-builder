@@ -63,7 +63,7 @@ export class AddSubtableDialogComponent implements OnInit {
 
   public formGroup: SubTableFormGroup;
   public defaultKey: string;
-  @ViewChild('columnTable', { static: true }) public columnTable: MatTable<AbstractControl>;
+  @ViewChild('columnTable', { static: true }) public columnTable?: MatTable<AbstractControl>;
   public dragDisabled = true;
   public displayedColumns: string[] = ['action', 'metric', 'field'];
   public title: string = marker('Add a sub table');
@@ -77,10 +77,7 @@ export class AddSubtableDialogComponent implements OnInit {
     private readonly dialogRef: MatDialogRef<AddSubtableDialogComponent>,
     private readonly metricsTableFormBuilder: MetricsTableFormBuilderService,
     private readonly collectionService: CollectionService
-  ) { }
-
-  public ngOnInit(): void {
-    const formBuilder = this.metricsTableFormBuilder;
+  ) {
     if (!!this.dialogData.subTable) {
       this.formGroup = this.dialogData.subTable;
       (this.formGroup.get('columns') as FormArray).controls.forEach(c => {
@@ -90,13 +87,16 @@ export class AddSubtableDialogComponent implements OnInit {
       this.buttonLabel = marker('Edit');
 
     } else {
-      this.formGroup = formBuilder.buildSubTable(this.dialogData.collection);
+      this.formGroup = this.metricsTableFormBuilder.buildSubTable(this.dialogData.collection);
     }
-    this.defaultKey = formBuilder.defaultKey;
+    this.defaultKey = this.metricsTableFormBuilder.defaultKey;
+  }
+
+  public ngOnInit(): void {
     if (this.formGroup) {
-      this.formGroup.get('collection').valueChanges.subscribe(v => {
+      this.formGroup.customControls.collection.valueChanges.subscribe(v => {
         this.columns.clear();
-        this.columnTable.renderRows();
+        this.columnTable?.renderRows();
       });
     }
   }
@@ -112,7 +112,7 @@ export class AddSubtableDialogComponent implements OnInit {
     const subTableColumn = this.metricsTableFormBuilder.buildSubTableColumn(this.collection);
     this.initMetricCollectField(subTableColumn);
     this.columns.push(subTableColumn);
-    this.columnTable.renderRows();
+    this.columnTable?.renderRows();
   }
 
   private initMetricCollectField(subTableColumn: SubTableColumnFormGroup) {
@@ -122,7 +122,7 @@ export class AddSubtableDialogComponent implements OnInit {
       control.enable();
       this.setMetricCollectFieldValues(control.value, control);
     }
-    subTableColumn.get('metricCollectFunction').valueChanges
+    subTableColumn.customControls.metricCollectFunction.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(v => {
         this.setMetricCollectFieldValues(v, control);
@@ -150,15 +150,15 @@ export class AddSubtableDialogComponent implements OnInit {
 
   public deleteColumn(colIndex: number) {
     (this.formGroup.get('columns') as FormArray).removeAt(colIndex);
-    this.columnTable.renderRows();
+    this.columnTable?.renderRows();
   }
 
   public get columns() {
-    return this.formGroup?.get('columns') as FormArray;
+    return this.formGroup.customControls.columns;
   }
 
   public get collection() {
-    return this.formGroup?.get('collection').value;
+    return this.formGroup.customControls.collection.value;
   }
 
   public drop(event: CdkDragDrop<any[]>) {
@@ -168,10 +168,10 @@ export class AddSubtableDialogComponent implements OnInit {
     newOrders.forEach((v, i) => {
       this.columns.setControl(i, v);
     });
-    this.columnTable.renderRows();
+    this.columnTable?.renderRows();
   }
 
-  public dragStarted(event) {
+  public dragStarted() {
     this.dragDisabled = true;
   }
 }

@@ -1,0 +1,13 @@
+diff --git a/node_modules/arlas-persistence-api/api.d.ts b/node_modules/arlas-persistence-api/api.d.ts
+index 929c5ad..4e8b8f1 100644
+--- a/node_modules/arlas-persistence-api/api.d.ts
++++ b/node_modules/arlas-persistence-api/api.d.ts
+@@ -103,7 +103,7 @@ export interface DataWithLinks {
+      * @type {string}
+      * @memberof DataWithLinks
+      */
+-    id?: string;
++    id: string;
+     /**
+      *
+      * @type {string}

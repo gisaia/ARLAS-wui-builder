@@ -149,7 +149,7 @@ export class AnalyticsInitService {
       this.settingsService);
     this.arlasStartupService.contributorRegistry.set(
       contribConfig.identifier, contributor);
-    return this.arlasStartupService.contributorRegistry.get(contribConfig.identifier);
+    return contributor;
   }
 
 }

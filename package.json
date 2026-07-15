@@ -3,7 +3,7 @@
   "version": "28.1.0-dev",
   "scripts": {
     "ng": "ng",
-    "postinstall": "patch-package --patch-dir ./node_modules/arlas-web-core/patches && patch-package --patch-dir ./node_modules/arlas-d3/patches && patch-package --patch-dir node_modules/arlas-map/patches",
+    "postinstall": "patch-package && patch-package --patch-dir ./node_modules/arlas-web-core/patches && patch-package --patch-dir ./node_modules/arlas-d3/patches && patch-package --patch-dir node_modules/arlas-map/patches",
     "start": "ng serve",
     "start:iam": "ng serve --ssl --ssl-cert=$EXPLO_SSL_CERT --ssl-key=$EXPLO_SSL_KEY",
     "build": "ng build --configuration production --aot --base-href='$ARLAS_BUILDER_BASE_HREF/'",
