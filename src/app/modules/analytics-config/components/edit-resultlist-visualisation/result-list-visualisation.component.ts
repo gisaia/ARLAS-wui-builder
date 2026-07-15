@@ -30,6 +30,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatRadioButton } from '@angular/material/radio';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -46,8 +47,9 @@ import { SelectFormControl } from '@shared-models/config-form';
     DragDropModule,
     MatChipsModule,
     MatTooltipModule,
-    MatMenuModule
-  ],
+    MatMenuModule,
+    MatRadioButton
+],
   templateUrl: './result-list-visualisation.component.html',
   styleUrl: './result-list-visualisation.component.scss',
   animations: [
@@ -61,18 +63,18 @@ export class ResultListVisualisationComponent {
 
   @Input() public collectionControl: SelectFormControl;
   @Input() public control: FormArray<ResultListVisualisationsFormGroup>;
-  /** disable drag when dropping an element **/
+  /** disable drag when dropping an element */
   public dragDisabled = true;
-  /** handle the switch between visualisation list and edit **/
+  /** handle the switch between visualisation list and edit */
   public manageViewIsOpened = false;
   public isEdition = signal(false);
-  /** store the current visualisation edited or created **/
-  public currentVisualisation: ResultListVisualisationsFormGroup = null;
-  public displayedColumns = ['drag', 'name', 'description', 'applyTo', 'action'];
+  /** store the current visualisation edited or created */
+  public currentVisualisation: ResultListVisualisationsFormGroup | null = null;
+  public displayedColumns = ['drag', 'name', 'description', 'applyTo', 'default', 'action'];
   @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
 
   public get visualisation(): ResultListVisualisationsFormGroup[] {
-    return this.control? this.control.controls as Array<ResultListVisualisationsFormGroup> : [];
+    return this.control? this.control.controls : [];
   }
 
   public dropVisualisation(event: CdkDragDrop<any[]>) {
@@ -95,13 +97,12 @@ export class ResultListVisualisationComponent {
    */
   public manageVisualisationValidated($event: boolean) {
     this.manageViewIsOpened = false;
-    if(!this.isEdition()){
+    if(!this.isEdition() && this.currentVisualisation){
       this.control.push(this.currentVisualisation);
       this.currentVisualisation = null;
       setTimeout(() => {
         this.table.renderRows();
       }, 0);
-
     }
     this.isEdition.set(false);
   }
@@ -117,9 +118,24 @@ export class ResultListVisualisationComponent {
     this.table.renderRows();
   }
 
-  public openManageVisualisationForEdition(visualisationIndex: any) {
+  public openManageVisualisationForEdition(visualisationIndex: number) {
     this.isEdition.set(true);
     this.manageViewIsOpened = true;
     this.currentVisualisation = this.control.at(visualisationIndex);
+  }
+
+  /**
+   * Changes the selected visualisation default state.
+   * If the selected one becomes the default, then all other default visualisations are unselected.
+   */
+  public setDefaultVisualisation(visualisation: ResultListVisualisationsFormGroup, clickedIdx: number) {
+    visualisation.customControls.default.setValue(!visualisation.customControls.default.value);
+    if (visualisation.customControls.default.value) {
+      this.visualisation.forEach((fg, idx) => {
+        if (idx !== clickedIdx) {
+          fg.customControls.default.setValue(false);
+        }
+      });
+    }
   }
 }

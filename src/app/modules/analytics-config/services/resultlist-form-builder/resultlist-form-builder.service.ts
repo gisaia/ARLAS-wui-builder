@@ -22,15 +22,15 @@ import {
 import {
     ResultListVisualisationComponent
 } from '@analytics-config/components/edit-resultlist-visualisation/result-list-visualisation.component';
-import {ResultlistDataComponent} from '@analytics-config/components/resultlist-data/resultlist-data.component';
-import {Injectable} from '@angular/core';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialog} from '@angular/material/dialog';
-import {marker} from '@colsen1991/ngx-translate-extract-marker';
-import {DialogColorTableComponent} from '@map-config/components/dialog-color-table/dialog-color-table.component';
-import {DialogColorTableData, KeywordColor} from '@map-config/components/dialog-color-table/models';
-import {CollectionService} from '@services/collection-service/collection.service';
-import {CollectionField} from '@services/collection-service/models';
+import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
+import { Injectable } from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
+import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionField } from '@services/collection-service/models';
 import {
     NUMERIC_OR_DATE_OR_KEYWORD,
     NUMERIC_OR_DATE_OR_TEXT_TYPES,
@@ -39,10 +39,10 @@ import {
     toNumericOrKeywordOrBooleanObs,
     toOptionsObs
 } from '@services/collection-service/tools';
-import {DefaultConfig, DefaultValuesService} from '@services/default-values/default-values.service';
-import {MainFormService} from '@services/main-form/main-form.service';
-import {ConfigFormGroupComponent} from '@shared-components/config-form-group/config-form-group.component';
-import {CollectionConfigFormGroup} from '@shared-models/collection-config-form';
+import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
     ButtonFormControl,
     ButtonToggleFormControl,
@@ -62,20 +62,16 @@ import {
     TitleInputFormControl,
     TypedSelectFormControl
 } from '@shared-models/config-form';
-import {GeoFilterInputsBuilder} from '@shared-models/filter-input-builder';
-import {WidgetConfigFormGroup} from '@shared-models/widget-config-form';
-import {Expression} from 'arlas-api';
-import {ArlasColorService} from 'arlas-web-components';
-import {ArlasColorGeneratorLoader} from 'arlas-wui-toolkit';
-import {Observable} from 'rxjs';
-import {WidgetFormBuilder} from '../widget-form-builder';
-import {ResultListCardLineFormGroup, ResultlistDataConfigForm, ResultlistDetailFormGroup} from './form-group';
+import { GeoFilterInputsBuilder } from '@shared-models/filter-input-builder';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+import { Expression } from 'arlas-api';
+import { ArlasColorService } from 'arlas-web-components';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { Observable } from 'rxjs';
+import { WidgetFormBuilder } from '../widget-form-builder';
+import { ResultListCardLineFormGroup, ResultlistDataConfigForm, ResultlistDetailFormGroup } from './form-group';
 import {
-    buildCardViewProperties,
-    buildDetailField,
-    CellBackgroundEnum,
-    ResultListDefaultMode,
-    resultModeDefaultList
+    buildCardViewProperties, buildDetailField, CellBackgroundEnum, ResultListDefaultMode, resultModeDefaultList
 } from './utils';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
@@ -723,7 +719,8 @@ export class ResultListVisualisationsFormGroup extends FormGroup {
     public customControls = {
         name: this.get('name') as InputFormControl,
         description: this.get('description') as TextareaFormControl,
-        dataGroups: this.get('dataGroups') as FormArray<ResultListVisualisationsDataGroup>
+        dataGroups: this.get('dataGroups') as FormArray<ResultListVisualisationsDataGroup>,
+        default: this.get('default') as HiddenFormControl
     };
 
     public constructor(fieldsObs?: Observable<Array<CollectionField>>, collection?: string, collectionService?: CollectionService) {
@@ -738,12 +735,13 @@ export class ResultListVisualisationsFormGroup extends FormGroup {
                 marker('Visualisation description'),
                 '',
                 '',
-                null,
+                undefined,
                 {
                     optional: true,
                 }
             ),
-            dataGroups: new FormArray<ResultListVisualisationsDataGroup>([], [Validators.required, Validators.minLength(1)])
+            dataGroups: new FormArray<ResultListVisualisationsDataGroup>([], [Validators.required, Validators.minLength(1)]),
+            default: new HiddenFormControl(false)
         });
     }
 }
