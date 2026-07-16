@@ -18,6 +18,12 @@
  */
 @use "variables.scss" as var;
 
+.visualisations__header {
+  display: flex;
+  margin: 10px 0;
+  background-color: var(--arlas-builder-config-background-color);
+}
+
 .description {
   align-self: center;
   width: fit-content;
@@ -25,7 +31,7 @@
   color: var.$config-element-description-text-color;
   line-height: 1.6;
   border-left: 0.2rem solid var.$config-element-description-border-color;
-  background-color: white;
+  background-color: var(--arlas-builder-description-background-color);
   border-radius: 4px;
   display: inline-block;
   box-sizing: border-box;

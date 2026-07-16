@@ -17,6 +17,7 @@
  * under the License.
  */
 @use "styles/material-override.scss" as *;
+@use "styles/form.scss" as *;
 
 @font-face {
   font-family: 'Material Symbols Outlined';
@@ -37,6 +38,11 @@ body {
   line-height: 1.5;
 
   --arlas-builder-input-width: 220px;
+  --arlas-builder-config-background-color: white;
+  --arlas-builder-description-background-color: #fafafa;
+
+  --arlas-builder-background-color: #efefef;
+  --mat-sidenav-content-background-color: #efefef;
 }
 
 .material-icons {
@@ -67,7 +73,6 @@ body {
 
   &.mat-stepper-horizontal,
   &.mat-stepper-vertical {
-    background-color: #fafafa;
 
     div.mat-horizontal-content-container,
     div.mat-vertical-content-container {

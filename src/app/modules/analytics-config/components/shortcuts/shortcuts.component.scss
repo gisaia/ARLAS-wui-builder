@@ -17,28 +17,39 @@
  * under the License.
  */
 
+@use "variables.scss" as var;
+
+:host {
+    background-color: var(--arlas-builder-config-background-color);
+    border-bottom: 10px solid var(--arlas-builder-background-color);
+}
+
 .title {
-    padding: 3px 0;
+    @include var.group-title();
 }
 
 .container, .cdk-drag-preview {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    padding: 3px;
+    padding: 10px;
+    gap: 10px;
+    white-space: nowrap;
+    overflow: clip;
 
     .shortcut {
         cursor: grab;
         margin: 2px;
         background-color: #fff;
-        padding: 2px;
-        border-radius: 2px;
-        box-shadow: 0px -2px 3px -6px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14);
+        padding: 5px;
+        border-radius: 4px;
+        // Align border on widget tabs
+        border: 1px solid rgba(0, 0, 0, 0.12);
         display: flex;
         align-items: center;
         justify-content: space-between;
 
-        .title {
+        &__title {
             padding: 0 2px;
         }
 

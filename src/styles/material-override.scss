@@ -17,6 +17,12 @@
  * under the License.
  */
 
+// Add a background-color to better integrate them
+.mat-mdc-tab-list,
+.mat-horizontal-stepper-header-container {
+  background-color: white;
+}
+
 // Tighten the display of inputs
 .mat-mdc-form-field-infix {
   // Remove 8px from padding bottom and min height

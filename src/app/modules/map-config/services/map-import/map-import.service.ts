@@ -34,7 +34,7 @@ import { isTechnicalArlasLayer, Layer, MapConfig } from '@services/main-form-man
 import { importElements } from '@services/main-form-manager/tools';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
 import { COUNT_OR_METRIC, PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/property-selector-form-builder/models';
-import { BasemapStyle, LayerMetadata, VisualisationSetConfig } from 'arlas-map';
+import { BasemapStyle, VisualisationSetConfig } from 'arlas-map';
 import {
   ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, ExtentFilterGeometry, FeatureRenderMode, LayerSourceConfig, MetricConfig
 } from 'arlas-web-contributors';
@@ -397,8 +397,7 @@ export class MapImportService {
     const renderMode = layerSource.render_mode ?? FeatureRenderMode.wide;
 
     const values: any = {
-      geometryStep: {
-      },
+      geometryStep: {},
       visibilityStep: {
         visible: (!!layer.layout && !!layer.layout.visibility) ? layer.layout.visibility === VISIBILITY.visible : true,
         renderMode,
@@ -406,8 +405,9 @@ export class MapImportService {
         filters: new FormArray([])
       },
       styleStep: {
-        colorFg: {
-        }
+        colorFg: {},
+        stroke: {},
+        heatmap: {}
       }
     };
 
@@ -416,26 +416,28 @@ export class MapImportService {
       PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
     if (layer.type === GEOMETRY_TYPE.line.toString()) {
-      values.styleStep.widthFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-width'], values.styleStep.widthFg,
+      values.styleStep.line = {
+        width: {}
+      };
+      this.importPropertySelector(layer.paint[layer.type + '-width'], values.styleStep.line.width,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
       if (!!layer.paint['line-dasharray']) {
         switch (layer.paint['line-dasharray'].toString()) {
           case LINE_TYPE_VALUES.get(LINE_TYPE.dashed).toString():
-            values.styleStep.lineType = LINE_TYPE.dashed;
+            values.styleStep.line.type = LINE_TYPE.dashed;
             break;
           case LINE_TYPE_VALUES.get(LINE_TYPE.dotted).toString():
-            values.styleStep.lineType = LINE_TYPE.dotted;
+            values.styleStep.line.type = LINE_TYPE.dotted;
             break;
           case LINE_TYPE_VALUES.get(LINE_TYPE.mixed).toString():
-            values.styleStep.lineType = LINE_TYPE.mixed;
+            values.styleStep.line.type = LINE_TYPE.mixed;
             break;
           default:
-            values.styleStep.lineType = LINE_TYPE.solid;
+            values.styleStep.line.type = LINE_TYPE.solid;
         }
       } else {
-        values.styleStep.lineType = LINE_TYPE.solid;
+        values.styleStep.line.type = LINE_TYPE.solid;
       }
 
     } else if (layer.type === GEOMETRY_TYPE.circle.toString()) {
@@ -443,58 +445,60 @@ export class MapImportService {
       this.importPropertySelector(layer.paint[layer.type + '-radius'], values.styleStep.radiusFg,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
-      values.styleStep.strokeWidthFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-stroke-width'], values.styleStep.strokeWidthFg,
+      values.styleStep.stroke.width = {};
+      this.importPropertySelector(layer.paint[layer.type + '-stroke-width'], values.styleStep.stroke.width,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
-      values.styleStep.strokeColorFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-stroke-color'], values.styleStep.strokeColorFg,
+      values.styleStep.stroke.color = {};
+      this.importPropertySelector(layer.paint[layer.type + '-stroke-color'], values.styleStep.stroke.color,
         PROPERTY_SELECTOR_SOURCE.fix_color, isAggregated, layerSource);
 
-      values.styleStep.strokeOpacityFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-stroke-opacity'], values.styleStep.strokeOpacityFg,
+      values.styleStep.stroke.opacity = {};
+      this.importPropertySelector(layer.paint[layer.type + '-stroke-opacity'], values.styleStep.stroke.opacity,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
     } else if (layer.type === GEOMETRY_TYPE.heatmap.toString()) {
-      values.styleStep.intensityFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-intensity'], values.styleStep.intensityFg,
+      values.styleStep.heatmap.intensity = {};
+      this.importPropertySelector(layer.paint[layer.type + '-intensity'], values.styleStep.heatmap.intensity,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
-      values.styleStep.weightFg = {};
-      this.importPropertySelector(layer.paint[layer.type + '-weight'], values.styleStep.weightFg,
+
+      values.styleStep.heatmap.weight = {};
+      this.importPropertySelector(layer.paint[layer.type + '-weight'], values.styleStep.heatmap.weight,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+
       values.styleStep.radiusFg = {};
       this.importPropertySelector(layer.paint[layer.type + '-radius'], values.styleStep.radiusFg,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
     } else if (layer.type === GEOMETRY_TYPE.fill.toString()) {
-      if (!!layer.metadata && !!(layer.metadata as LayerMetadata).stroke) {
-        values.styleStep.strokeWidthFg = {};
-        this.importPropertySelector((layer.metadata as LayerMetadata).stroke.width, values.styleStep.strokeWidthFg,
+      if (!!layer.metadata && !!layer.metadata.stroke) {
+        values.styleStep.stroke.width = {};
+        this.importPropertySelector(layer.metadata.stroke.width, values.styleStep.stroke.width,
           PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
-        values.styleStep.strokeColorFg = {};
-        this.importPropertySelector((layer.metadata as LayerMetadata).stroke.color, values.styleStep.strokeColorFg,
+        values.styleStep.stroke.color = {};
+        this.importPropertySelector(layer.metadata.stroke.color, values.styleStep.stroke.color,
           PROPERTY_SELECTOR_SOURCE.fix_color, isAggregated, layerSource);
 
-        values.styleStep.strokeOpacityFg = {};
-        this.importPropertySelector((layer.metadata as LayerMetadata).stroke.opacity, values.styleStep.strokeOpacityFg,
+        values.styleStep.stroke.opacity = {};
+        this.importPropertySelector(layer.metadata.stroke.opacity, values.styleStep.stroke.opacity,
           PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
       }
 
       if(!!layer.metadata && !!layer.metadata.extrusion) {
-        values.styleStep.enableExtrusion = true;
-        values.styleStep.extrusionValue = {};
+        values.styleStep.extrusion.enable = true;
+        values.styleStep.extrusion.value = {};
 
         const {extrusionHeightValue, exaggeration} = this.extractExaggeration(layer);
-        this.importPropertySelector(extrusionHeightValue, values.styleStep.extrusionValue,
+        this.importPropertySelector(extrusionHeightValue, values.styleStep.extrusion.value,
           PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
-        values.styleStep.extrusionExaggeration = {};
+        values.styleStep.extrusion.exaggeration = {};
         if(exaggeration !== undefined){
-          this.importPropertySelector(exaggeration, values.styleStep.extrusionExaggeration,
+          this.importPropertySelector(exaggeration, values.styleStep.extrusion.exaggeration,
             PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
         }
 
-        values.styleStep.extrusionOpacity = {};
-        this.importPropertySelector(layer.metadata.extrusion.opacity, values.styleStep.extrusionOpacity,
+        values.styleStep.extrusion.opacity = {};
+        this.importPropertySelector(layer.metadata.extrusion.opacity, values.styleStep.extrusion.opacity,
           PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
       }
@@ -505,12 +509,17 @@ export class MapImportService {
     this.importPropertySelector(colors, values.styleStep.colorFg,
       PROPERTY_SELECTOR_SOURCE.fix_color, isAggregated, layerSource);
     if (layer.type === 'symbol') {
-      values.styleStep.labelSizeFg = {};
-      values.styleStep.labelRotationFg = {};
-      values.styleStep.labelContentFg = {};
-      values.styleStep.labelHaloColorFg = {};
-      values.styleStep.labelHaloBlurFg = {};
-      values.styleStep.labelHaloWidthFg = {};
+      values.styleStep.label = {
+        content: {},
+        size: {},
+        rotation: {},
+        halo: {
+          color: {},
+          blur: {},
+          width: {}
+        },
+        layout: {}
+      };
       const size = layer.layout['text-size'];
       const content = layer.layout['text-field'];
       const haloColor = layer.paint['text-halo-color'];
@@ -520,35 +529,35 @@ export class MapImportService {
       const overlap = layer.layout['text-allow-overlap'];
       const alignment = layer.layout['text-anchor'];
       const placement = layer.layout['symbol-placement'];
-      values.styleStep.labelOverlapFg = !!overlap;
-      this.importPropertySelector(size, values.styleStep.labelSizeFg,
+      values.styleStep.label.layout.overlap = !!overlap;
+      this.importPropertySelector(size, values.styleStep.label.size,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
-      this.importPropertySelectorForLabel(rotation, values.styleStep.labelRotationFg, isAggregated, layerSource,
+      this.importPropertySelectorForLabel(rotation, values.styleStep.label.rotation, isAggregated, layerSource,
         PROPERTY_SELECTOR_SOURCE.fix_slider, /** dsplayable */ false, /** numeric */ true);
-      this.importPropertySelectorForLabel(content, values.styleStep.labelContentFg, isAggregated, layerSource,
+      this.importPropertySelectorForLabel(content, values.styleStep.label.content, isAggregated, layerSource,
         PROPERTY_SELECTOR_SOURCE.fix_input, /** dsplayable */ true, /** numeric */ false);
-      this.importPropertySelector(haloColor, values.styleStep.labelHaloColorFg,
+      this.importPropertySelector(haloColor, values.styleStep.label.halo.color,
         PROPERTY_SELECTOR_SOURCE.fix_color, isAggregated, layerSource);
-      this.importPropertySelector(haloBlur, values.styleStep.labelHaloBlurFg,
+      this.importPropertySelector(haloBlur, values.styleStep.label.halo.blur,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
-      this.importPropertySelector(haloWidth, values.styleStep.labelHaloWidthFg,
+      this.importPropertySelector(haloWidth, values.styleStep.label.halo.width,
         PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
       const offset = layer.paint['text-translate'];
       if (offset) {
-        values.styleStep.labelOffsetFg = {
+        values.styleStep.label.offset = {
           dx: offset[0] + '',
           dy: offset[1] + ''
         };
       }
       if (!!placement) {
-        values.styleStep.labelPlacementCtrl = placement;
+        values.styleStep.label.layout.placement = placement;
       } else {
-        values.styleStep.labelPlacementCtrl = LABEL_PLACEMENT.point.toString();
+        values.styleStep.label.layout.placement = LABEL_PLACEMENT.point.toString();
       }
       if (!!alignment) {
-        values.styleStep.labelAlignmentCtrl = alignment;
+        values.styleStep.label.layout.alignment = alignment;
       } else {
-        values.styleStep.labelAlignmentCtrl = LABEL_ALIGNMENT.center.toString();
+        values.styleStep.label.layout.alignment = LABEL_ALIGNMENT.center.toString();
       }
     }
 
@@ -578,10 +587,10 @@ export class MapImportService {
    * @param layer
    * @private
    */
-  private static extractExaggeration(layer){
-    let extrusionHeightValue = (layer.metadata as LayerMetadata).extrusion.height;
+  private static extractExaggeration(layer: Layer){
+    let extrusionHeightValue = layer.metadata.extrusion.height;
     let exaggeration = 1;
-    const expression = (layer.metadata as LayerMetadata).extrusion.height as Array<string | Array<string> | number>;
+    const expression = layer.metadata.extrusion.height as Array<string | Array<string> | number>;
     const isExaggerationExpression = Array.isArray(extrusionHeightValue) &&
       expression.at(0) === '*' && typeof expression.at(-1) === 'number';
     if(isExaggerationExpression) {

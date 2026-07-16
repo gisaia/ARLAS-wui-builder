@@ -405,54 +405,58 @@ export class ConfigExportHelper {
       this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.opacity, layerValues.mode);
     }
 
-    if (!!modeValues.styleStep.widthFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.widthFg, layerValues.mode);
+    if (modeValues.styleStep.line?.width) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.line.width, layerValues.mode);
     }
 
     if (!!modeValues.styleStep.radiusFg) {
       this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.radiusFg, layerValues.mode);
     }
 
-    if (modeValues.styleStep?.extrusionOpacity) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.extrusionOpacity, layerValues.mode);
+    if (modeValues.styleStep.extrusion?.opacity) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.extrusion.opacity, layerValues.mode);
     }
 
-    if (modeValues.styleStep?.extrusionValue) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.extrusionValue, layerValues.mode);
+    if (modeValues.styleStep.extrusion?.value) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.extrusion.value, layerValues.mode);
     }
 
-    if (!!modeValues.styleStep.strokeColorFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.strokeColorFg, layerValues.mode);
+    if (modeValues.styleStep.stroke?.color) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.stroke.color, layerValues.mode);
     }
 
-    if (!!modeValues.styleStep.strokeWidthFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.strokeWidthFg, layerValues.mode);
+    if (modeValues.styleStep.stroke?.width) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.stroke.width, layerValues.mode);
     }
 
-    if (!!modeValues.styleStep.strokeOpacityFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.strokeOpacityFg, layerValues.mode);
+    if (modeValues.styleStep.stroke?.opacity) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.stroke.opacity, layerValues.mode);
     }
 
-    if (!!modeValues.styleStep.weightFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.weightFg, layerValues.mode);
+    if (modeValues.styleStep.heatmap?.weight) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.heatmap.weight, layerValues.mode);
     }
-    if (!!modeValues.styleStep.labelSizeFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelSizeFg, layerValues.mode);
+    if (modeValues.styleStep.heatmap?.intensity) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.heatmap.intensity, layerValues.mode);
     }
-    if (!!modeValues.styleStep.labelHaloColorFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelHaloColorFg, layerValues.mode);
+
+    if (modeValues.styleStep.label?.size) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.label.size, layerValues.mode);
     }
-    if (!!modeValues.styleStep.labelHaloBlurFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelHaloBlurFg, layerValues.mode);
+    if (modeValues.styleStep.label?.halo?.color) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.label.halo.color, layerValues.mode);
     }
-    if (!!modeValues.styleStep.labelHaloWidthFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelHaloWidthFg, layerValues.mode);
+    if (modeValues.styleStep.label?.halo?.blur) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.label.halo.blur, layerValues.mode);
     }
-    if (!!modeValues.styleStep.labelRotationFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelRotationFg, layerValues.mode);
+    if (modeValues.styleStep.label?.halo?.width) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.label.halo.width, layerValues.mode);
     }
-    if (!!modeValues.styleStep.labelContentFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelContentFg, layerValues.mode);
+    if (modeValues.styleStep.label?.rotation) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.label.rotation, layerValues.mode);
+    }
+    if (modeValues.styleStep.label?.content) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.label.content, layerValues.mode);
     }
     layerSource.source = getSourceName(layerSource) + '-' + layerFg.value.collection;
     return layerSource;

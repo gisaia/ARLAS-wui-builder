@@ -196,20 +196,20 @@ export class ConfigMapExportHelper {
 
     if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.fill.toString()) {
       const fillStroke: FillStroke = {
-        color: this.getMapProperty(modeValues.styleStep.strokeColorFg, mode, colorService, taggableFields),
-        width: this.getMapProperty(modeValues.styleStep.strokeWidthFg, mode, colorService, taggableFields),
-        opacity: this.getMapProperty(modeValues.styleStep.strokeOpacityFg, mode, colorService, taggableFields)
+        color: this.getMapProperty(modeValues.styleStep.stroke.color, mode, colorService, taggableFields),
+        width: this.getMapProperty(modeValues.styleStep.stroke.width, mode, colorService, taggableFields),
+        opacity: this.getMapProperty(modeValues.styleStep.stroke.opacity, mode, colorService, taggableFields)
       };
       metadata.stroke = fillStroke;
     }
 
-    if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.fill.toString() && modeValues.styleStep.enableExtrusion) {
-      const heightExpression =  this.getMapProperty(modeValues.styleStep.extrusionValue, mode, colorService, taggableFields);
-      const height = this.applyExaggeration(heightExpression, modeValues.styleStep.extrusionExaggeration);
+    if (modeValues.styleStep.geometryType === GEOMETRY_TYPE.fill.toString() && modeValues.styleStep.extrusion.enable) {
+      const heightExpression =  this.getMapProperty(modeValues.styleStep.extrusion.value, mode, colorService, taggableFields);
+      const height = this.applyExaggeration(heightExpression, modeValues.styleStep.extrusion.exaggeration);
       metadata.extrusion = {
         height: height,
         color: this.getMapProperty(modeValues.styleStep.colorFg, mode, colorService, taggableFields),
-        opacity: this.getMapProperty(modeValues.styleStep.extrusionOpacity, mode, colorService, taggableFields)
+        opacity: this.getMapProperty(modeValues.styleStep.extrusion.opacity, mode, colorService, taggableFields)
       };
     }
 
@@ -309,8 +309,8 @@ export class ConfigMapExportHelper {
       case GEOMETRY_TYPE.line: {
         paint['line-opacity'] = opacity;
         paint['line-color'] = color;
-        paint['line-width'] = this.getMapProperty(modeValues.styleStep.widthFg, mode, colorService, taggableFields);
-        const lineType = modeValues.styleStep.lineType;
+        paint['line-width'] = this.getMapProperty(modeValues.styleStep.line.width, mode, colorService, taggableFields);
+        const lineType = modeValues.styleStep.line.type;
         if (lineType !== LINE_TYPE.solid) {
           paint['line-dasharray'] = LINE_TYPE_VALUES.get(lineType);
         } else {
@@ -322,27 +322,26 @@ export class ConfigMapExportHelper {
         paint['circle-opacity'] = opacity;
         paint['circle-color'] = color;
         paint['circle-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, colorService, taggableFields);
-        paint['circle-stroke-width'] = this.getMapProperty(modeValues.styleStep.strokeWidthFg, mode, colorService, taggableFields);
-        paint['circle-stroke-color'] = this.getMapProperty(modeValues.styleStep.strokeColorFg, mode, colorService, taggableFields);
-        paint['circle-stroke-opacity'] = this.getMapProperty(modeValues.styleStep.strokeOpacityFg,
-          mode, colorService, taggableFields);
+        paint['circle-stroke-width'] = this.getMapProperty(modeValues.styleStep.stroke.width, mode, colorService, taggableFields);
+        paint['circle-stroke-color'] = this.getMapProperty(modeValues.styleStep.stroke.color, mode, colorService, taggableFields);
+        paint['circle-stroke-opacity'] = this.getMapProperty(modeValues.styleStep.stroke.opacity, mode, colorService, taggableFields);
         break;
       }
       case GEOMETRY_TYPE.heatmap: {
         paint['heatmap-color'] = color;
         paint['heatmap-opacity'] = opacity;
-        paint['heatmap-intensity'] = this.getMapProperty(modeValues.styleStep.intensityFg, mode, colorService, taggableFields);
-        paint['heatmap-weight'] = this.getMapProperty(modeValues.styleStep.weightFg, mode, colorService, taggableFields);
+        paint['heatmap-intensity'] = this.getMapProperty(modeValues.styleStep.heatmap.intensity, mode, colorService, taggableFields);
+        paint['heatmap-weight'] = this.getMapProperty(modeValues.styleStep.heatmap.weight, mode, colorService, taggableFields);
         paint['heatmap-radius'] = this.getMapProperty(modeValues.styleStep.radiusFg, mode, colorService, taggableFields);
         break;
       }
       case GEOMETRY_TYPE.symbol: {
         paint['text-color'] = color;
         paint['text-opacity'] = opacity;
-        paint['text-halo-color'] = this.getMapProperty(modeValues.styleStep.labelHaloColorFg, mode, colorService, taggableFields);
-        paint['text-halo-width'] = this.getMapProperty(modeValues.styleStep.labelHaloWidthFg, mode, colorService, taggableFields);
-        paint['text-halo-blur'] = this.getMapProperty(modeValues.styleStep.labelHaloBlurFg, mode, colorService, taggableFields);
-        paint['text-translate'] = [+modeValues.styleStep.labelOffsetFg.dx, +modeValues.styleStep.labelOffsetFg.dy];
+        paint['text-halo-color'] = this.getMapProperty(modeValues.styleStep.label.halo.color, mode, colorService, taggableFields);
+        paint['text-halo-width'] = this.getMapProperty(modeValues.styleStep.label.halo.width, mode, colorService, taggableFields);
+        paint['text-halo-blur'] = this.getMapProperty(modeValues.styleStep.label.halo.blur, mode, colorService, taggableFields);
+        paint['text-translate'] = [+modeValues.styleStep.label.offset.dx, +modeValues.styleStep.label.offset.dy];
 
         break;
       }
@@ -369,13 +368,13 @@ export class ConfigMapExportHelper {
         break;
       }
       case GEOMETRY_TYPE.symbol: {
-        layout['text-field'] = this.getMapProperty(modeValues.styleStep.labelContentFg, mode, colorService, taggableFields);
+        layout['text-field'] = this.getMapProperty(modeValues.styleStep.label.content, mode, colorService, taggableFields);
         layout['text-font'] = ['Open Sans Bold', 'Arial Unicode MS Bold'];
-        layout['text-size'] = this.getMapProperty(modeValues.styleStep.labelSizeFg, mode, colorService, taggableFields);
-        layout['text-rotate'] = this.getMapProperty(modeValues.styleStep.labelRotationFg, mode, colorService, taggableFields);
-        layout['text-allow-overlap'] = modeValues.styleStep.labelOverlapFg;
-        layout['text-anchor'] = modeValues.styleStep.labelAlignmentCtrl;
-        layout['symbol-placement'] = modeValues.styleStep.labelPlacementCtrl;
+        layout['text-size'] = this.getMapProperty(modeValues.styleStep.label.size, mode, colorService, taggableFields);
+        layout['text-rotate'] = this.getMapProperty(modeValues.styleStep.label.rotation, mode, colorService, taggableFields);
+        layout['text-allow-overlap'] = modeValues.styleStep.label.layout.overlap;
+        layout['text-anchor'] = modeValues.styleStep.label.layout.alignment;
+        layout['symbol-placement'] = modeValues.styleStep.label.layout.placement;
         break;
       }
       case GEOMETRY_TYPE.circleHeat: {
@@ -394,7 +393,7 @@ export class ConfigMapExportHelper {
     }
     switch (modeValues.styleStep.geometryType) {
       case GEOMETRY_TYPE.line: {
-        const lineFilter = this.getFilter(modeValues.styleStep.widthFg, mode, taggableFields);
+        const lineFilter = this.getFilter(modeValues.styleStep.line.width, mode, taggableFields);
         if (lineFilter) {
           filterLayer = filterLayer.concat(lineFilter);
         }
@@ -408,11 +407,11 @@ export class ConfigMapExportHelper {
         break;
       }
       case GEOMETRY_TYPE.heatmap: {
-        const intensityFilter = this.getFilter(modeValues.styleStep.intensityFg, mode, taggableFields);
+        const intensityFilter = this.getFilter(modeValues.styleStep.heatmap.intensity, mode, taggableFields);
         if (intensityFilter) {
           filterLayer = filterLayer.concat(intensityFilter);
         }
-        const weightFilter = this.getFilter(modeValues.styleStep.weightFg, mode, taggableFields);
+        const weightFilter = this.getFilter(modeValues.styleStep.heatmap.weight, mode, taggableFields);
         if (weightFilter) {
           filterLayer = filterLayer.concat(weightFilter);
         }
@@ -423,19 +422,19 @@ export class ConfigMapExportHelper {
         break;
       }
       case GEOMETRY_TYPE.symbol: {
-        const orientationFilter = this.getFilter(modeValues.styleStep.labelRotationFg, mode, taggableFields);
+        const orientationFilter = this.getFilter(modeValues.styleStep.label.rotation, mode, taggableFields);
         if (orientationFilter) {
           filterLayer = filterLayer.concat(orientationFilter);
         }
-        const sizeFilter = this.getFilter(modeValues.styleStep.labelSizeFg, mode, taggableFields);
+        const sizeFilter = this.getFilter(modeValues.styleStep.label.size, mode, taggableFields);
         if (sizeFilter) {
           filterLayer = filterLayer.concat(sizeFilter);
         }
-        const haloWidthFilter = this.getFilter(modeValues.styleStep.labelHaloWidthFg, mode, taggableFields);
+        const haloWidthFilter = this.getFilter(modeValues.styleStep.label.halo.width, mode, taggableFields);
         if (haloWidthFilter) {
           filterLayer = filterLayer.concat(haloWidthFilter);
         }
-        const haloBlurFilter = this.getFilter(modeValues.styleStep.labelHaloBlurFg, mode, taggableFields);
+        const haloBlurFilter = this.getFilter(modeValues.styleStep.label.halo.blur, mode, taggableFields);
         if (haloBlurFilter) {
           filterLayer = filterLayer.concat(haloBlurFilter);
         }

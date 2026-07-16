@@ -1,12 +1,13 @@
 @if (shortcutService.shortcuts.length > 0) {
   <div class="title">{{'shortcuts_title' | translate}}</div>
+
   <div class="container" cdkDropList #dropShortcutsListContainer cdkDropListGroup>
     @for (shortcut of shortcutService.shortcuts; track shortcut; let ci = $index) {
-      <div  cdkDropList style="display: flex;" [cdkDropListData]="ci">
+      <div cdkDropList [cdkDropListData]="ci">
         <div cdkDrag [cdkDragData]="ci" (cdkDragEntered)="dragEntered($event)"
           (cdkDragMoved)="dragMoved($event)" (cdkDragDropped)="dragDropped($event)">
           <div class="shortcut">
-            <div class="title">{{shortcut.title}}</div>
+            <div class="shortcut__title">{{shortcut.title}}</div>
             <mat-icon class="remove" (click)="shortcutService.removeShortcut(shortcut.uuid)">clear</mat-icon>
           </div>
           <div class="placeholder" *cdkDragPlaceholder></div>

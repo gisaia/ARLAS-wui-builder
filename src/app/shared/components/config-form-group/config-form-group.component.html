@@ -1,4 +1,4 @@
-<div [formGroup]="configFormGroup" class="main-form-group-div">
+<div [formGroup]="configFormGroup" class="form-group__container">
   @if (configFormGroup.title) {
     <h3 class="form-control-title">{{configFormGroup.title | translate}}</h3>
   }
@@ -30,7 +30,7 @@
   }
 
   @if (hasChildTabs()) {
-    <mat-tab-group mat-stretch-tabs>
+    <mat-tab-group mat-stretch-tabs class="form-group__tabs">
       @for (control of configFormGroup | orderConfigFormTabControls; track control) {
         @if (control.value.enabled) {
           @if (isFormGroup(control.value); as formGroup) {

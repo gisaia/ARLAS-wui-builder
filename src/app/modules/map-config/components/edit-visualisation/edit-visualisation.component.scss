@@ -16,24 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 .action-buttons {
-  button {
-    margin: 0 5px 10px 0;
-  }
+  background-color: var(--arlas-builder-config-background-color);
+  padding: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 .head {
-  background-color: white;
+  background-color: var(--arlas-builder-config-background-color);
   color: #444;
 }
 
 .layers-list {
   margin-bottom: 10px;
+  background-color: var(--arlas-builder-config-background-color);
+
   .layers-container {
     box-sizing: border-box;
     font-size: 0.8em;
-    margin-left: 10px;
-    border-radius: 3px;
+    padding: 10px 20px 20px;
 
     width: fit-content;
 
@@ -49,6 +52,7 @@
       padding-left: 25px;
       padding-right: 61px;
       border-bottom: 0.4px solid #efefef;
+
       .draghandle {
         position: absolute;
         left: 5px;
@@ -57,15 +61,10 @@
         font-size: 18px;
         width: 18px;
         height: 18px;
-        visibility: hidden;
         cursor: grab;
+
         &:focus {
           cursor: grabbing;
-        }
-      }
-      &:hover {
-        .draghandle {
-          visibility: visible;
         }
       }
     }

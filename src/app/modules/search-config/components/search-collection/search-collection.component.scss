@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-@use "variables.scss" as var;
 
 .search-config {
     display: flex;
@@ -33,22 +32,15 @@
     }
 
     ::ng-deep .form-control-title {
-        @include var.group-title();
-        font-size: 22px;
         margin: 10px 0 5px 10px;
     }
 
 }
 
-
-
 .delete {
     position: relative;
     top: 30px;
 }
-
-
-
 
 .button-wrapper {
     display: flex;

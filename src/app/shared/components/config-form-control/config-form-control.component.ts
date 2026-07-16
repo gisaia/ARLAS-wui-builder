@@ -52,6 +52,11 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionItem } from '@services/collection-service/models';
 import { CollectionsUnitsComponent } from '@shared-components/collections-units/collections-units.component';
 import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
+import {
+  AutoCompleteSelectFormComponent
+} from '@shared-components/config-form-control/auto-complete-select/auto-complete-select-form.component';
+import { OrderedSelectComponent } from '@shared-components/config-form-control/ordered-select/ordered-select.component';
+import { RangeSliderComponent } from '@shared-components/config-form-control/range-slider/range-slider.component';
 import { LayerFiltersComponent } from '@shared-components/layer-filters/filters.component';
 import { AlertOnChangeDirective } from '@shared-directives/alert-on-change/alert-on-change.directive';
 import { ResetOnChangeDirective } from '@shared-directives/reset-on-change/reset-on-change.directive';
@@ -74,8 +79,9 @@ import {
   MultipleSelectFormControl,
   OrderedSelectFormControl,
   RadioButtonFormControl,
+  RangeSliderFormControl,
   SelectFormControl,
-  SliderFormControl, RangeSliderFormControl,
+  SliderFormControl,
   SlideToggleFormControl,
   TextareaFormControl,
   TitleInputFormControl,
@@ -89,11 +95,6 @@ import { ArlasIamService } from 'arlas-wui-toolkit';
 import { Subject } from 'rxjs';
 import { StepGradientPipe } from '../../pipes/step-gradient.pipe';
 import { MultiSelectSearchComponent } from './multi-select-search/multi-select-search.component';
-import {
-  AutoCompleteSelectFormComponent
-} from '@shared-components/config-form-control/auto-complete-select/auto-complete-select-form.component';
-import {OrderedSelectComponent} from '@shared-components/config-form-control/ordered-select/ordered-select.component';
-import {RangeSliderComponent} from '@shared-components/config-form-control/range-slider/range-slider.component';
 
 @Component({
   selector: 'arlas-config-form-control',
@@ -236,7 +237,7 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   }
 
   public isRangeSlider(): RangeSliderFormControl | null {
-    return (this.control instanceof RangeSliderFormControl) ? this.control as RangeSliderFormControl : null;
+    return (this.control instanceof RangeSliderFormControl) ? this.control : null;
   }
 
   public isCheckbox(): VisualisationCheckboxFormControl | null {

@@ -25,7 +25,7 @@ import { updateValueAndValidity } from '@utils/tools';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { HistogramUtils } from 'arlas-d3';
 import { ComputeConfig, validProcess } from 'arlas-web-contributors';
-import {BehaviorSubject, Observable, Subject, Subscription} from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { METRIC_TYPES } from '../../services/collection-service/collection.service';
 import { CollectionField, GroupCollectionItem } from '../../services/collection-service/models';
 import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toNumericOrDateOrKeywordOrTextObs } from '../../services/collection-service/tools';

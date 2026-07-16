@@ -78,9 +78,11 @@ export interface StyleStep {
         propertyInterpolatedFg?: InterpolatedProperty | any;
     };
     radiusFg?: Property;
-    strokeColorFg?: Property;
-    strokeWidthFg?: Property;
-    strokeOpacityFg?: Property;
+    stroke?: {
+        color?: Property;
+        width?: Property;
+        opacity?: Property;
+    };
 }
 
 type interpolatedValues = InterpolatedValueString | InterpolatedValueNumber;

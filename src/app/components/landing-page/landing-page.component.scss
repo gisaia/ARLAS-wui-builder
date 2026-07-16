@@ -18,11 +18,17 @@
  */
 @use "variables.scss" as var;
 
+:host {
+   background-color: var(--arlas-builder-config-background-color);
+   display: block;
+}
+
 .landing-title {
    display: flex;
    justify-content: space-between;
    align-items: center;
    font: 500 20px / 32px Roboto, "Helvetica Neue", sans-serif;
+   padding: 10px;
 
    .organisations {
       min-width: 200px;
@@ -72,7 +78,7 @@
 }
 
 .buttons {
-   margin-top: calc(2 * var.$sm-margin);
+   padding: calc(2 * var.$default-spacing);
    display: flex;
    justify-content: center;
 

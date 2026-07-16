@@ -35,7 +35,8 @@ import {
   ConfigFormControl,
   ConfigFormGroup,
   ConfigFormGroupArray,
-  HiddenConfigFromGroup
+  HiddenConfigFromGroup,
+  HiddenFormControl
 } from '@shared-models/config-form';
 import { ObjectvaluesPipe } from '@shared/pipes/objectvalues.pipe';
 import { OrderConfigFormTabControlsPipe } from '@shared/pipes/order-config-form-tab.pipe';
@@ -111,12 +112,12 @@ export class ConfigFormGroupComponent extends AsbtractConfigFormControl implemen
   }
 
   public isFormControl(control: AbstractControl): ConfigFormControl | null {
-    return control instanceof ConfigFormControl ? control : null;
+    return control instanceof ConfigFormControl && !(control instanceof HiddenFormControl) ? control : null;
   }
 
   public isFormGroup(control: AbstractControl): ConfigFormGroup | null {
     return !this.isHistogramBucketFormGroup(control) && control instanceof ConfigFormGroup &&
-    !(control instanceof HiddenConfigFromGroup)  ? control : null;
+    !(control instanceof HiddenConfigFromGroup) ? control : null;
   }
 
   public isHistogramBucketFormGroup(control: AbstractControl): BucketsIntervalFormGroup | null {
