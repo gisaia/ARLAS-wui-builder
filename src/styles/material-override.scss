@@ -21,6 +21,7 @@
 .mat-mdc-tab-list,
 .mat-horizontal-stepper-header-container {
   background-color: white;
+  border-bottom: 5px solid var(--arlas-builder-background-color);
 }
 
 // Tighten the display of inputs
@@ -77,10 +78,6 @@
 .mat-mdc-tab-link:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label,
 .mat-mdc-tab:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label {
   color: rgba(0, 0, 0, 0.6);
-}
-
-.mat-mdc-tab-header {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 // Change style of table back to how they were

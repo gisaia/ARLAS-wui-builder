@@ -19,12 +19,11 @@
 @use "variables.scss" as var;
 
 .form-control-title {
-   @include var.group-title();
-   font-size: 22px;
-
-   // Used to create gaps between logical groups
-   border-top: var.$default-spacing solid var(--arlas-builder-background-color);
+   &--borderless {
+      border-top: 0;
+   }
 }
+
 
 .tab-error {
    color: var.$error-color;

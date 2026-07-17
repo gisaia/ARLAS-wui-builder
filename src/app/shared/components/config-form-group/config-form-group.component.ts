@@ -20,7 +20,8 @@ import { BucketsIntervalFormGroup } from '@analytics-config/services/buckets-int
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import {
   Component, OnDestroy, OnInit, QueryList, ViewChild,
-  ViewChildren, ViewEncapsulation, forwardRef
+  ViewChildren, ViewEncapsulation, forwardRef,
+  input
 } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -78,6 +79,9 @@ import { AsbtractConfigFormControl } from './abstract-config-form-group';
 export class ConfigFormGroupComponent extends AsbtractConfigFormControl implements OnInit, OnDestroy {
   @ViewChild(MatStepper, { static: false }) private stepper: MatStepper;
   @ViewChildren(forwardRef(() => ConfigFormGroupComponent)) private subConfigFormGroups: QueryList<ConfigFormGroupComponent>;
+
+  /** Determines whether to hide the gap displayed before the form group title */
+  public hideGap = input(false);
 
   public static listenToAllControlsOnDependencyChange(configFormGroup: ConfigFormGroup, toUnsubscribe: Array<Subscription>) {
     [

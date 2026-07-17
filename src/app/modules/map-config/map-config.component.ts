@@ -19,6 +19,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { isFullyTouched } from '@utils/tools';
@@ -54,31 +55,31 @@ export class MapConfigComponent implements OnInit, OnDestroy {
 
   public tabs: Tab[] = [
     {
-      routeurLink: 'global', label: 'Global configuration',
+      routeurLink: 'global', label: marker('Global configuration'),
       hasError: () => !!this.mainFormService.mapConfig.getGlobalFg()
         && this.mainFormService.mapConfig.getGlobalFg().invalid
         && isFullyTouched(this.mainFormService.mapConfig.getGlobalFg())
     },
     {
-      routeurLink: 'visualisations', label: 'Visualisation sets',
+      routeurLink: 'visualisations', label: marker('Visualisation sets'),
       hasError: () => !!this.mainFormService.mapConfig.getVisualisationsFa()
         && this.mainFormService.mapConfig.getVisualisationsFa().invalid
         && isFullyTouched(this.mainFormService.mapConfig.getVisualisationsFa())
     },
     {
-      routeurLink: 'layers', label: 'Layers',
+      routeurLink: 'layers', label: marker('Layers'),
       hasError: () => !!this.mainFormService.mapConfig.getLayersFa()
         && this.mainFormService.mapConfig.getLayersFa().invalid
         && isFullyTouched(this.mainFormService.mapConfig.getLayersFa())
     },
     {
-      routeurLink: 'basemaps', label: 'Basemaps',
+      routeurLink: 'basemaps', label: marker('Basemaps'),
       hasError: () => !!this.mainFormService.mapConfig.getBasemapsFg()
         && this.mainFormService.mapConfig.getBasemapsFg().invalid
         && isFullyTouched(this.mainFormService.mapConfig.getBasemapsFg())
     },
     {
-      routeurLink: 'preview', label: 'Preview',
+      routeurLink: 'preview', label: marker('Preview'),
       hasError: () => !!this.mainFormService.mapConfig.getLayersFa()
         && this.mainFormService.mapConfig.getLayersFa().invalid
         && isFullyTouched(this.mainFormService.mapConfig.getLayersFa())

@@ -1,6 +1,6 @@
 <div [formGroup]="configFormGroup" class="form-group__container">
   @if (configFormGroup.title) {
-    <h3 class="form-control-title">{{configFormGroup.title | translate}}</h3>
+    <h3 class="form-control-title" [class.form-control-title--borderless]="hideGap()">{{configFormGroup.title | translate}}</h3>
   }
 
   @if (hasChildSteps()) {
@@ -10,9 +10,9 @@
         @if (control.enabled) {
           @if (isFormGroup(control); as formGroup) {
             @if (!formGroup.hide) {
-              <mat-step label="{{formGroup.stepName | translate}}" [stepControl]="formGroup">
+              <mat-step [label]="formGroup.stepName | translate" [stepControl]="formGroup">
                 <arlas-config-form-group [configFormGroup]="formGroup" [parentConfigFormGroup]="parentConfigFormGroup"
-                  [defaultKey]="defaultKey" [isSubGroup]="true"></arlas-config-form-group>
+                  [defaultKey]="defaultKey" [isSubGroup]="true" [hideGap]="!configFormGroup.title && $first"></arlas-config-form-group>
                 <div class="stepper-for-config-element__nav">
                   @if ($index > 0) {
                     <button matButton="outlined" matStepperPrevious>{{ 'Back' | translate}}</button>
@@ -41,7 +41,7 @@
                 </span>
               </ng-template>
               <arlas-config-form-group [configFormGroup]="formGroup" [parentConfigFormGroup]="parentConfigFormGroup"
-                [defaultKey]="defaultKey" [isSubGroup]="true"></arlas-config-form-group>
+                [defaultKey]="defaultKey" [isSubGroup]="true" [hideGap]="!configFormGroup.title && $first"></arlas-config-form-group>
               <ng-content select="control.key"></ng-content>
             </mat-tab>
           }
@@ -57,7 +57,7 @@
           @if (isFormControl(control); as formControl) {
             @if (!formControl.isChild) {
               @if (formControl.title) {
-                <h3 class="form-control-title">{{formControl.title | translate}}</h3>
+                <h3 class="form-control-title" [class.form-control-title--borderless]="hideGap()">{{formControl.title | translate}}</h3>
               }
               <arlas-config-element [fullSize]="!control.description">
                 <div form-fields>
@@ -88,7 +88,8 @@
             }
           }
           @if (isFormGroup(control); as formGroup;) {
-            <arlas-config-form-group [configFormGroup]="formGroup" [parentConfigFormGroup]="parentConfigFormGroup" [defaultKey]="defaultKey" [isSubGroup]="true">
+            <arlas-config-form-group [configFormGroup]="formGroup" [parentConfigFormGroup]="parentConfigFormGroup"
+              [defaultKey]="defaultKey" [isSubGroup]="true" [hideGap]="!configFormGroup.title && $first">
             </arlas-config-form-group>
           }
           @if (isHistogramBucketFormGroup(control); as formGroup;) {

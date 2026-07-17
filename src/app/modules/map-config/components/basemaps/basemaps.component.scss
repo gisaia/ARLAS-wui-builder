@@ -21,8 +21,6 @@
 @use "variables.scss" as var;
 
 .content {
-    border-top: var.$default-spacing solid var(--arlas-builder-background-color);
-
     .basemaps {
         display: flex;
         flex-direction: row;
