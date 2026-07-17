@@ -22,19 +22,8 @@
 
     ::ng-deep .no-child-step-tabs-div {
         display: flex !important;
-        padding: 5px 0px;
         border-bottom: 1px dashed;
-        width: fit-content;
     }
-
-    ::ng-deep .config-element {
-        box-shadow: none;
-    }
-
-    ::ng-deep .form-control-title {
-        margin: 10px 0 5px 10px;
-    }
-
 }
 
 .delete {
