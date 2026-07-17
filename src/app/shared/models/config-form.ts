@@ -433,9 +433,10 @@ export class ComponentFormControl extends ConfigFormControl {
     },
     public outputs?: {
       [key: string]: (val) => any;
-    }
+    },
+    optionalParams?: ControlOptionalParams
   ) {
-    super(null, null, null, { optional: true });
+    super(null, null, null, { ...optionalParams, optional: true });
   }
 }
 

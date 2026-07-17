@@ -16,14 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { isFullyTouched } from '@utils/tools';
-import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/internal/operators/filter';
 import { map } from 'rxjs/operators';
 
@@ -44,13 +44,19 @@ interface Tab {
     RouterOutlet
   ]
 })
-export class MapConfigComponent implements OnInit, OnDestroy {
-
-  private routerSub: Subscription;
+export class MapConfigComponent {
 
   public constructor(
     private readonly mainFormService: MainFormService,
-    private readonly router: Router) { }
+    private readonly router: Router
+  ) {
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        map(navEnd => navEnd.urlAfterRedirects),
+        takeUntilDestroyed())
+      .subscribe(url => this.activeTab = this.tabs.find(tabs => url.indexOf(tabs.routeurLink) > 0) ?? this.tabs[0]);
+    }
 
 
   public tabs: Tab[] = [
@@ -87,16 +93,4 @@ export class MapConfigComponent implements OnInit, OnDestroy {
   ];
 
   public activeTab = this.tabs[0];
-
-  public ngOnInit() {
-    this.routerSub = this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd),
-        map(navEnd => navEnd.urlAfterRedirects))
-      .subscribe(url => this.activeTab = this.tabs.find(tabs => url.indexOf(tabs.routeurLink) > 0));
-  }
-
-  public ngOnDestroy() {
-    this.routerSub.unsubscribe();
-  }
-
 }

@@ -59,7 +59,7 @@
               @if (formControl.title) {
                 <h3 class="form-control-title" [class.form-control-title--borderless]="hideGap()">{{formControl.title | translate}}</h3>
               }
-              <arlas-config-element [fullSize]="!control.description">
+              <arlas-config-element [fullSize]="!formControl.description">
                 <div form-fields>
                   <arlas-config-form-control [control]="formControl" [parentFormGroup]="parentConfigFormGroup" [defaultKey]="defaultKey" (updateSyncOptions)="updateSyncOptions.next({prefix: $event, control: formControl})">
                   </arlas-config-form-control>
