@@ -123,6 +123,26 @@ export interface ServerConfig {
   max_age_cache: number;
 }
 
+/** Configures how a field is displayed inside a card of the result list. */
+export interface CardViewProperties {
+  /** Material icon name displayed next to the field value. */
+  icon?: string;
+  /** Display label for the field. */
+  prettyName: string;
+  /** Backend field name mapped to this card property. */
+  fieldName: string;
+  /** Unit suffix appended to the field value. */
+  dataType?: string;
+  /** Optional JavaScript transformation applied to the value before rendering. */
+  process?: string;
+  /** Whether this field is used as the card title. */
+  isTitle?: boolean;
+  /** Sort direction (asc / desc / empty). */
+  sort?: string;
+  /** Line index this field belongs to (0-based). Fields on the same line share a row. */
+  lineNumber: number;
+}
+
 export interface ContributorConfig {
   type: string;
   identifier: string;
@@ -157,6 +177,7 @@ export interface ContributorConfig {
     order: number;
     fields: Array<{ path: string; label: string; process: string; }>;
   }>;
+  cardViewProperties?: Array<CardViewProperties>;
   colorField?: string;
   useUtc?: boolean;
   additionalCollections?: Array<{ collectionName: string; field: string; }>;
@@ -165,7 +186,6 @@ export interface ContributorConfig {
   allowOperatorChange?: boolean;
   sort?: MetricsTableSortConfig;
   configuration?: Array<MetricsSubTableConfig>;
-
 }
 
 export interface MetricsSubTableConfig {

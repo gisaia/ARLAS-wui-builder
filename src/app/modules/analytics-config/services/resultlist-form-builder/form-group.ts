@@ -17,19 +17,28 @@
  * under the License.
  */
 
-import { FormArray, FormGroup, Validators } from '@angular/forms';
-import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import {FormArray, FormGroup, Validators} from '@angular/forms';
+import {marker} from '@colsen1991/ngx-translate-extract-marker';
 import {
-  ConfigFormGroup,
-  HiddenFormControl, InputFormControl, SelectFormControl, SelectOption, SliderFormControl, TextareaFormControl
+    ConfigFormGroup,
+    HiddenFormControl,
+    IconFormControl,
+    InputFormControl,
+    SelectFormControl,
+    SelectOption,
+    SliderFormControl,
+    SlideToggleFormControl,
+    TextareaFormControl
 } from '@shared-models/config-form';
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
+import {CollectionConfigFormGroup} from '@shared-models/collection-config-form';
 
 export type ResultlistDataConfigForm = FormGroup<{
   collection: SelectFormControl;
   searchSize: SliderFormControl;
   columns: FormArray;
   grid: ConfigFormGroup;
+  cardViewProperties: FormArray<ResultListCardLineFormGroup>;
   detailsTitle: HiddenFormControl;
   details: FormArray;
   idFieldName: HiddenFormControl;
@@ -90,3 +99,104 @@ export class ResultlistDetailFieldFormGroup extends FormGroup {
     process: this.get('process') as TextareaFormControl,
   };
 }
+
+
+
+export class ResultListCardLineFormGroup extends FormGroup {
+
+  public constructor() {
+    super({
+      fields: new FormArray([], Validators.required)
+    });
+  }
+
+  public customControls = {
+    fields: this.get('fields') as FormArray<ResultListCardFieldsFormGroup>,
+  };
+}
+
+
+export class ResultListCardFieldsFormGroup extends CollectionConfigFormGroup {
+
+  public constructor(
+      fieldsObs: Observable<Array<SelectOption>>,
+      collection: string,
+  ) {
+    super(collection,
+        {
+          prettyName: new InputFormControl(
+              '',
+              marker('Pretty name'),
+              ''
+          ),
+          icon: new IconFormControl(
+              '',
+              marker('Icon'),
+              '',
+              {
+                optional: true
+              }
+          ),
+          fieldName: new SelectFormControl(
+              '',
+              marker('Column field'),
+              '',
+              true,
+              fieldsObs
+          ),
+          dataType: new InputFormControl(
+              '',
+              marker('Unit of the column'),
+              '',
+              undefined,
+              {
+                optional: true
+              }
+          ),
+          process: new TextareaFormControl(
+              '',
+              marker('Transformation'),
+              '',
+              '',
+              1,
+              {
+                optional: true,
+                validators: [TextareaFormControl.processValidator('result')],
+              }
+          ),
+          isTitle: new SlideToggleFormControl(
+              false,
+              marker('Colorize'),
+              '',
+              {
+                optional: true
+
+              }
+          ),
+          sort: new HiddenFormControl(
+              '',
+              '',
+              {
+                optional: true
+              }
+          ),
+          lineNumber: new HiddenFormControl(0,
+              '',
+              {
+                optional: true
+              })
+        });
+  }
+
+  public customControls = {
+    prettyName: this.get('prettyName') as InputFormControl,
+    icon: this.get('icon') as IconFormControl,
+    fieldName: this.get('fieldName') as SelectFormControl,
+    dataType: this.get('dataType') as InputFormControl,
+    process: this.get('process') as TextareaFormControl,
+    isTitle: this.get('isTitle') as SlideToggleFormControl,
+    sort: this.get('sort') as HiddenFormControl,
+    lineNumber: this.get('lineNumber') as HiddenFormControl
+  };
+}
+

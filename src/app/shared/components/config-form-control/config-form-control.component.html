@@ -1,4 +1,5 @@
-@let label = control.label | translate:{ property: control.propertyName | translate } | upperFirst:true;
+@let label = showLabel && control.label  ?
+    (control.label | translate:{ property: control.propertyName | translate } | upperFirst:true ): '';
 
 @if (isSlideToggle(); as typedControl) {
   <div class="slider-toggle-form-control">

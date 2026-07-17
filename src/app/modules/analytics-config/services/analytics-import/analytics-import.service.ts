@@ -809,10 +809,10 @@ export class AnalyticsImportService {
       .importActionsSteps()
       .importSettingsSteps()
       .importDataSteps()
-      .importGridStep()
       .importResultListQuickLook(this.resultlistFormBuilder, this.colorService, this.collectionService)
       .importContributorColumns(this.resultlistFormBuilder)
       .importResultListContributorDetail(this.collectionService)
+      .importResultListContributorCards(this.collectionService)
       .importUnmanagedFields();
     return widgetData;
   }

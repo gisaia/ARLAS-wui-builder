@@ -1033,6 +1033,18 @@ export class ConfigExportHelper {
             fields
           });
         });
+
+        contrib.cardViewProperties = [];
+        if(widgetData.dataStep?.cardViewProperties) {
+          widgetData.dataStep.cardViewProperties.forEach((line) => {
+            line.fields.forEach(el => {
+              contrib.cardViewProperties.push({
+                ...el
+              });
+            });
+          });
+        }
+
         contrib.includeMetadata = [];
         const metadatas = new Set<string>();
         /** TODO :Grid steps contains, booleans, urls...; we need to filter those controls properly */
@@ -1114,6 +1126,19 @@ export class ConfigExportHelper {
           fields
         });
       });
+
+
+      contrib.cardViewProperties = [];
+      if(list.dataStep?.cardViewProperties){
+        list.dataStep.cardViewProperties.forEach((line, index) => {
+          line.fields.forEach(el => {
+            contrib.cardViewProperties.push({
+              ...el
+            });
+          });
+        });
+      }
+
       contrib.includeMetadata = [];
       contribs.push(contrib);
     });
@@ -1408,8 +1433,9 @@ export class ConfigExportHelper {
           nbGridColumns: unmanagedRenderFields.nbGridColumns,
           displayFilters: !!widgetData.settingsStep.displayFilters,
           hasListView: widgetData.dataStep?.columns.length > 0,
+            hasCardView:  widgetData.dataStep?.cardViewProperties.length > 0,
           hasGridView: widgetData.dataStep.grid.aHasGridView,
-          defaultMode: widgetData.dataStep.defaultMode,
+          defaultMode: widgetData.dataStep.defaultMode.toString(),
           visualisationLink: widgetData.sactionStep.visualisationLink,
           downloadLink: widgetData.sactionStep.downloadLink,
           isBodyHidden: unmanagedRenderFields.isBodyHidden,

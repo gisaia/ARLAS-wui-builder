@@ -1,17 +1,30 @@
 <mat-tab-group class="mat-elevation-z1" mat-stretch-tabs>
     <mat-tab #columns>
         <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">list</mat-icon>
       <span [class.tab-error]="control.controls.columns.touched && control.controls.columns.invalid && !columns.isActive">
         {{ 'Table' | translate }}
       </span>
         </ng-template>
-            <arlas-edit-resultlist-columns [collection]="control.controls.collection"
-                                           [control]="control.controls.columns">
-            </arlas-edit-resultlist-columns>
+        <arlas-edit-resultlist-columns [collection]="control.controls.collection"
+                                       [control]="control.controls.columns">
+        </arlas-edit-resultlist-columns>
 
     </mat-tab>
-   <mat-tab #grid>
+    <mat-tab #cards>
         <ng-template mat-tab-label>
+            <mat-icon class="tab__icon tab__icon--reverse">event_list</mat-icon>
+      <span [class.tab-error]="control.controls.cardViewProperties.touched && control.controls.cardViewProperties.invalid && !cards.isActive">
+        {{ 'Card' | translate }}
+      </span>
+        </ng-template>
+        <arlas-edit-card-resultlist-columns [collection]="control.controls.collection"
+                                            [control]="control.controls.cardViewProperties">
+        </arlas-edit-card-resultlist-columns>
+    </mat-tab>
+    <mat-tab #grid>
+        <ng-template mat-tab-label>
+            <mat-icon class="tab__icon">grid_view</mat-icon>
       <span [class.tab-error]="control.controls.grid.touched && control.controls.grid.invalid && !grid.isActive">
         {{ 'Grid' | translate }}
       </span>
@@ -32,11 +45,11 @@
     </mat-tab>
     <mat-tab #details>
         <ng-template mat-tab-label>
-      <span [class.tab-error]="control.controls.details.touched && control.controls.details.invalid && !details.isActive">
-        {{ 'Details' | translate }}
-      </span>
+            <mat-icon class="tab__icon">view_list</mat-icon>
+          <span [class.tab-error]="control.controls.details.touched && control.controls.details.invalid && !details.isActive">
+            {{ 'Details' | translate }}
+          </span>
         </ng-template>
-
         <div class="details-title">
             <arlas-config-element [fullSize]="!detailsTitleControl.description">
                 <div form-fields>

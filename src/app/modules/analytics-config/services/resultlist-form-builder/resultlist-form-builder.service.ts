@@ -69,8 +69,14 @@ import {ArlasColorService} from 'arlas-web-components';
 import {ArlasColorGeneratorLoader} from 'arlas-wui-toolkit';
 import {Observable} from 'rxjs';
 import {WidgetFormBuilder} from '../widget-form-builder';
-import {ResultlistDataConfigForm, ResultlistDetailFormGroup} from './form-group';
-import {buildDetailField, CellBackgroundEnum, ResultListDefaultMode, resultModeDefaultList} from './utils';
+import {ResultListCardLineFormGroup, ResultlistDataConfigForm, ResultlistDetailFormGroup} from './form-group';
+import {
+    buildCardViewProperties,
+    buildDetailField,
+    CellBackgroundEnum,
+    ResultListDefaultMode,
+    resultModeDefaultList
+} from './utils';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
     public tabsOrder: string[] = ['dataStep', 'visualisationStep', 'sactionStep', 'settingsStep'];
@@ -103,6 +109,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                     colorIdentifier: this.get('dataStep.grid.color.colorIdentifier') as SelectFormControl
                 }
             },
+            cardViewProperties: this.get('dataStep.cardViewProperties') as FormArray,
             detailsTitle: this.get('dataStep.detailsTitle') as HiddenFormControl,
             details: this.get('dataStep.details') as FormArray,
             idFieldName: this.get('dataStep.idFieldName') as HiddenFormControl,
@@ -190,22 +197,30 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                     ),
                     defaultMode: new ButtonToggleFormControl(
                         '',
-                        resultModeDefaultList
-                        ,
+                        resultModeDefaultList.map(o => ({...o})),
                         marker('List default mode description'),
                         {
                             resetDependantsOnChange: true,
-                            dependsOn: () => [this.customControls.dataStep.grid.aHasGridView],
+                            dependsOn: () => [this.customControls.dataStep.grid.aHasGridView,
+                                this.customControls.dataStep.cardViewProperties as any],
                             onDependencyChange: (control: ButtonToggleFormControl) => {
-                                const hasValueGridAndHaseGridFalse = !this.customControls.dataStep.grid.aHasGridView.value &&
-                                    this.customControls.dataStep.defaultMode.value === ResultListDefaultMode.grid;
-
                                 // if value was grid and grid is disabled set value to false
-                                if(hasValueGridAndHaseGridFalse) {
-                                    control.disableOption(ResultListDefaultMode.grid);
-                                    this.customControls.dataStep.defaultMode.setValue(ResultListDefaultMode.list.toString());
+                                if(!this.customControls.dataStep.grid.aHasGridView.value) {
+                                    this.customControls.dataStep.defaultMode.disableOption(ResultListDefaultMode.grid);
+                                    if(this.customControls.dataStep.defaultMode.value === ResultListDefaultMode.grid){
+                                        this.customControls.dataStep.defaultMode.setValue(ResultListDefaultMode.list);
+                                    }
                                 } else {
-                                    control.enableOption(ResultListDefaultMode.grid);
+                                    this.customControls.dataStep.defaultMode.enableOption(ResultListDefaultMode.grid);
+                                }
+
+                                if(this.customControls.dataStep.cardViewProperties.length === 0){
+                                    this.customControls.dataStep.defaultMode.disableOption(ResultListDefaultMode.card);
+                                    if(this.customControls.dataStep.defaultMode.value === ResultListDefaultMode.card){
+                                        this.customControls.dataStep.defaultMode.setValue(ResultListDefaultMode.list);
+                                    }
+                                } else {
+                                    this.customControls.dataStep.defaultMode.enableOption(ResultListDefaultMode.card);
                                 }
                             }
                         }),
@@ -310,6 +325,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                         }).withTitle(marker('Color configuration')),
                     }),
                     details: new FormArray([]),
+                    cardViewProperties: new FormArray([]),
 
                     detailsTitle: new HiddenFormControl(
                         '',
@@ -974,6 +990,13 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
         const columns = (value.dataStep || {}).columns || [];
         columns.forEach(c => formGroup.customControls.dataStep.columns
             .push(this.buildColumn(collection)));
+
+        const cardsProp =  (value.dataStep || {}).cardViewProperties || [];
+        cardsProp.forEach( resultListCard => {
+            const line = new ResultListCardLineFormGroup();
+            resultListCard.line.forEach(_ => line.customControls.fields.push(buildCardViewProperties(this.collectionService, collection)));
+            formGroup.customControls.dataStep.cardViewProperties.push(line);
+        });
 
         // same for the details, and the fields within
         const details = (value.dataStep || {}).details || [];
