@@ -17,8 +17,8 @@
  * under the License.
  */
 import {
-  ResultListCardLineFormGroup,
-  ResultlistDetailFormGroup
+    ResultListCardLineFormGroup,
+    ResultlistDetailFormGroup
 } from '@analytics-config/services/resultlist-form-builder/form-group';
 import { isNumberOperator } from '@analytics-config/services/resultlist-form-builder/models';
 import {
@@ -33,22 +33,10 @@ import {
     buildDetailField,
     ResultListDefaultMode
 } from '@analytics-config/services/resultlist-form-builder/utils';
-import {AbstractControl, FormArray} from '@angular/forms';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {marker} from '@colsen1991/ngx-translate-extract-marker';
-import {TranslateService} from '@ngx-translate/core';
-import {Expression} from 'arlas-api';
-import {ArlasColorService} from 'arlas-web-components';
-import {firstValueFrom} from 'rxjs';
-import {CollectionService} from '../services/collection-service/collection.service';
-import {NUMERIC_TYPES} from '../services/collection-service/tools';
-import {
-  AnalyticComponentResultListInputConfig,
-    CardViewProperties,
-  ContributorConfig,
-  DataGroupInputConfig
-} from '../services/main-form-manager/models-config';
-import {ImportElement, importElements} from '../services/main-form-manager/tools';
+import { AbstractControl, FormArray } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { TranslateService } from '@ngx-translate/core';
 import {
     ButtonToggleFormControl,
     ConfigFormGroup, FieldTemplateControl,
@@ -57,6 +45,18 @@ import {
     SlideToggleFormControl,
     TextareaFormControl
 } from '@shared-models/config-form';
+import { Expression } from 'arlas-api';
+import { ArlasColorService } from 'arlas-web-components';
+import { firstValueFrom } from 'rxjs';
+import { CollectionService } from '../services/collection-service/collection.service';
+import { NUMERIC_TYPES } from '../services/collection-service/tools';
+import {
+    AnalyticComponentResultListInputConfig,
+    CardViewProperties,
+    ContributorConfig,
+    DataGroupInputConfig
+} from '../services/main-form-manager/models-config';
+import { ImportElement, importElements } from '../services/main-form-manager/tools';
 
 interface ResultListConfigFeederOptions {
     widgetData: ResultlistConfigForm;
@@ -309,6 +309,10 @@ export class ResultListInputsFeeder {
                         value: visualisation.name,
                         control: visualisationForm.customControls.name
                     },
+                    {
+                        value: visualisation.default,
+                        control: visualisationForm.customControls.default
+                    }
                 ]);
 
                 if (visualisation?.dataGroups && visualisation.dataGroups.length > 0) {

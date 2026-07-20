@@ -1466,12 +1466,13 @@ export class ConfigExportHelper {
   }
 
   public static getVisualisationList(visualisationList: ResultListVisualisationFormWidget[]){
-    const visualisations = [];
+    const visualisations = new Array<VisualisationListInputConfig>();
     visualisationList.forEach(visualisationWidgetConfig => {
       const visualisation: VisualisationListInputConfig =  {
         name: visualisationWidgetConfig.name,
         description: visualisationWidgetConfig.description,
-        dataGroups: []
+        dataGroups: [],
+        default: visualisationWidgetConfig.default
       };
       visualisation.dataGroups = this.buildDataGroups(visualisationWidgetConfig);
       visualisations.push(visualisation);

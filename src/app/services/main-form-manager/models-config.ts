@@ -340,6 +340,8 @@ export interface VisualisationListInputConfig {
   description: string;
   name: string;
   dataGroups: DataGroupInputConfig[];
+  /** Whether this visualisation is the default one */
+  default: boolean;
 }
 
 export interface DataGroupInputConfig {
