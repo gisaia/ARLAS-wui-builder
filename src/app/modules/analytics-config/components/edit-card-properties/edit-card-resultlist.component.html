@@ -10,7 +10,8 @@
                    class="card" mat-table>
                 <ng-container matColumnDef="action">
                     <th *matHeaderCellDef class="action" mat-header-cell>
-                        <div class="badge">{{ $index + 1 }}</div>
+                        <div class="badge" [matTooltip]="'Configuration for line ##idx## of the card' | translate:{ idx: $index + 1 }">
+                            {{ $index + 1 }}</div>
                     </th>
                     <td *matCellDef="let field; let i = index" class="action" mat-cell>
                         <div class="action-wrapper">

@@ -190,6 +190,7 @@
 	"Add a widget": "Add a widget",
 	"Choose widget type": "Choose widget type",
 	"Data tables are out of analytics": "Data tables are now to be declared in the dedicated menu (on the left), outside this analytics board",
+	"Configuration for line ##idx## of the card": "Configuration for line {{idx}} of the card",
 	"Pretty name": "Display name",
 	"Field name": "Field name",
 	"Icon": "Icon",
@@ -964,5 +965,6 @@
 	"week": "week",
 	"within": "within",
 	"writing": "Right to write",
-	"year": "year"
+	"year": "year",
+	"metricstable": "Metrics table"
 }

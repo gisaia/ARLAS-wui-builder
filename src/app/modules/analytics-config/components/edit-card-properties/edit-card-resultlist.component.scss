@@ -22,22 +22,6 @@
 :host {
     --badge-number-background-color: #2196f3;
     --badge-number-text-color: white;
-
-    .mat-column-unit, .mat-column-action {
-        max-width: 100px;
-    }
-
-    .mat-column-icon {
-        max-width: 170px;
-    }
-
-    .mat-column-delete {
-        max-width: 40px;
-    }
-
-    ::ng-deep table .mat-mdc-form-field {
-        width: 100%;
-    }
 }
 
 .badge {
@@ -58,52 +42,13 @@
 .card-wrapper {
     background-color: white;
     padding: 10px;
+    overflow: auto;
 
     .card {
         width: 100%;
 
         .mat-mdc-header-cell {
             padding-left: 10px !important;
-        }
-
-        .action-wrapper {
-            display: flex;
-            align-items: center;
-
-            .drag {
-                cursor: grab;
-            }
-
-            .sort {
-                &.reversed {
-                    transform: rotate(180deg);
-                }
-            }
-            .sort-disabled {
-                color: lightgray;
-                transform: rotate(90deg);
-            }
-
-            .delete,
-            .sort,
-            .sort-disabled {
-                --mat-icon-button-state-layer-size: 24px;
-                --mat-icon-button-touch-target-size: 24px;
-                padding: 0;
-            }
-        }
-
-        .transformation {
-            white-space: pre-wrap;
-        }
-
-
-
-        ::ng-deep .input-field-form-control .mat-mdc-form-field,
-        ::ng-deep .autocomplete-input-form-control .mat-form-field,
-        ::ng-deep .textarea-form-control .mat-form-field {
-            width: 90% !important;
-            margin: 0 5px;
         }
     }
 }
@@ -120,44 +65,38 @@
     margin: 20px;
 }
 
-.column-drag.cdk-drag-preview {
-    border-radius: 4px;
-    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
-        0 3px 14px 2px rgba(0, 0, 0, 0.12);
-    background-color: white;
+.column-drag.cdk-drag-preview,
+.card {
+    .action-wrapper {
+        display: flex;
+        align-items: center;
 
-    .name {
-        width: 210px !important;
-    }
+        .drag {
+            cursor: grab;
+        }
 
-    .action {
-        min-width: 40px !important;
-        .action-wrapper {
-            display: flex;
-            align-items: center;
-
-            .drag {
-                cursor: grabbing;
+        .sort {
+            &.reversed {
+                transform: rotate(180deg);
             }
+        }
+        .sort-disabled {
+            color: lightgray;
+            transform: rotate(90deg);
+        }
 
-            .sort {
-                &.reversed {
-                    transform: rotate(180deg);
-                }
-            }
-            .sort-disabled{
-                color: lightgray;
-                transform: rotate(90deg);
-            }
+        .delete,
+        .sort,
+        .sort-disabled {
+            --mat-icon-button-state-layer-size: 24px;
+            --mat-icon-button-touch-target-size: 24px;
+            padding: 0;
         }
     }
 
-
-    .process {
-        width: inherit;
-        max-width: 350px !important;
+    .transformation {
+        white-space: pre-wrap;
     }
-
 
     ::ng-deep .input-field-form-control .mat-mdc-form-field,
     ::ng-deep .autocomplete-input-form-control .mat-form-field,
@@ -165,6 +104,29 @@
         width: 90% !important;
         margin: 0 5px;
     }
+
+    .mat-column-unit, .mat-column-action {
+        max-width: 100px;
+    }
+
+    .mat-column-icon {
+        max-width: 170px;
+    }
+
+    .mat-column-delete {
+        max-width: 40px;
+    }
+
+    ::ng-deep table .mat-mdc-form-field {
+        width: 100%;
+    }
+}
+
+.column-drag.cdk-drag-preview {
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    background-color: white;
 }
 
 .cdk-drag-placeholder {

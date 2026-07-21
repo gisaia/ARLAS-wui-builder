@@ -65,11 +65,7 @@ export class MetricsTableDataComponent implements OnInit {
   public displayedColumns: string[] = ['drag', 'collection', 'field', 'columns', 'actions'];
   private metricsTableSortConfig: MetricsTableSortConfig = {};
 
-  public constructor(private dialog: MatDialog, private main: MainFormService,
-
-  ) { }
-
-
+  public constructor(private readonly dialog: MatDialog, private readonly main: MainFormService) { }
 
   public ngOnInit(): void {
     if (!this.collection) {

@@ -190,6 +190,7 @@
 	"Add a widget": "Ajouter un widget",
 	"Choose widget type": "Choix du type de widget",
 	"Data tables are out of analytics": "Les tableaux de données doivent maintenant être déclarés dans le menu dédié (à gauche), en dehors de ce tableau de bord.",
+	"Configuration for line ##idx## of the card": "Configuration pour la ligne {{idx}} de la carte",
 	"Pretty name": "Nom d'affichage",
 	"Field name": "Nom du champ",
 	"Icon": "Icône",
@@ -964,5 +965,6 @@
 	"week": "semaine",
 	"within": "contient",
 	"writing": "Droit d'écriture",
-	"year": "année"
+	"year": "année",
+	"metricstable": "Table de métriques"
 }
