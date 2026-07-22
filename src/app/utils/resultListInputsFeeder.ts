@@ -146,7 +146,7 @@ export class ResultListInputsFeeder {
     public importSettingsSteps() {
         return this.imports([
             {
-                value: this.options.contributor.search_size >= this.MIN_SEARCH_SIZE ? this.options.contributor.search_size : this.MIN_SEARCH_SIZE,
+                value: Math.max(this.options.contributor.search_size, this.MIN_SEARCH_SIZE),
                 control: this.settingsStep.searchSize
             },
             {
@@ -156,6 +156,10 @@ export class ResultListInputsFeeder {
             {
                 value: this.options.input.isGeoSortActived,
                 control: this.settingsStep.isGeoSortActived
+            },
+            {
+                value: this.options.input.isExportEnabled,
+                control: this.settingsStep.isExportEnabled
             },
             {
                 value: this.options.input.cellBackgroundStyle,
