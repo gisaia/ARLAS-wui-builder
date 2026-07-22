@@ -12,6 +12,6 @@
     <button matButton="outlined" class="modal_button" (click)="cancel()"
       tabindex="-1">{{ 'Cancel' | translate }}</button>
   }
-  <button matButton="filled" color="primary" class="modal_button" [mat-dialog-close]="textName" [disabled]="!textName"
-    tabindex="2">{{ 'OK' | translate }}</button>
+  <button matButton="filled" color="primary" class="modal_button" [mat-dialog-close]="textName"
+    [disabled]="!textName || textName === data.initialValue" tabindex="2">{{ 'OK' | translate }}</button>
 </div>
