@@ -57,7 +57,7 @@
           @if (isFormControl(control); as formControl) {
             @if (!formControl.isChild) {
               @if (formControl.title) {
-                <h3 class="form-control-title" [class.form-control-title--borderless]="hideGap()">{{formControl.title | translate}}</h3>
+                <h3 class="form-control-title" [class.form-control-title--borderless]="hideGap() && $first">{{formControl.title | translate}}</h3>
               }
               <arlas-config-element [fullSize]="!formControl.description">
                 <div form-fields>
