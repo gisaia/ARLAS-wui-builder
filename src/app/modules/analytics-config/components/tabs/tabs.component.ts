@@ -74,14 +74,13 @@ export class TabsComponent implements OnDestroy {
   private editDialogRef: MatDialogRef<EditTabComponent>;
 
   public constructor(
-    private defaultValuesService: DefaultValuesService,
-    private translateService: TranslateService,
-    private mainFormService: MainFormService,
-    private analyticsInitService: AnalyticsInitService,
-    private dialog: MatDialog,
-    private shortcutsService: ShortcutsService,
+    private readonly defaultValuesService: DefaultValuesService,
+    private readonly translateService: TranslateService,
+    private readonly mainFormService: MainFormService,
+    private readonly analyticsInitService: AnalyticsInitService,
+    private readonly dialog: MatDialog,
+    private readonly shortcutsService: ShortcutsService,
   ) {
-
     this.tabsFa = this.mainFormService.analyticsConfig.getListFa();
   }
 
@@ -230,8 +229,11 @@ export class TabsComponent implements OnDestroy {
   }
 
   public drop(event: CdkDragDrop<string[]>) {
-    const previousIndex = parseInt(event.previousContainer.id.replace('tab-', ''), 10);
-    const newIndex = parseInt(event.container.id.replace('tab-', ''), 10);
+    // Cancel the edit of tabs names. Otherwise, if tab A is being edited and dropped on tab B then tab B is being edited with name A
+    this.editingTabIndex = -1;
+
+    const previousIndex = Number.parseInt(event.previousContainer.id.replace('tab-', ''), 10);
+    const newIndex = Number.parseInt(event.container.id.replace('tab-', ''), 10);
     moveInFormArray(previousIndex, newIndex, this.tabsFa);
     this.matTabGroup.selectedIndex = newIndex;
   }
