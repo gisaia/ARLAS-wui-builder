@@ -741,7 +741,12 @@ export class ResultListVisualisationsFormGroup extends FormGroup {
                 }
             ),
             dataGroups: new FormArray<ResultListVisualisationsDataGroup>([], [Validators.required, Validators.minLength(1)]),
-            default: new HiddenFormControl(false)
+            default: new HiddenFormControl(
+                false,
+                undefined,
+                {
+                    optional: true
+                })
         });
     }
 }
