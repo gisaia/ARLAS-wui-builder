@@ -28,7 +28,7 @@
     justify-content: space-between;
 
     .form-fields {
-      padding: 10px;
+      padding: 0 10px;
       min-width: 35%;
       max-width: 35%;
       ::ng-deep mat-label + mat-slider {
