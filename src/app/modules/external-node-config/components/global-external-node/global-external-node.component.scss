@@ -19,10 +19,7 @@
 @use "variables.scss" as var;
 
 .config-element {
-  box-shadow: 0px -2px 3px -6px rgba(0, 0, 0, 0.2),
-    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
   padding: 5px;
-  margin: -1px 10px;
   background-color: white;
 
   .config-element-container {
@@ -52,7 +49,7 @@
       color: var.$config-element-description-text-color;
       line-height: 1.6;
       border-left: 0.2rem solid var.$config-element-description-border-color;
-      background-color: var.$config-element-description-background;
+      background-color: var(--arlas-builder-description-background-color);
       border-radius: 4px;
       box-sizing: border-box;
 
@@ -66,4 +63,9 @@
       flex: 1;
     }
   }
+}
+
+.external-node__form {
+  height: 80vh;
+  margin-top: 10px;
 }

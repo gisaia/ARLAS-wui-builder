@@ -28,11 +28,14 @@ div .form-group-form-fields {
 .array_header {
     display: flex;
     align-items: center;
-    .form-control-title {
-        @include var.group-title();
-        font-size: 22px;
-        margin: 10px 0 10px 10px;
+
+    h3.form-control-title {
+        // Styling already present because of class name
+        padding: 0;
+        // Remove border because its container already has it
+        border-top: 0;
     }
+
     .icon {
         cursor: pointer;
         color: #777;

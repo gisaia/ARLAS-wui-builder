@@ -17,7 +17,7 @@
  * under the License.
  */
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup, ValidatorFn } from '@angular/forms';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { LAYER_MODE } from '@map-config/components/edit-layer/models';
 // The licence of this library is MIT.
@@ -35,18 +35,19 @@ import {
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
-    ButtonToggleFormControl,
-    ConfigFormGroup,
-    HiddenFormControl,
-    InputFormControl,
-    MapFiltersControl,
-    OrderedSelectFormControl,
-    SelectFormControl,
-    SelectOption,
-    SliderFormControl, RangeSliderFormControl,
-    SlideToggleFormControl,
-    VisualisationCheckboxFormControl,
-    VisualisationCheckboxOption
+  ButtonToggleFormControl,
+  ConfigFormGroup,
+  HiddenFormControl,
+  InputFormControl,
+  MapFiltersControl,
+  OrderedSelectFormControl,
+  RangeSliderFormControl,
+  SelectFormControl,
+  SelectOption,
+  SliderFormControl,
+  SlideToggleFormControl,
+  VisualisationCheckboxFormControl,
+  VisualisationCheckboxOption
 } from '@shared-models/config-form';
 import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
 import {
@@ -57,8 +58,7 @@ import { valuesToOptions } from '@utils/tools';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { ClusterAggType, FeatureRenderMode, Granularity } from 'arlas-web-contributors/models/models';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
-import { Observable, of, Subject } from 'rxjs';
-import { map } from 'rxjs/internal/operators/map';
+import { map, Observable, of, Subject } from 'rxjs';
 import { toNumericOptionsObs } from '../../../../services/collection-service/tools';
 import { MapFilterFormGroup } from './form-group';
 import {
@@ -327,12 +327,12 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         if (zoomRangeSliderCtrl.value.min < Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0)) {
             zoomRangeSliderCtrl.setMinRange(Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0));
             zoomRangeSliderCtrl.hasWarning = true;
-            zoomRangeSliderCtrl.warningMessage = `${marker('Network Analytics Fetching Precision is')} ${networkFetchingLevelControl.value}. 
+            zoomRangeSliderCtrl.warningMessage = `${marker('Network Analytics Fetching Precision is')} ${networkFetchingLevelControl.value}.
              ${marker('Therefore; minimum zoom level of the layer should be greater than or equal to')} ${zoomRangeSliderCtrl.value.min} .`;
             if (zoomRangeSliderCtrl.value.max <= zoomRangeSliderCtrl.value.min ) {
                 zoomRangeSliderCtrl.setMaxRange(Math.min(MAX_ZOOM, zoomRangeSliderCtrl.value.min + 1));
                 zoomRangeSliderCtrl.hasWarning = true;
-                zoomRangeSliderCtrl.warningMessage = `${marker('Maximum zoom level of the layer should be greater than')} 
+                zoomRangeSliderCtrl.warningMessage = `${marker('Maximum zoom level of the layer should be greater than')}
                 ${zoomRangeSliderCtrl.value.min}.`;
             } else {
                 zoomRangeSliderCtrl.hasWarning = false;
@@ -544,42 +544,6 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             }
           }
         ),
-        lineType: new SelectFormControl(
-          '',
-          marker('line type'),
-          marker('line type description'),
-          false,
-          [
-            { value: LINE_TYPE.solid, label: marker('Solid') + ' ( ━ ) ' },
-            { value: LINE_TYPE.dashed, label: marker('Dashed') + ' ( - - - )' },
-            { value: LINE_TYPE.dotted, label: marker('Dotted') + ' ( • • • )' },
-            { value: LINE_TYPE.mixed, label: marker('Mixed') + ' ( - • - )' }
-          ],
-          {
-            dependsOn: () => [this.geometryType],
-            onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.line)
-          }
-        ),
-        filter: new FormControl(),
-        labelContentFg: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.text,
-          marker('map.layer.label.content'),
-          labelSources,
-          isAggregated,
-          collection,
-          marker('label content description')
-        ).withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
-        labelOverlapFg: new SlideToggleFormControl(
-          true,
-          marker('overlap'),
-          marker('overlap description'),
-          {
-            optional: true,
-            dependsOn: () => [this.geometryType],
-            onDependencyChange: (control) => control.enableIf(this.isLabel())
-          }
-        ),
         opacity: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
           marker('map.layer.opacity'),
@@ -597,21 +561,35 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           isAggregated,
           collection,
           marker('property color ' + (type === MAP_LAYER_TYPE.CLUSTER ? type : '') + ' description'),
-          geometryTypes.indexOf(GEOMETRY_TYPE.heatmap) >= 0 ? () => this.geometryType : undefined
+          geometryTypes.includes(GEOMETRY_TYPE.heatmap) ? () => this.geometryType : undefined
         ),
-        widthFg: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.number,
-          marker('map.layer.width'),
-          [
-            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
-          ],
-          isAggregated,
-          collection,
-          marker('property width description')
-        )
-          .withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.line)),
-
+        line: new ConfigFormGroup({
+          type: new SelectFormControl(
+            '',
+            marker('line type'),
+            marker('line type description'),
+            false,
+            [
+              { value: LINE_TYPE.solid, label: marker('Solid') + ' ( ━ ) ' },
+              { value: LINE_TYPE.dashed, label: marker('Dashed') + ' ( - - - )' },
+              { value: LINE_TYPE.dotted, label: marker('Dotted') + ' ( • • • )' },
+              { value: LINE_TYPE.mixed, label: marker('Mixed') + ' ( - • - )' }
+            ]),
+          width: propertySelectorFormBuilder.build(
+            PROPERTY_TYPE.number,
+            marker('map.layer.width'),
+            [
+              PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
+            ],
+            isAggregated,
+            collection,
+            marker('property width description'))
+        },
+        {
+          dependsOn: () => [this.geometryType],
+          onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.line)
+        }).withTitle(marker('Line configuration')),
+        // TODO: Should that be duplicated within circle and heatmap?
         radiusFg: propertySelectorFormBuilder.build(
           PROPERTY_TYPE.number,
           marker('map.layer.radius'),
@@ -623,265 +601,269 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           marker('property radius ' + type + ' description')
         )
           .withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.circle
-            || this.geometryType.value === GEOMETRY_TYPE.heatmap)),
-        enableExtrusion: new SlideToggleFormControl(
-          false,
-          marker('Enable extrusion'),
-          marker('Display geographic features with a fill extrusion.'),
-          {
-            optional: true,
-            dependsOn: () => [this.geometryType],
-            onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.fill),
-            title: marker('Extrusion')
-          }
-        ),
-        extrusionValue: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.number,
-          marker('map.layer.extrusion.value'),
-          [
-            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.provided_field_for_feature
-          ],
-          isAggregated,
-          collection,
-          marker('property extrusionValue description')
-        ).withDependsOn(() => [this.enableExtrusion])
-          .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value)),
-        extrusionExaggeration: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.number,
-          marker('map.layer.extrusion.exaggeration'),
-          [
-            PROPERTY_SELECTOR_SOURCE.fix_slider
-          ],
-          isAggregated,
-          collection,
-          marker('exaggeration'),
-        ).withDependsOn(() => [this.enableExtrusion])
-          .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value)),
-        extrusionOpacity: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.number,
-          marker('map.layer.extrusion.opacity'),
-          [
-            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
-          ],
-          isAggregated,
-          collection,
-          marker('extrusion opacity description'),
-        ).withDependsOn(() => [this.enableExtrusion])
-          .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value )),
-        strokeColorFg: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.color,
-          marker('map.layer.stroke.color'),
-          colorSources,
-          isAggregated,
-          collection,
-          marker('property stroke color description')
-        ).withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.isCircleOrFill() && this.enabled))
-          .withTitle(marker('stroke')),
+          .withOnDependencyChange((control) => control.enableIf(this.isCircle() || this.isHeatmap())),
 
-        strokeWidthFg: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.number,
-          marker('map.layer.stroke.width'),
-          [
-            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
-          ],
-          isAggregated,
-          collection,
-          marker('property stroke width description')
-        ).withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.isCircleOrFill() && this.enabled)),
+        extrusion: new ConfigFormGroup({
+          enable: new SlideToggleFormControl(
+            false,
+            marker('Enable extrusion'),
+            marker('Display geographic features with a fill extrusion.'),
+            {
+              optional: true,
+              dependsOn: () => [this.geometryType],
+              onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.fill)
+            }),
+          value: propertySelectorFormBuilder.build(
+            PROPERTY_TYPE.number,
+            marker('map.layer.extrusion.value'),
+            [
+              PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated, PROPERTY_SELECTOR_SOURCE.provided_field_for_feature
+            ],
+            isAggregated,
+            collection,
+            marker('property extrusionValue description')
+          ).withDependsOn(() => [this.enableExtrusion])
+            .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value)),
+          exaggeration: propertySelectorFormBuilder.build(
+            PROPERTY_TYPE.number,
+            marker('map.layer.extrusion.exaggeration'),
+            [
+              PROPERTY_SELECTOR_SOURCE.fix_slider
+            ],
+            isAggregated,
+            collection,
+            marker('exaggeration'),
+          ).withDependsOn(() => [this.enableExtrusion])
+            .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value)),
+          opacity: propertySelectorFormBuilder.build(
+            PROPERTY_TYPE.number,
+            marker('map.layer.extrusion.opacity'),
+            [
+              PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
+            ],
+            isAggregated,
+            collection,
+            marker('extrusion opacity description')
+          ).withDependsOn(() => [this.enableExtrusion])
+            .withOnDependencyChange((control) => control.enableIf(this.enableExtrusion.value))
+        }).withTitle(marker('Extrusion')),
 
-        strokeOpacityFg: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.number,
-          marker('map.layer.stroke.opacity'),
-          [
-            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
-          ],
-          isAggregated,
-          collection,
-          marker('property stroke opacity description')
-        ).withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.isCircleOrFill() && this.enabled)),
+        stroke: new ConfigFormGroup({
+          color: propertySelectorFormBuilder.build(
+            PROPERTY_TYPE.color,
+            marker('map.layer.stroke.color'),
+            colorSources,
+            isAggregated,
+            collection,
+            marker('property stroke color description')),
+          width: propertySelectorFormBuilder.build(
+            PROPERTY_TYPE.number,
+            marker('map.layer.stroke.width'),
+            [
+              PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
+            ],
+            isAggregated,
+            collection,
+            marker('property stroke width description')),
+          opacity: propertySelectorFormBuilder.build(
+            PROPERTY_TYPE.number,
+            marker('map.layer.stroke.opacity'),
+            [
+              PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
+            ],
+            isAggregated,
+            collection,
+            marker('property stroke opacity description'))
+        },
+        {
+          dependsOn: () => [this.geometryType],
+          onDependencyChange: (control) => control.enableIf(this.isCircleOrFill() && this.enabled)
+        }).withTitle(marker('stroke')),
 
-        weightFg: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.number,
-          marker('map.layer.heatmap.weight'),
-          [
-            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
-          ],
-          isAggregated,
-          collection,
-          marker('property weight description')
-        )
-          .withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.heatmap)),
+        heatmap: new ConfigFormGroup({
+          weight: propertySelectorFormBuilder.build(
+            PROPERTY_TYPE.number,
+            marker('map.layer.heatmap.weight'),
+            [
+              PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
+            ],
+            isAggregated,
+            collection,
+            marker('property weight description')),
+          intensity: propertySelectorFormBuilder.build(
+            PROPERTY_TYPE.number,
+            marker('map.layer.heatmap.intensity'),
+            [
+              PROPERTY_SELECTOR_SOURCE.fix_slider
+            ],
+            isAggregated,
+            collection,
+            marker('property intensity description'))
+        },
+        {
+          dependsOn: () => [this.geometryType],
+          onDependencyChange: (control) => control.enableIf(this.isHeatmap())
+        }).withTitle(marker('Heatmap')),
 
-        intensityFg: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.number,
-          marker('map.layer.heatmap.intensity'),
-          [
-            PROPERTY_SELECTOR_SOURCE.fix_slider
-          ],
-          isAggregated,
-          collection,
-          marker('property intensity description')
-        )
-          .withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.heatmap)),
-        labelSizeFg: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.number,
-          marker('map.layer.label.size'),
-          [
-            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
-          ],
-          isAggregated,
-          collection,
-          marker('property label size description')
-        )
-          .withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.isLabel()))
-          .withTitle(marker('size rotation offset')),
-        labelRotationFg: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.number,
-          marker('map.layer.label.rotation'),
-          labelRotationSources,
-          isAggregated,
-          collection,
-          marker('property label rotation description')
-        )
-          .withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
-        labelPlacementCtrl: new ButtonToggleFormControl(
-          'point',
-          [
-            { label: marker('point'), value: LABEL_PLACEMENT.point },
-            { label: marker('line'), value: LABEL_PLACEMENT.line },
-            { label: marker('line-center'), value: LABEL_PLACEMENT.line_center },
-          ],
-          marker('label placement description'),
-          {
-            optional: true,
-            title: marker('Label placement'),
-            dependsOn: () => [this.geometryType, this.geometryStep],
-            onDependencyChange: (control) => {
-              control.enableIf(this.geometryType.value === GEOMETRY_TYPE.symbol);
-              if (control.enabled) {
-                // Feature Mode and Feature Metric Mode
-                if (
-                  !!this.geometryStep.get('geometry') && !!this.geometryStep.get('geometry').value
-                  && this.geometryStep.get('geometry').touched
-                ) {
-                  const sub = (this.geometryStep.get('geometry') as SelectFormControl).sourceData.subscribe((fields: CollectionField[]) => {
-                    fields.forEach(f => {
-                      if (f.name === this.geometryStep.get('geometry').value) {
-                        control.enableIf(f.type !== CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT);
-                      }
-                    });
-                    sub.unsubscribe();
-                  });
-                }
+        label: new ConfigFormGroup({
+          content: propertySelectorFormBuilder.build(
+            PROPERTY_TYPE.text,
+            marker('map.layer.label.content'),
+            labelSources,
+            isAggregated,
+            collection,
+            marker('label content description')),
+          size: propertySelectorFormBuilder.build(
+            PROPERTY_TYPE.number,
+            marker('map.layer.label.size'),
+            [
+              PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
+            ],
+            isAggregated,
+            collection,
+            marker('property label size description')),
+          rotation: propertySelectorFormBuilder.build(
+            PROPERTY_TYPE.number,
+            marker('map.layer.label.rotation'),
+            labelRotationSources,
+            isAggregated,
+            collection,
+            marker('property label rotation description')),
+          offset: new ConfigFormGroup({
+            dx: new InputFormControl(
+              0,
+              marker('label offset dx'),
+              marker('label offset dx description'),
+              'number',
+              {
+                optional: false
+              }
+            ),
+            dy: new InputFormControl(
+              0,
+              marker('label offset dy'),
+              marker('label offset dy description'),
+              'number',
+              {
+                optional: false
+              }
+            )
+          }),
 
-                // Cluster Mode
-                if (
-                  !!this.geometryStep.get('aggregatedGeometry') && !!this.geometryStep.get('aggregatedGeometry').value
-                  && this.geometryStep.get('aggregatedGeometry').touched
-                ) {
-                  control.enableIf(this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.bbox ||
-                    this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.cell);
-                }
-                if (
-                  !!this.geometryStep.get('rawGeometry') && !!this.geometryStep.get('rawGeometry').value
-                  && this.geometryStep.get('rawGeometry').touched
-                ) {
-                  const sub = (this.geometryStep.get('rawGeometry') as SelectFormControl).sourceData.subscribe(
-                    (fields: CollectionField[]) => {
-                      fields.forEach(f => {
-                        if (f.name === this.geometryStep.get('rawGeometry').value) {
-                          control.enableIf(f.type !== CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT);
-                        }
+          layout: new ConfigFormGroup({
+            overlap: new SlideToggleFormControl(
+              true,
+              marker('overlap'),
+              marker('overlap description'),
+              {
+                optional: true
+              }
+            ),
+            placement: new ButtonToggleFormControl(
+              'point',
+              [
+                { label: marker('point'), value: LABEL_PLACEMENT.point },
+                { label: marker('line'), value: LABEL_PLACEMENT.line },
+                { label: marker('line-center'), value: LABEL_PLACEMENT.line_center },
+              ],
+              marker('label placement description'),
+              {
+                optional: true,
+                dependsOn: () => [this.geometryType, this.geometryStep],
+                onDependencyChange: (control) => {
+                  control.enableIf(this.geometryType.value === GEOMETRY_TYPE.symbol);
+                  if (control.enabled) {
+                    // Feature Mode and Feature Metric Mode
+                    if (
+                      !!this.geometryStep.get('geometry') && !!this.geometryStep.get('geometry').value
+                      && this.geometryStep.get('geometry').touched
+                    ) {
+                      const sub = (this.geometryStep.get('geometry') as SelectFormControl).sourceData.subscribe((fields: CollectionField[]) => {
+                        fields.forEach(f => {
+                          if (f.name === this.geometryStep.get('geometry').value) {
+                            control.enableIf(f.type !== CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT);
+                          }
+                        });
+                        sub.unsubscribe();
                       });
-                      sub.unsubscribe();
-                    });
+                    }
+
+                    // Cluster Mode
+                    if (
+                      !!this.geometryStep.get('aggregatedGeometry') && !!this.geometryStep.get('aggregatedGeometry').value
+                      && this.geometryStep.get('aggregatedGeometry').touched
+                    ) {
+                      control.enableIf(this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.bbox ||
+                        this.geometryStep.get('aggregatedGeometry').value === AGGREGATE_GEOMETRY_TYPE.cell);
+                    }
+                    if (
+                      !!this.geometryStep.get('rawGeometry') && !!this.geometryStep.get('rawGeometry').value
+                      && this.geometryStep.get('rawGeometry').touched
+                    ) {
+                      const sub = (this.geometryStep.get('rawGeometry') as SelectFormControl).sourceData.subscribe(
+                        (fields: CollectionField[]) => {
+                          fields.forEach(f => {
+                            if (f.name === this.geometryStep.get('rawGeometry').value) {
+                              control.enableIf(f.type !== CollectionReferenceDescriptionProperty.TypeEnum.GEOPOINT);
+                            }
+                          });
+                          sub.unsubscribe();
+                        });
+                    }
+                  }
                 }
               }
-            }
-          }
-        ),
-        labelAlignmentCtrl: new ButtonToggleFormControl(
-          'center',
-          [
-            { label: marker('right'), value: LABEL_ALIGNMENT.right },
-            { label: marker('center'), value: LABEL_ALIGNMENT.center },
-            { label: marker('left'), value: LABEL_ALIGNMENT.left },
+            ),
+            alignment: new ButtonToggleFormControl(
+              'center',
+              [
+                { label: marker('right'), value: LABEL_ALIGNMENT.right },
+                { label: marker('center'), value: LABEL_ALIGNMENT.center },
+                { label: marker('left'), value: LABEL_ALIGNMENT.left },
 
-          ],
-          marker('label alignment description'),
-          {
-            optional: true,
-            title: marker('Label alignment'),
-            dependsOn: () => [this.geometryType],
-            onDependencyChange: (control) => control.enableIf(this.geometryType.value === GEOMETRY_TYPE.symbol)
-          }
-        ),
-        labelOffsetFg: new ConfigFormGroup({
-          dx: new InputFormControl(
-            0,
-            marker('label offset dx'),
-            marker('label offset dx description'),
-            'number',
-            {
-              optional: false
-            }
-          ),
-          dy: new InputFormControl(
-            0,
-            marker('label offset dy'),
-            marker('label offset dy description'),
-            'number',
-            {
-              optional: false
-            }
-          )
-        })
-          .withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
-        labelHaloColorFg: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.color,
-          marker('map.layer.label.halo.color'),
-          colorSources,
-          isAggregated,
-          collection,
-          marker('property label halo color description')
-        )
-          .withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.isLabel()))
-          .withTitle(marker('Halo title')),
-        labelHaloWidthFg: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.number,
-          marker('map.layer.label.halo.width'),
-          [
-            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
-          ],
-          isAggregated,
-          collection,
-          marker('property label halo width description')
-        )
-          .withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.isLabel())),
-        labelHaloBlurFg: propertySelectorFormBuilder.build(
-          PROPERTY_TYPE.number,
-          marker('map.layer.label.halo.blur'),
-          [
-            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
-          ],
-          isAggregated,
-          collection,
-          marker('property label halo blur description')
-        )
-          .withDependsOn(() => [this.geometryType])
-          .withOnDependencyChange((control) => control.enableIf(this.isLabel()))
+              ],
+              marker('label alignment description'),
+              {
+                optional: true
+              }
+            )
+          }).withTitle(marker('Label layout')),
 
+          halo: new ConfigFormGroup({
+            color: propertySelectorFormBuilder.build(
+              PROPERTY_TYPE.color,
+              marker('map.layer.label.halo.color'),
+              colorSources,
+              isAggregated,
+              collection,
+              marker('property label halo color description')
+            ),
+            width: propertySelectorFormBuilder.build(
+              PROPERTY_TYPE.number,
+              marker('map.layer.label.halo.width'),
+              [
+                PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
+              ],
+              isAggregated,
+              collection,
+              marker('property label halo width description')
+            ),
+            blur: propertySelectorFormBuilder.build(
+              PROPERTY_TYPE.number,
+              marker('map.layer.label.halo.blur'),
+              [
+                PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
+              ],
+              isAggregated,
+              collection,
+              marker('property label halo blur description')
+            )
+          }).withTitle(marker('Halo title'))
+        },
+        {
+          dependsOn: () => [this.geometryType],
+          onDependencyChange: (control) => control.enableIf(this.isLabel())
+        }).withTitle(marker('size rotation offset'))
       }).withStepName(marker('Style')),
       visibilityStep: new ConfigFormGroup({
         visible: new SlideToggleFormControl(
@@ -952,7 +934,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
     return this.get('visibilityStep') as ConfigFormGroup;
   }
   public get networkFetchingLevel() {
-    return this.get('visibilityStep').get('networkFetchingLevel') as SliderFormControl;
+    return this.get('visibilityStep')?.get('networkFetchingLevel') as SliderFormControl;
   }
   public get styleStep() {
     return this.get('styleStep') as ConfigFormGroup;
@@ -975,95 +957,93 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
     return this.styleStep.get('geometryType') as SelectFormControl;
   }
   public get enableExtrusion() {
-    return this.styleStep.get('enableExtrusion') as SlideToggleFormControl;
+    return this.styleStep.get('extrusion')?.get('enable') as SlideToggleFormControl;
   }
   public get extrusionValue() {
-    return this.styleStep.get('extrusionValue') as SlideToggleFormControl;
+    return this.styleStep.get('extrusion')?.get('value') as SlideToggleFormControl;
   }
 
   public get extrusionExaggeration(){
-    return this.styleStep.get('extrusionExaggeration') as SlideToggleFormControl;
+    return this.styleStep.get('extrusion')?.get('exaggeration') as SlideToggleFormControl;
   }
 
   public get extrusionOpacity() {
-    return this.styleStep.get('extrusionOpacity') as SlideToggleFormControl;
+    return this.styleStep.get('extrusion')?.get('opacity') as SlideToggleFormControl;
   }
   public get opacity() {
     return this.styleStep.get('opacity') as PropertySelectorFormGroup;
   }
   public get labelContentFg() {
-    return this.styleStep.get('labelContentFg') as PropertySelectorFormGroup;
+    return this.styleStep.get('label')?.get('content') as PropertySelectorFormGroup;
   }
   public get labelOverlapFg() {
-    return this.styleStep.get('labelOverlapFg') as SlideToggleFormControl;
+    return this.styleStep.get('label')?.get('layout')?.get('overlap') as SlideToggleFormControl;
   }
   public get colorFg() {
     return this.styleStep.get('colorFg') as PropertySelectorFormGroup;
   }
   public get widthFg() {
-    return this.styleStep.get('widthFg') as PropertySelectorFormGroup;
+    return this.styleStep.get('line')?.get('width') as PropertySelectorFormGroup;
   }
   public get radiusFg() {
     return this.styleStep.get('radiusFg') as PropertySelectorFormGroup;
   }
   public get strokeWidthFg() {
-    return this.styleStep.get('strokeWidthFg') as PropertySelectorFormGroup;
+    return this.styleStep.get('stroke')?.get('width') as PropertySelectorFormGroup;
   }
   public get strokeColorFg() {
-    return this.styleStep.get('strokeColorFg') as PropertySelectorFormGroup;
+    return this.styleStep.get('stroke')?.get('color') as PropertySelectorFormGroup;
   }
   public get strokeOpacityFg() {
-    return this.styleStep.get('strokeOpacityFg') as PropertySelectorFormGroup;
+    return this.styleStep.get('stroke')?.get('opacity') as PropertySelectorFormGroup;
   }
   public get weightFg() {
-    return this.styleStep.get('weightFg') as PropertySelectorFormGroup;
+    return this.styleStep.get('heatmap')?.get('weight') as PropertySelectorFormGroup;
   }
   public get intensityFg() {
-    return this.styleStep.get('intensityFg') as PropertySelectorFormGroup;
+    return this.styleStep.get('heatmap')?.get('intensity') as PropertySelectorFormGroup;
   }
-  public get filter() {
-    return this.styleStep.get('filter') as FormGroup;
-  }
+
   public get filters() {
     return this.visibilityStep.get('filters') as MapFiltersControl;
   }
 
   public get labelSizeFg() {
-    return this.styleStep.get('labelSizeFg') as PropertySelectorFormGroup;
+    return this.styleStep.get('label')?.get('size') as PropertySelectorFormGroup;
   }
 
   public get labelRotationFg() {
-    return this.styleStep.get('labelRotationFg') as PropertySelectorFormGroup;
+    return this.styleStep.get('label')?.get('rotation') as PropertySelectorFormGroup;
   }
 
   public get labelHaloColorFg() {
-    return this.styleStep.get('labelHaloColorFg') as PropertySelectorFormGroup;
+    return this.styleStep.get('label')?.get('halo')?.get('color') as PropertySelectorFormGroup;
   }
 
   public get labelHaloBlurFg() {
-    return this.styleStep.get('labelHaloBlurFg') as PropertySelectorFormGroup;
+    return this.styleStep.get('label')?.get('halo')?.get('blur') as PropertySelectorFormGroup;
   }
 
   public get labelHaloWidthFg() {
-    return this.styleStep.get('labelHaloWidthFg') as PropertySelectorFormGroup;
+    return this.styleStep.get('label')?.get('halo')?.get('width') as PropertySelectorFormGroup;
   }
 
   public get labelPlacementCtrl() {
-    return this.styleStep.get('labelPlacementCtrl') as ButtonToggleFormControl;
+    return this.styleStep.get('label')?.get('layout')?.get('placement') as ButtonToggleFormControl;
   }
 
   public get labelAlignmentCtrl() {
-    return this.styleStep.get('labelAlignmentCtrl') as ButtonToggleFormControl;
+    return this.styleStep.get('label')?.get('layout')?.get('alignment') as ButtonToggleFormControl;
   }
 
   public get labelOffsetFg() {
-    return this.styleStep.get('labelOffsetFg') as ConfigFormGroup;
+    return this.styleStep.get('label')?.get('offset') as ConfigFormGroup;
   }
   public get labelOffsetDx() {
-    return this.styleStep.get('labelOffsetFg').get('dx') as InputFormControl;
+    return this.labelOffsetFg.get('dx') as InputFormControl;
   }
   public get labelOffsetDy() {
-    return this.styleStep.get('labelOffsetFg').get('dy') as InputFormControl;
+    return this.labelOffsetFg.get('dy') as InputFormControl;
   }
 
   private isCircleOrFill(): boolean {
@@ -1080,6 +1060,10 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
 
   private isLabel(): boolean {
     return this.geometryType.value === GEOMETRY_TYPE.symbol;
+  }
+
+  private isHeatmap(): boolean {
+    return this.geometryType.value === GEOMETRY_TYPE.heatmap;
   }
 }
 

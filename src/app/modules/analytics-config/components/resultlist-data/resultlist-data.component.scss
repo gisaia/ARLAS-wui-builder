@@ -36,3 +36,9 @@
 .grid-form-control{
    margin: 30px 10px
 }
+
+:host {
+   mat-tab-group {
+      border: 1px solid rgba(0, 0, 0, 0.12);
+   }
+}

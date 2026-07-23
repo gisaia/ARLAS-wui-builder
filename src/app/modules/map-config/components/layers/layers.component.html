@@ -1,4 +1,4 @@
-<div style="display: flex; margin: 10px 0">
+<div class="layers__header">
   <button matButton="outlined" color="primary" [disabled]="!enableAddLayer" class="add-layer"
       [matTooltip]="enableAddLayer ? ('Add layer' | translate) : ('No collection with geometries is available in the server' | translate)"
       matTooltipPosition="below" [routerLink]="['add']" queryParamsHandling="preserve">
@@ -13,10 +13,11 @@
   </div>
 </div>
 
-<mat-form-field>
+<mat-form-field [subscriptSizing]="'dynamic'">
   <mat-icon class="filter-icon" matPrefix>filter_alt</mat-icon>
   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
 </mat-form-field>
+
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z1" matSort>
 
   <ng-container matColumnDef="name">

@@ -28,7 +28,7 @@ export class MapBasemapFormGroup extends ConfigFormGroup {
   public constructor(settingsService: ArlasSettingsService) {
     super({
       basemaps: new FormArray<BasemapFormGroup>([]),
-      default: new HiddenFormControl('', null),
+      default: new HiddenFormControl('', undefined),
       terrain: new ConfigFormGroup({
         enable: new SlideToggleFormControl(
           false,

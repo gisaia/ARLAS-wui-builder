@@ -20,7 +20,8 @@ import { BucketsIntervalFormGroup } from '@analytics-config/services/buckets-int
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import {
   Component, OnDestroy, OnInit, QueryList, ViewChild,
-  ViewChildren, ViewEncapsulation, forwardRef
+  ViewChildren, ViewEncapsulation, forwardRef,
+  input
 } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,7 +36,8 @@ import {
   ConfigFormControl,
   ConfigFormGroup,
   ConfigFormGroupArray,
-  HiddenConfigFromGroup
+  HiddenConfigFromGroup,
+  HiddenFormControl
 } from '@shared-models/config-form';
 import { ObjectvaluesPipe } from '@shared/pipes/objectvalues.pipe';
 import { OrderConfigFormTabControlsPipe } from '@shared/pipes/order-config-form-tab.pipe';
@@ -78,6 +80,9 @@ export class ConfigFormGroupComponent extends AsbtractConfigFormControl implemen
   @ViewChild(MatStepper, { static: false }) private stepper: MatStepper;
   @ViewChildren(forwardRef(() => ConfigFormGroupComponent)) private subConfigFormGroups: QueryList<ConfigFormGroupComponent>;
 
+  /** Determines whether to hide the gap displayed before the form group title */
+  public hideGap = input(false);
+
   public static listenToAllControlsOnDependencyChange(configFormGroup: ConfigFormGroup, toUnsubscribe: Array<Subscription>) {
     [
       ...configFormGroup.controlsRecursively,
@@ -111,12 +116,12 @@ export class ConfigFormGroupComponent extends AsbtractConfigFormControl implemen
   }
 
   public isFormControl(control: AbstractControl): ConfigFormControl | null {
-    return control instanceof ConfigFormControl ? control : null;
+    return control instanceof ConfigFormControl && !(control instanceof HiddenFormControl) ? control : null;
   }
 
   public isFormGroup(control: AbstractControl): ConfigFormGroup | null {
     return !this.isHistogramBucketFormGroup(control) && control instanceof ConfigFormGroup &&
-    !(control instanceof HiddenConfigFromGroup)  ? control : null;
+    !(control instanceof HiddenConfigFromGroup) ? control : null;
   }
 
   public isHistogramBucketFormGroup(control: AbstractControl): BucketsIntervalFormGroup | null {

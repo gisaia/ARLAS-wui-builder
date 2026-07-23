@@ -17,6 +17,13 @@
  * under the License.
  */
 
+// Add a background-color to better integrate them
+.mat-mdc-tab-list,
+.mat-horizontal-stepper-header-container {
+  background-color: white;
+  border-bottom: 5px solid var(--arlas-builder-background-color);
+}
+
 // Tighten the display of inputs
 .mat-mdc-form-field-infix {
   // Remove 8px from padding bottom and min height
@@ -73,10 +80,6 @@
   color: rgba(0, 0, 0, 0.6);
 }
 
-.mat-mdc-tab-header {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-}
-
 // Change style of table back to how they were
 .mdc-data-table__header-cell {
   font-size: 12px;
@@ -102,11 +105,6 @@ td.mat-mdc-cell:first-of-type {
   --mat-checkbox-state-layer-size: 18px;
 }
 
-.mdc-form-field > label {
-  margin-left: 10px !important;
-  font-size: 14px;
-}
-
 .mdc-button__label {
   font-size: 14px;
 }
@@ -119,9 +117,18 @@ mat-nav-list .mat-mdc-list-item {
   margin: 0 !important;
 }
 
-.mdc-form-field--align-end {
+.mdc-form-field {
   label {
-    margin-left: 0 !important;
+    margin-left: 10px !important;
+    font-size: 14px;
+  }
+
+  &--align-end {
+    label {
+      margin-left: 0 !important;
+      // Increase space between text and toggle
+      padding-right: 10px !important;
+    }
   }
 }
 
