@@ -41,57 +41,66 @@
     overflow-y: auto;
     flex-grow: 2;
 
-    .content {
-      display: flex;
-      align-items: center;
-      min-width: 210px;
-      gap: 0 10px;
-
-      .tab-error {
-        color: var.$error-color;
-      }
-
-      .edit-tab-name {
-        display: flex;
-        box-shadow: inset black 0px 0px 2px 0px;
-        background-color: white;
-        font-weight: bold;
-        height: 30px;
-        flex: 5;
-      }
-
-      .icon {
-        flex:1;
-      }
-
-      .tab-name {
-        align-self: center;
-        cursor: text;
-        min-height: 15px;
-        flex: 5;
-
-        &.pointer {
-          cursor: pointer;
-        }
-      }
-
-      .close,
-      .settings {
-        --mat-icon-button-state-layer-size: 16px;
-        --mat-icon-button-touch-target-size: 16px;
-        padding: 0;
-        display: flex;
-
-        mat-icon {
-          font-size: 16px;
-          width: 16px;
-          height: 16px;
-        }
-      }
-    }
-
     .no-tabs {
       padding: 20px;
     }
   }
 }
+
+.cdk-drag-preview {
+  background-color: white;
+  // Reproduce dimensions of the tabs
+  // height: 48px;
+  padding: 12px 24px;
+}
+
+.content,
+.cdk-drag-preview {
+  display: flex;
+  align-items: center;
+  min-width: 210px;
+  gap: 0 10px;
+
+  .tab-error {
+    color: var.$error-color;
+  }
+
+  .edit-tab-name {
+    display: flex;
+    box-shadow: inset black 0px 0px 2px 0px;
+    background-color: white;
+    font-weight: bold;
+    height: 30px;
+    flex: 5;
+  }
+
+  .icon {
+    flex:1;
+  }
+
+  .tab-name {
+    align-self: center;
+    cursor: text;
+    min-height: 15px;
+    flex: 5;
+
+    &.pointer {
+      cursor: pointer;
+    }
+  }
+
+  .close,
+  .settings {
+    --mat-icon-button-state-layer-size: 16px;
+    --mat-icon-button-touch-target-size: 16px;
+    padding: 0;
+    display: flex;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+

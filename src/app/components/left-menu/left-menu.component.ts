@@ -80,7 +80,7 @@ export class LeftMenuComponent implements OnInit {
       );
   }
 
-  public save(event) {
+  public save(event: Event) {
     if (this.persistenceService.isAvailable) {
       this.mainFormManager.attemptExport(EXPORT_TYPE.persistence);
       this.updateNbErrors();
