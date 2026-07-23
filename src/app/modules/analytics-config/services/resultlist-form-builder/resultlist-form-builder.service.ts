@@ -118,6 +118,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             searchSize: this.get('settingsStep.searchSize') as SliderFormControl,
             displayFilters: this.get('settingsStep.displayFilters') as SlideToggleFormControl,
             isGeoSortActived: this.get('settingsStep.isGeoSortActived') as SlideToggleFormControl,
+            isExportEnabled: this.get('settingsStep.isExportEnabled') as SlideToggleFormControl,
             cellBackgroundStyle: this.get('settingsStep.cellBackgroundStyle') as SelectFormControl
         },
         visualisationStep: {
@@ -379,7 +380,12 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                     isGeoSortActived: new SlideToggleFormControl(
                         false,
                         marker('Activate geosort'),
-                        marker('Activate geosort')
+                        marker('Activate geosort description')
+                    ),
+                    isExportEnabled: new SlideToggleFormControl(
+                        false,
+                        marker('Enable CSV export'),
+                        marker('Enable CSV export description')
                     ),
                     cellBackgroundStyle: new SelectFormControl(
                         CellBackgroundEnum.filled,
@@ -395,9 +401,9 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                             dependsOn: () => [
                                 this.customControls.dataStep.columns as any
                             ],
-                            onDependencyChange: (control: ButtonFormControl) => {
+                            onDependencyChange: control => {
                                 const useColorService = this.customControls.dataStep.columns.controls
-                                    .filter(c => c.get('useColorService').value === true).length > 0;
+                                    .some(c => c.get('useColorService').value === true);
                                 control.enableIf(useColorService);
                             }
                         }

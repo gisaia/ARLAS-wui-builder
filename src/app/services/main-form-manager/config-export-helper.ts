@@ -1444,6 +1444,7 @@ export class ConfigExportHelper {
           downloadLink: widgetData.sactionStep.downloadLink,
           isBodyHidden: unmanagedRenderFields.isBodyHidden,
           isGeoSortActived: !!widgetData.settingsStep.isGeoSortActived,
+          isExportEnabled: !!widgetData.settingsStep.isExportEnabled,
           isAutoGeoSortActived: unmanagedRenderFields.isAutoGeoSortActived,
           selectedItemsEvent: unmanagedRenderFields.selectedItemsEvent,
           consultedItemEvent: unmanagedRenderFields.consultedItemEvent,

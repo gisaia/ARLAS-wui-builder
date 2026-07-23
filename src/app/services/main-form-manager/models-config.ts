@@ -254,6 +254,7 @@ export interface ShortcutsConfig {
   order?: number;
 }
 
+// TODO: split it between the different analytics component
 export interface AnalyticComponentInputConfig {
   id: string;
   dataType?: string;
@@ -313,6 +314,7 @@ export interface AnalyticComponentInputConfig {
   displayFilters?: boolean;
   isBodyHidden?: boolean;
   isGeoSortActived?: boolean;
+  isExportEnabled?: boolean;
   isAutoGeoSortActived?: boolean;
   selectedItemsEvent?: any;
   consultedItemEvent?: any;
