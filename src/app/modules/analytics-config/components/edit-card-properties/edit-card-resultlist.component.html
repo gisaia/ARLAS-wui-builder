@@ -81,8 +81,7 @@
                     <th *matHeaderCellDef class="color-service" mat-header-cell>{{ 'Icon' | translate }}</th>
                     <td *matCellDef="let field" class="color-service" mat-cell>
                         <div class="color-service-wrapper">
-                            <arlas-config-form-control [control]="field.controls.icon" [showLabel]="false">
-                            </arlas-config-form-control>
+                            <arlas-config-icon-picker [control]="field.controls.icon" [default]="''"></arlas-config-icon-picker>
                         </div>
                     </td>
                 </ng-container>

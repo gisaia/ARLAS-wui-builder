@@ -34,12 +34,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
-import { IconPickerModule } from '@gisaia-team/ngx-icon-picker';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { AnalyticConfig } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { ConfigIconPickerComponent } from '@shared-components/config-icon-picker/config-icon-picker.component';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { ConfigFormGroup } from '@shared-models/config-form';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
@@ -101,7 +101,6 @@ export class AddWidgetDialogComponent {
   imports: [
     ReactiveFormsModule,
     MatIconModule,
-    IconPickerModule,
     MatFormFieldModule,
     TranslatePipe,
     MatButtonToggleModule,
@@ -110,8 +109,9 @@ export class AddWidgetDialogComponent {
     DragDropModule,
     WidgetEditionComponent,
     MatInputModule,
-    MatButtonModule
-  ]
+    MatButtonModule,
+    ConfigIconPickerComponent
+]
 })
 export class EditGroupComponent implements OnInit, OnDestroy {
 

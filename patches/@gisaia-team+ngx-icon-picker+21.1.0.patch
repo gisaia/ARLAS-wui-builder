@@ -1,0 +1,15 @@
+diff --git a/node_modules/@gisaia-team/ngx-icon-picker/fesm2022/gisaia-team-ngx-icon-picker.mjs b/node_modules/@gisaia-team/ngx-icon-picker/fesm2022/gisaia-team-ngx-icon-picker.mjs
+index 2296baa..dd15d4a 100644
+--- a/node_modules/@gisaia-team/ngx-icon-picker/fesm2022/gisaia-team-ngx-icon-picker.mjs
++++ b/node_modules/@gisaia-team/ngx-icon-picker/fesm2022/gisaia-team-ngx-icon-picker.mjs
+@@ -41992,8 +41992,8 @@ class IconPickerComponent {
+                 parentNode = node;
+             }
+             const boxParent = this.createBox(parentNode, true);
+-            this.top = boxDirective.top - boxParent.top;
+-            this.left = boxDirective.left - boxParent.left;
++            this.top = boxDirective.top;
++            this.left = boxDirective.left;
+         }
+         else {
+             this.top = boxDirective.top;
