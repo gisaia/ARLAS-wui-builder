@@ -1,0 +1,23 @@
+@if (control().value) {
+<button mat-icon-button (click)="iconInput.click()" [matTooltip]="'Click to open the icon picker' | translate">
+    <mat-icon>{{control().value}}</mat-icon>
+</button>
+} @else {
+<button matButton="outlined" class="icon-picker__button--empty" (click)="iconInput.click()">
+    {{ 'Click to select an icon' | translate }}
+</button>
+}
+
+<input class="icon-picker__input" #iconInput matInput
+    [iconPicker]="control().value" [ipIconPack]="['mat']"
+    [ipFallbackIcon]="default()" [ipPosition]="'right'"
+    [ipButtonStyleClass]="'mat-raised-button'"
+    [ipMaxHeight]="'300px'" [ipWidth]="'467px'" [ipIconSize]="'24px'"
+    (iconPickerSelect)="onIconPickerSelect($event)"/>
+
+<!-- If the default is empty string, then we want to be able to reset the icon picker -->
+@if (control().value && !default()) {
+<button matButton="outlined" class="icon-picker__delete" (click)="onIconPickerSelect('')">
+    {{ 'Remove selected icon' | translate }}
+</button>
+}

@@ -5,13 +5,7 @@
       <mat-label>{{'Name' | translate}}</mat-label>
       <input matInput formControlName="name">
     </mat-form-field>
-    <div class="icon">
-      <mat-icon style="cursor: pointer;" (click)="iconInput.click();">
-        {{tabForm.get('icon').value}}</mat-icon>
-      <input class="icon-picker-icon" #iconInput matInput [iconPicker]="tabForm.get('icon').value" [ipIconPack]="['mat']"
-        [ipFallbackIcon]="'short_text'" [ipPosition]="'right'" [ipButtonStyleClass]="'mat-raised-button'"
-        [ipMaxHeight]="'250px'" [ipWidth]="'307px'" (iconPickerSelect)="onIconPickerSelect($event)" />
-    </div>
+    <arlas-config-icon-picker [control]="tabForm.controls.icon"></arlas-config-icon-picker>
   </div>
   <div>
     <mat-form-field style="width: 100%;">

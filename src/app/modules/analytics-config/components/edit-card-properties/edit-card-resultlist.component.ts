@@ -16,31 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import {CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {Component, DestroyRef, inject, Input, OnInit} from '@angular/core';
-import {FormArray} from '@angular/forms';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {MatError} from '@angular/material/select';
-import {MatTable, MatTableModule} from '@angular/material/table';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {TranslatePipe} from '@ngx-translate/core';
-import {ConfigFormControlComponent} from '@shared-components/config-form-control/config-form-control.component';
-import {SelectFormControl} from '@shared-models/config-form';
-import {MatCard} from '@angular/material/card';
-import {buildCardViewProperties} from '@analytics-config/services/resultlist-form-builder/utils';
 import {
     ResultListCardFieldsFormGroup, ResultListCardLineFormGroup
 } from '@analytics-config/services/resultlist-form-builder/form-group';
-import {CollectionService} from '@services/collection-service/collection.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { buildCardViewProperties } from '@analytics-config/services/resultlist-form-builder/utils';
+import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormArray } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCard } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatError } from '@angular/material/select';
+import { MatTable, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { ConfigFormControlComponent } from '@shared-components/config-form-control/config-form-control.component';
+import { ConfigIconPickerComponent } from '@shared-components/config-icon-picker/config-icon-picker.component';
+import { SelectFormControl } from '@shared-models/config-form';
 
 @Component({
     selector: 'arlas-edit-card-resultlist-columns',
     templateUrl: './edit-card-resultlist.component.html',
     styleUrls: ['./edit-card-resultlist.component.scss'],
     imports: [MatTableModule, DragDropModule, MatIconModule, MatButtonModule,
-        MatTooltipModule, ConfigFormControlComponent, TranslatePipe, MatError, MatCard]
+    MatTooltipModule, ConfigFormControlComponent, TranslatePipe, MatError, MatCard, ConfigIconPickerComponent]
 })
 export class EditCardResultListComponent implements OnInit {
     /** The form array controlling the card lines. */
@@ -65,9 +66,9 @@ export class EditCardResultListComponent implements OnInit {
     }
 
     public ngOnInit() {
-        if (!!this.collection) {
+        if (this.collection) {
             this.collection.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(c => {
-                (this.control as FormArray).clear();
+                this.control.clear();
             });
         }
     }

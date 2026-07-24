@@ -110,7 +110,8 @@
     }
 
     .mat-column-icon {
-        max-width: 170px;
+        // Give space for the empty button
+        min-width: 200px;
     }
 
     .mat-column-delete {
