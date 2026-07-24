@@ -241,7 +241,8 @@ export class EditGroupComponent implements OnInit, OnDestroy {
         formData: widgetFg.value.widgetData,
         collection
       } as EditWidgetDialogData,
-      maxWidth: '90vw'
+      maxWidth: '90vw',
+      minWidth: '90vw'
     })
       .afterClosed().subscribe(result => {
         if (result) {

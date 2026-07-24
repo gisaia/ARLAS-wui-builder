@@ -52,14 +52,7 @@
   --mat-dialog-headline-padding: 0;
 }
 .mdc-dialog__content {
-  --mat-dialog-supporting-text-font: Roboto, "Helvetica Neue", sans-serif;
   --mat-dialog-supporting-text-tracking: 0;
-  --mat-dialog-with-actions-content-padding: 10px;
-}
-
-// Add padding around dialog
-.mdc-dialog__surface {
-  padding: 24px;
 }
 
 // Reduce the apparent size of mat suffix icon
@@ -89,10 +82,6 @@
 .mdc-data-table__cell {
   font-size: 14px;
   color: #000000de;
-}
-th.mat-mdc-header-cell:first-of-type,
-td.mat-mdc-cell:first-of-type {
-  padding-left: 24px;
 }
 
 .mat-mdc-outlined-button {

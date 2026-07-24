@@ -26,13 +26,14 @@
 
 .title {
     @include var.group-title();
+    padding-bottom: 0;
 }
 
 .container, .cdk-drag-preview {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    padding: 10px;
+    padding: 5px;
     gap: 10px;
     white-space: nowrap;
     overflow: clip;

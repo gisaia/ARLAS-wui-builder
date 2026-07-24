@@ -29,8 +29,8 @@
 
     .form-fields {
       padding: 0 10px;
-      min-width: 35%;
-      max-width: 35%;
+      min-width: 45%;
+      max-width: 45%;
       ::ng-deep mat-label + mat-slider {
         margin-left: 20px;
       }
@@ -43,8 +43,8 @@
 
     .description {
       align-self: center;
-      max-width: 50%;
-      min-width: 50%;
+      max-width: 45%;
+      min-width: 45%;
       white-space: pre-line;
       font-size: 14px;
       color: var.$config-element-description-text-color;
