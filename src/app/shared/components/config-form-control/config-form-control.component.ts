@@ -157,8 +157,8 @@ export class ConfigFormControlComponent implements OnInit, AfterViewInit, AfterV
   protected readonly WARNING_MESSAGE = marker('Warning, changing this field\'s value will reset some other fields');
 
   public constructor(
-    private resolver: ComponentFactoryResolver,
-    private changeDetector: ChangeDetectorRef,
+    private readonly resolver: ComponentFactoryResolver,
+    private readonly changeDetector: ChangeDetectorRef,
     private readonly arlasIamService: ArlasIamService
   ) {
     this.organisation = this.arlasIamService.getOrganisation();

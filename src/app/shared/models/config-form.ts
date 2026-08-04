@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { ResultListDefaultMode } from '@analytics-config/services/resultlist-form-builder/utils';
 import {
   AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators
 } from '@angular/forms';
@@ -38,7 +39,7 @@ import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toNumericOrDateOrKeywor
 
 export interface SelectOption {
   value: any;
-  label: any;
+  label: string;
   enabled?: boolean;
   type?: CollectionReferenceDescriptionProperty.TypeEnum;
   color?: string;

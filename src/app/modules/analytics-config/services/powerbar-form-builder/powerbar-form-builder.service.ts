@@ -138,8 +138,8 @@ export class PowerbarConfigForm extends WidgetConfigFormGroup {
             marker('Powerbar operator description'),
             false,
             [
-              { label: 'include', value: 'Eq' },
-              { label: 'exclude', value: 'Neq' }
+              { label: marker('include'), value: 'Eq' },
+              { label: marker('exclude'), value: 'Neq' }
             ],
             {
               optional: false

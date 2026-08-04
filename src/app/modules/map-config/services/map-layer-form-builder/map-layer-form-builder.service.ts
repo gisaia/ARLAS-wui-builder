@@ -35,18 +35,19 @@ import {
 import { DefaultValuesService } from '@services/default-values/default-values.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import {
-    ButtonToggleFormControl,
-    ConfigFormGroup,
-    HiddenFormControl,
-    InputFormControl,
-    MapFiltersControl,
-    OrderedSelectFormControl,
-    SelectFormControl,
-    SelectOption,
-    SliderFormControl, RangeSliderFormControl,
-    SlideToggleFormControl,
-    VisualisationCheckboxFormControl,
-    VisualisationCheckboxOption
+  ButtonToggleFormControl,
+  ConfigFormGroup,
+  HiddenFormControl,
+  InputFormControl,
+  MapFiltersControl,
+  OrderedSelectFormControl,
+  RangeSliderFormControl,
+  SelectFormControl,
+  SelectOption,
+  SliderFormControl,
+  SlideToggleFormControl,
+  VisualisationCheckboxFormControl,
+  VisualisationCheckboxOption
 } from '@shared-models/config-form';
 import { PROPERTY_SELECTOR_SOURCE, PROPERTY_TYPE } from '@shared-services/property-selector-form-builder/models';
 import {
@@ -327,12 +328,12 @@ export class MapLayerFormGroup extends ConfigFormGroup {
         if (zoomRangeSliderCtrl.value.min < Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0)) {
             zoomRangeSliderCtrl.setMinRange(Math.max(networkFetchingLevelControl.value - PRECISION_TOLERATED_DIFFERENCE, 0));
             zoomRangeSliderCtrl.hasWarning = true;
-            zoomRangeSliderCtrl.warningMessage = `${marker('Network Analytics Fetching Precision is')} ${networkFetchingLevelControl.value}. 
+            zoomRangeSliderCtrl.warningMessage = `${marker('Network Analytics Fetching Precision is')} ${networkFetchingLevelControl.value}.
              ${marker('Therefore; minimum zoom level of the layer should be greater than or equal to')} ${zoomRangeSliderCtrl.value.min} .`;
             if (zoomRangeSliderCtrl.value.max <= zoomRangeSliderCtrl.value.min ) {
                 zoomRangeSliderCtrl.setMaxRange(Math.min(MAX_ZOOM, zoomRangeSliderCtrl.value.min + 1));
                 zoomRangeSliderCtrl.hasWarning = true;
-                zoomRangeSliderCtrl.warningMessage = `${marker('Maximum zoom level of the layer should be greater than')} 
+                zoomRangeSliderCtrl.warningMessage = `${marker('Maximum zoom level of the layer should be greater than')}
                 ${zoomRangeSliderCtrl.value.min}.`;
             } else {
                 zoomRangeSliderCtrl.hasWarning = false;
@@ -662,7 +663,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
           PROPERTY_TYPE.number,
           marker('map.layer.extrusion.opacity'),
           [
-            PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
+            PROPERTY_SELECTOR_SOURCE.fix_slider
           ],
           isAggregated,
           collection,
