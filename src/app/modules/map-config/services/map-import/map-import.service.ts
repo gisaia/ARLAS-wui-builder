@@ -47,10 +47,10 @@ import { BasemapFormGroup } from '../map-basemap-form-builder/map-basemap-form-b
 export class MapImportService {
 
   public constructor(
-    private mainFormService: MainFormService,
-    private mapGlobalFormBuilder: MapGlobalFormBuilderService,
-    private mapLayerFormBuilder: MapLayerFormBuilderService,
-    private mapVisualisationFormBuilder: MapVisualisationFormBuilderService
+    private readonly mainFormService: MainFormService,
+    private readonly mapGlobalFormBuilder: MapGlobalFormBuilderService,
+    private readonly mapLayerFormBuilder: MapLayerFormBuilderService,
+    private readonly mapVisualisationFormBuilder: MapVisualisationFormBuilderService
   ) { }
 
   public static removeLastcolor = (value) => value.substring(0, value.lastIndexOf('_arlas__color'));

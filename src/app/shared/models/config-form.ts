@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { ResultListDefaultMode } from '@analytics-config/services/resultlist-form-builder/utils';
 import {
   AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators
 } from '@angular/forms';
@@ -26,7 +25,7 @@ import { updateValueAndValidity } from '@utils/tools';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { HistogramUtils } from 'arlas-d3';
 import { ComputeConfig, validProcess } from 'arlas-web-contributors';
-import {BehaviorSubject, Observable, Subject, Subscription} from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { METRIC_TYPES } from '../../services/collection-service/collection.service';
 import { CollectionField, GroupCollectionItem } from '../../services/collection-service/models';
 import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toNumericOrDateOrKeywordOrTextObs } from '../../services/collection-service/tools';
