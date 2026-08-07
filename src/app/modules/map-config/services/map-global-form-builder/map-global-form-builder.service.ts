@@ -256,7 +256,7 @@ export class MapGlobalRequestGeometryFormGroup extends ConfigFormGroup {
           Expression.OpEnum.Notwithin,
           Expression.OpEnum.Within
         ].map(op => ({
-          label: op,
+          label: op + '',
           value: op
         }))
       ),

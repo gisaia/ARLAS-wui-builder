@@ -47,10 +47,10 @@ import { BasemapFormGroup } from '../map-basemap-form-builder/map-basemap-form-b
 export class MapImportService {
 
   public constructor(
-    private mainFormService: MainFormService,
-    private mapGlobalFormBuilder: MapGlobalFormBuilderService,
-    private mapLayerFormBuilder: MapLayerFormBuilderService,
-    private mapVisualisationFormBuilder: MapVisualisationFormBuilderService
+    private readonly mainFormService: MainFormService,
+    private readonly mapGlobalFormBuilder: MapGlobalFormBuilderService,
+    private readonly mapLayerFormBuilder: MapLayerFormBuilderService,
+    private readonly mapVisualisationFormBuilder: MapVisualisationFormBuilderService
   ) { }
 
   public static removeLastcolor = (value) => value.substring(0, value.lastIndexOf('_arlas__color'));
@@ -69,7 +69,7 @@ export class MapImportService {
         propertySelectorValues.propertyFixSlider = inputValues + '';
       }
 
-    } else if (inputValues instanceof Array) {
+    } else if (Array.isArray(inputValues)) {
       if (inputValues.length === 2) {
         let field = (inputValues as Array<string>)[1];
         // To deal with old arlas15 config
@@ -488,15 +488,17 @@ export class MapImportService {
           PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
         values.styleStep.extrusionExaggeration = {};
-        if(exaggeration !== undefined){
+        if (exaggeration !== undefined) {
           this.importPropertySelector(exaggeration, values.styleStep.extrusionExaggeration,
             PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
         }
 
         values.styleStep.extrusionOpacity = {};
-        this.importPropertySelector(layer.metadata.extrusion.opacity, values.styleStep.extrusionOpacity,
-          PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
-
+        // Because extrusion opacity can only be a fix value, ignore previously possible interpolations
+        if (!Array.isArray(layer.metadata.extrusion.opacity)) {
+          this.importPropertySelector(layer.metadata.extrusion.opacity, values.styleStep.extrusionOpacity,
+            PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
+        }
       }
     }
     values.visibilityStep.filters = filtersFa;

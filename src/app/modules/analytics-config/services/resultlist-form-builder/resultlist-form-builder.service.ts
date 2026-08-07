@@ -814,7 +814,7 @@ export class ResultListVisualisationsDataGroupCondition extends FormGroup {
                 '',
                 false,
                 filterOperations.map(op => ({
-                    label: op,
+                    label: op + '',
                     value: op
                 })),
                 {
