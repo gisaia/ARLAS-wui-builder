@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { ResultListDefaultMode } from '@analytics-config/services/resultlist-form-builder/utils';
 import {
   AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators
 } from '@angular/forms';
@@ -29,7 +30,6 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { METRIC_TYPES } from '../../services/collection-service/collection.service';
 import { CollectionField, GroupCollectionItem } from '../../services/collection-service/models';
 import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toNumericOrDateOrKeywordOrTextObs } from '../../services/collection-service/tools';
-import {ResultListDefaultMode} from '@analytics-config/services/resultlist-form-builder/utils';
 /**
  * These are wrappers above existing FormGroup and FormControl in order to add a custom behavior.
  * The goal is to have a full model-driven form without putting (or duplicating) the logic
@@ -39,7 +39,7 @@ import {ResultListDefaultMode} from '@analytics-config/services/resultlist-form-
 
 export interface SelectOption {
   value: any;
-  label: any;
+  label: string;
   enabled?: boolean;
   type?: CollectionReferenceDescriptionProperty.TypeEnum;
   color?: string;

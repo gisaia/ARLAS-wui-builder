@@ -639,7 +639,7 @@ export class MapLayerAllTypesFormGroup extends ConfigFormGroup {
             PROPERTY_TYPE.number,
             marker('map.layer.extrusion.opacity'),
             [
-              PROPERTY_SELECTOR_SOURCE.fix_slider, PROPERTY_SELECTOR_SOURCE.interpolated
+              PROPERTY_SELECTOR_SOURCE.fix_slider
             ],
             isAggregated,
             collection,

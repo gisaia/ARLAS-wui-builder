@@ -296,7 +296,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             marker('label metric description'),
             false,
             [METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX]
-              .map(m => ({ label: m, value: m })),
+              .map(m => ({ label: m + '', value: m })),
             {
               optional: false,
               dependsOn: () => [this.customControls.propertyCountOrMetricFg.propertyCountOrMetricCtrl],
@@ -528,7 +528,7 @@ export class PropertySelectorFormGroup extends CollectionConfigFormGroup {
             '',
             false,
             [METRIC_TYPES.AVG, METRIC_TYPES.SUM, METRIC_TYPES.MIN, METRIC_TYPES.MAX]
-              .map(m => ({ label: m, value: m })),
+              .map(m => ({ label: m + '', value: m })),
             {
               dependsOn: () => [this.customControls.propertyInterpolatedFg.propertyInterpolatedCountOrMetricCtrl],
               onDependencyChange: (control) => control.enableIf(
