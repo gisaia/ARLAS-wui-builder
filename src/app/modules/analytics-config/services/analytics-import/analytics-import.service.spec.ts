@@ -3,7 +3,7 @@ import { mockArlasStartupService } from '@app/test/arlas-startup.service.mock';
 import { mockCollectionService } from '@app/test/collection.service.mock';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
-import { ArlasStartupService } from 'arlas-wui-toolkit';
+import { ArlasStartupService, ArlasTaskService, GET_OPTIONS } from 'arlas-wui-toolkit';
 import { LoggerModule } from 'ngx-logger';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { AnalyticsImportService } from './analytics-import.service';
@@ -23,6 +23,11 @@ describe('AnalyticsImportService', () => {
                 }),
             ],
             providers: [
+                ArlasTaskService,
+                {
+                    provide: GET_OPTIONS,
+                    useValue: () => { }
+                },
                 {
                     provide: ArlasStartupService,
                     useValue: mockArlasStartupService

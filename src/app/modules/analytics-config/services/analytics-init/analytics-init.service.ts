@@ -27,6 +27,7 @@ import {
   ArlasCollaborativesearchService, ArlasConfigService,
   ArlasSettingsService,
   ArlasStartupService,
+  ArlasTaskService,
   ContributorBuilder
 } from 'arlas-wui-toolkit';
 
@@ -51,7 +52,8 @@ export class AnalyticsInitService {
     private arlasStartupService: ArlasStartupService,
     private collaborativesearchService: ArlasCollaborativesearchService,
     private configService: ArlasConfigService,
-    private settingsService: ArlasSettingsService
+    private settingsService: ArlasSettingsService,
+    private taskService: ArlasTaskService
   ) { }
 
   public initModule() {
@@ -146,7 +148,7 @@ export class AnalyticsInitService {
       contribConfig.identifier,
       this.configService,
       this.collaborativesearchService,
-      this.settingsService);
+      this.settingsService, this.taskService);
     this.arlasStartupService.contributorRegistry.set(
       contribConfig.identifier, contributor);
     return this.arlasStartupService.contributorRegistry.get(contribConfig.identifier);

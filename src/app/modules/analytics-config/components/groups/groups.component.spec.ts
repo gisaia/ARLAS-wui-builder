@@ -5,7 +5,7 @@ import { mockArlasStartupService } from '@app/test/arlas-startup.service.mock';
 import { mockMainFormService } from '@app/test/main-form.service.mock';
 import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ArlasStartupService } from 'arlas-wui-toolkit';
+import { ArlasStartupService, ArlasTaskService, GET_OPTIONS } from 'arlas-wui-toolkit';
 import { LoggerModule } from 'ngx-logger';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { GroupsComponent } from './groups.component';
@@ -25,6 +25,11 @@ describe('GroupsComponent', () => {
                 RouterModule.forRoot([])
             ],
             providers: [
+                ArlasTaskService,
+                {
+                    provide: GET_OPTIONS,
+                    useValue: () => { }
+                },
                 {
                     provide: ArlasStartupService,
                     useValue: mockArlasStartupService
@@ -35,7 +40,7 @@ describe('GroupsComponent', () => {
                 }
             ]
         })
-        .compileComponents();
+            .compileComponents();
 
         fixture = TestBed.createComponent(GroupsComponent);
         component = fixture.componentInstance;

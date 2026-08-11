@@ -57,7 +57,7 @@ import { ArlasDataLayer, LayerIconComponent, LayerMetadata, LegendService, Visua
 import { ArlasColorService, GetCollectionDisplayNamePipe } from 'arlas-web-components';
 import { ExtentFilterGeometry, MapContributor } from 'arlas-web-contributors';
 import {
-  ArlasCollaborativesearchService, ArlasConfigService, ArlasSettingsService, ContributorBuilder
+  ArlasCollaborativesearchService, ArlasConfigService, ArlasSettingsService, ArlasTaskService, ContributorBuilder
 } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { PreviewComponent } from '../preview/preview.component';
@@ -117,7 +117,8 @@ export class LayersComponent implements OnInit, OnDestroy {
     private readonly mapLayerFormBuilder: MapLayerFormBuilderService,
     private readonly mapGlobalFormBuilder: MapGlobalFormBuilderService,
     protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
-    private readonly settingsService: ArlasSettingsService
+    private readonly settingsService: ArlasSettingsService,
+    private readonly taskService: ArlasTaskService
   ) {
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
     this.visualisationSetFa = this.mainFormService.mapConfig.getVisualisationsFa();
@@ -386,6 +387,7 @@ export class LayersComponent implements OnInit, OnDestroy {
         this.configService,
         this.collaborativesearchService,
         this.settingsService,
+        this.taskService,
         this.colorService);
       contributors.push(mapContributor);
     });

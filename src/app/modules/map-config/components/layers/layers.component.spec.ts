@@ -7,7 +7,7 @@ import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-tran
 import { CollectionService } from '@services/collection-service/collection.service';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
-import { ArlasStartupService } from 'arlas-wui-toolkit';
+import { ArlasStartupService, ArlasTaskService, GET_OPTIONS } from 'arlas-wui-toolkit';
 import { LoggerModule } from 'ngx-logger';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { LayersComponent } from './layers.component';
@@ -33,6 +33,11 @@ describe('LayersComponent', () => {
                 RouterModule.forRoot([])
             ],
             providers: [
+                ArlasTaskService,
+                {
+                    provide: GET_OPTIONS,
+                    useValue: () => { }
+                },
                 {
                     provide: ArlasStartupService,
                     useValue: mockArlasStartupService
@@ -47,7 +52,7 @@ describe('LayersComponent', () => {
                 }
             ]
         })
-        .compileComponents();
+            .compileComponents();
 
         fixture = TestBed.createComponent(LayersComponent);
         component = fixture.componentInstance;

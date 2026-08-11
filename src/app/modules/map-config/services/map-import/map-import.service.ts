@@ -38,7 +38,8 @@ import { BasemapStyle, VisualisationSetConfig } from 'arlas-map';
 import {
   ColorConfig, DEFAULT_FETCH_NETWORK_LEVEL, ExtentFilterGeometry, FeatureRenderMode, LayerSourceConfig, MetricConfig
 } from 'arlas-web-contributors';
-import { ClusterAggType, ClusterLayerCourceConfig, FeatureLayerSourceConfig, TopologyLayerSourceConfig } from 'arlas-web-contributors/models/models';
+import { ClusterAggType, ClusterLayerCourceConfig, FeatureLayerSourceConfig, TopologyLayerSourceConfig }
+  from 'arlas-web-contributors/models/models';
 import { BasemapFormGroup } from '../map-basemap-form-builder/map-basemap-form-builder.service';
 
 @Injectable({
@@ -92,7 +93,7 @@ export class MapImportService {
           if (inputValues.length === 2) {
             propertySelectorValues.propertyProvidedColorLabelCtrl = colorProvidedField?.label;
           }
-        }  else {
+        } else {
           propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.provided_field_for_feature;
           propertySelectorValues.propertyProvidedFieldFeatureFg = {};
           propertySelectorValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl = field;
@@ -253,7 +254,7 @@ export class MapImportService {
       propertySelectorValues.propertySource = PROPERTY_SELECTOR_SOURCE.interpolated;
       const interpolatedColumn = (inputValues[2] as Array<string>);
       // cause interpolated column could contain only one value, ex: [zoom]
-      const getValue = (interpolatedColumn.length > 1) ?  interpolatedColumn[1] : interpolatedColumn[0];
+      const getValue = (interpolatedColumn.length > 1) ? interpolatedColumn[1] : interpolatedColumn[0];
       if (getValue.startsWith('count')) {
         propertySelectorValues.propertyInterpolatedFg = {
           propertyInterpolatedCountOrMetricCtrl: COUNT_OR_METRIC.COUNT,
@@ -333,7 +334,7 @@ export class MapImportService {
     filtersFa: FormArray
   ) {
     // convert to circle heatmap
-    if(layer.metadata && layer.metadata['hidden-props'] && layer.metadata['hidden-props']['geom-type'] === GEOMETRY_TYPE.circleHeat) {
+    if (layer.metadata && layer.metadata['hidden-props'] && layer.metadata['hidden-props']['geom-type'] === GEOMETRY_TYPE.circleHeat) {
       layer.type = GEOMETRY_TYPE.circleHeat;
     }
     const type = layer.source.split('-')[0];
@@ -406,7 +407,7 @@ export class MapImportService {
       visibilityStep: {
         visible: (!!layer.layout && !!layer.layout.visibility) ? layer.layout.visibility === VISIBILITY.visible : true,
         renderMode,
-        zoom: {min: minzoom, max: maxzoom},
+        zoom: { min: minzoom, max: maxzoom },
         filters: new FormArray([])
       },
       styleStep: {
@@ -494,7 +495,7 @@ export class MapImportService {
           value: {}
         };
 
-        const {extrusionHeightValue, exaggeration} = this.extractExaggeration(layer);
+        const { extrusionHeightValue, exaggeration } = this.extractExaggeration(layer);
         this.importPropertySelector(extrusionHeightValue, values.styleStep.extrusion.value,
           PROPERTY_SELECTOR_SOURCE.fix_slider, isAggregated, layerSource);
 
@@ -596,17 +597,17 @@ export class MapImportService {
    * @param layer
    * @private
    */
-  private static extractExaggeration(layer: Layer){
+  private static extractExaggeration(layer: Layer) {
     let extrusionHeightValue = layer.metadata.extrusion.height;
     let exaggeration = 1;
     const expression = layer.metadata.extrusion.height as Array<string | Array<string> | number>;
     const isExaggerationExpression = Array.isArray(extrusionHeightValue) &&
       expression.at(0) === '*' && typeof expression.at(-1) === 'number';
-    if(isExaggerationExpression) {
+    if (isExaggerationExpression) {
       extrusionHeightValue = expression.at(1);
-      exaggeration = (expression.at( -1)) as number;
+      exaggeration = (expression.at(-1)) as number;
     }
-    return {extrusionHeightValue, exaggeration};
+    return { extrusionHeightValue, exaggeration };
   }
 
 
@@ -666,7 +667,7 @@ export class MapImportService {
     values.geometryStep.clusterSort = isGeometryTypeRaw ? layerSource.raw_geometry?.sort : null;
     values.visibilityStep.featuresMin = layerSource.minfeatures;
     // to display the correct geom type when editing a circle-heat layer
-    if(layer.metadata && layer.metadata.hiddenProps && layer.metadata.hiddenProps.geomType === GEOMETRY_TYPE.circleHeat) {
+    if (layer.metadata && layer.metadata.hiddenProps && layer.metadata.hiddenProps.geomType === GEOMETRY_TYPE.circleHeat) {
       values.styleStep.geometryType = GEOMETRY_TYPE.circleHeat;
     } else {
       values.styleStep.geometryType = layer.type;

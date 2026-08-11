@@ -7,7 +7,7 @@ import { mockPersistenceService } from '@app/test/persistence.service.mock';
 import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
-import { ArlasSettingsService, ArlasStartupService, PersistenceService } from 'arlas-wui-toolkit';
+import { ArlasSettingsService, ArlasStartupService, ArlasTaskService, GET_OPTIONS, PersistenceService } from 'arlas-wui-toolkit';
 import { LoggerModule } from 'ngx-logger';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { LeftMenuComponent } from './left-menu.component';
@@ -33,6 +33,11 @@ describe('LeftMenuComponent', () => {
                 RouterModule.forRoot([])
             ],
             providers: [
+                ArlasTaskService,
+                {
+                    provide: GET_OPTIONS,
+                    useValue: () => { }
+                },
                 {
                     provide: ArlasStartupService,
                     useValue: mockArlasStartupService
@@ -51,7 +56,7 @@ describe('LeftMenuComponent', () => {
                 }
             ]
         })
-        .compileComponents();
+            .compileComponents();
 
         fixture = TestBed.createComponent(LeftMenuComponent);
         component = fixture.componentInstance;

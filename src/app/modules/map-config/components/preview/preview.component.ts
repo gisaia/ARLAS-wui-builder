@@ -39,7 +39,7 @@ import { MapContributor } from 'arlas-web-contributors';
 import { OnMoveResult } from 'arlas-web-contributors/models/models';
 import {
   ArlasCollaborativesearchService, ArlasConfigService,
-  ArlasSettingsService, ContributorBuilder, PersistenceService
+  ArlasSettingsService, ArlasTaskService, ContributorBuilder, PersistenceService
 } from 'arlas-wui-toolkit';
 import { FeatureCollection, Geometry, Polygon } from 'geojson';
 import {
@@ -90,6 +90,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     private readonly translate: TranslateService,
     private readonly settingsService: ArlasSettingsService,
     private readonly mapFrameworkService: ArlasMapFrameworkService<ArlasLayer, ArlasSource, MapOptions>,
+    private readonly taskService: ArlasTaskService,
     @Inject(MAT_DIALOG_DATA) public dataMap: MapglComponentInput
   ) {
     if (this.dataMap.mapglContributors !== undefined || this.dataMap.mapComponentConfig !== undefined) {
@@ -122,6 +123,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
           this.configService,
           this.collaborativeService,
           this.settingsService,
+          this.taskService,
           this.colorService);
         contributors.push(mapContributor);
       });

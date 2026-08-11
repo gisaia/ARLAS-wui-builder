@@ -58,7 +58,8 @@ import { CollectionReferenceDescriptionProperty } from 'arlas-api/api';
 import { BasemapStyle, ExternalEventLayer, SCROLLABLE_ARLAS_ID, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
 import { ArlasColorService, DescribedUrl } from 'arlas-web-components';
 import { ColorConfig, ExtentFilterGeometry, FieldsConfiguration, getSourceName, LayerSourceConfig } from 'arlas-web-contributors';
-import { ClusterLayerCourceConfig, CoreLayerSourceConfig, FeatureLayerSourceConfig, FeatureRenderMode, TopologyLayerSourceConfig } from 'arlas-web-contributors/models/models';
+import { ClusterLayerCourceConfig, CoreLayerSourceConfig, FeatureLayerSourceConfig, FeatureRenderMode, TopologyLayerSourceConfig }
+  from 'arlas-web-contributors/models/models';
 import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
 import {
   AggregationModelConfig,
@@ -1017,7 +1018,7 @@ export class ConfigExportHelper {
           iconColorFieldName: widgetData.dataStep.grid.color.colorIdentifier
         };
         if (widgetData.visualisationStep.thumbnailAndQuicklook.thumbnailUrl) {
-          fieldsConfig.urlThumbnailTemplate =  widgetData.visualisationStep.thumbnailAndQuicklook.thumbnailUrl;
+          fieldsConfig.urlThumbnailTemplate = widgetData.visualisationStep.thumbnailAndQuicklook.thumbnailUrl;
         }
         if (widgetData.renderStep.imageUrl) {
           fieldsConfig.urlImageTemplate = widgetData.renderStep.imageUrl;
@@ -1053,7 +1054,7 @@ export class ConfigExportHelper {
         });
 
         contrib.cardViewProperties = [];
-        if(widgetData.dataStep?.cardViewProperties) {
+        if (widgetData.dataStep?.cardViewProperties) {
           widgetData.dataStep.cardViewProperties.forEach((line) => {
             line.fields.forEach(el => {
               contrib.cardViewProperties.push({
@@ -1147,7 +1148,7 @@ export class ConfigExportHelper {
 
 
       contrib.cardViewProperties = [];
-      if(list.dataStep?.cardViewProperties){
+      if (list.dataStep?.cardViewProperties) {
         list.dataStep.cardViewProperties.forEach((line, index) => {
           line.fields.forEach(el => {
             contrib.cardViewProperties.push({
@@ -1230,7 +1231,7 @@ export class ConfigExportHelper {
       if (!!widgetData.dataStep.metric) {
         idString += '-' + (widgetData.dataStep.metric.metricCollectFunction !== undefined ?
           widgetData.dataStep.metric.metricCollectFunction : '') + '-' + (!!widgetData.dataStep.metric.metricCollectField ?
-          widgetData.dataStep.metric.metricCollectField : '');
+            widgetData.dataStep.metric.metricCollectField : '');
       }
       if (agg.aggregationBucketOrInterval === 'bucket') {
         idString += '-' + agg.aggregationBucketsNumber;
@@ -1451,7 +1452,7 @@ export class ConfigExportHelper {
           nbGridColumns: unmanagedRenderFields.nbGridColumns,
           displayFilters: !!widgetData.settingsStep.displayFilters,
           hasListView: widgetData.dataStep?.columns.length > 0,
-            hasCardView:  widgetData.dataStep?.cardViewProperties.length > 0,
+          hasCardView: widgetData.dataStep?.cardViewProperties.length > 0,
           hasGridView: widgetData.dataStep.grid.aHasGridView,
           defaultMode: widgetData.dataStep.defaultMode.toString(),
           visualisationLink: widgetData.sactionStep.visualisationLink,
@@ -1484,10 +1485,10 @@ export class ConfigExportHelper {
     return component;
   }
 
-  public static getVisualisationList(visualisationList: ResultListVisualisationFormWidget[]){
+  public static getVisualisationList(visualisationList: ResultListVisualisationFormWidget[]) {
     const visualisations = new Array<VisualisationListInputConfig>();
     visualisationList.forEach(visualisationWidgetConfig => {
-      const visualisation: VisualisationListInputConfig =  {
+      const visualisation: VisualisationListInputConfig = {
         name: visualisationWidgetConfig.name,
         description: visualisationWidgetConfig.description,
         dataGroups: [],
@@ -1499,7 +1500,7 @@ export class ConfigExportHelper {
     return visualisations;
   }
 
-  public static buildDataGroups(visualisationWidgetConfig: ResultListVisualisationFormWidget){
+  public static buildDataGroups(visualisationWidgetConfig: ResultListVisualisationFormWidget) {
     return visualisationWidgetConfig.dataGroups.map(dataG => {
       const dataGroup: DataGroupInputConfig = {
         filters: [],
@@ -1512,7 +1513,7 @@ export class ConfigExportHelper {
     });
   }
 
-  protected static  buildDataGroupCriteria(dataG: ResultListVisualisationDataGroupFormWidget) {
+  protected static buildDataGroupCriteria(dataG: ResultListVisualisationDataGroupFormWidget) {
     return dataG.filters.map(f => {
       // return a lowercase string
       const op = Expression.OpEnum[f.filterOperation];
@@ -1526,13 +1527,13 @@ export class ConfigExportHelper {
       };
 
       if (f.filterOperation === Expression.OpEnum.Like) {
-        criteria.value =  f.filterValues.filterInValues.map(v => v.value);
+        criteria.value = f.filterValues.filterInValues.map(v => v.value);
       } else if (isNumberOperator(f.filterOperation) &&
-      NUMERIC_TYPES.includes(criteria.type as unknown as CollectionReferenceDescriptionProperty.TypeEnum)
+        NUMERIC_TYPES.includes(criteria.type as unknown as CollectionReferenceDescriptionProperty.TypeEnum)
       ) {
         criteria.value = f.filterValues.filterEqualValues;
       } else if (f.filterOperation === Expression.OpEnum.Range) {
-        criteria.value =  f.filterValues.filterMinRangeValues + ';' + f.filterValues.filterMaxRangeValues;
+        criteria.value = f.filterValues.filterMinRangeValues + ';' + f.filterValues.filterMaxRangeValues;
       } else if (f.filterOperation === Expression.OpEnum.Eq) {
         criteria.value = f.filterValues.filterBoolean;
       }

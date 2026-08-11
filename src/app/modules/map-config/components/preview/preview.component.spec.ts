@@ -7,7 +7,7 @@ import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-tran
 import { CollectionService } from '@services/collection-service/collection.service';
 import { BasemapService } from 'arlas-map';
 import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
-import { ArlasStartupService, PersistenceService } from 'arlas-wui-toolkit';
+import { ArlasStartupService, ArlasTaskService, GET_OPTIONS, PersistenceService } from 'arlas-wui-toolkit';
 import { of } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { PreviewComponent } from './preview.component';
@@ -31,6 +31,11 @@ describe('PreviewComponent', () => {
                 }),
             ],
             providers: [
+                ArlasTaskService,
+                {
+                    provide: GET_OPTIONS,
+                    useValue: () => { }
+                },
                 {
                     provide: ArlasStartupService,
                     useValue: mockArlasStartupService

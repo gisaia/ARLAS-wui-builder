@@ -7,7 +7,8 @@ import { mockPersistenceService } from '@app/test/persistence.service.mock';
 import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
-import { ArlasSettingsService, ArlasStartupService, PermissionService, PersistenceService } from 'arlas-wui-toolkit';
+import { ArlasSettingsService, ArlasStartupService, ArlasTaskService, GET_OPTIONS, PermissionService, PersistenceService }
+    from 'arlas-wui-toolkit';
 import { LoggerModule } from 'ngx-logger';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { LandingPageComponent } from './landing-page.component';
@@ -34,6 +35,11 @@ describe('LandingPageComponent', () => {
                 }),
             ],
             providers: [
+                ArlasTaskService,
+                {
+                    provide: GET_OPTIONS,
+                    useValue: () => { }
+                },
                 {
                     provide: ArlasStartupService,
                     useValue: mockArlasStartupService
@@ -52,7 +58,7 @@ describe('LandingPageComponent', () => {
                 }
             ]
         })
-        .compileComponents();
+            .compileComponents();
 
         fixture = TestBed.createComponent(LandingPageComponent);
         component = fixture.componentInstance;
