@@ -30,7 +30,7 @@ import {
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { DateFormats } from '@shared/models/enum';
 import { Metric } from 'arlas-api';
-import { SwimlaneMode } from 'arlas-web-components';
+import { SwimlaneMode } from 'arlas-d3';
 import { Observable } from 'rxjs';
 import {
   BucketsIntervalFormBuilderService, BucketsIntervalFormGroup

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -42,7 +42,7 @@ import {
 import {
   MapVisualisationFormBuilderService
 } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
@@ -57,7 +57,7 @@ import { ArlasDataLayer, LayerIconComponent, LayerMetadata, LegendService, Visua
 import { ArlasColorService, GetCollectionDisplayNamePipe } from 'arlas-web-components';
 import { ExtentFilterGeometry, MapContributor } from 'arlas-web-contributors';
 import {
-  ArlasCollaborativesearchService, ArlasConfigService, ArlasSettingsService, ContributorBuilder
+  ArlasCollaborativesearchService, ArlasConfigService, ArlasSettingsService, ArlasTaskService, ContributorBuilder
 } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { PreviewComponent } from '../preview/preview.component';
@@ -104,6 +104,7 @@ export class LayersComponent implements OnInit, OnDestroy {
   public enableAddLayer = true;
   @ViewChild(MatSort, { static: true }) public sort: MatSort;
 
+  private readonly translate = inject(TranslateService);
   public constructor(
     protected mainFormService: MainFormService,
     private readonly dialog: MatDialog,
@@ -116,7 +117,8 @@ export class LayersComponent implements OnInit, OnDestroy {
     private readonly mapLayerFormBuilder: MapLayerFormBuilderService,
     private readonly mapGlobalFormBuilder: MapGlobalFormBuilderService,
     protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
-    private readonly settingsService: ArlasSettingsService
+    private readonly settingsService: ArlasSettingsService,
+    private readonly taskService: ArlasTaskService
   ) {
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
     this.visualisationSetFa = this.mainFormService.mapConfig.getVisualisationsFa();
@@ -219,17 +221,17 @@ export class LayersComponent implements OnInit, OnDestroy {
 
   public getColorLegend(paint) {
     const styleColor = paint['circle-color'] || paint['heatmap-color'] || paint['fill-color'] || paint['line-color'] || paint['text-color'];
-    const colorLegend = LegendService.buildColorLegend(styleColor, true, null);
+    const colorLegend = LegendService.buildColorLegend(styleColor, true, new Map(), [], this.translate);
     return colorLegend[0];
   }
 
   public getStrokeColorLegend(paint, metadata: LayerMetadata) {
     const circleStyleColor = paint['circle-stroke-color'];
     if (circleStyleColor) {
-      const colorLegend = LegendService.buildColorLegend(circleStyleColor, true, null);
+      const colorLegend = LegendService.buildColorLegend(circleStyleColor, true, new Map(), [], this.translate);
       return colorLegend[0];
     } else if (!!metadata && !!metadata.stroke) {
-      const colorLegend = LegendService.buildColorLegend(metadata.stroke.color, true, null);
+      const colorLegend = LegendService.buildColorLegend(metadata.stroke.color, true, new Map(), [], this.translate);
       return colorLegend[0];
     }
   }
@@ -385,6 +387,7 @@ export class LayersComponent implements OnInit, OnDestroy {
         this.configService,
         this.collaborativesearchService,
         this.settingsService,
+        this.taskService,
         this.colorService);
       contributors.push(mapContributor);
     });
