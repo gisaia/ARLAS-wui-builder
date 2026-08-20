@@ -30,8 +30,7 @@ import {
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import {
     buildCardViewProperties,
-    buildDetailField,
-    ResultListDefaultMode
+    buildDetailField
 } from '@analytics-config/services/resultlist-form-builder/utils';
 import { AbstractControl, FormArray } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -46,7 +45,7 @@ import {
     TextareaFormControl
 } from '@shared-models/config-form';
 import { Expression } from 'arlas-api';
-import { ArlasColorService } from 'arlas-web-components';
+import { ArlasColorService, stringToResultlistModeEnum } from 'arlas-web-components';
 import { firstValueFrom } from 'rxjs';
 import { CollectionService } from '../services/collection-service/collection.service';
 import { NUMERIC_TYPES } from '../services/collection-service/tools';
@@ -210,33 +209,11 @@ export class ResultListInputsFeeder {
                 control: this.dataStep.grid.aHasGridView
             },
             {
-                value: this.interopEnum(this.options.input?.defaultMode ??
-                    (this.options.input as any)?.defautMode), // Backward compat du to typo error
+                value: stringToResultlistModeEnum(this.options.input?.defaultMode ??
+                    (this.options.input as any)?.defautMode), // Backward compat due to typo error
                 control: this.dataStep.defaultMode
             }
         ]);
-    }
-
-    // For retro compatibility; In previous conf the value passed to defaultMode was grid or list.
-    // But the value stand for an enum.
-    protected interopEnum(value: string){
-        const isNumeric = !Number.isNaN(Number(value)) && (''+value).trim() !== '';
-        if(isNumeric){
-            return value as unknown as ResultListDefaultMode;
-        }
-
-        switch (value) {
-            case 'grid' :
-                return ResultListDefaultMode.grid;
-
-            case 'list' :
-                return ResultListDefaultMode.list;
-
-            case 'card' :
-                return ResultListDefaultMode.card;
-            default:
-                return  ResultListDefaultMode.list;
-        }
     }
 
     // not present in analytics config that is why it is separate
@@ -649,7 +626,7 @@ export class AnalyticsResultListInputsFeeder extends ResultListInputsFeeder {
                 control: this.dataStep.idFieldName
             },
             {
-                value:  this.interopEnum(this.options.input?.defaultMode
+                value:  stringToResultlistModeEnum(this.options.input?.defaultMode
                     ?? (this.options.input as any)?.defautMode), // Backward compat due to typo error,
                 control: this.dataStep.defaultMode
             },
