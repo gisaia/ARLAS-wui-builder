@@ -19,7 +19,7 @@
 import { AnalyticsInitService } from '@analytics-config/services/analytics-init/analytics-init.service';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -29,11 +29,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { DefaultValuesService } from '@services/default-values/default-values.service';
+import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
-import { AnalyticsBoardComponent, AnalyticsService } from 'arlas-wui-toolkit';
+import { AnalyticGroupConfiguration, AnalyticsBoardComponent, AnalyticsService } from 'arlas-wui-toolkit';
 import { Subscription } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
 import { debounceTime } from 'rxjs/operators';
@@ -56,40 +57,43 @@ import { EditGroupComponent } from '../edit-group/edit-group.component';
     AnalyticsBoardComponent
   ]
 })
-export class GroupsComponent implements OnInit, OnDestroy {
+export class GroupsComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @Input() public contentFg: FormGroup;
-  @ViewChild('analyticsBoard', { static: false }) public analyticsBoard: AnalyticsBoardComponent;
+  public contentFg = input.required<FormGroup>();
 
   public updateDisplay: Subject<any> = new Subject<any>();
 
-  public groupsPreview = [];
+  public groupsPreview = new Array<AnalyticGroupConfiguration>();
 
-  private afterClosedSub: Subscription;
+  private afterClosedSub?: Subscription;
 
   public spinnerColor: string;
   public spinnerDiameter: number;
   public showSpinner: boolean;
-  public constructor(
-    private defaultValuesService: DefaultValuesService,
-    public dialog: MatDialog,
-    private analyticsInitService: AnalyticsInitService,
-    private translate: TranslateService,
-    private cdr: ChangeDetectorRef,
-    private shortcutsService: ShortcutsService,
-    protected mainFormService: MainFormService,
-    private analyticsService: AnalyticsService
 
+  public constructor(
+    private readonly defaultValuesService: DefaultValuesService,
+    private readonly dialog: MatDialog,
+    private readonly analyticsInitService: AnalyticsInitService,
+    private readonly translate: TranslateService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly shortcutsService: ShortcutsService,
+    protected readonly mainFormService: MainFormService,
+    private readonly analyticsService: AnalyticsService
   ) { }
 
   public ngOnInit() {
-    this.analyticsInitService.initTabContent(this.contentFg);
+    this.analyticsInitService.initTabContent(this.contentFg());
     this.updateDisplay.pipe(
       debounceTime(200)
     ).subscribe(() => this.updateAnalytics());
     this.spinnerColor = this.mainFormService.lookAndFeelConfig?.control.value.LookAndFeelConfigGlobal.spinnerColor;
     this.spinnerDiameter = this.mainFormService.lookAndFeelConfig?.control.value.LookAndFeelConfigGlobal.spinnerDiameter;
     this.showSpinner = this.mainFormService.lookAndFeelConfig?.control.value.LookAndFeelConfigGlobal.spinner;
+  }
+
+  public ngAfterViewInit() {
+    this.updateAnalytics();
   }
 
   public addGroup() {
@@ -103,7 +107,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   public getGroup = (index: number) => this.groupsFa.at(index) as FormGroup;
 
 
-  public remove(gi) {
+  public remove(gi: number) {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
       data: { message: marker('Do you really want to delete this group?') }
@@ -119,17 +123,18 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   public get groupsFa() {
-    return !!this.contentFg ? this.contentFg.get('groupsFa') as FormArray<FormGroup> : null;
+    return this.contentFg().get('groupsFa') as FormArray<FormGroup>;
   }
 
   public updateAnalytics() {
-    const analytics = [];
     this.groupsPreview = [];
     this.groupsFa?.value.forEach(group => {
-      analytics.push(group.preview);
+      this.groupsPreview.push(ConfigExportHelper.getAnalyticsGroup('preview',
+        group,
+        this.analyticsInitService.groupIndex++,
+        this.mainFormService.lookAndFeelConfig.getGlobalFg()));
     });
-    this.analyticsService.initializeGroups(analytics);
-    this.groupsPreview = analytics;
+    this.analyticsService.initializeGroups(this.groupsPreview);
     this.analyticsService.selectTab(0);
     this.cdr.detectChanges();
   }
@@ -146,17 +151,13 @@ export class GroupsComponent implements OnInit, OnDestroy {
     if (this.updateDisplay) {
       this.updateDisplay.unsubscribe();
     }
-
-    this.analyticsBoard = null;
-    this.groupsPreview = null;
-    this.contentFg = null;
   }
 
   private removeAllShortcuts(groupIndex: number) {
     const group = this.getGroup(groupIndex);
-    const widgetsFa: FormArray = group.controls.content as FormArray;
+    const widgetsFa = group.controls.content as FormArray<FormGroup>;
     if (widgetsFa) {
-      widgetsFa.controls.forEach((widget: FormGroup) => {
+      widgetsFa.controls.forEach(widget => {
         const widgetConfigFg = widget.controls.widgetData as WidgetConfigFormGroup;
         this.shortcutsService.removeShortcut(widgetConfigFg.uuidControl.value);
       });
