@@ -22,7 +22,7 @@
                 @if (editingTabIndex === index) {
                   <span class="edit-tab-name">
                     <!-- keydown stopPropagation needed to allow spaces -->
-                    <input matInput [(ngModel)]="editingTabName" arlasAutoFocus autocomplete="off"
+                    <input class="edit-tab-name__input" matInput [(ngModel)]="editingTabName" arlasAutoFocus autocomplete="off"
                       (keydown)="$event.stopPropagation();" (keydown.enter)="finishEditTabName(index);">
                   </span>
                 }
@@ -64,6 +64,7 @@
     </mat-tab-group>
   </div>
 </div>
+
 @if (tabsFa.touched && tabsFa.errors?.required) {
   <mat-error>
     {{'At least one tab is required' | translate}}
