@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { ResultListDefaultMode } from '@analytics-config/services/resultlist-form-builder/utils';
+
 import {
   AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators
 } from '@angular/forms';
@@ -25,11 +25,13 @@ import { ProportionedValues } from '@shared-services/property-selector-form-buil
 import { updateValueAndValidity } from '@utils/tools';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { HistogramUtils } from 'arlas-d3';
+import { ResultlistModeEnum } from 'arlas-web-components';
 import { ComputeConfig, validProcess } from 'arlas-web-contributors';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { METRIC_TYPES } from '../../services/collection-service/collection.service';
 import { CollectionField, GroupCollectionItem } from '../../services/collection-service/models';
 import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toNumericOrDateOrKeywordOrTextObs } from '../../services/collection-service/tools';
+
 /**
  * These are wrappers above existing FormGroup and FormControl in order to add a custom behavior.
  * The goal is to have a full model-driven form without putting (or duplicating) the logic
@@ -392,14 +394,14 @@ export class ButtonToggleFormControl extends ConfigFormControl {
       propertyName);
   }
 
-  public disableOption(name: ResultListDefaultMode){
+  public disableOption(name: ResultlistModeEnum){
     const opt = this.options.find(o => o.value === name);
     if(opt){
       opt.disabled = true;
     }
   }
 
-  public enableOption(name: ResultListDefaultMode){
+  public enableOption(name: ResultlistModeEnum){
     const opt = this.options.find(o => o.value === name);
     if(opt){
       opt.disabled = false;

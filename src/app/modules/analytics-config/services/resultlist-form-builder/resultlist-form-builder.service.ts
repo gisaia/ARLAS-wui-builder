@@ -65,13 +65,14 @@ import {
 import { GeoFilterInputsBuilder } from '@shared-models/filter-input-builder';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
 import { Expression } from 'arlas-api';
-import { ArlasColorService } from 'arlas-web-components';
+import { ArlasColorService, CellBackgroundStyleEnum, ResultlistModeEnum } from 'arlas-web-components';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
 import { WidgetFormBuilder } from '../widget-form-builder';
 import { ResultListCardLineFormGroup, ResultlistDataConfigForm, ResultlistDetailFormGroup } from './form-group';
 import {
-    buildCardViewProperties, buildDetailField, CellBackgroundEnum, ResultListDefaultMode, resultModeDefaultList
+    buildCardViewProperties, buildDetailField,
+    resultModeDefaultList
 } from './utils';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
@@ -202,22 +203,22 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                                 this.customControls.dataStep.cardViewProperties as any],
                             onDependencyChange: (control: ButtonToggleFormControl) => {
                                 // if value was grid and grid is disabled set value to false
-                                if(!this.customControls.dataStep.grid.aHasGridView.value) {
-                                    this.customControls.dataStep.defaultMode.disableOption(ResultListDefaultMode.grid);
-                                    if(this.customControls.dataStep.defaultMode.value === ResultListDefaultMode.grid){
-                                        this.customControls.dataStep.defaultMode.setValue(ResultListDefaultMode.list);
+                                if (!this.customControls.dataStep.grid.aHasGridView.value) {
+                                    this.customControls.dataStep.defaultMode.disableOption(ResultlistModeEnum.grid);
+                                    if (this.customControls.dataStep.defaultMode.value === ResultlistModeEnum.grid) {
+                                        this.customControls.dataStep.defaultMode.setValue(ResultlistModeEnum.list);
                                     }
                                 } else {
-                                    this.customControls.dataStep.defaultMode.enableOption(ResultListDefaultMode.grid);
+                                    this.customControls.dataStep.defaultMode.enableOption(ResultlistModeEnum.grid);
                                 }
 
-                                if(this.customControls.dataStep.cardViewProperties.length === 0){
-                                    this.customControls.dataStep.defaultMode.disableOption(ResultListDefaultMode.card);
-                                    if(this.customControls.dataStep.defaultMode.value === ResultListDefaultMode.card){
-                                        this.customControls.dataStep.defaultMode.setValue(ResultListDefaultMode.list);
+                                if (this.customControls.dataStep.cardViewProperties.length === 0) {
+                                    this.customControls.dataStep.defaultMode.disableOption(ResultlistModeEnum.card);
+                                    if (this.customControls.dataStep.defaultMode.value === ResultlistModeEnum.card) {
+                                        this.customControls.dataStep.defaultMode.setValue(ResultlistModeEnum.list);
                                     }
                                 } else {
-                                    this.customControls.dataStep.defaultMode.enableOption(ResultListDefaultMode.card);
+                                    this.customControls.dataStep.defaultMode.enableOption(ResultlistModeEnum.card);
                                 }
                             }
                         }),
@@ -388,13 +389,13 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                         marker('Enable CSV export description')
                     ),
                     cellBackgroundStyle: new SelectFormControl(
-                        CellBackgroundEnum.filled,
+                        CellBackgroundStyleEnum.filled,
                         marker('Background style of cells'),
                         marker('Background style of cells Description'),
                         false,
                         [
-                            {label: marker('Filled'), value: CellBackgroundEnum.filled},
-                            {label: marker('Outlined'), value: CellBackgroundEnum.outlined},
+                            {label: marker('Filled'), value: CellBackgroundStyleEnum.filled},
+                            {label: marker('Outlined'), value: CellBackgroundStyleEnum.outlined},
                         ],
                         {
                             optional: true,
