@@ -20,7 +20,8 @@
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { Aggregation, Expression } from 'arlas-api';
 import { ArlasDataLayer, BasemapStyle, MapLayers, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
-import { FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
+import { Detail, FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
+import { CardViewProperty } from 'arlas-web-contributors/models/models';
 import { AnalyticsTabs, ZoomToDataStrategy } from 'arlas-wui-toolkit';
 
 export const JSONPATH_COUNT = '$.count';
@@ -123,26 +124,6 @@ export interface ServerConfig {
   max_age_cache: number;
 }
 
-/** Configures how a field is displayed inside a card of the result list. */
-export interface CardViewProperties {
-  /** Material icon name displayed next to the field value. */
-  icon?: string;
-  /** Display label for the field. */
-  prettyName: string;
-  /** Backend field name mapped to this card property. */
-  fieldName: string;
-  /** Unit suffix appended to the field value. */
-  dataType?: string;
-  /** Optional JavaScript transformation applied to the value before rendering. */
-  process?: string;
-  /** Whether this field is used as the card title. */
-  isTitle?: boolean;
-  /** Sort direction (asc / desc / empty). */
-  sort?: string;
-  /** Line index this field belongs to (0-based). Fields on the same line share a row. */
-  lineNumber: number;
-}
-
 export interface ContributorConfig {
   type: string;
   identifier: string;
@@ -172,12 +153,8 @@ export interface ContributorConfig {
   search_size?: number;
   fieldsConfiguration?: FieldsConfiguration;
   columns?: Array<{ columnName: string; fieldName: string; dataType: string; process: string; useColorService: boolean; sort: string; }>;
-  details?: Array<{
-    name: string;
-    order: number;
-    fields: Array<{ path: string; label: string; process: string; }>;
-  }>;
-  cardViewProperties?: Array<CardViewProperties>;
+  details?: Array<Detail>;
+  cardViewProperties?: CardViewProperty[];
   colorField?: string;
   useUtc?: boolean;
   additionalCollections?: Array<{ collectionName: string; field: string; }>;

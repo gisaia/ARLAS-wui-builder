@@ -64,7 +64,7 @@ import {
 } from '@shared-models/config-form';
 import { GeoFilterInputsBuilder } from '@shared-models/filter-input-builder';
 import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
-import { Expression } from 'arlas-api';
+import { CollectionReferenceDescriptionProperty, Expression } from 'arlas-api';
 import { ArlasColorService, CellBackgroundStyleEnum, ResultlistModeEnum } from 'arlas-web-components';
 import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
 import { Observable } from 'rxjs';
@@ -91,7 +91,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
         dataStep: {
             collection: this.get('dataStep.collection') as SelectFormControl,
             defaultMode: this.get('dataStep.defaultMode') as ButtonToggleFormControl,
-            columns: this.get('dataStep.columns') as FormArray,
+            columns: this.get('dataStep.columns') as FormArray<ResultlistColumnFormGroup>,
             grid: {
                 aHasGridView: this.get('dataStep.grid.aHasGridView') as SlideToggleFormControl,
                 aTitle: {
@@ -106,9 +106,9 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                     colorIdentifier: this.get('dataStep.grid.color.colorIdentifier') as SelectFormControl
                 }
             },
-            cardViewProperties: this.get('dataStep.cardViewProperties') as FormArray,
+            cardViewProperties: this.get('dataStep.cardViewProperties') as FormArray<ResultListCardLineFormGroup>,
             detailsTitle: this.get('dataStep.detailsTitle') as HiddenFormControl,
-            details: this.get('dataStep.details') as FormArray,
+            details: this.get('dataStep.details') as FormArray<ResultlistDetailFormGroup>,
             idFieldName: this.get('dataStep.idFieldName') as HiddenFormControl,
         },
         sactionStep: {
@@ -124,11 +124,17 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
         },
         visualisationStep: {
             visualisationsList: this.get('visualisationStep.visualisationsList') as FormArray,
-            thumbnailAndQuicklook: {
-                useHttpThumbnails: this.get('visualisationStep.thumbnailAndQuicklook.useHttpThumbnails') as SlideToggleFormControl,
-                useHttpQuicklooks: this.get('visualisationStep.thumbnailAndQuicklook.useHttpQuicklooks') as SlideToggleFormControl,
-                thumbnailUrl: this.get('visualisationStep.thumbnailAndQuicklook.thumbnailUrl') as FieldTemplateControl,
-                quicklookUrls: this.get('visualisationStep.thumbnailAndQuicklook.quicklookUrls') as FormArray,
+            thumbnail: {
+                useHttp: this.get('visualisationStep.thumbnail.useHttp') as SlideToggleFormControl,
+                url: this.get('visualisationStep.thumbnail.url') as FieldTemplateControl,
+            },
+            quicklook: {
+                useHttp: this.get('visualisationStep.quicklook.useHttp') as SlideToggleFormControl,
+                urls: this.get('visualisationStep.quicklook.urls') as FormArray<ResultlistQuicklookFormGroup>,
+                displayOnMap: {
+                    enabled: this.get('visualisationStep.quicklook.displayOnMap.enabled') as SlideToggleFormControl,
+                    boundsFieldName: this.get('visualisationStep.quicklook.displayOnMap.boundsFieldName') as SelectFormControl
+                }
             },
             visualisations: this.get('visualisationStep.visualisations') as ConfigFormGroup,
         },
@@ -222,9 +228,9 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                                 }
                             }
                         }),
-                    columns: (new FormArray([], {
+                    columns: new FormArray<ResultlistColumnFormGroup>([], {
                         validators: Validators.required,
-                    })),
+                    }),
                     grid: new HiddenConfigFromGroup({
                         aHasGridView: new SlideToggleFormControl(
                             false,
@@ -322,8 +328,8 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                             ),
                         }).withTitle(marker('Color configuration')),
                     }),
-                    details: new FormArray([]),
-                    cardViewProperties: new FormArray([]),
+                    details: new FormArray<ResultlistDetailFormGroup>([]),
+                    cardViewProperties: new FormArray<ResultListCardLineFormGroup>([]),
 
                     detailsTitle: new HiddenFormControl(
                         '',
@@ -412,18 +418,13 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                 }).withTabName(marker('Resultlist settings')),
                 visualisationStep: new ConfigFormGroup({
                     visualisationsList: new FormArray([]),
-                    thumbnailAndQuicklook: new ConfigFormGroup({
-                        useHttpThumbnails: new SlideToggleFormControl(
+                    thumbnail: new ConfigFormGroup({
+                        useHttp: new SlideToggleFormControl(
                             false,
                             marker('Use http thumbnails'),
                             marker('Use http thumbnails description')
                         ),
-                        useHttpQuicklooks: new SlideToggleFormControl(
-                            false,
-                            marker('Use http quicklooks'),
-                            marker('Use http quicklooks description')
-                        ),
-                        thumbnailUrl: new FieldTemplateControl(
+                        url: new FieldTemplateControl(
                             '',
                             marker('Thumbnail url'),
                             marker('Thumbnail url description'),
@@ -439,15 +440,51 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                                 }
                             }
                         ),
-                        quicklookUrls: new FormArray([]),
+                    }).withTitle(marker('Thumbnail')),
+                    quicklook: new ConfigFormGroup({
+                        useHttp: new SlideToggleFormControl(
+                            false,
+                            marker('Use http quicklooks'),
+                            marker('Use http quicklooks description')
+                        ),
+                        urls: new FormArray<ResultlistQuicklookFormGroup>([]),
                         quicklook: new ComponentFormControl(
                             EditResultlistQuicklookComponent,
                             {
                                 collectionControl: () => this.customControls.dataStep.collection,
-                                control: () => this.customControls.visualisationStep.thumbnailAndQuicklook.quicklookUrls
+                                control: () => this.customControls.visualisationStep.quicklook.urls
                             }
-                        )
-                    }).withTitle(marker('Thumbnail and Quicklook')),
+                        ),
+                        displayOnMap: new ConfigFormGroup({
+                            enabled: new SlideToggleFormControl(
+                                false,
+                                marker('Enable quicklook on map'),
+                                marker('Enable quicklook on map description')
+                            ),
+                            boundsFieldName: new SelectFormControl(
+                                '',
+                                marker('Quicklook on map bounds field'),
+                                marker('Quicklook on map bounds field description'),
+                                true,
+                                toOptionsObs(collectionService.getCollectionFields(collection,
+                                    [CollectionReferenceDescriptionProperty.TypeEnum.GEOMETRY])),
+                                {
+                                    optional: true,
+                                    dependsOn: () => [
+                                        this.customControls.dataStep.collection,
+                                        this.customControls.visualisationStep.quicklook.displayOnMap.enabled
+                                    ],
+                                    onDependencyChange: (control: SelectFormControl) => {
+                                        if (!this.collection || this.customControls.dataStep.collection.dirty) {
+                                            this.updateSelectFormControl(collectionService, control);
+                                        }
+
+                                        control.enableIf(!!this.customControls.visualisationStep.quicklook.displayOnMap.enabled.value);
+                                    }
+                                }
+                            )
+                        })
+                    }).withTitle(marker('Quicklook')),
                     visualisations: new ConfigFormGroup({
                         visualisation: new ComponentFormControl(
                             ResultListVisualisationComponent,
