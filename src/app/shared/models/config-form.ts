@@ -51,13 +51,13 @@ export interface SelectOption {
 
 export interface VisualisationCheckboxOption {
   include: boolean;
-  name: any;
+  name: string;
   layers: string[];
 }
 export abstract class ConfigFormControl extends FormControl {
 
   // reference to other controls that depends on this one
-  public dependantControls: Array<AbstractControl>;
+  public dependantControls = new Array<AbstractControl>();
 
   // if it is a child control, it is to be displayed below another controls into a single config element
   public isChild = false;
@@ -187,7 +187,7 @@ export interface GroupOptionalParams {
 export class ConfigFormGroup extends FormGroup {
 
   // reference to other controls that depends on this one
-  public dependantControls: Array<AbstractControl>;
+  public dependantControls = new Array<AbstractControl>();
 
   public title: string;
   public stepName: string;
