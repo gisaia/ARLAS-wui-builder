@@ -5,9 +5,9 @@ import { mockArlasStartupService } from '@app/test/arlas-startup.service.mock';
 import { mockMainFormService } from '@app/test/main-form.service.mock';
 import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ArlasStartupService, ArlasTaskService, GET_OPTIONS } from 'arlas-wui-toolkit';
+import { AnalyticsService, ArlasStartupService, ArlasTaskService, GET_OPTIONS } from 'arlas-wui-toolkit';
 import { LoggerModule } from 'ngx-logger';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GroupsComponent } from './groups.component';
 
 describe('GroupsComponent', () => {
@@ -37,6 +37,13 @@ describe('GroupsComponent', () => {
                 {
                     provide: MainFormService,
                     useValue: mockMainFormService
+                },
+                {
+                    provide: AnalyticsService,
+                    useValue: {
+                        initializeGroups: vi.fn(),
+                        selectTab: vi.fn()
+                    }
                 }
             ]
         })
