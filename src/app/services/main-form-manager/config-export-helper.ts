@@ -28,6 +28,7 @@ import {
   ResultListVisualisationDataGroupFormWidget,
   ResultListVisualisationFormWidget
 } from '@analytics-config/services/resultlist-form-builder/models';
+import { ResultlistConfigForm } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { FormArray, FormGroup } from '@angular/forms';
 import { LookAndFeelGlobalFormGroup } from '@look-and-feel-config/services/look-and-feel-global-form-builder/form-group';
@@ -53,13 +54,11 @@ import {
 import {
   TimelineGlobalFormGroup
 } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
-import { CollectionReferenceDescription, Expression } from 'arlas-api';
-import { CollectionReferenceDescriptionProperty } from 'arlas-api/api';
+import { CollectionReferenceDescription, CollectionReferenceDescriptionProperty, Expression } from 'arlas-api';
 import { BasemapStyle, ExternalEventLayer, SCROLLABLE_ARLAS_ID, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
 import { ArlasColorService, DescribedUrl } from 'arlas-web-components';
 import { ColorConfig, ExtentFilterGeometry, FieldsConfiguration, getSourceName, LayerSourceConfig } from 'arlas-web-contributors';
-import { ClusterLayerCourceConfig, CoreLayerSourceConfig, FeatureLayerSourceConfig, FeatureRenderMode, TopologyLayerSourceConfig }
-  from 'arlas-web-contributors/models/models';
+import { ClusterLayerCourceConfig, CoreLayerSourceConfig, FeatureLayerSourceConfig, FeatureRenderMode, FieldDetail, TopologyLayerSourceConfig } from 'arlas-web-contributors/models/models';
 import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
 import {
   AggregationModelConfig,
@@ -1017,8 +1016,8 @@ export class ConfigExportHelper {
           icon: 'fiber_manual_record',
           iconColorFieldName: widgetData.dataStep.grid.color.colorIdentifier
         };
-        if (widgetData.visualisationStep.thumbnailAndQuicklook.thumbnailUrl) {
-          fieldsConfig.urlThumbnailTemplate = widgetData.visualisationStep.thumbnailAndQuicklook.thumbnailUrl;
+        if (widgetData.visualisationStep.thumbnail.url) {
+          fieldsConfig.urlThumbnailTemplate = widgetData.visualisationStep.thumbnail.url;
         }
         if (widgetData.renderStep.imageUrl) {
           fieldsConfig.urlImageTemplate = widgetData.renderStep.imageUrl;
@@ -1083,38 +1082,45 @@ export class ConfigExportHelper {
     return contrib;
   }
 
-  private static getResultListContributors(resultLists: FormArray): ContributorConfig[] {
-    const contribs = [];
-    resultLists.value.forEach(list => {
-      const contrib = this.getWidgetContributor(list, WIDGET_TYPE.resultlist, 'table_chart');
+  private static getResultListContributors(resultLists: FormArray<ResultlistConfigForm>): ContributorConfig[] {
+    const contribs = new Array<ContributorConfig>();
+
+    resultLists.controls.forEach(listForm => {
+      const contrib = this.getWidgetContributor(listForm.value, WIDGET_TYPE.resultlist, 'table_chart');
       contrib.type = 'resultlist';
-      contrib.search_size = list.settingsStep.searchSize;
+
+      const list = listForm.customControls;
+      contrib.search_size = list.settingsStep.searchSize.value;
       const fieldsConfig: FieldsConfiguration = {
-        idFieldName: list.dataStep.idFieldName,
+        idFieldName: list.dataStep.idFieldName.value,
         titleFieldNames: [{
-          fieldPath: list.dataStep.grid.aTitle.titleLabelField,
-          process: list.dataStep.grid.aTitle.titleLabelFieldProcess
+          fieldPath: list.dataStep.grid.aTitle.titleLabelField.value,
+          process: list.dataStep.grid.aTitle.titleLabelFieldProcess.value
         }],
         tooltipFieldNames: [{
-          fieldPath: list.dataStep.grid.bTooltip.tooltipField,
-          process: list.dataStep.grid.bTooltip.tooltipFieldProcess
+          fieldPath: list.dataStep.grid.bTooltip.tooltipField.value,
+          process: list.dataStep.grid.bTooltip.tooltipFieldProcess.value
         }],
-        iconColorFieldName: list.dataStep.grid.color.colorIdentifier,
-        useHttpQuicklooks: list.visualisationStep.thumbnailAndQuicklook.useHttpQuicklooks,
-        useHttpThumbnails: list.visualisationStep.thumbnailAndQuicklook.useHttpThumbnails
+        iconColorFieldName: list.dataStep.grid.color.colorIdentifier.value,
+        useHttpQuicklooks: list.visualisationStep.quicklook.useHttp.value,
+        useHttpThumbnails: list.visualisationStep.thumbnail.useHttp.value,
+        displayQuicklookOnMap: {
+          enabled: list.visualisationStep.quicklook.displayOnMap.enabled.value,
+          boundsFieldName: list.visualisationStep.quicklook.displayOnMap.boundsFieldName.value,
+        }
       };
-      if (list.dataStep.detailsTitle) {
-        fieldsConfig.detailsTitleTemplate = list.dataStep.detailsTitle;
+      if (list.dataStep.detailsTitle.value) {
+        fieldsConfig.detailsTitleTemplate = list.dataStep.detailsTitle.value;
       }
-      if (list.visualisationStep.thumbnailAndQuicklook.thumbnailUrl) {
-        fieldsConfig.urlThumbnailTemplate = list.visualisationStep.thumbnailAndQuicklook.thumbnailUrl;
+      if (list.visualisationStep.thumbnail.url.value) {
+        fieldsConfig.urlThumbnailTemplate = list.visualisationStep.thumbnail.url.value;
       }
 
-      if (list.visualisationStep.thumbnailAndQuicklook.quicklookUrls) {
-        fieldsConfig.urlImageTemplates = list.visualisationStep.thumbnailAndQuicklook.quicklookUrls.map(formValues => {
-          const quicklook: DescribedUrl = { url: formValues.url, description: formValues.description };
-          if (formValues.filter.field !== '') {
-            quicklook.filter = { field: formValues.filter.field, values: formValues.filter.values.map(v => v.value) };
+      if (list.visualisationStep.quicklook.urls.value) {
+        fieldsConfig.urlImageTemplates = list.visualisationStep.quicklook.urls.controls.map(f => f.customControls).map(formValues => {
+          const quicklook: DescribedUrl = { url: formValues.url.value, description: formValues.description.value };
+          if (formValues.filter.field.value !== '') {
+            quicklook.filter = { field: formValues.filter.field.value, values: formValues.filter.values.value.map(v => v.value) };
           }
           return quicklook;
         });
@@ -1122,25 +1128,26 @@ export class ConfigExportHelper {
 
       contrib.fieldsConfiguration = fieldsConfig;
       contrib.columns = [];
-      (list.dataStep.columns as Array<any>).forEach(c =>
+      for (const c of list.dataStep.columns.controls.map(c => c.customControls)) {
         contrib.columns.push({
-          columnName: c.columnName,
-          fieldName: c.fieldName,
-          dataType: c.dataType,
-          process: c.process,
-          useColorService: !!c.useColorService,
-          sort: c.sort
-        }));
+          columnName: c.columnName.value,
+          fieldName: c.fieldName.value,
+          dataType: c.dataType.value,
+          process: c.process.value,
+          useColorService: !!c.useColorService.value,
+          sort: c.sort.value
+        });
+      }
 
       contrib.details = [];
-      (list.dataStep.details).forEach((d, index) => {
-        const fields = d.fields.map(f => ({
-          path: f.path,
-          label: f.label,
-          process: f.process
+      list.dataStep.details.controls.map(c => c.customControls).forEach((d, index) => {
+        const fields: FieldDetail[] = d.fields.controls.map(c => c.customControls).map(f => ({
+          path: f.path.value,
+          label: f.label.value,
+          process: f.process.value
         }));
-        contrib.details.push({
-          name: d.name,
+        contrib.details?.push({
+          name: d.name.value,
           order: index + 1,
           fields
         });
@@ -1148,26 +1155,35 @@ export class ConfigExportHelper {
 
 
       contrib.cardViewProperties = [];
-      if (list.dataStep?.cardViewProperties) {
-        list.dataStep.cardViewProperties.forEach((line, index) => {
-          line.fields.forEach(el => {
+      if (list.dataStep?.cardViewProperties.value) {
+        for (const line of list.dataStep.cardViewProperties.controls.map(c => c.customControls)) {
+          for (const el of line.fields.controls.map(c => c.customControls)) {
             contrib.cardViewProperties.push({
-              ...el
+              fieldName: el.fieldName.value,
+              lineNumber: el.lineNumber.value,
+              prettyName: el.prettyName.value,
+              icon: el.icon.value,
+              dataType: el.dataType.value,
+              process: el.process.value,
+              isTitle: el.isTitle.value,
+              sort: el.sort.value,
             });
-          });
-        });
+          }
+        }
       }
 
       contrib.includeMetadata = [];
+
       contribs.push(contrib);
     });
+
     return contribs;
   }
 
   public static getResultListComponent(resultLists: FormArray) {
-    const lists = [];
+    const lists = new Array<AnalyticComponentConfig>();
     resultLists.value.forEach(list => {
-      lists.push(this.getAnalyticsComponent(WIDGET_TYPE.resultlist, list, null));
+      lists.push(this.getAnalyticsComponent(WIDGET_TYPE.resultlist, list, undefined));
     });
 
     return lists;
@@ -1280,7 +1296,7 @@ export class ConfigExportHelper {
   private static getAnalyticsComponent(
     widgetType: any,
     widgetData: any,
-    itemPerLine: number,
+    itemPerLine: number | undefined,
     lookAndFeelConfigGlobal?: LookAndFeelGlobalFormGroup): AnalyticComponentConfig {
     const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
     const analyticsBoardWidth = 445;

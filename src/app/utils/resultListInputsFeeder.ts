@@ -46,12 +46,12 @@ import {
 } from '@shared-models/config-form';
 import { Expression } from 'arlas-api';
 import { ArlasColorService, stringToResultlistModeEnum } from 'arlas-web-components';
+import { CardViewProperty } from 'arlas-web-contributors/models/models';
 import { firstValueFrom } from 'rxjs';
 import { CollectionService } from '../services/collection-service/collection.service';
 import { NUMERIC_TYPES } from '../services/collection-service/tools';
 import {
     AnalyticComponentResultListInputConfig,
-    CardViewProperties,
     ContributorConfig,
     DataGroupInputConfig
 } from '../services/main-form-manager/models-config';
@@ -89,11 +89,13 @@ interface DataStep {
 
 interface VisualisationStep {
     visualisationsList: FormArray<any>;
-    thumbnailAndQuicklook: {
-        useHttpThumbnails: SlideToggleFormControl;
-        useHttpQuicklooks: SlideToggleFormControl;
-        thumbnailUrl: FieldTemplateControl;
-        quicklookUrls: FormArray;
+    thumbnail: {
+        useHttp: SlideToggleFormControl;
+        url: FieldTemplateControl;
+    };
+    quicklook: {
+        useHttp: SlideToggleFormControl;
+        urls: FormArray;
     };
     visualisations: ConfigFormGroup;
 };
@@ -266,15 +268,15 @@ export class ResultListInputsFeeder {
         this.imports([
             {
                 value: this.options.contributor.fieldsConfiguration.urlThumbnailTemplate ?? '',
-                control: this.visualisationStep.thumbnailAndQuicklook.thumbnailUrl
+                control: this.visualisationStep.thumbnail.url
             },
             {
                 value: this.options.contributor.fieldsConfiguration.useHttpThumbnails,
-                control: this.visualisationStep.thumbnailAndQuicklook.useHttpThumbnails
+                control: this.visualisationStep.thumbnail.useHttp
             },
             {
                 value: this.options.contributor.fieldsConfiguration.useHttpQuicklooks,
-                control: this.visualisationStep.thumbnailAndQuicklook.useHttpQuicklooks
+                control: this.visualisationStep.quicklook.useHttp
             }
         ]);
 
@@ -407,7 +409,7 @@ export class ResultListInputsFeeder {
         if (this.options.contributor.fieldsConfiguration.urlImageTemplate) {
             const quicklook = resultListFormBuilder.buildQuicklook(this.options.contributor.collection);
             this.import(this.options.contributor.fieldsConfiguration.urlImageTemplate, quicklook.customControls.url);
-            this.visualisationStep.thumbnailAndQuicklook.quicklookUrls.push(quicklook);
+            this.visualisationStep.quicklook.urls.push(quicklook);
         }
 
         this.options.contributor.fieldsConfiguration.urlImageTemplates?.forEach(descUrl => {
@@ -447,7 +449,7 @@ export class ResultListInputsFeeder {
                         })));
                     });
             }
-            this.options.widgetData.customControls.visualisationStep.thumbnailAndQuicklook.quicklookUrls.push(quicklook);
+            this.options.widgetData.customControls.visualisationStep.quicklook.urls.push(quicklook);
         });
         return this;
     }
@@ -494,7 +496,7 @@ export class ResultListInputsFeeder {
         .sort((d1, d2) => d1.lineNumber - d2.lineNumber);
 
     sortedCards.forEach((curr, i) => {
-          const prev: CardViewProperties = sortedCards[i - 1];
+          const prev: CardViewProperty = sortedCards[i - 1];
 
           if(prev && prev.lineNumber !== curr.lineNumber){
             this.dataStep.cardViewProperties.push(cardsLine);
