@@ -1127,7 +1127,6 @@ export class TextareaFormControl extends ConfigFormControl {
     label: string,
     description: string,
     public placeHolder: string = '',
-    public nbRows?: number,
     optionalParams?: ControlOptionalParams,
     propertyName?: string
   ) {
