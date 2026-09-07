@@ -22,6 +22,7 @@ import { Aggregation, Expression } from 'arlas-api';
 import { ArlasDataLayer, BasemapStyle, MapLayers, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
 import { CardViewProperty, Detail, FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
 import { AnalyticsTabs, ZoomToDataStrategy } from 'arlas-wui-toolkit';
+import { RasterDEMSourceSpecification } from 'maplibre-gl';
 
 export const JSONPATH_COUNT = '$.count';
 export const JSONPATH_METRIC = '$.metrics[0].value';
@@ -385,7 +386,7 @@ export interface MapComponentInputConfig {
   mapLayers: MapLayers<ArlasDataLayer>;
   visualisations_sets: Array<VisualisationSetConfig>;
   /** Configuration to display terrain elevation */
-  terrain: TerrainConfiguration<maplibregl.RasterDEMSourceSpecification>;
+  terrain: TerrainConfiguration<RasterDEMSourceSpecification>;
 }
 
 export interface AggregationModelConfig {

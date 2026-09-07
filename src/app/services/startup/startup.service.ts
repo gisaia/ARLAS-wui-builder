@@ -25,6 +25,7 @@ import {
   ArlasSettings, ArlasStartupService, AuthentificationService, AuthentSetting
 } from 'arlas-wui-toolkit';
 import fetchIntercept from 'fetch-intercept';
+import { RasterDEMSourceSpecification } from 'maplibre-gl';
 import { map, Observable } from 'rxjs';
 
 export const ZONE_WUI_BUILDER = 'config.json';
@@ -43,7 +44,7 @@ export interface Basemap {
 export interface ArlasBuilderSettings extends ArlasSettings {
   basemaps?: Basemap[];
   /** Configuration for the terrain. If present allows the user to add a terrain with a toggle */
-  terrain?: maplibregl.RasterDEMSourceSpecification;
+  terrain?: RasterDEMSourceSpecification;
 }
 
 @Injectable({

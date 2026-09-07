@@ -63,6 +63,7 @@ import {
 } from 'arlas-web-contributors';
 import { FieldDetail } from 'arlas-web-contributors/models/models';
 import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
+import { RasterDEMSourceSpecification } from 'maplibre-gl';
 import {
   AggregationModelConfig,
   AnalyticComponentConfig,
@@ -587,7 +588,7 @@ export class ConfigExportHelper {
       defaultBasemap = basemaps[0];
     }
 
-    const terrain: TerrainConfiguration<maplibregl.RasterDEMSourceSpecification> = {
+    const terrain: TerrainConfiguration<RasterDEMSourceSpecification> = {
       enable: mapConfigBasemaps.customControls.terrain.enable.value
     };
     if (terrain.enable) {
