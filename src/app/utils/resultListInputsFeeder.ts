@@ -46,7 +46,7 @@ import {
 } from '@shared-models/config-form';
 import { Expression } from 'arlas-api';
 import { ArlasColorService, stringToResultlistModeEnum } from 'arlas-web-components';
-import { CardViewProperty } from 'arlas-web-contributors/models/models';
+import { CardViewProperty } from 'arlas-web-contributors';
 import { firstValueFrom } from 'rxjs';
 import { CollectionService } from '../services/collection-service/collection.service';
 import { NUMERIC_TYPES } from '../services/collection-service/tools';

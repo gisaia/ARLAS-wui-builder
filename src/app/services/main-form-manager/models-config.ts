@@ -20,8 +20,7 @@
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { Aggregation, Expression } from 'arlas-api';
 import { ArlasDataLayer, BasemapStyle, MapLayers, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
-import { Detail, FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
-import { CardViewProperty } from 'arlas-web-contributors/models/models';
+import { CardViewProperty, Detail, FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
 import { AnalyticsTabs, ZoomToDataStrategy } from 'arlas-wui-toolkit';
 
 export const JSONPATH_COUNT = '$.count';

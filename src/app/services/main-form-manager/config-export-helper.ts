@@ -57,8 +57,11 @@ import {
 import { CollectionReferenceDescription, CollectionReferenceDescriptionProperty, Expression } from 'arlas-api';
 import { BasemapStyle, ExternalEventLayer, SCROLLABLE_ARLAS_ID, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
 import { ArlasColorService, DescribedUrl } from 'arlas-web-components';
-import { ColorConfig, ExtentFilterGeometry, FieldsConfiguration, getSourceName, LayerSourceConfig } from 'arlas-web-contributors';
-import { ClusterLayerCourceConfig, CoreLayerSourceConfig, FeatureLayerSourceConfig, FeatureRenderMode, FieldDetail, TopologyLayerSourceConfig } from 'arlas-web-contributors/models/models';
+import {
+  ClusterLayerCourceConfig, ColorConfig, CoreLayerSourceConfig, ExtentFilterGeometry, FeatureLayerSourceConfig,
+  FeatureRenderMode, FieldsConfiguration, getSourceName, LayerSourceConfig, TopologyLayerSourceConfig
+} from 'arlas-web-contributors';
+import { FieldDetail } from 'arlas-web-contributors/models/models';
 import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
 import {
   AggregationModelConfig,

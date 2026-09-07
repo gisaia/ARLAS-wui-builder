@@ -27,8 +27,7 @@ import { PROPERTY_SELECTOR_SOURCE, ProportionedValues } from '@shared-services/p
 import { InterpolatedProperty, ModesValues } from '@shared/interfaces/config-map.interfaces';
 import { EXTRUSION_LAYER_PREFIX, FillStroke, LayerMetadata, MapLayers, SCROLLABLE_ARLAS_ID } from 'arlas-map';
 import { ArlasColorService } from 'arlas-web-components';
-import { LayerSourceConfig } from 'arlas-web-contributors';
-import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
+import { FeatureRenderMode, LayerSourceConfig } from 'arlas-web-contributors';
 import { LINE_TYPE_VALUES } from '../../modules/map-config/services/map-layer-form-builder/models';
 import { ConfigExportHelper } from './config-export-helper';
 import {
