@@ -65,7 +65,6 @@ export abstract class AsbtractConfigFormControl implements OnInit, OnDestroy {
       .forEach(
         (c: ConfigFormControl | ConfigFormGroup) => {
           c.dependsOn().forEach(d => {
-            d.dependantControls = d.dependantControls || [];
             if (!d.dependantControls.includes(c)) {
               d.dependantControls.push(c);
             }

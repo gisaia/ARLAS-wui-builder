@@ -254,7 +254,6 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                                 marker('Transformation title'),
                                 marker('Transformation title description'),
                                 '',
-                                1,
                                 {
                                     optional: true,
                                     validators: [TextareaFormControl.processValidator('result')],
@@ -290,7 +289,6 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                                 marker('Transformation tooltip'),
                                 marker('Transformation tooltip description'),
                                 '',
-                                1,
                                 {
                                     optional: true,
                                     validators: [TextareaFormControl.processValidator('result')],
@@ -548,7 +546,6 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
                     marker('Transformation'),
                     '',
                     '',
-                    1,
                     {
                         optional: true,
                         validators: [TextareaFormControl.processValidator('result')],
@@ -742,7 +739,6 @@ export class ResultListVisualisationsFormGroup extends FormGroup {
                 marker('Visualisation description'),
                 '',
                 '',
-                undefined,
                 {
                     optional: true,
                 }

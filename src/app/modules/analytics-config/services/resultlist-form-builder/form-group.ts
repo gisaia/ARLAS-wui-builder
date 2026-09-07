@@ -17,21 +17,21 @@
  * under the License.
  */
 
-import {FormArray, FormGroup, Validators} from '@angular/forms';
-import {marker} from '@colsen1991/ngx-translate-extract-marker';
+import { FormArray, FormGroup, Validators } from '@angular/forms';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
-    ConfigFormGroup,
-    HiddenFormControl,
-    IconFormControl,
-    InputFormControl,
-    SelectFormControl,
-    SelectOption,
-    SliderFormControl,
-    SlideToggleFormControl,
-    TextareaFormControl
+  ConfigFormGroup,
+  HiddenFormControl,
+  IconFormControl,
+  InputFormControl,
+  SelectFormControl,
+  SelectOption,
+  SliderFormControl,
+  SlideToggleFormControl,
+  TextareaFormControl
 } from '@shared-models/config-form';
-import {Observable} from 'rxjs';
-import {CollectionConfigFormGroup} from '@shared-models/collection-config-form';
+import { Observable } from 'rxjs';
 
 export type ResultlistDataConfigForm = FormGroup<{
   collection: SelectFormControl;
@@ -84,7 +84,6 @@ export class ResultlistDetailFieldFormGroup extends FormGroup {
         marker('Apply a calculation in javascript'),
         '',
         marker('e.g : result+\'$\''),
-        1,
         {
           optional: true,
           validators: [TextareaFormControl.processValidator('result')],
@@ -158,7 +157,6 @@ export class ResultListCardFieldsFormGroup extends CollectionConfigFormGroup {
               marker('Transformation'),
               '',
               '',
-              1,
               {
                 optional: true,
                 validators: [TextareaFormControl.processValidator('result')],
