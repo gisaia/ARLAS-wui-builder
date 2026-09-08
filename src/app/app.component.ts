@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -24,7 +24,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Title } from '@angular/platform-browser';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
-import { LandingPageComponent } from '@components/landing-page/landing-page.component';
 import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
 import { StatusComponent } from '@components/status/status.component';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -57,10 +56,9 @@ import { environment } from '../environments/environment';
 export class AppComponent implements OnInit {
 
   public title = 'ARLAS-wui-builder';
-  public version: string;
+  public version = environment.VERSION;
   public displayTopMenu = true;
   public displayLeftMenu = false;
-  @ViewChild('landing', { static: false }) public landing: LandingPageComponent;
 
   public constructor(
     private readonly logger: NGXLogger,
@@ -82,14 +80,13 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     this.title = this.arlasSettingsService.settings['tab_name'] ?? 'ARLAS-wui-builder';
-    this.version = environment.VERSION;
 
     this.titleService.setTitle(this.title);
     this.iconService.registerIcons();
     // remove arlas gif after
     const gifElement = document.querySelector('.gif');
     if (gifElement) {
-      document.querySelector('.gif').remove();
+      gifElement.remove();
     }
 
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(
