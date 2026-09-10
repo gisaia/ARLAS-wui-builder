@@ -51,8 +51,7 @@ import { TitleCasePipe } from '@angular/common';
     GetFieldDisplayNamePipe,
     MatMenuModule,
     MatError,
-    MatButtonModule,
-    TitleCasePipe
+    MatButtonModule
   ]
 })
 export class MetricsTableDataComponent implements OnInit {

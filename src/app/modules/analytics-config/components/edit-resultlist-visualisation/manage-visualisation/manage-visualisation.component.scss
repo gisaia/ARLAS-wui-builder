@@ -66,8 +66,8 @@
   }
 
   &__description {
-    ::ng-deep textarea {
-      height: 60px !important;
+    ::ng-deep .mat-form-field {
+      width: 230px !important;
     }
   }
 
