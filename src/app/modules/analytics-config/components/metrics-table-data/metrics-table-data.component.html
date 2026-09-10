@@ -56,7 +56,7 @@
                     {{ 'metric of field' | translate : { metric: c.get("metricCollectFunction").value | translate,
                       field: metricCollectField | getFieldDisplayName | translate} }}</span>
                 } @else {
-                  <span>{{ metricCollectField | translate }}</span>
+                  <span>{{  c.get("metricCollectFunction").value | titlecase | translate }}</span>
                 }
               </div>
             </div>
