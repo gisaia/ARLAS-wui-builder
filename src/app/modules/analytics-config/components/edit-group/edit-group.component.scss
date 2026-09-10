@@ -32,6 +32,18 @@
         width: 480px;
     }
 
+    .edit-group-icon{
+        align-items: unset;
+    }
+
+    .edit-group-title{
+        max-width: 50%;
+        flex: 1 1 50%;
+        mat-form-field {
+            max-width: 100%;
+        }
+    }
+
     .edit-group-form {
         padding: 10px;
         margin: 2px;
@@ -44,7 +56,6 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            flex-wrap: wrap;
         }
 
         .edit-widgets {
