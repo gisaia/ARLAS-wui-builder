@@ -65,6 +65,12 @@
     margin: 6px 0;
   }
 
+  &__description {
+    ::ng-deep textarea {
+      height: 60px!important;
+    }
+  }
+
   &__back-icon {
     text-decoration: underline;
     display: flex;
