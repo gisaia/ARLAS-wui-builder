@@ -65,6 +65,12 @@
     margin: 6px 0;
   }
 
+  &__description {
+    ::ng-deep .mat-form-field {
+      width: 230px !important;
+    }
+  }
+
   &__back-icon {
     text-decoration: underline;
     display: flex;
