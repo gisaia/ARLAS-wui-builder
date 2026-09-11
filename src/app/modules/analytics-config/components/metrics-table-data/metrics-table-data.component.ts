@@ -33,7 +33,6 @@ import { MainFormService } from '@services/main-form/main-form.service';
 import { GetCollectionDisplayNamePipe, GetFieldDisplayNamePipe } from 'arlas-web-components';
 import { Subject } from 'rxjs';
 import { AddSubtableDialogComponent } from '../add-subtable-dialog/add-subtable-dialog.component';
-import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'arlas-metrics-table-data',
