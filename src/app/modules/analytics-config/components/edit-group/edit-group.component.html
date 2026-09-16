@@ -2,10 +2,10 @@
   <div class="edit-group">
     <div class="edit-group-form">
       <div class="fields">
-        <arlas-config-icon-picker [control]="formGroup.controls.icon">
+        <arlas-config-icon-picker  class="edit-group-icon" [control]="formGroup.controls.icon">
         </arlas-config-icon-picker>
-        <div>
-          <mat-form-field>
+        <div class="edit-group-title">
+          <mat-form-field >
             <mat-label>{{'Title' | translate}}</mat-label>
             <input matInput formControlName="title" (change)="updatePreview()">
           </mat-form-field>
