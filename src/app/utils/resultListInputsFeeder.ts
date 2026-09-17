@@ -96,6 +96,10 @@ interface VisualisationStep {
     quicklook: {
         useHttp: SlideToggleFormControl;
         urls: FormArray;
+        displayOnMap: {
+            enabled: SlideToggleFormControl;
+            boundsFieldName: SelectFormControl;
+        };
     };
     visualisations: ConfigFormGroup;
 };
@@ -267,16 +271,24 @@ export class ResultListInputsFeeder {
 
         this.imports([
             {
-                value: this.options.contributor.fieldsConfiguration.urlThumbnailTemplate ?? '',
+                value: this.options.contributor.fieldsConfiguration?.urlThumbnailTemplate ?? '',
                 control: this.visualisationStep.thumbnail.url
             },
             {
-                value: this.options.contributor.fieldsConfiguration.useHttpThumbnails,
+                value: this.options.contributor.fieldsConfiguration?.useHttpThumbnails ?? false,
                 control: this.visualisationStep.thumbnail.useHttp
             },
             {
-                value: this.options.contributor.fieldsConfiguration.useHttpQuicklooks,
+                value: this.options.contributor.fieldsConfiguration?.useHttpQuicklooks ?? false,
                 control: this.visualisationStep.quicklook.useHttp
+            },
+            {
+                value: this.options.contributor.fieldsConfiguration?.displayQuicklookOnMap?.enabled ?? false,
+                control: this.visualisationStep.quicklook.displayOnMap.enabled
+            },
+            {
+                value: this.options.contributor.fieldsConfiguration?.displayQuicklookOnMap?.boundsFieldName,
+                control: this.visualisationStep.quicklook.displayOnMap.boundsFieldName
             }
         ]);
 
