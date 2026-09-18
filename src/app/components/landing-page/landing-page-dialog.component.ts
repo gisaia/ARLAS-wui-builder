@@ -18,7 +18,7 @@
  */
 
 import { KeyValue, KeyValuePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -44,7 +44,10 @@ import { ConfigElementComponent } from '@shared-components/config-element/config
 import { DialogData } from '@shared-components/input-modal/input-modal.component';
 import { GroupCollectionPipe } from '@shared/pipes/group-collection.pipe';
 import { GetCollectionDisplayNamePipe } from 'arlas-web-components';
-import { PersistenceService, UserInfosComponent } from 'arlas-wui-toolkit';
+import {
+  ArlasIamService, ArlasSettingsService, AuthentificationService,
+  AuthentSetting, PersistenceService, UserInfosComponent
+} from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner';
 
@@ -79,6 +82,7 @@ export class LandingPageDialogComponent implements OnInit {
   public includePublicCollection = false;
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly arlasSettingsService = inject(ArlasSettingsService);
 
   public constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -95,7 +99,9 @@ export class LandingPageDialogComponent implements OnInit {
     private readonly spinner: NgxSpinnerService,
     private readonly router: Router,
     private readonly menu: MenuService,
-    private readonly landingPageService: LandingPageService
+    private readonly landingPageService: LandingPageService,
+    private readonly arlasIamService: ArlasIamService,
+    private readonly authService: AuthentificationService,
   ) { }
 
   public ngOnInit(): void {
@@ -142,7 +148,15 @@ export class LandingPageDialogComponent implements OnInit {
     this.spinner.show('connectServer');
     const serverUrl = this.mainFormService.startingConfig.getFg().get('serverUrl').value;
     const resolvedServerUrl = this.resolveServerUrl(serverUrl, window.location.origin);
-    this.http.get(resolvedServerUrl + '/openapi.json')
+    const authent: AuthentSetting = this.arlasSettingsService.getAuthentSettings();
+    let httpHeaders: HttpHeaders = new HttpHeaders();
+    if (!!authent && authent.use_authent) {
+      const token = authent.auth_mode === 'iam' ? this.arlasIamService.getAccessToken() : this.authService.accessToken;
+      if (token) {
+        httpHeaders = httpHeaders.set('Authorization', `Bearer ${token}`);
+      }
+    }
+    this.http.get(resolvedServerUrl + '/openapi.json', { headers: httpHeaders })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
@@ -177,9 +191,10 @@ export class LandingPageDialogComponent implements OnInit {
                     this.spinner.hide('connectServer');
                   },
                   () => this.spinner.hide('connectServer')
-              );
+                );
               this.isServerReady = true;
-            });
+            }
+          );
         },
         error: () => {
           this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
@@ -187,7 +202,7 @@ export class LandingPageDialogComponent implements OnInit {
           this.spinner.hide('connectServer');
         }
       }
-    );
+      );
   }
 
   public saveConfig() {
