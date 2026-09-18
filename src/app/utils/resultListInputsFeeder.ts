@@ -22,8 +22,10 @@ import {
 } from '@analytics-config/services/resultlist-form-builder/form-group';
 import { isNumberOperator } from '@analytics-config/services/resultlist-form-builder/models';
 import {
+    ResultlistColumnFormGroup,
     ResultlistConfigForm,
     ResultlistFormBuilderService,
+    ResultlistQuicklookFormGroup,
     ResultListVisualisationsDataGroup,
     ResultListVisualisationsDataGroupCondition,
     ResultListVisualisationsFormGroup
@@ -67,7 +69,7 @@ interface DataStep {
     collection: SelectFormControl;
     defaultMode: ButtonToggleFormControl;
     cardViewProperties: FormArray<ResultListCardLineFormGroup>;
-    columns: FormArray;
+    columns: FormArray<ResultlistColumnFormGroup>;
     grid: {
         aHasGridView: SlideToggleFormControl;
         aTitle: {
@@ -83,7 +85,7 @@ interface DataStep {
         };
     };
     detailsTitle: HiddenFormControl;
-    details: FormArray;
+    details: FormArray<ResultlistDetailFormGroup>;
     idFieldName: HiddenFormControl;
 }
 
@@ -95,7 +97,7 @@ interface VisualisationStep {
     };
     quicklook: {
         useHttp: SlideToggleFormControl;
-        urls: FormArray;
+        urls: FormArray<ResultlistQuicklookFormGroup>;
         displayOnMap: {
             enabled: SlideToggleFormControl;
             boundsFieldName: SelectFormControl;
@@ -539,7 +541,7 @@ export class ResultListInputsFeeder {
     return this;
   }
 
-    public importContributorColumns(resultlistFormBuilder) {
+    public importContributorColumns(resultlistFormBuilder: ResultlistFormBuilderService) {
         this.options.contributor.columns.forEach(c => {
             const column = resultlistFormBuilder.buildColumn(this.options.contributor.collection);
             importElements([

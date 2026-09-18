@@ -32,8 +32,6 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
 import { ConfigFormGroup } from '@shared-models/config-form';
-import { camelize } from '@utils/tools';
-import { LegendService } from 'arlas-map';
 import { Subscription } from 'rxjs';
 import { DialogFilterComponent } from '../../../modules/map-config/components/dialog-filter/dialog-filter.component';
 import { LAYER_MODE } from '../../../modules/map-config/components/edit-layer/models';
@@ -60,7 +58,7 @@ export interface Layer {
 export class LayerFiltersComponent implements OnInit, OnDestroy {
   @Input() public layerFg: MapLayerFormGroup;
 
-  public filtersFa: FormArray;
+  public filtersFa: FormArray<MapFilterFormGroup>;
   public displayedColumns: string[] = ['field', 'operation', 'value', 'action'];
 
   private confirmDeleteSub: Subscription;
@@ -83,7 +81,7 @@ export class LayerFiltersComponent implements OnInit, OnDestroy {
         .controls.filters.value;
     }
     for (let i = 0; i < this.filtersFa.length; i++) {
-      const ffg = this.filtersFa.at(i) as MapLayerFormGroup;
+      const ffg = this.filtersFa.at(i);
       ffg.customControls.id.setValue(i);
       this.filtersFa.setControl(i, ffg);
     }
@@ -102,7 +100,7 @@ export class LayerFiltersComponent implements OnInit, OnDestroy {
     /** if we edit an existing filter */
     if (filterId !== undefined) {
       const formGroupIndex = (this.filtersFa.value as any[]).findIndex(el => el.id === filterId);
-      const oldmapFormGroup = this.filtersFa.at(formGroupIndex) as MapFilterFormGroup;
+      const oldmapFormGroup = this.filtersFa.at(formGroupIndex);
       mapFormGroup.customControls.id.setValue(filterId);
       mapFormGroup.customControls.filterField.setValue(oldmapFormGroup.customControls.filterField.value);
       mapFormGroup.customControls.filterOperation.setValue(oldmapFormGroup.customControls.filterOperation.value);
@@ -145,12 +143,6 @@ export class LayerFiltersComponent implements OnInit, OnDestroy {
     });
   }
 
-  public getColorLegend(paint) {
-    const styleColor = paint['circle-color'] || paint['heatmap-color'] || paint['fill-color'] || paint['line-color'];
-    const colorLegend = LegendService.buildColorLegend(styleColor, true, new Map(), [], this.translate);
-    return colorLegend[0];
-  }
-
   public confirmDelete(filterId: number): void {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       width: '400px',
@@ -163,9 +155,5 @@ export class LayerFiltersComponent implements OnInit, OnDestroy {
       }
       this.ngOnInit();
     });
-  }
-
-  public camelize(text: string): string {
-    return camelize(text);
   }
 }

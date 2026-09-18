@@ -40,14 +40,15 @@ import {
   MapLayerFormGroup
 } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import {
-  MapVisualisationFormBuilderService
+  MapVisualisationFormBuilderService,
+  MapVisualisationFormGroup
 } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ConfigExportHelper } from '@services/main-form-manager/config-export-helper';
 import { ConfigMapExportHelper } from '@services/main-form-manager/config-map-export-helper';
 import { Config } from '@services/main-form-manager/models-config';
-import { Layer as LayerMap } from '@services/main-form-manager/models-map-config';
+import { Layer as LayerMap, Paint } from '@services/main-form-manager/models-map-config';
 import { ARLAS_ID, MainFormService } from '@services/main-form/main-form.service';
 import { StartupService } from '@services/startup/startup.service';
 import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
@@ -89,8 +90,8 @@ export interface Layer {
 export class LayersComponent implements OnInit, OnDestroy {
 
   public displayedColumns: string[] = ['representation', 'name', 'mode', 'visualisationSet', 'collection', 'zoom', 'nbFeature', 'action'];
-  public layersFa: FormArray;
-  public visualisationSetFa: FormArray;
+  public layersFa: FormArray<MapLayerFormGroup>;
+  public visualisationSetFa: FormArray<MapVisualisationFormGroup>;
 
   public layerLegend: Map<string, { layer: any; colorLegend: any; strokeColorLegend: any; lineDashArray: any;}> = new Map();
 
@@ -219,7 +220,7 @@ export class LayersComponent implements OnInit, OnDestroy {
     return layer;
   }
 
-  public getColorLegend(paint) {
+  public getColorLegend(paint: Paint) {
     const styleColor = paint['circle-color'] || paint['heatmap-color'] || paint['fill-color'] || paint['line-color'] || paint['text-color'];
     const colorLegend = LegendService.buildColorLegend(styleColor, true, new Map(), [], this.translate);
     return colorLegend[0];

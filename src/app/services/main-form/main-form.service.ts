@@ -21,6 +21,8 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { LookAndFeelGlobalFormGroup } from '@look-and-feel-config/services/look-and-feel-global-form-builder/form-group';
 import { MapBasemapFormGroup } from '@map-config/services/map-basemap-form-builder/map-basemap-form-builder.service';
 import { MapGlobalFormGroup } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
+import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { MapVisualisationFormGroup } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { SearchGlobalFormGroup } from '@search-config/services/search-global-form-builder/form-group';
 import { ResourcesConfigFormGroup } from '@services/resources-form-builder/resources-config-form-builder.service';
 import { StartingConfigFormGroup } from '@services/starting-config-form-builder/starting-config-form-builder.service';
@@ -119,8 +121,8 @@ export class MainFormService {
     public initVisualisationsFa = (fa: FormArray) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_VISUALISATIONS, fa);
     public initBasemapsFg = (fg: MapBasemapFormGroup) => this.control.setControl(MAIN_FORM_KEYS.MAP_CONFIG_BASAMAPS, fg);
     public getGlobalFg = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_GLOBAL) as MapGlobalFormGroup;
-    public getLayersFa = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS) as FormArray;
-    public getVisualisationsFa = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_VISUALISATIONS) as FormArray;
+    public getLayersFa = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_LAYERS) as FormArray<MapLayerFormGroup>;
+    public getVisualisationsFa = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_VISUALISATIONS) as FormArray<MapVisualisationFormGroup>;
     public getBasemapsFg = () => this.control.get(MAIN_FORM_KEYS.MAP_CONFIG_BASAMAPS) as MapBasemapFormGroup;
 
   }(this.mainForm.get(MAIN_FORM_KEYS.MAP_CONFIG) as FormGroup);
