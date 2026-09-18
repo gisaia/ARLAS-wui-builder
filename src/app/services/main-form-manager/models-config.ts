@@ -21,6 +21,7 @@ import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { Aggregation, Expression } from 'arlas-api';
 import { ArlasDataLayer, BasemapStyle, MapLayers, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
 import { CardViewProperty, Detail, FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
+import { MetricsTableSortConfig, MetricsVectorConfig } from 'arlas-web-contributors/models/metrics-table.config';
 import { AnalyticsTabs, ZoomToDataStrategy } from 'arlas-wui-toolkit';
 import { RasterDEMSourceSpecification } from 'maplibre-gl';
 
@@ -124,6 +125,7 @@ export interface ServerConfig {
   max_age_cache: number;
 }
 
+// TODO: make a BaseContributorConfig + a ContributorConfig per contributor type to improve typing
 export interface ContributorConfig {
   type: string;
   identifier: string;
@@ -162,28 +164,7 @@ export interface ContributorConfig {
   filterOperator?: string;
   allowOperatorChange?: boolean;
   sort?: MetricsTableSortConfig;
-  configuration?: Array<MetricsSubTableConfig>;
-}
-
-export interface MetricsSubTableConfig {
-  termfield: string;
-  collection: string;
-  metrics: Array<{
-    metric: string;
-    field?: string;
-  }>;
-
-}
-
-export interface MetricsTableSortConfig {
-  collection?: string;
-  termfield?: string;
-  order?: Aggregation.OrderEnum;
-  on?: 'metric' | 'count';
-  metric?: {
-    metric: string;
-    field: string;
-  };
+  configuration?: Array<MetricsVectorConfig>;
 }
 
 export interface SwimlaneConfig {
@@ -203,8 +184,6 @@ export interface AnalyticConfig {
   icon: string;
   components: Array<AnalyticComponentConfig>;
 }
-
-
 
 export interface AnalyticComponentConfig {
   /** this uuid will be used a reference to a component configuration and reused by a shortcut. */

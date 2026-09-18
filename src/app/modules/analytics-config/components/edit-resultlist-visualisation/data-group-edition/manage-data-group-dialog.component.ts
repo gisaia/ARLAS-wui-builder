@@ -20,6 +20,7 @@
 import {
   ResultlistFormBuilderService,
   ResultListVisualisationsDataGroup,
+  ResultListVisualisationsDataGroupCondition,
   ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import {
@@ -32,7 +33,6 @@ import {
   ViewChild,
   WritableSignal
 } from '@angular/core';
-import { AbstractControl, FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -76,11 +76,11 @@ export class ManageDataGroupDialogComponent implements OnInit {
   public disableButton: WritableSignal<boolean>;
   @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
 
-  public get criteriaList(){
-    return (this.data.dataGroup.get('filters')  as FormArray);
+  public get criteriaList() {
+    return this.data.dataGroup.customControls.filters;
   }
 
-  public get criteria(): AbstractControl[] {
+  public get criteria(): ResultListVisualisationsDataGroupCondition[] {
     return this.criteriaList ? this.criteriaList.controls : [];
   }
 
@@ -94,7 +94,7 @@ export class ManageDataGroupDialogComponent implements OnInit {
   }
 
   public removeCriteria(index: number) {
-    (this.data.dataGroup.get('filters')  as FormArray).removeAt(index);
+    this.data.dataGroup.customControls.filters.removeAt(index);
     this.table.renderRows();
   }
 

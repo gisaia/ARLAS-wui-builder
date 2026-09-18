@@ -32,15 +32,16 @@ import {
   TextareaFormControl
 } from '@shared-models/config-form';
 import { Observable } from 'rxjs';
+import { ResultlistColumnFormGroup } from './resultlist-form-builder.service';
 
 export type ResultlistDataConfigForm = FormGroup<{
   collection: SelectFormControl;
   searchSize: SliderFormControl;
-  columns: FormArray;
+  columns: FormArray<ResultlistColumnFormGroup>;
   grid: ConfigFormGroup;
   cardViewProperties: FormArray<ResultListCardLineFormGroup>;
   detailsTitle: HiddenFormControl;
-  details: FormArray;
+  details: FormArray<ResultlistDetailFormGroup>;
   idFieldName: HiddenFormControl;
 }>;
 

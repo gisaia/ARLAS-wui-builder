@@ -60,6 +60,7 @@ import { ClusterAggType, FeatureRenderMode, Granularity } from 'arlas-web-contri
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 import { map, Observable, of, Subject } from 'rxjs';
 import { toNumericOptionsObs } from '../../../../services/collection-service/tools';
+import { MapVisualisationFormGroup } from '../map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { MapFilterFormGroup } from './form-group';
 import {
   AGGREGATE_GEOMETRY_TYPE,
@@ -76,7 +77,7 @@ export interface MapLayerFormGroupConfig {
     featuresFg: MapLayerTypeFeaturesFormGroup;
     featureMetricFg: MapLayerTypeFeatureMetricFormGroup;
     clusterFg: MapLayerTypeClusterFormGroup;
-    vFa: FormArray;
+    vFa: FormArray<MapVisualisationFormGroup>;
     collection: string;
     edit: boolean;
     collectionService: CollectionService;

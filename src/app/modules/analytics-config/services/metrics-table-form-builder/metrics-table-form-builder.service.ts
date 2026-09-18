@@ -41,7 +41,7 @@ export class MetricsTableFormGroup extends WidgetConfigFormGroup {
   ) {
     super(collection, {
       title: new InputFormControl(
-        !!title ? title : '',
+        title ?? '',
         marker('metricstable title'),
         marker('metricstable title description'),
         ''
@@ -182,7 +182,7 @@ export class SubTableFormGroup extends CollectionConfigFormGroup {
           }
         }
       ),
-      columns: (new FormArray([], {
+      columns: (new FormArray<SubTableColumnFormGroup>([], {
         validators: Validators.required,
       })),
     });
@@ -190,7 +190,7 @@ export class SubTableFormGroup extends CollectionConfigFormGroup {
   public customControls = {
     collection: this.get('collection') as SelectFormControl,
     aggregationField: this.get('aggregationField') as SelectFormControl,
-    columns: this.get('columns') as FormArray,
+    columns: this.get('columns') as FormArray<SubTableColumnFormGroup>,
   };
 }
 
