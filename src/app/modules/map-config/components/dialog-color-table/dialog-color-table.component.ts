@@ -18,7 +18,7 @@
  */
 import { AsyncPipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -32,9 +32,14 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
 import { ColorPickerWrapperComponent } from '@shared-components/color-picker-wrapper/color-picker-wrapper.component';
 import { ArlasColorService } from 'arlas-web-components';
-import { from, Observable, of } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { from, mergeMap, Observable, of } from 'rxjs';
 import { DialogColorTableData } from './models';
+
+/** Form group to specify the color associated to a keyword */
+export type ColorFormGroup = FormGroup<{
+  keyword: FormControl;
+  color: FormControl;
+}>
 
 @Component({
   selector: 'arlas-dialog-color-table',
@@ -59,8 +64,8 @@ import { DialogColorTableData } from './models';
 })
 export class DialogColorTableComponent implements OnInit {
 
-  public keywordColorsForm: FormArray;
-  public dataSource: MatTableDataSource<AbstractControl>;
+  public keywordColorsForm: FormArray<ColorFormGroup>;
+  public dataSource: MatTableDataSource<ColorFormGroup>;
   public displayedColumns = ['keyword', 'color'];
   public filter: string;
   public newKeywordValues: Observable<Array<string>>;
@@ -79,7 +84,7 @@ export class DialogColorTableComponent implements OnInit {
     this.dialogRef.updateSize('800px');
 
     // build the form with all keywords / colors
-    this.keywordColorsForm = this.formBuilder.array([]);
+    this.keywordColorsForm = this.formBuilder.array<ColorFormGroup>([]);
     this.data.keywordColors.filter(kc => kc.keyword.length > 0).forEach(kc =>
       this.keywordColorsForm.push(this.formBuilder.group({
         keyword: [kc.keyword],
@@ -125,9 +130,9 @@ export class DialogColorTableComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  public reset(fg: FormGroup) {
-    fg.get('color').setValue(
-      this.colorService.getColor(fg.get('keyword').value));
+  public reset(fg: ColorFormGroup) {
+    fg.controls.color.setValue(
+      this.colorService.getColor(fg.controls.keyword.value));
   }
 
   public remove(index: number) {

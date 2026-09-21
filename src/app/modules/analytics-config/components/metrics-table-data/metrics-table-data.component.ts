@@ -16,7 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import {
+  SubTableColumnFormGroup, SubTableFormGroup
+} from '@analytics-config/services/metrics-table-form-builder/metrics-table-form-builder.service';
+import { CdkDragDrop, CdkDragStart, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,12 +28,13 @@ import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatError } from '@angular/material/select';
-import { MatTableModule } from '@angular/material/table';
+import { MatTable, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
-import { MetricsTableSortConfig } from '@services/main-form-manager/models-config';
 import { MainFormService } from '@services/main-form/main-form.service';
+import { Metric as ArlasApiMetric } from 'arlas-api';
 import { GetCollectionDisplayNamePipe, GetFieldDisplayNamePipe } from 'arlas-web-components';
+import { MetricsTableSortConfig } from 'arlas-web-contributors/models/metrics-table.config';
 import { Subject } from 'rxjs';
 import { AddSubtableDialogComponent } from '../add-subtable-dialog/add-subtable-dialog.component';
 
@@ -55,15 +59,15 @@ import { AddSubtableDialogComponent } from '../add-subtable-dialog/add-subtable-
 })
 export class MetricsTableDataComponent implements OnInit {
 
-  @Input() public control: FormArray = new FormArray([]);
+  @Input() public control = new FormArray<SubTableFormGroup>([]);
   @Input() public collection: string;
   @Input() public displaySchema = true;
   @Output() public sort = new Subject<any>();
-  @ViewChild('subTables', { static: true }) public subTables;
+  @ViewChild('subTables', { static: true }) public subTables?: MatTable<SubTableFormGroup>;
 
   public dragDisabled = true;
   public displayedColumns: string[] = ['drag', 'collection', 'field', 'columns', 'actions'];
-  private metricsTableSortConfig: MetricsTableSortConfig = {};
+  private metricsTableSortConfig: MetricsTableSortConfig | undefined;
 
   public constructor(private readonly dialog: MatDialog, private readonly main: MainFormService) { }
 
@@ -83,14 +87,15 @@ export class MetricsTableDataComponent implements OnInit {
         if (result) {
           this.control.push(result);
           this.displaySchema = false;
-          setTimeout(() => this.subTables.renderRows(), 100);
+          setTimeout(() => this.subTables?.renderRows(), 100);
         }
       });
   }
 
-  public dragStarted(event) {
+  public dragStarted(event: CdkDragStart) {
     this.dragDisabled = true;
   }
+
   public drop(event: CdkDragDrop<any[]>) {
     const previousIndex = this.control.controls.findIndex(row => row === event.item.data);
     moveItemInArray(this.control.controls, previousIndex, event.currentIndex);
@@ -98,10 +103,10 @@ export class MetricsTableDataComponent implements OnInit {
     newOrders.forEach((v, i) => {
       this.control.setControl(i, v);
     });
-    this.subTables.renderRows();
+    this.subTables?.renderRows();
   }
 
-  public editSubTable(index, collection) {
+  public editSubTable(index: number, collection: string) {
     this.dialog.open(AddSubtableDialogComponent, {
       width: '1200px', data: {
         collection: collection,
@@ -112,35 +117,37 @@ export class MetricsTableDataComponent implements OnInit {
         if (result) {
           this.control.removeAt(index);
           this.control.insert(index, result);
-          setTimeout(() => this.subTables.renderRows(), 100);
+          setTimeout(() => this.subTables?.renderRows(), 100);
         }
       });
 
   }
 
-  public deleteSubTable(index) {
+  public deleteSubTable(index: number) {
     this.control.removeAt(index);
-    this.subTables.renderRows();
+    this.subTables?.renderRows();
     if (this.control.length === 0) {
       this.displaySchema = true;
     }
   }
 
-  public setSort(column, sort, collection, termfield, metric, field) {
+  public setSort(column: SubTableColumnFormGroup, sort: 'asc' | 'desc' | '',
+    collection: string, termfield: string, metric: ArlasApiMetric.CollectFctEnum | 'count', field: string
+  ) {
     this.control.controls.forEach(subTable => {
-      (subTable as any).controls.columns.controls.forEach(c => {
-        c.get('sort').setValue('');
+      subTable.customControls.columns.controls.forEach(c => {
+        c.customControls.sort.setValue('');
       });
     });
 
     let sortToSet = 'asc';
     if (sort === '') {
-      column.get('sort').setValue('asc');
+      column.customControls.sort.setValue('asc');
     } else if (sort === 'asc') {
-      column.get('sort').setValue('desc');
+      column.customControls.sort.setValue('desc');
       sortToSet = 'desc';
     } else {
-      column.get('sort').setValue('');
+      column.customControls.sort.setValue('');
       sortToSet = '';
     }
     if (!!field) {

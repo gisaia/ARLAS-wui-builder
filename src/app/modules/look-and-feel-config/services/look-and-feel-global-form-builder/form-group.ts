@@ -118,11 +118,11 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
   public collectionIgnoredMap = new Map();
   public ignoredCollections = new Map();
 
-  public buildUnits(collections: string[]): FormArray {
-    const collectionsUnits = new FormArray([]);
-    const values = this.customControls.units.value as FormArray;
+  public buildUnits(collections: string[]): FormArray<CollectionUnitFormGroup> {
+    const collectionsUnits = new FormArray<CollectionUnitFormGroup>([]);
+    const values = this.customControls.units.value as FormArray<CollectionUnitFormGroup>;
     if (!!values && values.controls) {
-      values.controls.forEach((cu: CollectionUnitFormGroup) => {
+      values.controls.forEach(cu => {
         if (cu.customControls.unit.value) {
           this.collectionUnitMap.set(cu.customControls.collection.value, cu.customControls.unit.value);
           this.collectionIgnoredMap.set(cu.customControls.collection.value, cu.customControls.ignored.value);
@@ -131,7 +131,7 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
     }
     collections.forEach((collection, i) => {
       let collectionUnitForm = values.controls
-        .find((v: CollectionUnitFormGroup) => v.customControls.collection.value === collection) as CollectionUnitFormGroup;
+        .find(v => v.customControls.collection.value === collection) as CollectionUnitFormGroup;
       if (!collectionUnitForm) {
         collectionUnitForm = new CollectionUnitFormGroup();
         collectionUnitForm.customControls.collection.setValue(collection);
