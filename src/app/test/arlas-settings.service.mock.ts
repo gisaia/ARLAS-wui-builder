@@ -25,5 +25,6 @@ export const mockArlasSettingsService = {
     getAuthentSettings: vi.fn(() => {}),
     getSettings: vi.fn(() => ({
         terrain: {}
-    }))
+    })),
+    isDarkThemeEnabled:  vi.fn(() => false)
 };
