@@ -1,0 +1,476 @@
+{
+  "arlas": {
+    "server": {
+      "url": "http://localhost:9999/arlas",
+      "collection": {
+        "name": "courses"
+      },
+      "max_age_cache": 3600
+    },
+    "web": {
+      "contributors": [
+        {
+          "type": "map",
+          "identifier": "map_vessel_paths",
+          "name": "Map courses",
+          "collection": "courses",
+          "geo_query_field": "track.location",
+          "geo_query_op": "Intersects",
+          "window_extent_geometry": "centroid_path",
+          "margePanForLoad": 0,
+          "margePanForTest": 0,
+          "layers_sources": [
+            {
+              "id": "arlas_id:Trajectoires des navires:vessel_trails",
+              "name": "Tracés des trajectoires",
+              "source": "vessel_trails_source",
+              "render_mode": "window",
+              "returned_geometry": "track.trail",
+              "minzoom": 0,
+              "maxzoom": 22,
+              "maxfeatures": 5000,
+              "include_fields": [
+                "object.name",
+                "object.ship_type",
+                "track.dynamics.gps.speed_nd",
+                "track.duration_s"
+              ]
+            },
+            {
+              "id": "arlas_id:Positions des navires:vessel_locations",
+              "name": "Positions regroupées",
+              "source": "vessel_locations_cluster_source",
+              "aggType": "tile",
+              "granularity": "Fine",
+              "aggregated_geometry": "bbox",
+              "agg_geo_field": "track.location",
+              "minfeatures": 5,
+              "maxzoom": 12
+            }
+          ]
+        },
+        {
+          "type": "histogram",
+          "identifier": "timeline",
+          "name": "Chronologie des navigations",
+          "collection": "courses",
+          "isOneDimension": true,
+          "useUtc": true,
+          "aggregationmodels": [
+            {
+              "type": "datehistogram",
+              "field": "track.timestamps.center",
+              "interval": {
+                "value": 1,
+                "unit": "day"
+              }
+            }
+          ]
+        },
+        {
+          "type": "detailedhistogram",
+          "identifier": "detailedTimeline",
+          "name": "Chronologie détaillée",
+          "collection": "courses",
+          "annexedContributorId": "timeline",
+          "isOneDimension": true,
+          "useUtc": true,
+          "selectionExtentPercentage": 20,
+          "aggregationmodels": [
+            {
+              "type": "datehistogram",
+              "field": "track.timestamps.center",
+              "interval": {
+                "value": 1,
+                "unit": "hour"
+              }
+            }
+          ]
+        },
+        {
+          "type": "histogram",
+          "identifier": "speed_histogram",
+          "name": "Distribution des vitesses",
+          "collection": "courses",
+          "isOneDimension": true,
+          "useUtc": false,
+          "numberOfBuckets": 25,
+          "aggregationmodels": [
+            {
+              "type": "histogram",
+              "field": "track.dynamics.gps.speed_nd",
+              "interval": {
+                "value": 2
+              }
+            }
+          ]
+        },
+        {
+          "type": "tree",
+          "identifier": "shiptype_tree",
+          "name": "Types de navires",
+          "title": "Répartition par type de navire",
+          "collection": "courses",
+          "aggregationmodels": [
+            {
+              "type": "term",
+              "field": "object.ship_type",
+              "size": 15
+            }
+          ]
+        },
+        {
+          "type": "swimlane",
+          "identifier": "swimlane_shiptype",
+          "name": "Dispersion temporelle par type de navire",
+          "collection": "courses",
+          "swimlanes": [
+            {
+              "id": "swimlane_lanes_shiptype",
+              "name": "Navires par type dans le temps",
+              "aggregationmodels": [
+                {
+                  "type": "term",
+                  "field": "object.ship_type",
+                  "size": 10
+                },
+                {
+                  "type": "datehistogram",
+                  "field": "track.timestamps.center",
+                  "interval": {
+                    "value": 1,
+                    "unit": "day"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "metric",
+          "identifier": "avg_duration_metric",
+          "name": "Durée moyenne de navigation",
+          "title": "Durée moyenne d'un parcours (heures)",
+          "collection": "courses",
+          "function": "m[0] / 3600",
+          "metrics": [
+            {
+              "field": "track.duration_s",
+              "metric": "avg"
+            }
+          ]
+        },
+        {
+          "type": "search",
+          "identifier": "search_vessel",
+          "name": "Recherche de navire",
+          "collection": "courses",
+          "search_field": "object.name",
+          "autocomplete_field": "object.name",
+          "autocomplete_size": 10
+        },
+        {
+          "type": "resultlist",
+          "identifier": "resultlist_courses",
+          "name": "Liste des parcours",
+          "collection": "courses",
+          "options": {
+            "showName": false
+          },
+          "cardViewProperties": [],
+          "search_size": 50,
+          "max_pages": 3,
+          "fieldsConfiguration": {
+            "idFieldName": "track.id",
+            "titleFieldNames": [
+              {
+                "fieldPath": "object.name",
+                "process": ""
+              }
+            ],
+            "tooltipFieldNames": [
+              {
+                "fieldPath": "object.ship_type",
+                "process": ""
+              }
+            ],
+            "iconColorFieldName": "object.ship_type",
+            "useHttpQuicklooks": false,
+            "useHttpThumbnails": false,
+            "displayQuicklookOnMap": {
+              "enabled": false,
+              "boundsFieldName": ""
+            },
+            "icon": "fiber_manual_record",
+            "urlImageTemplates": []
+          },
+          "columns": [
+            {
+              "columnName": "Navire",
+              "fieldName": "object.name",
+              "dataType": "",
+              "sort": ""
+            },
+            {
+              "columnName": "Type de navire",
+              "fieldName": "object.ship_type",
+              "dataType": "",
+              "sort": ""
+            },
+            {
+              "columnName": "Vitesse moyenne (nd)",
+              "fieldName": "track.dynamics.gps.speed_nd",
+              "dataType": "nd",
+              "sort": ""
+            },
+            {
+              "columnName": "Durée (s)",
+              "fieldName": "track.duration_s",
+              "dataType": "s",
+              "sort": ""
+            },
+            {
+              "columnName": "Port de départ",
+              "fieldName": "departure.address.port",
+              "dataType": "",
+              "sort": ""
+            },
+            {
+              "columnName": "Port d'arrivée",
+              "fieldName": "arrival.address.port",
+              "dataType": "",
+              "sort": ""
+            }
+          ],
+          "details": [
+            {
+              "name": "Détails du parcours",
+              "order": 1,
+              "fields": [
+                {
+                  "label": "Nom du navire",
+                  "path": "object.name",
+                  "process": ""
+                },
+                {
+                  "label": "Type de navire",
+                  "path": "object.ship_type",
+                  "process": ""
+                },
+                {
+                  "label": "MMSI",
+                  "path": "object.mmsi",
+                  "process": ""
+                },
+                {
+                  "label": "Vitesse GPS (nœuds)",
+                  "path": "track.dynamics.gps.speed_nd",
+                  "process": ""
+                },
+                {
+                  "label": "Durée du trajet (secondes)",
+                  "path": "track.duration_s",
+                  "process": ""
+                },
+                {
+                  "label": "Distance parcourue (m)",
+                  "path": "track.distance.gps.travelled_m",
+                  "process": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "components": {
+        "mapgl": {
+          "allowMapExtend": true,
+          "nbVerticesLimit": 100,
+          "input": {
+            "margePanForLoad": 0,
+            "margePanForTest": 0,
+            "initZoom": 4,
+            "initCenter": [
+              -4,
+              48
+            ],
+            "displayScale": true,
+            "displayCurrentCoordinates": true,
+            "enableGlobe": true,
+            "defaultBasemapStyle": {
+              "name": "Positron",
+              "styleFile": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
+            },
+            "basemapStyles": [
+              {
+                "name": "Positron",
+                "styleFile": "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
+              }
+            ],
+            "mapLayers": {
+              "layers": [],
+              "events": {
+                "onHover": [
+                  "arlas-hover-trails"
+                ],
+                "emitOnClick": [
+                  "arlas_id:Trajectoires des navires:vessel_trails"
+                ],
+                "zoomOnClick": [
+                  "arlas_id:Positions des navires:vessel_locations"
+                ]
+              },
+              "externalEventLayers": []
+            },
+            "visualisations_sets": [
+              {
+                "name": "Trajectoires & Positions",
+                "layers": [
+                  "arlas_id:Trajectoires des navires:vessel_trails",
+                  "arlas_id:Positions des navires:vessel_locations"
+                ],
+                "enabled": true
+              }
+            ]
+          }
+        },
+        "timeline": {
+          "contributorId": "timeline",
+          "dateFormat": "%d/%m/%Y %H:%M",
+          "input": {
+            "id": "timeline_chart"
+          }
+        },
+        "detailedTimeline": {
+          "contributorId": "detailedTimeline",
+          "dateFormat": "%d/%m/%Y %H:%M",
+          "input": {
+            "id": "detailed_timeline_chart"
+          }
+        },
+        "resultlists": [
+          {
+            "componentType": "resultlist",
+            "contributorId": "resultlist_courses",
+            "uuid": "resultlist_courses_uuid",
+            "input": {
+              "id": "resultlist_courses_input"
+            }
+          }
+        ]
+      },
+      "analytics": [
+        {
+          "groupId": "group_kpi",
+          "title": "Indicateurs Clés & Répartition",
+          "components": [
+            {
+              "contributorId": "avg_duration_metric",
+              "componentType": "metric",
+              "title": "Durée moyenne de trajet (heures)",
+              "uuid": "metric_duration_uuid",
+              "input": {
+                "customizedCssClass": "metric-custom"
+              }
+            },
+            {
+              "contributorId": "shiptype_tree",
+              "componentType": "donut",
+              "title": "Types de navires",
+              "uuid": "donut_shiptype_uuid",
+              "input": {
+                "id": "donut_shiptype_input",
+                "diameter": 180,
+                "containerWidth": 260
+              }
+            }
+          ]
+        },
+        {
+          "groupId": "group_speeds",
+          "title": "Comparaison des Vitesses (Nœuds)",
+          "components": [
+            {
+              "contributorId": "speed_histogram",
+              "componentType": "histogram",
+              "title": "Distribution des vitesses (nœuds)",
+              "uuid": "hist_speed_uuid",
+              "input": {
+                "id": "hist_speed_input",
+                "dataType": "numeric",
+                "chartType": "bars",
+                "xUnit": "nd",
+                "chartYLabel": "Nombre de parcours",
+                "yAxisStartsFromZero": true
+              }
+            }
+          ]
+        },
+        {
+          "groupId": "group_dispersion",
+          "title": "Dispersion Temporelle par Type de Navire",
+          "components": [
+            {
+              "contributorId": "swimlane_shiptype",
+              "componentType": "swimlane",
+              "title": "Dispersion chronologique des navires",
+              "uuid": "swimlane_shiptype_uuid",
+              "input": {
+                "id": "swimlane_shiptype_input",
+                "swimlaneMode": "fixedHeight",
+                "swimlaneHeight": 28,
+                "swimLaneLabelsWidth": 120
+              }
+            }
+          ]
+        },
+        {
+          "groupId": "group_results",
+          "title": "Trajectoires et Données Détaillées",
+          "components": [
+            {
+              "contributorId": "resultlist_courses",
+              "componentType": "resultlist",
+              "title": "Liste des parcours",
+              "uuid": "resultlist_courses_uuid",
+              "input": {
+                "id": "resultlist_courses_input"
+              }
+            }
+          ]
+        }
+      ],
+      "options": {
+        "drag_items": true,
+        "zoom_to_strategy": "centroid",
+        "indicators": false
+      }
+    }
+  },
+  "arlas-wui": {
+    "web": {
+      "app": {
+        "name": "Navigation et Trajectoires Maritimes",
+        "units": [
+          {
+            "collection": "courses",
+            "unit": "parcours",
+            "ignored": false
+          }
+        ]
+      }
+    }
+  },
+  "extraConfigs": [
+    {
+      "configPath": "config.map.json",
+      "replacedAttribute": "arlas.web.components.mapgl.input.mapLayers.layers",
+      "replacer": "layers"
+    },
+    {
+      "configPath": "config.map.json",
+      "replacedAttribute": "arlas.web.components.mapgl.input.mapLayers.externalEventLayers",
+      "replacer": "external-event-layers"
+    }
+  ]
+}

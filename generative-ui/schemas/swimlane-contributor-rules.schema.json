@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Swimlane Contributor Rules",
+  "description": "JSON Schema capturing validation rules for swimlane contributors discovered in ARLAS WUI code generation patterns",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "swimlane" }
+        }
+      },
+      "then": {
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "description": "Unique identifier for swimlane contributor. Required field."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the swimlane contributor. Required field."
+          },
+          "swimlanes": {
+            "type": "array",
+            "items": { "type": "object" },
+            "minItems": 1,
+            "description": "Array of swimlane definitions. Required field."
+          },
+          "numberOfBuckets": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Number of buckets for swimlane color distribution"
+          },
+          "aggregationmodels": {
+            "type": "array",
+            "items": { "type": "object" },
+            "description": "Aggregation models for swimlane metrics"
+          },
+          "filterOperator": {
+            "type": "string",
+            "enum": ["Eq", "Neq", "Gt", "Lt", "Gte", "Lte"],
+            "description": "Filter operator for swimlane data filtering"
+          },
+          "allowOperatorChange": {
+            "type": "boolean",
+            "description": "Whether to allow operator change in swimlane filter"
+          },
+          "jsonpath": {
+            "type": "string",
+            "description": "JSONPath expression for data extraction"
+          }
+        },
+        "required": ["identifier", "name", "swimlanes"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "swimlane" },
+          "aggregationmodels": { "const": true }
+        }
+      },
+      "then": {
+        "properties": {
+          "aggregationmodels": {
+            "minItems": 1,
+            "description": "At least one aggregation model must be present"
+          },
+          "filterOperator": {
+            "enum": ["Eq", "Neq"],
+            "description": "When aggregationmodels is present, filter operator is limited to Eq or Neq"
+          }
+        }
+      }
+    },
+    {
+      "description": "Prevent extra properties not in schema from being generated",
+      "allOf": [
+        {
+          "properties": {
+            "type": { "const": "swimlane" }
+          },
+          "not": {
+            "anyOf": [
+              {
+                "properties": {
+                  "charttype": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "title": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "type": "swimlane",
+      "identifier": "swim123",
+      "name": "Swimlane View",
+      "title": "Swimlane View",
+      "collection": "collection123",
+      "icon": "timeline",
+      "swimlanes": [
+        {
+          "name": "critical",
+          "color": "#ff0000",
+          "condition": "priority = 'high'"
+        },
+        {
+          "name": "normal",
+          "color": "#00ff00",
+          "condition": "priority = 'medium'"
+        }
+      ],
+      "numberOfBuckets": 3,
+      "aggregationmodels": [
+        {
+          "aggregationField": "duration",
+          "aggregationFieldType": "number",
+          "aggregationBucketOrInterval": "interval"
+        }
+      ],
+      "filterOperator": "Eq",
+      "allowOperatorChange": false,
+      "jsonpath": "$.data.steps"
+    }
+  ]
+}

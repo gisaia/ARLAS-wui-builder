@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Resultlist Contributor Rules",
+  "description": "JSON Schema capturing validation rules discovered in ARLAS WUI code generation patterns",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "resultlist" }
+        }
+      },
+      "then": {
+        "properties": {
+          "options": {
+            "type": "object",
+            "description": "Configuration options for the result list contributor. Must be present.",
+            "required": ["showName"],
+            "properties": {
+              "showName": {
+                "type": "boolean",
+                "description": "Whether to show the name in the result list. Defaults to false if not defined."
+              },
+              "showIcon": {
+                "type": "boolean",
+                "description": "Whether to show the icon in the result list"
+              },
+              "showActionsOnhover": {
+                "type": "string",
+                "description": "Whether to show actions on hover. Hardcoded to 'true' in code generation."
+              },
+              "showDetailIconName": {
+                "type": "string",
+                "description": "Name of the detail icon. Hardcoded to 'keyboard_arrow_down' in code generation."
+              },
+              "hideDetailIconName": {
+                "type": "string",
+                "description": "Whether to hide the detail icon. Hardcoded to 'keyboard_arrow_up' in code generation."
+              },
+              "icon": {
+                "type": "string",
+                "description": "Material icon name for the result list contributor"
+              }
+            }
+          }
+        },
+        "required": ["options"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "resultlist" },
+          "options": { "const": true }
+        }
+      },
+      "then": {
+        "properties": {
+          "options.showName": {
+            "const": false,
+            "description": "showName defaults to false when options is present"
+          }
+        }
+      }
+    },
+    {
+      "description": "Ensure generated config has no extra properties not in schema",
+      "allOf": [
+        {
+          "properties": {
+            "type": { "const": "resultlist" }
+          },
+          "not": {
+            "anyOf": [
+              {
+                "properties": {
+                  "options": {
+                    "not": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "type": "resultlist",
+      "identifier": "collection123",
+      "name": "Result List 1",
+      "title": "Result List 1",
+      "collection": "collection123",
+      "icon": "short_text",
+      "options": {
+        "showName": false,
+        "showIcon": true,
+        "showActionsOnhover": "true",
+        "showDetailIconName": "keyboard_arrow_down",
+        "hideDetailIconName": "keyboard_arrow_up",
+        "icon": "short_text"
+      },
+      "fieldsConfiguration": {
+        "idFieldName": "track.id",
+        "titleFieldNames": [{"fieldPath": "", "process": ""}],
+        "tooltipFieldNames": [{"fieldPath": "", "process": ""}],
+        "iconColorFieldName": "",
+        "useHttpQuicklooks": false,
+        "useHttpThumbnails": false,
+        "displayQuicklookOnMap": {"enabled": false, "boundsFieldName": ""},
+        "urlImageTemplates": []
+      },
+      "columns": [],
+      "details": []
+    }
+  ]
+}

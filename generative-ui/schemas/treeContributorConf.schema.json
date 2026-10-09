@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Tree Contributor Configuration",
+  "description": "The Configuration of Tree Contributor",
+  "type": "object",
+  "$id": "treeContributorConf.schema.json",
+  "allOf": [
+    {
+      "$ref": "rootContributorConf.schema.json#"
+    }
+  ],
+  "properties": {
+    "title": {
+      "description": "Title of contributor",
+      "type": "string"
+    },
+    "nodeSizeMinPourcentage": {
+      "description": "The minimum ratio of the node size in its level needed to be plotted. Otherwise the node is considered as OTHER",
+      "type": "number"
+    },
+    "jsonpath": {
+      "description": "Json path to find value used in aggregation, for example $.count or $.metrics[0].value",
+      "type": "string"
+    },
+    "filterOperator": {
+      "description": "The filter operator to apply (Eq or Neq)",
+      "type": "string",
+      "enum": [
+        "Eq",
+        "Neq"
+      ]
+    },
+    "allowOperatorChange": {
+      "description": "Whether to allow user to change the filter operator",
+      "type": "boolean"
+    },
+    "colorField": {
+      "description": "Field used to colorize nodes",
+      "type": "string"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

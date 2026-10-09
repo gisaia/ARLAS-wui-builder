@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Search Contributor Rules",
+  "description": "JSON Schema capturing validation rules for search contributors discovered in ARLAS WUI code generation patterns",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "search" }
+        }
+      },
+      "then": {
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "description": "Unique identifier for search contributor. Required field."
+          },
+          "search_field": {
+            "type": "string",
+            "description": "Search field for query execution. Required field."
+          },
+          "autocomplete_field": {
+            "type": "string",
+            "description": "Field used for autocomplete suggestions"
+          },
+          "autocomplete_size": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "description": "Number of autocomplete suggestions to return (1-100)"
+          }
+        },
+        "required": ["identifier", "search_field"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "search" },
+          "autocomplete_field": { "const": true }
+        }
+      },
+      "then": {
+        "properties": {
+          "autocomplete_size": {
+            "minimum": 5,
+            "maximum": 20,
+            "description": "Autocomplete size must be between 5 and 20 when autocomplete field is present"
+          }
+        }
+      }
+    },
+    {
+      "description": "Prevent extra properties not in schema from being generated",
+      "allOf": [
+        {
+          "properties": {
+            "type": { "const": "search" }
+          },
+          "not": {
+            "anyOf": [
+              {
+                "properties": {
+                  "charttype": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "icon": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "type": "search",
+      "identifier": "search123",
+      "name": "Search View",
+      "title": "Search View",
+      "collection": "collection123",
+      "icon": "search",
+      "search_field": "properties.title",
+      "autocomplete_field": "properties.title.autocomplete",
+      "autocomplete_size": 10
+    }
+  ]
+}

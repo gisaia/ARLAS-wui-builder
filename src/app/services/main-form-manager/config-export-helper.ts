@@ -1023,7 +1023,7 @@ export class ConfigExportHelper {
         if (widgetData.visualisationStep.thumbnail.url) {
           fieldsConfig.urlThumbnailTemplate = widgetData.visualisationStep.thumbnail.url;
         }
-        if (widgetData.renderStep.imageUrl) {
+        if (widgetData.renderStep && widgetData.renderStep.imageUrl) {
           fieldsConfig.urlImageTemplate = widgetData.renderStep.imageUrl;
         }
         if (widgetData.dataStep.detailsTitle) {
@@ -1070,15 +1070,17 @@ export class ConfigExportHelper {
         contrib.includeMetadata = [];
         const metadatas = new Set<string>();
         /** TODO :Grid steps contains, booleans, urls...; we need to filter those controls properly */
-        Object.keys(widgetData.renderStep).forEach(v => {
-          if (!!widgetData.renderStep[v] && v !== 'isDefaultMode') {
-            if (Array.isArray(widgetData.renderStep[v])) {
-              (widgetData.renderStep[v] as Array<string>).forEach(f => metadatas.add(f));
-            } else {
-              metadatas.add(widgetData.renderStep[v]);
+        if (widgetData.renderStep) {
+          Object.keys(widgetData.renderStep).forEach(v => {
+            if (!!widgetData.renderStep[v] && v !== 'isDefaultMode') {
+              if (Array.isArray(widgetData.renderStep[v])) {
+                (widgetData.renderStep[v] as Array<string>).forEach(f => metadatas.add(f));
+              } else {
+                metadatas.add(widgetData.renderStep[v]);
+              }
             }
-          }
-        });
+          });
+        }
         contrib.includeMetadata = Array.from(metadatas);
         break;
       }

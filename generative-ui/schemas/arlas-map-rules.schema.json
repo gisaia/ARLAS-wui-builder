@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "ARLAS Map Rules",
+  "description": "JSON Schema capturing validation rules for ARLAS map contributors discovered in ARLAS WUI code generation patterns",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "map" }
+        }
+      },
+      "then": {
+        "properties": {
+          "mapLayers": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Array of map layers. Required field for map type."
+          },
+          "margePanForLoad": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Margin for pan loading in pixels. Required field for map type."
+          },
+          "margePanForTest": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Margin for pan test in pixels. Required field for map type."
+          },
+          "displayScale": {
+            "type": "boolean",
+            "description": "Whether to display scale on map"
+          },
+          "displayLayerSwitcher": {
+            "type": "boolean",
+            "description": "Whether to display layer switcher on map"
+          },
+          "maxWidthScale": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Maximum width scale for map"
+          },
+          "unitScale": {
+            "type": "string",
+            "description": "Unit scale for map (e.g., 'km', 'miles')"
+          },
+          "defaultBasemapStyle": {
+            "type": "string",
+            "description": "Default basemap style for map"
+          },
+          "basemapStyles": {
+            "type": "array",
+            "items": { "type": "object" },
+            "description": "Array of available basemap styles"
+          },
+          "initCenter": {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 2,
+            "maxItems": 2,
+            "description": "Initial center coordinates [longitude, latitude] for map"
+          },
+          "initZoom": {
+            "type": "integer",
+            "description": "Initial zoom level for map"
+          },
+          "minZoom": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Minimum zoom level for map"
+          },
+          "maxZoom": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Maximum zoom level for map"
+          },
+          "terrain": {
+            "type": "object",
+            "description": "Terrain configuration for 3D map view"
+          },
+          "displayCurrentCoordinates": {
+            "type": "boolean",
+            "description": "Whether to display current coordinates on map"
+          },
+          "idFeatureField": {
+            "type": "string",
+            "description": "Field ID for map features"
+          },
+          "enableGlobe": {
+            "type": "boolean",
+            "description": "Whether to enable globe view for map"
+          },
+          "icons": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Array of icon names for map"
+          }
+        }
+      }
+    },
+    {
+      "description": "Prevent extra properties not in schema from being generated",
+      "allOf": [
+        {
+          "properties": {
+            "type": { "const": "map" }
+          },
+          "not": {
+            "anyOf": [
+              {
+                "properties": {
+                  "charttype": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "icon": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "type": "map",
+      "identifier": "map123",
+      "name": "Map View",
+      "title": "Map View",
+      "collection": "collection123",
+      "icon": "map",
+      "mapLayers": [
+        {
+          "name": "layer1",
+          "type": "geojson",
+          "url": "https://example.com/data.geojson"
+        }
+      ],
+      "margePanForLoad": 50,
+      "margePanForTest": 50,
+      "displayScale": true,
+      "displayLayerSwitcher": true,
+      "initCenter": [2.3522, 48.8566],
+      "initZoom": 5,
+      "minZoom": 2,
+      "maxZoom": 18,
+      "terrain": {
+        "enable": false,
+        "exaggeration": 0.5
+      }
+    }
+  ]
+}

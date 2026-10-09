@@ -356,7 +356,7 @@ export class MapImportService {
        */
       layerSource.name = layerSource.id;
       layerSource.id = ARLAS_ID + layerSource.name + ':' + Date.now();
-      visualisationSets.forEach(vs => {
+      visualisationSets?.forEach(vs => {
         vs.layers = vs.layers.map(l => {
           if (l === layerSource.name) {
             return layerSource.id;
@@ -581,7 +581,7 @@ export class MapImportService {
     }
 
 
-    typeFg.patchValue(values);
+    typeFg?.patchValue(values);
 
     // populate manual values FormArray
     const manualValues = (((values.styleStep || {}).colorFg || {}).propertyManualFg || {}).propertyManualValuesCtrl as Array<KeywordColor>;
@@ -677,8 +677,8 @@ export class MapImportService {
 
   public doImport(config: Config, mapConfig: MapConfig) {
     const mapgl = config.arlas.web.components.mapgl;
-    const visualisationSets: Array<VisualisationSetConfig> = mapgl.input.visualisations_sets;
-    const basemaps: BasemapStyle[] = mapgl.input.basemapStyles;
+    const visualisationSets: Array<VisualisationSetConfig> = mapgl.input.visualisations_sets ?? [];
+    const basemaps: BasemapStyle[] = mapgl.input.basemapStyles ?? [];
     const defaultBasemap: BasemapStyle = mapgl.input.defaultBasemapStyle;
     const defaultCollection = config.arlas.server.collection.name;
 
@@ -713,13 +713,13 @@ export class MapImportService {
         mapGlobalForm.addGeoFilter(mc.collection, this.mapGlobalFormBuilder.buildRequestGeometry(
           mc.collection,
           mc.geo_query_field,
-          mc.geo_query_op.toLowerCase(),
+          (mc.geo_query_op ?? 'Intersects').toLowerCase(),
           (mc.window_extent_geometry ?? ExtentFilterGeometry.geometry_path).toLowerCase()
         ));
       } else {
         mapGlobalForm.collectionGeoFiltersMap.set(mc.collection, {
           geoField: mc.geo_query_field,
-          geoOp: mc.geo_query_op.toLowerCase(),
+          geoOp: (mc.geo_query_op ?? 'Intersects').toLowerCase(),
           windowExtentGeometry: (mc.window_extent_geometry ?? ExtentFilterGeometry.geometry_path).toLowerCase()
         });
       }
@@ -785,11 +785,11 @@ export class MapImportService {
         control: mapGlobalForm.customControls.initZoom
       },
       {
-        value: mapgl.input.initCenter[1],
+        value: !!mapgl.input.initCenter ? mapgl.input.initCenter[1] : 0,
         control: mapGlobalForm.customControls.initCenterLat
       },
       {
-        value: mapgl.input.initCenter[0],
+        value: !!mapgl.input.initCenter ? mapgl.input.initCenter[0] : 0,
         control: mapGlobalForm.customControls.initCenterLon
       },
       {

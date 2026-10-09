@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Compute Contributor Configuration",
+  "description": "The Configuration of Compute Contributor",
+  "type": "object",
+  "$id": "computeContributorConf.schema.json",
+  "allOf": [
+    {
+      "$ref": "rootContributorConf.schema.json#"
+    }
+  ],
+  "properties": {
+    "title": {
+      "description": "Title of the contributor",
+      "type": "string"
+    },
+    "metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "description": "Field pattern or name",
+        "type": "object",
+        "properties": {
+          "field": {
+            "description": "The field on which the metric is computed",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metric": {
+            "description": "The metric to compute",
+            "type": "string",
+            "enum": [
+              "avg",
+              "cardinality",
+              "max",
+              "min",
+              "spanning",
+              "sum",
+              "count"
+            ]
+          }
+        }
+      }
+    },
+    "function": {
+      "description": "Function to apply with metrics result as parameter, exemple (m[0] + m[1]) / m[2]), where m[0] is the result of the first metric. To do a simple metric, put one element in metrics and set function to m[0].",
+      "type": "string"
+    }
+  },
+  "required": [
+    "metrics",
+    "function"
+  ]
+}

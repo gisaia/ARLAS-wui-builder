@@ -1,0 +1,13 @@
+{
+  "mcp": {
+    "allowed": [
+      "arlas-server"
+    ]
+  },
+  "mcpServers": {
+    "arlas-server": {
+      "command": "npx",
+      "args": ["tsx", "/home/mickael/WebstormProjects/untitled1/src/index.ts"]
+    }
+  }
+}

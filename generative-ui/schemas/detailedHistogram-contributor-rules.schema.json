@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Detailed Histogram Contributor Rules",
+  "description": "JSON Schema capturing validation rules for detailed histogram contributors discovered in ARLAS WUI code generation patterns",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "detailedhistogram" }
+        }
+      },
+      "then": {
+        "properties": {
+          "annexedContributorId": {
+            "type": "string",
+            "description": "ID of the annexed/parent contributor. Required field."
+          },
+          "selectionExtentPercentage": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Percentage for selection extent in detailed histogram (0-100)"
+          }
+        }
+      }
+    },
+    {
+      "description": "Prevent extra properties not in schema from being generated",
+      "allOf": [
+        {
+          "properties": {
+            "type": { "const": "detailedhistogram" }
+          },
+          "not": {
+            "anyOf": [
+              {
+                "properties": {
+                  "charttype": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "icon": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "type": "detailedhistogram",
+      "identifier": "dhist123",
+      "name": "Detailed Histogram",
+      "title": "Detailed Histogram",
+      "collection": "collection123",
+      "icon": "show_charts",
+      "annexedContributorId": "hist123",
+      "selectionExtentPercentage": 25
+    }
+  ]
+}

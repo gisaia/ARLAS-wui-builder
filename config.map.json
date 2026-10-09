@@ -1,0 +1,68 @@
+{
+  "layers": [
+    {
+      "id": "arlas_id:Trajectoires des navires:vessel_trails",
+      "type": "line",
+      "source": "vessel_trails_source",
+      "layout": {
+        "line-join": "round",
+        "line-cap": "round"
+      },
+      "paint": {
+        "line-color": "#0284c7",
+        "line-width": 2.5,
+        "line-opacity": 0.85
+      }
+    },
+    {
+      "id": "arlas_id:Positions des navires:vessel_locations",
+      "type": "circle",
+      "source": "vessel_locations_cluster_source",
+      "paint": {
+        "circle-color": "#f97316",
+        "circle-radius": 7,
+        "circle-opacity": 0.85,
+        "circle-stroke-width": 1,
+        "circle-stroke-color": "#ffffff"
+      }
+    },
+    {
+      "id": "arlas-hover-trails",
+      "type": "line",
+      "source": "vessel_trails_source",
+      "layout": {
+        "line-join": "round",
+        "line-cap": "round"
+      },
+      "paint": {
+        "line-color": "#facc15",
+        "line-width": 4.5,
+        "line-opacity": 1
+      }
+    },
+    {
+      "id": "arlas-select-trails",
+      "type": "line",
+      "source": "vessel_trails_source",
+      "layout": {
+        "line-join": "round",
+        "line-cap": "round"
+      },
+      "paint": {
+        "line-color": "#ef4444",
+        "line-width": 5,
+        "line-opacity": 1
+      }
+    }
+  ],
+  "external-event-layers": [
+    {
+      "id": "arlas-hover-trails",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-select-trails",
+      "on": "select"
+    }
+  ]
+}

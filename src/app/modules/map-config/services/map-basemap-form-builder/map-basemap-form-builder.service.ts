@@ -45,7 +45,7 @@ export class MapBasemapFormGroup extends ConfigFormGroup {
             onDependencyChange: (control) => control.enableIf(!!this.customControls.terrain.enable.value)
           }
         ),
-        source: new HiddenFormControl((settingsService.getSettings() as ArlasBuilderSettings).terrain)
+        source: new HiddenFormControl((settingsService.getSettings() as ArlasBuilderSettings)?.terrain)
       }).withTitle(marker('Terrain'))
     });
   }

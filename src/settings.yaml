@@ -3,77 +3,59 @@
 ########################################################
 authentication:
   use_authent: true
-  auth_mode: iam
-  url: 'https://localhost/arlas_iam_server'
+  auth_mode: openid
+  url: https://site.arlas.k8s
   force_connect: false
   use_discovery: true
   threshold: 60000
-  issuer: https://localhost:9443/auth/realms/arlas
+  issuer: https://keycloak.arlas.k8s/realms/arlas
   client_id: arlas-front
   redirect_uri: https://localhost:4200/callback
-  scope: "profile"
-  silent_refresh_redirect_uri: https://localhost:4200/silent-refresh.html
+  silent_refresh_redirect_uri: https://site.arlas.k8s/hub/silent-refresh.html
+  scope: profile
+  token_endpoint: NOT_CONFIGURED
+  userinfo_endpoint: NOT_CONFIGURED
+  jwks_endpoint: NOT_CONFIGURED
+  login_url: NOT_CONFIGURED
+  logout_url: NOT_CONFIGURED
+  show_debug_information: false
   require_https: false
-  response_type: "code"
-  silent_refresh_timeout: 10000
+  response_type: code
+  silent_refresh_timeout: 1000
   timeout_factor: 0.75
   session_checks_enabled: true
   clear_hash_after_login: true
-  disable_at_hash_check: false
-  show_debug_information: true
-  logout_url: https://arlas-cloud-dev.eu.auth0.com/v2/logout?returnTo=https://localhost:4200
   storage: memorystorage
-  custom_query_params: [{"audience":"http://arlas.io/api/server"}]
-  sign_up_enabled: true
+  disable_at_hash_check: true
+  dummy_client_secret: NOT_CONFIGURED
+  custom_query_params: []
+  sign_up_enabled: false
 
+########################################################
+############   Persistence SETTINGS   ##################
+########################################################
 persistence:
-  url: https://localhost/persist
+  url: https://site.arlas.k8s/persist
 ########################################################
 ############   Permissions SETTINGS   ##################
 ########################################################
 permission:
-  url: https://localhost/arlas_permissions_server
+  url: https://site.arlas.k8s/permissions
 ########################################################
-############   URLs to WUI app   #######################
+############        URLs to WUI             ############
 ########################################################
-arlas_wui_url: "http://localhost:4200"
-links: [ ]
-basemaps: [
-    {"name":"Basic","url":"https://api.maptiler.com/maps/basic/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/basic.png"},
-    {"name":"Bright","url":"https://api.maptiler.com/maps/bright/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/bright.png"},
-    {"name":"Outdoor","url":"https://api.maptiler.com/maps/outdoor/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/outdoor.png"},
-    {"name":"Pastel","url":"https://api.maptiler.com/maps/pastel/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/pastel.png"},
-    {"name":"Satellite Hybrid","url":"https://api.maptiler.com/maps/hybrid/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/hybrid.png"},
-    {"name":"Streets","url":"https://api.maptiler.com/maps/streets/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/streets.png"},
-    {"name":"Toner","url":"https://api.maptiler.com/maps/toner/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/toner.png"},
-    {"name":"Topo","url":"https://api.maptiler.com/maps/topo/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/topo.png"},
-    {"name":"Topographique","url":"https://api.maptiler.com/maps/topographique/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/topographique.png"},
-    {"name":"Voyager","url":"https://api.maptiler.com/maps/voyager/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://cloud.maptiler.com/static/img/maps/voyager.png"},
-    {"name":"Positron","url":"https://api.maptiler.com/maps/8bb9093c-9865-452b-8be4-7a397f552b49/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/8bb9093c-9865-452b-8be4-7a397f552b49/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"},
-    {"name":"Dark Topo","url":"https://api.maptiler.com/maps/99521f88-ff7f-4c7b-b1dc-05a5a773b1f1/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/99521f88-ff7f-4c7b-b1dc-05a5a773b1f1/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"},
-    {"name":"Streets-dark","url":"https://api.maptiler.com/maps/a1e62ee0-aca6-451a-a4b8-42250422a212/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/a1e62ee0-aca6-451a-a4b8-42250422a212/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"},
-    {"name":"Streets-light","url":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/style.json?key=xIhbu1RwgdbxfZNmoXn4","image":"https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/0/0/0.png?key=xIhbu1RwgdbxfZNmoXn4"},
-    {"name":"Light Protomaps","url":"https://storage.googleapis.com/gisaia-public/protomaps/styles/light.json","image":"https://storage.googleapis.com/gisaia-public/protomaps/quicklooks/light.png", "type": "protomap"},
-    {"name":"Dark Protomaps","url":"https://storage.googleapis.com/gisaia-public/protomaps/styles/dark.json","image":"https://storage.googleapis.com/gisaia-public/protomaps/quicklooks/dark.png", "type": "protomap"}
-  ]
-
-terrain:
-  type: 'raster-dem'
-  tiles: ['https://tiles.mapterhorn.com/{z}/{x}/{y}.webp']
-  encoding: terrarium
-  tileSize: 512
-
-tab_name: "ARLAS-wui-builder Dev"
+arlas_wui_url: /wui
+links: []
+########################################################
+############        Basemaps                ############
+########################################################
+basemaps: [ {"name":"Contrast","url":"/wui/assets/basemap/styles/protomap-contrast.json","image":"/wui/assets/basemap/quicklook/contrast.png", "type": "protomap"}, {"name":"Dark","url":"/wui/assets/basemap/styles/protomap-dark.json","image":"/wui/assets/basemap/quicklook/dark.png", "type": "protomap"}, {"name":"Grayscale","url":"/wui/assets/basemap/styles/protomap-grayscale.json","image":"/wui/assets/basemap/quicklook/grayscale.png", "type": "protomap"}, {"name":"Light","url":"/wui/assets/basemap/styles/protomap-light.json","image":"/wui/assets/basemap/quicklook/light.png", "type": "protomap"}, {"name":"White","url":"/wui/assets/basemap/styles/protomap-white.json","image":"/wui/assets/basemap/quicklook/white.png", "type": "protomap"} ]
+tab_name:  ARLAS-wui-builder
 external_node_page: true
-external_node_schemas:
-  - name: Schema 1
-    url: /assets/schema1.json
-  - name: Schema 2
-    url: /assets/schema2.json
+external_node_schemas: []
 histogram:
-  max_buckets: 100
+  max_buckets: 200
   export_nb_buckets: 1000
-use_time_filter: true
+use_time_filter: false
 enable_advanced_features: false
-
-whitelistedUrls: []
+terrain: { "type": "raster-dem", "tiles": ["https://tiles.mapterhorn.com/{z}/{x}/{y}.webp"], "encoding": terrarium, "tileSize": 512 }

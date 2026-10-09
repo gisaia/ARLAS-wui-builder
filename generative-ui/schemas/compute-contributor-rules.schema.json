@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Compute Contributor Rules",
+  "description": "JSON Schema capturing validation rules for compute contributors discovered in ARLAS WUI code generation patterns",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": { "enum": ["compute", "metric"] }
+        }
+      },
+      "then": {
+        "properties": {
+          "metrics": {
+            "type": "array",
+            "items": { "type": "object" },
+            "minItems": 1,
+            "description": "Array of metrics definitions. Required field."
+          },
+          "function": {
+            "type": "string",
+            "description": "Compute function to apply. Required field."
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the compute contributor"
+          }
+        },
+        "required": ["metrics", "function"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "enum": ["compute", "metric"] },
+          "function": { "const": "sum" }
+        }
+      },
+      "then": {
+        "properties": {
+          "metrics": {
+            "minItems": 1,
+            "description": "When function is 'sum', at least one metric must be present"
+          }
+        }
+      }
+    },
+    {
+      "description": "Prevent extra properties not in schema from being generated",
+      "allOf": [
+        {
+          "properties": {
+            "type": { "enum": ["compute", "metric"] }
+          },
+          "not": {
+            "anyOf": [
+              {
+                "properties": {
+                  "charttype": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "icon": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "type": "compute",
+      "identifier": "compute123",
+      "name": "Compute View",
+      "title": "Compute View",
+      "collection": "collection123",
+      "icon": "calculate",
+      "metrics": [
+        {
+          "name": "revenue",
+          "field": "properties.revenue",
+          "function": "sum"
+        }
+      ],
+      "function": "sum",
+      "title": "Revenue Compute"
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Tree Contributor Rules",
+  "description": "JSON Schema capturing validation rules for tree contributors discovered in ARLAS WUI code generation patterns",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "tree" }
+        }
+      },
+      "then": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of the tree contributor. Required field."
+          },
+          "nodeSizeMinPourcentage": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Minimum percentage for node sizing in tree (0-100)"
+          },
+          "jsonpath": {
+            "type": "string",
+            "description": "JSONPath expression for tree data extraction"
+          },
+          "filterOperator": {
+            "type": "string",
+            "enum": ["Eq", "Neq", "Gt", "Lt", "Gte", "Lte"],
+            "description": "Filter operator for tree data filtering"
+          },
+          "allowOperatorChange": {
+            "type": "boolean",
+            "description": "Whether to allow operator change in tree filter"
+          }
+        },
+        "required": ["title"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "tree" },
+          "allowOperatorChange": { "const": true }
+        }
+      },
+      "then": {
+        "properties": {
+          "filterOperator": {
+            "enum": ["Eq", "Neq"],
+            "description": "When allowOperatorChange is true, filter operator is limited to Eq or Neq"
+          }
+        }
+      }
+    },
+    {
+      "description": "Prevent extra properties not in schema from being generated",
+      "allOf": [
+        {
+          "properties": {
+            "type": { "const": "tree" }
+          },
+          "not": {
+            "anyOf": [
+              {
+                "properties": {
+                  "charttype": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "icon": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "type": "tree",
+      "identifier": "tree123",
+      "title": "Tree View",
+      "title": "Tree View",
+      "collection": "collection123",
+      "icon": "trending_up",
+      "nodeSizeMinPourcentage": 10,
+      "jsonpath": "$.data.nodes",
+      "filterOperator": "Eq",
+      "allowOperatorChange": true,
+      "aggregationmodels": []
+    }
+  ]
+}

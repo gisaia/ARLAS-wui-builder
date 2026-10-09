@@ -5,7 +5,7 @@
     "analytics": false,
     "cache": {
       "enabled": false
-    }
+    },
   },
   "newProjectRoot": "projects",
   "projects": {

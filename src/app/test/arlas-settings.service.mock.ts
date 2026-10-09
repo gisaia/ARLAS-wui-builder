@@ -26,5 +26,6 @@ export const mockArlasSettingsService = {
     getSettings: vi.fn(() => ({
         terrain: {}
     })),
+    getHistogramMaxBucket: vi.fn(() => 100),
     isDarkThemeEnabled:  vi.fn(() => false)
 };

@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "MetricsTable Contributor Rules",
+  "description": "JSON Schema capturing validation rules for metrics table contributors discovered in ARLAS WUI code generation patterns",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "metricsTable" }
+        }
+      },
+      "then": {
+        "properties": {
+          "numberOfBuckets": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Number of bucket for metrics table. Required field."
+          },
+          "configuration": {
+            "type": "object",
+            "description": "Configuration for metrics table. Required field."
+          },
+          "sort": {
+            "type": "string",
+            "enum": ["asc", "desc"],
+            "description": "Sort order for metrics table rows"
+          },
+          "filterOperator": {
+            "type": "string",
+            "enum": ["Eq", "Neq", "Gt", "Lt", "Gte", "Lte"],
+            "description": "Filter operator for metrics table data filtering"
+          }
+        },
+        "required": ["numberOfBuckets", "configuration"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "metricsTable" },
+          "sort": { "const": true }
+        }
+      },
+      "then": {
+        "properties": {
+          "filterOperator": {
+            "enum": ["Eq", "Neq"],
+            "description": "When sort is present, filter operator is limited to Eq or Neq"
+          }
+        }
+      }
+    },
+    {
+      "description": "Prevent extra properties not in schema from being generated",
+      "allOf": [
+        {
+          "properties": {
+            "type": { "const": "metricsTable" }
+          },
+          "not": {
+            "anyOf": [
+              {
+                "properties": {
+                  "charttype": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "icon": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "type": "metricsTable",
+      "identifier": "metrictable123",
+      "name": "Metrics Table",
+      "title": "Metrics Table",
+      "collection": "collection123",
+      "icon": "show_charts",
+      "numberOfBuckets": 10,
+      "configuration": {
+        "metrics": ["revenue", "cost", "profit"],
+        "groupBy": "category"
+      },
+      "sort": "desc",
+      "filterOperator": "Eq"
+    }
+  ]
+}

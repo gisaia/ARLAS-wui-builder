@@ -1,6 +1,6 @@
 {
   "global": {
-    "serverUrl": "${ARLAS_SERVER_URL}",
+    "serverUrl": "https://site.arlas.k8s/arlas",
     "unmanagedFields": {
       "appName": "ARLAS",
       "appUnit": "",

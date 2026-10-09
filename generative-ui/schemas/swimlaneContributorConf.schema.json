@@ -1,0 +1,50 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "title": "Swimlane Contributor Configuration",
+    "description": "The Configuration of Swimlane Contributor",
+    "type": "object",
+    "$id": "swimlaneContributorConf.schema.json",
+    "properties": {
+        "identifier": {
+            "description": "The unique identifier for a Contributor",
+            "type": "string"
+        },
+        "name": {
+            "description": "The name of the Contributor",
+            "type": "string"
+        },
+        "swimlanes": {
+            "description": "List of swimlanes",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {},
+                    "name": {},
+                    "aggregationmodels": {
+                        "$ref": "rootContributorConf.schema.json#/definitions/aggregationmodels"
+                    },
+                    "jsonpath": {
+                        "description": "Json path to find value used in aggregation, for example  $.count or $.metrics[0].value, $.count is used by default if this property is not setted.",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "aggregationmodels"
+                ]
+            }
+        },
+        "numberOfBuckets": {
+            "description": "Number of buckets in the swimlane. If not specified, the interval in aggregation model is used instead.",
+            "type": "number"
+        }
+    },
+    "required": [
+        "identifier",
+        "name",
+        "swimlanes"
+    ]
+}

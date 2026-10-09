@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Chipssearch Contributor Rules",
+  "description": "JSON Schema capturing validation rules for chipssearch contributors discovered in ARLAS WUI code generation patterns",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "chipssearch" }
+        }
+      },
+      "then": {
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "description": "Unique identifier for chipssearch contributor. Required field."
+          },
+          "search_field": {
+            "type": "string",
+            "description": "Search field for chip search queries. Required field."
+          },
+          "autocomplete_field": {
+            "type": "string",
+            "description": "Field used for chip autocomplete suggestions"
+          },
+          "autocomplete_size": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "description": "Number of autocomplete suggestions for chips (1-100)"
+          }
+        },
+        "required": ["identifier", "search_field"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "chipssearch" },
+          "autocomplete_field": { "const": true }
+        }
+      },
+      "then": {
+        "properties": {
+          "autocomplete_size": {
+            "minimum": 3,
+            "maximum": 15,
+            "description": "Autocomplete size for chips must be between 3 and 15 when autocomplete field is present"
+          }
+        }
+      }
+    },
+    {
+      "description": "Prevent extra properties not in schema from being generated",
+      "allOf": [
+        {
+          "properties": {
+            "type": { "const": "chipssearch" }
+          },
+          "not": {
+            "anyOf": [
+              {
+                "properties": {
+                  "charttype": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "icon": {
+                    "not": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "type": "chipssearch",
+      "identifier": "chips123",
+      "name": "Chips Search",
+      "title": "Chips Search",
+      "collection": "collection123",
+      "icon": "filter_list",
+      "search_field": "properties.content",
+      "autocomplete_field": "properties.content.autocomplete",
+      "autocomplete_size": 8
+    }
+  ]
+}
