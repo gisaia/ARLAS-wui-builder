@@ -218,7 +218,7 @@ export class EditHistogramLabelComponent implements OnInit, OnDestroy {
 
     private disableYUnitField() {
       this.yAxisConfig.unitControl.disable();
-      this.yAxisConfig.infoMessage.next(marker('Field set by unit collection in look and feel'));
+      this.yAxisConfig.infoMessage.next(marker('Field set by unit collection in Preferences'));
     }
 
     private enableYUnitField() {

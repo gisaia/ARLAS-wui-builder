@@ -40,7 +40,7 @@ export class MenuService {
     {
       name: marker('Timeline'),
       link: '/timeline-config',
-      icon: 'history_toggle_off',
+      icon: 'schedule',
       tooltip: marker('Timeline'),
       enabled: false,
       control: this.mainFormService.timelineConfig.control
@@ -64,24 +64,24 @@ export class MenuService {
     {
       name: marker('Data table'),
       link: '/data-table-config',
-      icon: 'table_chart',
+      icon: 'data_table',
       tooltip: marker('Data table'),
       enabled: false,
       control: this.mainFormService.resultListConfig.control
     },
     {
-      name: marker('Side modules'),
-      link: '/side-modules',
-      icon: 'view_column',
-      tooltip: marker('Side modules'),
+      name: marker('Share and Tag'),
+      link: '/share-and-tag',
+      icon: 'share',
+      tooltip: marker('Share and Tag'),
       enabled: false,
       control: this.mainFormService.sideModulesConfig.control
     },
     {
-      name: marker('Look \'n feel'),
-      link: '/look-and-feel',
-      icon: 'opacity',
-      tooltip: marker('Look \'n feel'),
+      name: marker('Preferences'),
+      link: '/preferences',
+      icon: 'settings',
+      tooltip: marker('Preferences'),
       enabled: false,
       control: this.mainFormService.lookAndFeelConfig.control
     }
@@ -91,10 +91,10 @@ export class MenuService {
     private arlasSettingsService: ArlasSettingsService) {
     if (this.arlasSettingsService.settings['external_node_page']) {
       this.pages.push({
-        name: marker('Custom configuration'),
-        link: '/extra-node',
-        icon: 'settings_input_composite',
-        tooltip: marker('Custom configuration'),
+        name: marker('Extra modules'),
+        link: '/extra-modules',
+        icon: 'widgets',
+        tooltip: marker('Extra modules'),
         enabled: false,
         control: this.mainFormService.externalNodeConfig.control
       });
