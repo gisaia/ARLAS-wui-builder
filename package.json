@@ -9,6 +9,7 @@
     "build": "ng build --configuration production --aot --base-href='$ARLAS_BUILDER_BASE_HREF/'",
     "build:stats": "ng build --stats-json",
     "test": "ng test",
+    "verify:roundtrip": "ng test --no-watch --include=src/app/services/main-form-manager/main-form-manager.spec.ts",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "license-check": "license-check-and-add check -f license-check-and-add.json",

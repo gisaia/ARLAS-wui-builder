@@ -130,7 +130,7 @@ export class MainFormManagerService {
     }
   }
 
-  private doExport(type: EXPORT_TYPE) {
+  public exportConfig(): { generatedConfig: Config; generatedMapConfig: any; } {
     const startingConfig = this.mainFormService.startingConfig.getFg();
     const resourcesConfig = this.mainFormService.resourcesConfig.getFg();
     const mapConfigGlobal = this.mainFormService.mapConfig.getGlobalFg();
@@ -165,6 +165,12 @@ export class MainFormManagerService {
     );
 
     const generatedMapConfig = ConfigMapExportHelper.process(mapConfigLayers, this.colorService, this.collectionService.taggableFieldsMap);
+    return { generatedConfig, generatedMapConfig };
+  }
+
+  private doExport(type: EXPORT_TYPE) {
+    const resourcesConfig = this.mainFormService.resourcesConfig.getFg();
+    const { generatedConfig, generatedMapConfig } = this.exportConfig();
 
     const confToValidate: any = JSON.parse(JSON.stringify(generatedConfig).replace('"layers":[]', '"layers":' + JSON.stringify(
       generatedMapConfig.layers

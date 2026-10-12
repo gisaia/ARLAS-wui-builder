@@ -329,7 +329,27 @@
                                                         },
                                                         "input": {
                                                             "description": "Input of resultlist component.",
-                                                            "type": "object"
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "options": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "showName": {
+                                                                            "type": "boolean"
+                                                                        },
+                                                                        "showIcon": {
+                                                                            "type": "boolean"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "showName",
+                                                                        "showIcon"
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "options"
+                                                            ]
                                                         }
                                                     }
                                                 },
@@ -568,6 +588,10 @@
                                                 {
                                                     "$ref": "histogram.schema.json#"
                                                 }
+                                            ],
+                                            "required": [
+                                                "chartTitle",
+                                                "chartType"
                                             ]
                                         },
                                         "dateFormat": {
@@ -577,7 +601,8 @@
                                     },
                                     "required": [
                                         "contributorId",
-                                        "input"
+                                        "input",
+                                        "dateFormat"
                                     ]
                                 },
                                 "detailedTimeline": {
@@ -595,6 +620,10 @@
                                                 {
                                                     "$ref": "histogram.schema.json#"
                                                 }
+                                            ],
+                                            "required": [
+                                                "chartTitle",
+                                                "chartType"
                                             ]
                                         },
                                         "dateFormat": {
@@ -604,7 +633,8 @@
                                     },
                                     "required": [
                                         "contributorId",
-                                        "input"
+                                        "input",
+                                        "dateFormat"
                                     ]
                                 }
                             }
@@ -918,14 +948,22 @@
                                                 "icon": {
                                                     "type": "string"
                                                 }
-                                            }
+                                            },
+                                            "required": [
+                                                "name",
+                                                "icon"
+                                            ]
                                         }
-                                    }
+                                    },
+                                    "required": [
+                                        "chipssearch"
+                                    ]
                                 }
-                            },
-                            "required": [
-                                "name"
-                            ]
+                                },
+                                "required": [
+                                "name",
+                                "components"
+                                ]
                         }
                     },
                     "required": [

@@ -147,6 +147,7 @@
     "basemapStyles": {
       "description": "List of basemaps styles",
       "type": "array",
+      "default": [],
       "items": {
         "description": "Defines the name and the basemap style.",
         "type": "object",
@@ -246,6 +247,7 @@
     "visualisations_sets": {
       "description": "List of visualisation sets",
       "type": "array",
+      "default": [],
       "items": {
         "description": "A Visualisation set is an entity where layers are grouped together.",
         "type": "object",
@@ -330,6 +332,8 @@
     "margePanForLoad",
     "margePanForTest",
     "initCenter",
-    "initZoom"
+    "initZoom",
+    "visualisations_sets",
+    "basemapStyles"
   ]
 }

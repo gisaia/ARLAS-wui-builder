@@ -133,8 +133,13 @@ Le moteur de validation ARLAS compile l'arborescence des schémas officiels suiv
 5. **Couplage Cartographique et Événements Externes** :
    - Chaque source de données déclarée dans `arlas.web.contributors[type=map].layers_sources` doit posséder au moins une couche correspondante dans `config.map.json.layers`.
    - Tout identifiant déclaré dans `config.map.json.external-event-layers[].id` doit obligatoirement être présent dans `config.map.json.layers`.
-6. **Proscription des Clés Dépréciées** :
-   - Le type `chipssearch` est obsolète et remplacé par `search`.
+6. **Invariants Anti-Crash & Préfixes de Couches Cartographiques** :
+   - **Préfixe des identifiants (`id`)** : Chaque couche cartographique DOIT impérativement débuter par `arlas_id:<Nom>:<cle_unique>` pour éviter le déclenchement intempestif de migrations legacy dans le builder.
+   - **Préfixe des sources (`source`)** : Chaque source déclarée dans `layers_sources` et `config.map.json.layers` DOIT obligatoirement débuter par `feature-`, `cluster-` ou `feature-metric-`. Le moteur Angular s'appuie sur ce préfixe pour déduire le formulaire de style (`LayerMode`).
+   - **Objets d'initialisation de la carte** : `initCenter` (ex: `[-4, 48]`), `initZoom`, `visualisations_sets: []` et `basemapStyles: []` sont obligatoires dans `mapgl.input` pour éviter des `TypeError: Cannot read properties of undefined (reading '1')` ou `(reading 'forEach')`.
+   - **Recherche & Affichage** : `arlas-wui.web.app.components.chipssearch` (`{ name, icon }`) et `options.showName` sur les composants `resultlist` sont requis pour initialiser la barre de recherche et les listes.
+7. **Proscription des Clés Dépréciées** :
+   - Le type `chipssearch` dans les contributeurs est obsolète et remplacé par `search`.
    - La propriété `zoom_to_data` dans `options` est obsolète et remplacée par `zoom_to_strategy` (`"centroid"` ou `"bbox"`).
 
 ---

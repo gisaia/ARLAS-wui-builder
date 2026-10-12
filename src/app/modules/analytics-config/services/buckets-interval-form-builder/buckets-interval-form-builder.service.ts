@@ -27,7 +27,7 @@ import {
 import { integerValidator } from '@utils/validators';
 import { CollectionReferenceDescriptionProperty, Interval } from 'arlas-api';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
-import { delay, map, Observable, of, Subscription } from 'rxjs';
+import { delay, map, Observable, of, Subscription, take } from 'rxjs';
 import { BUCKET_TYPE } from './models';
 
 export interface BucketsIntervalControls {
@@ -73,12 +73,11 @@ export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
             dependsOn: () => [this.customControls.aggregationField],
             onDependencyChange: (control) => {
               const bucketsFieldsObs = this.getBucketsFieldsObs(this.collection, collectionService, bucketType);
-              const sub: Subscription = bucketsFieldsObs.subscribe(fields => {
+              bucketsFieldsObs.pipe(take(1)).subscribe(fields => {
                 const aggregationField = fields.find(f => f.name === this.customControls.aggregationField.value);
                 if (!!aggregationField) {
                   control.setValue(aggregationField.type === CollectionReferenceDescriptionProperty.TypeEnum.DATE ? 'time' : 'numeric');
                 }
-                sub.unsubscribe();
               });
             },
             optional: true
@@ -131,7 +130,7 @@ export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
             dependsOn: () => [this.customControls.aggregationBucketOrInterval, this.customControls.aggregationField],
             onDependencyChange: (control) => {
               const bucketsFieldsObs = this.getBucketsFieldsObs(this.collection, collectionService, bucketType);
-              const sub: Subscription = bucketsFieldsObs.subscribe(fields => {
+              bucketsFieldsObs.pipe(take(1)).subscribe(fields => {
                 if (this.customControls.aggregationBucketOrInterval.value === BY_BUCKET_OR_INTERVAL.INTERVAL &&
                   // eslint-disable-next-line max-len
                   fields?.find(f => f.name === this.customControls.aggregationField.value)?.type === CollectionReferenceDescriptionProperty.TypeEnum.DATE) {
@@ -139,7 +138,6 @@ export class BucketsIntervalFormGroup extends CollectionConfigFormGroup {
                 } else {
                   control.disable();
                 }
-                sub.unsubscribe();
               });
 
             }

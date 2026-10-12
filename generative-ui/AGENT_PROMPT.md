@@ -67,6 +67,10 @@ Pour garantir une configuration exempte de bugs et strictement conforme, tu dois
 3. **Phase 3 : Validation de Conformité** :
    - Assure-toi que les fichiers générés sont rigoureusement valides contre la suite de métamodèles JSON Schema (draft-06) et respectent toutes les contraintes de dépendances d'intégrité référentielle.
 
+4. **Phase 4 : Validation Fonctionnelle de Round-Trip (Import/Export Process)** :
+   - Assure-toi que les identifiants de couches commencent par `arlas_id:<Nom>:<cle>`, que les sources débutent par `feature-` ou `cluster-`, et que `visualisations_sets`, `basemapStyles`, `initCenter` et `initZoom` sont définis dans `mapgl.input`.
+   - La configuration générée doit passer avec succès le test de round-trip (`npm run verify:roundtrip`) qui exécute l'import complet des formulaires réactifs (`doImport`) puis ré-exporte via `ConfigExportHelper.process()` et `ConfigMapExportHelper.process()` pour garantir qu'aucun crash à l'importation (`TypeError`) ne survient dans l'interface utilisateur.
+
 ---
 
 # RÈGLES D'ARCHITECTURE ET INVARIANTS STRICTS (NE JAMAIS TRANSGRESSER)

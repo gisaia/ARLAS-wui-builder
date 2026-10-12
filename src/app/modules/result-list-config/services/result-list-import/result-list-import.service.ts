@@ -73,7 +73,7 @@ export class ResultListImportService {
     resultListInputsFeeder
       .importTitle()
       .import(
-        input.options.showName !== undefined ? input.options.showName : true,
+        input?.options?.showName !== undefined ? input.options.showName : true,
         widgetData.customControls.showName)
       .importIcons()
       .importActionsSteps()

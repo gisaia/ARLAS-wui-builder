@@ -3,7 +3,7 @@
     {
       "id": "arlas_id:Trajectoires des navires:vessel_trails",
       "type": "line",
-      "source": "vessel_trails_source",
+      "source": "feature-vessel_trails",
       "layout": {
         "line-join": "round",
         "line-cap": "round"
@@ -17,7 +17,7 @@
     {
       "id": "arlas_id:Positions des navires:vessel_locations",
       "type": "circle",
-      "source": "vessel_locations_cluster_source",
+      "source": "cluster-vessel_locations",
       "paint": {
         "circle-color": "#f97316",
         "circle-radius": 7,
@@ -29,7 +29,7 @@
     {
       "id": "arlas-hover-trails",
       "type": "line",
-      "source": "vessel_trails_source",
+      "source": "feature-vessel_trails",
       "layout": {
         "line-join": "round",
         "line-cap": "round"
@@ -43,7 +43,7 @@
     {
       "id": "arlas-select-trails",
       "type": "line",
-      "source": "vessel_trails_source",
+      "source": "feature-vessel_trails",
       "layout": {
         "line-join": "round",
         "line-cap": "round"

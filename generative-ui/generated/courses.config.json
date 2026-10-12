@@ -130,25 +130,6 @@
           "additionalCollections": []
         },
         {
-          "type": "histogram",
-          "identifier": "courses_speed_histogram",
-          "name": "Distribution des vitesses",
-          "title": "Distribution des vitesses",
-          "collection": "courses",
-          "icon": "speed",
-          "charttype": "bars",
-          "isOneDimension": false,
-          "numberOfBuckets": 40,
-          "jsonpath": "$.count",
-          "aggregationmodels": [
-            {
-              "type": "histogram",
-              "field": "track.dynamics.gps.speed_nd"
-            }
-          ],
-          "useUtc": true
-        },
-        {
           "type": "tree",
           "identifier": "courses_ship_type_tree",
           "name": "Types de navires",
@@ -160,48 +141,6 @@
             {
               "type": "term",
               "field": "object.ship_type",
-              "size": 10,
-              "order": "desc",
-              "on": "count"
-            }
-          ],
-          "filterOperator": "Eq",
-          "allowOperatorChange": true,
-          "nodeSizeMinPourcentage": 10
-        },
-        {
-          "type": "tree",
-          "identifier": "courses_departure_port_tree",
-          "name": "Ports de d\u00e9part",
-          "title": "Ports de d\u00e9part",
-          "collection": "courses",
-          "icon": "anchor",
-          "jsonpath": "$.count",
-          "aggregationmodels": [
-            {
-              "type": "term",
-              "field": "departure.address.port",
-              "size": 10,
-              "order": "desc",
-              "on": "count"
-            }
-          ],
-          "filterOperator": "Eq",
-          "allowOperatorChange": true,
-          "nodeSizeMinPourcentage": 10
-        },
-        {
-          "type": "tree",
-          "identifier": "courses_arrival_port_tree",
-          "name": "Ports d'arriv\u00e9e",
-          "title": "Ports d'arriv\u00e9e",
-          "collection": "courses",
-          "icon": "anchor",
-          "jsonpath": "$.count",
-          "aggregationmodels": [
-            {
-              "type": "term",
-              "field": "arrival.address.port",
               "size": 10,
               "order": "desc",
               "on": "count"
@@ -557,251 +496,6 @@
         },
         "download": {}
       },
-      "analytics": [
-        {
-          "groupId": "courses-synth-0",
-          "title": "Indicateurs de Parcours",
-          "tab": "Synth\u00e8se",
-          "icon": "dashboard",
-          "components": [
-            {
-              "componentType": "metric",
-              "contributorId": "courses_avg_duration_metric",
-              "uuid": "uuid-metric-avg-duration",
-              "usage": "analytics",
-              "input": {
-                "customizedCssClass": "arlas-metric-analytics"
-              }
-            },
-            {
-              "componentType": "metric",
-              "contributorId": "courses_avg_speed_metric",
-              "uuid": "uuid-metric-avg-speed",
-              "usage": "analytics",
-              "input": {
-                "customizedCssClass": "arlas-metric-analytics"
-              }
-            },
-            {
-              "componentType": "metric",
-              "contributorId": "courses_total_distance_metric",
-              "uuid": "uuid-metric-total-distance",
-              "usage": "analytics",
-              "input": {
-                "customizedCssClass": "arlas-metric-analytics"
-              }
-            }
-          ]
-        },
-        {
-          "groupId": "courses-synth-1",
-          "title": "Flotte par Type",
-          "tab": "Synth\u00e8se",
-          "icon": "pie_chart",
-          "components": [
-            {
-              "componentType": "donut",
-              "showExportCsv": false,
-              "contributorId": "courses_ship_type_tree",
-              "uuid": "uuid-donut-ship-type",
-              "usage": "analytics",
-              "input": {
-                "id": "courses_ship_type_tree_donut",
-                "customizedCssClass": "arlas-donuts-analytics",
-                "diameter": 170,
-                "containerWidth": 223,
-                "multiselectable": true,
-                "opacity": 0.5
-              }
-            }
-          ]
-        },
-        {
-          "groupId": "courses-vitesses-0",
-          "title": "Analyse des Vitesses",
-          "tab": "Vitesses & Trajectoires",
-          "icon": "speed",
-          "components": [
-            {
-              "componentType": "histogram",
-              "showExportCsv": true,
-              "contributorId": "courses_speed_histogram",
-              "uuid": "uuid-histogram-speed",
-              "usage": "analytics",
-              "input": {
-                "id": "courses_speed_histogram_input",
-                "isHistogramSelectable": true,
-                "multiselectable": true,
-                "topOffsetRemoveInterval": 40,
-                "leftOffsetRemoveInterval": 18,
-                "brushHandlesHeightWeight": 0.8,
-                "yAxisStartsFromZero": true,
-                "chartType": "bars",
-                "chartTitle": "Distribution des vitesses",
-                "chartHeight": 120,
-                "chartWidth": 445,
-                "xAxisPosition": "bottom",
-                "descriptionPosition": "bottom",
-                "xTicks": 5,
-                "yTicks": 2,
-                "xLabels": 5,
-                "yLabels": 4,
-                "xUnit": "nd",
-                "yUnit": "trajets",
-                "chartXLabel": "Vitesse GPS (n\u0153uds)",
-                "shortYLabels": false,
-                "showXTicks": true,
-                "showYTicks": true,
-                "showXLabels": true,
-                "showYLabels": true,
-                "showHorizontalLines": true,
-                "barWeight": 0.8,
-                "dataType": "numeric",
-                "customizedCssClass": "arlas-histogram-analytics",
-                "isSmoothedCurve": false
-              }
-            },
-            {
-              "componentType": "powerbars",
-              "showExportCsv": true,
-              "contributorId": "courses_ship_type_tree",
-              "uuid": "uuid-powerbars-ship-type",
-              "usage": "analytics",
-              "input": {
-                "chartTitle": "Types de navires",
-                "powerbarTitle": "Types de navires",
-                "displayFilter": true,
-                "scrollable": true,
-                "filterOperator": {
-                  "value": "Eq",
-                  "display": true
-                },
-                "useColorService": true,
-                "useColorFromData": false,
-                "unit": "trajets",
-                "chartWidth": 217
-              }
-            }
-          ]
-        },
-        {
-          "groupId": "courses-dispersion-0",
-          "title": "\u00c9volution et Dispersion Temporelle",
-          "tab": "Dispersion Temporelle",
-          "icon": "timeline",
-          "components": [
-            {
-              "componentType": "swimlane",
-              "showExportCsv": false,
-              "contributorId": "courses_swimlane_ship_type",
-              "uuid": "uuid-swimlane-ship-type",
-              "usage": "analytics",
-              "input": {
-                "id": "courses_swimlane_ship_type_input",
-                "isHistogramSelectable": true,
-                "multiselectable": false,
-                "topOffsetRemoveInterval": 40,
-                "leftOffsetRemoveInterval": 18,
-                "brushHandlesHeightWeight": 0.8,
-                "yAxisStartsFromZero": true,
-                "chartTitle": "Activit\u00e9 par type de navire au fil du temps",
-                "chartHeight": 140,
-                "chartWidth": 445,
-                "xAxisPosition": "bottom",
-                "descriptionPosition": "bottom",
-                "xTicks": 4,
-                "yTicks": 1,
-                "xLabels": 4,
-                "yLabels": 4,
-                "xUnit": "",
-                "yUnit": "",
-                "chartXLabel": "",
-                "shortYLabels": false,
-                "showXTicks": true,
-                "showYTicks": true,
-                "showXLabels": true,
-                "showYLabels": true,
-                "barWeight": 0.8,
-                "dataType": "time",
-                "swimLaneLabelsWidth": 110,
-                "swimlaneHeight": 22,
-                "swimlaneMode": "variableHeight",
-                "swimlaneBorderRadius": 3,
-                "swimlane_representation": "global",
-                "customizedCssClass": "arlas-swimlane",
-                "swimlane_options": {
-                  "nan_color": "#D6D6D6"
-                }
-              }
-            }
-          ]
-        },
-        {
-          "groupId": "courses-ports-0",
-          "title": "Ports Fr\u00e9quent\u00e9s",
-          "tab": "Ports & Escales",
-          "icon": "anchor",
-          "components": [
-            {
-              "componentType": "powerbars",
-              "showExportCsv": true,
-              "contributorId": "courses_departure_port_tree",
-              "uuid": "uuid-powerbars-departure-port",
-              "usage": "analytics",
-              "input": {
-                "chartTitle": "Ports de d\u00e9part",
-                "powerbarTitle": "Ports de d\u00e9part",
-                "displayFilter": true,
-                "scrollable": true,
-                "filterOperator": {
-                  "value": "Eq",
-                  "display": true
-                },
-                "useColorService": false,
-                "useColorFromData": false,
-                "unit": "trajets",
-                "chartWidth": 217
-              }
-            },
-            {
-              "componentType": "powerbars",
-              "showExportCsv": true,
-              "contributorId": "courses_arrival_port_tree",
-              "uuid": "uuid-powerbars-arrival-port",
-              "usage": "analytics",
-              "input": {
-                "chartTitle": "Ports d'arriv\u00e9e",
-                "powerbarTitle": "Ports d'arriv\u00e9e",
-                "displayFilter": true,
-                "scrollable": true,
-                "filterOperator": {
-                  "value": "Eq",
-                  "display": true
-                },
-                "useColorService": false,
-                "useColorFromData": false,
-                "unit": "trajets",
-                "chartWidth": 217
-              }
-            }
-          ]
-        },
-        {
-          "groupId": "courses-details-0",
-          "title": "Donn\u00e9es D\u00e9taill\u00e9es des Trajets",
-          "tab": "Donn\u00e9es",
-          "icon": "table_chart",
-          "components": [
-            {
-              "componentType": "resultlist",
-              "contributorId": "courses_resultlist",
-              "uuid": "uuid-resultlist-analytics",
-              "usage": "analytics",
-              "input": {}
-            }
-          ]
-        }
-      ],
       "colorGenerator": {
         "keysToColors": [
           [
@@ -921,6 +615,82 @@
       "configPath": "config.map.json",
       "replacedAttribute": "arlas.web.components.mapgl.input.mapLayers.externalEventLayers",
       "replacer": "external-event-layers"
+    }
+  ],
+  "analytics": [
+    {
+      "groupId": "courses-synth-0",
+      "title": "Indicateurs de Parcours",
+      "tab": "Synth\u00e8se",
+      "icon": "dashboard",
+      "components": [
+        {
+          "componentType": "powerbars",
+          "contributorId": "courses-object.mmsi-10-Count-desc-count",
+          "input": {
+            "chartTitle": "MMSI",
+            "powerbarTitle": "MMSI",
+            "displayFilter": true,
+            "scrollable": true,
+            "filterOperator": {
+              "value": "Eq",
+              "display": true
+            },
+            "useColorService": true,
+            "useColorFromData": false,
+            "unit": "",
+            "chartWidth": 217
+          }
+        },
+        {
+          "componentType": "donut",
+          "contributorId": "courses-object.ship_type-10-",
+          "input": {
+            "id": "courses-object.ship_type-10-",
+            "customizedCssClass": "arlas-donuts-analytics",
+            "diameter": 170,
+            "containerWidth": 223,
+            "multiselectable": true,
+            "opacity": 0.4
+          }
+        },
+        {
+          "componentType": "resultlist",
+          "contributorId": "courses-track.id-100-dedzd-",
+          "input": {
+            "id": "courses-track.id-100-dedzd-",
+            "tableWidth": 445,
+            "globalActionsList": [],
+            "searchSize": 100,
+            "nLastLines": 3,
+            "detailedGridHeight": 300,
+            "nbGridColumns": 3,
+            "displayFilters": false,
+            "hasListView": true,
+            "hasCardView": false,
+            "hasGridView": false,
+            "defaultMode": "list",
+            "downloadLink": "",
+            "isBodyHidden": false,
+            "isGeoSortActived": false,
+            "isExportEnabled": false,
+            "isAutoGeoSortActived": null,
+            "consultedItemEvent": null,
+            "actionOnItemEvent": null,
+            "globalActionEvent": null,
+            "useColorService": true,
+            "visualisationsList": [],
+            "options": {
+              "showActionsOnhover": "true",
+              "showDetailIconName": "keyboard_arrow_down",
+              "hideDetailIconName": "keyboard_arrow_up",
+              "icon": "short_text",
+              "showName": true,
+              "showIcon": true
+            }
+          }
+        }
+      ]
     }
   ]
 }

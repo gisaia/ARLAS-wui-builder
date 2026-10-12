@@ -343,6 +343,7 @@ export class MapImportService {
       type === 'feature' ? LAYER_MODE.features :
         type === 'cluster' ? LAYER_MODE.cluster :
           null;
+
     if (layerSource.id.startsWith(ARLAS_ID)) {
       if (!layerSource.name) {
         layerSource.name = layerSource.id.split(ARLAS_ID)[1].split(':')[0];
@@ -580,8 +581,7 @@ export class MapImportService {
       this.importLayerCluster(values, layer, layerSource as ClusterLayerCourceConfig);
     }
 
-
-    typeFg?.patchValue(values);
+    typeFg.patchValue(values);
 
     // populate manual values FormArray
     const manualValues = (((values.styleStep || {}).colorFg || {}).propertyManualFg || {}).propertyManualValuesCtrl as Array<KeywordColor>;

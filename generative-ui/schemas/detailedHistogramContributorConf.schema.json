@@ -16,10 +16,14 @@
     },
     "selectionExtentPercentage": {
       "description": "Percentage of current selection extent. This percentage will be used to calculate an offset to add to this extent : offset + selectionextent = data extent",
-      "type": "number"
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
     }
   },
   "required": [
-    "annexedContributorId"
+    "annexedContributorId",
+    "numberOfBuckets",
+    "selectionExtentPercentage"
   ]
 }

@@ -1,7 +1,7 @@
 {
   "arlas": {
     "server": {
-      "url": "/arlas",
+      "url": "http://localhost:9999/arlas",
       "collection": {
         "name": "courses"
       },
@@ -23,7 +23,7 @@
             {
               "id": "arlas_id:Trajectoires des navires:vessel_trails",
               "name": "Tracés des trajectoires",
-              "source": "vessel_trails_source",
+              "source": "feature-vessel_trails",
               "render_mode": "window",
               "returned_geometry": "track.trail",
               "minzoom": 0,
@@ -39,7 +39,7 @@
             {
               "id": "arlas_id:Positions des navires:vessel_locations",
               "name": "Positions regroupées",
-              "source": "vessel_locations_cluster_source",
+              "source": "cluster-vessel_locations",
               "aggType": "tile",
               "granularity": "Fine",
               "aggregated_geometry": "bbox",
@@ -75,7 +75,8 @@
           "annexedContributorId": "timeline",
           "isOneDimension": true,
           "useUtc": true,
-          "selectionExtentPercentage": 20,
+          "numberOfBuckets": 50,
+          "selectionExtentPercentage": 0.2,
           "aggregationmodels": [
             {
               "type": "datehistogram",
@@ -121,13 +122,15 @@
         },
         {
           "type": "swimlane",
-          "identifier": "swimlane_shiptype",
+          "identifier": "courses-track.timestamps.center-time-interval-Count--1-dayobject.ship_type",
           "name": "Dispersion temporelle par type de navire",
           "collection": "courses",
           "swimlanes": [
             {
-              "id": "swimlane_lanes_shiptype",
-              "name": "Navires par type dans le temps",
+              "id": 1,
+              "name": "Dispersion temporelle par type de navire",
+              "xAxisField": "track.timestamps.center",
+              "termField": "object.ship_type",
               "aggregationmodels": [
                 {
                   "type": "term",
@@ -338,14 +341,18 @@
           "contributorId": "timeline",
           "dateFormat": "%d/%m/%Y %H:%M",
           "input": {
-            "id": "timeline_chart"
+            "id": "timeline_chart",
+            "chartTitle": "Chronologie des navigations",
+            "chartType": "bars"
           }
         },
         "detailedTimeline": {
           "contributorId": "detailedTimeline",
           "dateFormat": "%d/%m/%Y %H:%M",
           "input": {
-            "id": "detailed_timeline_chart"
+            "id": "detailed_timeline_chart",
+            "chartTitle": "Chronologie détaillée",
+            "chartType": "bars"
           }
         },
         "resultlists": [
@@ -354,7 +361,11 @@
             "contributorId": "resultlist_courses",
             "uuid": "resultlist_courses_uuid",
             "input": {
-              "id": "resultlist_courses_input"
+              "id": "resultlist_courses_input",
+              "options": {
+                "showName": true,
+                "showIcon": true
+              }
             }
           }
         ]
@@ -370,6 +381,7 @@
               "title": "Durée moyenne de trajet (heures)",
               "uuid": "metric_duration_uuid",
               "input": {
+                "id": "metric_duration_input",
                 "customizedCssClass": "metric-custom"
               }
             },
@@ -411,12 +423,12 @@
           "title": "Dispersion Temporelle par Type de Navire",
           "components": [
             {
-              "contributorId": "swimlane_shiptype",
+              "contributorId": "courses-track.timestamps.center-time-interval-Count--1-dayobject.ship_type",
               "componentType": "swimlane",
               "title": "Dispersion chronologique des navires",
               "uuid": "swimlane_shiptype_uuid",
               "input": {
-                "id": "swimlane_shiptype_input",
+                "id": "courses-track.timestamps.center-time-interval-Count--1-dayobject.ship_type",
                 "swimlaneMode": "fixedHeight",
                 "swimlaneHeight": 28,
                 "swimLaneLabelsWidth": 120
@@ -434,7 +446,11 @@
               "title": "Liste des parcours",
               "uuid": "resultlist_courses_uuid",
               "input": {
-                "id": "resultlist_courses_input"
+                "id": "resultlist_courses_input",
+                "options": {
+                  "showName": true,
+                  "showIcon": true
+                }
               }
             }
           ]
@@ -451,6 +467,12 @@
     "web": {
       "app": {
         "name": "Navigation et Trajectoires Maritimes",
+        "components": {
+          "chipssearch": {
+            "name": "Rechercher...",
+            "icon": "search"
+          }
+        },
         "units": [
           {
             "collection": "courses",

@@ -34,7 +34,8 @@
           },
           "source": {
             "description": "Type of the data - concat - id.",
-            "type": "string"
+            "type": "string",
+            "pattern": "^(feature|cluster|feature-metric)-.+"
           },
           "render_mode": {
             "description": "Render mode for features.",
