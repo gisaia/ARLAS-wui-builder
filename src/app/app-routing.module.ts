@@ -59,16 +59,16 @@ const routes: Routes = [
     canActivate: [MainFormInitializedGuard]
   },
   {
-    path: 'side-modules',
+    path: 'share-and-tag',
     loadChildren: () => import('./modules/side-modules-config/side-modules-config.module').then(m => m.SideModulesConfigModule),
     canActivate: [MainFormInitializedGuard]
   },
   {
-    path: 'look-and-feel',
+    path: 'preferences',
     loadChildren: () => import('./modules/look-and-feel-config/look-and-feel-config.module').then(m => m.LookAndFeelConfigModule),
     canActivate: [MainFormInitializedGuard]
   },  {
-    path: 'extra-node',
+    path: 'extra-modules',
     loadChildren: () => import('./modules/external-node-config/external-node-config.module').then(m => m.ExternalNodeConfigModule),
     canActivate: [MainFormInitializedGuard]
   },

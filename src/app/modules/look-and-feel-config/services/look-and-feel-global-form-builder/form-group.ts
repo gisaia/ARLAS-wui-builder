@@ -39,7 +39,7 @@ export class LookAndFeelGlobalFormGroup extends ConfigFormGroup {
           '',
           marker('Drag and drop'),
           marker('Drag and drop description'),
-          { title: marker('Look and feel') }
+          { title: marker('Preferences') }
         ),
         zoomToDataStrategy: new SelectFormControl(
           '',
