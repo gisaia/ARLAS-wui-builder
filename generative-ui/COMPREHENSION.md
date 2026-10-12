@@ -141,6 +141,10 @@ Le moteur de validation ARLAS compile l'arborescence des schémas officiels suiv
 7. **Proscription des Clés Dépréciées** :
    - Le type `chipssearch` dans les contributeurs est obsolète et remplacé par `search`.
    - La propriété `zoom_to_data` dans `options` est obsolète et remplacée par `zoom_to_strategy` (`"centroid"` ou `"bbox"`).
+8. **Invariants Swimlane & Résolution d'Identifiant Canonique (`dataType`)** :
+   - Pour tout widget analytique de type `swimlane` ou `histogram`, le champ `"dataType": "time"` (ou `"numeric"`) est **obligatoire** dans l'objet `input`.
+   - L'omission de `dataType` conduit le Builder à classifier la donnée en `numeric`, ce qui fausse le calcul interne de l'identifiant canonique (`-numeric-` au lieu de `-time-`) et provoque l'exception `Given contributorId [...] does not match any registered contributor`.
+   - Chaque couloir dans `swimlane.swimlanes` doit déclarer `xAxisField`, `termField`, `jsonpath: "$.count"` et `useUtc: true`.
 
 ---
 

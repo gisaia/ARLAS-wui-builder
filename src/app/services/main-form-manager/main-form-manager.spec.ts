@@ -13,6 +13,7 @@ import {
   GET_OPTIONS,
   PersistenceService
 } from 'arlas-wui-toolkit';
+import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { LoggerModule } from 'ngx-logger';
 import { of, Subject } from 'rxjs';
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -107,7 +108,9 @@ describe('MainFormManagerService', () => {
         arlasConfigService.setConfig(maritimeConfig);
 
         const collectionService = TestBed.inject(CollectionService);
-        collectionService.getCollectionFields = () => of([]);
+        collectionService.getCollectionFields = () => of([
+            { name: 'track.timestamps.center', type: CollectionReferenceDescriptionProperty.TypeEnum.DATE } as any
+        ]);
         collectionService.getDescribe = () => of({ params: {} } as any);
         collectionService.collectionParamsMap.set('courses', {
             params: {
@@ -191,5 +194,20 @@ describe('MainFormManagerService', () => {
         expect(() => {
             service.doImport(config, mapConfig);
         });
+    });
+
+    it('should correctly import and re-export swimlane widget with matching canonical ID', () => {
+        const config = structuredClone(maritimeConfig) as any;
+        const mapConfig = structuredClone(maritimeMapConfig) as any;
+
+        const swimlaneContrib = config.arlas.web.contributors.find((c: any) => c.type === 'swimlane');
+        expect(swimlaneContrib).toBeDefined();
+
+        service.doImport(config, mapConfig);
+        const { generatedConfig } = service.exportConfig();
+
+        const exportedSwimlane = generatedConfig.arlas.web.contributors.find((c: any) => c.type === 'swimlane');
+        expect(exportedSwimlane).toBeDefined();
+        expect(exportedSwimlane.identifier).toBe(swimlaneContrib.identifier);
     });
 });

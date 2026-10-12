@@ -116,8 +116,28 @@ logSection('3. Validation Spécifique des Contributeurs');
 const contributors = config?.arlas?.web?.contributors || [];
 const contributorIds = new Set();
 let duplicates = 0;
+let structureErrors = 0;
 
 contributors.forEach(c => {
+  // A. Contrôle structurel de l'identifiant (Contributor ID Structure)
+  if (!c.identifier || typeof c.identifier !== 'string' || c.identifier.trim().length === 0) {
+    logFail(`Structure d'identifiant invalide pour le contributeur (${c.type || 'inconnu'}) : l'identifiant doit être une chaîne non vide.`);
+    structureErrors++;
+  } else if (/\s/.test(c.identifier)) {
+    logFail(`Structure d'identifiant invalide pour "${c.identifier}" (${c.type}) : les espaces sont strictement interdits dans les identifiants de contributeurs.`);
+    structureErrors++;
+  } else if (!/^[a-zA-Z0-9_\-\.:]+$/.test(c.identifier)) {
+    logFail(`Structure d'identifiant invalide pour "${c.identifier}" (${c.type}) : caractères spéciaux non autorisés (autorisés: alphanumérique, '-', '_', '.', ':').`);
+    structureErrors++;
+  } else {
+    // Vérifications structurelles spécifiques par type
+    if (c.type === 'swimlane' && c.collection && !c.identifier.includes(c.collection)) {
+      logFail(`Structure d'identifiant non canonique pour la swimlane "${c.identifier}" : l'identifiant doit intégrer le nom de la collection ("${c.collection}").`);
+      structureErrors++;
+    }
+  }
+
+  // B. Détection des doublons
   if (contributorIds.has(c.identifier)) {
     logFail(`Duplication d'identifiant détectée : "${c.identifier}"`);
     duplicates++;
@@ -152,8 +172,8 @@ contributors.forEach(c => {
   }
 });
 
-if (duplicates === 0) {
-  logPass(`Unicité validée pour les ${contributors.length} contributeurs.`);
+if (duplicates === 0 && structureErrors === 0) {
+  logPass(`Structure et unicité validées pour les ${contributors.length} identifiants de contributeurs.`);
 }
 
 // 4. Validation globale arlasconfig (comme ArlasStartupService.validateConfiguration)
@@ -201,6 +221,30 @@ analyticsGroups.forEach(group => {
 });
 if (missingWidgets === 0) {
   logPass(`Tous les ${totalWidgets} widgets du panneau analytics référencent des contributeurs valides.`);
+}
+
+// A.bis Composants Globaux (Timeline, DetailedTimeline, ResultLists)
+const components = config?.arlas?.web?.components || {};
+if (components.timeline?.contributorId) {
+  if (!contributorIds.has(components.timeline.contributorId)) {
+    logFail(`Composant timeline référence un contributeur inexistant: "${components.timeline.contributorId}"`);
+  } else {
+    logPass(`Composant timeline lié à un contributeur valide : "${components.timeline.contributorId}".`);
+  }
+}
+if (components.detailedTimeline?.contributorId) {
+  if (!contributorIds.has(components.detailedTimeline.contributorId)) {
+    logFail(`Composant detailedTimeline référence un contributeur inexistant: "${components.detailedTimeline.contributorId}"`);
+  } else {
+    logPass(`Composant detailedTimeline lié à un contributeur valide : "${components.detailedTimeline.contributorId}".`);
+  }
+}
+if (Array.isArray(components.resultlists)) {
+  components.resultlists.forEach((rl, idx) => {
+    if (rl.contributorId && !contributorIds.has(rl.contributorId)) {
+      logFail(`Composant resultlists[${idx}] référence un contributeur inexistant: "${rl.contributorId}"`);
+    }
+  });
 }
 
 // B. Timeline Détaillée

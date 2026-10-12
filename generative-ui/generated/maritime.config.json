@@ -131,6 +131,8 @@
               "name": "Dispersion temporelle par type de navire",
               "xAxisField": "track.timestamps.center",
               "termField": "object.ship_type",
+              "jsonpath": "$.count",
+              "useUtc": true,
               "aggregationmodels": [
                 {
                   "type": "term",
@@ -429,6 +431,12 @@
               "uuid": "swimlane_shiptype_uuid",
               "input": {
                 "id": "courses-track.timestamps.center-time-interval-Count--1-dayobject.ship_type",
+                "dataType": "time",
+                "chartType": "bars",
+                "chartTitle": "Dispersion chronologique des navires",
+                "customizedCssClass": "arlas-swimlane",
+                "swimlane_representation": "global",
+                "swimlane_options": {},
                 "swimlaneMode": "fixedHeight",
                 "swimlaneHeight": 28,
                 "swimLaneLabelsWidth": 120

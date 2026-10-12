@@ -22,12 +22,26 @@
                 "properties": {
                     "id": {},
                     "name": {},
+                    "xAxisField": {
+                        "description": "Field representing the x axis (temporal or numeric)",
+                        "type": "string"
+                    },
+                    "termField": {
+                        "description": "Field representing the terms/lanes",
+                        "type": "string"
+                    },
+                    "useUtc": {
+                        "description": "Whether to use UTC timezone",
+                        "type": "boolean",
+                        "default": true
+                    },
                     "aggregationmodels": {
                         "$ref": "rootContributorConf.schema.json#/definitions/aggregationmodels"
                     },
                     "jsonpath": {
                         "description": "Json path to find value used in aggregation, for example  $.count or $.metrics[0].value, $.count is used by default if this property is not setted.",
-                        "type": "string"
+                        "type": "string",
+                        "default": "$.count"
                     }
                 },
                 "required": [

@@ -61,6 +61,8 @@ Pour garantir une configuration exempte de bugs et strictement conforme, tu dois
      - Pour `resultlist` : Définis impérativement `options: { showName: false }` et initialise `cardViewProperties: []`.
      - Pour `map` : Définis `window_extent_geometry: { enabled: true, boundsFieldName: '' }` ainsi que `margePanForLoad: 0` et `margePanForTest: 0`.
      - Pour `histogram` : Assure la présence de `isOneDimension: true`, `useUtc: true`, et `additionalCollections`.
+     - Pour `swimlane` et `histogram` dans `analytics` : Définis IMPÉRATIVEMENT `"dataType": "time"` (pour les données temporelles) ou `"dataType": "numeric"` dans l'objet `input`. L'omission de `dataType` conduit le Builder à classifier la donnée en 'numeric', faussant le calcul d'identifiant canonique et provoquant l'erreur `Given contributorId does not match any registered contributor`.
+     - Pour `swimlane` (contributeur) : Définis dans chaque couloir de `swimlanes` : `xAxisField`, `termField`, `jsonpath: "$.count"` et `useUtc: true`.
      - Pour `search` : Définis explicitement `autocomplete_size: 10`.
    - **Filtrage des Types Non Supportés** : Limite strictement les contributeurs aux types supportés par l'application cible (`map`, `search`, `histogram`, `detailedhistogram`, `tree`, `resultlist`). N'inclus pas de types orphelins ou non supportés qui causeraient des erreurs à l'importation.
 
@@ -76,7 +78,7 @@ Pour garantir une configuration exempte de bugs et strictement conforme, tu dois
 # RÈGLES D'ARCHITECTURE ET INVARIANTS STRICTS (NE JAMAIS TRANSGRESSER)
 1. **Unicité des Identifiants** : Chaque objet dans `arlas.web.contributors` doit avoir un `identifier` strictement unique.
 2. **Intégrité Référentielle** : 
-   - Chaque `contributorId` appelé dans les widgets `analytics` DOIT correspondre à un `identifier` déclaré dans les contributeurs.
+   - Chaque `contributorId` appelé dans les widgets `analytics` ET dans les composants globaux (`components.timeline`, `components.detailedTimeline`, `components.resultlists`) DOIT correspondre exactement à un `identifier` déclaré dans `arlas.web.contributors`.
    - Le contributeur `detailedhistogram` DOIT obligatoirement avoir une clé `annexedContributorId` pointant vers l'ID du contributeur `histogram` principal.
 3. **Le Mécanisme extraConfigs** : Dans `config.json`, `mapLayers.layers` et `mapLayers.externalEventLayers` DOIVENT être des tableaux vides `[]`. Ils sont remplacés au runtime. Tu DOIS inclure la délégation suivante à la racine de `config.json` :
    ```json

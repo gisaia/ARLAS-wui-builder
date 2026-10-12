@@ -69,5 +69,9 @@
         }
       }
     }
-  }
+  },
+  "required": [
+    "id",
+    "dataType"
+  ]
 }
