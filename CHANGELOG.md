@@ -1,5 +1,23 @@
 # Change Log
 
+## [v29.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v29.0.0) (2026-10-13)
+
+**New stuff:**
+
+- Use Icon Selector in card view list configuration [\#1196](https://github.com/gisaia/ARLAS-wui-builder/issues/1196)
+- Improve grouped configurable properties layout in Arlas WUI Builder [\#1185](https://github.com/gisaia/ARLAS-wui-builder/issues/1185)
+- Fix ui artifact [\#1176](https://github.com/gisaia/ARLAS-wui-builder/issues/1176)
+- Add a new option in result list to show/hide exporting it as CSV  [\#944](https://github.com/gisaia/ARLAS-wui-builder/issues/944)
+
+**Fixed bugs:**
+
+- Landing page call openapi.json of arlas server without token [\#1216](https://github.com/gisaia/ARLAS-wui-builder/issues/1216)
+- Bug in analytics view [\#1208](https://github.com/gisaia/ARLAS-wui-builder/issues/1208)
+- View list configuration: the default view is not apply and persist [\#1207](https://github.com/gisaia/ARLAS-wui-builder/issues/1207)
+- Disable OK button in Another tab already exists [\#1193](https://github.com/gisaia/ARLAS-wui-builder/issues/1193) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Error message in console when I try to change order tab in analytics module [\#1192](https://github.com/gisaia/ARLAS-wui-builder/issues/1192) [[ANALYTICS](https://github.com/gisaia/ARLAS-wui-builder/labels/ANALYTICS)]
+- Add a card view list does not work [\#1191](https://github.com/gisaia/ARLAS-wui-builder/issues/1191)
+
 ## [v28.0.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v28.0.1) (2026-06-12)
 
 **Fixed bugs:**
