@@ -147,6 +147,8 @@ export class DonutConfigForm extends WidgetConfigFormGroup {
                     }
                     sub.unsubscribe();
                   });
+              }).catch(() => {
+                console.log('Could not fetch term aggregation');
               }),
             marker('A field is required to manage colors'),
             {

@@ -194,7 +194,10 @@ export class LandingPageDialogComponent implements OnInit {
                 );
               this.isServerReady = true;
             }
-          );
+          ).catch(() => {
+            this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));
+            this.spinner.hide('connectServer');
+          });
         },
         error: () => {
           this.logger.error(this.translate.instant('Unable to access the server. Please, verify the url.'));

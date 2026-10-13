@@ -45,9 +45,9 @@ import { ObjectvaluesPipe } from '@shared/pipes/objectvalues.pipe';
 import { Expression } from 'arlas-api';
 
 interface DataGroupDialogData {
-    edit: boolean;
-    dataGroup: ResultListVisualisationsDataGroup;
-    collectionControlName: string;
+  edit: boolean;
+  dataGroup: ResultListVisualisationsDataGroup;
+  collectionControlName: string;
 }
 
 @Component({
@@ -113,13 +113,17 @@ export class ManageDataGroupDialogComponent implements OnInit {
      */
   public updateList(event: { prefix: string; }, index: number) {
     const control = this.data.dataGroup.customControls.filters.at(index).customControls;
-    if (control.filterOperation.value ===  Expression.OpEnum.Like) {
+    if (control.filterOperation.value === Expression.OpEnum.Like) {
       control.filterValues.filterInValues.setSyncOptions([]);
       this.collectionService.getTermAggregation(
         this.data.collectionControlName,
         control.filterField.value.value, true, undefined, event.prefix)
         .then(keywords => {
-          control.filterValues.filterInValues.setSyncOptions(keywords.map(k => ({value: k, label: k})));
+          control.filterValues.filterInValues.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
+        })
+        .catch(() => {
+          console.log('Could not fetch term aggregation');
+          control.filterValues.filterInValues.setSyncOptions([]);
         });
     }
   }

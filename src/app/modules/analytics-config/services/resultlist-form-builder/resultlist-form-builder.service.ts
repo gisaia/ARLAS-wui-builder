@@ -98,7 +98,7 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                     titleLabelField: this.get('dataStep.grid.aTitle.titleLabelField') as SelectFormControl,
                     titleLabelFieldProcess: this.get('dataStep.grid.aTitle.titleLabelFieldProcess') as TextareaFormControl,
                 },
-                bTooltip:{
+                bTooltip: {
                     tooltipField: this.get('dataStep.grid.bTooltip.tooltipField') as SelectFormControl,
                     tooltipFieldProcess: this.get('dataStep.grid.bTooltip.tooltipFieldProcess') as TextareaFormControl,
                 },
@@ -201,12 +201,12 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                     ),
                     defaultMode: new ButtonToggleFormControl(
                         '',
-                        resultModeDefaultList.map(o => ({...o})),
+                        resultModeDefaultList.map(o => ({ ...o })),
                         marker('List default mode description'),
                         {
                             resetDependantsOnChange: true,
                             dependsOn: () => [this.customControls.dataStep.grid.aHasGridView,
-                                this.customControls.dataStep.cardViewProperties as any],
+                            this.customControls.dataStep.cardViewProperties as any],
                             onDependencyChange: (control: ButtonToggleFormControl) => {
                                 // if value was grid and grid is disabled set value to false
                                 if (!this.customControls.dataStep.grid.aHasGridView.value) {
@@ -398,8 +398,8 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                         marker('Background style of cells Description'),
                         false,
                         [
-                            {label: marker('Filled'), value: CellBackgroundStyleEnum.filled},
-                            {label: marker('Outlined'), value: CellBackgroundStyleEnum.outlined},
+                            { label: marker('Filled'), value: CellBackgroundStyleEnum.filled },
+                            { label: marker('Outlined'), value: CellBackgroundStyleEnum.outlined },
                         ],
                         {
                             optional: true,
@@ -740,7 +740,10 @@ export class ResultlistQuicklookFormGroup extends FormGroup {
                                     collection,
                                     this.customControls.filter.field.value)
                                     .then(keywords => {
-                                        control.setSyncOptions(keywords.map(k => ({value: k, label: k})));
+                                        control.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
+                                    }).catch(() => {
+                                        console.log('Could not fetch term aggregation');
+                                        control.setSyncOptions([]);
                                     });
                             } else {
                                 control.setSyncOptions([]);
@@ -813,8 +816,8 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
                 '',
                 false,
                 [
-                    {label: marker('Titiler'), value: 'titiler'},
-                    {label: marker('Other'), value: 'other'},
+                    { label: marker('Titiler'), value: 'titiler' },
+                    { label: marker('Other'), value: 'other' },
                 ],
                 {
                     validators: [Validators.required]
@@ -1034,8 +1037,8 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
         columns.forEach(c => formGroup.customControls.dataStep.columns
             .push(this.buildColumn(collection)));
 
-        const cardsProp =  (value.dataStep || {}).cardViewProperties || [];
-        cardsProp.forEach( resultListCard => {
+        const cardsProp = (value.dataStep || {}).cardViewProperties || [];
+        cardsProp.forEach(resultListCard => {
             const line = new ResultListCardLineFormGroup();
             resultListCard.line.forEach(_ => line.customControls.fields.push(buildCardViewProperties(this.collectionService, collection)));
             formGroup.customControls.dataStep.cardViewProperties.push(line);
@@ -1080,10 +1083,10 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
     public buildVisualisationsDataGroupCriteria(collection: string) {
         const collectionFields = this.collectionService.getCollectionFields(collection);
         const operators = [Expression.OpEnum.Range,
-            Expression.OpEnum.Eq, Expression.OpEnum.Like,
-            Expression.OpEnum.Lte, Expression.OpEnum.Lt,
-            Expression.OpEnum.Gte, Expression.OpEnum.Gt,
-            Expression.OpEnum.Ne
+        Expression.OpEnum.Eq, Expression.OpEnum.Like,
+        Expression.OpEnum.Lte, Expression.OpEnum.Lt,
+        Expression.OpEnum.Gte, Expression.OpEnum.Gt,
+        Expression.OpEnum.Ne
         ];
 
         const control = new ResultListVisualisationsDataGroupCondition(collectionFields,

@@ -461,6 +461,10 @@ export class ResultListInputsFeeder {
                             value: k,
                             label: k
                         })));
+                    })
+                    .catch(() => {
+                        console.log('Could not fetch term aggregation');
+                        quicklook.customControls.filter.values.setSyncOptions([]);
                     });
             }
             this.options.widgetData.customControls.visualisationStep.quicklook.urls.push(quicklook);
