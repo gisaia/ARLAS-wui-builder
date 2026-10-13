@@ -50,13 +50,13 @@ import { moveInFormArray as moveItemInFormArray } from '@utils/tools';
 export class EditResultlistDetailsComponent implements OnInit {
   private readonly collectionService = inject(CollectionService);
 
-  @Input() public control: FormArray;
+  @Input() public control: FormArray<ResultlistDetailFormGroup>;
   @Input() public collection: SelectFormControl;
 
   public ngOnInit() {
-    if (!!this.collection) {
+    if (this.collection) {
       this.collection.valueChanges.subscribe(c => {
-        (this.control as FormArray).clear();
+        this.control.clear();
       });
     }
   }
@@ -79,10 +79,10 @@ export class EditResultlistDetailsComponent implements OnInit {
   }
 
   public get details() {
-    return this.control.controls as Array<ResultlistDetailFormGroup>;
+    return this.control.controls;
   }
 
-  public getDetail = (detailIndex: number) => this.control.at(detailIndex) as ResultlistDetailFormGroup;
+  public getDetail = (detailIndex: number) => this.control.at(detailIndex);
   public getFields = (detailIndex: number) => this.getDetail(detailIndex).customControls.fields.controls;
 
   public drop = (event: CdkDragDrop<string[]>) => moveItemInFormArray(event.previousIndex, event.currentIndex, this.control);

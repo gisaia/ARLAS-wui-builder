@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 import {
   AbstractControl, AbstractControlOptions, AsyncValidatorFn, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators
 } from '@angular/forms';
@@ -24,11 +25,13 @@ import { ProportionedValues } from '@shared-services/property-selector-form-buil
 import { updateValueAndValidity } from '@utils/tools';
 import { CollectionReferenceDescriptionProperty } from 'arlas-api';
 import { HistogramUtils } from 'arlas-d3';
+import { ResultlistModeEnum } from 'arlas-web-components';
 import { ComputeConfig, validProcess } from 'arlas-web-contributors';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { METRIC_TYPES } from '../../services/collection-service/collection.service';
 import { CollectionField, GroupCollectionItem } from '../../services/collection-service/models';
 import { toKeywordOptionsObs, toNumericOrDateOptionsObs, toNumericOrDateOrKeywordOrTextObs } from '../../services/collection-service/tools';
+
 /**
  * These are wrappers above existing FormGroup and FormControl in order to add a custom behavior.
  * The goal is to have a full model-driven form without putting (or duplicating) the logic
@@ -48,13 +51,13 @@ export interface SelectOption {
 
 export interface VisualisationCheckboxOption {
   include: boolean;
-  name: any;
+  name: string;
   layers: string[];
 }
 export abstract class ConfigFormControl extends FormControl {
 
   // reference to other controls that depends on this one
-  public dependantControls: Array<AbstractControl>;
+  public dependantControls = new Array<AbstractControl>();
 
   // if it is a child control, it is to be displayed below another controls into a single config element
   public isChild = false;
@@ -184,7 +187,7 @@ export interface GroupOptionalParams {
 export class ConfigFormGroup extends FormGroup {
 
   // reference to other controls that depends on this one
-  public dependantControls: Array<AbstractControl>;
+  public dependantControls = new Array<AbstractControl>();
 
   public title: string;
   public stepName: string;
@@ -391,14 +394,14 @@ export class ButtonToggleFormControl extends ConfigFormControl {
       propertyName);
   }
 
-  public disableOption(name: string){
+  public disableOption(name: ResultlistModeEnum){
     const opt = this.options.find(o => o.value === name);
     if(opt){
       opt.disabled = true;
     }
   }
 
-  public enableOption(name: string){
+  public enableOption(name: ResultlistModeEnum){
     const opt = this.options.find(o => o.value === name);
     if(opt){
       opt.disabled = false;
@@ -432,9 +435,10 @@ export class ComponentFormControl extends ConfigFormControl {
     },
     public outputs?: {
       [key: string]: (val) => any;
-    }
+    },
+    optionalParams?: ControlOptionalParams
   ) {
-    super(null, null, null, { optional: true });
+    super(null, null, null, { ...optionalParams, optional: true });
   }
 }
 
@@ -1123,7 +1127,6 @@ export class TextareaFormControl extends ConfigFormControl {
     label: string,
     description: string,
     public placeHolder: string = '',
-    public nbRows?: number,
     optionalParams?: ControlOptionalParams,
     propertyName?: string
   ) {

@@ -3,7 +3,7 @@ import { mockArlasStartupService } from '@app/test/arlas-startup.service.mock';
 import { mockPersistenceService } from '@app/test/persistence.service.mock';
 import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
-import { ArlasStartupService, PersistenceService } from 'arlas-wui-toolkit';
+import { ArlasStartupService, ArlasTaskService, GET_OPTIONS, PersistenceService } from 'arlas-wui-toolkit';
 import { LoggerModule } from 'ngx-logger';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { MainFormManagerService } from './main-form-manager.service';
@@ -26,6 +26,11 @@ describe('MainFormManagerService', () => {
                 }),
             ],
             providers: [
+                ArlasTaskService,
+                {
+                    provide: GET_OPTIONS,
+                    useValue: () => { }
+                },
                 {
                     provide: ArlasStartupService,
                     useValue: mockArlasStartupService

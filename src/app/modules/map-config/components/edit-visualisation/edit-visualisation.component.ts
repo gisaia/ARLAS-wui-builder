@@ -49,7 +49,7 @@ import { Subscription } from 'rxjs';
 })
 export class EditVisualisationComponent implements OnInit, CanComponentExit, OnDestroy {
 
-  private visualisationsFa: FormArray;
+  private visualisationsFa: FormArray<MapVisualisationFormGroup>;
   private visualisationsValues: any[] = [];
   public forceCanExit: boolean;
   public visualisationFg: MapVisualisationFormGroup;
@@ -59,10 +59,11 @@ export class EditVisualisationComponent implements OnInit, CanComponentExit, OnD
 
   public constructor(
     protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
-    private mainFormService: MainFormService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private logger: NGXLogger) {
+    private readonly mainFormService: MainFormService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly logger: NGXLogger
+  ) {
     this.visualisationFg = mapVisualisationFormBuilder.buildVisualisation();
   }
 

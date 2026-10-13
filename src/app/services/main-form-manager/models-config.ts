@@ -20,8 +20,10 @@
 import { WIDGET_TYPE } from '@analytics-config/components/edit-group/models';
 import { Aggregation, Expression } from 'arlas-api';
 import { ArlasDataLayer, BasemapStyle, MapLayers, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
-import { FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
+import { CardViewProperty, Detail, FieldsConfiguration, LayerSourceConfig } from 'arlas-web-contributors';
+import { MetricsTableSortConfig, MetricsVectorConfig } from 'arlas-web-contributors/models/metrics-table.config';
 import { AnalyticsTabs, ZoomToDataStrategy } from 'arlas-wui-toolkit';
+import { RasterDEMSourceSpecification } from 'maplibre-gl';
 
 export const JSONPATH_COUNT = '$.count';
 export const JSONPATH_METRIC = '$.metrics[0].value';
@@ -123,6 +125,7 @@ export interface ServerConfig {
   max_age_cache: number;
 }
 
+// TODO: make a BaseContributorConfig + a ContributorConfig per contributor type to improve typing
 export interface ContributorConfig {
   type: string;
   identifier: string;
@@ -152,11 +155,8 @@ export interface ContributorConfig {
   search_size?: number;
   fieldsConfiguration?: FieldsConfiguration;
   columns?: Array<{ columnName: string; fieldName: string; dataType: string; process: string; useColorService: boolean; sort: string; }>;
-  details?: Array<{
-    name: string;
-    order: number;
-    fields: Array<{ path: string; label: string; process: string; }>;
-  }>;
+  details?: Array<Detail>;
+  cardViewProperties?: CardViewProperty[];
   colorField?: string;
   useUtc?: boolean;
   additionalCollections?: Array<{ collectionName: string; field: string; }>;
@@ -164,29 +164,7 @@ export interface ContributorConfig {
   filterOperator?: string;
   allowOperatorChange?: boolean;
   sort?: MetricsTableSortConfig;
-  configuration?: Array<MetricsSubTableConfig>;
-
-}
-
-export interface MetricsSubTableConfig {
-  termfield: string;
-  collection: string;
-  metrics: Array<{
-    metric: string;
-    field?: string;
-  }>;
-
-}
-
-export interface MetricsTableSortConfig {
-  collection?: string;
-  termfield?: string;
-  order?: Aggregation.OrderEnum;
-  on?: 'metric' | 'count';
-  metric?: {
-    metric: string;
-    field: string;
-  };
+  configuration?: Array<MetricsVectorConfig>;
 }
 
 export interface SwimlaneConfig {
@@ -206,8 +184,6 @@ export interface AnalyticConfig {
   icon: string;
   components: Array<AnalyticComponentConfig>;
 }
-
-
 
 export interface AnalyticComponentConfig {
   /** this uuid will be used a reference to a component configuration and reused by a shortcut. */
@@ -234,6 +210,7 @@ export interface ShortcutsConfig {
   order?: number;
 }
 
+// TODO: split it between the different analytics component
 export interface AnalyticComponentInputConfig {
   id: string;
   dataType?: string;
@@ -293,6 +270,7 @@ export interface AnalyticComponentInputConfig {
   displayFilters?: boolean;
   isBodyHidden?: boolean;
   isGeoSortActived?: boolean;
+  isExportEnabled?: boolean;
   isAutoGeoSortActived?: boolean;
   selectedItemsEvent?: any;
   consultedItemEvent?: any;
@@ -320,6 +298,8 @@ export interface VisualisationListInputConfig {
   description: string;
   name: string;
   dataGroups: DataGroupInputConfig[];
+  /** Whether this visualisation is the default one */
+  default: boolean;
 }
 
 export interface DataGroupInputConfig {
@@ -385,7 +365,7 @@ export interface MapComponentInputConfig {
   mapLayers: MapLayers<ArlasDataLayer>;
   visualisations_sets: Array<VisualisationSetConfig>;
   /** Configuration to display terrain elevation */
-  terrain: TerrainConfiguration<maplibregl.RasterDEMSourceSpecification>;
+  terrain: TerrainConfiguration<RasterDEMSourceSpecification>;
 }
 
 export interface AggregationModelConfig {

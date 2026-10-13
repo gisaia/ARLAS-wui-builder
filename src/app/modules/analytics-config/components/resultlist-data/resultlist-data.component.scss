@@ -22,10 +22,23 @@
    color: var.$error-color;
 }
 
+.tab__icon{
+   margin-right: 10px;
+   &--reverse {
+      transform: scale(-1);
+   }
+}
+
 .details-title {
    margin: 10px;
 }
 
 .grid-form-control{
    margin: 30px 10px
+}
+
+:host {
+   mat-tab-group {
+      border: 1px solid rgba(0, 0, 0, 0.12);
+   }
 }

@@ -28,6 +28,7 @@ import {
   ResultListVisualisationDataGroupFormWidget,
   ResultListVisualisationFormWidget
 } from '@analytics-config/services/resultlist-form-builder/models';
+import { ResultlistConfigForm } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import { ShortcutsService } from '@analytics-config/services/shortcuts/shortcuts.service';
 import { FormArray, FormGroup } from '@angular/forms';
 import { LookAndFeelGlobalFormGroup } from '@look-and-feel-config/services/look-and-feel-global-form-builder/form-group';
@@ -53,13 +54,16 @@ import {
 import {
   TimelineGlobalFormGroup
 } from '@timeline-config/services/timeline-global-form-builder/timeline-global-form-builder.service';
-import { CollectionReferenceDescription, Expression } from 'arlas-api';
-import { CollectionReferenceDescriptionProperty } from 'arlas-api/api';
+import { CollectionReferenceDescription, CollectionReferenceDescriptionProperty, Expression } from 'arlas-api';
 import { BasemapStyle, ExternalEventLayer, SCROLLABLE_ARLAS_ID, TerrainConfiguration, VisualisationSetConfig } from 'arlas-map';
 import { ArlasColorService, DescribedUrl } from 'arlas-web-components';
-import { ColorConfig, ExtentFilterGeometry, FieldsConfiguration, getSourceName, LayerSourceConfig } from 'arlas-web-contributors';
-import { FeatureRenderMode } from 'arlas-web-contributors/models/models';
+import {
+  ClusterLayerCourceConfig, ColorConfig, CoreLayerSourceConfig, ExtentFilterGeometry, FeatureLayerSourceConfig,
+  FeatureRenderMode, FieldsConfiguration, getSourceName, LayerSourceConfig, TopologyLayerSourceConfig
+} from 'arlas-web-contributors';
+import { FieldDetail } from 'arlas-web-contributors/models/models';
 import { ZoomToDataStrategy } from 'arlas-wui-toolkit';
+import { RasterDEMSourceSpecification } from 'maplibre-gl';
 import {
   AggregationModelConfig,
   AnalyticComponentConfig,
@@ -314,84 +318,81 @@ export class ConfigExportHelper {
     const modeValues = layerFg.value.mode === LAYER_MODE.features ? layerFg.value.featuresFg :
       (layerFg.value.mode === LAYER_MODE.featureMetric ? layerFg.value.featureMetricFg : layerFg.value.clusterFg);
     const filters = !!modeValues.visibilityStep.filters ? modeValues.visibilityStep.filters.value : undefined;
-    const layerSource: LayerSourceConfig = {
+    const coreLayerSource: CoreLayerSourceConfig = {
       id: layerValues.arlasId,
       name: layerValues.name,
       source: '',
       minzoom: modeValues.visibilityStep.zoom.min,
-      maxzoom: modeValues.visibilityStep.zoom.max,
-      include_fields: [],
-      short_form_fields: [],
-      colors_from_fields: [],
-      provided_fields: [],
-      normalization_fields: [],
-      metrics: []
+      maxzoom: modeValues.visibilityStep.zoom.max
     };
 
     if (!!filters) {
       filters.forEach((f) => {
-        if (!layerSource.filters) {
-          layerSource.filters = [];
+        if (!coreLayerSource.filters) {
+          coreLayerSource.filters = [];
         }
         if (f.filterOperation === FILTER_OPERATION.IN || f.filterOperation === FILTER_OPERATION.NOT_IN) {
-          layerSource.filters.push({
+          coreLayerSource.filters.push({
             field: f.filterField.value,
             op: f.filterOperation,
             value: f.filterInValues.map(v => v.value)
           });
         } else if (f.filterOperation === FILTER_OPERATION.EQUAL || f.filterOperation === FILTER_OPERATION.NOT_EQUAL) {
-          layerSource.filters.push({
+          coreLayerSource.filters.push({
             field: f.filterField.value,
             op: f.filterOperation,
             value: f.filterEqualValues
           });
         } else if (f.filterOperation === FILTER_OPERATION.RANGE || f.filterOperation === FILTER_OPERATION.OUT_RANGE) {
-          layerSource.filters.push({
+          coreLayerSource.filters.push({
             field: f.filterField.value, op: f.filterOperation,
             value: f.filterMinRangeValues + ';' + f.filterMaxRangeValues
           });
         } else if (f.filterOperation === FILTER_OPERATION.IS) {
-          layerSource.filters.push({
+          coreLayerSource.filters.push({
             field: f.filterField.value, op: f.filterOperation,
             value: f.filterBoolean
           });
         }
-        if (!layerSource.include_fields) {
-          layerSource.include_fields = [];
-        }
-        const includeFieldsSet = new Set(layerSource.include_fields);
+
+        const featureLayerSource = coreLayerSource as FeatureLayerSourceConfig;
+        featureLayerSource.include_fields ??= [];
+        const includeFieldsSet = new Set(featureLayerSource.include_fields);
         includeFieldsSet.add(f.filterField.value);
-        layerSource.include_fields = Array.from(includeFieldsSet);
+        featureLayerSource.include_fields = Array.from(includeFieldsSet);
       });
 
     }
 
     switch (layerValues.mode) {
       case LAYER_MODE.features: {
-        layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
-        layerSource.returned_geometry = modeValues.geometryStep.geometry;
-        layerSource.render_mode = modeValues.visibilityStep.renderMode;
+        const featureLayerSource = coreLayerSource as FeatureLayerSourceConfig;
+        featureLayerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
+        featureLayerSource.returned_geometry = modeValues.geometryStep.geometry;
+        featureLayerSource.render_mode = modeValues.visibilityStep.renderMode;
         break;
       }
       case LAYER_MODE.featureMetric: {
-        layerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
-        layerSource.raw_geometry = {
+        const topologyLayerSource = coreLayerSource as TopologyLayerSourceConfig;
+        topologyLayerSource.maxfeatures = modeValues.visibilityStep.featuresMax;
+        topologyLayerSource.raw_geometry = {
           geometry: modeValues.geometryStep.geometry,
           sort: !!modeValues.geometryStep.featureMetricSort ? modeValues.geometryStep.featureMetricSort : ''
         };
-        layerSource.geometry_id = modeValues.geometryStep.geometryId;
-        layerSource.network_fetching_level = +modeValues.visibilityStep.networkFetchingLevel;
+        topologyLayerSource.geometry_id = modeValues.geometryStep.geometryId;
+        topologyLayerSource.network_fetching_level = +modeValues.visibilityStep.networkFetchingLevel;
         break;
       }
       case LAYER_MODE.cluster: {
-        layerSource.agg_geo_field = modeValues.geometryStep.aggGeometry;
-        layerSource.aggType = modeValues.geometryStep.aggType;
-        layerSource.granularity = modeValues.geometryStep.granularity;
-        layerSource.minfeatures = modeValues.visibilityStep.featuresMin;
+        const clusterLayerSource = coreLayerSource as ClusterLayerCourceConfig;
+        clusterLayerSource.agg_geo_field = modeValues.geometryStep.aggGeometry;
+        clusterLayerSource.aggType = modeValues.geometryStep.aggType;
+        clusterLayerSource.granularity = modeValues.geometryStep.granularity;
+        clusterLayerSource.minfeatures = modeValues.visibilityStep.featuresMin;
         if (modeValues.geometryStep.clusterGeometryType === CLUSTER_GEOMETRY_TYPE.aggregated_geometry) {
-          layerSource.aggregated_geometry = modeValues.geometryStep.aggregatedGeometry;
+          clusterLayerSource.aggregated_geometry = modeValues.geometryStep.aggregatedGeometry;
         } else {
-          layerSource.raw_geometry = {
+          clusterLayerSource.raw_geometry = {
             geometry: modeValues.geometryStep.rawGeometry,
             sort: !!modeValues.geometryStep.clusterSort ? modeValues.geometryStep.clusterSort : ''
           };
@@ -399,60 +400,65 @@ export class ConfigExportHelper {
       }
     }
 
+    const layerSource = coreLayerSource as LayerSourceConfig;
     this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.colorFg, layerValues.mode);
 
     if (!!modeValues.styleStep.opacity) {
       this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.opacity, layerValues.mode);
     }
 
-    if (!!modeValues.styleStep.widthFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.widthFg, layerValues.mode);
+    if (modeValues.styleStep.line?.width) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.line.width, layerValues.mode);
     }
 
     if (!!modeValues.styleStep.radiusFg) {
       this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.radiusFg, layerValues.mode);
     }
 
-    if (modeValues.styleStep?.extrusionOpacity) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.extrusionOpacity, layerValues.mode);
+    if (modeValues.styleStep.extrusion?.opacity) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.extrusion.opacity, layerValues.mode);
     }
 
-    if (modeValues.styleStep?.extrusionValue) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.extrusionValue, layerValues.mode);
+    if (modeValues.styleStep.extrusion?.value) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.extrusion.value, layerValues.mode);
     }
 
-    if (!!modeValues.styleStep.strokeColorFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.strokeColorFg, layerValues.mode);
+    if (modeValues.styleStep.stroke?.color) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.stroke.color, layerValues.mode);
     }
 
-    if (!!modeValues.styleStep.strokeWidthFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.strokeWidthFg, layerValues.mode);
+    if (modeValues.styleStep.stroke?.width) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.stroke.width, layerValues.mode);
     }
 
-    if (!!modeValues.styleStep.strokeOpacityFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.strokeOpacityFg, layerValues.mode);
+    if (modeValues.styleStep.stroke?.opacity) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.stroke.opacity, layerValues.mode);
     }
 
-    if (!!modeValues.styleStep.weightFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.weightFg, layerValues.mode);
+    if (modeValues.styleStep.heatmap?.weight) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.heatmap.weight, layerValues.mode);
     }
-    if (!!modeValues.styleStep.labelSizeFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelSizeFg, layerValues.mode);
+    if (modeValues.styleStep.heatmap?.intensity) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.heatmap.intensity, layerValues.mode);
     }
-    if (!!modeValues.styleStep.labelHaloColorFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelHaloColorFg, layerValues.mode);
+
+    if (modeValues.styleStep.label?.size) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.label.size, layerValues.mode);
     }
-    if (!!modeValues.styleStep.labelHaloBlurFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelHaloBlurFg, layerValues.mode);
+    if (modeValues.styleStep.label?.halo?.color) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.label.halo.color, layerValues.mode);
     }
-    if (!!modeValues.styleStep.labelHaloWidthFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelHaloWidthFg, layerValues.mode);
+    if (modeValues.styleStep.label?.halo?.blur) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.label.halo.blur, layerValues.mode);
     }
-    if (!!modeValues.styleStep.labelRotationFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelRotationFg, layerValues.mode);
+    if (modeValues.styleStep.label?.halo?.width) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.label.halo.width, layerValues.mode);
     }
-    if (!!modeValues.styleStep.labelContentFg) {
-      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.labelContentFg, layerValues.mode);
+    if (modeValues.styleStep.label?.rotation) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.label.rotation, layerValues.mode);
+    }
+    if (modeValues.styleStep.label?.content) {
+      this.declareFieldsToLayerSource(layerSource, modeValues.styleStep.label.content, layerValues.mode);
     }
     layerSource.source = getSourceName(layerSource) + '-' + layerFg.value.collection;
     return layerSource;
@@ -532,7 +538,7 @@ export class ConfigExportHelper {
     const layersHoverIds: Array<string> = new Array<string>();
     mapConfigLayers.controls.forEach((layerFg: MapLayerFormGroup) => {
       layers.push(layerFg.value.name);
-      if (this.getLayerSourceConfig(layerFg).render_mode === FeatureRenderMode.window) {
+      if ((this.getLayerSourceConfig(layerFg) as FeatureLayerSourceConfig).render_mode === FeatureRenderMode.window) {
         layersHoverIds.push(layerFg.value.arlasId);
         layersHoverIds.push(layerFg.value.arlasId.replace(ARLAS_ID, SCROLLABLE_ARLAS_ID));
       }
@@ -582,7 +588,7 @@ export class ConfigExportHelper {
       defaultBasemap = basemaps[0];
     }
 
-    const terrain: TerrainConfiguration<maplibregl.RasterDEMSourceSpecification> = {
+    const terrain: TerrainConfiguration<RasterDEMSourceSpecification> = {
       enable: mapConfigBasemaps.customControls.terrain.enable.value
     };
     if (terrain.enable) {
@@ -645,11 +651,14 @@ export class ConfigExportHelper {
         if (!!layerValues.propertyProvidedColorLabelCtrl) {
           colorConfig.label = layerValues.propertyProvidedColorLabelCtrl;
         }
+        layerSource = layerSource as FeatureLayerSourceConfig;
+        layerSource.provided_fields ??= [];
         layerSource.provided_fields.push(colorConfig);
         break;
       }
       case PROPERTY_SELECTOR_SOURCE.provided_field_for_agg: {
-        let sorts = [];
+        layerSource = layerSource as ClusterLayerCourceConfig;
+        let sorts = new Array<string>();
         if (!layerSource.fetched_hits) {
           layerSource.fetched_hits = {
             sorts,
@@ -675,14 +684,18 @@ export class ConfigExportHelper {
       }
       case PROPERTY_SELECTOR_SOURCE.provided_field_for_feature:
       case PROPERTY_SELECTOR_SOURCE.provided_numeric_field_for_feature: {
+        layerSource = layerSource as FeatureLayerSourceConfig;
+        layerSource.include_fields ??= [];
         layerSource.include_fields.push(layerValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl);
         if (layerValues.propertyProvidedFieldFeatureFg.propertyShortFormatCtrl) {
+          layerSource.short_form_fields ??= [];
           layerSource.short_form_fields.push(layerValues.propertyProvidedFieldFeatureFg.propertyProvidedFieldFeatureCtrl);
         }
         break;
       }
       case PROPERTY_SELECTOR_SOURCE.displayable_metric_on_field:
       case PROPERTY_SELECTOR_SOURCE.metric_on_field: {
+        layerSource = layerSource as ClusterLayerCourceConfig;
         const countMetricFg = layerValues.propertyCountOrMetricFg;
         if (countMetricFg.propertyCountOrMetricCtrl === 'count') {
           layerSource.metrics.push({
@@ -702,26 +715,35 @@ export class ConfigExportHelper {
         break;
       }
       case PROPERTY_SELECTOR_SOURCE.generated: {
+        layerSource = layerSource as FeatureLayerSourceConfig;
+        layerSource.colors_from_fields ??= [];
         layerSource.colors_from_fields.push(layerValues.propertyGeneratedFieldCtrl);
         break;
       }
       case PROPERTY_SELECTOR_SOURCE.manual: {
+        layerSource = layerSource as FeatureLayerSourceConfig;
+        layerSource.include_fields ??= [];
         layerSource.include_fields.push(layerValues.propertyManualFg.propertyManualFieldCtrl);
         break;
       }
       case PROPERTY_SELECTOR_SOURCE.interpolated: {
         const interpolatedValues = layerValues.propertyInterpolatedFg;
         if (mode === LAYER_MODE.features) {
+          layerSource = layerSource as FeatureLayerSourceConfig;
           if (interpolatedValues.propertyInterpolatedNormalizeCtrl) {
+            layerSource.normalization_fields ??= [];
             layerSource.normalization_fields.push(
               {
                 on: interpolatedValues.propertyInterpolatedFieldCtrl,
                 per: interpolatedValues.propertyInterpolatedNormalizeLocalFieldCtrl
               });
           } else {
+            layerSource.include_fields ??= [];
             layerSource.include_fields.push(interpolatedValues.propertyInterpolatedFieldCtrl);
           }
         } else {
+          layerSource = layerSource as ClusterLayerCourceConfig;
+          layerSource.metrics ??= [];
           if (interpolatedValues.propertyInterpolatedCountOrMetricCtrl === 'count') {
             layerSource.metrics.push({
               field: '',
@@ -998,8 +1020,8 @@ export class ConfigExportHelper {
           icon: 'fiber_manual_record',
           iconColorFieldName: widgetData.dataStep.grid.color.colorIdentifier
         };
-        if (widgetData.visualisationStep.thumbnailAndQuicklook.thumbnailUrl) {
-          fieldsConfig.urlThumbnailTemplate =  widgetData.visualisationStep.thumbnailAndQuicklook.thumbnailUrl;
+        if (widgetData.visualisationStep.thumbnail.url) {
+          fieldsConfig.urlThumbnailTemplate = widgetData.visualisationStep.thumbnail.url;
         }
         if (widgetData.renderStep.imageUrl) {
           fieldsConfig.urlImageTemplate = widgetData.renderStep.imageUrl;
@@ -1033,6 +1055,18 @@ export class ConfigExportHelper {
             fields
           });
         });
+
+        contrib.cardViewProperties = [];
+        if (widgetData.dataStep?.cardViewProperties) {
+          widgetData.dataStep.cardViewProperties.forEach((line) => {
+            line.fields.forEach(el => {
+              contrib.cardViewProperties.push({
+                ...el
+              });
+            });
+          });
+        }
+
         contrib.includeMetadata = [];
         const metadatas = new Set<string>();
         /** TODO :Grid steps contains, booleans, urls...; we need to filter those controls properly */
@@ -1052,38 +1086,45 @@ export class ConfigExportHelper {
     return contrib;
   }
 
-  private static getResultListContributors(resultLists: FormArray): ContributorConfig[] {
-    const contribs = [];
-    resultLists.value.forEach(list => {
-      const contrib = this.getWidgetContributor(list, WIDGET_TYPE.resultlist, 'table_chart');
+  private static getResultListContributors(resultLists: FormArray<ResultlistConfigForm>): ContributorConfig[] {
+    const contribs = new Array<ContributorConfig>();
+
+    resultLists.controls.forEach(listForm => {
+      const contrib = this.getWidgetContributor(listForm.value, WIDGET_TYPE.resultlist, 'table_chart');
       contrib.type = 'resultlist';
-      contrib.search_size = list.settingsStep.searchSize;
+
+      const list = listForm.customControls;
+      contrib.search_size = list.settingsStep.searchSize.value;
       const fieldsConfig: FieldsConfiguration = {
-        idFieldName: list.dataStep.idFieldName,
+        idFieldName: list.dataStep.idFieldName.value,
         titleFieldNames: [{
-          fieldPath: list.dataStep.grid.aTitle.titleLabelField,
-          process: list.dataStep.grid.aTitle.titleLabelFieldProcess
+          fieldPath: list.dataStep.grid.aTitle.titleLabelField.value,
+          process: list.dataStep.grid.aTitle.titleLabelFieldProcess.value
         }],
         tooltipFieldNames: [{
-          fieldPath: list.dataStep.grid.bTooltip.tooltipField,
-          process: list.dataStep.grid.bTooltip.tooltipFieldProcess
+          fieldPath: list.dataStep.grid.bTooltip.tooltipField.value,
+          process: list.dataStep.grid.bTooltip.tooltipFieldProcess.value
         }],
-        iconColorFieldName: list.dataStep.grid.color.colorIdentifier,
-        useHttpQuicklooks: list.visualisationStep.thumbnailAndQuicklook.useHttpQuicklooks,
-        useHttpThumbnails: list.visualisationStep.thumbnailAndQuicklook.useHttpThumbnails
+        iconColorFieldName: list.dataStep.grid.color.colorIdentifier.value,
+        useHttpQuicklooks: list.visualisationStep.quicklook.useHttp.value,
+        useHttpThumbnails: list.visualisationStep.thumbnail.useHttp.value,
+        displayQuicklookOnMap: {
+          enabled: list.visualisationStep.quicklook.displayOnMap.enabled.value,
+          boundsFieldName: list.visualisationStep.quicklook.displayOnMap.boundsFieldName.value,
+        }
       };
-      if (list.dataStep.detailsTitle) {
-        fieldsConfig.detailsTitleTemplate = list.dataStep.detailsTitle;
+      if (list.dataStep.detailsTitle.value) {
+        fieldsConfig.detailsTitleTemplate = list.dataStep.detailsTitle.value;
       }
-      if (list.visualisationStep.thumbnailAndQuicklook.thumbnailUrl) {
-        fieldsConfig.urlThumbnailTemplate = list.visualisationStep.thumbnailAndQuicklook.thumbnailUrl;
+      if (list.visualisationStep.thumbnail.url.value) {
+        fieldsConfig.urlThumbnailTemplate = list.visualisationStep.thumbnail.url.value;
       }
 
-      if (list.visualisationStep.thumbnailAndQuicklook.quicklookUrls) {
-        fieldsConfig.urlImageTemplates = list.visualisationStep.thumbnailAndQuicklook.quicklookUrls.map(formValues => {
-          const quicklook: DescribedUrl = { url: formValues.url, description: formValues.description };
-          if (formValues.filter.field !== '') {
-            quicklook.filter = { field: formValues.filter.field, values: formValues.filter.values.map(v => v.value) };
+      if (list.visualisationStep.quicklook.urls.value) {
+        fieldsConfig.urlImageTemplates = list.visualisationStep.quicklook.urls.controls.map(f => f.customControls).map(formValues => {
+          const quicklook: DescribedUrl = { url: formValues.url.value, description: formValues.description.value };
+          if (formValues.filter.field.value !== '') {
+            quicklook.filter = { field: formValues.filter.field.value, values: formValues.filter.values.value.map(v => v.value) };
           }
           return quicklook;
         });
@@ -1091,39 +1132,62 @@ export class ConfigExportHelper {
 
       contrib.fieldsConfiguration = fieldsConfig;
       contrib.columns = [];
-      (list.dataStep.columns as Array<any>).forEach(c =>
+      for (const c of list.dataStep.columns.controls.map(c => c.customControls)) {
         contrib.columns.push({
-          columnName: c.columnName,
-          fieldName: c.fieldName,
-          dataType: c.dataType,
-          process: c.process,
-          useColorService: !!c.useColorService,
-          sort: c.sort
-        }));
+          columnName: c.columnName.value,
+          fieldName: c.fieldName.value,
+          dataType: c.dataType.value,
+          process: c.process.value,
+          useColorService: !!c.useColorService.value,
+          sort: c.sort.value
+        });
+      }
 
       contrib.details = [];
-      (list.dataStep.details).forEach((d, index) => {
-        const fields = d.fields.map(f => ({
-          path: f.path,
-          label: f.label,
-          process: f.process
+      list.dataStep.details.controls.map(c => c.customControls).forEach((d, index) => {
+        const fields: FieldDetail[] = d.fields.controls.map(c => c.customControls).map(f => ({
+          path: f.path.value,
+          label: f.label.value,
+          process: f.process.value
         }));
-        contrib.details.push({
-          name: d.name,
+        contrib.details?.push({
+          name: d.name.value,
           order: index + 1,
           fields
         });
       });
+
+
+      contrib.cardViewProperties = [];
+      if (list.dataStep?.cardViewProperties.value) {
+        for (const line of list.dataStep.cardViewProperties.controls.map(c => c.customControls)) {
+          for (const el of line.fields.controls.map(c => c.customControls)) {
+            contrib.cardViewProperties.push({
+              fieldName: el.fieldName.value,
+              lineNumber: el.lineNumber.value,
+              prettyName: el.prettyName.value,
+              icon: el.icon.value,
+              dataType: el.dataType.value,
+              process: el.process.value,
+              isTitle: el.isTitle.value,
+              sort: el.sort.value,
+            });
+          }
+        }
+      }
+
       contrib.includeMetadata = [];
+
       contribs.push(contrib);
     });
+
     return contribs;
   }
 
   public static getResultListComponent(resultLists: FormArray) {
-    const lists = [];
+    const lists = new Array<AnalyticComponentConfig>();
     resultLists.value.forEach(list => {
-      lists.push(this.getAnalyticsComponent(WIDGET_TYPE.resultlist, list, null));
+      lists.push(this.getAnalyticsComponent(WIDGET_TYPE.resultlist, list, undefined));
     });
 
     return lists;
@@ -1187,7 +1251,7 @@ export class ConfigExportHelper {
       if (!!widgetData.dataStep.metric) {
         idString += '-' + (widgetData.dataStep.metric.metricCollectFunction !== undefined ?
           widgetData.dataStep.metric.metricCollectFunction : '') + '-' + (!!widgetData.dataStep.metric.metricCollectField ?
-          widgetData.dataStep.metric.metricCollectField : '');
+            widgetData.dataStep.metric.metricCollectField : '');
       }
       if (agg.aggregationBucketOrInterval === 'bucket') {
         idString += '-' + agg.aggregationBucketsNumber;
@@ -1236,7 +1300,7 @@ export class ConfigExportHelper {
   private static getAnalyticsComponent(
     widgetType: any,
     widgetData: any,
-    itemPerLine: number,
+    itemPerLine: number | undefined,
     lookAndFeelConfigGlobal?: LookAndFeelGlobalFormGroup): AnalyticComponentConfig {
     const unmanagedRenderFields = widgetData.unmanagedFields.renderStep;
     const analyticsBoardWidth = 445;
@@ -1408,12 +1472,14 @@ export class ConfigExportHelper {
           nbGridColumns: unmanagedRenderFields.nbGridColumns,
           displayFilters: !!widgetData.settingsStep.displayFilters,
           hasListView: widgetData.dataStep?.columns.length > 0,
+          hasCardView: widgetData.dataStep?.cardViewProperties.length > 0,
           hasGridView: widgetData.dataStep.grid.aHasGridView,
-          defaultMode: widgetData.dataStep.defaultMode,
+          defaultMode: widgetData.dataStep.defaultMode.toString(),
           visualisationLink: widgetData.sactionStep.visualisationLink,
           downloadLink: widgetData.sactionStep.downloadLink,
           isBodyHidden: unmanagedRenderFields.isBodyHidden,
           isGeoSortActived: !!widgetData.settingsStep.isGeoSortActived,
+          isExportEnabled: !!widgetData.settingsStep.isExportEnabled,
           isAutoGeoSortActived: unmanagedRenderFields.isAutoGeoSortActived,
           selectedItemsEvent: unmanagedRenderFields.selectedItemsEvent,
           consultedItemEvent: unmanagedRenderFields.consultedItemEvent,
@@ -1439,13 +1505,14 @@ export class ConfigExportHelper {
     return component;
   }
 
-  public static getVisualisationList(visualisationList: ResultListVisualisationFormWidget[]){
-    const visualisations = [];
+  public static getVisualisationList(visualisationList: ResultListVisualisationFormWidget[]) {
+    const visualisations = new Array<VisualisationListInputConfig>();
     visualisationList.forEach(visualisationWidgetConfig => {
-      const visualisation: VisualisationListInputConfig =  {
+      const visualisation: VisualisationListInputConfig = {
         name: visualisationWidgetConfig.name,
         description: visualisationWidgetConfig.description,
-        dataGroups: []
+        dataGroups: [],
+        default: visualisationWidgetConfig.default
       };
       visualisation.dataGroups = this.buildDataGroups(visualisationWidgetConfig);
       visualisations.push(visualisation);
@@ -1453,7 +1520,7 @@ export class ConfigExportHelper {
     return visualisations;
   }
 
-  public static buildDataGroups(visualisationWidgetConfig: ResultListVisualisationFormWidget){
+  public static buildDataGroups(visualisationWidgetConfig: ResultListVisualisationFormWidget) {
     return visualisationWidgetConfig.dataGroups.map(dataG => {
       const dataGroup: DataGroupInputConfig = {
         filters: [],
@@ -1466,7 +1533,7 @@ export class ConfigExportHelper {
     });
   }
 
-  protected static  buildDataGroupCriteria(dataG: ResultListVisualisationDataGroupFormWidget) {
+  protected static buildDataGroupCriteria(dataG: ResultListVisualisationDataGroupFormWidget) {
     return dataG.filters.map(f => {
       // return a lowercase string
       const op = Expression.OpEnum[f.filterOperation];
@@ -1480,13 +1547,13 @@ export class ConfigExportHelper {
       };
 
       if (f.filterOperation === Expression.OpEnum.Like) {
-        criteria.value =  f.filterValues.filterInValues.map(v => v.value);
+        criteria.value = f.filterValues.filterInValues.map(v => v.value);
       } else if (isNumberOperator(f.filterOperation) &&
-      NUMERIC_TYPES.includes(criteria.type as unknown as CollectionReferenceDescriptionProperty.TypeEnum)
+        NUMERIC_TYPES.includes(criteria.type as unknown as CollectionReferenceDescriptionProperty.TypeEnum)
       ) {
         criteria.value = f.filterValues.filterEqualValues;
       } else if (f.filterOperation === Expression.OpEnum.Range) {
-        criteria.value =  f.filterValues.filterMinRangeValues + ';' + f.filterValues.filterMaxRangeValues;
+        criteria.value = f.filterValues.filterMinRangeValues + ';' + f.filterValues.filterMaxRangeValues;
       } else if (f.filterOperation === Expression.OpEnum.Eq) {
         criteria.value = f.filterValues.filterBoolean;
       }

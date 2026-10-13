@@ -22,15 +22,15 @@ import {
 import {
     ResultListVisualisationComponent
 } from '@analytics-config/components/edit-resultlist-visualisation/result-list-visualisation.component';
-import {ResultlistDataComponent} from '@analytics-config/components/resultlist-data/resultlist-data.component';
-import {Injectable} from '@angular/core';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialog} from '@angular/material/dialog';
-import {marker} from '@colsen1991/ngx-translate-extract-marker';
-import {DialogColorTableComponent} from '@map-config/components/dialog-color-table/dialog-color-table.component';
-import {DialogColorTableData, KeywordColor} from '@map-config/components/dialog-color-table/models';
-import {CollectionService} from '@services/collection-service/collection.service';
-import {CollectionField} from '@services/collection-service/models';
+import { ResultlistDataComponent } from '@analytics-config/components/resultlist-data/resultlist-data.component';
+import { Injectable } from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { DialogColorTableComponent } from '@map-config/components/dialog-color-table/dialog-color-table.component';
+import { DialogColorTableData, KeywordColor } from '@map-config/components/dialog-color-table/models';
+import { CollectionService } from '@services/collection-service/collection.service';
+import { CollectionField } from '@services/collection-service/models';
 import {
     NUMERIC_OR_DATE_OR_KEYWORD,
     NUMERIC_OR_DATE_OR_TEXT_TYPES,
@@ -39,10 +39,10 @@ import {
     toNumericOrKeywordOrBooleanObs,
     toOptionsObs
 } from '@services/collection-service/tools';
-import {DefaultConfig, DefaultValuesService} from '@services/default-values/default-values.service';
-import {MainFormService} from '@services/main-form/main-form.service';
-import {ConfigFormGroupComponent} from '@shared-components/config-form-group/config-form-group.component';
-import {CollectionConfigFormGroup} from '@shared-models/collection-config-form';
+import { DefaultConfig, DefaultValuesService } from '@services/default-values/default-values.service';
+import { MainFormService } from '@services/main-form/main-form.service';
+import { ConfigFormGroupComponent } from '@shared-components/config-form-group/config-form-group.component';
+import { CollectionConfigFormGroup } from '@shared-models/collection-config-form';
 import {
     ButtonFormControl,
     ButtonToggleFormControl,
@@ -62,15 +62,18 @@ import {
     TitleInputFormControl,
     TypedSelectFormControl
 } from '@shared-models/config-form';
-import {GeoFilterInputsBuilder} from '@shared-models/filter-input-builder';
-import {WidgetConfigFormGroup} from '@shared-models/widget-config-form';
-import {Expression} from 'arlas-api';
-import {ArlasColorService} from 'arlas-web-components';
-import {ArlasColorGeneratorLoader} from 'arlas-wui-toolkit';
-import {Observable} from 'rxjs';
-import {WidgetFormBuilder} from '../widget-form-builder';
-import {ResultlistDataConfigForm, ResultlistDetailFormGroup} from './form-group';
-import {buildDetailField, CellBackgroundEnum, ResultListDefaultMode, resultModeDefaultList} from './utils';
+import { GeoFilterInputsBuilder } from '@shared-models/filter-input-builder';
+import { WidgetConfigFormGroup } from '@shared-models/widget-config-form';
+import { CollectionReferenceDescriptionProperty, Expression } from 'arlas-api';
+import { ArlasColorService, CellBackgroundStyleEnum, ResultlistModeEnum } from 'arlas-web-components';
+import { ArlasColorGeneratorLoader } from 'arlas-wui-toolkit';
+import { Observable } from 'rxjs';
+import { WidgetFormBuilder } from '../widget-form-builder';
+import { ResultListCardLineFormGroup, ResultlistDataConfigForm, ResultlistDetailFormGroup } from './form-group';
+import {
+    buildCardViewProperties, buildDetailField,
+    resultModeDefaultList
+} from './utils';
 
 export class ResultlistConfigForm extends WidgetConfigFormGroup {
     public tabsOrder: string[] = ['dataStep', 'visualisationStep', 'sactionStep', 'settingsStep'];
@@ -88,14 +91,14 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
         dataStep: {
             collection: this.get('dataStep.collection') as SelectFormControl,
             defaultMode: this.get('dataStep.defaultMode') as ButtonToggleFormControl,
-            columns: this.get('dataStep.columns') as FormArray,
+            columns: this.get('dataStep.columns') as FormArray<ResultlistColumnFormGroup>,
             grid: {
                 aHasGridView: this.get('dataStep.grid.aHasGridView') as SlideToggleFormControl,
                 aTitle: {
                     titleLabelField: this.get('dataStep.grid.aTitle.titleLabelField') as SelectFormControl,
                     titleLabelFieldProcess: this.get('dataStep.grid.aTitle.titleLabelFieldProcess') as TextareaFormControl,
                 },
-                bTooltip:{
+                bTooltip: {
                     tooltipField: this.get('dataStep.grid.bTooltip.tooltipField') as SelectFormControl,
                     tooltipFieldProcess: this.get('dataStep.grid.bTooltip.tooltipFieldProcess') as TextareaFormControl,
                 },
@@ -103,8 +106,9 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                     colorIdentifier: this.get('dataStep.grid.color.colorIdentifier') as SelectFormControl
                 }
             },
+            cardViewProperties: this.get('dataStep.cardViewProperties') as FormArray<ResultListCardLineFormGroup>,
             detailsTitle: this.get('dataStep.detailsTitle') as HiddenFormControl,
-            details: this.get('dataStep.details') as FormArray,
+            details: this.get('dataStep.details') as FormArray<ResultlistDetailFormGroup>,
             idFieldName: this.get('dataStep.idFieldName') as HiddenFormControl,
         },
         sactionStep: {
@@ -115,15 +119,22 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
             searchSize: this.get('settingsStep.searchSize') as SliderFormControl,
             displayFilters: this.get('settingsStep.displayFilters') as SlideToggleFormControl,
             isGeoSortActived: this.get('settingsStep.isGeoSortActived') as SlideToggleFormControl,
+            isExportEnabled: this.get('settingsStep.isExportEnabled') as SlideToggleFormControl,
             cellBackgroundStyle: this.get('settingsStep.cellBackgroundStyle') as SelectFormControl
         },
         visualisationStep: {
             visualisationsList: this.get('visualisationStep.visualisationsList') as FormArray,
-            thumbnailAndQuicklook: {
-                useHttpThumbnails: this.get('visualisationStep.thumbnailAndQuicklook.useHttpThumbnails') as SlideToggleFormControl,
-                useHttpQuicklooks: this.get('visualisationStep.thumbnailAndQuicklook.useHttpQuicklooks') as SlideToggleFormControl,
-                thumbnailUrl: this.get('visualisationStep.thumbnailAndQuicklook.thumbnailUrl') as FieldTemplateControl,
-                quicklookUrls: this.get('visualisationStep.thumbnailAndQuicklook.quicklookUrls') as FormArray,
+            thumbnail: {
+                useHttp: this.get('visualisationStep.thumbnail.useHttp') as SlideToggleFormControl,
+                url: this.get('visualisationStep.thumbnail.url') as FieldTemplateControl,
+            },
+            quicklook: {
+                useHttp: this.get('visualisationStep.quicklook.useHttp') as SlideToggleFormControl,
+                urls: this.get('visualisationStep.quicklook.urls') as FormArray<ResultlistQuicklookFormGroup>,
+                displayOnMap: {
+                    enabled: this.get('visualisationStep.quicklook.displayOnMap.enabled') as SlideToggleFormControl,
+                    boundsFieldName: this.get('visualisationStep.quicklook.displayOnMap.boundsFieldName') as SelectFormControl
+                }
             },
             visualisations: this.get('visualisationStep.visualisations') as ConfigFormGroup,
         },
@@ -190,28 +201,36 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                     ),
                     defaultMode: new ButtonToggleFormControl(
                         '',
-                        resultModeDefaultList
-                        ,
+                        resultModeDefaultList.map(o => ({ ...o })),
                         marker('List default mode description'),
                         {
                             resetDependantsOnChange: true,
-                            dependsOn: () => [this.customControls.dataStep.grid.aHasGridView],
+                            dependsOn: () => [this.customControls.dataStep.grid.aHasGridView,
+                            this.customControls.dataStep.cardViewProperties as any],
                             onDependencyChange: (control: ButtonToggleFormControl) => {
-                                const hasValueGridAndHaseGridFalse = !this.customControls.dataStep.grid.aHasGridView.value &&
-                                    this.customControls.dataStep.defaultMode.value === ResultListDefaultMode.grid;
-
                                 // if value was grid and grid is disabled set value to false
-                                if(hasValueGridAndHaseGridFalse) {
-                                    control.disableOption(ResultListDefaultMode.grid);
-                                    this.customControls.dataStep.defaultMode.setValue(ResultListDefaultMode.list.toString());
+                                if (!this.customControls.dataStep.grid.aHasGridView.value) {
+                                    this.customControls.dataStep.defaultMode.disableOption(ResultlistModeEnum.grid);
+                                    if (this.customControls.dataStep.defaultMode.value === ResultlistModeEnum.grid) {
+                                        this.customControls.dataStep.defaultMode.setValue(ResultlistModeEnum.list);
+                                    }
                                 } else {
-                                    control.enableOption(ResultListDefaultMode.grid);
+                                    this.customControls.dataStep.defaultMode.enableOption(ResultlistModeEnum.grid);
+                                }
+
+                                if (this.customControls.dataStep.cardViewProperties.length === 0) {
+                                    this.customControls.dataStep.defaultMode.disableOption(ResultlistModeEnum.card);
+                                    if (this.customControls.dataStep.defaultMode.value === ResultlistModeEnum.card) {
+                                        this.customControls.dataStep.defaultMode.setValue(ResultlistModeEnum.list);
+                                    }
+                                } else {
+                                    this.customControls.dataStep.defaultMode.enableOption(ResultlistModeEnum.card);
                                 }
                             }
                         }),
-                    columns: (new FormArray([], {
+                    columns: new FormArray<ResultlistColumnFormGroup>([], {
                         validators: Validators.required,
-                    })),
+                    }),
                     grid: new HiddenConfigFromGroup({
                         aHasGridView: new SlideToggleFormControl(
                             false,
@@ -241,7 +260,6 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                                 marker('Transformation title'),
                                 marker('Transformation title description'),
                                 '',
-                                1,
                                 {
                                     optional: true,
                                     validators: [TextareaFormControl.processValidator('result')],
@@ -277,7 +295,6 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                                 marker('Transformation tooltip'),
                                 marker('Transformation tooltip description'),
                                 '',
-                                1,
                                 {
                                     optional: true,
                                     validators: [TextareaFormControl.processValidator('result')],
@@ -309,7 +326,8 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                             ),
                         }).withTitle(marker('Color configuration')),
                     }),
-                    details: new FormArray([]),
+                    details: new FormArray<ResultlistDetailFormGroup>([]),
+                    cardViewProperties: new FormArray<ResultListCardLineFormGroup>([]),
 
                     detailsTitle: new HiddenFormControl(
                         '',
@@ -367,25 +385,30 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                     isGeoSortActived: new SlideToggleFormControl(
                         false,
                         marker('Activate geosort'),
-                        marker('Activate geosort')
+                        marker('Activate geosort description')
+                    ),
+                    isExportEnabled: new SlideToggleFormControl(
+                        false,
+                        marker('Enable CSV export'),
+                        marker('Enable CSV export description')
                     ),
                     cellBackgroundStyle: new SelectFormControl(
-                        CellBackgroundEnum.filled,
+                        CellBackgroundStyleEnum.filled,
                         marker('Background style of cells'),
                         marker('Background style of cells Description'),
                         false,
                         [
-                            {label: marker('Filled'), value: CellBackgroundEnum.filled},
-                            {label: marker('Outlined'), value: CellBackgroundEnum.outlined},
+                            { label: marker('Filled'), value: CellBackgroundStyleEnum.filled },
+                            { label: marker('Outlined'), value: CellBackgroundStyleEnum.outlined },
                         ],
                         {
                             optional: true,
                             dependsOn: () => [
                                 this.customControls.dataStep.columns as any
                             ],
-                            onDependencyChange: (control: ButtonFormControl) => {
+                            onDependencyChange: control => {
                                 const useColorService = this.customControls.dataStep.columns.controls
-                                    .filter(c => c.get('useColorService').value === true).length > 0;
+                                    .some(c => c.get('useColorService').value === true);
                                 control.enableIf(useColorService);
                             }
                         }
@@ -393,18 +416,13 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                 }).withTabName(marker('Resultlist settings')),
                 visualisationStep: new ConfigFormGroup({
                     visualisationsList: new FormArray([]),
-                    thumbnailAndQuicklook: new ConfigFormGroup({
-                        useHttpThumbnails: new SlideToggleFormControl(
+                    thumbnail: new ConfigFormGroup({
+                        useHttp: new SlideToggleFormControl(
                             false,
                             marker('Use http thumbnails'),
                             marker('Use http thumbnails description')
                         ),
-                        useHttpQuicklooks: new SlideToggleFormControl(
-                            false,
-                            marker('Use http quicklooks'),
-                            marker('Use http quicklooks description')
-                        ),
-                        thumbnailUrl: new FieldTemplateControl(
+                        url: new FieldTemplateControl(
                             '',
                             marker('Thumbnail url'),
                             marker('Thumbnail url description'),
@@ -420,15 +438,51 @@ export class ResultlistConfigForm extends WidgetConfigFormGroup {
                                 }
                             }
                         ),
-                        quicklookUrls: new FormArray([]),
+                    }).withTitle(marker('Thumbnail')),
+                    quicklook: new ConfigFormGroup({
+                        useHttp: new SlideToggleFormControl(
+                            false,
+                            marker('Use http quicklooks'),
+                            marker('Use http quicklooks description')
+                        ),
+                        urls: new FormArray<ResultlistQuicklookFormGroup>([]),
                         quicklook: new ComponentFormControl(
                             EditResultlistQuicklookComponent,
                             {
                                 collectionControl: () => this.customControls.dataStep.collection,
-                                control: () => this.customControls.visualisationStep.thumbnailAndQuicklook.quicklookUrls
+                                control: () => this.customControls.visualisationStep.quicklook.urls
                             }
-                        )
-                    }).withTitle(marker('Thumbnail and Quicklook')),
+                        ),
+                        displayOnMap: new ConfigFormGroup({
+                            enabled: new SlideToggleFormControl(
+                                false,
+                                marker('Enable quicklook on map'),
+                                marker('Enable quicklook on map description')
+                            ),
+                            boundsFieldName: new SelectFormControl(
+                                '',
+                                marker('Quicklook on map bounds field'),
+                                marker('Quicklook on map bounds field description'),
+                                true,
+                                toOptionsObs(collectionService.getCollectionFields(collection,
+                                    [CollectionReferenceDescriptionProperty.TypeEnum.GEOMETRY])),
+                                {
+                                    optional: true,
+                                    dependsOn: () => [
+                                        this.customControls.dataStep.collection,
+                                        this.customControls.visualisationStep.quicklook.displayOnMap.enabled
+                                    ],
+                                    onDependencyChange: (control: SelectFormControl) => {
+                                        if (!this.collection || this.customControls.dataStep.collection.dirty) {
+                                            this.updateSelectFormControl(collectionService, control);
+                                        }
+
+                                        control.enableIf(!!this.customControls.visualisationStep.quicklook.displayOnMap.enabled.value);
+                                    }
+                                }
+                            )
+                        })
+                    }).withTitle(marker('Quicklook')),
                     visualisations: new ConfigFormGroup({
                         visualisation: new ComponentFormControl(
                             ResultListVisualisationComponent,
@@ -529,7 +583,6 @@ export class ResultlistColumnFormGroup extends CollectionConfigFormGroup {
                     marker('Transformation'),
                     '',
                     '',
-                    1,
                     {
                         optional: true,
                         validators: [TextareaFormControl.processValidator('result')],
@@ -687,7 +740,10 @@ export class ResultlistQuicklookFormGroup extends FormGroup {
                                     collection,
                                     this.customControls.filter.field.value)
                                     .then(keywords => {
-                                        control.setSyncOptions(keywords.map(k => ({value: k, label: k})));
+                                        control.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
+                                    }).catch(() => {
+                                        console.log('Could not fetch term aggregation');
+                                        control.setSyncOptions([]);
                                     });
                             } else {
                                 control.setSyncOptions([]);
@@ -707,7 +763,8 @@ export class ResultListVisualisationsFormGroup extends FormGroup {
     public customControls = {
         name: this.get('name') as InputFormControl,
         description: this.get('description') as TextareaFormControl,
-        dataGroups: this.get('dataGroups') as FormArray<ResultListVisualisationsDataGroup>
+        dataGroups: this.get('dataGroups') as FormArray<ResultListVisualisationsDataGroup>,
+        default: this.get('default') as HiddenFormControl
     };
 
     public constructor(fieldsObs?: Observable<Array<CollectionField>>, collection?: string, collectionService?: CollectionService) {
@@ -722,12 +779,17 @@ export class ResultListVisualisationsFormGroup extends FormGroup {
                 marker('Visualisation description'),
                 '',
                 '',
-                null,
                 {
                     optional: true,
                 }
             ),
-            dataGroups: new FormArray<ResultListVisualisationsDataGroup>([], [Validators.required, Validators.minLength(1)])
+            dataGroups: new FormArray<ResultListVisualisationsDataGroup>([], [Validators.required, Validators.minLength(1)]),
+            default: new HiddenFormControl(
+                false,
+                undefined,
+                {
+                    optional: true
+                })
         });
     }
 }
@@ -754,8 +816,8 @@ export class ResultListVisualisationsDataGroup extends FormGroup {
                 '',
                 false,
                 [
-                    {label: marker('Titiler'), value: 'titiler'},
-                    {label: marker('Other'), value: 'other'},
+                    { label: marker('Titiler'), value: 'titiler' },
+                    { label: marker('Other'), value: 'other' },
                 ],
                 {
                     validators: [Validators.required]
@@ -975,6 +1037,13 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
         columns.forEach(c => formGroup.customControls.dataStep.columns
             .push(this.buildColumn(collection)));
 
+        const cardsProp = (value.dataStep || {}).cardViewProperties || [];
+        cardsProp.forEach(resultListCard => {
+            const line = new ResultListCardLineFormGroup();
+            resultListCard.line.forEach(_ => line.customControls.fields.push(buildCardViewProperties(this.collectionService, collection)));
+            formGroup.customControls.dataStep.cardViewProperties.push(line);
+        });
+
         // same for the details, and the fields within
         const details = (value.dataStep || {}).details || [];
         details.forEach(d => {
@@ -1014,10 +1083,10 @@ export class ResultlistFormBuilderService extends WidgetFormBuilder {
     public buildVisualisationsDataGroupCriteria(collection: string) {
         const collectionFields = this.collectionService.getCollectionFields(collection);
         const operators = [Expression.OpEnum.Range,
-            Expression.OpEnum.Eq, Expression.OpEnum.Like,
-            Expression.OpEnum.Lte, Expression.OpEnum.Lt,
-            Expression.OpEnum.Gte, Expression.OpEnum.Gt,
-            Expression.OpEnum.Ne
+        Expression.OpEnum.Eq, Expression.OpEnum.Like,
+        Expression.OpEnum.Lte, Expression.OpEnum.Lt,
+        Expression.OpEnum.Gte, Expression.OpEnum.Gt,
+        Expression.OpEnum.Ne
         ];
 
         const control = new ResultListVisualisationsDataGroupCondition(collectionFields,

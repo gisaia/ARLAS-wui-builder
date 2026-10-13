@@ -18,6 +18,7 @@
  */
 
 import { NgModule } from '@angular/core';
+import { IconPickerModule } from '@gisaia-team/ngx-icon-picker';
 import { SharedModule } from '@shared/shared.module';
 import { ArlasToolkitSharedModule } from 'arlas-wui-toolkit';
 import { GlobalResultListComponent } from './components/global-result-list/global-result-list.component';
@@ -28,7 +29,8 @@ import { ResultListConfigRoutingModule } from './result-list-config-routing.modu
         ArlasToolkitSharedModule,
         ResultListConfigRoutingModule,
         SharedModule,
-        GlobalResultListComponent
+        GlobalResultListComponent,
+        IconPickerModule
     ]
 })
 export class ResultListConfigModule { }

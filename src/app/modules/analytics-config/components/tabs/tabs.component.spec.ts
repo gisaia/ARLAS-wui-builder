@@ -3,7 +3,7 @@ import { mockArlasStartupService } from '@app/test/arlas-startup.service.mock';
 import { mockMainFormService } from '@app/test/main-form.service.mock';
 import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
-import { ArlasStartupService } from 'arlas-wui-toolkit';
+import { ArlasStartupService, ArlasTaskService, GET_OPTIONS } from 'arlas-wui-toolkit';
 import { LoggerModule } from 'ngx-logger';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TabsComponent } from './tabs.component';
@@ -22,6 +22,11 @@ describe('TabsComponent', () => {
                 }),
             ],
             providers: [
+                ArlasTaskService,
+                {
+                    provide: GET_OPTIONS,
+                    useValue: () => { }
+                },
                 {
                     provide: ArlasStartupService,
                     useValue: mockArlasStartupService
@@ -32,7 +37,7 @@ describe('TabsComponent', () => {
                 }
             ]
         })
-        .compileComponents();
+            .compileComponents();
 
         fixture = TestBed.createComponent(TabsComponent);
         component = fixture.componentInstance;

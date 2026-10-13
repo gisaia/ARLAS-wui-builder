@@ -19,19 +19,18 @@
 @use "variables.scss" as var;
 
 .form-control-title {
-   @include var.group-title();
-   font-size: 22px;
+   &--borderless {
+      border-top: 0;
+   }
 }
+
 
 .tab-error {
    color: var.$error-color;
 }
 
-.main-form-group-div {
-   padding-bottom: 5px;
-}
-.no-child-step-tabs-div{
-   padding-bottom: 1px;
+.no-child-step-tabs-div {
+   background-color: var(--arlas-builder-config-background-color);
 }
 
 .no-overflow {
@@ -41,6 +40,9 @@
 }
 
 .stepper-for-config-element {
+   // Used to create gaps between logical groups
+   border-top: var.$default-spacing solid var(--arlas-builder-background-color);
+
    &__nav {
       display: flex;
       justify-content: center;

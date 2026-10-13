@@ -21,10 +21,10 @@ import {
   SubTableColumnFormGroup,
   SubTableFormGroup
 } from '@analytics-config/services/metrics-table-form-builder/metrics-table-form-builder.service';
-import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragStart, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, DestroyRef, forwardRef, inject, Inject, OnInit, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AbstractControl, FormArray } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -83,7 +83,7 @@ export class AddSubtableDialogComponent implements OnInit {
     const formBuilder = this.metricsTableFormBuilder;
     if (!!this.dialogData.subTable) {
       this.formGroup = this.dialogData.subTable;
-      (this.formGroup.get('columns') as FormArray).controls.forEach(c => {
+      this.formGroup.customControls.columns.controls.forEach(c => {
         this.initMetricCollectField(c as SubTableColumnFormGroup);
       });
       this.title = marker('Edit sub table');
@@ -94,7 +94,7 @@ export class AddSubtableDialogComponent implements OnInit {
     }
     this.defaultKey = formBuilder.defaultKey;
     if (this.formGroup) {
-      this.formGroup.get('collection').valueChanges.subscribe(v => {
+      this.formGroup.customControls.collection.valueChanges.subscribe(v => {
         this.columns.clear();
         this.columnTable.renderRows();
       });
@@ -116,13 +116,13 @@ export class AddSubtableDialogComponent implements OnInit {
   }
 
   private initMetricCollectField(subTableColumn: SubTableColumnFormGroup) {
-    const control: SelectFormControl = subTableColumn.get('metricCollectField') as SelectFormControl;
+    const control: SelectFormControl = subTableColumn.customControls.metricCollectField;
     control.disable();
     if (control.value && control.value !== '') {
       control.enable();
       this.setMetricCollectFieldValues(control.value, control);
     }
-    subTableColumn.get('metricCollectFunction').valueChanges
+    subTableColumn.customControls.metricCollectFunction.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(v => {
         this.setMetricCollectFieldValues(v, control);
@@ -149,16 +149,16 @@ export class AddSubtableDialogComponent implements OnInit {
   }
 
   public deleteColumn(colIndex: number) {
-    (this.formGroup.get('columns') as FormArray).removeAt(colIndex);
+    this.formGroup.customControls.columns.removeAt(colIndex);
     this.columnTable.renderRows();
   }
 
   public get columns() {
-    return this.formGroup?.get('columns') as FormArray;
+    return this.formGroup.customControls.columns;
   }
 
   public get collection() {
-    return this.formGroup?.get('collection').value;
+    return this.formGroup.customControls.collection.value;
   }
 
   public drop(event: CdkDragDrop<any[]>) {
@@ -171,7 +171,7 @@ export class AddSubtableDialogComponent implements OnInit {
     this.columnTable.renderRows();
   }
 
-  public dragStarted(event) {
+  public dragStarted(event: CdkDragStart) {
     this.dragDisabled = true;
   }
 }

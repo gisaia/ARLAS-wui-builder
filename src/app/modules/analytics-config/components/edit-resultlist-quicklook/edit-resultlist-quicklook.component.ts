@@ -49,7 +49,7 @@ import { SelectFormControl } from '@shared-models/config-form';
 export class EditResultlistQuicklookComponent implements OnInit {
 
   @Input() public collectionControl: SelectFormControl;
-  @Input() public control: FormArray;
+  @Input() public control: FormArray<ResultlistQuicklookFormGroup>;
   @ViewChild('quicklookTable', { static: true }) public quicklookTable;
 
   public displayedColumns: string[] = ['action', 'url', 'description', 'filterField', 'filterValues'];

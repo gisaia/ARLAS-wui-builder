@@ -17,7 +17,7 @@
  * under the License.
  */
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
-import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -26,10 +26,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { marker } from '@colsen1991/ngx-translate-extract-marker';
+import { MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
+import { MapVisualisationFormGroup } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MainFormService } from '@services/main-form/main-form.service';
 import { ConfirmModalComponent } from '@shared-components/confirm-modal/confirm-modal.component';
-import { camelize } from '@utils/tools';
 import { LayerIdToName } from 'arlas-map';
 import { Subscription } from 'rxjs';
 
@@ -54,25 +55,23 @@ export interface Layer {
     MatMenuModule
   ]
 })
-export class VisualisationsComponent implements OnInit, AfterViewChecked, OnDestroy {
+export class VisualisationsComponent implements AfterViewChecked, OnDestroy {
 
   public displayedColumns: string[] = ['name', 'layers', 'displayed', 'action'];
-  public layersFa: FormArray;
-  public visualisationsFa: FormArray;
+  public layersFa: FormArray<MapLayerFormGroup>;
+  public visualisationsFa: FormArray<MapVisualisationFormGroup>;
 
   private confirmDeleteSub: Subscription;
 
   public constructor(
     protected mainFormService: MainFormService,
-    public dialog: MatDialog,
-    private cdRef: ChangeDetectorRef
+    private readonly dialog: MatDialog,
+    private readonly cdRef: ChangeDetectorRef
 
   ) {
     this.layersFa = this.mainFormService.mapConfig.getLayersFa();
     this.visualisationsFa = this.mainFormService.mapConfig.getVisualisationsFa();
   }
-
-  public ngOnInit() { }
 
   public ngOnDestroy() {
     if (this.confirmDeleteSub) {
@@ -82,10 +81,6 @@ export class VisualisationsComponent implements OnInit, AfterViewChecked, OnDest
 
   public ngAfterViewChecked() {
     this.cdRef.detectChanges();
-  }
-
-  public camelize(text: string): string {
-    return camelize(text);
   }
 
   public confirmDelete(visualisationId: number, visualisationName: string): void {

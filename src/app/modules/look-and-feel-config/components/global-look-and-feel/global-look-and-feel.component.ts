@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, forwardRef, OnInit } from '@angular/core';
+import { Component, forwardRef } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { LookAndFeelGlobalFormGroup } from '@look-and-feel-config/services/look-and-feel-global-form-builder/form-group';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -32,19 +32,17 @@ import { CollectionUnitFormGroup } from '@shared-models/collection-unit-form-gro
     forwardRef(() => ConfigFormGroupComponent)
   ]
 })
-export class GlobalLookAndFeelComponent implements OnInit {
+export class GlobalLookAndFeelComponent {
 
   public lookAndFeelFg: LookAndFeelGlobalFormGroup;
-  public unitsFg: FormArray;
+  public unitsFg: FormArray<CollectionUnitFormGroup>;
 
   public constructor(
     private readonly mainFormService: MainFormService,
     private readonly collectionService: CollectionService
   ) {
     this.lookAndFeelFg = this.mainFormService.lookAndFeelConfig.getGlobalFg();
-  }
 
-  public ngOnInit() {
     const configuredCollections = this.mainFormService.getAllCollections(this.collectionService);
 
     /** keeping formarray order */

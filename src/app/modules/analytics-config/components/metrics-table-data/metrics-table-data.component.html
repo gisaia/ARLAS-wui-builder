@@ -51,12 +51,13 @@
                 }
 
                 @let metricCollectField = c.get('metricCollectField').value;
+                @let metricCollectFunction = c.get('metricCollectFunction').value;
                 @if (metricCollectField) {
                   <span>
-                    {{ 'metric of field' | translate : { metric: c.get("metricCollectFunction").value | translate,
+                    {{ 'metric of field' | translate : { metric: metricCollectFunction | translate,
                       field: metricCollectField | getFieldDisplayName | translate} }}</span>
                 } @else {
-                  <span>{{ metricCollectField | translate }}</span>
+                  <span>{{ metricCollectFunction | translate }}</span>
                 }
               </div>
             </div>

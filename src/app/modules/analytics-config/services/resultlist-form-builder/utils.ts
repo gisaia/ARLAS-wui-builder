@@ -17,10 +17,15 @@
  * under the License.
  */
 
+import { marker } from '@colsen1991/ngx-translate-extract-marker';
 import { CollectionService } from '@services/collection-service/collection.service';
-import { NUMERIC_OR_DATE_OR_TEXT_TYPES, toOptionsObs } from '@services/collection-service/tools';
-import { ResultlistDetailFieldFormGroup } from './form-group';
-import {marker} from '@colsen1991/ngx-translate-extract-marker';
+import {
+  NUMERIC_OR_DATE_OR_KEYWORD,
+  NUMERIC_OR_DATE_OR_TEXT_TYPES,
+  toOptionsObs
+} from '@services/collection-service/tools';
+import { ResultlistModeEnum } from 'arlas-web-components';
+import { ResultListCardFieldsFormGroup, ResultlistDetailFieldFormGroup } from './form-group';
 
 export function buildDetailField(collectionService: CollectionService, collection: string) {
   return new ResultlistDetailFieldFormGroup(
@@ -29,24 +34,20 @@ export function buildDetailField(collectionService: CollectionService, collectio
   );
 }
 
-/**
- * Result mode enum
- */
-export enum ResultListDefaultMode {
-  grid = 'grid',
-  list = 'list',
+/** Builds a card field form group with options fetched from the given collection. */
+export function buildCardViewProperties(collectionService: CollectionService, collection: string) {
+  const fieldObs = toOptionsObs(collectionService.getCollectionFields(collection, NUMERIC_OR_DATE_OR_KEYWORD));
+  return new ResultListCardFieldsFormGroup(
+      fieldObs,
+      collection
+  );
 }
 
 /**
  *  Default result mode selection
  */
 export const resultModeDefaultList = [
-  {label: marker('List mode'), value: ResultListDefaultMode.list},
-  {label: marker('Grid mode'), value: ResultListDefaultMode.grid}
+  { label: marker('List mode'), value: ResultlistModeEnum.list },
+  { label: marker('Card mode'), value: ResultlistModeEnum.card },
+  { label: marker('Grid mode'), value: ResultlistModeEnum.grid }
 ];
-
-
-export enum CellBackgroundEnum {
-  filled = 'filled',
-  outlined = 'outlined'
-}

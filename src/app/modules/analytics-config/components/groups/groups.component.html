@@ -1,4 +1,4 @@
-<div class="groups-wrapper" [formGroup]="contentFg">
+<div class="groups-wrapper" [formGroup]="contentFg()">
   @if (groupsFa.touched && groupsFa?.errors?.required) {
     <mat-error>
       {{'At least one group is required within a tab' | translate}}
@@ -31,7 +31,7 @@
 
     @if (groupsPreview.length > 0) {
       <div class="preview-group">
-        <arlas-analytics-board #analyticsBoard [showSpinner]="showSpinner" [diameterSpinner]="spinnerDiameter" [colorSpinner]="spinnerColor"></arlas-analytics-board>
+        <arlas-analytics-board [showSpinner]="showSpinner" [diameterSpinner]="spinnerDiameter" [colorSpinner]="spinnerColor"></arlas-analytics-board>
       </div>
     }
   </div>

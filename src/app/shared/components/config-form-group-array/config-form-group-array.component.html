@@ -1,10 +1,12 @@
 <!-- Displaying a control according to its enabled state is not yet supported -->
-<div class="array_header">
+<!-- Add form-control-title class here to display a separation between -->
+<div class="form-control-title array_header">
   @if (configFormGroupArray.title) {
     <h3 class="form-control-title">{{configFormGroupArray.title | translate}}</h3>
   }
   @if (configFormGroupArray.description) {
-    <mat-icon class="icon" matTooltip="{{configFormGroupArray.description | translate}}" matTooltipPosition="right">info_outline</mat-icon>
+    <mat-icon class="icon" [matTooltip]="configFormGroupArray.description | translate"
+      matTooltipPosition="right">info_outline</mat-icon>
   }
 </div>
 @if (configFormGroupArray.note) {

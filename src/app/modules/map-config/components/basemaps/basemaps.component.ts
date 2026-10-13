@@ -41,7 +41,7 @@ import { ArlasSettingsService } from 'arlas-wui-toolkit';
 })
 export class BasemapsComponent implements OnInit {
 
-  public basemapFa: FormArray;
+  public basemapFa: FormArray<BasemapFormGroup>;
   public basemaps: Basemap[] = [];
   public defaultBasemapFc: HiddenFormControl;
 

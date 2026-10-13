@@ -19,7 +19,7 @@
 import {
   ResultlistColumnFormGroup, ResultlistFormBuilderService
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
-import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragStart, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -48,7 +48,7 @@ import { SelectFormControl } from '@shared-models/config-form';
 })
 export class EditResultlistColumnsComponent implements OnInit {
 
-  @Input() public control: FormArray;
+  @Input() public control: FormArray<ResultlistColumnFormGroup>;
   @Input() public collection: SelectFormControl;
   @ViewChild('columnTable', { static: true }) public columnTable;
 
@@ -57,14 +57,13 @@ export class EditResultlistColumnsComponent implements OnInit {
   public displayedColumns: string[] = ['action', 'name', 'field', 'unit', 'process', 'colorService'];
 
   public constructor(
-    private resultlistFormBuilder: ResultlistFormBuilderService
-  ) {
-  }
+    private readonly resultlistFormBuilder: ResultlistFormBuilderService
+  ) { }
 
   public ngOnInit() {
-    if (!!this.collection) {
+    if (this.collection) {
       this.collection.valueChanges.subscribe(c => {
-        (this.control as FormArray).clear();
+        this.control.clear();
       });
     }
   }
@@ -89,18 +88,18 @@ export class EditResultlistColumnsComponent implements OnInit {
     this.columnTable.renderRows();
   }
 
-  public dragStarted(event) {
+  public dragStarted(event: CdkDragStart) {
     this.dragDisabled = true;
   }
 
-  public setSort(index, sort: string) {
-    this.control.controls.forEach( c => c.get('sort').setValue(''));
+  public setSort(index: number, sort: string) {
+    this.control.controls.forEach( c => c.customControls.sort.setValue(''));
     if (sort === '') {
-      this.control.controls[index].get('sort').setValue('asc');
+      this.control.controls[index].customControls.sort.setValue('asc');
     } else if (sort === 'asc') {
-      this.control.controls[index].get('sort').setValue('desc');
+      this.control.controls[index].customControls.sort.setValue('desc');
     } else {
-      this.control.controls[index].get('sort').setValue('');
+      this.control.controls[index].customControls.sort.setValue('');
     }
   }
 }

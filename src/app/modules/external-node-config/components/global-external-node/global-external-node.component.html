@@ -1,5 +1,5 @@
 <div id="externalNode">
-  <h3 class="form-control-title">{{"Custom configuration" | translate}}</h3>
+  <h3 class="form-control-title">{{"Extra modules" | translate}}</h3>
   @if (schemas && schemas.length>0) {
     <div class="config-element">
       <div class="config-element-container" >
@@ -23,7 +23,7 @@
       </div>
     </div>
   }
-  <form [formGroup]="externalNodeForm" style="height: 80vh; margin:10px">
+  <form [formGroup]="externalNodeForm" class="external-node__form">
     <json-editor [options]="editorOptions" formControlName="externalNode" #editor></json-editor>
   </form>
 </div>

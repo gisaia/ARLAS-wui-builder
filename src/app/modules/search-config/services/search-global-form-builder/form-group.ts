@@ -33,7 +33,7 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
           null,
           marker('Placeholder'),
           marker('Placeholder descritpion'),
-          null,
+          undefined,
           { title: marker('Search') }),
         autocompleteSize: new SliderFormControl(
           null,
@@ -51,8 +51,9 @@ export class SearchGlobalFormGroup extends ConfigFormGroup {
           {
             searchConfigurations: () => this.customControls.searchConfigurations
           },
+          {},
           {
-
+            title: marker('Search configuration by collection')
           }
         ),
         unmanagedFields: new FormGroup({

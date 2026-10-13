@@ -50,7 +50,13 @@
         },
         "styleStep": {
           "geometryType": "fill",
-          "lineType": "solid",
+          "line": {
+            "type": "solid",
+            "width": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 2
+            }
+          },
           "opacity": {
             "propertySource": "Fix slider",
             "propertyFixSlider": 1
@@ -63,65 +69,71 @@
             "propertySource": "Fix slider",
             "propertyFixSlider": 1.5
           },
-          "strokeColorFg": {
-            "propertySource": "Fix color",
-            "propertyFixColor": "#fff"
+          "stroke": {
+            "color":{
+              "propertySource": "Fix color",
+              "propertyFixColor": "#fff"
+            },
+            "width": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": "0"
+            },
+            "opacity": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": "0"
+            }
           },
-          "strokeWidthFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": "0"
+          "label": {
+            "content": {
+              "propertySource": "Fix input",
+              "propertyFixInput": "→"
+            },
+            "size": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 12
+            },
+            "rotation": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": "0"
+            },
+            "offset": {
+              "dx": "0",
+              "dy": "0"
+            },
+            "halo": {
+              "blur": {
+                "propertySource": "Fix slider",
+                "propertyFixSlider": "0"
+              },
+              "width": {
+                "propertySource": "Fix slider",
+                "propertyFixSlider": "0"
+              },
+              "color": {
+                "propertySource": "Fix color",
+                "propertyFixColor": "#000"
+              }
+            },
+            "layout": {
+              "overlap": true,
+              "placement": "point",
+              "alignment": "center"
+            }
           },
-          "strokeOpacityFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": "0"
-          },
-          "widthFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 2
-          },
-          "labelContentFg": {
-            "propertySource": "Fix input",
-            "propertyFixInput": "→"
-          },
-          "labelSizeFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 12
-          },
-          "labelRotationFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": "0"
-          },
-          "labelHaloBlurFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": "0"
-          },
-          "labelHaloWidthFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": "0"
-          },
-          "labelHaloColorFg": {
-            "propertySource": "Fix color",
-            "propertyFixColor": "#000"
-          },
-          "labelOverlapFg": true,
-          "labelOffsetFg": {
-            "dx": "0",
-            "dy": "0"
-          },
-          "labelPlacementCtrl": "point",
-          "labelAlignmentCtrl": "center",
-          "enableExtrusion": false,
-          "extrusionValue": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 1
-          },
-          "extrusionExaggeration": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 1
-          },
-          "extrusionOpacity": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 1
+          "extrusion": {
+            "enable": false,
+            "value": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 1
+            },
+            "exaggeration": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 1
+            },
+            "opacity": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 1
+            }
           }
         }
       },
@@ -138,7 +150,13 @@
         },
         "styleStep": {
           "geometryType": "fill",
-          "lineType": "solid",
+          "line": {
+            "type": "solid",
+            "width": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 2
+            }
+          },
           "opacity": {
             "propertySource": "Fix slider",
             "propertyFixSlider": 1
@@ -151,65 +169,71 @@
             "propertySource": "Fix slider",
             "propertyFixSlider": 1.5
           },
-          "strokeColorFg": {
-            "propertySource": "Fix color",
-            "propertyFixColor": "#fff"
+          "stroke": {
+            "color":{
+              "propertySource": "Fix color",
+              "propertyFixColor": "#fff"
+            },
+            "width": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": "0"
+            },
+            "opacity": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": "0"
+            }
           },
-          "strokeWidthFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": "0"
+          "label": {
+            "content": {
+              "propertySource": "Fix input",
+              "propertyFixInput": "→"
+            },
+            "size": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 12
+            },
+            "rotation": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": "0"
+            },
+            "offset": {
+              "dx": "0",
+              "dy": "0"
+            },
+            "halo": {
+              "blur": {
+                "propertySource": "Fix slider",
+                "propertyFixSlider": "0"
+              },
+              "width": {
+                "propertySource": "Fix slider",
+                "propertyFixSlider": "0"
+              },
+              "color": {
+                "propertySource": "Fix color",
+                "propertyFixColor": "#000"
+              }
+            },
+            "layout": {
+              "overlap": true,
+              "placement": "point",
+              "alignment": "center"
+            }
           },
-          "strokeOpacityFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": "0"
-          },
-          "widthFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 2
-          },
-          "labelSizeFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 12
-          },
-          "labelRotationFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": "0"
-          },
-          "labelHaloBlurFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": "0"
-          },
-          "labelHaloWidthFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": "0"
-          },
-          "labelHaloColorFg": {
-            "propertySource": "Fix color",
-            "propertyFixColor": "#000"
-          },
-          "labelContentFg": {
-            "propertySource": "Fix input",
-            "propertyFixInput": "→"
-          },
-          "labelOverlapFg": true,
-          "labelOffsetFg": {
-            "dx": "0",
-            "dy": "0"
-          },
-          "labelPlacementCtrl": "point",
-          "labelAlignmentCtrl": "center",
-          "enableExtrusion": false,
-          "extrusionValue": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 1
-          },
-          "extrusionExaggeration": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 1
-          },
-          "extrusionOpacity": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 1
+          "extrusion": {
+            "enable": false,
+            "value": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 1
+            },
+            "exaggeration": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 1
+            },
+            "opacity": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 1
+            }
           }
         }
       },
@@ -229,7 +253,13 @@
         },
         "styleStep": {
           "geometryType": "fill",
-          "lineType": "solid",
+          "line": {
+            "type": "solid",
+            "width": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 2
+            }
+          },
           "opacity": {
             "propertySource": "Fix slider",
             "propertyFixSlider": 0.7
@@ -242,69 +272,81 @@
             "propertySource": "Fix slider",
             "propertyFixSlider": 1.5
           },
-          "strokeColorFg": {
-            "propertySource": "Fix color",
-            "propertyFixColor": "#fff"
+          "stroke": {
+            "color":{
+              "propertySource": "Fix color",
+              "propertyFixColor": "#fff"
+            },
+            "width": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": "0"
+            },
+            "opacity": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": "0"
+            }
           },
-          "strokeWidthFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": "0"
+          "heatmap": {
+            "weight": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 1
+            },
+            "intensity": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 1
+            }
           },
-          "strokeOpacityFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": "0"
+          "label": {
+            "content": {
+              "propertySource": "Fix input",
+              "propertyFixInput": "→"
+            },
+            "size": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 12
+            },
+            "rotation": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": "0"
+            },
+            "offset": {
+              "dx": "0",
+              "dy": "0"
+            },
+            "halo": {
+              "blur": {
+                "propertySource": "Fix slider",
+                "propertyFixSlider": "0"
+              },
+              "width": {
+                "propertySource": "Fix slider",
+                "propertyFixSlider": "0"
+              },
+              "color": {
+                "propertySource": "Fix color",
+                "propertyFixColor": "#000"
+              }
+            },
+            "layout": {
+              "overlap": true,
+              "placement": "point",
+              "alignment": "center"
+            }
           },
-          "weightFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 1
-          },
-          "intensityFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 1
-          },
-          "labelSizeFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 12
-          },
-          "labelRotationFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": "0"
-          },
-          "labelHaloBlurFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": "0"
-          },
-          "labelHaloWidthFg": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": "0"
-          },
-          "labelHaloColorFg": {
-            "propertySource": "Fix color",
-            "propertyFixColor": "#000"
-          },
-          "labelContentFg": {
-            "propertySource": "Fix input",
-            "propertyFixInput": "→"
-          },
-          "labelOverlapFg": true,
-          "labelOffsetFg": {
-            "dx": "0",
-            "dy": "0"
-          },
-          "labelPlacementCtrl": "point",
-          "labelAlignmentCtrl": "center",
-          "enableExtrusion": false,
-          "extrusionValue": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 1
-          },
-          "extrusionExaggeration": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 1
-          },
-          "extrusionOpacity": {
-            "propertySource": "Fix slider",
-            "propertyFixSlider": 1
+          "extrusion": {
+            "enable": false,
+            "value": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 1
+            },
+            "exaggeration": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 1
+            },
+            "opacity": {
+              "propertySource": "Fix slider",
+              "propertyFixSlider": 1
+            }
           }
         }
       }

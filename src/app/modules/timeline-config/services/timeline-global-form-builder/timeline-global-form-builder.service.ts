@@ -34,7 +34,8 @@ import {
   SliderFormControl, SlideToggleFormControl
 } from '@shared-models/config-form';
 import { DateFormats } from '@shared/models/enum';
-import { ArlasColorService, ChartType } from 'arlas-web-components';
+import { ChartType } from 'arlas-d3';
+import { ArlasColorService } from 'arlas-web-components';
 import { ArlasSettingsService } from 'arlas-wui-toolkit';
 
 

@@ -57,31 +57,33 @@ import { ShortcutsComponent } from '../shortcuts/shortcuts.component';
     GroupsComponent,
     MatButtonModule,
     MatError
-  ]
+  ],
+  host: {
+    '(click)': 'onHostClickEvent($event)'
+  }
 })
 export class TabsComponent implements OnDestroy {
 
-  public tabsFa: FormArray;
+  public tabsFa: FormArray<FormGroup>;
   public editingTabIndex = -1;
   public editingTabName = '';
   public isEditingTab = false;
   public selectedIndex = 0;
   @ViewChild('matTabGroup', { static: false }) private matTabGroup: MatTabGroup;
 
-  private newAfterClosedSub: Subscription;
-  private removeAfterClosedSub: Subscription;
-  private finishAfterClosedSub: Subscription;
-  private editDialogRef: MatDialogRef<EditTabComponent>;
+  private newAfterClosedSub?: Subscription;
+  private removeAfterClosedSub?: Subscription;
+  private finishAfterClosedSub?: Subscription;
+  private editDialogRef?: MatDialogRef<EditTabComponent>;
 
   public constructor(
-    private defaultValuesService: DefaultValuesService,
-    private translateService: TranslateService,
-    private mainFormService: MainFormService,
-    private analyticsInitService: AnalyticsInitService,
-    private dialog: MatDialog,
-    private shortcutsService: ShortcutsService,
+    private readonly defaultValuesService: DefaultValuesService,
+    private readonly translateService: TranslateService,
+    private readonly mainFormService: MainFormService,
+    private readonly analyticsInitService: AnalyticsInitService,
+    private readonly dialog: MatDialog,
+    private readonly shortcutsService: ShortcutsService,
   ) {
-
     this.tabsFa = this.mainFormService.analyticsConfig.getListFa();
   }
 
@@ -156,7 +158,7 @@ export class TabsComponent implements OnDestroy {
 
     this.editDialogRef.afterClosed().subscribe( result => {
       if (result) {
-        const otherTabNames = Object.values(this.tabsFa.controls).filter((c, index) => index !== tabIndex).map(c => c.get('tabName').value);
+        const otherTabNames = Object.values(this.tabsFa.controls).filter((c, index) => index !== tabIndex).map(c => c.controls.tabName.value);
         const updateByCheckingDuplicates = (newTabName: string) => {
           if (otherTabNames.indexOf(newTabName) >= 0) {
             const dialogRef = this.dialog.open(InputModalComponent, {
@@ -171,13 +173,13 @@ export class TabsComponent implements OnDestroy {
               updateByCheckingDuplicates(tabName);
             });
           } else {
-            this.getTab(tabIndex).get('tabName').setValue(newTabName);
+            this.getTab(tabIndex).controls.tabName.setValue(newTabName);
           }
         };
         updateByCheckingDuplicates(result.name);
-        this.getTab(tabIndex).get('tabIcon').setValue(result.icon);
-        this.getTab(tabIndex).get('showName').setValue(result.showName);
-        this.getTab(tabIndex).get('showIcon').setValue(result.showIcon);
+        this.getTab(tabIndex).controls.tabIcon.setValue(result.icon);
+        this.getTab(tabIndex).controls.showName.setValue(result.showName);
+        this.getTab(tabIndex).controls.showIcon.setValue(result.showIcon);
       }
     });
   }
@@ -185,13 +187,13 @@ export class TabsComponent implements OnDestroy {
   public startEditTabName(index: number) {
     if (!this.isEditingTab && index === this.matTabGroup.selectedIndex) {
       this.editingTabIndex = index;
-      this.editingTabName = this.getTab(index).get('tabName').value;
+      this.editingTabName = this.getTab(index).controls.tabName.value;
       this.isEditingTab = true;
     }
   }
 
   public finishEditTabName(tabIndex: number) {
-    const otherTabNames = Object.values(this.tabsFa.controls).filter((c, index) => index !== tabIndex).map(c => c.get('tabName').value);
+    const otherTabNames = Object.values(this.tabsFa.controls).filter((c, index) => index !== tabIndex).map(c => c.controls.tabName.value);
 
     // update the tabName, if it is a duplicate then ask recursively for a unique name
     const updateByCheckingDuplicates = (newTabName: string) => {
@@ -208,7 +210,7 @@ export class TabsComponent implements OnDestroy {
           updateByCheckingDuplicates(tabName);
         });
       } else {
-        this.getTab(tabIndex).get('tabName').setValue(newTabName);
+        this.getTab(tabIndex).controls.tabName.setValue(newTabName);
       }
     };
 
@@ -230,8 +232,11 @@ export class TabsComponent implements OnDestroy {
   }
 
   public drop(event: CdkDragDrop<string[]>) {
-    const previousIndex = parseInt(event.previousContainer.id.replace('tab-', ''), 10);
-    const newIndex = parseInt(event.container.id.replace('tab-', ''), 10);
+    // Cancel the edit of tabs names. Otherwise, if tab A is being edited and dropped on tab B then tab B is being edited with name A
+    this.editingTabIndex = -1;
+
+    const previousIndex = Number.parseInt(event.previousContainer.id.replace('tab-', ''), 10);
+    const newIndex = Number.parseInt(event.container.id.replace('tab-', ''), 10);
     moveInFormArray(previousIndex, newIndex, this.tabsFa);
     this.matTabGroup.selectedIndex = newIndex;
   }
@@ -241,11 +246,6 @@ export class TabsComponent implements OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.matTabGroup = null;
-    this.tabsFa = null;
-    this.editingTabIndex = null;
-    this.editingTabName = null;
-    this.isEditingTab = null;
     if (this.newAfterClosedSub) {
       this.newAfterClosedSub.unsubscribe();
     }
@@ -257,14 +257,24 @@ export class TabsComponent implements OnDestroy {
     }
   }
 
+  /**
+   * If the user clicks anywhere outside of the input to edit a tab's name, then finish the tab name edition process
+   * @param event Click event
+   */
+  protected onHostClickEvent(event: PointerEvent) {
+    if (!(event.target as any).classList.contains('edit-tab-name__input') && this.editingTabIndex >= 0) {
+      this.finishEditTabName(this.editingTabIndex);
+    }
+  }
+
   private removeAllShortcuts(tabIndex: number) {
     const tab = this.getTab(tabIndex);
-    const groupsFa: FormArray = (tab.controls.contentFg as FormGroup).controls.groupsFa as FormArray;
+    const groupsFa = tab.controls.contentFg.controls.groupsFa as FormArray<FormGroup>;
     if (groupsFa) {
-      groupsFa.controls.forEach((group: FormGroup) => {
-        const widgetsFa: FormArray = group.controls.content as FormArray;
+      groupsFa.controls.forEach(group => {
+        const widgetsFa = group.controls.content as FormArray<FormGroup>;
         if (widgetsFa) {
-          widgetsFa.controls.forEach((widget: FormGroup) => {
+          widgetsFa.controls.forEach(widget => {
             const widgetConfigFg = widget.controls.widgetData as WidgetConfigFormGroup;
             this.shortcutsService.removeShortcut(widgetConfigFg.uuidControl.value);
           });

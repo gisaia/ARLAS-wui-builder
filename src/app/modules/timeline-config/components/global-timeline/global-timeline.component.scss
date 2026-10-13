@@ -22,3 +22,11 @@
 .tab-error {
   color: var.$error-color;
 }
+
+.toggle-detailed-timeline {
+  background-color: var(--arlas-builder-config-background-color);
+  padding: var.$default-spacing;
+
+  // Separate logical block from rest of form
+  border-bottom: var.$default-spacing solid var(--arlas-builder-background-color);
+}

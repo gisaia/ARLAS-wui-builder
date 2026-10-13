@@ -95,7 +95,10 @@ bootstrapApplication(AppComponent, {
             provide: ArlasConfigurationUpdaterService,
             useClass: ArlasConfigurationUpdaterService
         },
-        { provide: FETCH_OPTIONS, useValue: {} },
+        {
+            provide: FETCH_OPTIONS,
+            useValue: {}
+        },
         {
             provide: CONFIG_UPDATER,
             useValue: configUpdaterFactory

@@ -1,4 +1,5 @@
-@let label = control.label | translate:{ property: control.propertyName | translate } | upperFirst:true;
+@let label = showLabel && control.label  ?
+    (control.label | translate:{ property: control.propertyName | translate } | upperFirst:true ): '';
 
 @if (isSlideToggle(); as typedControl) {
   <div class="slider-toggle-form-control">
@@ -240,7 +241,7 @@
             <div class="textarea-form-control metric-filter">
               <mat-form-field>
                 <textarea matInput [formControl]="typedControl.arlasFilterCtrl"
-                [required]="false"></textarea>
+                  [required]="false" cdkTextareaAutosize="true"></textarea>
               </mat-form-field>
             </div>
             <div class="description">
@@ -463,8 +464,7 @@
         <mat-label>{{ label }}</mat-label>
       }
       <textarea matInput [formControl]="typedControl" [required]="!typedControl.optional"
-        [placeholder]="typedControl.placeHolder | translate"
-      [rows]="typedControl.nbRows"></textarea>
+        [placeholder]="typedControl.placeHolder | translate" cdkTextareaAutosize="true"></textarea>
       @if (typedControl?.errors) {
         <span>
           <mat-error>{{ 'Process error message' | translate }}</mat-error>

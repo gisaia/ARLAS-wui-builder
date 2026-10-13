@@ -26,7 +26,6 @@ import {
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { LowerCasePipe, NgTemplateOutlet } from '@angular/common';
 import { Component, inject, input, output, ViewChild } from '@angular/core';
-import { FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -62,7 +61,7 @@ export class ManageVisualisationComponent {
    * @type {InputSignal<ResultListVisualisationsFormGroup | undefined>}
    * @protected
    */
-  protected visualisation = input<ResultListVisualisationsFormGroup>();
+  protected visualisation = input.required<ResultListVisualisationsFormGroup>();
   /**
    * Whether it is a new visualisation or not.
    * @type {InputSignal<boolean | undefined>}
@@ -132,8 +131,8 @@ export class ManageVisualisationComponent {
   }
 
   public dropItemFamily(event: CdkDragDrop<any>){
-    const previousIndex = (this.visualisation().get('dataGroups') as FormArray).controls.findIndex(row => row === event.item.data);
-    moveItemInArray((this.visualisation().get('dataGroups') as FormArray).controls, previousIndex, event.currentIndex);
+    const previousIndex = this.visualisation().customControls.dataGroups.controls.findIndex(row => row === event.item.data);
+    moveItemInArray(this.visualisation().customControls.dataGroups.controls, previousIndex, event.currentIndex);
     this.dragDisabled = true;
     this.table.renderRows();
   }
@@ -142,7 +141,7 @@ export class ManageVisualisationComponent {
     if(ev && ev.key !== 'Enter') {
       return;
     }
-    const dataGroup = (this.visualisation().get('dataGroups') as FormArray).at(itemIndex) as ResultListVisualisationsDataGroup;
+    const dataGroup = this.visualisation().customControls.dataGroups.at(itemIndex) as ResultListVisualisationsDataGroup;
     this.openEditionDialog(dataGroup, true);
   }
 
@@ -150,7 +149,7 @@ export class ManageVisualisationComponent {
     if(ev && ev.key !== 'Enter') {
       return;
     }
-    (this.visualisation().get('dataGroups') as FormArray).removeAt(itemIndex);
+    this.visualisation().customControls.dataGroups.removeAt(itemIndex);
     this.table.renderRows();
   }
 
@@ -171,7 +170,7 @@ export class ManageVisualisationComponent {
 
   public addDataGroup() {
     const dataGroup = new ResultListVisualisationsDataGroup();
-    dataGroup.get('name').setValue(marker('New data group'));
+    dataGroup.customControls.name.setValue(marker('New data group'));
     const ref = this.openEditionDialog(dataGroup);
 
     ref.afterClosed()
@@ -180,7 +179,7 @@ export class ManageVisualisationComponent {
         filter( (validate: boolean) => validate)
       )
       .subscribe(_ => {
-        (this.visualisation().get('dataGroups') as FormArray).push(dataGroup);
+        this.visualisation().customControls.dataGroups.push(dataGroup);
         this.table.renderRows();
       });
   }

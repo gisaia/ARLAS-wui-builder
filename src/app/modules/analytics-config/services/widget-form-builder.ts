@@ -32,7 +32,7 @@ export abstract class WidgetFormBuilder {
      * It may be overriden to create inner controls (like in FormArray)
      * before setting the value.
      */
-    public buildWithValues(value: any, collection) {
+    public buildWithValues(value: any, collection: string) {
       const formGroup = this.build(collection);
       formGroup.patchValue(value);
       return formGroup;

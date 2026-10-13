@@ -22,11 +22,11 @@ $arlasColor: #f63366;
 
 @mixin group-title() {
    font-weight: 300;
-   font-size: 24px;
+   font-size: 22px;
    line-height: 32px;
-   margin: 5px 10px;
-   padding-bottom: 3px;
-
+   padding: 5px 10px;
+   margin: 0;
+   background-color: var(--arlas-builder-config-background-color);
 }
 
 $default-spacing: 10px;
@@ -42,7 +42,6 @@ $text-input-disabled: rgba(26, 27, 31, .38);
 $input-background-disabled: rgba(26, 27, 31, .04);
 
 $config-element-description-border-color: rgba(41, 98, 255, .4);
-$config-element-description-background: #fafafa;
 $config-element-description-text-color: #455a6499;
 
 $error-color: #f44336;

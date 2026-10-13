@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -24,8 +24,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { IconPickerModule } from '@gisaia-team/ngx-icon-picker';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ConfigIconPickerComponent } from '@shared-components/config-icon-picker/config-icon-picker.component';
 import { AnalyticsTabs } from 'arlas-wui-toolkit';
 
 export enum TAB_DISPLAY_MODE {
@@ -44,13 +44,13 @@ export enum TAB_DISPLAY_MODE {
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    IconPickerModule,
     MatSelectModule,
     MatDialogModule,
-    MatButtonModule
-  ]
+    MatButtonModule,
+    ConfigIconPickerComponent
+]
 })
-export class EditTabComponent implements OnInit {
+export class EditTabComponent {
 
   public tabForm = new FormGroup({
     icon: new FormControl('', Validators.required),
@@ -63,42 +63,33 @@ export class EditTabComponent implements OnInit {
   public constructor(
     @Inject(MAT_DIALOG_DATA) public dialogData: AnalyticsTabs,
   ) {
-    this.tabForm.get('icon').setValue(dialogData.icon);
-    this.tabForm.get('name').setValue(dialogData.name);
-    this.tabForm.get('showName').setValue(dialogData.showName);
-    this.tabForm.get('showIcon').setValue(dialogData.showIcon);
+    this.tabForm.controls.icon.setValue(dialogData.icon);
+    this.tabForm.controls.name.setValue(dialogData.name);
+    this.tabForm.controls.showName.setValue(dialogData.showName);
+    this.tabForm.controls.showIcon.setValue(dialogData.showIcon);
     if (dialogData.showName && dialogData.showIcon) {
-      this.tabForm.get('display').setValue(TAB_DISPLAY_MODE.BOTH);
+      this.tabForm.controls.display.setValue(TAB_DISPLAY_MODE.BOTH);
     } else if (dialogData.showName && !dialogData.showIcon) {
-      this.tabForm.get('display').setValue(TAB_DISPLAY_MODE.TEXT);
+      this.tabForm.controls.display.setValue(TAB_DISPLAY_MODE.TEXT);
     } else if (!dialogData.showName && dialogData.showIcon) {
-      this.tabForm.get('display').setValue(TAB_DISPLAY_MODE.ICON);
+      this.tabForm.controls.display.setValue(TAB_DISPLAY_MODE.ICON);
     }
-  }
-
-  public ngOnInit(): void {
-
   }
 
   public displayChange(event: MatSelectChange): void {
     switch (event.value) {
       case TAB_DISPLAY_MODE.BOTH:
-        this.tabForm.get('showName').setValue(true);
-        this.tabForm.get('showIcon').setValue(true);
+        this.tabForm.controls.showName.setValue(true);
+        this.tabForm.controls.showIcon.setValue(true);
         break;
       case TAB_DISPLAY_MODE.TEXT:
-        this.tabForm.get('showName').setValue(true);
-        this.tabForm.get('showIcon').setValue(false);
+        this.tabForm.controls.showName.setValue(true);
+        this.tabForm.controls.showIcon.setValue(false);
         break;
       case TAB_DISPLAY_MODE.ICON:
-        this.tabForm.get('showName').setValue(false);
-        this.tabForm.get('showIcon').setValue(true);
+        this.tabForm.controls.showName.setValue(false);
+        this.tabForm.controls.showIcon.setValue(true);
         break;
     }
   }
-
-  public onIconPickerSelect(icon): void {
-    this.tabForm.get('icon').setValue(icon);
-  }
-
 }

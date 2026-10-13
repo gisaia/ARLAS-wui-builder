@@ -18,6 +18,7 @@
  */
 
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { ColorFormGroup } from '@map-config/components/dialog-color-table/dialog-color-table.component';
 import { KeywordColor } from '@map-config/components/dialog-color-table/models';
 import { MaplibreSourceType } from 'arlas-maplibre';
 import {
@@ -164,7 +165,7 @@ export function valuesToOptions(values: Array<string>) {
   }));
 }
 
-export function camelize(str) {
+export function camelize(str: string) {
   return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
     if (+match === 0) {
       return '';
@@ -173,9 +174,8 @@ export function camelize(str) {
   });
 }
 
-export function addToColorManualValuesCtrl(kc: KeywordColor, fa: FormArray, index?: number) {
-  if (!Object.values(fa.controls)
-    .find(keywordColorGrp => keywordColorGrp.get('keyword').value === kc.keyword)) {
+export function addToColorManualValuesCtrl(kc: KeywordColor, fa: FormArray<ColorFormGroup>, index?: number) {
+  if (!Object.values(fa.controls).some(keywordColorGrp => keywordColorGrp.controls.keyword.value === kc.keyword)) {
     const keywordColorGrp = new FormGroup({
       keyword: new FormControl(kc.keyword),
       color: new FormControl(kc.color)

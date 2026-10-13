@@ -33,6 +33,7 @@ export interface ResultListVisualisationFormWidget {
     name: string;
     description: string;
     dataGroups: ResultListVisualisationDataGroupFormWidget[];
+    default: boolean;
 }
 
 

@@ -20,6 +20,7 @@
 import {
   ResultlistFormBuilderService,
   ResultListVisualisationsDataGroup,
+  ResultListVisualisationsDataGroupCondition,
   ResultListVisualisationsFormGroup
 } from '@analytics-config/services/resultlist-form-builder/resultlist-form-builder.service';
 import {
@@ -32,7 +33,6 @@ import {
   ViewChild,
   WritableSignal
 } from '@angular/core';
-import { AbstractControl, FormArray } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -45,9 +45,9 @@ import { ObjectvaluesPipe } from '@shared/pipes/objectvalues.pipe';
 import { Expression } from 'arlas-api';
 
 interface DataGroupDialogData {
-    edit: boolean;
-    dataGroup: ResultListVisualisationsDataGroup;
-    collectionControlName: string;
+  edit: boolean;
+  dataGroup: ResultListVisualisationsDataGroup;
+  collectionControlName: string;
 }
 
 @Component({
@@ -76,11 +76,11 @@ export class ManageDataGroupDialogComponent implements OnInit {
   public disableButton: WritableSignal<boolean>;
   @ViewChild(MatTable) protected table: MatTable<ResultListVisualisationsFormGroup>;
 
-  public get criteriaList(){
-    return (this.data.dataGroup.get('filters')  as FormArray);
+  public get criteriaList() {
+    return this.data.dataGroup.customControls.filters;
   }
 
-  public get criteria(): AbstractControl[] {
+  public get criteria(): ResultListVisualisationsDataGroupCondition[] {
     return this.criteriaList ? this.criteriaList.controls : [];
   }
 
@@ -94,7 +94,7 @@ export class ManageDataGroupDialogComponent implements OnInit {
   }
 
   public removeCriteria(index: number) {
-    (this.data.dataGroup.get('filters')  as FormArray).removeAt(index);
+    this.data.dataGroup.customControls.filters.removeAt(index);
     this.table.renderRows();
   }
 
@@ -113,13 +113,17 @@ export class ManageDataGroupDialogComponent implements OnInit {
      */
   public updateList(event: { prefix: string; }, index: number) {
     const control = this.data.dataGroup.customControls.filters.at(index).customControls;
-    if (control.filterOperation.value ===  Expression.OpEnum.Like) {
+    if (control.filterOperation.value === Expression.OpEnum.Like) {
       control.filterValues.filterInValues.setSyncOptions([]);
       this.collectionService.getTermAggregation(
         this.data.collectionControlName,
         control.filterField.value.value, true, undefined, event.prefix)
         .then(keywords => {
-          control.filterValues.filterInValues.setSyncOptions(keywords.map(k => ({value: k, label: k})));
+          control.filterValues.filterInValues.setSyncOptions(keywords.map(k => ({ value: k, label: k })));
+        })
+        .catch(() => {
+          console.log('Could not fetch term aggregation');
+          control.filterValues.filterInValues.setSyncOptions([]);
         });
     }
   }

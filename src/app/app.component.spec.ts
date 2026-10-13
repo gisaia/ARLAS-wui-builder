@@ -5,7 +5,7 @@ import { TranslateLoader, TranslateModule, TranslateNoOpLoader } from '@ngx-tran
 import { CollectionService } from '@services/collection-service/collection.service';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { AwcColorGeneratorLoader, ColorGeneratorLoader, ColorGeneratorModule } from 'arlas-web-components';
-import { ArlasSettingsService, ArlasStartupService, PersistenceService } from 'arlas-wui-toolkit';
+import { ArlasSettingsService, ArlasStartupService, ArlasTaskService, GET_OPTIONS, PersistenceService } from 'arlas-wui-toolkit';
 import { LoggerModule } from 'ngx-logger';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { AppComponent } from './app.component';
@@ -37,6 +37,11 @@ describe('AppComponent', () => {
                 BrowserAnimationsModule
             ],
             providers: [
+                ArlasTaskService,
+                {
+                    provide: GET_OPTIONS,
+                    useValue: () => { }
+                },
                 {
                     provide: ArlasStartupService,
                     useValue: mockArlasStartupService
@@ -55,7 +60,7 @@ describe('AppComponent', () => {
                 }
             ]
         })
-        .compileComponents();
+            .compileComponents();
 
         fixture = TestBed.createComponent(AppComponent);
         component = fixture.componentInstance;

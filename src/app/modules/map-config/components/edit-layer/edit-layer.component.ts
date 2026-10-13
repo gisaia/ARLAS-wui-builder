@@ -24,7 +24,8 @@ import { CanComponentExit } from '@guards/confirm-exit/confirm-exit.guard';
 import { MapGlobalFormBuilderService } from '@map-config/services/map-global-form-builder/map-global-form-builder.service';
 import { MapLayerFormBuilderService, MapLayerFormGroup } from '@map-config/services/map-layer-form-builder/map-layer-form-builder.service';
 import {
-  MapVisualisationFormBuilderService
+  MapVisualisationFormBuilderService,
+  MapVisualisationFormGroup
 } from '@map-config/services/map-visualisation-form-builder/map-visualisation-form-builder.service';
 import { TranslatePipe } from '@ngx-translate/core';
 import { CollectionService } from '@services/collection-service/collection.service';
@@ -49,8 +50,8 @@ import { LAYER_MODE } from './models';
 })
 export class EditLayerComponent implements OnInit, CanComponentExit, AfterContentChecked, OnDestroy {
 
-  private layersFa: FormArray;
-  private visualisationsFa: FormArray;
+  private layersFa: FormArray<MapLayerFormGroup>;
+  private visualisationsFa: FormArray<MapVisualisationFormGroup>;
   private layersValues: any[] = [];
   public forceCanExit: boolean;
   public LAYER_MODE = LAYER_MODE;
@@ -63,13 +64,13 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
   public constructor(
     protected mapLayerFormBuilder: MapLayerFormBuilderService,
     protected mapVisualisationFormBuilder: MapVisualisationFormBuilderService,
-    private readonly  mainFormService: MainFormService,
-    private readonly  mapGlobalFormBuilder: MapGlobalFormBuilderService,
-    private readonly  collectionService: CollectionService,
-    private readonly  route: ActivatedRoute,
-    private readonly  cdref: ChangeDetectorRef,
-    private readonly  router: Router,
-    private readonly  logger: NGXLogger) {
+    private readonly mainFormService: MainFormService,
+    private readonly mapGlobalFormBuilder: MapGlobalFormBuilderService,
+    private readonly collectionService: CollectionService,
+    private readonly route: ActivatedRoute,
+    private readonly cdref: ChangeDetectorRef,
+    private readonly router: Router,
+    private readonly logger: NGXLogger) {
   }
 
   public ngOnInit() {
@@ -246,7 +247,7 @@ export class EditLayerComponent implements OnInit, CanComponentExit, AfterConten
   }
 
   public isNewLayer(): boolean {
-    return this.layerFg.get('id').value === '';
+    return this.layerFg.customControls.id.value === '';
   }
 
   public canExit() {
