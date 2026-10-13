@@ -62,6 +62,10 @@ Pour garantir une configuration exempte de bugs et strictement conforme, tu dois
      - Pour `map` : Définis `window_extent_geometry: { enabled: true, boundsFieldName: '' }` ainsi que `margePanForLoad: 0` et `margePanForTest: 0`.
      - Pour `histogram` : Assure la présence de `isOneDimension: true`, `useUtc: true`, et `additionalCollections`.
      - Pour `swimlane` et `histogram` dans `analytics` : Définis IMPÉRATIVEMENT `"dataType": "time"` (pour les données temporelles) ou `"dataType": "numeric"` dans l'objet `input`. L'omission de `dataType` conduit le Builder à classifier la donnée en 'numeric', faussant le calcul d'identifiant canonique et provoquant l'erreur `Given contributorId does not match any registered contributor`.
+     - Pour `swimlane` et `histogram` dans `analytics` : Définis IMPÉRATIVEMENT `"chartWidth": 445` (ou 217 si itemPerLine=2), `"chartHeight": 120` et `"barWeight": 0.8`. L'omission de `chartWidth` ou `barWeight` conduit le moteur de rendu SVG (D3) à calculer des dimensions en `NaN`, provoquant l'erreur `Error: <rect> attribute width: Expected length, "NaN"`.
+     - Pour `powerbars` dans `analytics` : Définis IMPÉRATIVEMENT `"chartWidth": 445` (ou 217 si itemPerLine=2).
+     - Pour `donut` dans `analytics` : Définis IMPÉRATIVEMENT `"diameter": 170` (ou 180) et `"containerWidth": 223` (ou 260).
+     - Pour `resultlist` dans `analytics` : Définis IMPÉRATIVEMENT `options: { showName: true, showIcon: true }`.
      - Pour `swimlane` (contributeur) : Définis dans chaque couloir de `swimlanes` : `xAxisField`, `termField`, `jsonpath: "$.count"` et `useUtc: true`.
      - Pour `search` : Définis explicitement `autocomplete_size: 10`.
    - **Filtrage des Types Non Supportés** : Limite strictement les contributeurs aux types supportés par l'application cible (`map`, `search`, `histogram`, `detailedhistogram`, `tree`, `resultlist`). N'inclus pas de types orphelins ou non supportés qui causeraient des erreurs à l'importation.

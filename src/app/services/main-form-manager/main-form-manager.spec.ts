@@ -111,7 +111,7 @@ describe('MainFormManagerService', () => {
         collectionService.getCollectionFields = () => of([
             { name: 'track.timestamps.center', type: CollectionReferenceDescriptionProperty.TypeEnum.DATE } as any
         ]);
-        collectionService.getDescribe = () => of({ params: {} } as any);
+        collectionService.getDescribe = () => of({ params: { id_path: 'track.id', timestamp_path: 'track.timestamps.center' } } as any);
         collectionService.collectionParamsMap.set('courses', {
             params: {
                 centroid_path: 'track.location',
@@ -209,5 +209,77 @@ describe('MainFormManagerService', () => {
         const exportedSwimlane = generatedConfig.arlas.web.contributors.find((c: any) => c.type === 'swimlane');
         expect(exportedSwimlane).toBeDefined();
         expect(exportedSwimlane.identifier).toBe(swimlaneContrib.identifier);
+    });
+
+    it('should have all analytics groups and widgets valid', () => {
+        service.doImport(structuredClone(maritimeConfig) as any, structuredClone(maritimeMapConfig) as any);
+        const listFa = (service as any).mainFormService.analyticsConfig.getListFa();
+        const invalidDetails: string[] = [];
+        listFa.controls.forEach((tab: any, ti: number) => {
+            const groupsFa = tab.controls.contentFg.controls.groupsFa;
+            groupsFa.controls.forEach((group: any, gi: number) => {
+                if (!group.valid) {
+                    invalidDetails.push(`GROUP ${gi} (${group.value.title}) INVALID: ${JSON.stringify(group.errors)}`);
+                    Object.keys(group.controls).forEach(key => {
+                        const ctrl = group.controls[key];
+                        if (!ctrl.valid) {
+                            invalidDetails.push(`  group control '${key}' invalid: ${JSON.stringify(ctrl.errors)}`);
+                        }
+                    });
+                }
+                const widgetsFa = group.controls.content;
+                widgetsFa.controls.forEach((widget: any, wi: number) => {
+                    if (!widget.valid) {
+                        invalidDetails.push(`  WIDGET ${wi} (${widget.value.widgetType}) INVALID: ${JSON.stringify(widget.errors)}`);
+                        const widgetData = widget.controls.widgetData;
+                        const findErrors = (fg: any, path = '') => {
+                            if (!fg || !fg.controls) return;
+                            Object.keys(fg.controls).forEach(k => {
+                                const c = fg.controls[k];
+                                const currentPath = path ? `${path}.${k}` : k;
+                                if (!c.valid) {
+                                    if (c.controls) {
+                                        findErrors(c, currentPath);
+                                    } else {
+                                        invalidDetails.push(`    widget control '${currentPath}' invalid: ${JSON.stringify(c.errors)} val=${c.value}`);
+                                    }
+                                }
+                            });
+                        };
+                        findErrors(widgetData);
+                    }
+                });
+            });
+        });
+        expect(invalidDetails).toEqual([]);
+    });
+
+    it('should have the entire mainForm completely valid after import', () => {
+        service.doImport(structuredClone(maritimeConfig) as any, structuredClone(maritimeMapConfig) as any);
+        const mainForm = (service as any).mainFormService.mainForm;
+        const invalidControls: string[] = [];
+
+        const scanControl = (control: any, path: string) => {
+            if (!control) return;
+            if (control.disabled) return;
+            if (control.controls) {
+                if (Array.isArray(control.controls)) {
+                    control.controls.forEach((child: any, idx: number) => {
+                        scanControl(child, `${path}[${idx}]`);
+                    });
+                } else {
+                    Object.keys(control.controls).forEach(key => {
+                        scanControl(control.controls[key], `${path}.${key}`);
+                    });
+                }
+            } else {
+                if (!control.valid) {
+                    invalidControls.push(`${path} INVALID: errors=${JSON.stringify(control.errors)} val=${control.value}`);
+                }
+            }
+        };
+
+        scanControl(mainForm, 'mainForm');
+        expect(invalidControls).toEqual([]);
     });
 });

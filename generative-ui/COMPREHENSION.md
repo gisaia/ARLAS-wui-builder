@@ -145,6 +145,14 @@ Le moteur de validation ARLAS compile l'arborescence des schémas officiels suiv
    - Pour tout widget analytique de type `swimlane` ou `histogram`, le champ `"dataType": "time"` (ou `"numeric"`) est **obligatoire** dans l'objet `input`.
    - L'omission de `dataType` conduit le Builder à classifier la donnée en `numeric`, ce qui fausse le calcul interne de l'identifiant canonique (`-numeric-` au lieu de `-time-`) et provoque l'exception `Given contributorId [...] does not match any registered contributor`.
    - Chaque couloir dans `swimlane.swimlanes` doit déclarer `xAxisField`, `termField`, `jsonpath: "$.count"` et `useUtc: true`.
+9. **Invariants Rendu SVG & Dimensions de Graphe (`chartWidth`, `barWeight`)** :
+   - Tout composant `histogram` ou `swimlane` dans `analytics` doit impérativement déclarer `"chartWidth": 445` (ou 217 si itemPerLine=2), `"chartHeight": 120` et `"barWeight": 0.8`.
+   - L'omission de `chartWidth` ou `barWeight` conduit le moteur D3 (`AbstractSwimlane.js` / `AbstractHistogram.js`) à évaluer `+this.histogramParams.chartWidth` en `NaN`, rendant les échelles temporelles et les largeurs de bandes invalides et provoquant l'erreur SVG console `Error: <rect> attribute width: Expected length, "NaN"`.
+10. **Dimensions Obligatoires pour Tous les Types de Widgets Analytics** :
+   - **`powerbars`** : `"chartWidth": 445` (ou `217` si `itemPerLine=2`).
+   - **`donut`** : `"diameter": 170` (ou `180`) et `"containerWidth": 223` (ou `260`).
+   - **`resultlist`** : `options: { showName: true, showIcon: true }`.
+   - **`metric`** : `"id"` non vide, avec mise en forme optionnelle (`valuePrecision`, `afterValue`).
 
 ---
 

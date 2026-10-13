@@ -50,6 +50,7 @@
     }
   },
   "required": [
+    "title",
     "metrics",
     "function"
   ]

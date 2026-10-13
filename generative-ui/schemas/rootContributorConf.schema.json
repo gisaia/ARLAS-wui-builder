@@ -185,6 +185,7 @@
     "required": [
         "type",
         "identifier",
-        "name"
+        "name",
+        "icon"
     ]
 }

@@ -59,6 +59,12 @@
     "showRowField": {
       "description": "Display the name of the field use to retrieve row values for each sub table.",
       "type": "boolean"
+    },
+    "itemPerLine": {
+      "description": "Number of widgets per line in the analytics panel. Valid values: 1, 2, or 3. Default: 1",
+      "type": "integer",
+      "enum": [1, 2, 3],
+      "default": 1
     }
   },
   "required": []

@@ -89,6 +89,15 @@
     "selectWithCheckbox": {
       "description": " Whether to have the option to select the powerbar using checkboxes.",
       "type": "boolean"
+    },
+    "itemPerLine": {
+      "description": "Number of widgets per line in the analytics panel. Valid values: 1, 2, or 3. Default: 1",
+      "type": "integer",
+      "enum": [1, 2, 3],
+      "default": 1
     }
-  }
+  },
+  "required": [
+    "chartWidth"
+  ]
 }

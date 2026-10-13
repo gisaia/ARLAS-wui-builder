@@ -72,6 +72,9 @@
   },
   "required": [
     "id",
-    "dataType"
+    "dataType",
+    "chartTitle",
+    "chartWidth",
+    "barWeight"
   ]
 }

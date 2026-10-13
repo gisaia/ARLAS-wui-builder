@@ -145,6 +145,11 @@ contributors.forEach(c => {
     contributorIds.add(c.identifier);
   }
 
+  // C. Présence d'une icône obligatoire pour le menu et l'interface
+  if (!c.icon || typeof c.icon !== 'string' || c.icon.trim().length === 0) {
+    logFail(`Contributeur "${c.identifier}" (${c.type}) : "icon" est obligatoire pour éviter l'erreur TypeError dans l'icon-picker.`);
+  }
+
   let schemaId = null;
   switch (c.type) {
     case 'map': schemaId = 'mapContributorConf.schema.json'; break;
@@ -211,11 +216,48 @@ let totalWidgets = 0;
 let missingWidgets = 0;
 
 analyticsGroups.forEach(group => {
+  // Contrôle Anti-Crash Icon Picker : chaque groupe doit déclarer une icône et un titre valides
+  if (!group.icon || typeof group.icon !== 'string' || group.icon.trim().length === 0) {
+    logFail(`Groupe analytique "${group.title || group.groupId}" : "icon" est obligatoire pour éviter l'erreur config-icon-picker "Cannot read properties of undefined (reading 'length')".`);
+  }
+  if (!group.title || typeof group.title !== 'string' || group.title.trim().length === 0) {
+    logFail(`Groupe analytique "${group.groupId}" : "title" est obligatoire.`);
+  }
+
   (group.components || []).forEach(widget => {
     totalWidgets++;
     if (!contributorIds.has(widget.contributorId)) {
       logFail(`Widget "${widget.title || widget.componentType}" référence un contributeur inexistant: "${widget.contributorId}"`);
       missingWidgets++;
+    }
+
+    // Contrôle Anti-Crash Dimensions Graphiques (D3 / SVG) pour TOUS les types de widgets analytics :
+    const input = widget.input || {};
+    if (widget.componentType === 'histogram' || widget.componentType === 'swimlane') {
+      if (!input.chartTitle || typeof input.chartTitle !== 'string' || input.chartTitle.trim().length === 0) {
+        logFail(`Widget "${widget.title || widget.contributorId}" (${widget.componentType}) : "input.chartTitle" est obligatoire pour initialiser le titre du formulaire réactif.`);
+      }
+      if (!input.chartWidth || typeof input.chartWidth !== 'number' || isNaN(input.chartWidth) || input.chartWidth <= 0) {
+        logFail(`Widget "${widget.title || widget.contributorId}" (${widget.componentType}) : "input.chartWidth" est obligatoire (> 0, ex: 445) pour éviter l'erreur SVG "<rect> attribute width: NaN".`);
+      }
+      if (input.barWeight === undefined || typeof input.barWeight !== 'number' || isNaN(input.barWeight) || input.barWeight <= 0) {
+        logFail(`Widget "${widget.title || widget.contributorId}" (${widget.componentType}) : "input.barWeight" est obligatoire (> 0 et <= 1, ex: 0.8) pour éviter l'erreur SVG "<rect> attribute width: NaN".`);
+      }
+    } else if (widget.componentType === 'powerbars') {
+      if (!input.chartWidth || typeof input.chartWidth !== 'number' || isNaN(input.chartWidth) || input.chartWidth <= 0) {
+        logFail(`Widget "${widget.title || widget.contributorId}" (powerbars) : "input.chartWidth" est obligatoire (> 0, ex: 445 ou 217).`);
+      }
+    } else if (widget.componentType === 'donut') {
+      if (!input.diameter || typeof input.diameter !== 'number' || isNaN(input.diameter) || input.diameter <= 0) {
+        logFail(`Widget "${widget.title || widget.contributorId}" (donut) : "input.diameter" est obligatoire (> 0, ex: 170).`);
+      }
+      if (!input.containerWidth || typeof input.containerWidth !== 'number' || isNaN(input.containerWidth) || input.containerWidth <= 0) {
+        logFail(`Widget "${widget.title || widget.contributorId}" (donut) : "input.containerWidth" est obligatoire (> 0, ex: 223).`);
+      }
+    } else if (widget.componentType === 'resultlist') {
+      if (!input.options || typeof input.options.showName !== 'boolean' || typeof input.options.showIcon !== 'boolean') {
+        logFail(`Widget "${widget.title || widget.contributorId}" (resultlist) : "input.options.showName" et "showIcon" sont obligatoires.`);
+      }
     }
   });
 });
@@ -238,6 +280,19 @@ if (components.detailedTimeline?.contributorId) {
   } else {
     logPass(`Composant detailedTimeline lié à un contributeur valide : "${components.detailedTimeline.contributorId}".`);
   }
+}
+
+// Contrôles Anti-Crash Formulaires Réactifs Globaux (Tagger & Timeline DateFormat) :
+if (config?.arlas?.tagger) {
+  if (!config.arlas.tagger.collection || typeof config.arlas.tagger.collection !== 'string') {
+    logFail(`Configuration tagger : "collection" est obligatoire lorsque tagger est défini pour que le formulaire SideModules soit valide.`);
+  }
+}
+if (components.timeline?.input && !components.timeline.input.ticksDateFormat) {
+  logFail(`Composant timeline : "input.ticksDateFormat" est obligatoire pour initialiser le format de date du formulaire.`);
+}
+if (components.detailedTimeline?.input && !components.detailedTimeline.input.ticksDateFormat) {
+  logFail(`Composant detailedTimeline : "input.ticksDateFormat" est obligatoire pour initialiser le format de date du formulaire.`);
 }
 if (Array.isArray(components.resultlists)) {
   components.resultlists.forEach((rl, idx) => {

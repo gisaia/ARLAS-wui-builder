@@ -58,6 +58,8 @@
     }
   },
   "required": [
-    "id"
+    "id",
+    "diameter",
+    "containerWidth"
   ]
 }

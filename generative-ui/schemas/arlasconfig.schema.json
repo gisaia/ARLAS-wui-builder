@@ -225,6 +225,18 @@
                                         "description": "Id of group to regroup component in same line",
                                         "type": "string"
                                     },
+                                    "title": {
+                                        "description": "Title of the analytic group",
+                                        "type": "string"
+                                    },
+                                    "tab": {
+                                        "description": "Tab name to which this group belongs",
+                                        "type": "string"
+                                    },
+                                    "icon": {
+                                        "description": "Material icon associated to the group",
+                                        "type": "string"
+                                    },
                                     "filterValues": {
                                         "description": "Values used to filter the display of group",
                                         "type": "array",
@@ -316,6 +328,10 @@
                                                                 {
                                                                     "$ref": "histogram.schema.json#"
                                                                 }
+                                                            ],
+                                                            "required": [
+                                                                "chartWidth",
+                                                                "barWeight"
                                                             ]
                                                         }
                                                     }
@@ -339,6 +355,12 @@
                                                                         },
                                                                         "showIcon": {
                                                                             "type": "boolean"
+                                                                        },
+                                                                        "itemPerLine": {
+                                                                          "description": "Number of widgets per line in the analytics panel. Valid values: 1, 2, or 3. Default: 1",
+                                                                          "type": "integer",
+                                                                          "enum": [1, 2, 3],
+                                                                          "default": 1
                                                                         }
                                                                     },
                                                                     "required": [
@@ -366,6 +388,9 @@
                                                                 {
                                                                     "$ref": "powerbars.schema.json#"
                                                                 }
+                                                            ],
+                                                            "required": [
+                                                                "chartWidth"
                                                             ]
                                                         }
                                                     }
@@ -383,6 +408,10 @@
                                                                 {
                                                                     "$ref": "donut.schema.json#"
                                                                 }
+                                                            ],
+                                                            "required": [
+                                                                "diameter",
+                                                                "containerWidth"
                                                             ]
                                                         }
                                                     }
@@ -400,6 +429,10 @@
                                                                 {
                                                                     "$ref": "swimlane.schema.json#"
                                                                 }
+                                                            ],
+                                                            "required": [
+                                                                "chartWidth",
+                                                                "barWeight"
                                                             ]
                                                         }
                                                     }
@@ -452,7 +485,9 @@
                                 },
                                 "required": [
                                     "groupId",
-                                    "components"
+                                    "components",
+                                    "title",
+                                    "icon"
                                 ]
                             }
                         },
@@ -591,7 +626,8 @@
                                             ],
                                             "required": [
                                                 "chartTitle",
-                                                "chartType"
+                                                "chartType",
+                                                "ticksDateFormat"
                                             ]
                                         },
                                         "dateFormat": {
@@ -601,8 +637,7 @@
                                     },
                                     "required": [
                                         "contributorId",
-                                        "input",
-                                        "dateFormat"
+                                        "input"
                                     ]
                                 },
                                 "detailedTimeline": {
@@ -623,7 +658,8 @@
                                             ],
                                             "required": [
                                                 "chartTitle",
-                                                "chartType"
+                                                "chartType",
+                                                "ticksDateFormat"
                                             ]
                                         },
                                         "dateFormat": {
@@ -633,8 +669,7 @@
                                     },
                                     "required": [
                                         "contributorId",
-                                        "input",
-                                        "dateFormat"
+                                        "input"
                                     ]
                                 }
                             }
@@ -854,7 +889,11 @@
                             "description": "Name of ARLAS Collection",
                             "type": "string"
                         }
-                    }
+                    },
+                    "required": [
+                        "url",
+                        "collection"
+                    ]
                 }
             },
             "required": [

@@ -84,6 +84,13 @@ export class AnalyticsImportService {
     private readonly shortcutService: ShortcutsService
   ) { }
 
+  private validateItemPerLine(itemPerLine: any): number {
+    if (itemPerLine != null && !isNaN(itemPerLine) && [1, 2, 3].includes(+itemPerLine)) {
+      return +itemPerLine;
+    }
+    return 1;
+  }
+
   public doImport(config: Config) {
 
     const tabs: Map<string, FormGroup> = new Map();
@@ -116,7 +123,7 @@ export class AnalyticsImportService {
         newGroup.patchValue({
           icon: analyticGroup.icon,
           title: analyticGroup.title,
-          itemPerLine,
+          itemPerLine: this.validateItemPerLine(itemPerLine),
           contentType: contentTypes
         });
         ((tab.controls.contentFg as FormGroup).controls.groupsFa as FormArray).push(newGroup);
