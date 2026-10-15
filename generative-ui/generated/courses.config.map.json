@@ -1,0 +1,435 @@
+{
+  "layers": [
+    {
+      "id": "arlas_id:Trajectoires par type:trails_by_type",
+      "type": "line",
+      "source": "feature-trails_by_type",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": [
+          "match",
+          [
+            "get",
+            "object_ship_type"
+          ],
+          "Passenger",
+          "#0072B2",
+          "Fishing",
+          "#009E73",
+          "Cargo",
+          "#E69F00",
+          "Tanker",
+          "#D55E00",
+          "HSC",
+          "#CC79A7",
+          "#999999"
+        ],
+        "line-width": 2,
+        "line-opacity": 0.9
+      },
+      "metadata": {
+        "collection": "courses",
+        "collection-display-name": "courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-hover-arlas_id:Trajectoires par type:trails_by_type",
+      "type": "line",
+      "source": "feature-trails_by_type",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": [
+          "match",
+          [
+            "get",
+            "object_ship_type"
+          ],
+          "Passenger",
+          "#0072B2",
+          "Fishing",
+          "#009E73",
+          "Cargo",
+          "#E69F00",
+          "Tanker",
+          "#D55E00",
+          "HSC",
+          "#CC79A7",
+          "#999999"
+        ],
+        "line-width": 6,
+        "line-opacity": 1
+      },
+      "metadata": {
+        "collection": "courses",
+        "collection-display-name": "courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-select-arlas_id:Trajectoires par type:trails_by_type",
+      "type": "line",
+      "source": "feature-trails_by_type",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": [
+          "match",
+          [
+            "get",
+            "object_ship_type"
+          ],
+          "Passenger",
+          "#0072B2",
+          "Fishing",
+          "#009E73",
+          "Cargo",
+          "#E69F00",
+          "Tanker",
+          "#D55E00",
+          "HSC",
+          "#CC79A7",
+          "#999999"
+        ],
+        "line-width": 6,
+        "line-opacity": 1
+      },
+      "metadata": {
+        "collection": "courses",
+        "collection-display-name": "courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Trajectoires par vitesse:trails_by_speed",
+      "type": "line",
+      "source": "feature-trails_by_speed",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_dynamics_gps_speed_nd"
+          ],
+          2.36,
+          "#ffffb2",
+          4.15,
+          "#fecc5c",
+          6.11,
+          "#fd8d3c",
+          10.19,
+          "#f03b20",
+          12.41,
+          "#bd0026"
+        ],
+        "line-width": 2.5,
+        "line-opacity": 0.9
+      },
+      "metadata": {
+        "collection": "courses",
+        "collection-display-name": "courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-hover-arlas_id:Trajectoires par vitesse:trails_by_speed",
+      "type": "line",
+      "source": "feature-trails_by_speed",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_dynamics_gps_speed_nd"
+          ],
+          2.36,
+          "#ffffb2",
+          4.15,
+          "#fecc5c",
+          6.11,
+          "#fd8d3c",
+          10.19,
+          "#f03b20",
+          12.41,
+          "#bd0026"
+        ],
+        "line-width": 6,
+        "line-opacity": 1
+      },
+      "metadata": {
+        "collection": "courses",
+        "collection-display-name": "courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-select-arlas_id:Trajectoires par vitesse:trails_by_speed",
+      "type": "line",
+      "source": "feature-trails_by_speed",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_dynamics_gps_speed_nd"
+          ],
+          2.36,
+          "#ffffb2",
+          4.15,
+          "#fecc5c",
+          6.11,
+          "#fd8d3c",
+          10.19,
+          "#f03b20",
+          12.41,
+          "#bd0026"
+        ],
+        "line-width": 6,
+        "line-opacity": 1
+      },
+      "metadata": {
+        "collection": "courses",
+        "collection-display-name": "courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Ports de depart:departures",
+      "type": "circle",
+      "source": "cluster-departure.location-Finest-tile-centroid-courses",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible",
+        "circle-sort-key": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "count_:normalized"
+          ],
+          0,
+          8,
+          1,
+          0
+        ]
+      },
+      "paint": {
+        "circle-color": "#333333",
+        "circle-opacity": 0.65,
+        "circle-radius": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "count_:normalized"
+          ],
+          0,
+          3,
+          0.0625,
+          6,
+          0.25,
+          9,
+          0.5625,
+          12,
+          1,
+          15
+        ],
+        "circle-stroke-width": 1.5,
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "courses",
+        "collection-display-name": "courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Ports d arrivee:arrivals",
+      "type": "circle",
+      "source": "cluster-arrival.location-Finest-tile-centroid-courses",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible",
+        "circle-sort-key": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "count_:normalized"
+          ],
+          0,
+          8,
+          1,
+          0
+        ]
+      },
+      "paint": {
+        "circle-color": "#ffffff",
+        "circle-opacity": 0.65,
+        "circle-radius": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "count_:normalized"
+          ],
+          0,
+          3,
+          0.0625,
+          6,
+          0.25,
+          9,
+          0.5625,
+          12,
+          1,
+          15
+        ],
+        "circle-stroke-width": 2,
+        "circle-stroke-color": "#333333",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "courses",
+        "collection-display-name": "courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    }
+  ],
+  "external-event-layers": [
+    {
+      "id": "arlas-hover-arlas_id:Trajectoires par type:trails_by_type",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-select-arlas_id:Trajectoires par type:trails_by_type",
+      "on": "select"
+    },
+    {
+      "id": "arlas-hover-arlas_id:Trajectoires par vitesse:trails_by_speed",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-select-arlas_id:Trajectoires par vitesse:trails_by_speed",
+      "on": "select"
+    }
+  ],
+  "events": {
+    "on-hover": {},
+    "emit-on-click": {},
+    "zoom-on-click": {}
+  }
+}
