@@ -12,11 +12,11 @@
       "$ref": "rootContributorConf.schema.json#/definitions/name"
     },
     "search_size": {
-      "description": "The size of search result on server side. Defaults to 100",
+      "description": "The size of search result on server side. Defaults to 100. Builder: 50 to 500 (step 10); values below 50 are raised to 50 at import.",
       "type": "integer"
     },
     "max_pages": {
-      "description": "Maximum number of pages that the contributor fetches. Default to 3.",
+      "description": "Maximum number of pages that the contributor fetches. Default to 3. Not exported by the Builder (lost after a round-trip).",
       "type": "integer"
     },
     "fieldsConfiguration": {
@@ -175,7 +175,7 @@
             "type": "string"
           },
           "dataType": {
-            "description": "Unit of column (ex: \u00b0C, km ..)",
+            "description": "Unit of column (ex: °C, km ..)",
             "type": "string"
           },
           "process": {
@@ -222,7 +222,7 @@
             "type": "string"
           },
           "dataType": {
-            "description": "Unit of property (ex: \u00b0C, km ..)",
+            "description": "Unit of property (ex: °C, km ..)",
             "type": "string"
           },
           "process": {
@@ -371,7 +371,7 @@
       }
     },
     "options": {
-      "description": "Configuration options for the result list contributor",
+      "description": "Configuration options for the result list contributor. Not exported by the Builder on the contributor: display options belong to the component input.options (see resultlist.schema.json).",
       "type": "object",
       "properties": {
         "showName": {

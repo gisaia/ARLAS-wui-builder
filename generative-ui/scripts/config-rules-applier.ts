@@ -46,13 +46,16 @@ function loadRuleSchemas(): any[] {
     'powerbars-rules.schema.json',
     'rootContributor-rules.schema.json',
     'swimlane-rules.schema.json',
-    'resultlist-contributor-rules.schema.json'
+    'resultlist-contributor-rules.schema.json',
+    'resultlist-rules.schema.json'
   ];
 
   return ruleFiles.map(file => {
     const filePath = path.join(SCHEMAS_DIR, file);
     if (fs.existsSync(filePath)) {
-      return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      // The rule schemas have no $id: register them under their file name to avoid the duplicate "" key
+      const schema = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      return { $id: file, ...schema };
     }
     return null;
   }).filter((s): s is any => s !== null);
@@ -65,13 +68,24 @@ function loadRuleSchemas(): any[] {
  * - Ensure schema compliance
  */
 function applyRules(config: any): ApplyRulesResult {
-  const ajv = new Ajv({ allOf: true, strict: false });
+  // validateSchema: false — the *-rules schemas declare "https://json-schema.org/draft-07/schema#", unknown to Ajv (which registers the http URL)
+  const ajv = new Ajv({ allOf: true, strict: false, validateSchema: false });
   
   // Load and add all rule schemas
   const ruleSchemas = loadRuleSchemas();
   ruleSchemas.forEach(schema => {
     ajv.addSchema(schema);
   });
+
+  // Official component / contributor schemas referenced by arlasconfig.schema.json ($ref by $id)
+  fs.readdirSync(SCHEMAS_DIR)
+    .filter(f => f.endsWith('.schema.json') && !f.endsWith('-rules.schema.json') && f !== 'arlasconfig.schema.json')
+    .forEach(f => {
+      const schema = JSON.parse(fs.readFileSync(path.join(SCHEMAS_DIR, f), 'utf8'));
+      if (!ajv.getSchema(schema.$id || f)) {
+        ajv.addSchema(schema, schema.$id ? undefined : f);
+      }
+    });
 
   // Also add the main arlasconfig schema
   const mainSchemaPath = path.join(SCHEMAS_DIR, 'arlasconfig.schema.json');
@@ -91,96 +105,144 @@ function applyRules(config: any): ApplyRulesResult {
     (c: any) => c.type === 'resultlist'
   ) || [];
 
+  // Allowed contributor keys = resultlistContributorConf + rootContributorConf properties (read from the schema files,
+  // not from ajv.getSchema(), which returns a validation function without `properties`).
+  const readSchemaProps = (file: string): string[] => {
+    const p = path.join(SCHEMAS_DIR, file);
+    return fs.existsSync(p) ? Object.keys(JSON.parse(fs.readFileSync(p, 'utf8')).properties || {}) : [];
+  };
+  const allowedResultlistProps = new Set([
+    ...readSchemaProps('resultlistContributorConf.schema.json'),
+    ...readSchemaProps('rootContributorConf.schema.json'),
+    'type', 'identifier', 'name', 'title', 'collection', 'icon'
+  ]);
+
   resultlistContributors.forEach((contributor: any) => {
     let fixesApplied = 0;
 
-    // Rule 1: Must have options property with showName
-    if (!contributor.options) {
-      contributor.options = { showName: false };
+    // R9: display options belong to the component input.options, never to the contributor
+    if (contributor.options !== undefined) {
+      delete contributor.options;
       fixesApplied++;
-      recommendations.push('Added options: { showName: false } to resultlist contributor');
+      recommendations.push(`Removed "options" from resultlist contributor ${contributor.identifier} (belongs to the component input.options)`);
     }
 
-    // Ensure showName is boolean false (not undefined)
-    if (contributor.options && contributor.options.showName === undefined) {
-      contributor.options.showName = false;
-      fixesApplied++;
-    }
-
-    // Rule 2: cardViewProperties should be present (can be empty array)
+    // R8 / R9: arrays always exported by the Builder
     if (contributor.cardViewProperties === undefined) {
       contributor.cardViewProperties = [];
       fixesApplied++;
-      recommendations.push('Added cardViewProperties: [] to resultlist contributor');
+    }
+    if (contributor.includeMetadata === undefined) {
+      contributor.includeMetadata = [];
+      fixesApplied++;
+    }
+    if (contributor.details === undefined) {
+      contributor.details = [];
+      fixesApplied++;
     }
 
-    // Rule 3: Ensure fieldsConfiguration has required sub-properties
-    if (!contributor.fieldsConfiguration) {
-      contributor.fieldsConfiguration = {
-        idFieldName: 'revenue',
-        titleFieldNames: [{ fieldPath: 'title', process: '' }],
-        tooltipFieldNames: [{ fieldPath: 'type', process: '' }],
-        iconColorFieldName: 'type',
-        useHttpQuicklooks: false,
-        useHttpThumbnails: false,
-        displayQuicklookOnMap: { enabled: false, boundsFieldName: '' },
-        urlImageTemplates: []
-      };
-      fixesApplied += 2;
-      recommendations.push('Added fieldsConfiguration to resultlist contributor');
-    } else {
-      // Add missing sub-properties if needed
-      if (!contributor.fieldsConfiguration.idFieldName) {
-        contributor.fieldsConfiguration.idFieldName = 'revenue';
+    // R6: fieldsConfiguration, with the Builder defaults (empty field paths, never invented field names)
+    contributor.fieldsConfiguration = contributor.fieldsConfiguration || {};
+    const fc = contributor.fieldsConfiguration;
+    if (!fc.idFieldName) {
+      recommendations.push(`Resultlist ${contributor.identifier}: set fieldsConfiguration.idFieldName to the collection id_path (_describe)`);
+    }
+    const defaults: Record<string, any> = {
+      titleFieldNames: [{ fieldPath: '', process: '' }],
+      tooltipFieldNames: [{ fieldPath: '', process: '' }],
+      iconColorFieldName: '',
+      useHttpQuicklooks: false,
+      useHttpThumbnails: false,
+      displayQuicklookOnMap: { enabled: false, boundsFieldName: '' },
+      urlImageTemplates: []
+    };
+    Object.entries(defaults).forEach(([key, value]) => {
+      if (fc[key] === undefined) {
+        fc[key] = value;
         fixesApplied++;
       }
-      if (!contributor.fieldsConfiguration.titleFieldNames) {
-        contributor.fieldsConfiguration.titleFieldNames = [{ fieldPath: 'title', process: '' }];
-        fixesApplied++;
-      }
-      if (!contributor.fieldsConfiguration.tooltipFieldNames) {
-        contributor.fieldsConfiguration.tooltipFieldNames = [{ fieldPath: 'type', process: '' }];
-        fixesApplied++;
-      }
-      if (contributor.fieldsConfiguration.useHttpQuicklooks === undefined) {
-        contributor.fieldsConfiguration.useHttpQuicklooks = false;
-        fixesApplied++;
-      }
-      if (contributor.fieldsConfiguration.useHttpThumbnails === undefined) {
-        contributor.fieldsConfiguration.useHttpThumbnails = false;
-        fixesApplied++;
-      }
-      if (contributor.fieldsConfiguration.displayQuicklookOnMap === undefined) {
-        contributor.fieldsConfiguration.displayQuicklookOnMap = { enabled: false, boundsFieldName: '' };
-        fixesApplied++;
-      }
-      if (contributor.fieldsConfiguration.urlImageTemplates === undefined) {
-        contributor.fieldsConfiguration.urlImageTemplates = [];
-        fixesApplied++;
-      }
+    });
+
+    // R1: a list without columns has no list view
+    if (!Array.isArray(contributor.columns) || contributor.columns.length === 0) {
+      recommendations.push(`Resultlist ${contributor.identifier}: add at least one column (otherwise hasListView is false)`);
     }
 
-    // Remove unnecessary properties not in schema
-    // These are props that would cause schema validation failures
-    const schemaProps = ajv.getSchema('resultlistContributorConf.schema.json');
-    if (schemaProps && contributor) {
-      const schemaPropsList = Object.keys(schemaProps.properties || {});
-      const extraProps = Object.keys(contributor).filter(
-        prop => !schemaPropsList.includes(prop) && prop !== 'options'
-      );
-      
-      // Keep only 'options' but remove others
-      extraProps.forEach(prop => {
-        if (prop !== 'options') {
-          delete contributor[prop];
-          fixesApplied++;
-        }
-      });
-      
-      if (extraProps.length > 0) {
-        recommendations.push(`Removed ${extraProps.length} unnecessary properties from resultlist contributor`);
-      }
+    // Remove properties unknown to the schemas
+    const extraProps = Object.keys(contributor).filter(prop => !allowedResultlistProps.has(prop));
+    extraProps.forEach(prop => {
+      delete contributor[prop];
+      fixesApplied++;
+    });
+    if (extraProps.length > 0) {
+      recommendations.push(`Removed ${extraProps.length} unknown properties from resultlist contributor ${contributor.identifier}: ${extraProps.join(', ')}`);
     }
+
+    if (fixesApplied > 0) {
+      violationsFixed.push(fixesApplied);
+    }
+  });
+
+  // ============================================
+  // RESULTLIST COMPONENT RULES (components.resultlists[] and analytics widgets)
+  // ============================================
+
+  const resultlistComponents: any[] = [
+    ...(config.arlas?.web?.components?.resultlists || []),
+    ...((config.arlas?.web?.analytics || []).flatMap((g: any) => g.components || [])
+      .filter((w: any) => w.componentType === 'resultlist'))
+  ];
+
+  resultlistComponents.forEach((component: any) => {
+    let fixesApplied = 0;
+    const contributor = resultlistContributors.find((c: any) => c.identifier === component.contributorId);
+    component.input = component.input || {};
+    const input = component.input;
+
+    // C1: input.id === contributorId
+    if (input.id !== component.contributorId) {
+      input.id = component.contributorId;
+      fixesApplied++;
+      recommendations.push(`Set input.id = contributorId (${component.contributorId}) on resultlist component`);
+    }
+    // C2: views derived from the contributor
+    const hasColumns = !!contributor && Array.isArray(contributor.columns) && contributor.columns.length > 0;
+    const hasCards = !!contributor && Array.isArray(contributor.cardViewProperties) && contributor.cardViewProperties.length > 0;
+    if (input.hasListView !== hasColumns) { input.hasListView = hasColumns; fixesApplied++; }
+    if (input.hasCardView !== hasCards) { input.hasCardView = hasCards; fixesApplied++; }
+    if (input.hasGridView === undefined) { input.hasGridView = false; fixesApplied++; }
+    // C3: defaultMode consistent with the available views
+    const mode = input.defaultMode ?? input.defautMode;
+    if (mode === undefined
+      || (['grid', '1'].includes(String(mode)) && !input.hasGridView)
+      || (['card', '2'].includes(String(mode)) && !hasCards)) {
+      input.defaultMode = 'list';
+      fixesApplied++;
+    }
+    // C4 / C6
+    if (input.tableWidth === undefined) { input.tableWidth = 445; fixesApplied++; }
+    if (contributor && input.searchSize !== contributor.search_size) { input.searchSize = contributor.search_size; fixesApplied++; }
+    // C5: full options object
+    const optionDefaults: Record<string, any> = {
+      showActionsOnhover: 'true',
+      showDetailIconName: 'keyboard_arrow_down',
+      hideDetailIconName: 'keyboard_arrow_up',
+      icon: contributor?.icon || 'short_text',
+      showName: true,
+      showIcon: true
+    };
+    input.options = input.options || {};
+    Object.entries(optionDefaults).forEach(([key, value]) => {
+      if (input.options[key] === undefined) { input.options[key] = value; fixesApplied++; }
+    });
+    // C7 / C8 / C9 defaults of a Builder export
+    const inputDefaults: Record<string, any> = {
+      displayFilters: false, isGeoSortActived: false, isExportEnabled: false, useColorService: true,
+      visualisationsList: [], globalActionsList: [], downloadLink: '', isBodyHidden: false
+    };
+    Object.entries(inputDefaults).forEach(([key, value]) => {
+      if (input[key] === undefined) { input[key] = value; fixesApplied++; }
+    });
 
     if (fixesApplied > 0) {
       violationsFixed.push(fixesApplied);
@@ -227,12 +289,15 @@ function applyRules(config: any): ApplyRulesResult {
     }
 
     // Remove extra properties not in schema
-    const mainSchema = ajv.getSchema('arlasconfig.schema.json');
-    if (mainSchema && contributor) {
-      const schemaPropsList = Object.keys(mainSchema.properties || {});
-      const extraProps = Object.keys(contributor).filter(
-        prop => !schemaPropsList.includes(prop)
-      );
+    // Allowed keys come from mapContributorConf + rootContributorConf (the previous code read the
+    // properties of arlasconfig.schema.json through ajv.getSchema(), which is empty: it deleted every key).
+    const allowedMapProps = new Set([
+      ...readSchemaProps('mapContributorConf.schema.json'),
+      ...readSchemaProps('rootContributorConf.schema.json'),
+      'type', 'identifier', 'name', 'title', 'collection', 'icon'
+    ]);
+    if (contributor) {
+      const extraProps = Object.keys(contributor).filter(prop => !allowedMapProps.has(prop));
       
       extraProps.forEach(prop => {
         delete contributor[prop];
@@ -285,12 +350,14 @@ function applyRules(config: any): ApplyRulesResult {
     }
 
     // Remove extra properties
-    const histogramSchema = ajv.getSchema('histogramContributorConf.schema.json');
-    if (histogramSchema && contributor) {
-      const schemaPropsList = Object.keys(histogramSchema.properties || {});
-      const extraProps = Object.keys(contributor).filter(
-        prop => !schemaPropsList.includes(prop) && prop !== 'aggregationmodels'
-      );
+    const allowedHistogramProps = new Set([
+      ...readSchemaProps('histogramContributorConf.schema.json'),
+      ...readSchemaProps(contributor.type === 'detailedhistogram' ? 'detailedHistogramContributorConf.schema.json' : 'histogramContributorConf.schema.json'),
+      ...readSchemaProps('rootContributorConf.schema.json'),
+      'type', 'identifier', 'name', 'title', 'collection', 'icon', 'aggregationmodels'
+    ]);
+    if (contributor) {
+      const extraProps = Object.keys(contributor).filter(prop => !allowedHistogramProps.has(prop));
       
       extraProps.forEach(prop => {
         delete contributor[prop];
@@ -487,12 +554,13 @@ function applyRules(config: any): ApplyRulesResult {
  * Main execution
  */
 function main() {
-  const configPath = path.join(
+  const configPath = process.argv[2] || path.join(
     '/home/mickael/IdeaProjects/ARLAS-wui-builder',
     'generative-ui',
     'generated',
     'courses.config.json'
   );
+  const mapConfigPath = process.argv[3] || configPath.replace(/\.json$/, '.map.json');
 
   if (!fs.existsSync(configPath)) {
     console.error(`❌ Config not found at: ${configPath}`);
@@ -541,9 +609,7 @@ function main() {
   
   try {
     const output = execSync(
-      'node /home/mickael/IdeaProjects/ARLAS-wui-builder/generative-ui/validate.js ' +
-      '/home/mickael/IdeaProjects/ARLAS-wui-builder/generative-ui/generated/courses.config.json ' +
-      '/home/mickael/IdeaProjects/ARLAS-wui-builder/generative-ui/generated/courses.config.map.json',
+      `node /home/mickael/IdeaProjects/ARLAS-wui-builder/generative-ui/validate.js "${configPath}" "${mapConfigPath}"`,
       { cwd: '/home/mickael/IdeaProjects/ARLAS-wui-builder/generative-ui', stdio: 'pipe' }
     ).toString();
     

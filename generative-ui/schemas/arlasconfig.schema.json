@@ -226,7 +226,7 @@
                                         "type": "string"
                                     },
                                     "title": {
-                                        "description": "Title of the analytic group",
+                                        "description": "Title of panel group",
                                         "type": "string"
                                     },
                                     "tab": {
@@ -234,7 +234,7 @@
                                         "type": "string"
                                     },
                                     "icon": {
-                                        "description": "Material icon associated to the group",
+                                        "description": "Icon of panel group, from material design icon",
                                         "type": "string"
                                     },
                                     "filterValues": {
@@ -345,31 +345,19 @@
                                                         },
                                                         "input": {
                                                             "description": "Input of resultlist component.",
-                                                            "type": "object",
-                                                            "properties": {
-                                                                "options": {
-                                                                    "type": "object",
-                                                                    "properties": {
-                                                                        "showName": {
-                                                                            "type": "boolean"
-                                                                        },
-                                                                        "showIcon": {
-                                                                            "type": "boolean"
-                                                                        },
-                                                                        "itemPerLine": {
-                                                                          "description": "Number of widgets per line in the analytics panel. Valid values: 1, 2, or 3. Default: 1",
-                                                                          "type": "integer",
-                                                                          "enum": [1, 2, 3],
-                                                                          "default": 1
-                                                                        }
-                                                                    },
-                                                                    "required": [
-                                                                        "showName",
-                                                                        "showIcon"
-                                                                    ]
+                                                            "allOf": [
+                                                                {
+                                                                    "$ref": "resultlist.schema.json#"
                                                                 }
-                                                            },
+                                                            ],
                                                             "required": [
+                                                                "id",
+                                                                "tableWidth",
+                                                                "searchSize",
+                                                                "hasListView",
+                                                                "hasGridView",
+                                                                "hasCardView",
+                                                                "defaultMode",
                                                                 "options"
                                                             ]
                                                         }
@@ -473,14 +461,6 @@
                                                 }
                                             ]
                                         }
-                                    },
-                                    "title": {
-                                        "description": "Title of panel group",
-                                        "type": "string"
-                                    },
-                                    "icon": {
-                                        "description": "Icon of panel group, from material design icon",
-                                        "type": "string"
                                     }
                                 },
                                 "required": [
@@ -598,7 +578,22 @@
                                                 ]
                                             },
                                             "input": {
-                                                "type": "object"
+                                                "description": "Input of the resultlist component (data table). input.id must equal contributorId.",
+                                                "allOf": [
+                                                    {
+                                                        "$ref": "resultlist.schema.json#"
+                                                    }
+                                                ],
+                                                "required": [
+                                                    "id",
+                                                    "tableWidth",
+                                                    "searchSize",
+                                                    "hasListView",
+                                                    "hasGridView",
+                                                    "hasCardView",
+                                                    "defaultMode",
+                                                    "options"
+                                                ]
                                             }
                                         },
                                         "required": [
@@ -617,7 +612,7 @@
                                             "type": "string"
                                         },
                                         "input": {
-                                            "description": "Histogram component inputs for timeline",
+                                            "description": "Histogram component inputs for timeline The Builder always exports dataType 'time', barWeight and chartHeight; without them the bars are not drawn (NaN width/height).",
                                             "type": "object",
                                             "allOf": [
                                                 {
@@ -627,7 +622,10 @@
                                             "required": [
                                                 "chartTitle",
                                                 "chartType",
-                                                "ticksDateFormat"
+                                                "ticksDateFormat",
+                                                "dataType",
+                                                "barWeight",
+                                                "chartHeight"
                                             ]
                                         },
                                         "dateFormat": {
@@ -649,7 +647,7 @@
                                             "type": "string"
                                         },
                                         "input": {
-                                            "description": "Histogram component inputs for detailed timeline",
+                                            "description": "Histogram component inputs for detailed timeline The Builder always exports dataType 'time', barWeight and chartHeight; without them the bars are not drawn (NaN width/height).",
                                             "type": "object",
                                             "allOf": [
                                                 {
@@ -659,7 +657,10 @@
                                             "required": [
                                                 "chartTitle",
                                                 "chartType",
-                                                "ticksDateFormat"
+                                                "ticksDateFormat",
+                                                "dataType",
+                                                "barWeight",
+                                                "chartHeight"
                                             ]
                                         },
                                         "dateFormat": {
@@ -998,11 +999,11 @@
                                         "chipssearch"
                                     ]
                                 }
-                                },
-                                "required": [
+                            },
+                            "required": [
                                 "name",
                                 "components"
-                                ]
+                            ]
                         }
                     },
                     "required": [

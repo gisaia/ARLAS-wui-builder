@@ -2,119 +2,398 @@
   "$schema": "https://json-schema.org/draft-07/schema#",
   "type": "object",
   "title": "Resultlist Contributor Rules",
-  "description": "JSON Schema capturing validation rules discovered in ARLAS WUI code generation patterns",
+  "description": "Rules applied by the ARLAS WUI Builder to a resultlist contributor, extracted from ConfigExportHelper.getResultListContributors (export), ResultListInputsFeeder (import), ResultlistFormBuilderService (form validators) and arlas-web-contributors ResultListContributor (runtime). R10 - the Builder re-exports the contributor with the canonical identifier `<collection>-<idFieldName>-<searchSize>-<columnName1>-...-<detailName1>-...`; the component `input.id` and `contributorId` must follow the identifier (checked by validate.js).",
+  "definitions": {
+    "process": {
+      "description": "R3 - JavaScript expression on the variable `result` (e.g. \"Math.round(result * 10) / 10\"). Rejected by validProcess if 250 characters or more, or if it contains document, window, eval, localStorage, this or function/Function. Only Date, Math, Number, String and Array methods and arithmetic operators are allowed. Empty string means no transformation.",
+      "type": "string",
+      "pattern": "^(?![\\s\\S]*(document|window|eval|localStorage|this|function|Function))[\\s\\S]{0,249}$"
+    }
+  },
   "allOf": [
     {
       "if": {
         "properties": {
-          "type": { "const": "resultlist" }
+          "type": {
+            "const": "resultlist"
+          }
         }
       },
       "then": {
+        "required": [
+          "identifier",
+          "collection",
+          "search_size",
+          "fieldsConfiguration",
+          "columns",
+          "details",
+          "cardViewProperties",
+          "includeMetadata"
+        ],
+        "not": {
+          "description": "R9 - The Builder never exports `options` on the contributor: display options belong to the component `input.options`.",
+          "required": [
+            "options"
+          ]
+        },
         "properties": {
-          "options": {
-            "type": "object",
-            "description": "Configuration options for the result list contributor. Must be present.",
-            "required": ["showName"],
-            "properties": {
-              "showName": {
-                "type": "boolean",
-                "description": "Whether to show the name in the result list. Defaults to false if not defined."
-              },
-              "showIcon": {
-                "type": "boolean",
-                "description": "Whether to show the icon in the result list"
-              },
-              "showActionsOnhover": {
-                "type": "string",
-                "description": "Whether to show actions on hover. Hardcoded to 'true' in code generation."
-              },
-              "showDetailIconName": {
-                "type": "string",
-                "description": "Name of the detail icon. Hardcoded to 'keyboard_arrow_down' in code generation."
-              },
-              "hideDetailIconName": {
-                "type": "string",
-                "description": "Whether to hide the detail icon. Hardcoded to 'keyboard_arrow_up' in code generation."
-              },
-              "icon": {
-                "type": "string",
-                "description": "Material icon name for the result list contributor"
+          "search_size": {
+            "description": "R4 - Page size. Builder slider: 50 to 500, step 10. At import the Builder applies max(search_size, 50). Runtime default: 100.",
+            "type": "integer",
+            "minimum": 50,
+            "maximum": 500
+          },
+          "max_pages": {
+            "description": "R5 - Maximum number of fetched pages (runtime default 3). NOT exported by the Builder: lost after a round-trip.",
+            "type": "integer",
+            "minimum": 1
+          },
+          "columns": {
+            "description": "R1 - At least one column (FormArray Validators.required). Columns drive `hasListView` on the component.",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "description": "R2 - Column of the list view.",
+              "type": "object",
+              "required": [
+                "columnName",
+                "fieldName"
+              ],
+              "properties": {
+                "columnName": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "fieldName": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "dataType": {
+                  "description": "Unit displayed in the header (e.g. 'nd', 'h').",
+                  "type": "string"
+                },
+                "process": {
+                  "$ref": "#/definitions/process"
+                },
+                "useColorService": {
+                  "type": "boolean"
+                },
+                "sort": {
+                  "description": "Initial sort of the column. Not re-imported when the list is an analytics widget.",
+                  "enum": [
+                    "asc",
+                    "desc",
+                    ""
+                  ]
+                }
               }
             }
-          }
-        },
-        "required": ["options"]
-      }
-    },
-    {
-      "if": {
-        "properties": {
-          "type": { "const": "resultlist" },
-          "options": { "const": true }
-        }
-      },
-      "then": {
-        "properties": {
-          "options.showName": {
-            "const": false,
-            "description": "showName defaults to false when options is present"
-          }
-        }
-      }
-    },
-    {
-      "description": "Ensure generated config has no extra properties not in schema",
-      "allOf": [
-        {
-          "properties": {
-            "type": { "const": "resultlist" }
           },
-          "not": {
-            "anyOf": [
-              {
+          "fieldsConfiguration": {
+            "description": "R6 - Fields used by the list, the grid view (titleFieldNames[0] = tile title, tooltipFieldNames[0] = tooltip, iconColorFieldName = tile color, urlThumbnailTemplate = tile image) and the quicklooks (urlImageTemplates).",
+            "type": "object",
+            "required": [
+              "idFieldName",
+              "titleFieldNames",
+              "tooltipFieldNames",
+              "useHttpQuicklooks",
+              "useHttpThumbnails",
+              "displayQuicklookOnMap"
+            ],
+            "properties": {
+              "idFieldName": {
+                "description": "Must be the `id_path` of the collection (set automatically from _describe).",
+                "type": "string",
+                "minLength": 1
+              },
+              "titleFieldNames": {
+                "description": "Only the FIRST element is kept by the Builder.",
+                "type": "array",
+                "maxItems": 1,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "fieldPath": {
+                      "type": "string"
+                    },
+                    "process": {
+                      "$ref": "#/definitions/process"
+                    }
+                  }
+                }
+              },
+              "tooltipFieldNames": {
+                "description": "Only the FIRST element is kept by the Builder.",
+                "type": "array",
+                "maxItems": 1,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "fieldPath": {
+                      "type": "string"
+                    },
+                    "process": {
+                      "$ref": "#/definitions/process"
+                    }
+                  }
+                }
+              },
+              "iconColorFieldName": {
+                "type": "string"
+              },
+              "useHttpQuicklooks": {
+                "type": "boolean"
+              },
+              "useHttpThumbnails": {
+                "type": "boolean"
+              },
+              "displayQuicklookOnMap": {
+                "type": "object",
+                "required": [
+                  "enabled"
+                ],
                 "properties": {
-                  "options": {
-                    "not": {
-                      "type": "object"
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "boundsFieldName": {
+                    "description": "Geo field of the image footprint; only used when enabled is true.",
+                    "type": "string"
+                  }
+                }
+              },
+              "detailsTitleTemplate": {
+                "type": "string"
+              },
+              "urlThumbnailTemplate": {
+                "description": "Tile image of the grid view, URL template with {field} placeholders (e.g. \"https://host/thumbnails/{object_id}.jpg\"). Required in practice when the component has hasGridView: true.",
+                "type": "string"
+              },
+              "urlImageTemplate": {
+                "description": "Legacy single quicklook; converted into urlImageTemplates at import.",
+                "type": "string"
+              },
+              "urlImageTemplates": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "url"
+                  ],
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "filter": {
+                      "type": "object",
+                      "required": [
+                        "field",
+                        "values"
+                      ],
+                      "properties": {
+                        "field": {
+                          "type": "string"
+                        },
+                        "values": {
+                          "type": "array"
+                        }
+                      }
                     }
                   }
                 }
               }
-            ]
+            }
+          },
+          "details": {
+            "description": "R7 - Sections of the detail panel. `order` is renumbered (index + 1) at export.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "order",
+                "fields"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "order": {
+                  "type": "number"
+                },
+                "fields": {
+                  "description": "At least one field per section (FormArray Validators.required). Fields of type numeric, date or text.",
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "label",
+                      "path",
+                      "process"
+                    ],
+                    "properties": {
+                      "label": {
+                        "type": "string"
+                      },
+                      "path": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "process": {
+                        "$ref": "#/definitions/process"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "cardViewProperties": {
+            "description": "R8 - Fields of the card view (component hasCardView: true), grouped by lineNumber: each distinct lineNumber is one line of the card, lines are displayed in ascending lineNumber order. Leave empty ([]) when the card view is not used (then hasCardView: false).",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "fieldName",
+                "prettyName",
+                "lineNumber"
+              ],
+              "properties": {
+                "fieldName": {
+                  "description": "Field displayed (keyword, numeric or date).",
+                  "type": "string",
+                  "minLength": 1
+                },
+                "lineNumber": {
+                  "description": "Line of the card on which the field is displayed (0, 1, 2...).",
+                  "type": "number",
+                  "minimum": 0
+                },
+                "prettyName": {
+                  "description": "Label displayed before the value (mandatory in the Builder form).",
+                  "type": "string",
+                  "minLength": 1
+                },
+                "icon": {
+                  "description": "Optional material icon displayed before the value.",
+                  "type": "string"
+                },
+                "dataType": {
+                  "description": "Optional unit displayed after the value.",
+                  "type": "string"
+                },
+                "process": {
+                  "$ref": "#/definitions/process"
+                },
+                "isTitle": {
+                  "description": "Display this field as the card title.",
+                  "type": "boolean"
+                },
+                "sort": {
+                  "description": "Optional sort of the field (hidden control in the Builder form).",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "includeMetadata": {
+            "description": "R9 - Always exported as an array (empty by default).",
+            "type": "array"
           }
         }
-      ]
+      }
     }
   ],
   "examples": [
     {
       "type": "resultlist",
-      "identifier": "collection123",
-      "name": "Result List 1",
-      "title": "Result List 1",
-      "collection": "collection123",
-      "icon": "short_text",
-      "options": {
-        "showName": false,
-        "showIcon": true,
-        "showActionsOnhover": "true",
-        "showDetailIconName": "keyboard_arrow_down",
-        "hideDetailIconName": "keyboard_arrow_up",
-        "icon": "short_text"
-      },
+      "identifier": "courses-track.id-50-Navire-Type-Parcours-",
+      "name": "Liste des parcours",
+      "collection": "courses",
+      "icon": "table_chart",
+      "search_size": 50,
       "fieldsConfiguration": {
         "idFieldName": "track.id",
-        "titleFieldNames": [{"fieldPath": "", "process": ""}],
-        "tooltipFieldNames": [{"fieldPath": "", "process": ""}],
-        "iconColorFieldName": "",
+        "titleFieldNames": [
+          {
+            "fieldPath": "object.name",
+            "process": ""
+          }
+        ],
+        "tooltipFieldNames": [
+          {
+            "fieldPath": "object.ship_type",
+            "process": ""
+          }
+        ],
+        "iconColorFieldName": "object.ship_type",
         "useHttpQuicklooks": false,
         "useHttpThumbnails": false,
-        "displayQuicklookOnMap": {"enabled": false, "boundsFieldName": ""},
+        "displayQuicklookOnMap": {
+          "enabled": false,
+          "boundsFieldName": ""
+        },
         "urlImageTemplates": []
       },
-      "columns": [],
-      "details": []
+      "columns": [
+        {
+          "columnName": "Navire",
+          "fieldName": "object.name",
+          "dataType": "",
+          "process": "",
+          "useColorService": false,
+          "sort": ""
+        },
+        {
+          "columnName": "Type",
+          "fieldName": "object.ship_type",
+          "dataType": "",
+          "process": "",
+          "useColorService": true,
+          "sort": ""
+        }
+      ],
+      "details": [
+        {
+          "name": "Parcours",
+          "order": 1,
+          "fields": [
+            {
+              "label": "Distance (m)",
+              "path": "track.distance.gps.travelled_m",
+              "process": "Math.round(result)"
+            }
+          ]
+        }
+      ],
+      "cardViewProperties": [
+        {
+          "fieldName": "object.name",
+          "prettyName": "Navire",
+          "lineNumber": 0,
+          "icon": "directions_boat",
+          "dataType": "",
+          "process": "",
+          "isTitle": true,
+          "sort": ""
+        },
+        {
+          "fieldName": "track.dynamics.gps.speed_nd",
+          "prettyName": "Vitesse",
+          "lineNumber": 1,
+          "icon": "speed",
+          "dataType": "nd",
+          "process": "Math.round(result * 10) / 10",
+          "isTitle": false,
+          "sort": ""
+        }
+      ],
+      "includeMetadata": []
     }
   ]
 }

@@ -28,6 +28,7 @@ import { LeftMenuComponent } from '@components/left-menu/left-menu.component';
 import { StatusComponent } from '@components/status/status.component';
 import { TranslatePipe } from '@ngx-translate/core';
 import { IconService } from '@services/icon-service/icon.service';
+import { WebmcpService } from '@services/webmcp/webmcp.service';
 import { ArlasSettingsService, TopMenuComponent } from 'arlas-wui-toolkit';
 import { INGXLoggerMetadata, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -67,7 +68,8 @@ export class AppComponent implements OnInit {
     private readonly arlasSettingsService: ArlasSettingsService,
     private readonly router: Router,
     // Is used in the logger below
-    private readonly snackbar: MatSnackBar
+    private readonly snackbar: MatSnackBar,
+    private readonly webmcpService: WebmcpService
   ) {
     this.logger.registerMonitor({
       onLog: (logObject: INGXLoggerMetadata) => {
@@ -83,6 +85,7 @@ export class AppComponent implements OnInit {
 
     this.titleService.setTitle(this.title);
     this.iconService.registerIcons();
+    this.webmcpService.registerTools();
     // remove arlas gif after
     const gifElement = document.querySelector('.gif');
     if (gifElement) {

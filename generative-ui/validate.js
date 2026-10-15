@@ -43,6 +43,10 @@ function logFail(msg) {
   hasErrors = true;
 }
 
+function logWarn(msg) {
+  console.warn(`  [WARN] ${msg}`);
+}
+
 function logSection(title) {
   console.log(`\n--- ${title} ---`);
 }
@@ -97,7 +101,8 @@ const schemaList = [
   'arlas-map.schema.json',
   'donut.schema.json',
   'metric.schema.json',
-  'metrics-table.schema.json'
+  'metrics-table.schema.json',
+  'resultlist.schema.json'
 ];
 
 schemaList.forEach(file => {
@@ -207,6 +212,114 @@ if (!fs.existsSync(fullSchemaPath)) {
   }
 }
 
+// Règles de la liste de résultats (extraites de ConfigExportHelper / ResultListInputsFeeder / validProcess)
+const FORBIDDEN_PROCESS_WORDS = ['document', 'window', 'eval', 'localStorage', 'this', 'function', 'Function'];
+function checkProcess(value, where) {
+  if (!value) return;
+  if (typeof value !== 'string' || value.length >= 250 || FORBIDDEN_PROCESS_WORDS.some(w => value.includes(w))) {
+    logFail(`${where} : "process" refusé par validProcess (< 250 caractères, sans ${FORBIDDEN_PROCESS_WORDS.join('/')}) (R3).`);
+  } else if (!value.includes('result')) {
+    logWarn(`${where} : "process" n'utilise pas la variable "result" ("${value}") (R3).`);
+  }
+}
+
+function checkResultlistContributor(c) {
+  const where = `Contributeur resultlist "${c.identifier}"`;
+  if (c.options !== undefined) {
+    logFail(`${where} : la clé "options" n'est jamais exportée par le Builder sur le contributeur ; elle va dans input.options du composant (R9).`);
+  }
+  if (!Array.isArray(c.columns) || c.columns.length === 0) {
+    logFail(`${where} : au moins une colonne est requise ; sans colonne, hasListView est faux et la table ne s'affiche pas (R1).`);
+  }
+  (c.columns || []).forEach((col, i) => {
+    if (!col.columnName || !col.fieldName) logFail(`${where} : columns[${i}] doit définir columnName et fieldName (R2).`);
+    if (col.sort !== undefined && !['asc', 'desc', ''].includes(col.sort)) logFail(`${where} : columns[${i}].sort doit valoir "asc", "desc" ou "" (R2).`);
+    checkProcess(col.process, `${where} columns[${i}]`);
+  });
+  (c.details || []).forEach((d, i) => {
+    if (!Array.isArray(d.fields) || d.fields.length === 0) logFail(`${where} : details[${i}] ("${d.name}") doit contenir au moins un champ (R7).`);
+    (d.fields || []).forEach((f, j) => checkProcess(f.process, `${where} details[${i}].fields[${j}]`));
+  });
+  (c.cardViewProperties || []).forEach((cv, i) => {
+    if (!cv.fieldName || !cv.prettyName || typeof cv.lineNumber !== 'number') {
+      logFail(`${where} : cardViewProperties[${i}] doit définir fieldName, prettyName et lineNumber (R8).`);
+    }
+    checkProcess(cv.process, `${where} cardViewProperties[${i}]`);
+  });
+  const fc = c.fieldsConfiguration || {};
+  ['titleFieldNames', 'tooltipFieldNames'].forEach(k => {
+    if (Array.isArray(fc[k]) && fc[k].length > 1) logWarn(`${where} : fieldsConfiguration.${k} contient ${fc[k].length} éléments ; le Builder ne conserve que le premier (R6).`);
+    (fc[k] || []).forEach((t, i) => checkProcess(t.process, `${where} fieldsConfiguration.${k}[${i}]`));
+  });
+  if (typeof c.search_size === 'number' && (c.search_size < 50 || c.search_size > 500)) {
+    logWarn(`${where} : search_size=${c.search_size} hors de la plage du Builder (50–500) ; une valeur < 50 est remontée à 50 à l'import (R4).`);
+  }
+  if (c.max_pages !== undefined) {
+    logWarn(`${where} : max_pages n'est pas exporté par le Builder et sera perdu après un round-trip (R5).`);
+  }
+  if (!Array.isArray(c.includeMetadata)) {
+    logWarn(`${where} : includeMetadata absent ; le Builder exporte toujours un tableau (R9).`);
+  }
+}
+
+function checkResultlistComponent(comp, where) {
+  const input = comp.input || {};
+  const contrib = contributors.find(c => c.identifier === comp.contributorId);
+  if (input.id !== comp.contributorId) {
+    logFail(`${where} : input.id ("${input.id}") doit être égal à contributorId ("${comp.contributorId}") (C1).`);
+  }
+  if (!input.options || typeof input.options.showName !== 'boolean' || typeof input.options.showIcon !== 'boolean') {
+    logFail(`${where} : input.options.showName et input.options.showIcon sont obligatoires (C5).`);
+  }
+  const hasColumns = !!contrib && Array.isArray(contrib.columns) && contrib.columns.length > 0;
+  const hasCards = !!contrib && Array.isArray(contrib.cardViewProperties) && contrib.cardViewProperties.length > 0;
+  ['hasListView', 'hasGridView', 'hasCardView'].forEach(flag => {
+    if (typeof input[flag] !== 'boolean') {
+      logFail(`${where} : input.${flag} est obligatoire (booléen, false si la vue n'est pas utilisée) (C2).`);
+    }
+  });
+  if (input.hasListView !== hasColumns) {
+    logFail(`${where} : input.hasListView doit valoir ${hasColumns} (le contributeur a ${hasColumns ? 'des' : 'aucune'} colonne(s)) (C2).`);
+  }
+  if (typeof input.hasCardView === 'boolean' && input.hasCardView !== hasCards) {
+    logFail(`${where} : input.hasCardView doit valoir ${hasCards} (cardViewProperties ${hasCards ? 'non vide' : 'vide'}) (C2).`);
+  }
+  if (input.hasGridView === true && contrib) {
+    const fc = contrib.fieldsConfiguration || {};
+    if (!fc.urlThumbnailTemplate) {
+      logWarn(`${where} : hasGridView est vrai mais fieldsConfiguration.urlThumbnailTemplate est vide : les tuiles de la grille n'auront pas d'image (C2).`);
+    }
+    if (!fc.titleFieldNames?.[0]?.fieldPath) {
+      logWarn(`${where} : hasGridView est vrai mais fieldsConfiguration.titleFieldNames[0].fieldPath est vide : les tuiles n'auront pas de titre (C2).`);
+    }
+  }
+  const mode = input.defaultMode ?? input.defautMode;
+  if (mode === undefined) {
+    logFail(`${where} : input.defaultMode est absent ("list", "grid" ou "card") (C3).`);
+  } else if (['grid', '1'].includes(String(mode)) && !input.hasGridView) {
+    logFail(`${where} : defaultMode "grid" exige hasGridView: true (C3).`);
+  } else if (['card', '2'].includes(String(mode)) && !hasCards) {
+    logFail(`${where} : defaultMode "card" exige des cardViewProperties sur le contributeur (C3).`);
+  }
+  if (![445, 217, 143, 211, 137].includes(input.tableWidth)) {
+    logFail(`${where} : input.tableWidth (${input.tableWidth}) doit valoir 445, 217 ou 143 selon le nombre de widgets par ligne (C4).`);
+  }
+  if (contrib && input.searchSize !== contrib.search_size) {
+    logWarn(`${where} : input.searchSize (${input.searchSize}) diffère de search_size du contributeur (${contrib.search_size}) (C6).`);
+  }
+  if (input.cellBackgroundStyle !== undefined && !(contrib?.columns || []).some(col => col.useColorService)) {
+    logWarn(`${where} : cellBackgroundStyle n'a d'effet que si une colonne a useColorService: true (C7).`);
+  }
+  if (comp.usage !== undefined && !['analytics', 'shortcuts', 'both'].includes(comp.usage)) {
+    logFail(`${where} : usage doit valoir "analytics", "shortcuts" ou "both" (C10).`);
+  }
+}
+
+logSection('4.bis Règles des Listes de Résultats (contributeurs resultlist)');
+const resultlistContribs = contributors.filter(c => c.type === 'resultlist');
+resultlistContribs.forEach(checkResultlistContributor);
+logPass(`${resultlistContribs.length} contributeur(s) resultlist contrôlé(s) (R1–R9).`);
+
 // 5. Intégrité Référentielle et Dépendances
 logSection('5. Intégrité Référentielle et Cohérence Inter-Composants');
 
@@ -255,9 +368,7 @@ analyticsGroups.forEach(group => {
         logFail(`Widget "${widget.title || widget.contributorId}" (donut) : "input.containerWidth" est obligatoire (> 0, ex: 223).`);
       }
     } else if (widget.componentType === 'resultlist') {
-      if (!input.options || typeof input.options.showName !== 'boolean' || typeof input.options.showIcon !== 'boolean') {
-        logFail(`Widget "${widget.title || widget.contributorId}" (resultlist) : "input.options.showName" et "showIcon" sont obligatoires.`);
-      }
+      checkResultlistComponent(widget, `Widget analytics "${widget.title || widget.contributorId}" (resultlist)`);
     }
   });
 });
@@ -288,6 +399,54 @@ if (config?.arlas?.tagger) {
     logFail(`Configuration tagger : "collection" est obligatoire lorsque tagger est défini pour que le formulaire SideModules soit valide.`);
   }
 }
+// Timeline : entrées exportées par le Builder (ConfigExportHelper.getTimelineComponent)
+[['timeline', 'histogram-timeline'], ['detailedTimeline', 'histogram-detailed-timeline']].forEach(([key, expectedId]) => {
+  const tl = components[key];
+  if (!tl) return;
+  const inp = tl.input || {};
+  if (inp.dataType !== 'time') {
+    logFail(`Composant ${key} : input.dataType doit valoir "time" (sinon l'axe est numérique et les barres ne s'affichent pas).`);
+  }
+  if (typeof inp.barWeight !== 'number' || !(inp.barWeight > 0 && inp.barWeight <= 1)) {
+    logFail(`Composant ${key} : input.barWeight est obligatoire (0 < barWeight <= 1, ex. 0.8) ; sans lui la largeur des barres vaut NaN.`);
+  }
+  if (typeof inp.chartHeight !== 'number' || inp.chartHeight <= 0) {
+    logFail(`Composant ${key} : input.chartHeight est obligatoire (> 0 ; Builder : 128 pour la timeline, 60 pour la timeline détaillée).`);
+  }
+  if (tl.componentType !== 'histogram') {
+    logWarn(`Composant ${key} : componentType "histogram" attendu (export du Builder).`);
+  }
+  if (inp.id !== expectedId) {
+    logWarn(`Composant ${key} : input.id "${expectedId}" attendu (export du Builder), trouvé "${inp.id}".`);
+  }
+});
+
+// Panneau analytics : onglets et titres
+const declaredTabs = config?.arlas?.web?.options?.tabs;
+const groupTabs = [...new Set(analyticsGroups.map(g => g.tab).filter(t => t !== undefined))];
+if (analyticsGroups.length > 0) {
+  if (!Array.isArray(declaredTabs) || declaredTabs.length === 0) {
+    logWarn(`arlas.web.options.tabs est absent : la WUI affiche les onglets en mode rétrocompatible (icône "short_text", sans nom). Déclarez { name, icon, showIcon, showName } pour : ${groupTabs.join(', ')}.`);
+  } else {
+    const declaredNames = new Set(declaredTabs.map(t => t.name));
+    groupTabs.filter(t => !declaredNames.has(t)).forEach(t => {
+      logFail(`L'onglet "${t}" utilisé par des groupes analytics n'est pas déclaré dans arlas.web.options.tabs : il sera masqué.`);
+    });
+    declaredTabs.filter(t => !groupTabs.includes(t.name)).forEach(t => {
+      logWarn(`L'onglet "${t.name}" est déclaré dans options.tabs mais aucun groupe ne l'utilise : il est ignoré.`);
+    });
+  }
+}
+analyticsGroups.forEach(g => {
+  const untitled = (g.components || []).filter(c => ['metric', 'metricstable', 'resultlist'].includes(c.componentType));
+  if (untitled.length > 1) {
+    logWarn(`Groupe "${g.groupId}" : ${untitled.length} composants ${[...new Set(untitled.map(c => c.componentType))].join('/')} ; ces widgets n'affichent pas de titre propre (seul group.title est rendu). Placez chaque indicateur dans son propre groupe titré, ou utilisez beforeValue/afterValue.`);
+  }
+  (g.components || []).filter(c => c.title !== undefined).forEach(c => {
+    logWarn(`Groupe "${g.groupId}" : la propriété "title" du composant ${c.componentType} "${c.contributorId}" n'est jamais affichée (titre = group.title, input.chartTitle, input.powerbarTitle ou nom du contributeur selon le widget).`);
+  });
+});
+
 if (components.timeline?.input && !components.timeline.input.ticksDateFormat) {
   logFail(`Composant timeline : "input.ticksDateFormat" est obligatoire pour initialiser le format de date du formulaire.`);
 }
@@ -298,6 +457,13 @@ if (Array.isArray(components.resultlists)) {
   components.resultlists.forEach((rl, idx) => {
     if (rl.contributorId && !contributorIds.has(rl.contributorId)) {
       logFail(`Composant resultlists[${idx}] référence un contributeur inexistant: "${rl.contributorId}"`);
+    }
+    checkResultlistComponent(rl, `Composant resultlists[${idx}]`);
+  });
+  const rlInAnalytics = analyticsGroups.flatMap(g => g.components || []).filter(w => w.componentType === 'resultlist');
+  rlInAnalytics.forEach(w => {
+    if (components.resultlists.some(rl => rl.contributorId === w.contributorId)) {
+      logWarn(`Liste "${w.contributorId}" utilisée à la fois dans components.resultlists et dans analytics avec le même contributeur : utilisez un contributeur distinct pour le widget analytics (le widget analytics est importé sans grille, icônes ni tri des colonnes) (C11).`);
     }
   });
 }

@@ -1,0 +1,226 @@
+{
+  "layers": [
+    {
+      "id": "arlas_id:Tracks:1724158164373",
+      "type": "circle",
+      "source": "cluster-departure.location-Finest-tile-centroid-courses",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible",
+        "circle-sort-key": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "count_:normalized"
+          ],
+          0,
+          0,
+          1,
+          8
+        ]
+      },
+      "paint": {
+        "circle-stroke-opacity": 0,
+        "circle-stroke-color": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "count_:normalized"
+          ],
+          0,
+          "#cee897",
+          0.05,
+          "#9dc95b",
+          0.1,
+          "#4bc71e",
+          0.15,
+          "#1bc473",
+          0.2,
+          "#16ccc9",
+          0.25,
+          "#2673cc",
+          0.3,
+          "#3619cf",
+          0.35,
+          "#6518d0",
+          0.45,
+          "#9317d1",
+          0.55,
+          "#d11799",
+          0.75,
+          "#cf1919",
+          1,
+          "#631313"
+        ],
+        "circle-opacity": 0.7,
+        "circle-color": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "count_:normalized"
+          ],
+          0,
+          "#cee897",
+          0.05,
+          "#9dc95b",
+          0.1,
+          "#4bc71e",
+          0.15,
+          "#1bc473",
+          0.2,
+          "#16ccc9",
+          0.25,
+          "#2673cc",
+          0.3,
+          "#3619cf",
+          0.35,
+          "#6518d0",
+          0.45,
+          "#9317d1",
+          0.55,
+          "#d11799",
+          0.75,
+          "#cf1919",
+          1,
+          "#631313"
+        ],
+        "circle-radius": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          0,
+          9,
+          23,
+          15
+        ],
+        "circle-blur": 1
+      },
+      "metadata": {
+        "collection": "courses",
+        "collection-display-name": "courses",
+        "cell-shape": "square",
+        "hidden-props": {
+          "geom-type": "circle-heatmap"
+        }
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Trails:1724158240395",
+      "type": "line",
+      "source": "feature-track.trail-wide-courses",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-opacity": 1,
+        "line-color": "#ff0000",
+        "line-width": 2
+      },
+      "metadata": {
+        "collection": "courses",
+        "collection-display-name": "courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-select-arlas_id:Trails:1724158240395",
+      "type": "line",
+      "source": "feature-track.trail-wide-courses",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-opacity": 1,
+        "line-color": "#ff0000",
+        "line-width": 14
+      },
+      "metadata": {
+        "collection": "courses",
+        "collection-display-name": "courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-hover-arlas_id:Trails:1724158240395",
+      "type": "line",
+      "source": "feature-track.trail-wide-courses",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-opacity": 1,
+        "line-color": "#ff0000",
+        "line-width": 14
+      },
+      "metadata": {
+        "collection": "courses",
+        "collection-display-name": "courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    }
+  ],
+  "external-event-layers": [
+    {
+      "id": "arlas-hover-arlas_id:Trails:1724158240395",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-select-arlas_id:Trails:1724158240395",
+      "on": "select"
+    }
+  ],
+  "events": {
+    "on-hover": {},
+    "emit-on-click": {},
+    "zoom-on-click": {}
+  }
+}
