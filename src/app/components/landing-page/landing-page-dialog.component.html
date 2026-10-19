@@ -13,10 +13,9 @@
               (change)="toggleDisplayPublic($event)" class="include-public">
             {{'Include public collections' | translate}}</mat-checkbox>
           }
-          <button
-            (click)="mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
+          <button (click)="mainFormService.startingConfig.getFg().get('serverUrl').valid ? checkUrl() : false"
             [disabled]="mainFormService.startingConfig.getFg().get('serverUrl').invalid"
-            matButton="outlined" color="primary">{{'Reload collections' | translate}}</button>
+            matButton="outlined" color="primary" class="new-config-content__reload">{{'Reload collections' | translate}}</button>
         </div>
       </arlas-config-element>
       @if (isServerReady) {
