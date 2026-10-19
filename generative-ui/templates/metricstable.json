@@ -1,0 +1,58 @@
+{
+  "_usage": "Metrics table: one row per term, one column per metric. Only group.title is shown.",
+  "contributor": {
+    "type": "metricstable",
+    "identifier": "<<ID>>",
+    "name": "<<TITLE>>",
+    "title": "<<TITLE>>",
+    "icon": "table_chart",
+    "collection": "<<COLLECTION>>",
+    "numberOfBuckets": 10,
+    "sort": {
+      "collection": "<<COLLECTION>>",
+      "on": "metric",
+      "order": "desc",
+      "metric": {
+        "metric": "avg",
+        "field": "<<FIELD:NUMERIC>>"
+      }
+    },
+    "configuration": [
+      {
+        "collection": "<<COLLECTION>>",
+        "termfield": "<<FIELD:KEYWORD>>",
+        "metrics": [
+          {
+            "metric": "avg",
+            "field": "<<FIELD:NUMERIC>>"
+          }
+        ]
+      }
+    ]
+  },
+  "analytics_group": {
+    "groupId": "<<ID>>_group",
+    "title": "<<TITLE>>",
+    "tab": "<<TAB>>",
+    "icon": "table_chart",
+    "components": [
+      {
+        "contributorId": "<<ID>>",
+        "componentType": "metricstable",
+        "usage": "analytics",
+        "input": {
+          "id": "<<ID>>",
+          "filterOperator": {
+            "value": "Eq",
+            "display": true
+          },
+          "useColorService": true,
+          "applyColorTo": "row",
+          "headerDisplayMode": "full",
+          "normaliseBy": "column",
+          "selectWithCheckbox": false
+        }
+      }
+    ]
+  }
+}

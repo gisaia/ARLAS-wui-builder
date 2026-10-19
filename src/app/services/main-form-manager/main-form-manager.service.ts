@@ -61,6 +61,30 @@ import { DataWithLinks } from 'arlas-persistence-api';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 
+/**
+ * Stringifies a generated config the way it is saved to a file.
+ * With a separator, object keys are converted to snake- or kebab-case (e.g. '-' for config.map.json):
+ * a property cannot be declared with a kebab-cased name, so the model interfaces use camel case.
+ */
+export function stringifyForSave(json: any, separator?: string): string {
+  return JSON.stringify(json, (key, value) => {
+    if (!!separator && value && typeof value === 'object' && !Array.isArray(value)) {
+      const replacement = {};
+      for (const k in value) {
+        if (Object.hasOwnProperty.call(value, k)) {
+          replacement[
+            k.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
+              .map(x => x.toLowerCase())
+              .join(separator)
+          ] = value[k];
+        }
+      }
+      return replacement;
+    }
+    return value;
+  }, 2);
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -306,25 +330,7 @@ export class MainFormManagerService {
   }
 
   private saveJson(json: any, filename: string, separator?: string) {
-    const blob = new Blob([JSON.stringify(json, (key, value) => {
-      if (!!separator && value && typeof value === 'object' && !Array.isArray(value)) {
-        // convert keys to snake- or kebab-case (eventually other) according to the separator.
-        // In fact we cannot declare a property with a snake-cased name,
-        // (so in models interfaces properties are are camel case)
-        const replacement = {};
-        for (const k in value) {
-          if (Object.hasOwnProperty.call(value, k)) {
-            replacement[
-              k.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
-                .map(x => x.toLowerCase())
-                .join(separator)
-            ] = value[k];
-          }
-        }
-        return replacement;
-      }
-      return value;
-    }, 2)], { type: 'application/json;charset=utf-8' });
+    const blob = new Blob([stringifyForSave(json, separator)], { type: 'application/json;charset=utf-8' });
     FileSaver.saveAs(blob, filename);
   }
 

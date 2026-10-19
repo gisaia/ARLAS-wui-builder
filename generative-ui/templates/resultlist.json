@@ -1,0 +1,92 @@
+{
+  "_usage": "Main result list: the contributor goes to arlas.web.contributors, the component to arlas.web.components.resultlists (never a copy in analytics). input.id = contributorId, searchSize = search_size, idFieldName = params.id_path of the collection. hasListView needs at least one column; hasCardView needs cardViewProperties; hasGridView needs urlThumbnailTemplate and titleFieldNames[0].",
+  "contributor": {
+    "type": "resultlist",
+    "identifier": "<<ID>>",
+    "name": "<<TITLE>>",
+    "icon": "table_chart",
+    "collection": "<<COLLECTION>>",
+    "search_size": 50,
+    "fieldsConfiguration": {
+      "idFieldName": "<<ID_PATH>>",
+      "titleFieldNames": [
+        {
+          "fieldPath": "<<FIELD:ANY>>",
+          "process": ""
+        }
+      ],
+      "tooltipFieldNames": [
+        {
+          "fieldPath": "<<FIELD:ANY>>",
+          "process": ""
+        }
+      ],
+      "iconColorFieldName": "",
+      "urlImageTemplates": [],
+      "useHttpQuicklooks": false,
+      "useHttpThumbnails": false,
+      "displayQuicklookOnMap": {
+        "enabled": false,
+        "boundsFieldName": ""
+      }
+    },
+    "columns": [
+      {
+        "columnName": "<<LABEL>>",
+        "fieldName": "<<FIELD:ANY>>",
+        "dataType": "",
+        "process": "",
+        "useColorService": false,
+        "sort": ""
+      }
+    ],
+    "details": [
+      {
+        "name": "<<LABEL>>",
+        "order": 1,
+        "fields": [
+          {
+            "path": "<<FIELD:ANY>>",
+            "label": "<<LABEL>>",
+            "process": ""
+          }
+        ]
+      }
+    ],
+    "cardViewProperties": [],
+    "includeMetadata": []
+  },
+  "component": {
+    "componentType": "resultlist",
+    "contributorId": "<<ID>>",
+    "usage": "analytics",
+    "input": {
+      "id": "<<ID>>",
+      "tableWidth": 445,
+      "globalActionsList": [],
+      "searchSize": 50,
+      "nLastLines": 3,
+      "detailedGridHeight": 300,
+      "nbGridColumns": 3,
+      "displayFilters": false,
+      "hasListView": true,
+      "hasCardView": false,
+      "hasGridView": false,
+      "defaultMode": "list",
+      "downloadLink": "",
+      "isBodyHidden": false,
+      "isGeoSortActived": false,
+      "isExportEnabled": true,
+      "useColorService": true,
+      "visualisationsList": [],
+      "options": {
+        "showActionsOnhover": "true",
+        "showDetailIconName": "keyboard_arrow_down",
+        "hideDetailIconName": "keyboard_arrow_up",
+        "icon": "table_chart",
+        "showName": true,
+        "showIcon": true
+      }
+    }
+  }
+}

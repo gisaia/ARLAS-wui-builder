@@ -1,0 +1,235 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Resultlist input configuration",
+  "description": "Input of the resultlist component (data table), used both in `arlas.web.components.resultlists[]` and in `arlas.web.analytics[].components[]` with componentType `resultlist`. Rules extracted from the ARLAS WUI Builder export (`ConfigExportHelper.getAnalyticsComponent`) and import (`ResultListInputsFeeder`).",
+  "type": "object",
+  "$id": "resultlist.schema.json",
+  "properties": {
+    "id": {
+      "description": "Identifier of the resultlist component. MUST be equal to the `contributorId` of the component (the Builder exports `id: contributorId`).",
+      "type": "string",
+      "minLength": 1
+    },
+    "tableWidth": {
+      "description": "Width of the table in pixels. 445 for one widget per line, otherwise ceil(445 / itemPerLine) - 6 (217 for 2, 143 for 3; legacy exports used -12: 211 and 137). In the analytics panel, the Builder infers itemPerLine from this value at import.",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "searchSize": {
+      "description": "Page size of the list. Mirrors `search_size` of the resultlist contributor.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "hasListView": {
+      "description": "MANDATORY. Whether the list (table) view is available. `true` when the contributor has at least one column; `false` otherwise.",
+      "type": "boolean",
+      "default": false
+    },
+    "hasCardView": {
+      "description": "MANDATORY, `false` when not used. Whether the card view is available. Must be `true` exactly when the contributor has at least one `cardViewProperties` entry (cards are built from them, one line per `lineNumber`).",
+      "type": "boolean",
+      "default": false
+    },
+    "hasGridView": {
+      "description": "MANDATORY, `false` when not used. Whether the grid view (tiles) is available. When `true`, the contributor fieldsConfiguration provides the tile content: `titleFieldNames[0]` (tile title), `tooltipFieldNames[0]` (tooltip), `iconColorFieldName` (tile color) and `urlThumbnailTemplate` (tile image, e.g. \"https://host/{object_id}.jpg\"); `urlImageTemplates` adds full-size quicklooks. Without urlThumbnailTemplate the tiles have no image.",
+      "type": "boolean",
+      "default": false
+    },
+    "defaultMode": {
+      "description": "View displayed at startup. `grid` requires `hasGridView: true`, `card` requires `hasCardView: true`; otherwise the Builder forces `list`. Legacy numeric values 0 (list), 1 (grid), 2 (card) are still parsed by `stringToResultlistModeEnum`.",
+      "type": "string",
+      "enum": [
+        "list",
+        "grid",
+        "card",
+        "0",
+        "1",
+        "2"
+      ]
+    },
+    "displayFilters": {
+      "description": "Display a filter row below the column headers.",
+      "type": "boolean"
+    },
+    "isGeoSortActived": {
+      "description": "Enable sorting the list by distance to the map center.",
+      "type": "boolean"
+    },
+    "isAutoGeoSortActived": {
+      "description": "Passed through unchanged by the Builder (not editable).",
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "isExportEnabled": {
+      "description": "Enable the CSV export of the list.",
+      "type": "boolean"
+    },
+    "isBodyHidden": {
+      "description": "Passed through unchanged by the Builder (not editable).",
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "cellBackgroundStyle": {
+      "description": "Background style of colorized cells. Only meaningful when at least one column of the contributor has `useColorService: true`.",
+      "type": "string",
+      "enum": [
+        "filled",
+        "outlined"
+      ]
+    },
+    "useColorService": {
+      "description": "Use the ARLAS color service to colorize cells and icons. Always `true` in Builder exports.",
+      "type": "boolean"
+    },
+    "nLastLines": {
+      "description": "Passed through unchanged by the Builder (not editable).",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "detailedGridHeight": {
+      "description": "Passed through unchanged by the Builder (not editable).",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "nbGridColumns": {
+      "description": "Passed through unchanged by the Builder (not editable).",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "globalActionsList": {
+      "description": "Passed through unchanged by the Builder (not editable).",
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "selectedItemsEvent": {
+      "description": "Passed through unchanged by the Builder (not editable)."
+    },
+    "consultedItemEvent": {
+      "description": "Passed through unchanged by the Builder (not editable)."
+    },
+    "actionOnItemEvent": {
+      "description": "Passed through unchanged by the Builder (not editable)."
+    },
+    "globalActionEvent": {
+      "description": "Passed through unchanged by the Builder (not editable)."
+    },
+    "downloadLink": {
+      "description": "URL template of a download service for an item.",
+      "type": "string"
+    },
+    "visualisationLink": {
+      "description": "URL template of an external visualisation of an item.",
+      "type": "string"
+    },
+    "visualisationsList": {
+      "description": "External visualisations available for the items.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "default": {
+            "type": "boolean"
+          },
+          "dataGroups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "protocol": {
+                  "type": "string"
+                },
+                "visualisationUrl": {
+                  "type": "string"
+                },
+                "filters": {
+                  "type": "array"
+                }
+              },
+              "required": [
+                "name",
+                "protocol",
+                "visualisationUrl"
+              ]
+            }
+          }
+        },
+        "required": [
+          "name",
+          "dataGroups"
+        ]
+      }
+    },
+    "options": {
+      "description": "Display options. The Builder always exports the full object.",
+      "type": "object",
+      "properties": {
+        "showActionsOnhover": {
+          "description": "Show item actions on hover. Exported as the string 'true'.",
+          "type": "string"
+        },
+        "showDetailIconName": {
+          "description": "Material icon used to open the details. Exported as 'keyboard_arrow_down'.",
+          "type": "string"
+        },
+        "hideDetailIconName": {
+          "description": "Material icon used to close the details. Exported as 'keyboard_arrow_up'.",
+          "type": "string"
+        },
+        "icon": {
+          "description": "Material icon of the list tab. Default 'short_text' at import.",
+          "type": "string"
+        },
+        "showName": {
+          "description": "Show the list name in its tab. Default `true` at import.",
+          "type": "boolean"
+        },
+        "showIcon": {
+          "description": "Show the icon in the list tab. Default `true` at import.",
+          "type": "boolean"
+        },
+        "itemPerLine": {
+          "description": "Number of widgets per line in the analytics panel. Valid values: 1, 2, or 3. Default: 1",
+          "type": "integer",
+          "enum": [
+            1,
+            2,
+            3
+          ],
+          "default": 1
+        }
+      },
+      "required": [
+        "showName",
+        "showIcon"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "options",
+    "hasListView",
+    "hasGridView",
+    "hasCardView"
+  ]
+}

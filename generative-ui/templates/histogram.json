@@ -1,0 +1,50 @@
+{
+  "_usage": "Numeric histogram in the analytics panel. Append the contributor to arlas.web.contributors and the group to arlas.web.analytics (declare its tab in arlas.web.options.tabs). The visible title is input.chartTitle. Use either interval or numberOfBuckets, not both.",
+  "contributor": {
+    "type": "histogram",
+    "identifier": "<<ID>>",
+    "name": "<<TITLE>>",
+    "title": "<<TITLE>>",
+    "icon": "bar_chart",
+    "collection": "<<COLLECTION>>",
+    "isOneDimension": true,
+    "useUtc": false,
+    "additionalCollections": [],
+    "aggregationmodels": [
+      {
+        "type": "histogram",
+        "field": "<<FIELD:NUMERIC>>",
+        "interval": {
+          "value": "<<NUMBER:INTERVAL>>"
+        }
+      }
+    ]
+  },
+  "analytics_group": {
+    "groupId": "<<ID>>_group",
+    "title": "<<TITLE>>",
+    "tab": "<<TAB>>",
+    "icon": "bar_chart",
+    "components": [
+      {
+        "contributorId": "<<ID>>",
+        "componentType": "histogram",
+        "usage": "analytics",
+        "input": {
+          "id": "<<ID>>",
+          "chartTitle": "<<TITLE>>",
+          "dataType": "numeric",
+          "chartType": "bars",
+          "chartWidth": 445,
+          "chartHeight": 120,
+          "barWeight": 0.8,
+          "xUnit": "<<UNIT>>",
+          "chartYLabel": "<<LABEL>>",
+          "yAxisStartsFromZero": true,
+          "isHistogramSelectable": true,
+          "multiselectable": false
+        }
+      }
+    ]
+  }
+}

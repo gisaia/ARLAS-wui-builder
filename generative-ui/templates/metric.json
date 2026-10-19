@@ -1,0 +1,39 @@
+{
+  "_usage": "Single indicator. Only group.title is shown: one metric per group. function uses m[0], m[1]… in the order of metrics; field is null for count. sum for a stock, avg (or ratio of sums) for a ratio.",
+  "contributor": {
+    "type": "metric",
+    "identifier": "<<ID>>",
+    "name": "<<TITLE>>",
+    "title": "<<TITLE>>",
+    "icon": "<<ICON>>",
+    "collection": "<<COLLECTION>>",
+    "function": "m[0]",
+    "metrics": [
+      {
+        "field": "<<FIELD:NUMERIC>>",
+        "metric": "avg"
+      }
+    ]
+  },
+  "analytics_group": {
+    "groupId": "<<ID>>_group",
+    "title": "<<TITLE>>",
+    "tab": "<<TAB>>",
+    "icon": "<<ICON>>",
+    "components": [
+      {
+        "contributorId": "<<ID>>",
+        "componentType": "metric",
+        "usage": "analytics",
+        "input": {
+          "id": "<<ID>>",
+          "customizedCssClass": "metric-custom",
+          "shortValue": false,
+          "valuePrecision": 1,
+          "afterValue": " <<UNIT>>",
+          "chartWidth": 445
+        }
+      }
+    ]
+  }
+}

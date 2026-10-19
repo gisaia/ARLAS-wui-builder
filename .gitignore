@@ -111,3 +111,7 @@ dist
 
 # angular cache
 .angular
+
+# generative-ui pipeline outputs
+generative-ui/generated/*.normalized.config.json
+generative-ui/generated/*.report.json

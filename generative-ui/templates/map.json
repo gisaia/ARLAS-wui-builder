@@ -1,0 +1,192 @@
+{
+  "_usage": "Map. `contributor` goes to arlas.web.contributors: one per collection, identifier = the collection, name = \"Map <collection>\" (schema pattern), layers_sources[].id = layer id. `extraConfigs` goes at the root of config.json, and mapgl.input.mapLayers.layers / externalEventLayers stay []. `map_layers` and `external_event_layers` go to config.map.json (`layers`, `external-event-layers`). margePanForLoad / margePanForTest belong to mapgl.input, never to the contributor. window_extent_geometry is the string \"geometry_path\" or \"centroid_path\". Map properties are read with [\"get\", \"<field with . replaced by _>\"]; a normalized count with [\"get\", \"count_:normalized\"]. The Builder rebuilds the stops of a normalized interpolate at a constant step: no √ spacing. Only literals, get, match and interpolate linear survive the Builder. No *-sort-key. Each base layer listed in external_event_layers needs its arlas-hover-<id> and arlas-select-<id> copies in map_layers (same source, highlighted paint); the Builder rebuilds them on save.",
+  "contributor": {
+    "type": "map",
+    "identifier": "<<COLLECTION>>",
+    "name": "Map <<COLLECTION>>",
+    "icon": "map",
+    "collection": "<<COLLECTION>>",
+    "geo_query_field": "<<FIELD:GEO>>",
+    "geo_query_op": "Intersects",
+    "window_extent_geometry": "geometry_path",
+    "layers_sources": [
+      {
+        "id": "arlas_id:<<NAME>>:<<KEY>>",
+        "name": "<<NAME>>",
+        "source": "feature-<<KEY>>",
+        "minzoom": 0,
+        "maxzoom": 23,
+        "maxfeatures": 5000,
+        "render_mode": "wide",
+        "returned_geometry": "<<FIELD:GEO>>",
+        "include_fields": []
+      },
+      {
+        "id": "arlas_id:<<NAME2>>:<<KEY2>>",
+        "name": "<<NAME2>>",
+        "source": "cluster-<<FIELD:GEO_POINT>>-Finest-tile-centroid-<<COLLECTION>>",
+        "minzoom": 0,
+        "maxzoom": 23,
+        "agg_geo_field": "<<FIELD:GEO_POINT>>",
+        "aggType": "tile",
+        "granularity": "Finest",
+        "minfeatures": 0,
+        "aggregated_geometry": "centroid",
+        "metrics": [
+          {
+            "field": "",
+            "metric": "count",
+            "normalize": true
+          }
+        ]
+      }
+    ]
+  },
+  "extraConfigs": [
+    {
+      "configPath": "config.map.json",
+      "replacedAttribute": "arlas.web.components.mapgl.input.mapLayers.layers",
+      "replacer": "layers"
+    },
+    {
+      "configPath": "config.map.json",
+      "replacedAttribute": "arlas.web.components.mapgl.input.mapLayers.externalEventLayers",
+      "replacer": "external-event-layers"
+    }
+  ],
+  "mapgl": {
+    "allowMapExtend": true,
+    "nbVerticesLimit": 100,
+    "input": {
+      "margePanForLoad": 0,
+      "margePanForTest": 0,
+      "initZoom": "<<NUMBER:ZOOM>>",
+      "initCenter": [
+        "<<NUMBER:LON>>",
+        "<<NUMBER:LAT>>"
+      ],
+      "displayScale": true,
+      "displayCurrentCoordinates": true,
+      "enableGlobe": true,
+      "defaultBasemapStyle": {
+        "name": "Dark Matter",
+        "styleFile": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+      },
+      "basemapStyles": [
+        {
+          "name": "Dark Matter",
+          "styleFile": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+        }
+      ],
+      "mapLayers": {
+        "layers": [],
+        "externalEventLayers": [],
+        "events": {
+          "onHover": [],
+          "emitOnClick": [],
+          "zoomOnClick": []
+        }
+      },
+      "visualisations_sets": [
+        {
+          "name": "<<TITLE>>",
+          "layers": [
+            "arlas_id:<<NAME>>:<<KEY>>"
+          ],
+          "enabled": true
+        }
+      ]
+    }
+  },
+  "map_layers": [
+    {
+      "id": "arlas_id:<<NAME>>:<<KEY>>",
+      "type": "line",
+      "source": "feature-<<KEY>>",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "metadata": {
+        "collection": "<<COLLECTION>>",
+        "collection-display-name": "<<COLLECTION>>",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#A0A7B4",
+        "line-width": 1.6,
+        "line-opacity": 0.95
+      }
+    },
+    {
+      "id": "arlas_id:<<NAME2>>:<<KEY2>>",
+      "type": "circle",
+      "source": "cluster-<<FIELD:GEO_POINT>>-Finest-tile-centroid-<<COLLECTION>>",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "metadata": {
+        "collection": "<<COLLECTION>>",
+        "collection-display-name": "<<COLLECTION>>",
+        "cell-shape": "square"
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "circle-color": "#FFFFFF",
+        "circle-opacity": 0.75,
+        "circle-radius": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "count_:normalized"
+          ],
+          0,
+          4,
+          0.2,
+          7.2,
+          0.4,
+          10.4,
+          0.6,
+          13.6,
+          0.8,
+          16.8,
+          1,
+          20
+        ],
+        "circle-stroke-width": 1.5,
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-opacity": 0.9
+      }
+    }
+  ],
+  "external_event_layers": [
+    {
+      "id": "arlas-hover-arlas_id:<<NAME>>:<<KEY>>",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-select-arlas_id:<<NAME>>:<<KEY>>",
+      "on": "select"
+    }
+  ]
+}

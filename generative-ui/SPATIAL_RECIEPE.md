@@ -470,3 +470,56 @@ Règle G5 : Lisibilité des Graphiques et des Indicateurs
 • Les unités sont affichées et converties dans une grandeur lisible (heures plutôt que secondes, kilomètres plutôt que mètres).
 • Une troncature (top N, période partielle, seuil d'effectif) est indiquée dans le titre ou la légende.
 • Un même indicateur n'est pas présenté deux fois sans apport ; deux définitions concurrentes d'une même grandeur sont à éviter.
+
+🧩 10. Compléments : Mobilité, Qualité des Données et Mise en Page
+
+Recette 4 : La Carte de Localisation et la Généralisation Multi-échelle
+
+• Usage : Montrer où se trouvent des objets (semis de points, lignes) sans analyse quantitative, ou comme couche de détail sous une analyse agrégée.
+• Règles de construction : Au-delà de quelques milliers d'objets, la superposition masque la densité réelle : agréger à petite échelle (grille, cercles de comptage) et ne montrer les objets un à un qu'à grande échelle ; fixer le seuil de bascule sur le nombre d'objets affichés ou sur le niveau de zoom ; symboles petits, semi-transparents, avec un liseré clair.
+• Design visuel : Une teinte neutre si aucune variable n'est portée ; la couleur ou la taille ne sont ajoutées que si elles servent une variable (Recettes 1 et 2).
+• Pièges : Un semis non agrégé suggère une densité fausse (points empilés au même endroit) ; l'ordre de dessin change ce qui est visible.
+
+Analyse 49 : La Densité de Trajectoires (Corridors)
+
+• Objectif : Faire apparaître les axes de passage (routes, corridors, couloirs migratoires) à partir de trajectoires.
+• Méthode : Découper l'espace en mailles et compter, par maille, le nombre d'objets mobiles distincts (ou de parcours distincts) qui la traversent ; variante pondérée par la durée de présence ou la longueur parcourue dans la maille.
+• Entrée : Trajectoires (lignes) ou positions échantillonnées le long des trajectoires, avec un identifiant de parcours ou d'objet.
+• Rendu : Grille en dégradé séquentiel (clair = peu fréquenté, foncé ou vif = corridor) ; éventuellement les trajectoires en fond très transparentes.
+• Pièges : Compter des positions plutôt que des parcours surpondère les objets lents ou échantillonnés plus souvent ; une maille trop grande fusionne des corridors voisins, trop petite les fragmente (Analyse 15).
+
+Analyse 50 : Les Indicateurs de Forme des Trajectoires
+
+• Objectif : Qualifier un déplacement : direct, avec détour, en boucle ou erratique.
+• Méthode : Rectitude = distance à vol d'oiseau entre origine et destination / distance parcourue (1 = direct, proche de 0 = boucle) ; indice de détour (inverse) ; boucle si origine = destination ; sinuosité locale (variation du cap) ; part du temps à l'arrêt.
+• Entrée : Trajectoires avec origine, destination et longueur parcourue (ou positions horodatées).
+• Rendu : Histogramme de la rectitude ; trajectoires colorées en dégradé séquentiel sur la rectitude ; comparaison par catégorie d'objet.
+• Pièges : Une boucle (pêche, croisière, patrouille) n'est pas un trajet inefficace : séparer les parcours dont l'origine est la destination avant d'interpréter les détours.
+
+Analyse 51 : La Régularité de Desserte et la Demande non Desservie
+
+• Objectif : Distinguer une liaison déjà assurée par un service régulier d'une demande dispersée qui justifierait d'ouvrir une ligne.
+• Méthode : Par paire origine-destination : nombre de parcours, nombre de véhicules ou d'opérateurs distincts, ratio parcours / véhicule (très supérieur à 1 = navette régulière ; proche de 1 avec plusieurs véhicules = demande fragmentée), fréquence et intervalle entre départs, persistance dans le temps, durée et rectitude des trajets (Analyse 50).
+• Entrée : Parcours avec origine, destination, date de départ et identifiant de véhicule.
+• Rendu : Matrice ou barres origine → destination ; indicateur parcours / véhicule ; couloirs origine × temps pour lire la régularité ; carte des corridors (Analyse 49) et des pôles (Analyse 29).
+• Pièges : Une fenêtre d'observation courte ne montre ni les rythmes hebdomadaires ni les saisons (Analyse 20) ; la demande observée est celle des trajets réalisés, pas celle des voyageurs ou des marchandises transportés ; les liaisons internes (origine = destination) sont à lire à part.
+
+Analyse 52 : La Complétude et la Qualité des Données
+
+• Objectif : Mesurer ce que les données ne disent pas avant d'en tirer des conclusions.
+• Méthode : Part des valeurs manquantes ou « inconnues » par variable, et leur répartition dans l'espace, dans le temps et par catégorie ; étendue et continuité temporelles de l'échantillon ; précision de position ; doublons ; valeurs hors domaine.
+• Entrée : Toute collection.
+• Rendu : La modalité « inconnue » est montrée comme une catégorie à part (en gris), jamais retirée silencieusement ; indicateur de la part manquante ; période couverte rappelée dans les titres.
+• Pièges : Des valeurs manquantes concentrées sur une zone ou une période biaisent toute comparaison ; exclure les inconnues change les dénominateurs des taux.
+
+Règle G6 : Projection et Mesures
+
+• Les surfaces se calculent dans une projection équivalente, les distances sur l'ellipsoïde (géodésiques).
+• En Mercator, l'aire apparente est multipliée par 1/cos²(latitude) : une grille de tuiles ou de géocodes n'a pas une aire constante au sol, et un comptage par maille est biaisé en faveur des hautes latitudes.
+• Pour comparer des densités entre zones éloignées en latitude, utiliser des mailles d'aire (quasi) égale, comme une grille hexagonale, ou rapporter le comptage à l'aire réelle de la maille.
+
+Règle G7 : Habillage de la Carte
+
+• Légende explicite : variable, unité, agrégation, classes ou arrêts, transformation éventuelle (Analyse 41).
+• Échelle graphique ; source et date des données ; période couverte par la sélection.
+• Les catégories « Autre » et « Inconnu » sont nommées comme telles et ne se confondent pas avec une vraie modalité.

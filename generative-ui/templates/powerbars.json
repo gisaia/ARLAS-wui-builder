@@ -1,0 +1,45 @@
+{
+  "_usage": "Powerbars on a term aggregation (8–50 values, or top N + search above 50). The Builder shows contributor.title: input.chartTitle and input.powerbarTitle must be equal to it.",
+  "contributor": {
+    "type": "tree",
+    "identifier": "<<ID>>",
+    "name": "<<TITLE>>",
+    "title": "<<TITLE>>",
+    "icon": "<<ICON>>",
+    "collection": "<<COLLECTION>>",
+    "aggregationmodels": [
+      {
+        "type": "term",
+        "field": "<<FIELD:KEYWORD>>",
+        "size": 10
+      }
+    ]
+  },
+  "analytics_group": {
+    "groupId": "<<ID>>_group",
+    "title": "<<TITLE>>",
+    "tab": "<<TAB>>",
+    "icon": "<<ICON>>",
+    "components": [
+      {
+        "contributorId": "<<ID>>",
+        "componentType": "powerbars",
+        "usage": "analytics",
+        "input": {
+          "id": "<<ID>>",
+          "chartTitle": "<<TITLE>>",
+          "powerbarTitle": "<<TITLE>>",
+          "chartWidth": 445,
+          "displayFilter": true,
+          "scrollable": true,
+          "filterOperator": {
+            "value": "Eq",
+            "display": true
+          },
+          "useColorService": true,
+          "useColorFromData": false
+        }
+      }
+    ]
+  }
+}

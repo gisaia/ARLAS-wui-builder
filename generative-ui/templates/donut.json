@@ -1,0 +1,38 @@
+{
+  "_usage": "Donut on a term aggregation, 7 values at most. The Builder shows contributor.title.",
+  "contributor": {
+    "type": "tree",
+    "identifier": "<<ID>>",
+    "name": "<<TITLE>>",
+    "title": "<<TITLE>>",
+    "icon": "donut_large",
+    "collection": "<<COLLECTION>>",
+    "aggregationmodels": [
+      {
+        "type": "term",
+        "field": "<<FIELD:KEYWORD>>",
+        "size": 7
+      }
+    ]
+  },
+  "analytics_group": {
+    "groupId": "<<ID>>_group",
+    "title": "<<TITLE>>",
+    "tab": "<<TAB>>",
+    "icon": "donut_large",
+    "components": [
+      {
+        "contributorId": "<<ID>>",
+        "componentType": "donut",
+        "usage": "analytics",
+        "input": {
+          "id": "<<ID>>",
+          "diameter": 170,
+          "containerWidth": 223,
+          "multiselectable": true,
+          "opacity": 0.4
+        }
+      }
+    ]
+  }
+}

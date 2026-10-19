@@ -1,0 +1,62 @@
+{
+  "_usage": "Swimlane (term × time). The identifier must be the Builder canonical id, which contains the collection name. The visible title is input.chartTitle.",
+  "contributor": {
+    "type": "swimlane",
+    "identifier": "<<COLLECTION>>-<<FIELD:DATE>>-time-interval-Count--6-hour<<FIELD:KEYWORD>>",
+    "name": "<<TITLE>>",
+    "icon": "view_week",
+    "collection": "<<COLLECTION>>",
+    "swimlanes": [
+      {
+        "id": 1,
+        "name": "<<TITLE>>",
+        "xAxisField": "<<FIELD:DATE>>",
+        "termField": "<<FIELD:KEYWORD>>",
+        "jsonpath": "$.count",
+        "useUtc": true,
+        "aggregationmodels": [
+          {
+            "type": "term",
+            "field": "<<FIELD:KEYWORD>>",
+            "size": 10
+          },
+          {
+            "type": "datehistogram",
+            "field": "<<FIELD:DATE>>",
+            "interval": {
+              "value": 6,
+              "unit": "hour"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "analytics_group": {
+    "groupId": "<<ID>>_group",
+    "title": "<<TITLE>>",
+    "tab": "<<TAB>>",
+    "icon": "view_week",
+    "components": [
+      {
+        "contributorId": "<<SAME AS contributor.identifier>>",
+        "componentType": "swimlane",
+        "usage": "analytics",
+        "input": {
+          "id": "<<SAME AS contributor.identifier>>",
+          "dataType": "time",
+          "chartWidth": 445,
+          "chartHeight": 120,
+          "barWeight": 0.8,
+          "chartTitle": "<<TITLE>>",
+          "customizedCssClass": "arlas-swimlane",
+          "swimlane_representation": "global",
+          "swimlane_options": {},
+          "swimlaneMode": "fixedHeight",
+          "swimlaneHeight": 28,
+          "swimLaneLabelsWidth": 120
+        }
+      }
+    ]
+  }
+}

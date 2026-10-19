@@ -1,0 +1,13 @@
+{
+  "_usage": "Search bar. Usually internal.fulltext / internal.autocomplete when the collection has them (check the mapping). Never chipssearch.",
+  "contributor": {
+    "type": "search",
+    "identifier": "<<ID>>",
+    "name": "<<TITLE>>",
+    "icon": "search",
+    "collection": "<<COLLECTION>>",
+    "search_field": "<<FIELD:TEXT>>",
+    "autocomplete_field": "<<FIELD:KEYWORD>>",
+    "autocomplete_size": 10
+  }
+}

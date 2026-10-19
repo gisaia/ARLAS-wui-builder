@@ -176,8 +176,7 @@ Le panneau affiche, pour chaque groupe, un panneau dépliant dont l'en-tête est
 | Widget | Titre affiché |
 |---|---|
 | `histogram`, `swimlane` | `input.chartTitle` |
-| `powerbars` | `input.powerbarTitle` |
-| `donut` | nom du contributeur (`name`) |
+| `powerbars`, `donut` | `title` du contributeur : à l'import le Builder le lit (`analytics-import.service.ts`) et le recopie à l'export dans `input.chartTitle` / `input.powerbarTitle` ; ces deux entrées doivent donc lui être égales (règle TITLE-P) |
 | `metric`, `metricstable`, `resultlist` | **aucun** : seul `group.title` les nomme |
 
 Règle : **un indicateur `metric` (ou une `metricstable`, ou une `resultlist`) par groupe**, avec un `group.title` qui le nomme. Si plusieurs indicateurs doivent cohabiter, leur libellé passe par `input.beforeValue` / `input.afterValue`. Entrée `metric` exportée par le Builder : `customizedCssClass`, `shortValue`, `valuePrecision`, `chartWidth` (445, 217 ou 143), `beforeValue` / `afterValue` facultatifs (le schéma local exige aussi `id`, à mettre égal à `contributorId`).
@@ -214,7 +213,7 @@ Sources :
 - formulaires : `ResultlistFormBuilderService` ;
 - exécution : `ResultListContributor` et `validProcess` (`arlas-web-contributors`).
 
-Schémas : `resultlistContributorConf.schema.json` (contributeur officiel), `resultlist.schema.json` (entrée du composant, nouveau), `resultlist-contributor-rules.schema.json` et `resultlist-rules.schema.json` (règles du Builder). Les règles qui croisent plusieurs objets (C1, C2, C6, C11) sont contrôlées par `validate.js`, section 4.bis et section 5.
+Schémas : `resultlistContributorConf.schema.json` (contributeur officiel), `resultlist.schema.json` (entrée du composant, nouveau). Les règles R1–R9 et C1–C11 sont implémentées dans `lib/rules.js` et contrôlées par `validate.js` (section 4.bis).
 
 ### Deux emplacements possibles (C11)
 
@@ -314,9 +313,26 @@ Côté composant : `"hasListView": true, "hasGridView": true, "hasCardView": tru
 
 ## 5. Guide du Validateur et des Schémas Autonomes
 
-Le dossier `generative-ui/` contient une suite de validation complète et autonome :
-- **`generative-ui/schemas/`** : Les 21 métamodèles JSON Schema draft-06 officiels (validation de l'application et de ses widgets, dont `resultlist.schema.json`) et 20 schémas `*-rules.schema.json` (règles du Builder, utilisés par `scripts/config-rules-applier.ts`).
-- **`generative-ui/validate.js`** : Script exécutable Node.js implémentant la validation stricte RFC 8259, la compilation Ajv conforme à `ArlasStartupService.validateConfiguration`, la validation unitaire des contributeurs et le contrôle d'intégrité référentielle.
+Le dossier `generative-ui/` contient une chaîne de vérification complète, lancée par une seule commande :
+
+```bash
+npm run genui:check -- <config.json> <config.map.json> --mapping <mapping.json> [--profile <profile.json>] [--no-roundtrip]
+```
+
+| Étape | Outil | Rôle |
+|---|---|---|
+| 1. Lecture | `pipeline.js` | JSON strict des quatre fichiers |
+| 2. Normalisation | `normalize.js` | Applique les correctifs du registre de règles : constantes de mise en page du Builder, tableaux vides, valeurs déduites d'une autre partie de la config, suppression des clés hors schéma. **Ne remplit jamais un champ, une collection ni un identifiant de contributeur** (garde-fou `FIELD_LIKE_KEYS`). Écrit `<nom>.normalized.config.json`, n'écrase jamais l'entrée, liste chaque correction. |
+| 3. Validation | `validate.js` | Schémas officiels draft-06 (comme `ArlasStartupService.validateConfiguration`), invariants du Builder, références, carte et, avec `--mapping`, existence et type de chaque champ (FLD-0). |
+| 4. Round-trip | `scripts/verify-config-roundtrip.js` | Copie la config dans `src/app/services/main-form-manager/fixtures/`, lance `generated-config.spec.ts` (import dans les formulaires, validité de chaque contrôle, absence de `console.error`, ré-export au format écrit par le Builder et comparaison avec l'entrée), puis restaure les fixtures. Le `config.json` racine n'est jamais touché. Les écarts attendus (identifiants canoniques, `groupId`, noms de sources, couches hover/select reconstruites…) sont listés avec leur raison dans `roundtrip-allowlist.json` ; tout autre écart est une perte. |
+| 5. Critique | `critique.js` | Cohérence analytique (voir ci-dessous). |
+
+Le rapport de toutes les étapes est écrit dans `<nom>.report.json`.
+
+- **`generative-ui/lib/rules.js`** : registre unique des règles (identifiant, contrôle, correctif éventuel), partagé par la validation et la normalisation. Ajouter une règle = ajouter une entrée et un test.
+- **`generative-ui/templates/`** : gabarits au format d'export du Builder, un par widget, avec des valeurs `<<…>>` à remplacer (une valeur restante est refusée par PH-1). Assemblés et remplis, ils passent la validation et le round-trip sans perte (`test/templates.test.js`).
+- **`generative-ui/test/`** : tests du validateur et du normalisateur (`npm run genui:test`) : une configuration cassée par règle, garde-fou des champs, idempotence, gabarits.
+- **`generative-ui/schemas/`** : les 21 métamodèles JSON Schema draft-06 officiels (référence à jour).
 
 ### Critique analytique (`generative-ui/critique.js`)
 
@@ -346,10 +362,10 @@ Le dossier `generative-ui/` contient une suite de validation complète et autono
 | TITLE-7 | Alerte | Titre visible de plus de 60 caractères (cible ≈ 55 : court et évocateur) |
 | DUP-2 | Alerte | Deux listes de résultats sur la même collection dont les colonnes de l'une sont incluses dans l'autre |
 
-Les règles TITLE s'appuient sur les **libellés** du profil : pour chaque champ, `labels` liste les mots du langage courant qui le désignent (ex. `track.dynamics.gps.speed_nd` → « vitesse » ; `object.ship_type` → « type de navire », « type »), et `documentLabels` nomme les documents (« parcours »). Le titre visible est celui que la WUI rend : `group.title` plus `input.chartTitle` (histogramme, swimlane), `input.powerbarTitle` (powerbars) ou le nom du contributeur (donut). Le sens d'un titre (sur-promesse, ambiguïté) reste à juger par la relecture (`CRITIC_PROMPT.md`).
+Les règles TITLE s'appuient sur les **libellés** du profil : pour chaque champ, `labels` liste les mots du langage courant qui le désignent (ex. `track.dynamics.gps.speed_nd` → « vitesse » ; `object.ship_type` → « type de navire », « type »), et `documentLabels` nomme les documents (« parcours »). Le titre visible est celui que la WUI rend : `group.title` plus `input.chartTitle` (histogramme, swimlane), `input.powerbarTitle` (powerbars, égal au `title` du contributeur après normalisation) ou le nom du contributeur (donut). Le sens d'un titre (sur-promesse, ambiguïté) reste à juger par la relecture (`CRITIC_PROMPT.md`).
 
 ```bash
-node generative-ui/critique.js generative-ui/generated/courses.config.json generative-ui/generated/courses.config.map.json generative-ui/generated/courses.profile.json
+node generative-ui/critique.js generative-ui/generated/courses.v2.config.json generative-ui/generated/courses.v2.config.map.json generative-ui/generated/courses.profile.json
 ```
 
 La critique automatique est complétée par une critique raisonnée de l'agent (couverture des besoins, justesse statistique, lisibilité, cohérence visuelle, limites) : voir la Phase 5 de `AGENT_PROMPT.md`.
@@ -359,18 +375,17 @@ La critique automatique est complétée par une critique raisonnée de l'agent (
 Prompt système d'un agent critique distinct du générateur. À partir du besoin de l'utilisateur, du profil, de la configuration et de la sortie de `critique.js`, il :
 - dresse l'inventaire des analyses ;
 - note cinq axes de 0 à 4 : pertinence de l'analyse spatiale (25 %), sémiologie graphique (20 %), justesse statistique (25 %), pertinence des graphiques (15 %), analyse temporelle (15 %) ;
-- classe chaque constat (CRITIQUE, MAJEUR, MINEUR, SUGGESTION), avec son chemin JSON et sa référence dans `SPATIAL_RECIEPE.md` (Patterns, Recettes, Analyses 1–48, Règles G1–G5) ;
+- classe chaque constat (CRITIQUE, MAJEUR, MINEUR, SUGGESTION), avec son chemin JSON et sa référence dans `SPATIAL_RECIEPE.md` (Patterns, Recettes 1–4, Analyses 1–52, Règles G1–G7) ;
 - distingue défaut de conception, limite ARLAS et choix discutable ;
 - rend un verdict (ACCEPTÉ / À CORRIGER / REFUSÉ) avec un bloc JSON exploitable automatiquement.
 
-### Exécution du script de validation :
+### Exécution des outils séparément
 
 ```bash
-# Valider les fichiers par défaut de generative-ui/
-node generative-ui/validate.js
-
-# Valider des fichiers spécifiques
-node generative-ui/validate.js path/to/config.json path/to/config.map.json
+node generative-ui/validate.js <config.json> <config.map.json> --mapping <mapping.json> [--json]
+node generative-ui/normalize.js <config.json> <config.map.json> [--out <fichier>]
+npm run verify:roundtrip -- <config.json> <config.map.json> --mapping <mapping.json> --strip-colors
+npm run genui:test
 ```
 
 ---

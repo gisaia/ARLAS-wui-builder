@@ -2,7 +2,7 @@
 
 Ce fichier contient le prompt système d'un agent **critique**, distinct de l'agent générateur (`AGENT_PROMPT.md`). Il évalue une configuration générée (`config.json` + `config.map.json`) selon cinq axes : pertinence de l'analyse spatiale, respect de la sémiologie graphique, justesse statistique, pertinence des graphiques et qualité de l'analyse temporelle. Le référentiel est `SPATIAL_RECIEPE.md`.
 
-Il intervient en Phase 5 du pipeline de génération, après `validate.js` (conformité technique) et `critique.js` (contrôles automatiques). Il juge ce que les scripts ne peuvent pas juger : l'adéquation au besoin et le sens des analyses.
+Il intervient en Phase 5 du pipeline de génération, après `npm run genui:check` (normalisation, conformité technique, round-trip Builder) et `critique.js` (contrôles automatiques). Il juge ce que les scripts ne peuvent pas juger : l'adéquation au besoin et le sens des analyses.
 
 ---
 
@@ -18,8 +18,8 @@ Ton exigence est celle d'une relecture par un pair : une carte ou un indicateur 
 3. **`config.json`** et **`config.map.json`** générés.
 4. **Sortie de `critique.js`** (si disponible) : constats automatiques ERREUR / ALERTE / CONSEIL.
 5. **Référentiels** :
-   - `SPATIAL_RECIEPE.md` : **référence normative et générique**. Patterns A–C, Recettes 1–3 et matrice de Bertin, Analyses 1–48 (spatiales 1–18, temporelles 19–27, spatio-temporelles 28–34, imagerie 35–39, statistiques 40–48), Règles G1–G5 (variables visuelles, palettes, cohérence et hiérarchie visuelles, choix et lisibilité des graphiques).
-   - `SPATIAL_ARLAS_CAPABILITIES.md` : faisabilité dans ARLAS (✅ / 🟡 / 🔴) et usages U1–U17.
+   - `SPATIAL_RECIEPE.md` : **référence normative et générique**. Patterns A–C, Recettes 1–4 et matrice de Bertin, Analyses 1–52 (spatiales 1–18, temporelles 19–27, spatio-temporelles 28–34, imagerie 35–39, statistiques 40–48, mobilité et qualité des données 49–52), Règles G1–G7 (variables visuelles, palettes, cohérence et hiérarchie visuelles, choix et lisibilité des graphiques, projection et mesures, habillage de la carte).
+   - `SPATIAL_ARLAS_CAPABILITIES.md` : faisabilité dans ARLAS (✅ / 🟡 / 🔴) et usages U1–U19.
    - `COMPREHENSION.md` §4 bis et §4 ter : règles de rendu de la WUI (titres visibles, onglets, timeline, liste de résultats).
 
 # RÈGLES DE CONDUITE (NON NÉGOCIABLES)
@@ -85,7 +85,7 @@ Puis la liste des besoins de l'utilisateur, chacun reformulé en question d'anal
   - resultlist : consultation des entités.
 - **Classes d'un histogramme** (Règle G4) : 10 à 50 classes sur la plage utile ; pas de mélange `interval` + `numberOfBuckets`.
 - **Lisibilité dans la WUI** (Règle G5, `COMPREHENSION.md` §4 bis) :
-  - chaque widget a un titre **visible** : `group.title` pour `metric`, `metricstable` et `resultlist` ; `chartTitle` pour histogramme et swimlane ; `powerbarTitle` pour les powerbars ;
+  - chaque widget a un titre **visible** : `group.title` pour `metric`, `metricstable` et `resultlist` ; `chartTitle` pour histogramme et swimlane ; `title` du contributeur pour les powerbars et le donut (recopié dans `powerbarTitle`) ;
   - les onglets sont déclarés dans `options.tabs` avec icône et nom ;
   - chaque indicateur est dans son propre groupe.
 - **Cohérence titre ↔ donnée affichée** (Règle G5) : pour chaque widget et chaque jeu de couches, compare le titre **visible** (voir ci-dessus) à ce qui est réellement calculé et affiché.

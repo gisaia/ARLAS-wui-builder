@@ -1,0 +1,119 @@
+{
+  "_usage": "Timeline + detailed timeline. Append `contributors` to arlas.web.contributors and merge `components` into arlas.web.components. Replace every <<…>>. Time field: params.timestamp_path of the collection (type DATE).",
+  "contributors": [
+    {
+      "type": "histogram",
+      "identifier": "timeline",
+      "name": "<<TITLE>>",
+      "icon": "watch_later",
+      "collection": "<<COLLECTION>>",
+      "isOneDimension": false,
+      "useUtc": true,
+      "additionalCollections": [],
+      "aggregationmodels": [
+        {
+          "type": "datehistogram",
+          "field": "<<FIELD:DATE>>",
+          "interval": {
+            "value": 1,
+            "unit": "hour"
+          }
+        }
+      ]
+    },
+    {
+      "type": "detailedhistogram",
+      "identifier": "detailedTimeline",
+      "name": "<<TITLE>>",
+      "icon": "watch_later",
+      "collection": "<<COLLECTION>>",
+      "annexedContributorId": "timeline",
+      "isOneDimension": false,
+      "useUtc": true,
+      "numberOfBuckets": 50,
+      "selectionExtentPercentage": 0.2,
+      "additionalCollections": [],
+      "aggregationmodels": [
+        {
+          "type": "datehistogram",
+          "field": "<<FIELD:DATE>>"
+        }
+      ]
+    }
+  ],
+  "components": {
+    "timeline": {
+      "contributorId": "timeline",
+      "componentType": "histogram",
+      "input": {
+        "id": "histogram-timeline",
+        "xTicks": 9,
+        "yTicks": 2,
+        "xLabels": 9,
+        "yLabels": 2,
+        "xUnit": "",
+        "yUnit": "",
+        "chartXLabel": "",
+        "shortYLabels": false,
+        "chartTitle": "<<TITLE>>",
+        "customizedCssClass": "arlas-timeline",
+        "multiselectable": true,
+        "brushHandlesHeightWeight": 0.8,
+        "dataType": "time",
+        "isHistogramSelectable": true,
+        "ticksDateFormat": "%d/%m/%Y %H:%M",
+        "valuesDateFormat": "%d/%m/%Y %H:%M",
+        "chartType": "bars",
+        "chartHeight": 128,
+        "chartWidth": null,
+        "xAxisPosition": "bottom",
+        "yAxisStartsFromZero": true,
+        "descriptionPosition": "top",
+        "showXTicks": true,
+        "showYTicks": true,
+        "showXLabels": true,
+        "showYLabels": true,
+        "showHorizontalLines": false,
+        "isSmoothedCurve": true,
+        "barWeight": 0.8,
+        "topOffsetRemoveInterval": 10
+      }
+    },
+    "detailedTimeline": {
+      "contributorId": "detailedTimeline",
+      "componentType": "histogram",
+      "input": {
+        "id": "histogram-detailed-timeline",
+        "xTicks": 5,
+        "yTicks": 2,
+        "xLabels": 5,
+        "yLabels": 2,
+        "xUnit": "",
+        "yUnit": "",
+        "chartXLabel": "",
+        "shortYLabels": false,
+        "chartTitle": "<<TITLE>>",
+        "customizedCssClass": "arlas-detailed-timeline",
+        "multiselectable": false,
+        "brushHandlesHeightWeight": 0.8,
+        "dataType": "time",
+        "isHistogramSelectable": true,
+        "ticksDateFormat": "%d/%m/%Y %H:%M",
+        "valuesDateFormat": "%d/%m/%Y %H:%M",
+        "chartType": "bars",
+        "chartHeight": 60,
+        "chartWidth": null,
+        "xAxisPosition": "top",
+        "yAxisStartsFromZero": true,
+        "descriptionPosition": "bottom",
+        "showXTicks": true,
+        "showYTicks": true,
+        "showXLabels": true,
+        "showYLabels": true,
+        "showHorizontalLines": false,
+        "isSmoothedCurve": true,
+        "barWeight": 0.8
+      }
+    }
+  }
+}
