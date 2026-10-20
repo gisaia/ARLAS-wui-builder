@@ -64,7 +64,12 @@
   }
 }
 
-
+.new-config-content {
+  &__reload {
+    // Align touch height on button height
+    --mat-button-outlined-touch-target-size: 36px;
+  }
+}
 
 .actions {
   .buttons {

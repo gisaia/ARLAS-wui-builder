@@ -251,14 +251,6 @@ export class LandingPageDialogComponent implements OnInit {
     this.router.navigate(['/collection']);
   }
 
-  public openPersistenceManagement(event) {
-    if (this.persistenceService.isAvailable) {
-      this.configChoice = InitialChoice.load;
-    } else {
-      event.stopPropagation();
-    }
-  }
-
   public toggleDisplayPublic(event) {
     this.includePublicCollection = event.checked;
     this.checkUrl();

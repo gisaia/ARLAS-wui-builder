@@ -58,7 +58,6 @@ enum MAIN_FORM_KEYS {
   LOOK_AND_FEEL_CONFIG = 'LookAndFeelConfig',
   LOOK_AND_FEEL_CONFIG_GLOBAL = 'LookAndFeelConfigGlobal',
   RESULT_LIST_CONFIG = 'ResultListConfig',
-  RESULT_LIST_CONFIG_GLOBAL = 'ResultListConfig',
   RESULT_LIST_CONFIG_LISTS = 'ResultListConfigLists',
   EXTERNAL_NODE_CONFIG = 'ExternalNodeConfig',
   EXTERNAL_NODE_CONFIG_GLOBAL = 'ExternalNodeGlobal'
@@ -71,7 +70,7 @@ export const ARLAS_ID = 'arlas_id:';
 })
 export class MainFormService {
 
-  public configurationId: string;
+  public configurationId: string | undefined;
 
   public configurationName: string;
 

@@ -17,9 +17,10 @@
  * under the License.
  */
 import { DatePipe } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
@@ -39,13 +40,12 @@ import { UserOrgData } from 'arlas-iam-api';
 import { Resource } from 'arlas-permissions-api';
 import { DataWithLinks } from 'arlas-persistence-api';
 import {
-  ArlasAuthentificationService,
-  ArlasIamService, ArlasSettingsService, AuthentificationService, ConfigAction,
-  ConfigActionEnum, ConfigMenuComponent, ErrorService, PermissionService, PersistenceService, UserInfosComponent
+  Config as ActionConfig, ArlasAuthentificationService, ArlasIamService, ArlasSettingsService, AuthentificationService,
+  ConfigAction, ConfigActionEnum, ConfigMenuComponent, ErrorService, PermissionService, PersistenceService, UserInfosComponent
 } from 'arlas-wui-toolkit';
 import { NGXLogger } from 'ngx-logger';
 import { NgxSpinnerComponent } from 'ngx-spinner';
-import { map, Subscription } from 'rxjs';
+import { map } from 'rxjs';
 import { LandingPageDialogComponent } from './landing-page-dialog.component';
 
 export interface Configuration {
@@ -72,38 +72,36 @@ export interface Configuration {
     MatButtonModule
   ]
 })
-export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
+export class LandingPageComponent implements OnInit, AfterViewInit {
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly destroyRef = inject(DestroyRef);
 
-  public dialogRef: MatDialogRef<LandingPageDialogComponent>;
   public displayedColumns: string[] = ['id', 'creation', 'detail'];
 
-  private confId = '-1';
+  private confId: string | null = null;
 
   public configurations: Configuration[] = [];
   public configurationsLength = 0;
   public configPageNumber = 0;
   public configPageSize = 5;
-  public configChoice;
-  public availablesCollections: string[];
+  public configChoice: InitialChoice | undefined;
+  public availablesCollections: string[] = [];
   public InitialChoice = InitialChoice;
 
-  public authentMode = 'false';
+  public authentMode: 'iam' | 'openid' | undefined;
 
   public isAuthenticated = false;
   public isAuthentActivated = false;
   public orgs: UserOrgData[] = [];
-  public currentOrga = '';
+  public currentOrga: string | undefined;
 
   public canCreateForCurrentOrg = false; // Whether the buttons to CREATE / IMPORT a dashboard are displayed
 
-  private subscription: Subscription;
-  private refreshSubscription: Subscription;
   public constructor(
     private readonly startupService: StartupService,
     public persistenceService: PersistenceService,
     private readonly permissionService: PermissionService,
-    public mainFormService: MainFormService,
+    private readonly mainFormService: MainFormService,
     private readonly startingConfigFormBuilder: StartingConfigFormBuilderService,
     private readonly resourcesConfigFormBuilder: ResourcesConfigFormBuilderService,
     private readonly arlasAuthentService: ArlasAuthentificationService,
@@ -117,10 +115,10 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly translate: TranslateService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly menu: MenuService,
-    private readonly landingPageService: LandingPageService) {
-
-    this.authentMode = !!this.settingsService.getAuthentSettings() ? this.settingsService.getAuthentSettings().auth_mode : undefined;
-    this.isAuthentActivated = !!this.settingsService.getAuthentSettings() && !!this.settingsService.getAuthentSettings().use_authent;
+    private readonly landingPageService: LandingPageService
+  ) {
+    this.authentMode = this.settingsService.getAuthentSettings()?.auth_mode;
+    this.isAuthentActivated = !!this.settingsService.getAuthentSettings()?.use_authent;
     if (this.isAuthentActivated && !this.authentMode) {
       this.authentMode = 'openid';
     }
@@ -142,71 +140,76 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mainFormService.resourcesConfig?.init(
       this.resourcesConfigFormBuilder.build()
     );
-    if (this.activatedRoute.snapshot.paramMap.has('id')) {
-      this.confId = this.activatedRoute.snapshot.paramMap.get('id');
+    const routeId = this.activatedRoute.snapshot.paramMap.get('id');
+    if (routeId) {
+      this.confId = routeId;
       this.loadConfig(this.confId);
     } else if (!!this.activatedRoute.snapshot.routeConfig && this.activatedRoute.snapshot.routeConfig.path === 'import') {
       this.configChoice = InitialChoice.load;
       this.openChoice(this.configChoice);
-    } else {
-      if (
-        this.persistenceService.isAvailable
-        && (!this.arlasAuthentService.authSettings?.use_authent)
-      ) {
-        this.getConfigList();
-      }
+    } else if (this.persistenceService.isAvailable && !this.arlasAuthentService.authSettings?.use_authent) {
+      this.getConfigList();
     }
-    if (this.authentMode === 'openid') {
-      this.subscription = this.authService.canActivateProtectedRoutes.subscribe(isAuthenticated => {
-        this.isAuthenticated = isAuthenticated;
-        if (this.persistenceService.isAvailable) {
-          this.permissionService.get('persist/resource/').subscribe({
-            next: (resources: Resource[]) => {
-              this.canCreateForCurrentOrg = resources.filter(r => r.verb === 'POST').length > 0;
-              this.getConfigList();
-              this.cdr.detectChanges();
-            }
-          });
-        }
-      });
-    } else if (this.authentMode === 'iam') {
-      this.refreshSubscription = this.arlasIamService.tokenRefreshed$.subscribe({
-        next: (loginData) => {
-          if (!!loginData) {
 
-            this.isAuthenticated = true;
-            this.orgs = loginData.user.organisations.map(org => {
-              org.displayName = org.name === loginData.user.id ? loginData.user.email.split('@')[0] : org.name;
-              return org;
+    if (this.authentMode === 'openid') {
+      this.authService.canActivateProtectedRoutes
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(isAuthenticated => {
+          this.isAuthenticated = isAuthenticated;
+          if (this.persistenceService.isAvailable) {
+            this.permissionService.get('persist/resource/').subscribe({
+              next: (resources: Resource[]) => {
+                this.canCreateForCurrentOrg = resources.some(r => r.verb === 'POST');
+                this.getConfigList();
+                this.cdr.detectChanges();
+              }
             });
-            this.currentOrga = this.arlasIamService.getOrganisation();
-          } else {
+          }
+        });
+    } else if (this.authentMode === 'iam') {
+      this.arlasIamService.tokenRefreshed$
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (loginData) => {
+            if (loginData) {
+              this.isAuthenticated = true;
+              this.orgs = (loginData.user.organisations ?? []).map(org => {
+                org.displayName = org.name === loginData.user.id ? loginData.user.email.split('@')[0] : org.name;
+                return org;
+              });
+              this.currentOrga = this.arlasIamService.getOrganisation();
+            } else {
+              this.isAuthenticated = false;
+            }
+            if (this.persistenceService.isAvailable) {
+              this.checkUserRightsForOrg(this.currentOrga);
+            }
+          },
+          error: () => {
             this.isAuthenticated = false;
           }
-          if (this.persistenceService.isAvailable) {
-            this.checkUserRightsForOrg(this.currentOrga);
-          }
-        },
-        error: () => {
-          this.isAuthenticated = false;
-        }
-      });
+        });
     }
     // if persistence is configured and anonymous mode is enabled, we fetch the configuration accessible as anonymous
     // if ARLAS-persistence doesn't allow anonymous access, a suitable error is displayed in a modal
 
-    this.subscription = this.landingPageService.startEvent$.subscribe((b) => {
-      this.menu.updatePagesStatus(true);
-      this.router.navigate(['map-config'], { queryParamsHandling: 'preserve' });
-      this.logger.info(this.translate.instant('Ready to access server'));
-    });
+    this.landingPageService.startEvent$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(async (b) => {
+        this.menu.updatePagesStatus(true);
+        await this.router.navigate(['map-config'], { queryParamsHandling: 'preserve' });
+        this.logger.info(this.translate.instant('Ready to access server'));
+      });
   }
 
-  public openChoice(configChoice?) {
+  public openChoice(configChoice?: InitialChoice) {
     this.configChoice = configChoice;
     if (configChoice) {
-      this.dialogRef = this.dialog.open(LandingPageDialogComponent, {
-        disableClose: true, width:'70vw', data:
+      this.dialog.open(LandingPageDialogComponent, {
+        disableClose: true,
+        width: '70vw',
+        maxWidth: '570px',
+        data:
           { message: this.confId, configChoice, authentMode: this.authentMode,
             currentOrga: this.currentOrga, isAuthentActivated: this.isAuthentActivated }
       });
@@ -229,7 +232,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public computeData(data: DataWithLinks): Configuration {
     const actions: Array<ConfigAction> = new Array();
-    const config = {
+    const config: ActionConfig = {
       id: data.id,
       name: data.doc_key,
       value: data.doc_value,
@@ -245,44 +248,40 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
       configIdParam: 'config_id',
       type: ConfigActionEnum.VIEW,
       enabled: data.updatable
-    });
-    actions.push({
+    },
+    {
       config,
       type: ConfigActionEnum.EDIT,
       enabled: data.updatable
-    });
-    actions.push({
+    },
+    {
       config,
       type: ConfigActionEnum.RENAME,
       name: data.doc_key,
       enabled: data.updatable
-    });
-    actions.push({
+    },
+    {
       config,
       type: ConfigActionEnum.DUPLICATE,
       name: data.doc_key,
       enabled: data.updatable
-
-    });
-    actions.push({
+    },
+    {
       config,
       type: ConfigActionEnum.SHARE,
       enabled: data.updatable
-
-    });
-    actions.push({
+    },
+    {
       config,
       type: ConfigActionEnum.DELETE,
       enabled: data.updatable
     });
-
 
     return {
       name: data.doc_key,
       last_update_date: data.last_update_date,
       actions
     };
-
   }
 
   public getConfigList() {
@@ -301,11 +300,11 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
           this.configurations = result[1] as Configuration[];
           this.configurations.forEach(c => {
             c.actions.filter(a => a.type === ConfigActionEnum.VIEW)
-              .map(a => a.url = this.settingsService.getArlasWuiUrl());
+              .forEach(a => a.url = this.settingsService.getArlasWuiUrl());
             // for IAM only, if the user doesn't have the right to create (POST)
             // disabled the EDIT action
             if (this.authentMode === 'iam') {
-              c.actions.filter(a => a.type === ConfigActionEnum.EDIT).map(a =>
+              c.actions.filter(a => a.type === ConfigActionEnum.EDIT).forEach(a =>
                 a.enabled = a.enabled && this.canCreateForCurrentOrg
               );
             }
@@ -328,14 +327,6 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.configPageNumber = pageEvent.pageIndex;
     this.configPageSize = pageEvent.pageSize;
     this.getConfigList();
-  }
-
-  public openPersistenceManagement(event) {
-    if (this.persistenceService.isAvailable) {
-      this.configChoice = InitialChoice.load;
-    } else {
-      event.stopPropagation();
-    }
   }
 
   public loadConfig(id: string) {
@@ -363,16 +354,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.checkUserRightsForOrg(event.value);
   }
 
-  public ngOnDestroy() {
-    if (!!this.subscription) {
-      this.subscription.unsubscribe();
-    }
-    if (this.refreshSubscription) {
-      this.refreshSubscription.unsubscribe();
-    }
-  }
-
-  private checkUserRightsForOrg(org: string) {
+  private checkUserRightsForOrg(org: string | undefined) {
     const iamHeader = {
       Authorization: 'Bearer ' + this.arlasIamService.getAccessToken(),
       'arlas-org-filter': org
@@ -382,7 +364,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit, OnDestroy {
     // Check user rights on current organisation
     this.permissionService.get('persist/resource/').subscribe({
       next: (resources: Resource[]) => {
-        this.canCreateForCurrentOrg = resources.filter(r => r.verb === 'POST').length > 0;
+        this.canCreateForCurrentOrg = resources.some(r => r.verb === 'POST');
         this.getConfigList();
         this.cdr.detectChanges();
       }
