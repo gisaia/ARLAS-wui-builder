@@ -59,6 +59,9 @@ const EXTRA_CONFIGS = [
   { configPath: 'config.map.json', replacedAttribute: 'arlas.web.components.mapgl.input.mapLayers.externalEventLayers', replacer: 'external-event-layers' }
 ];
 
+// Date format the Builder writes on export for the timeline and the detailed timeline.
+const TIMELINE_DATE_FORMAT = '%d/%m/%Y %H:%M';
+
 const FORBIDDEN_PROCESS_WORDS = ['document', 'window', 'eval', 'localStorage', 'this', 'function', 'Function'];
 
 // ---------------------------------------------------------------- helpers
@@ -254,6 +257,15 @@ function resolveGetName(name, flatFields) {
 
 // ---------------------------------------------------------------- context
 
+// Widget (analytics, timeline or detailed timeline) bound to a histogram contributor
+function histogramWidgetOf(ctx, contributor) {
+  return ctx.widgets.find(({ widget }) => widget.contributorId === contributor.identifier)?.widget
+    || Object.values(ctx.components || {}).find(w => w && w.contributorId === contributor.identifier);
+}
+// Chart types the Builder offers for histograms and timelines (histogram- and timeline-form-builder).
+// 'oneDimension' (8 px colour strip, values divided by the largest bucket) is not one of them.
+const BUILDER_CHART_TYPES = ['bars', 'area', 'curve'];
+
 function buildContext(config, mapConfig, options = {}) {
   const web = config?.arlas?.web || {};
   const contributors = Array.isArray(web.contributors) ? web.contributors : [];
@@ -282,15 +294,36 @@ function buildContext(config, mapConfig, options = {}) {
 
 // ---------------------------------------------------------------- rules
 
-const checkProcess = (r, value, where) => {
+// The Builder validates process / function expressions with validProcess of arlas-web-contributors: use the
+// same function when it loads, so that the validation refuses exactly what the Builder forms refuse.
+let builderValidProcess = null;
+try { ({ validProcess: builderValidProcess } = require('arlas-web-contributors')); } catch (e) { builderValidProcess = null; }
+const isValidProcess = (value, variable) => {
+  if (typeof value !== 'string' || value.length >= 250 || FORBIDDEN_PROCESS_WORDS.some(w => value.includes(w))) return false;
+  if (!builderValidProcess) return true;
+  try { return !!builderValidProcess(value, variable); } catch (e) { return false; }
+};
+const checkProcess = (r, value, where, variable = 'result') => {
   if (!value) return;
-  if (typeof value !== 'string' || value.length >= 250 || FORBIDDEN_PROCESS_WORDS.some(w => value.includes(w))) {
-    r.fail(`${where} : "process" refusé par validProcess (< 250 caractères, sans ${FORBIDDEN_PROCESS_WORDS.join('/')}).`);
-  } else if (!value.includes('result')) {
-    r.warn(`${where} : "process" n'utilise pas la variable "result" ("${value}").`);
+  if (!isValidProcess(value, variable)) {
+    r.fail(`${where} : expression "${value}" refusée par validProcess du Builder (< 250 caractères, sans ${FORBIDDEN_PROCESS_WORDS.join('/')}, sans notation scientifique comme 1e6 : écrire 1000000).`);
+  } else if (!value.includes(variable)) {
+    r.warn(`${where} : l'expression n'utilise pas la variable "${variable}" ("${value}").`);
   }
 };
 const resultlists = ctx => ctx.contributors.filter(c => c.type === 'resultlist');
+/** Analytics histograms on a count (no metric) whose collection declares a unit in arlas-wui.web.app.units. */
+const countHistograms = ctx => {
+  const units = ctx.config?.['arlas-wui']?.web?.app?.units;
+  if (!Array.isArray(units)) return [];
+  return ctx.widgets.filter(({ widget }) => widget.componentType === 'histogram').map(({ widget }) => {
+    const c = ctx.contributors.find(x => x.identifier === widget.contributorId);
+    const agg = (c?.aggregationmodels || [])[0] || {};
+    const isCount = !Array.isArray(agg.metrics) || agg.metrics.length === 0 || agg.metrics.every(m => /count/i.test(m.collect_fct || ''));
+    const unit = units.find(u => u.collection === c?.collection)?.unit;
+    return c && isCount && nonEmptyString(unit) ? { widget, unit } : null;
+  }).filter(Boolean);
+};
 
 const RULES = [
   // ======================================================== 3. contributors
@@ -401,14 +434,27 @@ const RULES = [
     check(ctx, r) {
       ctx.contributors.filter(c => ['histogram', 'detailedhistogram'].includes(c.type)).forEach(c => {
         if (c.useUtc === undefined) r.warn(`Contributeur ${c.type} "${c.identifier}" : useUtc absent (le Builder l'exporte toujours).`);
-        if (c.isOneDimension === undefined) r.fail(`Contributeur ${c.type} "${c.identifier}" : isOneDimension est obligatoire.`);
+        // isOneDimension divides every bucket by the largest one (HistogramContributor.setData): y axis 0–1 instead of counts.
+        // It only makes sense with chartType oneDimension, which the Builder does not offer: always false.
+        if (c.isOneDimension !== false) r.fail(`Contributeur ${c.type} "${c.identifier}" : isOneDimension doit valoir false (true ramène l'axe Y à 0–1 au lieu des effectifs ; le graphique oneDimension n'existe pas dans le Builder).`);
+        const chartType = histogramWidgetOf(ctx, c)?.input?.chartType;
+        if (chartType !== undefined && !BUILDER_CHART_TYPES.includes(chartType)) r.fail(`Contributeur ${c.type} "${c.identifier}" : chartType "${chartType}" absent du Builder (${BUILDER_CHART_TYPES.join(', ')}).`);
       });
     },
     fix(ctx, f) {
       ctx.contributors.filter(c => ['histogram', 'detailedhistogram'].includes(c.type)).forEach(c => {
         if (c.useUtc === undefined) f.set(c, 'useUtc', true, `contributor "${c.identifier}"`);
-        if (c.isOneDimension === undefined) f.set(c, 'isOneDimension', true, `contributor "${c.identifier}"`);
+        if (c.isOneDimension !== false) f.set(c, 'isOneDimension', false, `contributor "${c.identifier}"`);
+        const w = histogramWidgetOf(ctx, c);
+        if (w?.input?.chartType !== undefined && !BUILDER_CHART_TYPES.includes(w.input.chartType)) f.set(w.input, 'chartType', 'bars', `widget "${c.identifier}"`);
       });
+    }
+  },
+  {
+    id: 'MET-1', section: 'contributors',
+    check(ctx, r) {
+      ctx.contributors.filter(c => c.type === 'metric')
+        .forEach(c => checkProcess(r, c.function, `Contributeur metric "${c.identifier}" function`, 'm'));
     }
   },
   {
@@ -458,6 +504,32 @@ const RULES = [
         if (!col.columnName || !col.fieldName) r.fail(`${where} : columnName et fieldName sont obligatoires.`);
         if (col.sort !== undefined && !['asc', 'desc', ''].includes(col.sort)) r.fail(`${where} : sort doit valoir "asc", "desc" ou "".`);
       }));
+    }
+  },
+  {
+    // A date field shown without process prints its raw stored value (epoch seconds or milliseconds).
+    id: 'DATE-1', section: 'resultlist',
+    check(ctx, r) {
+      if (!ctx.mapping) return;
+      const isDate = f => ['DATE', 'DATE_NANOS'].includes(ctx.fields.get(f));
+      const formatOf = f => {
+        let node = { properties: ctx.mapping.properties };
+        for (const k of f.split('.')) node = node?.properties?.[k];
+        return String(node?.format || '');
+      };
+      const hint = f => {
+        const fmt = formatOf(f);
+        if (fmt.includes('epoch_second')) return "new Date(result*1000).toISOString().slice(0,16).replace('T',' ')";
+        return "new Date(result).toISOString().slice(0,16).replace('T',' ')";
+      };
+      resultlists(ctx).forEach(c => {
+        const w = `Contributeur resultlist "${c.identifier}"`;
+        const check = (field, process, where) => {
+          if (field && isDate(field) && !process) r.warn(`${w} ${where} : la date "${field}" s'affiche en valeur brute (${formatOf(field) || 'format inconnu'}) ; formate-la avec process, ex. "${hint(field)}" et « (UTC) » dans le nom de la colonne.`);
+        };
+        (c.columns || []).forEach((col, i) => check(col.fieldName, col.process, `columns[${i}] « ${col.columnName} »`));
+        (c.details || []).forEach((d, i) => (d.fields || []).forEach((fl, j) => check(fl.path, fl.process, `details[${i}].fields[${j}] « ${fl.label} »`)));
+      });
     }
   },
   {
@@ -787,6 +859,21 @@ const RULES = [
     }
   },
   {
+    // On export, the Builder sets input.yUnit of a count histogram to the unit of its collection
+    // (arlas-wui.web.app.units): any other value is rewritten.
+    id: 'HIST-2', section: 'refs',
+    check(ctx, r) {
+      countHistograms(ctx).forEach(({ widget, unit }) => {
+        if (widget.input?.yUnit !== undefined && widget.input.yUnit !== unit) r.fail(`Widget "${widgetName(widget)}" (histogram de comptage) : input.yUnit doit valoir l'unité de la collection "${unit}" (le Builder la réécrit à l'export).`);
+      });
+    },
+    fix(ctx, f) {
+      countHistograms(ctx).forEach(({ widget, unit }) => {
+        if (widget.input && widget.input.yUnit !== undefined && widget.input.yUnit !== unit) f.set(widget.input, 'yUnit', unit, `widget "${widgetName(widget)}" (histogram).input`);
+      });
+    }
+  },
+  {
     id: 'TL-1', section: 'refs',
     check(ctx, r) {
       [['timeline', 'histogram-timeline'], ['detailedTimeline', 'histogram-detailed-timeline']].forEach(([key, expectedId]) => {
@@ -796,7 +883,9 @@ const RULES = [
         if (inp.dataType !== 'time') r.fail(`Composant ${key} : input.dataType doit valoir "time" (sinon les barres ne s'affichent pas).`);
         if (!(isPosNum(inp.barWeight) && inp.barWeight <= 1)) r.fail(`Composant ${key} : input.barWeight est obligatoire (0 < barWeight <= 1, ex. 0.8).`);
         if (!isPosNum(inp.chartHeight)) r.fail(`Composant ${key} : input.chartHeight est obligatoire (128 pour la timeline, 60 pour la détaillée).`);
-        if (!inp.ticksDateFormat) r.fail(`Composant ${key} : input.ticksDateFormat est obligatoire.`);
+        ['ticksDateFormat', 'valuesDateFormat'].forEach(k => {
+          if (inp[k] !== TIMELINE_DATE_FORMAT) r.fail(`Composant ${key} : input.${k} doit valoir "${TIMELINE_DATE_FORMAT}" (le Builder réécrit toute autre valeur).`);
+        });
         if (tl.componentType !== 'histogram') r.warn(`Composant ${key} : componentType "histogram" attendu.`);
         if (inp.id !== expectedId) r.warn(`Composant ${key} : input.id "${expectedId}" attendu, trouvé "${inp.id}".`);
         if (ctx.contributorIds.has(tl.contributorId)) r.pass(`Composant ${key} lié au contributeur "${tl.contributorId}".`);
@@ -812,7 +901,7 @@ const RULES = [
         if (inp.dataType !== 'time') f.set(inp, 'dataType', 'time', `${where}.input`);
         if (!(isPosNum(inp.barWeight) && inp.barWeight <= 1)) f.set(inp, 'barWeight', 0.8, `${where}.input`);
         if (!isPosNum(inp.chartHeight)) f.set(inp, 'chartHeight', height, `${where}.input`);
-        if (!inp.ticksDateFormat) f.set(inp, 'ticksDateFormat', '%d/%m/%Y', `${where}.input`);
+        ['ticksDateFormat', 'valuesDateFormat'].forEach(k => { if (inp[k] !== TIMELINE_DATE_FORMAT) f.set(inp, k, TIMELINE_DATE_FORMAT, `${where}.input`); });
         if (tl.componentType !== 'histogram') f.set(tl, 'componentType', 'histogram', where);
         if (inp.id !== expectedId) f.set(inp, 'id', expectedId, `${where}.input`);
       });
@@ -947,6 +1036,67 @@ const RULES = [
         });
         if (!bad) r.pass(`Les ${(c.layers_sources || []).length} sources de couches sont synchronisées avec config.map.json.`);
       });
+    }
+  },
+  {
+    // render_mode "window": the Builder disables maxfeatures and marks the layer as scrollable
+    // (metadata.is-scrollable-layer = true, plus a scrollable_ copy it rebuilds itself); "wide": not scrollable.
+    id: 'MAP-7', section: 'map',
+    check(ctx, r) {
+      const layerById = new Map(ctx.mapLayers.map(l => [l.id, l]));
+      ctx.contributors.filter(c => c.type === 'map').forEach(c => (c.layers_sources || [])
+        .filter(s => typeof s.source === 'string' && s.source.startsWith('feature-') && !s.source.startsWith('feature-metric-'))
+        .forEach(s => {
+          const window = s.render_mode === 'window';
+          if (window && s.maxfeatures !== undefined) r.fail(`Source "${s.id}" : render_mode "window" n'a pas de maxfeatures (le Builder le supprime).`);
+          const meta = layerById.get(s.id)?.metadata;
+          if (meta && meta['is-scrollable-layer'] !== undefined && meta['is-scrollable-layer'] !== window) {
+            r.fail(`Couche "${s.id}" : metadata.is-scrollable-layer doit valoir ${window} (render_mode "${s.render_mode}").`);
+          } else if (meta && window && meta['is-scrollable-layer'] === undefined) {
+            r.fail(`Couche "${s.id}" : metadata.is-scrollable-layer doit valoir true (render_mode "window").`);
+          }
+        }));
+    },
+    fix(ctx, f) {
+      ctx.contributors.filter(c => c.type === 'map').forEach(c => (c.layers_sources || [])
+        .filter(s => s.render_mode === 'window' && s.maxfeatures !== undefined)
+        .forEach(s => f.remove(s, 'maxfeatures', `contributor "${c.identifier}".layers_sources "${s.id}"`)));
+    }
+  },
+  {
+    // The Builder builds hover / select copies only for "features" layers of type line or circle, and for the
+    // arlas-fill_stroke- outline of a fill layer that declares metadata.stroke. Cluster and feature-metric layers
+    // have none.
+    id: 'MAP-8', section: 'map',
+    check(ctx, r) {
+      const byId = new Map(ctx.mapLayers.map(l => [l.id, l]));
+      ctx.extLayers.forEach(el => {
+        const base = typeof el.id === 'string' ? el.id.replace(/^arlas-(hover|select)-/, '') : '';
+        const layer = byId.get(base);
+        if (!layer) return;
+        const src = String(layer.source || '');
+        const features = src.startsWith('feature-') && !src.startsWith('feature-metric-');
+        if (!features) {
+          r.fail(`external-event-layer "${el.id}" : la couche "${base}" n'est pas en mode features (${src.split('-')[0]}) ; le Builder ne crée de survol / sélection que pour les couches features.`);
+        } else if (layer.type === 'fill') {
+          r.fail(`external-event-layer "${el.id}" : une couche fill n'a pas de survol / sélection ; déclare metadata.stroke et vise son contour "${base.replace(/^arlas_id:/, 'arlas-fill_stroke-')}".`);
+        } else if (!['line', 'circle'].includes(layer.type)) {
+          r.fail(`external-event-layer "${el.id}" : type "${layer.type}" sans survol / sélection dans le Builder (line ou circle seulement).`);
+        }
+      });
+    }
+  },
+  {
+    // The Builder disables layer filters on cluster layers (map-layer-form-builder: filters enabled only when
+    // type !== 'cluster'): a filtered aggregation is lost on save.
+    id: 'MAP-9', section: 'map',
+    check(ctx, r) {
+      const trivial = f => f === undefined || JSON.stringify(f) === '["all"]' || JSON.stringify(f) === '["all",["all"]]';
+      ctx.mapLayers.filter(l => String(l.source || '').startsWith('cluster-') && !/^arlas-(hover|select)-/.test(l.id) && !trivial(l.filter))
+        .forEach(l => r.fail(`Couche "${l.id}" : filtre sur une couche cluster, ignoré par le Builder ; filtre plutôt par la sélection (widgets) ou utilise une couche features.`));
+      ctx.contributors.filter(c => c.type === 'map').forEach(c => (c.layers_sources || [])
+        .filter(s => String(s.source || '').startsWith('cluster-') && Array.isArray(s.filters) && s.filters.length)
+        .forEach(s => r.fail(`Source "${s.id}" : filters sur une source cluster, ignorés par le Builder.`)));
     }
   },
   {

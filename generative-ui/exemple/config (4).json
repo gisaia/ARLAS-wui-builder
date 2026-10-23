@@ -1,0 +1,2162 @@
+{
+  "arlas": {
+    "web": {
+      "contributors": [
+        {
+          "type": "map",
+          "identifier": "demo_ais_course",
+          "name": "Map demo_ais_course",
+          "collection": "demo_ais_course",
+          "geo_query_op": "Intersects",
+          "geo_query_field": "track.trail",
+          "window_extent_geometry": "geometry_path",
+          "icon": "check_box_outline_blank",
+          "layers_sources": [
+            {
+              "id": "arlas_id:Grid:1736159920410",
+              "name": "Grid",
+              "source": "cluster-track.trail_geohashes_6-Fine-h3-cell-demo_ais_course",
+              "minzoom": 0,
+              "maxzoom": 23,
+              "include_fields": [],
+              "short_form_fields": [],
+              "colors_from_fields": [],
+              "provided_fields": [],
+              "normalization_fields": [],
+              "metrics": [
+                {
+                  "field": "",
+                  "metric": "count",
+                  "normalize": true
+                },
+                {
+                  "field": "",
+                  "metric": "count",
+                  "normalize": true
+                }
+              ],
+              "agg_geo_field": "track.trail_geohashes_6",
+              "aggType": "h3",
+              "granularity": "Fine",
+              "minfeatures": 1000,
+              "aggregated_geometry": "cell"
+            },
+            {
+              "id": "arlas_id:Gathered departures:1625210669176",
+              "name": "Gathered departures",
+              "source": "cluster-departure.location-Fine-geohash-centroid-demo_ais_course",
+              "minzoom": 0,
+              "maxzoom": 23,
+              "include_fields": [],
+              "short_form_fields": [],
+              "colors_from_fields": [],
+              "provided_fields": [],
+              "normalization_fields": [],
+              "metrics": [
+                {
+                  "field": "",
+                  "metric": "count",
+                  "normalize": true
+                },
+                {
+                  "field": "",
+                  "metric": "count",
+                  "normalize": true
+                }
+              ],
+              "agg_geo_field": "departure.location",
+              "aggType": "geohash",
+              "granularity": "Fine",
+              "minfeatures": 1000,
+              "aggregated_geometry": "centroid"
+            },
+            {
+              "id": "arlas_id:Gathered arrivals:1625210688720",
+              "name": "Gathered arrivals",
+              "source": "cluster-arrival.location-Fine-geohash-centroid-demo_ais_course",
+              "minzoom": 0,
+              "maxzoom": 23,
+              "include_fields": [],
+              "short_form_fields": [],
+              "colors_from_fields": [],
+              "provided_fields": [],
+              "normalization_fields": [],
+              "metrics": [
+                {
+                  "field": "",
+                  "metric": "count",
+                  "normalize": true
+                },
+                {
+                  "field": "",
+                  "metric": "count",
+                  "normalize": true
+                }
+              ],
+              "agg_geo_field": "arrival.location",
+              "aggType": "geohash",
+              "granularity": "Fine",
+              "minfeatures": 1000,
+              "aggregated_geometry": "centroid"
+            },
+            {
+              "id": "arlas_id:Boats courses (Ship type):1729526577282",
+              "name": "Boats courses (Ship type)",
+              "source": "feature-track.trail-window-demo_ais_course",
+              "minzoom": 0,
+              "maxzoom": 23,
+              "include_fields": [
+                "object.ship_type"
+              ],
+              "short_form_fields": [],
+              "colors_from_fields": [],
+              "provided_fields": [],
+              "normalization_fields": [
+                {
+                  "on": "track.timestamps.center",
+                  "per": "object.id"
+                }
+              ],
+              "metrics": [],
+              "returned_geometry": "track.trail",
+              "render_mode": "window"
+            },
+            {
+              "id": "arlas_id:Boats courses (Ship type) light:1740475069955",
+              "name": "Boats courses (Ship type) light",
+              "source": "feature-track.trail-wide-demo_ais_course",
+              "minzoom": 0,
+              "maxzoom": 23,
+              "include_fields": [
+                "object.ship_type"
+              ],
+              "short_form_fields": [],
+              "colors_from_fields": [],
+              "provided_fields": [],
+              "normalization_fields": [],
+              "metrics": [],
+              "maxfeatures": 1000,
+              "returned_geometry": "track.trail",
+              "render_mode": "wide"
+            },
+            {
+              "id": "arlas_id:Boats courses (Ship type) light Scrollable:1729526269742",
+              "name": "Boats courses (Ship type) light Scrollable",
+              "source": "feature-track.trail-window-demo_ais_course",
+              "minzoom": 12,
+              "maxzoom": 23,
+              "include_fields": [
+                "object.ship_type"
+              ],
+              "short_form_fields": [],
+              "colors_from_fields": [],
+              "provided_fields": [],
+              "normalization_fields": [],
+              "metrics": [],
+              "returned_geometry": "track.trail",
+              "render_mode": "window"
+            },
+            {
+              "id": "arlas_id:Boats courses (Speed):1616754563858",
+              "name": "Boats courses (Speed)",
+              "source": "feature-track.trail-wide-demo_ais_course",
+              "minzoom": 0,
+              "maxzoom": 23,
+              "include_fields": [
+                "track.dynamics.sensor.speed_nd"
+              ],
+              "short_form_fields": [],
+              "colors_from_fields": [],
+              "provided_fields": [],
+              "normalization_fields": [
+                {
+                  "on": "track.timestamps.center",
+                  "per": "object.id"
+                }
+              ],
+              "metrics": [],
+              "maxfeatures": 1000,
+              "returned_geometry": "track.trail",
+              "render_mode": "wide"
+            },
+            {
+              "id": "arlas_id:Boats courses (courses):1639650403518",
+              "name": "Boats courses (courses)",
+              "source": "feature-track.trail-wide-demo_ais_course",
+              "minzoom": 0,
+              "maxzoom": 23,
+              "include_fields": [],
+              "short_form_fields": [],
+              "colors_from_fields": [
+                "track.id"
+              ],
+              "provided_fields": [],
+              "normalization_fields": [
+                {
+                  "on": "track.timestamps.center",
+                  "per": "object.id"
+                }
+              ],
+              "metrics": [],
+              "maxfeatures": 1000,
+              "returned_geometry": "track.trail",
+              "render_mode": "wide"
+            },
+            {
+              "id": "arlas_id:Courses departure stops:1625500541199",
+              "name": "Courses departure stops",
+              "source": "feature-departure.location-wide-demo_ais_course",
+              "minzoom": 0,
+              "maxzoom": 23,
+              "include_fields": [],
+              "short_form_fields": [],
+              "colors_from_fields": [],
+              "provided_fields": [],
+              "normalization_fields": [],
+              "metrics": [],
+              "maxfeatures": 1000,
+              "returned_geometry": "departure.location",
+              "render_mode": "wide"
+            },
+            {
+              "id": "arlas_id:Courses arrival stops:1625500564823",
+              "name": "Courses arrival stops",
+              "source": "feature-arrival.location-wide-demo_ais_course",
+              "minzoom": 0,
+              "maxzoom": 23,
+              "include_fields": [],
+              "short_form_fields": [],
+              "colors_from_fields": [],
+              "provided_fields": [],
+              "normalization_fields": [],
+              "metrics": [],
+              "maxfeatures": 1000,
+              "returned_geometry": "arrival.location",
+              "render_mode": "wide"
+            },
+            {
+              "id": "arlas_id:Pauses:1616754564012",
+              "name": "Pauses",
+              "source": "feature-track.pauses.trail-wide-demo_ais_course",
+              "minzoom": 1,
+              "maxzoom": 22,
+              "include_fields": [],
+              "short_form_fields": [],
+              "colors_from_fields": [],
+              "provided_fields": [],
+              "normalization_fields": [],
+              "metrics": [],
+              "maxfeatures": 1000,
+              "returned_geometry": "track.pauses.trail",
+              "render_mode": "wide"
+            },
+            {
+              "id": "arlas_id:Stop Before:1639126072827",
+              "name": "Stop Before",
+              "source": "feature-departure.stop_before.location_precision.geometry-wide-demo_ais_course",
+              "minzoom": 1,
+              "maxzoom": 22,
+              "include_fields": [],
+              "short_form_fields": [],
+              "colors_from_fields": [],
+              "provided_fields": [],
+              "normalization_fields": [],
+              "metrics": [],
+              "maxfeatures": 1000,
+              "returned_geometry": "departure.stop_before.location_precision.geometry",
+              "render_mode": "wide"
+            },
+            {
+              "id": "arlas_id:Stop After:1639126084804",
+              "name": "Stop After",
+              "source": "feature-arrival.stop_after.location_precision.geometry-wide-demo_ais_course",
+              "minzoom": 1,
+              "maxzoom": 22,
+              "include_fields": [],
+              "short_form_fields": [],
+              "colors_from_fields": [],
+              "provided_fields": [],
+              "normalization_fields": [],
+              "metrics": [],
+              "maxfeatures": 1000,
+              "returned_geometry": "arrival.stop_after.location_precision.geometry",
+              "render_mode": "wide"
+            },
+            {
+              "id": "arlas_id:Pauses Center:1616754564129",
+              "name": "Pauses Center",
+              "source": "feature-track.pauses.location-wide-demo_ais_course",
+              "minzoom": 2,
+              "maxzoom": 22,
+              "include_fields": [],
+              "short_form_fields": [],
+              "colors_from_fields": [],
+              "provided_fields": [],
+              "normalization_fields": [],
+              "metrics": [],
+              "maxfeatures": 1000,
+              "returned_geometry": "track.pauses.location",
+              "render_mode": "wide"
+            },
+            {
+              "id": "arlas_id:GPS:1625215965169",
+              "name": "GPS",
+              "source": "feature-track.trail-wide-demo_ais_course",
+              "minzoom": 1,
+              "maxzoom": 22,
+              "include_fields": [],
+              "short_form_fields": [],
+              "colors_from_fields": [],
+              "provided_fields": [],
+              "normalization_fields": [],
+              "metrics": [],
+              "maxfeatures": 10000,
+              "returned_geometry": "track.trail",
+              "render_mode": "wide"
+            },
+            {
+              "id": "arlas_id:Ship name:1691132578172",
+              "name": "Ship name",
+              "source": "feature-track.trail-wide-demo_ais_course",
+              "minzoom": 1,
+              "maxzoom": 23,
+              "include_fields": [
+                "object.name"
+              ],
+              "short_form_fields": [],
+              "colors_from_fields": [],
+              "provided_fields": [],
+              "normalization_fields": [],
+              "metrics": [],
+              "maxfeatures": 5000,
+              "returned_geometry": "track.trail",
+              "render_mode": "wide"
+            }
+          ]
+        },
+        {
+          "type": "search",
+          "identifier": "search_demo_ais_course_internal.fulltext_internal.autocomplete",
+          "collection": "demo_ais_course",
+          "search_field": "internal.fulltext",
+          "name": "Search a MMSI",
+          "icon": "search",
+          "autocomplete_field": "internal.autocomplete",
+          "autocomplete_size": 3
+        },
+        {
+          "type": "histogram",
+          "identifier": "timeline",
+          "collection": "demo_ais_course",
+          "name": "Timeline",
+          "icon": "watch_later",
+          "isOneDimension": false,
+          "useUtc": true,
+          "numberOfBuckets": 100,
+          "aggregationmodels": [
+            {
+              "type": "datehistogram",
+              "field": "track.timestamps.center"
+            }
+          ],
+          "additionalCollections": []
+        },
+        {
+          "identifier": "demo_ais_course-track.id-100-MMSI-Ship Name-Ship Type-Duration-Departure-Vessel Information-Course Information-Origin-Destination-",
+          "name": "Courses",
+          "title": "Courses",
+          "collection": "demo_ais_course",
+          "icon": "table_chart",
+          "type": "resultlist",
+          "search_size": 100,
+          "fieldsConfiguration": {
+            "idFieldName": "track.id",
+            "titleFieldNames": [
+              {
+                "fieldPath": "",
+                "process": ""
+              }
+            ],
+            "tooltipFieldNames": [
+              {
+                "fieldPath": "",
+                "process": ""
+              }
+            ],
+            "iconColorFieldName": "",
+            "useHttpQuicklooks": false,
+            "useHttpThumbnails": false,
+            "urlImageTemplates": []
+          },
+          "columns": [
+            {
+              "columnName": "MMSI",
+              "fieldName": "object.mmsi",
+              "dataType": "",
+              "process": "",
+              "useColorService": false,
+              "sort": ""
+            },
+            {
+              "columnName": "Ship Name",
+              "fieldName": "object.name",
+              "dataType": "",
+              "process": "",
+              "useColorService": false,
+              "sort": ""
+            },
+            {
+              "columnName": "Ship Type",
+              "fieldName": "object.ship_type",
+              "dataType": "",
+              "process": "",
+              "useColorService": true,
+              "sort": ""
+            },
+            {
+              "columnName": "Duration",
+              "fieldName": "track.duration_s",
+              "dataType": "",
+              "process": "Math.floor(result /3600)+'h '+(Math.floor(((result / 3600 -  Math.floor(result /3600)) * 60))) + 'min ' + (Math.floor((((result / 3600 -  Math.floor(result /3600)) * 60)-Math.floor(((result / 3600 -  Math.floor(result /3600)) * 60)) )* 60) ) + 's'",
+              "useColorService": false,
+              "sort": ""
+            },
+            {
+              "columnName": "Departure",
+              "fieldName": "track.timestamps.start",
+              "dataType": "",
+              "process": "(new Date(result * 1000)).toUTCString().split(',')[1] !== undefined ? (new Date(result * 1000)).toUTCString().split(',')[1].replace('GMT', '') :'undefined'",
+              "useColorService": false,
+              "sort": ""
+            }
+          ],
+          "details": [
+            {
+              "name": "Vessel Information",
+              "order": 1,
+              "fields": [
+                {
+                  "path": "object.name",
+                  "label": "Ship Name",
+                  "process": ""
+                },
+                {
+                  "path": "object.length",
+                  "label": "Ship length (m)",
+                  "process": "result + ' m'"
+                },
+                {
+                  "path": "object.imo",
+                  "label": "IMO",
+                  "process": ""
+                },
+                {
+                  "path": "object.mobile_type",
+                  "label": "Mobile Type",
+                  "process": ""
+                },
+                {
+                  "path": "object.source_type",
+                  "label": "Source Type",
+                  "process": ""
+                },
+                {
+                  "path": "object.mmsi",
+                  "label": "MMSI",
+                  "process": ""
+                },
+                {
+                  "path": "object.ship_type",
+                  "label": "Ship type",
+                  "process": ""
+                }
+              ]
+            },
+            {
+              "name": "Course Information",
+              "order": 2,
+              "fields": [
+                {
+                  "path": "track.duration_s",
+                  "label": "Duration",
+                  "process": "Math.floor(result /3600)+'h ' + (Math.floor(((result / 3600 -  Math.floor(result /3600)) * 60))) + 'min ' + (Math.floor((((result / 3600 -  Math.floor(result /3600)) * 60)-Math.floor(((result / 3600 -  Math.floor(result /3600)) * 60)) )* 60) ) + 's'"
+                },
+                {
+                  "path": "track.distance.gps.travelled_m",
+                  "label": "Travelled Distance (m)",
+                  "process": "Math.round(result)"
+                },
+                {
+                  "path": "track.distance.gps.straight_line_m",
+                  "label": "Straight line Distance (m)",
+                  "process": "Math.round(result)"
+                },
+                {
+                  "path": "track.distance.gps.straightness",
+                  "label": "Straightness",
+                  "process": "Math.round(result * 1000) / 1000"
+                },
+                {
+                  "path": "track.dynamics.gps.speed_nd",
+                  "label": "Mean Speed (nd)",
+                  "process": "Math.round(result * 10) / 10"
+                },
+                {
+                  "path": "track.dynamics.sensor.bearing",
+                  "label": "Mean Bearing (deg)",
+                  "process": "Math.round(result)"
+                },
+                {
+                  "path": "track.dynamics.sensor.draught",
+                  "label": "Draught (m)",
+                  "process": "Math.round(result * 10) / 10"
+                }
+              ]
+            },
+            {
+              "name": "Origin",
+              "order": 3,
+              "fields": [
+                {
+                  "path": "track.timestamps.start",
+                  "label": "Departure timestamp",
+                  "process": "(new Date(result * 1000)).toUTCString().split(',')[1] !== undefined ? (new Date(result * 1000)).toUTCString().split(',')[1].replace('GMT', '') :'undefined'"
+                },
+                {
+                  "path": "departure.location",
+                  "label": "Location",
+                  "process": "'Lat : ' + Math.round(result.split(',')[0] * 100) / 100 + ' ' + 'Lon : ' + Math.round(result.split(',')[1] * 100) / 100"
+                },
+                {
+                  "path": "departure.address.country",
+                  "label": "Country",
+                  "process": ""
+                },
+                {
+                  "path": "departure.address.port",
+                  "label": "Port",
+                  "process": ""
+                }
+              ]
+            },
+            {
+              "name": "Destination",
+              "order": 4,
+              "fields": [
+                {
+                  "path": "track.timestamps.end",
+                  "label": "Arrival timestamp",
+                  "process": "(new Date(result * 1000)).toUTCString().split(',')[1] !== undefined ? (new Date(result * 1000)).toUTCString().split(',')[1].replace('GMT', '') :'undefined'"
+                },
+                {
+                  "path": "arrival.location",
+                  "label": "Location",
+                  "process": "'Lat : ' + Math.round(result.split(',')[0] * 100) / 100 + ' ' + 'Lon : ' + Math.round(result.split(',')[1] * 100) / 100"
+                },
+                {
+                  "path": "arrival.address.country",
+                  "label": "Country",
+                  "process": ""
+                },
+                {
+                  "path": "arrival.address.state",
+                  "label": "State",
+                  "process": ""
+                },
+                {
+                  "path": "arrival.address.port",
+                  "label": "Port",
+                  "process": ""
+                }
+              ]
+            }
+          ],
+          "includeMetadata": []
+        },
+        {
+          "type": "detailedhistogram",
+          "identifier": "detailedTimeline",
+          "collection": "demo_ais_course",
+          "name": "Timeline",
+          "icon": "watch_later",
+          "isOneDimension": false,
+          "useUtc": true,
+          "numberOfBuckets": 100,
+          "aggregationmodels": [
+            {
+              "type": "datehistogram",
+              "field": "track.timestamps.center"
+            }
+          ],
+          "annexedContributorId": "timeline",
+          "selectionExtentPercentage": 0.02,
+          "additionalCollections": []
+        },
+        {
+          "identifier": "demo_ais_course-object.id-cardinality-0",
+          "name": "Number of vessels",
+          "title": "Number of vessels",
+          "collection": "demo_ais_course",
+          "icon": "functions",
+          "type": "metric",
+          "function": "m[0]",
+          "metrics": [
+            {
+              "field": "object.id",
+              "metric": "cardinality"
+            }
+          ]
+        },
+        {
+          "identifier": "demo_ais_course-m[0]/1852track.distance.gps.travelled_m-sum-0",
+          "name": "Travelled distance",
+          "title": "Travelled distance",
+          "collection": "demo_ais_course",
+          "icon": "functions",
+          "type": "metric",
+          "function": "m[0]/1852",
+          "metrics": [
+            {
+              "field": "track.distance.gps.travelled_m",
+              "metric": "sum"
+            }
+          ]
+        },
+        {
+          "identifier": "demo_ais_course-track.nb_geopoints-sum-0",
+          "name": "Nb Géopoints",
+          "title": "Nb Géopoints",
+          "collection": "demo_ais_course",
+          "icon": "functions",
+          "type": "metric",
+          "function": "m[0]",
+          "metrics": [
+            {
+              "field": "track.nb_geopoints",
+              "metric": "sum"
+            }
+          ]
+        },
+        {
+          "identifier": "demo_ais_course-object.ship_type-8-object.cargo_type-undefined-",
+          "name": "Ship type",
+          "title": "Ship type",
+          "collection": "demo_ais_course",
+          "icon": "directions_boat",
+          "type": "tree",
+          "aggregationmodels": [
+            {
+              "field": "object.ship_type",
+              "size": 8,
+              "type": "term"
+            },
+            {
+              "field": "object.cargo_type",
+              "type": "term"
+            }
+          ]
+        },
+        {
+          "identifier": "demo_ais_course-object.ship_type-161-Count-desc-count",
+          "name": "Ship type",
+          "title": "Ship type",
+          "collection": "demo_ais_course",
+          "icon": "directions_boat",
+          "type": "tree",
+          "jsonpath": "$.count",
+          "aggregationmodels": [
+            {
+              "type": "term",
+              "field": "object.ship_type",
+              "size": 161,
+              "order": "desc",
+              "on": "count"
+            }
+          ],
+          "filterOperator": "Eq",
+          "allowOperatorChange": true
+        },
+        {
+          "identifier": "demo_ais_course-track.timestamps.center-time-bucket-Count--40object.ship_type",
+          "name": "Ship type",
+          "title": "Ship type",
+          "collection": "demo_ais_course",
+          "icon": "directions_boat",
+          "type": "swimlane",
+          "numberOfBuckets": 40,
+          "swimlanes": [
+            {
+              "id": 1,
+              "name": "Ship type",
+              "xAxisField": "track.timestamps.center",
+              "termField": "object.ship_type",
+              "aggregationmodels": [
+                {
+                  "type": "term",
+                  "field": "object.ship_type",
+                  "size": 10
+                },
+                {
+                  "type": "datehistogram",
+                  "field": "track.timestamps.center"
+                }
+              ],
+              "useUtc": true,
+              "jsonpath": "$.count"
+            }
+          ]
+        },
+        {
+          "identifier": "demo_ais_course-object.id-10-Count-desc-count",
+          "name": "MMSI",
+          "title": "MMSI",
+          "collection": "demo_ais_course",
+          "icon": "fingerprint",
+          "type": "tree",
+          "jsonpath": "$.count",
+          "aggregationmodels": [
+            {
+              "type": "term",
+              "field": "object.id",
+              "size": 10,
+              "order": "desc",
+              "on": "count"
+            }
+          ],
+          "filterOperator": "Eq",
+          "allowOperatorChange": true
+        },
+        {
+          "identifier": "demo_ais_course-object.name-10-Count-desc-count",
+          "name": "Ship name",
+          "title": "Ship name",
+          "collection": "demo_ais_course",
+          "icon": "fingerprint",
+          "type": "tree",
+          "jsonpath": "$.count",
+          "aggregationmodels": [
+            {
+              "type": "term",
+              "field": "object.name",
+              "size": 10,
+              "order": "desc",
+              "on": "count"
+            }
+          ],
+          "filterOperator": "Eq",
+          "allowOperatorChange": true
+        },
+        {
+          "identifier": "demo_ais_course-departure.address.country-10-Count-desc-count",
+          "name": "Departure Country",
+          "title": "Departure Country",
+          "collection": "demo_ais_course",
+          "icon": "call_made",
+          "type": "tree",
+          "jsonpath": "$.count",
+          "aggregationmodels": [
+            {
+              "type": "term",
+              "field": "departure.address.country",
+              "size": 10,
+              "order": "desc",
+              "on": "count"
+            }
+          ],
+          "filterOperator": "Eq",
+          "allowOperatorChange": true
+        },
+        {
+          "identifier": "demo_ais_course-departure.address.port-10-Count-desc-count",
+          "name": "Departure Port",
+          "title": "Departure Port",
+          "collection": "demo_ais_course",
+          "icon": "call_made",
+          "type": "tree",
+          "jsonpath": "$.count",
+          "aggregationmodels": [
+            {
+              "type": "term",
+              "field": "departure.address.port",
+              "size": 10,
+              "order": "desc",
+              "on": "count"
+            }
+          ],
+          "filterOperator": "Eq",
+          "allowOperatorChange": true
+        },
+        {
+          "identifier": "demo_ais_course-arrival.address.country-10-Count-desc-count",
+          "name": "Arrival Country",
+          "title": "Arrival Country",
+          "collection": "demo_ais_course",
+          "icon": "call_received",
+          "type": "tree",
+          "jsonpath": "$.count",
+          "aggregationmodels": [
+            {
+              "type": "term",
+              "field": "arrival.address.country",
+              "size": 10,
+              "order": "desc",
+              "on": "count"
+            }
+          ],
+          "filterOperator": "Eq",
+          "allowOperatorChange": true
+        },
+        {
+          "identifier": "demo_ais_course-arrival.address.port-10-Count-desc-count",
+          "name": "Arrival Port",
+          "title": "Arrival Port",
+          "collection": "demo_ais_course",
+          "icon": "call_received",
+          "type": "tree",
+          "jsonpath": "$.count",
+          "aggregationmodels": [
+            {
+              "type": "term",
+              "field": "arrival.address.port",
+              "size": 10,
+              "order": "desc",
+              "on": "count"
+            }
+          ],
+          "filterOperator": "Eq",
+          "allowOperatorChange": true
+        },
+        {
+          "identifier": "demo_ais_course-track.duration_s-numeric-bucket-Count--50",
+          "name": "Number of courses having this value",
+          "title": "Number of courses having this value",
+          "collection": "demo_ais_course",
+          "icon": "access_time",
+          "charttype": "bars",
+          "isOneDimension": false,
+          "type": "histogram",
+          "numberOfBuckets": 50,
+          "jsonpath": "$.count",
+          "aggregationmodels": [
+            {
+              "type": "histogram",
+              "field": "track.duration_s"
+            }
+          ]
+        },
+        {
+          "identifier": "demo_ais_course-track.distance.gps.travelled_m-numeric-bucket-Count--30",
+          "name": "Number of courses having this value",
+          "title": "Number of courses having this value",
+          "collection": "demo_ais_course",
+          "icon": "straighten",
+          "charttype": "bars",
+          "isOneDimension": false,
+          "type": "histogram",
+          "numberOfBuckets": 30,
+          "jsonpath": "$.count",
+          "aggregationmodels": [
+            {
+              "type": "histogram",
+              "field": "track.distance.gps.travelled_m"
+            }
+          ]
+        },
+        {
+          "identifier": "demo_ais_course-track.timestamps.center-time-bucket-SUM-track.distance.gps.travelled_m-30",
+          "name": "Travelled distance",
+          "title": "Travelled distance",
+          "collection": "demo_ais_course",
+          "icon": "straighten",
+          "charttype": "bars",
+          "isOneDimension": false,
+          "type": "histogram",
+          "numberOfBuckets": 30,
+          "jsonpath": "$.metrics[0].value",
+          "useUtc": true,
+          "aggregationmodels": [
+            {
+              "type": "datehistogram",
+              "field": "track.timestamps.center",
+              "metrics": [
+                {
+                  "collect_fct": "sum",
+                  "collect_field": "track.distance.gps.travelled_m"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "identifier": "demo_ais_course-track.dynamics.sensor.speed_nd-numeric-bucket-Count--20",
+          "name": "Number of courses having this value",
+          "title": "Number of courses having this value",
+          "collection": "demo_ais_course",
+          "icon": "network_check",
+          "charttype": "bars",
+          "isOneDimension": false,
+          "type": "histogram",
+          "numberOfBuckets": 20,
+          "jsonpath": "$.count",
+          "aggregationmodels": [
+            {
+              "type": "histogram",
+              "field": "track.dynamics.sensor.speed_nd"
+            }
+          ]
+        },
+        {
+          "identifier": "demo_ais_course-track.tempo_emission.main-10-",
+          "name": "Tempo",
+          "title": "Tempo",
+          "collection": "demo_ais_course",
+          "icon": "access_alarm",
+          "type": "tree",
+          "aggregationmodels": [
+            {
+              "field": "track.tempo_emission.main",
+              "size": 10,
+              "type": "term"
+            }
+          ]
+        },
+        {
+          "identifier": "demo_ais_course-track.tempo_emission.main-10-Count-desc-count",
+          "name": "Tempo legend",
+          "title": "Tempo legend",
+          "collection": "demo_ais_course",
+          "icon": "access_alarm",
+          "type": "tree",
+          "jsonpath": "$.count",
+          "aggregationmodels": [
+            {
+              "type": "term",
+              "field": "track.tempo_emission.main",
+              "size": 10,
+              "order": "desc",
+              "on": "count"
+            }
+          ],
+          "filterOperator": "Eq",
+          "allowOperatorChange": true
+        },
+        {
+          "identifier": "demo_ais_course-departure.stop_before.duration_s-numeric-bucket-Count--30",
+          "name": "Number of courses having this value",
+          "title": "Number of courses having this value",
+          "collection": "demo_ais_course",
+          "icon": "timelapse",
+          "charttype": "bars",
+          "isOneDimension": false,
+          "type": "histogram",
+          "numberOfBuckets": 30,
+          "jsonpath": "$.count",
+          "aggregationmodels": [
+            {
+              "type": "histogram",
+              "field": "departure.stop_before.duration_s"
+            }
+          ]
+        },
+        {
+          "identifier": "demo_ais_course-arrival.stop_after.duration_s-numeric-bucket-Count--30",
+          "name": "Number of courses having this value",
+          "title": "Number of courses having this value",
+          "collection": "demo_ais_course",
+          "icon": "timelapse",
+          "charttype": "bars",
+          "isOneDimension": false,
+          "type": "histogram",
+          "numberOfBuckets": 30,
+          "jsonpath": "$.count",
+          "aggregationmodels": [
+            {
+              "type": "histogram",
+              "field": "arrival.stop_after.duration_s"
+            }
+          ]
+        },
+        {
+          "identifier": "demo_ais_course-track.id-10-Count-desc-count",
+          "name": "Course ID",
+          "title": "Course ID",
+          "collection": "demo_ais_course",
+          "icon": "list",
+          "type": "tree",
+          "jsonpath": "$.count",
+          "aggregationmodels": [
+            {
+              "type": "term",
+              "field": "track.id",
+              "size": 10,
+              "order": "desc",
+              "on": "count"
+            }
+          ],
+          "filterOperator": "Eq",
+          "allowOperatorChange": true
+        }
+      ],
+      "components": {
+        "timeline": {
+          "contributorId": "timeline",
+          "componentType": "histogram",
+          "uuid": "",
+          "input": {
+            "id": "histogram-timeline",
+            "xTicks": 9,
+            "yTicks": 2,
+            "xLabels": 9,
+            "yLabels": 2,
+            "chartTitle": "Number of AIS positions over time",
+            "customizedCssClass": "arlas-timeline",
+            "multiselectable": true,
+            "brushHandlesHeightWeight": 1,
+            "dataType": "time",
+            "isHistogramSelectable": true,
+            "ticksDateFormat": "%b %d %Y  %H:%M",
+            "valuesDateFormat": "%b %d %Y  %H:%M",
+            "chartType": "bars",
+            "chartHeight": 128,
+            "chartWidth": null,
+            "xAxisPosition": "bottom",
+            "yAxisStartsFromZero": true,
+            "descriptionPosition": "top",
+            "showXTicks": true,
+            "showYTicks": true,
+            "showXLabels": true,
+            "showYLabels": true,
+            "showHorizontalLines": false,
+            "isSmoothedCurve": true,
+            "barWeight": 0.8,
+            "topOffsetRemoveInterval": 10
+          }
+        },
+        "mapgl": {
+          "allowMapExtend": true,
+          "input": {
+            "defaultBasemapStyle": {
+              "name": "Streets-dark",
+              "styleFile": "https://api.maptiler.com/maps/a1e62ee0-aca6-451a-a4b8-42250422a212/style.json?key=E7xmD2y9rRj1z4TcNnj9",
+              "image": null,
+              "type": null
+            },
+            "basemapStyles": [
+              {
+                "name": "Basic",
+                "styleFile": "https://api.maptiler.com/maps/basic/style.json?key=E7xmD2y9rRj1z4TcNnj9",
+                "image": null,
+                "type": null
+              },
+              {
+                "name": "Bright",
+                "styleFile": "https://api.maptiler.com/maps/bright/style.json?key=E7xmD2y9rRj1z4TcNnj9",
+                "image": null,
+                "type": null
+              },
+              {
+                "name": "Outdoor",
+                "styleFile": "https://api.maptiler.com/maps/outdoor/style.json?key=E7xmD2y9rRj1z4TcNnj9",
+                "image": null,
+                "type": null
+              },
+              {
+                "name": "Pastel",
+                "styleFile": "https://api.maptiler.com/maps/pastel/style.json?key=E7xmD2y9rRj1z4TcNnj9",
+                "image": null,
+                "type": null
+              },
+              {
+                "name": "Satellite Hybrid",
+                "styleFile": "https://api.maptiler.com/maps/hybrid/style.json?key=E7xmD2y9rRj1z4TcNnj9",
+                "image": null,
+                "type": null
+              },
+              {
+                "name": "Streets",
+                "styleFile": "https://api.maptiler.com/maps/streets/style.json?key=E7xmD2y9rRj1z4TcNnj9",
+                "image": null,
+                "type": null
+              },
+              {
+                "name": "Toner",
+                "styleFile": "https://api.maptiler.com/maps/toner/style.json?key=E7xmD2y9rRj1z4TcNnj9",
+                "image": null,
+                "type": null
+              },
+              {
+                "name": "Topo",
+                "styleFile": "https://api.maptiler.com/maps/topo/style.json?key=E7xmD2y9rRj1z4TcNnj9",
+                "image": null,
+                "type": null
+              },
+              {
+                "name": "Topographique",
+                "styleFile": "https://api.maptiler.com/maps/topographique/style.json?key=E7xmD2y9rRj1z4TcNnj9",
+                "image": null,
+                "type": null
+              },
+              {
+                "name": "Voyager",
+                "styleFile": "https://api.maptiler.com/maps/voyager/style.json?key=E7xmD2y9rRj1z4TcNnj9",
+                "image": null,
+                "type": null
+              },
+              {
+                "name": "Positron",
+                "styleFile": "https://api.maptiler.com/maps/8bb9093c-9865-452b-8be4-7a397f552b49/style.json?key=E7xmD2y9rRj1z4TcNnj9",
+                "image": null,
+                "type": null
+              },
+              {
+                "name": "Streets-dark",
+                "styleFile": "https://api.maptiler.com/maps/a1e62ee0-aca6-451a-a4b8-42250422a212/style.json?key=E7xmD2y9rRj1z4TcNnj9",
+                "image": null,
+                "type": null
+              },
+              {
+                "name": "Streets-light",
+                "styleFile": "https://api.maptiler.com/maps/208a41eb-368f-4003-8e3c-2dba0d90b3cb/style.json?key=E7xmD2y9rRj1z4TcNnj9",
+                "image": null,
+                "type": null
+              }
+            ],
+            "terrain": {
+              "enable": false
+            },
+            "margePanForLoad": 5,
+            "margePanForTest": 2,
+            "initZoom": 6,
+            "initCenter": [
+              9.667969,
+              55.627996
+            ],
+            "displayScale": true,
+            "displayCurrentCoordinates": true,
+            "enableGlobe": true,
+            "idFeatureField": "deprecated, to be removed",
+            "mapLayers": {
+              "layers": [],
+              "events": {
+                "zoomOnClick": [],
+                "emitOnClick": [
+                  "arlas_id:Boats courses (Ship type):1729526577282",
+                  "scrollable_arlas_id:Boats courses (Ship type):1729526577282",
+                  "arlas_id:Boats courses (Ship type) light Scrollable:1729526269742",
+                  "scrollable_arlas_id:Boats courses (Ship type) light Scrollable:1729526269742"
+                ],
+                "onHover": [
+                  "arlas_id:Boats courses (Ship type):1729526577282",
+                  "scrollable_arlas_id:Boats courses (Ship type):1729526577282",
+                  "arlas_id:Boats courses (Ship type) light Scrollable:1729526269742",
+                  "scrollable_arlas_id:Boats courses (Ship type) light Scrollable:1729526269742"
+                ]
+              },
+              "externalEventLayers": []
+            },
+            "visualisations_sets": [
+              {
+                "name": "Departures",
+                "layers": [
+                  "arlas_id:Gathered departures:1625210669176",
+                  "arlas_id:Courses departure stops:1625500541199"
+                ],
+                "enabled": true
+              },
+              {
+                "name": "Departure area",
+                "layers": [
+                  "arlas_id:Stop Before:1639126072827"
+                ],
+                "enabled": false
+              },
+              {
+                "name": "Arrivals",
+                "layers": [
+                  "arlas_id:Gathered arrivals:1625210688720",
+                  "arlas_id:Courses arrival stops:1625500564823"
+                ],
+                "enabled": true
+              },
+              {
+                "name": "Arrival area",
+                "layers": [
+                  "arlas_id:Stop After:1639126084804"
+                ],
+                "enabled": false
+              },
+              {
+                "name": "Pauses",
+                "layers": [
+                  "arlas_id:Pauses:1616754564012",
+                  "arlas_id:Pauses Center:1616754564129"
+                ],
+                "enabled": false
+              },
+              {
+                "name": "Speed",
+                "layers": [
+                  "arlas_id:Boats courses (Speed):1616754563858"
+                ],
+                "enabled": false
+              },
+              {
+                "name": "Ship type",
+                "layers": [
+                  "arlas_id:Boats courses (Ship type):1729526577282"
+                ],
+                "enabled": false
+              },
+              {
+                "name": "Courses",
+                "layers": [
+                  "arlas_id:Boats courses (courses):1639650403518"
+                ],
+                "enabled": false
+              },
+              {
+                "name": "Boats courses distribution",
+                "layers": [
+                  "arlas_id:Grid:1736159920410"
+                ],
+                "enabled": true
+              },
+              {
+                "name": "Boats courses density",
+                "layers": [],
+                "enabled": false
+              },
+              {
+                "name": "Raw locations",
+                "layers": [
+                  "arlas_id:GPS:1625215965169"
+                ],
+                "enabled": false
+              },
+              {
+                "name": "Ship type light",
+                "layers": [
+                  "arlas_id:Boats courses (Ship type) light:1740475069955",
+                  "arlas_id:Boats courses (Ship type) light Scrollable:1729526269742"
+                ],
+                "enabled": true
+              }
+            ]
+          }
+        },
+        "resultlists": [
+          {
+            "componentType": "resultlist",
+            "input": {
+              "id": "demo_ais_course-track.id-100-MMSI-Ship Name-Ship Type-Duration-Departure-Vessel Information-Course Information-Origin-Destination-",
+              "tableWidth": 445,
+              "globalActionsList": [],
+              "searchSize": 100,
+              "nLastLines": 3,
+              "detailedGridHeight": 300,
+              "nbGridColumns": 3,
+              "displayFilters": false,
+              "hasGridMode": false,
+              "defautMode": "list",
+              "downloadLink": "",
+              "isBodyHidden": false,
+              "isGeoSortActived": false,
+              "isAutoGeoSortActived": null,
+              "selectedItemsEvent": null,
+              "consultedItemEvent": null,
+              "actionOnItemEvent": null,
+              "globalActionEvent": 300,
+              "useColorService": true,
+              "cellBackgroundStyle": "filled",
+              "visualisationsList": [],
+              "options": {
+                "showActionsOnhover": "true",
+                "showDetailIconName": "keyboard_arrow_down",
+                "hideDetailIconName": "keyboard_arrow_up",
+                "icon": "swap_calls",
+                "showName": true,
+                "showIcon": true
+              }
+            },
+            "contributorId": "demo_ais_course-track.id-100-MMSI-Ship Name-Ship Type-Duration-Departure-Vessel Information-Course Information-Origin-Destination-",
+            "uuid": "a2fb0c18-dc9c-4574-bb23-7fe33ceb340b",
+            "usage": "analytics"
+          }
+        ],
+        "detailedTimeline": {
+          "contributorId": "detailedTimeline",
+          "componentType": "histogram",
+          "uuid": "",
+          "input": {
+            "id": "histogram-detailed-timeline",
+            "xTicks": 5,
+            "yTicks": 2,
+            "xLabels": 5,
+            "yLabels": 2,
+            "chartTitle": "Detailed of AIS positions over time",
+            "customizedCssClass": "arlas-detailed-timeline",
+            "multiselectable": true,
+            "brushHandlesHeightWeight": 1,
+            "dataType": "time",
+            "isHistogramSelectable": true,
+            "ticksDateFormat": "%b %d %Y  %H:%M",
+            "valuesDateFormat": "%b %d %Y  %H:%M",
+            "chartType": "bars",
+            "chartHeight": 60,
+            "chartWidth": null,
+            "xAxisPosition": "top",
+            "yAxisStartsFromZero": true,
+            "descriptionPosition": "bottom",
+            "showXTicks": true,
+            "showYTicks": true,
+            "showXLabels": true,
+            "showYLabels": true,
+            "showHorizontalLines": false,
+            "isSmoothedCurve": true,
+            "barWeight": 0.8
+          }
+        },
+        "share": {
+          "geojson": {
+            "max_for_feature": 10000,
+            "max_for_topology": 10000,
+            "sort_excluded_type": [
+              "TEXT",
+              "GEO_POINT"
+            ]
+          }
+        },
+        "download": {}
+      },
+      "analytics": [
+        {
+          "groupId": "Fleet-0",
+          "title": "Statistics",
+          "tab": "Fleet",
+          "icon": "functions",
+          "components": [
+            {
+              "componentType": "metric",
+              "input": {
+                "customizedCssClass": "power",
+                "shortValue": false,
+                "valuePrecision": 0,
+                "chartWidth": 143,
+                "afterValue": "Vessels"
+              },
+              "contributorId": "demo_ais_course-object.id-cardinality-0",
+              "uuid": "fab79e86-28ee-4dbf-a7ba-05e274967597",
+              "usage": "analytics"
+            },
+            {
+              "componentType": "metric",
+              "input": {
+                "customizedCssClass": "power",
+                "shortValue": false,
+                "valuePrecision": 0,
+                "chartWidth": 143,
+                "afterValue": "Nautic Miles"
+              },
+              "contributorId": "demo_ais_course-m[0]/1852track.distance.gps.travelled_m-sum-0",
+              "uuid": "23bbf023-c3b0-4b9c-b5eb-232b09c519ad",
+              "usage": "analytics"
+            },
+            {
+              "componentType": "metric",
+              "input": {
+                "customizedCssClass": "power",
+                "shortValue": true,
+                "valuePrecision": 0,
+                "chartWidth": 143,
+                "afterValue": "Geopoints"
+              },
+              "contributorId": "demo_ais_course-track.nb_geopoints-sum-0",
+              "uuid": "8eb302be-7740-4193-b622-7c9b82cdc545",
+              "usage": "analytics"
+            }
+          ]
+        },
+        {
+          "groupId": "Fleet-1",
+          "title": "Ship type",
+          "tab": "Fleet",
+          "icon": "directions_boat",
+          "components": [
+            {
+              "componentType": "donut",
+              "input": {
+                "id": "demo_ais_course-object.ship_type-8-object.cargo_type-undefined-",
+                "customizedCssClass": "arlas-donuts-analytics",
+                "diameter": 170,
+                "containerWidth": 223,
+                "multiselectable": true,
+                "opacity": 0.3
+              },
+              "contributorId": "demo_ais_course-object.ship_type-8-object.cargo_type-undefined-",
+              "uuid": "1d47eccc-36ae-499c-a887-47c8647d0c9a",
+              "usage": "analytics"
+            },
+            {
+              "showExportCsv": true,
+              "componentType": "powerbars",
+              "input": {
+                "chartTitle": "Ship type",
+                "powerbarTitle": "Ship type",
+                "displayFilter": false,
+                "scrollable": true,
+                "filterOperator": {
+                  "value": "Eq",
+                  "display": true
+                },
+                "useColorService": true,
+                "useColorFromData": false,
+                "unit": "courses",
+                "chartWidth": 217
+              },
+              "contributorId": "demo_ais_course-object.ship_type-161-Count-desc-count",
+              "uuid": "015f6447-fd79-4561-b12f-8d4d98afe0f1",
+              "usage": "both"
+            }
+          ]
+        },
+        {
+          "groupId": "Fleet-2",
+          "title": "Ship type over time",
+          "tab": "Fleet",
+          "icon": "directions_boat",
+          "components": [
+            {
+              "input": {
+                "id": "demo_ais_course-track.timestamps.center-time-bucket-Count--40object.ship_type",
+                "isHistogramSelectable": true,
+                "multiselectable": false,
+                "topOffsetRemoveInterval": 40,
+                "leftOffsetRemoveInterval": 18,
+                "brushHandlesHeightWeight": 1,
+                "yAxisStartsFromZero": true,
+                "chartTitle": "Ship type",
+                "chartHeight": 100,
+                "chartWidth": 445,
+                "xAxisPosition": "bottom",
+                "descriptionPosition": "bottom",
+                "xTicks": 4,
+                "yTicks": 1,
+                "xLabels": 4,
+                "yLabels": 4,
+                "showXTicks": true,
+                "showYTicks": true,
+                "showXLabels": true,
+                "showYLabels": false,
+                "barWeight": 0.8,
+                "dataType": "time",
+                "swimLaneLabelsWidth": 100,
+                "swimlaneHeight": 20,
+                "swimlaneMode": "variableHeight",
+                "swimlaneBorderRadius": 3,
+                "paletteColors": [
+                  330,
+                  170
+                ],
+                "swimlane_representation": "global",
+                "customizedCssClass": "arlas-swimlane",
+                "swimlane_options": {
+                  "nan_color": "#333"
+                }
+              },
+              "componentType": "swimlane",
+              "showExportCsv": false,
+              "contributorId": "demo_ais_course-track.timestamps.center-time-bucket-Count--40object.ship_type",
+              "uuid": "d651d784-1930-4e42-9940-6fe7c9fa6779",
+              "usage": "analytics"
+            }
+          ]
+        },
+        {
+          "groupId": "Fleet-3",
+          "title": "Vessels identifiers",
+          "tab": "Fleet",
+          "icon": "fingerprint",
+          "components": [
+            {
+              "showExportCsv": true,
+              "componentType": "powerbars",
+              "input": {
+                "chartTitle": "MMSI",
+                "powerbarTitle": "MMSI",
+                "displayFilter": true,
+                "scrollable": false,
+                "filterOperator": {
+                  "value": "Eq",
+                  "display": true
+                },
+                "useColorService": false,
+                "useColorFromData": false,
+                "chartWidth": 217
+              },
+              "contributorId": "demo_ais_course-object.id-10-Count-desc-count",
+              "uuid": "00dc1811-d351-4be0-bb7e-183d9162b352",
+              "usage": "analytics"
+            },
+            {
+              "showExportCsv": true,
+              "componentType": "powerbars",
+              "input": {
+                "chartTitle": "Ship name",
+                "powerbarTitle": "Ship name",
+                "displayFilter": true,
+                "scrollable": false,
+                "filterOperator": {
+                  "value": "Eq",
+                  "display": true
+                },
+                "useColorService": false,
+                "useColorFromData": false,
+                "chartWidth": 217
+              },
+              "contributorId": "demo_ais_course-object.name-10-Count-desc-count",
+              "uuid": "14945ea5-d37a-46fc-ba55-35c3b54401f5",
+              "usage": "analytics"
+            }
+          ]
+        },
+        {
+          "groupId": "Course-0",
+          "title": "Course Departure",
+          "tab": "Course",
+          "icon": "call_made",
+          "components": [
+            {
+              "showExportCsv": true,
+              "componentType": "powerbars",
+              "input": {
+                "chartTitle": "Departure Country",
+                "powerbarTitle": "Departure Country",
+                "displayFilter": true,
+                "scrollable": false,
+                "filterOperator": {
+                  "value": "Eq",
+                  "display": true
+                },
+                "useColorService": false,
+                "useColorFromData": false,
+                "chartWidth": 217
+              },
+              "contributorId": "demo_ais_course-departure.address.country-10-Count-desc-count",
+              "uuid": "296670b7-334d-4551-8faf-f2307d9d9eeb",
+              "usage": "analytics"
+            },
+            {
+              "showExportCsv": true,
+              "componentType": "powerbars",
+              "input": {
+                "chartTitle": "Departure Port",
+                "powerbarTitle": "Departure Port",
+                "displayFilter": true,
+                "scrollable": false,
+                "filterOperator": {
+                  "value": "Eq",
+                  "display": true
+                },
+                "useColorService": false,
+                "useColorFromData": false,
+                "chartWidth": 217
+              },
+              "contributorId": "demo_ais_course-departure.address.port-10-Count-desc-count",
+              "uuid": "1ab4520c-1e31-4b91-9d57-a81f4411d432",
+              "usage": "analytics"
+            }
+          ]
+        },
+        {
+          "groupId": "Course-1",
+          "title": "Course Arrival",
+          "tab": "Course",
+          "icon": "call_received",
+          "components": [
+            {
+              "showExportCsv": true,
+              "componentType": "powerbars",
+              "input": {
+                "chartTitle": "Arrival Country",
+                "powerbarTitle": "Arrival Country",
+                "displayFilter": true,
+                "scrollable": false,
+                "filterOperator": {
+                  "value": "Eq",
+                  "display": true
+                },
+                "useColorService": false,
+                "useColorFromData": false,
+                "chartWidth": 217
+              },
+              "contributorId": "demo_ais_course-arrival.address.country-10-Count-desc-count",
+              "uuid": "e3d70305-487a-4501-84b8-85463586ca88",
+              "usage": "analytics"
+            },
+            {
+              "showExportCsv": true,
+              "componentType": "powerbars",
+              "input": {
+                "chartTitle": "Arrival Port",
+                "powerbarTitle": "Arrival Port",
+                "displayFilter": true,
+                "scrollable": false,
+                "filterOperator": {
+                  "value": "Eq",
+                  "display": true
+                },
+                "useColorService": false,
+                "useColorFromData": false,
+                "chartWidth": 217
+              },
+              "contributorId": "demo_ais_course-arrival.address.port-10-Count-desc-count",
+              "uuid": "540fb20d-a80d-4fda-beea-6205d1a4e88a",
+              "usage": "analytics"
+            }
+          ]
+        },
+        {
+          "groupId": "Course-2",
+          "title": "Course duration (s)",
+          "tab": "Course",
+          "icon": "access_time",
+          "components": [
+            {
+              "input": {
+                "id": "demo_ais_course-track.duration_s-numeric-bucket-Count--50",
+                "isHistogramSelectable": true,
+                "multiselectable": true,
+                "topOffsetRemoveInterval": 40,
+                "leftOffsetRemoveInterval": 18,
+                "brushHandlesHeightWeight": 1,
+                "yAxisStartsFromZero": true,
+                "chartType": "bars",
+                "chartTitle": "Number of courses having this value",
+                "chartHeight": 100,
+                "chartWidth": 445,
+                "xAxisPosition": "bottom",
+                "descriptionPosition": "bottom",
+                "xTicks": 4,
+                "yTicks": 1,
+                "xLabels": 4,
+                "yLabels": 4,
+                "xUnit": "s",
+                "yUnit": "courses",
+                "chartXLabel": "Course duration",
+                "showXTicks": true,
+                "showYTicks": true,
+                "showXLabels": true,
+                "showYLabels": true,
+                "showHorizontalLines": false,
+                "barWeight": 0.8,
+                "dataType": "numeric",
+                "customizedCssClass": "arlas-histogram-analytics",
+                "isSmoothedCurve": true
+              },
+              "componentType": "histogram",
+              "contributorId": "demo_ais_course-track.duration_s-numeric-bucket-Count--50",
+              "uuid": "a1d3e787-b06e-41e8-9ade-c29895585801",
+              "usage": "analytics"
+            }
+          ]
+        },
+        {
+          "groupId": "Course-3",
+          "title": "Course Traveled distance (m)",
+          "tab": "Course",
+          "icon": "straighten",
+          "components": [
+            {
+              "input": {
+                "id": "demo_ais_course-track.distance.gps.travelled_m-numeric-bucket-Count--30",
+                "isHistogramSelectable": true,
+                "multiselectable": true,
+                "topOffsetRemoveInterval": 40,
+                "leftOffsetRemoveInterval": 18,
+                "brushHandlesHeightWeight": 1,
+                "yAxisStartsFromZero": true,
+                "chartType": "bars",
+                "chartTitle": "Number of courses having this value",
+                "chartHeight": 100,
+                "chartWidth": 445,
+                "xAxisPosition": "bottom",
+                "descriptionPosition": "bottom",
+                "xTicks": 4,
+                "yTicks": 1,
+                "xLabels": 2,
+                "yLabels": 4,
+                "xUnit": "m",
+                "yUnit": "courses",
+                "chartXLabel": "Travelled distance",
+                "showXTicks": true,
+                "showYTicks": true,
+                "showXLabels": true,
+                "showYLabels": true,
+                "showHorizontalLines": false,
+                "barWeight": 0.8,
+                "dataType": "numeric",
+                "customizedCssClass": "arlas-histogram-analytics",
+                "isSmoothedCurve": false
+              },
+              "componentType": "histogram",
+              "showExportCsv": true,
+              "contributorId": "demo_ais_course-track.distance.gps.travelled_m-numeric-bucket-Count--30",
+              "uuid": "e091009b-2148-4ec6-9daa-fc9677471d8c",
+              "usage": "analytics"
+            },
+            {
+              "input": {
+                "id": "demo_ais_course-track.timestamps.center-time-bucket-SUM-track.distance.gps.travelled_m-30",
+                "isHistogramSelectable": true,
+                "multiselectable": true,
+                "topOffsetRemoveInterval": 40,
+                "leftOffsetRemoveInterval": 18,
+                "brushHandlesHeightWeight": 1,
+                "yAxisStartsFromZero": true,
+                "chartType": "bars",
+                "chartTitle": "Travelled distance",
+                "chartHeight": 100,
+                "chartWidth": 445,
+                "xAxisPosition": "bottom",
+                "descriptionPosition": "bottom",
+                "xTicks": 4,
+                "yTicks": 1,
+                "xLabels": 4,
+                "yLabels": 4,
+                "yUnit": "m",
+                "chartXLabel": "Date",
+                "showXTicks": true,
+                "showYTicks": true,
+                "showXLabels": true,
+                "showYLabels": true,
+                "showHorizontalLines": false,
+                "barWeight": 0.8,
+                "dataType": "time",
+                "customizedCssClass": "arlas-timeline-analytics",
+                "isSmoothedCurve": false
+              },
+              "componentType": "histogram",
+              "showExportCsv": true,
+              "contributorId": "demo_ais_course-track.timestamps.center-time-bucket-SUM-track.distance.gps.travelled_m-30",
+              "uuid": "3334cca1-9aad-403a-8c32-9d69ebc83bd1",
+              "usage": "analytics"
+            }
+          ]
+        },
+        {
+          "groupId": "Course-4",
+          "title": "Course mean Speed (Knot)",
+          "tab": "Course",
+          "icon": "network_check",
+          "components": [
+            {
+              "input": {
+                "id": "demo_ais_course-track.dynamics.sensor.speed_nd-numeric-bucket-Count--20",
+                "isHistogramSelectable": true,
+                "multiselectable": true,
+                "topOffsetRemoveInterval": 40,
+                "leftOffsetRemoveInterval": 18,
+                "brushHandlesHeightWeight": 1,
+                "yAxisStartsFromZero": true,
+                "chartType": "bars",
+                "chartTitle": "Number of courses having this value",
+                "chartHeight": 100,
+                "chartWidth": 445,
+                "xAxisPosition": "bottom",
+                "descriptionPosition": "bottom",
+                "xTicks": 4,
+                "yTicks": 1,
+                "xLabels": 4,
+                "yLabels": 4,
+                "xUnit": "nd",
+                "yUnit": "courses",
+                "chartXLabel": "Speed average",
+                "showXTicks": true,
+                "showYTicks": true,
+                "showXLabels": true,
+                "showYLabels": true,
+                "showHorizontalLines": false,
+                "barWeight": 0.8,
+                "dataType": "numeric",
+                "customizedCssClass": "arlas-histogram-analytics",
+                "isSmoothedCurve": false
+              },
+              "componentType": "histogram",
+              "contributorId": "demo_ais_course-track.dynamics.sensor.speed_nd-numeric-bucket-Count--20",
+              "uuid": "891fd520-ed4f-4436-9b6b-0a922abe900f",
+              "usage": "analytics"
+            }
+          ]
+        },
+        {
+          "groupId": "Course-5",
+          "title": "Tempo",
+          "tab": "Course",
+          "icon": "access_alarm",
+          "components": [
+            {
+              "componentType": "donut",
+              "showExportCsv": true,
+              "input": {
+                "id": "demo_ais_course-track.tempo_emission.main-10-",
+                "customizedCssClass": "arlas-donuts-analytics",
+                "diameter": 170,
+                "containerWidth": 223,
+                "multiselectable": true,
+                "opacity": 0.2
+              },
+              "contributorId": "demo_ais_course-track.tempo_emission.main-10-",
+              "uuid": "9a198195-eaab-4149-8ac8-16c4ea3425cd",
+              "usage": "analytics"
+            },
+            {
+              "showExportCsv": true,
+              "componentType": "powerbars",
+              "input": {
+                "chartTitle": "Tempo legend",
+                "powerbarTitle": "Tempo legend",
+                "displayFilter": true,
+                "scrollable": false,
+                "filterOperator": {
+                  "value": "Eq",
+                  "display": true
+                },
+                "useColorService": true,
+                "useColorFromData": false,
+                "chartWidth": 217
+              },
+              "contributorId": "demo_ais_course-track.tempo_emission.main-10-Count-desc-count",
+              "uuid": "483b509c-dc5d-4428-bf87-ca14faaa7843",
+              "usage": "analytics"
+            }
+          ]
+        },
+        {
+          "groupId": "Course-6",
+          "title": "Departure & Arrival stop Duration (s)",
+          "tab": "Course",
+          "icon": "timelapse",
+          "components": [
+            {
+              "input": {
+                "id": "demo_ais_course-departure.stop_before.duration_s-numeric-bucket-Count--30",
+                "isHistogramSelectable": true,
+                "multiselectable": true,
+                "topOffsetRemoveInterval": 40,
+                "leftOffsetRemoveInterval": 18,
+                "brushHandlesHeightWeight": 1,
+                "yAxisStartsFromZero": true,
+                "chartType": "bars",
+                "chartTitle": "Number of courses having this value",
+                "chartHeight": 100,
+                "chartWidth": 445,
+                "xAxisPosition": "bottom",
+                "descriptionPosition": "bottom",
+                "xTicks": 4,
+                "yTicks": 1,
+                "xLabels": 2,
+                "yLabels": 4,
+                "xUnit": "s",
+                "yUnit": "courses",
+                "chartXLabel": "Departure stop duration",
+                "showXTicks": true,
+                "showYTicks": true,
+                "showXLabels": true,
+                "showYLabels": true,
+                "showHorizontalLines": false,
+                "barWeight": 0.8,
+                "dataType": "numeric",
+                "customizedCssClass": "arlas-histogram-analytics",
+                "isSmoothedCurve": false
+              },
+              "componentType": "histogram",
+              "showExportCsv": true,
+              "contributorId": "demo_ais_course-departure.stop_before.duration_s-numeric-bucket-Count--30",
+              "uuid": "855cc447-c968-4218-a527-35c46bb46e16",
+              "usage": "analytics"
+            },
+            {
+              "input": {
+                "id": "demo_ais_course-arrival.stop_after.duration_s-numeric-bucket-Count--30",
+                "isHistogramSelectable": true,
+                "multiselectable": true,
+                "topOffsetRemoveInterval": 40,
+                "leftOffsetRemoveInterval": 18,
+                "brushHandlesHeightWeight": 1,
+                "yAxisStartsFromZero": true,
+                "chartType": "bars",
+                "chartTitle": "Number of courses having this value",
+                "chartHeight": 100,
+                "chartWidth": 445,
+                "xAxisPosition": "bottom",
+                "descriptionPosition": "bottom",
+                "xTicks": 4,
+                "yTicks": 1,
+                "xLabels": 2,
+                "yLabels": 4,
+                "xUnit": "s",
+                "yUnit": "courses",
+                "chartXLabel": "Arrival stop duration",
+                "showXTicks": true,
+                "showYTicks": true,
+                "showXLabels": true,
+                "showYLabels": true,
+                "showHorizontalLines": false,
+                "barWeight": 0.8,
+                "dataType": "numeric",
+                "customizedCssClass": "arlas-histogram-analytics",
+                "isSmoothedCurve": false
+              },
+              "componentType": "histogram",
+              "showExportCsv": true,
+              "contributorId": "demo_ais_course-arrival.stop_after.duration_s-numeric-bucket-Count--30",
+              "uuid": "504b16f8-94f4-4b99-882c-986e45934723",
+              "usage": "analytics"
+            }
+          ]
+        },
+        {
+          "groupId": "Course-7",
+          "title": "Course identifier",
+          "tab": "Course",
+          "icon": "list",
+          "components": [
+            {
+              "componentType": "powerbars",
+              "input": {
+                "chartTitle": "Course ID",
+                "powerbarTitle": "Course ID",
+                "displayFilter": true,
+                "scrollable": false,
+                "filterOperator": {
+                  "value": "Eq",
+                  "display": true
+                },
+                "useColorService": false,
+                "useColorFromData": false,
+                "chartWidth": 445
+              },
+              "contributorId": "demo_ais_course-track.id-10-Count-desc-count",
+              "uuid": "385cfa91-7efc-4aca-baff-1f9899319997",
+              "usage": "analytics"
+            }
+          ]
+        }
+      ],
+      "filters_shortcuts": [
+        {
+          "uuid": "015f6447-fd79-4561-b12f-8d4d98afe0f1",
+          "title": "Ship type",
+          "order": 1
+        }
+      ],
+      "colorGenerator": {
+        "keysToColors": [
+          [
+            "Tanker",
+            "#ff8ee8"
+          ],
+          [
+            "Fishing",
+            "#7AD8F5"
+          ],
+          [
+            "Tug",
+            "#f4df42"
+          ],
+          [
+            "SAR",
+            "#03c6ac"
+          ],
+          [
+            "OTHER",
+            "#9d9ca9"
+          ],
+          [
+            "Unknown",
+            "#c2c2c2"
+          ],
+          [
+            "Other",
+            "#c2c2c2"
+          ],
+          [
+            "Undefined",
+            "#c2c2c2"
+          ],
+          [
+            "Category X",
+            "#eab738"
+          ],
+          [
+            "Category Y",
+            "#ead538"
+          ],
+          [
+            "Category Z",
+            "#ea8538"
+          ],
+          [
+            "Category OS",
+            "#ed29d5"
+          ],
+          [
+            "Pilot",
+            "#e74b4b"
+          ],
+          [
+            "HSC",
+            "#0086bd"
+          ],
+          [
+            "Law enforcement",
+            "#00b4d3"
+          ],
+          [
+            "Military",
+            "#a625e0"
+          ],
+          [
+            "Cargo",
+            "#0099ff"
+          ],
+          [
+            "Passenger",
+            "#a5c176"
+          ],
+          [
+            "Dredging",
+            "#51a588"
+          ],
+          [
+            "Anti-pollution",
+            "#00f4d0"
+          ],
+          [
+            "Pleasure",
+            "#ad0084"
+          ],
+          [
+            "Towing",
+            "#d37700"
+          ],
+          [
+            "Towing long/wide",
+            "#d37700"
+          ],
+          [
+            "Sailing",
+            "#edc77b"
+          ],
+          [
+            "Under way using engine",
+            "#51a588"
+          ],
+          [
+            "Unknown value",
+            "#c2c2c2"
+          ],
+          [
+            "Engaged in fishing",
+            "#86d8f7"
+          ],
+          [
+            "Moored",
+            "#eab738"
+          ],
+          [
+            "Reserved for future amendment [HSC]",
+            "#0086bd"
+          ],
+          [
+            "Under way sailing",
+            "#ad0084"
+          ],
+          [
+            "tempo_10s",
+            "#f24848"
+          ],
+          [
+            "tempo_30s",
+            "#0099ff"
+          ],
+          [
+            "tempo_irregular",
+            "#9c9a19"
+          ],
+          [
+            "tempo_3m",
+            "#ff701b"
+          ]
+        ]
+      },
+      "options": {
+        "drag_items": false,
+        "zoom_to_strategy": "centroid",
+        "indicators": true,
+        "spinner": {
+          "show": true,
+          "color": "accent",
+          "diameter": 50
+        },
+        "tabs": [
+          {
+            "name": "Fleet",
+            "icon": "directions_boat",
+            "showIcon": true,
+            "showName": true
+          },
+          {
+            "name": "Course",
+            "icon": "swap_calls",
+            "showIcon": true,
+            "showName": true
+          }
+        ]
+      },
+      "externalNode": {}
+    },
+    "server": {
+      "url": "https://cloud.arlas.io/arlas/server",
+      "max_age_cache": 3600,
+      "collection": {
+        "name": "demo_ais_course"
+      }
+    }
+  },
+  "arlas-wui": {
+    "web": {
+      "app": {
+        "components": {
+          "chipssearch": {
+            "name": "Search a MMSI",
+            "icon": "search"
+          }
+        },
+        "name": "AIS Course",
+        "units": [
+          {
+            "collection": "demo_ais_course",
+            "unit": "courses",
+            "ignored": false
+          }
+        ]
+      }
+    }
+  },
+  "extraConfigs": [
+    {
+      "configPath": "config.map.json",
+      "replacedAttribute": "arlas.web.components.mapgl.input.mapLayers.layers",
+      "replacer": "layers"
+    },
+    {
+      "configPath": "config.map.json",
+      "replacedAttribute": "arlas.web.components.mapgl.input.mapLayers.externalEventLayers",
+      "replacer": "external-event-layers"
+    }
+  ],
+  "resources": {
+    "previewId": "2cb092a2-7436-11ef-bebc-1a82c5e3fc6f"
+  }
+}

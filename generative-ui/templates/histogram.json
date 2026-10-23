@@ -1,5 +1,5 @@
 {
-  "_usage": "Numeric histogram in the analytics panel. Append the contributor to arlas.web.contributors and the group to arlas.web.analytics (declare its tab in arlas.web.options.tabs). The visible title is input.chartTitle. Use either interval or numberOfBuckets, not both.",
+  "_usage": "Numeric histogram in the analytics panel. Append the contributor to arlas.web.contributors and the group to arlas.web.analytics (declare its tab in arlas.web.options.tabs). The visible title is input.chartTitle. Use either interval or numberOfBuckets, not both. Keep every axis key (show*Labels, show*Ticks, x/yLabels, x/yTicks): the WUI binds them directly, so a missing key hides the axis labels. xUnit: unit of the x values (may be empty). yUnit: for a count, the unit of the collection, exactly as in arlas-wui.web.app.units (the Builder rewrites any other value, HIST-2). chartXLabel: name of the x variable, shown when the histogram has a single bucket. isOneDimension is always false: true divides every bar by the largest one (y axis 0–1 instead of counts); it only serves chartType oneDimension, a colour strip the Builder does not offer. chartType: bars, area or curve (HIST-1).",
   "contributor": {
     "type": "histogram",
     "identifier": "<<ID>>",
@@ -7,7 +7,7 @@
     "title": "<<TITLE>>",
     "icon": "bar_chart",
     "collection": "<<COLLECTION>>",
-    "isOneDimension": true,
+    "isOneDimension": false,
     "useUtc": false,
     "additionalCollections": [],
     "aggregationmodels": [
@@ -42,7 +42,25 @@
           "chartYLabel": "<<LABEL>>",
           "yAxisStartsFromZero": true,
           "isHistogramSelectable": true,
-          "multiselectable": false
+          "multiselectable": false,
+          "topOffsetRemoveInterval": 40,
+          "leftOffsetRemoveInterval": 18,
+          "brushHandlesHeightWeight": 0.8,
+          "xAxisPosition": "bottom",
+          "descriptionPosition": "bottom",
+          "xTicks": 4,
+          "yTicks": 1,
+          "xLabels": 4,
+          "yLabels": 4,
+          "showXTicks": true,
+          "showYTicks": true,
+          "showXLabels": true,
+          "showYLabels": true,
+          "shortYLabels": false,
+          "showHorizontalLines": false,
+          "yUnit": "<<COLLECTION_UNIT>>",
+          "chartXLabel": "<<LABEL:X>>",
+          "isSmoothedCurve": false
         }
       }
     ]

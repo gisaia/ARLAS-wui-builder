@@ -1,5 +1,5 @@
 {
-  "_usage": "Map. `contributor` goes to arlas.web.contributors: one per collection, identifier = the collection, name = \"Map <collection>\" (schema pattern), layers_sources[].id = layer id. `extraConfigs` goes at the root of config.json, and mapgl.input.mapLayers.layers / externalEventLayers stay []. `map_layers` and `external_event_layers` go to config.map.json (`layers`, `external-event-layers`). margePanForLoad / margePanForTest belong to mapgl.input, never to the contributor. window_extent_geometry is the string \"geometry_path\" or \"centroid_path\". Map properties are read with [\"get\", \"<field with . replaced by _>\"]; a normalized count with [\"get\", \"count_:normalized\"]. The Builder rebuilds the stops of a normalized interpolate at a constant step: no √ spacing. Only literals, get, match and interpolate linear survive the Builder. No *-sort-key. Each base layer listed in external_event_layers needs its arlas-hover-<id> and arlas-select-<id> copies in map_layers (same source, highlighted paint); the Builder rebuilds them on save.",
+  "_usage": "Map. `contributor` goes to arlas.web.contributors: one per collection, identifier = the collection, name = \"Map <collection>\" (schema pattern), layers_sources[].id = layer id. `extraConfigs` goes at the root of config.json, and mapgl.input.mapLayers.layers / externalEventLayers stay []. `map_layers` and `external_event_layers` go to config.map.json (`layers`, `external-event-layers`). margePanForLoad / margePanForTest belong to mapgl.input, never to the contributor. window_extent_geometry is the string \"geometry_path\" or \"centroid_path\". Map properties are read with [\"get\", \"<field with . replaced by _>\"]; a normalized count with [\"get\", \"count_:normalized\"]. The Builder rebuilds the stops of a normalized interpolate at a constant step: no √ spacing. Only literals, get, match and interpolate linear survive the Builder. No *-sort-key. Hover / select (MAP-8): only for features layers of type line or circle (a fill layer goes through its arlas-fill_stroke-<name>:<key> outline, declared by metadata.stroke; cluster and feature-metric layers have none). Each such layer needs its arlas-hover-<id> and arlas-select-<id> copies in map_layers: same source and filter, layout.visibility \"none\" (the WUI shows them only on hover / selection), highlighted paint (wider line or radius, opacity 1); the Builder rebuilds them on save.",
   "contributor": {
     "type": "map",
     "identifier": "<<COLLECTION>>",
@@ -188,5 +188,234 @@
       "id": "arlas-select-arlas_id:<<NAME>>:<<KEY>>",
       "on": "select"
     }
-  ]
+  ],
+  "layer_variants": {
+    "_usage": "Optional layers, used only when the need and the mapping call for them. For each variant used: add `layers_source` to contributor.layers_sources, `map_layer` to map_layers and `visualisations_set` to mapgl.input.visualisations_sets (or put the layer in an existing set). Never copy the variant names or _usage. <<FLAT:…>> is the same field with every . replaced by _ (MapLibre property name).",
+    "h3_grid": {
+      "_usage": "Precondition: a geo_point (the centroid or a secondary point) and an extent wider than a few degrees of latitude, or N > 5 000. Equal-area grid (Règle G6), the default aggregation at small scale. Count: documents per H3 cell, read with [\"get\", \"count_:normalized\"]; on a multi-valued geo_point sampled along each geometry, one document counts once per cell, so the count is the number of documents crossing the cell (SPATIAL_RECIEPE Analyse 49). Ratio: metrics [{\"field\": \"<field>\", \"metric\": \"avg\", \"normalize\": false}], read with [\"get\", \"<FLAT:field>_avg_\"] and stops inside the range of the profile. Single sequential ramp with monotonic luminance and constant opacity (Règles G1, G2).",
+      "layers_source": {
+        "id": "arlas_id:<<NAME3>>:<<KEY3>>",
+        "name": "<<NAME3>>",
+        "source": "cluster-<<FIELD:GEO_POINT>>-Fine-h3-cell-<<COLLECTION>>",
+        "minzoom": 0,
+        "maxzoom": 23,
+        "agg_geo_field": "<<FIELD:GEO_POINT>>",
+        "aggType": "h3",
+        "granularity": "Fine",
+        "minfeatures": 0,
+        "aggregated_geometry": "cell",
+        "metrics": [
+          {
+            "field": "",
+            "metric": "count",
+            "normalize": true
+          }
+        ]
+      },
+      "map_layer": {
+        "id": "arlas_id:<<NAME3>>:<<KEY3>>",
+        "type": "fill",
+        "source": "cluster-<<FIELD:GEO_POINT>>-Fine-h3-cell-<<COLLECTION>>",
+        "minzoom": 0,
+        "maxzoom": 23,
+        "metadata": {
+          "collection": "<<COLLECTION>>",
+          "collection-display-name": "<<COLLECTION>>",
+          "cell-shape": "hexagonal",
+          "stroke": {
+            "color": "#ffffff",
+            "width": 0,
+            "opacity": 0
+          }
+        },
+        "filter": [
+          "all",
+          [
+            "all"
+          ]
+        ],
+        "layout": {
+          "visibility": "visible"
+        },
+        "paint": {
+          "fill-color": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "get",
+              "count_:normalized"
+            ],
+            0,
+            "#440154",
+            0.2,
+            "#414487",
+            0.4,
+            "#2a788e",
+            0.6,
+            "#22a884",
+            0.8,
+            "#7ad151",
+            1,
+            "#fde725"
+          ],
+          "fill-opacity": 0.7
+        }
+      },
+      "visualisations_set": {
+        "name": "<<TITLE>>",
+        "layers": [
+          "arlas_id:<<NAME3>>:<<KEY3>>"
+        ],
+        "enabled": true
+      }
+    },
+    "chronological_line": {
+      "_usage": "Precondition: an entity key (several documents per entity) and the main time field, on a line or point geometry. Chronological order of the documents of one entity (SPATIAL_RECIEPE Recette 5): the width grows with the date, normalized entity by entity (normalization_fields on <date> per <entity key>), so the latest document of each entity is the thickest. Neutral colour: the width carries the variable. Enable it with a selection or at large scale.",
+      "layers_source": {
+        "id": "arlas_id:<<NAME4>>:<<KEY4>>",
+        "name": "<<NAME4>>",
+        "source": "feature-<<KEY4>>",
+        "minzoom": 0,
+        "maxzoom": 23,
+        "maxfeatures": 5000,
+        "render_mode": "wide",
+        "returned_geometry": "<<FIELD:GEO>>",
+        "include_fields": [],
+        "normalization_fields": [
+          {
+            "on": "<<FIELD:DATE>>",
+            "per": "<<FIELD:ENTITY>>"
+          }
+        ]
+      },
+      "map_layer": {
+        "id": "arlas_id:<<NAME4>>:<<KEY4>>",
+        "type": "line",
+        "source": "feature-<<KEY4>>",
+        "minzoom": 0,
+        "maxzoom": 23,
+        "metadata": {
+          "collection": "<<COLLECTION>>",
+          "collection-display-name": "<<COLLECTION>>",
+          "cell-shape": "square",
+          "is-scrollable-layer": false
+        },
+        "filter": [
+          "all",
+          [
+            "all"
+          ]
+        ],
+        "layout": {
+          "visibility": "visible",
+          "line-cap": "round",
+          "line-join": "round"
+        },
+        "paint": {
+          "line-color": "#A0A7B4",
+          "line-opacity": 0.9,
+          "line-width": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "get",
+              "<<FLAT:FIELD:DATE>>:normalized:<<FLAT:FIELD:ENTITY>>"
+            ],
+            0,
+            0.5,
+            0.2,
+            1.2,
+            0.4,
+            1.9,
+            0.6,
+            2.6,
+            0.8,
+            3.3,
+            1,
+            4
+          ]
+        }
+      },
+      "visualisations_set": {
+        "name": "<<TITLE>>",
+        "layers": [
+          "arlas_id:<<NAME4>>:<<KEY4>>"
+        ],
+        "enabled": false
+      }
+    },
+    "label": {
+      "_usage": "Precondition: a human-readable label field (name, code) of low ambiguity. Label written on each geometry, only at large scale (minzoom) to stay readable (Recette 4). Text in a neutral colour with a halo.",
+      "layers_source": {
+        "id": "arlas_id:<<NAME5>>:<<KEY5>>",
+        "name": "<<NAME5>>",
+        "source": "feature-<<KEY5>>",
+        "minzoom": "<<NUMBER:LABEL_MINZOOM>>",
+        "maxzoom": 23,
+        "maxfeatures": 5000,
+        "render_mode": "wide",
+        "returned_geometry": "<<FIELD:GEO>>",
+        "include_fields": [
+          "<<FIELD:ANY>>"
+        ]
+      },
+      "map_layer": {
+        "id": "arlas_id:<<NAME5>>:<<KEY5>>",
+        "type": "symbol",
+        "source": "feature-<<KEY5>>",
+        "minzoom": "<<NUMBER:LABEL_MINZOOM>>",
+        "maxzoom": 23,
+        "metadata": {
+          "collection": "<<COLLECTION>>",
+          "collection-display-name": "<<COLLECTION>>",
+          "cell-shape": "square",
+          "is-scrollable-layer": false
+        },
+        "filter": [
+          "all",
+          [
+            "all"
+          ]
+        ],
+        "layout": {
+          "visibility": "visible",
+          "text-field": [
+            "get",
+            "<<FLAT:FIELD:ANY>>"
+          ],
+          "text-font": [
+            "Open Sans Bold",
+            "Arial Unicode MS Bold"
+          ],
+          "text-size": 10,
+          "text-rotate": 0,
+          "text-allow-overlap": false,
+          "text-anchor": "center",
+          "symbol-placement": "point"
+        },
+        "paint": {
+          "text-color": "#ffffff",
+          "text-opacity": 1,
+          "text-halo-color": "#000000",
+          "text-halo-width": 1.3,
+          "text-halo-blur": 0.4,
+          "text-translate": [
+            0,
+            0
+          ]
+        }
+      },
+      "visualisations_set": {
+        "name": "<<TITLE>>",
+        "layers": [
+          "arlas_id:<<NAME5>>:<<KEY5>>"
+        ],
+        "enabled": false
+      }
+    }
+  }
 }

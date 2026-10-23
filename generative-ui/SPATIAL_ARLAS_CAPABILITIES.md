@@ -1,266 +1,322 @@
-# Croisement : Analyse spatiale générique × Capacités ARLAS
+# Pondération ARLAS de l'analyse spatiale générique
 
-Ce document croise les connaissances **génériques** d'analyse spatiale, temporelle et statistique (`SPATIAL_RECIEPE.md`, Analyses 1 à 52, Recettes 1 à 4, Règles G1 à G7) avec ce que la plateforme ARLAS permet aujourd'hui : Server, WUI, Builder, Tagger, Subscriptions, AIAS, services OGC et tuiles.
+`SPATIAL_RECIEPE.md` dit **quelle est la bonne analyse**, indépendamment de l'outil. Ce document dit **ce qu'ARLAS permet d'en faire** : il pondère l'analyse idéale par les capacités réelles de la plateforme, pour que l'agent choisisse l'analyse la plus juste **parmi celles qu'ARLAS peut réaliser**, et dise honnêtement ce qui est perdu.
 
-**Principe** : la connaissance générique reste dans `SPATIAL_RECIEPE.md` et elle est **toujours conservée**, même quand ARLAS ne sait pas (encore) la mettre en œuvre. L'agent raisonne d'abord en géomaticien (quelle est la bonne analyse ?), puis en intégrateur ARLAS (comment la réaliser, l'approcher, ou quel pré-traitement demander ?). Ce document ne redéfinit pas les analyses : il renvoie à leur numéro dans la recette.
+Il est générique, comme la recette : aucun nom de champ, aucune collection, aucun domaine. Les champs sont désignés par leur **rôle** (`<date>`, `<clé d'entité>`, `<mesure STOCK>`, `<dimension>`, `<origine>`, `<destination>`, `<géométrie principale>`…), au sens de l'étape 1 d'`AGENT_PROMPT.md`. Les numéros (Analyses 1–62, Recettes R1–R6, Règles G1–G8, Patterns A–C) renvoient à `SPATIAL_RECIEPE.md`, qui n'est pas répété ici.
 
-**Périmètre des données** : les agents (générateur `AGENT_PROMPT.md` et critique `CRITIC_PROMPT.md`) ne travaillent qu'avec les champs **déjà présents** dans la collection. Les colonnes « pré-traitement » et les usages qui supposent de nouvelles données (ingestion, champ calculé, boucle externe U11) sont une connaissance de référence pour l'équipe data : les agents ne les recommandent pas. Ils signalent seulement qu'une analyse est « non réalisable avec les données disponibles ».
+---
+
+## 0. Comment pondérer
+
+Pour chaque question de l'utilisateur :
+
+1. **Analyse idéale** : choisis-la dans `SPATIAL_RECIEPE.md`, comme si l'outil n'avait pas de limite.
+2. **Précondition** : trouve sa ligne ici (ou, à défaut, la question la plus proche de l'index §13) et vérifie, avec les rôles du profil, que la précondition est remplie. Si elle ne l'est pas, l'analyse est **non réalisable avec les données disponibles**, quel que soit son statut.
+3. **Statut** : applique la conduite de la légende ci-dessous.
+4. **Repli** : si l'analyse est 🟡, ⚠️, 🔧 ou 🔴, choisis le repli indiqué dans la ligne (ou l'analyse réalisable la plus proche) et vérifie que ce repli ne trompe pas : une approximation acceptable répond à la même question avec moins de précision ; une approximation trompeuse répond à une autre question en ayant l'air de répondre à la première. Dans le doute, préfère une analyse plus simple mais juste.
+5. **Limite** : une limite qui change la lecture d'un élément (échelle relative D2, classes écrasées D11, concentration non testée D14, top N D12…) va **dans le tableau de bord**, là où l'utilisateur la lit : titre du widget, titre du groupe ou nom du jeu de visualisation. Le message final de l'agent reprend toutes les limites, mais l'utilisateur du tableau de bord ne le voit pas. Jamais de proposition de nouvelles données ni de traitement externe.
+6. **Dégradations transversales** : vérifie la section 1 ; elles s'appliquent à toutes les analyses.
 
 ### Légende des statuts
 
-| Statut | Signification | Comportement attendu de l'agent |
+| Statut | Signification | Conduite de l'agent |
 |---|---|---|
-| ✅ **Natif** | Réalisable dans `config.json` / `config.map.json` **et** reconnu par le Builder (survit au round-trip import/export) | Configurer |
-| 🟡 **Partiel** | Approximation possible au runtime ; ou réalisable si un champ pré-calculé existe ; ou **config manuelle** (clé présente dans les schémas mais non gérée par le Builder, au risque d'être perdue au round-trip) ; ou réalisable par un service ARLAS hors configuration du tableau de bord (API, Tagger, Subscriptions, tuiles) | Configurer l'approximation **et** expliquer sa limite |
-| 🔴 **Non disponible** | Ni configurable ni approchable aujourd'hui | Expliquer l'analyse générique, signaler qu'elle n'est pas réalisable avec les données disponibles et configurer la meilleure analyse réalisable ; ne pas proposer de nouvelles données |
+| ✅ **Natif** | Configurable dans `config.json` / `config.map.json` et conservé par le Builder (round-trip import / export) | Configurer |
+| 🟡 **Approché** | Une configuration native répond à la question avec une perte (de précision, de périmètre, d'échelle) | Configurer l'approximation **et** écrire la limite |
+| ⚠️ **Hors Builder** | Clé présente dans les schémas mais non gérée par le Builder : perdue au premier enregistrement ou refusée par `genui:check` | Ne pas configurer ; mentionner comme limite ; configurer le repli |
+| 🔧 **Service** | Réalisable par un service ARLAS hors tableau de bord (API, Tagger, Subscriptions, tuiles, OGC) | Ne pas configurer ; mentionner dans le rapport si utile |
+| 🔴 **Non disponible** | Ni configurable ni approchable dans ARLAS | Expliquer l'analyse idéale, dire « non réalisable dans ARLAS » (limite de l'outil, à distinguer de « non réalisable avec les données disponibles », précondition non remplie) et configurer le repli |
+
+Une ligne à statut mixte (« ✅ / 🟡 », « 🔴 calcul / 🟡 repli ») donne le statut de chaque élément dans sa colonne « Mise en œuvre » : la conduite s'applique élément par élément. « 🔴 calcul / 🟡 repli » : l'analyse idéale n'existe pas dans ARLAS, le repli indiqué est configurable avec sa limite.
+
+**Périmètre des données** : seuls les champs déjà présents dans la collection sont utilisables. Une colonne « Limite » explique *pourquoi* ARLAS ne va pas plus loin ; elle n'est jamais une recommandation d'ingestion, de champ calculé ou de traitement externe.
 
 ---
 
-## 1. Socle de capacités ARLAS (référence)
+## 1. Dégradations transversales (à appliquer à toute analyse)
 
-### 1.1 Tableau de bord (configuration WUI / Builder)
+Ces limites d'ARLAS reviennent dans de nombreuses analyses. Chacune dit ce que l'agent perd et comment ajuster son jugement.
 
-| Brique | Capacités | Clés de configuration |
+| # | Limite ARLAS | Conséquence sur le jugement | Repli |
+|---|---|---|---|
+| D1 | Pas de médiane ni de percentile dans les métriques | Une moyenne sur une distribution asymétrique (moyenne > 2 × médiane du profil) trompe | `histogram` de la distribution à côté du `metric` ; titre « moyenne » explicite ; pour un stock, `sum` plutôt que `avg`. La médiane du profil est figée : elle peut figurer dans le message final, jamais dans un titre (elle devient fausse dès qu'un filtre s'applique) |
+| D2 | `:normalized` est calculé **sur la vue courante** | Les couleurs ne se comparent pas d'une vue, d'une période ou d'une zone à l'autre | Dès qu'une comparaison entre zones ou périodes est demandée, arrêts fixes sur la valeur brute : `["get", "count"]` pour un comptage de maille, `["get", "<champ>_<métrique>_"]` pour une métrique, arrêts tirés de la plage du profil ; sinon, « relative à la vue » dans le nom du jeu |
+| D3 | Sur une valeur normalisée, le Builder recalcule des arrêts équidistants (MAP-5) | Pas de rayon ∝ √v ni d'échelle non linéaire sur un comptage normalisé | Rayon linéaire, signalé ; sur un champ brut, arrêts en progression quadratique ou géométrique |
+| D4 | Expressions réimportables : littéral, `get`, `match`, `interpolate` linéaire (pas de `step`, `case`, `sqrt`, arithmétique) | Pas de classes discrètes au sens strict | Classes encodées par des arrêts d'`interpolate` aux bornes |
+| D5 | `*-sort-key` non conservé (MAP-6) | Ordre de dessin des objets non maîtrisé | Couches séparées et opacité ; signaler |
+| D6 | `function` d'un `metric` agit sur les agrégats **de la sélection**, jamais par document ni par cellule | Taux, part ou ratio disponibles en global seulement | Ratio global de sommes ; par terme, stock et dénominateur côte à côte dans `metricstable` |
+| D7 | Pas de champ dérivé : aucune valeur calculée par document | Toute analyse qui suppose un indice, un écart ou une classe par document exige que ce champ existe | Analyse sur les champs existants ; limite écrite |
+| D8 | Couleur interpolée sur une métrique de cellule : `avg`, `sum`, `min`, `max` dans le Builder ; `cardinality` ⚠️ | Pas de carte du nombre d'entités distinctes par cellule | Chiffre global `cardinality` + carte `count` |
+| D9 | Grille `tile` / `geohash` : aire de maille variable avec la latitude | Comptages biaisés dès que le rapport d'aire des mailles sur l'emprise dépasse 1,3 (G6, contrôle G6-1) | `aggType: h3` (aire quasi égale) |
+| D10 | Heatmap : noyau en pixels écran, pas en unités terrain | La « densité » dépend du zoom | Comptage par maille H3 pour mesurer ; heatmap pour l'aperçu seulement |
+| D11 | Histogramme : pas de bornes, pas entier, pas d'échelle logarithmique | Distribution très asymétrique écrasée dans les premières classes | Pas adapté au cœur de la distribution, limite écrite ; arrêts géométriques pour la couleur |
+| D12 | Agrégation de termes : top N (`size`) ; swimlane lisible jusqu'à 10 couloirs | Modalités rares invisibles ; des ex æquo au seuil rendent le contenu du top N arbitraire | N = nombre de modalités s'il est ≤ 10 (swimlane) ou ≤ 50 (powerbars), sinon 10 / 50 ; « top N » dans le titre ; `search` pour retrouver les autres |
+| D13 | Aucune statistique circulaire | Moyenne d'angles fausse | `histogram` 0–360 et palette circulaire, jamais `avg` |
+| D14 | Aucune statistique spatiale inférentielle (autocorrélation, significativité, voisinage) | Une concentration visible n'est pas un « hotspot » démontré, ni une zone « anormale » | Grille de comptage nommée « exploratoire » |
+| D15 | La timeline place chaque document à **une** date | Un document qui a un début et une fin (séjour, parcours, acquisition longue) est réduit à un instant | Timeline sur la date principale ; limite écrite si les durées sont longues devant le pas de la timeline |
+| D16 | Une métrique de maille compte des **documents**, pas des entités ; une agrégation porte sur un `geo_point` (`agg_geo_field`) | Une entité répétée pèse plusieurs fois ; un grand polygone n'est compté que dans la maille de son point | Dire « documents » (passages, images) et non « entités » ; distincts globalement par `cardinality` (D8) |
+| D17 | Les filtres de couche sont ignorés sur une couche `cluster-` (le Builder les désactive, MAP-9) | Pas de grille sur un sous-ensemble fixe | Sous-ensemble par la sélection (widget, timeline) qui filtre la grille ; ou couche `feature-` filtrée |
+| D18 | Pas de mesure de la nullité d'un champ numérique (ni `missing` ni `value_count` en métrique) | La part de valeurs manquantes d'une mesure ne s'affiche pas | « hors valeurs manquantes » dans les titres ; pour une dimension, la modalité « inconnue » reste visible |
+
+---
+
+## 2. Briques de configuration ARLAS
+
+Vocabulaire des capacités, avec leur statut dans le Builder. Les autres sections s'y réfèrent.
+
+### 2.1 Tableau de bord (configuration WUI / Builder)
+
+| Brique | Capacité | Clés | Statut |
+|---|---|---|---|
+| Requête géographique | Filtrer par relation topologique avec une géométrie | `geo_query_field`, `geo_query_op` : `Intersects`, `Within`, `Notwithin`, `Notintersects` | ✅ |
+| Dessin utilisateur | Emprise ou polygone servant de filtre | `mapgl.input.drawButtonEnabled`, `drawPolygonVerticesLimit` | ✅ |
+| Emprise de la vue | Filtrage par la fenêtre de carte | `window_extent_geometry` (`centroid_path`, `geometry_path`) | ✅ |
+| Mode Features (`feature-`) | Objets individuels | `returned_geometry`, `render_mode` (`window` : défilement des objets de la vue, sans `maxfeatures` ; `wide` : jusqu'à `maxfeatures`) (MAP-7), `include_fields` | ✅ |
+| Mode Cluster (`cluster-`) | Géo-agrégation d'un `geo_point` sur grille ; grille ou heatmap | `aggType` (`h3`, `tile`), `granularity` (`Coarse` → `Finest`, taille de maille relative au zoom : ne pas annoncer de taille en km), `aggregated_geometry` (`cell`, `cell_center`, `centroid`, `bbox`, `geohash`…), `raw_geometry` + `sort` (géométrie du premier document de la cellule selon un tri, `-` pour décroissant), `minfeatures`, `fetched_hits` (valeurs pour les étiquettes) | ✅ |
+| Mode Network Analytics (`feature-metric-`) | Agrégation par émetteur ou géométrie partagée (station, arrêt, tronçon) | `geometry_id`, `raw_geometry`, `network_fetching_level` | ✅ |
+| Métriques de cellule | `count`, `sum`, `avg`, `min`, `max` (champ numérique ou date) ; `cardinality` | `metrics[].metric`, `metrics[].field` | ✅ ; `cardinality` en style ⚠️ (D8) |
+| Normalisation | Min–max sur la vue (D2) ; par entité avec `normalization_fields` | suffixe `:normalized` | ✅ |
+| Filtres de couche | Sous-ensemble attributaire par couche | `filters` (`IN`, `NOT_IN`, `EQUAL`, `NOT_EQUAL`, `RANGE`, `OUT_RANGE`, `IS`) | ✅ sur `feature-` ; ⚠️ sur `cluster-` (D17) |
+| Survol et sélection | Mise en évidence d'un objet | copies `arlas-hover-` / `arlas-select-` des couches `feature-` de type `line` ou `circle` ; pour un `fill`, de son contour `arlas-fill_stroke-` (déclaré par `metadata.stroke`) ; aucune pour `cluster-` et `feature-metric-` (MAP-8) | ✅ |
+| Couleurs partagées | Même couleur par modalité sur la carte, dans les widgets et la liste ; un même gris pour plusieurs modalités regroupées | `colorGenerator.keysToColors` | ✅ |
+| Styles | `circle`, `line`, `fill` (extrusion 3D possible), `heatmap`, `circle-heatmap`, `symbol` | expressions réimportables (D4) | ✅ |
+| Couches de contexte | Sources externes statiques (raster, vecteur, GeoJSON), non filtrées par ARLAS | `mapgl.input.mapSources` | ✅ |
+| Relief | MNT raster en 3D | `mapgl.input.terrain` | ✅ |
+| Multi-échelle | Bascule agrégé / détaillé selon le zoom ou le volume | `minzoom`/`maxzoom`, `minfeatures`/`maxfeatures` | ✅ |
+| Jeux de visualisation | Groupes de couches activables | `visualisations_sets` | ✅ |
+| Timeline | Histogramme de dates, sélection de période, détail zoomable | `histogram` (timeline), `detailedhistogram`, `additionalCollections` | ✅ |
+| Raccourcis temporels relatifs | « 7 derniers jours », « ce mois-ci » | `timeShortcuts` | ⚠️ |
+| Répartitions | Une ou plusieurs dimensions | `tree` → `donut` (anneaux) / `powerbars` | ✅ |
+| Distributions | Mesure ou date en classes | `histogram` (`interval` entier ou `numberOfBuckets`), `chartType` `bars` / `area` / `curve`, `isOneDimension: false` | ✅ |
+| Bande d'intensité 1D | Classes en bande colorée, valeurs divisées par la plus grande classe (pas d'effectifs, pas d'axe Y) | `chartType: oneDimension` + `isOneDimension: true` | ⚠️ (absent du Builder) |
+| Croisement dimension × temps | Matrice de comptages | `swimlane` (D12) | ✅ |
+| Indicateurs | `count`, `sum`, `avg`, `min`, `max`, `cardinality` combinés par `function` sur `m[0]…m[n]` (D6) | `metric` | ✅ ; `spanning` ⚠️ |
+| Tableau de métriques | Une ligne par modalité, plusieurs métriques | `metricstable` | ✅ |
+| Recherche | Plein texte, autocomplétion | `search` (`search_field`, `autocomplete_field`) | ✅ |
+| Liste de résultats | Colonnes triables, détails, vignettes, quicklooks, survol lié à la carte, « Zoom to » | `resultlist` (`columns[].sort`, `fieldsConfiguration.urlThumbnailTemplate`, `urlImageTemplates`) | ✅ |
+| Filtrage croisé | Toute sélection (carte, widget, timeline) filtre les autres | bus de contributeurs | ✅ natif |
+| Multi-collections | Un contributeur `map` par collection, sources suffixées par la collection | `layers_sources[].source` = `<source>-<collection>` | ✅ |
+| Export et signets | Export GeoJSON de la carte ; signets de jeux de filtres | natif, sans configuration | ✅ (usage) |
+
+### 2.2 Services ARLAS hors tableau de bord (🔧)
+
+| Service | Capacité | Ce que l'agent en fait |
 |---|---|---|
-| Requête géographique | Filtrer par relation topologique avec une géométrie | `geo_query_field`, `geo_query_op` : `Intersects`, `Within`, `Notwithin`, `Notintersects` |
-| Dessin utilisateur | Emprise ou polygone servant de filtre géographique | `mapgl.input.drawButtonEnabled`, `drawPolygonVerticesLimit` |
-| Emprise de la vue | Filtrage par la fenêtre de carte | `window_extent_geometry` (`centroid_path`, `geometry_path`) |
-| Mode **Features** (`feature-`) | Entités brutes | `returned_geometry`, `render_mode` (`window`, `wide`), `maxfeatures`, `include_fields` |
-| Mode **Cluster** (`cluster-`) | Géo-agrégation sur grille régulière ; grille ou heatmap | `aggType` (`h3`, `tile`), `granularity` (`Coarse` → `Finest`), `aggregated_geometry` (`cell`, `cell_center`, `centroid`, `bbox`, `geohash`…), `raw_geometry` + `sort` (géométrie du premier document de la cellule selon un tri sur des champs séparés par des virgules, `-` pour décroissant), `minfeatures` ; `fetched_hits` (valeurs de documents de la cellule utilisées pour les **étiquettes**) |
-| Mode **Network Analytics** (`feature-metric-`) | Agrégation des événements par émetteur ou par géométrie partagée (station, arrêt, tronçon) | `geometry_id`, `raw_geometry`, `network_fetching_level` |
-| Métriques de cellule / entité | Schéma : `count`, `sum`, `avg`, `min`, `max`, `cardinality`. **Builder** : la couleur interpolée sur une métrique ne propose que `avg`, `sum`, `min`, `max` (champs numériques **ou date**) ; `cardinality` n'est pas proposée pour le style (config manuelle) | `metrics[].metric`, `metrics[].field` |
-| Normalisation | Min–max **sur la vue courante** | suffixe `:normalized` |
-| Filtres de couche | Sous-ensemble attributaire par couche | `filters` (`IN`, `NOT_IN`, `EQUAL`, `NOT_EQUAL`, `RANGE`, `OUT_RANGE`, `IS`) |
-| Styles MapLibre | `circle`, `line`, `fill` (avec option d'extrusion 3D), `heatmap`, `circle-heatmap`, `symbol` | réimportables par le Builder : littéral, `get`, `match`, `interpolate` linéaire (sur un champ, `zoom` ou `heatmap-density`). Sur une valeur normalisée (`count_:normalized`, `<champ>_<métrique>_:normalized`), le Builder **recalcule des arrêts équidistants** à la sauvegarde ; les `*-sort-key` ne sont pas conservés |
-| Couches de contexte | Sources externes (raster, vecteur, GeoJSON) en fond | `mapgl.input.mapSources` |
-| Relief | MNT raster en 3D | `mapgl.input.terrain` |
-| Multi-échelle | Bascule entre agrégé et détaillé selon le zoom ou le volume (tutoriel AIS : seuil de 10 000) | `minzoom`/`maxzoom`, `minfeatures`/`maxfeatures` |
-| Jeux de visualisation | Groupes de couches activables (démo OpenAQ : un jeu par polluant) | `visualisations_sets` |
-| Timeline | Histogramme de dates, sélection de période, détail zoomable ; raccourcis relatifs (`Last 7 days`, `This month so far`…) **en config manuelle** (`timeShortcuts` est dans le schéma mais n'est pas géré par le Builder) | `histogram` (`timeline`), `detailedhistogram`, `timeShortcuts`, `additionalCollections` |
-| Analytique | Répartitions, distributions, croisements (catégorie × temps), indicateurs | `tree` → `donut` (plusieurs niveaux en anneaux) / `powerbars` (un niveau) ; `histogram` ; `swimlane` (catégorie × temps) ; `metric` (Builder : `count`, `avg`, `cardinality`, `max`, `min`, `sum` ; `spanning` présent dans le schéma seulement, config manuelle) **combinées par `function`** : expression sur `m[0]…m[n]` (ratio de sommes, part, ratio événements / entité, conversion d'unité), globale à la sélection ; `metricstable` (une ligne par terme, métriques `count`, `avg`, `sum`, `min`, `max`, `cardinality`) ; `swimlane` limité à 10 couloirs lisibles. Titre affiché : `chartTitle` (histogramme, swimlane), `title` du contributeur (powerbars, donut), titre du groupe (metric, metricstable) |
-| Recherche | Plein texte, autocomplétion, expressions régulières | `search` (`search_field`, `autocomplete_field`) |
-| Table de résultats | Colonnes **triables**, détails, vignettes, quicklooks, survol qui met l'entité en évidence sur la carte, « Zoom to » | `resultlist` (`columns[].sort`, `fieldsConfiguration.urlThumbnailTemplate`, `urlImageTemplates`) |
-| Collaboration | Toute sélection (carte, widget, timeline) filtre tous les autres | bus de contributeurs (natif) |
-| Multi-collections | Couches de plusieurs collections sur une carte : le Builder crée **un contributeur `map` par collection** et suffixe le nom de chaque source par sa collection | `layers_sources[].source` = `<source>-<collection>` ; `additionalCollections` sur la timeline |
-| Export et partage (fonction du tableau de bord) | Export **GeoJSON** de ce que montre la carte (modes Features et Cluster) vers QGIS ; **signets** de jeux de filtres | natif dans le tableau de bord, sans configuration |
-
-### 1.2 Services ARLAS hors configuration du tableau de bord
-
-| Service | Capacités utiles à l'analyse | Points d'entrée |
-|---|---|---|
-| API Exploration | Agrégations `datehistogram`, `histogram`, `term`, `geohash`, `geotile` (`h3` est présent dans les schémas et le Builder mais absent de la page API consultée) ; `collect_fct` : `avg`, `sum`, `min`, `max`, `cardinality`, **`geobbox`, `geocentroid`** ; `fetch_hits` (meilleurs documents par case) ; `raw_geometries` triées ; `_compute` avec **`spanning`** ; filtres `like` (regex), `range` sur `$timestamp`, **date math** (`now-7d`, `/d`) ; tri **`geodistance:lat lon`** ; `_suggest` | `/arlas/explore/{collection}/_aggregate`, `_geoaggregate`, `_compute`, `_search`, `_geosearch` |
-| Contrôle d'accès | Restreindre les documents (ex. par territoire) et les champs visibles | en-têtes `partition-filter`, `column-filter` |
-| **Tagger** | Ajouter ou retirer une étiquette aux documents d'une requête, avec **propagation** à tous les documents qui partagent une valeur (ex. même identifiant d'objet) ; rejeu de l'historique | `_tag`, `_untag`, `_tagreplay` ; champ déclaré dans `taggable_fields` |
-| **Subscriptions** | Notifier quand un nouveau document correspond à un filtre et à un déclencheur géographique (zone d'intérêt) | gestionnaire de souscriptions + matcher Kafka |
-| **Tile service** | Mosaïque PNG des images des documents correspondant à un filtre : ordre d'empilement par `sort`, arrêt à un taux de `coverage` | `/arlas/explore/{collection}/_tile/{z}/{x}/{y}.png` |
-| OGC | WFS 2.0 (`GetFeature` avec bbox et filtre) et CSW 3.0 (catalogue des collections) pour les clients SIG | `/arlas/ogc/wfs/{collection}`, `/arlas/ogc/csw/` |
-| **AIAS** | Catalogue STAC (AIRS), ingestion et téléchargement d'archives en asynchrone (APROC), accès protégé aux fichiers (AGATE), enrichissement | `/processes/ingest`, `/processes/download` ; `ARLAS_DOWNLOAD_PROCESS_*`, `ARLAS_ENRICH_PROCESS_*` côté WUI |
+| API Exploration | Agrégations `datehistogram`, `histogram`, `term`, `geohash`, `geotile` ; `collect_fct` dont `geobbox`, `geocentroid` ; `fetch_hits` ; `_compute` avec `spanning` ; date math (`now-7d`) ; tri `geodistance` | Construire le profil ; mentionner une capacité, jamais la configurer |
+| Contrôle d'accès | `partition-filter`, `column-filter` | Mentionner si la question porte sur des droits |
+| Tagger | Étiqueter les documents d'une requête, propagation sur une valeur partagée | Hors périmètre : écrit un champ |
+| Subscriptions | Notification sur nouveau document correspondant à un filtre et une zone | Mentionner pour une question d'alerte |
+| Tile service | Mosaïque PNG triée, arrêt à un taux de couverture | Mentionner ; exige un modèle d'URL de tuiles dans la collection |
+| OGC | WFS, CSW pour les clients SIG | Mentionner pour un usage SIG externe |
+| AIAS | Catalogue STAC, téléchargement asynchrone | Mentionner pour la récupération d'images |
 
 ---
 
-## 2. Patterns de transformation (`SPATIAL_RECIEPE.md` §1)
+## 3. Patterns de transformation (`SPATIAL_RECIEPE.md` §1)
 
-| Pattern générique | Statut | Mise en œuvre / approximation ARLAS | Pré-traitement recommandé sinon |
+| Pattern | Précondition (rôles) | Statut | Mise en œuvre ARLAS | Limite à signaler |
+|---|---|---|---|---|
+| A. Normalisation par la surface | Géométrie agrégeable en grille | ✅ sur grille H3 | `count` ou `sum` par maille H3 : une maille d'aire égale rend le comptage comparable à une densité (U2) | Densité par maille, pas par unité administrative ; sur polygones arbitraires 🔴 sauf mesure de densité existante |
+| A'. Normalisation par une population exposée | `<mesure STOCK>` + `<dénominateur STOCK>`, ou ratio existant | 🟡 | Taux global de la sélection : `function` Σ / Σ ✅ ; par modalité : les deux sommes côte à côte dans `metricstable` ; ratio existant en choroplèthe | Taux par maille ou par modalité non calculé (D6) |
+| B. Point-in-polygon | Géométrie ponctuelle ; ou `<dimension de zone>` | ✅ / 🟡 | Comptage par maille H3 ; répartition par la dimension de zone (`powerbars`, `donut`) ; comptage dans une zone dessinée (`metric`) | Pas de jointure à des polygones de référence non indexés |
+| C. Voisinage | Géométrie | 🟡 / 🔴 | Zone dessinée ; plus proche voisin 🔧 (tri `geodistance`, U14) | Tampons de distance exacts et isochrones 🔴 |
+
+## 4. Recettes cartographiques (`SPATIAL_RECIEPE.md` §2)
+
+| Recette | Précondition (rôles) | Statut | Mise en œuvre ARLAS | Limite à signaler |
+|---|---|---|---|---|
+| Matrice de Bertin | — | ✅ | taille (`circle-radius`, `line-width`), valeur (`interpolate`), teinte (`match`) | Texture (`fill-pattern`) ⚠️ |
+| R1 Choroplèthe | Polygone + `<mesure RATIO>` ; ou grille H3 | ✅ / 🟡 | `fill` + `interpolate` (features) ou `<champ>_avg_` / `count` par maille | Classes approchées (D4) ; comparaison entre vues impossible sur `:normalized` (D2) |
+| R2 Symboles proportionnels | Point (ou centroïde) + `<mesure STOCK>` ou comptage | ✅ / 🟡 | `circle` sur `feature-` ou `cluster-` (`sum`, `count`) ; arrêts quadratiques sur un champ brut | Sur un comptage normalisé, rayon linéaire (D3) ; sur polygone sans centroïde 🔴 |
+| R3 Flux origine-destination | `<origine>` + `<destination>` (géométries ou dimensions) | 🟡 | `line` + `line-width` si une géométrie de liaison existe ; `feature-metric-` ; deux couches origine / destination (U1) ; densité de passages (U18) | Arcs, flèches, animation 🔴 |
+| R4 Multi-échelle | Géométrie | ✅ | `cluster-` à petite échelle, `feature-` à grande échelle (`minzoom`, `minfeatures`) ; `render_mode: window` | Ordre de dessin (D5) |
+| R5 Chronologie d'une entité | `<clé d'entité>` + `<date>` + géométrie | ✅ | `normalization_fields` `{on: <date>, per: <clé d'entité>}` puis `line-width` ou `line-color` en `interpolate` sur `<date>:normalized:<clé d'entité>` ; une couleur par document (`colors_from_fields`) | L'échelle dépend des documents chargés dans la vue |
+| R6 Carte composite d'un objet | Plusieurs géométries (principale, origine, destination, arrêts, précision) | ✅ | Une couche `feature-` par géométrie, détails bornés par `minzoom`, regroupés en `visualisations_sets` ; teintes reprises dans les widgets | Ordre de dessin (D5) |
+| G8 Incertitude de position | `<géométrie de précision>` | ✅ / 🔴 | `fill` très transparent avec contour sous l'objet | Sans géométrie de précision 🔴 |
+
+---
+
+## 5. Analyses spatiales (Analyses 1–18)
+
+| # | Analyse | Précondition (rôles) | Statut | Mise en œuvre / repli ARLAS | Limite à signaler |
+|---|---|---|---|---|---|
+| 1 | Hotspots, zones anormalement denses (Gi*) | Géométrie | 🔴 calcul / 🟡 repli | Comptage par maille H3 nommé « exploratoire », arrêts fixes si l'on compare des zones (D2) ; rendu divergent si un score est déjà indexé | Concentrations sans test de significativité (D14) ; documents et non entités (D16) |
+| 2 | Allocation multicritère | Plusieurs mesures ou dimensions | 🟡 | Overlay booléen par le filtrage croisé : plages sur `histogram`, modalités sur `powerbars`, zone dessinée, `filters` de couche ; contraintes en `mapSources` (non filtrantes) | Pas de score pondéré |
+| 3 | Centrographie | Géométrie | 🟡 | Centroïde par maille (`aggregated_geometry: centroid`) ; centroïde par modalité 🔧 (`geocentroid`) | Distance standard, ellipse 🔴 |
+| 4 | Configuration du semis | Points | 🔴 | Lecture visuelle multi-échelle (`granularity`) | Pas d'indice (D14) |
+| 5 | Autocorrélation (Moran, LISA) | Géométrie + mesure | 🔴 calcul / ✅ rendu | `match` sur une classe déjà indexée | Sans classe indexée 🔴 (D14) |
+| 6 | Densité par noyau | Points | 🟡 | `heatmap` / `circle-heatmap` pour l'aperçu ; comptage H3 pour mesurer | Noyau en pixels (D10) |
+| 7 | Interpolation | Points + `<mesure RATIO>` | 🟡 | Moyenne par maille H3 (`<champ>_avg_`) | Aucune estimation hors des mesures |
+| 8 | Aires d'influence | Points | 🟡 / 🔴 | Plus proche site 🔧 (U14) | Voronoï, modèles gravitaires 🔴 |
+| 9 | Réseau et accessibilité | Lignes ou `<identifiant de tronçon>` | 🟡 | Métriques par tronçon ou émetteur (`feature-metric-`, U6) | Routage, isochrones 🔴 |
+| 10 | Classification / régionalisation | `<dimension de classe>` existante | 🔴 calcul / ✅ rendu | `match` + `donut` / `powerbars` sur la classe existante | La grille `cluster-` n'est pas un clustering |
+| 11 | Régression géographiquement pondérée | Coefficients existants | 🔴 calcul / ✅ rendu | Palette divergente sur les coefficients ; sinon exploration bivariée par sélection croisée | Pas de modèle |
+| 12 | Spécialisation / co-localisation | Géométrie + `<dimension>` | 🟡 | Grille H3 `count` lue avant et après sélection de la modalité (D17) ; `tree` zone → modalité si une dimension de zone existe | Quotient de localisation non calculé (D6) |
+| 13 | Richesse / diversité | `<dimension>` ou `<clé d'entité>` | 🟡 | `metric` `cardinality` global ✅ ; carte de richesse par maille ⚠️ (D8) | Indices de diversité 🔴 |
+| 14 | Petits effectifs | Géométrie | 🟡 | `minfeatures`, comptage affiché en étiquette (`symbol`) | Pas de lissage |
+| 15 | Problème d'agrégation (MAUP) | Géométrie | ✅ | Varier `granularity` et `aggType` | — |
+| 16 | Terrain / visibilité | — | 🟡 | Relief (`terrain`) | Pente, visibilité 🔴 |
+| 17 | Requêtes topologiques | Géométrie | ✅ | `geo_query_op` + dessin | « À moins de d » approché par une zone dessinée |
+| 18 | Localisation optimale | — | 🔴 | Préparer par l'overlay booléen (Analyse 2) | Pas d'optimisation |
+
+## 6. Analyses temporelles (Analyses 19–27)
+
+| # | Analyse | Précondition (rôles) | Statut | Mise en œuvre / repli ARLAS | Limite à signaler |
+|---|---|---|---|---|---|
+| 19 | Pas d'agrégation et calendrier | `<date>` | ✅ | `datehistogram` (`interval` ou `numberOfBuckets`), `useUtc`, timeline détaillée | Pas en mois : intervalles inégaux, à dire ; documents à durée (D15) |
+| 20 | Tendance / saisonnalité | `<date>` | 🔴 calcul / 🟡 repli | Lecture visuelle de la timeline | Pas de décomposition |
+| 21 | Cycles (jour × heure) | `<heure>` / `<jour>` existants | 🟡 | `histogram` sur l'heure, `powerbars` sur le jour, filtrage croisé | Sans ces champs 🔴 ; matrice jour × heure 🔴 |
+| 22 | Moyennes mobiles, cumuls | `<date>` | 🔴 | — | Pas de lissage ni de cumul |
+| 23 | Comparaison de périodes | `<date>` | 🟡 | Signets d'une période à l'autre (U12) ; arrêts de couleur fixes (D2) | Pas de superposition N / N-1 |
+| 24 | Fenêtres glissantes relatives | `<date>` | 🟡 | Sélection de la période sur la timeline ; raccourcis relatifs ⚠️ | — |
+| 25 | Ruptures / anomalies | `<date>` | 🔴 calcul / 🟡 repérage | Pics visibles sur la timeline et le `swimlane` | Pas de détection |
+| 26 | Récence, ancienneté, étendue | `<date>` | ✅ / 🟡 | `metric` `min` / `max` de la date ✅ ; dernier document par maille par `raw_geometry` triée sur `-<date>` (U3) ✅ ; récence par maille `max(<date>)` (U4) ✅ ; `spanning` ⚠️ | Ancienneté relative à aujourd'hui non calculée |
+| 27 | Durées, survie, revisite | `<durée>` | 🟡 | `histogram` de la durée ; `metric` `sum` (total) ; `avg` seulement si la distribution est peu asymétrique (D1) | Survie et intervalles de revisite 🔴 |
+
+## 7. Analyses spatio-temporelles et mobilité (Analyses 28–34)
+
+| # | Analyse | Précondition (rôles) | Statut | Mise en œuvre / repli ARLAS | Limite à signaler |
+|---|---|---|---|---|---|
+| 28 | Segmentation des trajectoires | Lignes déjà segmentées | 🟡 | Affichage des segments existants | Détection d'arrêts et de déplacements 🔴 |
+| 29 | Matrice origine-destination | `<origine>` + `<destination>` | 🟡 | Deux `powerbars` origine et destination filtrées l'une par l'autre (lecture ligne par ligne) ✅ ; `metricstable` par origine (`count`, `cardinality` de la `<clé d'entité>`) ✅ ; `tree` origine → destination en `donut` à anneaux (≤ 7 modalités) ; couches origine / destination (U1) | Pas de matrice croisée complète ; liaisons internes mêlées aux autres |
+| 30 | Cube espace-temps | Géométrie + `<date>` | 🔴 | Lecture période par période (timeline + signets) | — |
+| 31 | Diffusion / front | Géométrie + `<date>` | 🟡 | `min(<date>)` par maille (U4) = première apparition | Vitesse du front 🔴 |
+| 32 | Co-présence / rencontres | Géométrie + `<date>` + `<clé d'entité>` | 🔴 | — | Pas de jointure spatio-temporelle |
+| 33 | Passage par une zone (événement → entité) | `<clé d'entité>` | 🟡 / 🔧 | Filtre géographique : observations dans la zone seulement ; extension à l'entité par le Tagger 🔧 (hors périmètre) | Les autres observations de l'entité ne sont pas retenues |
+| 34 | Géorepérage / alertes | Géométrie | 🔧 | Subscriptions (U9) | Hors tableau de bord |
+
+## 8. Catalogues d'imagerie et qualité d'acquisition (Analyses 35–39)
+
+| # | Analyse | Précondition (rôles) | Statut | Mise en œuvre / repli ARLAS | Limite à signaler |
+|---|---|---|---|---|---|
+| 35 | Couverture nuageuse | `<couverture nuageuse>` | ✅ / 🟡 | U17 : `histogram`, couche filtrée `RANGE`, `avg` / `min` par maille H3 | Valeur par scène, pas sur la zone d'intérêt |
+| 36 | Revisite utile | `<couverture nuageuse>` + `<date>` | 🟡 | Sélection 0–seuil sur l'`histogram` de la couverture nuageuse, qui filtre la grille H3 `count`, la timeline et le `swimlane` `<capteur>` × temps (D17) | Scènes adjacentes d'un même passage comptées plusieurs fois (D16) ; intervalles entre images exploitables 🔴 |
+| 37 | Meilleure image / mosaïque | `<couverture nuageuse>` | ✅ / 🟡 | Liste triée par nuages croissants ✅ ; `min` de la couverture nuageuse par maille ✅ (la valeur, pas l'image) ; `raw_geometry` de maille triée sur nuages puis `-<date>` (U3, clé hors gabarit, à valider par le round-trip) ; mosaïque 🔧 (U10) | Mosaïque harmonisée 🔴 |
+| 38 | Couverture spatiale du catalogue | Emprises (polygones) + leur centroïde | 🟡 | `count` d'emprises par maille, agrégé sur le centroïde (D16) ; emprises en `line` à grande échelle ; si une `<clé de tuile de référence>` existe : `cardinality` = nombre de tuiles couvertes ✅ | Un grand polygone compte dans une seule maille ; union des emprises, taux de couverture, zones blanches 🔴 |
+| 39 | Autres métadonnées d'acquisition | Mesures et dimensions d'acquisition | ✅ | `histogram` (angles, résolution), `powerbars` (capteur, niveau), `min` / `max` par maille | — |
+
+## 9. Statistiques appliquées (Analyses 40–48)
+
+| # | Analyse | Précondition (rôles) | Statut | Mise en œuvre / repli ARLAS | Limite à signaler |
+|---|---|---|---|---|---|
+| 40 | Tendance centrale robuste | Mesure | 🟡 | `histogram` + `metric` `avg`, `min`, `max` ; ratio de sommes par `function` | Médiane, IQR 🔴 (D1) |
+| 41 | Transformations (log…) | Mesure | 🟡 | Arrêts de couleur en progression géométrique | Histogramme linéaire seulement (D11) |
+| 42 | Corrélation | Deux mesures | 🟡 | Sélection d'une plage d'une mesure, lecture de la distribution de l'autre ; carte bivariée (R1 + R2) | Pas de coefficient ni de nuage de points |
+| 43 | Concentration / Pareto | `<dimension>` | 🟡 | `powerbars` triés décroissants (top N) | Gini, part cumulée 🔴 |
+| 44 | Contingence | Deux dimensions | 🟡 | `swimlane` (dimension × temps) ; `tree` à deux niveaux en `donut` à anneaux | Test d'indépendance 🔴 |
+| 45 | Écart à la normale | Mesure | 🟡 | Queues de l'`histogram` sélectionnables ; `filters` `OUT_RANGE` | Score standardisé 🔴 |
+| 46 | Seuils et percentiles | Mesure | ✅ | Arrêts de couleur fixes aux seuils (quantiles du profil) ; sélection d'intervalle | — |
+| 47 | Échantillonnage / biais | Couche de l'effort d'observation (autre collection) | 🟡 | Couches côte à côte (U13) | Pas de normalisation par l'effort |
+| 48 | Richesse contre volume | `<clé d'entité>` | 🟡 | `metric` `cardinality` et `count`, ratio événements / entité par `function` (U19) ✅ ; carte `count` H3 ✅ ; `cardinality` par maille ⚠️ (D8) | Ratio par maille 🔴 (D6) |
+
+## 10. Mobilité, qualité des données, mise en page (Analyses 49–52, Règles G6–G7)
+
+| # | Analyse ou règle | Précondition (rôles) | Statut | Mise en œuvre / repli ARLAS | Limite à signaler |
+|---|---|---|---|---|---|
+| 49 | Densité de passages (corridors) | `geo_point` multivalué échantillonné le long des géométries | ✅ / 🟡 | U18 : comptage par maille H3 = nombre de documents qui traversent la maille ✅ ; sans ce champ : lignes très transparentes (lecture visuelle) 🟡 | Compte des documents, pas des entités (D16) ; si le `geo_point` est déjà quantifié (géohash), une maille plus fine que sa précision crée des artefacts ; comptage normalisé linéaire (D3) |
+| 50 | Forme des trajectoires | `<indice de forme>` existant | ✅ / 🔴 | `histogram`, couleur `interpolate`, `avg` par modalité dans `metricstable` ; boucles lisibles par le filtrage croisé origine / destination | Sans indice 🔴 (D7) |
+| 51 | Régularité de desserte | `<origine>` + `<destination>` + `<clé d'entité>` | 🟡 | U19 : ratio documents / entité, origine × destination filtrées, `swimlane` origine × temps, `metricstable` par origine | Intervalle entre départs 🔴 |
+| 52 | Complétude et qualité | — | ✅ / 🟡 | Dimension : modalité « inconnue » visible dans `powerbars` et la liste, part par sélection + `metric` ✅ ; mesure : part de manquants non affichable (D18) ; période couverte par la timeline ✅ ; précision de position (G8) | Les valeurs nulles n'apparaissent pas comme une modalité |
+| G6 | Projection et mesures | Géométrie | 🟡 | `aggType: h3` (aire quasi égale) | Surfaces et distances : champs existants seulement (D9) |
+| G7 | Habillage de la carte | — | 🟡 | Légende native, échelle `displayScale` ; source et période dans les titres et noms de jeux | Pas de bloc « source » dédié |
+
+## 11. Mobilité avancée (Analyses 53–62)
+
+| # | Analyse | Précondition (rôles) | Statut | Mise en œuvre / repli ARLAS | Limite à signaler |
+|---|---|---|---|---|---|
+| 53 | Statistiques directionnelles | `<mesure CIRCULAR>` | 🟡 | `histogram` 0–360 ; palette circulaire (même couleur à 0 et 360) ; sélection d'un secteur | Rose, direction moyenne, variance circulaire 🔴 (D13) |
+| 54 | Régimes d'une mesure de mouvement | `<mesure RATIO>` + `<dimension>` | ✅ / 🟡 | `histogram` croisé par le filtrage avec la dimension ✅ ; géométries colorées par la mesure ✅ ; `avg` par maille H3 ✅ ; `metricstable` `avg` par modalité ✅ ; profils par sélection croisée de plusieurs mesures 🟡 | Moyenne par document non pondérée ; classification 🔴 |
+| 55 | Arrêts hors pôles | `<position des arrêts>` | 🟡 | Couches `feature-` sur les positions et tracés d'arrêt ; densité par `cluster-` si la position est un `geo_point` | Arrêts comptés par document si le champ est multivalué |
+| 56 | Temps d'escale et budget-temps | `<durées d'arrêt>` | ✅ / 🟡 | `histogram` des durées ✅ ; `metricstable` par `<lieu>` avec `avg` ✅ ; part du temps en mouvement globale par `function` sur des sommes de durées 🟡 | Moyennes tirées par les longues durées (D1) |
+| 57 | Cadence et zones d'ombre | `<classe de cadence>` ou `<nombre de positions>` + `<durée>` | ✅ / 🟡 | Répartition par classe de cadence ✅ ; positions par heure globales par `function` ✅ ; carte de cadence par classe filtrée 🟡 | Lacunes de signal 🔴 |
+| 58 | Plausibilité cinématique | Mesures redondantes (deux sources d'une même grandeur, ou distance + durée) | 🟡 | Grandeur dérivée globale par `function` comparée à la moyenne mesurée ; deux `histogram` côte à côte ; bornes par `filters` `OUT_RANGE` | Écart par document 🔴 (D7) |
+| 59 | Variable d'état | `<variable d'état>` + `<dimension>` | 🟡 | `histogram` par modalité ; sélection d'une plage puis répartition origine / destination | État relatif au maximum de l'entité 🔴 |
+| 60 | Flux pondérés par la taille | `<taille>` + `<origine>` / `<destination>` | 🟡 | `metricstable` (`count`, `sum` de la taille) ; symboles proportionnels à la somme par maille | La taille n'est pas la charge |
+| 61 | Réseau de lieux | `<origine>` + `<destination>` | 🟡 | Origine et destination filtrées l'une par l'autre ; degré d'un lieu = `cardinality` des destinations par origine (`metricstable`) ; symboles proportionnels origine / destination | Graphe, centralité, communautés 🔴 |
+| 62 | Chaînage des documents d'une entité | `<clé d'entité>` + `<date>` | 🟡 | R5 ; liste filtrée sur une entité et triée par date ; lieux distincts par entité (`metricstable` par `<clé d'entité>`, `cardinality` de la destination) | Détection de circuits 🔴 |
+
+---
+
+## 12. Usages ARLAS éprouvés
+
+À consulter avant de conclure qu'une analyse est 🔴 : ces combinaisons de briques répondent à des questions que les briques seules ne couvrent pas. Seuls ceux dont la précondition est remplie par la collection sont utilisables.
+
+| Code | Usage | Précondition (rôles) | Configuration ARLAS | Statut |
+|---|---|---|---|---|
+| U1 | Origines et destinations | `<origine>` + `<destination>` géographiques | Deux couches `cluster-` sur les deux géométries, même grille, teintes distinctes, deux jeux de visualisation | ✅ |
+| U2 | Taux d'occupation du sol | Polygones + `<surface>` | `cluster-` H3, `sum` de la surface, `fill` séquentiel : densité légitime car mailles d'aire égale | ✅ |
+| U3 | Dernier état connu | Géométrie + `<date>` | `raw_geometry` de maille triée sur `-<date>` (clé hors gabarit, à valider par le round-trip) ; liste triée par date | ✅ |
+| U4 | Récence ou première apparition | Géométrie + `<date>` | `max` (ou `min`) de la date par maille, lu par `["get", "<champ>_max_"]`, couleur interpolée avec des arrêts en epoch (millisecondes) tirés de la plage du profil ; étendue globale par `metric` `min` / `max` | ✅ |
+| U5 | Richesse contre volume par maille | `<clé d'entité>` | Couche H3 `count` ✅ à côté d'une couche H3 `cardinality` ⚠️ (D8) ; chiffres globaux `cardinality` et `count` ✅ | 🟡 |
+| U6 | Intensité par tronçon | Lignes segmentées + mesure, ou `<identifiant de tronçon>` | `line-color` sur la mesure ; ou `feature-metric-` avec `avg` par tronçon | ✅ |
+| U7 | Réseau de capteurs multi-variables | `<identifiant de station>` + plusieurs mesures | Network Analytics par station ; un `visualisations_set` par variable, un seul actif | ✅ |
+| U8 | Annotation et propagation | `<clé d'entité>` | Tagger 🔧 : écrit un champ, hors périmètre des agents | 🔧 |
+| U9 | Veille de zone | Géométrie | Subscriptions 🔧 | 🔧 |
+| U10 | Mosaïque d'images | Modèle d'URL de tuiles dans la collection | Tile service 🔧 ; `mapSources` est statique et non filtré | 🔧 |
+| U11 | Boucle d'analyse externe | — | Export, traitement externe, ré-ingestion : hors périmètre des agents | 🔴 pour l'agent |
+| U12 | Comparaison de périodes ou de scénarios | — | Signets de jeux de filtres ; échelles de couleur fixes (D2) | ✅ |
+| U13 | Croisement multi-collections | Une autre collection | `additionalCollections` sur la timeline ; un contributeur `map` par collection | ✅ |
+| U14 | Plus proche voisin | Géométrie | Tri `geodistance` de l'API 🔧 (non exposé dans le Builder) | 🔧 |
+| U15 | Cloisonnement territorial | — | `partition-filter` 🔧 | 🔧 |
+| U16 | Inspection visuelle d'objets | `<vignette>` / `<quicklook>` | Liste avec vignettes, quicklooks, survol lié à la carte, « Zoom to » | ✅ |
+| U17 | Qualité d'un catalogue d'images | `<couverture nuageuse>` + emprises + `<date>` | Voir ci-dessous | ✅ / 🟡 |
+| U18 | Densité de passages | `geo_point` multivalué échantillonné le long des géométries | `cluster-` sur ce champ, `aggType: h3` (D9), `aggregated_geometry: cell`, `fill` séquentiel sur `count_:normalized` (exploration de la vue) ou `count` à arrêts fixes (comparaison, D2) ; compte des documents (D16) | ✅ |
+| U19 | Demande fragmentée | `<origine>` + `<destination>` + `<clé d'entité>` | `metric` `function` `m[1] > 0 ? m[0] / m[1] : 0` sur `count` et `cardinality` de la clé d'entité ; origine et destination filtrées l'une par l'autre ; `metricstable` par origine ; `swimlane` origine × temps | ✅ |
+
+### U17 — Qualité d'un catalogue d'images (Analyses 35–39)
+
+1. **Distribution et seuil** : `histogram` de `<couverture nuageuse>` (pas de 5 %) ; sélectionner 0–20 filtre la carte, la timeline et les widgets.
+2. **Images exploitables** : couche `fill` d'une source `feature-` avec `filters` `RANGE` 0–20 et un contour (`metadata.stroke`, MAP-8), à côté d'une couche « toutes les images » en `line` neutre ; les deux couches ont des sources distinctes (`render_mode` ou géométrie différents).
+3. **Nébulosité moyenne** : `cluster-` H3, `avg` de la couverture nuageuse, dégradé séquentiel. C'est un ratio : moyenne, jamais somme.
+4. **Meilleure image par maille** : `min` de la couverture nuageuse (la valeur) ; l'emprise de cette image par `raw_geometry` triée sur la couverture nuageuse puis `-<date>` (U3).
+5. **Revisite utile** : sélection 0–20 sur l'histogramme de l'étape 1, qui filtre la grille H3 `count` (D17) ; dire que des scènes adjacentes d'un même passage comptent plusieurs fois (D16).
+6. **Cadence** : timeline et `swimlane` `<capteur>` × temps ; signets de saisons (U12).
+7. **Choix** : liste triée par nuages croissants puis date, vignettes et quicklooks (U16).
+8. **Limites** : nuages sur la scène et non sur la zone d'intérêt ; intervalle entre images exploitables, plus longue lacune et taux de couverture 🔴.
+
+---
+
+## 13. Index : question → analyse → réponse ARLAS
+
+Point d'entrée rapide. Les réponses supposent la précondition remplie ; sinon, « non réalisable avec les données disponibles » et repli.
+
+| Question type | Analyse(s) | Statut | Réponse ARLAS |
 |---|---|---|---|
-| **A. Normalisation par la surface** | 🟡 | Natif **sur grille d'aire égale** : sur une cellule H3, `count` ou `sum` *est* une densité (U2). Sur polygones arbitraires : champ densité existant. | Aire en projection équivalente et ratio, à l'ingestion |
-| **A'. Normalisation par une population exposée** | 🟡 | Champ taux existant → choroplèthe ; **taux global de la sélection** : `metric` avec `function` ratio de deux sommes ✅ ; par terme : stock et dénominateur côte à côte dans `metricstable` ; par cellule : 🔴 | Jointure du dénominateur et calcul du taux |
-| **B. Point-in-polygon** | 🟡 | ✅ sur grille H3 ; ✅ par zone pré-attribuée (`tree` / `feature-metric-` sur l'identifiant de zone) ; ✅ comptage dans une zone dessinée (`metric` count) | Spatial join à l'ingestion (exemple : rattachement de chaque bâtiment à sa commune dans le tutoriel *Buildings Solar Potential*) |
-| **C. Voisinage (buffers, isochrones)** | 🟡 / 🔴 | Zone dessinée ; plus proche voisin par tri `geodistance` (U14) ; isochrones 🔴 | Buffers / isochrones indexés en `geo_shape` |
-
-## 3. Recettes cartographiques (`SPATIAL_RECIEPE.md` §2)
-
-| Recette générique | Statut | Mise en œuvre ARLAS | Limite / écart à signaler |
-|---|---|---|---|
-| Matrice Bertin (taille / valeur / teinte) | ✅ | `circle-radius`, `line-width` ; `interpolate` ; `match` | Texture (`fill-pattern`) non gérée par le Builder |
-| R1 Choroplèthe | ✅ / 🟡 | `fill` + `interpolate` (features) ou `<champ>_avg_` / `count` sur cellule H3 | Pas de `step` réimportable : classes encodées en arrêts d'`interpolate` aux bornes. `:normalized` dépend de la vue : pour comparer des périodes ou des zones, utiliser des valeurs brutes avec des arrêts fixes. |
-| R2 Symboles proportionnels | ✅ / 🟡 | `circle` sur `feature-` ou `cluster-` (`sum`, `count`) | Pas de `sqrt`. Sur un champ brut, des arrêts d'`interpolate` en progression quadratique approchent la racine carrée et sont conservés. Sur une valeur normalisée (`count_:normalized`), le Builder **recalcule des arrêts équidistants** : le rayon devient linéaire (à signaler). Sur polygones, champ centroïde requis |
-| R3 Carte de flux O-D | 🟡 | `line` + `line-width` interpolé si les géométries O-D existent ; flux agrégés via `feature-metric-` ; départs et arrivées en deux couches (U1) ; corridors par densité de trajectoires (U18) | Arcs, flèches, animation : 🔴 |
-| R4 Localisation et généralisation multi-échelle | ✅ | Couche `cluster-` à petite échelle et `feature-` à grande échelle (`minzoom`/`maxzoom`, `minfeatures`/`maxfeatures`) ; `render_mode` `window` | Ordre de dessin des entités non maîtrisé (`*-sort-key` non conservé) |
-
----
-
-## 4. Analyses spatiales (`SPATIAL_RECIEPE.md` Analyses 1–18)
-
-| # | Analyse générique | Statut | Mise en œuvre / approximation ARLAS | Pré-traitement ou boucle externe sinon |
-|---|---|---|---|---|
-| 1 | Hotspots (Gi*) | 🔴 calcul / ✅ rendu | Exploration : cellules H3 sur `count` (concentrations sans test de significativité, à dire explicitement). Rendu divergent si `z_score` indexé. | Gi* sur grille H3 (PySAL) via U11 |
-| 2 | Allocation multicritère | 🟡 | **Overlay booléen natif** par le bus : plage sur `histogram`, catégories sur `powerbars`, zone dessinée, `filters` de couche. Contraintes affichées en `mapSources` (sans filtrage). | Score d'aptitude pondéré par cellule |
-| 3 | Centrographie | 🟡 | Centroïde par cellule (`aggregated_geometry: centroid`) ; centroïde ou emprise par catégorie via `collect_fct geocentroid/geobbox` de l'API (`term` + `geocentroid`) | Distance standard, ellipse |
-| 4 | Configuration du semis (Clark-Evans, Ripley) | 🔴 | Lecture visuelle multi-échelle (`granularity`) | Calcul et restitution en `metric` |
-| 5 | Moran / LISA | 🔴 calcul / ✅ rendu | `match` sur la classe LISA indexée | PySAL / GeoDa via U11 |
-| 6 | KDE | 🟡 | `heatmap` / `circle-heatmap` (noyau en pixels écran) ; densité mesurable par `count` H3 | KDE en unités terrain |
-| 7 | Interpolation | 🟡 | Moyenne par cellule H3 (`<champ>_avg_`), sans estimation hors mesures | Grille interpolée indexée ou raster en `mapSources` |
-| 8 | Aires d'influence | 🟡 / 🔴 | Plus proche site par tri `geodistance` (U14) | Voronoï / Huff indexés |
-| 9 | Réseau et accessibilité | 🟡 | Métriques par tronçon ou émetteur (`feature-metric-`, U6) | Routage (OSRM, pgRouting), isochrones indexées |
-| 10 | Classification / régionalisation | 🔴 calcul / ✅ rendu | `match` + `donut`/`powerbars` sur l'étiquette indexée ou posée par le Tagger (U8). La grille `cluster-` n'est pas un clustering. | DBSCAN / SKATER via U11 |
-| 11 | GWR | 🔴 calcul / ✅ rendu | Coefficients indexés en palette divergente ; exploration bivariée par sélection croisée | GWR via U11 |
-| 12 | Spécialisation / co-localisation (QL) | 🟡 | Deux couches H3 (`count` total et `count` filtré sur la catégorie) comparées visuellement ; `tree` à deux niveaux zone → catégorie en `donut` à anneaux (si un identifiant de zone est indexé) | QL par zone indexé |
-| 13 | Richesse / diversité | 🟡 | Richesse globale ou filtrée : `metric` `cardinality` ✅ ; carte de richesse par cellule (`cardinality` par cellule H3) en config manuelle (U5) | Shannon, Simpson |
-| 14 | Petits effectifs | 🟡 | `minfeatures`, filtre sur `count`, `count` affiché en étiquette (`symbol`) | Lissage bayésien |
-| 15 | MAUP | ✅ (exploration) | Varier `granularity`, `aggType` | — |
-| 16 | Terrain / visibilité | 🟡 | Relief (`terrain`) | Pente, viewshed |
-| 17 | Requêtes topologiques | ✅ | `geo_query_op` + dessin ; « à moins de *d* » approché par une zone dessinée | — |
-| 18 | Localisation optimale | 🔴 | Préparation par l'exploration (Analyse 2) | p-médian, MCLP |
-
-## 5. Analyses temporelles (Analyses 19–27)
-
-| # | Analyse générique | Statut | Mise en œuvre / approximation ARLAS | Pré-traitement sinon |
-|---|---|---|---|---|
-| 19 | Pas d'agrégation et calendrier | ✅ | `datehistogram` (`interval` ou `numberOfBuckets`), `useUtc`, `detailedTimeline` | — |
-| 20 | Tendance / saisonnalité | 🔴 | Lecture visuelle de la timeline | Décomposition STL, pente par zone indexée |
-| 21 | Cycles (jour × heure) | 🟡 | Avec des champs `hour` / `weekday` indexés : `histogram` sur l'heure, `powerbars` sur le jour, filtrage croisé | Champs calendaires à l'ingestion ; matrice jour × heure : 🔴 |
-| 22 | Moyennes mobiles, cumuls | 🔴 | — | Séries lissées ou cumulées indexées |
-| 23 | Comparaison de périodes | 🟡 | Signets d'une période à l'autre (U12) ; sélection de périodes sur la timeline ; **arrêts de couleur fixes** (pas `:normalized`) pour garder la même échelle | Variation indexée (palette divergente) |
-| 24 | Fenêtres glissantes relatives | 🟡 | `timeShortcuts` de la timeline (`Last 7 days`, `This month so far`…) en config manuelle ; date math `now-7d` dans l'API ; à défaut, sélection manuelle de la période sur la timeline | — |
-| 25 | Ruptures / anomalies temporelles | 🔴 calcul / 🟡 repérage | Pics visibles sur la timeline et le `swimlane` | z-score saisonnier, CUSUM |
-| 26 | Récence, ancienneté, étendue | 🟡 | `metric` `min` / `max` sur la date ✅ (global, filtré) ; `spanning` en config manuelle ; dernier document par cellule via `raw_geometry` triée sur `-date` ✅ (U3) ; carte de récence `max(date)` par cellule ✅ (U4) | Ancienneté (`now − dernière date`) indexée |
-| 27 | Durées, survie, revisite | 🟡 | `histogram` sur un champ durée (ex. `track.duration_s`), `metric avg` | Kaplan-Meier, intervalles de revisite |
-
-## 6. Analyses spatio-temporelles et mobilité (Analyses 28–34)
-
-| # | Analyse générique | Statut | Mise en œuvre / approximation ARLAS | Pré-traitement sinon |
-|---|---|---|---|---|
-| 28 | Segmentation des trajectoires | 🟡 | Affichage natif des parcours et fragments pré-segmentés (démos AIS Courses / AIS Flow, produites avec ARLAS PROC ML) | Détection stops / moves |
-| 29 | Matrice O-D | 🟡 | Deux couches cluster sur les champs de départ et d'arrivée (U1) ; **deux `powerbars` origine et destination filtrées l'une par l'autre** ✅ : cliquer une origine affiche ses destinations (matrice lue ligne par ligne) ; `metricstable` par origine (`count`, `cardinality` des véhicules) ✅ ; `tree` à deux niveaux origine → destination en `donut` à anneaux (≤ 7 modalités). Les liaisons internes (origine = destination) restent mêlées aux autres : les lire à part | Matrice indexée, géométries O-D |
-| 30 | Cube espace-temps / hotspots émergents | 🔴 | Lecture période par période (timeline + signets) | Emerging hotspots via U11 |
-| 31 | Diffusion / front | 🟡 | `min(date)` par cellule (U4) = date de première apparition | Vitesse du front |
-| 32 | Co-présence / rencontres | 🔴 | — | Jointure spatio-temporelle |
-| 33 | Passage par une zone (événement → entité) | 🟡 | **Tagger avec propagation** sur l'identifiant d'objet (U8), puis filtrage sur le tag. Le filtre géographique seul ne retient que les observations dans la zone. | — |
-| 34 | Géorepérage / alertes | 🟡 | **Subscriptions** (service, hors `config.json`) (U9) | — |
-
-## 7. Catalogues d'imagerie et qualité d'acquisition (Analyses 35–39)
-
-| # | Analyse générique | Statut | Mise en œuvre / approximation ARLAS | Pré-traitement sinon |
-|---|---|---|---|---|
-| 35 | Couverture nuageuse | ✅ / 🟡 | U17 : `histogram` du % de nuages, couche filtrée `RANGE`, H3 `avg` / `min` | % de nuages *sur la zone d'intérêt* (et non sur la scène) |
-| 36 | Revisite utile | 🟡 | `count` H3 sur une couche filtrée sous le seuil ; timeline et `swimlane` capteur × temps | Intervalles entre images exploitables, plus longue lacune |
-| 37 | Meilleure image / mosaïque | ✅ / 🟡 | Table triée par nuages croissants (`columns[].sort`) ✅ ; `raw_geometry` de cluster triée sur `cloud_cover,-date` ✅ ; **tile service** `sort` + `coverage` 🟡 (U10) | Mosaïque radiométriquement harmonisée |
-| 38 | Couverture spatiale du catalogue | 🟡 | `count` d'emprises par cellule (selon le support de l'agrégation de `geo_shape`, sinon sur le centroïde) | Union des emprises, taux de couverture, zones blanches |
-| 39 | Autres métadonnées d'acquisition | ✅ | `histogram` (incidence, élévation solaire, résolution) ; `powerbars` (capteur, niveau) ; H3 `min`/`max` | — |
-
-## 8. Statistiques appliquées (Analyses 40–48)
-
-| # | Analyse générique | Statut | Mise en œuvre / approximation ARLAS | Pré-traitement sinon |
-|---|---|---|---|---|
-| 40 | Tendance centrale robuste | 🟡 | `histogram` de distribution ; `metric` `avg`, `min`, `max` ; ratio des sommes (et non moyenne des ratios) par `function` `m[0] / m[1]` ✅ | Médiane, percentiles, IQR (absents des métriques ARLAS) |
-| 41 | Transformations (log…) | 🟡 | Arrêts d'`interpolate` en progression géométrique (lecture logarithmique de la couleur) | Champ `log_x` indexé |
-| 42 | Corrélation | 🟡 | Sélection d'une plage d'une variable et lecture de la distribution d'une autre ; carte bivariée (R2 + R1) | Coefficients, nuage de points |
-| 43 | Concentration / Pareto | 🟡 | `powerbars` triés décroissants (top-N) | Gini, HHI, part cumulée |
-| 44 | Contingence | 🟡 | `swimlane` (catégorie × temps) ; `tree` à deux niveaux catégorie × catégorie rendu en `donut` à anneaux | Khi², résidus |
-| 45 | Écart à la normale | 🟡 | Queues de l'`histogram` sélectionnables ; `filters` `OUT_RANGE` | z-score indexé |
-| 46 | Seuils et percentiles | ✅ | Arrêts d'`interpolate` fixes aux seuils métier ; sélection d'intervalle sur `histogram` | Percentiles calculés par le profiler |
-| 47 | Échantillonnage / biais | 🟡 | Couche de l'effort d'observation en parallèle (autre collection, U13) | Normalisation par l'effort |
-| 48 | Richesse contre volume | 🟡 | Chiffres globaux ✅ : `metric` `cardinality` et `count`, et **ratio événements / entité** par `function` `m[0] / m[1]` (U19) ; cartes : `count` par cellule H3 ✅, `cardinality` par cellule en config manuelle (U5) | Ratio événements / entité par cellule |
-
-## 8 bis. Compléments : mobilité, qualité des données, mise en page (Analyses 49–52, Règles G6–G7)
-
-| # | Analyse ou règle générique | Statut | Mise en œuvre / approximation ARLAS | Pré-traitement sinon |
-|---|---|---|---|---|
-| 49 | Densité de trajectoires (corridors) | ✅ / 🟡 | U18 : `cluster-` sur un `geo_point` multivalué échantillonné le long des trajectoires, `count` par cellule = nombre de parcours qui la traversent (un document compté une fois par cellule) ✅. Sans un tel champ : trajectoires `line` très transparentes (lecture visuelle) 🟡 | Positions échantillonnées le long des trajectoires |
-| 50 | Indicateurs de forme des trajectoires | ✅ / 🔴 | Si un champ de rectitude ou de détour est indexé : `histogram`, couleur `interpolate` sur les trajectoires, `avg` par catégorie dans `metricstable` ✅ ; boucles (origine = destination) lisibles par le filtrage croisé des ports ; sinon 🔴 | Rectitude, indice de détour |
-| 51 | Régularité de desserte, demande non desservie | 🟡 | U19 : ratio parcours / véhicule (`metric` `function`), `powerbars` origine × destination filtrées l'une par l'autre, `swimlane` origine × temps pour la régularité, `metricstable` par origine ✅ ; intervalle entre départs (headway) 🔴 | Paire O-D indexée, intervalles entre départs |
-| 52 | Complétude et qualité des données | ✅ / 🟡 | La modalité « inconnue » apparaît dans les `powerbars` et la table comme une barre à part ✅ ; part d'inconnus : sélection de la modalité + `metric` `count` ✅ ; période couverte par la timeline ✅ ; précision de position 🟡 (si un champ de précision existe) | — |
-| G6 | Projection et mesures | 🟡 | `aggType: h3` : mailles d'aire quasi égale ✅ ; `tile` / `geohash` : aire variable avec la latitude (biais en haute latitude, à signaler) ; surfaces et distances : champs indexés seulement | Aires et distances calculées à l'ingestion |
-| G7 | Habillage de la carte | 🟡 | Légende des couches native ✅ ; échelle `displayScale` ✅ ; source, date et période dans les titres et le nom des jeux de visualisation ; pas de bloc « source » dédié | — |
+| Où se concentrent les documents ? | 6, 1 | 🟡 | Comptage par maille H3 pour mesurer ; heatmap pour l'aperçu (D10) |
+| Ces concentrations sont-elles significatives ? Quelles zones sont anormalement fréquentées ? | 1, 5 (12, 48) | 🔴 calcul / 🟡 repli | Grille H3 « exploratoire », arrêts fixes pour comparer des zones (D2), distincts en global (D8), limite écrite (D14, D16) |
+| Quelle zone est la plus touchée ? | B, A' | 🟡 | `powerbars` par dimension de zone ou maille H3 ; un taux seulement s'il existe ou en global (D6) |
+| Combien de documents dans ce secteur ? | 17 | ✅ | Zone dessinée + `metric` |
+| Quelle est la valeur moyenne ici ? | 7 | 🟡 | `avg` par maille H3 + `histogram` |
+| Comment cela évolue-t-il ? | 19, 20 | ✅ / 🔴 | Timeline, `swimlane`, carte synchronisée ; tendance lue, non calculée |
+| Quoi de neuf récemment ? | 24, 26 | 🟡 / ✅ | Sélection de période sur la timeline ; carte de récence (U4) |
+| Combien d'entités distinctes ? | 13, 48 | ✅ / 🟡 | `metric` `cardinality` ; par maille ⚠️ (U5) |
+| Par où passent-ils ? | 28, 49 | ✅ / 🟡 | Lignes `feature-` ; densité de passages (U18) si le champ existe |
+| D'où partent-ils, où vont-ils ? | 29 | 🟡 | Couches origine / destination (U1) + origine et destination filtrées l'une par l'autre |
+| Quelle entité est passée par ici ? | 33 | 🟡 | Filtre géographique (observations seulement) ; liste des entités par clé |
+| Prévenez-moi si… | 34 | 🔧 | Subscriptions, hors tableau de bord |
+| Où installer… ? | 2, 18 | 🟡 / 🔴 | Overlay booléen par les widgets |
+| Qui est accessible en un temps donné ? | 9 | 🔴 | Zone dessinée, limite écrite |
+| Cette valeur ou cette période est-elle anormale ? | 25, 45 | 🟡 | `histogram` + sélection des extrêmes ; pics de la timeline |
+| Pourquoi ici ? | 11, 42 | 🔴 | Exploration bivariée par sélection croisée |
+| Où et quand ai-je des images exploitables ? | 35, 36 | ✅ / 🟡 | U17 étapes 1, 3, 5, 6 |
+| Quelle est la meilleure image sur ma zone ? | 37 | ✅ / 🟡 | U17 étapes 4 et 7 |
+| Quel est le dernier état connu ? | 26, 37 | ✅ | U3, liste triée par date |
+| Quelle liaison renforcer ? | 29, 49, 51, 48 | 🟡 | U18 + U1 + U19 |
+| Les trajets sont-ils directs ? | 50 | ✅ / 🔴 | Indice de forme s'il existe |
+| Les données sont-elles fiables ? | 52, 47, 14 | ✅ / 🟡 | Part des inconnus, période couverte, effectifs affichés |
 
 ---
 
-## 9. Usages ARLAS avancés
+## Annexe (référence, non utilisée pour la génération)
 
-Usages tirés des démos, des tutoriels et de la documentation ARLAS. L'agent les consulte avant de conclure qu'une analyse est 🔴. Seuls les usages qui fonctionnent avec les champs existants sont proposés par les agents ; ceux qui supposent de nouvelles données ou un traitement externe (U8 Tagger, qui écrit un champ ; U10, qui exige un modèle d'URL de tuiles dans la collection ; U11, export puis ré-import) restent une information de référence.
+### Pistes d'évolution d'ARLAS
 
-| Code | Usage | Configuration ARLAS | Source | Statut |
-|---|---|---|---|---|
-| **U1** | Origines et destinations | Deux couches `cluster-` sur deux champs géographiques (départ, arrivée), même grille, teintes distinctes, dans deux jeux de visualisation | Démo AIS Courses (*Departures*, *Arrivals*) | ✅ |
-| **U2** | Taux d'occupation du sol | `cluster-` H3, métrique `sum` sur le champ surface (`area`), `fill` séquentiel : densité légitime car les cellules ont une aire égale | Inspiré de la démo OSM Buildings (couche *Built area* ; configuration non consultée) ; champ `area` du tutoriel *Buildings Solar Potential* | ✅ |
-| **U3** | Dernier état connu | `raw_geometry` de cluster triée sur `-date` (géométrie du document le plus récent par cellule) ✅ ; table triée par date ✅ ; dans l'API, `fetch_hits` triés renvoient les derniers documents par cellule (dans la WUI, `fetched_hits` ne sert qu'aux étiquettes) 🟡 | Builder (`clusterSort`), API Exploration | ✅ / 🟡 |
-| **U4** | Carte de récence ou de première apparition | Métrique `max` (ou `min`) d'un champ date par cellule, couleur interpolée avec des arrêts exprimés en epoch (millisecondes) ; étendue globale via `metric` `min` / `max` (ou `spanning` en config manuelle) | Builder : couleur interpolée sur métrique acceptant les champs date (`toNumericOrDateOptionsObs`) | ✅ |
-| **U5** | Richesse contre volume | Couche H3 `count` ✅ et couche H3 `cardinality` de l'identifiant (ex. nombre de navires ou d'oiseaux distincts) en config manuelle, côte à côte ; chiffres globaux par `metric` `cardinality` et `count` ✅ | Schéma `metrics[].metric: cardinality` ; Builder (couleur limitée à `avg`/`sum`/`min`/`max`) | 🟡 |
-| **U6** | Intensité par fragment ou tronçon | `line` sur fragments avec `line-color` sur la vitesse ; ou `feature-metric-` avec `avg` de vitesse par tronçon | Démo AIS Flow (*Speed*) | ✅ |
-| **U7** | Réseau de capteurs multi-variables | Mode Network Analytics par station ; un `visualisations_sets` par variable (polluant), un seul actif à la fois | Inspiré de la démo OpenAQ (PM10, bascule entre polluants ; mécanisme de bascule non documenté) ; mode Network Analytics de la doc des tableaux de bord (exemple PM2.5 par station) | ✅ |
-| **U8** | Annotation collaborative et propagation | Tagger : étiqueter la sélection courante (ex. « suspect », « classe A ») ; propagation sur l'identifiant d'objet pour étendre l'étiquette à toute la trajectoire ; puis `match` / `powerbars` sur le champ tag | ARLAS-tagger (`_tag`, `propagation`) | 🟡 (service hors `config.json`) |
-| **U9** | Veille de zone | Souscription : zone d'intérêt + filtre ; notification à l'ingestion d'un document correspondant | ARLAS-Subscriptions (exemple Flickr / tour Eiffel) | 🟡 (service) |
-| **U10** | Mosaïque d'images | Tile service PNG : `sort` (nuages croissants ou date décroissante), `coverage`, filtre passé dans la requête | ARLAS tile service | 🟡 : la collection doit déclarer un modèle d'URL de tuiles ; l'intégration au tableau de bord n'est pas documentée, et `mapSources` déclare des sources statiques (« basemaps ») **non synchronisées avec les filtres** ARLAS. Usage sûr : client SIG ou URL figée sur un filtre |
-| **U11** | Boucle d'analyse externe | Export GeoJSON de la carte ou WFS `GetFeature` → QGIS / PySAL (Gi*, LISA, GWR, DBSCAN, KDE…) → ré-ingestion du résultat (ARLAS CLI) → rendu ARLAS | Dashboard (export GeoJSON → QGIS), OGC WFS, ARLAS CLI | 🟡 : rend réalisables les analyses 🔴 |
-| **U12** | Comparaison de scénarios ou de périodes | Signets de jeux de filtres (période, zone, catégories) rechargés successivement ; échelles de couleur fixes | Dashboard (bookmarks) | ✅ |
-| **U13** | Croisement multi-collections | `additionalCollections` sur la timeline ; couches de plusieurs collections sur la même carte (un contributeur `map` par collection, sources suffixées par la collection) ; filtre géographique commun | Schéma `histogram` (`additionalCollections`), Builder (`config-export-helper.ts`) | ✅ |
-| **U14** | Plus proche voisin | Tri `geodistance:lat lon` des résultats | API Exploration (non exposé dans le Builder) | 🟡 |
-| **U15** | Cloisonnement territorial | `partition-filter` par rôle (chaque utilisateur ne voit que son territoire) | API, ARLAS IAM | 🟡 (sécurité, hors `config.json`) |
-| **U16** | Inspection visuelle d'objets ou d'images | Table de résultats colorée par type, vignettes, quicklooks multiples, survol de ligne qui met l'entité en évidence, « Zoom to » | Tutoriel EO Objects | ✅ |
-| **U17** | Couverture nuageuse d'un catalogue d'images | Voir ci-dessous | ARLAS-EO, AIAS / STAC | ✅ / 🟡 |
-| **U18** | Densité de corridors | `cluster-` sur un `geo_point` multivalué le long des trajectoires (ex. `track.trail_geohashes_6`), `aggType: tile`, `aggregated_geometry: cell`, `fill` séquentiel (viridis) sur `count_:normalized` ; mailles d'aire variable (G6) | Tableau de bord `generated/lines` (round-trip Builder sans perte) | ✅ |
-| **U19** | Demande fragmentée (ligne à ouvrir) | `metric` `function` `m[1] > 0 ? m[0] / m[1] : 0` sur `count` et `cardinality` de l'identifiant de véhicule ; `powerbars` origine et destination filtrées l'une par l'autre ; `metricstable` par origine (`count`, `cardinality`, `avg` de rectitude) ; `swimlane` origine × temps | Tableau de bord `generated/lines` | ✅ |
+Ce qui ferait passer des analyses de 🔴 / 🟡 à ✅ : expressions étendues dans le Builder (`step`, `sqrt`, `case`, arithmétique) ; ratio de deux métriques par maille et division par l'aire ; agrégation sur polygones de référence ; médiane et percentiles ; agrégation jour × heure ; comparaison N / N-1 sur la timeline ; cumuls et moyennes mobiles ; filtre et tri par distance dans le Builder ; statistiques de voisinage sur grille H3 ; Tagger et Subscriptions pilotés depuis le tableau de bord ; routage ; exposition dans le Builder de `timeShortcuts`, `spanning` et de la couleur sur `cardinality` ; conservation des arrêts non équidistants et des `*-sort-key` ; agrégation sur une paire de champs (`multi_terms`) ; grille d'aire égale par défaut.
 
-### U17 — Analyse de couverture nuageuse (Analyses 35–39)
+### Sources consultées
 
-Champ typique : `eo:cloud_cover` en STAC ; le nom réel dépend de l'index.
-
-1. **Distribution et seuil interactif** : `histogram` numérique du % de nuages (`dataType: "numeric"`, intervalle de 5 %). Sélectionner 0–20 filtre toute la carte, la timeline et les widgets.
-2. **Couche « images exploitables »** : emprises `fill` d'une source `feature-` avec `filters` `RANGE` 0–20, à côté d'une couche « toutes les images » (`line` gris).
-3. **Nébulosité moyenne** : `cluster-` H3, `avg` du % de nuages, `fill` séquentiel blanc → gris foncé. C'est un ratio : moyenne, jamais somme.
-4. **Meilleure image possible** : même grille, métrique `min` du % de nuages ; `raw_geometry` triée sur `cloud_cover,-date` pour afficher l'emprise de la meilleure image par cellule.
-5. **Revisite utile** : `count` H3 sur la source filtrée sous le seuil : nombre d'acquisitions exploitables par zone.
-6. **Saisonnalité et cadence** : timeline + `swimlane` capteur × temps ; signets « été » / « hiver » pour comparer (U12).
-7. **Choix et récupération** : table triée par nuages croissants puis date, vignettes et quicklooks (U16) ; mosaïque « la moins nuageuse » via le tile service (U10) ; téléchargement des images retenues via AIAS / APROC.
-8. **🔴 à signaler** : % de nuages sur la zone d'intérêt (et non sur la scène), intervalle entre deux images exploitables, plus longue lacune, taux de couverture de la zone → pré-traitement ou U11.
-
----
-
-## 10. Synthèse : question utilisateur → analyse → réponse ARLAS
-
-| Question type | Analyse(s) | Statut | Réponse ARLAS proposée par l'agent |
-|---|---|---|---|
-| « Où se concentrent les événements ? » | 6, 1 | 🟡 | `heatmap` / `circle-heatmap` + H3 `count` pour mesurer |
-| « Ces concentrations sont-elles significatives ? » | 1, 5 | 🔴 | H3 exploratoire **+** Gi* via U11, rendu divergent |
-| « Quelle zone est la plus touchée ? » | Pattern B, A' | 🟡 | `powerbars` par identifiant de zone ou H3 ; recommander taux / densité |
-| « Combien d'éléments dans ce secteur ? » | 17 | ✅ | Dessin + `metric` count |
-| « Quelle est la valeur moyenne ici ? » | 7 | 🟡 | H3 `avg` + `histogram` |
-| « Comment cela évolue-t-il ? » | 19, 20 | ✅ / 🔴 | Timeline + `swimlane` + carte synchronisée |
-| « Quoi de neuf depuis 7 jours ? » | 24, 26 | 🟡 / ✅ | Sélection des 7 derniers jours sur la timeline (raccourci `timeShortcuts` en config manuelle) + carte de récence (U4) |
-| « Combien d'espèces / de navires différents ? » | 13, 48 | ✅ / 🟡 | Chiffre global : `metric` `cardinality` ✅ ; carte par cellule : `cardinality` H3 en config manuelle (U5) |
-| « Par où passent-ils ? » | 28, 9 | ✅ / 🟡 | `line` features + `feature-metric-` par segment |
-| « D'où partent-ils, où vont-ils ? » | 29 | 🟡 | Couches départs / arrivées (U1) + `tree` origine → destination |
-| « Qui est passé par là ? » | 33 | 🟡 | Tagger avec propagation (U8) |
-| « Prévenez-moi si… » | 34 | 🟡 | Subscriptions (U9) |
-| « Où installer… ? » | 2, 18 | 🟡 / 🔴 | Overlay booléen par widgets + score d'aptitude recommandé |
-| « Qui est accessible en 15 min ? » | 9 | 🔴 | Zone dessinée + isochrones via pré-traitement |
-| « Est-ce anormal ? » | 25, 45 | 🟡 | `histogram` + sélection des extrêmes ; z-score recommandé |
-| « Pourquoi ici ? » | 11, 42 | 🔴 | Exploration bivariée croisée ; GWR via U11 |
-| « Où et quand ai-je des images sans nuages ? » | 35, 36 | ✅ / 🟡 | U17 étapes 1, 3, 5, 6 |
-| « Quelle est la meilleure image sur ma zone ? » | 37 | ✅ / 🟡 | U17 étapes 4 et 7 |
-| « Quelle est la dernière image / position ? » | 26, 37 | ✅ | `raw_geometry` triée sur `-date` (U3), table triée par date |
-| « Quelle ligne faut-il ouvrir ? » | 29, 49, 51, 48 | 🟡 | Corridors (U18) + départs / arrivées (U1) + ratio parcours / véhicule et origines × destinations filtrées (U19) |
-| « Ces trajets sont-ils directs ? » | 50 | ✅ / 🔴 | `histogram` et couleur sur le champ de rectitude s'il existe |
-| « Les données sont-elles fiables ? » | 52, 47, 14 | ✅ / 🟡 | Part des « inconnus » dans les `powerbars`, période couverte, effectifs affichés |
-
----
-
-## 11. Pistes d'évolution d'ARLAS (🔴 → ✅)
-
-1. **Expressions MapLibre étendues dans le Builder** (`step`, `sqrt`, `case`, arithmétique) → classes discrètes, symboles proportionnels exacts, choroplèthe bivariée.
-2. **Ratio de deux métriques par cellule** et division par l'aire de la cellule → densités, taux et quotients de localisation natifs (Patterns A, A', Analyse 12).
-3. **Agrégation sur polygones de référence** (jointure spatiale à la volée) → Pattern B générique.
-4. **Percentiles et médiane** comme métriques (`collect_fct`) → Analyses 40, 46.
-5. **Agrégation imbriquée jour × heure** (`term` ou `histogram` sur un champ calendaire dérivé de la date) → Analyse 21.
-6. **Comparaison N / N-1 native** sur la timeline (période de référence superposée) → Analyse 23.
-7. **Cumul et moyenne mobile** sur les histogrammes → Analyse 22.
-8. **Filtre par distance** (`geo_distance`) et tri par distance exposés dans le Builder → Pattern C, Analyse 8.
-9. **Statistiques de voisinage sur grille H3** (anneaux `k-ring` : Gi*, LISA, lissage) → Analyses 1, 5, 14.
-10. **Tagger et Subscriptions pilotés depuis le tableau de bord** (étiqueter la sélection, s'abonner à la vue courante) → Analyses 33, 34.
-11. **Service de routage** (isochrones comme géométries de filtre) → Analyse 9.
-12. **Exposer dans le Builder** les clés déjà présentes dans les schémas : `timeShortcuts`, métrique `spanning`, couleur interpolée sur `cardinality` → Analyses 13, 24, 26, 48.
-13. **Conserver les arrêts non équidistants** sur une valeur normalisée (rayon ∝ √v) et les `*-sort-key` → Recettes 2 et 4.
-14. **Agrégation sur une paire de champs** (`multi_terms` origine × destination) → Analyses 29 et 51 sans champ de paire indexé.
-15. **Grille d'aire égale par défaut** (H3) pour les densités, ou division par l'aire réelle de la cellule → Règle G6, Analyse 49.
-
----
-
-## Annexe : sources consultées
-
-- https://www.arlas.io/ et https://www.arlas.io/arlas-demo-io : démos Flickr, AIS Courses, AIS Flow, OSM Buildings, Bird Tracking, Open AQ
-- https://docs.arlas.io/static_docs/arlas_dashboards/ : modes Features / Cluster / Network Analytics, filtres, export GeoJSON, signets
-- https://docs.arlas.io/static_docs/concepts/, https://docs.arlas.io/static_docs/building_dashboard/
-- Tutoriels : https://docs.arlas.io/external_docs/arlas_playground/ (AIS, Buildings Solar Potential, EO Objects)
-- API : https://docs.arlas.io/external_docs/ARLAS-server/arlas-api-exploration/, https://docs.arlas.io/external_docs/ARLAS-server/arlas-tile-service/, https://docs.arlas.io/external_docs/ARLAS-server/arlas-ogc/
-- Services : https://docs.arlas.io/external_docs/ARLAS-tagger/arlas-api-tagging/, https://docs.arlas.io/external_docs/ARLAS-subscriptions/subscriptions/, https://docs.arlas.io/external_docs/aias/aias/, https://docs.arlas.io/external_docs/ARLAS-wui/arlas-wui-configuration/
-- Code et schémas locaux : `generative-ui/schemas/*.schema.json`, `src/app/services/main-form-manager/config-export-helper.ts`, `config-map-export-helper.ts`, `src/app/modules/map-config/services/map-import/map-import.service.ts`
+- https://www.arlas.io/ et https://www.arlas.io/arlas-demo-io (démos publiques)
+- https://docs.arlas.io/static_docs/arlas_dashboards/, https://docs.arlas.io/static_docs/concepts/, https://docs.arlas.io/static_docs/building_dashboard/
+- Tutoriels : https://docs.arlas.io/external_docs/arlas_playground/
+- API et services : https://docs.arlas.io/external_docs/ARLAS-server/arlas-api-exploration/, https://docs.arlas.io/external_docs/ARLAS-server/arlas-tile-service/, https://docs.arlas.io/external_docs/ARLAS-server/arlas-ogc/, https://docs.arlas.io/external_docs/ARLAS-tagger/arlas-api-tagging/, https://docs.arlas.io/external_docs/ARLAS-subscriptions/subscriptions/, https://docs.arlas.io/external_docs/aias/aias/, https://docs.arlas.io/external_docs/ARLAS-wui/arlas-wui-configuration/
+- Code et schémas du Builder : `generative-ui/schemas/`, `config-export-helper.ts`, `config-map-export-helper.ts`, `map-import.service.ts`

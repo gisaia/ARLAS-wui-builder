@@ -46,10 +46,11 @@
             ]
           },
           "aggType": {
-            "description": "Algorithm for geo aggregation (tile or h3).",
+            "description": "Algorithm for geo aggregation (tile, geohash or h3).",
             "type": "string",
             "enum": [
               "tile",
+              "geohash",
               "h3"
             ]
           },

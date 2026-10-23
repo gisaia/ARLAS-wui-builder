@@ -1,5 +1,5 @@
 {
-  "_usage": "Swimlane (term × time). The identifier must be the Builder canonical id, which contains the collection name. The visible title is input.chartTitle.",
+  "_usage": "Swimlane (term × time). The identifier must be the Builder canonical id, which contains the collection name. The visible title is input.chartTitle. Keep every axis key (show*Labels, show*Ticks, x/yLabels, x/yTicks): the WUI binds them directly, so a missing key hides the axis labels.",
   "contributor": {
     "type": "swimlane",
     "identifier": "<<COLLECTION>>-<<FIELD:DATE>>-time-interval-Count--6-hour<<FIELD:KEYWORD>>",
@@ -54,7 +54,24 @@
           "swimlane_options": {},
           "swimlaneMode": "fixedHeight",
           "swimlaneHeight": 28,
-          "swimLaneLabelsWidth": 120
+          "swimLaneLabelsWidth": 120,
+          "topOffsetRemoveInterval": 40,
+          "leftOffsetRemoveInterval": 18,
+          "brushHandlesHeightWeight": 0.8,
+          "xAxisPosition": "bottom",
+          "descriptionPosition": "bottom",
+          "xTicks": 4,
+          "yTicks": 1,
+          "xLabels": 4,
+          "yLabels": 4,
+          "showXTicks": true,
+          "showYTicks": true,
+          "showXLabels": true,
+          "showYLabels": true,
+          "shortYLabels": false,
+          "xUnit": "",
+          "yUnit": "",
+          "chartXLabel": ""
         }
       }
     ]

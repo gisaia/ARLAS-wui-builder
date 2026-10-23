@@ -113,6 +113,8 @@ test('C1: resultlist input.id different from contributorId', () => expectRule('C
 test('C2: resultlist view flags missing', () => expectRule('C2', c => { delete c.arlas.web.components.resultlists[0].input.hasListView; }, { fixable: true }));
 test('DIM-1: histogram without chartWidth', () => expectRule('DIM-1', c => { delete widget(c, 'histogram').input.chartWidth; }, { fixable: true }));
 test('DIM-1: histogram without dataType (data-dependent)', () => expectRule('DIM-1', c => { delete widget(c, 'histogram').input.dataType; }, { fixable: false }));
+test('HIST-1: isOneDimension true on a bars histogram (y axis scaled to 0-1)', () => expectRule('HIST-1', c => { c.arlas.web.contributors.find(x => x.identifier === 'speed_histogram').isOneDimension = true; }, { fixable: true }));
+test('HIST-1: oneDimension chart type (not offered by the Builder)', () => expectRule('HIST-1', c => { widget(c, 'histogram').input.chartType = 'oneDimension'; }, { fixable: true }));
 test('TL-1: timeline without dataType', () => expectRule('TL-1', c => { delete c.arlas.web.components.timeline.input.dataType; }, { fixable: true }));
 test('TAB-1: tab used but not declared', () => expectRule('TAB-1', c => { c.arlas.web.options.tabs.pop(); }, { fixable: true }));
 test('XC-1: extraConfigs missing', () => expectRule('XC-1', c => { delete c.extraConfigs; }, { fixable: true }));
@@ -144,4 +146,52 @@ test('without a mapping, the field check is skipped with a warning', () => {
   const r = validate(config, map, {});
   assert.equal(r.errors, 0);
   assert.ok(r.findings.some(f => f.rule === 'FLD-0' && f.severity === 'WARN'));
+});
+
+test('MET-1 / R3: expressions refused by validProcess of the Builder (scientific notation)', () => {
+  expectRule('MET-1', config => { contributor(config, 'metric').function = 'm[0]/1e6'; }, { fixable: false });
+  expectRule('R3', config => { contributor(config, 'resultlist').columns[0].process = 'Math.round(result/1e8)/10'; }, { fixable: false });
+  const { config, map, mapping } = base();
+  contributor(config, 'metric').function = 'm[0]/1000000';
+  assert.ok(!rulesOf(errorsOf(config, map, mapping)).includes('MET-1'));
+});
+
+test('HIST-2: the yUnit of a count histogram is the unit of the collection (fixable)', () => {
+  expectRule('HIST-2', config => { widget(config, 'histogram').input.yUnit = 'documents'; }, { fixable: true });
+});
+
+test('TL-1: the timeline date formats are the ones the Builder writes (fixable)', () => {
+  expectRule('TL-1', config => { config.arlas.web.components.timeline.input.ticksDateFormat = '%d/%m/%Y'; }, { fixable: true });
+});
+
+test('MAP-7: a window layer has no maxfeatures (fixable) and is scrollable', () => {
+  expectRule('MAP-7', config => {
+    const s = contributor(config, 'map').layers_sources.find(x => x.source.startsWith('feature-'));
+    s.render_mode = 'window';
+  }, { fixable: false });
+  const { config, map, mapping } = base();
+  const s = contributor(config, 'map').layers_sources.find(x => x.source.startsWith('feature-'));
+  s.render_mode = 'window';
+  map.layers.find(l => l.id === s.id).metadata['is-scrollable-layer'] = true;
+  assert.ok(rulesOf(errorsOf(config, map, mapping)).includes('MAP-7'), 'maxfeatures in window mode');
+  const { config: fixed } = normalize(config, map, { mapping });
+  assert.ok(!rulesOf(errorsOf(fixed, map, mapping)).includes('MAP-7'));
+});
+
+test('MAP-8: hover / select only on features line or circle layers', () => {
+  expectRule('MAP-8', (config, map) => { map.layers.find(l => l.id === map['external-event-layers'][0].id.replace(/^arlas-(hover|select)-/, '')).type = 'fill'; }, { fixable: false });
+});
+
+test('MAP-9: no filter on a cluster layer', () => {
+  expectRule('MAP-9', (config, map) => { map.layers.find(l => l.source.startsWith('cluster-')).filter = ['all', ['<', ['get', 'x'], 1]]; }, { fixable: false });
+});
+
+test('DATE-1: a date column without process is reported (raw epoch value)', () => {
+  const { config, map, mapping } = base();
+  const rl = contributor(config, 'resultlist');
+  rl.columns.push({ columnName: 'Date', fieldName: 'track.timestamps.start', dataType: '', process: '', useColorService: false, sort: '' });
+  const warns = validate(config, map, { mapping }).findings.filter(f => f.rule === 'DATE-1' && f.severity === 'WARN');
+  assert.equal(warns.length, 1);
+  rl.columns[rl.columns.length - 1].process = "new Date(result*1000).toISOString().slice(0,16).replace('T',' ')";
+  assert.equal(validate(config, map, { mapping }).findings.filter(f => f.rule === 'DATE-1' && f.severity === 'WARN').length, 0);
 });

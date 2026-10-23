@@ -1,5 +1,5 @@
 {
-  "_usage": "Single indicator. Only group.title is shown: one metric per group. function uses m[0], m[1]… in the order of metrics; field is null for count. sum for a stock, avg (or ratio of sums) for a ratio.",
+  "_usage": "Single indicator. Only group.title is shown: one metric per group. function uses m[0], m[1]… in the order of metrics; field is null for count. sum for a stock, avg (or ratio of sums) for a ratio. Unit conversion (Règle G5): the function converts the raw value and afterValue names the unit, choose the unit whose order of magnitude is readable for the value range of the profile, e.g. metres → \"m[0]/1000\" + \"km\", seconds → \"m[0]/3600\" + \"h\", bytes → \"m[0]/1000000\" + \"MB\" (never scientific notation such as 1e6: validProcess refuses it, MET-1). Keep the domain unit of the profile when it exists. A histogram cannot convert its buckets: its unit goes in the title and xUnit.",
   "contributor": {
     "type": "metric",
     "identifier": "<<ID>>",

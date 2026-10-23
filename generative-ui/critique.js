@@ -236,6 +236,35 @@ mainLayers.forEach(l => {
   if (!sets.some(s => (s.layers || []).includes(l.id))) WARN('MAP-3', where, `couche absente de tout visualisations_sets : elle ne sera jamais affichée.`);
 });
 
+// SEM-16 : couleur et opacité pilotées par la même valeur (une variable, deux variables visuelles — Règle G1)
+const getKey = e => (Array.isArray(e) && e[0] === 'interpolate' && Array.isArray(e[2]) && e[2][0] === 'get' ? e[2][1] : null);
+mainLayers.forEach(l => {
+  const paint = l.paint || {};
+  Object.keys(paint).filter(p => p.endsWith('-color') && !p.includes('stroke')).forEach(p => {
+    const opacity = p.replace(/-color$/, '-opacity');
+    const k = getKey(paint[p]);
+    if (k && k === getKey(paint[opacity])) {
+      TIP('SEM-16', `couche ${l.id}`, `${p} et ${opacity} varient tous deux avec "${k}" : une même valeur portée par deux variables visuelles (Règle G1). Gardez le dégradé de couleur et une opacité constante.`);
+    }
+  });
+});
+
+// G6-1 : grille geohash / tuiles pour un comptage sur une emprise étendue en latitude (Règle G6)
+const lats = profile?.bbox ? [profile.bbox[1], profile.bbox[3]].filter(Number.isFinite) : [];
+if (lats.length === 2) {
+  const cos2 = lat => Math.cos(lat * Math.PI / 180) ** 2;
+  const [lo, hi] = [Math.min(...lats.map(Math.abs)), Math.max(...lats.map(Math.abs))];
+  const ratio = cos2(lo) / cos2(Math.min(hi, 89));
+  mainLayers.forEach(l => {
+    const ls = sourceById.get(l.source);
+    if (!ls?.source?.startsWith('cluster-') || !['geohash', 'tile'].includes(ls.aggType)) return;
+    if (!JSON.stringify(l.paint || {}).includes('count_')) return;
+    if (ratio > 1.3) {
+      TIP('G6-1', `couche ${l.id}`, `comptage sur une grille ${ls.aggType} alors que l'emprise va de ${lats[0]}° à ${lats[1]}° de latitude : l'aire au sol des mailles varie d'un facteur ${ratio.toFixed(1)}, les mailles du nord paraissent plus denses (Règle G6). Préférez "aggType": "h3" (mailles d'aire quasi égale).`);
+    }
+  });
+}
+
 // Couleurs visibles en même temps (jeux activés par défaut)
 const enabledLayerIds = new Set(sets.filter(s => s.enabled).flatMap(s => s.layers || []));
 const visible = mainLayers.filter(l => enabledLayerIds.has(l.id))
@@ -365,6 +394,68 @@ groups.forEach(g => {
 });
 sets.forEach(st => checkLength(st.name, `jeu « ${st.name} »`));
 ['timeline', 'detailedTimeline'].forEach(k => checkLength(web.components?.[k]?.input?.chartTitle, `composant ${k}`));
+
+// ---------------------------------------------------------------- 6. Redondances et titres génériques
+// Titre propre d'un widget (affiché sous le titre du groupe) ; metric / metricstable n'en ont pas.
+const ownTitle = comp => describeComponent(comp)?.own?.trim() || '';
+// TITLE-DUP : deux widgets d'un même groupe portent le même titre (indiscernables — Règle G5) ;
+// un même titre repris dans 3 widgets ou plus est générique (il ne nomme pas la variable).
+const titleUses = new Map();
+groups.forEach(g => {
+  const inGroup = new Map();
+  (g.components || []).forEach(comp => {
+    const t = ownTitle(comp);
+    if (!t) return;
+    if (inGroup.has(t)) WARN('TITLE-DUP', `groupe ${g.groupId}`, `deux widgets (${inGroup.get(t)}, ${comp.componentType}) portent le même titre « ${t} » : ils sont indiscernables. Nommez la variable de chacun (Règle G5).`);
+    inGroup.set(t, comp.componentType);
+    titleUses.set(t, [...(titleUses.get(t) || []), g.groupId]);
+  });
+});
+titleUses.forEach((ids, t) => {
+  if (new Set(ids).size >= 3) TIP('TITLE-DUP', `groupes ${[...new Set(ids)].join(', ')}`, `le titre « ${t} » est repris dans ${ids.length} widgets : titre générique qui ne dit pas ce qui est mesuré (Règle G5).`);
+});
+
+// DUP-3 : dans un même groupe, deux widgets différents agrègent le même champ de la même façon (Règle G5)
+groups.forEach(g => {
+  const firstUse = new Map();
+  (g.components || []).forEach(comp => {
+    const u = describeComponent(comp)?.used?.[0];
+    if (!u?.field) return;
+    const key = `${u.metric}:${u.field}`;
+    const prev = firstUse.get(key);
+    if (prev && prev.id !== comp.contributorId) {
+      WARN('DUP-3', `groupe ${g.groupId}`, `${prev.type} et ${comp.componentType} montrent tous deux ${u.metric} de ${u.field} : même indicateur présenté deux fois (Règle G5). Gardez-en un.`);
+    } else if (!prev) firstUse.set(key, { id: comp.contributorId, type: comp.componentType });
+  });
+});
+
+// ID-1 : répartition (term) sur un identifiant unique par document : toutes les barres valent 1 (Règle G4)
+const docIds = new Set(contributors.filter(c => c.type === 'resultlist').map(c => c.fieldsConfiguration?.idFieldName).filter(Boolean));
+groups.forEach(g => (g.components || []).forEach(comp => {
+  if (!['powerbars', 'donut'].includes(comp.componentType)) return;
+  const u = describeComponent(comp)?.used?.[0];
+  if (!u?.field || u.metric !== 'term') return;
+  const unique = docIds.has(u.field) || (profile?.count && fields[u.field]?.cardinality === profile.count);
+  if (unique) WARN('TERM-ID', `groupe ${g.groupId} (${comp.componentType})`, `répartition sur ${u.field}, unique pour chaque document : chaque barre vaut 1 et le graphique ne compare rien (Règle G4). Retirez-le : la liste de résultats sert à retrouver un document.`);
+}));
+
+// UNIT-3 : un même champ affiché dans des unités différentes (indicateur converti, histogramme brut — Règle G5)
+const shownUnits = new Map(); // champ -> [{ unit, where }]
+groups.forEach(g => (g.components || []).forEach(comp => {
+  const c = byId.get(comp.contributorId);
+  if (!c) return;
+  let field, unit;
+  if (comp.componentType === 'metric' && (c.metrics || []).length === 1) { field = c.metrics[0].field; unit = comp.input?.afterValue; }
+  if (comp.componentType === 'histogram') {
+    const a = c.aggregationmodels?.[0];
+    field = a?.metrics?.[0]?.collect_field || a?.field; unit = a?.metrics?.length ? comp.input?.yUnit : comp.input?.xUnit;
+  }
+  if (field && unit) shownUnits.set(field, [...(shownUnits.get(field) || []), { unit: String(unit).trim(), where: `${g.groupId} (${comp.componentType})` }]);
+}));
+shownUnits.forEach((uses, f) => {
+  const units = [...new Set(uses.map(u => u.unit.toLowerCase()))];
+  if (units.length > 1) TIP('UNIT-3', uses.map(u => u.where).join(' / '), `${f} est affiché en ${units.join(' et en ')} selon le widget : annoncez l'unité dans chaque titre, ou harmonisez (Règle G5).`);
+});
 
 // ---------------------------------------------------------------- Rapport
 const order = { ERREUR: 0, ALERTE: 1, CONSEIL: 2 };

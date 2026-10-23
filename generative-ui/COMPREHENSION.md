@@ -329,7 +329,7 @@ npm run genui:check -- <config.json> <config.map.json> --mapping <mapping.json> 
 
 Le rapport de toutes les étapes est écrit dans `<nom>.report.json`.
 
-- **`generative-ui/lib/rules.js`** : registre unique des règles (identifiant, contrôle, correctif éventuel), partagé par la validation et la normalisation. Ajouter une règle = ajouter une entrée et un test.
+- **`generative-ui/lib/rules.js`** : registre unique des règles (identifiant, contrôle, correctif éventuel), partagé par la validation et la normalisation. Ajouter une règle = ajouter une entrée et un test. Les expressions (`process` de la liste, R3 ; `function` d'un metric, MET-1) sont contrôlées avec `validProcess` d'`arlas-web-contributors`, la fonction même des formulaires du Builder : elle refuse notamment la notation scientifique (`1e6`). HIST-2 ⚙ aligne le `yUnit` d'un histogramme de comptage sur l'unité de la collection (`arlas-wui.web.app.units`), que le Builder réécrit à l'export. Réécritures de la carte détectées sans round-trip : TL-1 ⚙ (format de date de la timeline `%d/%m/%Y %H:%M`), MAP-7 (`render_mode: window` sans `maxfeatures` ⚙ et avec `metadata.is-scrollable-layer: true`), MAP-8 (survol / sélection seulement sur les couches features `line` ou `circle`, et sur le contour `arlas-fill_stroke-` d'un `fill`), MAP-9 (pas de filtre sur une couche `cluster-`, que le Builder ignore).
 - **`generative-ui/templates/`** : gabarits au format d'export du Builder, un par widget, avec des valeurs `<<…>>` à remplacer (une valeur restante est refusée par PH-1). Assemblés et remplis, ils passent la validation et le round-trip sans perte (`test/templates.test.js`).
 - **`generative-ui/test/`** : tests du validateur et du normalisateur (`npm run genui:test`) : une configuration cassée par règle, garde-fou des champs, idempotence, gabarits.
 - **`generative-ui/schemas/`** : les 21 métamodèles JSON Schema draft-06 officiels (référence à jour).
@@ -393,4 +393,13 @@ npm run genui:test
 ## 6. Prompt Système pour Agent Autonome (`generative-ui/AGENT_PROMPT.md`)
 
 Le fichier [`AGENT_PROMPT.md`](./AGENT_PROMPT.md) fournit le Master Prompt complet permettant à un LLM ou agent autonome de concevoir de bout en bout des visualisations complètes à partir d'une requête utilisateur et d'un schéma d'index Elasticsearch/OpenSearch.
+
+Le prompt est **indépendant du domaine** : il ne raisonne que sur les propriétés mesurées des champs (profil de données) et ne cite aucun champ ni vocabulaire d'une collection particulière (`test/prompt.test.js` y veille). Sa structure :
+- `<role>`, `<inputs>` (besoin, mapping, profil à construire s'il manque), `<hard_constraints>` (champs existants uniquement, gabarits, socle obligatoire : map + timeline + au moins un resultlist, expressions MapLibre réimportables) ;
+- `<procedure>` en six étapes : rôles des champs (géométrie principale / secondaire, temps, clé d'entité, identifiant, mesure, dimension, libellé, texte) → questions analytiques → composition → construction depuis `templates/` → `npm run genui:check` → critique raisonnée, avec comme critère d'arrêt 0 ERREUR et 0 constat CRITIQUE ;
+- `<decision_tables>` : nature → agrégation, variable → widget, primitive × nature → recette cartographique ;
+- `<judgment_rules>` : les seuls invariants qui ne sont pas corrigés automatiquement par la normalisation ;
+- `<output>` : fichiers dans `generated/` et message final (diagnostic, couverture, vérification, critique).
+
+Les préconditions des couches optionnelles sont dans le `_usage` des `layer_variants` de `templates/map.json`, exprimées en rôles de champs.
 

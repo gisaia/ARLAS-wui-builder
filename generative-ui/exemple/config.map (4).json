@@ -1,0 +1,2292 @@
+{
+  "layers": [
+    {
+      "id": "arlas_id:Grid:1736159920410",
+      "type": "fill",
+      "source": "cluster-track.trail_geohashes_6-Fine-h3-cell-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "count_:normalized"
+          ],
+          0,
+          0.1,
+          0.2,
+          0.28,
+          0.4,
+          0.45999999999999996,
+          0.6,
+          0.64,
+          0.8,
+          0.82,
+          1,
+          1
+        ],
+        "fill-color": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "count_:normalized"
+          ],
+          0,
+          "#53d9e8",
+          0.05,
+          "#29AFFB",
+          0.1,
+          "#2874FA",
+          0.25,
+          "#8a77fb",
+          0.4,
+          "#eb79fc",
+          1,
+          "#ef586c"
+        ]
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "hexagonal",
+        "stroke": {
+          "color": "#fff",
+          "width": 0,
+          "opacity": 0
+        }
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Gathered departures:1625210669176",
+      "type": "circle",
+      "source": "cluster-departure.location-Fine-geohash-centroid-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "circle-opacity": 0.3,
+        "circle-color": "#ffffff",
+        "circle-radius": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "count_:normalized"
+          ],
+          0,
+          0,
+          0.2,
+          3,
+          0.4,
+          6,
+          0.6,
+          9,
+          0.8,
+          12,
+          1,
+          15
+        ],
+        "circle-stroke-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "count_:normalized"
+          ],
+          0,
+          2,
+          0.2,
+          2.8,
+          0.4,
+          3.6,
+          0.6,
+          4.4,
+          0.8,
+          5.2,
+          1,
+          6
+        ],
+        "circle-stroke-color": "#44d68b",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square"
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Gathered arrivals:1625210688720",
+      "type": "circle",
+      "source": "cluster-arrival.location-Fine-geohash-centroid-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "circle-opacity": 0.3,
+        "circle-color": "#ffffff",
+        "circle-radius": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "count_:normalized"
+          ],
+          0,
+          0,
+          0.2,
+          3,
+          0.4,
+          6,
+          0.6,
+          9,
+          0.8,
+          12,
+          1,
+          15
+        ],
+        "circle-stroke-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "count_:normalized"
+          ],
+          0,
+          2,
+          0.2,
+          2.8,
+          0.4,
+          3.6,
+          0.6,
+          4.4,
+          0.8,
+          5.2,
+          1,
+          6
+        ],
+        "circle-stroke-color": "#f85e7f",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square"
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Boats courses (Ship type):1729526577282",
+      "type": "line",
+      "source": "feature-track.trail-window-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-opacity": 1,
+        "line-color": [
+          "match",
+          [
+            "get",
+            "object_ship_type"
+          ],
+          "Passenger",
+          "#a5c176",
+          "Fishing",
+          "#7AD8F5",
+          "Cargo",
+          "#0099ff",
+          "Other",
+          "#c2c2c2",
+          "Undefined",
+          "#c2c2c2",
+          "Tug",
+          "#f4df42",
+          "Pilot",
+          "#e74b4b",
+          "Tanker",
+          "#ff8ee8",
+          "Dredging",
+          "#51a588",
+          "SAR",
+          "#03c6ac",
+          "#9d9ca9"
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_timestamps_center:normalized:object_id"
+          ],
+          0,
+          2,
+          0.2,
+          2.4,
+          0.4,
+          2.8,
+          0.6,
+          3.2,
+          0.8,
+          3.6,
+          1,
+          4
+        ]
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": true
+      },
+      "filter": [
+        "all",
+        [
+          "all",
+          [
+            "<",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            1.7976931348623157e+308
+          ],
+          [
+            ">",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            -1.7976931348623157e+308
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Boats courses (Ship type) light:1740475069955",
+      "type": "line",
+      "source": "feature-track.trail-wide-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-opacity": 0.3,
+        "line-color": [
+          "match",
+          [
+            "get",
+            "object_ship_type"
+          ],
+          "Passenger",
+          "#a5c176",
+          "Fishing",
+          "#7AD8F5",
+          "Cargo",
+          "#0099ff",
+          "Other",
+          "#c2c2c2",
+          "Undefined",
+          "#c2c2c2",
+          "Tug",
+          "#f4df42",
+          "Pilot",
+          "#e74b4b",
+          "Tanker",
+          "#ff8ee8",
+          "Dredging",
+          "#51a588",
+          "SAR",
+          "#03c6ac",
+          "#9d9ca9"
+        ],
+        "line-width": 0.5
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Boats courses (Ship type) light Scrollable:1729526269742",
+      "type": "line",
+      "source": "feature-track.trail-window-demo_ais_course",
+      "minzoom": 12,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-opacity": 0.4,
+        "line-color": [
+          "match",
+          [
+            "get",
+            "object_ship_type"
+          ],
+          "Passenger",
+          "#a5c176",
+          "Fishing",
+          "#7AD8F5",
+          "Cargo",
+          "#0099ff",
+          "Other",
+          "#c2c2c2",
+          "Undefined",
+          "#c2c2c2",
+          "Tug",
+          "#f4df42",
+          "Pilot",
+          "#e74b4b",
+          "Tanker",
+          "#ff8ee8",
+          "Dredging",
+          "#51a588",
+          "SAR",
+          "#03c6ac",
+          "#9d9ca9"
+        ],
+        "line-width": 1
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": true
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Boats courses (Speed):1616754563858",
+      "type": "line",
+      "source": "feature-track.trail-wide-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-opacity": 1,
+        "line-color": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_dynamics_sensor_speed_nd"
+          ],
+          0,
+          "#36a996",
+          2.5,
+          "#3683a9",
+          5,
+          "#3649a9",
+          7.5,
+          "#5c36a9",
+          10,
+          "#9636a9",
+          15,
+          "#a93683",
+          25,
+          "#d33a3a"
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_timestamps_center:normalized:object_id"
+          ],
+          0,
+          2,
+          0.2,
+          2.4,
+          0.4,
+          2.8,
+          0.6,
+          3.2,
+          0.8,
+          3.6,
+          1,
+          4
+        ]
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all",
+          [
+            "<",
+            [
+              "get",
+              "track_dynamics_sensor_speed_nd"
+            ],
+            1.7976931348623157e+308
+          ],
+          [
+            ">",
+            [
+              "get",
+              "track_dynamics_sensor_speed_nd"
+            ],
+            -1.7976931348623157e+308
+          ],
+          [
+            "<",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            1.7976931348623157e+308
+          ],
+          [
+            ">",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            -1.7976931348623157e+308
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Boats courses (courses):1639650403518",
+      "type": "line",
+      "source": "feature-track.trail-wide-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-opacity": 1,
+        "line-color": [
+          "get",
+          "track_id_arlas__color"
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_timestamps_center:normalized:object_id"
+          ],
+          0,
+          0.5,
+          0.2,
+          0.7,
+          0.4,
+          0.9,
+          0.6,
+          1.1,
+          0.8,
+          1.3,
+          1,
+          1.5
+        ]
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all",
+          [
+            "<",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            1.7976931348623157e+308
+          ],
+          [
+            ">",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            -1.7976931348623157e+308
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Courses departure stops:1625500541199",
+      "type": "circle",
+      "source": "feature-departure.location-wide-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "circle-opacity": 0.7,
+        "circle-color": "#1bae62",
+        "circle-radius": 3,
+        "circle-stroke-width": 0,
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Courses arrival stops:1625500564823",
+      "type": "circle",
+      "source": "feature-arrival.location-wide-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "circle-opacity": 0.7,
+        "circle-color": "#e95f77",
+        "circle-radius": 3,
+        "circle-stroke-width": 0,
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Pauses:1616754564012",
+      "type": "fill",
+      "source": "feature-track.pauses.trail-wide-demo_ais_course",
+      "minzoom": 1,
+      "maxzoom": 22,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-opacity": 0.6,
+        "fill-color": "#8f4af9"
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "stroke": {
+          "color": "#fff",
+          "width": 0,
+          "opacity": 0
+        },
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Stop Before:1639126072827",
+      "type": "fill",
+      "source": "feature-departure.stop_before.location_precision.geometry-wide-demo_ais_course",
+      "minzoom": 1,
+      "maxzoom": 22,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-opacity": 0.4,
+        "fill-color": "#939fab"
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "stroke": {
+          "color": "#fff",
+          "width": 0,
+          "opacity": 0
+        },
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Stop After:1639126084804",
+      "type": "fill",
+      "source": "feature-arrival.stop_after.location_precision.geometry-wide-demo_ais_course",
+      "minzoom": 1,
+      "maxzoom": 22,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-opacity": 0.4,
+        "fill-color": "#939fab"
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "stroke": {
+          "color": "#fff",
+          "width": 0,
+          "opacity": 0
+        },
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Pauses Center:1616754564129",
+      "type": "circle",
+      "source": "feature-track.pauses.location-wide-demo_ais_course",
+      "minzoom": 2,
+      "maxzoom": 22,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "circle-opacity": 0.6,
+        "circle-color": "#7e54ab",
+        "circle-radius": 5,
+        "circle-stroke-width": 1,
+        "circle-stroke-color": "#abcdef",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:GPS:1625215965169",
+      "type": "circle",
+      "source": "feature-track.trail-wide-demo_ais_course",
+      "minzoom": 1,
+      "maxzoom": 22,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "circle-opacity": 0.4,
+        "circle-color": "#f97da6",
+        "circle-radius": 1.5,
+        "circle-stroke-width": 0,
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas_id:Ship name:1691132578172",
+      "type": "symbol",
+      "source": "feature-track.trail-wide-demo_ais_course",
+      "minzoom": 1,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "visible",
+        "text-field": [
+          "get",
+          "object_name"
+        ],
+        "text-font": [
+          "Open Sans Bold",
+          "Arial Unicode MS Bold"
+        ],
+        "text-size": 10,
+        "text-rotate": 0,
+        "text-allow-overlap": false,
+        "text-anchor": "center",
+        "symbol-placement": "point"
+      },
+      "paint": {
+        "text-color": "#000000",
+        "text-opacity": 1,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.3,
+        "text-halo-blur": 0.4,
+        "text-translate": [
+          0,
+          0
+        ]
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-select-arlas_id:Boats courses (Ship type):1729526577282",
+      "type": "line",
+      "source": "feature-track.trail-window-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-opacity": 1,
+        "line-color": [
+          "match",
+          [
+            "get",
+            "object_ship_type"
+          ],
+          "Passenger",
+          "#a5c176",
+          "Fishing",
+          "#7AD8F5",
+          "Cargo",
+          "#0099ff",
+          "Other",
+          "#c2c2c2",
+          "Undefined",
+          "#c2c2c2",
+          "Tug",
+          "#f4df42",
+          "Pilot",
+          "#e74b4b",
+          "Tanker",
+          "#ff8ee8",
+          "Dredging",
+          "#51a588",
+          "SAR",
+          "#03c6ac",
+          "#9d9ca9"
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_timestamps_center:normalized:object_id"
+          ],
+          0,
+          14,
+          0.2,
+          14.4,
+          0.4,
+          14.8,
+          0.6,
+          15.2,
+          0.8,
+          15.6,
+          1,
+          16
+        ]
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": true
+      },
+      "filter": [
+        "all",
+        [
+          "all",
+          [
+            "<",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            1.7976931348623157e+308
+          ],
+          [
+            ">",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            -1.7976931348623157e+308
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "arlas-select-arlas_id:Boats courses (Ship type) light:1740475069955",
+      "type": "line",
+      "source": "feature-track.trail-wide-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-opacity": 0.3,
+        "line-color": [
+          "match",
+          [
+            "get",
+            "object_ship_type"
+          ],
+          "Passenger",
+          "#a5c176",
+          "Fishing",
+          "#7AD8F5",
+          "Cargo",
+          "#0099ff",
+          "Other",
+          "#c2c2c2",
+          "Undefined",
+          "#c2c2c2",
+          "Tug",
+          "#f4df42",
+          "Pilot",
+          "#e74b4b",
+          "Tanker",
+          "#ff8ee8",
+          "Dredging",
+          "#51a588",
+          "SAR",
+          "#03c6ac",
+          "#9d9ca9"
+        ],
+        "line-width": 12.5
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-select-arlas_id:Boats courses (Ship type) light Scrollable:1729526269742",
+      "type": "line",
+      "source": "feature-track.trail-window-demo_ais_course",
+      "minzoom": 12,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-opacity": 0.4,
+        "line-color": [
+          "match",
+          [
+            "get",
+            "object_ship_type"
+          ],
+          "Passenger",
+          "#a5c176",
+          "Fishing",
+          "#7AD8F5",
+          "Cargo",
+          "#0099ff",
+          "Other",
+          "#c2c2c2",
+          "Undefined",
+          "#c2c2c2",
+          "Tug",
+          "#f4df42",
+          "Pilot",
+          "#e74b4b",
+          "Tanker",
+          "#ff8ee8",
+          "Dredging",
+          "#51a588",
+          "SAR",
+          "#03c6ac",
+          "#9d9ca9"
+        ],
+        "line-width": 13
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": true
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-select-arlas_id:Boats courses (Speed):1616754563858",
+      "type": "line",
+      "source": "feature-track.trail-wide-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-opacity": 1,
+        "line-color": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_dynamics_sensor_speed_nd"
+          ],
+          0,
+          "#36a996",
+          2.5,
+          "#3683a9",
+          5,
+          "#3649a9",
+          7.5,
+          "#5c36a9",
+          10,
+          "#9636a9",
+          15,
+          "#a93683",
+          25,
+          "#d33a3a"
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_timestamps_center:normalized:object_id"
+          ],
+          0,
+          14,
+          0.2,
+          14.4,
+          0.4,
+          14.8,
+          0.6,
+          15.2,
+          0.8,
+          15.6,
+          1,
+          16
+        ]
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all",
+          [
+            "<",
+            [
+              "get",
+              "track_dynamics_sensor_speed_nd"
+            ],
+            1.7976931348623157e+308
+          ],
+          [
+            ">",
+            [
+              "get",
+              "track_dynamics_sensor_speed_nd"
+            ],
+            -1.7976931348623157e+308
+          ],
+          [
+            "<",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            1.7976931348623157e+308
+          ],
+          [
+            ">",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            -1.7976931348623157e+308
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "arlas-select-arlas_id:Boats courses (courses):1639650403518",
+      "type": "line",
+      "source": "feature-track.trail-wide-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-opacity": 1,
+        "line-color": [
+          "get",
+          "track_id_arlas__color"
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_timestamps_center:normalized:object_id"
+          ],
+          0,
+          12.5,
+          0.2,
+          12.7,
+          0.4,
+          12.9,
+          0.6,
+          13.1,
+          0.8,
+          13.3,
+          1,
+          13.5
+        ]
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all",
+          [
+            "<",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            1.7976931348623157e+308
+          ],
+          [
+            ">",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            -1.7976931348623157e+308
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "arlas-select-arlas_id:Courses departure stops:1625500541199",
+      "type": "circle",
+      "source": "feature-departure.location-wide-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "circle-opacity": 0.7,
+        "circle-color": "#1bae62",
+        "circle-radius": 3,
+        "circle-stroke-width": 12,
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-select-arlas_id:Courses arrival stops:1625500564823",
+      "type": "circle",
+      "source": "feature-arrival.location-wide-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "circle-opacity": 0.7,
+        "circle-color": "#e95f77",
+        "circle-radius": 3,
+        "circle-stroke-width": 12,
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-select-arlas_id:Pauses Center:1616754564129",
+      "type": "circle",
+      "source": "feature-track.pauses.location-wide-demo_ais_course",
+      "minzoom": 2,
+      "maxzoom": 22,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "circle-opacity": 0.6,
+        "circle-color": "#7e54ab",
+        "circle-radius": 5,
+        "circle-stroke-width": 13,
+        "circle-stroke-color": "#abcdef",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-select-arlas_id:GPS:1625215965169",
+      "type": "circle",
+      "source": "feature-track.trail-wide-demo_ais_course",
+      "minzoom": 1,
+      "maxzoom": 22,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "circle-opacity": 0.4,
+        "circle-color": "#f97da6",
+        "circle-radius": 1.5,
+        "circle-stroke-width": 12,
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "source": "feature-track.pauses.trail-wide-demo_ais_course",
+      "id": "arlas-select-arlas-fill_stroke-Pauses:1616754564012",
+      "type": "line",
+      "maxzoom": 22,
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ],
+      "minzoom": 1,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-color": "#fff",
+        "line-opacity": 0,
+        "line-width": 12
+      }
+    },
+    {
+      "source": "feature-departure.stop_before.location_precision.geometry-wide-demo_ais_course",
+      "id": "arlas-select-arlas-fill_stroke-Stop Before:1639126072827",
+      "type": "line",
+      "maxzoom": 22,
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ],
+      "minzoom": 1,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-color": "#fff",
+        "line-opacity": 0,
+        "line-width": 12
+      }
+    },
+    {
+      "source": "feature-arrival.stop_after.location_precision.geometry-wide-demo_ais_course",
+      "id": "arlas-select-arlas-fill_stroke-Stop After:1639126084804",
+      "type": "line",
+      "maxzoom": 22,
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ],
+      "minzoom": 1,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-color": "#fff",
+        "line-opacity": 0,
+        "line-width": 12
+      }
+    },
+    {
+      "id": "arlas-hover-arlas_id:Boats courses (Ship type):1729526577282",
+      "type": "line",
+      "source": "feature-track.trail-window-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-opacity": 1,
+        "line-color": [
+          "match",
+          [
+            "get",
+            "object_ship_type"
+          ],
+          "Passenger",
+          "#a5c176",
+          "Fishing",
+          "#7AD8F5",
+          "Cargo",
+          "#0099ff",
+          "Other",
+          "#c2c2c2",
+          "Undefined",
+          "#c2c2c2",
+          "Tug",
+          "#f4df42",
+          "Pilot",
+          "#e74b4b",
+          "Tanker",
+          "#ff8ee8",
+          "Dredging",
+          "#51a588",
+          "SAR",
+          "#03c6ac",
+          "#9d9ca9"
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_timestamps_center:normalized:object_id"
+          ],
+          0,
+          14,
+          0.2,
+          14.4,
+          0.4,
+          14.8,
+          0.6,
+          15.2,
+          0.8,
+          15.6,
+          1,
+          16
+        ]
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": true
+      },
+      "filter": [
+        "all",
+        [
+          "all",
+          [
+            "<",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            1.7976931348623157e+308
+          ],
+          [
+            ">",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            -1.7976931348623157e+308
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "arlas-hover-arlas_id:Boats courses (Ship type) light:1740475069955",
+      "type": "line",
+      "source": "feature-track.trail-wide-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-opacity": 0.3,
+        "line-color": [
+          "match",
+          [
+            "get",
+            "object_ship_type"
+          ],
+          "Passenger",
+          "#a5c176",
+          "Fishing",
+          "#7AD8F5",
+          "Cargo",
+          "#0099ff",
+          "Other",
+          "#c2c2c2",
+          "Undefined",
+          "#c2c2c2",
+          "Tug",
+          "#f4df42",
+          "Pilot",
+          "#e74b4b",
+          "Tanker",
+          "#ff8ee8",
+          "Dredging",
+          "#51a588",
+          "SAR",
+          "#03c6ac",
+          "#9d9ca9"
+        ],
+        "line-width": 12.5
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-hover-arlas_id:Boats courses (Ship type) light Scrollable:1729526269742",
+      "type": "line",
+      "source": "feature-track.trail-window-demo_ais_course",
+      "minzoom": 12,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-opacity": 0.4,
+        "line-color": [
+          "match",
+          [
+            "get",
+            "object_ship_type"
+          ],
+          "Passenger",
+          "#a5c176",
+          "Fishing",
+          "#7AD8F5",
+          "Cargo",
+          "#0099ff",
+          "Other",
+          "#c2c2c2",
+          "Undefined",
+          "#c2c2c2",
+          "Tug",
+          "#f4df42",
+          "Pilot",
+          "#e74b4b",
+          "Tanker",
+          "#ff8ee8",
+          "Dredging",
+          "#51a588",
+          "SAR",
+          "#03c6ac",
+          "#9d9ca9"
+        ],
+        "line-width": 13
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": true
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-hover-arlas_id:Boats courses (Speed):1616754563858",
+      "type": "line",
+      "source": "feature-track.trail-wide-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-opacity": 1,
+        "line-color": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_dynamics_sensor_speed_nd"
+          ],
+          0,
+          "#36a996",
+          2.5,
+          "#3683a9",
+          5,
+          "#3649a9",
+          7.5,
+          "#5c36a9",
+          10,
+          "#9636a9",
+          15,
+          "#a93683",
+          25,
+          "#d33a3a"
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_timestamps_center:normalized:object_id"
+          ],
+          0,
+          14,
+          0.2,
+          14.4,
+          0.4,
+          14.8,
+          0.6,
+          15.2,
+          0.8,
+          15.6,
+          1,
+          16
+        ]
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all",
+          [
+            "<",
+            [
+              "get",
+              "track_dynamics_sensor_speed_nd"
+            ],
+            1.7976931348623157e+308
+          ],
+          [
+            ">",
+            [
+              "get",
+              "track_dynamics_sensor_speed_nd"
+            ],
+            -1.7976931348623157e+308
+          ],
+          [
+            "<",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            1.7976931348623157e+308
+          ],
+          [
+            ">",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            -1.7976931348623157e+308
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "arlas-hover-arlas_id:Boats courses (courses):1639650403518",
+      "type": "line",
+      "source": "feature-track.trail-wide-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-opacity": 1,
+        "line-color": [
+          "get",
+          "track_id_arlas__color"
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_timestamps_center:normalized:object_id"
+          ],
+          0,
+          12.5,
+          0.2,
+          12.7,
+          0.4,
+          12.9,
+          0.6,
+          13.1,
+          0.8,
+          13.3,
+          1,
+          13.5
+        ]
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all",
+          [
+            "<",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            1.7976931348623157e+308
+          ],
+          [
+            ">",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            -1.7976931348623157e+308
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "arlas-hover-arlas_id:Courses departure stops:1625500541199",
+      "type": "circle",
+      "source": "feature-departure.location-wide-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "circle-opacity": 0.7,
+        "circle-color": "#1bae62",
+        "circle-radius": 3,
+        "circle-stroke-width": 12,
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-hover-arlas_id:Courses arrival stops:1625500564823",
+      "type": "circle",
+      "source": "feature-arrival.location-wide-demo_ais_course",
+      "minzoom": 0,
+      "maxzoom": 23,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "circle-opacity": 0.7,
+        "circle-color": "#e95f77",
+        "circle-radius": 3,
+        "circle-stroke-width": 12,
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-hover-arlas_id:Pauses Center:1616754564129",
+      "type": "circle",
+      "source": "feature-track.pauses.location-wide-demo_ais_course",
+      "minzoom": 2,
+      "maxzoom": 22,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "circle-opacity": 0.6,
+        "circle-color": "#7e54ab",
+        "circle-radius": 5,
+        "circle-stroke-width": 13,
+        "circle-stroke-color": "#abcdef",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "id": "arlas-hover-arlas_id:GPS:1625215965169",
+      "type": "circle",
+      "source": "feature-track.trail-wide-demo_ais_course",
+      "minzoom": 1,
+      "maxzoom": 22,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "circle-opacity": 0.4,
+        "circle-color": "#f97da6",
+        "circle-radius": 1.5,
+        "circle-stroke-width": 12,
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-opacity": 1
+      },
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "cell-shape": "square",
+        "is-scrollable-layer": false
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ]
+    },
+    {
+      "source": "feature-track.pauses.trail-wide-demo_ais_course",
+      "id": "arlas-hover-arlas-fill_stroke-Pauses:1616754564012",
+      "type": "line",
+      "maxzoom": 22,
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ],
+      "minzoom": 1,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-color": "#fff",
+        "line-opacity": 0,
+        "line-width": 12
+      }
+    },
+    {
+      "source": "feature-departure.stop_before.location_precision.geometry-wide-demo_ais_course",
+      "id": "arlas-hover-arlas-fill_stroke-Stop Before:1639126072827",
+      "type": "line",
+      "maxzoom": 22,
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ],
+      "minzoom": 1,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-color": "#fff",
+        "line-opacity": 0,
+        "line-width": 12
+      }
+    },
+    {
+      "source": "feature-arrival.stop_after.location_precision.geometry-wide-demo_ais_course",
+      "id": "arlas-hover-arlas-fill_stroke-Stop After:1639126084804",
+      "type": "line",
+      "maxzoom": 22,
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ],
+      "minzoom": 1,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-color": "#fff",
+        "line-opacity": 0,
+        "line-width": 12
+      }
+    },
+    {
+      "source": "cluster-track.trail_geohashes_6-Fine-h3-cell-demo_ais_course",
+      "id": "arlas-fill_stroke-Grid:1736159920410",
+      "type": "line",
+      "maxzoom": 23,
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ],
+      "minzoom": 0,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "#fff",
+        "line-opacity": 0,
+        "line-width": 0
+      }
+    },
+    {
+      "source": "feature-track.pauses.trail-wide-demo_ais_course",
+      "id": "arlas-fill_stroke-Pauses:1616754564012",
+      "type": "line",
+      "maxzoom": 22,
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ],
+      "minzoom": 1,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "#fff",
+        "line-opacity": 0,
+        "line-width": 0
+      }
+    },
+    {
+      "source": "feature-departure.stop_before.location_precision.geometry-wide-demo_ais_course",
+      "id": "arlas-fill_stroke-Stop Before:1639126072827",
+      "type": "line",
+      "maxzoom": 22,
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ],
+      "minzoom": 1,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "#fff",
+        "line-opacity": 0,
+        "line-width": 0
+      }
+    },
+    {
+      "source": "feature-arrival.stop_after.location_precision.geometry-wide-demo_ais_course",
+      "id": "arlas-fill_stroke-Stop After:1639126084804",
+      "type": "line",
+      "maxzoom": 22,
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ],
+      "minzoom": 1,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "#fff",
+        "line-opacity": 0,
+        "line-width": 0
+      }
+    },
+    {
+      "source": "feature-track.trail-window-demo_ais_course",
+      "id": "scrollable_arlas_id:Boats courses (Ship type):1729526577282",
+      "type": "line",
+      "maxzoom": 23,
+      "minzoom": 0,
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "is-scrollable-layer": false,
+        "cell-shape": "square"
+      },
+      "filter": [
+        "all",
+        [
+          "all",
+          [
+            "<",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            1.7976931348623157e+308
+          ],
+          [
+            ">",
+            [
+              "get",
+              "track_timestamps_center:normalized:object_id"
+            ],
+            -1.7976931348623157e+308
+          ]
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-opacity": 0.1,
+        "line-color": [
+          "match",
+          [
+            "get",
+            "object_ship_type"
+          ],
+          "Passenger",
+          "#a5c176",
+          "Fishing",
+          "#7AD8F5",
+          "Cargo",
+          "#0099ff",
+          "Other",
+          "#c2c2c2",
+          "Undefined",
+          "#c2c2c2",
+          "Tug",
+          "#f4df42",
+          "Pilot",
+          "#e74b4b",
+          "Tanker",
+          "#ff8ee8",
+          "Dredging",
+          "#51a588",
+          "SAR",
+          "#03c6ac",
+          "#9d9ca9"
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "get",
+            "track_timestamps_center:normalized:object_id"
+          ],
+          0,
+          2,
+          0.2,
+          2.4,
+          0.4,
+          2.8,
+          0.6,
+          3.2,
+          0.8,
+          3.6,
+          1,
+          4
+        ]
+      }
+    },
+    {
+      "source": "feature-track.trail-window-demo_ais_course",
+      "id": "scrollable_arlas_id:Boats courses (Ship type) light Scrollable:1729526269742",
+      "type": "line",
+      "maxzoom": 23,
+      "minzoom": 12,
+      "metadata": {
+        "collection": "demo_ais_course",
+        "collection-display-name": "AIS Courses",
+        "is-scrollable-layer": false,
+        "cell-shape": "square"
+      },
+      "filter": [
+        "all",
+        [
+          "all"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-opacity": 0.1,
+        "line-color": [
+          "match",
+          [
+            "get",
+            "object_ship_type"
+          ],
+          "Passenger",
+          "#a5c176",
+          "Fishing",
+          "#7AD8F5",
+          "Cargo",
+          "#0099ff",
+          "Other",
+          "#c2c2c2",
+          "Undefined",
+          "#c2c2c2",
+          "Tug",
+          "#f4df42",
+          "Pilot",
+          "#e74b4b",
+          "Tanker",
+          "#ff8ee8",
+          "Dredging",
+          "#51a588",
+          "SAR",
+          "#03c6ac",
+          "#9d9ca9"
+        ],
+        "line-width": 1
+      }
+    }
+  ],
+  "external-event-layers": [
+    {
+      "id": "arlas-hover-arlas_id:Boats courses (Ship type):1729526577282",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-hover-arlas_id:Boats courses (Ship type) light:1740475069955",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-hover-arlas_id:Boats courses (Ship type) light Scrollable:1729526269742",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-hover-arlas_id:Boats courses (Speed):1616754563858",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-hover-arlas_id:Boats courses (courses):1639650403518",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-hover-arlas_id:Courses departure stops:1625500541199",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-hover-arlas_id:Courses arrival stops:1625500564823",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-hover-arlas_id:Pauses Center:1616754564129",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-hover-arlas_id:GPS:1625215965169",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-hover-arlas-fill_stroke-Pauses:1616754564012",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-hover-arlas-fill_stroke-Stop Before:1639126072827",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-hover-arlas-fill_stroke-Stop After:1639126084804",
+      "on": "hover"
+    },
+    {
+      "id": "arlas-select-arlas_id:Boats courses (Ship type):1729526577282",
+      "on": "select"
+    },
+    {
+      "id": "arlas-select-arlas_id:Boats courses (Ship type) light:1740475069955",
+      "on": "select"
+    },
+    {
+      "id": "arlas-select-arlas_id:Boats courses (Ship type) light Scrollable:1729526269742",
+      "on": "select"
+    },
+    {
+      "id": "arlas-select-arlas_id:Boats courses (Speed):1616754563858",
+      "on": "select"
+    },
+    {
+      "id": "arlas-select-arlas_id:Boats courses (courses):1639650403518",
+      "on": "select"
+    },
+    {
+      "id": "arlas-select-arlas_id:Courses departure stops:1625500541199",
+      "on": "select"
+    },
+    {
+      "id": "arlas-select-arlas_id:Courses arrival stops:1625500564823",
+      "on": "select"
+    },
+    {
+      "id": "arlas-select-arlas_id:Pauses Center:1616754564129",
+      "on": "select"
+    },
+    {
+      "id": "arlas-select-arlas_id:GPS:1625215965169",
+      "on": "select"
+    },
+    {
+      "id": "arlas-select-arlas-fill_stroke-Pauses:1616754564012",
+      "on": "select"
+    },
+    {
+      "id": "arlas-select-arlas-fill_stroke-Stop Before:1639126072827",
+      "on": "select"
+    },
+    {
+      "id": "arlas-select-arlas-fill_stroke-Stop After:1639126084804",
+      "on": "select"
+    }
+  ],
+  "events": {
+    "on-hover": {},
+    "emit-on-click": {},
+    "zoom-on-click": {}
+  }
+}

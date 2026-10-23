@@ -523,3 +523,106 @@ Règle G7 : Habillage de la Carte
 • Légende explicite : variable, unité, agrégation, classes ou arrêts, transformation éventuelle (Analyse 41).
 • Échelle graphique ; source et date des données ; période couverte par la sélection.
 • Les catégories « Autre » et « Inconnu » sont nommées comme telles et ne se confondent pas avec une vraie modalité.
+
+🚢 11. Compléments : Mobilité Avancée et Incertitude de Position
+
+Recette 5 : La Trajectoire Chronologique d'une Entité
+
+• Usage : Lire l'ordre dans lequel une même entité (navire, véhicule, animal) a réalisé ses parcours successifs, sans recourir à une animation.
+• Règles de construction : La couleur ou l'épaisseur varie avec le temps, normalisée entité par entité (du plus ancien au plus récent de chaque entité, et non de l'ensemble) ; une palette séquentielle à luminance monotone (clair = ancien, foncé = récent) ; une couleur distincte par parcours n'est utile que pour quelques entités à la fois.
+• Design visuel : Rappeler dans la légende que l'échelle est relative à chaque entité ; mettre en évidence le dernier parcours connu.
+• Pièges : Une normalisation globale écrase les entités peu actives ; comparer deux entités sur une échelle relative ne dit rien de leurs dates absolues.
+
+Recette 6 : La Carte Composite d'un Parcours (Multi-géométries)
+
+• Usage : Représenter un parcours composé de plusieurs géométries : ligne du trajet, points de départ et d'arrivée, arrêts intermédiaires, zones d'arrêt, positions brutes.
+• Règles de construction : Hiérarchie visuelle explicite (ligne du trajet dominante, extrémités ensuite, détails en dernier) ; codes stables pour les extrémités (une teinte pour le départ, une teinte opposée pour l'arrivée, conservées dans toute l'interface, Règle G3) ; les détails (positions brutes, zones d'arrêt) n'apparaissent qu'à grande échelle (Recette 4).
+• Design visuel : Extrémités en petits symboles pleins ; arrêts en symboles proportionnels à la durée (Recette 2) ; zones en contour léger (Règle G8).
+• Pièges : Trop de couches simultanées brouillent la lecture (au plus deux couches thématiques, Règle G3) ; un point d'extrémité agrégé à petite échelle ne correspond plus à un lieu précis.
+
+Règle G8 : Représenter l'Incertitude de Position
+
+• Une position estimée (lieu d'arrêt, position reconstruite, géocodage approximatif) se montre par sa zone d'incertitude (polygone, cercle ou ellipse de précision) plutôt que par un point qui paraît exact.
+• Zone en remplissage très transparent avec un contour léger, sous le symbole du point ; la taille de la zone dit la précision, elle ne porte pas d'autre variable.
+• Indiquer dans la légende ce que représente la zone (enveloppe des positions, rayon de précision, intervalle de confiance).
+• Une mesure de distance ou une sélection spatiale sur une position incertaine hérite de cette incertitude (un point proche d'une limite peut être d'un côté ou de l'autre).
+
+Analyse 53 : Les Statistiques Directionnelles (Caps et Orientations)
+
+• Objectif : Décrire les directions de déplacement ou les orientations d'objets (cap, sens de circulation, orientation de linéaires).
+• Méthode : Statistique circulaire : direction moyenne (moyenne des vecteurs unitaires), longueur du vecteur résultant et variance circulaire (concentration autour de la moyenne), test de Rayleigh (uniformité) ; rose des directions par secteurs (8, 16 ou 36) ; séparation des deux sens d'un même corridor (directions opposées de 180°).
+• Entrée : Angles (0–360°) par observation ou par parcours, éventuellement pondérés.
+• Rendu : Rose des directions ; histogramme sur 0–360° (lecture circulaire : 0° et 360° sont voisins) ; trajectoires ou mailles colorées en palette circulaire ; carte de la direction dominante par maille.
+• Pièges : La moyenne arithmétique d'angles est fausse (la moyenne de 350° et 10° vaut 0°, pas 180°) ; un cap mesuré à l'arrêt ou à très faible vitesse n'a pas de sens ; distinguer cap (orientation de l'objet) et route (direction du déplacement).
+
+Analyse 54 : Les Régimes de Vitesse et les Profils Comportementaux
+
+• Objectif : Caractériser comment les objets se déplacent et en déduire des comportements (transit, activité lente, errance, attente).
+• Méthode : Distribution des vitesses par catégorie d'objet ; classes de vitesse métier (arrêt, manœuvre, activité lente, croisière) ; vitesse moyenne par maille (moyenne, jamais somme) ; combinaison vitesse × rectitude (Analyse 50) × durée pour distinguer les profils ; écart entre la catégorie déclarée de l'objet et le comportement observé.
+• Entrée : Parcours avec vitesse (moyenne ou instantanée), rectitude, durée et catégorie.
+• Rendu : Histogrammes de vitesse par catégorie (mêmes classes pour comparer) ; trajectoires colorées par classe de vitesse en palette séquentielle ; carte de vitesse moyenne par maille ; tableau catégorie × profil.
+• Pièges : Une vitesse moyenne de parcours masque les phases d'arrêt ; les classes doivent être fixées par le métier (elles diffèrent selon le type d'objet) ; un comportement atypique peut être une erreur de catégorie autant qu'une activité inhabituelle.
+
+Analyse 55 : Les Arrêts hors Pôles (Stationnement en Route)
+
+• Objectif : Repérer les arrêts qui ne se produisent pas aux lieux d'origine ou de destination (attente, mouillage, stationnement prolongé, activité sur place).
+• Méthode : Séparer les arrêts aux extrémités des parcours (lieux nommés) des arrêts intermédiaires ; densité des arrêts intermédiaires par maille ; durée des arrêts (distribution, cumul par maille) ; proximité des pôles (attente avant accès) ou isolement.
+• Entrée : Arrêts intermédiaires (positions ou zones) avec durée, rattachés à un parcours et à une entité.
+• Rendu : Carte de densité des arrêts intermédiaires (grille séquentielle) ; symboles proportionnels à la durée ; distribution des durées ; répartition par catégorie d'objet.
+• Pièges : Un arrêt intermédiaire proche d'un pôle est souvent une attente d'accès, pas une activité distincte ; le seuil de détection d'arrêt (vitesse, durée minimale) conditionne le nombre d'arrêts (Analyse 28).
+
+Analyse 56 : Le Temps d'Escale et le Budget-Temps d'Activité
+
+• Objectif : Mesurer combien de temps les objets passent aux lieux d'escale et comment se répartit leur temps entre déplacement et arrêt.
+• Méthode : Durée d'arrêt avant le départ et après l'arrivée, par lieu et par catégorie (médiane, percentiles, Analyse 40) ; budget-temps par entité = part du temps en déplacement, à l'arrêt en route, à quai ; temps de rotation (arrivée → départ suivant au même lieu).
+• Entrée : Parcours avec durée, durées d'arrêt aux extrémités, lieux nommés, identifiant d'entité.
+• Rendu : Barres des lieux classés par durée médiane d'escale ; histogrammes des durées d'escale ; barres empilées à 100 % du budget-temps par catégorie ; carte des lieux en symboles proportionnels au temps cumulé d'escale.
+• Pièges : Les escales en cours en fin de période sont censurées (Analyse 27) ; la moyenne est tirée par quelques escales très longues (désarmement, réparation) ; un temps cumulé élevé peut refléter le nombre d'escales plutôt que leur durée.
+
+Analyse 57 : La Cadence d'Échantillonnage et les Zones d'Ombre
+
+• Objectif : Mesurer la densité et la régularité des observations d'objets mobiles, et repérer les zones ou périodes où le signal se perd.
+• Méthode : Nombre de positions par unité de distance et par unité de temps, par parcours ; classes de cadence d'émission ; répartition spatiale des cadences (par maille) ; lacunes = intervalles anormalement longs entre deux positions ; comparaison par catégorie d'objet ou de source.
+• Entrée : Parcours avec nombre de positions, durée, distance, et éventuellement une classe de cadence.
+• Rendu : Histogramme de la cadence ; carte de la cadence moyenne par maille (séquentielle) ; zones d'ombre en contraste ; part des parcours par classe de cadence.
+• Pièges : Une absence de signal n'est pas une absence d'objet (couverture des récepteurs, coupure volontaire) ; une cadence faible dégrade toutes les mesures dérivées (vitesse, forme, arrêts) ; la cadence dépend souvent de la vitesse et du type d'émetteur.
+
+Analyse 58 : La Plausibilité Cinématique des Trajectoires
+
+• Objectif : Écarter ou signaler les parcours dont les mesures sont physiquement incohérentes avant de les analyser.
+• Méthode : Vitesse dérivée (distance / durée) comparée à la vitesse mesurée ; comparaison de deux sources de mesure d'une même grandeur ; contrôles de bornes (distance à vol d'oiseau ≤ distance parcourue, rectitude entre 0 et 1, durée strictement positive, vitesse sous le maximum physique de la catégorie) ; sauts de position impossibles.
+• Entrée : Parcours avec distance parcourue, distance à vol d'oiseau, durée, une ou plusieurs vitesses.
+• Rendu : Indicateur de la part de parcours incohérents ; histogramme de l'écart entre vitesse dérivée et vitesse mesurée ; liste des parcours hors bornes ; carte de leur localisation (une concentration spatiale signale un problème de source).
+• Pièges : Un écart modéré entre deux vitesses est normal (vitesse moyenne contre instantanée, courant, arrêts) ; un parcours très court amplifie les erreurs relatives ; ne pas supprimer silencieusement les parcours douteux (Analyse 52).
+
+Analyse 59 : La Variable d'État de l'Objet (Chargé ou à Vide)
+
+• Objectif : Utiliser une mesure de l'état de l'objet pendant le parcours (tirant d'eau, charge, taux d'occupation) pour qualifier les flux.
+• Méthode : Rapporter la mesure à la valeur maximale observée pour la même entité (état relatif, comparable entre entités de tailles différentes) ; classes d'état (vide, partiel, plein) ; comparaison de l'état par sens de liaison (aller chargé, retour à vide) ; pôles de chargement et de déchargement.
+• Entrée : Parcours avec une mesure d'état, une origine, une destination et un identifiant d'entité.
+• Rendu : Flux origine-destination colorés par état ; barres des origines et destinations par classe d'état ; histogramme de l'état relatif par catégorie.
+• Pièges : Une mesure déclarée manuellement peut ne pas être mise à jour ; l'état relatif exige assez de parcours par entité ; une valeur absolue compare mal des objets de tailles différentes.
+
+Analyse 60 : Les Flux Pondérés par la Taille ou la Capacité
+
+• Objectif : Distinguer le nombre de passages de la capacité réellement transitée (quelques grands objets contre beaucoup de petits).
+• Méthode : Pondérer les comptages (origine-destination, corridors, lieux) par une taille ou une capacité de l'objet ; comparer classement par nombre et classement par capacité ; distribution des tailles par liaison ou par lieu.
+• Entrée : Parcours avec une taille ou une capacité de l'objet, origine, destination.
+• Rendu : Deux classements côte à côte (nombre et capacité) ; symboles proportionnels à la capacité cumulée (Recette 2) ; histogramme des tailles par catégorie.
+• Pièges : La taille n'est qu'un indicateur de capacité, pas du chargement réel (Analyse 59) ; les tailles manquantes faussent les sommes (part à signaler, Analyse 52).
+
+Analyse 61 : Le Réseau de Lieux (Graphe des Liaisons)
+
+• Objectif : Décrire la structure d'un système de lieux reliés par des déplacements : pôles, relais, lieux isolés, sous-réseaux.
+• Méthode : Graphe dont les nœuds sont les lieux et les arêtes les liaisons origine-destination pondérées (Analyse 29) ; degré (nombre de lieux reliés), force (somme des flux), centralité d'intermédiarité, organisation en étoile (hub and spoke) ou maillée ; détection de communautés de lieux ; asymétrie des liaisons.
+• Entrée : Parcours avec un lieu d'origine et un lieu de destination nommés.
+• Rendu : Carte des lieux en symboles proportionnels au degré ou à la force, liaisons en lignes d'épaisseur proportionnelle ; barres des lieux classés par nombre de lieux reliés ; couleur qualitative par communauté.
+• Pièges : Diffère de l'analyse de réseau d'infrastructure (Analyse 9) : ici les arêtes sont des liaisons observées, pas des tronçons ; le graphe dépend de la définition des lieux (MAUP, Analyse 15) ; les liaisons internes (origine = destination) sont à exclure ou à lire à part.
+
+Analyse 62 : Le Chaînage des Parcours d'une Entité (Circuits et Tournées)
+
+• Objectif : Reconstituer l'enchaînement des lieux visités par une même entité pour repérer ses circuits, son point d'attache et ses tournées répétées.
+• Méthode : Ordonner les parcours de chaque entité par date de départ ; suite des lieux visités ; nombre de lieux distincts par entité ; lieu le plus fréquent (point d'attache) et fréquence de retour ; détection de circuits répétés (même suite de lieux) ; continuité (la destination d'un parcours est l'origine du suivant).
+• Entrée : Parcours avec identifiant d'entité, date de départ, lieu d'origine et lieu de destination.
+• Rendu : Trajectoire chronologique de l'entité (Recette 5) ; frise des lieux visités dans le temps ; histogramme du nombre de lieux distincts par entité ; barres des points d'attache.
+• Pièges : Des parcours manquants rompent la continuité (destination ≠ origine suivante) : la signaler plutôt que la combler ; une fenêtre d'observation courte tronque les circuits longs.

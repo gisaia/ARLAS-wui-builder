@@ -1,5 +1,5 @@
 {
-  "_usage": "Root of config.json. Fill arlas.web.contributors / components / analytics from the other templates. Declare every analytics group.tab in options.tabs. extraConfigs: see map.json.",
+  "_usage": "Root of config.json: config.json is the content of `config` (not this wrapper). <<COLLECTION_UNIT>>: plural noun of one document (e.g. images, records), reused as yUnit of count histograms. Fill arlas.web.contributors / components / analytics from the other templates. Declare every analytics group.tab in options.tabs. extraConfigs: see map.json.",
   "config": {
     "arlas": {
       "server": { "url": "<<SERVER_URL>>", "collection": { "name": "<<COLLECTION>>" }, "max_age_cache": 3600 },
@@ -21,7 +21,7 @@
         "app": {
           "name": "<<TITLE>>",
           "components": { "chipssearch": { "name": "<<LABEL>>", "icon": "search" } },
-          "units": [{ "collection": "<<COLLECTION>>", "unit": "<<UNIT>>", "ignored": false }]
+          "units": [{ "collection": "<<COLLECTION>>", "unit": "<<COLLECTION_UNIT>>", "ignored": false }]
         }
       }
     },

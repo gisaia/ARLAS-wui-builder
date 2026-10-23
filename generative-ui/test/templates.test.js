@@ -15,8 +15,11 @@ const mapping = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'src
 const VALUES = {
   'FIELD:DATE': 'track.timestamps.center', 'FIELD:NUMERIC': 'track.duration_s', 'FIELD:KEYWORD': 'object.ship_type',
   'FIELD:ANY': 'object.name', 'FIELD:GEO': 'track.trail', 'FIELD:GEO_POINT': 'departure.location', 'FIELD:TEXT': 'internal.fulltext',
-  SERVER_URL: 'http://localhost:9999/arlas', COLLECTION: 'courses', ID_PATH: 'track.id', TITLE: 'Titre', TAB: 'Onglet', ICON: 'bar_chart', UNIT: 's', LABEL: 'Libellé',
+  SERVER_URL: 'http://localhost:9999/arlas', COLLECTION: 'courses', ID_PATH: 'track.id', TITLE: 'Titre', TAB: 'Onglet', ICON: 'bar_chart', UNIT: 's', LABEL: 'Libellé', COLLECTION_UNIT: 'parcours', 'LABEL:X': 'Durée',
   NAME: 'Trajets', KEY: 'trails', NAME2: 'Departs', KEY2: 'departures',
+  NAME3: 'Corridors', KEY3: 'corridors', NAME4: 'Chronologie', KEY4: 'chrono', NAME5: 'Noms', KEY5: 'names',
+  'FIELD:ENTITY': 'object.mmsi', 'FLAT:FIELD:DATE': 'track_timestamps_center', 'FLAT:FIELD:ENTITY': 'object_mmsi', 'FLAT:FIELD:ANY': 'object_name',
+  'NUMBER:LABEL_MINZOOM': 10,
   'NUMBER:INTERVAL': 3600, 'NUMBER:ZOOM': 5, 'NUMBER:LON': 8, 'NUMBER:LAT': 55
 };
 
@@ -46,6 +49,13 @@ function assemble(fillIt) {
     f(tpl('metric'), { ID: 'metric' }), f(tpl('metricstable'), { ID: 'mt' })
   ];
   const config = f(tpl('dashboard')).config;
+  // every optional map layer variant is assembled too, so each one is validated
+  const variants = Object.entries(map.layer_variants || {}).filter(([k]) => k !== '_usage').map(([, v]) => v);
+  variants.forEach(v => {
+    map.contributor.layers_sources.push(v.layers_source);
+    map.map_layers.push(v.map_layer);
+    map.mapgl.input.visualisations_sets.push(v.visualisations_set);
+  });
   config.arlas.web.contributors = [...timeline.contributors, map.contributor, resultlist.contributor,
     f(tpl('search'), { ID: 'search' }).contributor, ...widgets.map(w => w.contributor)];
   config.arlas.web.components = {

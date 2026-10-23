@@ -17,7 +17,7 @@ npm run genui:check -- generated/<name>.config.json generated/<name>.config.map.
 | `CRITIC_PROMPT.md` | System prompt of an independent reviewer agent: scores the dashboard on five axes and gives a verdict. |
 | `COMPREHENSION.md` | Reference on the ARLAS WUI configuration: structure, fields, analytics panel, result list, tooling. |
 | `SPATIAL_RECIEPE.md` | Generic rules of spatial analysis and cartographic semiology (tool-independent). |
-| `SPATIAL_ARLAS_CAPABILITIES.md` | What ARLAS can do for each analysis of the recipe (native / partial / not available). |
+| `SPATIAL_ARLAS_CAPABILITIES.md` | Weighting of the generic analysis by ARLAS: per analysis, data precondition (field roles), status (native / approximated / outside the Builder / service / not available), fallback and limit; cross-cutting ARLAS degradations D1–D14. Generic: no field name, no generated file. |
 
 ## Tooling
 
