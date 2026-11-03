@@ -1,11 +1,22 @@
 # Change Log
 
+## [v29.0.1](https://github.com/gisaia/ARLAS-wui-builder/tree/v29.0.1) (2026-11-03)
+
+**New stuff:**
+
+- Change icons in builder [\#1219](https://github.com/gisaia/ARLAS-wui-builder/issues/1219)
+
+**Fixed bugs:**
+
+- Missing "point" in label placement [\#874](https://github.com/gisaia/ARLAS-wui-builder/issues/874)
+
 ## [v29.0.0](https://github.com/gisaia/ARLAS-wui-builder/tree/v29.0.0) (2026-10-13)
 
 **New stuff:**
 
 - Use Icon Selector in card view list configuration [\#1196](https://github.com/gisaia/ARLAS-wui-builder/issues/1196)
 - Improve grouped configurable properties layout in Arlas WUI Builder [\#1185](https://github.com/gisaia/ARLAS-wui-builder/issues/1185)
+- Add Cards view list configuration [\#1184](https://github.com/gisaia/ARLAS-wui-builder/issues/1184)
 - Fix ui artifact [\#1176](https://github.com/gisaia/ARLAS-wui-builder/issues/1176)
 - Add a new option in result list to show/hide exporting it as CSV  [\#944](https://github.com/gisaia/ARLAS-wui-builder/issues/944)
 
